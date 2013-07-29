@@ -1,0 +1,5 @@
+{"nodes":[{"id":"1", "label":"Josh","x":167.4379,"y":-220.91151,"size":10.0,"color":"rgb(153,153,153)","attributes":{}},
+{"id":"2", "label":"Sophie","x":-76.69397,"y":330.24362,"size":10.0,"color":"rgb(153,153,153)","attributes":{}},
+{"id":"3", "label":"Julie","x":-90.74393,"y":-109.332115,"size":10.0,"color":"rgb(153,153,153)","attributes":{}}],"edges":[{"source":"1","target":"2","weight":"1.0","id":"1"},
+{"source":"1","target":"3","weight":"1.0","id":"2"},
+{"source":"2","target":"3","weight":"1.0","id":"3"}]}

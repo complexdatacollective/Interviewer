@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2013-04-24">
+    <creator>Gephi 0.8.1</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static">
+    <nodes>
+      <node id="1" label="Josh"></node>
+      <node id="2" label="Sophie"></node>
+      <node id="3" label="Julie"></node>
+    </nodes>
+    <edges>
+      <edge source="1" target="2"></edge>
+      <edge source="1" target="3"></edge>
+      <edge source="2" target="3"></edge>
+    </edges>
+  </graph>
+</gexf>

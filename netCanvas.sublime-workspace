@@ -1,0 +1,261 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"node",
+				"nodeLayer"
+			],
+			[
+				"y",
+				"y"
+			],
+			[
+				"uiL",
+				"uiLayer"
+			],
+			[
+				"current",
+				"currentMode"
+			],
+			[
+				"buil",
+				"buildNode"
+			],
+			[
+				"opacity",
+				"opacityIncrement"
+			],
+			[
+				"mo",
+				"moveToTop"
+			],
+			[
+				"opa",
+				"opacityIncrement"
+			],
+			[
+				"b",
+				"inline-block"
+			],
+			[
+				"draw",
+				"drawConcentricCircles"
+			],
+			[
+				"str",
+				"strokeWidth"
+			],
+			[
+				"set",
+				"setStrokeWidth"
+			],
+			[
+				"anim",
+				"animSelected"
+			],
+			[
+				"circle",
+				"circleLayer"
+			],
+			[
+				"edge",
+				"edgeLayer"
+			],
+			[
+				"ran",
+				"randomFriend"
+			],
+			[
+				"random",
+				"randombetween"
+			],
+			[
+				"z",
+				"zoomDelta"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/css/style.css",
+		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/index.html",
+		"/Volumes/www/wordpress/wp-config.php",
+		"/Users/joshua/Sites/netCanvas/index.html",
+		"/Users/joshua/Sites/netCanvas/css/main.css",
+		"/Users/joshua/Sites/netCanvas/index_kinetic.html",
+		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/js/swipe.min.js",
+		"/Users/joshua/Sites/bookjs/example1.html",
+		"/Users/joshua/Sites/isigma.js/test/index.html",
+		"/Users/joshua/Sites/networkcanvas/index.html",
+		"/Users/joshua/Sites/vis_portal/submissionform/index.html",
+		"/Users/joshua/Desktop/hyper_island_text",
+		"/Users/joshua/Desktop/Facebook App_SDuguay/index.php",
+		"/Users/joshua/Sites/InteractiveVis/network/config_ukgov.json",
+		"/Users/joshua/Sites/sigma.js/src/core/plotter.js",
+		"/Users/joshua/Sites/sigma.js/src/core/sigma.js",
+		"/Users/joshua/Sites/sigma.js/src/core/graph.js",
+		"/Users/joshua/Sites/sigma.js/src/sigmaintro.js",
+		"/Users/joshua/Downloads/Joshua R. Melville_1348599833.json",
+		"/Users/joshua/Desktop/Joshua R. Melville_1349232695.graphml",
+		"/Users/joshua/Sites/InteractiveVis/network/css/style.css",
+		"/Users/joshua/Sites/InteractiveVis/network/js/sigma/sigma.parseGexf.js",
+		"/Users/joshua/Sites/InteractiveVis/network/js/excanvas.js",
+		"/Users/joshua/Sites/InteractiveVis/map/js/main.js",
+		"/Users/joshua/Sites/InteractiveVis/colorbrewer.css",
+		"/Users/joshua/Sites/InteractiveVis/network/ukgov_config.json",
+		"/Applications/TeX/LuaTeX-and-XeTeX/XeTeX-2.tex",
+		"/Users/joshua/Sites/gltail/config.yaml",
+		"/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/DiskSpaceRecovery.h",
+		"/Users/joshua/Sites/InteractiveVis/network/index.html",
+		"/Users/joshua/Sites/wordpress/wp-load.php",
+		"/Users/joshua/Desktop/namegen_iit/README.md"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"hidden-error",
+			"getnamed",
+			"nodeorigin",
+			"stage",
+			"changem",
+			"changemo",
+			");\">",
+			"offset",
+			"nodeRadius",
+			"entypo",
+			"drawcircles",
+			"updateDottedLines",
+			"bitmap",
+			"    height: 900px;",
+			"textRadios",
+			">\n",
+			"3",
+			"optionsRadios",
+			"education",
+			"init",
+			"img"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"cs",
+				"css/main.css"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

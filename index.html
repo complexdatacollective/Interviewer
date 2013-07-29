@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+		<script src="http://code.createjs.com/createjs-2013.02.12.min.js"></script>
+
+
+		<script language="javascript">
+		var nodes = [
+		    {
+		        "properties": {
+							"shape":"square"
+						},
+				"position": [234,123],
+				"name":"Josh"
+		    },
+		    {
+		        "properties": [{
+							"variable": "manchesterunited"
+						},
+						{
+							"variable": "manchestercity"
+						}],
+				"position": [54.2323,-01,2345],
+				"name":"Josh"
+		    }
+
+		];
+
+		var edges = [
+		    {
+		        "teams": [{
+							"variable": "manchesterunited"
+						},
+						{
+							"variable": "manchestercity"
+						}],
+		        "rivalry_info": "The Manchester derby.",
+				"centre_map": [54.2323,-01,2345],
+				"name":"Man Utd vs. Man City"
+		    },
+		    {
+		        "teams": [{
+							"variable": "arsenal"
+						},
+						{
+							"variable": "tottenhamhotspur"
+						}],
+		        "rivalry_info": "The North London derby.",
+				"centre_map": [54.2323,-01,2345],
+				"name":"Arsenal vs. Tottenham"
+		    }  
+		];
+
+		</script>
+
+
+
+			<script>
+
+	var canvas, stage;
+
+	var mouseTarget;	// the display object currently under the mouse, or being dragged
+	var dragStarted;	// indicates whether we are currently in a drag operation
+	var offset;
+	var update = true;
+
+	function init() {
+
+		// create stage and point it to the canvas:
+		canvas = document.getElementById("mainCanvas");
+
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		//check to see if we are running in a browser with touch support
+		stage = new createjs.Stage(canvas);
+
+		// enable touch interactions if supported on the current device:
+		createjs.Touch.enable(stage);
+
+		// enabled mouse over / out events
+		stage.enableMouseOver(10);
+		stage.mouseMoveOutside = true; // keep tracking the mouse even when it leaves the canvas
+
+
+		loadNodes();
+
+	}
+
+	function stop() {
+		createjs.Ticker.removeEventListener("tick", tick);
+	}
+
+	function loadNodes() {
+		var node;
+		var container = new createjs.Container();
+		stage.addChild(container);
+
+		// create and populate the screen with random daisies:
+		for(var i = 0; i < 10; i++){
+			node = new createjs.Shape();
+ 			node.graphics.beginFill("#ff0000").drawCircle(0,0,50);
+			container.addChild(node);
+			node.x = canvas.width * Math.random()|0;
+			node.y = canvas.height * Math.random()|0;
+			node.regX = node.width/2|0;
+			node.regY = node.height/2|0;
+			node.name = "node_"+i;
+
+			// wrapper function to provide scope for the event handlers:
+			(function(target) {
+				node.onPress = function(evt) {
+					// bump the target in front of it's siblings:
+					container.addChild(target);
+					var offset = {x:target.x-evt.stageX, y:target.y-evt.stageY};
+
+					// add a handler to the event object's onMouseMove callback
+					// this will be active until the user releases the mouse button:
+					evt.onMouseMove = function(ev) {
+						target.x = ev.stageX+offset.x;
+						target.y = ev.stageY+offset.y;
+						// indicate that the stage should be updated on the next tick:
+						update = true;
+					}
+				}
+				node.onMouseOver = function() {
+					// console.log(target);
+    				target.graphics.clear().beginFill("#FF00FF").drawCircle(0,0,50);
+					update = true;
+				}
+				node.onMouseOut = function() {
+					target.graphics.clear().beginFill("#FF0000").drawCircle(0,0,50);
+					update = true;
+				}
+				
+			})(node);
+		}
+
+		createjs.Ticker.addEventListener("tick", tick);
+	}
+
+	function tick(event) {
+		// this set makes it so the stage only re-renders when an event handler indicates a change has happened.
+		// console.log("tick!");
+		if (update) {
+			update = false; // only update once
+			stage.update(event);
+		}
+	}
+	</script>
+
+
+</head>
+   <body onload="init();">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+      
+<div id="ui">
+      <h1>User Interface</h1>
+
+</div>
+
+<div class="canvasHolder">
+		<canvas id="mainCanvas"></canvas>
+	</div>
+
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+
+    </body>
+</html>
