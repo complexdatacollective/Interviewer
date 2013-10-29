@@ -216,8 +216,8 @@ textarea {
     position: absolute;
     bottom:45px;
     left:45px;
-    -webkit-animation: pulsate 2.5s ease-out;
-    -webkit-animation-iteration-count: infinite; 
+/*    -webkit-animation: pulsate 2.5s ease-out;
+    -webkit-animation-iteration-count: infinite; */
     opacity: 0.0
 }
 @-webkit-keyframes pulsate {

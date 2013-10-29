@@ -79,6 +79,31 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "index_kinetic.html",
+			"settings":
+			{
+				"buffer_size": 15624,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "css/main.css",
+			"settings":
+			{
+				"buffer_size": 8069,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "networkcanvas.html",
+			"settings":
+			{
+				"buffer_size": 123,
+				"line_ending": "Unix",
+				"name": "<span style=\"font-face:'Helvetica Neue';font-weigh"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -191,8 +216,92 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "index_kinetic.html",
+					"settings":
+					{
+						"buffer_size": 15624,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15245,
+								15245
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7578.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "css/main.css",
+					"settings":
+					{
+						"buffer_size": 8069,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4013,
+								3918
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 375.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "networkcanvas.html",
+					"settings":
+					{
+						"buffer_size": 123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35,
+								35
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<span style=\"font-face:'Helvetica Neue';font-weigh",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
