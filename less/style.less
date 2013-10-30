@@ -6,6 +6,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'bootstrap.less'; /* Compiled in Codekit - referenced here as a Framework */
 @import '../less/variables.less'; /* Your site specific LESS variables - these override BS defaults  */
 
+
 @font-face {
     font-family: 'EntypoRegular';
     src: url('../fonts/fontello.eot');
@@ -52,7 +53,7 @@ Import Bootstrap LESS and Site Specific LESS
 }
 
 .nodebutton {
-    position:absolute;
+    position:relative;
     left: 90px;
     top: 40px;
     width:100px;
@@ -61,7 +62,7 @@ Import Bootstrap LESS and Site Specific LESS
 }
 
 .edgebutton {
-    position:absolute;
+    position:relative;
     left: 90px;
     top: 160px;
     width:100px;
@@ -70,7 +71,7 @@ Import Bootstrap LESS and Site Specific LESS
 }
 
 .communitybutton {
-    position:absolute;
+    position:relative;
     left: 90px;
     top: 280px;
     width:100px;
@@ -80,43 +81,33 @@ Import Bootstrap LESS and Site Specific LESS
 
 
     html, body {
-        width:100%;
-        height:100%;
-        margin:0;
-        padding:0;
-        overflow:hidden;
-        background:#eee;
-    }
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#eee;
+    -webkit-font-smoothing: antialiased;
+    font-weight:300;
+    font-family: 'Raleway', sans-serif;
+}
 
-    .ui {
-        z-index: 20;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
+.ui {
+    z-index: 20;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
-    #nodebox {
-        position:absolute;
-        bottom:20px;
-        left:10px;
-    }
+#nodebox {
+    position:absolute;
+    bottom:20px;
+    left:10px;
+}
 
-    #container {
-        position:absolute;
-        left:0;
-        right:0;
-        bottom:0;
-        top:0;
-        /*background:black;*/
-
-    }
-
-    canvas {
-
-    }
 
 
 .ring {
@@ -125,17 +116,21 @@ Import Bootstrap LESS and Site Specific LESS
     height: 50px;
     width: 50px;
     position: absolute;
-    bottom:45px;
-    left:45px;
-/*    -webkit-animation: pulsate 2.5s ease-out;
-    -webkit-animation-iteration-count: infinite; */
+    bottom:65px;
+    left:70px;
+    -webkit-animation: pulsate 2.5s ease-out;
+    -webkit-animation-iteration-count: infinite; 
     opacity: 0.0
 }
+
 @-webkit-keyframes pulsate {
     0% {-webkit-transform: scale(0.01, 0.01); opacity: 0.0;}
     15% {opacity: 1.0;}
     100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }
 
-
+.swiper-container, .swiper-slide {
+  width: 100%;
+  height: 100%;
+}
 
