@@ -291,7 +291,7 @@
         fontSize: 15,
         fontFamily: 'Raleway',
         fill: colors['blue'],
-        offset: [-1.5*nodeSize,10], //[left/right, up/down]
+        offset: [-1.2*nodeSize,8], //[left/right, up/down]
         });
 
         anchor.add(shape);
@@ -300,10 +300,10 @@
 
         doNotification("Putting node "+nodeLabel+" at coordinates x:"+nodex+", y:"+nodey, "success");
 
-        anchor.on('touchstart', function(evt) {
+        anchor.on('click', function(evt) {
 
        	// handleNodeTouch(this);
-          this.moveToTop();
+        this.moveToTop();
         doNotification("Selected node "+this.children[1].attrs.text);
         if (selected != null) {selected.stop(); $.each(nodes, function(index, value) { nodes[index].setStrokeWidth = 0; }); }
         currentNode = this;
@@ -312,7 +312,7 @@
 
         });      
 
-        anchor.on('dragstart', function() {
+        anchor.on('dragmove', function() {
           updateEdgePosition(this);
         });  
 
@@ -389,7 +389,15 @@
 		    keyboardControl: true,
 		    speed: 1000,
 		    onlyExternal: true,
-		});  
+        onSlideChangeStart: function (e) {
+            // $('.slidebackground').stop();
+            $('.swiper-slide').fadeTo(200, 0);
+        },
+        onSlideChangeEnd: function () {
+
+            $('.swiper-slide').fadeTo(1000, 1);
+        }
+    });
 
         stage = new Kinetic.Stage({
           container: 'kineticCanvas',

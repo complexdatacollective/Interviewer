@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"notifica",
+				"notificationStyle"
+			],
+			[
+				"no",
+				"notificationStyle"
+			],
+			[
+				"nofit",
+				"notificationStyle"
+			],
+			[
 				"node",
 				"nodeLayer"
 			],
@@ -80,18 +92,34 @@
 	"buffers":
 	[
 		{
-			"file": "index_kinetic.html",
+			"file": "less/style.less",
 			"settings":
 			{
-				"buffer_size": 15624,
+				"buffer_size": 2639,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "css/main.css",
+			"file": "less/variables.less",
 			"settings":
 			{
-				"buffer_size": 8069,
+				"buffer_size": 16805,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/bootstrap-notify.js",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/bootstrap/js/bootstrap.js",
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Unix"
 			}
 		},
@@ -99,7 +127,7 @@
 			"file": "networkcanvas.html",
 			"settings":
 			{
-				"buffer_size": 123,
+				"buffer_size": 0,
 				"line_ending": "Unix",
 				"name": "<span style=\"font-face:'Helvetica Neue';font-weigh"
 			}
@@ -129,12 +157,22 @@
 	},
 	"file_history":
 	[
+		"/Users/joshua/Sites/android_geo/www/index.html",
+		"/Users/joshua/Sites/netCanvas/js/main.js",
+		"/Users/joshua/Sites/netCanvas/css/idangerous.swiper.css",
+		"/Users/joshua/Sites/netCanvas/index.html",
+		"/Users/joshua/Sites/android_geo/www/less/style.less",
+		"/Users/joshua/Sites/android_geo/www/js/main.js",
+		"/Users/joshua/Sites/netCanvas/js/idangerous.swiper-2.2.min.js",
+		"/Users/joshua/Sites/netCanvas/js/kinetic.min.js",
+		"/Users/joshua/Sites/netCanvas/js/kinetic-v4.5.0.min.js",
+		"/Users/joshua/Sites/netCanvas/js/plugins.js",
+		"/Users/joshua/Sites/netCanvas/js/bootstrap/js/bootstrap.js",
+		"/Users/joshua/Sites/netCanvas/css/main.css",
+		"/Users/joshua/Sites/netCanvas/index_kinetic.html",
 		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/css/style.css",
 		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/index.html",
 		"/Volumes/www/wordpress/wp-config.php",
-		"/Users/joshua/Sites/netCanvas/index.html",
-		"/Users/joshua/Sites/netCanvas/css/main.css",
-		"/Users/joshua/Sites/netCanvas/index_kinetic.html",
 		"/Users/joshua/Sites/Android/Geographies_of_the_World's_Knowledge/assets/www/js/swipe.min.js",
 		"/Users/joshua/Sites/bookjs/example1.html",
 		"/Users/joshua/Sites/isigma.js/test/index.html",
@@ -178,6 +216,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"updateedgeposition",
+			"fixpages",
+			"handle",
+			"randomx",
+			"randomy",
+			"        ",
+			"preventde",
 			"hidden-error",
 			"getnamed",
 			"nodeorigin",
@@ -216,79 +261,133 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "index_kinetic.html",
+					"file": "less/style.less",
 					"settings":
 					{
-						"buffer_size": 15624,
+						"buffer_size": 2639,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15245,
-								15245
+								1841,
+								1841
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7578.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "css/main.css",
+					"file": "less/variables.less",
 					"settings":
 					{
-						"buffer_size": 8069,
+						"buffer_size": 16805,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4013,
-								3918
+								1566,
+								1566
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/LESS/LESS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 375.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "networkcanvas.html",
+					"file": "js/bootstrap-notify.js",
 					"settings":
 					{
-						"buffer_size": 123,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								35,
-								35
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "js/bootstrap/js/bootstrap.js",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 335.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "networkcanvas.html",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -365,6 +464,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 282.0,
 	"status_bar_visible": true
 }
