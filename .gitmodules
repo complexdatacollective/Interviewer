@@ -1,0 +1,15 @@
+[submodule "externals/jquery"]
+	path = externals/jquery
+	url = git://github.com/jquery/jquery.git
+[submodule "externals/kinetic"]
+	path = externals/kinetic
+	url = https://github.com/ericdrowell/KineticJS.git
+[submodule "externals/bootstrap"]
+	path = externals/bootstrap
+	url = https://github.com/twbs/bootstrap.git
+[submodule "externals/zepto"]
+	path = externals/zepto
+	url = https://github.com/madrobby/zepto.git
+[submodule "externals/Swiper"]
+	path = externals/Swiper
+	url = https://github.com/nolimits4web/Swiper.git

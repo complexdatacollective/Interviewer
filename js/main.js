@@ -16,16 +16,14 @@
 
       var namesList = new Array("Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive");
 
-      // duration that notifications remain on screen
-      alertify.set({ delay: 1700 });
 
       function doNotification(text, type){
 
-      	notificationStyle = (type !=null) ? type : 'Standard';
+      	// notificationStyle = (type !=null) ? type : 'Standard';
 
         if (debug == true) {
-		  alertify.log(text, notificationStyle);
-		  // console.log(notificationStyle);
+		  // alertify.log(text, notificationStyle);
+		  console.log(text);
         }
 
       }
@@ -390,12 +388,8 @@
 		    speed: 1000,
 		    onlyExternal: true,
         onSlideChangeStart: function (e) {
-            // $('.slidebackground').stop();
-            $('.swiper-slide').fadeTo(200, 0);
         },
         onSlideChangeEnd: function () {
-
-            $('.swiper-slide').fadeTo(1000, 1);
         }
     });
 
@@ -404,10 +398,6 @@
           width: window.innerWidth,
           height: window.innerHeight
         });
-
-       //  $(document).bind("contextmenu",function(e){
-       //        return false;
-       // });
 
         $(".nodebutton").click(function() {
           // $(this).toggleClass('btn-danger');
