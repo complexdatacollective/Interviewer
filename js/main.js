@@ -1,454 +1,426 @@
+//helper functions go here
+var touchNumber = 0;
+var Notify = function(text, type){
+        console.log(text);
 
-      // globals
-      var stage, nodeOrigin, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper;
-      var nodes = [];
-      var edges = [];
-      var edgeTemp = [];
-      var defaultNodeRadius =  33;
-      var debug = true;
-      var leftHanded = true;
-      var currentMode = 1;
+}
+
+var randomBetween = function(min,max) {
+    return Math.random() * (max - min) + min;
+}
+
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
 
 
-      var colors = [];
-      colors['blue'] = '#0174DF';
-      colors['edge'] = '#888';
+// App declaration
 
-      var namesList = new Array("Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive");
+var NetCanvas = (function () {
 
+    // globals
+    var stage, newNodeBox, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper,
+        nodes = [],
+        edges = [],
+        edgeTemp = [],
+        defaultNodeRadius =  33,
+        debug = true,
+        leftHanded = true,
+        currentMode = 1,
+        _init = false,
+        app = {};
 
-      function doNotification(text, type){
+    // Colours
+    var colors = [];
+    colors['blue'] = '#0174DF';
+    colors['edge'] = '#888';
 
-      	// notificationStyle = (type !=null) ? type : 'Standard';
+    // Dummy Names
+    var namesList = new Array("Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive");
 
-        if (debug == true) {
-		  // alertify.log(text, notificationStyle);
-		  console.log(text);
+    app.init = function () {
+        if (_init) {
+            return;
+        }
+        _init = true;
+
+        this.initKinetic();
+        this.drawUIComponents();
+        // this.createRandomGraph(10,0.4);
+        this.loadGraph();
+    }
+
+    app.addNode = function(coords, size, shape, label) {
+
+        var nodex,nodey;
+        var nodeTextLabel = (label != null) ? label : namesList[Math.round(randomBetween(0,namesList.length-1))],
+            nodeSize = (size != null) ? size : defaultNodeRadius;
+
+        if (coords != null) {
+            nodex = coords[0];
+            nodey = coords[1];
+        } else {
+          //TODO: make the random coordinates fall within a uniform distribution of the largest concentric circle.
+          nodex = Math.round(randomBetween(100,window.innerWidth-100));
+          nodey = Math.round(randomBetween(100,window.innerHeight-100));
         }
 
-      }
+        var nodeGroup = new Kinetic.Group({
+            id: nodes.length,
+            draggable: true,
+            y: nodey,
+            x: nodex,
+            name: nodeTextLabel,
+            edges: []
+        });
 
-      function drawNewNodeBox() {
+        var nodeCircle = new Kinetic.Circle({
+            dashArray: [15, 3],
+            radius: nodeSize,
+            stroke: colors['blue'],
+            strokeWidth: 10,
+        });
 
-      	// create a 'pot' for nodes to sit in before they are positioned. 
-        var nodeOrigin = new Kinetic.Circle({
-              radius: 50,
-              stroke: '#666',
-              strokeWidth: 0,
-              y: window.innerHeight - 100,
-              x: 100,
+        var nodeLabel = new Kinetic.Text({         
+            text: nodeTextLabel,
+            fontSize: 15,
+            fontFamily: 'Raleway',
+            fill: 'red',
+            offsetX: -40,
+            offsetY: 10,
+
+        });
+
+        nodeGroup.add(nodeCircle);
+        nodeGroup.add(nodeLabel);
+
+        Notify("Putting node "+nodeTextLabel+" at coordinates x:"+nodex+", y:"+nodey, "success"); 
+
+        nodeGroup.on('dragstart dragmove', function() {
+            Notify("Drag start.");
+            var dragNode = this;
+            $.each(edges, function(index, value) {
+                // value.setPoints([dragNode.getX(), dragNode.getY() ]);
+            if (value.attrs.from == dragNode || value.attrs.to == dragNode) {
+                var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
+                value.attrs.points = points;               
+            }
+
             });
 
-        nodeOrigin.on('mousedown touchstart', function() {
-            var touchPos = (stage.getTouchPosition() != null) ? stage.getTouchPosition() : stage.getMousePosition();
-            var coords = new Array();
-            coords[0] = touchPos.x;
-            coords[1] = touchPos.y;
-            console.log(coords);
-            var created = buildNode(coords);
-            nodeOrigin.moveToBottom();
-            nodeOrigin.setListening(false);
-            uiLayer.draw();
+            edgeLayer.draw();
         });  
 
-        uiLayer.add(nodeOrigin);
-        uiLayer.draw();
+        nodeGroup.on('mousedown tap', function() {
+            touchNumber++;
+            Notify("Touchstart");
+            Notify("Touch number: "+touchNumber);
+        });  
 
-      }
+        nodeGroup.on('mouseup touchend', function() {
+            touchNumber--;
+            Notify("Touchend");
+            Notify("Touch number: "+touchNumber);
+        });            
 
-      function drawConcentricCircles(number, colour) {
-        var colour = (colour != null) ? colour : '#666';
-        var circleFills, circles;
-        var totalHeight = window.innerHeight-(defaultNodeRadius *  2);
-        var increment = totalHeight/number;
-        var offset = increment;
-        var startOpacity = 0.2;
-        var opacityIncrement = startOpacity/number; 
-        var opacityOffset = opacityIncrement;
+        nodeGroup.on('dragend', function() {
+            uiLayer.children[0].setListening(true); // Listen for click events on the new node box again.
+            app.saveGraph();
 
-        for(i = 0; i < number; i++) {
-          var opacity = startOpacity - (i*opacityIncrement);
-          var circles = new Kinetic.Circle({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-          radius: offset/2,
-          stroke: 'white',
-          strokeWidth: 0.5,
-          opacity: 1
-          });
-
-          var circleFills = new Kinetic.Circle({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-          radius: offset/2,
-          fill: colour,
-          strokeWidth: 0.5,
-          opacity: opacity
-          });          
-
-          offset+=increment;
-          opacityOffset+=opacityIncrement;
-        circleLayer.add(circles); 
-        circleLayer.add(circleFills);  
-        }
-        
-        circleLayer.draw();
-      }
-
-      function randomBetween(min,max) {
-
-        return Math.random() * (max - min) + min;
-
-	  }
-
-      function clearGraph() {
-        edgeLayer.removeChildren();
-        edgeLayer.clear();
-        nodeLayer.removeChildren();
-        nodeLayer.clear();
-        nodes = [];
-        edges = [];
-
-      }
-
-      function animSelected(toAnimate, animColor) {
-
-        $.each(nodes, function (index, value) {
-          // nodes[index].children[0].setStroke(null);
-          // nodes[index].children[0].setStrokeWidth(null);
         });
 
+        nodeLayer.add(nodeGroup);
+        nodes.push(nodeGroup);
+        nodeGroup.moveToBottom();
         nodeLayer.draw();
+        return nodeGroup;
+    }
 
-        if (selected != toAnimate) {
-          var circle = toAnimate.children[0];
-          var angularSpeed = Math.PI / 3;
-          circle.setStroke(colors['blue']);
-          circle.setStrokeWidth(10);
-          var anim = new Kinetic.Animation(function(frame) {
-            var angleDiff = frame.timeDiff * angularSpeed / 1000;
-            circle.rotate(angleDiff);
-          }, nodeLayer);
-
-          // anim.start();
-
-          selected = toAnimate;
-
-          return anim;
-
-        }
-
-      }
-
-      function handleNodeTouch(node) {
-      	this = node;
-
-      	switch(currentMode) {
-          case 1:
-            // position nodes
-
-
-          break;
-          case 2:
-            // add edges
-            if (edgeTemp.length == 1) {
-
-              if (this == edgeTemp[0]) {
-                doNotification('Same node. Ignoring...');
-                edgeTemp = [];
-              } else {
-                doNotification('Selected second node.','info');
-                buildEdge(edgeTemp[0],this);
-                edgeTemp = [];
-              }
-
-            } else {
-              doNotification('Selected first node.','info');
-              edgeTemp.push(this);
+    app.getNodeByID = function(id) {
+        var node = {}
+        $.each(nodes, function(index, value) {
+            if (value.attrs.id == id) {
+                node = value;
             }
-          break;
-          case 3:
-            // draw communities
-          break;          
-          default:
-            // error handling
-            doNotification('ERROR: Current mode not set correctly.', 'error');
-
-        }
-        
-      }
-
-
-      function randomGraph(nodeCount,edgeProbability) {
-
-
-        doNotification("Creating random graph...");
-        for (i=0;i<nodeCount;i++) {
-          nodes.push(buildNode());
-        }
-
-        $.each(nodes, function (index, value) {
-          if (randomBetween(0, 1) < edgeProbability) {
-
-            var randomFriend = Math.round(randomBetween(0,nodes.length-1));
-
-
-            buildEdge(nodes[index],nodes[randomFriend]);
-            // doNotification("Adding edge between "+nodes[index]+" and "+nodes[randomFriend]+".", "success");
-
-          }
         });
-      }
 
-      
-      function updateEdgePosition(dragNode) {
+        return node;
+    }
 
-         if (dragNode != null) {
+    app.addEdge = function(from, to) {
+        var alreadyExists = false;
+        var fromObject,toObject;
 
-          $.each(dragNode.attrs.edges, function(index, value) {
+        //TODO: Make this function accept ID's or names
+        //TODO: Check if the nodes exist and return false if they don't.
+        //TODO: Make sure you cant add a self-loop
 
-                if (value.attrs.from == dragNode) {
-                  value.attrs.points[0].y = dragNode.attrs.y;
-                  value.attrs.points[0].x = dragNode.attrs.x;
-                } else {
-                  value.attrs.points[1].y = dragNode.attrs.y;
-                  value.attrs.points[1].x = dragNode.attrs.x;
-
-                }
-
-          });
-
-         }
-
-        edgeLayer.draw();
-      }
-
-      function changeMode(newMode) {
-        if (newMode != null) {
-          currentMode = newMode;
-          doNotification('Changing mode to: '+newMode, 'info');
-
-          switch(newMode) {
-            case 1:
-              // position nodes
-            break;
-            case 2:
-              // add edges
-              //disable node dragging
-              $.each(nodes, function (index, value) {
-                nodes[index].attrs.draggable = false;
-              });
-
-            break;
-            case 3:
-              // draw communities
-            break;          
-            default:
-              // error handling
-              doNotification('ERROR: Current mode not set correctly.', 'error');
-
-          }
+        if (from != null && typeof from === 'object' || to != null && typeof to === 'object') {
+            fromObject = from;
+            toObject = to;
 
         } else {
-          doNotification('ERROR: No new mode specified.', 'error');
+            //assume we have ID's rather than the object, and so iterate through nodes looking for ID's.
+            fromObject = app.getNodeByID(from);
+            toObject = app.getNodeByID(to);
         }
-      }
 
-      function buildNode(coords, size, shape, label) {
-
-		var nodex,nodey;
-
-      	if (coords != null) {
-      		nodex = coords[0];
-      		nodey = coords[1];
-      	} else {
-      		//no coords supplied, so we will generate some random ones.
-      		//TODO: make the random coordinates fall within a uniform distribution of the largest concentric circle.
-      		nodex = Math.round(randomBetween(100,window.innerWidth-100));
-      		nodey = Math.round(randomBetween(100,window.innerHeight-100));
-      	}
-
-        var nodeLabel = (label != null) ? label : namesList[Math.round(randomBetween(0,namesList.length))];
-        var nodeSize = (size != null) ? size : defaultNodeRadius;
-        var anchor = new Kinetic.Group({
-          id: nodes.length,
-          draggable: true,
-          y: nodey,
-          x: nodex,
-          edges: []
-        });
-        var shape = new Kinetic.Circle({
-          dashArray: [15, 3],
-          radius: nodeSize,
-          stroke: colors['blue'],
-          strokeWidth: 10,
-        });
-
-        var label = new Kinetic.Text({
-        text: nodeLabel,
-        fontSize: 15,
-        fontFamily: 'Raleway',
-        fill: colors['blue'],
-        offset: [-1.2*nodeSize,8], //[left/right, up/down]
-        });
-
-        anchor.add(shape);
-        anchor.add(label);
-
-
-        doNotification("Putting node "+nodeLabel+" at coordinates x:"+nodex+", y:"+nodey, "success");
-
-        anchor.on('click', function(evt) {
-
-       	// handleNodeTouch(this);
-        this.moveToTop();
-        doNotification("Selected node "+this.children[1].attrs.text);
-        if (selected != null) {selected.stop(); $.each(nodes, function(index, value) { nodes[index].setStrokeWidth = 0; }); }
-        currentNode = this;
-        selected = animSelected(this);
-        selected.start();
-
-        });      
-
-        anchor.on('dragmove', function() {
-          updateEdgePosition(this);
+        $.each(edges, function(index, value) {
+            if (value.attrs.from == toObject || value.attrs.to == toObject) {
+                alreadyExists = true;
+            }
         });  
 
-        anchor.on('dragend', function() {
-          updateEdgePosition(this);
-          uiLayer.children[0].setListening(true);
-          uiLayer.draw();
-          currentNode = null;
-        });
+        if (alreadyExists || fromObject === toObject) {
+            Notify("Edge already exists. Cancelling.", "error");
+            return false;
+        }
 
-        nodeLayer.add(anchor);
-        nodes.push(anchor);
-        anchor.moveToBottom();
-        nodeLayer.draw();
-        return anchor;
-      }
-
-      function buildEdge(from, to) {
-
-        var alreadyExists = false;
-
-        $.each(from.attrs.edges, function(index, value) {
-          if (value.attrs.from == to || value.attrs.to == to) {
-            alreadyExists = true;
-          }
-        });
-
-        if (alreadyExists || from === to) {
-
-          doNotification("Edge already exists. Cancelling.", "error");
-          return false;
-
-        } else {
-
-          var firstx = from.attrs.x;
-          var firsty = from.attrs.y;
-          var secondx = to.attrs.x;
-          var secondy = to.attrs.y;
-
-
-          var edge = new Kinetic.Line({
+        var points = [fromObject.attrs.x, fromObject.attrs.y, toObject.attrs.x, toObject.attrs.y];
+        var edge = new Kinetic.Line({
             // dashArray: [10, 10, 00, 10],
             strokeWidth: 2,
             stroke: colors['edge'],
             // opacity: 0.8,
-            from: from,
-            to: to,
-            points: [firstx, firsty, secondx, secondy]
-          });
+            from: fromObject,
+            to: toObject,
+            points: points
+        });
 
-          // add edge reference to both of the nodes involved
-          from.attrs.edges.push(edge);
-          to.attrs.edges.push(edge);
+        edges.push(edge);
+        edgeLayer.add(edge);
+        edgeLayer.draw(); 
+        nodeLayer.draw();
+        Notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success");
+        return true;   
+    }
 
+    app.getSimpleEdges = function() {
+        var simpleEdges = {}
+        var edgeCounter = 0;
+        $.each(edges, function(index, value) {
+            simpleEdges[edgeCounter] = {};
+            simpleEdges[edgeCounter].from = value.attrs.from.attrs.id;
+            simpleEdges[edgeCounter].to = value.attrs.to.attrs.id;
+            edgeCounter++;
+        });
 
-          edgeLayer.add(edge);
-          edgeLayer.draw(); 
-          nodeLayer.draw();
-          doNotification("Created Edge between "+from.children[1].attrs.text+" and "+to.children[1].attrs.text, "success");
-          return true;   
+        return simpleEdges;
+    }
 
-        }
-   
-      }
-
-
-      window.onload = function() {
-
-		mySwiper = new Swiper('.swiper-container',{
-		    //Your options here:
-		    mode:'horizontal',
-		    loop: false,
-		    autoResize: true,
-		    keyboardControl: true,
-		    speed: 1000,
-		    onlyExternal: true,
-        onSlideChangeStart: function (e) {
-        },
-        onSlideChangeEnd: function () {
-        }
-    });
-
+    app.initKinetic = function () {
+        // Initialise KineticJS stage
         stage = new Kinetic.Stage({
-          container: 'kineticCanvas',
-          width: window.innerWidth,
-          height: window.innerHeight
+            container: 'kineticCanvas',
+            width: window.innerWidth,
+            height: window.innerHeight
         });
-
-        $(".nodebutton").click(function() {
-          // $(this).toggleClass('btn-danger');
-          changeMode(1);
-          buildNode();
-        });
-        
-        $(".edgebutton").click(function() {
-          $(this).toggleClass('btn-danger');
-          if (currentMode == 2) {
-            changeMode(1);
-          } else {
-            changeMode(2);
-          }
-          
-        });
-
-        $(".communitybutton").click(function() {
-          $(this).toggleClass('btn-danger');
-          changeMode(3);
-        });
-
 
         circleLayer = new Kinetic.Layer();
         nodeLayer = new Kinetic.Layer();
         edgeLayer = new Kinetic.Layer();
         uiLayer = new Kinetic.Layer();
 
-
-
-        // keep curves in sync with the lines
-        nodeLayer.on('beforeDraw', function() {
-          if(currentNode != null) {
-            updateEdgePosition(currentNode);
-          }
-          
-        });
-
         stage.add(circleLayer);
         stage.add(edgeLayer);
         stage.add(nodeLayer);
         stage.add(uiLayer);
+    }
 
-        updateEdgePosition();
+    app.loadGraph = function () {
+        // TODO: Add return false for if this fails.
+        Notify("Loading graph from localStorage.");
+        loadedNodes = localStorage.getObject('nodes');
+        loadedEdges = localStorage.getObject('edges');
+        $.each(loadedNodes, function (index, value) {
+            var coords = [];
+            coords.push(value.x);
+            coords.push(value.y);
+            var label = value.name;
+            app.addNode(coords,null,null,label);
+        });
 
-        $('img').on('dragstart', function(event) { event.preventDefault(); });
+        $.each(loadedEdges, function (index, value) {
+            app.addEdge(value.from,value.to);
+        });
+    }
 
-        // Set up interface
-        drawConcentricCircles(4);
-        drawNewNodeBox();
-        randomGraph(10,0.4);
+    app.saveGraph = function () {
+        Notify("Saving graph.");
+        simpleNodes = app.getSimpleNodes();
+        simpleEdges = app.getSimpleEdges();
+        localStorage.setObject('nodes', simpleNodes);
+        localStorage.setObject('edges', simpleEdges);
+    }
 
+    app.getNodes = function() {
+        return nodes;
+    }
 
-      };
+    app.getEdges = function() {
+        return edges;
+    }    
+
+    app.getSimpleNodes = function() {
+        // We need to create a simple representation of the nodes for storing.
+        var simpleNodes = new Object();
+        $.each(nodes, function (index, value) {
+            simpleNodes[value.attrs.id] = {};
+            simpleNodes[value.attrs.id].x = value.attrs.x;
+            simpleNodes[value.attrs.id].y = value.attrs.y;
+            simpleNodes[value.attrs.id].name = value.attrs.name;
+        });
+        return simpleNodes;
+    }
+    
+    app.getEdges = function() {
+        return edges;
+    }
+
+    app.drawUIComponents = function () {
+
+        var settings = {
+                circleColor: '#fff',
+                circleNumber: 4,
+            }
+        // Draw all UI components
+        var circleFills, circleLines;
+        var currentColor = settings.circleColor;
+        var totalHeight = window.innerHeight-(defaultNodeRadius *  2); // Our canvas area is the window height minus twice the node radius (for spacing)
+        
+        //draw concentric circles
+        for(i = 0; i < settings.circleNumber; i++) {
+            var ratio = 1-(i/settings.circleNumber);
+            var currentRadius = totalHeight/2 * ratio;
+      
+            var circleLines = new Kinetic.Circle({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+                radius: currentRadius,
+                stroke: 'white',
+                strokeWidth: 1.5,
+                opacity: 0
+            });
+
+            var circleFills = new Kinetic.Circle({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+                radius: currentRadius,
+                fill: currentColor,
+                strokeWidth: 0
+            });
+
+            currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();        
+            circleLayer.add(circleFills); 
+            circleLayer.add(circleLines);
+
+      }
+
+      // create a new node box
+      var newNodeBox = new Kinetic.Circle({
+            radius: 50,
+            stroke: '#666',
+            strokeWidth: 0,
+            y: window.innerHeight - 100,
+            x: 100,
+      });
+
+      newNodeBox.on('click tap', function() {
+          var touchPos = stage.getPointerPosition();
+          var coords = new Array();
+          coords[0] = touchPos.x;
+          coords[1] = touchPos.y;
+          console.log(coords);
+          var created = app.addNode(coords);
+          newNodeBox.moveToBottom();
+          nodeOrigin.setListening(false);
+          uiLayer.draw();
+      });
+
+      uiLayer.add(newNodeBox);
+
+      circleLayer.draw();
+      uiLayer.draw();
+
+    }
+
+    app.clearGraph = function() {
+        edgeLayer.removeChildren();
+        edgeLayer.clear();
+        nodeLayer.removeChildren();
+        nodeLayer.clear();
+        nodes = [];
+        edges = [];
+    }
+
+    app.createRandomGraph = function(nodeCount,edgeProbability) {
+        nodeCount = nodeCount || 10;
+        edgeProbability = edgeProbability || 0.4;
+
+        Notify("Creating random graph...");
+        for (i=0;i<nodeCount;i++) {
+            var current = i+1;
+            Notify("Adding node "+current+" of "+nodeCount);
+            app.addNode();
+            
+        }
+
+        Notify("Adding edges."); 
+        $.each(nodes, function (index, value) {
+            if (randomBetween(0, 1) < edgeProbability) {
+                var randomFriend = Math.round(randomBetween(0,nodes.length-1));
+                app.addEdge(nodes[index],nodes[randomFriend]);
+                 
+            }
+        });
+    }
+
+    return app;
+
+})();
+
+window.onload = function() {
+$('#menu-button').click(function() {
+    // $(this).toggleClass( "btn-link" );
+    // $(this).toggleClass( "btn-primary" );
+    console.log($('.menu-container').css('opacity'));
+    if($('.menu-container').css('opacity') == '1') {
+        $('.menu-item').animate({
+            'marginLeft': '-110px',
+        },1000,"easeOutQuint");
+        $('.menu-container').animate({
+            'opacity': '0'
+        },1000,"easeOutQuint");
+    } else {
+        $('.menu-item').animate({
+            'marginLeft': 0,
+        },1000,"easeOutQuint");
+        $('.menu-container').animate({
+            'opacity': '1'
+        },1000,"easeOutQuint");        
+    }
+
+});
+
+mySwiper = new Swiper('.swiper-container',{
+    //Your options here:
+    mode:'horizontal',
+    loop: false,
+    autoResize: true,
+    keyboardControl: true,
+    speed: 1000,
+    onlyExternal: true,
+    onSlideChangeStart: function (e) {
+    },
+    onSlideChangeEnd: function () {
+    }  
+});
+
+    NetCanvas.init();
+
+};

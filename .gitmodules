@@ -13,3 +13,9 @@
 [submodule "externals/Swiper"]
 	path = externals/Swiper
 	url = https://github.com/nolimits4web/Swiper.git
+[submodule "externals/TinyColor"]
+	path = externals/TinyColor
+	url = https://github.com/bgrins/TinyColor.git
+[submodule "externals/easings"]
+	path = externals/easings
+	url = https://github.com/ai/easings.net.git

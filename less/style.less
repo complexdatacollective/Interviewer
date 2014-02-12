@@ -23,13 +23,54 @@ html, body {
     user-select: none;
 }
 
+.btn-link:hover {
+    text-decoration: none !important;
+}
+
 #nodebox {
     position:absolute;
     bottom:20px;
     left:10px;
 }
 
+.arrow-nav {
+    position:fixed;
+    top:43%;
 
+}
+.arrow-right {
+    right:0
+}
+.arrow-left {
+    left:0;
+}
+
+.menu {
+    line-height: 1.1;
+    position:absolute;
+    top:15px;
+    left:150px;
+}
+
+.menu-item {
+    line-height:1.1;
+    width:130px;
+    margin-left:-110px;
+}
+
+.menu-container {
+    opacity:0;
+}
+
+.menu-text {
+    font-size: @font-size-small;
+}
+
+.menu-button {
+    width:130px;
+    left:15px;
+    z-index: 9999;
+}
 
 .ring {
     border: 30px solid #999;

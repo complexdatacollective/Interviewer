@@ -19,35 +19,57 @@
         <script src="externals/jquery/dist/jquery.min.js"></script>
         <script src="externals/Swiper/dist/idangerous.swiper.min.js"></script>
 		    <script src="externals/kinetic/kinetic.min.js"></script>
-        <script src="externals/bootstrap/dist/js/bootstrap.min.js"></script>      
-        <script src="js/main.min.js"></script>
+        <script src="externals/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="externals/TinyColor/dist/tinycolor-min.js"></script>
+<!--    <script src="externals/zepto/dist/zepto.min.js"></script> -->
+        <script src="js/jquery.easing.1.3.js"></script>      
+        <script src="js/main.js"></script>
 
 
 
 </head>
 <body>
 
-<div class="ui arrow-nav arrow-nav-left">
-  <span class="pictogram arrows">&#59154;</span>
+<div class="ui btn btn-primary btn-lg menu menu-button" id="menu-button">
+  <span class="glyphicon glyphicon-list-alt"></span><div class="menu-text">Menu</div>
+</div>
+<div class="ui menu menu-container">
+  <div class="ui btn btn-info btn-lg menu-item">
+    <span class="glyphicon glyphicon-link"></span><div class="menu-text">Link</div>
+  </div>
+  <div class="ui btn btn-success btn-lg menu-item">
+    <span class="glyphicon glyphicon-globe"></span><div class="menu-text">Communities</div>
+  </div>
+  <div class="ui btn btn-warning btn-lg menu-item">
+    <span class="glyphicon glyphicon glyphicon-floppy-save"></span><div class="menu-text">Download</div>
+  </div>
+  <div class="ui btn btn-danger btn-lg menu-item">
+    <span class="glyphicon glyphicon glyphicon-cog"></span><div class="menu-text">Settings</div>
+  </div>
+</div>
+
+<div class="btn btn-link btn-lg ui arrow-nav arrow-left">
+  <span class="glyphicon glyphicon-chevron-left"></span>
 </div>  
 
-<div class="ui arrow-nav arrow-nav-right">  
-  <span class="pictogram arrows">&#10150;</span>
+<div class="btn btn-link btn-lg ui arrow-nav arrow-right">  
+  <span class="glyphicon glyphicon-chevron-right"></span>
 </div>
 
 <div class="swiper-container">
   <div class="swiper-wrapper">
       <!--First Slide-->
-    <div class="swiper-slide"> 
+
+<!--     <div class="swiper-slide"> 
        <div class="container"><h1>Hello</h1></div>
-    </div>
+    </div> -->
       
     <!--Second Slide-->
     <div class="swiper-slide">
  
             <div id="kineticCanvas"></div>
 
-            <button class="ui btn btn-primary btn-large nodebutton">
+<!--             <button class="ui btn btn-primary btn-large nodebutton">
               <span class="pictogram button">&#59136;</span>
             </button>
 
@@ -57,8 +79,8 @@
 
             <button class="ui btn btn-primary btn-large communitybutton" >
               <span class="pictogram button">&#59290;</span>
-            </button>
-           <!--  <div class="ring"></div> -->
+            </button> -->
+<!--             <div class="ring"></div> -->
       </div>
   </div>
 </div>
