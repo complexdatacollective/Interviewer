@@ -2,7 +2,6 @@
 var touchNumber = 0;
 var Notify = function(text, type){
         console.log(text);
-
 }
 
 var randomBetween = function(min,max) {
@@ -101,34 +100,44 @@ var NetCanvas = (function () {
 
         Notify("Putting node "+nodeTextLabel+" at coordinates x:"+nodex+", y:"+nodey, "success"); 
 
-        nodeGroup.on('dragstart dragmove', function() {
-            Notify("Drag start.");
+        nodeGroup.on('dragstart', function() {
+            Notify("dragstart");
+            var dragnode = this;
+        });
+
+
+        nodeGroup.on('dragmove', function(e) {
+            Notify("Dragmove");
             var dragNode = this;
-            $.each(edges, function(index, value) {
-                // value.setPoints([dragNode.getX(), dragNode.getY() ]);
-            if (value.attrs.from == dragNode || value.attrs.to == dragNode) {
-                var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
-                value.attrs.points = points;               
+            var currX = this.attrs.x;
+            var currY = this.attrs.y;
+            var touchY = e.touches[0].clientY;
+            var touchX = e.touches[0].clientX;
+            // console.log(e.touches[0].clientX+' ('+currX+'), '+e.touches[0].clientY+' ('+currY+')');
+
+            if( (Math.abs(currX-touchX)) > 10 || (Math.abs(currY-touchY)) > 10 ) {
+                console.log(e);
+                $.each(edges, function(index, value) {
+                    // value.setPoints([dragNode.getX(), dragNode.getY() ]);
+                    if (value.attrs.from == dragNode || value.attrs.to == dragNode) {
+                        var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
+                        value.attrs.points = points;          
+                    }
+                });
+                edgeLayer.draw();     
+            } else {
+                Notify('false.')
+                dragNode.setDraggable(false);
             }
 
-            });
+            dragNode.setDraggable(true);
 
-            edgeLayer.draw();
-        });  
-
-        nodeGroup.on('mousedown tap', function() {
-            touchNumber++;
-            Notify("Touchstart");
-            Notify("Touch number: "+touchNumber);
-        });  
-
-        nodeGroup.on('mouseup touchend', function() {
-            touchNumber--;
-            Notify("Touchend");
-            Notify("Touch number: "+touchNumber);
-        });            
+        });    
 
         nodeGroup.on('dragend', function() {
+            Notify('dragend');
+            var dragNode = this;
+            dragNode.setDraggable(true);
             uiLayer.children[0].setListening(true); // Listen for click events on the new node box again.
             app.saveGraph();
 
@@ -285,7 +294,7 @@ var NetCanvas = (function () {
     app.drawUIComponents = function () {
 
         var settings = {
-                circleColor: '#fff',
+                circleColor: '#C3D5E6',
                 circleNumber: 4,
             }
         // Draw all UI components
