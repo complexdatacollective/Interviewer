@@ -1,7 +1,16 @@
 //helper functions go here
-var touchNumber = 0;
+
+var settings = {
+    debug: false,
+    defaultNodeRadius: 28,
+    circleColor: '#fff',
+    circleNumber: 4,
+}
+
 var Notify = function(text, type){
-        console.log(text);
+    if(settings.debug) {
+        console.log(text);        
+    }
 }
 
 var randomBetween = function(min,max) {
@@ -25,32 +34,27 @@ var NetCanvas = (function () {
     // globals
     var stage, newNodeBox, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper,
         nodes = [],
-        edges = [],
-        edgeTemp = [],
-        defaultNodeRadius =  33,
-        debug = true,
-        leftHanded = true,
-        currentMode = 1,
         _init = false,
-        app = {};
+        settings = {},
+        app = {},
+        selectedNodes = [];
 
     // Colours
     var colors = [];
     colors['blue'] = '#0174DF';
-    colors['edge'] = '#888';
+    colors['edge'] = '#0174DF';
 
     // Dummy Names
     var namesList = new Array("Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive");
 
-    app.init = function () {
+    app.init = function (s) {
         if (_init) {
             return;
         }
         _init = true;
-
+        settings = s;
         this.initKinetic();
         this.drawUIComponents();
-        // this.createRandomGraph(10,0.4);
         this.loadGraph();
     }
 
@@ -58,7 +62,7 @@ var NetCanvas = (function () {
 
         var nodex,nodey;
         var nodeTextLabel = (label != null) ? label : namesList[Math.round(randomBetween(0,namesList.length-1))],
-            nodeSize = (size != null) ? size : defaultNodeRadius;
+            nodeSize = (size != null) ? size : settings.defaultNodeRadius;
 
         if (coords != null) {
             nodex = coords[0];
@@ -71,27 +75,33 @@ var NetCanvas = (function () {
 
         var nodeGroup = new Kinetic.Group({
             id: nodes.length,
-            draggable: true,
             y: nodey,
             x: nodex,
             name: nodeTextLabel,
-            edges: []
+            edges: [],
+            draggable: true,
+            dragDistance: 10,
         });
 
         var nodeCircle = new Kinetic.Circle({
-            dashArray: [15, 3],
             radius: nodeSize,
-            stroke: colors['blue'],
-            strokeWidth: 10,
+            fill:colors['blue'],
+            // stroke: colors['blue'],
+            strokeWidth: 0,
         });
 
         var nodeLabel = new Kinetic.Text({         
             text: nodeTextLabel,
-            fontSize: 15,
-            fontFamily: 'Raleway',
-            fill: 'red',
-            offsetX: -40,
-            offsetY: 10,
+            fontSize: 25,
+            fontFamily: 'Lato',
+            fill: 'white',
+            offsetX: -32,
+            offsetY:15,
+            fontStyle:100,
+        shadowColor: 'black',
+        shadowBlur: 4,
+        shadowOffset: {x:0, y:0},
+        shadowOpacity: 1
 
         });
 
@@ -103,42 +113,59 @@ var NetCanvas = (function () {
         nodeGroup.on('dragstart', function() {
             Notify("dragstart");
             var dragnode = this;
+            this.moveToTop();
+            nodeLayer.draw();
         });
 
 
         nodeGroup.on('dragmove', function(e) {
             Notify("Dragmove");
             var dragNode = this;
-            var currX = this.attrs.x;
-            var currY = this.attrs.y;
-            var touchY = e.touches[0].clientY;
-            var touchX = e.touches[0].clientX;
-            // console.log(e.touches[0].clientX+' ('+currX+'), '+e.touches[0].clientY+' ('+currY+')');
-
-            if( (Math.abs(currX-touchX)) > 10 || (Math.abs(currY-touchY)) > 10 ) {
-                console.log(e);
-                $.each(edges, function(index, value) {
-                    // value.setPoints([dragNode.getX(), dragNode.getY() ]);
-                    if (value.attrs.from == dragNode || value.attrs.to == dragNode) {
-                        var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
-                        value.attrs.points = points;          
-                    }
-                });
-                edgeLayer.draw();     
-            } else {
-                Notify('false.')
-                dragNode.setDraggable(false);
-            }
-
-            dragNode.setDraggable(true);
+            $.each(edgeLayer.children, function(index, value) {
+                // value.setPoints([dragNode.getX(), dragNode.getY() ]);
+                if (value.attrs.from == dragNode || value.attrs.to == dragNode) {
+                    var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
+                    // var points = new Array();
+                    // var points1 = {};
+                    // var points2 = {};
+                    // points1.x = value.attrs.from.attrs.x;
+                    // points1.y = value.attrs.from.attrs.y;
+                    // points2.x = value.attrs.to.attrs.x;
+                    // points2.y = value.attrs.to.attrs.y;
+                    // points.push(points1);
+                    // points.push(points2);
+                    value.attrs.points = points;       
+                }
+            });
+            edgeLayer.draw();     
 
         });    
+
+        nodeGroup.on('tap', function(e) {
+            this.moveToTop();
+            nodeLayer.draw();
+        }); 
+    
+        nodeGroup.on('dbltap', function(e) {
+            Notify('double tap');
+            selectedNodes.push(this);
+            if(selectedNodes.length == 2) {
+                app.addEdge(selectedNodes[0],selectedNodes[1]);
+                selectedNodes[0].children[0].fill(colors['blue']);
+                selectedNodes[1].children[0].fill(colors['blue']);
+                selectedNodes = [];
+                nodeLayer.draw(); 
+
+            } else {
+                this.children[0].fill('red');
+                nodeLayer.draw();                
+            }
+
+        });      
 
         nodeGroup.on('dragend', function() {
             Notify('dragend');
             var dragNode = this;
-            dragNode.setDraggable(true);
-            uiLayer.children[0].setListening(true); // Listen for click events on the new node box again.
             app.saveGraph();
 
         });
@@ -147,6 +174,7 @@ var NetCanvas = (function () {
         nodes.push(nodeGroup);
         nodeGroup.moveToBottom();
         nodeLayer.draw();
+        app.saveGraph();
         return nodeGroup;
     }
 
@@ -164,6 +192,7 @@ var NetCanvas = (function () {
     app.addEdge = function(from, to) {
         var alreadyExists = false;
         var fromObject,toObject;
+        var toRemove;
 
         //TODO: Make this function accept ID's or names
         //TODO: Check if the nodes exist and return false if they don't.
@@ -179,21 +208,26 @@ var NetCanvas = (function () {
             toObject = app.getNodeByID(to);
         }
 
-        $.each(edges, function(index, value) {
-            if (value.attrs.from == toObject || value.attrs.to == toObject) {
-                alreadyExists = true;
+        if (edgeLayer.children.length > 0) {
+            $.each(edgeLayer.children, function(index, value) {
+                if (value.attrs.from == fromObject && value.attrs.to == toObject || value.attrs.to == fromObject && value.attrs.from == toObject) {
+                    toRemove = value;
+                    alreadyExists = true;
             }
         });  
 
-        if (alreadyExists || fromObject === toObject) {
-            Notify("Edge already exists. Cancelling.", "error");
+        }
+
+
+        if (alreadyExists) {
+            app.removeEdge(toRemove);
             return false;
         }
 
         var points = [fromObject.attrs.x, fromObject.attrs.y, toObject.attrs.x, toObject.attrs.y];
         var edge = new Kinetic.Line({
             // dashArray: [10, 10, 00, 10],
-            strokeWidth: 2,
+            strokeWidth: 4,
             stroke: colors['edge'],
             // opacity: 0.8,
             from: fromObject,
@@ -201,18 +235,31 @@ var NetCanvas = (function () {
             points: points
         });
 
-        edges.push(edge);
         edgeLayer.add(edge);
         edgeLayer.draw(); 
         nodeLayer.draw();
         Notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success");
+        app.saveGraph();
         return true;   
     }
+
+    app.removeEdge = function(edge) {
+        Notify("Removing edge.");
+        $.each(edgeLayer.children, function(index, value) {
+            if (value == edge) {
+                edgeLayer.children[index].remove();
+                edgeLayer.draw();
+            }
+        }); 
+
+        app.saveGraph();
+          
+    }    
 
     app.getSimpleEdges = function() {
         var simpleEdges = {}
         var edgeCounter = 0;
-        $.each(edges, function(index, value) {
+        $.each(edgeLayer.children, function(index, value) {
             simpleEdges[edgeCounter] = {};
             simpleEdges[edgeCounter].from = value.attrs.from.attrs.id;
             simpleEdges[edgeCounter].to = value.attrs.to.attrs.id;
@@ -222,6 +269,10 @@ var NetCanvas = (function () {
         return simpleEdges;
     }
 
+    app.getEdgeLayer = function() {
+        return edgeLayer;
+    }
+
     app.initKinetic = function () {
         // Initialise KineticJS stage
         stage = new Kinetic.Stage({
@@ -229,6 +280,15 @@ var NetCanvas = (function () {
             width: window.innerWidth,
             height: window.innerHeight
         });
+
+      stage.getContent().addEventListener('touchmove', function(evt) {
+        var touch1 = evt.touches[0];
+        var touch2 = evt.touches[1];
+        // Notify(evt.touches);
+      }, false);
+
+      stage.getContent().addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+
 
         circleLayer = new Kinetic.Layer();
         nodeLayer = new Kinetic.Layer();
@@ -272,7 +332,7 @@ var NetCanvas = (function () {
     }
 
     app.getEdges = function() {
-        return edges;
+        return edgeLayer.children;
     }    
 
     app.getSimpleNodes = function() {
@@ -286,26 +346,19 @@ var NetCanvas = (function () {
         });
         return simpleNodes;
     }
-    
-    app.getEdges = function() {
-        return edges;
-    }
 
     app.drawUIComponents = function () {
 
-        var settings = {
-                circleColor: '#C3D5E6',
-                circleNumber: 4,
-            }
         // Draw all UI components
         var circleFills, circleLines;
         var currentColor = settings.circleColor;
-        var totalHeight = window.innerHeight-(defaultNodeRadius *  2); // Our canvas area is the window height minus twice the node radius (for spacing)
+        var totalHeight = window.innerHeight-(settings.defaultNodeRadius *  2); // Our canvas area is the window height minus twice the node radius (for spacing)
+        var currentOpacity = 0.1;
         
         //draw concentric circles
         for(i = 0; i < settings.circleNumber; i++) {
             var ratio = 1-(i/settings.circleNumber);
-            var currentRadius = totalHeight/2 * ratio;
+            var currentRadius = (totalHeight/2 * ratio);
       
             var circleLines = new Kinetic.Circle({
                 x: window.innerWidth / 2,
@@ -321,10 +374,12 @@ var NetCanvas = (function () {
                 y: window.innerHeight / 2,
                 radius: currentRadius,
                 fill: currentColor,
-                strokeWidth: 0
+                opacity: currentOpacity,
+                strokeWidth: 0,
             });
 
-            currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();        
+            // currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();
+            currentOpacity = currentOpacity+((0.3-currentOpacity)/settings.circleNumber);        
             circleLayer.add(circleFills); 
             circleLayer.add(circleLines);
 
@@ -344,10 +399,9 @@ var NetCanvas = (function () {
           var coords = new Array();
           coords[0] = touchPos.x;
           coords[1] = touchPos.y;
-          console.log(coords);
+          Notify(coords);
           var created = app.addNode(coords);
           newNodeBox.moveToBottom();
-          nodeOrigin.setListening(false);
           uiLayer.draw();
       });
 
@@ -364,7 +418,7 @@ var NetCanvas = (function () {
         nodeLayer.removeChildren();
         nodeLayer.clear();
         nodes = [];
-        edges = [];
+        app.saveGraph();
     }
 
     app.createRandomGraph = function(nodeCount,edgeProbability) {
@@ -393,27 +447,72 @@ var NetCanvas = (function () {
 
 })();
 
-window.onload = function() {
-$('#menu-button').click(function() {
-    // $(this).toggleClass( "btn-link" );
-    // $(this).toggleClass( "btn-primary" );
-    console.log($('.menu-container').css('opacity'));
-    if($('.menu-container').css('opacity') == '1') {
-        $('.menu-item').animate({
-            'marginLeft': '-110px',
-        },1000,"easeOutQuint");
-        $('.menu-container').animate({
-            'opacity': '0'
-        },1000,"easeOutQuint");
-    } else {
-        $('.menu-item').animate({
-            'marginLeft': 0,
-        },1000,"easeOutQuint");
-        $('.menu-container').animate({
-            'opacity': '1'
-        },1000,"easeOutQuint");        
+var menu = (function () {
+
+    var menu = {};
+    var open = false;
+
+    menu.open = function() {
+        $('.menu-item').animate({'marginLeft': 0,},500,"easeOutQuint");
+        $('.menu-container').animate({'opacity': '1'},500,"easeOutQuint");
+        open = true; 
     }
 
+    menu.close = function() {
+        $('.menu-item').animate({'marginLeft': '-110px',},700,"easeOutQuint");
+        $('.menu-container').animate({'opacity': '0'},500,"easeOutQuint");
+        open = false;
+    }
+
+    menu.toggle = function() {
+        if(open) {
+            menu.close();
+        } else {
+            menu.open();
+        }
+
+    }
+
+    return menu;
+
+})();
+
+window.onload = function() {
+ $('body').addClass('bodyfade');
+
+document.getElementById("kineticCanvas").addEventListener('contextmenu', function (event) {
+  event.preventDefault();
+});
+
+$('#menu-button').click(function() {
+    menu.toggle();
+});
+
+$('.menu-item').click(function() {
+    menu.close();
+});
+
+$('#kineticCanvas').click(function() {
+    menu.close();
+});
+
+$('#refresh-button').click(function() {
+    $(this).addClass('.refresh-animate');
+    location.reload(); 
+});
+
+
+
+$('#generate-graph-submit').click(function() {
+    $('.modal').modal('hide');
+    menu.close();
+    if($('#gen-graph-clear').is(':checked')) {
+        NetCanvas.clearGraph();
+    }
+
+    var nodeNumber = $('#gen-graph-nodes').val();
+    var edgeProb = $('#gen-graph-edge-prob').val();
+    NetCanvas.createRandomGraph(nodeNumber,edgeProb);
 });
 
 mySwiper = new Swiper('.swiper-container',{
@@ -430,6 +529,6 @@ mySwiper = new Swiper('.swiper-container',{
     }  
 });
 
-    NetCanvas.init();
+    NetCanvas.init(settings);
 
 };

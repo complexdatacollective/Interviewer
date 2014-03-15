@@ -164,13 +164,10 @@
 			}
 		},
 		{
-			"contents": "<!DOCTYPE html>\n<!--[if lt IE 7]>      <html class=\"no-js lt-ie9 lt-ie8 lt-ie7\"> <![endif]-->\n<!--[if IE 7]>         <html class=\"no-js lt-ie9 lt-ie8\"> <![endif]-->\n<!--[if IE 8]>         <html class=\"no-js lt-ie9\"> <![endif]-->\n<!--[if gt IE 8]><!--> <html class=\"no-js\"> <!--<![endif]-->\n    <head>\n        <meta charset=\"utf-8\">\n        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n        <title></title>\n        <meta name=\"description\" content=\"\">\n        <meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0, user-scalable=no\">\n        <!-- include the core styles -->\n        <link rel=\"stylesheet\" href=\"externals/Swiper/dist/idangerous.swiper.css\">\n        <link rel=\"stylesheet\" href=\"css/style.css\">\n\n        <link href='http://fonts.googleapis.com/css?family=Noto+Sans|Merriweather+Sans|Sintony:400,700|Roboto' rel='stylesheet' type='text/css'>\n        <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900' rel='stylesheet' type='text/css'>\n\n        <script src=\"externals/jquery/dist/jquery.min.js\"></script>\n        <script src=\"externals/Swiper/dist/idangerous.swiper.min.js\"></script>\n		    <script src=\"externals/kinetic/kinetic.min.js\"></script>\n        <script src=\"js/Kinetic.MultiTouch.js\"></script>\n        <script src=\"externals/bootstrap/dist/js/bootstrap.min.js\"></script>\n        <script src=\"externals/TinyColor/dist/tinycolor-min.js\"></script>\n<!--    <script src=\"externals/zepto/dist/zepto.min.js\"></script> -->\n        <script src=\"js/jquery.easing.1.3.js\"></script>      \n        <script src=\"js/main.js\"></script>\n\n\n\n</head>\n<body>\n\n<div class=\"ui btn btn-primary btn-lg menu menu-button\" id=\"menu-button\">\n  <span class=\"glyphicon glyphicon-list-alt\"></span><div class=\"menu-text\">Menu</div>\n</div>\n<div class=\"ui menu menu-container\">\n  <div class=\"ui btn btn-info btn-lg menu-item\">\n    <span class=\"glyphicon glyphicon-link\"></span><div class=\"menu-text\">Link</div>\n  </div>\n  <div class=\"ui btn btn-success btn-lg menu-item\">\n    <span class=\"glyphicon glyphicon-globe\"></span><div class=\"menu-text\">Communities</div>\n  </div>\n  <div class=\"ui btn btn-warning btn-lg menu-item\">\n    <span class=\"glyphicon glyphicon glyphicon-floppy-save\"></span><div class=\"menu-text\">Download</div>\n  </div>\n  <div class=\"ui btn btn-danger btn-lg menu-item\">\n    <span class=\"glyphicon glyphicon glyphicon-cog\"></span><div class=\"menu-text\">Settings</div>\n  </div>\n</div>\n\n<div class=\"btn btn-link btn-lg ui arrow-nav arrow-left\">\n  <span class=\"glyphicon glyphicon-chevron-left\"></span>\n</div>  \n\n<div class=\"btn btn-link btn-lg ui arrow-nav arrow-right\">  \n  <span class=\"glyphicon glyphicon-chevron-right\"></span>\n</div>\n\n<div class=\"swiper-container\">\n  <div class=\"swiper-wrapper\">\n      <!--First Slide-->\n\n<!--     <div class=\"swiper-slide\"> \n       <div class=\"container\"><h1>Hello</h1></div>\n    </div> -->\n      \n    <!--Second Slide-->\n    <div class=\"swiper-slide\">\n \n            <div id=\"kineticCanvas\"></div>\n\n<!--             <button class=\"ui btn btn-primary btn-large nodebutton\">\n              <span class=\"pictogram button\">&#59136;</span>\n            </button>\n\n            <button class=\"ui btn btn-primary btn-large edgebutton\">\n              <span class=\"pictogram button\">&#128279;</span>\n            </button>\n\n            <button class=\"ui btn btn-primary btn-large communitybutton\" >\n              <span class=\"pictogram button\">&#59290;</span>\n            </button> -->\n<!--             <div class=\"ring\"></div> -->\n      </div>\n  </div>\n</div>\n\n\n\n\n\n\n    </body>\n</html>\n",
 			"file": "index.html",
-			"file_size": 3541,
-			"file_write_time": 1392228736000000,
 			"settings":
 			{
-				"buffer_size": 3598,
+				"buffer_size": 3829,
 				"line_ending": "Unix"
 			}
 		},
@@ -186,12 +183,12 @@
 			"file": "js/main.js",
 			"settings":
 			{
-				"buffer_size": 12836,
+				"buffer_size": 13696,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/joshua/Sites/Kinetic.MultiTouch/example/example.js",
+			"file": "/Users/joshua/Sites/KineticMT/example/example.js",
 			"settings":
 			{
 				"buffer_size": 3551,
@@ -199,18 +196,26 @@
 			}
 		},
 		{
-			"file": "/Users/joshua/Sites/Kinetic.MultiTouch/example/index.html",
+			"file": "js/Kinetic.MultiTouch.js",
 			"settings":
 			{
-				"buffer_size": 1870,
+				"buffer_size": 12041,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/joshua/Sites/Kinetic.MultiTouch/Kinetic.MultiTouch.js",
+			"file": "js/kinetic.min.js",
 			"settings":
 			{
-				"buffer_size": 12054,
+				"buffer_size": 473371,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "externals/kinetic/src/Stage.js",
+			"settings":
+			{
+				"buffer_size": 24711,
 				"line_ending": "Unix"
 			}
 		}
@@ -247,6 +252,19 @@
 	},
 	"file_history":
 	[
+		"/Applications/MAMP/htdocs/wp-content/themes/geo2-experimental/js/main.js",
+		"/Users/joshua/Sites/netCanvas/externals/kinetic/src/Animation.js",
+		"/Users/joshua/Sites/netCanvas/externals/kinetic/src/DragAndDrop.js",
+		"/Users/joshua/Sites/netCanvas/externals/kinetic/src/Factory.js",
+		"/Users/joshua/Sites/KineticJS/src/DragAndDrop.js",
+		"/Users/joshua/Sites/KineticJS/kinetic.js",
+		"/Users/joshua/Sites/netCanvas/js/kinetic.min.js",
+		"/Users/joshua/Sites/Kinetic.MultiTouch/example/example.js",
+		"/Users/joshua/Sites/KineticMT/example/kinetic.min.js",
+		"/Users/joshua/Sites/Kinetic.MultiTouch/Kinetic.MultiTouch.js",
+		"/Users/joshua/Sites/Kinetic.MultiTouch/example/index.html",
+		"/Users/joshua/Sites/netCanvas/externals/kinetic/kinetic.js",
+		"/Users/joshua/Sites/netCanvas/.gitmodules",
 		"/Users/joshua/Sites/ghost-openshift/content/themes/ghostwriter/index.hbs",
 		"/Users/joshua/Sites/ghost-openshift/content/themes/casper/index.hbs",
 		"/Users/joshua/Sites/ghost-openshift/config.js",
@@ -256,7 +274,6 @@
 		"/Users/joshua/Sites/ghost-openshift/core/server.js",
 		"/Users/joshua/Sites/ghost-openshift/index.js",
 		"/Users/joshua/Sites/ghost-openshift/Gruntfile.js",
-		"/Users/joshua/Sites/Kinetic.MultiTouch/example/index.html",
 		"/Users/joshua/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/joshua/Sites/netCanvas/js/main.js",
 		"/Users/joshua/Sites/android_geo/www/js/main.js",
@@ -271,7 +288,6 @@
 		"/Users/joshua/Sites/netCanvas/css/idangerous.swiper.css",
 		"/Users/joshua/Sites/android_geo/www/less/style.less",
 		"/Users/joshua/Sites/netCanvas/js/idangerous.swiper-2.2.min.js",
-		"/Users/joshua/Sites/netCanvas/js/kinetic.min.js",
 		"/Users/joshua/Sites/netCanvas/js/kinetic-v4.5.0.min.js",
 		"/Users/joshua/Sites/netCanvas/js/plugins.js",
 		"/Users/joshua/Sites/netCanvas/css/main.css",
@@ -322,6 +338,25 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"{multitouch : true}",
+			"container",
+			"{multitouch : true}",
+			"stage",
+			"one touch",
+			"for now",
+			"get",
+			"multitouch",
+			"DRAGMOVE",
+			"dd.node",
+			"dd.isDragging",
+			"_drag",
+			"dd.is",
+			"dd.node",
+			"drag",
+			"dd.node",
+			" if(!dd.isDragging) {",
+			"+",
+			"DD",
 			"ui",
 			"thresh",
 			"save",
@@ -408,7 +443,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -423,8 +458,8 @@
 						"selection":
 						[
 							[
-								646,
-								646
+								1103,
+								1103
 							]
 						],
 						"settings":
@@ -434,7 +469,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 503.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -444,15 +479,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 3598,
+						"buffer_size": 3829,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1593,
-								1593
+								1311,
+								1311
 							]
 						],
 						"settings":
@@ -488,7 +523,7 @@
 							"syntax": "Packages/LESS/LESS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 7970.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -498,15 +533,15 @@
 					"file": "js/main.js",
 					"settings":
 					{
-						"buffer_size": 12836,
+						"buffer_size": 13696,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6723,
-								6729
+								13035,
+								13035
 							]
 						],
 						"settings":
@@ -516,14 +551,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3244.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "/Users/joshua/Sites/Kinetic.MultiTouch/example/example.js",
+					"file": "/Users/joshua/Sites/KineticMT/example/example.js",
 					"settings":
 					{
 						"buffer_size": 3551,
@@ -533,8 +568,8 @@
 						"selection":
 						[
 							[
-								297,
-								297
+								1968,
+								1968
 							]
 						],
 						"settings":
@@ -544,51 +579,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1002.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "/Users/joshua/Sites/Kinetic.MultiTouch/example/index.html",
+					"file": "js/Kinetic.MultiTouch.js",
 					"settings":
 					{
-						"buffer_size": 1870,
+						"buffer_size": 12041,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1533,
-								1595
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Users/joshua/Sites/Kinetic.MultiTouch/Kinetic.MultiTouch.js",
-					"settings":
-					{
-						"buffer_size": 12054,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
+								1968,
+								1968
 							]
 						],
 						"settings":
@@ -598,7 +607,63 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 554.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "js/kinetic.min.js",
+					"settings":
+					{
+						"buffer_size": 473371,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								473371,
+								473371
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 198122.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "externals/kinetic/src/Stage.js",
+					"settings":
+					{
+						"buffer_size": 24711,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5346,
+								5346
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7028.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

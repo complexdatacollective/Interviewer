@@ -10,7 +10,25 @@ html, body {
     height:100%;
     width:100%;
     // -webkit-font-smoothing: antialiased;
+    font-weight:300;
 
+
+}
+
+body {
+    opacity:0;
+}
+
+body.modal-open, 
+.modal-open .navbar-fixed-top, 
+.modal-open .navbar-fixed-bottom 
+{
+    margin-right: 0px;
+}
+
+.modal
+{
+    overflow-y: auto;
 }
 
 .ui {
@@ -45,6 +63,29 @@ html, body {
     left:0;
 }
 
+#refresh-button {
+    position: fixed;
+    bottom:35px;
+    right:45px;
+    cursor:pointer;
+}
+
+.refresh-animate {
+    -webkit-animation: spin 1s infinite linear;
+}
+
+@-webkit-keyframes spin {
+    0%  {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg);}   
+}
+
+.bodyfade {
+   opacity: 1;
+   transition: opacity 2s ease-in-out;
+   -moz-transition: opacity 2s ease-in-out;
+   -webkit-transition: opacity 2s ease-in-out;
+   }
+
 .menu {
     line-height: 1.1;
     position:absolute;
@@ -69,7 +110,32 @@ html, body {
 .menu-button {
     width:130px;
     left:15px;
-    z-index: 9999;
+    z-index: 99;
+}
+
+.modal-content {
+    background-clip: inherit;
+    border:0;
+}
+.modal-dialog {
+    margin-top:190px !important;
+    // top:50%;
+    // left:50%;
+}
+
+.modal-header {
+    background: darken(@brand-primary, 25%);
+    border-bottom:0;
+    text-align:center;
+}
+
+.modal-footer {
+    border-top:0;
+    text-align: center;
+}
+
+label {
+    font-weight: 300 !important;
 }
 
 .ring {

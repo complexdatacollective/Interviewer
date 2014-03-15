@@ -49,7 +49,7 @@
             var tp = toStagePoint(point);
             // Find node below point
             var obj = stage.getIntersection(tp);
-            return obj && obj.shape;
+            return obj;
         }
 
         // Scan the node hierarchy starting fron the given node for 'multitouch' directives.

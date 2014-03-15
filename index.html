@@ -18,7 +18,11 @@
 
         <script src="externals/jquery/dist/jquery.min.js"></script>
         <script src="externals/Swiper/dist/idangerous.swiper.min.js"></script>
+        <script src="js/underscore-min.js"></script>
+        <script src="js/touchy.js"></script>
 		    <script src="externals/kinetic/kinetic.min.js"></script>
+        <!-- // <script type="text/javascript" src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.7.4.js"></script> -->
+        <script src="js/Kinetic.MultiTouch.js"></script>
         <script src="externals/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="externals/TinyColor/dist/tinycolor-min.js"></script>
 <!--    <script src="externals/zepto/dist/zepto.min.js"></script> -->
@@ -30,12 +34,19 @@
 </head>
 <body>
 
-<div class="ui btn btn-primary btn-lg menu menu-button" id="menu-button">
+<!-- Refresh button -->
+
+<img src="img/glyphicons/png/glyphicons_085_repeat@2x_light.png" id="refresh-button" class="ui"/>
+<!-- Menu Button -->
+
+<div class="ui btn btn-link btn-lg menu menu-button" id="menu-button">
   <span class="glyphicon glyphicon-list-alt"></span><div class="menu-text">Menu</div>
 </div>
+
+<!-- Main Menu -->
 <div class="ui menu menu-container">
-  <div class="ui btn btn-info btn-lg menu-item">
-    <span class="glyphicon glyphicon-link"></span><div class="menu-text">Link</div>
+  <div class="ui btn btn-info btn-lg menu-item" data-toggle="modal" data-target="#generate-graph">
+    <span class="glyphicon glyphicon-link"></span><div class="menu-text">Generate</div>
   </div>
   <div class="ui btn btn-success btn-lg menu-item">
     <span class="glyphicon glyphicon-globe"></span><div class="menu-text">Communities</div>
@@ -48,6 +59,38 @@
   </div>
 </div>
 
+<!-- Generate Graph Modal -->
+<div class="modal fade" id="generate-graph" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Generate a Random Graph</h4>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Number of Nodes</label>
+            <input type="number" class="form-control" id="gen-graph-nodes" value="10">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Edge Probability</label>
+            <input type="number" class="form-control" id="gen-graph-edge-prob" value="1">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="gen-graph-clear" checked> Clear existing graph.
+            </label>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="generate-graph-submit">Generate Graph</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation Arrows -->
 <div class="btn btn-link btn-lg ui arrow-nav arrow-left">
   <span class="glyphicon glyphicon-chevron-left"></span>
 </div>  
