@@ -63,6 +63,6 @@ This project makes extensive use of existing libraries and frameworks. Currently
 
 ## Contribution/Collaboration
 
-Network Canvas is under intense developmet, with the aim of being fully feature complete (according to specification) by summer 2014. I would welcome fixes, improvements, and refinements to the code (I am very much a begginer with these technologies!). 
+Network Canvas is under intensive development, with the aim of being fully feature complete (according to specification) by summer 2014. I would welcome fixes, improvements, and refinements to the code (I am very much a begginer with these technologies!). 
 
 If you want to use Network Canvas with your own work or research, please contact me!
