@@ -5112,7 +5112,7 @@ button.close {
 }
 .modal-content {
   position: relative;
-  background-color: #008ab3;
+  background-color: #cc0000;
   border: 1px solid #999999;
   border: 1px solid transparent;
   border-radius: 6px;
@@ -5140,7 +5140,7 @@ button.close {
 }
 .modal-header {
   padding: 10px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #cc0000;
   min-height: 11.628571429px;
 }
 .modal-header .close {
@@ -5875,7 +5875,7 @@ body.modal-open,
   margin-top: 190px !important;
 }
 .modal-header {
-  background: #004f67;
+  background: #800000;
   border-bottom: 0;
   text-align: center;
 }

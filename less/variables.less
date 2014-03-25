@@ -18,6 +18,7 @@
 @brand-info:            #5bc0de;
 @brand-warning:         #FA920D;
 @brand-danger:          #D62722;
+@modal-base:			#ff0000;
 
 //== Scaffolding
 //
@@ -566,7 +567,7 @@
 @modal-title-line-height:     @line-height-base;
 
 //** Background color of modal content area
-@modal-content-bg:                             darken(@brand-primary,10%);
+@modal-content-bg:                             darken(@modal-base,10%);
 //** Modal content border color
 @modal-content-border-color:                   transparent;
 //** Modal content border color **for IE8**
@@ -577,7 +578,7 @@
 //** Modal backdrop opacity
 @modal-backdrop-opacity:      .7;
 //** Modal header border color
-@modal-header-border-color:   #e5e5e5;
+@modal-header-border-color:   darken(@modal-base, 10%);
 //** Modal footer border color
 @modal-footer-border-color:   transparent;
 
