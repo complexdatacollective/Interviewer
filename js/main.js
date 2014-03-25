@@ -1,3 +1,11 @@
+// CodeKit Imports
+
+// @codekit-prepend "../components/jquery/dist/jquery.min.js"
+// @codekit-prepend "../components/swiper/dist/idangerous.swiper.min.js"
+// @codekit-prepend "../components/kineticjs/kinetic.min.js"
+// @codekit-prepend "../components/jquery.transit/jquery.transit.js"
+
+
 //helper functions go here
 
 var settings = {
@@ -141,12 +149,12 @@ var NetCanvas = (function () {
 
         });    
 
-        nodeGroup.on('tap', function(e) {
+        nodeGroup.on('tap click', function(e) {
             this.moveToTop();
             nodeLayer.draw();
         }); 
     
-        nodeGroup.on('dbltap', function(e) {
+        nodeGroup.on('dbltap dblclick', function(e) {
             Notify('double tap');
             selectedNodes.push(this);
             if(selectedNodes.length == 2) {
@@ -194,7 +202,6 @@ var NetCanvas = (function () {
         var fromObject,toObject;
         var toRemove;
 
-        //TODO: Make this function accept ID's or names
         //TODO: Check if the nodes exist and return false if they don't.
         //TODO: Make sure you cant add a self-loop
 
@@ -453,14 +460,14 @@ var menu = (function () {
     var open = false;
 
     menu.open = function() {
-        $('.menu-item').animate({'marginLeft': 0,},500,"easeOutQuint");
-        $('.menu-container').animate({'opacity': '1'},500,"easeOutQuint");
+        $('.menu-item').transition({ 'marginLeft': 0 }, 500, 'ease');
+        $('.menu-container').transition({'opacity': '1'},500);
         open = true; 
     }
 
     menu.close = function() {
-        $('.menu-item').animate({'marginLeft': '-110px',},700,"easeOutQuint");
-        $('.menu-container').animate({'opacity': '0'},500,"easeOutQuint");
+        $('.menu-item').transition({ 'marginLeft': '-110px' }, 500, 'ease');
+        $('.menu-container').transition({'opacity': '0'},500);
         open = false;
     }
 

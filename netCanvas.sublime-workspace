@@ -4,16 +4,68 @@
 		"selected_items":
 		[
 			[
+				"k",
+				"kineticCanvas"
+			],
+			[
+				"ed",
+				"edgeLayer"
+			],
+			[
+				"already",
+				"alreadyExists"
+			],
+			[
+				"remo",
+				"removeEdge"
+			],
+			[
+				"edge",
+				"edgeLayer"
+			],
+			[
+				"selec",
+				"selectedNodes"
+			],
+			[
+				"cir",
+				"circleNumber"
+			],
+			[
+				"current",
+				"currentOpacity"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"backg",
+				"background-clip"
+			],
+			[
+				"brand",
+				"brand-primary"
+			],
+			[
+				"me",
+				"menu-item"
+			],
+			[
+				"clear",
+				"clearGraph"
+			],
+			[
+				"create",
+				"createRandomGraph"
+			],
+			[
 				"Multit",
 				"MultiTouch"
 			],
 			[
 				"touch",
 				"touchNumber"
-			],
-			[
-				"text",
-				"text-decoration"
 			],
 			[
 				"font",
@@ -48,24 +100,12 @@
 				"simpleNodes"
 			],
 			[
-				"current",
-				"currentColor"
-			],
-			[
 				"cu",
 				"cuOpacity"
 			],
 			[
-				"edge",
-				"edgeProbability"
-			],
-			[
 				"cre",
 				"createRandomGraph"
-			],
-			[
-				"create",
-				"createKineticStage"
 			],
 			[
 				"draw",
@@ -159,7 +199,7 @@
 			"file": "less/style.less",
 			"settings":
 			{
-				"buffer_size": 1751,
+				"buffer_size": 2752,
 				"line_ending": "Unix"
 			}
 		},
@@ -167,7 +207,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 3829,
+				"buffer_size": 5427,
 				"line_ending": "Unix"
 			}
 		},
@@ -175,7 +215,15 @@
 			"file": "less/variables.less",
 			"settings":
 			{
-				"buffer_size": 25342,
+				"buffer_size": 25390,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/joshua/Documents/Vuze Downloads/Adobe Acrobat XI Pro 11.0.3 Multilanguage Mac OS X [ChingLiu]/Crack-OSX/install.txt",
+			"settings":
+			{
+				"buffer_size": 2222,
 				"line_ending": "Unix"
 			}
 		},
@@ -183,7 +231,7 @@
 			"file": "js/main.js",
 			"settings":
 			{
-				"buffer_size": 13696,
+				"buffer_size": 15636,
 				"line_ending": "Unix"
 			}
 		},
@@ -215,7 +263,7 @@
 			"file": "externals/kinetic/src/Stage.js",
 			"settings":
 			{
-				"buffer_size": 24711,
+				"buffer_size": 24991,
 				"line_ending": "Unix"
 			}
 		}
@@ -252,6 +300,7 @@
 	},
 	"file_history":
 	[
+		"/Users/joshua/Documents/Vuze Downloads/Adobe Acrobat XI Pro 11.0.3 Multilanguage Mac OS X [ChingLiu]/ChingLiu.Install.Notes.txt",
 		"/Applications/MAMP/htdocs/wp-content/themes/geo2-experimental/js/main.js",
 		"/Users/joshua/Sites/netCanvas/externals/kinetic/src/Animation.js",
 		"/Users/joshua/Sites/netCanvas/externals/kinetic/src/DragAndDrop.js",
@@ -338,6 +387,25 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"draw",
+			"modal",
+			"selectedNodes",
+			"edgeTemp",
+			"console.log",
+			"addedge",
+			"edges",
+			"==",
+			"edges",
+			"}\n",
+			"alreadyExists",
+			"addNode",
+			"1",
+			"concentri",
+			"label",
+			"modal",
+			"link",
+			"weight",
+			"modal",
 			"{multitouch : true}",
 			"container",
 			"{multitouch : true}",
@@ -451,15 +519,15 @@
 					"file": "less/style.less",
 					"settings":
 					{
-						"buffer_size": 1751,
+						"buffer_size": 2752,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1103,
-								1103
+								2070,
+								2070
 							]
 						],
 						"settings":
@@ -469,7 +537,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 503.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -479,15 +547,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 3829,
+						"buffer_size": 5427,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1311,
-								1311
+								3524,
+								3524
 							]
 						],
 						"settings":
@@ -507,15 +575,15 @@
 					"file": "less/variables.less",
 					"settings":
 					{
-						"buffer_size": 25342,
+						"buffer_size": 25390,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16267,
-								16270
+								654,
+								654
 							]
 						],
 						"settings":
@@ -530,18 +598,46 @@
 				},
 				{
 					"buffer": 3,
-					"file": "js/main.js",
+					"file": "/Users/joshua/Documents/Vuze Downloads/Adobe Acrobat XI Pro 11.0.3 Multilanguage Mac OS X [ChingLiu]/Crack-OSX/install.txt",
 					"settings":
 					{
-						"buffer_size": 13696,
+						"buffer_size": 2222,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13035,
-								13035
+								1516,
+								1432
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 187.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/main.js",
+					"settings":
+					{
+						"buffer_size": 15636,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								134,
+								134
 							]
 						],
 						"settings":
@@ -557,7 +653,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "/Users/joshua/Sites/KineticMT/example/example.js",
 					"settings":
 					{
@@ -585,7 +681,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "js/Kinetic.MultiTouch.js",
 					"settings":
 					{
@@ -613,7 +709,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "js/kinetic.min.js",
 					"settings":
 					{
@@ -641,19 +737,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "externals/kinetic/src/Stage.js",
 					"settings":
 					{
-						"buffer_size": 24711,
+						"buffer_size": 24991,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5346,
-								5346
+								0,
+								0
 							]
 						],
 						"settings":

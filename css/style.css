@@ -1,3 +1,4 @@
+@import '../components/swiper/dist/idangerous.swiper.css';
 /* ===================================================================
 Import Bootstrap LESS and Site Specific LESS
 =================================================================== */
@@ -3297,6 +3298,8 @@ input[type="button"].btn-block {
   padding-right: 0;
 }
 .input-group .form-control {
+  position: relative;
+  z-index: 2;
   float: left;
   width: 100%;
   margin-bottom: 0;
