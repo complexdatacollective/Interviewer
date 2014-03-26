@@ -16,14 +16,20 @@ var NetworkCanvas = function (options) {
     }
 
     Storage.prototype.getObject = function(key) {
-        var value = this.getItem(key);
-        return value && JSON.parse(value);
+        if (this.getItem(key) === null) {
+            Notify('Key not found in localStorage. Returning false.');
+            return false;
+        } else {
+            Notify('Key found in localStorage. Returning it.');
+            var value = this.getItem(key);
+            Notify(value);
+            return value && JSON.parse(value);            
+        }
+
     }
 
     // globals
     var stage, newNodeBox, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper,
-        nodes = [],
-        _init = false,
         app = this,
         selectedNodes = [];
 
@@ -66,8 +72,10 @@ var NetworkCanvas = function (options) {
           nodey = Math.round(randomBetween(100,window.innerHeight-100));
         }
 
+        var nodeNumber = app.getNodes();
+
         var nodeGroup = new Kinetic.Group({
-            id: nodes.length,
+            id: nodeNumber.length,
             y: nodey,
             x: nodex,
             name: nodeTextLabel,
@@ -151,7 +159,6 @@ var NetworkCanvas = function (options) {
         });
 
         nodeLayer.add(nodeGroup);
-        nodes.push(nodeGroup);
         nodeGroup.moveToBottom();
         nodeLayer.draw();
         app.saveGraph();
@@ -160,6 +167,7 @@ var NetworkCanvas = function (options) {
 
     this.getNodeByID = function(id) {
         var node = {}
+        var nodes = app.getNodes();
         $.each(nodes, function(index, value) {
             if (value.attrs.id == id) {
                 node = value;
@@ -274,8 +282,8 @@ var NetworkCanvas = function (options) {
     this.loadGraph = function () {
         // TODO: Add return false for if this fails.
         Notify("Loading graph from localStorage.");
-        loadedNodes = localStorage.getObject('nodes');
-        loadedEdges = localStorage.getObject('edges');
+        loadedNodes = localStorage.getObject('nodes') || {};
+        loadedEdges = localStorage.getObject('edges') || {};
         $.each(loadedNodes, function (index, value) {
             var coords = [];
             coords.push(value.x);
@@ -298,7 +306,7 @@ var NetworkCanvas = function (options) {
     }
 
     this.getNodes = function() {
-        return nodes;
+        return nodeLayer.children;
     }
 
     this.getEdges = function() {
@@ -308,6 +316,7 @@ var NetworkCanvas = function (options) {
     this.getSimpleNodes = function() {
         // We need to create a simple representation of the nodes for storing.
         var simpleNodes = new Object();
+        var nodes = app.getNodes();
         $.each(nodes, function (index, value) {
             simpleNodes[value.attrs.id] = {};
             simpleNodes[value.attrs.id].x = value.attrs.x;
@@ -387,7 +396,6 @@ var NetworkCanvas = function (options) {
         edgeLayer.clear();
         nodeLayer.removeChildren();
         nodeLayer.clear();
-        nodes = [];
         app.saveGraph();
     }
 
@@ -403,7 +411,8 @@ var NetworkCanvas = function (options) {
             
         }
 
-        Notify("Adding edges."); 
+        Notify("Adding edges.");
+        var nodes = app.getNodes(); 
         $.each(nodes, function (index, value) {
             if (randomBetween(0, 1) < edgeProbability) {
                 var randomFriend = Math.round(randomBetween(0,nodes.length-1));

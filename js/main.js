@@ -5,7 +5,7 @@
 // @codekit-prepend "../components/swiper/dist/idangerous.swiper.min.js"
 // @codekit-prepend "../components/kineticjs/kinetic.min.js"
 // @codekit-prepend "../components/jquery.transit/jquery.transit.js"
-// @codekit-prepend "../js/NetworkCanvas.min.js"
+// @codekit-prepend "../js/NetworkCanvas.js"
 
 
 //helper functions go here
@@ -43,7 +43,7 @@ var menu = (function () {
 window.onload = function() {
 
     window.test = new NetworkCanvas({
-        debug: false,
+        debug: true,
         defaultNodeRadius: 28,
         circleColor: '#ffffff',
         circleNumber: 4, 
