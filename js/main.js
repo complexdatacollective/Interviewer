@@ -2,7 +2,6 @@
 
 // @codekit-prepend "../components/jquery/dist/jquery.min.js"
 // @codekit-prepend "../components/bootstrap/dist/js/bootstrap.min.js"
-// @codekit-prepend "../components/swiper/dist/idangerous.swiper.min.js"
 // @codekit-prepend "../components/kineticjs/kinetic.min.js"
 // @codekit-prepend "../components/jquery.transit/jquery.transit.js"
 // @codekit-prepend "../js/NetworkCanvas.js"
@@ -18,14 +17,14 @@ var menu = (function () {
     menu.open = function() {
         $('.menu-item').transition({ 'marginLeft': 0 }, 500, 'ease');
         $('.menu-container').transition({'opacity': '1'},500);
-        open = true; 
-    }
+        open = true;
+    };
 
     menu.close = function() {
         $('.menu-item').transition({ 'marginLeft': '-110px' }, 500, 'ease');
         $('.menu-container').transition({'opacity': '0'},500);
         open = false;
-    }
+    };
 
     menu.toggle = function() {
         if(open) {
@@ -34,7 +33,7 @@ var menu = (function () {
             menu.open();
         }
 
-    }
+    };
 
     return menu;
 
@@ -42,11 +41,7 @@ var menu = (function () {
 
 window.onload = function() {
 
-    window.test = new NetworkCanvas({
-        debug: true,
-        defaultNodeRadius: 28,
-        circleColor: '#ffffff',
-        circleNumber: 4, 
+    window.n = new NetworkCanvas({
     });
 
 
@@ -66,7 +61,7 @@ window.onload = function() {
 
     $('#refresh-button').click(function() {
         $(this).addClass('.refresh-animate');
-        location.reload(); 
+        location.reload();
     });
 
 
@@ -76,27 +71,13 @@ window.onload = function() {
         menu.close();
 
         if($('#gen-graph-clear').is(':checked')) {
-            test.clearGraph();
+            n.clearGraph();
         }
 
         var nodeNumber = $('#gen-graph-nodes').val();
         var edgeProb = $('#gen-graph-edge-prob').val();
         
-        test.createRandomGraph(nodeNumber,edgeProb);
-    });
-
-    mySwiper = new Swiper('.swiper-container',{
-        //Your options here:
-        mode:'horizontal',
-        loop: false,
-        autoResize: true,
-        keyboardControl: true,
-        speed: 1000,
-        onlyExternal: true,
-        onSlideChangeStart: function (e) {
-        },
-        onSlideChangeEnd: function () {
-        }  
+        n.createRandomGraph(nodeNumber,edgeProb);
     });
 
 };
