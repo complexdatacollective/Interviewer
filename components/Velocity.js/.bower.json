@@ -1,0 +1,32 @@
+{
+  "name": "Velocity.js",
+  "homepage": "https://github.com/julianshapiro/velocity",
+  "authors": [
+    "Julian Shapiro"
+  ],
+  "description": "Accelerated JavaScript animation.",
+  "main": "./jquery.velocity.js",
+  "keywords": [
+    "jQuery",
+    "animation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "_release": "3422a50efe",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3422a50efe43d6e0ef0595a13b164307a37df73b"
+  },
+  "_source": "git://github.com/julianshapiro/velocity.git",
+  "_target": "*",
+  "_originalSource": "Velocity.js",
+  "_direct": true
+}

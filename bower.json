@@ -1,11 +1,13 @@
 {
   "name": "netcanvas",
-  "version":"0.1",
+  "version": "0.1",
   "dependencies": {
     "bootstrap": "~3.1.1",
     "kineticjs": "~5.0.1",
     "swiper": "~2.5.5",
     "tinycolor": "~0.9.17",
-    "jquery.transit": "~0.9.9"
+    "jquery.transit": "~0.9.9",
+    "vis": "~0.7.4",
+    "Velocity.js": "*"
   }
 }

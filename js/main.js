@@ -4,11 +4,13 @@
 // @codekit-prepend "../components/bootstrap/dist/js/bootstrap.min.js"
 // @codekit-prepend "../components/kineticjs/kinetic.min.js"
 // @codekit-prepend "../components/jquery.transit/jquery.transit.js"
+// @codekit-prepend "../components/vis/dist/vis.min.js"
+// @codekit-prepend "../components/Velocity.js/jquery.velocity.min.js"
 // @codekit-prepend "../js/NetworkCanvas.js"
-
+//
 
 //helper functions go here
-
+var test = {};
 var menu = (function () {
 
     var menu = {};
@@ -43,9 +45,6 @@ window.onload = function() {
 
     window.n = new NetworkCanvas({
     });
-
-
-    $('body').addClass('bodyfade');
 
     $('#menu-button').click(function() {
         menu.toggle();

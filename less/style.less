@@ -5,14 +5,15 @@ Import Bootstrap LESS and Site Specific LESS
  
 @import '../components/bootstrap/less/bootstrap.less'; /* Compiled in Codekit - referenced here as a Framework */
 @import '../less/variables.less'; /* Your site specific LESS variables - these override BS defaults  */
-@import '../components/swiper/dist/idangerous.swiper.css'; // Swiper css
+@import '../components/vis/dist/vis.min.css'; // Swiper css
 
 
 html, body {
     height:100%;
     width:100%;
-    // -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
     font-weight:300;
+    overflow:hidden;
 
 
 }
@@ -33,6 +34,10 @@ body.modal-open,
     overflow-y: auto;
 }
 
+input[type=radio]:checked + label>img {
+    background: tomato;
+}
+
 .ui {
     z-index: 20;
     -webkit-touch-callout: none;
@@ -45,6 +50,27 @@ body.modal-open,
 
 .btn-link:hover {
     text-decoration: none !important;
+}
+
+#newNodeForm {
+    position:fixed;
+    visibility:hidden;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    background:rgba(0, 0, 0, 0.85);
+    z-index:23;
+    opacity:0;
+}
+
+#newNodeForm > * {
+    opacity:0;
+    position:relative;
+    left:1000px;
 }
 
 #nodebox {
@@ -112,7 +138,7 @@ body.modal-open,
 .menu-button {
     width:130px;
     left:15px;
-    z-index: 99;
+    z-index: 21;
 }
 
 .modal-content {

@@ -1,11 +1,19 @@
 // App declaration
 
+// TODO: node distance from origin.
+// edge select mode. allows each node to be put into 'edge mode' where all edges for that node can be articulated in one step
+// an 'edge mode' which puts node in 'edge select mode' from center to outside.
+// multiple attributes assigned to each alter to compliment network attribute mode.
+// case management!
+
 var NetworkCanvas = function (options) {
 
     // Global variables
-    var stage, newNodeBox, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper,
-        app = this;
-        eventLog = new Array();
+    var stage, deleteNodeBox, circleLayer, edgeLayer, nodeLayer, currentNode, selected, uiLayer, mySwiper,
+        app = this,
+        animating = false,
+        open = false,
+        eventLog = new Array(),
         selectedNodes = [];
 
     // Colours
@@ -21,12 +29,12 @@ var NetworkCanvas = function (options) {
     colors['sand'] = '#ceb48d';
     colors['dazzling-blue'] = '#006bb6';
     colors['edge'] = colors['blue'];
-    colors['selected'] = colors['sand'];
+    colors['selected'] = 'gold';
 
     // Default settings
     var defaultSettings = {
-        debugLevel: 3,
-        defaultNodeSize: 27,
+        debugLevel: 2,
+        defaultNodeSize: 20,
         defaultNodeColor: colors['blue'],
         defaultEdgeColor: colors['edge'],
         concentricCircleColor: '#ffffff',
@@ -49,6 +57,42 @@ var NetworkCanvas = function (options) {
         app.initKinetic();
         app.drawUIComponents();
         app.loadGraph();
+
+
+        $('body').velocity({ opacity: '1'},{duration: 1000},{easing: "easeInSine"});
+        $('#new-name-box').focus();
+
+        // Key bindings
+        $(document).on("keypress", function (e) {
+            $('#new-name-box').focus();
+            // Prevent accidental backspace navigation
+            if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
+                e.preventDefault();
+            }
+
+            // Reject anything but the letter keys
+            if (event.which !== 13) {
+                if (animating == false && open == false) {
+                    animating = true;
+                    $('#newNodeForm').css('visibility', 'visible');
+                    $('#newNodeForm').velocity({opacity: '1', marginTop:'0'},{duration: 150},{easing: "easeInSine"});
+                    $('#newNodeForm > *').velocity({ opacity: '1',left:'0'},{duration: 400},{easing: "easeInSine"}).promise().done( function(){animating = false; open = true;});                    
+                } 
+            } else {
+                if (!animating) {
+                    animating = true;
+                    $('#newNodeForm').velocity({scale: '5',opacity: '0', marginTop:'0'},{duration: 200},{easing: "easeInSine"}).promise().done( function(){ 
+                        $('#newNodeForm > *').velocity({opacity:'0',left:'1000px'});
+                        $('#newNodeForm').velocity({scale:'1'});
+                        animating = false;
+                        open = false;
+                        $('#newNodeForm').css('visibility', 'hidden');
+                        $('#new-name-box').focus();                   
+                    });
+                }                  
+            }
+        });
+
     }
 
 
@@ -56,16 +100,14 @@ var NetworkCanvas = function (options) {
 
     this.addToLog = function(type,d,id) {
         if (!d && !type) { return false; }
-
         var date = +new Date();
         var data = {};
         data.timestamp = date;
         data.eventType = type;
         data.eventValue = d;
         data.objectID = id;
-
         eventLog.push(data);
-        Notify("Logged "+data.eventType+" on object "+data.objectID+" at time point "+date,1);
+        Notify("Logged "+data.eventType+" on object "+data.objectID+" at time point "+date,2);
         return true;
     }
 
@@ -80,13 +122,13 @@ var NetworkCanvas = function (options) {
         // THIS IS NOT A SAFE ASSUMPTION!
         var nodeNumber = id || nodes.length;
 
-
-
         // Create and populate the node properties object which will be sent to the event log
         var nodeProperties = {};
 
         // calculate random coords within a safe boundary of our window
-        nodeProperties.coords = coords || new Array(Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100)));
+        // nodeProperties.coords = coords || new Array(Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100)));
+        nodeProperties.coords = coords || new Array($(window).width()+50,100);
+
 
         // if we don't have a label for the node, use a random one from the list. if we dont have a size, use the default node size. (and so on)
         nodeProperties.size = size || settings.defaultNodeSize;
@@ -95,6 +137,7 @@ var NetworkCanvas = function (options) {
         var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
         nodeProperties.type = type || settings.nodeTypes[randomType].name;
         nodeProperties.color = color || settings.nodeTypes[randomType].color;
+        nodeProperties.strokeWidth = 4;
 
         var nodeGroup = new Kinetic.Group({
             id: nodeProperties.id,
@@ -115,7 +158,7 @@ var NetworkCanvas = function (options) {
                     radius: nodeProperties.size,
                     fill:nodeProperties.color,
                     stroke: app.calculateStrokeColor(nodeProperties.color),
-                    strokeWidth: 2
+                    strokeWidth: nodeProperties.strokeWidth
                 });
             break;
 
@@ -125,7 +168,7 @@ var NetworkCanvas = function (options) {
                     height: nodeProperties.size*2,
                     fill:nodeProperties.color,
                     stroke: app.calculateStrokeColor(nodeProperties.color),
-                    strokeWidth: 2,
+                    strokeWidth: nodeProperties.strokeWidth,
                     offset: {x: nodeProperties.size, y: nodeProperties.size}
                 });
             break;
@@ -136,7 +179,7 @@ var NetworkCanvas = function (options) {
                     fill:nodeProperties.color,
                     radius: nodeProperties.size*1.2, // How should I calculate the correct multiplier for a triangle?
                     stroke: app.calculateStrokeColor(nodeProperties.color),
-                    strokeWidth: 2
+                    strokeWidth: nodeProperties.strokeWidth
                 });
             break; 
 
@@ -147,7 +190,7 @@ var NetworkCanvas = function (options) {
                     innerRadius: nodeProperties.size-(nodeProperties.size/3),
                     outerRadius: nodeProperties.size+(nodeProperties.size/3),
                     stroke: app.calculateStrokeColor(nodeProperties.color),
-                    strokeWidth: 2
+                    strokeWidth: nodeProperties.strokeWidth
                 });
             break;
 
@@ -167,7 +210,7 @@ var NetworkCanvas = function (options) {
         nodeGroup.add(nodeShape);
         nodeGroup.add(nodeLabel);
 
-        Notify("Putting node "+nodeProperties.label+" at coordinates x:"+nodeProperties.coords[0]+", y:"+nodeProperties.coords[0], 2);
+        Notify("Putting node "+nodeProperties.label+" at coordinates x:"+nodeProperties.coords[0]+", y:"+nodeProperties.coords[1], 2);
         app.addToLog('nodeCreate', nodeProperties, nodeNumber); 
 
 
@@ -221,6 +264,7 @@ var NetworkCanvas = function (options) {
             } else {
                 // If not, simply turn the node stroke to the selected style so we can see that it has been selected.
                 this.children[0].stroke(colors['selected']);
+                // this.children[0].strokeWidth(4);
                 nodeLayer.draw();                
             }
 
@@ -261,6 +305,18 @@ var NetworkCanvas = function (options) {
         nodeGroup.moveToBottom();
         nodeLayer.draw();
         app.saveGraph();
+
+        if (coords == null) {
+            var tween = new Kinetic.Tween({
+                node: nodeGroup,
+                x: $(window).width()-150,
+                y: 100,
+                duration:0.7,
+                easing: Kinetic.Easings.EaseOut
+            });
+            tween.play();            
+        }
+
         return nodeGroup;
     }
 
@@ -356,7 +412,8 @@ var NetworkCanvas = function (options) {
         for (i=0;i<nodeCount;i++) {
             var current = i+1;
             Notify("Adding node "+current+" of "+nodeCount,1);
-            app.addNode();
+            // Use random coordinates
+            app.addNode(new Array(Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))));
             
         }
 
@@ -431,7 +488,7 @@ var NetworkCanvas = function (options) {
       }
 
       // create a new node box
-      var newNodeBox = new Kinetic.Circle({
+      var deleteNodeBox = new Kinetic.Circle({
             radius: 50,
             stroke: '#666',
             strokeWidth: 0,
@@ -439,17 +496,17 @@ var NetworkCanvas = function (options) {
             x: 100,
       });
 
-      newNodeBox.on('click tap', function() {
+      deleteNodeBox.on('click tap', function() {
           var touchPos = stage.getPointerPosition();
           var coords = new Array();
           coords[0] = touchPos.x;
           coords[1] = touchPos.y;
           var created = app.addNode(coords);
-          newNodeBox.moveToBottom();
+          deleteNodeBox.moveToBottom();
           uiLayer.draw();
       });
 
-      uiLayer.add(newNodeBox);
+      uiLayer.add(deleteNodeBox);
 
       circleLayer.draw();
       uiLayer.draw();
@@ -497,7 +554,7 @@ var NetworkCanvas = function (options) {
 
     this.getSimpleNodes = function() {
         // We need to create a simple representation of the nodes for storing.
-        var simpleNodes = new Object();
+        var simpleNodes = {};
         var nodes = app.getNodes();
         $.each(nodes, function (index, value) {
             simpleNodes[value.attrs.id] = {};
@@ -627,6 +684,7 @@ var NetworkCanvas = function (options) {
             console.log(text);
         }
     }
+
     app.init();
     
 
