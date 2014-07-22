@@ -1,5 +1,4 @@
 /*global Kinetic*/
-/*global notify*/
 /* exported networkCanvas */
 /*jshint bitwise: false*/
 
@@ -63,9 +62,14 @@ var networkCanvas = function (userSettings) {
 
     // Private methods
 
+    function notify(text, level){
+        level = level || 0;
+        var settings = settings || {};
 
-
-
+        if (level >= settings.debugLevel) {
+            console.log(text);
+        }
+    }
 
     // Public methods
 

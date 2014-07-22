@@ -34,9 +34,6 @@ var menu = (function () {
 
 window.onload = function() {
 
-    // window.n = new NetworkCanvas({
-    // });
-
     $('#menu-button').click(function() {
         menu.toggle();
     });
@@ -61,13 +58,13 @@ window.onload = function() {
         menu.close();
 
         if($('#gen-graph-clear').is(':checked')) {
-            n.clearGraph();
+            networkCanvas.clearGraph();
         }
 
         var nodeNumber = $('#gen-graph-nodes').val();
         var edgeProb = $('#gen-graph-edge-prob').val();
         
-        n.createRandomGraph(nodeNumber,edgeProb);
+        networkCanvas.createRandomGraph(nodeNumber,edgeProb);
     });
 
 };
