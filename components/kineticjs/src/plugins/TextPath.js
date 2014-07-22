@@ -1,6 +1,6 @@
 (function() {
     var EMPTY_STRING = '',
-        CALIBRI = 'Calibri',
+        //CALIBRI = 'Calibri',
         NORMAL = 'normal';
 
     /**
@@ -13,6 +13,7 @@
      * @param {String} [config.fontFamily] default is Calibri
      * @param {Number} [config.fontSize] default is 12
      * @param {String} [config.fontStyle] can be normal, bold, or italic.  Default is normal
+     * @param {String} [config.fontVariant] can be normal or small-caps.  Default is normal
      * @param {String} config.text
      * @param {String} config.data SVG data string
      * @@shapeParams
@@ -42,7 +43,7 @@
     Kinetic.TextPath.prototype = {
         ___init: function(config) {
             var that = this;
-            this.dummyCanvas = document.createElement('canvas');
+            this.dummyCanvas = Kinetic.Util.createCanvasElement();
             this.dataArray = [];
 
             // call super constructor
@@ -176,7 +177,7 @@
 
                 return {};
             };
-            var findSegmentToFitCharacter = function(c, before) {
+            var findSegmentToFitCharacter = function(c) {
 
                 var glyphWidth = that._getTextSize(c).width;
 
@@ -196,8 +197,9 @@
                         }
                     }
 
-                    if(pathCmd === {} || p0 === undefined)
+                    if(pathCmd === {} || p0 === undefined) {
                         return undefined;
+                    }
 
                     var needNewSegment = false;
 
@@ -206,8 +208,9 @@
                             if(Kinetic.Path.getLineLength(p0.x, p0.y, pathCmd.points[0], pathCmd.points[1]) > glyphWidth) {
                                 p1 = Kinetic.Path.getPointOnLine(glyphWidth, p0.x, p0.y, pathCmd.points[0], pathCmd.points[1], p0.x, p0.y);
                             }
-                            else
+                            else {
                                 pathCmd = undefined;
+                            }
                             break;
                         case 'A':
 
@@ -217,13 +220,16 @@
                             // 5 = dTheta
                             var end = pathCmd.points[4] + dTheta;
 
-                            if(currentT === 0)
+                            if(currentT === 0){
                                 currentT = start + 0.00000001;
+                            }
                             // Just in case start is 0
-                            else if(glyphWidth > currLen)
+                            else if(glyphWidth > currLen) {
                                 currentT += (Math.PI / 180.0) * dTheta / Math.abs(dTheta);
-                            else
+                            }
+                            else {
                                 currentT -= Math.PI / 360.0 * dTheta / Math.abs(dTheta);
+                            }
 
                             // Credit for bug fix: @therth https://github.com/ericdrowell/KineticJS/issues/249
                             // Old code failed to render text along arc of this path: "M 50 50 a 150 50 0 0 1 250 50 l 50 0"
@@ -235,15 +241,19 @@
                             break;
                         case 'C':
                             if(currentT === 0) {
-                                if(glyphWidth > pathCmd.pathLength)
+                                if(glyphWidth > pathCmd.pathLength) {
                                     currentT = 0.00000001;
-                                else
+                                }
+                                else {
                                     currentT = glyphWidth / pathCmd.pathLength;
+                                }
                             }
-                            else if(glyphWidth > currLen)
+                            else if(glyphWidth > currLen) {
                                 currentT += (glyphWidth - currLen) / pathCmd.pathLength;
-                            else
+                            }
+                            else {
                                 currentT -= (currLen - glyphWidth) / pathCmd.pathLength;
+                            }
 
                             if(currentT > 1.0) {
                                 currentT = 1.0;
@@ -252,12 +262,15 @@
                             p1 = Kinetic.Path.getPointOnCubicBezier(currentT, pathCmd.start.x, pathCmd.start.y, pathCmd.points[0], pathCmd.points[1], pathCmd.points[2], pathCmd.points[3], pathCmd.points[4], pathCmd.points[5]);
                             break;
                         case 'Q':
-                            if(currentT === 0)
+                            if(currentT === 0) {
                                 currentT = glyphWidth / pathCmd.pathLength;
-                            else if(glyphWidth > currLen)
+                            }
+                            else if(glyphWidth > currLen) {
                                 currentT += (glyphWidth - currLen) / pathCmd.pathLength;
-                            else
+                            }
+                            else {
                                 currentT -= (currLen - glyphWidth) / pathCmd.pathLength;
+                            }
 
                             if(currentT > 1.0) {
                                 currentT = 1.0;
@@ -283,8 +296,9 @@
                 // Find p1 such that line segment between p0 and p1 is approx. width of glyph
                 findSegmentToFitCharacter(charArr[i]);
 
-                if(p0 === undefined || p1 === undefined)
+                if(p0 === undefined || p1 === undefined) {
                     break;
+                }
 
                 var width = Kinetic.Path.getLineLength(p0.x, p0.y, p1.x, p1.y);
 
@@ -367,6 +381,23 @@
      * @memberof Kinetic.TextPath.prototype
      */
 
+    Kinetic.Factory.addGetterSetter(Kinetic.TextPath, 'fontVariant', NORMAL);
+
+    /**
+     * set font variant.  Can be 'normal' or 'small-caps'.  'normal' is the default.
+     * @name setFontVariant
+     * @method
+     * @memberof Kinetic.TextPath.prototype
+     * @param {String} fontVariant
+     */
+
+    /**
+     * @get font variant
+     * @name getFontVariant
+     * @method
+     * @memberof Kinetic.TextPath.prototype
+     */
+
     Kinetic.Factory.addGetter(Kinetic.TextPath, 'text', EMPTY_STRING);
 
     /**
@@ -376,5 +407,5 @@
      * @memberof Kinetic.TextPath.prototype
      */
 
-     Kinetic.Collection.mapMethods(Kinetic.TextPath);
+    Kinetic.Collection.mapMethods(Kinetic.TextPath);
 })();

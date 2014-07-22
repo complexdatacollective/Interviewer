@@ -1,4 +1,6 @@
 (function() {
+    var PI_OVER_180 = Math.PI / 180;
+
     /**
      * Arc constructor
      * @constructor
@@ -34,7 +36,7 @@
             this.sceneFunc(this._sceneFunc);
         },
         _sceneFunc: function(context) {
-            var angle = this.angle() * Math.PI / 180,
+            var angle = Kinetic.getAngle(this.angle()),
                 clockwise = this.clockwise();
 
             context.beginPath();
@@ -105,8 +107,8 @@
      * @name clockwise
      * @method
      * @memberof Kinetic.Arc.prototype
-     * @param {Number} clockwise
-     * @returns {Number}
+     * @param {Boolean} clockwise
+     * @returns {Boolean}
      * @example
      * // get clockwise flag<br>
      * var clockwise = arc.clockwise();<br><br>
@@ -118,5 +120,5 @@
      * arc.clockwise(true);
      */
 
-     Kinetic.Collection.mapMethods(Kinetic.Arc);
+    Kinetic.Collection.mapMethods(Kinetic.Arc);
 })();

@@ -8,9 +8,17 @@
      * @constructor
      * @augments Kinetic.Shape
      * @param {Object} config
-     * @param {Number|Array|Object} config.radius defines x and y radius
+     * @param {Object} config.radius defines x and y radius
      * @@ShapeParams
      * @@NodeParams
+     * @example
+     * var ellipse = new Kinetic.Ellipse({<br>
+     *   radius : {<br>
+     *     x : 50,<br>
+     *     y : 50<br>
+     *   },<br>
+     *   fill: 'red'<br>
+     * });
      */
     Kinetic.Ellipse = function(config) {
         this.___init(config);
@@ -118,6 +126,6 @@
      * ellipse.radiusY(200);
      */
 
-     Kinetic.Collection.mapMethods(Kinetic.Ellipse);
+    Kinetic.Collection.mapMethods(Kinetic.Ellipse);
 
 })();

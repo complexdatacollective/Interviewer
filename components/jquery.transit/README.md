@@ -10,12 +10,21 @@ examples.
 Usage
 -----
 
-Just include this script after jQuery. Requires jQuery 1.4+.
+Just include [jquery.transit.js] after jQuery. Requires jQuery 1.4+.
 
 ``` html
 <script src='jquery.js'></script>
 <script src='jquery.transit.js'></script>
 ```
+
+It is also available via [bower] and [npm].
+
+    $ bower install --save jquery.transit
+    $ npm install --save jquery.transit
+
+[bower]: http://bower.io/search/?q=jquery.transit
+[npm]: http://npmjs.org/package/jquery.transit
+[jquery.transit.js]: https://github.com/rstacruz/jquery.transit/blob/master/jquery.transit.js
 
 Transformations
 ---------------
@@ -105,7 +114,11 @@ different browsers.
 Alternatives
 ------------
 
-__[Move.js](https://github.com/visionmedia/move.js)__ (recommended!)
+__[Velocity.js](https://velocityjs.org)__ (recommended!)
+
+ * Pros: optimized for situations with hundreds of simultaneous transitions. Lots of extra features.
+
+__[Move.js](https://github.com/visionmedia/move.js)__
 
  * Pros: no jQuery dependency, great syntax.
  * Cons (at time of writing): no iOS support (doesn't use `translate3d`), some
@@ -116,7 +129,7 @@ enhanced](https://github.com/benbarnett/jQuery-Animate-Enhanced)__
 
 * Pros: transparently overrides `$.fn.animate()` to provide CSS transitions 
   support.
-* Cons: transpalently overrides `$.fn.animate()`. No transformations support.
+* Cons: transparently overrides `$.fn.animate()`. No transformations support.
 
 __[jQuery 2D transformations](https://github.com/heygrady/transform/)__
 
@@ -128,20 +141,29 @@ __[jQuery CSS3 rotate](http://plugins.jquery.com/project/Rotate)__
 * Pros: simply provides rotation.
 * Cons: simply provides rotation. No transitions support.
 
-Acknowledgements
-----------------
+Support
+-------
 
-© 2011, Rico Sta. Cruz. Released under the [MIT 
-License](http://www.opensource.org/licenses/mit-license.php).
+__Bugs and requests__: submit them through the project's issues tracker.<br>
+[![Issues](http://img.shields.io/github/issues/rstacruz/jquery.transit.svg)]( https://github.com/rstacruz/jquery.transit/issues )
 
-jQuery Transit is authored and maintained by [Rico Sta. Cruz][rsc] with help 
-from it's [contributors][c]. It is sponsored by my startup, [Sinefunc, Inc][sf].
+__Questions__: ask them at StackOverflow with the tag *jquery-transit*.<br>
+[![StackOverflow](http://img.shields.io/badge/stackoverflow-jquery--transit-brightgreen.svg)]( http://stackoverflow.com/questions/tagged/jquery-transit )
 
- * [My website](http://ricostacruz.com) (ricostacruz.com)
- * [Sinefunc, Inc.](http://sinefunc.com) (sinefunc.com)
- * [Github](http://github.com/rstacruz) (@rstacruz)
- * [Twitter](http://twitter.com/rstacruz) (@rstacruz)
+__Chat__: join us at gitter.im.<br>
+[![Chat](http://img.shields.io/badge/gitter-rstacruz / jquery.transit-brightgreen.svg)]( https://gitter.im/rstacruz/jquery.transit )
 
-[rsc]: http://ricostacruz.com
-[c]:   http://github.com/rstacruz/jquery.transit/contributors
-[sf]:  http://sinefunc.com
+Thanks
+------
+
+**jQuery Transit** © 2011-2014+, Rico Sta. Cruz. Released under the [MIT License].<br>
+Authored and maintained by Rico Sta. Cruz with help from [contributors].
+
+> [ricostacruz.com](http://ricostacruz.com) &nbsp;&middot;&nbsp;
+> GitHub [@rstacruz](https://github.com/rstacruz) &nbsp;&middot;&nbsp;
+> Twitter [@rstacruz](https://twitter.com/rstacruz)
+
+[MIT License]: http://mit-license.org/
+[contributors]: http://github.com/rstacruz/jquery.transit/contributors
+
+[![npm version](https://img.shields.io/npm/v/jquery.transit.png)](https://npmjs.org/package/jquery.transit "View this project on npm")

@@ -60,6 +60,14 @@
                 // reset index when animation changes
                 this.frameIndex(0);
             });
+            // smooth change for frameRate
+            this.on('frameRateChange.kinetic', function() {
+                if (!this.anim.isRunning()) {
+                    return;
+                }
+                clearInterval(this.interval);
+                this._setInterval();
+            });
 
             this.sceneFunc(this._sceneFunc);
             this.hitFunc(this._hitFunc);
@@ -95,13 +103,18 @@
         _useBufferCanvas: function() {
             return (this.hasShadow() || this.getAbsoluteOpacity() !== 1) && this.hasStroke();
         },
+        _setInterval: function() {
+            var that = this;
+            this.interval = setInterval(function() {
+                that._updateIndex();
+            }, 1000 / this.getFrameRate());
+        },
         /**
          * start sprite animation
          * @method
          * @memberof Kinetic.Sprite.prototype
          */
         start: function() {
-            var that = this;
             var layer = this.getLayer();
 
             /*
@@ -111,11 +124,7 @@
              *  redraw
              */
             this.anim.setLayers(layer);
-
-            this.interval = setInterval(function() {
-                that._updateIndex();
-            }, 1000 / this.getFrameRate());
-
+            this._setInterval();
             this.anim.start();
         },
         /**
@@ -126,6 +135,15 @@
         stop: function() {
             this.anim.stop();
             clearInterval(this.interval);
+        },
+        /**
+         * determine if animation of sprite is running or not.  returns true or false
+         * @method
+         * @memberof Kinetic.Animation.prototype
+         * @returns {Boolean}
+         */
+        isRunning: function() {
+            return this.anim.isRunning();
         },
         _updateIndex: function() {
             var index = this.frameIndex(),

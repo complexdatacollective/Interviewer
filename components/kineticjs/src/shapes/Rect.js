@@ -13,7 +13,7 @@
      *   width: 100,<br>
      *   height: 50,<br>
      *   fill: 'red',<br>
-     *   stroke: 'black'<br>
+     *   stroke: 'black',<br>
      *   strokeWidth: 5<br>
      * });
      */
@@ -74,5 +74,5 @@
      * rect.cornerRadius(10);
      */
 
-     Kinetic.Collection.mapMethods(Kinetic.Rect);
+    Kinetic.Collection.mapMethods(Kinetic.Rect);
 })();

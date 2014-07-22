@@ -1,5 +1,2 @@
-/site/_output
-/site/source.html
-/site/jquery.transit.js
-/site/jquery.transit.min.js
-/site/.sass-cache
+node_modules
+site

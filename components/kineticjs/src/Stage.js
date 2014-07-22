@@ -1,3 +1,4 @@
+/*jshint unused:false */
 (function() {
     // CONSTANTS
     var STAGE = 'Stage',
@@ -48,9 +49,9 @@
         eventsLength = EVENTS.length;
 
     function addEvent(ctx, eventName) {
-      ctx.content.addEventListener(eventName, function(evt) {
-        ctx[UNDERSCORE + eventName](evt);
-      }, false);
+        ctx.content.addEventListener(eventName, function(evt) {
+            ctx[UNDERSCORE + eventName](evt);
+        }, false);
     }
 
     Kinetic.Util.addMethods(Kinetic.Stage, {
@@ -77,7 +78,11 @@
          */
         setContainer: function(container) {
             if( typeof container === STRING) {
-                container = document.getElementById(container);
+                var id = container;
+                container = Kinetic.document.getElementById(container);
+                if (!container) {
+                    throw 'Can not find container in document with id ' + id;
+                }
             }
             this._setAttr(CONTAINER, container);
             return this;
@@ -140,8 +145,16 @@
             }
             return this;
         },
+        clone: function(obj) {
+            if (!obj) {
+                obj = {};
+            }
+            obj.container = Kinetic.document.createElement(DIV);
+            
+            return Kinetic.Container.prototype.clone.call(this, obj);
+        },
         /**
-         * remove stage
+         * destroy stage
          * @method
          * @memberof Kinetic.Stage.prototype
          */
@@ -151,6 +164,10 @@
 
             if(content && Kinetic.Util._isInDocument(content)) {
                 this.getContainer().removeChild(content);
+            }
+            var index = Kinetic.stages.indexOf(this);
+            if (index > -1) {
+                Kinetic.stages.splice(index, 1);
             }
         },
         /**
@@ -212,7 +229,7 @@
             function drawLayer(n) {
                 var layer = layers[n],
                     layerUrl = layer.toDataURL(),
-                    imageObj = new Image();
+                    imageObj = new Kinetic.window.Image();
 
                 imageObj.onload = function() {
                     _context.drawImage(imageObj, 0, 0);
@@ -274,7 +291,7 @@
                 shape = layers[n].getIntersection(pos);
                 if (shape) {
                     return shape;
-                } 
+                }
             }
 
             return null;
@@ -304,15 +321,22 @@
             }
         },
         /**
-         * add layer to stage
+         * add layer or layers to stage
          * @method
          * @memberof Kinetic.Stage.prototype
-         * @param {Kinetic.Layer} layer
+         * @param {...Kinetic.Layer} layer
+         * @example
+         * stage.add(layer1, layer2, layer3);
          */
         add: function(layer) {
+            if (arguments.length > 1) {
+                for (var i = 0; i < arguments.length; i++) {
+                    this.add(arguments[i]);
+                }
+                return;
+            }
             Kinetic.Container.prototype.add.call(this, layer);
-            layer.canvas.setSize(this.attrs.width, this.attrs.height);
-            layer.hitCanvas.setSize(this.attrs.width, this.attrs.height);
+            layer._setCanvasSize(this.width(), this.height());
 
             // draw layer and append canvas to container
             layer.draw();
@@ -336,66 +360,70 @@
             return this.getChildren();
         },
         _bindContentEvents: function() {
-            var that = this,
-                n;
-
-            for (n = 0; n < eventsLength; n++) {
-              addEvent(this, EVENTS[n]);
+            for (var n = 0; n < eventsLength; n++) {
+                addEvent(this, EVENTS[n]);
             }
         },
         _mouseover: function(evt) {
-            this._fire(CONTENT_MOUSEOVER, evt);
+            if (!Kinetic.UA.mobile) {
+                this._setPointerPosition(evt);
+                this._fire(CONTENT_MOUSEOVER, {evt: evt});
+            }
         },
         _mouseout: function(evt) {
-            this._setPointerPosition(evt);
-            var targetShape = this.targetShape;
+            if (!Kinetic.UA.mobile) {
+                this._setPointerPosition(evt);
+                var targetShape = this.targetShape;
 
-            if(targetShape && !Kinetic.isDragging()) {
-                targetShape._fireAndBubble(MOUSEOUT, evt);
-                targetShape._fireAndBubble(MOUSELEAVE, evt);
-                this.targetShape = null;
+                if(targetShape && !Kinetic.isDragging()) {
+                    targetShape._fireAndBubble(MOUSEOUT, {evt: evt});
+                    targetShape._fireAndBubble(MOUSELEAVE, {evt: evt});
+                    this.targetShape = null;
+                }
+                this.pointerPos = undefined;
+
+                this._fire(CONTENT_MOUSEOUT, {evt: evt});
             }
-            this.pointerPos = undefined;
-
-            this._fire(CONTENT_MOUSEOUT, evt);
         },
         _mousemove: function(evt) {
-            this._setPointerPosition(evt);
-            var dd = Kinetic.DD,
-                shape = this.getIntersection(this.getPointerPosition());
+            if (!Kinetic.UA.mobile) {
+                this._setPointerPosition(evt);
+                var dd = Kinetic.DD,
+                    shape = this.getIntersection(this.getPointerPosition());
 
-            if(shape && shape.isListening()) {
-                if(!Kinetic.isDragging() && (!this.targetShape || this.targetShape._id !== shape._id)) {
-                    if(this.targetShape) {
-                        this.targetShape._fireAndBubble(MOUSEOUT, evt, shape);
-                        this.targetShape._fireAndBubble(MOUSELEAVE, evt, shape);
+                if(shape && shape.isListening()) {
+                    if(!Kinetic.isDragging() && (!this.targetShape || this.targetShape._id !== shape._id)) {
+                        if(this.targetShape) {
+                            this.targetShape._fireAndBubble(MOUSEOUT, {evt: evt}, shape);
+                            this.targetShape._fireAndBubble(MOUSELEAVE, {evt: evt}, shape);
+                        }
+                        shape._fireAndBubble(MOUSEOVER, {evt: evt}, this.targetShape);
+                        shape._fireAndBubble(MOUSEENTER, {evt: evt}, this.targetShape);
+                        this.targetShape = shape;
                     }
-                    shape._fireAndBubble(MOUSEOVER, evt, this.targetShape);
-                    shape._fireAndBubble(MOUSEENTER, evt, this.targetShape);
-                    this.targetShape = shape;
+                    else {
+                        shape._fireAndBubble(MOUSEMOVE, {evt: evt});
+                    }
                 }
+                /*
+                 * if no shape was detected, clear target shape and try
+                 * to run mouseout from previous target shape
+                 */
                 else {
-                    shape._fireAndBubble(MOUSEMOVE, evt);
+                    if(this.targetShape && !Kinetic.isDragging()) {
+                        this.targetShape._fireAndBubble(MOUSEOUT, {evt: evt});
+                        this.targetShape._fireAndBubble(MOUSELEAVE, {evt: evt});
+                        this.targetShape = null;
+                    }
+
                 }
-            }
-            /*
-             * if no shape was detected, clear target shape and try
-             * to run mouseout from previous target shape
-             */
-            else {
-              if(this.targetShape && !Kinetic.isDragging()) {
-                this.targetShape._fireAndBubble(MOUSEOUT, evt);
-                this.targetShape._fireAndBubble(MOUSELEAVE, evt);
-                this.targetShape = null;
-              }
 
-            }
+                // content event
+                this._fire(CONTENT_MOUSEMOVE, {evt: evt});
 
-            // content event
-            this._fire(CONTENT_MOUSEMOVE, evt);
-
-            if(dd) {
-                dd._drag(evt);
+                if(dd) {
+                    dd._drag(evt);
+                }
             }
 
             // always call preventDefault for desktop events because some browsers
@@ -405,18 +433,20 @@
             }
         },
         _mousedown: function(evt) {
-            this._setPointerPosition(evt);
-            var shape = this.getIntersection(this.getPointerPosition());
+            if (!Kinetic.UA.mobile) {
+                this._setPointerPosition(evt);
+                var shape = this.getIntersection(this.getPointerPosition());
 
-            Kinetic.listenClickTap = true;
+                Kinetic.listenClickTap = true;
 
-            if (shape && shape.isListening()) {
-                this.clickStartShape = shape;
-                shape._fireAndBubble(MOUSEDOWN, evt);
+                if (shape && shape.isListening()) {
+                    this.clickStartShape = shape;
+                    shape._fireAndBubble(MOUSEDOWN, {evt: evt});
+                }
+
+                // content event
+                this._fire(CONTENT_MOUSEDOWN, {evt: evt});
             }
-
-            // content event
-            this._fire(CONTENT_MOUSEDOWN, evt);
 
             // always call preventDefault for desktop events because some browsers
             // try to drag and drop the canvas element
@@ -425,46 +455,48 @@
             }
         },
         _mouseup: function(evt) {
-            this._setPointerPosition(evt);
-            var that = this,
-                shape = this.getIntersection(this.getPointerPosition()),
-                clickStartShape = this.clickStartShape,
-                fireDblClick = false;
+            if (!Kinetic.UA.mobile) {
+                this._setPointerPosition(evt);
+                var that = this,
+                    shape = this.getIntersection(this.getPointerPosition()),
+                    clickStartShape = this.clickStartShape,
+                    fireDblClick = false;
 
-            if(Kinetic.inDblClickWindow) {
-                fireDblClick = true;
-                Kinetic.inDblClickWindow = false;
-            }
-            else {
-                Kinetic.inDblClickWindow = true;
-            }
+                if(Kinetic.inDblClickWindow) {
+                    fireDblClick = true;
+                    Kinetic.inDblClickWindow = false;
+                }
+                else {
+                    Kinetic.inDblClickWindow = true;
+                }
 
-            setTimeout(function() {
-                Kinetic.inDblClickWindow = false;
-            }, Kinetic.dblClickWindow);
+                setTimeout(function() {
+                    Kinetic.inDblClickWindow = false;
+                }, Kinetic.dblClickWindow);
 
-            if (shape && shape.isListening()) {
-                shape._fireAndBubble(MOUSEUP, evt);
+                if (shape && shape.isListening()) {
+                    shape._fireAndBubble(MOUSEUP, {evt: evt});
 
-                // detect if click or double click occurred
-                if(Kinetic.listenClickTap && clickStartShape && clickStartShape._id === shape._id) {
-                    shape._fireAndBubble(CLICK, evt);
+                    // detect if click or double click occurred
+                    if(Kinetic.listenClickTap && clickStartShape && clickStartShape._id === shape._id) {
+                        shape._fireAndBubble(CLICK, {evt: evt});
 
-                    if(fireDblClick) {
-                        shape._fireAndBubble(DBL_CLICK, evt);
+                        if(fireDblClick) {
+                            shape._fireAndBubble(DBL_CLICK, {evt: evt});
+                        }
                     }
                 }
-            }
-            // content events
-            this._fire(CONTENT_MOUSEUP, evt);
-            if (Kinetic.listenClickTap) {
-                this._fire(CONTENT_CLICK, evt);
-                if(fireDblClick) {
-                    this._fire(CONTENT_DBL_CLICK, evt);
+                // content events
+                this._fire(CONTENT_MOUSEUP, {evt: evt});
+                if (Kinetic.listenClickTap) {
+                    this._fire(CONTENT_CLICK, {evt: evt});
+                    if(fireDblClick) {
+                        this._fire(CONTENT_DBL_CLICK, {evt: evt});
+                    }
                 }
-            }
 
-            Kinetic.listenClickTap = false;
+                Kinetic.listenClickTap = false;
+            }
 
             // always call preventDefault for desktop events because some browsers
             // try to drag and drop the canvas element
@@ -480,7 +512,7 @@
 
             if (shape && shape.isListening()) {
                 this.tapStartShape = shape;
-                shape._fireAndBubble(TOUCHSTART, evt);
+                shape._fireAndBubble(TOUCHSTART, {evt: evt});
 
                 // only call preventDefault if the shape is listening for events
                 if (shape.isListening() && evt.preventDefault) {
@@ -488,35 +520,34 @@
                 }
             }
             // content event
-            this._fire(CONTENT_TOUCHSTART, evt);
+            this._fire(CONTENT_TOUCHSTART, {evt: evt});
         },
         _touchend: function(evt) {
             this._setPointerPosition(evt);
-            var that = this,
-                shape = this.getIntersection(this.getPointerPosition());
+            var shape = this.getIntersection(this.getPointerPosition()),
                 fireDblClick = false;
 
-                if(Kinetic.inDblClickWindow) {
-                    fireDblClick = true;
-                    Kinetic.inDblClickWindow = false;
-                }
-                else {
-                    Kinetic.inDblClickWindow = true;
-                }
+            if(Kinetic.inDblClickWindow) {
+                fireDblClick = true;
+                Kinetic.inDblClickWindow = false;
+            }
+            else {
+                Kinetic.inDblClickWindow = true;
+            }
 
-                setTimeout(function() {
-                    Kinetic.inDblClickWindow = false;
-                }, Kinetic.dblClickWindow);
+            setTimeout(function() {
+                Kinetic.inDblClickWindow = false;
+            }, Kinetic.dblClickWindow);
 
             if (shape && shape.isListening()) {
-                shape._fireAndBubble(TOUCHEND, evt);
+                shape._fireAndBubble(TOUCHEND, {evt: evt});
 
                 // detect if tap or double tap occurred
                 if(Kinetic.listenClickTap && shape._id === this.tapStartShape._id) {
-                    shape._fireAndBubble(TAP, evt);
+                    shape._fireAndBubble(TAP, {evt: evt});
 
                     if(fireDblClick) {
-                        shape._fireAndBubble(DBL_TAP, evt);
+                        shape._fireAndBubble(DBL_TAP, {evt: evt});
                     }
                 }
                 // only call preventDefault if the shape is listening for events
@@ -526,9 +557,9 @@
             }
             // content events
             if (Kinetic.listenClickTap) {
-                this._fire(CONTENT_TOUCHEND, evt);
+                this._fire(CONTENT_TOUCHEND, {evt: evt});
                 if(fireDblClick) {
-                    this._fire(CONTENT_DBL_TAP, evt);
+                    this._fire(CONTENT_DBL_TAP, {evt: evt});
                 }
             }
 
@@ -540,14 +571,14 @@
                 shape = this.getIntersection(this.getPointerPosition());
 
             if (shape && shape.isListening()) {
-                shape._fireAndBubble(TOUCHMOVE, evt);
+                shape._fireAndBubble(TOUCHMOVE, {evt: evt});
 
                 // only call preventDefault if the shape is listening for events
                 if (shape.isListening() && evt.preventDefault) {
                     evt.preventDefault();
                 }
             }
-            this._fire(CONTENT_TOUCHMOVE, evt);
+            this._fire(CONTENT_TOUCHMOVE, {evt: evt});
 
             // start drag and drop
             if(dd) {
@@ -555,24 +586,24 @@
             }
         },
         _setPointerPosition: function(evt) {
-            var evt = evt ? evt : window.event,
-                contentPosition = this._getContentPosition(),
+            var contentPosition = this._getContentPosition(),
                 offsetX = evt.offsetX,
                 clientX = evt.clientX,
                 x = null,
                 y = null,
                 touch;
+            evt = evt ? evt : window.event;
 
             // touch events
             if(evt.touches !== undefined) {
                 // currently, only handle one finger
-                if (evt.touches.length === 1) {
+                if (evt.touches.length > 0) {
 
                     touch = evt.touches[0];
 
                     // get the information for finger #1
                     x = touch.clientX - contentPosition.left;
-                    y = touch.clientY - contentPosition.top; 
+                    y = touch.clientY - contentPosition.top;
                 }
             }
             // mouse events
@@ -613,12 +644,19 @@
         },
         _buildDOM: function() {
             var container = this.getContainer();
-
+            if (!container) {
+                if (Kinetic.Util.isBrowser()) {
+                    throw 'Stage has not container. But container is required';
+                } else {
+                    // automatically create element for jsdom in nodejs env
+                    container = Kinetic.document.createElement(DIV);
+                }
+            }
             // clear content inside container
             container.innerHTML = EMPTY_STRING;
 
             // content
-            this.content = document.createElement(DIV);
+            this.content = Kinetic.document.createElement(DIV);
             this.content.style.position = RELATIVE;
             this.content.style.display = INLINE_BLOCK;
             this.content.className = KINETICJS_CONTENT;
@@ -644,6 +682,14 @@
                 baseEvent = types[n];
                 this.content.addEventListener(baseEvent, handler, false);
             }
+        },
+        // currently cache function is now working for stage, because stage has no its own canvas element
+        // TODO: may be it is better to cache all children layers?
+        cache: function() {
+            Kinetic.Util.warn('Cache function is not allowed for stage. You may use cache only for layers, groups and shapes.');
+            return;
+        },
+        clearCache : function() {
         }
     });
     Kinetic.Util.extend(Kinetic.Stage, Kinetic.Container);

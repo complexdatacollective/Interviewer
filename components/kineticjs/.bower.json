@@ -1,6 +1,6 @@
 {
   "name": "KineticJS",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "homepage": "http://kineticjs.com/",
   "authors": [
     "Eric Rowell"
@@ -18,14 +18,14 @@
     "test",
     "tests"
   ],
-  "main": "kinetic.min.js",
-  "_release": "5.0.1",
+  "main": "kinetic.js",
+  "_release": "5.1.0",
   "_resolution": {
     "type": "version",
-    "tag": "v5.0.1",
-    "commit": "45bc983dfc7138644cacca54122f10f2b48d194f"
+    "tag": "v5.1.0",
+    "commit": "150f58b8cf93e1bf475b28887bc067a97d6b4b35"
   },
   "_source": "git://github.com/ericdrowell/KineticJS.git",
-  "_target": "~5.0.1",
+  "_target": "*",
   "_originalSource": "kineticjs"
 }

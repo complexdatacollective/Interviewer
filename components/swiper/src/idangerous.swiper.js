@@ -485,7 +485,7 @@ var Swiper = function (selector, params) {
                 }
             }
         } else if (Object.prototype.toString.call(callback) === '[object String]') {
-            if (params['on' + callback]) _this.fireCallback(params['on' + callback]);
+            if (params['on' + callback]) _this.fireCallback(params['on' + callback], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
         } else {
             callback(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
         }
@@ -1198,6 +1198,19 @@ var Swiper = function (selector, params) {
         else e.returnValue = false;
         return false;
     }
+    _this.disableMousewheelControl = function () {
+        if (!_this._wheelEvent) return false;
+        params.mousewheelControl = false;
+        _this.h.removeEventListener(_this.container, _this._wheelEvent, handleMousewheel);
+        return true;
+    };
+
+    _this.enableMousewheelControl = function () {
+        if (!_this._wheelEvent) return false;
+        params.mousewheelControl = true;
+        _this.h.addEventListener(_this.container, _this._wheelEvent, handleMousewheel);
+        return true;
+    };
 
     /*=========================
       Grab Cursor
@@ -1323,7 +1336,7 @@ var Swiper = function (selector, params) {
             }
 
             //CallBack
-            if (params.onTouchStart) _this.fireCallback(params.onTouchStart, _this);
+            if (params.onTouchStart) _this.fireCallback(params.onTouchStart, _this, event);
             _this.callPlugins('onTouchStartEnd');
 
         }
@@ -1472,7 +1485,7 @@ var Swiper = function (selector, params) {
             velocityPrevTime = (new Date()).getTime();
             //Callbacks
             _this.callPlugins('onTouchMoveEnd');
-            if (params.onTouchMove) _this.fireCallback(params.onTouchMove, _this);
+            if (params.onTouchMove) _this.fireCallback(params.onTouchMove, _this, event);
 
             return false;
         }
@@ -1544,13 +1557,13 @@ var Swiper = function (selector, params) {
         //Not moved or Prevent Negative Back Sliding/After-End Sliding
         if (!_this.isMoved && params.freeMode) {
             _this.isMoved = false;
-            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this);
+            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this, event);
             _this.callPlugins('onTouchEnd');
             return;
         }
         if (!_this.isMoved || _this.positions.current > 0 || _this.positions.current < -maxPosition) {
             _this.swipeReset();
-            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this);
+            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this, event);
             _this.callPlugins('onTouchEnd');
             return;
         }
@@ -1606,7 +1619,7 @@ var Swiper = function (selector, params) {
             }
             if (!params.freeModeFluid || timeDiff >= 300) _this.updateActiveSlide(_this.positions.current);
 
-            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this);
+            if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this, event);
             _this.callPlugins('onTouchEnd');
             return;
         }
@@ -1661,7 +1674,7 @@ var Swiper = function (selector, params) {
                 _this.swipeReset();
             }
         }
-        if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this);
+        if (params.onTouchEnd) _this.fireCallback(params.onTouchEnd, _this, event);
         _this.callPlugins('onTouchEnd');
     }
 
@@ -2485,7 +2498,9 @@ Swiper.prototype = {
         if (this.support.transforms && this.params.useCSS3Transforms) {
             curStyle = window.getComputedStyle(el, null);
             if (window.WebKitCSSMatrix) {
-                transformMatrix = new WebKitCSSMatrix(curStyle.webkitTransform);
+                // Some old versions of Webkit choke when 'none' is passed; pass
+                // empty string instead in this case
+                transformMatrix = new WebKitCSSMatrix(curStyle.webkitTransform === 'none' ? '' : curStyle.webkitTransform);
             }
             else {
                 transformMatrix = curStyle.MozTransform || curStyle.OTransform || curStyle.MsTransform || curStyle.msTransform  || curStyle.transform || curStyle.getPropertyValue('transform').replace('translate(', 'matrix(1, 0, 0, 1,');

@@ -5,7 +5,6 @@
 // @codekit-prepend "../components/kineticjs/kinetic.min.js"
 // @codekit-prepend "../components/jquery.transit/jquery.transit.js"
 // @codekit-prepend "../components/vis/dist/vis.min.js"
-// @codekit-prepend "../components/Velocity.js/jquery.velocity.min.js"
 // @codekit-prepend "../js/NetworkCanvas.js"
 //
 

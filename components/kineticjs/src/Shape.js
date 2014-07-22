@@ -43,7 +43,7 @@
             // call super constructor
             Kinetic.Node.call(this, config);
 
-            this.on('shadowColorChange.kinetic shadowBlurChange.kinetic shadowOffsetChange.kinetic shadowOpacityChange.kinetic shadowEnabledChanged.kinetic', _clearHasShadowCache);
+            this.on('shadowColorChange.kinetic shadowBlurChange.kinetic shadowOffsetChange.kinetic shadowOpacityChange.kinetic shadowEnabledChange.kinetic', _clearHasShadowCache);
         },
         hasChildren: function() {
             return false;
@@ -76,7 +76,7 @@
          * @returns {Boolean}
          */
         hasShadow: function() {
-            return this._getCache(HAS_SHADOW, this._hasShadow);  
+            return this._getCache(HAS_SHADOW, this._hasShadow);
         },
         _hasShadow: function() {
             return this.getShadowEnabled() && (this.getShadowOpacity() !== 0 && !!(this.getShadowColor() || this.getShadowBlur() || this.getShadowOffsetX() || this.getShadowOffsetY()));
@@ -121,7 +121,7 @@
 
             bufferHitCanvas.getContext().clear();
             this.drawScene(bufferHitCanvas);
-            p = bufferHitCanvas.context.getImageData(pos.x | 0, pos.y | 0, 1, 1).data;
+            p = bufferHitCanvas.context.getImageData(Math.round(pos.x), Math.round(pos.y), 1, 1).data;
             return p[3] > 0;
         },
         // extends Node.prototype.destroy 
@@ -130,17 +130,18 @@
             delete Kinetic.shapes[this.colorKey];
         },
         _useBufferCanvas: function() {
-            return (this.hasShadow() || this.getAbsoluteOpacity() !== 1) && this.hasFill() && this.hasStroke();
+            return (this.hasShadow() || this.getAbsoluteOpacity() !== 1) && this.hasFill() && this.hasStroke() && this.getStage();
         },
-        drawScene: function(can) {
-            var canvas = can || this.getLayer().getCanvas(),
+        drawScene: function(can, top) {
+            var layer = this.getLayer(),
+                canvas = can || layer.getCanvas(),
                 context = canvas.getContext(),
                 cachedCanvas = this._cache.canvas,
                 drawFunc = this.sceneFunc(),
                 hasShadow = this.hasShadow(),
                 stage, bufferCanvas, bufferContext;
 
-            if(this.isVisible()) { 
+            if(this.isVisible()) {
                 if (cachedCanvas) {
                     this._drawCachedSceneCanvas(context);
                 }
@@ -154,7 +155,7 @@
                         bufferContext.clear();
                         bufferContext.save();
                         bufferContext._applyLineJoin(this);
-                        bufferContext._applyTransform(this);
+                        layer._applyTransform(this, bufferContext, top);
                      
                         drawFunc.call(this, bufferContext);
                         bufferContext.restore();
@@ -162,7 +163,7 @@
                         if (hasShadow) {
                             context.save();
                             context._applyShadow(this);
-                            context.drawImage(bufferCanvas._canvas, 0, 0); 
+                            context.drawImage(bufferCanvas._canvas, 0, 0);
                             context.restore();
                         }
 
@@ -172,26 +173,27 @@
                     // if buffer canvas is not needed
                     else {
                         context._applyLineJoin(this);
-                        context._applyTransform(this);
+                        layer._applyTransform(this, context, top);
                
                         if (hasShadow) {
                             context.save();
                             context._applyShadow(this);
                             drawFunc.call(this, context);
                             context.restore();
-                        }   
+                        }
 
                         context._applyOpacity(this);
                         drawFunc.call(this, context);
-                    }   
-                    context.restore(); 
+                    }
+                    context.restore();
                 }
             }
 
             return this;
         },
-        drawHit: function(can) {
-            var canvas = can || this.getLayer().hitCanvas,
+        drawHit: function(can, top) {
+            var layer = this.getLayer(),
+                canvas = can || layer.hitCanvas,
                 context = canvas.getContext(),
                 drawFunc = this.hitFunc() || this.sceneFunc(),
                 cachedCanvas = this._cache.canvas,
@@ -205,9 +207,9 @@
                 else if (drawFunc) {
                     context.save();
                     context._applyLineJoin(this);
-                    context._applyTransform(this);
+                    layer._applyTransform(this, context, top);
                    
-                    drawFunc.call(this, context);   
+                    drawFunc.call(this, context);
                     context.restore();
                 }
                 
