@@ -1,13 +1,5 @@
 // CodeKit Imports
 
-// @codekit-prepend "../components/jquery/dist/jquery.min.js"
-// @codekit-prepend "../components/bootstrap/dist/js/bootstrap.min.js"
-// @codekit-prepend "../components/kineticjs/kinetic.min.js"
-// @codekit-prepend "../components/jquery.transit/jquery.transit.js"
-// @codekit-prepend "../components/vis/dist/vis.min.js"
-// @codekit-prepend "../js/NetworkCanvas.js"
-//
-
 //helper functions go here
 var test = {};
 var menu = (function () {
@@ -42,8 +34,8 @@ var menu = (function () {
 
 window.onload = function() {
 
-    window.n = new NetworkCanvas({
-    });
+    // window.n = new NetworkCanvas({
+    // });
 
     $('#menu-button').click(function() {
         menu.toggle();
