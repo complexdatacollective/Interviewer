@@ -26,6 +26,7 @@
     "commit": "150f58b8cf93e1bf475b28887bc067a97d6b4b35"
   },
   "_source": "git://github.com/ericdrowell/KineticJS.git",
-  "_target": "*",
-  "_originalSource": "kineticjs"
+  "_target": "~5.1.0",
+  "_originalSource": "kineticjs",
+  "_direct": true
 }

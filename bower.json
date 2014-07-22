@@ -16,11 +16,12 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": null,
-    "jquery.transit": null,
-    "kineticjs": null,
-    "swiper": null,
-    "tinycolor": null,
-    "vis": null
+    "bootstrap": "~3.2.0",
+    "jquery.transit": "~0.9.12",
+    "kineticjs": "~5.1.0",
+    "swiper": "~2.6.1",
+    "tinycolor": "~1.0.0",
+    "vis": "~3.1.0",
+    "jquery": "~2.1.1"
   }
 }

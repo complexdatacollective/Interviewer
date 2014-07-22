@@ -27,6 +27,7 @@
     "commit": "1b32004b624dcf13abe819d5a3344bdb9706e804"
   },
   "_source": "git://github.com/almende/vis.git",
-  "_target": "*",
-  "_originalSource": "vis"
+  "_target": "~3.1.0",
+  "_originalSource": "vis",
+  "_direct": true
 }

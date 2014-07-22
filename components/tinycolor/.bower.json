@@ -15,6 +15,7 @@
     "commit": "951b172141b66eb479012335dedf7ad1974f0ac2"
   },
   "_source": "git://github.com/bgrins/TinyColor.git",
-  "_target": "*",
-  "_originalSource": "tinycolor"
+  "_target": "~1.0.0",
+  "_originalSource": "tinycolor",
+  "_direct": true
 }
