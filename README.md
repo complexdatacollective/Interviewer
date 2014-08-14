@@ -8,13 +8,7 @@ In developing the application, I have the following design goals:
 * **Simplicity**: A minimalist interface, free from clutter and distraction.
 * **Touch Based**: Drawing on the intuitive nature of touch based interaction.
 * **Modularity**: A simple JSON based configuration system, to enable the tool to be customised to suit different research contexts and goals.
-* **Standards Complliance**: Too much academic software has been lost to obsolescence. Often this is the result of poor planning, and the use of proprietory/closed source libraries, languages, and packages. This application will be written in HTML5 and JavaScript, meaning it should be platform independant and simple to maintain and extend.
-
-
-## Recent Changes
-
-	25/03/2014
-	Switched to bower for dependency management and (finally!) wrote the readme.
+* **Standards Compliance**: Too much academic software has been lost to obsolescence. Often this is the result of poor planning, and the use of proprietory/closed source libraries, languages, and packages. This application will be written in HTML5 and JavaScript, meaning it should be platform independant and simple to maintain and extend.
 
 ## Todo
 
