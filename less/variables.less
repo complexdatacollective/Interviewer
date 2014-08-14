@@ -13,19 +13,19 @@
 @gray-light:             lighten(#000, 60%);   // #999
 @gray-lighter:           lighten(#000, 93.5%); // #eee
 
-@brand-primary:         #00B1E6;
+@brand-primary:         #770063;
 @brand-success:         #1BB81B;
 @brand-info:            #5bc0de;
 @brand-warning:         #FA920D;
 @brand-danger:          #D62722;
-@modal-base:			@gray;
+@modal-base:			@brand-info;
 
 //== Scaffolding
 //
 // ## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:  #363636;
+@body-bg:  #000;
 //** Global text color on `<body>`.
 @text-color:            #fff;
 
@@ -567,7 +567,7 @@
 @modal-title-line-height:     @line-height-base;
 
 //** Background color of modal content area
-@modal-content-bg:                             darken(@modal-base,10%);
+@modal-content-bg:                             @modal-base;
 //** Modal content border color
 @modal-content-border-color:                   transparent;
 //** Modal content border color **for IE8**

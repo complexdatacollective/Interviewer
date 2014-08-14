@@ -1,1 +1,1 @@
-{"version":3,"file":"/Users/joshua/Sites/netCanvas/js/main.min.js","sources":["js/main.js"],"names":["window","onload","networkCanvas","init","menu","$","click","this","addClass","location","reload"],"mappings":"AAAAA,OAAOC,OAAS,WAEZC,cAAcC,OACdC,KAAKD,OAELE,EAAE,mBAAmBC,MAAM,WACvBD,EAAEE,MAAMC,SAAS,oBACjBC,SAASC","sourceRoot":"./../"}
+{"version":3,"file":"/Users/joshua/Sites/netCanvas/js/main.min.js","sources":["js/main.js"],"names":["window","debugLevel","session","Session","init"],"mappings":"AAAAA,OAAOC,WAAa,EAEnB,WAGG,GAAIC,GAAU,GAAIC,QAClBD,GAAQE","sourceRoot":"./../"}

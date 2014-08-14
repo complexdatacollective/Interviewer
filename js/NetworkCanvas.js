@@ -1,19 +1,18 @@
-/*global Kinetic,randomBetween,modifyColor */
-/* exported networkCanvas */
+/*global Kinetic, randomBetween, modifyColor, menu, Logger, notify */
+/* exported NetworkCanvas */
 /*jshint bitwise: false*/
 
-// App declaration
 'use strict';
 
-var networkCanvas = function (userSettings) {
+var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer,
-	app = {},
+	network = {},
 	animating = false,
 	open = false,
-	eventLog = [],
-	selectedNodes = [],
+	eventLog = new Logger();
+	var selectedNodes = [],
 	colors = {};
 
 	// Colours
@@ -27,12 +26,11 @@ var networkCanvas = function (userSettings) {
 	colors.celosiaorange = '#f47d44';
 	colors.sand = '#ceb48d';
 	colors.dazzlingblue = '#006bb6';
-	colors.edge = colors.blue;
+	colors.edge = '#999';
 	colors.selected = 'gold';
 
 	// Default settings
 	var settings = {
-		debugLevel: 0,
 		defaultNodeSize: 20,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
@@ -52,48 +50,26 @@ var networkCanvas = function (userSettings) {
 	// Dummy Names
 	var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
 
+	network.init = function () {
+		network.initKinetic();
+		network.drawUIComponents();
 
-	// Private methods
-	function notify(text, level){
-		level = level || 0;
-		if (level >= settings.debugLevel) {
-			console.log(text);
-		}
-	}
+		eventLog.init();
 
-	app.init = function () {
-		app.initKinetic();
-		app.drawUIComponents();
-		// app.loadGraph();
-
-
-		$('body').transition({ opacity: '1'},1000,'easeInSine');
+		// network.loadGraph();
 		$('#new-name-box').focus();
-	};
-
-
-	// Event log functions
-
-	app.addToLog = function(type,d,id) {
-		if (!d && !type) { return false; }
-		var date = new Date();
-		var humanDate = date.toString('H:mm:ss');
-		var data = {};
-		data.timestamp = date;
-		data.eventType = type;
-		data.eventValue = d;
-		data.objectID = id;
-		eventLog.push(data);
-		notify("Logged "+data.eventType+" on object "+data.objectID+" at time point "+humanDate,2);
-		return true;
 	};
 
 	// Node manipulation functions
 
-	app.addNode = function(coords, id, size, type, label, color) {
+	network.addNode = function(coords, id, size, type, label, color) {
 
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
+		if (!id) {
+			var nodes = network.getNodes();
+			id = nodes.length;
+		}
 		id = parseInt(id, 10);
 
 		// Create and populate the node properties object which will be sent to the event log
@@ -114,7 +90,6 @@ var networkCanvas = function (userSettings) {
 		nodeProperties.strokeWidth = 4;
 		var nodeGroup = new Kinetic.Group({
 			id: nodeProperties.id,
-			josh:0,
 			x: nodeProperties.coords[0],
 			y: nodeProperties.coords[1],
 			name: nodeProperties.label,
@@ -131,7 +106,7 @@ var networkCanvas = function (userSettings) {
 			nodeShape = new Kinetic.Circle({
 				radius: nodeProperties.size,
 				fill:nodeProperties.color,
-				stroke: app.calculateStrokeColor(nodeProperties.color),
+				stroke: network.calculateStrokeColor(nodeProperties.color),
 				strokeWidth: nodeProperties.strokeWidth
 			});
 			break;
@@ -141,7 +116,7 @@ var networkCanvas = function (userSettings) {
 				width: nodeProperties.size*2,
 				height: nodeProperties.size*2,
 				fill:nodeProperties.color,
-				stroke: app.calculateStrokeColor(nodeProperties.color),
+				stroke: network.calculateStrokeColor(nodeProperties.color),
 				strokeWidth: nodeProperties.strokeWidth,
 				offset: {x: nodeProperties.size, y: nodeProperties.size}
 			});
@@ -152,7 +127,7 @@ var networkCanvas = function (userSettings) {
 				sides: 3,
 				fill:nodeProperties.color,
 					radius: nodeProperties.size*1.2, // How should I calculate the correct multiplier for a triangle?
-					stroke: app.calculateStrokeColor(nodeProperties.color),
+					stroke: network.calculateStrokeColor(nodeProperties.color),
 					strokeWidth: nodeProperties.strokeWidth
 				});
 			break; 
@@ -163,7 +138,7 @@ var networkCanvas = function (userSettings) {
 				fill:nodeProperties.color,
 				innerRadius: nodeProperties.size-(nodeProperties.size/3),
 				outerRadius: nodeProperties.size+(nodeProperties.size/3),
-				stroke: app.calculateStrokeColor(nodeProperties.color),
+				stroke: network.calculateStrokeColor(nodeProperties.color),
 				strokeWidth: nodeProperties.strokeWidth
 			});
 			break;
@@ -173,11 +148,13 @@ var networkCanvas = function (userSettings) {
 		var nodeLabel = new Kinetic.Text({         
 			text: nodeProperties.label,
 			fontSize: 20,
-			fontFamily: 'Lato',
+			fontFamily: 'Futura',
 			fill: 'white',
+			stroke:'black',
+			strokeWidth:0.2,
 			offsetX: (nodeProperties.size*-1)-10, //left right
 			offsetY:(nodeProperties.size*1)-10, //up down
-			fontStyle:300,
+			fontStyle:500,
 
 		});
 
@@ -185,7 +162,7 @@ var networkCanvas = function (userSettings) {
 		nodeGroup.add(nodeLabel);
 
 		notify("Putting node "+nodeProperties.label+" at coordinates x:"+nodeProperties.coords[0]+", y:"+nodeProperties.coords[1], 2);
-		app.addToLog('nodeCreate', nodeProperties, nodeProperties.id); 
+		eventLog.addToLog('nodeCreate', nodeProperties, nodeProperties.id); 
 
 
 		// Node event handlers
@@ -215,7 +192,7 @@ var networkCanvas = function (userSettings) {
 
 		nodeGroup.on('tap click', function() {
 			notify('tap or click.', 0);
-			app.addToLog('nodeClick',this, this.attrs.id);
+			eventLog.addToLog('nodeClick',this, this.attrs.id);
 			this.moveToTop();
 			nodeLayer.draw();
 		}); 
@@ -228,9 +205,12 @@ var networkCanvas = function (userSettings) {
 
 			// If this makes a couple, link them.
 			if(selectedNodes.length === 2) {
-				app.addEdge(selectedNodes[0],selectedNodes[1]);
-				selectedNodes[0].children[0].stroke(app.calculateStrokeColor(app.getNodeColorByType(selectedNodes[0].attrs.type)));
-				selectedNodes[1].children[0].stroke(app.calculateStrokeColor(app.getNodeColorByType(selectedNodes[1].attrs.type)));
+				if (!network.addEdge(selectedNodes[0],selectedNodes[1])) {
+					network.removeEdge(selectedNodes[0],selectedNodes[1]);
+				}
+				
+				selectedNodes[0].children[0].stroke(network.calculateStrokeColor(network.getNodeColorByType(selectedNodes[0].attrs.type)));
+				selectedNodes[1].children[0].stroke(network.calculateStrokeColor(network.getNodeColorByType(selectedNodes[1].attrs.type)));
 				selectedNodes = [];
 				nodeLayer.draw(); 
 
@@ -264,8 +244,8 @@ var networkCanvas = function (userSettings) {
 			};
 
 			// Log the movement and save the graph state.
-			app.addToLog('nodeMove',eventObject, this.attrs.id);
-			app.saveGraph();
+			eventLog.addToLog('nodeMove',eventObject, this.attrs.id);
+			network.saveGraph();
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -276,9 +256,9 @@ var networkCanvas = function (userSettings) {
 		nodeLayer.add(nodeGroup);
 		nodeGroup.moveToBottom();
 		nodeLayer.draw();
-		app.saveGraph();
+		network.saveGraph();
 
-		if (coords === null) {
+		if (!coords) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
@@ -294,7 +274,7 @@ var networkCanvas = function (userSettings) {
 
 	// Edge manipulation functions
 
-	app.addEdge = function(from, to) {
+	network.addEdge = function(from, to) {
 		var alreadyExists = false;
 		var fromObject,toObject;
 		var toRemove;
@@ -321,16 +301,16 @@ var networkCanvas = function (userSettings) {
 
 		}
 
-		// Can't recall why I wanted this functionality...
-		// if (alreadyExists) {
-		//     this.removeEdge(toRemove);
-		//     return false;
-		// }
+		if (alreadyExists) {
+		    // this.removeEdge(toRemove);
+		    return false;
+		}
 
 		var points = [fromObject.attrs.x, fromObject.attrs.y, toObject.attrs.x, toObject.attrs.y];
 		var edge = new Kinetic.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 2,
+			opacity:0.5,
 			stroke: settings.defaultEdgeColor,
 			// opacity: 0.8,
 			from: fromObject,
@@ -343,13 +323,13 @@ var networkCanvas = function (userSettings) {
 		nodeLayer.draw();
 		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
 		
-		var simpleEdge = app.getSimpleEdge(edgeLayer.children.length-1);
-		app.addToLog('edgeCreate',simpleEdge, '0');
-		app.saveGraph();
+		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
+		eventLog.addToLog('edgeCreate',simpleEdge, '0');
+		network.saveGraph();
 		return true;   
 	};
 
-	app.removeEdge = function(edge) {
+	network.removeEdge = function(edge) {
 		notify("Removing edge.");
 		$.each(edgeLayer.children, function(index, value) {
 			if (value === edge) {
@@ -364,35 +344,35 @@ var networkCanvas = function (userSettings) {
 
 	// Misc functions
 
-	app.calculateStrokeColor = function(color) {
+	network.calculateStrokeColor = function(color) {
 		return modifyColor(color, 15);
 	};
 
-	app.clearGraph = function() {
+	network.clearGraph = function() {
 		edgeLayer.removeChildren();
 		edgeLayer.clear();
 		nodeLayer.removeChildren();
 		nodeLayer.clear();
-		app.saveGraph();
+		network.saveGraph();
 	};
 
-	app.createRandomGraph = function(nodeCount,edgeProbability) {
+	network.createRandomGraph = function(nodeCount,edgeProbability) {
 		nodeCount = nodeCount || 10;
 		edgeProbability = edgeProbability || 0.4;
-		var nodes = app.getNodes(); 
+		var nodes = network.getNodes(); 
 		notify("Creating random graph...",3);
 		for (var i=0;i<nodeCount;i++) {
 			var current = i+1;
 			notify("Adding node "+current+" of "+nodeCount,1);
 			// Use random coordinates
-			app.addNode([Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))],nodes.length);	
+			network.addNode([Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))],nodes.length);	
 		}
 
 		notify("Adding edges.",3);
 		$.each(nodes, function (index) {
 			if (randomBetween(0, 1) < edgeProbability) {
 				var randomFriend = Math.round(randomBetween(0,nodes.length-1));
-				app.addEdge(nodes[index],nodes[randomFriend]);
+				network.addEdge(nodes[index],nodes[randomFriend]);
 
 			}
 		});
@@ -400,7 +380,7 @@ var networkCanvas = function (userSettings) {
 
 	// Main initialisation functions
 
-	app.initKinetic = function () {
+	network.initKinetic = function () {
 		// Initialise KineticJS stage
 		stage = new Kinetic.Stage({
 			container: 'kineticCanvas',
@@ -420,7 +400,7 @@ var networkCanvas = function (userSettings) {
 		notify("Kinetic stage initialised.",3);
 	};
 
-	app.drawUIComponents = function () {
+	network.drawUIComponents = function () {
 
 		// Draw all UI components
 		var circleFills, circleLines;
@@ -470,10 +450,10 @@ var networkCanvas = function (userSettings) {
 	  	deleteNodeBox.on('click tap', function() {
 			var touchPos = stage.getPointerPosition();
 			var coords = [];
-			var nodes = app.getNodes();
+			var nodes = network.getNodes();
 			coords[0] = touchPos.x;
 			coords[1] = touchPos.y;
-			app.addNode(coords,nodes.length);
+			network.addNode(coords,nodes.length);
 			deleteNodeBox.moveToBottom();
 			uiLayer.draw();
 	  	});
@@ -485,33 +465,41 @@ var networkCanvas = function (userSettings) {
 
 		// Key bindings
 		$(document).on("keypress", function (e) {
-			$('#new-name-box').focus();
-			// Prevent accidental backspace navigation
-			if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
-				e.preventDefault();
-			}
 
-			// Reject anything but the letter keys
-			if (event.which !== 13) {
-				if (animating === false && open === false) {
-					animating = true;
-					$('#newNodeForm').css('visibility', 'visible');
-					$('#newNodeForm').transition({opacity: '1', marginTop:'0'},150,'easeInSine');
-					$('#newNodeForm > *').transition({ opacity: '1',left:'0'},400,'easeInSine').promise().done( function(){animating = false; open = true;});                    
-				} 
-			} else {
-				if (!animating) {
-					animating = true;
-					$('#newNodeForm').transition({scale: '5',opacity: '0', marginTop:'0'},200,'easeInSine').promise().done( function(){ 
-						$('#newNodeForm > *').transition({opacity:'0',left:'1000px'});
-						$('#newNodeForm').transition({scale:'1'});
-						animating = false;
-						open = false;
-						$('#newNodeForm').css('visibility', 'hidden');
-						$('#new-name-box').focus();                   
-					});
-				}                  
+			// Cancel if a modal is currently open
+			if (!$("#generate-graph").data()['bs.modal'].isShown) {
+				$('#new-name-box').focus();
+				// Prevent accidental backspace navigation
+				if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
+					e.preventDefault();
+				}
+
+				// Reject anything but the letter keys
+				if (event.which !== 13) {
+					menu.close();
+					if (animating === false && open === false) {
+						animating = true;
+						// $('#newNodeForm').css('visibility', 'visible');
+						$('#newNodeForm').css('z-index', 9999);
+						$('#newNodeForm').transition({opacity: '1', marginTop:'0'},50,'easeInSine');
+						$('#newNodeForm > *').transition({ opacity: '1',right:'0'},400,'easeInSine').promise().done( function(){animating = false; open = true;});                    
+					} 
+				} else {
+					if (!animating) {
+						animating = true;
+						$('#newNodeForm').css('z-index', 0);
+						$('#newNodeForm').transition({scale: '2',opacity: '0', marginTop:'0'},300,'easeInSine').promise().done( function(){ //animate out
+							$('#newNodeForm > *').transition({opacity:'0',right:'100px'});
+							$('#newNodeForm').transition({scale:'1'});
+							animating = false;
+							open = false;
+							// $('#newNodeForm').css('visibility', 'hidden');
+							$('#new-name-box').focus();                   
+						});
+					}                  
+				}	
 			}
+			
 		});
 
 
@@ -520,7 +508,7 @@ var networkCanvas = function (userSettings) {
 
 	// Graph saving/loading/exporting functions
 
-	app.loadGraph = function () {
+	network.loadGraph = function () {
 		// TODO: Add return false for if this fails.
 		notify("Loading graph from localStorage.",3);
 		var loadedNodes = localStorage.getObject('nodes') || {};
@@ -529,19 +517,19 @@ var networkCanvas = function (userSettings) {
 			var coords = [];
 			coords.push(value.x);
 			coords.push(value.y);
-			app.addNode(coords,index,value.nodeSize,value.type,value.name,value.color);
+			network.addNode(coords,index,value.nodeSize,value.type,value.name,value.color);
 		});
 
 		$.each(loadedEdges, function (index, value) {
-			app.addEdge(value.from,value.to);
+			network.addEdge(value.from,value.to);
 		});
 	};
 
-	app.saveGraph = function () {
+	network.saveGraph = function () {
 		notify("Saving graph.",3);
-		var simpleNodes = app.getSimpleNodes();
-		var simpleEdges = app.getSimpleEdges();
-		var log = app.getLog();
+		var simpleNodes = network.getSimpleNodes();
+		var simpleEdges = network.getSimpleEdges();
+		var log = network.getLog();
 		localStorage.setObject('nodes', simpleNodes);
 		localStorage.setObject('edges', simpleEdges);
 		localStorage.setObject('log', log);
@@ -549,18 +537,18 @@ var networkCanvas = function (userSettings) {
 
 	// Get & set functions
 
-	app.getNodes = function() {
+	network.getNodes = function() {
 		return nodeLayer.children;
 	};
 
-	app.getEdges = function() {
+	network.getEdges = function() {
 		return edgeLayer.children;
 	};    
 
-	app.getSimpleNodes = function() {
+	network.getSimpleNodes = function() {
 		// We need to create a simple representation of the nodes for storing.
 		var simpleNodes = {};
-		var nodes = app.getNodes();
+		var nodes = network.getNodes();
 		$.each(nodes, function (index, value) {
 			simpleNodes[value.attrs.id] = {};
 			simpleNodes[value.attrs.id].x = value.attrs.x;
@@ -573,7 +561,7 @@ var networkCanvas = function (userSettings) {
 		return simpleNodes;
 	};
 
-	app.getSimpleEdges = function() {
+	network.getSimpleEdges = function() {
 		var simpleEdges = {},
 		edgeCounter = 0;
 
@@ -587,21 +575,21 @@ var networkCanvas = function (userSettings) {
 		return simpleEdges;
 	};
 
-	app.getSimpleEdge = function(id) {
-		var simpleEdges = app.getSimpleEdges();
+	network.getSimpleEdge = function(id) {
+		var simpleEdges = network.getSimpleEdges();
 		if (!id) { return false; }
 
 		var simpleEdge = simpleEdges[id];
 		return simpleEdge;
 	};
 
-	app.getEdgeLayer = function() {
+	network.getEdgeLayer = function() {
 		return edgeLayer;
 	};
 
-	app.getNodeByID = function(id) {
+	network.getNodeByID = function(id) {
 		var node = {},
-		nodes = app.getNodes();
+		nodes = network.getNodes();
 
 		$.each(nodes, function(index, value) {
 			if (value.attrs.id === id) {
@@ -612,7 +600,7 @@ var networkCanvas = function (userSettings) {
 		return node;
 	};
 
-	app.getNodeColorByType = function(type) {
+	network.getNodeColorByType = function(type) {
 		var returnVal = null;
 		$.each(settings.nodeTypes, function(index, value) {
 			if (value.name === type) {returnVal = value.color;}
@@ -625,14 +613,16 @@ var networkCanvas = function (userSettings) {
 		}
 	};
 
-	app.getLog = function() {
+	network.getLog = function() {
 		return eventLog;
 	};
 
-	app.getLastEvent = function() {
+	network.getLastEvent = function() {
 		return eventLog[eventLog.length-1];
 	};
 
-	return app;
+	network.init();
 	
-}();
+	return network;
+	
+};

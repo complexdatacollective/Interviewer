@@ -2,116 +2,141 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>Network Canvas</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" href="css/style.css">
-
-        <link href='http://fonts.googleapis.com/css?family=Noto+Sans|Merriweather+Sans|Sintony:400,700|Roboto' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="css/component.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
 <body>
 
-<!-- Refresh button -->
-<img src="img/glyphicons/png/glyphicons_085_repeat@2x_light.png" id="refresh-button" class="ui"/>
+<!-- Main Containt Panel -->
+<div id="content" class="content">
 
-<!-- Menu Button -->
-<div class="ui btn btn-link btn-lg menu menu-button" id="menu-button">
-  <span class="glyphicon glyphicon-list-alt"></span>
 </div>
 
-<!-- Main Menu -->
-<div class="ui menu menu-container">
-  <div class="ui btn btn-info btn-lg menu-item" data-toggle="modal" data-target="#generate-graph">
-    <span class="glyphicon glyphicon-link"></span><div class="menu-text">Generate</div>
-  </div>
-  <div class="ui btn btn-success btn-lg menu-item">
-    <span class="glyphicon glyphicon-globe"></span><div class="menu-text">Communities</div>
-  </div>
-  <div class="ui btn btn-warning btn-lg menu-item">
-    <span class="glyphicon glyphicon glyphicon-floppy-save"></span><div class="menu-text">Download</div>
-  </div>
-  <div class="ui btn btn-danger btn-lg menu-item">
-    <span class="glyphicon glyphicon glyphicon-cog"></span><div class="menu-text">Settings</div>
-  </div>
-</div>
 
-<!-- Generate Graph Modal -->
-<div class="modal fade" id="generate-graph" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Generate a Random Graph</h4>
-      </div>
-      <div class="modal-body">
-          <div class="form-group">
-            <label for="gen-graph-nodes">Number of Nodes</label>
-            <input type="number" class="form-control" id="gen-graph-nodes" value="10">
-          </div>
-          <div class="form-group">
-            <label for="gen-graph-edge-prob">Edge Probability</label>
-            <input type="number" class="form-control" id="gen-graph-edge-prob" value="1">
-          </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="gen-graph-clear" checked> Clear existing graph.
-            </label>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="generate-graph-submit">Generate Graph</button>
+<div class="morph-button morph-button-sidebar morph-button-fixed">
+  <button type="button"><span class="icon icon-cog">Settings Menu</span></button>
+  <div class="morph-content">
+    <div>
+      <div class="content-style-sidebar">
+        <span class="icon icon-close">Close the overlay</span>
+        <h2>Settings</h2>
+        <ul>
+          <li><a class="icon icon-camera" href="#">Default filters</a></li>
+          <li><a class="icon icon-server" href="#">Storage Use</a></li>
+          <li><a class="icon icon-heart" href="#">Favorites</a></li>
+          <li><a class="icon icon-zoom-in" href="#">Readability</a></li>
+          <li><a class="icon icon-microphone" href="#">Speech</a></li>
+          <li><a class="icon icon-cloud" href="#">Uploads</a></li>
+          <li><a class="icon icon-user" href="#">Profile</a></li>
+          <li><a class="icon icon-briefcase" href="#">Documents</a></li>
+          <li><a class="icon icon-globe" href="#">Global Options</a></li>
+        </ul>
       </div>
     </div>
   </div>
-</div>
+</div><!-- morph-button -->
+
+
+
 
 <!-- Navigation Arrows -->
-<!-- <div class="btn btn-link btn-lg ui arrow-nav arrow-left">
+<a class="btn btn-link btn-lg ui arrow-nav arrow-left arrow-prev">
   <span class="glyphicon glyphicon-chevron-left"></span>
-</div>  
+</a>  
 
-<div class="btn btn-link btn-lg ui arrow-nav arrow-right">  
+<a class="btn btn-link btn-lg ui arrow-nav arrow-right arrow-next">  
   <span class="glyphicon glyphicon-chevron-right"></span>
-</div>
- -->
-<div id="newNodeForm" class="ui">
-    <div class="container" style="">
-        <h1>Add a new contact</h1>
-        <p>some roisjert iuaertiaehrtoayuegrt apuyregt aoerygt aoerygt aperygt oareygta oerygtauyregt oayergt aerta eorutay ertayretaperuygta pneruytg. </p>
-        <div class="form-group">
-            <label for="new-name-box">Name</label>
-            <input type="text" style="width:100%;" class="form-control" id="new-name-box"></input>
-        </div>
-        <div class="form-group text-center">
-          <input type="radio" name="nodeType" class="hidden" id="person" />
-          <label for="person"><img src="img/circle.png" alt="Person" /></label>
+</a>
 
-          <input type="radio" name="nodeType" class="hidden" id="onlinePerson" />
-          <label for="onlinePerson"><img src="img/square.png" alt="Online Person" /></label>
-
-          <input type="radio" name="nodeType" class="hidden" id="organisation" />
-          <label for="organisation"><img src="img/star.png" alt="Organisation" /></label>
-
-          <input type="radio" name="nodeType" class="hidden" id="professional" />
-          <label for="professional"><img src="img/triangle.png" alt="Professional" /></label>          
-        </div>
-    </div>
-</div>
-<div id="kineticCanvas"></div>
+<!-- Components -->
 <script src="components/jquery/dist/jquery.min.js"></script>
 <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="components/kineticjs/kinetic.min.js"></script>
 <script src="components/jquery.transit/jquery.transit.js"></script>
 <script src="components/vis/dist/vis.min.js"></script>
+
+<!-- Modules -->
 <script src="js/menu.js"></script>
+
+<script>
+  (function() {
+    var docElem = window.document.documentElement, 
+        didScroll, 
+        scrollPosition,
+        container = document.getElementById('content' );
+
+    // trick to prevent scrolling when opening/closing button
+    function noScrollFn() {
+      window.scrollTo( scrollPosition ? scrollPosition.x : 0, scrollPosition ? scrollPosition.y : 0 );
+    }
+
+    function noScroll() {
+      window.removeEventListener( 'scroll', scrollHandler );
+      window.addEventListener( 'scroll', noScrollFn );
+    }
+
+    function scrollFn() {
+      window.addEventListener( 'scroll', scrollHandler );
+    }
+
+    function canScroll() {
+      window.removeEventListener( 'scroll', noScrollFn );
+      scrollFn();
+    }
+
+    function scrollHandler() {
+      if( !didScroll ) {
+        didScroll = true;
+        setTimeout( function() { scrollPage(); }, 60 );
+      }
+    };
+
+    function scrollPage() {
+      scrollPosition = { x : window.pageXOffset || docElem.scrollLeft, y : window.pageYOffset || docElem.scrollTop };
+      didScroll = false;
+    };
+
+    scrollFn();
+    
+    var el = document.querySelector( '.morph-button' );
+    console.log(el);
+    
+    window.menu = new Menu( el, {
+      closeEl : '.icon-close',
+      onBeforeOpen : function() {
+        noScroll();
+        $(container).addClass("pushed");
+      },
+      onAfterOpen : function() {
+        canScroll();
+        $(el).addClass('scroll');
+      },
+      onBeforeClose : function() {
+        $(el).removeClass('scroll');
+        noScroll();
+        $(container).removeClass("pushed");
+      },
+      onAfterClose : function() {
+        canScroll();
+      }
+    } );
+  })();
+</script>
+
 <script src="js/extensions.js"></script>
+<script src="js/session.js"></script>
+<script src="js/logger.js"></script>
+<script src="js/interview.js"></script>
 <script src="js/NetworkCanvas.js"></script>
 <script src="js/main.min.js"></script>
+
 </body>
 </html>

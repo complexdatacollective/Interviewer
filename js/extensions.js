@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/* global Storage */
+/* global Storage, debugLevel */
 /*jshint bitwise: false*/
 
 "use strict";
@@ -18,6 +18,13 @@ Storage.prototype.getObject = function(key) {
 };
 
 // helper functions
+
+function notify(text, level){
+    level = level || 0;
+    if (level >= debugLevel) {
+        console.log(text);
+    }
+}
 
 function randomBetween(min,max) {
     return Math.random() * (max - min) + min;

@@ -1,0 +1,1 @@
+var Session=function e(){var e={};return e.id=12,e.date=new Date,e.nodes={},e.edges={},e.log={},e};

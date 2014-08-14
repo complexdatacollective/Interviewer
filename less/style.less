@@ -14,24 +14,6 @@ html, body {
     -webkit-font-smoothing: antialiased;
     font-weight:300;
     overflow:hidden;
-
-
-}
-
-body {
-    opacity:0;
-}
-
-body.modal-open, 
-.modal-open .navbar-fixed-top, 
-.modal-open .navbar-fixed-bottom 
-{
-    margin-right: 0px;
-}
-
-.modal
-{
-    overflow-y: auto;
 }
 
 input[type=radio]:checked + label>img {
@@ -54,23 +36,26 @@ input[type=radio]:checked + label>img {
 
 #newNodeForm {
     position:fixed;
-    visibility:hidden;
+    // visibility:hidden;
     top:0;
     left:0;
     width:100%;
     height:100%;
+    display:box;
     display:-webkit-box;
     -webkit-box-pack:center;
-    -webkit-box-align:center;
+    -webkit-box-align:center;   
+    box-pack:center;
+    box-align:center;
     background:rgba(0, 0, 0, 0.85);
-    z-index:23;
+    z-index:0;
     opacity:0;
 }
 
 #newNodeForm > * {
     opacity:0;
     position:relative;
-    left:1000px;
+    right:100px;
 }
 
 #nodebox {
@@ -125,10 +110,11 @@ input[type=radio]:checked + label>img {
     line-height:1.1;
     width:130px;
     margin-left:-110px;
+    opacity:0;
 }
 
 .menu-container {
-    opacity:0;
+    // opacity:0;
 }
 
 .menu-text {
@@ -139,27 +125,6 @@ input[type=radio]:checked + label>img {
     width:130px;
     left:15px;
     z-index: 21;
-}
-
-.modal-content {
-    background-clip: inherit;
-    border:0;
-}
-.modal-dialog {
-    margin-top:190px !important;
-    // top:50%;
-    // left:50%;
-}
-
-.modal-header {
-    background: darken(@modal-base, 25%);
-    border-bottom:0;
-    text-align:center;
-}
-
-.modal-footer {
-    border-top:0;
-    text-align: center;
 }
 
 label {
@@ -189,4 +154,9 @@ label {
   width: 100%;
   height: 100%;
 }
+
+
+// menu stuff
+
+
 

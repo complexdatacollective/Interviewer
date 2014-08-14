@@ -1,0 +1,32 @@
+  <div id="newNodeForm" class="ui">
+      <div class="container" style="">
+          <h1>Add a new contact</h1>
+          <p>some roisjert iuaertiaehrtoayuegrt apuyregt aoerygt aoerygt aperygt oareygta oerygtauyregt oayergt aerta eorutay ertayretaperuygta pneruytg.</p>
+          <div class="form-group">
+              <label for="new-name-box">Name</label>
+              <input type="text" style="width:100%;" class="form-control" id="new-name-box"></input>
+          </div>
+          <div class="form-group text-center">
+            <input type="radio" name="nodeType" class="hidden" id="person" />
+            <label for="person"><img src="img/circle.png" alt="Person" /></label>
+
+            <input type="radio" name="nodeType" class="hidden" id="onlinePerson" />
+            <label for="onlinePerson"><img src="img/square.png" alt="Online Person" /></label>
+
+            <input type="radio" name="nodeType" class="hidden" id="organisation" />
+            <label for="organisation"><img src="img/star.png" alt="Organisation" /></label>
+
+            <input type="radio" name="nodeType" class="hidden" id="professional" />
+            <label for="professional"><img src="img/triangle.png" alt="Professional" /></label>          
+          </div>
+      </div>
+  </div>
+  <div id="kineticCanvas"></div>
+
+  <!-- Refresh button -->
+  <img src="img/glyphicons/png/glyphicons_085_repeat@2x_light.png" id="refresh-button" class="ui"/>
+
+  <script>
+    var network = new NetworkCanvas();
+    network.loadGraph();
+  </script>
