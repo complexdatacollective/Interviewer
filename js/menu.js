@@ -86,7 +86,7 @@ var Menu = function Menu(el, options) {
         extend(menu.options,options);
 
         // the button
-        button = $('button');
+        button = $('.menu-btn');
         // state
         expanded = false;
         // content el

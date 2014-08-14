@@ -9,8 +9,7 @@
         <title>Network Canvas</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="css/demo.css" />
-        <link rel="stylesheet" type="text/css" href="css/component.css" />
+        <link rel="stylesheet" type="text/css" href="css/menu.css" />
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
 <body>
@@ -20,24 +19,24 @@
 
 </div>
 
-
+<span class="hi-icon hi-icon-cog menu-btn">Settings Menu</span>
 <div class="morph-button morph-button-sidebar morph-button-fixed">
-  <button type="button"><span class="icon icon-cog">Settings Menu</span></button>
+  <button type="button"></button>
   <div class="morph-content">
     <div>
       <div class="content-style-sidebar">
         <span class="icon icon-close">Close the overlay</span>
         <h2>Settings</h2>
         <ul>
-          <li><a class="icon icon-camera" href="#">Default filters</a></li>
-          <li><a class="icon icon-server" href="#">Storage Use</a></li>
-          <li><a class="icon icon-heart" href="#">Favorites</a></li>
+          <li><a class="icon icon-server" href="#">Load Protocol</a></li>
+          <li><a class="icon icon-cloud" href="#">Sync Data</a></li>
+          <li><a class="icon icon-user" href="#">User Profile</a></li>
+          <li><a class="icon icon-briefcase" href="#">Manage Cases</a></li>
+          <li><a class="icon icon-globe" href="#">Global Options</a></li>
+<!-- 
           <li><a class="icon icon-zoom-in" href="#">Readability</a></li>
           <li><a class="icon icon-microphone" href="#">Speech</a></li>
-          <li><a class="icon icon-cloud" href="#">Uploads</a></li>
-          <li><a class="icon icon-user" href="#">Profile</a></li>
-          <li><a class="icon icon-briefcase" href="#">Documents</a></li>
-          <li><a class="icon icon-globe" href="#">Global Options</a></li>
+          <li><a class="icon icon-heart" href="#">Favorites</a></li>   -->        
         </ul>
       </div>
     </div>
@@ -113,6 +112,8 @@
       closeEl : '.icon-close',
       onBeforeOpen : function() {
         noScroll();
+        $('.arrow-right').transition({right:-550});
+        $('.arrow-left').transition({left:-550});
         $(container).addClass("pushed");
       },
       onAfterOpen : function() {
@@ -125,6 +126,8 @@
         $(container).removeClass("pushed");
       },
       onAfterClose : function() {
+        $('.arrow-right').transition({right:0},1000);
+        $('.arrow-left').transition({left:0},1000);
         canScroll();
       }
     } );
