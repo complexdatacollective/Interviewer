@@ -19,32 +19,9 @@
 
 </div>
 
-<span class="hi-icon hi-icon-cog menu-btn">Settings Menu</span>
-<div class="morph-button morph-button-sidebar morph-button-fixed">
-  <button type="button"></button>
-  <div class="morph-content">
-    <div>
-      <div class="content-style-sidebar">
-        <span class="icon icon-close">Close the overlay</span>
-        <h2>Settings</h2>
-        <ul>
-          <li><a class="icon icon-server" href="#">Load Protocol</a></li>
-          <li><a class="icon icon-cloud" href="#">Sync Data</a></li>
-          <li><a class="icon icon-user" href="#">User Profile</a></li>
-          <li><a class="icon icon-briefcase" href="#">Manage Cases</a></li>
-          <li><a class="icon icon-globe" href="#">Global Options</a></li>
-<!-- 
-          <li><a class="icon icon-zoom-in" href="#">Readability</a></li>
-          <li><a class="icon icon-microphone" href="#">Speech</a></li>
-          <li><a class="icon icon-heart" href="#">Favorites</a></li>   -->        
-        </ul>
-      </div>
-    </div>
-  </div>
-</div><!-- morph-button -->
+<div class="menu-container">
 
-
-
+</div>
 
 <!-- Navigation Arrows -->
 <a class="btn btn-link btn-lg ui arrow-nav arrow-left arrow-prev">
@@ -67,79 +44,29 @@
 
 <script>
   (function() {
-    var docElem = window.document.documentElement, 
-        didScroll, 
-        scrollPosition,
-        container = document.getElementById('content' );
-
-    // trick to prevent scrolling when opening/closing button
-    function noScrollFn() {
-      window.scrollTo( scrollPosition ? scrollPosition.x : 0, scrollPosition ? scrollPosition.y : 0 );
-    }
-
-    function noScroll() {
-      window.removeEventListener( 'scroll', scrollHandler );
-      window.addEventListener( 'scroll', noScrollFn );
-    }
-
-    function scrollFn() {
-      window.addEventListener( 'scroll', scrollHandler );
-    }
-
-    function canScroll() {
-      window.removeEventListener( 'scroll', noScrollFn );
-      scrollFn();
-    }
-
-    function scrollHandler() {
-      if( !didScroll ) {
-        didScroll = true;
-        setTimeout( function() { scrollPage(); }, 60 );
-      }
-    };
-
-    function scrollPage() {
-      scrollPosition = { x : window.pageXOffset || docElem.scrollLeft, y : window.pageYOffset || docElem.scrollTop };
-      didScroll = false;
-    };
-
-    scrollFn();
+    var container = document.getElementById('content');
     
-    var el = document.querySelector( '.morph-button' );
-    console.log(el);
-    
-    window.menu = new Menu( el, {
-      closeEl : '.icon-close',
-      onBeforeOpen : function() {
-        noScroll();
-        $('.arrow-right').transition({right:-550});
-        $('.arrow-left').transition({left:-550});
-        $(container).addClass("pushed");
-      },
-      onAfterOpen : function() {
-        canScroll();
-        $(el).addClass('scroll');
-      },
-      onBeforeClose : function() {
-        $(el).removeClass('scroll');
-        noScroll();
-        $(container).removeClass("pushed");
-      },
-      onAfterClose : function() {
-        $('.arrow-right').transition({right:0},1000);
-        $('.arrow-left').transition({left:0},1000);
-        canScroll();
-      }
-    } );
+    window.menu = new Menu({});
+
+    function josh() {
+      console.log("josh!");
+    }
+
+    var settingsMenu = menu.addMenu('Settings','hi-icon-cog');
+    menu.addItem(settingsMenu, 'Load Data', 'icon-globe', josh);
+    menu.addItem(settingsMenu, 'Reset', 'icon-globe', josh);
+    menu.addItem(settingsMenu, 'Download', 'icon-globe', josh);
+    menu.addItem(settingsMenu, 'Sync', 'icon-globe', josh);
+    menu.addItem(settingsMenu, 'Global Settings', 'icon-globe', josh);
   })();
 </script>
 
-<script src="js/extensions.js"></script>
-<script src="js/session.js"></script>
-<script src="js/logger.js"></script>
-<script src="js/interview.js"></script>
-<script src="js/NetworkCanvas.js"></script>
-<script src="js/main.min.js"></script>
+<script src="js/min/extensions-min.js"></script>
+<script src="js/min/session-min.js"></script>
+<script src="js/min/logger-min.js"></script>
+<script src="js/min/interview-min.js"></script>
+<script src="js/min/NetworkCanvas-min.js"></script>
+<script src="js/min/main-min.js"></script>
 
 </body>
 </html>

@@ -1,11 +1,10 @@
 /* exported Menu */
-var Menu = function Menu(el, options) {
+var Menu = function Menu(options) {
 
     var menu = {};
+    var menus = [];
     var isAnimating = false;
-    // var el = $('.menu');
-
-    var button, expanded, contentEl;
+    var menuContainer = $('.menu-container');
 
 
     // private
@@ -19,19 +18,36 @@ var Menu = function Menu(el, options) {
     }
 
     menu.options = {
-        closeEl : '',
-        onBeforeOpen : function() { return false; },
-        onAfterOpen : function() { return false; },
-        onBeforeClose : function() { return false; },
-        onAfterClose : function() { return false; }
+      onBeforeOpen : function() {
+        $('.arrow-right').transition({right:-550});
+        $('.arrow-left').transition({left:-550});
+        $('.content').addClass("pushed");
+      },
+      onAfterOpen : function() {
+      },
+      onBeforeClose : function() {
+        $('.content').removeClass("pushed");
+      },
+      onAfterClose : function() {
+        $('.arrow-right').transition({right:0},1000);
+        $('.arrow-left').transition({left:0},1000);
+      }
     };
 
-    menu.toggle = function() {
+    menu.getMenus = function() {
+        return menus;
+    };
+
+    menu.toggle = function(targetMenu) {
 
         // set the left and top values of the contentEl (same like the button)
-        var buttonPos = button[0].getBoundingClientRect();
+        var buttonPos = targetMenu.button[0].getBoundingClientRect();
         console.log(buttonPos);
         // need to reset
+        var contentEl = $('.'+targetMenu.name+'-menu');
+        var menuContent = $('.'+targetMenu.name+'-menu-container');
+        console.log(contentEl);
+
         contentEl.addClass('no-transition');
         contentEl[0].style.left = 'auto';
         contentEl[0].style.top = 'auto';
@@ -41,18 +57,24 @@ var Menu = function Menu(el, options) {
             return false;
         } else {
             isAnimating = true;
-            if(expanded === true) {
+            if(targetMenu.expanded === true) {
                 console.log('closing');
+                // $('.morph-content').css('z-index',0);
                 menu.options.onBeforeClose();
-                $(el).removeClass('active');
+                menuContent.removeClass('active');
                 menu.options.onAfterClose();
                 isAnimating = false;
+                
             } else {
+                $('.menu-btn').transition({opacity:0});
+                $('.menu-btn').hide();
+                // $('.morph-content').css('z-index',9999);
                 console.log('opening');
                 menu.options.onBeforeOpen();
-                $(el).addClass('active');
+                menuContent.addClass('active');
                 menu.options.onAfterOpen();
                 isAnimating = false;
+
             }
 
         }
@@ -62,17 +84,20 @@ var Menu = function Menu(el, options) {
             contentEl[0].style.left = buttonPos.left + 'px';
             contentEl[0].style.top = buttonPos.top + 'px';
             
-            if(expanded === true) {
+            if(targetMenu.expanded === true) {
                 console.log('expanded already');
                 contentEl.removeClass('no-transition');
-                $(el).removeClass('open');
-                expanded = false;
+                menuContent.removeClass('open');
+                targetMenu.expanded = false;
+
+                $('.menu-btn').transition({opacity:1});
+
             }
             else {
                 setTimeout( function() { 
                     contentEl.removeClass('no-transition');
-                    $(el).addClass('open');
-                    expanded = true; 
+                    menuContent.addClass('open');
+                    targetMenu.expanded = true; 
                 }, 25 );
             }
         }, 25 );
@@ -81,34 +106,67 @@ var Menu = function Menu(el, options) {
 
     };
 
+    menu.addMenu = function(name, icon) {
+        var newMenu = {};
+        newMenu.name = name;
+        newMenu.expanded = false;
+        newMenu.button = $('<span class="hi-icon menu-btn '+name+'"></span>');
+        newMenu.button.addClass(icon).html(name);
+        menuContainer.append(newMenu.button);
+
+
+        var menuItemsClass = name+'-menu';
+        var menuContainerClass = name+'-menu-container';
+        newMenu.items = $('<div class="morph-button morph-button-sidebar morph-button-fixed '+menuContainerClass+'"><div class="morph-content '+menuItemsClass+'"><div><div class="content-style-sidebar"><span class="icon icon-close">Close the overlay</span><h2>'+name+'</h2><ul></ul></div></div></div></div>');
+        newMenu.button.after(newMenu.items);
+
+        newMenu.button.on( 'click', function() { 
+            menu.toggle(newMenu); 
+        });
+        console.log(newMenu.items.find('.icon-close'));
+        newMenu.items.find('.icon-close').on('click', function() {
+            $('.menu-btn').show();
+            menu.toggle(newMenu);
+        });
+
+        menus.push(newMenu);
+        // // close
+        // if( menu.options.closeEl !== '' ) {
+        //     $(menu.options.closeEl).on('click', function() {
+        //         menu.toggle();
+        //     });
+        // }
+
+        return newMenu;
+
+    };
+
+    menu.addItem = function(menu,item,icon,callback) {
+        var menuItem = $('<li><a class="icon icon-server '+icon+'" href="#">'+item+'</a></li>');
+        menu.items.find('ul').append(menuItem);
+        menuItem.on('click', function() {
+            callback();
+        });
+
+//           <li><a class="icon icon-server" href="#">Load Protocol</a></li>
+//           <li><a class="icon icon-cloud" href="#">Sync Data</a></li>
+//           <li><a class="icon icon-user" href="#">User Profile</a></li>
+//           <li><a class="icon icon-briefcase" href="#">Manage Cases</a></li>
+//           <li><a class="icon icon-globe" href="#">Global Options</a></li>
+// <!-- 
+//           <li><a class="icon icon-zoom-in" href="#">Readability</a></li>
+//           <li><a class="icon icon-microphone" href="#">Speech</a></li>
+//           <li><a class="icon icon-heart" href="#">Favorites</a></li>   -->        
+
+
+
+    }; 
+
     menu.init = function() {
         console.log(options);
         extend(menu.options,options);
-
-        // the button
-        button = $('.menu-btn');
-        // state
-        expanded = false;
-        // content el
-        contentEl = $('.morph-content');
-        // init events
-        menu.initEvents();        
-
     };
 
-    menu.initEvents = function() {
-        // open
-        // console.log(button);
-        button.on( 'click', function() { 
-            menu.toggle(); 
-        });
-        // close
-        if( menu.options.closeEl !== '' ) {
-            $(menu.options.closeEl).on('click', function() {
-                menu.toggle();
-            });
-        }
-    };
 
     menu.init();
 
