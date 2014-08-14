@@ -24,6 +24,7 @@ var Menu = function Menu(options) {
         $('.content').addClass("pushed");
       },
       onAfterOpen : function() {
+        return false;
       },
       onBeforeClose : function() {
         $('.content').removeClass("pushed");
@@ -141,6 +142,10 @@ var Menu = function Menu(options) {
 
     };
 
+    menu.removeMenu = function(menu) {
+        menu.remove();
+    };
+
     menu.addItem = function(menu,item,icon,callback) {
         var menuItem = $('<li><a class="icon icon-server '+icon+'" href="#">'+item+'</a></li>');
         menu.items.find('ul').append(menuItem);
@@ -163,7 +168,6 @@ var Menu = function Menu(options) {
     }; 
 
     menu.init = function() {
-        console.log(options);
         extend(menu.options,options);
     };
 
