@@ -111,10 +111,11 @@ var Menu = function Menu(options) {
         var newMenu = {};
         newMenu.name = name;
         newMenu.expanded = false;
-        newMenu.button = $('<span class="hi-icon menu-btn '+name+'"></span>');
+        newMenu.button = $('<span class="hi-icon menu-btn '+name+'" style="opacity:0"></span>');
+
         newMenu.button.addClass(icon).html(name);
         menuContainer.append(newMenu.button);
-
+        newMenu.button.css({top:-300});
 
         var menuItemsClass = name+'-menu';
         var menuContainerClass = name+'-menu-container';
@@ -131,19 +132,17 @@ var Menu = function Menu(options) {
         });
 
         menus.push(newMenu);
-        // // close
-        // if( menu.options.closeEl !== '' ) {
-        //     $(menu.options.closeEl).on('click', function() {
-        //         menu.toggle();
-        //     });
-        // }
+        newMenu.button.transition({top:0,opacity:1},1000);
 
         return newMenu;
 
     };
 
-    menu.removeMenu = function(menu) {
-        menu.remove();
+    menu.removeMenu = function(targetMenu) {
+        targetMenu.button.transition({top:-300,opacity:0},1000, function() {
+            $(targetMenu.button).remove();
+            $(targetMenu.items).remove();            
+        });
     };
 
     menu.addItem = function(menu,item,icon,callback) {

@@ -26,7 +26,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	colors.celosiaorange = '#f47d44';
 	colors.sand = '#ceb48d';
 	colors.dazzlingblue = '#006bb6';
-	colors.edge = '#999';
+	colors.edge = '#bbb';
 	colors.selected = 'gold';
 
 	// Default settings
@@ -148,10 +148,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		var nodeLabel = new Kinetic.Text({         
 			text: nodeProperties.label,
 			fontSize: 20,
-			fontFamily: 'Futura',
+			fontFamily: 'Lato',
 			fill: 'white',
-			stroke:'black',
-			strokeWidth:0.2,
 			offsetX: (nodeProperties.size*-1)-10, //left right
 			offsetY:(nodeProperties.size*1)-10, //up down
 			fontStyle:500,

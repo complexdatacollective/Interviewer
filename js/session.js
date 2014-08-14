@@ -1,14 +1,19 @@
+/* global History */
 /* exported Session */
 var Session = function Session(options) {
 
   var session = {};
   var currentStage = 0;
   var $content = $('#content');
-
+  var changeStageEvent = new Event('changeStage');
   session.id = 0;
   session.date = new Date();
   session.stages = 2;
 
+    History.Adapter.bind(window, 'statechange', function(){
+      var State = History.getState();
+      console.log(State);
+    });
 
   // private
   function extend( a, b ) {
@@ -31,7 +36,16 @@ var Session = function Session(options) {
 
   session.init = function() {
     extend(session.options,options);
-    session.goToStage(0);
+
+    var State = History.getState();    
+
+    if(State.data.stage) {
+      session.goToStage(State.data.stage);
+    } else {
+      session.goToStage(0);
+    }
+
+
     $('.arrow-next').click(function() {
         session.nextStage();
     });
@@ -47,13 +61,15 @@ var Session = function Session(options) {
 
   session.goToStage = function(stage) {
     session.options.fnBeforeStageChange();
+    window.dispatchEvent(changeStageEvent);
     var newStage = stage;
-    $content.transition({ opacity: '0'},700,'easeInSine').promise().done( function(){
+    $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+stage+".html", function() {
-        $content.transition({ opacity: '1'},700,'easeInSine');    
+        $content.transition({ opacity: '1'},400,'easeInSine');    
       });
     });                    
     currentStage = newStage;
+    History.pushState({'stage': stage},null, '?stage='+stage);
     session.options.fnAfterStageChange();
   };
 

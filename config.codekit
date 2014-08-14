@@ -1648,6 +1648,1101 @@
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0
 		},
+	"\/components\/history.js\/buildr-uncompressed.coffee": {
+		"createSourceMap": 0,
+		"fileType": 32,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/buildr-uncompressed.coffee",
+		"minifyOutput": 1,
+		"outputAbbreviatedPath": "\/components\/history.js\/buildr-uncompressed.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/buildr.coffee": {
+		"createSourceMap": 0,
+		"fileType": 32,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/buildr.coffee",
+		"minifyOutput": 1,
+		"outputAbbreviatedPath": "\/components\/history.js\/buildr.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/demo\/bcherry-orig.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/bcherry-orig.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/bcherry.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/bcherry.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/chrome.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/chrome.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/index.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/index.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/native-auto.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/native-auto.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/native.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/native.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/navigator.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/navigator.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/safari.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/safari.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/demo\/unicode.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/demo\/unicode.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/History.md": {
+		"enableFootnoteSupport": 0,
+		"enableSmartyPants": 1,
+		"expandTabs": 1,
+		"fileType": 4096,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/History.md",
+		"outputAbbreviatedPath": "\/components\/history.js\/History.html",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/README.md": {
+		"enableFootnoteSupport": 0,
+		"enableSmartyPants": 1,
+		"expandTabs": 1,
+		"fileType": 4096,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/README.md",
+		"outputAbbreviatedPath": "\/components\/history.js\/README.html",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/dojo.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/dojo.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/dojo.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/extjs.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/extjs.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/extjs.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/jquery.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/jquery.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/jquery.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/mootools.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/mootools.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/mootools.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/native.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/native.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/native.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/right.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/right.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/right.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/zepto.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/zepto.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html4+html5\/min\/zepto.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/dojo.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/dojo.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/dojo.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/extjs.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/extjs.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/extjs.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/jquery.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/jquery.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/jquery.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/mootools.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/mootools.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/mootools.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/native.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/native.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/native.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/right.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/right.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/right.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/zepto.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/zepto.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled-uncompressed\/html5\/min\/zepto.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/dojo.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/dojo.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/dojo.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/extjs.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/extjs.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/extjs.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/jquery.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/jquery.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/jquery.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/mootools.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/mootools.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/mootools.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/native.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/native.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/native.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/right.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/right.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/right.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html4+html5\/zepto.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/zepto.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html4+html5\/min\/zepto.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/dojo.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/dojo.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/dojo.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/extjs.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/extjs.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/extjs.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/jquery.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/jquery.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/jquery.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/mootools.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/mootools.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/mootools.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/native.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/native.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/native.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/right.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/right.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/right.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/bundled\/html5\/zepto.history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/zepto.history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/bundled\/html5\/min\/zepto.history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.dojo.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.dojo.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.dojo-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.extjs.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.extjs.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.extjs-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.jquery.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.jquery.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.jquery-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.mootools.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.mootools.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.mootools-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.native.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.native.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.native-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.right.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.right.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.right-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.adapter.zepto.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.adapter.zepto.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.adapter.zepto-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.html4.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.html4.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history.html4-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/compressed\/json2.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/json2.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/compressed\/min\/json2-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.dojo.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.dojo.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.dojo-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.extjs.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.extjs.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.extjs-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.jquery.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.jquery.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.jquery-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.mootools.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.mootools.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.mootools-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.native.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.native.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.native-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.right.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.right.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.right-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.adapter.zepto.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.adapter.zepto.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.adapter.zepto-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.html4.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.html4.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history.html4-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/history.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/history.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/history-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/scripts\/uncompressed\/json2.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/json2.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/scripts\/uncompressed\/min\/json2-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/tests.src\/_header.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests.src\/_header.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests.src\/all.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests.src\/all.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests.src\/each.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests.src\/each.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests.src\/index.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests.src\/index.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.dojo.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.dojo.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.extjs.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.extjs.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.jquery.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.jquery.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.mootools.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.mootools.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.native.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.native.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.right.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.right.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html4+html5.zepto.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html4+html5.zepto.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.dojo.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.dojo.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.extjs.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.extjs.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.jquery.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.jquery.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.mootools.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.mootools.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.native.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.native.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.right.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.right.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/html5.zepto.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/html5.zepto.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/image.php": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/image.php",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/index.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/index.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/tests\/tests.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/tests\/tests.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/tests\/min\/tests-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/dojo.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/dojo.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/dojo-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/extjs.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/extjs.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/extjs-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/jquery.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/jquery.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/jquery-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/mootools.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/mootools.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/mootools-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/grunt.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/grunt.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/min\/grunt-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/History.md": {
+		"enableFootnoteSupport": 0,
+		"enableSmartyPants": 1,
+		"expandTabs": 1,
+		"fileType": 4096,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/History.md",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/History.html",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/qunit\/qunit.css": {
+		"fileType": 16,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/qunit\/qunit.css",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/qunit\/qunit.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/qunit\/qunit.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/qunit\/min\/qunit-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/README.md": {
+		"enableFootnoteSupport": 0,
+		"enableSmartyPants": 1,
+		"expandTabs": 1,
+		"fileType": 4096,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/README.md",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/README.html",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/async.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/async.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/async.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/async.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/async-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/deepEqual.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/deepEqual.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/deepEqual-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/headless.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/headless.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/index.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/index.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/logs.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/logs.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/logs.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/logs.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/logs-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/narwhal-test.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/narwhal-test.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/narwhal-test-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/node-test.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/node-test.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/node-test-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/same.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/same.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/same-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/swarminject.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/swarminject.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/swarminject-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/qunit\/test\/test.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/test.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/qunit\/test\/min\/test-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/right.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/right.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/right-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/components\/history.js\/vendor\/zepto.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/components\/history.js\/vendor\/zepto.js",
+		"outputAbbreviatedPath": "\/components\/history.js\/vendor\/min\/zepto-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/components\/jquery.transit\/CONTRIBUTING.md": {
 		"enableFootnoteSupport": 0,
 		"enableSmartyPants": 1,
@@ -16914,7 +18009,7 @@
 		"outputAbbreviatedPath": "\/js\/min\/extensions-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/interview.js": {
@@ -16925,7 +18020,7 @@
 		"outputAbbreviatedPath": "\/js\/min\/interview-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 1,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/logger.js": {
@@ -16936,7 +18031,7 @@
 		"outputAbbreviatedPath": "\/js\/min\/logger-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/main.js": {
@@ -16958,7 +18053,7 @@
 		"outputAbbreviatedPath": "\/js\/min\/menu-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/js\/min\/extensions-min.js": {
@@ -17027,6 +18122,17 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
+	"\/js\/min\/NetworkCanvas-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/js\/min\/NetworkCanvas-min.js",
+		"outputAbbreviatedPath": "\/js\/min\/min\/NetworkCanvas-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
 	"\/js\/min\/session-min.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -17057,7 +18163,7 @@
 		"outputAbbreviatedPath": "\/js\/min\/session-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
+		"outputStyle": 2,
 		"syntaxCheckerStyle": 1
 		},
 	"\/less\/colors.less": {
@@ -17094,7 +18200,7 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 0,
 		"relativeURLS": 0,
-		"shouldRunAutoprefixer": 0,
+		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"strictImports": 0,
 		"strictMath": 0,

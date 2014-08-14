@@ -30,6 +30,14 @@
     var network = new NetworkCanvas();
     network.loadGraph();
 
-    menu.addMenu('Network','hi-icon-user');
+    var networkMenu = menu.addMenu('Network','hi-icon-user');
+    menu.addItem(networkMenu, 'Load Network', 'icon-globe', null);
+    menu.addItem(networkMenu, 'Random Graph', 'icon-globe', null);
+    menu.addItem(networkMenu, 'Download Network', 'icon-globe', null);
+    menu.addItem(networkMenu, 'Clear Graph', 'icon-globe', null);
+
+    window.addEventListener('changeStage', function (e) { 
+      menu.removeMenu(networkMenu);
+    }, false);
 
   </script>
