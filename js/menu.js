@@ -39,6 +39,10 @@ var Menu = function Menu(options) {
         return menus;
     };
 
+    menu.closeMenu = function(targetMenu) {
+        targetMenu.items.find('.icon-close').trigger('click');
+    };
+
     menu.toggle = function(targetMenu) {
 
         // set the left and top values of the contentEl (same like the button)
@@ -65,7 +69,6 @@ var Menu = function Menu(options) {
                 menuContent.removeClass('active');
                 menu.options.onAfterClose();
                 isAnimating = false;
-                
             } else {
                 $('.menu-btn').transition({opacity:0});
                 $('.menu-btn').hide();
@@ -139,17 +142,19 @@ var Menu = function Menu(options) {
     };
 
     menu.removeMenu = function(targetMenu) {
+        console.log('removing menu');
         targetMenu.button.transition({top:-300,opacity:0},1000, function() {
             $(targetMenu.button).remove();
             $(targetMenu.items).remove();            
         });
     };
 
-    menu.addItem = function(menu,item,icon,callback) {
+    menu.addItem = function(targetMenu,item,icon,callback) {
         var menuItem = $('<li><a class="icon icon-server '+icon+'" href="#">'+item+'</a></li>');
-        menu.items.find('ul').append(menuItem);
+        targetMenu.items.find('ul').append(menuItem);
         menuItem.on('click', function() {
             callback();
+            menu.closeMenu(targetMenu);
         });
 
 //           <li><a class="icon icon-server" href="#">Load Protocol</a></li>

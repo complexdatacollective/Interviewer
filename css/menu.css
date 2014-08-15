@@ -91,15 +91,15 @@ section.related {
 .content {
   width: 100%;
   position: absolute;
-  -webkit-transition: -webkit-transform 1s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
-          transition: transform 1s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
+          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
 }
 .pushed.content {
   opacity: 0.3 !important;
   -webkit-filter: blur(1px);
           filter: blur(1px);
-  -webkit-transition-duration: 1s;
-          transition-duration: 1s;
+  -webkit-transition-duration: 0.5s;
+          transition-duration: 0.5s;
   -webkit-transform: translateX(200px) scale(0.5);
       -ms-transform: translateX(200px) scale(0.5);
           transform: translateX(200px) scale(0.5);

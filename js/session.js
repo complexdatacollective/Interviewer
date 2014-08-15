@@ -8,7 +8,7 @@ var Session = function Session(options) {
   var changeStageEvent = new Event('changeStage');
   session.id = 0;
   session.date = new Date();
-  session.stages = 2;
+  session.stages = ['intro.html','namegenerator.html'];
 
     History.Adapter.bind(window, 'statechange', function(){
       var State = History.getState();
@@ -64,7 +64,7 @@ var Session = function Session(options) {
     window.dispatchEvent(changeStageEvent);
     var newStage = stage;
     $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
-      $content.load( "stages/"+stage+".html", function() {
+      $content.load( "stages/"+session.stages[stage], function() {
         $content.transition({ opacity: '1'},400,'easeInSine');    
       });
     });                    
