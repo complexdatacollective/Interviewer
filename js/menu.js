@@ -1,5 +1,11 @@
+
 /* exported Menu */
 var Menu = function Menu(options) {
+
+// TODO: Check if a menu exists before adding it. If it does, return false. Unique id = menu name.
+// TODO: Give menus ascending classes.
+
+
 
     var menu = {};
     var menus = [];
@@ -47,23 +53,19 @@ var Menu = function Menu(options) {
 
         // set the left and top values of the contentEl (same like the button)
         var buttonPos = targetMenu.button[0].getBoundingClientRect();
-        console.log(buttonPos);
         // need to reset
         var contentEl = $('.'+targetMenu.name+'-menu');
         var menuContent = $('.'+targetMenu.name+'-menu-container');
-        console.log(contentEl);
 
         contentEl.addClass('no-transition');
         contentEl[0].style.left = 'auto';
         contentEl[0].style.top = 'auto';
 
         if (isAnimating === true) {
-            console.log('already isAnimating');
             return false;
         } else {
             isAnimating = true;
             if(targetMenu.expanded === true) {
-                console.log('closing');
                 // $('.morph-content').css('z-index',0);
                 menu.options.onBeforeClose();
                 menuContent.removeClass('active');
@@ -73,7 +75,6 @@ var Menu = function Menu(options) {
                 $('.menu-btn').transition({opacity:0});
                 $('.menu-btn').hide();
                 // $('.morph-content').css('z-index',9999);
-                console.log('opening');
                 menu.options.onBeforeOpen();
                 menuContent.addClass('active');
                 menu.options.onAfterOpen();
@@ -89,7 +90,6 @@ var Menu = function Menu(options) {
             contentEl[0].style.top = buttonPos.top + 'px';
             
             if(targetMenu.expanded === true) {
-                console.log('expanded already');
                 contentEl.removeClass('no-transition');
                 menuContent.removeClass('open');
                 targetMenu.expanded = false;
@@ -128,7 +128,6 @@ var Menu = function Menu(options) {
         newMenu.button.on( 'click', function() { 
             menu.toggle(newMenu); 
         });
-        console.log(newMenu.items.find('.icon-close'));
         newMenu.items.find('.icon-close').on('click', function() {
             $('.menu-btn').show();
             menu.toggle(newMenu);
@@ -142,7 +141,6 @@ var Menu = function Menu(options) {
     };
 
     menu.removeMenu = function(targetMenu) {
-        console.log('removing menu');
         targetMenu.button.transition({top:-300,opacity:0},1000, function() {
             $(targetMenu.button).remove();
             $(targetMenu.items).remove();            

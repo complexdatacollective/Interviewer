@@ -1,43 +1,19 @@
-  <div id="newNodeForm" class="ui">
-      <div class="container" style="">
-          <h1>Add a new contact</h1>
-          <p>some roisjert iuaertiaehrtoayuegrt apuyregt aoerygt aoerygt aperygt oareygta oerygtauyregt oayergt aerta eorutay ertayretaperuygta pneruytg.</p>
-          <div class="form-group">
-              <label for="new-name-box">Name</label>
-              <input type="text" style="width:100%;" class="form-control" id="new-name-box"></input>
-          </div>
-          <div class="form-group text-center">
-            <input type="radio" name="nodeType" class="hidden" id="person" />
-            <label for="person"><img src="img/circle.png" alt="Person" /></label>
-
-            <input type="radio" name="nodeType" class="hidden" id="onlinePerson" />
-            <label for="onlinePerson"><img src="img/square.png" alt="Online Person" /></label>
-
-            <input type="radio" name="nodeType" class="hidden" id="organisation" />
-            <label for="organisation"><img src="img/star.png" alt="Organisation" /></label>
-
-            <input type="radio" name="nodeType" class="hidden" id="professional" />
-            <label for="professional"><img src="img/triangle.png" alt="Professional" /></label>          
-          </div>
-      </div>
-  </div>
   <div id="kineticCanvas"></div>
-
-  <!-- Refresh button -->
-  <img src="img/glyphicons/png/glyphicons_085_repeat@2x_light.png" id="refresh-button" class="ui"/>
 
   <script>
     var network = new NetworkCanvas();
     network.loadGraph();
 
     var networkMenu = menu.addMenu('Network','hi-icon-user');
+
     menu.addItem(networkMenu, 'Load Network', 'icon-globe', null);
-    menu.addItem(networkMenu, 'Random Graph', 'icon-globe', network.createRandomGraph);
-    menu.addItem(networkMenu, 'Download Network', 'icon-globe', null);
+    menu.addItem(networkMenu, 'Create Random Graph', 'icon-globe', network.createRandomGraph);
+    menu.addItem(networkMenu, 'Download Network Data', 'icon-globe', null);
     menu.addItem(networkMenu, 'Clear Graph', 'icon-globe', network.clearGraph);
 
-    window.addEventListener('changeStage', function (e) { 
-      menu.removeMenu(networkMenu);
+    window.addEventListener('changeStageStart', function (e) { 
+      menu.removeMenu(networkMenu); // remove the network menu when we navigate away from the page.
+      $('.new-node-form').remove(); // Remove the new node form 
     }, false);
 
   </script>

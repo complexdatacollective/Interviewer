@@ -19,6 +19,15 @@ Storage.prototype.getObject = function(key) {
 
 // helper functions
 
+function extend( a, b ) {
+  for( var key in b ) { 
+      if( b.hasOwnProperty( key ) ) {
+          a[key] = b[key];
+      }
+  }
+  return a;
+}
+
 function notify(text, level){
     level = level || 0;
     if (level >= debugLevel) {

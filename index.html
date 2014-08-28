@@ -9,16 +9,18 @@
         <title>Network Canvas</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="css/menu.css" />
+        <link rel="stylesheet" type="text/css" href="css/menu.css">
+        <link rel="stylesheet" type="text/css" href="css/loader.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
 <body>
 
-<!-- Main Containt Panel -->
+<!-- Main Content Panel -->
 <div id="content" class="content">
 
 </div>
 
+<!-- Menu Container -->
 <div class="menu-container">
 
 </div>
@@ -32,6 +34,15 @@
   <span class="glyphicon glyphicon-chevron-right"></span>
 </a>
 
+<!-- Loader -->
+<div class="loader">
+    <div class="spinner">
+      <div class="dot1"></div>
+      <div class="dot2"></div>
+    </div>
+</div>
+
+
 <!-- Components -->
 <script src="components/jquery/dist/jquery.min.js"></script>
 <script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -42,32 +53,13 @@
 
 <!-- Modules -->
 <script src="js/menu.js"></script>
-
-<script>
-  (function() {
-    var container = document.getElementById('content');
-    
-    window.menu = new Menu({});
-
-    function josh() {
-      console.log("josh!");
-    }
-
-    var settingsMenu = menu.addMenu('Settings','hi-icon-cog');
-    menu.addItem(settingsMenu, 'Load Data', 'icon-globe', josh);
-    menu.addItem(settingsMenu, 'Reset Application', 'icon-globe', josh);
-    menu.addItem(settingsMenu, 'Download Data', 'icon-globe', josh);
-    menu.addItem(settingsMenu, 'Sync with Server', 'icon-globe', josh);
-    menu.addItem(settingsMenu, 'Global App Settings', 'icon-globe', josh);
-  })();
-</script>
-
-<script src="js/min/extensions-min.js"></script>
-<script src="js/min/session-min.js"></script>
-<script src="js/min/logger-min.js"></script>
-<script src="js/min/interview-min.js"></script>
-<script src="js/min/NetworkCanvas-min.js"></script>
-<script src="js/min/main-min.js"></script>
+<script src="js/iointerface.js"></script>
+<script src="js/extensions.js"></script>
+<script src="js/session.js"></script>
+<script src="js/logger.js"></script>
+<script src="js/interview.js"></script>
+<script src="js/NetworkCanvas.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

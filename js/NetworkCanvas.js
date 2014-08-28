@@ -1,4 +1,4 @@
-/*global Kinetic, randomBetween, modifyColor, menu, Logger, notify */
+/*global extend, session, randomBetween, Kinetic, modifyColor, notify */
 /* exported NetworkCanvas */
 /*jshint bitwise: false*/
 
@@ -7,27 +7,26 @@
 var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Global variables
-	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer,
-	network = {},
-	animating = false,
-	open = false,
-	eventLog = new Logger();
-	var selectedNodes = [],
-	colors = {};
+	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, network = {};
+	var selectedNodes = [];
+	var menuOpen = false;
+	var cancelKeyBindings = false;
 
 	// Colours
-	colors.blue = '#0174DF';
-	colors.placidblue = '#83b5dd';
-	colors.violettulip = '#9B90C8';
-	colors.hemlock = '#9eccb3';
-	colors.paloma = '#aab1b0';
-	colors.freesia = '#ffd600';
-	colors.cayenne = '#c40000';
-	colors.celosiaorange = '#f47d44';
-	colors.sand = '#ceb48d';
-	colors.dazzlingblue = '#006bb6';
-	colors.edge = '#bbb';
-	colors.selected = 'gold';
+	var colors = {
+		blue: '#0174DF',
+		placidblue: '#83b5dd',
+		violettulip: '#9B90C8',
+		hemlock: '#9eccb3',
+		paloma: '#aab1b0',
+		freesia: '#ffd600',
+		cayenne: '#c40000',
+		celosiaorange: '#f47d44',
+		sand: '#ceb48d',
+		dazzlingblue: '#006bb6',
+		edge: '#bbb',
+		selected: 'gold',
+	};	
 
 	// Default settings
 	var settings = {
@@ -43,115 +42,107 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		{'name':'Professional','color':colors.violettulip}]
 	};
 
-	$.extend( true, settings, userSettings); // extend our defaults with user settings.
-
-	// var logEventMap = ['nodeMove','nodeTouch','edgeCreate','edgeDelete'];
-
 	// Dummy Names
 	var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
 
 	network.init = function () {
+
 		network.initKinetic();
 		network.drawUIComponents();
+		extend(settings,userSettings);
+		session.registerData('nodes');
+		session.registerData('edges');
 
-		eventLog.init();
-
-		// network.loadGraph();
-		$('#new-name-box').focus();
 	};
 
 	// Node manipulation functions
 
-	network.addNode = function(coords, id, size, type, label, color) {
+	network.addNode = function(options) {
 
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
-		if (!id) {
-			var nodes = network.getNodes();
-			id = nodes.length;
-		}
-		id = parseInt(id, 10);
-
-		// Create and populate the node properties object which will be sent to the event log
-		var nodeProperties = {};
-
-		// calculate random coords within a safe boundary of our window
-		// nodeProperties.coords = coords || new Array(Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100)));
-		nodeProperties.coords = coords || [$(window).width()+50,100];
-
-
-		// if we don't have a label for the node, use a random one from the list. if we dont have a size, use the default node size. (and so on)
-		nodeProperties.size = size || settings.defaultNodeSize;
-		nodeProperties.label = label || namesList[Math.round(randomBetween(0,namesList.length-1))];
-		nodeProperties.id = id;
+		var nodes = network.getNodes();
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
-		nodeProperties.type = type || settings.nodeTypes[randomType].name;
-		nodeProperties.color = color || settings.nodeTypes[randomType].color;
-		nodeProperties.strokeWidth = 4;
+
+		var nodeOptions = {
+			coords: [$(window).width()+50,100],
+			id: nodes.length+1,
+			label: namesList[Math.round(randomBetween(0,namesList.length-1))],
+			size: settings.defaultNodeSize,
+			type: settings.nodeTypes[randomType].name,
+			color: settings.nodeTypes[randomType].color,
+			strokeWidth: 4
+		};
+
+		extend(nodeOptions, options);
+
+		nodeOptions.id = parseInt(nodeOptions.id, 10);
+
+		
 		var nodeGroup = new Kinetic.Group({
-			id: nodeProperties.id,
-			x: nodeProperties.coords[0],
-			y: nodeProperties.coords[1],
-			name: nodeProperties.label,
+			id: nodeOptions.id,
+			x: nodeOptions.coords[0],
+			y: nodeOptions.coords[1],
+			name: nodeOptions.label,
 			edges: [],
-			type: nodeProperties.type,
-			nodeSize: nodeProperties.size,
-			color: nodeProperties.color,
+			type: nodeOptions.type,
+			nodeSize: nodeOptions.size,
+			color: nodeOptions.color,
 			draggable: true,
 			dragDistance: 10
 		});
 
-		switch (nodeProperties.type) {
+		switch (nodeOptions.type) {
 			case 'Person':                
 			nodeShape = new Kinetic.Circle({
-				radius: nodeProperties.size,
-				fill:nodeProperties.color,
-				stroke: network.calculateStrokeColor(nodeProperties.color),
-				strokeWidth: nodeProperties.strokeWidth
+				radius: nodeOptions.size,
+				fill:nodeOptions.color,
+				stroke: network.calculateStrokeColor(nodeOptions.color),
+				strokeWidth: nodeOptions.strokeWidth
 			});
 			break;
 
 			case 'Organisation':
 			nodeShape = new Kinetic.Rect({
-				width: nodeProperties.size*2,
-				height: nodeProperties.size*2,
-				fill:nodeProperties.color,
-				stroke: network.calculateStrokeColor(nodeProperties.color),
-				strokeWidth: nodeProperties.strokeWidth,
-				offset: {x: nodeProperties.size, y: nodeProperties.size}
+				width: nodeOptions.size*2,
+				height: nodeOptions.size*2,
+				fill:nodeOptions.color,
+				stroke: network.calculateStrokeColor(nodeOptions.color),
+				strokeWidth: nodeOptions.strokeWidth,
+				offset: {x: nodeOptions.size, y: nodeOptions.size}
 			});
 			break;
 
 			case 'OnlinePerson':
 			nodeShape = new Kinetic.RegularPolygon({
 				sides: 3,
-				fill:nodeProperties.color,
-					radius: nodeProperties.size*1.2, // How should I calculate the correct multiplier for a triangle?
-					stroke: network.calculateStrokeColor(nodeProperties.color),
-					strokeWidth: nodeProperties.strokeWidth
+				fill:nodeOptions.color,
+					radius: nodeOptions.size*1.2, // How should I calculate the correct multiplier for a triangle?
+					stroke: network.calculateStrokeColor(nodeOptions.color),
+					strokeWidth: nodeOptions.strokeWidth
 				});
 			break; 
 
 			case 'Professional':
 			nodeShape = new Kinetic.Star({
 				numPoints: 6,
-				fill:nodeProperties.color,
-				innerRadius: nodeProperties.size-(nodeProperties.size/3),
-				outerRadius: nodeProperties.size+(nodeProperties.size/3),
-				stroke: network.calculateStrokeColor(nodeProperties.color),
-				strokeWidth: nodeProperties.strokeWidth
+				fill:nodeOptions.color,
+				innerRadius: nodeOptions.size-(nodeOptions.size/3),
+				outerRadius: nodeOptions.size+(nodeOptions.size/3),
+				stroke: network.calculateStrokeColor(nodeOptions.color),
+				strokeWidth: nodeOptions.strokeWidth
 			});
 			break;
 
 		}
 
 		var nodeLabel = new Kinetic.Text({         
-			text: nodeProperties.label,
+			text: nodeOptions.label,
 			fontSize: 20,
 			fontFamily: 'Lato',
 			fill: 'white',
-			offsetX: (nodeProperties.size*-1)-10, //left right
-			offsetY:(nodeProperties.size*1)-10, //up down
+			offsetX: (nodeOptions.size*-1)-10, //left right
+			offsetY:(nodeOptions.size*1)-10, //up down
 			fontStyle:500,
 
 		});
@@ -159,8 +150,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeGroup.add(nodeShape);
 		nodeGroup.add(nodeLabel);
 
-		notify("Putting node "+nodeProperties.label+" at coordinates x:"+nodeProperties.coords[0]+", y:"+nodeProperties.coords[1], 2);
-		eventLog.addToLog('nodeCreate', nodeProperties, nodeProperties.id); 
+		notify("Putting node "+nodeOptions.label+" at coordinates x:"+nodeOptions.coords[0]+", y:"+nodeOptions.coords[1], 2);
+		session.log('nodeCreate', nodeOptions, nodeOptions.id); 
 
 
 		// Node event handlers
@@ -190,7 +181,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		nodeGroup.on('tap click', function() {
 			notify('tap or click.', 0);
-			eventLog.addToLog('nodeClick',this, this.attrs.id);
+			session.log('nodeClick',this, this.attrs.id);
 			this.moveToTop();
 			nodeLayer.draw();
 		}); 
@@ -242,7 +233,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			};
 
 			// Log the movement and save the graph state.
-			eventLog.addToLog('nodeMove',eventObject, this.attrs.id);
+			session.log('nodeMove',eventObject, this.attrs.id);
 			network.saveGraph();
 
 			// remove the attributes, just incase.
@@ -256,7 +247,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeLayer.draw();
 		network.saveGraph();
 
-		if (!coords) {
+		if (!options.coords) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
@@ -322,7 +313,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
 		
 		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
-		eventLog.addToLog('edgeCreate',simpleEdge, '0');
+		session.log('edgeCreate',simpleEdge, '0');
 		network.saveGraph();
 		return true;   
 	};
@@ -363,7 +354,10 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			var current = i+1;
 			notify("Adding node "+current+" of "+nodeCount,1);
 			// Use random coordinates
-			network.addNode([Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))],nodes.length);	
+			var nodeOptions = {
+				coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
+			};
+			network.addNode(nodeOptions);	
 		}
 
 		notify("Adding edges.",3);
@@ -446,14 +440,18 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			});
 
 	  	deleteNodeBox.on('click tap', function() {
-			var touchPos = stage.getPointerPosition();
-			var coords = [];
-			var nodes = network.getNodes();
-			coords[0] = touchPos.x;
-			coords[1] = touchPos.y;
-			network.addNode(coords,nodes.length);
-			deleteNodeBox.moveToBottom();
-			uiLayer.draw();
+
+	  		// Turn this into a delete box
+
+
+			// var touchPos = stage.getPointerPosition();
+			// var coords = [];
+			// var nodes = network.getNodes();
+			// coords[0] = touchPos.x;
+			// coords[1] = touchPos.y;
+			// network.addNode(coords,nodes.length);
+			// deleteNodeBox.moveToBottom();
+			// uiLayer.draw();
 	  	});
 
 	  	uiLayer.add(deleteNodeBox);
@@ -461,47 +459,63 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	  	circleLayer.draw();
 	  	uiLayer.draw();
 
+	  	network.initNewNodeForm();
+		notify("User interface initialised.",3);
+	};
+
+	// New Node Form
+
+	network.initNewNodeForm = function() {
+		var form = $('<div class="new-node-form"></div>');
+		var innerForm = $('<div class="new-node-inner"></div>');
+		form.append(innerForm);
+		innerForm.append('<h1>Add a new contact</h1>');
+		innerForm.append('<p>Some text accompanying the node creation box.</p>');
+		// TODO: Use a innerForm generation class here.
+		// For now, just an input box.
+		innerForm.append('<input type="text" class="form-control name-box"></input>');		
+
+		$('.content').after(form); // add after the content container.
+
+
 		// Key bindings
 		$(document).on("keypress", function (e) {
+			if (!cancelKeyBindings) {
 
-			// Cancel if a modal is currently open
-			if (!$("#generate-graph").data()['bs.modal'].isShown) {
-				$('#new-name-box').focus();
+				if (!menuOpen) {
+					//open the menu
+					$('.new-node-form').addClass('node-form-open');
+					$('.content').addClass('blurry'); //blur content background
+					menuOpen = true;
+					$('.name-box').focus();					
+				}
+
 				// Prevent accidental backspace navigation
 				if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
 					e.preventDefault();
 				}
 
-				// Reject anything but the letter keys
-				if (event.which !== 13) {
-					menu.close();
-					if (animating === false && open === false) {
-						animating = true;
-						// $('#newNodeForm').css('visibility', 'visible');
-						$('#newNodeForm').css('z-index', 9999);
-						$('#newNodeForm').transition({opacity: '1', marginTop:'0'},50,'easeInSine');
-						$('#newNodeForm > *').transition({ opacity: '1',right:'0'},400,'easeInSine').promise().done( function(){animating = false; open = true;});                    
-					} 
-				} else {
-					if (!animating) {
-						animating = true;
-						$('#newNodeForm').css('z-index', 0);
-						$('#newNodeForm').transition({scale: '2',opacity: '0', marginTop:'0'},300,'easeInSine').promise().done( function(){ //animate out
-							$('#newNodeForm > *').transition({opacity:'0',right:'100px'});
-							$('#newNodeForm').transition({scale:'1'});
-							animating = false;
-							open = false;
-							// $('#newNodeForm').css('visibility', 'hidden');
-							$('#new-name-box').focus();                   
-						});
-					}                  
-				}	
+				// Enter key = create new node
+				if (event.which === 13) {
+					//close menu
+					$('.new-node-form').removeClass('node-form-open');
+					$('.content').removeClass('blurry');
+					menuOpen = false;
+					var nodeOptions = {
+						label: $('.name-box').val()
+					};				
+					network.addNode(nodeOptions);
+					$('.name-box').val('');
+				}
+
 			}
 			
 		});
 
 
-		notify("User interface initialised.",3);
+
+
+
 	};
 
 	// Graph saving/loading/exporting functions
@@ -512,10 +526,14 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		var loadedNodes = localStorage.getObject('nodes') || {};
 		var loadedEdges = localStorage.getObject('edges') || {};
 		$.each(loadedNodes, function (index, value) {
-			var coords = [];
-			coords.push(value.x);
-			coords.push(value.y);
-			network.addNode(coords,index,value.nodeSize,value.type,value.name,value.color);
+			var nodeOptions = {
+				coords: [value.x,value.y],
+				id: index,
+				type: value.type,
+				label: value.name,
+				color: value.color
+			};
+			network.addNode(nodeOptions);
 		});
 
 		$.each(loadedEdges, function (index, value) {
@@ -527,10 +545,13 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		notify("Saving graph.",3);
 		var simpleNodes = network.getSimpleNodes();
 		var simpleEdges = network.getSimpleEdges();
-		var log = network.getLog();
-		localStorage.setObject('nodes', simpleNodes);
-		localStorage.setObject('edges', simpleEdges);
-		localStorage.setObject('log', log);
+	
+		session.addData('nodes', simpleNodes);
+		session.addData('edges', simpleEdges);
+		session.saveData();		
+		// localStorage.setObject('nodes', simpleNodes);
+		// localStorage.setObject('edges', simpleEdges);
+		// localStorage.setObject('log', log);
 	};
 
 	// Get & set functions
@@ -609,14 +630,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		} else {
 			return false;
 		}
-	};
-
-	network.getLog = function() {
-		return eventLog;
-	};
-
-	network.getLastEvent = function() {
-		return eventLog[eventLog.length-1];
 	};
 
 	network.init();

@@ -91,18 +91,17 @@ section.related {
 .content {
   width: 100%;
   position: absolute;
-  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
-          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, opacity 2s ease-in-out, -webkit-filter 1s ease-in-out;
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, -webkit-box-shadow 2s;
+          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, box-shadow 2s;
 }
 .pushed.content {
-  opacity: 0.3 !important;
-  -webkit-filter: blur(1px);
-          filter: blur(1px);
   -webkit-transition-duration: 0.5s;
           transition-duration: 0.5s;
-  -webkit-transform: translateX(200px) scale(0.5);
-      -ms-transform: translateX(200px) scale(0.5);
-          transform: translateX(200px) scale(0.5);
+  -webkit-transform: translateX(200px) scale(0.6);
+      -ms-transform: translateX(200px) scale(0.6);
+          transform: translateX(200px) scale(0.6);
+  -webkit-box-shadow: 31px 25px 170px black;
+          box-shadow: 31px 25px 170px black;
 }
 /* Icons */
 .icon-close {
@@ -642,12 +641,12 @@ section.related {
   }
   40% {
     opacity: 0.5;
-    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
   }
   100% {
-    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
     -webkit-transform: scale(1.5);
     opacity: 0;
   }
@@ -658,14 +657,15 @@ section.related {
   }
   40% {
     opacity: 0.5;
-    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
   }
   100% {
-    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #333333, 0 0 0 10px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
     -webkit-transform: scale(1.5);
             transform: scale(1.5);
     opacity: 0;
   }
 }
+/*# sourceMappingURL=menu.css.map */

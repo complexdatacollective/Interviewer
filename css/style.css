@@ -892,7 +892,7 @@ body {
   font-size: 20px;
   line-height: 1.62857143;
   color: #ffffff;
-  background-color: #000000;
+  background-color: #222222;
 }
 input,
 button,
@@ -938,7 +938,7 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.62857143;
-  background-color: #000000;
+  background-color: #222222;
   border: 1px solid #dddddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -1385,39 +1385,39 @@ pre code {
 .container {
   margin-right: auto;
   margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 125px;
+  padding-right: 125px;
 }
 @media (min-width: 768px) {
-  .container {
-    width: 750px;
-  }
-}
-@media (min-width: 992px) {
   .container {
     width: 970px;
   }
 }
+@media (min-width: 992px) {
+  .container {
+    width: 1190px;
+  }
+}
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 1390px;
   }
 }
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 125px;
+  padding-right: 125px;
 }
 .row {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: -125px;
+  margin-right: -125px;
 }
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
   position: relative;
   min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 125px;
+  padding-right: 125px;
 }
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
   float: left;
@@ -2087,7 +2087,7 @@ th {
   border-top: 2px solid #dddddd;
 }
 .table .table {
-  background-color: #000000;
+  background-color: #222222;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,
@@ -2687,8 +2687,8 @@ select[multiple].input-lg {
   min-height: 39px;
 }
 .form-horizontal .form-group {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: -125px;
+  margin-right: -125px;
 }
 @media (min-width: 768px) {
   .form-horizontal .control-label {
@@ -2699,7 +2699,7 @@ select[multiple].input-lg {
 }
 .form-horizontal .has-feedback .form-control-feedback {
   top: 0;
-  right: 15px;
+  right: 125px;
 }
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
@@ -3627,7 +3627,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #000000;
+  background-color: #222222;
   border: 1px solid #dddddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -3673,7 +3673,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .nav-tabs.nav-justified > .active > a,
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #000000;
+    border-bottom-color: #222222;
   }
 }
 .nav-pills > li {
@@ -3741,7 +3741,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .nav-tabs-justified > .active > a,
   .nav-tabs-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus {
-    border-bottom-color: #000000;
+    border-bottom-color: #222222;
   }
 }
 .tab-content > .tab-pane {
@@ -3773,8 +3773,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-collapse {
   overflow-x: visible;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 125px;
+  padding-left: 125px;
   border-top: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -3820,8 +3820,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .container-fluid > .navbar-header,
 .container > .navbar-collapse,
 .container-fluid > .navbar-collapse {
-  margin-right: -15px;
-  margin-left: -15px;
+  margin-right: -125px;
+  margin-left: -125px;
 }
 @media (min-width: 768px) {
   .container > .navbar-header,
@@ -3867,7 +3867,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-brand {
   float: left;
-  padding: 9px 15px;
+  padding: 9px 125px;
   font-size: 41px;
   line-height: 32px;
   height: 50px;
@@ -3879,13 +3879,13 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 @media (min-width: 768px) {
   .navbar > .container .navbar-brand,
   .navbar > .container-fluid .navbar-brand {
-    margin-left: -15px;
+    margin-left: -125px;
   }
 }
 .navbar-toggle {
   position: relative;
   float: right;
-  margin-right: 15px;
+  margin-right: 125px;
   padding: 9px 10px;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -3912,7 +3912,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
-  margin: 4.5px -15px;
+  margin: 4.5px -125px;
 }
 .navbar-nav > li > a {
   padding-top: 10px;
@@ -3955,7 +3955,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     padding-bottom: 9px;
   }
   .navbar-nav.navbar-right:last-child {
-    margin-right: -15px;
+    margin-right: -125px;
   }
 }
 @media (min-width: 768px) {
@@ -3967,9 +3967,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-form {
-  margin-left: -15px;
-  margin-right: -15px;
-  padding: 10px 15px;
+  margin-left: -125px;
+  margin-right: -125px;
+  padding: 10px 125px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -4041,7 +4041,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     box-shadow: none;
   }
   .navbar-form.navbar-right:last-child {
-    margin-right: -15px;
+    margin-right: -125px;
   }
 }
 .navbar-nav > li > .dropdown-menu {
@@ -4072,8 +4072,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 @media (min-width: 768px) {
   .navbar-text {
     float: left;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 125px;
+    margin-right: 125px;
   }
   .navbar-text.navbar-right:last-child {
     margin-right: 0;
@@ -4575,7 +4575,7 @@ a.list-group-item.active > .badge,
   padding: 4px;
   margin-bottom: 32px;
   line-height: 1.62857143;
-  background-color: #000000;
+  background-color: #222222;
   border: 1px solid #dddddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -6177,7 +6177,7 @@ body {
 }
 .content {
   height: 100%;
-  background: #333333;
+  background: #111111;
 }
 input[type=radio]:checked + label > img {
   background: tomato;
@@ -6197,31 +6197,31 @@ input[type=radio]:checked + label > img {
 .btn-link:hover {
   text-decoration: none !important;
 }
-#newNodeForm {
+.new-node-form {
   position: fixed;
-  top: 0;
+  top: -303px;
   left: 0;
   width: 100%;
-  height: 100%;
-  display: box;
-  display: -webkit-box;
-  -webkit-box-pack: center;
-  -webkit-box-align: center;
-  box-pack: center;
-  box-align: center;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 0;
-  opacity: 0;
+  height: auto;
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
+          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
 }
-#newNodeForm > * {
-  opacity: 0;
-  position: relative;
-  right: 100px;
+.new-node-form.node-form-open {
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
+  -webkit-transform: translateY(303px);
+      -ms-transform: translateY(303px);
+          transform: translateY(303px);
 }
-#nodebox {
-  position: absolute;
-  bottom: 20px;
-  left: 10px;
+.content.blurry {
+  -webkit-filter: blur(3px);
+          filter: blur(3px);
+}
+.new-node-inner {
+  background: black;
+  padding: 50px;
+  width: 700px;
+  margin: 0 auto;
 }
 .arrow-nav {
   position: fixed;

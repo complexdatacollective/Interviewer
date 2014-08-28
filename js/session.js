@@ -1,41 +1,62 @@
-/* global History */
-/* exported Session */
+/* global History, extend, IOInterface, Logger */
+/* exported Session, eventLog */
 var Session = function Session(options) {
 
+  //global vars
   var session = {};
   var currentStage = 0;
   var $content = $('#content');
-  var changeStageEvent = new Event('changeStage');
+  var eventLog = new Logger();
+  
+  // Establish a new IOInterface for loading and saving
+  var dataStore;
+
+
   session.id = 0;
   session.date = new Date();
+  session.data = {};
   session.stages = ['intro.html','namegenerator.html'];
 
+
+  // custom events
+  var changeStageStartEvent = new Event('changeStageStart');
+  var changeStageEndEvent = new Event('changeStageEnd');
+
+  session.options = {
+    fnBeforeStageChange : function() {
+      window.dispatchEvent(changeStageStartEvent);
+
+    },
+    fnAfterStageChange : function() {
+      window.dispatchEvent(changeStageEndEvent);
+    }    
+  };
+
+  session.log = function(type,e,id) {
+    eventLog.addToLog(type,e,id);
+  };   
+
+  session.init = function() {
+
+    // exdend our local options with any passed options
+    extend(session.options,options); 
+
+    //bind to the custom state change event to handle spinner interactions
+    window.addEventListener('changeStageStart', function () { 
+      $('.loader').transition({opacity:1});
+    }, false);
+
+    window.addEventListener('changeStageEnd', function () {
+      $('.loader').transition({opacity:0});
+    }, false);
+
+    dataStore = new IOInterface();
+
+    // Historyjs integration for page loading
     History.Adapter.bind(window, 'statechange', function(){
       var State = History.getState();
       console.log(State);
     });
-
-  // private
-  function extend( a, b ) {
-      for( var key in b ) { 
-          if( b.hasOwnProperty( key ) ) {
-              a[key] = b[key];
-          }
-      }
-      return a;
-  }
-
-  session.options = {
-    fnBeforeStageChange : function() {
-      return false;
-    },
-    fnAfterStageChange : function() {
-      return false;
-    }    
-  };     
-
-  session.init = function() {
-    extend(session.options,options);
 
     var State = History.getState();    
 
@@ -45,23 +66,19 @@ var Session = function Session(options) {
       session.goToStage(0);
     }
 
-
-    $('.arrow-next').click(function() {
-        session.nextStage();
-    });
-    $('.arrow-prev').click(function() {
-        session.prevStage();
-    });
   };
 
-  session.loadData = function(path) {
-    var data = JSON.parse(path);
-    $.extend(session, data);
+  session.loadData = function(id) {
+    session.data = dataStore.load(id);
   };
+
+  session.saveData = function() {
+    dataStore.save(session.data);
+  };
+
 
   session.goToStage = function(stage) {
     session.options.fnBeforeStageChange();
-    window.dispatchEvent(changeStageEvent);
     var newStage = stage;
     $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+session.stages[stage], function() {
@@ -81,6 +98,30 @@ var Session = function Session(options) {
     session.goToStage(currentStage-1);
   };
 
+  session.addStage = function(stage) {
+    console.log(stage);
+  };
+
+  session.registerData = function(dataKey) {
+    session.data[dataKey] = {};
+  };
+
+  session.addData = function(dataKey, newData) {
+    /*
+      This function should let any module add data to the session model. The session model 
+      (global data variable) is essentially a key/value store. 
+    */
+    console.log(newData);
+    session.data[dataKey] = newData;
+
+
+  };
+
+  session.getData = function() {
+    return session.data;
+  };
+
+  session.init();
 
   return session;
 };
