@@ -21,6 +21,55 @@ Storage.prototype.getObject = function(key) {
 
 // helper functions
 
+function deepEquals(a, x) {
+    var p;
+    for (p in a) {
+        if (typeof(x[p]) == 'undefined') {
+            return false;
+        }
+    }
+ 
+    for (p in a) {
+        if (a[p]) {
+ 
+            switch (typeof(a[p])) {
+                case 'object':
+                    if (a[p].sort) {
+                        a[p].sort();
+                        x[p].sort();
+                    }
+                    if (!deepEquals(a[p], x[p])) {
+                        return false;
+                    }
+                    break;
+                case 'function':
+                    if (typeof(x[p]) == 'undefined' || a[p].toString() != x[p].toString()) {
+                        return false;
+                    }
+                    break;
+                default:
+                    if (a[p] != x[p]) {
+                        return false;
+                    }
+            }
+        } else {
+            if (x[p]) {
+                return false;
+            }
+                
+        }
+    }
+    for (p in x) {
+        if (typeof(a[p]) == 'undefined') {
+            return false;
+        }
+    }
+ 
+    return true;
+}
+
+
+
 function isInNestedObject(targetArray, objectKey, objectKeyValue) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){

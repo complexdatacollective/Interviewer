@@ -149,7 +149,9 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeGroup.add(nodeLabel);
 
 		notify("Putting node "+nodeOptions.label+" at coordinates x:"+nodeOptions.coords[0]+", y:"+nodeOptions.coords[1], 2);
-		session.log('nodeCreate', nodeOptions, nodeOptions.id); 
+		
+		var log = new Event('log', {'eventType': 'nodeCreate', 'targetObject':nodeOptions.id, 'eventValue': nodeOptions});
+    	window.dispatchEvent(log);
 
 
 		// Node event handlers
@@ -178,8 +180,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		});    
 
 		nodeGroup.on('tap click', function() {
-			notify('tap or click.', 2);
-			session.log('nodeClick',this, this.attrs.id);
+			var log = new Event('log', {'eventType': 'nodeClick', 'targetObject':this.attrs.id, 'eventValue': this});
+    		window.dispatchEvent(log);
 			this.moveToTop();
 			nodeLayer.draw();
 		}); 
@@ -233,13 +235,15 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			var currentNode = this;
 
 			// Log the movement and save the graph state.
-			session.log('nodeMove',eventObject, this.attrs.id);
+			var log = new Event('log', {'eventType': 'nodeMove', 'targetObject':eventObject, 'eventValue': this});
+    		window.dispatchEvent(log);
 			var currentNodes = session.returnData('nodes');
 			$.each(currentNodes, function(index, value) {
 				if (value.id === currentNode.attrs.id) {
 					// extend(value, currentNode.attrs);
 					value.coords = [currentNode.attrs.x,currentNode.attrs.y];
 					value.type = currentNode.attrs.type;
+					value.color = currentNode.attrs.color;
 
 				}
 
@@ -322,7 +326,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
 		
 		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
-		session.log('edgeCreate',simpleEdge, '0');
+		var log = new Event('log', {'eventType': 'createEdge', 'targetObject':null, 'eventValue': simpleEdge});
+    	window.dispatchEvent(log);
 		
 		return true;   
 	};
@@ -373,7 +378,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		$.each(nodes, function (index) {
 			if (randomBetween(0, 1) < edgeProbability) {
 				var randomFriend = Math.round(randomBetween(0,nodes.length-1));
-				network.addEdge(nodes[index],nodes[randomFriend]);
+				session.addEdge(nodes[index],nodes[randomFriend]);
 
 			}
 		});

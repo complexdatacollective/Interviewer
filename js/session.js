@@ -1,4 +1,4 @@
-/* global History, extend, IOInterface, Logger, notify */
+/* global History, extend, IOInterface, notify */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -6,32 +6,30 @@ var Session = function Session(options) {
   var session = {};
   var currentStage = 0;
   var $content = $('#content');
-  var eventLog = new Logger();
-  
+   
   // Establish a new IOInterface for loading and saving
   var dataStore;
   session.id = 0;
   session.userData = {};
+  var lastSaveTime;
   session.stages = ['intro.html','namegenerator.html'];
+  
+  var saveTimer;
 
 
   // custom events
-  var changeStageStartEvent = new Event('changeStageStart');
-  var changeStageEndEvent = new Event('changeStageEnd');
 
   session.options = {
     fnBeforeStageChange : function() {
+      var changeStageStartEvent = new Event('changeStageStart');
       window.dispatchEvent(changeStageStartEvent);
 
     },
     fnAfterStageChange : function() {
+      var changeStageEndEvent = new Event('changeStageEnd');
       window.dispatchEvent(changeStageEndEvent);
     }    
   };
-
-  session.log = function(type,e,id) {
-    eventLog.addToLog(type,e,id);
-  };   
 
   session.init = function() {
 
@@ -47,6 +45,8 @@ var Session = function Session(options) {
       $('.loader').transition({opacity:0});
     }, false);
 
+    window.nodes = session.registerData('nodes', true);
+    window.edges = session.registerData('edges', true);
 
     // Create our data interface
     dataStore = new IOInterface();
@@ -75,10 +75,21 @@ var Session = function Session(options) {
       session.goToStage(0);
     }
 
+    window.addEventListener('unsavedChanges', function () { 
+      session.saveManager();
+    }, false);
+
+  };
+
+  session.saveManager = function() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(session.saveData, 2000);
   };
 
   session.updateUserData = function(data) {
     extend(session.userData, data);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
   };
 
   session.returnSessionID = function() {
@@ -92,18 +103,44 @@ var Session = function Session(options) {
   session.saveData = function() {
     notify('saving data.', 3);
     dataStore.save(session.userData);
+    lastSaveTime = new Date();
   };
 
-  session.addNode = function() {
+  session.addNode = function(options) {
 
     var nodeOptions = {
       id: window.nodes.length+1,
       label: 'Josh'
     };
 
-    window.nodes.push(nodeOptions);
+    extend(nodeOptions, options);
 
+    window.nodes.push(nodeOptions);
+    var nodeAddedEvent = new Event('nodeAdded',{'options':nodeOptions});
+    window.dispatchEvent(nodeAddedEvent);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
   };
+
+  session.addEdge = function(from, to) {
+    var alreadyExists = false;
+
+    var edgeOptions = {
+      'from': from,
+      'to'  : to
+    };
+
+    if (alreadyExists) {
+        return false;
+    }
+
+    window.edges.push(edgeOptions);
+    var edgeAddedEvent = new Event('edgeAdded',{'options':edgeOptions});
+    window.dispatchEvent(edgeAddedEvent);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
+
+  };  
 
   session.goToStage = function(stage) {
     session.options.fnBeforeStageChange();
@@ -116,6 +153,8 @@ var Session = function Session(options) {
     currentStage = newStage;
     History.pushState({'stage': stage},null, '?stage='+stage);
     session.options.fnAfterStageChange();
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
   };
 
   session.nextStage = function() {
@@ -137,6 +176,8 @@ var Session = function Session(options) {
         session.userData[dataKey] = {};
       }
     }
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
     return session.userData[dataKey];
   };
 
@@ -149,6 +190,8 @@ var Session = function Session(options) {
     notify("Adding data to "+dataKey+".",2);
     console.log("session data is now:");
     console.log(session.userData);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
 
   };
 

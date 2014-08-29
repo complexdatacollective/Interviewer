@@ -74,7 +74,6 @@ var IOInterface = function IOInterface() {
       dataType: 'json',
       data: JSON.stringify(userData),
       success: function(data) {
-        console.log('saved');
         console.log(data);
       }, 
       error: function() {

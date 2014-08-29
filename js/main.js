@@ -1,5 +1,5 @@
   (function() {
-
+    // Set the global debug level
     window.debugLevel = 1;
     
     var container = document.getElementById('content');
@@ -8,12 +8,13 @@
     window.session = new Session({});
 
     window.sessionData = session.registerData('session'); //create a data store for this session
-    window.nodes = session.registerData('nodes', true);
-    window.edges = session.registerData('edges', true); 
     
     var thisSession = {
         startDate: new Date()
     }
+
+    // Create a log
+    window.eventLog = new Logger();
 
     session.addData('session', thisSession);
 
