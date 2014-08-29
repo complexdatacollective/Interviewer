@@ -50,8 +50,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		network.initKinetic();
 		network.drawUIComponents();
 		extend(settings,userSettings);
-		session.registerData('nodes');
-		session.registerData('edges');
 
 	};
 
@@ -61,12 +59,12 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
-		var nodes = network.getNodes();
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
+		var nodeID = window.nodes.length+1;
 
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
-			id: nodes.length+1,
+			id: nodeID,
 			label: namesList[Math.round(randomBetween(0,namesList.length-1))],
 			size: settings.defaultNodeSize,
 			type: settings.nodeTypes[randomType].name,
@@ -156,7 +154,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
-			notify("dragstart",0);
+			notify("dragstart",2);
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -166,7 +164,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		});
 
 		nodeGroup.on('dragmove', function() {
-			notify("Dragmove",0);
+			notify("Dragmove",2);
 			var dragNode = this;
 			$.each(edgeLayer.children, function(index, value) {
 				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
@@ -180,14 +178,14 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		});    
 
 		nodeGroup.on('tap click', function() {
-			notify('tap or click.', 0);
+			notify('tap or click.', 2);
 			session.log('nodeClick',this, this.attrs.id);
 			this.moveToTop();
 			nodeLayer.draw();
 		}); 
 
 		nodeGroup.on('dbltap dblclick', function() {
-			notify('double tap',0);
+			notify('double tap',2);
 
 			// Store this node in our special array for currently selected nodes.
 			selectedNodes.push(this);
@@ -213,7 +211,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		});      
 
 		nodeGroup.on('dragend', function() {
-			notify('dragend',0);
+			notify('dragend',2);
 
 			// set the context
 			var from = {};
@@ -232,9 +230,21 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				to: to,
 			};
 
+			var currentNode = this;
+
 			// Log the movement and save the graph state.
 			session.log('nodeMove',eventObject, this.attrs.id);
-			network.saveGraph();
+			var currentNodes = session.returnData('nodes');
+			$.each(currentNodes, function(index, value) {
+				if (value.id === currentNode.attrs.id) {
+					// extend(value, currentNode.attrs);
+					value.coords = [currentNode.attrs.x,currentNode.attrs.y];
+					value.type = currentNode.attrs.type;
+
+				}
+
+			});			
+			session.addData('nodes', currentNodes);
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -245,7 +255,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeLayer.add(nodeGroup);
 		nodeGroup.moveToBottom();
 		nodeLayer.draw();
-		network.saveGraph();
 
 		if (!options.coords) {
 			var tween = new Kinetic.Tween({
@@ -314,7 +323,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		
 		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
 		session.log('edgeCreate',simpleEdge, '0');
-		network.saveGraph();
+		
 		return true;   
 	};
 
@@ -327,7 +336,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			}
 		}); 
 
-		this.saveGraph();
+		
 
 	};
 
@@ -342,22 +351,22 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		edgeLayer.clear();
 		nodeLayer.removeChildren();
 		nodeLayer.clear();
-		network.saveGraph();
+		
 	};
 
 	network.createRandomGraph = function(nodeCount,edgeProbability) {
 		nodeCount = nodeCount || 10;
 		edgeProbability = edgeProbability || 0.4;
-		var nodes = network.getNodes(); 
-		notify("Creating random graph...",3);
+		var nodes = network.getKineticNodes(); 
+		notify("Creating random graph...",1);
 		for (var i=0;i<nodeCount;i++) {
 			var current = i+1;
-			notify("Adding node "+current+" of "+nodeCount,1);
+			notify("Adding node "+current+" of "+nodeCount,2);
 			// Use random coordinates
 			var nodeOptions = {
 				coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
 			};
-			network.addNode(nodeOptions);	
+			session.addNode(nodeOptions);	
 		}
 
 		notify("Adding edges.",3);
@@ -389,7 +398,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		stage.add(edgeLayer);
 		stage.add(nodeLayer);
 		stage.add(uiLayer);
-		notify("Kinetic stage initialised.",3);
+		notify("Kinetic stage initialised.",1);
 	};
 
 	network.drawUIComponents = function () {
@@ -442,16 +451,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	  	deleteNodeBox.on('click tap', function() {
 
 	  		// Turn this into a delete box
-
-
-			// var touchPos = stage.getPointerPosition();
-			// var coords = [];
-			// var nodes = network.getNodes();
-			// coords[0] = touchPos.x;
-			// coords[1] = touchPos.y;
-			// network.addNode(coords,nodes.length);
-			// deleteNodeBox.moveToBottom();
-			// uiLayer.draw();
 	  	});
 
 	  	uiLayer.add(deleteNodeBox);
@@ -460,7 +459,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	  	uiLayer.draw();
 
 	  	network.initNewNodeForm();
-		notify("User interface initialised.",3);
+		notify("User interface initialised.",1);
 	};
 
 	// New Node Form
@@ -520,54 +519,20 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Graph saving/loading/exporting functions
 
-	network.loadGraph = function () {
-		// TODO: Add return false for if this fails.
-		notify("Loading graph from localStorage.",3);
-		var loadedNodes = localStorage.getObject('nodes') || {};
-		var loadedEdges = localStorage.getObject('edges') || {};
-		$.each(loadedNodes, function (index, value) {
-			var nodeOptions = {
-				coords: [value.x,value.y],
-				id: index,
-				type: value.type,
-				label: value.name,
-				color: value.color
-			};
-			network.addNode(nodeOptions);
-		});
-
-		$.each(loadedEdges, function (index, value) {
-			network.addEdge(value.from,value.to);
-		});
-	};
-
-	network.saveGraph = function () {
-		notify("Saving graph.",3);
-		var simpleNodes = network.getSimpleNodes();
-		var simpleEdges = network.getSimpleEdges();
-	
-		session.addData('nodes', simpleNodes);
-		session.addData('edges', simpleEdges);
-		session.saveData();		
-		// localStorage.setObject('nodes', simpleNodes);
-		// localStorage.setObject('edges', simpleEdges);
-		// localStorage.setObject('log', log);
-	};
-
 	// Get & set functions
 
-	network.getNodes = function() {
+	network.getKineticNodes = function() {
 		return nodeLayer.children;
 	};
 
-	network.getEdges = function() {
+	network.getKineticEdges = function() {
 		return edgeLayer.children;
 	};    
 
 	network.getSimpleNodes = function() {
 		// We need to create a simple representation of the nodes for storing.
 		var simpleNodes = {};
-		var nodes = network.getNodes();
+		var nodes = network.getKineticNodes();
 		$.each(nodes, function (index, value) {
 			simpleNodes[value.attrs.id] = {};
 			simpleNodes[value.attrs.id].x = value.attrs.x;
@@ -608,7 +573,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	network.getNodeByID = function(id) {
 		var node = {},
-		nodes = network.getNodes();
+		nodes = network.getKineticNodes();
 
 		$.each(nodes, function(index, value) {
 			if (value.attrs.id === id) {

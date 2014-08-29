@@ -4,6 +4,8 @@
 
 "use strict";
 
+// Storage prototypes
+
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
 };
@@ -18,6 +20,29 @@ Storage.prototype.getObject = function(key) {
 };
 
 // helper functions
+
+function isInNestedObject(targetArray, objectKey, objectKeyValue) {
+    // This function is for checking for keys in arrays of objects.
+    for (var i = 0; i<targetArray.length; i++){
+        for (var prop in targetArray[i]){
+            if (prop === objectKey && targetArray[i][prop] === objectKeyValue) { return true; }
+        }
+    }
+
+    return false;
+}
+
+function getValueFromNestedObject(targetArray, objectKey) {
+    // This function is for checking for keys in arrays of objects.
+    for (var i = 0; i<targetArray.length; i++){
+        for (var prop in targetArray[i]){
+            if (prop === objectKey) { return targetArray[i][prop]; }
+        }
+    }
+
+    return false;
+}
+
 
 function extend( a, b ) {
   for( var key in b ) { 

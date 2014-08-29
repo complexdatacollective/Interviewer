@@ -1,4 +1,4 @@
-/* global History, extend, IOInterface, Logger */
+/* global History, extend, IOInterface, Logger, notify */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -10,11 +10,8 @@ var Session = function Session(options) {
   
   // Establish a new IOInterface for loading and saving
   var dataStore;
-
-
   session.id = 0;
-  session.date = new Date();
-  session.data = {};
+  session.userData = {};
   session.stages = ['intro.html','namegenerator.html'];
 
 
@@ -50,12 +47,24 @@ var Session = function Session(options) {
       $('.loader').transition({opacity:0});
     }, false);
 
+
+    // Create our data interface
     dataStore = new IOInterface();
+    // Check for an in-progress session
+    if (localStorage.getObject('activeSession')!== false) {
+      session.id = localStorage.getObject('activeSession');
+      notify("Existing session found (session id: "+session.id+"). Loading.", 3);
+      // load data.
+      dataStore.init(session.id);
+      session.loadData();
+    } else {
+      session.id = dataStore.init(); // returns ID of an unused slot on the server. 
+    }
+    
+    session.registerData("session");
 
     // Historyjs integration for page loading
     History.Adapter.bind(window, 'statechange', function(){
-      var State = History.getState();
-      console.log(State);
     });
 
     var State = History.getState();    
@@ -68,14 +77,33 @@ var Session = function Session(options) {
 
   };
 
-  session.loadData = function(id) {
-    session.data = dataStore.load(id);
+  session.updateUserData = function(data) {
+    extend(session.userData, data);
+  };
+
+  session.returnSessionID = function() {
+    return session.id;
+  };
+
+  session.loadData = function() {
+    dataStore.load();
   };
 
   session.saveData = function() {
-    dataStore.save(session.data);
+    notify('saving data.', 3);
+    dataStore.save(session.userData);
   };
 
+  session.addNode = function() {
+
+    var nodeOptions = {
+      id: window.nodes.length+1,
+      label: 'Josh'
+    };
+
+    window.nodes.push(nodeOptions);
+
+  };
 
   session.goToStage = function(stage) {
     session.options.fnBeforeStageChange();
@@ -98,12 +126,18 @@ var Session = function Session(options) {
     session.goToStage(currentStage-1);
   };
 
-  session.addStage = function(stage) {
-    console.log(stage);
+  session.addStage = function() {
   };
 
-  session.registerData = function(dataKey) {
-    session.data[dataKey] = {};
+  session.registerData = function(dataKey, array) {
+    if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
+      if (array) {
+        session.userData[dataKey] = [];
+      } else {
+        session.userData[dataKey] = {};
+      }
+    }
+    return session.userData[dataKey];
   };
 
   session.addData = function(dataKey, newData) {
@@ -111,14 +145,19 @@ var Session = function Session(options) {
       This function should let any module add data to the session model. The session model 
       (global data variable) is essentially a key/value store. 
     */
-    console.log(newData);
-    session.data[dataKey] = newData;
-
+    extend(session.userData[dataKey], newData);
+    notify("Adding data to "+dataKey+".",2);
+    console.log("session data is now:");
+    console.log(session.userData);
 
   };
 
-  session.getData = function() {
-    return session.data;
+  session.returnData = function(dataKey) {
+    return session.userData[dataKey];
+  };
+
+  session.returnSessionData = function() {
+    return session.userData;
   };
 
   session.init();

@@ -7,6 +7,17 @@
     // Set up a new session
     window.session = new Session({});
 
+    window.sessionData = session.registerData('session'); //create a data store for this session
+    window.nodes = session.registerData('nodes', true);
+    window.edges = session.registerData('edges', true); 
+    
+    var thisSession = {
+        startDate: new Date()
+    }
+
+    session.addData('session', thisSession);
+
+
     $('.arrow-next').click(function() {
         session.nextStage();
     });

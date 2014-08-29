@@ -23,7 +23,7 @@ var Logger = function Logger() {
       objectID: id
     };
     log.push(data);
-    notify("Logged "+data.eventType+" on object "+data.objectID+" at time point "+humanDate,2);
+    notify("Logged "+data.eventType+" on object "+data.objectID+" at time point "+humanDate,1);
     return true;
   };
 
