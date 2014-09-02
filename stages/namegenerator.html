@@ -3,19 +3,6 @@
   <script>
     var network = new NetworkCanvas();
 
-    var nodes = session.registerData('nodes');
-    var edges = session.registerData('edges');
-    
-    $.each(nodes, function (index, value) {
-      network.addNode(value);
-    });
-
-    $.each(edges, function (index, value) {
-      network.addEdge(value.from,value.to);
-    });
-
-
-
     var networkMenu = menu.addMenu('Network','hi-icon-user');
 
     menu.addItem(networkMenu, 'Load Network', 'icon-globe', null);

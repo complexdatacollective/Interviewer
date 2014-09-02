@@ -12,36 +12,37 @@ var Logger = function Logger() {
 
     // listen for log events
     window.addEventListener('log', function (e) { 
-      logger.addToLog(e);
+      logger.addToLog(e.detail);
     }, false);
 
     return true;
   };
 
-  logger.addToLog = function(type,e,id) {
-    if (!e && !type) { return false; }
-    var date = new Date();
-    // var humanDate = date.toString('H:mm:ss');
+  logger.addToLog = function(e) {
+    if (!e) { return false; }
+
     var data = {
-      timestamp: date,
-      eventType: type,
-      eventValue: e,
-      objectID: id
+      'eventType': e.eventType,
+      'targetObject':e.eventObject,
+      'eventTime': new Date()
     };
+    // var humanDate = date.toString('H:mm:ss');
     window.log.push(data);
-    session.addData('log',window.log);
-    var eventLogged = new Event('eventLogged', {'eventType': data.eventType,'eventTime':data.timestamp, 'targetObject':data.objectID, 'eventValue': e});
+    var eventLogged = new CustomEvent('eventLogged', {"detail":data});
     window.dispatchEvent(eventLogged);
     return true;
   };
 
   logger.getLog = function() {
+    return window.log;
     
   };
 
   logger.getLastEvent = function() {
     
-  };  
+  };
+
+  logger.init();
 
   return logger;
 };

@@ -1,6 +1,6 @@
   (function() {
     // Set the global debug level
-    window.debugLevel = 1;
+    window.debugLevel = 0;
     
     var container = document.getElementById('content');
 

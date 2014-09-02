@@ -104,7 +104,7 @@ function extend( a, b ) {
 
 function notify(text, level){
     level = level || 0;
-    if (level >= debugLevel) {
+    if (level >= window.debugLevel) {
         console.log(text);
     }
 }

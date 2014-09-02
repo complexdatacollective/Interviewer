@@ -30,7 +30,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Default settings
 	var settings = {
-		defaultNodeSize: 20,
+		defaultNodeSize: 40,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
@@ -51,7 +51,27 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		network.drawUIComponents();
 		extend(settings,userSettings);
 
+		window.addEventListener('nodeAdded', function (e) { 
+      		network.addNode(e.details);
+    	}, false);
+
 	};
+
+
+	// Private functions
+
+
+	// Adjusts the size of text so that it will always fit inside a given shape.
+	function padText(text, container, amount){
+		while ((text.width()*1.001)<container.width()-(amount*2)) {
+			text.fontSize(text.fontSize() * 1.001);
+
+			text.y((container.height() - text.height())/2);
+
+			text.width(container.width());
+			text.height(container.height());			
+		}
+	}	
 
 	// Node manipulation functions
 
@@ -76,6 +96,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		nodeOptions.id = parseInt(nodeOptions.id, 10);
 
+		nodeOptions.type = 'Person'; // We don't need different node shapes for RADAR
 		
 		var nodeGroup = new Kinetic.Group({
 			id: nodeOptions.id,
@@ -84,8 +105,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			name: nodeOptions.label,
 			edges: [],
 			type: nodeOptions.type,
-			nodeSize: nodeOptions.size,
-			color: nodeOptions.color,
 			draggable: true,
 			dragDistance: 10
 		});
@@ -107,7 +126,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				fill:nodeOptions.color,
 				stroke: network.calculateStrokeColor(nodeOptions.color),
 				strokeWidth: nodeOptions.strokeWidth,
-				offset: {x: nodeOptions.size, y: nodeOptions.size}
+				// offset: {x: nodeOptions.size, y: nodeOptions.size}
 			});
 			break;
 
@@ -136,24 +155,18 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		var nodeLabel = new Kinetic.Text({         
 			text: nodeOptions.label,
-			fontSize: 20,
+			// fontSize: 20,
 			fontFamily: 'Lato',
 			fill: 'white',
-			offsetX: (nodeOptions.size*-1)-10, //left right
-			offsetY:(nodeOptions.size*1)-10, //up down
+			align: 'center',
+			// offsetX: (nodeOptions.size*-1)-10, //left right
+			// offsetY:(nodeOptions.size*1)-10, //up down
 			fontStyle:500,
 
 		});
 
-		nodeGroup.add(nodeShape);
-		nodeGroup.add(nodeLabel);
-
 		notify("Putting node "+nodeOptions.label+" at coordinates x:"+nodeOptions.coords[0]+", y:"+nodeOptions.coords[1], 2);
 		
-		var log = new Event('log', {'eventType': 'nodeCreate', 'targetObject':nodeOptions.id, 'eventValue': nodeOptions});
-    	window.dispatchEvent(log);
-
-
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
 			notify("dragstart",2);
@@ -180,7 +193,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		});    
 
 		nodeGroup.on('tap click', function() {
-			var log = new Event('log', {'eventType': 'nodeClick', 'targetObject':this.attrs.id, 'eventValue': this});
+			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
     		window.dispatchEvent(log);
 			this.moveToTop();
 			nodeLayer.draw();
@@ -235,7 +248,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			var currentNode = this;
 
 			// Log the movement and save the graph state.
-			var log = new Event('log', {'eventType': 'nodeMove', 'targetObject':eventObject, 'eventValue': this});
+			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
 			var currentNodes = session.returnData('nodes');
 			$.each(currentNodes, function(index, value) {
@@ -248,7 +261,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				}
 
 			});			
-			session.addData('nodes', currentNodes);
+			session.addData('nodes', currentNodes, false);
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -256,11 +269,14 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 		});
 
+		padText(nodeLabel,nodeShape, 10);
+		nodeGroup.add(nodeShape);
+		nodeGroup.add(nodeLabel);
 		nodeLayer.add(nodeGroup);
 		nodeGroup.moveToBottom();
 		nodeLayer.draw();
 
-		if (!options.coords) {
+		if (!nodeOptions.coords) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
@@ -326,7 +342,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
 		
 		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
-		var log = new Event('log', {'eventType': 'createEdge', 'targetObject':null, 'eventValue': simpleEdge});
+		var log = new CustomEvent('log', {"detail":{'eventType': 'createEdge', 'eventObject':simpleEdge}});
     	window.dispatchEvent(log);
 		
 		return true;   
@@ -357,31 +373,6 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeLayer.removeChildren();
 		nodeLayer.clear();
 		
-	};
-
-	network.createRandomGraph = function(nodeCount,edgeProbability) {
-		nodeCount = nodeCount || 10;
-		edgeProbability = edgeProbability || 0.4;
-		var nodes = network.getKineticNodes(); 
-		notify("Creating random graph...",1);
-		for (var i=0;i<nodeCount;i++) {
-			var current = i+1;
-			notify("Adding node "+current+" of "+nodeCount,2);
-			// Use random coordinates
-			var nodeOptions = {
-				coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
-			};
-			session.addNode(nodeOptions);	
-		}
-
-		notify("Adding edges.",3);
-		$.each(nodes, function (index) {
-			if (randomBetween(0, 1) < edgeProbability) {
-				var randomFriend = Math.round(randomBetween(0,nodes.length-1));
-				session.addEdge(nodes[index],nodes[randomFriend]);
-
-			}
-		});
 	};
 
 	// Main initialisation functions
@@ -516,13 +507,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			
 		});
 
-
-
-
-
 	};
-
-	// Graph saving/loading/exporting functions
 
 	// Get & set functions
 

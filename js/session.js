@@ -56,8 +56,9 @@ var Session = function Session(options) {
       notify("Existing session found (session id: "+session.id+"). Loading.", 3);
       // load data.
       dataStore.init(session.id);
-      session.loadData();
+      dataStore.load(session.updateUserData);
     } else {
+      notify("No existing session found. Creating new session.", 3);
       session.id = dataStore.init(); // returns ID of an unused slot on the server. 
     }
     
@@ -87,7 +88,14 @@ var Session = function Session(options) {
   };
 
   session.updateUserData = function(data) {
+    notify("Updating user data.", 2);
+    notify("Using the following to update:", 1);
+    notify(data, 1);
+    notify("session.userData is:", 1);
+    notify(session.userData, 1);
     extend(session.userData, data);
+    notify("Combined output is:", 0);
+    notify(session.userData, 0);    
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };
@@ -96,18 +104,12 @@ var Session = function Session(options) {
     return session.id;
   };
 
-  session.loadData = function() {
-    dataStore.load();
-  };
-
   session.saveData = function() {
-    notify('saving data.', 3);
     dataStore.save(session.userData);
     lastSaveTime = new Date();
   };
 
   session.addNode = function(options) {
-
     var nodeOptions = {
       id: window.nodes.length+1,
       label: 'Josh'
@@ -116,7 +118,9 @@ var Session = function Session(options) {
     extend(nodeOptions, options);
 
     window.nodes.push(nodeOptions);
-    var nodeAddedEvent = new Event('nodeAdded',{'options':nodeOptions});
+    var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeOptions}});
+    window.dispatchEvent(log);
+    var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeOptions});
     window.dispatchEvent(nodeAddedEvent);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
@@ -181,26 +185,38 @@ var Session = function Session(options) {
     return session.userData[dataKey];
   };
 
-  session.addData = function(dataKey, newData) {
+  session.addData = function(dataKey, newData, append) {
     /*
       This function should let any module add data to the session model. The session model 
       (global data variable) is essentially a key/value store. 
     */
-    extend(session.userData[dataKey], newData);
-    notify("Adding data to "+dataKey+".",2);
-    console.log("session data is now:");
-    console.log(session.userData);
+
+    if (!append) { append = false; }
+
+    if (append === true) { // this is an array
+      console.log(typeof session.userData[dataKey].length);
+      session.userData[dataKey].push(newData);
+    } else {
+      extend(session.userData[dataKey], newData);
+    }
+    
+    notify("Adding data to key '"+dataKey+"'.",2);
+    notify(newData, 1);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
 
   };
 
   session.returnData = function(dataKey) {
-    return session.userData[dataKey];
-  };
 
-  session.returnSessionData = function() {
-    return session.userData;
+    if (!dataKey) {
+      return session.userData;
+    } else if (typeof session.userData[dataKey] !== 'undefined') {
+      return session.userData[dataKey];
+    } else {
+      return session.userData;
+    }
+    
   };
 
   session.init();
