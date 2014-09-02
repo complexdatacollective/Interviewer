@@ -28,7 +28,7 @@ var IOInterface = function IOInterface() {
   var interface = {};
 
   interface.init = function(existingID) {
-
+    notify('IOInterface initialising.', 1);
     // If we don't have an existing ID, create a blank entry in mongodb and return its ID
     if (!existingID) {
       $.ajax({

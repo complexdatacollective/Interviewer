@@ -1,4 +1,4 @@
-
+/* global notify */
 /* exported Menu */
 var Menu = function Menu(options) {
 
@@ -170,6 +170,7 @@ var Menu = function Menu(options) {
     }; 
 
     menu.init = function() {
+        notify('Menu initialising.', 1);
         extend(menu.options,options);
     };
 

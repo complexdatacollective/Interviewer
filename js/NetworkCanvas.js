@@ -1,13 +1,13 @@
 /*global extend, session, randomBetween, Kinetic, modifyColor, notify */
-/* exported NetworkCanvas */
+/* exported Canvas */
 /*jshint bitwise: false*/
 
 'use strict';
 
-var NetworkCanvas = function NetworkCanvas(userSettings) {
+var Canvas = function Canvas(userSettings) {
 
 	// Global variables
-	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, network = {};
+	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, canvas = {};
 	var selectedNodes = [];
 	var menuOpen = false;
 	var cancelKeyBindings = false;
@@ -45,21 +45,32 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	// Dummy Names
 	var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
 
-	network.init = function () {
-
-		network.initKinetic();
-		network.drawUIComponents();
+	canvas.init = function () {
+		notify('Canvas initialising.', 1);
+		canvas.initKinetic();
+		canvas.drawUIComponents();
 		extend(settings,userSettings);
 
 		window.addEventListener('nodeAdded', function (e) { 
-      		network.addNode(e.details);
+      		canvas.addNode(e.details);
     	}, false);
+
+    	window.addEventListener('newDataLoaded', function () {
+    		notify('Canvas noticed that new data has been loaded.',2); 
+      		for (var i = 0; i < session.returnData('nodes').length; i++) {
+      			canvas.addNode(session.returnData('nodes')[i]);
+      		}
+    	}, false);
+
+    	// Are there existing nodes? Display them.
+      	for (var i = 0; i < session.returnData('nodes').length; i++) {
+      		canvas.addNode(session.returnData('nodes')[i]);
+    	}    	
 
 	};
 
 
 	// Private functions
-
 
 	// Adjusts the size of text so that it will always fit inside a given shape.
 	function padText(text, container, amount){
@@ -75,8 +86,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Node manipulation functions
 
-	network.addNode = function(options) {
-
+	canvas.addNode = function(options) {
+		notify('Canvas is creating a node.',2);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
@@ -114,7 +125,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 			nodeShape = new Kinetic.Circle({
 				radius: nodeOptions.size,
 				fill:nodeOptions.color,
-				stroke: network.calculateStrokeColor(nodeOptions.color),
+				stroke: canvas.calculateStrokeColor(nodeOptions.color),
 				strokeWidth: nodeOptions.strokeWidth
 			});
 			break;
@@ -124,7 +135,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				width: nodeOptions.size*2,
 				height: nodeOptions.size*2,
 				fill:nodeOptions.color,
-				stroke: network.calculateStrokeColor(nodeOptions.color),
+				stroke: canvas.calculateStrokeColor(nodeOptions.color),
 				strokeWidth: nodeOptions.strokeWidth,
 				// offset: {x: nodeOptions.size, y: nodeOptions.size}
 			});
@@ -135,7 +146,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				sides: 3,
 				fill:nodeOptions.color,
 					radius: nodeOptions.size*1.2, // How should I calculate the correct multiplier for a triangle?
-					stroke: network.calculateStrokeColor(nodeOptions.color),
+					stroke: canvas.calculateStrokeColor(nodeOptions.color),
 					strokeWidth: nodeOptions.strokeWidth
 				});
 			break; 
@@ -146,7 +157,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 				fill:nodeOptions.color,
 				innerRadius: nodeOptions.size-(nodeOptions.size/3),
 				outerRadius: nodeOptions.size+(nodeOptions.size/3),
-				stroke: network.calculateStrokeColor(nodeOptions.color),
+				stroke: canvas.calculateStrokeColor(nodeOptions.color),
 				strokeWidth: nodeOptions.strokeWidth
 			});
 			break;
@@ -207,12 +218,12 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 			// If this makes a couple, link them.
 			if(selectedNodes.length === 2) {
-				if (!network.addEdge(selectedNodes[0],selectedNodes[1])) {
-					network.removeEdge(selectedNodes[0],selectedNodes[1]);
+				if (!canvas.addEdge(selectedNodes[0],selectedNodes[1])) {
+					canvas.removeEdge(selectedNodes[0],selectedNodes[1]);
 				}
 				
-				selectedNodes[0].children[0].stroke(network.calculateStrokeColor(network.getNodeColorByType(selectedNodes[0].attrs.type)));
-				selectedNodes[1].children[0].stroke(network.calculateStrokeColor(network.getNodeColorByType(selectedNodes[1].attrs.type)));
+				selectedNodes[0].children[0].stroke(canvas.calculateStrokeColor(canvas.getNodeColorByType(selectedNodes[0].attrs.type)));
+				selectedNodes[1].children[0].stroke(canvas.calculateStrokeColor(canvas.getNodeColorByType(selectedNodes[1].attrs.type)));
 				selectedNodes = [];
 				nodeLayer.draw(); 
 
@@ -276,7 +287,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeGroup.moveToBottom();
 		nodeLayer.draw();
 
-		if (!nodeOptions.coords) {
+		// console.log('coords:'+nodeOptions.coords);
+		if (!options.coords) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
@@ -292,7 +304,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Edge manipulation functions
 
-	network.addEdge = function(from, to) {
+	canvas.addEdge = function(from, to) {
 		var alreadyExists = false;
 		var fromObject,toObject;
 		var toRemove;
@@ -341,14 +353,14 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		nodeLayer.draw();
 		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
 		
-		var simpleEdge = network.getSimpleEdge(edgeLayer.children.length-1);
+		var simpleEdge = canvas.getSimpleEdge(edgeLayer.children.length-1);
 		var log = new CustomEvent('log', {"detail":{'eventType': 'createEdge', 'eventObject':simpleEdge}});
     	window.dispatchEvent(log);
 		
 		return true;   
 	};
 
-	network.removeEdge = function(edge) {
+	canvas.removeEdge = function(edge) {
 		notify("Removing edge.");
 		$.each(edgeLayer.children, function(index, value) {
 			if (value === edge) {
@@ -363,11 +375,11 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Misc functions
 
-	network.calculateStrokeColor = function(color) {
+	canvas.calculateStrokeColor = function(color) {
 		return modifyColor(color, 15);
 	};
 
-	network.clearGraph = function() {
+	canvas.clearGraph = function() {
 		edgeLayer.removeChildren();
 		edgeLayer.clear();
 		nodeLayer.removeChildren();
@@ -377,7 +389,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Main initialisation functions
 
-	network.initKinetic = function () {
+	canvas.initKinetic = function () {
 		// Initialise KineticJS stage
 		stage = new Kinetic.Stage({
 			container: 'kineticCanvas',
@@ -397,7 +409,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		notify("Kinetic stage initialised.",1);
 	};
 
-	network.drawUIComponents = function () {
+	canvas.drawUIComponents = function () {
 
 		// Draw all UI components
 		var circleFills, circleLines;
@@ -454,13 +466,13 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 	  	circleLayer.draw();
 	  	uiLayer.draw();
 
-	  	network.initNewNodeForm();
+	  	canvas.initNewNodeForm();
 		notify("User interface initialised.",1);
 	};
 
 	// New Node Form
 
-	network.initNewNodeForm = function() {
+	canvas.initNewNodeForm = function() {
 		var form = $('<div class="new-node-form"></div>');
 		var innerForm = $('<div class="new-node-inner"></div>');
 		form.append(innerForm);
@@ -499,7 +511,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 					var nodeOptions = {
 						label: $('.name-box').val()
 					};				
-					network.addNode(nodeOptions);
+					canvas.addNode(nodeOptions);
 					$('.name-box').val('');
 				}
 
@@ -511,18 +523,18 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 
 	// Get & set functions
 
-	network.getKineticNodes = function() {
+	canvas.getKineticNodes = function() {
 		return nodeLayer.children;
 	};
 
-	network.getKineticEdges = function() {
+	canvas.getKineticEdges = function() {
 		return edgeLayer.children;
 	};    
 
-	network.getSimpleNodes = function() {
+	canvas.getSimpleNodes = function() {
 		// We need to create a simple representation of the nodes for storing.
 		var simpleNodes = {};
-		var nodes = network.getKineticNodes();
+		var nodes = canvas.getKineticNodes();
 		$.each(nodes, function (index, value) {
 			simpleNodes[value.attrs.id] = {};
 			simpleNodes[value.attrs.id].x = value.attrs.x;
@@ -535,7 +547,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		return simpleNodes;
 	};
 
-	network.getSimpleEdges = function() {
+	canvas.getSimpleEdges = function() {
 		var simpleEdges = {},
 		edgeCounter = 0;
 
@@ -549,21 +561,21 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		return simpleEdges;
 	};
 
-	network.getSimpleEdge = function(id) {
-		var simpleEdges = network.getSimpleEdges();
+	canvas.getSimpleEdge = function(id) {
+		var simpleEdges = canvas.getSimpleEdges();
 		if (!id) { return false; }
 
 		var simpleEdge = simpleEdges[id];
 		return simpleEdge;
 	};
 
-	network.getEdgeLayer = function() {
+	canvas.getEdgeLayer = function() {
 		return edgeLayer;
 	};
 
-	network.getNodeByID = function(id) {
+	canvas.getNodeByID = function(id) {
 		var node = {},
-		nodes = network.getKineticNodes();
+		nodes = canvas.getKineticNodes();
 
 		$.each(nodes, function(index, value) {
 			if (value.attrs.id === id) {
@@ -574,7 +586,7 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		return node;
 	};
 
-	network.getNodeColorByType = function(type) {
+	canvas.getNodeColorByType = function(type) {
 		var returnVal = null;
 		$.each(settings.nodeTypes, function(index, value) {
 			if (value.name === type) {returnVal = value.color;}
@@ -587,8 +599,8 @@ var NetworkCanvas = function NetworkCanvas(userSettings) {
 		}
 	};
 
-	network.init();
+	canvas.init();
 	
-	return network;
+	return canvas;
 	
 };

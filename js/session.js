@@ -32,7 +32,7 @@ var Session = function Session(options) {
   };
 
   session.init = function() {
-
+    notify('Session initialising.', 1);
     // exdend our local options with any passed options
     extend(session.options,options); 
 
@@ -44,9 +44,6 @@ var Session = function Session(options) {
     window.addEventListener('changeStageEnd', function () {
       $('.loader').transition({opacity:0});
     }, false);
-
-    window.nodes = session.registerData('nodes', true);
-    window.edges = session.registerData('edges', true);
 
     // Create our data interface
     dataStore = new IOInterface();
@@ -60,10 +57,11 @@ var Session = function Session(options) {
     } else {
       notify("No existing session found. Creating new session.", 3);
       session.id = dataStore.init(); // returns ID of an unused slot on the server. 
+      window.nodes = session.registerData('nodes', true);
+      window.edges = session.registerData('edges', true);
     }
     
     session.registerData("session");
-
     // Historyjs integration for page loading
     History.Adapter.bind(window, 'statechange', function(){
     });
@@ -95,7 +93,11 @@ var Session = function Session(options) {
     notify(session.userData, 1);
     extend(session.userData, data);
     notify("Combined output is:", 0);
-    notify(session.userData, 0);    
+    notify(session.userData, 0);
+    window.nodes = session.registerData('nodes', true);
+    window.edges = session.registerData('edges', true);
+    var newDataLoaded = new Event('newDataLoaded');
+    window.dispatchEvent(newDataLoaded);        
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };
@@ -173,7 +175,9 @@ var Session = function Session(options) {
   };
 
   session.registerData = function(dataKey, array) {
+    notify('Something registered a data store with the key "'+dataKey+'".', 2);
     if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
+      notify(dataKey+' was not already registered. Creating.', 2);
       if (array) {
         session.userData[dataKey] = [];
       } else {

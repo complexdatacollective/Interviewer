@@ -1,14 +1,16 @@
 /* exported Logger */
-/* global session */
+/* global session, notify */
 
 var Logger = function Logger() {
 
-  var logger = {};
-  window.log = session.registerData('log', true); 
+  var logger = {}; 
 
   // todo: add custom events so that other scripts can listen for log changes (think vis).
 
   logger.init = function() {
+    notify('Logger initialising.', 1);
+
+    window.log = session.registerData('log', true);
 
     // listen for log events
     window.addEventListener('log', function (e) { 
