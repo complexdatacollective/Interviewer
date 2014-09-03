@@ -62,18 +62,23 @@ var Network = function Network() {
   };
 
   network.addEdge = function(properties) {
-
-    if (!properties.from || !properties.to) {
+    if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
       return false;
     }
-
+    var localEdges = session.returnData('edges');
     var edgeProperties = {
-      id: window.edges.length,
+      id: localEdges.length,
       properties: []
     };
 
     extend(edgeProperties, properties);
-    window.edges.push(edgeProperties);
+    localEdges.push(edgeProperties);
+    var log = new CustomEvent('log', {"detail":{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
+    window.dispatchEvent(log);
+    var edgeAddedEvent = new CustomEvent('edgeAdded',{"detail":edgeProperties});
+    window.dispatchEvent(edgeAddedEvent);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
 
     return edgeProperties.id;
   };
@@ -133,20 +138,18 @@ var Network = function Network() {
     return network.filterObject(window.edges,criteria);
   };
 
-  network.setNodeProperties = function(node, properties) {
+  network.setProperties = function(object, properties) {
 
-    if (typeof node === 'undefined') { return false; }
+    if (typeof object === 'undefined') { return false; }
 
-    if (typeof node === 'object' && node.length>0) {
-      console.log('pass object');
-      // Multiple nodes!
-      for (var i = 0; i < node.length; i++) {
-        $.extend(node[i], properties);     
+    if (typeof object === 'object' && object.length>0) {
+      // Multiple objects!
+      for (var i = 0; i < object.length; i++) {
+        $.extend(object[i], properties);     
       }     
     } else {
-      console.log('passed single');
-      // Just one node.
-        $.extend(node, properties);    
+      // Just one object.
+        $.extend(object, properties);    
     }
 
   };
@@ -182,7 +185,7 @@ var Network = function Network() {
     $.each(localNodes, function (index) {
       if (randomBetween(0, 1) < edgeProbability) {
         var randomFriend = Math.round(randomBetween(0,localNodes.length-1));
-        session.addEdge(localNodes[index],localNodes[randomFriend]);
+        network.addEdge({from:localNodes[index].id,to:localNodes[randomFriend].id});
 
       }
     });

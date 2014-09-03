@@ -52,6 +52,10 @@ var Canvas = function Canvas(userSettings) {
       		canvas.addNode(e.detail);
     	}, false);
 
+		window.addEventListener('edgeAdded', function (e) { 
+      		canvas.addEdge(e.detail);
+    	}, false);    	
+
     	window.addEventListener('newDataLoaded', function () {
     		notify('Canvas noticed that new data has been loaded.',2); 
       		for (var i = 0; i < session.returnData('nodes').length; i++) {
@@ -62,6 +66,10 @@ var Canvas = function Canvas(userSettings) {
     	// Are there existing nodes? Display them.
       	for (var i = 0; i < session.returnData('nodes').length; i++) {
       		canvas.addNode(session.returnData('nodes')[i]);
+    	}    
+
+    	for (var j = 0; j < session.returnData('edges').length; j++) {
+      		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
     	}    	
 
 	};
@@ -87,6 +95,7 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.addNode = function(options) {
 		notify('Canvas is creating a node.',2);
+		console.log(options);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
@@ -190,12 +199,14 @@ var Canvas = function Canvas(userSettings) {
 
 		nodeGroup.on('dragmove', function() {
 			notify("Dragmove",0);
-			var dragNode = this;
+			var dragNode = nodeOptions.id;
 			$.each(edgeLayer.children, function(index, value) {
+				
 				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
-				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
-					var points = [value.attrs.from.attrs.x,value.attrs.from.attrs.y,value.attrs.to.attrs.x,value.attrs.to.attrs.y];
-					value.attrs.points = points;       
+				if (value.attrs.from.id === dragNode || value.attrs.to.id === dragNode) {
+					var points = [canvas.getNodeByID(value.attrs.from.id).getX(), canvas.getNodeByID(value.attrs.from.id).getY(), canvas.getNodeByID(value.attrs.to.id).getX(), canvas.getNodeByID(value.attrs.to.id).getY()];
+					value.attrs.points = points;
+				
 				}
 			});
 			edgeLayer.draw();     
@@ -214,15 +225,12 @@ var Canvas = function Canvas(userSettings) {
 
 			// Store this node in our special array for currently selected nodes.
 			selectedNodes.push(this);
+			console.log(selectedNodes);
 
 			// If this makes a couple, link them.
 			if(selectedNodes.length === 2) {
-				if (!canvas.addEdge(selectedNodes[0],selectedNodes[1])) {
-					canvas.removeEdge(selectedNodes[0],selectedNodes[1]);
-				}
 				
-				selectedNodes[0].children[0].stroke(canvas.calculateStrokeColor(canvas.getNodeColorByType(selectedNodes[0].attrs.type)));
-				selectedNodes[1].children[0].stroke(canvas.calculateStrokeColor(canvas.getNodeColorByType(selectedNodes[1].attrs.type)));
+				network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id});
 				selectedNodes = [];
 				nodeLayer.draw(); 
 
@@ -261,7 +269,7 @@ var Canvas = function Canvas(userSettings) {
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
 
-    		network.setNodeProperties(network.getNode(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y], type: currentNode.attrs.type, color: currentNode.attrs.color});
+    		network.setProperties(network.getNode(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y], type: currentNode.attrs.type, color: currentNode.attrs.color});
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -275,6 +283,7 @@ var Canvas = function Canvas(userSettings) {
 		nodeGroup.add(nodeLabel);	
 		
 		nodeLayer.add(nodeGroup);
+		console.log(nodeGroup);
 		nodeLayer.draw();
 
 		// console.log('coords:'+nodeOptions.coords);
@@ -294,39 +303,20 @@ var Canvas = function Canvas(userSettings) {
 
 	// Edge manipulation functions
 
-	canvas.addEdge = function(from, to) {
+	canvas.addEdge = function(properties) {
+		notify('Canvas is adding an edge.',2);
+		console.log(properties);
 		var alreadyExists = false;
-		var fromObject,toObject;
-		var toRemove;
-
-		//TODO: Check if the nodes exist and return false if they don't.
-		//TODO: Make sure you cant add a self-loop
-
-		if (from !== null && typeof from === 'object' || to !== null && typeof to === 'object') {
-			fromObject = from;
-			toObject = to;
-		} else {
-			//assume we have ID's rather than the object, and so iterate through nodes looking for ID's.
-			fromObject = this.getNodeByID(from);
-			toObject = this.getNodeByID(to);
-		}
-
-		if (edgeLayer.children.length > 0) {
-			$.each(edgeLayer.children, function(index, value) {
-				if (value.attrs.from === fromObject && value.attrs.to === toObject || value.attrs.to === fromObject && value.attrs.from === toObject) {
-					toRemove = value;
-					alreadyExists = true;
-				}
-			});  
-
-		}
-
+		var fromObject = network.getNode(properties.from);
+		var toObject = network.getNode(properties.to);
+		console.log(fromObject);
+		console.log(toObject);
 		if (alreadyExists) {
 		    // this.removeEdge(toRemove);
 		    return false;
 		}
 
-		var points = [fromObject.attrs.x, fromObject.attrs.y, toObject.attrs.x, toObject.attrs.y];
+		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 		var edge = new Kinetic.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 2,
@@ -341,11 +331,7 @@ var Canvas = function Canvas(userSettings) {
 		edgeLayer.add(edge);
 		edgeLayer.draw(); 
 		nodeLayer.draw();
-		notify("Created Edge between "+fromObject.children[1].attrs.text+" and "+toObject.children[1].attrs.text, "success",2);
-		
-		var simpleEdge = canvas.getSimpleEdge(edgeLayer.children.length-1);
-		var log = new CustomEvent('log', {"detail":{'eventType': 'createEdge', 'eventObject':simpleEdge}});
-    	window.dispatchEvent(log);
+		notify("Created Edge between "+fromObject.label+" and "+toObject.label, "success",2);
 		
 		return true;   
 	};

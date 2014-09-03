@@ -80,7 +80,7 @@ var Session = function Session(options) {
 
   session.saveManager = function() {
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(session.saveData, 2000);
+    saveTimer = setTimeout(session.saveData, 5000);
   };
 
   session.updateUserData = function(data) {
@@ -107,42 +107,6 @@ var Session = function Session(options) {
     dataStore.save(session.userData);
     lastSaveTime = new Date();
   };
-
-  // session.addNode = function(options) {
-  //   var nodeOptions = {
-  //     id: window.nodes.length+1,
-  //   };
-
-  //   extend(nodeOptions, options);
-
-  //   window.nodes.push(nodeOptions);
-  //   var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeOptions}});
-  //   window.dispatchEvent(log);
-  //   var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeOptions});
-  //   window.dispatchEvent(nodeAddedEvent);
-  //   var unsavedChanges = new Event('unsavedChanges');
-  //   window.dispatchEvent(unsavedChanges);
-  // };
-
-  // session.addEdge = function(from, to) {
-  //   var alreadyExists = false;
-
-  //   var edgeOptions = {
-  //     'from': from,
-  //     'to'  : to
-  //   };
-
-  //   if (alreadyExists) {
-  //       return false;
-  //   }
-
-  //   window.edges.push(edgeOptions);
-  //   var edgeAddedEvent = new Event('edgeAdded',{'options':edgeOptions});
-  //   window.dispatchEvent(edgeAddedEvent);
-  //   var unsavedChanges = new Event('unsavedChanges');
-  //   window.dispatchEvent(unsavedChanges);
-
-  // };  
 
   session.goToStage = function(stage) {
     if (typeof stage === 'undefined') { return false; }

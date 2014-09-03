@@ -1,6 +1,6 @@
   (function() {
     // Set the global debug level
-    window.debugLevel = 0;
+    window.debugLevel = 1;
 
     // Set up a new session
     window.session = new Session({});

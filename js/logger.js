@@ -29,8 +29,7 @@ var Logger = function Logger() {
       'targetObject':e.eventObject,
       'eventTime': new Date()
     };
-    // var humanDate = date.toString('H:mm:ss');
-    // window.log.push(data);
+
     session.addData('log', data, true);
     var eventLogged = new CustomEvent('eventLogged', {"detail":data});
     window.dispatchEvent(eventLogged);
