@@ -21,17 +21,42 @@ selecting nodes or edges by their various properties, and interating over them.
 var Network = function Network() {
   var network = {};
   var graph = {};
-  var nodes = [];
-  var edges = [];
-  window.log = session.registerData('log', true); 
+  var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
+
+  network.init = function() {
+
+      // window.addEventListener('newDataLoaded', function () {
+      //   notify('Network noticed that new data has been loaded.',2); 
+      //     for (var i = 0; i < session.returnData('nodes').length; i++) {
+      //       network.addNode(session.returnData('nodes')[i]);
+      //     }
+      // }, false);
+
+    notify('Network Initialising', 2);
+    window.nodes = session.registerData('nodes', true);
+    window.edges = session.registerData('edges', true);
+
+    return true;
+  };
 
   network.addNode = function(properties) {
+
+    var localNodes = session.returnData('nodes');
     var nodeProperties = {
-      id: nodes.length,
-      properties: []
+      id: localNodes.length,
+      properties: [],
+      label: namesList[Math.round(randomBetween(0,namesList.length-1))],
+      // color: 'red'
     };
     extend(nodeProperties, properties);    
-    nodes.push(nodeProperties);
+    
+    localNodes.push(nodeProperties);
+    var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
+    window.dispatchEvent(log);
+    var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeProperties});
+    window.dispatchEvent(nodeAddedEvent);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
 
     return nodeProperties.id;
   };
@@ -43,28 +68,28 @@ var Network = function Network() {
     }
 
     var edgeProperties = {
-      id: edges.length,
+      id: window.edges.length,
       properties: []
     };
 
     extend(edgeProperties, properties);
-    edges.push(edgeProperties);
+    window.edges.push(edgeProperties);
 
     return edgeProperties.id;
   };
 
   network.getNode = function(id) {
     if (id === undefined) { return false; }
-
-    for (var i = 0;i<nodes.length; i++) {
-      if (nodes[i].id === id) {return nodes[i]; }
+    var localNodes = session.returnData('nodes');
+    for (var i = 0;i<localNodes.length; i++) {
+      if (localNodes[i].id === id) {return localNodes[i]; }
     }
 
   };
 
   network.getEdge = function(id) {
     
-    return edges[id];
+    return window.edges[id];
   };
 
   network.filterObject = function(targetArray,criteria) {
@@ -91,30 +116,21 @@ var Network = function Network() {
   };
 
   network.getNodes = function(criteria) {
+    var localNodes = session.returnData('nodes');
     if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-      return network.filterObject(nodes,criteria);  
+      return network.filterObject(localNodes,criteria);  
     } else {
-      return nodes;
+      return localNodes;
     }
     
   };
 
   network.getNodeEdges = function(nodeID) {
-    var edgeList = [];
-
-    $.each(edges, function(index, value){
-      if (value.from === nodeID) {
-        edgeList.push(value);
-      }
-    });
-
-    return edgeList;
+    return network.getEdges({from:nodeID});
   };
 
   network.getEdges = function(criteria) {
-
-    return network.filterObject(edges,criteria);
-
+    return network.filterObject(window.edges,criteria);
   };
 
   network.setNodeProperties = function(node, properties) {
@@ -140,17 +156,17 @@ var Network = function Network() {
   };
 
   network.returnAllNodes = function() {
-    return nodes;
+    return session.returnData('nodes');
   };
 
   network.returnAllEdges = function() {
-    return edges;
+    return session.returnData('edges');
   };
 
   network.createRandomGraph = function(nodeCount,edgeProbability) {
+    var localNodes = session.returnData('nodes');
     nodeCount = nodeCount || 10;
     edgeProbability = edgeProbability || 0.4;
-    var nodes = network.getKineticNodes(); 
     notify("Creating random graph...",1);
     for (var i=0;i<nodeCount;i++) {
       var current = i+1;
@@ -159,19 +175,20 @@ var Network = function Network() {
       var nodeOptions = {
         coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
       };
-      session.addNode(nodeOptions); 
+      network.addNode(nodeOptions); 
     }
 
     notify("Adding edges.",3);
-    $.each(nodes, function (index) {
+    $.each(localNodes, function (index) {
       if (randomBetween(0, 1) < edgeProbability) {
-        var randomFriend = Math.round(randomBetween(0,nodes.length-1));
-        session.addEdge(nodes[index],nodes[randomFriend]);
+        var randomFriend = Math.round(randomBetween(0,localNodes.length-1));
+        session.addEdge(localNodes[index],localNodes[randomFriend]);
 
       }
     });
   };
 
+  network.init();
 
   return network;
 };

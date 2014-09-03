@@ -1,23 +1,23 @@
   (function() {
     // Set the global debug level
     window.debugLevel = 0;
-    
-    var container = document.getElementById('content');
 
     // Set up a new session
     window.session = new Session({});
-
     window.sessionData = session.registerData('session'); //create a data store for this session
     
+    // Create a log
+    window.eventLog = new Logger();
+
+    // Add the start date to the session.
     var thisSession = {
         startDate: new Date()
     }
 
-    // Create a log
-    window.eventLog = new Logger();
-
     session.addData('session', thisSession);
 
+    // Build a new network
+    window.network = new Network();
 
     $('.arrow-next').click(function() {
         session.nextStage();

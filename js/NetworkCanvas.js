@@ -1,4 +1,4 @@
-/*global extend, session, randomBetween, Kinetic, modifyColor, notify */
+/*global extend, session, randomBetween, Kinetic, modifyColor, notify, network */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -42,9 +42,6 @@ var Canvas = function Canvas(userSettings) {
 		{'name':'Professional','color':colors.violettulip}]
 	};
 
-	// Dummy Names
-	var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
-
 	canvas.init = function () {
 		notify('Canvas initialising.', 1);
 		canvas.initKinetic();
@@ -52,7 +49,7 @@ var Canvas = function Canvas(userSettings) {
 		extend(settings,userSettings);
 
 		window.addEventListener('nodeAdded', function (e) { 
-      		canvas.addNode(e.details);
+      		canvas.addNode(e.detail);
     	}, false);
 
     	window.addEventListener('newDataLoaded', function () {
@@ -74,14 +71,16 @@ var Canvas = function Canvas(userSettings) {
 
 	// Adjusts the size of text so that it will always fit inside a given shape.
 	function padText(text, container, amount){
-		while ((text.width()*1.001)<container.width()-(amount*2)) {
-			text.fontSize(text.fontSize() * 1.001);
+		while ((text.width() * 1.1)<container.width()-(amount*2)) {
+			text.fontSize(text.fontSize() * 1.1);
 
 			text.y((container.height() - text.height())/2);
 
-			text.width(container.width());
-			text.height(container.height());			
+
+
 		}
+		text.setX( container.getX() - text.getWidth()/2 );
+		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}	
 
 	// Node manipulation functions
@@ -91,16 +90,16 @@ var Canvas = function Canvas(userSettings) {
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
-		var nodeID = window.nodes.length+1;
+		var nodeID = network.getNodes().length;
 
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
 			id: nodeID,
-			label: namesList[Math.round(randomBetween(0,namesList.length-1))],
+			label: 'Undefined',
 			size: settings.defaultNodeSize,
 			type: settings.nodeTypes[randomType].name,
 			color: settings.nodeTypes[randomType].color,
-			strokeWidth: 4
+			strokeWidth: 0
 		};
 
 		extend(nodeOptions, options);
@@ -172,7 +171,7 @@ var Canvas = function Canvas(userSettings) {
 			align: 'center',
 			// offsetX: (nodeOptions.size*-1)-10, //left right
 			// offsetY:(nodeOptions.size*1)-10, //up down
-			fontStyle:500,
+			fontStyle:500
 
 		});
 
@@ -180,7 +179,7 @@ var Canvas = function Canvas(userSettings) {
 		
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
-			notify("dragstart",2);
+			notify("dragstart",1);
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -190,7 +189,7 @@ var Canvas = function Canvas(userSettings) {
 		});
 
 		nodeGroup.on('dragmove', function() {
-			notify("Dragmove",2);
+			notify("Dragmove",0);
 			var dragNode = this;
 			$.each(edgeLayer.children, function(index, value) {
 				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
@@ -211,7 +210,7 @@ var Canvas = function Canvas(userSettings) {
 		}); 
 
 		nodeGroup.on('dbltap dblclick', function() {
-			notify('double tap',2);
+			notify('double tap',1);
 
 			// Store this node in our special array for currently selected nodes.
 			selectedNodes.push(this);
@@ -237,7 +236,7 @@ var Canvas = function Canvas(userSettings) {
 		});      
 
 		nodeGroup.on('dragend', function() {
-			notify('dragend',2);
+			notify('dragend',1);
 
 			// set the context
 			var from = {};
@@ -261,18 +260,8 @@ var Canvas = function Canvas(userSettings) {
 			// Log the movement and save the graph state.
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
-			var currentNodes = session.returnData('nodes');
-			$.each(currentNodes, function(index, value) {
-				if (value.id === currentNode.attrs.id) {
-					// extend(value, currentNode.attrs);
-					value.coords = [currentNode.attrs.x,currentNode.attrs.y];
-					value.type = currentNode.attrs.type;
-					value.color = currentNode.attrs.color;
 
-				}
-
-			});			
-			session.addData('nodes', currentNodes, false);
+    		network.setNodeProperties(network.getNode(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y], type: currentNode.attrs.type, color: currentNode.attrs.color});
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -280,11 +269,12 @@ var Canvas = function Canvas(userSettings) {
 
 		});
 
-		padText(nodeLabel,nodeShape, 10);
+		padText(nodeLabel,nodeShape,10);
+
 		nodeGroup.add(nodeShape);
-		nodeGroup.add(nodeLabel);
+		nodeGroup.add(nodeLabel);	
+		
 		nodeLayer.add(nodeGroup);
-		nodeGroup.moveToBottom();
 		nodeLayer.draw();
 
 		// console.log('coords:'+nodeOptions.coords);

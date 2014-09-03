@@ -57,8 +57,6 @@ var Session = function Session(options) {
     } else {
       notify("No existing session found. Creating new session.", 3);
       session.id = dataStore.init(); // returns ID of an unused slot on the server. 
-      window.nodes = session.registerData('nodes', true);
-      window.edges = session.registerData('edges', true);
     }
     
     session.registerData("session");
@@ -94,8 +92,7 @@ var Session = function Session(options) {
     extend(session.userData, data);
     notify("Combined output is:", 0);
     notify(session.userData, 0);
-    window.nodes = session.registerData('nodes', true);
-    window.edges = session.registerData('edges', true);
+
     var newDataLoaded = new Event('newDataLoaded');
     window.dispatchEvent(newDataLoaded);        
     var unsavedChanges = new Event('unsavedChanges');
@@ -111,44 +108,46 @@ var Session = function Session(options) {
     lastSaveTime = new Date();
   };
 
-  session.addNode = function(options) {
-    var nodeOptions = {
-      id: window.nodes.length+1,
-      label: 'Josh'
-    };
+  // session.addNode = function(options) {
+  //   var nodeOptions = {
+  //     id: window.nodes.length+1,
+  //   };
 
-    extend(nodeOptions, options);
+  //   extend(nodeOptions, options);
 
-    window.nodes.push(nodeOptions);
-    var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeOptions}});
-    window.dispatchEvent(log);
-    var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeOptions});
-    window.dispatchEvent(nodeAddedEvent);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-  };
+  //   window.nodes.push(nodeOptions);
+  //   var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeOptions}});
+  //   window.dispatchEvent(log);
+  //   var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeOptions});
+  //   window.dispatchEvent(nodeAddedEvent);
+  //   var unsavedChanges = new Event('unsavedChanges');
+  //   window.dispatchEvent(unsavedChanges);
+  // };
 
-  session.addEdge = function(from, to) {
-    var alreadyExists = false;
+  // session.addEdge = function(from, to) {
+  //   var alreadyExists = false;
 
-    var edgeOptions = {
-      'from': from,
-      'to'  : to
-    };
+  //   var edgeOptions = {
+  //     'from': from,
+  //     'to'  : to
+  //   };
 
-    if (alreadyExists) {
-        return false;
-    }
+  //   if (alreadyExists) {
+  //       return false;
+  //   }
 
-    window.edges.push(edgeOptions);
-    var edgeAddedEvent = new Event('edgeAdded',{'options':edgeOptions});
-    window.dispatchEvent(edgeAddedEvent);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
+  //   window.edges.push(edgeOptions);
+  //   var edgeAddedEvent = new Event('edgeAdded',{'options':edgeOptions});
+  //   window.dispatchEvent(edgeAddedEvent);
+  //   var unsavedChanges = new Event('unsavedChanges');
+  //   window.dispatchEvent(unsavedChanges);
 
-  };  
+  // };  
 
   session.goToStage = function(stage) {
+    if (typeof stage === 'undefined') { return false; }
+
+    notify('Session is moving to stage '+stage, 3);
     session.options.fnBeforeStageChange();
     var newStage = stage;
     $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
@@ -175,14 +174,16 @@ var Session = function Session(options) {
   };
 
   session.registerData = function(dataKey, array) {
-    notify('Something registered a data store with the key "'+dataKey+'".', 2);
+    notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
     if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
-      notify(dataKey+' was not already registered. Creating.', 2);
+      notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
       if (array) {
         session.userData[dataKey] = [];
       } else {
         session.userData[dataKey] = {};
       }
+    } else {
+      notify ('A data store with this key already existed. Returning a pointer.',1);
     }
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
@@ -198,7 +199,6 @@ var Session = function Session(options) {
     if (!append) { append = false; }
 
     if (append === true) { // this is an array
-      console.log(typeof session.userData[dataKey].length);
       session.userData[dataKey].push(newData);
     } else {
       extend(session.userData[dataKey], newData);

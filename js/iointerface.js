@@ -28,7 +28,7 @@ var IOInterface = function IOInterface() {
   var interface = {};
 
   interface.init = function(existingID) {
-    notify('IOInterface initialising.', 1);
+    notify('ioInterface initialising.', 1);
     // If we don't have an existing ID, create a blank entry in mongodb and return its ID
     if (!existingID) {
       $.ajax({
@@ -60,26 +60,24 @@ var IOInterface = function IOInterface() {
   interface.save = function(userData) {
     delete session.userData._id;
     notify('IOInterface being asked to synchronise with data store:',2);
-    console.log(userData);
+    notify('Data to be saved: ', 1);
+    notify(userData, 1);
     $.each(userData, function(key,value) {
       localStorage.setObject(key, value);  
     });
 
-
-    var url = externalStoreRestUrl+'/collections/'+collection+'/'+id;
-    console.log(url);
-
     $.ajax({
-      url: url,
+      url: externalStoreRestUrl+'/collections/'+collection+'/'+id,
       type: 'PUT',
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify(userData),
       success: function(data) {
-        console.log(data);
+        notify('Result of saving was: ', 2);
+        notify(data, 2);
       }, 
-      error: function() {
-        console.log('failed');
+      error: function(data) {
+        notify('Saving failed! '+data, 100000);
       }
     });
     

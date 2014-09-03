@@ -21,6 +21,7 @@ var Logger = function Logger() {
   };
 
   logger.addToLog = function(e) {
+    notify("Event being added to log.",1);
     if (!e) { return false; }
 
     var data = {
@@ -29,9 +30,12 @@ var Logger = function Logger() {
       'eventTime': new Date()
     };
     // var humanDate = date.toString('H:mm:ss');
-    window.log.push(data);
+    // window.log.push(data);
+    session.addData('log', data, true);
     var eventLogged = new CustomEvent('eventLogged', {"detail":data});
     window.dispatchEvent(eventLogged);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
     return true;
   };
 
