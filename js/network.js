@@ -25,13 +25,6 @@ var Network = function Network() {
 
   network.init = function() {
 
-      // window.addEventListener('newDataLoaded', function () {
-      //   notify('Network noticed that new data has been loaded.',2); 
-      //     for (var i = 0; i < session.returnData('nodes').length; i++) {
-      //       network.addNode(session.returnData('nodes')[i]);
-      //     }
-      // }, false);
-
     notify('Network Initialising', 2);
     window.nodes = session.registerData('nodes', true);
     window.edges = session.registerData('edges', true);
@@ -40,17 +33,19 @@ var Network = function Network() {
   };
 
   network.addNode = function(properties) {
-
-    var localNodes = session.returnData('nodes');
+    var newNodeID = 0;
+    while (network.getNode(newNodeID) !== false) {
+      newNodeID++;
+    }
     var nodeProperties = {
-      id: localNodes.length,
+      id: newNodeID,
       properties: [],
       label: namesList[Math.round(randomBetween(0,namesList.length-1))],
       // color: 'red'
     };
     extend(nodeProperties, properties);    
     
-    localNodes.push(nodeProperties);
+    session.addData('nodes', nodeProperties, true);
     var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
     window.dispatchEvent(log);
     var nodeAddedEvent = new CustomEvent('nodeAdded',{"detail":nodeProperties});
@@ -65,22 +60,75 @@ var Network = function Network() {
     if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
       return false;
     }
-    var localEdges = session.returnData('edges');
+
     var edgeProperties = {
-      id: localEdges.length,
+      id: session.returnData('edges').length,
       properties: []
     };
 
     extend(edgeProperties, properties);
-    localEdges.push(edgeProperties);
-    var log = new CustomEvent('log', {"detail":{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
-    window.dispatchEvent(log);
-    var edgeAddedEvent = new CustomEvent('edgeAdded',{"detail":edgeProperties});
-    window.dispatchEvent(edgeAddedEvent);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
+    var alreadyExists = false;
+    var localEdges = session.returnData('edges');
+    for (var i = 0; i<localEdges.length; i++) {
+      if (localEdges[i].from === edgeProperties.from && localEdges[i].to === edgeProperties.to || localEdges[i].from === edgeProperties.to && localEdges[i].to === edgeProperties.from) {
+        alreadyExists = true;
+      }
+    }
 
-    return edgeProperties.id;
+    if(alreadyExists === false) {
+      session.addData('edges', edgeProperties, true);
+      var log = new CustomEvent('log', {"detail":{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
+      window.dispatchEvent(log);
+      var edgeAddedEvent = new CustomEvent('edgeAdded',{"detail":edgeProperties});
+      window.dispatchEvent(edgeAddedEvent);
+      var unsavedChanges = new Event('unsavedChanges');
+      window.dispatchEvent(unsavedChanges);
+
+      return edgeProperties.id;      
+    } else {
+      return false;
+    }
+
+  };
+
+  network.removeEdge = function(id) {
+    var localEdges = session.returnData('edges');
+    for (var i = 0; i<localEdges.length; i++) {
+      if (localEdges[i].id === id) {
+        localEdges.remove(id);
+        session.addData('edges', localEdges);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  network.removeNode = function(id) {
+    // Remove edges too
+    // Make this use .getNodeEdges
+    var localEdges = session.returnData('edges');
+    var unwanted = [];
+    for (var j = 0; j<localEdges.length; j++) {
+      if (localEdges[j].from === id || localEdges[j].to === id) {
+        unwanted.push(localEdges[j]);
+      }
+    }
+
+    for (var k = 0; k<unwanted.length; k++) {
+      localEdges.remove(unwanted[k]);
+    }
+
+    session.addData('edges', localEdges);
+
+    var localNodes = session.returnData('nodes');
+    for (var i = 0; i<localNodes.length; i++) {
+      if (localNodes[i].id === id) {
+        localNodes.remove(localNodes[i]);
+        session.addData('nodes', localNodes);
+        return true;
+      }
+    }
+    return false;
   };
 
   network.getNode = function(id) {
@@ -89,6 +137,7 @@ var Network = function Network() {
     for (var i = 0;i<localNodes.length; i++) {
       if (localNodes[i].id === id) {return localNodes[i]; }
     }
+    return false;
 
   };
 
@@ -135,7 +184,8 @@ var Network = function Network() {
   };
 
   network.getEdges = function(criteria) {
-    return network.filterObject(window.edges,criteria);
+    var localEdges = session.returnData('edges');
+    return network.filterObject(localEdges,criteria);
   };
 
   network.setProperties = function(object, properties) {

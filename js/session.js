@@ -20,13 +20,13 @@ var Session = function Session(options) {
   // custom events
 
   session.options = {
-    fnBeforeStageChange : function() {
-      var changeStageStartEvent = new Event('changeStageStart');
+    fnBeforeStageChange : function(oldStage, newStage) {
+      var changeStageStartEvent = new CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
       window.dispatchEvent(changeStageStartEvent);
 
     },
-    fnAfterStageChange : function() {
-      var changeStageEndEvent = new Event('changeStageEnd');
+    fnAfterStageChange : function(oldStage, newStage) {
+      var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
       window.dispatchEvent(changeStageEndEvent);
     }    
   };
@@ -78,9 +78,18 @@ var Session = function Session(options) {
 
   };
 
+  session.reset = function() {
+    localStorage.removeItem('activeSession');
+    localStorage.removeItem('nodes');
+    localStorage.removeItem('edges');
+    localStorage.removeItem('session');
+    localStorage.removeItem('log');
+    session.id = 0;
+  };
+
   session.saveManager = function() {
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(session.saveData, 5000);
+    saveTimer = setTimeout(session.saveData, 3000);
   };
 
   session.updateUserData = function(data) {
@@ -112,16 +121,17 @@ var Session = function Session(options) {
     if (typeof stage === 'undefined') { return false; }
 
     notify('Session is moving to stage '+stage, 3);
-    session.options.fnBeforeStageChange();
+    session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
     $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+session.stages[stage], function() {
         $content.transition({ opacity: '1'},400,'easeInSine');    
       });
     });                    
+    var oldStage = currentStage;
     currentStage = newStage;
     History.pushState({'stage': stage},null, '?stage='+stage);
-    session.options.fnAfterStageChange();
+    session.options.fnAfterStageChange(oldStage, currentStage);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };

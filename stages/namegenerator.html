@@ -10,9 +10,30 @@
     menu.addItem(canvasMenu, 'Download Network Data', 'icon-globe', null);
     menu.addItem(canvasMenu, 'Clear Graph', 'icon-globe', null);
 
+      var nodeAddedHandler = function(e) {
+        console.log('called');
+        canvas.addNode(e.detail);
+      };
+
+      var edgeAddedHandler = function(e) {
+        console.log('called');
+        canvas.addEdge(e.detail);
+      };      
+
+    window.addEventListener('nodeAdded', nodeAddedHandler, false);
+
+    window.addEventListener('edgeAdded', edgeAddedHandler, false);      
+
+
     window.addEventListener('changeStageStart', function (e) { 
-      menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
-      $('.new-node-form').remove(); // Remove the new node form 
+      // if (e.details.newStage !== '') {
+        menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
+        $('.new-node-form').remove(); // Remove the new node form 
+
+        window.removeEventListener('nodeAdded', nodeAddedHandler, false);
+        window.removeEventListener('edgeAdded', edgeAddedHandler, false);        
+      // }
+
     }, false);
 
   </script>

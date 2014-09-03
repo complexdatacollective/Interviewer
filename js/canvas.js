@@ -24,13 +24,13 @@ var Canvas = function Canvas(userSettings) {
 		celosiaorange: '#f47d44',
 		sand: '#ceb48d',
 		dazzlingblue: '#006bb6',
-		edge: '#bbb',
+		edge: '#e85657',
 		selected: 'gold',
 	};	
 
 	// Default settings
 	var settings = {
-		defaultNodeSize: 40,
+		defaultNodeSize: 35,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
@@ -47,21 +47,6 @@ var Canvas = function Canvas(userSettings) {
 		canvas.initKinetic();
 		canvas.drawUIComponents();
 		extend(settings,userSettings);
-
-		window.addEventListener('nodeAdded', function (e) { 
-      		canvas.addNode(e.detail);
-    	}, false);
-
-		window.addEventListener('edgeAdded', function (e) { 
-      		canvas.addEdge(e.detail);
-    	}, false);    	
-
-    	window.addEventListener('newDataLoaded', function () {
-    		notify('Canvas noticed that new data has been loaded.',2); 
-      		for (var i = 0; i < session.returnData('nodes').length; i++) {
-      			canvas.addNode(session.returnData('nodes')[i]);
-      		}
-    	}, false);
 
     	// Are there existing nodes? Display them.
       	for (var i = 0; i < session.returnData('nodes').length; i++) {
@@ -107,8 +92,8 @@ var Canvas = function Canvas(userSettings) {
 			label: 'Undefined',
 			size: settings.defaultNodeSize,
 			type: settings.nodeTypes[randomType].name,
-			color: settings.nodeTypes[randomType].color,
-			strokeWidth: 0
+			color: 'rgba(0,0,0,0.8)',
+			strokeWidth: 3
 		};
 
 		extend(nodeOptions, options);
@@ -133,7 +118,7 @@ var Canvas = function Canvas(userSettings) {
 			nodeShape = new Kinetic.Circle({
 				radius: nodeOptions.size,
 				fill:nodeOptions.color,
-				stroke: canvas.calculateStrokeColor(nodeOptions.color),
+				stroke: 'white',
 				strokeWidth: nodeOptions.strokeWidth
 			});
 			break;
@@ -229,7 +214,8 @@ var Canvas = function Canvas(userSettings) {
 
 			// If this makes a couple, link them.
 			if(selectedNodes.length === 2) {
-				
+				this.children[1].stroke('white');
+				this.children[0].stroke('white');
 				network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id});
 				selectedNodes = [];
 				nodeLayer.draw(); 
@@ -295,7 +281,8 @@ var Canvas = function Canvas(userSettings) {
 				duration:0.7,
 				easing: Kinetic.Easings.EaseOut
 			});
-			tween.play();            
+			tween.play();
+			network.setProperties(network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});           
 		}
 
 		return nodeGroup;
@@ -320,7 +307,7 @@ var Canvas = function Canvas(userSettings) {
 		var edge = new Kinetic.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 2,
-			opacity:0.5,
+			opacity:1,
 			stroke: settings.defaultEdgeColor,
 			// opacity: 0.8,
 			from: fromObject,
@@ -487,7 +474,7 @@ var Canvas = function Canvas(userSettings) {
 					var nodeOptions = {
 						label: $('.name-box').val()
 					};				
-					canvas.addNode(nodeOptions);
+					network.addNode(nodeOptions);
 					$('.name-box').val('');
 				}
 
