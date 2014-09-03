@@ -1,4 +1,4 @@
-/*global extend, session, randomBetween, Kinetic, modifyColor, notify, network */
+/*global extend, session, randomBetween, Kinetic, notify, network */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -59,17 +59,13 @@ var Canvas = function Canvas(userSettings) {
 
 	};
 
-
 	// Private functions
 
 	// Adjusts the size of text so that it will always fit inside a given shape.
 	function padText(text, container, amount){
 		while ((text.width() * 1.1)<container.width()-(amount*2)) {
 			text.fontSize(text.fontSize() * 1.1);
-
 			text.y((container.height() - text.height())/2);
-
-
 
 		}
 		text.setX( container.getX() - text.getWidth()/2 );
@@ -214,9 +210,15 @@ var Canvas = function Canvas(userSettings) {
 
 			// If this makes a couple, link them.
 			if(selectedNodes.length === 2) {
-				this.children[1].stroke('white');
-				this.children[0].stroke('white');
-				network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id});
+				console.log(selectedNodes);
+				selectedNodes[1].children[0].stroke('white');
+				selectedNodes[0].children[0].stroke('white');
+				if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
+					notify('Canvas removing edge.',2);
+					console.log({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id});
+					network.removeEdge(network.getEdges({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}));
+					network.removeEdge(network.getEdges({to: selectedNodes[0].attrs.id,from: selectedNodes[1].attrs.id}));
+				}
 				selectedNodes = [];
 				nodeLayer.draw(); 
 
@@ -292,16 +294,8 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.addEdge = function(properties) {
 		notify('Canvas is adding an edge.',2);
-		console.log(properties);
-		var alreadyExists = false;
 		var fromObject = network.getNode(properties.from);
 		var toObject = network.getNode(properties.to);
-		console.log(fromObject);
-		console.log(toObject);
-		if (alreadyExists) {
-		    // this.removeEdge(toRemove);
-		    return false;
-		}
 
 		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 		var edge = new Kinetic.Line({
@@ -323,24 +317,20 @@ var Canvas = function Canvas(userSettings) {
 		return true;   
 	};
 
-	canvas.removeEdge = function(edge) {
+	canvas.removeEdge = function(properties) {
+		var fromNode = network.getNode(properties.from);
+		var toNode = network.getNode(properties.to);
 		notify("Removing edge.");
 		$.each(edgeLayer.children, function(index, value) {
-			if (value === edge) {
+			if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
 				edgeLayer.children[index].remove();
 				edgeLayer.draw();
 			}
 		}); 
 
-		
-
 	};
 
 	// Misc functions
-
-	canvas.calculateStrokeColor = function(color) {
-		return modifyColor(color, 15);
-	};
 
 	canvas.clearGraph = function() {
 		edgeLayer.removeChildren();

@@ -11,18 +11,25 @@
     menu.addItem(canvasMenu, 'Clear Graph', 'icon-globe', null);
 
       var nodeAddedHandler = function(e) {
-        console.log('called');
         canvas.addNode(e.detail);
       };
 
       var edgeAddedHandler = function(e) {
-        console.log('called');
         canvas.addEdge(e.detail);
       };      
 
-    window.addEventListener('nodeAdded', nodeAddedHandler, false);
+      var nodeRemovedHandler = function(e) {
+        canvas.removeNode(e.detail);
+      };      
 
-    window.addEventListener('edgeAdded', edgeAddedHandler, false);      
+      var edgeRemovedHandler = function(e) {
+        canvas.removeEdge(e.detail);
+      };      
+
+    window.addEventListener('nodeAdded', nodeAddedHandler, false);
+    window.addEventListener('edgeAdded', edgeAddedHandler, false);
+    window.addEventListener('nodeRemoved', nodeRemovedHandler, false);
+    window.addEventListener('edgeRemoved', edgeRemovedHandler, false);      
 
 
     window.addEventListener('changeStageStart', function (e) { 
@@ -31,7 +38,9 @@
         $('.new-node-form').remove(); // Remove the new node form 
 
         window.removeEventListener('nodeAdded', nodeAddedHandler, false);
-        window.removeEventListener('edgeAdded', edgeAddedHandler, false);        
+        window.removeEventListener('edgeAdded', edgeAddedHandler, false);
+        window.removeEventListener('nodeRemoved', nodeRemovedHandler, false);
+        window.removeEventListener('edgeRemoved', edgeRemovedHandler, false);         
       // }
 
     }, false);
