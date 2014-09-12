@@ -1,69 +1,34 @@
 <div class="container full-height">
-	<div class="col-md-10 col-md-offset-1">
-	  	<h1>Who are the people you are close to?</h1>
-	  	<p class="lead">That is, people you see or talk to regularly and share your personal thoughts and feelings with.</p>
-		<div class="nameList"></div>
-	</div>
+
 </div>
 
-<div class="newNodeBox" style="position:absolute;top:300px;width:400px;left:50%;margin-left:-200px;padding:40px;border-radius:12px;background:black;">
-	<form role="form" id="step2">
-		<div class="col-md-12">
-	  		<div class="form-group">
-	  			<label class="sr-only" for="firstName">First Name:</label>
-			  	<input type="text" class="form-control firstName" id="firstName" placeholder="First Name" required>
-			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group">
-				<label class="sr-only" for="lastName">Last Name:</label>
-			  	<input type="text" class="form-control lastName" id="lastName" placeholder="Last Name" required>
-			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group">
-				<label class="sr-only" for="nickname">Nickname:</label>
-			  	<input type="text" class="form-control nickname" id="nickname" placeholder="Nick Name" required>
-			</div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group">
-				<label class="sr-only" for="age">Age:</label>
-			  	<input type="number" class="form-control age" id="age" placeholder="Age" required>
-			</div>
-		</div>
-		<div class="col-md-12">
-		  		<button type="submit" class="btn btn-primary submit-1">Continue</button>
-		</div>
-	</form>
-</div>
 
 
 <script>
-	
-	$('#firstName').focus();
 
-	$("#step2").submit(function( event ) {
-		$('#firstName').focus();
-	  	event.preventDefault();
-	  	var newNode = network.addNode({
-	  		label:$('#nickname').val(), 
-	  		type_t0: 'Alter', 
-	  		fname_t0: $('#firstName').val(),
-	  		lname_t0: $('#lastName').val(),
-	  		nname_t0: $('#nickname').val(),
-	  		ng_t0: 1,
-	  		age_p_t0: $('#age').val(),
-	  		dob_p_t0: new Date().getFullYear()-$('#age').val()
-	  	});
-	  	network.addEdge({
-	  		type: 'Social',
-	  		from: network.getNodes({type_t0:'Ego'})[0].id,
-	  		to: newNode,
-	  		k_or_p_t0: 'known'
-	 	 });
-
-	  	$('#step2').trigger("reset");
+	var namegenerator = new Namegenerator({
+		targetEl: $('.container'),
+    	variables: [
+      		{label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter'},
+      		{label:'First Name',variable:'fname_t0',target:'edge', private: false},
+      		{label:'Last Name',variable:'lname_t0',target:'edge', private: false},
+      		{label:'Nick Name',variable:'nname_t0',target:'edge', private: false},
+      		{label:'Age',variable:'age_p_t0',target:'edge', private: false},
+      		{label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:1}
+        ],
+    	heading: "Who are the people you are closest to?",
+    	subheading: "That is, people you see or talk to regularly and share your personal thoughts and feelings with."
 	});
+
+	// add existing nodes
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:1}), function(index,value) {
+    	var properties = {
+    		fname_t0: value.fname_t0,
+    		nname_t0: value.nname_t0,
+    		lname_t0: value.lname_t0,
+    		age_p_t0: value.age_p_t0
+    	}
+     	namegenerator.addToList(properties);
+    });
 
 </script>

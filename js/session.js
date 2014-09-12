@@ -8,7 +8,7 @@ var Session = function Session(options) {
   var $content = $('#content');
    
   // Establish a new IOInterface for loading and saving
-  var dataStore;
+  window.dataStore = {};
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
@@ -46,17 +46,17 @@ var Session = function Session(options) {
     }, false);
 
     // Create our data interface
-    dataStore = new IOInterface();
+    window.dataStore = new IOInterface();
     // Check for an in-progress session
     if (localStorage.getObject('activeSession')!== false) {
       session.id = localStorage.getObject('activeSession');
       notify("Existing session found (session id: "+session.id+"). Loading.", 3);
       // load data.
-      dataStore.init(session.id);
-      dataStore.load(session.updateUserData);
+      window.dataStore.init(session.id);
+      window.dataStore.load(session.updateUserData);
     } else {
       notify("No existing session found. Creating new session.", 3);
-      session.id = dataStore.init(); // returns ID of an unused slot on the server. 
+      session.id = window.dataStore.init(); // returns ID of an unused slot on the server. 
     }
     
     session.registerData("session");
@@ -76,7 +76,6 @@ var Session = function Session(options) {
       session.saveManager();
     }, false);
 
-
     var sessionMenu = menu.addMenu('Session','hi-icon-cog');
     menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
@@ -94,7 +93,8 @@ var Session = function Session(options) {
     localStorage.removeItem('log');
     session.id = 0;
     session.currentStage = 0;
-    dataStore.save(session.userData);
+    window.dataStore.save(session.userData);
+    History.pushState({'stage': 0},null, '?stage='+0);
     location.reload();
   };
 
@@ -110,6 +110,7 @@ var Session = function Session(options) {
     notify("session.userData is:", 1);
     notify(session.userData, 1);
     extend(session.userData, data);
+    // session.userData = $.extend(session.userData,data);
     notify("Combined output is:", 0);
     notify(session.userData, 0);
 
@@ -124,7 +125,7 @@ var Session = function Session(options) {
   };
 
   session.saveData = function() {
-    dataStore.save(session.userData);
+    window.dataStore.save(session.userData);
     lastSaveTime = new Date();
   };
 
@@ -136,6 +137,7 @@ var Session = function Session(options) {
     var newStage = stage;
     $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+session.stages[stage], function() {
+        // This never gets called if there is a JS error. Is there a way to ensure it is?
         $content.transition({ opacity: '1'},400,'easeInSine');    
       });
     });                    

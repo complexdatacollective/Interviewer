@@ -22,11 +22,40 @@ html, body {
     // width:96%;
 }
 
+table {
+    width: 100%; /* Optional */
+}
+
+thead, tbody { display: block; }
+
+tbody {
+    max-height: 600px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+    overflow-x: hidden;  /* Hide the horizontal scroll */
+}
+
+tbody td, thead th {
+    width: 35%;  /* Optional */
+}
+
 .black {
     width:100%;
     height:100%;
     background: black;
     position:absolute;
+}
+
+.newNodeBox {
+    position:absolute;
+    top:300px;
+    width:400px;
+    left:50%;
+    margin-left:-200px;
+    padding:40px;
+    border-radius:12px;
+    background:black;
+    transform: scale(0.1);
+    opacity: 0;
 }
 
 .content {
