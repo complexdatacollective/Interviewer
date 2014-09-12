@@ -1,4 +1,4 @@
-/*global extend, session, randomBetween, Kinetic, notify, network */
+/*global extend, session, randomBetween, Kinetic, notify, network, menu */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -11,6 +11,7 @@ var Canvas = function Canvas(userSettings) {
 	var selectedNodes = [];
 	var menuOpen = false;
 	var cancelKeyBindings = false;
+	var canvasMenu;
 
 	// Colours
 	var colors = {
@@ -42,23 +43,6 @@ var Canvas = function Canvas(userSettings) {
 		{'name':'Professional','color':colors.violettulip}]
 	};
 
-	canvas.init = function () {
-		notify('Canvas initialising.', 1);
-		canvas.initKinetic();
-		canvas.drawUIComponents();
-		extend(settings,userSettings);
-
-    	// Are there existing nodes? Display them.
-      	for (var i = 0; i < session.returnData('nodes').length; i++) {
-      		canvas.addNode(session.returnData('nodes')[i]);
-    	}    
-
-    	for (var j = 0; j < session.returnData('edges').length; j++) {
-      		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
-    	}    	
-
-	};
-
 	// Private functions
 
 	// Adjusts the size of text so that it will always fit inside a given shape.
@@ -71,6 +55,104 @@ var Canvas = function Canvas(userSettings) {
 		text.setX( container.getX() - text.getWidth()/2 );
 		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}	
+
+	// Private event handling functions
+	var nodeAddedHandler = function(e) {
+		canvas.addNode(e.detail);
+	};
+
+	var edgeAddedHandler = function(e) {
+		canvas.addEdge(e.detail);
+	};      
+
+	var nodeRemovedHandler = function(e) {
+		canvas.removeNode(e.detail);
+	};      
+
+	var edgeRemovedHandler = function(e) {
+		canvas.removeEdge(e.detail);
+	}; 
+
+	var keyPressHandler = function(e) {
+		if (!cancelKeyBindings) {
+
+			if (!menuOpen) {
+				//open the menu
+				$('.new-node-form').addClass('node-form-open');
+				$('.content').addClass('blurry'); //blur content background
+				menuOpen = true;
+				$('.name-box').focus();					
+			}
+
+			// Prevent accidental backspace navigation
+			if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
+				e.preventDefault();
+			}
+
+			// Enter key = create new node
+			if (event.which === 13) {
+				//close menu
+				$('.new-node-form').removeClass('node-form-open');
+				$('.content').removeClass('blurry');
+				menuOpen = false;
+				var nodeOptions = {
+					label: $('.name-box').val()
+				};				
+				network.addNode(nodeOptions);
+				$('.name-box').val('');
+			}
+
+		}
+	};
+
+	var stageChangeHandler = function() {
+		canvas.destroy();
+	};
+
+
+	canvas.init = function () {
+		notify('Canvas initialising.', 1);
+		canvas.initKinetic();
+		canvas.drawUIComponents();
+		extend(settings,userSettings);
+
+	   	canvasMenu = menu.addMenu('Canvas','hi-icon-user');
+
+	    menu.addItem(canvasMenu, 'Load Network', 'icon-globe', null);
+	    menu.addItem(canvasMenu, 'Create Random Graph', 'icon-globe', null);
+	    menu.addItem(canvasMenu, 'Download Network Data', 'icon-globe', null);
+	    menu.addItem(canvasMenu, 'Clear Graph', 'icon-globe', null);          
+
+	    window.addEventListener('nodeAdded', nodeAddedHandler, false);
+	    window.addEventListener('edgeAdded', edgeAddedHandler, false);
+	    window.addEventListener('nodeRemoved', nodeRemovedHandler, false);
+	    window.addEventListener('edgeRemoved', edgeRemovedHandler, false);
+	    window.addEventListener('changeStageStart', stageChangeHandler, false);    
+
+    	// Are there existing nodes? Display them.
+      	for (var i = 0; i < session.returnData('nodes').length; i++) {
+      		canvas.addNode(session.returnData('nodes')[i]);
+    	}    
+
+    	for (var j = 0; j < session.returnData('edges').length; j++) {
+      		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
+    	}    	
+
+	};
+
+	canvas.destroy = function() {
+
+        menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
+        $('.new-node-form').remove(); // Remove the new node form 
+
+        window.removeEventListener('nodeAdded', nodeAddedHandler, false);
+        window.removeEventListener('edgeAdded', edgeAddedHandler, false);
+        window.removeEventListener('nodeRemoved', nodeRemovedHandler, false);
+        window.removeEventListener('edgeRemoved', edgeRemovedHandler, false);
+        window.removeEventListener('changeStageStart', stageChangeHandler, false);
+        $(document).off("keypress", keyPressHandler); 
+
+	};
 
 	// Node manipulation functions
 
@@ -215,9 +297,7 @@ var Canvas = function Canvas(userSettings) {
 				selectedNodes[0].children[0].stroke('white');
 				if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
 					notify('Canvas removing edge.',2);
-					console.log({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id});
 					network.removeEdge(network.getEdges({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}));
-					network.removeEdge(network.getEdges({to: selectedNodes[0].attrs.id,from: selectedNodes[1].attrs.id}));
 				}
 				selectedNodes = [];
 				nodeLayer.draw(); 
@@ -318,10 +398,19 @@ var Canvas = function Canvas(userSettings) {
 	};
 
 	canvas.removeEdge = function(properties) {
+
 		var fromNode = network.getNode(properties.from);
 		var toNode = network.getNode(properties.to);
 		notify("Removing edge.");
-		$.each(edgeLayer.children, function(index, value) {
+		
+
+
+		// This function is failing because two nodes are matching below
+
+
+		$.each(canvas.getKineticEdges(), function(index, value) {
+			console.log(index);
+			console.log(value);
 			if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
 				edgeLayer.children[index].remove();
 				edgeLayer.draw();
@@ -439,40 +528,11 @@ var Canvas = function Canvas(userSettings) {
 
 
 		// Key bindings
-		$(document).on("keypress", function (e) {
-			if (!cancelKeyBindings) {
-
-				if (!menuOpen) {
-					//open the menu
-					$('.new-node-form').addClass('node-form-open');
-					$('.content').addClass('blurry'); //blur content background
-					menuOpen = true;
-					$('.name-box').focus();					
-				}
-
-				// Prevent accidental backspace navigation
-				if (e.which === 8 && !$(e.target).is("input, textarea, div")) {
-					e.preventDefault();
-				}
-
-				// Enter key = create new node
-				if (event.which === 13) {
-					//close menu
-					$('.new-node-form').removeClass('node-form-open');
-					$('.content').removeClass('blurry');
-					menuOpen = false;
-					var nodeOptions = {
-						label: $('.name-box').val()
-					};				
-					network.addNode(nodeOptions);
-					$('.name-box').val('');
-				}
-
-			}
-			
-		});
+		$(document).on("keypress", keyPressHandler);
 
 	};
+
+
 
 	// Get & set functions
 

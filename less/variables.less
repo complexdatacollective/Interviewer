@@ -15,7 +15,7 @@
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          20px;
+@font-size-base:          17px;
 @font-size-large:         ceil((@font-size-base * 2.05)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
@@ -50,14 +50,14 @@
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-@padding-base-vertical:     6px;
-@padding-base-horizontal:   12px;
+@padding-base-vertical:     8px;
+@padding-base-horizontal:   14px;
 
-@padding-large-vertical:    10px;
-@padding-large-horizontal:  16px;
+@padding-large-vertical:    12px;
+@padding-large-horizontal:  18px;
 
-@padding-small-vertical:    5px;
-@padding-small-horizontal:  10px;
+@padding-small-vertical:    8px;
+@padding-small-horizontal:  12px;
 
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     5px;
@@ -65,9 +65,9 @@
 @line-height-large:         1.33;
 @line-height-small:         1.5;
 
-@border-radius-base:        4px;
-@border-radius-large:       6px;
-@border-radius-small:       3px;
+@border-radius-base:        8px;
+@border-radius-large:       12px;
+@border-radius-small:       6px;
 
 //** Global color for active items (e.g., navs or dropdowns).
 @component-active-color:    #fff;
@@ -111,9 +111,9 @@
 @btn-default-bg:                 #fff;
 @btn-default-border:             #ccc;
 
-@btn-primary-color:              #fff;
-@btn-primary-bg:                 @brand-primary;
-@btn-primary-border:             darken(@btn-primary-bg, 5%);
+@btn-primary-color:              @brand-primary;
+@btn-primary-bg:                 transparent;
+@btn-primary-border:             @btn-primary-color;
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
@@ -139,18 +139,19 @@
 //##
 
 //** `<input>` background color
-@input-bg:                       #fff;
+@input-bg:                       #000;
 //** `<input disabled>` background color
-@input-bg-disabled:              @gray-lighter;
+@input-bg-disabled:              #000;
 
 //** Text color for `<input>`s
-@input-color:                    @gray;
+@input-color:                    #fff;
 //** `<input>` border color
-@input-border:                   #ccc;
+@input-border:                   #333;
 //** `<input>` border radius
 @input-border-radius:            @border-radius-base;
 //** Border color for inputs on focus
-@input-border-focus:             #66afe9;
+@input-border-focus:             @brand-primary;
+// @input-border-focus:             transparent;
 
 //** Placeholder text color
 @input-color-placeholder:        @gray-light;
@@ -263,7 +264,7 @@
 //** Number of columns in the grid.
 @grid-columns:              12;
 //** Padding between columns. Gets divided in half for the left and right.
-@grid-gutter-width:         250px;
+@grid-gutter-width:         30px;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 @grid-float-breakpoint:     @screen-sm-min;

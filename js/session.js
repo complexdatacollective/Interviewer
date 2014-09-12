@@ -1,4 +1,4 @@
-/* global History, extend, IOInterface, notify */
+/* global History, extend, IOInterface, notify, menu */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -12,7 +12,7 @@ var Session = function Session(options) {
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
-  session.stages = ['intro.html','namegenerator.html'];
+  session.stages = ['1.html','2.html','namegenerator.html'];
   
   var saveTimer;
 
@@ -76,15 +76,26 @@ var Session = function Session(options) {
       session.saveManager();
     }, false);
 
+
+    var sessionMenu = menu.addMenu('Session','hi-icon-cog');
+    menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
+    menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
+    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { return true; });
+    menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
+
   };
 
   session.reset = function() {
+    notify("Resetting session.",2);
     localStorage.removeItem('activeSession');
     localStorage.removeItem('nodes');
     localStorage.removeItem('edges');
     localStorage.removeItem('session');
     localStorage.removeItem('log');
     session.id = 0;
+    session.currentStage = 0;
+    dataStore.save(session.userData);
+    location.reload();
   };
 
   session.saveManager = function() {
@@ -118,12 +129,12 @@ var Session = function Session(options) {
   };
 
   session.goToStage = function(stage) {
-    if (typeof stage === 'undefined') { return false; }
+    if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
 
     notify('Session is moving to stage '+stage, 3);
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
-    $content.transition({ opacity: '0'},400,'easeInSine').promise().done( function(){
+    $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+session.stages[stage], function() {
         $content.transition({ opacity: '1'},400,'easeInSine');    
       });

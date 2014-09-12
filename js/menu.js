@@ -25,6 +25,9 @@ var Menu = function Menu(options) {
 
     menu.options = {
       onBeforeOpen : function() {
+        $('.menu-btn').transition({opacity:0});
+        $('.menu-btn').hide();
+        $('.black').hide();
         $('.arrow-right').transition({right:-550});
         $('.arrow-left').transition({left:-550});
         $('.content').addClass("pushed");
@@ -36,6 +39,7 @@ var Menu = function Menu(options) {
         $('.content').removeClass("pushed");
       },
       onAfterClose : function() {
+        $('.black').show();
         $('.arrow-right').transition({right:0},1000);
         $('.arrow-left').transition({left:0},1000);
       }
@@ -66,20 +70,15 @@ var Menu = function Menu(options) {
         } else {
             isAnimating = true;
             if(targetMenu.expanded === true) {
-                // $('.morph-content').css('z-index',0);
                 menu.options.onBeforeClose();
                 menuContent.removeClass('active');
-                menu.options.onAfterClose();
+                setTimeout(menu.options.onAfterClose, 500);
                 isAnimating = false;
             } else {
-                $('.menu-btn').transition({opacity:0});
-                $('.menu-btn').hide();
-                // $('.morph-content').css('z-index',9999);
                 menu.options.onBeforeOpen();
                 menuContent.addClass('active');
-                menu.options.onAfterOpen();
+                setTimeout(menu.options.onAfterOpen, 500);
                 isAnimating = false;
-
             }
 
         }
@@ -105,9 +104,6 @@ var Menu = function Menu(options) {
                 }, 25 );
             }
         }, 25 );
-
-
-
     };
 
     menu.addMenu = function(name, icon) {

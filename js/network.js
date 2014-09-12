@@ -39,7 +39,6 @@ var Network = function Network() {
     }
     var nodeProperties = {
       id: newNodeID,
-      properties: [],
       label: namesList[Math.round(randomBetween(0,namesList.length-1))],
       // color: 'red'
     };
@@ -62,8 +61,7 @@ var Network = function Network() {
     }
 
     var edgeProperties = {
-      id: session.returnData('edges').length,
-      properties: []
+      id: session.returnData('edges').length
     };
 
     extend(edgeProperties, properties);

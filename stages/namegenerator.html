@@ -2,47 +2,4 @@
 
   <script>
     var canvas = new Canvas();
-
-    var canvasMenu = menu.addMenu('Canvas','hi-icon-user');
-
-    menu.addItem(canvasMenu, 'Load Network', 'icon-globe', null);
-    menu.addItem(canvasMenu, 'Create Random Graph', 'icon-globe', null);
-    menu.addItem(canvasMenu, 'Download Network Data', 'icon-globe', null);
-    menu.addItem(canvasMenu, 'Clear Graph', 'icon-globe', null);
-
-      var nodeAddedHandler = function(e) {
-        canvas.addNode(e.detail);
-      };
-
-      var edgeAddedHandler = function(e) {
-        canvas.addEdge(e.detail);
-      };      
-
-      var nodeRemovedHandler = function(e) {
-        canvas.removeNode(e.detail);
-      };      
-
-      var edgeRemovedHandler = function(e) {
-        canvas.removeEdge(e.detail);
-      };      
-
-    window.addEventListener('nodeAdded', nodeAddedHandler, false);
-    window.addEventListener('edgeAdded', edgeAddedHandler, false);
-    window.addEventListener('nodeRemoved', nodeRemovedHandler, false);
-    window.addEventListener('edgeRemoved', edgeRemovedHandler, false);      
-
-
-    window.addEventListener('changeStageStart', function (e) { 
-      // if (e.details.newStage !== '') {
-        menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
-        $('.new-node-form').remove(); // Remove the new node form 
-
-        window.removeEventListener('nodeAdded', nodeAddedHandler, false);
-        window.removeEventListener('edgeAdded', edgeAddedHandler, false);
-        window.removeEventListener('nodeRemoved', nodeRemovedHandler, false);
-        window.removeEventListener('edgeRemoved', edgeRemovedHandler, false);         
-      // }
-
-    }, false);
-
   </script>

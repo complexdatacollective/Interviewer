@@ -42,7 +42,7 @@ var IOInterface = function IOInterface() {
           notify("id from last transaction: "+id, 3);
           session.registerData('session');
           localStorage.setObject('activeSession', id);
-          session.addData('session', {sessionid: id});
+          session.addData('session', {sessionID: id});
           return id;
         },
         error: function () {
@@ -56,6 +56,7 @@ var IOInterface = function IOInterface() {
     }
 
   };
+
 
   interface.save = function(userData) {
     delete session.userData._id;

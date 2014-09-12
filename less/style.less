@@ -16,10 +16,26 @@ html, body {
     overflow:hidden;
 }
 
+*:focus {outline: none !important;}
+
+.form-control {
+    // width:96%;
+}
+
+.black {
+    width:100%;
+    height:100%;
+    background: black;
+    position:absolute;
+}
+
 .content {
     height:100%;
     background: @content-bg;
     // padding-top:100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 input[type=radio]:checked + label>img {
@@ -36,7 +52,11 @@ input[type=radio]:checked + label>img {
     user-select: none;
 }
 
-.Network-menu {
+.full-height {
+    height:100%;
+}
+
+.Session-menu {
     background:@brand-primary !important;
 }
 
@@ -46,7 +66,7 @@ input[type=radio]:checked + label>img {
 
 .new-node-form {
     position:fixed;
-    top:-303px;
+    top:-333px;
     left:0;
     width:100%;
     height:auto;
