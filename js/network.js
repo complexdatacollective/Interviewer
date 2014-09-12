@@ -56,12 +56,14 @@ var Network = function Network() {
   };
 
   network.addEdge = function(properties) {
+
     if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
       return false;
     }
 
     var edgeProperties = {
-      id: session.returnData('edges').length
+      id: session.returnData('edges').length,
+      type: "Default"
     };
 
     extend(edgeProperties, properties);
@@ -69,7 +71,12 @@ var Network = function Network() {
     var localEdges = session.returnData('edges');
     for (var i = 0; i<localEdges.length; i++) {
       if (localEdges[i].from === edgeProperties.from && localEdges[i].to === edgeProperties.to || localEdges[i].from === edgeProperties.to && localEdges[i].to === edgeProperties.from) {
-        alreadyExists = true;
+        //to and from match. what about type? 
+        if(localEdges[i].type === edgeProperties.type) {
+          if (localEdges[i].type === edgeProperties.type) {
+            alreadyExists = true;
+          }
+        }
       }
     }
 
@@ -160,19 +167,21 @@ var Network = function Network() {
   network.filterObject = function(targetArray,criteria) {
 
     if (!criteria) { return false; }
-
     // Get nodes using .filter(). Function is called for each of nodes.Nodes.
     var result = targetArray.filter(function(el){
+      var match = true;
+      for (var criteriaKey in criteria) {
+          if (el[criteriaKey] !== undefined) {
+            // current criteria exists in object.
+            if (el[criteriaKey] !== criteria[criteriaKey]) {
+              match = false;
+            }
+            
+          }      
+      }
 
-      // Iterate through the properties of this node.
-      var keys = Object.keys(el);
-      for (var i = 0; i < keys.length; i++) {
-
-        // Check if the current property exists in the criteria object
-        // If it does, check if the criteria and the object value match.
-        if (criteria[keys[i]] !== undefined && el[keys[i]] === criteria[keys[i]]) {
-          return el;
-        }
+      if (match === true) {
+        return el;
       }
 
     });
@@ -187,7 +196,6 @@ var Network = function Network() {
     } else {
       return localNodes;
     }
-    
   };
 
   network.getNodeInboundEdges = function(nodeID) {
@@ -197,6 +205,7 @@ var Network = function Network() {
   network.getNodeOutboundEdges = function(nodeID) {
     return network.getEdges({from:nodeID});
   };  
+
   network.getNodeEdges = function(nodeID) {
     if (network.getNode(nodeID) === false) {
       return false;
@@ -209,7 +218,11 @@ var Network = function Network() {
 
   network.getEdges = function(criteria) {
     var localEdges = session.returnData('edges');
-    return network.filterObject(localEdges,criteria);
+    if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
+      return network.filterObject(localEdges,criteria);  
+    } else {
+      return localEdges;
+    }
   };
 
   network.setProperties = function(object, properties) {
