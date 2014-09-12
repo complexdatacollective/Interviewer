@@ -149,6 +149,23 @@ var Network = function Network() {
     return false;
   };
 
+  network.updateEdge = function(id, properties) {
+    if(network.getNode(id) === false || properties === undefined) {
+      return false;
+    }
+
+    var edge = network.getEdge(id);
+    var edgeUpdateEvent, log;
+    extend(edge, properties);
+    edgeUpdateEvent = new CustomEvent('edgeUpdatedEvent',{"detail":edge});
+    window.dispatchEvent(edgeUpdateEvent);
+    log = new CustomEvent('log', {"detail":{'eventType': 'edgeUpdate', 'eventObject':edge}});
+    window.dispatchEvent(log);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
+
+  };
+
   network.getNode = function(id) {
     if (id === undefined) { return false; }
     var localNodes = session.returnData('nodes');
@@ -175,8 +192,7 @@ var Network = function Network() {
             // current criteria exists in object.
             if (el[criteriaKey] !== criteria[criteriaKey]) {
               match = false;
-            }
-            
+            }  
           }      
       }
 

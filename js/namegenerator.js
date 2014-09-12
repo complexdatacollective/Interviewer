@@ -16,7 +16,7 @@ var Namegenerator = function Namegenerator(options) {
   var nodeBoxOpen = false;
 
   var keyPressHandler = function(e) {
-    if (e.keyCode === 13 && !$(e.target).is("td")) {
+    if (e.keyCode === 13 && !$(e.target).is("input, td")) {
       if (!nodeBoxOpen) {
         namegenerator.openNodeBox();
       } else {
@@ -189,8 +189,17 @@ var Namegenerator = function Namegenerator(options) {
 
   };
 
-  namegenerator.update = function() {
+  namegenerator.update = function(id) {
+    var targetEdge = {};
+      $.each(namegenerator.options.variables, function(index, value){
+        if (value.private === true) {
+          targetEdge[value.variable] = value.value;
+        } else {
+          targetEdge[value.variable] = $('tr[data-index='+id+']').children('.'+value.variable).html();
+        }
+      });
 
+      network.updateEdge(id, targetEdge);
   };
 
   // namegenerator.remove = function() {
