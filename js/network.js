@@ -149,13 +149,13 @@ var Network = function Network() {
     return false;
   };
 
-  network.updateEdge = function(id, properties) {
-    if(network.getNode(id) === false || properties === undefined) {
+  network.updateEdge = function(id, properties, callback) {
+    if(network.getEdge(id) === false || properties === undefined) {
       return false;
     }
-
     var edge = network.getEdge(id);
     var edgeUpdateEvent, log;
+
     extend(edge, properties);
     edgeUpdateEvent = new CustomEvent('edgeUpdatedEvent',{"detail":edge});
     window.dispatchEvent(edgeUpdateEvent);
@@ -163,6 +163,29 @@ var Network = function Network() {
     window.dispatchEvent(log);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
+    if(callback) {
+      callback();
+    }
+
+  };
+
+  network.updateNode = function(id, properties, callback) {
+    if(network.getNode(id) === false || properties === undefined) {
+      return false;
+    }
+    var node = network.getNode(id);
+    var nodeUpdateEvent, log;
+
+    extend(node, properties);
+    nodeUpdateEvent = new CustomEvent('nodeUpdatedEvent',{"detail":node});
+    window.dispatchEvent(nodeUpdateEvent);
+    log = new CustomEvent('log', {"detail":{'eventType': 'nodeUpdate', 'eventObject':node}});
+    window.dispatchEvent(log);
+    var unsavedChanges = new Event('unsavedChanges');
+    window.dispatchEvent(unsavedChanges);
+    if(callback) {
+      callback();
+    }
 
   };
 
@@ -177,8 +200,12 @@ var Network = function Network() {
   };
 
   network.getEdge = function(id) {
-    
-    return window.edges[id];
+    if (id === undefined) { return false; }
+    var localEdges = session.returnData('edges');
+    for (var i = 0;i<localEdges.length; i++) {
+      if (localEdges[i].id === id) {return localEdges[i]; }
+    }
+    return false;
   };
 
   network.filterObject = function(targetArray,criteria) {

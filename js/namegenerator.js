@@ -16,12 +16,21 @@ var Namegenerator = function Namegenerator(options) {
   var nodeBoxOpen = false;
 
   var keyPressHandler = function(e) {
+
+    console.log(e.keyCode);
+    console.log(e.target);
     if (e.keyCode === 13 && !$(e.target).is("input, td")) {
       if (!nodeBoxOpen) {
         namegenerator.openNodeBox();
       } else {
         $("#step2").submit();
       }
+    } else if (e.keyCode === 13 && $(e.target).is("td")) {
+      console.log('yo');
+      e.preventDefault();
+      var id = $(e.target).parent().data('index');
+      console.log(id);
+      namegenerator.update(id);
     }
 
     if (e.keyCode === 27) {
@@ -41,7 +50,12 @@ var Namegenerator = function Namegenerator(options) {
       if ($('#lname_t0').val().length > 0 ) {
         lname +=".";
       }
-      $('#nname_t0').val(lname);  
+
+      var updateName = function() {
+        $('#nname_t0').val(lname);
+      };
+
+      setTimeout(updateName,0);  
     }
   };
 
@@ -105,7 +119,7 @@ var Namegenerator = function Namegenerator(options) {
     });
 
     // Event listeners
-    $(document).on("keyup", keyPressHandler);
+    $(document).on("keypress", keyPressHandler);
     window.addEventListener('nodeAdded', newNodeHandler, false);
     $('.cancel').on('click', cancelBtnHandler);
     $("#fname_t0, #lname_t0").keyup(inputKeypressHandler);
@@ -190,6 +204,8 @@ var Namegenerator = function Namegenerator(options) {
   };
 
   namegenerator.update = function(id) {
+    console.log('ng update');
+    console.log(id);
     var targetEdge = {};
       $.each(namegenerator.options.variables, function(index, value){
         if (value.private === true) {
