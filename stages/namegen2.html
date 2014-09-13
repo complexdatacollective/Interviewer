@@ -7,14 +7,17 @@
 	var namegenerator = new Namegenerator({
 		targetEl: $('.container'),
     	variables: [
-      		{label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter'},
-      		{label:'First Name',variable:'fname_t0',target:'edge', private: false},
-      		{label:'Last Name',variable:'lname_t0',target:'edge', private: false},
-      		{label:'Nick Name',variable:'nname_t0',target:'edge', private: false},
-      		{label:'Age',variable:'age_p_t0',target:'edge', private: false},
-      		{label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:2},
-      		{label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known'}
-      	
+          {label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter', type:'text', required:true},
+          {label:'type',variable:'type',target:'edge', private: true, value:'Dyad', type:'text', required:true},
+          {label:'First Name',variable:'fname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Last Name',variable:'lname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Nick Name',variable:'nname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Age',variable:'age_p_t0',target:'edge', private: false, type:'number', required:true},
+          {label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:2, type:'number', required:true},
+          {label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known', type:'number', required:true},
+          {label:'Relationship Category',variable:'reltype_main_t0',target:'edge', private: false, type:'relationship', required:true},
+          {label:'Specific Relationship',variable:'reltype_sub_t0',target:'edge', private: false, type:'subrelationship', required:false},
+          {label:'How would you describe the relationship?',variable:'reltype_oth_t0',target:'edge', private: false, type:'text', required:false}
         ],
     	heading: "Are there other people who would ive time and energy to help you?",
     	subheading: ""
@@ -22,15 +25,12 @@
 
 	// add existing nodes
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:2}), function(index,value) {
-    	var properties = {
-    		edgeID: value.id,
-    		fname_t0: value.fname_t0,
-    		nname_t0: value.nname_t0,
-    		lname_t0: value.lname_t0,
-    		age_p_t0: value.age_p_t0
-    	}
-     	namegenerator.addToList(properties);
+      var properties = {
+        edgeID: value.id,
+      }
 
+      extend(value,properties)
+      namegenerator.addToList(value);
     });
 
 </script>

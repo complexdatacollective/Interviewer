@@ -39,7 +39,6 @@ var Network = function Network() {
     }
     var nodeProperties = {
       id: newNodeID
-      // color: 'red'
     };
     extend(nodeProperties, properties);    
     

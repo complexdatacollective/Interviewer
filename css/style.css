@@ -6163,6 +6163,27 @@ body {
   padding: 0;
   font-size: 13px;
 }
+.list-container {
+  width: 100%;
+  border: 1px solid white;
+  max-height: 550px;
+  overflow: scroll;
+}
+.list-container .item {
+  background: #eee;
+  color: black;
+  padding: 20px;
+  margin: 15px;
+  cursor: pointer;
+  cursor: hand;
+  border-radius: 10px;
+  border: 2px solid #eee;
+}
+.list-container .item h3 {
+  display: inline;
+  margin: 0;
+  font-size: 25px;
+}
 .alter-count-box {
   position: absolute;
   bottom: 20px;
