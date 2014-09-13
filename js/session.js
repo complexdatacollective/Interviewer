@@ -12,7 +12,7 @@ var Session = function Session(options) {
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
-  session.stages = ['1.html','2.html','namegenerator.html'];
+  session.stages = ['intro.html','namegen1.html','namegen2.html','namegen3.html','namegen4.html'];
   
   var saveTimer;
 

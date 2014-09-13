@@ -1,0 +1,36 @@
+<div class="container full-height">
+
+</div>
+
+<script>
+
+	var namegenerator = new Namegenerator({
+		targetEl: $('.container'),
+    	variables: [
+      		{label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter'},
+      		{label:'First Name',variable:'fname_t0',target:'edge', private: false},
+      		{label:'Last Name',variable:'lname_t0',target:'edge', private: false},
+      		{label:'Nick Name',variable:'nname_t0',target:'edge', private: false},
+      		{label:'Age',variable:'age_p_t0',target:'edge', private: false},
+      		{label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:2},
+      		{label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known'}
+      	
+        ],
+    	heading: "Are there other people who would ive time and energy to help you?",
+    	subheading: ""
+	});
+
+	// add existing nodes
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:2}), function(index,value) {
+    	var properties = {
+    		edgeID: value.id,
+    		fname_t0: value.fname_t0,
+    		nname_t0: value.nname_t0,
+    		lname_t0: value.lname_t0,
+    		age_p_t0: value.age_p_t0
+    	}
+     	namegenerator.addToList(properties);
+
+    });
+
+</script>

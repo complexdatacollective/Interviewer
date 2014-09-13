@@ -6136,26 +6136,54 @@ body {
 *:focus {
   outline: none !important;
 }
-table {
+.nameList {
+  max-height: 700px;
   width: 100%;
-  /* Optional */
+  overflow: scroll;
 }
-thead,
-tbody {
-  display: block;
+.card {
+  width: 215px;
+  height: 300px;
+  border: 1px solid white;
+  display: inline-block;
+  padding: 20px;
+  margin: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  cursor: hand;
 }
-tbody {
-  max-height: 600px;
-  /* Just for the demo          */
-  overflow-y: auto;
-  /* Trigger vertical scroll    */
-  overflow-x: hidden;
-  /* Hide the horizontal scroll */
+.card h4 {
+  margin-top: 0;
 }
-tbody td,
-thead th {
-  width: 35%;
-  /* Optional */
+.card ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+.alter-count-box {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  height: 100px;
+  width: 100px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 55px;
+  text-align: center;
 }
 .black {
   width: 100%;
@@ -6165,10 +6193,6 @@ thead th {
 }
 .newNodeBox {
   position: absolute;
-  top: 300px;
-  width: 400px;
-  left: 50%;
-  margin-left: -200px;
   padding: 40px;
   border-radius: 12px;
   background: black;

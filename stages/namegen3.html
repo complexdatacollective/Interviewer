@@ -2,8 +2,6 @@
 
 </div>
 
-
-
 <script>
 
 	var namegenerator = new Namegenerator({
@@ -14,14 +12,16 @@
       		{label:'Last Name',variable:'lname_t0',target:'edge', private: false},
       		{label:'Nick Name',variable:'nname_t0',target:'edge', private: false},
       		{label:'Age',variable:'age_p_t0',target:'edge', private: false},
-      		{label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:1}
+      		{label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:3},
+      		{label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known'}
+      	
         ],
-    	heading: "Who are the people you are closest to?",
-    	subheading: "That is, people you see or talk to regularly and share your personal thoughts and feelings with."
+    	heading: "Are there other people who you could count on to lend or give you $25, or something of equal or greater value?",
+    	subheading: ""
 	});
 
 	// add existing nodes
-    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:1}), function(index,value) {
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:3}), function(index,value) {
     	var properties = {
     		edgeID: value.id,
     		fname_t0: value.fname_t0,
@@ -30,6 +30,7 @@
     		age_p_t0: value.age_p_t0
     	}
      	namegenerator.addToList(properties);
+
     });
 
 </script>

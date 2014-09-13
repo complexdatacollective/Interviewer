@@ -1,0 +1,37 @@
+<div class="container full-height">
+
+</div>
+
+<script>
+
+	var namegenerator = new Namegenerator({
+		targetEl: $('.container'),
+    	variables: [
+          {label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter', type:'text', required:true},
+          {label:'type',variable:'type',target:'edge', private: true, value:'Dyad', type:'text', required:true},
+          {label:'First Name',variable:'fname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Last Name',variable:'lname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Nick Name',variable:'nname_t0',target:'edge', private: false, type:'text', required:true},
+          {label:'Age',variable:'age_p_t0',target:'edge', private: false, type:'number', required:true},
+          {label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:1, type:'number', required:true},
+          {label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known', type:'number', required:true},
+          {label:'Relationship Category',variable:'reltype_main_t0',target:'edge', private: false, type:'relationship', required:true},
+          {label:'Specific Relationship',variable:'reltype_sub_t0',target:'edge', private: false, type:'subrelationship', required:false},
+          {label:'How would you describe the relationship?',variable:'reltype_oth_t0',target:'edge', private: false, type:'text', required:false}
+        ],
+    	heading: "Who are the people you are closest to?",
+    	subheading: "That is, people you see or talk to regularly and share your personal thoughts and feelings with."
+	});
+
+	// add existing nodes
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:1}), function(index,value) {
+    	var properties = {
+    		edgeID: value.id,
+    	}
+
+      extend(value,properties)
+     	namegenerator.addToList(value);
+    });
+    
+
+</script>

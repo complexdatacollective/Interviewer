@@ -22,21 +22,46 @@ html, body {
     // width:96%;
 }
 
-table {
-    width: 100%; /* Optional */
+.nameList {
+    max-height:700px;
+    width:100%;
+    overflow: scroll;
 }
 
-thead, tbody { display: block; }
-
-tbody {
-    max-height: 600px;       /* Just for the demo          */
-    overflow-y: auto;    /* Trigger vertical scroll    */
-    overflow-x: hidden;  /* Hide the horizontal scroll */
+.card {
+    width:215px;
+    height:300px;
+    border:1px solid white;
+    display: inline-block;
+    padding: 20px;
+    margin: 10px;
+    overflow:hidden;
+    cursor: pointer; cursor: hand;
 }
 
-tbody td, thead th {
-    width: 35%;  /* Optional */
+.card h4 {
+    margin-top:0;
+}
 
+.card ul
+{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    font-size:13px;
+}
+
+.alter-count-box {
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    height:100px;
+    width:100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+    text-align: center;
 }
 
 .black {
@@ -48,16 +73,13 @@ tbody td, thead th {
 
 .newNodeBox {
     position:absolute;
-    top:300px;
-    width:400px;
-    left:50%;
-    margin-left:-200px;
     padding:40px;
     border-radius:12px;
     background:black;
     transform: scale(0.1);
     opacity: 0;
 }
+
 
 .content {
     height:100%;

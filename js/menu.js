@@ -23,6 +23,10 @@ var Menu = function Menu(options) {
         return a;
     }
 
+    var contentClickHandler = function() {
+        menu.closeMenu();
+    };
+
     menu.options = {
       onBeforeOpen : function() {
         $('.menu-btn').transition({opacity:0});
@@ -31,11 +35,13 @@ var Menu = function Menu(options) {
         $('.arrow-right').transition({right:-550});
         $('.arrow-left').transition({left:-550});
         $('.content').addClass("pushed");
+        $('.pushed').on('click', contentClickHandler);
       },
       onAfterOpen : function() {
         return false;
       },
       onBeforeClose : function() {
+        $('.pushed').off('click', contentClickHandler);
         $('.content').removeClass("pushed");
       },
       onAfterClose : function() {
@@ -50,7 +56,15 @@ var Menu = function Menu(options) {
     };
 
     menu.closeMenu = function(targetMenu) {
-        targetMenu.items.find('.icon-close').trigger('click');
+        if(!targetMenu) {
+            //close all menus
+            $.each(menus, function(index) {
+                menus[index].items.find('.icon-close').trigger('click');        
+            });
+        } else {
+            targetMenu.items.find('.icon-close').trigger('click');    
+        }
+        
     };
 
     menu.toggle = function(targetMenu) {
