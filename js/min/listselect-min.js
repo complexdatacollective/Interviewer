@@ -1,0 +1,1 @@
+var listSelect=function i(n){var t={};t.options={targetEl:$(".container"),variables:[],heading:"This is a default heading",subheading:"And this is a default subheading"},extend(t.options,n);var a=function(){};return t.init=function(){},t.init(),t};
