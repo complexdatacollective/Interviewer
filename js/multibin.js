@@ -132,17 +132,6 @@ var MultiBin = function MultiBin(options) {
     // Add node bucket
     multiBin.options.targetEl.append('<div class="node-bucket"></div>');
 
-    // Add edges to bucket
-    $.each(edges, function(index,value) {
-      $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
-    });
-
-
-
- // Experiment
-
-    $(".draggable").draggable({ cursor: "pointer", revert: "invalid" });
-
     // One of these for each bin. One bin for each variable value.
 
     $.each(multiBin.options.variable.values, function(index, value){
@@ -197,7 +186,28 @@ var MultiBin = function MultiBin(options) {
     });
     $('.node-bin').css({position:'absolute'});      
 
-// experiment ends
+    // Add edges to bucket or to bins if they already have variable value.
+    $.each(edges, function(index,value) {
+      if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
+          index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
+          console.log('index: '+index);
+          console.log($('.n'+index));
+          $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+          var noun = "people";
+          if ($('.n'+index).children('.active-node-list').children().length === 1) {
+            noun = "person";
+          }
+          if ($('.n'+index).children('.active-node-list').children().length === 0) {
+            $('.n'+index).children('h4').html('(Empty)');
+          } else {
+            $('.n'+index).children('h4').html($('.n'+index).children('.active-node-list').children().length+' '+noun+'.');
+          }  
+      } else {
+          $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');  
+      }
+
+    });
+    $(".draggable").draggable({ cursor: "pointer", revert: "invalid" });
 
     // Event Listeners
     window.addEventListener('changeStageStart', stageChangeHandler, false);
