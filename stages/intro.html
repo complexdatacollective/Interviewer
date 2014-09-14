@@ -31,7 +31,7 @@
 	var readable = new Date(session.returnData('session').int_stime);
 	$('.startDate').val(readable);
 	$('.sessionID').val(session.returnData('session').sessionID);
-	$('.radarID').val(network.getNodes({type_t0:'Ego'})[0].radar_id);
+	$('.radarID').val(network.getNode(0).radar_id);
 
 
 	$( "#step1" ).submit(function( event ) {

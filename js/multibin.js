@@ -32,13 +32,14 @@ var MultiBin = function MultiBin(options) {
       // return false;
       } else {
       $('.container').fadeIn();
-      $('.copy').removeClass('node-bin-active'); 
-      setTimeout(function(){
-        $('.copy').remove();
-      },500);
-      
+      $('.copy').removeClass('node-bin-active');
+      $('.copy').addClass('node-bin-static');
+      // $('.copy').css({left:0,top:0});
+      $('.copy').children('h1, h4').show();
+      $('.copy').removeClass('copy'); 
 
-      $('.content').off("click", backgroundClickHandler);      
+      $('.content').off("click", backgroundClickHandler); 
+      $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});     
     }
 
   };
@@ -48,14 +49,15 @@ var MultiBin = function MultiBin(options) {
       $('.content').on("click", backgroundClickHandler);
       $('.container').fadeOut();
       var position = $(this).offset();
-      var nodeBinDetails = $(this).clone(true);
+      var nodeBinDetails = $(this);
+      nodeBinDetails.appendTo('.content');
       nodeBinDetails.offset(position);
-      nodeBinDetails.addClass('copy');
+      nodeBinDetails.addClass('node-bin-active copy');
       nodeBinDetails.removeClass('node-bin-static');
-      nodeBinDetails.children('h1, h4').remove();
+      nodeBinDetails.children('h1, h4').hide();
 
-      $('.content').append(nodeBinDetails);
-      $('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
+      // $('.content').append(nodeBinDetails);
+      nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
 
       setTimeout(function(){
         nodeBinDetails.addClass('node-bin-active');
@@ -64,13 +66,12 @@ var MultiBin = function MultiBin(options) {
             $(value).transition({left:0,opacity:1});
           },50*index);
         });
-      },0);
+      },400);
     }
 
   };
 
   var nodeClickHandler = function() {
-    if($(this).parent().hasClass('active-node-list')) {
       var el = $(this);
       var id = $(this).parent().parent().data('index');
       console.log('id is:');
@@ -79,25 +80,21 @@ var MultiBin = function MultiBin(options) {
       var properties = {};
       properties[multiBin.options.variable.label] = '';
       network.updateEdge(edgeID,properties);
+      $(this).appendTo('.node-bucket');
       var noun = "people";
-      console.log($('*[data-index="'+id+'"]').first().children('.active-node-list').children().length);
-      if ($('*[data-index="'+id+'"]').first().children('.active-node-list').children().length-1 === 1) {
+      console.log($('.n'+id).children('.active-node-list').length);
+      if ($('.n'+id).children('.active-node-list').children().length === 1) {
         noun = "person";
       }
+      if ($('.n'+id).children('.active-node-list').children().length === 0) {
+        console.log('empty');
+        $('.n'+id).children('h4').html('(Empty)');
+      } else {
+      $('.n'+id).children('h4').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
+      }
       
-      if ($('*[data-index="'+id+'"]').first().children('.active-node-list').children().length-1 === 0) {
-      $('div[data-index="'+id+'"]').first().children('h4').html('(Empty)');
-    } else {
-      $('div[data-index="'+id+'"]').first().children('h4').html($('div[data-index="'+id+'"]').first().children('.active-node-list').children().length-1+' '+noun+'.');
-    }
 
-      $('div[data-index="'+id+'"]').first().children('.active-node-list').children().remove();
-      var parent = el.parent();  
-      el.detach().appendTo('.node-bucket');
-      var list = parent.children().clone(true);
-      $('div[data-index="'+id+'"]').first().children('.active-node-list').append(list);
 
-    }
   };
 
   multiBin.destroy = function() {
@@ -132,7 +129,7 @@ var MultiBin = function MultiBin(options) {
 
  // Experiment
 
-    $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});
+    $(".draggable").draggable({ cursor: "pointer", revert: "invalid" });
 
     // One of these for each bin. One bin for each variable value.
 
@@ -140,12 +137,11 @@ var MultiBin = function MultiBin(options) {
       var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><h4>(Empty)</h4><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       multiBin.options.targetEl.append(newBin);
-
       $(".n"+index).droppable({ accept: ".draggable", 
         drop: function(event, ui) {
           var dropped = ui.draggable;
           var droppedOn = $(this);
-          $(dropped).detach().appendTo(droppedOn.children('.active-node-list'));
+          $(dropped).appendTo(droppedOn.children('.active-node-list'));
           var properties = {};
           properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
           // Add the attribute
@@ -176,7 +172,18 @@ var MultiBin = function MultiBin(options) {
         }
       });
 
+
+
     });
+
+    $.each($('.node-bin'), function(index, value) {
+      var oldPos = $(value).offset();
+      $(value).data('oldPos', oldPos);
+      
+      $(value).css(oldPos);
+      
+    });
+    $('.node-bin').css({position:'absolute'});      
 
 // experiment ends
 
