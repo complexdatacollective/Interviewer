@@ -22,6 +22,7 @@ html, body {
     // width:96%;
 }
 
+ // Name generator
 .nameList {
     max-height:700px;
     width:100%;
@@ -53,6 +54,7 @@ html, body {
     font-size:13px;
 }
 
+// name gen mod
 .list-container {
     width:100%;
     border:1px solid white;
@@ -99,6 +101,88 @@ html, body {
     bottom: 20px;
     padding: 20px;
 }
+
+
+ // Node bucket
+
+ .node-bucket {
+    width:100%;
+    // height:150px;
+    // overflow-x:hidden;
+    white-space: nowrap;
+ }
+
+
+ .node-item {
+    padding:20px;
+    height:60px;
+    color:black;
+    background:#eee;
+    margin:10px;
+    display:inline-flex;
+    align-items: center;
+    justify-content: center;
+ }
+
+ .node-bucket .node-item, .node-bin .node-item {
+    display: none;
+ }
+
+  .node-bucket .node-item:first-child {
+    display:inline-flex;
+ }
+
+ .over {
+    background: green !important;
+ }
+
+ .node-bin {
+    width:350px;
+    height:350px;
+    display:inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin:10px;
+ }
+
+ .n0 {
+    background:@brand-primary;
+ }
+
+ .n1 {
+    background:@brand-success;
+ }
+
+ .n2 {
+    background:@brand-info;
+ }
+
+ .n3 {
+    background:@brand-warning;
+    width:250px;
+    height:250px;
+ }
+
+ .n3 h1, .n3 h4 {
+    font-size:20px;
+ }
+
+ .n4 {
+    background:@brand-danger;
+    width:250px;
+    height:250px;
+ }
+
+.n4 h1, .n4 h4 {
+    font-size:20px;
+ }
+
+
+ .node-bin h1 {
+    margin-bottom:0;
+ }
 
 .alter-count-box {
     position:absolute;

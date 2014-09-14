@@ -22,6 +22,7 @@
     "tinycolor": "~1.0.0",
     "jquery": "~2.1.1",
     "vis": "~3.1.0",
-    "history.js": "~1.8.0"
+    "history.js": "~1.8.0",
+    "jquery-ui": "~1.11.1"
   }
 }
