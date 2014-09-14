@@ -6203,8 +6203,10 @@ body {
   padding: 20px;
 }
 .node-bucket {
-  width: 100%;
+  width: 300px;
   white-space: nowrap;
+  border: 1px solid white;
+  margin: 0 auto;
 }
 .node-item {
   padding: 20px;
@@ -6227,6 +6229,7 @@ body {
      -moz-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  z-index: 9999;
 }
 .node-bucket .node-item,
 .node-bin .node-item {
@@ -6269,6 +6272,12 @@ body {
           justify-content: center;
   border-radius: 50%;
   margin: 10px;
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+}
+.copy {
+  position: absolute !important;
+  margin: 0;
 }
 .n0 {
   background: #67c2d4;
@@ -6299,6 +6308,41 @@ body {
 }
 .node-bin h1 {
   margin-bottom: 0;
+}
+.node-bin-active {
+  height: 800px;
+  width: 800px;
+  position: absolute;
+  z-index: 999;
+  top: 50% !important;
+  left: 50% !important;
+  margin-left: -400px;
+  margin-top: -400px;
+}
+.active-node-list {
+  width: 70% ;
+  display: none;
+  overflow: scroll;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.node-bin-active .active-node-list {
+  display: inline-block;
+}
+.active-node-list .node-item {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 .alter-count-box {
   position: absolute;
