@@ -293,7 +293,9 @@ var Namegenerator = function Namegenerator(options) {
 					id = network.addEdge(edgeProperties);
 				});
 
-				var edge = network.getEdges({id:id, type:"Dyad"})[0];
+				var edge = network.getEdges({to:newNode, type:"Dyad"})[0];
+				console.log(id);
+				console.log(edge);
 				namegenerator.addToList(edge);
 				alterCount++;
 				$('.alter-count-box').html(alterCount);
@@ -315,7 +317,7 @@ var Namegenerator = function Namegenerator(options) {
 				// var nodeID = network.getEdge(editing).to;
 				$.each(namegenerator.options.edgeTypes, function(index,value) {
 					var currentEdge = value;
-					var currentEdgeProperties;
+					var currentEdgeProperties = {};
 					$.each(namegenerator.options.variables, function(index, value) {
 						if (value.target === 'edge' && value.edge === currentEdge) {
 							if (value.private === true) {

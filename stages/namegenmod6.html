@@ -1,30 +1,32 @@
-<div class="container full-height">
-
+<div class="container full-height col-sm-offset-2">
+  <div class="node-list">
+    
+  </div>
 </div>
 
 <script>
 
 	var namegenerator = new Namegenerator({
 		targetEl: $('.container'),
-      edgeTypes:['Dyad'],
+      edgeTypes:['Dyad','Drugs'],
       variables: [
           {label:'type_t0',variable:'type_t0',target:'node', private: true, value:'Alter', type:'text', required:true, edge: '',node:'Alter'},
           {label:'First Name',variable:'fname_t0',target:'edge', private: false, type:'text', required:true, edge: 'Dyad',node:''},
           {label:'Last Name',variable:'lname_t0',target:'edge', private: false, type:'text', required:true, edge: 'Dyad',node:''},
           {label:'Nick Name',variable:'nname_t0',target:'edge', private: false, type:'text', required:true, edge: 'Dyad',node:''},
           {label:'Age',variable:'age_p_t0',target:'edge', private: false, type:'number', required:true, edge: 'Dyad',node:''},
-          {label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:4, type:'number', required:true, edge: 'Dyad',node:''},
+          {label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:7, type:'number', required:true, edge: 'Dyad',node:''},
           {label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known', type:'number', required:true, edge: 'Dyad',node:''},
           {label:'Relationship Category',variable:'reltype_main_t0',target:'edge', private: false, type:'relationship', required:true, edge: 'Dyad',node:''},
           {label:'Specific Relationship',variable:'reltype_sub_t0',target:'edge', private: false, type:'subrelationship', required:false, edge: 'Dyad',node:''},
           {label:'How would you describe the relationship?',variable:'reltype_oth_t0',target:'edge', private: false, type:'text', required:false, edge: 'Dyad',node:''}
         ],
-    	heading: "Are there other people who you could turn to for help or advice about gay-related issues or problems?",
-    	subheading: "For example, if you were being harassed."
+    	heading: "Is there anyone you haven't listed who uses drugs with two or more of the people on this list?",
+    	subheading: ""
 	});
 
   // add existing nodes
-    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:4}), function(index,value) {
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:7}), function(index,value) {
       var properties = {
         edgeID: value.id,
       }
@@ -32,5 +34,14 @@
       extend(value,properties)
       namegenerator.addToList(value);
     });
+
+
+  // add custom node list
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
+      
+      var el = $('<div class="node-list-item"><h5>'+value.nname_t0+'</h5></div>')
+      $('.node-list').append(el);
+    });
+
 
 </script>

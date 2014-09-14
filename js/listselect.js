@@ -53,7 +53,7 @@ var ListSelect = function ListSelect(options) {
 
     $.each(network.getEdges(listSelect.options.criteria), function(index,value) {
       var el = $('<div class="item" data-nodeid="'+value.to+'"><h3><strong>'+value.nname_t0+'</strong> <span>Name: '+value.fname_t0+' '+value.lname_t0+'</span> <span>Age: '+value.age_p_t0+'</span></h3></div>');
-      if (network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: value.to, type:'Drugs'}).length>0) {
+      if (network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: value.to, type:listSelect.options.edgeType}).length>0) {
         el.data('selected', true);
         el.css({'border':'2px solid red','background':'#E8C0C0'});
       }

@@ -12,7 +12,19 @@ var Session = function Session(options) {
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
-  session.stages = ['intro.html','namegen1.html','namegen2.html','namegen3.html','namegen4.html', 'listselect1.html','namegen5.html','namegen6.html', 'listselect2.html','namegen7.html','namegen8.html','canvas.html'];
+  session.stages = [
+          'intro.html',
+          'namegen1.html',
+          'namegen2.html',
+          'namegen3.html',
+          'namegen4.html',
+          'listselect1.html',
+          'namegen5.html',
+          'namegenmod6.html',
+          'listselect2.html',
+          'namegen7.html',
+          'namegenmod8.html'
+                    ];
   
   var saveTimer;
 
