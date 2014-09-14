@@ -32,12 +32,23 @@ var ListSelect = function ListSelect(options) {
     
   };
 
+  var stageChangeHandler = function() {
+    listSelect.destroy();
+  };
+
   var processSubmitHandler = function() {
     
     session.nextStage(); 
 
   };
 
+  listSelect.destroy = function() {
+    // Event Listeners
+    $(document).off('click', '.item', itemClickHandler);
+    $(document).off('click', '.continue', processSubmitHandler);
+    window.removeEventListener('changeStageStart', stageChangeHandler, false);
+
+  };
 
   listSelect.init = function() {
     // Add header and subheader
@@ -49,6 +60,7 @@ var ListSelect = function ListSelect(options) {
     // Event Listeners
     $(document).on('click', '.item', itemClickHandler);
     $(document).on('click', '.continue', processSubmitHandler);
+    window.addEventListener('changeStageStart', stageChangeHandler, false);
 
 
     $.each(network.getEdges(listSelect.options.criteria), function(index,value) {

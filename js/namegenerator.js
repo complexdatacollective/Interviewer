@@ -1,4 +1,4 @@
-/* global network, extend */
+/* global network, extend, notify */
 /* exported Namegenerator */
 var Namegenerator = function Namegenerator(options) {
 
@@ -73,6 +73,10 @@ var Namegenerator = function Namegenerator(options) {
 
 	};
 
+	var stageChangeHandler = function() {
+		namegenerator.destroy();
+	};
+
 	var cardClickHandler = function() {
 		var index = $(this).data('index');
 		var edge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Dyad'})[0];
@@ -110,123 +114,30 @@ var Namegenerator = function Namegenerator(options) {
 		namegenerator.closeNodeBox();
 	};
 
-	namegenerator.openNodeBox = function() {
-		// $('.newNodeBox').show();
-		$('.newNodeBox').transition({scale:1,opacity:1},300);
-		$("#ngForm input:text").first().focus();
-		nodeBoxOpen = true;
+	var selectChangeHandler = function() {
+		if ($("select[name='reltype_main_t0']").val() === "") {
+			$("select[name='reltype_sub_t0']").prop( "disabled", true);
+			return false;
+		} 
+		$("select[name='reltype_sub_t0']").prop( "disabled", false );
+		$("select[name='reltype_sub_t0']").children().remove();
+		$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
+		$.each(relationshipTypes[$("select[name='reltype_main_t0']").val()], function(index,value) {
+			$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
+		});
+	
 	};
 
-	namegenerator.closeNodeBox = function() {
-		$('.newNodeBox').transition({scale:0.1,opacity:0},500);
-		nodeBoxOpen = false;
-		$('#ngForm').trigger("reset"); 
-		$('.reltype_oth_t0').hide();
-		editing = false;       
+	var selectSubChangeHandler = function() {
+		if ($("select[name='reltype_sub_t0']").val() === "Other") {
+			$('.reltype_oth_t0').show();
+		} else {
+			$('.reltype_oth_t0').val("");
+			$('.reltype_oth_t0').hide();
+		}
 	};
 
-	namegenerator.init = function() {
-
-		// create elements
-		var title = $('<h1 class="text-center"></h1>').html(namegenerator.options.heading);
-		namegenerator.options.targetEl.append(title);
-		var subtitle = $('<p class="lead"></p>').html(namegenerator.options.subheading);
-		namegenerator.options.targetEl.append(subtitle);
-		var alterCountBox = $('<div class="alter-count-box"></div>');
-		namegenerator.options.targetEl.append(alterCountBox);
-
-
-		// create node box
-		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul></div><div class="col-sm-6 right"></div></form></div>');
-		namegenerator.options.targetEl.append(newNodeBox);
-		$.each(namegenerator.options.variables, function(index, value) {
-			if(value.private !== true) {
-
-				var formItem, selectBox;
-
-				switch(value.type) {
-					case 'text':
-					formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
-					break;
-
-					case 'number':
-					formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
-					break; 
-
-					case 'relationship':
-					selectBox = $('<select class="form-control" name="'+value.variable+'"><option value="">Choose a relationship category</option></select>');
-					$.each(relationshipTypes, function(index){
-						selectBox.append('<option value="'+index+'">'+index+'</option>');
-					});
-					formItem = $('<div class="form-group '+value.variable+'"></div></div>');
-					formItem.append(selectBox);
-					break;
-
-					case 'subrelationship':
-					selectBox = $('<select class="form-control" name="'+value.variable+'"><option value="">Choose a specific relationship</option></select>');
-					$.each(relationshipTypes, function(index){
-						selectBox.append('<option value="'+index+'">'+index+'</option>');
-					});
-					formItem = $('<div class="form-group '+value.variable+'"></div>');
-					formItem.append(selectBox);
-
-					break;
-
-				}
-				$('.newNodeBox .form .right').append(formItem);
-				if (value.required === true) {
-					if (value.type === 'relationship') {
-						$("select[name='"+value.variable+"']").prop("required", true);            
-					} else {
-						$('#'+value.variable).prop("required", true);            
-					}
-
-				}
-
-			}
-
-		});
-	$("select[name='reltype_sub_t0']").prop( "disabled", true );
-	var buttons = $('<div class="col-sm-6 text-center"><button type="submit" class="btn btn-primary btn-block submit-1">Add</button></div><div class="col-sm-6"><span class="btn btn-danger btn-block cancel">Cancel</span></div>');
-	$('.newNodeBox .form .right').append(buttons);
-
-
-		// create namelist container
-		var nameList = $('<div class="table nameList"></div>');
-		namegenerator.options.targetEl.append(nameList);
-
-		// Event listeners
-		$(document).on("keydown", keyPressHandler);
-		$('.cancel').on('click', cancelBtnHandler);
-		$("#fname_t0, #lname_t0").keyup(inputKeypressHandler);
-		$('.reltype_oth_t0').hide();
-		$(document).on("click", ".card", cardClickHandler);
-
-
-		$("select[name='reltype_main_t0']").change(function() {
-			if ($("select[name='reltype_main_t0']").val() === "") {
-				$("select[name='reltype_sub_t0']").prop( "disabled", true);
-				return false;
-			} 
-			$("select[name='reltype_sub_t0']").prop( "disabled", false );
-			$("select[name='reltype_sub_t0']").children().remove();
-			$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
-			$.each(relationshipTypes[$("select[name='reltype_main_t0']").val()], function(index,value) {
-				$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
-			});
-		});
-
-		$("select[name='reltype_sub_t0']").change(function() {
-			if ($("select[name='reltype_sub_t0']").val() === "Other") {
-				$('.reltype_oth_t0').show();
-			} else {
-				$('.reltype_oth_t0').val("");
-				$('.reltype_oth_t0').hide();
-			}
-		});    
-
-		$('#ngForm').submit(function(e) {
-
+	var submitFormHandler = function(e) {
 			e.preventDefault();
 
       		var newEdgeProperties = {};
@@ -362,7 +273,115 @@ var Namegenerator = function Namegenerator(options) {
 		  // $('#ngForm').trigger("reset");
 		  namegenerator.closeNodeBox();
 
+		
+	};
+
+	namegenerator.openNodeBox = function() {
+		// $('.newNodeBox').show();
+		$('.newNodeBox').transition({scale:1,opacity:1},300);
+		$("#ngForm input:text").first().focus();
+		nodeBoxOpen = true;
+	};
+
+	namegenerator.closeNodeBox = function() {
+		$('.newNodeBox').transition({scale:0.1,opacity:0},500);
+		nodeBoxOpen = false;
+		$('#ngForm').trigger("reset"); 
+		$('.reltype_oth_t0').hide();
+		editing = false;       
+	};
+
+	namegenerator.destroy = function() {
+		notify('Destroying namegenerator.',2);
+		// Event listeners
+		$(document).off("keydown", keyPressHandler);
+		$('.cancel').off('click', cancelBtnHandler);
+		$("#fname_t0, #lname_t0").off('keyup', inputKeypressHandler);
+		$(document).off("click", ".card", cardClickHandler);
+		$("select[name='reltype_main_t0']").off('change', selectChangeHandler);
+		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);    
+		$('#ngForm').off('submit', submitFormHandler);
+		window.removeEventListener('changeStageStart', stageChangeHandler, false);
+	};
+
+	namegenerator.init = function() {
+		// create elements
+		var title = $('<h1 class="text-center"></h1>').html(namegenerator.options.heading);
+		namegenerator.options.targetEl.append(title);
+		var subtitle = $('<p class="lead"></p>').html(namegenerator.options.subheading);
+		namegenerator.options.targetEl.append(subtitle);
+		var alterCountBox = $('<div class="alter-count-box"></div>');
+		namegenerator.options.targetEl.append(alterCountBox);
+
+
+		// create node box
+		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul></div><div class="col-sm-6 right"></div></form></div>');
+		namegenerator.options.targetEl.append(newNodeBox);
+		$.each(namegenerator.options.variables, function(index, value) {
+			if(value.private !== true) {
+
+				var formItem, selectBox;
+
+				switch(value.type) {
+					case 'text':
+					formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+					break;
+
+					case 'number':
+					formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+					break; 
+
+					case 'relationship':
+					selectBox = $('<select class="form-control" name="'+value.variable+'"><option value="">Choose a relationship category</option></select>');
+					$.each(relationshipTypes, function(index){
+						selectBox.append('<option value="'+index+'">'+index+'</option>');
+					});
+					formItem = $('<div class="form-group '+value.variable+'"></div></div>');
+					formItem.append(selectBox);
+					break;
+
+					case 'subrelationship':
+					selectBox = $('<select class="form-control" name="'+value.variable+'"><option value="">Choose a specific relationship</option></select>');
+					$.each(relationshipTypes, function(index){
+						selectBox.append('<option value="'+index+'">'+index+'</option>');
+					});
+					formItem = $('<div class="form-group '+value.variable+'"></div>');
+					formItem.append(selectBox);
+
+					break;
+
+				}
+				$('.newNodeBox .form .right').append(formItem);
+				if (value.required === true) {
+					if (value.type === 'relationship') {
+						$("select[name='"+value.variable+"']").prop("required", true);            
+					} else {
+						$('#'+value.variable).prop("required", true);            
+					}
+
+				}
+
+			}
+
 		});
+	$("select[name='reltype_sub_t0']").prop( "disabled", true );
+	var buttons = $('<div class="col-sm-6 text-center"><button type="submit" class="btn btn-primary btn-block submit-1">Add</button></div><div class="col-sm-6"><span class="btn btn-danger btn-block cancel">Cancel</span></div>');
+	$('.newNodeBox .form .right').append(buttons);
+	$('.reltype_oth_t0').hide();
+
+		// create namelist container
+		var nameList = $('<div class="table nameList"></div>');
+		namegenerator.options.targetEl.append(nameList);
+
+		// Event listeners
+		window.addEventListener('changeStageStart', stageChangeHandler, false);
+		$(document).on("keydown", keyPressHandler);
+		$('.cancel').on('click', cancelBtnHandler);
+		$("#fname_t0, #lname_t0").on('keyup', inputKeypressHandler);
+		$(document).on("click", ".card", cardClickHandler);
+		$("select[name='reltype_main_t0']").on('change', selectChangeHandler);
+		$("select[name='reltype_sub_t0']").on('change', selectSubChangeHandler);    
+		$('#ngForm').on('submit', submitFormHandler);
 
 		// Set node count box
 		$('.alter-count-box').html(alterCount);
