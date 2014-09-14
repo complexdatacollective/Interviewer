@@ -1,7 +1,4 @@
-<div class="container full-height col-sm-offset-2">
-  <div class="node-list">
-    
-  </div>
+<div class="container full-height alt">
 </div>
 
 <script>
@@ -37,6 +34,8 @@
 
 
   // add custom node list
+    var currentNodeList = $('<div class="node-list"><h4>People you already named:</h4></div>');
+    $('.node-container').append(currentNodeList);
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
       
       var el = $('<div class="node-list-item"><h5>'+value.nname_t0+'</h5></div>')

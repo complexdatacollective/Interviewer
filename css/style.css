@@ -6186,15 +6186,21 @@ body {
 }
 .node-list {
   max-height: 500px;
-  position: absolute;
-  left: 100px;
-  width: 150px;
-  margin-top: 217px;
-  border: 1px solid white;
-  padding: 10px;
+  width: 50%;
+  float: left;
+  overflow: scrolll;
+}
+.alt .nameList {
+  width: 50%;
+  float: right;
 }
 .node-list-item {
   margin: 10px;
+}
+.menu-info {
+  position: absolute;
+  bottom: 20px;
+  padding: 20px;
 }
 .alter-count-box {
   position: absolute;

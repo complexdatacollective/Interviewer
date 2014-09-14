@@ -205,8 +205,6 @@ var Namegenerator = function Namegenerator(options) {
 				});
 
 				var edge = network.getEdges({to:newNode, type:"Dyad"})[0];
-				console.log(id);
-				console.log(edge);
 				namegenerator.addToList(edge);
 				alterCount++;
 				$('.alter-count-box').html(alterCount);
@@ -292,7 +290,7 @@ var Namegenerator = function Namegenerator(options) {
 	};
 
 	namegenerator.destroy = function() {
-		notify('Destroying namegenerator.',2);
+		notify('Destroying namegenerator.',0);
 		// Event listeners
 		$(document).off("keydown", keyPressHandler);
 		$('.cancel').off('click', cancelBtnHandler);
@@ -312,7 +310,6 @@ var Namegenerator = function Namegenerator(options) {
 		namegenerator.options.targetEl.append(subtitle);
 		var alterCountBox = $('<div class="alter-count-box"></div>');
 		namegenerator.options.targetEl.append(alterCountBox);
-
 
 		// create node box
 		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul></div><div class="col-sm-6 right"></div></form></div>');
@@ -369,9 +366,14 @@ var Namegenerator = function Namegenerator(options) {
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
 
+
+		var nodeContainer = $('<div class="node-container"></div>');
+		namegenerator.options.targetEl.append(nodeContainer);
+
+
 		// create namelist container
 		var nameList = $('<div class="table nameList"></div>');
-		namegenerator.options.targetEl.append(nameList);
+		$('.node-container').append(nameList);
 
 		// Event listeners
 		window.addEventListener('changeStageStart', stageChangeHandler, false);

@@ -132,7 +132,7 @@ var Menu = function Menu(options) {
 
         var menuItemsClass = name+'-menu';
         var menuContainerClass = name+'-menu-container';
-        newMenu.items = $('<div class="morph-button morph-button-sidebar morph-button-fixed '+menuContainerClass+'"><div class="morph-content '+menuItemsClass+'"><div><div class="content-style-sidebar"><span class="icon icon-close">Close the overlay</span><h2>'+name+'</h2><ul></ul></div></div></div></div>');
+        newMenu.items = $('<div class="morph-button morph-button-sidebar morph-button-fixed '+menuContainerClass+'"><div class="morph-content '+menuItemsClass+'"><div><div class="content-style-sidebar"><span class="icon icon-close">Close the overlay</span><h2>'+name+'</h2><ul></ul><div class="menu-info">Network Canvas v0.1a</div></div></div></div></div>');
         newMenu.button.after(newMenu.items);
 
         newMenu.button.on( 'click', function() { 

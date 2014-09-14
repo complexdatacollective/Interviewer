@@ -1,4 +1,4 @@
-/* global network, extend, session */
+/* global network, extend, session, notify */
 /* exported ListSelect */
 var ListSelect = function ListSelect(options) {
 
@@ -44,6 +44,7 @@ var ListSelect = function ListSelect(options) {
 
   listSelect.destroy = function() {
     // Event Listeners
+    notify("Destroying listSelect.",0);
     $(document).off('click', '.item', itemClickHandler);
     $(document).off('click', '.continue', processSubmitHandler);
     window.removeEventListener('changeStageStart', stageChangeHandler, false);
