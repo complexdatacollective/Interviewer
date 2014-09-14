@@ -6241,8 +6241,8 @@ body {
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-.over {
-  background: green !important;
+.invisible {
+  opacity: 0;
 }
 .node-bin {
   width: 350px;
@@ -6401,6 +6401,8 @@ body {
      -moz-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
 }
 input[type=radio]:checked + label > img {
   background: tomato;

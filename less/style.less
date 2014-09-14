@@ -133,8 +133,8 @@ html, body {
     display:inline-flex;
  }
 
- .over {
-    background: green !important;
+ .invisible {
+    opacity:0;
  }
 
  .node-bin {
@@ -258,10 +258,10 @@ html, body {
 .content {
     height:100%;
     background: @content-bg;
-    // padding-top:100px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.5s ease-in-out;
 }
 
 input[type=radio]:checked + label>img {

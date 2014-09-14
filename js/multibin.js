@@ -21,6 +21,7 @@ var MultiBin = function MultiBin(options) {
     subheading: "Default Subheading."
   };
 
+  var open = false;
   extend(multiBin.options, options);
 
   var stageChangeHandler = function() {
@@ -28,72 +29,88 @@ var MultiBin = function MultiBin(options) {
   };
 
   var backgroundClickHandler = function(e) {
+    e.stopPropagation();
     if (e.target !== e.currentTarget) {
-      // return false;
+
+      console.log(e);
+      console.log('back');
+      console.log('open: '+open);
+      if (open === true) {
+        console.log('closing');
+        $('.container').children().removeClass('invisible');
+        $('.copy').removeClass('node-bin-active');
+        $('.copy').addClass('node-bin-static');
+        $('.copy').children('h1, h4').show();
+        $('.copy').removeClass('copy'); 
+        $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});
+        open = false;  
       } else {
-      $('.container').fadeIn();
-      $('.copy').removeClass('node-bin-active');
-      $('.copy').addClass('node-bin-static');
-      // $('.copy').css({left:0,top:0});
-      $('.copy').children('h1, h4').show();
-      $('.copy').removeClass('copy'); 
+        console.log('rejecting');
+      }
 
-      $('.content').off("click", backgroundClickHandler); 
-      $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});     
     }
 
   };
 
-  var nodeBinClickHandler = function() {
-    if(!$(this).hasClass('.node-bin-active')) {
-      $('.content').on("click", backgroundClickHandler);
-      $('.container').fadeOut();
-      var position = $(this).offset();
-      var nodeBinDetails = $(this);
-      nodeBinDetails.appendTo('.content');
-      nodeBinDetails.offset(position);
-      nodeBinDetails.addClass('node-bin-active copy');
-      nodeBinDetails.removeClass('node-bin-static');
-      nodeBinDetails.children('h1, h4').hide();
+  var nodeBinClickHandler = function(e) {
+    e.stopPropagation();
+    if (open === false) {
 
-      // $('.content').append(nodeBinDetails);
-      nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
+      console.log(e);
 
-      setTimeout(function(){
-        nodeBinDetails.addClass('node-bin-active');
-        $.each($('.active-node-list').children(), function(index,value) {
-          setTimeout(function(){
-            $(value).transition({left:0,opacity:1});
-          },50*index);
-        });
-      },400);
+      if(!$(this).hasClass('.node-bin-active')) {
+        $('.container').children().not(this).addClass('invisible');
+        var position = $(this).offset();
+        var nodeBinDetails = $(this);
+        nodeBinDetails.offset(position);
+        nodeBinDetails.addClass('node-bin-active copy');
+        nodeBinDetails.removeClass('node-bin-static');
+        nodeBinDetails.children('h1, h4').hide();
+
+        // $('.content').append(nodeBinDetails);
+        nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
+
+        setTimeout(function(){
+          nodeBinDetails.addClass('node-bin-active');
+          $.each($('.active-node-list').children(), function(index,value) {
+            setTimeout(function(){
+              $(value).transition({left:0,opacity:1});
+            },50*index);
+          });
+        },400);
+      }
+
+      open = true;
     }
+
+    
 
   };
 
-  var nodeClickHandler = function() {
+  var nodeClickHandler = function(e) {
+    e.stopPropagation();
+    console.log('node clicked');
       var el = $(this);
       var id = $(this).parent().parent().data('index');
-      console.log('id is:');
-      console.log(id);
-      var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:'Dyad'})[0].id;
-      var properties = {};
-      properties[multiBin.options.variable.label] = '';
-      network.updateEdge(edgeID,properties);
-      $(this).appendTo('.node-bucket');
-      var noun = "people";
-      console.log($('.n'+id).children('.active-node-list').length);
-      if ($('.n'+id).children('.active-node-list').children().length === 1) {
-        noun = "person";
-      }
-      if ($('.n'+id).children('.active-node-list').children().length === 0) {
-        console.log('empty');
-        $('.n'+id).children('h4').html('(Empty)');
-      } else {
-      $('.n'+id).children('h4').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
-      }
-      
+      if ($(this).parent().hasClass('active-node-list')) {
 
+        var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:'Dyad'})[0].id;
+        var properties = {};
+        properties[multiBin.options.variable.label] = '';
+        network.updateEdge(edgeID,properties);
+        $(this).appendTo('.node-bucket');
+        var noun = "people";
+        if ($('.n'+id).children('.active-node-list').children().length === 1) {
+          noun = "person";
+        }
+        if ($('.n'+id).children('.active-node-list').children().length === 0) {
+          $('.n'+id).children('h4').html('(Empty)');
+        } else {
+        $('.n'+id).children('h4').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
+        }
+
+
+      }
 
   };
 
@@ -105,11 +122,6 @@ var MultiBin = function MultiBin(options) {
   };
 
   multiBin.init = function() {
-    // Event Listeners
-    window.addEventListener('changeStageStart', stageChangeHandler, false);
-    $(document).on("click", '.node-bin-static', nodeBinClickHandler);
-    $(document).on("click", '.node-item', nodeClickHandler);
-
     // Add header and subheader
     multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
     multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
@@ -187,7 +199,11 @@ var MultiBin = function MultiBin(options) {
 
 // experiment ends
 
-
+    // Event Listeners
+    window.addEventListener('changeStageStart', stageChangeHandler, false);
+    $('.node-bin-static').on("click", nodeBinClickHandler);
+    $('.node-item').on("click", nodeClickHandler);
+    $('.content').on("click", backgroundClickHandler);
 
   };
 
