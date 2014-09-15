@@ -118,6 +118,10 @@ var MultiBin = function MultiBin(options) {
     // Event Listeners
     notify("Destroying multiBin.",0);
     window.removeEventListener('changeStageStart', stageChangeHandler, false);
+    $('.node-bin-static').off("click", nodeBinClickHandler);
+    $('.node-item').off("click", nodeClickHandler);
+    $('.content').off("click", backgroundClickHandler);
+
 
   };
 
@@ -125,6 +129,13 @@ var MultiBin = function MultiBin(options) {
     // Add header and subheader
     multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
     multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
+    var itemSizeW = $('.container').width()/(multiBin.options.variable.values.length*0.66);
+    var itemSizeH = ($('.container').height()-300)/2;
+    console.log(itemSizeH);
+    console.log(itemSizeW);
+    var itemSize = itemSizeH > itemSizeW ? itemSizeW : itemSizeH;
+
+    console.log(itemSize);
 
     // get all edges
     var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:multiBin.options.edgeType});
@@ -177,6 +188,7 @@ var MultiBin = function MultiBin(options) {
 
     });
 
+    $('.node-bin').css({width:itemSize,height:itemSize});
     $.each($('.node-bin'), function(index, value) {
       var oldPos = $(value).offset();
       $(value).data('oldPos', oldPos);
