@@ -40,6 +40,7 @@ html, body {
     margin: 10px;
     overflow:hidden;
     cursor: pointer; cursor: hand;
+    float:left;
 }
 
 .card h4 {
@@ -54,11 +55,17 @@ html, body {
     font-size:13px;
 }
 
+.container {
+    width:80% !important;
+    padding:0 !important;
+}
+
 // name gen mod
 .list-container {
     width:100%;
-    border:1px solid white;
-    max-height:550px;
+    margin:0 auto;
+    // border:1px solid white;
+    max-height:78%;
     overflow:scroll;
 }
 
@@ -66,10 +73,14 @@ html, body {
     background:#eee;
     color:black;
     padding:20px;
-    margin:15px;
+    margin:10px;
     cursor: pointer; cursor: hand;
     border-radius: 10px;
     border:2px solid #eee;
+    height:102px;
+    width:300px;
+    display:inline-block;
+    float:left;
 }
 
 .list-container .item h3 {
@@ -79,8 +90,11 @@ html, body {
 }
 
 .node-list {
-    max-height:500px;
-    width:50%;
+    max-height:78%;
+    min-height: 700px;
+    width:450px;
+    background: @brand-primary;
+    padding:25px;
     float:left;
     overflow: scroll;
     // border:1px solid white;
@@ -107,7 +121,7 @@ html, body {
 
  .node-bucket {
     width: 300px;
-    height:90px;
+    height:80px;
     white-space: nowrap;
     // border: 1px solid white;
     margin: 0 auto;
@@ -144,7 +158,7 @@ html, body {
     display:inline-flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    // justify-content: center;
     border-radius: 50%;
     margin:10px;
     transition: all 0.5s ease-in-out;
@@ -156,10 +170,13 @@ html, body {
     margin:0
  }
 
- .node-bin h1, .node-bin h4 {
-    font-size:20px;
+ .node-bin h1 {
+    font-size:29px;
  }
 
+ .node-bin h4 {
+    font-size:20px;
+ }
 
  .n0 {
     background:@brand-primary;
@@ -180,7 +197,7 @@ html, body {
  }
 
  .n3 h1, .n3 h4 {
-    font-size:20px;
+    // font-size:20px;
  }
 
  .n4 {
@@ -190,7 +207,7 @@ html, body {
  }
 
 .n4 h1, .n4 h4 {
-    font-size:20px;
+    // font-size:20px;
  }
 
  .n5 {
@@ -219,6 +236,7 @@ html, body {
     left: 50% !important;
     margin-left: -400px;
     margin-top: -400px;
+    justify-content: center;
  }
 
  .active-node-list {
@@ -238,9 +256,6 @@ html, body {
  .active-node-list .node-item {
     display:inline-flex;
  }
-
-
-
 
 .alter-count-box {
     position:absolute;
@@ -264,6 +279,11 @@ html, body {
 
 .newNodeBox {
     position:absolute;
+    top:50%;
+    margin-top:-250px;
+    width:900px;
+    left:50%;
+    margin-left: -450px;
     padding:40px;
     border-radius:12px;
     background:black;
@@ -297,6 +317,7 @@ input[type=radio]:checked + label>img {
 
 .full-height {
     height:100%;
+    // text-align: center;
 }
 
 .Session-menu {

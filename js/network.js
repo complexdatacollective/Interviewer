@@ -212,13 +212,19 @@ var Network = function Network() {
     // Get nodes using .filter(). Function is called for each of nodes.Nodes.
     var result = targetArray.filter(function(el){
       var match = true;
+      // console.log('iterating criteria');
       for (var criteriaKey in criteria) {
+        // console.log('first criteria is '+criteriaKey);
           if (el[criteriaKey] !== undefined) {
+            // console.log('el[criteriaKey] was not undefined. Value is:');
+            // console.log(el[criteriaKey]);
             // current criteria exists in object.
             if (el[criteriaKey] !== criteria[criteriaKey]) {
               match = false;
             }  
-          }      
+          } else {
+            match = false;
+          }     
       }
 
       if (match === true) {

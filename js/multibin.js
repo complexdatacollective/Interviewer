@@ -122,30 +122,41 @@ var MultiBin = function MultiBin(options) {
     $('.node-item').off("click", nodeClickHandler);
     $('.content').off("click", backgroundClickHandler);
 
-
   };
 
   multiBin.init = function() {
     // Add header and subheader
     multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
-    multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
-    var itemSizeW = $('.container').width()/(multiBin.options.variable.values.length*0.66);
-    var itemSizeH = ($('.container').height()-300)/2;
-    console.log(itemSizeH);
-    console.log(itemSizeW);
-    var itemSize = itemSizeH > itemSizeW ? itemSizeW : itemSizeH;
+    multiBin.options.targetEl.append('<h4">'+multiBin.options.subheading+'</h4>');
+
+    // Add node bucket
+    multiBin.options.targetEl.append('<div class="node-bucket"></div>');
+
+    var number = Math.floor(multiBin.options.variable.values.length*0.66);
+    console.log('two thirds of number: '+number);
+    console.log("container outer: "+$('.container').outerWidth());
+    var itemSizeW = $('.container').outerWidth()/number;
+    console.log('item size: '+itemSizeW);
+
+
+    var itemSize = itemSizeW;
+    while(itemSize*2 > $('.container').height()-50) {
+      itemSize = itemSize*0.98;
+    }
 
     console.log(itemSize);
 
     // get all edges
     var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:multiBin.options.edgeType});
-
-    // Add node bucket
-    multiBin.options.targetEl.append('<div class="node-bucket"></div>');
-
+    var newLine = false;
     // One of these for each bin. One bin for each variable value.
-
     $.each(multiBin.options.variable.values, function(index, value){
+
+      if (index+1>number && newLine === false) {
+        console.log('yesssss');
+        multiBin.options.targetEl.append('<br>');
+        newLine = true;
+      }
       var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><h4>(Empty)</h4><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       multiBin.options.targetEl.append(newBin);
@@ -188,14 +199,24 @@ var MultiBin = function MultiBin(options) {
 
     });
 
-    $('.node-bin').css({width:itemSize,height:itemSize});
+
+
+    $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+    $('.node-bin').slice(0,number).css({width:itemSize-20,height:itemSize-20});
+    // $('.node-bin').css({width:itemSize,height:itemSize});
+
+
+    $('.node-bin h1').css({marginTop: itemSize/3});
+
+
+
     $.each($('.node-bin'), function(index, value) {
       var oldPos = $(value).offset();
       $(value).data('oldPos', oldPos);
-      
       $(value).css(oldPos);
       
     });
+    
     $('.node-bin').css({position:'absolute'});      
 
     // Add edges to bucket or to bins if they already have variable value.

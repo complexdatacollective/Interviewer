@@ -6153,6 +6153,7 @@ body {
   overflow: hidden;
   cursor: pointer;
   cursor: hand;
+  float: left;
 }
 .card h4 {
   margin-top: 0;
@@ -6163,21 +6164,29 @@ body {
   padding: 0;
   font-size: 13px;
 }
+.container {
+  width: 80% !important;
+  padding: 0 !important;
+}
 .list-container {
   width: 100%;
-  border: 1px solid white;
-  max-height: 550px;
+  margin: 0 auto;
+  max-height: 78%;
   overflow: scroll;
 }
 .list-container .item {
   background: #eee;
   color: black;
   padding: 20px;
-  margin: 15px;
+  margin: 10px;
   cursor: pointer;
   cursor: hand;
   border-radius: 10px;
   border: 2px solid #eee;
+  height: 102px;
+  width: 300px;
+  display: inline-block;
+  float: left;
 }
 .list-container .item h3 {
   display: inline;
@@ -6185,8 +6194,11 @@ body {
   font-size: 25px;
 }
 .node-list {
-  max-height: 500px;
-  width: 50%;
+  max-height: 78%;
+  min-height: 700px;
+  width: 450px;
+  background: #67c2d4;
+  padding: 25px;
   float: left;
   overflow: scroll;
 }
@@ -6204,7 +6216,7 @@ body {
 }
 .node-bucket {
   width: 300px;
-  height: 90px;
+  height: 80px;
   white-space: nowrap;
   margin: 0 auto;
 }
@@ -6265,11 +6277,6 @@ body {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-     -moz-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   border-radius: 50%;
   margin: 10px;
   -webkit-transition: all 0.5s ease-in-out;
@@ -6279,7 +6286,9 @@ body {
   position: absolute !important;
   margin: 0;
 }
-.node-bin h1,
+.node-bin h1 {
+  font-size: 29px;
+}
 .node-bin h4 {
   font-size: 20px;
 }
@@ -6297,18 +6306,10 @@ body {
   width: 250px;
   height: 250px;
 }
-.n3 h1,
-.n3 h4 {
-  font-size: 20px;
-}
 .n4 {
   background: #e85657;
   width: 250px;
   height: 250px;
-}
-.n4 h1,
-.n4 h4 {
-  font-size: 20px;
 }
 .n5 {
   background: #6731FF;
@@ -6331,6 +6332,11 @@ body {
   left: 50% !important;
   margin-left: -400px;
   margin-top: -400px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .active-node-list {
   width: 70% ;
@@ -6389,6 +6395,11 @@ body {
 }
 .newNodeBox {
   position: absolute;
+  top: 50%;
+  margin-top: -250px;
+  width: 900px;
+  left: 50%;
+  margin-left: -450px;
   padding: 40px;
   border-radius: 12px;
   background: black;

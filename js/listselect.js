@@ -53,8 +53,8 @@ var ListSelect = function ListSelect(options) {
 
   listSelect.init = function() {
     // Add header and subheader
-    listSelect.options.targetEl.append('<h1>'+listSelect.options.heading+'</h1>');
-    listSelect.options.targetEl.append('<p class="lead">'+listSelect.options.subheading+'</p>');
+    listSelect.options.targetEl.append('<h1 class="text-center">'+listSelect.options.heading+'</h1>');
+    listSelect.options.targetEl.append('<p class="lead text-center">'+listSelect.options.subheading+'</p>');
     listSelect.options.targetEl.append('<div class="form-group list-container"></div>');
 
 
@@ -65,7 +65,7 @@ var ListSelect = function ListSelect(options) {
 
 
     $.each(network.getEdges(listSelect.options.criteria), function(index,value) {
-      var el = $('<div class="item" data-nodeid="'+value.to+'"><h3><strong>'+value.nname_t0+'</strong> <span>Name: '+value.fname_t0+' '+value.lname_t0+'</span> <span>Age: '+value.age_p_t0+'</span></h3></div>');
+      var el = $('<div class="item" data-nodeid="'+value.to+'"><h3><strong>'+value.nname_t0+'</strong></h3><br><span>'+value.fname_t0+' '+value.lname_t0+'</span></div>');
       if (network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: value.to, type:listSelect.options.edgeType}).length>0) {
         el.data('selected', true);
         el.css({'border':'2px solid red','background':'#E8C0C0'});
@@ -73,8 +73,8 @@ var ListSelect = function ListSelect(options) {
       $('.list-container').append(el);
     });
 
-    var button = $('<div class="form-group text-right"><span class="btn btn-primary continue">Continue</span></div>');
-    listSelect.options.targetEl.append(button);
+    // var button = $('<div class="form-group text-right"><span class="btn btn-primary continue">Continue</span></div>');
+    // listSelect.options.targetEl.append(button);
 
   };
 

@@ -306,7 +306,7 @@ var Namegenerator = function Namegenerator(options) {
 		// create elements
 		var title = $('<h1 class="text-center"></h1>').html(namegenerator.options.heading);
 		namegenerator.options.targetEl.append(title);
-		var subtitle = $('<p class="lead"></p>').html(namegenerator.options.subheading);
+		var subtitle = $('<p class="lead text-center"></p>').html(namegenerator.options.subheading);
 		namegenerator.options.targetEl.append(subtitle);
 		var alterCountBox = $('<div class="alter-count-box"></div>');
 		namegenerator.options.targetEl.append(alterCountBox);

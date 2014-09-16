@@ -25,7 +25,10 @@ var Session = function Session(options) {
           'namegen7.html',
           'namegenmod8.html',
           'multibin1.html',
-          'multibin2.html'
+          'multibin2.html',
+          'multibin3.html',
+          'multibin4.html',
+          'test.html'
                     ];
   
   var saveTimer;
