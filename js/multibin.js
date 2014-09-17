@@ -36,7 +36,7 @@ var MultiBin = function MultiBin(options) {
         $('.container').children().removeClass('invisible');
         $('.copy').removeClass('node-bin-active');
         $('.copy').addClass('node-bin-static');
-        $('.copy').children('h1, h4').show();
+        $('.copy').children('h1, p').show();
         $('.copy').removeClass('copy'); 
         $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
         open = false;  
@@ -59,7 +59,7 @@ var MultiBin = function MultiBin(options) {
         nodeBinDetails.offset(position);
         nodeBinDetails.addClass('node-bin-active copy');
         nodeBinDetails.removeClass('node-bin-static');
-        nodeBinDetails.children('h1, h4').hide();
+        nodeBinDetails.children('h1, p').hide();
 
         // $('.content').append(nodeBinDetails);
         nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
@@ -85,8 +85,10 @@ var MultiBin = function MultiBin(options) {
     e.stopPropagation();
       var el = $(this);
       var id = $(this).parent().parent().data('index');
-      if ($(this).parent().hasClass('active-node-list')) {
 
+      // has the node been clicked while in the bucket or while in a bin?
+      if ($(this).parent().hasClass('active-node-list')) {
+        // it has been clicked while in a bin.
         var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:'Dyad'})[0].id;
         var properties = {};
         properties[multiBin.options.variable.label] = '';
@@ -94,17 +96,18 @@ var MultiBin = function MultiBin(options) {
         $(this).fadeOut(400, function() {
           $(this).appendTo('.node-bucket');
           $(this).css('display', '');
+          var noun = "people";
+          if ($('.n'+id).children('.active-node-list').children().length === 1) {
+            noun = "person";
+          }
+          if ($('.n'+id).children('.active-node-list').children().length === 0) {
+            $('.n'+id).children('p').html('(Empty)');
+          } else {
+          $('.n'+id).children('p').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
+          }
+
         });
         
-        var noun = "people";
-        if ($('.n'+id).children('.active-node-list').children().length === 1) {
-          noun = "person";
-        }
-        if ($('.n'+id).children('.active-node-list').children().length === 0) {
-          $('.n'+id).children('h4').html('(Empty)');
-        } else {
-        $('.n'+id).children('h4').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
-        }
 
 
       }
@@ -124,7 +127,7 @@ var MultiBin = function MultiBin(options) {
   multiBin.init = function() {
     // Add header and subheader
     multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
-    multiBin.options.targetEl.append('<h4">'+multiBin.options.subheading+'</h4>');
+    multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
 
     // Add node bucket
     multiBin.options.targetEl.append('<div class="node-bucket"></div>');
@@ -149,7 +152,7 @@ var MultiBin = function MultiBin(options) {
         multiBin.options.targetEl.append('<br>');
         newLine = true;
       }
-      var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><h4>(Empty)</h4><div class="active-node-list"></div></div>');
+      var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       multiBin.options.targetEl.append(newBin);
       $(".n"+index).droppable({ accept: ".draggable", 
@@ -167,7 +170,7 @@ var MultiBin = function MultiBin(options) {
           if ($(".n"+index+" .active-node-list").children().length === 1) {
             noun = "person";
           }
-          $(".n"+index+" h4").html($(".n"+index+" .active-node-list").children().length+' '+noun+'.');
+          $(".n"+index+" p").html($(".n"+index+" .active-node-list").children().length+' '+noun+'.');
 
           var el = $(".n"+index);
             // var origBg = el.css('background-color');
@@ -221,9 +224,9 @@ var MultiBin = function MultiBin(options) {
             noun = "person";
           }
           if ($('.n'+index).children('.active-node-list').children().length === 0) {
-            $('.n'+index).children('h4').html('(Empty)');
+            $('.n'+index).children('p').html('(Empty)');
           } else {
-            $('.n'+index).children('h4').html($('.n'+index).children('.active-node-list').children().length+' '+noun+'.');
+            $('.n'+index).children('p').html($('.n'+index).children('.active-node-list').children().length+' '+noun+'.');
           }  
       } else {
           $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');  

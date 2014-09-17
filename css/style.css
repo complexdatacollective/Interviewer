@@ -6396,6 +6396,7 @@ body {
   padding: 25px;
   float: left;
   overflow: scroll;
+  border-radius: 7px;
 }
 .alt .nameList {
   padding-left: 400px;
@@ -6440,6 +6441,7 @@ body {
   z-index: 9999;
   cursor: pointer;
   cursor: hand;
+  border-radius: 32px;
 }
 .node-bucket .node-item,
 .node-bin .node-item {
@@ -6594,7 +6596,7 @@ body {
 .newNodeBox {
   position: absolute;
   top: 50%;
-  margin-top: -250px;
+  margin-top: -285px;
   width: 900px;
   left: 50%;
   margin-left: -450px;
