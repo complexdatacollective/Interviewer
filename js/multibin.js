@@ -32,11 +32,7 @@ var MultiBin = function MultiBin(options) {
     e.stopPropagation();
     if (e.target !== e.currentTarget) {
 
-      console.log(e);
-      console.log('back');
-      console.log('open: '+open);
       if (open === true) {
-        console.log('closing');
         $('.container').children().removeClass('invisible');
         $('.copy').removeClass('node-bin-active');
         $('.copy').addClass('node-bin-static');
@@ -45,7 +41,6 @@ var MultiBin = function MultiBin(options) {
         $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});
         open = false;  
       } else {
-        console.log('rejecting');
       }
 
     }
@@ -56,7 +51,6 @@ var MultiBin = function MultiBin(options) {
     e.stopPropagation();
     if (open === false) {
 
-      console.log(e);
 
       if(!$(this).hasClass('.node-bin-active')) {
         $('.container').children().not(this).addClass('invisible');
@@ -89,7 +83,6 @@ var MultiBin = function MultiBin(options) {
 
   var nodeClickHandler = function(e) {
     e.stopPropagation();
-    console.log('node clicked');
       var el = $(this);
       var id = $(this).parent().parent().data('index');
       if ($(this).parent().hasClass('active-node-list')) {
@@ -133,10 +126,7 @@ var MultiBin = function MultiBin(options) {
     multiBin.options.targetEl.append('<div class="node-bucket"></div>');
 
     var number = Math.floor(multiBin.options.variable.values.length*0.66);
-    console.log('two thirds of number: '+number);
-    console.log("container outer: "+$('.container').outerWidth());
     var itemSizeW = $('.container').outerWidth()/number;
-    console.log('item size: '+itemSizeW);
 
 
     var itemSize = itemSizeW;
@@ -144,7 +134,6 @@ var MultiBin = function MultiBin(options) {
       itemSize = itemSize*0.98;
     }
 
-    console.log(itemSize);
 
     // get all edges
     var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:multiBin.options.edgeType});
@@ -153,7 +142,6 @@ var MultiBin = function MultiBin(options) {
     $.each(multiBin.options.variable.values, function(index, value){
 
       if (index+1>number && newLine === false) {
-        console.log('yesssss');
         multiBin.options.targetEl.append('<br>');
         newLine = true;
       }
@@ -223,8 +211,6 @@ var MultiBin = function MultiBin(options) {
     $.each(edges, function(index,value) {
       if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
           index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
-          console.log('index: '+index);
-          console.log($('.n'+index));
           $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
           var noun = "people";
           if ($('.n'+index).children('.active-node-list').children().length === 1) {

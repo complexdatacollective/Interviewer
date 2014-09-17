@@ -58,6 +58,7 @@ html, body {
 .container {
     width:80% !important;
     padding:0 !important;
+    overflow: hidden;
 }
 
 // name gen mod
@@ -90,9 +91,14 @@ html, body {
 }
 
 .node-list {
-    max-height:78%;
-    min-height: 700px;
-    width:450px;
+    position:absolute;
+    top:166px;
+    left:166px;
+    height:600px;
+    // max-height:700px;
+    margin-top:10px;
+    // min-height: 600px;
+    width:300px;
     background: @brand-primary;
     padding:25px;
     float:left;
@@ -102,12 +108,13 @@ html, body {
 }
 
 .alt .nameList {
-    width:50%;
+    padding-left:400px;
     float:right;
 }
 
 .node-list-item {
     margin:10px;
+    font-size: 30px;
 }
 
 .menu-info {

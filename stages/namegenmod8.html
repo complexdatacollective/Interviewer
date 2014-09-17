@@ -34,11 +34,11 @@
 
 
   // add custom node list
-    var currentNodeList = $('<div class="node-list"><h4>People you already named:</h4></div>');
+    var currentNodeList = $('<div class="node-list"></div>');
     $('.node-container').append(currentNodeList);
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
       
-      var el = $('<div class="node-list-item"><h5>'+value.nname_t0+'</h5></div>')
+      var el = $('<div class="node-list-item">'+value.nname_t0+'</div>')
       $('.node-list').append(el);
     });
 

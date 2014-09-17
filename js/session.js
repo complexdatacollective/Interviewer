@@ -13,22 +13,22 @@ var Session = function Session(options) {
   session.userData = {};
   var lastSaveTime;
   session.stages = [
-          'intro.html',
-          'namegen1.html',
-          'namegen2.html',
-          'namegen3.html',
-          'namegen4.html',
-          'listselect1.html',
-          'namegen5.html',
-          'namegenmod6.html',
-          'listselect2.html',
-          'namegen7.html',
-          'namegenmod8.html',
-          'multibin1.html',
-          'multibin2.html',
-          'multibin3.html',
-          'multibin4.html',
-          'test.html'
+          {label:'Intro', page:'intro.html'},
+          {label:'NG: closest', page:'namegen1.html'},
+          {label:'NG: time, energy', page:'namegen2.html'},
+          {label:'NG: $25', page:'namegen3.html'},
+          {label:'NG: gay issues', page:'namegen4.html'},
+          {label:'Page title', page:'listselect1.html'},
+          {label:'Page title', page:'namegen5.html'},
+          {label:'Page title', page:'namegenmod6.html'},
+          {label:'Page title', page:'listselect2.html'},
+          {label:'Page title', page:'namegen7.html'},
+          {label:'Page title', page:'namegenmod8.html'},
+          {label:'Page title', page:'multibin1.html'},
+          {label:'Page title', page:'multibin2.html'},
+          {label:'Page title', page:'multibin3.html'},
+          {label:'Page title', page:'multibin4.html'},
+          {label:'Page title', page:'test.html'},
                     ];
   
   var saveTimer;
@@ -99,6 +99,11 @@ var Session = function Session(options) {
     menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { return true; });
     menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
 
+    var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
+    $.each(session.stages, function(index,value) {
+      menu.addItem(stagesMenu, value.label, 'icon-cloud', function() { session.goToStage(index); });
+    });
+
   };
 
   session.reset = function() {
@@ -153,7 +158,7 @@ var Session = function Session(options) {
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
     $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
-      $content.load( "stages/"+session.stages[stage], function() {
+      $content.load( "stages/"+session.stages[stage].page, function() {
         // This never gets called if there is a JS error. Is there a way to ensure it is?
         $content.transition({ opacity: '1'},400,'easeInSine');    
       });

@@ -2,8 +2,6 @@
 /* global Storage, debugLevel */
 /*jshint bitwise: false*/
 
-"use strict";
-
 // Storage prototypes
 
 Storage.prototype.showUsage = function() {
@@ -143,32 +141,42 @@ function randomBetween(min,max) {
     return Math.random() * (max - min) + min;
 }
 
-function modifyColor(col, amt) {
-  
-    var usePound = false;
-  
-    if (col[0] === "#") {
-        col = col.slice(1);
-        usePound = true;
+$.cssHooks.backgroundColor = {
+    get: function(elem) {
+        if (elem.currentStyle)
+            var bg = elem.currentStyle["backgroundColor"];
+        else if (window.getComputedStyle)
+            var bg = document.defaultView.getComputedStyle(elem,
+                null).getPropertyValue("background-color");
+        if (bg.search("rgb") == -1)
+            return bg;
+        else {
+            bg = bg.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            function hex(x) {
+                return ("0" + parseInt(x).toString(16)).slice(-2);
+            }
+            return "#" + hex(bg[1]) + hex(bg[2]) + hex(bg[3]);
+        }
     }
- 
-    var num = parseInt(col,16);
- 
-    var r = (num >> 16) + amt;
- 
-    if (r > 255) {r = 255;}
-    else if  (r < 0) {r = 0;}
- 
-    var b = ((num >> 8) & 0x00FF) + amt;
- 
-    if (b > 255) {b = 255;}
-    else if  (b < 0) {b = 0;}
- 
-    var g = (num & 0x0000FF) + amt;
- 
-    if (g > 255) {g = 255;}
-    else if (g < 0) {g = 0;}
- 
-    return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+}
+
+function modifyColor(hex, lum) {
+  
+    // validate hex string
+    hex = String(hex).replace(/[^0-9a-f]/gi, '');
+    if (hex.length < 6) {
+        hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    }
+    lum = lum || 0;
+
+    // convert to decimal and change luminosity
+    var rgb = "#", c, i;
+    for (i = 0; i < 3; i++) {
+        c = parseInt(hex.substr(i*2,2), 16);
+        c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+        rgb += ("00"+c).substr(c.length);
+    }
+
+    return rgb;
   
 }
