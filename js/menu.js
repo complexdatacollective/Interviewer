@@ -165,8 +165,11 @@ var Menu = function Menu(options) {
         var menuItem = $('<li><a class="icon icon-server '+icon+'" href="#">'+item+'</a></li>');
         targetMenu.items.find('ul').append(menuItem);
         menuItem.on('click', function() {
-            callback();
+            
             menu.closeMenu(targetMenu);
+            setTimeout(function() {
+                callback();
+            },500);
         });
 
 //           <li><a class="icon icon-server" href="#">Load Protocol</a></li>
