@@ -91,7 +91,11 @@ var MultiBin = function MultiBin(options) {
         var properties = {};
         properties[multiBin.options.variable.label] = '';
         network.updateEdge(edgeID,properties);
-        $(this).appendTo('.node-bucket');
+        $(this).fadeOut(400, function() {
+          $(this).appendTo('.node-bucket');
+          $(this).css('display', '');
+        });
+        
         var noun = "people";
         if ($('.n'+id).children('.active-node-list').children().length === 1) {
           noun = "person";

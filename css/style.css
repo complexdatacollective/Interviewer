@@ -6433,6 +6433,8 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   z-index: 9999;
+  cursor: pointer;
+  cursor: hand;
 }
 .node-bucket .node-item,
 .node-bin .node-item {
