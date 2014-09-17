@@ -38,7 +38,7 @@ var MultiBin = function MultiBin(options) {
         $('.copy').addClass('node-bin-static');
         $('.copy').children('h1, h4').show();
         $('.copy').removeClass('copy'); 
-        $(".draggable").draggable({ cursor: "pointer", revert: "invalid"});
+        $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
         open = false;  
       } else {
       }
@@ -51,7 +51,7 @@ var MultiBin = function MultiBin(options) {
     e.stopPropagation();
     if (open === false) {
 
-
+      $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true });
       if(!$(this).hasClass('.node-bin-active')) {
         $('.container').children().not(this).addClass('invisible');
         var position = $(this).offset();
@@ -130,7 +130,7 @@ var MultiBin = function MultiBin(options) {
 
 
     var itemSize = itemSizeW;
-    while(itemSize*2 > $('.container').height()-50) {
+    while(itemSize*2 > $('.container').height()-300) {
       itemSize = itemSize*0.98;
     }
 
@@ -189,8 +189,8 @@ var MultiBin = function MultiBin(options) {
 
 
 
-    $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-    $('.node-bin').slice(0,number).css({width:itemSize-20,height:itemSize-20});
+    // $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+    $('.node-bin').css({width:itemSize-20,height:itemSize-20});
     // $('.node-bin').css({width:itemSize,height:itemSize});
 
 
@@ -226,7 +226,7 @@ var MultiBin = function MultiBin(options) {
       }
 
     });
-    $(".draggable").draggable({ cursor: "pointer", revert: "invalid" });
+    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
 
     // Event Listeners
     window.addEventListener('changeStageStart', stageChangeHandler, false);
