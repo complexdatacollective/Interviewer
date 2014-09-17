@@ -11,6 +11,7 @@ var Menu = function Menu(options) {
     var menus = [];
     var isAnimating = false;
     var menuContainer = $('.menu-container');
+    var adding = false;
 
 
     // private
@@ -148,7 +149,20 @@ var Menu = function Menu(options) {
         });
 
         menus.push(newMenu);
-        newMenu.button.transition({top:0,opacity:1},1000);
+        if (adding === true) {
+            setTimeout(function() {
+                newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
+                    adding = false;}
+                    );    
+            }, 500);
+            
+        } else {
+            adding = true;
+            newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
+                adding = false; }
+                );    
+        }
+        
 
         return newMenu;
 
