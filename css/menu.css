@@ -518,6 +518,7 @@ section.related {
   position: relative;
   z-index: 1;
   color: #fff;
+  text-decoration: none !important;
 }
 .hi-icon:after {
   pointer-events: none;

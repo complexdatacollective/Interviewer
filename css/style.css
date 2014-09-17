@@ -2328,7 +2328,7 @@ input[type="checkbox"]:focus {
 }
 output {
   display: block;
-  padding-top: 9px;
+  padding-top: 15px;
   font-size: 17px;
   line-height: 1.62857143;
   color: #ffffff;
@@ -2336,8 +2336,8 @@ output {
 .form-control {
   display: block;
   width: 100%;
-  height: 45px;
-  padding: 8px 14px;
+  height: 57px;
+  padding: 14px 14px;
   font-size: 17px;
   line-height: 1.62857143;
   color: #ffffff;
@@ -2381,7 +2381,7 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
 input[type="month"] {
-  line-height: 45px;
+  line-height: 57px;
   line-height: 1.62857143 \0;
 }
 input[type="date"].input-sm,
@@ -2461,8 +2461,8 @@ fieldset[disabled] .checkbox label {
   cursor: not-allowed;
 }
 .form-control-static {
-  padding-top: 9px;
-  padding-bottom: 9px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   margin-bottom: 0;
 }
 .form-control-static.input-lg,
@@ -2506,7 +2506,7 @@ select[multiple].input-lg {
   position: relative;
 }
 .has-feedback .form-control {
-  padding-right: 56.25px;
+  padding-right: 71.25px;
 }
 .form-control-feedback {
   position: absolute;
@@ -2514,9 +2514,9 @@ select[multiple].input-lg {
   right: 0;
   z-index: 2;
   display: block;
-  width: 45px;
-  height: 45px;
-  line-height: 45px;
+  width: 57px;
+  height: 57px;
+  line-height: 57px;
   text-align: center;
 }
 .input-lg + .form-control-feedback {
@@ -2663,11 +2663,11 @@ select[multiple].input-lg {
 .form-horizontal .checkbox-inline {
   margin-top: 0;
   margin-bottom: 0;
-  padding-top: 9px;
+  padding-top: 15px;
 }
 .form-horizontal .radio,
 .form-horizontal .checkbox {
-  min-height: 36px;
+  min-height: 42px;
 }
 .form-horizontal .form-group {
   margin-left: -15px;
@@ -2677,7 +2677,7 @@ select[multiple].input-lg {
   .form-horizontal .control-label {
     text-align: right;
     margin-bottom: 0;
-    padding-top: 9px;
+    padding-top: 15px;
   }
 }
 .form-horizontal .has-feedback .form-control-feedback {
@@ -2704,7 +2704,7 @@ select[multiple].input-lg {
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 8px 14px;
+  padding: 14px 14px;
   font-size: 17px;
   line-height: 1.62857143;
   border-radius: 8px;
@@ -3465,7 +3465,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   vertical-align: middle;
 }
 .input-group-addon {
-  padding: 8px 14px;
+  padding: 14px 14px;
   font-size: 17px;
   font-weight: normal;
   line-height: 1;
@@ -3946,8 +3946,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
-  margin-top: 2.5px;
-  margin-bottom: 2.5px;
+  margin-top: -3.5px;
+  margin-bottom: -3.5px;
 }
 @media (min-width: 2px) {
   .navbar-form .form-group {
@@ -4025,8 +4025,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border-bottom-left-radius: 0;
 }
 .navbar-btn {
-  margin-top: 2.5px;
-  margin-bottom: 2.5px;
+  margin-top: -3.5px;
+  margin-bottom: -3.5px;
 }
 .navbar-btn.btn-sm {
   margin-top: 5px;
@@ -4279,7 +4279,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > span {
   position: relative;
   float: left;
-  padding: 8px 14px;
+  padding: 14px 14px;
   line-height: 1.62857143;
   text-decoration: none;
   color: #ffffff;
@@ -6328,8 +6328,11 @@ body {
   width: 100%;
   overflow: scroll;
 }
+.delete-button {
+  display: none;
+}
 .card {
-  width: 215px;
+  width: 315px;
   height: 300px;
   border: 1px solid white;
   background: #eee;
@@ -6341,6 +6344,7 @@ body {
   cursor: pointer;
   cursor: hand;
   float: left;
+  word-wrap: break-word;
 }
 .card h4 {
   margin-top: 0;
@@ -6375,6 +6379,7 @@ body {
   width: 300px;
   display: inline-block;
   float: left;
+  text-align: center;
 }
 .list-container .item h3 {
   display: inline;
@@ -6600,6 +6605,14 @@ body {
       -ms-transform: scale(0.1);
           transform: scale(0.1);
   opacity: 0;
+  z-index: 9999;
+  border: 1px solid white;
+  box-shadow: 0px 5px 61px 20px rgba(0, 0, 0, 0.5);
+}
+.add-button {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
 }
 .content {
   height: 100%;

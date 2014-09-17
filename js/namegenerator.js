@@ -103,7 +103,7 @@ var Namegenerator = function Namegenerator(options) {
 				}else {
 					$('#'+value.variable).val(edge[value.variable]);    
 				}
-
+				$('.delete-button').show();
 				namegenerator.openNodeBox();
 			}
 
@@ -111,6 +111,7 @@ var Namegenerator = function Namegenerator(options) {
 	};
 
 	var cancelBtnHandler = function() {
+		$('.delete-button').hide();
 		namegenerator.closeNodeBox();
 	};
 
@@ -142,7 +143,7 @@ var Namegenerator = function Namegenerator(options) {
 
       		var newEdgeProperties = {};
 	      	var newNodeProperties = {};
-
+	      	$('.delete-button').hide();
 			$.each(namegenerator.options.variables, function(index,value) {
 
 				if(value.target === 'edge') {
@@ -296,6 +297,8 @@ var Namegenerator = function Namegenerator(options) {
 		$('.cancel').off('click', cancelBtnHandler);
 		$("#fname_t0, #lname_t0").off('keyup', inputKeypressHandler);
 		$(document).off("click", ".card", cardClickHandler);
+		$('.add-button').off('click', namegenerator.openNodeBox);
+		$('.delete-button').off('click', namegenerator.removeFromList);
 		$("select[name='reltype_main_t0']").off('change', selectChangeHandler);
 		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);    
 		$('#ngForm').off('submit', submitFormHandler);
@@ -308,11 +311,13 @@ var Namegenerator = function Namegenerator(options) {
 		namegenerator.options.targetEl.append(title);
 		var subtitle = $('<p class="lead text-center"></p>').html(namegenerator.options.subheading);
 		namegenerator.options.targetEl.append(subtitle);
+		var button = $('<a href="#set-8" class="hi-icon hi-icon-user add-button">Add</a>');
+		namegenerator.options.targetEl.append(button);
 		var alterCountBox = $('<div class="alter-count-box"></div>');
 		namegenerator.options.targetEl.append(alterCountBox);
 
 		// create node box
-		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul></div><div class="col-sm-6 right"></div></form></div>');
+		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul><button type="button" class="btn btn-danger btn-block delete-button">Delete this Node</button></div><div class="col-sm-6 right"></div></form></div>');
 		namegenerator.options.targetEl.append(newNodeBox);
 		$.each(namegenerator.options.variables, function(index, value) {
 			if(value.private !== true) {
@@ -362,7 +367,7 @@ var Namegenerator = function Namegenerator(options) {
 
 		});
 	$("select[name='reltype_sub_t0']").prop( "disabled", true );
-	var buttons = $('<div class="col-sm-6 text-center"><button type="submit" class="btn btn-primary btn-block submit-1">Add</button></div><div class="col-sm-6"><span class="btn btn-danger btn-block cancel">Cancel</span></div>');
+	var buttons = $('<div class="col-sm-6 text-center"><button type="submit" class="btn btn-success btn-block submit-1">Add</button></div><div class="col-sm-6"><span class="btn btn-danger btn-block cancel">Cancel</span></div>');
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
 
@@ -379,6 +384,8 @@ var Namegenerator = function Namegenerator(options) {
 		window.addEventListener('changeStageStart', stageChangeHandler, false);
 		$(document).on("keydown", keyPressHandler);
 		$('.cancel').on('click', cancelBtnHandler);
+		$('.add-button').on('click', namegenerator.openNodeBox);
+		$('.delete-button').on('click', namegenerator.removeFromList);
 		$("#fname_t0, #lname_t0").on('keyup', inputKeypressHandler);
 		$(document).on("click", ".card", cardClickHandler);
 		$("select[name='reltype_main_t0']").on('change', selectChangeHandler);
@@ -406,25 +413,21 @@ var Namegenerator = function Namegenerator(options) {
 
 	};
 
-	namegenerator.update = function(id) {
-		var targetEdge = {};
-		$.each(namegenerator.options.variables, function(index, value){
-			if (value.private === true) {
-				targetEdge[value.variable] = value.value;
-			} else {
-				targetEdge[value.variable] = $('div[data-index='+id+']').children('.'+value.variable).html();
-			}
-		});
+	namegenerator.removeFromList = function() {
+		$('.delete-button').hide();
+		
+		var nodeID = editing;
+		// var nodeID = network.getEdge(editing).to;
 
-		var color = function() {
-			$('tr[data-index='+id+']').stop().transition({background:'rgba(51, 160, 117, 1)'}, 800, 'ease');
-			setTimeout(function(){
-				$('tr[data-index='+id+']').stop().transition({ background:'rgba(0,0,0,0)'}, 1800, 'ease');
-			}, 1500);
-			$("#ngForm input:text").first().focus();
-		};
-		network.updateEdge(id, targetEdge, color);
+		// network.updateNode(nodeID, newNodeProperties);
+		network.removeNode(nodeID);
+
+		$('div[data-index='+editing+']').remove();
+	
+		editing = false;
+		namegenerator.closeNodeBox();
 	};
+
 
 	  // namegenerator.remove = function() {
 
