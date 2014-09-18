@@ -59,8 +59,18 @@ var Network = function Network() {
       return false;
     }
 
+    if (properties.id !== 'undefined' && network.getEdge(properties.id) !== false) {
+      notify('edge with this id already exists!!!', 2);
+      return false;
+    }
+
+    var position = 0;
+    while(network.getEdge(position) !== false) {
+      position++;
+    }
+
     var edgeProperties = {
-      id: session.returnData('edges').length,
+      id: position,
       type: "Default"
     };
 
@@ -245,6 +255,15 @@ var Network = function Network() {
     }
   };
 
+  network.getEdges = function(criteria) {
+    var localEdges = session.returnData('edges');
+    if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
+      return network.filterObject(localEdges,criteria);  
+    } else {
+      return localEdges;
+    }
+  };
+
   network.getNodeInboundEdges = function(nodeID) {
     return network.getEdges({to:nodeID});
   };
@@ -261,15 +280,6 @@ var Network = function Network() {
     var outbound = network.getNodeOutboundEdges(nodeID);
     var concat = inbound.concat(outbound);
     return concat;
-  };
-
-  network.getEdges = function(criteria) {
-    var localEdges = session.returnData('edges');
-    if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-      return network.filterObject(localEdges,criteria);  
-    } else {
-      return localEdges;
-    }
   };
 
   network.setProperties = function(object, properties) {

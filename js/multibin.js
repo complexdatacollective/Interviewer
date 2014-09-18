@@ -8,13 +8,9 @@ var MultiBin = function MultiBin(options) {
     targetEl: $('.container'),
     edgeType: 'Dyad',
     variable: {
-      label:'gender_p_t0',
+      label:'multibin_variable',
       values: [
-        'Female',
-        'Male',
-        'Transgender',
-        'Don\'t Know',
-        'Won\'t Answer'
+        'Variable 1',
       ]
     },
     heading: "Default Heading",
@@ -164,6 +160,8 @@ var MultiBin = function MultiBin(options) {
           properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
           // Add the attribute
           var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:'Dyad'})[0].id;
+          console.log(properties);
+          console.log(edgeID);
           network.updateEdge(edgeID,properties);
           
           var noun = "people";

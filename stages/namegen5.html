@@ -25,11 +25,6 @@
 
   // add existing nodes
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:6}), function(index,value) {
-      var properties = {
-        edgeID: value.id,
-      }
-
-      extend(value,properties)
       namegenerator.addToList(value);
     });
 

@@ -6555,9 +6555,14 @@ body {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  overflow-x: scroll;
   margin: 10px;
   -webkit-transition: all 0.5s ease-in-out;
           transition: all 0.5s ease-in-out;
+}
+.ord-node-bin .node-item {
+  position: relative;
+  z-index: 9999;
 }
 .copy {
   position: absolute !important;
