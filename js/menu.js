@@ -87,13 +87,11 @@ var Menu = function Menu(options) {
             if(targetMenu.expanded === true) {
                 menu.options.onBeforeClose();
                 menuContent.removeClass('active');
-                setTimeout(menu.options.onAfterClose, 500);
+                setTimeout(menu.options.onAfterClose, 1000);
                 isAnimating = false;
             } else {
                 menu.options.onBeforeOpen();
                 var col = modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
-                console.log($('.'+targetMenu.name+'-menu').css("background-color"));
-                console.log(col);
                 $('body').css({"background-color":col});
                 menuContent.addClass('active');
                 setTimeout(menu.options.onAfterOpen, 500);

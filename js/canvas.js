@@ -1,4 +1,4 @@
-/*global extend, session, randomBetween, Kinetic, notify, network, menu */
+/*global extend, randomBetween, Kinetic, notify, network, menu */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -35,7 +35,7 @@ var Canvas = function Canvas(userSettings) {
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
-		concentricCircleNumber: 4,
+		concentricCircleNumber: 5,
 		nodeTypes: [
 		{'name':'Person','color':colors.blue},
 		{'name':'OnlinePerson','color':colors.hemlock},
@@ -72,6 +72,34 @@ var Canvas = function Canvas(userSettings) {
 	var edgeRemovedHandler = function(e) {
 		canvas.removeEdge(e.detail);
 	}; 
+
+	var closePopoverHandler = function() {
+		var buttonOffset = $('.info-button').offset();
+		var currentOffset = $('.canvas-title').offset();
+		$('.canvas-title').data('oldPos', currentOffset);
+		console.log(currentOffset);
+		$('.canvas-title').css({position: 'absolute'});
+		$('.canvas-title').offset(currentOffset);
+		$('.canvas-title').children().hide();
+		$('.canvas-title').addClass('closed');
+		$('.canvas-title').offset(buttonOffset);
+		setTimeout(function() {
+			$('.canvas-popover').hide();
+			$('.info-button').css('visibility', 'visible');
+		}, 500);
+	};
+
+	var openPopoverHandler = function() {
+		$('.info-button').css('visibility', 'hidden');
+		$('.canvas-popover').show();
+		$('.canvas-title').offset($('.canvas-title').data('oldPos'));
+		$('.canvas-title').removeClass('closed');
+		setTimeout(function() {
+			$('.canvas-title').children().show();
+		}, 500);
+		
+
+	};  
 
 	var keyPressHandler = function(e) {
 		if (!cancelKeyBindings) {
@@ -112,31 +140,37 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.init = function () {
 		notify('Canvas initialising.', 1);
+
 		canvas.initKinetic();
 		canvas.drawUIComponents();
 		extend(settings,userSettings);
 
-	   	canvasMenu = menu.addMenu('Canvas','hi-icon-user');
+	   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
 
-	    menu.addItem(canvasMenu, 'Load Network', 'icon-globe', null);
-	    menu.addItem(canvasMenu, 'Create Random Graph', 'icon-globe', null);
-	    menu.addItem(canvasMenu, 'Download Network Data', 'icon-globe', null);
-	    menu.addItem(canvasMenu, 'Clear Graph', 'icon-globe', null);          
+	    menu.addItem(canvasMenu, 'Load Network', 'icon-play', null);
+	    menu.addItem(canvasMenu, 'Create Random Graph', 'icon-play', null);
+	    menu.addItem(canvasMenu, 'Download Network Data', 'icon-play', null);
+	    menu.addItem(canvasMenu, 'Reset Node Positions', 'icon-play', canvas.resetPositions); 
+	    menu.addItem(canvasMenu, 'Clear Graph', 'icon-play', null);          
 
 	    window.addEventListener('nodeAdded', nodeAddedHandler, false);
 	    window.addEventListener('edgeAdded', edgeAddedHandler, false);
 	    window.addEventListener('nodeRemoved', nodeRemovedHandler, false);
 	    window.addEventListener('edgeRemoved', edgeRemovedHandler, false);
-	    window.addEventListener('changeStageStart', stageChangeHandler, false);    
+	    window.addEventListener('changeStageStart', stageChangeHandler, false);
+	    $('.close-popover').on('click', closePopoverHandler);
+	    $('.info-button').on('click', openPopoverHandler);     
 
     	// Are there existing nodes? Display them.
-      	for (var i = 0; i < session.returnData('nodes').length; i++) {
-      		canvas.addNode(session.returnData('nodes')[i]);
+    	var dyadEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
+    	console.log(dyadEdges);
+      	for (var i = 0; i < dyadEdges.length; i++) {
+      		canvas.addNode(dyadEdges[i]);
     	}    
 
-    	for (var j = 0; j < session.returnData('edges').length; j++) {
-      		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
-    	}    	
+    	// for (var j = 0; j < session.returnData('edges').length; j++) {
+     //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
+    	// }    	
 
 	};
 
@@ -150,11 +184,22 @@ var Canvas = function Canvas(userSettings) {
         window.removeEventListener('nodeRemoved', nodeRemovedHandler, false);
         window.removeEventListener('edgeRemoved', edgeRemovedHandler, false);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
-        $(document).off("keypress", keyPressHandler); 
+        $(document).off("keypress", keyPressHandler);
+        $('.close-popover').off('click', closePopoverHandler);
+        $('.info-button').off('click', openPopoverHandler); 
 
 	};
 
 	// Node manipulation functions
+
+	canvas.resetPositions = function() {
+    	var dyadEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
+    	console.log(dyadEdges);
+      	for (var i = 0; i < dyadEdges.length; i++) {
+      		network.updateEdge(dyadEdges[i].id, {coords: []});
+    	}    
+
+	};
 
 	canvas.addNode = function(options) {
 		notify('Canvas is creating a node.',2);
@@ -163,7 +208,7 @@ var Canvas = function Canvas(userSettings) {
 		var nodeShape;
 		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
 		var nodeID = network.getNodes().length;
-
+		options.label = options.nname_t0;
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
 			id: nodeID,
@@ -171,7 +216,7 @@ var Canvas = function Canvas(userSettings) {
 			size: settings.defaultNodeSize,
 			type: settings.nodeTypes[randomType].name,
 			color: 'rgba(0,0,0,0.8)',
-			strokeWidth: 3
+			strokeWidth: 1
 		};
 
 		extend(nodeOptions, options);
@@ -337,7 +382,7 @@ var Canvas = function Canvas(userSettings) {
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
 
-    		network.setProperties(network.getNode(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y], type: currentNode.attrs.type, color: currentNode.attrs.color});
+    		network.setProperties(network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -355,7 +400,7 @@ var Canvas = function Canvas(userSettings) {
 		nodeLayer.draw();
 
 		// console.log('coords:'+nodeOptions.coords);
-		if (!options.coords) {
+		if (!options.coords || options.coords.length === 0) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
@@ -456,7 +501,7 @@ var Canvas = function Canvas(userSettings) {
 		// Draw all UI components
 		var circleFills, circleLines;
 		var currentColor = settings.concentricCircleColor ;
-		var totalHeight = window.innerHeight-(settings.defaultNodeSize *  2); // Our canvas area is the window height minus twice the node radius (for spacing)
+		var totalHeight = window.innerHeight-(settings.defaultNodeSize); // Our canvas area is the window height minus twice the node radius (for spacing)
 		var currentOpacity = 0.1;
 		
 		//draw concentric circles
@@ -475,7 +520,7 @@ var Canvas = function Canvas(userSettings) {
 
 			circleFills = new Kinetic.Circle({
 				x: window.innerWidth / 2,
-				y: window.innerHeight / 2,
+				y: (window.innerHeight / 2),
 				radius: currentRadius,
 				fill: currentColor,
 				opacity: currentOpacity,
@@ -508,7 +553,7 @@ var Canvas = function Canvas(userSettings) {
 	  	circleLayer.draw();
 	  	uiLayer.draw();
 
-	  	canvas.initNewNodeForm();
+	  	// canvas.initNewNodeForm();
 		notify("User interface initialised.",1);
 	};
 

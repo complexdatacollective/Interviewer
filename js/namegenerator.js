@@ -277,12 +277,14 @@ var Namegenerator = function Namegenerator(options) {
 
 	namegenerator.openNodeBox = function() {
 		// $('.newNodeBox').show();
+		$('.content').addClass('blurry');
 		$('.newNodeBox').transition({scale:1,opacity:1},300);
 		$("#ngForm input:text").first().focus();
 		nodeBoxOpen = true;
 	};
 
 	namegenerator.closeNodeBox = function() {
+		$('.content').removeClass('blurry');
 		$('.newNodeBox').transition({scale:0.1,opacity:0},500);
 		nodeBoxOpen = false;
 		$('#ngForm').trigger("reset"); 
@@ -303,6 +305,7 @@ var Namegenerator = function Namegenerator(options) {
 		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);    
 		$('#ngForm').off('submit', submitFormHandler);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
+		$('.newNodeBox').remove();
 	};
 
 	namegenerator.init = function() {
@@ -311,14 +314,15 @@ var Namegenerator = function Namegenerator(options) {
 		namegenerator.options.targetEl.append(title);
 		var subtitle = $('<p class="lead text-center"></p>').html(namegenerator.options.subheading);
 		namegenerator.options.targetEl.append(subtitle);
-		var button = $('<a href="#set-8" class="hi-icon hi-icon-user add-button">Add</a>');
+		var button = $('<span class="hi-icon hi-icon-user add-button">Add</span>');
 		namegenerator.options.targetEl.append(button);
 		var alterCountBox = $('<div class="alter-count-box"></div>');
 		namegenerator.options.targetEl.append(alterCountBox);
 
 		// create node box
 		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul><button type="button" class="btn btn-danger btn-block delete-button">Delete this Node</button></div><div class="col-sm-6 right"></div></form></div>');
-		namegenerator.options.targetEl.append(newNodeBox);
+		// namegenerator.options.targetEl.append(newNodeBox);
+		$('body').append(newNodeBox);
 		$.each(namegenerator.options.variables, function(index, value) {
 			if(value.private !== true) {
 

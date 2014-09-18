@@ -18,17 +18,17 @@ var Session = function Session(options) {
           {label:'NG: time, energy', page:'namegen2.html'},
           {label:'NG: $25', page:'namegen3.html'},
           {label:'NG: gay issues', page:'namegen4.html'},
-          {label:'Page title', page:'listselect1.html'},
-          {label:'Page title', page:'namegen5.html'},
-          {label:'Page title', page:'namegenmod6.html'},
-          {label:'Page title', page:'listselect2.html'},
-          {label:'Page title', page:'namegen7.html'},
-          {label:'Page title', page:'namegenmod8.html'},
-          {label:'Page title', page:'multibin1.html'},
-          {label:'Page title', page:'multibin2.html'},
-          {label:'Page title', page:'multibin3.html'},
-          {label:'Page title', page:'multibin4.html'},
-          {label:'Page title', page:'test.html'},
+          {label:'NI: drugs or alcohol', page:'listselect1.html'},
+          {label:'NG: other people drugs or alcohol', page:'namegen5.html'},
+          {label:'NG: drugs, two or more', page:'namegenmod6.html'},
+          {label:'NI: sex', page:'listselect2.html'},
+          {label:'NG: other people sex', page:'namegen7.html'},
+          {label:'NG: sex, two or more', page:'namegenmod8.html'},
+          {label:'Graph layout', page:'canvaslayout.html'},
+          {label:'CAT: gender identity', page:'multibin1.html'},
+          {label:'CAT: race/ethnicity', page:'multibin2.html'},
+          {label:'CAT: sexuality', page:'multibin3.html'},
+          {label:'CAT: location', page:'multibin4.html'},
                     ];
   
   var saveTimer;
@@ -101,7 +101,7 @@ var Session = function Session(options) {
 
     var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
     $.each(session.stages, function(index,value) {
-      menu.addItem(stagesMenu, value.label, 'icon-cloud', function() { session.goToStage(index); });
+      menu.addItem(stagesMenu, value.label, 'icon-play', function() { session.goToStage(index); });
     });
 
   };
