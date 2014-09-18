@@ -1,10 +1,10 @@
 /* global network, extend, notify */
-/* exported MultiBin */
-var MultiBin = function MultiBin(options) {
+/* exported OrdinalBin */
+var OrdinalBin = function OrdinalBin(options) {
 
   //global vars
-  var multiBin = {};
-  multiBin.options = {
+  var ordinalBin = {};
+  ordinalBin.options = {
     targetEl: $('.container'),
     edgeType: 'Dyad',
     variable: {
@@ -22,10 +22,11 @@ var MultiBin = function MultiBin(options) {
   };
 
   var open = false;
-  extend(multiBin.options, options);
+  extend(ordinalBin.options, options);
+  var itemW,itemH;
 
   var stageChangeHandler = function() {
-    multiBin.destroy();
+    ordinalBin.destroy();
   };
 
   var backgroundClickHandler = function(e) {
@@ -36,7 +37,8 @@ var MultiBin = function MultiBin(options) {
         $('.container').children().removeClass('invisible');
         $('.copy').removeClass('node-bin-active');
         $('.copy').addClass('node-bin-static');
-        $('.copy').children('h1, p').show();
+        // $('.copy').children('h1, p').show();
+        // $('.ord-node-bin h1').css({marginTop: itemH/3});
         $('.copy').removeClass('copy'); 
         $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
         open = false;  
@@ -49,6 +51,8 @@ var MultiBin = function MultiBin(options) {
 
   var nodeBinClickHandler = function(e) {
     e.stopPropagation();
+    
+    //reject bin clicks where the bin is already open
     if (open === false) {
 
       $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true });
@@ -59,7 +63,8 @@ var MultiBin = function MultiBin(options) {
         nodeBinDetails.offset(position);
         nodeBinDetails.addClass('node-bin-active copy');
         nodeBinDetails.removeClass('node-bin-static');
-        nodeBinDetails.children('h1, p').hide();
+        // nodeBinDetails.children('h1, p').hide();
+        // $('.ord-node-bin h1').css({marginTop: 0});
 
         // $('.content').append(nodeBinDetails);
         nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
@@ -91,7 +96,7 @@ var MultiBin = function MultiBin(options) {
         // it has been clicked while in a bin.
         var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:'Dyad'})[0].id;
         var properties = {};
-        properties[multiBin.options.variable.label] = '';
+        properties[ordinalBin.options.variable.label] = '';
         network.updateEdge(edgeID,properties);
         $(this).fadeOut(400, function() {
           $(this).appendTo('.node-bucket');
@@ -114,9 +119,9 @@ var MultiBin = function MultiBin(options) {
 
   };
 
-  multiBin.destroy = function() {
+  ordinalBin.destroy = function() {
     // Event Listeners
-    notify("Destroying multiBin.",0);
+    notify("Destroying ordinalBin.",0);
     window.removeEventListener('changeStageStart', stageChangeHandler, false);
     $('.node-bin-static').off("click", nodeBinClickHandler);
     $('.node-item').off("click", nodeClickHandler);
@@ -124,44 +129,37 @@ var MultiBin = function MultiBin(options) {
 
   };
 
-  multiBin.init = function() {
+  ordinalBin.init = function() {
     // Add header and subheader
-    multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
-    multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
+    ordinalBin.options.targetEl.append('<h1>'+ordinalBin.options.heading+'</h1>');
+    ordinalBin.options.targetEl.append('<p class="lead">'+ordinalBin.options.subheading+'</p>');
 
     // Add node bucket
-    multiBin.options.targetEl.append('<div class="node-bucket"></div>');
+    ordinalBin.options.targetEl.append('<div class="node-bucket"></div>');
 
-    var number = Math.floor(multiBin.options.variable.values.length*0.66);
-    var itemSizeW = $('.container').outerWidth()/number;
+    var number = ordinalBin.options.variable.values.length;
+    itemW = ($('.container').outerWidth()/number)-20;
+    itemH = $('.container').outerHeight()-300;
 
-
-    var itemSize = itemSizeW;
-    while(itemSize*2 > $('.container').height()-300) {
-      itemSize = itemSize*0.98;
-    }
 
 
     // get all edges
-    var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:multiBin.options.edgeType});
-    var newLine = false;
-    // One of these for each bin. One bin for each variable value.
-    $.each(multiBin.options.variable.values, function(index, value){
+    var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:ordinalBin.options.edgeType});
 
-      if (index+1>number && newLine === false) {
-        multiBin.options.targetEl.append('<br>');
-        newLine = true;
-      }
-      var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+    // One of these for each bin. One bin for each variable value.
+    $.each(ordinalBin.options.variable.values, function(index, value){
+
+      var newBin = $('<div class="ord-node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
-      multiBin.options.targetEl.append(newBin);
+      ordinalBin.options.targetEl.append(newBin);
       $(".n"+index).droppable({ accept: ".draggable", 
         drop: function(event, ui) {
           var dropped = ui.draggable;
           var droppedOn = $(this);
           $(dropped).appendTo(droppedOn.children('.active-node-list'));
+          $(dropped).css({position: '',top:'',left:''});
           var properties = {};
-          properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
+          properties[ordinalBin.options.variable.values[index].label] = ordinalBin.options.variable.values[index].value;
           // Add the attribute
           var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:'Dyad'})[0].id;
           network.updateEdge(edgeID,properties);
@@ -197,27 +195,24 @@ var MultiBin = function MultiBin(options) {
 
 
     // $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-    $('.node-bin').css({width:itemSize-20,height:itemSize-20});
+    $('.ord-node-bin').css({width:itemW,height:itemH});
     // $('.node-bin').css({width:itemSize,height:itemSize});
 
+    // $('.ord-node-bin h1').css({marginTop: itemH/3});
 
-    $('.node-bin h1').css({marginTop: itemSize/3});
-
-
-
-    $.each($('.node-bin'), function(index, value) {
+    $.each($('.ord-node-bin'), function(index, value) {
       var oldPos = $(value).offset();
       $(value).data('oldPos', oldPos);
       $(value).css(oldPos);
       
     });
     
-    $('.node-bin').css({position:'absolute'});      
+    $('.ord-node-bin').css({position:'absolute'});      
 
     // Add edges to bucket or to bins if they already have variable value.
     $.each(edges, function(index,value) {
-      if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
-          index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
+      if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== "") {
+          index = ordinalBin.options.variable.values.indexOf(value[ordinalBin.options.variable.label]);
           $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
           var noun = "people";
           if ($('.n'+index).children('.active-node-list').children().length === 1) {
@@ -243,7 +238,7 @@ var MultiBin = function MultiBin(options) {
 
   };
 
-  multiBin.init();
+  ordinalBin.init();
 
-  return multiBin;
+  return ordinalBin;
 };

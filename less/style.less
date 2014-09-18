@@ -227,6 +227,19 @@ html, body {
 
  }
 
+  .ord-node-bin {
+    width:350px;
+    height:350px;
+    display:inline-flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    // border-radius: 50%;
+    margin:10px;
+    transition: all 0.5s ease-in-out;
+
+ }
+
  .copy {
     position:absolute !important;
     margin:0
@@ -236,8 +249,18 @@ html, body {
     font-size:29px;
  }
 
+ .ord-node-bin h1 {
+    font-size:29px;
+    transition: all 0.5s ease-in-out;
+ }
+
  .node-bin h4 {
     font-size:20px;
+ }
+
+.ord-node-bin h4 {
+    font-size:20px;
+    transition: all 0.5s ease-in-out;
  }
 
  .n0 {
@@ -306,6 +329,14 @@ html, body {
     // border:1px solid white;
     // height:70%;
     display:none;
+    overflow: scroll;
+    align-items: center;
+    justify-content: center;
+ }
+
+.ord-node-bin  .active-node-list {
+    width:100%;
+    display:block;
     overflow: scroll;
     align-items: center;
     justify-content: center;
