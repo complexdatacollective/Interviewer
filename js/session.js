@@ -102,7 +102,7 @@ var Session = function Session(options) {
 
     var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
     $.each(session.stages, function(index,value) {
-      menu.addItem(stagesMenu, value.label, 'icon-play', function() { session.goToStage(index); });
+      menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
     });
 
   };
