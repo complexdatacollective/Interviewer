@@ -6323,6 +6323,25 @@ body {
 *:focus {
   outline: none !important;
 }
+.followup {
+  position: absolute;
+  width: 600px;
+  min-height: 400px;
+  padding: 40px;
+  background: black;
+  border: 1px solid #333;
+  border-radius: 12px;
+  top: 50%;
+  left: 50%;
+  margin-left: -300px;
+  margin-top: -300px;
+  display: none;
+  z-index: 99999;
+}
+.followup h2 {
+  margin-top: 0;
+  font-size: 32px;
+}
 .canvas-title {
   background: black;
   padding: 40px;

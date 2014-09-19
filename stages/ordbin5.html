@@ -1,0 +1,30 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+	var criteria = {
+		type:'Drugs',
+		from:network.getNodes({type_t0:'Ego'})[0].id
+	}
+
+	var ordinalBin = new OrdinalBin({
+	    targetEl: $('.container'),
+	    edgeType: 'Drugs',
+	    criteria: criteria,
+	    variable: {
+	      label:'d_freq_t0',
+	      values: [
+	        {label:'Never', value: 0},
+	        {label:'Once a month or less', value: 1},
+	        {label:'Less than weekly', value: 2},
+	        {label:'Daily', value: 3},
+	        {label:'Multiple times daily', value: 4},
+	        {label:'Don\'t Want to Answer', value: -1}
+	      ]
+	    },
+    	heading: "How often have you used drugs or alcohol with each of these people?",
+    	subheading: ""
+  	});
+
+</script>

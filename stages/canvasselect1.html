@@ -1,0 +1,18 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Drugs',
+  		from:network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var canvas = new Canvas({
+    	mode:'Select', //edge, position, select
+		targetEl: $('.container'),
+		edgeType: "Drugs",
+    	variables: ['d1_use_t0'],
+      	criteria: criteria,
+    	heading: "Of the people you listed, who have you used drugs or alcohol with?",
+    	subheading: "Tap a person to select them."
+	});
+  </script>

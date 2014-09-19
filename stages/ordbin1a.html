@@ -13,15 +13,17 @@
 	    edgeType: 'Dyad',
 	    criteria: criteria,
 	    variable: {
-	      label:'relstr_t0',
+	      label:'comm_t0',
 	      values: [
-	        {label:'Very Close', value: 2},
-	        {label:'Somewhat Close', value: 1},
-	        {label:'Not Close At All', value: 0},
+	        {label:'Never', value: 0},
+	        {label:'Once a month or less', value: 1},
+	        {label:'Less than weekly', value: 2},
+	        {label:'Daily', value: 3},
+	        {label:'Multiple times daily', value: 4},
 	        {label:'Don\'t Want to Answer', value: -1}
 	      ]
 	    },
-    	heading: "Rate the strength of your relationship with each person:",
+    	heading: "How often have you communicated with each of these people over the past 6 months?",
     	subheading: ""
   	});
 

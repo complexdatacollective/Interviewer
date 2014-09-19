@@ -1,17 +1,16 @@
-<div class="canvas-popover">
-	<div class="canvas-title">
-		<h3>Position the people you have named according to how close they are to you.</h3>
-		<p class="lead">Put people closer to you towards the middle of the circles, and people you don't feel as close to towards the edge.</p>
-		<button class="btn btn-primary close-popover" type="button">Okay</button>
-	</div>
-</div>
-<span class="hi-icon hi-icon-link info-button">Info</span>
 <div id="kineticCanvas"></div>
-
-
-
-
-
   <script>
-    var canvas = new Canvas();
+  	var criteria = {
+  		type:'Dyad',
+  		from:network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var canvas = new Canvas({
+    	mode:'Position', //edge, position, select
+		  targetEl: $('.container'),
+    	variables: ['coords_t0'],
+      	criteria: criteria,
+    	heading: "Position the people you have named according to how close they are to you.",
+    	subheading: "Put people closer to you towards the middle of the circles, and people you don't feel as close to towards the edge."
+	});
   </script>

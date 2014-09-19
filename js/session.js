@@ -24,12 +24,18 @@ var Session = function Session(options) {
           {label:'NI: sex', page:'listselect2.html'},
           {label:'NG: other people sex', page:'namegen7.html'},
           {label:'NG: sex, two or more', page:'namegenmod8.html'},
-          {label:'Graph layout', page:'canvaslayout.html'},
+          {label:'CANVAS: Graph layout', page:'canvaslayout.html'},
           {label:'ORD: relationship strength', page:'ordbin1.html'},
+          {label:'ORD: contact frequency', page:'ordbin1a.html'},
           {label:'CAT: gender identity', page:'multibin1.html'},
           {label:'CAT: race/ethnicity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
-          {label:'CAT: location', page:'multibin4.html'}
+          {label:'CAT: location', page:'multibin4.html'},
+          {label:'ORD: drug and alcohol freq.', page:'ordbin5.html'},
+          {label:'CANVAS: alcohol', page:'canvasselect1.html'},
+          {label:'ORD: oral sex freq.', page:'ordbin2.html'},
+          {label:'ORD: vaginal sex freq.', page:'ordbin3.html'},
+          {label:'ORD: anal sex freq.', page:'ordbin4.html'}
                     ];
   
   var saveTimer;

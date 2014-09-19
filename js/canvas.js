@@ -35,7 +35,8 @@ var Canvas = function Canvas(userSettings) {
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
-		concentricCircleNumber: 5,
+		concentricCircleNumber: 4,
+		criteria: {from:network.getNodes({type_t0:'Ego'})[0].id},
 		nodeTypes: [
 		{'name':'Person','color':colors.blue},
 		{'name':'OnlinePerson','color':colors.hemlock},
@@ -140,10 +141,13 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.init = function () {
 		notify('Canvas initialising.', 1);
+		extend(settings,userSettings);
+
+		$('<div class="canvas-popover"><div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p><button class="btn btn-primary close-popover" type="button">Okay</button></div></div><span class="hi-icon hi-icon-link info-button">Info</span>').insertBefore( "#kineticCanvas" );
 
 		canvas.initKinetic();
 		canvas.drawUIComponents();
-		extend(settings,userSettings);
+		
 
 	   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
 
@@ -162,11 +166,23 @@ var Canvas = function Canvas(userSettings) {
 	    $('.info-button').on('click', openPopoverHandler);     
 
     	// Are there existing nodes? Display them.
-    	var dyadEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
-    	console.log(dyadEdges);
-      	for (var i = 0; i < dyadEdges.length; i++) {
-      		canvas.addNode(dyadEdges[i]);
-    	}    
+    	if (settings.criteria.type !== 'Dyad') {
+	    	var criteriaEdges = network.getEdges(settings.criteria);
+	    	console.log(criteriaEdges);
+	      	for (var i = 0; i < criteriaEdges.length; i++) {
+	      		var dyadEdge = network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to})[0];
+	      		console.log('dyadedege');
+	      		console.log(dyadEdge);
+	      		canvas.addNode(dyadEdge);
+	    	}      		
+    	} else {
+ 	    	var dyadEdges = network.getEdges(settings.criteria);
+	    	console.log(dyadEdges);
+	      	for (var j = 0; j < dyadEdges.length; j++) {
+	      		canvas.addNode(dyadEdges[j]);
+	    	}        		
+    	}
+  
 
     	// for (var j = 0; j < session.returnData('edges').length; j++) {
      //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
@@ -225,6 +241,11 @@ var Canvas = function Canvas(userSettings) {
 
 		nodeOptions.type = 'Person'; // We don't need different node shapes for RADAR
 		
+		var dragStatus = false;
+		if (settings.mode === 'Position' || settings.mode === 'Select') {
+			dragStatus = true;
+		}
+
 		var nodeGroup = new Kinetic.Group({
 			id: nodeOptions.id,
 			x: nodeOptions.coords[0],
@@ -232,7 +253,7 @@ var Canvas = function Canvas(userSettings) {
 			name: nodeOptions.label,
 			edges: [],
 			type: nodeOptions.type,
-			draggable: true,
+			draggable: dragStatus,
 			dragDistance: 10
 		});
 
@@ -322,6 +343,20 @@ var Canvas = function Canvas(userSettings) {
 		});    
 
 		nodeGroup.on('tap click', function() {
+			if (settings.mode === 'Select') {
+				var edge = network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.id})[0];
+				console.log(edge);
+				if (edge[settings.variables[0]] === 'undefined' || edge[settings.variables[0]] === 0) {
+					this.children[0].stroke(colors.selected);
+      				
+      				edge[settings.variables[0]] = 1;
+      				network.updateEdge(edge.id, edge);
+    			} else {
+      				this.children[0].stroke('white');
+					edge[settings.variables[0]] = 0;
+      				network.updateEdge(edge.id, edge);
+    			}
+			}
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
     		window.dispatchEvent(log);
 			this.moveToTop();
@@ -329,31 +364,30 @@ var Canvas = function Canvas(userSettings) {
 		}); 
 
 		nodeGroup.on('dbltap dblclick', function() {
-			notify('double tap',1);
-
-			// Store this node in our special array for currently selected nodes.
-			selectedNodes.push(this);
-			console.log(selectedNodes);
-
-			// If this makes a couple, link them.
-			if(selectedNodes.length === 2) {
+			if (settings.mode === 'edge' || settings.mode === 'position') {
+				notify('double tap',1);
+				// Store this node in our special array for currently selected nodes.
+				selectedNodes.push(this);
 				console.log(selectedNodes);
-				selectedNodes[1].children[0].stroke('white');
-				selectedNodes[0].children[0].stroke('white');
-				if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
-					notify('Canvas removing edge.',2);
-					network.removeEdge(network.getEdges({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}));
+
+				// If this makes a couple, link them.
+				if(selectedNodes.length === 2) {
+					console.log(selectedNodes);
+					selectedNodes[1].children[0].stroke('white');
+					selectedNodes[0].children[0].stroke('white');
+					if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
+						notify('Canvas removing edge.',2);
+						network.removeEdge(network.getEdges({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}));
+					}
+					selectedNodes = [];
+					nodeLayer.draw(); 
+				} else {
+					// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
+					this.children[0].stroke(colors.selected);
+					// this.children[0].strokeWidth(4);
+					nodeLayer.draw();                
 				}
-				selectedNodes = [];
-				nodeLayer.draw(); 
-
-			} else {
-				// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
-				this.children[0].stroke(colors.selected);
-				// this.children[0].strokeWidth(4);
-				nodeLayer.draw();                
 			}
-
 		});      
 
 		nodeGroup.on('dragend', function() {

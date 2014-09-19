@@ -7,7 +7,7 @@ var ListSelect = function ListSelect(options) {
   listSelect.options = {
     targetEl: $('.container'),
     variables: [],
-    edgeType: "Drugs",
+    edgeType: "Test",
     heading: "This is a default heading",
     subheading: "And this is a default subheading"
   };
