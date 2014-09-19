@@ -25,11 +25,11 @@ var Session = function Session(options) {
           {label:'NG: other people sex', page:'namegen7.html'},
           {label:'NG: sex, two or more', page:'namegenmod8.html'},
           {label:'Graph layout', page:'canvaslayout.html'},
+          {label:'ORD: relationship strength', page:'ordbin1.html'},
           {label:'CAT: gender identity', page:'multibin1.html'},
           {label:'CAT: race/ethnicity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
-          {label:'CAT: location', page:'multibin4.html'},
-          {label:'ORD: relationship strength', page:'ordbin1.html'}
+          {label:'CAT: location', page:'multibin4.html'}
                     ];
   
   var saveTimer;
