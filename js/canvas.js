@@ -1,4 +1,4 @@
-/*global extend, randomBetween, Kinetic, notify, network, menu */
+/*global extend, Kinetic, notify, network, menu */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -78,7 +78,6 @@ var Canvas = function Canvas(userSettings) {
 		var buttonOffset = $('.info-button').offset();
 		var currentOffset = $('.canvas-title').offset();
 		$('.canvas-title').data('oldPos', currentOffset);
-		console.log(currentOffset);
 		$('.canvas-title').css({position: 'absolute'});
 		$('.canvas-title').offset(currentOffset);
 		$('.canvas-title').children().hide();
@@ -146,9 +145,7 @@ var Canvas = function Canvas(userSettings) {
 		$('<div class="canvas-popover"><div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p><button class="btn btn-primary close-popover" type="button">Okay</button></div></div><span class="hi-icon hi-icon-link info-button">Info</span>').insertBefore( "#kineticCanvas" );
 
 		canvas.initKinetic();
-		canvas.drawUIComponents();
 		
-
 	   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
 
 	    menu.addItem(canvasMenu, 'Load Network', 'icon-play', null);
@@ -168,21 +165,33 @@ var Canvas = function Canvas(userSettings) {
     	// Are there existing nodes? Display them.
     	if (settings.criteria.type !== 'Dyad') {
 	    	var criteriaEdges = network.getEdges(settings.criteria);
-	    	console.log(criteriaEdges);
 	      	for (var i = 0; i < criteriaEdges.length; i++) {
-	      		var dyadEdge = network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to})[0];
-	      		console.log('dyadedege');
-	      		console.log(dyadEdge);
-	      		canvas.addNode(dyadEdge);
-	    	}      		
+	      		var dyadEdge = network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
+	      		var newNode = canvas.addNode(dyadEdge);
+	      		if (settings.mode === 'Select') {
+	      			// initialise the default state of the variable
+	      			var selectObject = {};
+	      			selectObject[settings.variables[0]] = 0;
+	      			if (criteriaEdges[i][settings.variables[0]] !== undefined && criteriaEdges[i][settings.variables[0]] !== '' && criteriaEdges[i][settings.variables[0]] !== 0 ) {
+	      				newNode.children[0].stroke(colors.selected);
+	      				nodeLayer.draw();
+	      			} else {
+	      				network.updateEdge(criteriaEdges[i].id, selectObject);	
+	      			}
+	      			
+	      		}
+	    	}
+
     	} else {
  	    	var dyadEdges = network.getEdges(settings.criteria);
-	    	console.log(dyadEdges);
 	      	for (var j = 0; j < dyadEdges.length; j++) {
 	      		canvas.addNode(dyadEdges[j]);
 	    	}        		
     	}
-  
+  		
+  		setTimeout(function() {
+  			canvas.drawUIComponents();
+  		}, 0);
 
     	// for (var j = 0; j < session.returnData('edges').length; j++) {
      //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
@@ -210,29 +219,36 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.resetPositions = function() {
     	var dyadEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
-    	console.log(dyadEdges);
       	for (var i = 0; i < dyadEdges.length; i++) {
       		network.updateEdge(dyadEdges[i].id, {coords: []});
     	}    
-
 	};
 
 	canvas.addNode = function(options) {
 		notify('Canvas is creating a node.',2);
-		console.log(options);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
-		var randomType = Math.round(randomBetween(0,settings.nodeTypes.length-1));
-		var nodeID = network.getNodes().length;
+
+		var nodeID = 0;
+		while (network.getNode(nodeID) !== false) {
+			nodeID++;
+		}
+
+		var dragStatus = false;
+		if (settings.mode === 'Position' || settings.mode === 'Edge') {
+			dragStatus = true;
+		}
+
 		options.label = options.nname_t0;
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
 			id: nodeID,
 			label: 'Undefined',
 			size: settings.defaultNodeSize,
-			type: settings.nodeTypes[randomType].name,
 			color: 'rgba(0,0,0,0.8)',
-			strokeWidth: 1
+			strokeWidth: 1,	
+			draggable: dragStatus,
+			dragDistance: 10
 		};
 
 		extend(nodeOptions, options);
@@ -240,22 +256,12 @@ var Canvas = function Canvas(userSettings) {
 		nodeOptions.id = parseInt(nodeOptions.id, 10);
 
 		nodeOptions.type = 'Person'; // We don't need different node shapes for RADAR
-		
-		var dragStatus = false;
-		if (settings.mode === 'Position' || settings.mode === 'Select') {
-			dragStatus = true;
-		}
+		nodeOptions.x = nodeOptions.coords[0];
+		nodeOptions.y = nodeOptions.coords[1];
 
-		var nodeGroup = new Kinetic.Group({
-			id: nodeOptions.id,
-			x: nodeOptions.coords[0],
-			y: nodeOptions.coords[1],
-			name: nodeOptions.label,
-			edges: [],
-			type: nodeOptions.type,
-			draggable: dragStatus,
-			dragDistance: 10
-		});
+
+
+		var nodeGroup = new Kinetic.Group(nodeOptions);
 
 		switch (nodeOptions.type) {
 			case 'Person':                
@@ -344,8 +350,7 @@ var Canvas = function Canvas(userSettings) {
 
 		nodeGroup.on('tap click', function() {
 			if (settings.mode === 'Select') {
-				var edge = network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.id})[0];
-				console.log(edge);
+				var edge = network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0];
 				if (edge[settings.variables[0]] === 'undefined' || edge[settings.variables[0]] === 0) {
 					this.children[0].stroke(colors.selected);
       				
@@ -368,11 +373,9 @@ var Canvas = function Canvas(userSettings) {
 				notify('double tap',1);
 				// Store this node in our special array for currently selected nodes.
 				selectedNodes.push(this);
-				console.log(selectedNodes);
 
 				// If this makes a couple, link them.
 				if(selectedNodes.length === 2) {
-					console.log(selectedNodes);
 					selectedNodes[1].children[0].stroke('white');
 					selectedNodes[0].children[0].stroke('white');
 					if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
@@ -430,10 +433,9 @@ var Canvas = function Canvas(userSettings) {
 		nodeGroup.add(nodeLabel);	
 		
 		nodeLayer.add(nodeGroup);
-		console.log(nodeGroup);
 		nodeLayer.draw();
 
-		// console.log('coords:'+nodeOptions.coords);
+	
 		if (!options.coords || options.coords.length === 0) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
@@ -488,8 +490,6 @@ var Canvas = function Canvas(userSettings) {
 
 
 		$.each(canvas.getKineticEdges(), function(index, value) {
-			console.log(index);
-			console.log(value);
 			if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
 				edgeLayer.children[index].remove();
 				edgeLayer.draw();
