@@ -194,18 +194,25 @@ var Canvas = function Canvas(userSettings) {
   			canvas.drawUIComponents();
   		}, 0);
 
-  		function filter(property) {
-  			console.log(property);
-  		}
-
   		// Are there existing edges? Display them
   		if (settings.mode === 'Edge') {
   			var edgeProperties =  {
 							type: settings.edgeType
 						};
-  			var edges = network.getEdges(edgeProperties, filter);
+  			var edges = network.getEdges(edgeProperties, function (results) {
+  				var filteredResults = [];
+  				$.each(results, function(index,value) {
+  					if (value.from !== 0 || value.to !== 0) {
+  						filteredResults.push(value);
+  					}
+  				});
+
+	  			return filteredResults;
+	  		});
   			console.log(edges);
   		}
+
+
 
     	// for (var j = 0; j < session.returnData('edges').length; j++) {
      //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});

@@ -258,6 +258,8 @@ var Network = function Network() {
     if (filter) {
       results = filter(results);
     }
+
+    return results;
   };
 
   network.getEdges = function(criteria, filter) {
