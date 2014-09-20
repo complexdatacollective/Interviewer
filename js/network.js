@@ -246,22 +246,34 @@ var Network = function Network() {
     return result;
   };
 
-  network.getNodes = function(criteria) {
+  network.getNodes = function(criteria, filter) {
     var localNodes = session.returnData('nodes');
+    var results;
     if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-      return network.filterObject(localNodes,criteria);  
+      results = network.filterObject(localNodes,criteria);  
     } else {
-      return localNodes;
+      results = localNodes;
+    }
+
+    if (filter) {
+      results = filter(results);
     }
   };
 
-  network.getEdges = function(criteria) {
+  network.getEdges = function(criteria, filter) {
     var localEdges = session.returnData('edges');
+    var results;
     if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-      return network.filterObject(localEdges,criteria);  
+      results = network.filterObject(localEdges,criteria);
     } else {
-      return localEdges;
+      results = localEdges;
     }
+
+    if (filter) {
+      results = filter(results);
+    }
+  
+    return results;
   };
 
   network.getNodeInboundEdges = function(nodeID) {

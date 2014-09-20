@@ -8,6 +8,7 @@ var Canvas = function Canvas(userSettings) {
 
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, canvas = {};
+	var sourceNode;
 	var selectedNodes = [];
 	var menuOpen = false;
 	var cancelKeyBindings = false;
@@ -171,7 +172,7 @@ var Canvas = function Canvas(userSettings) {
 	      		if (settings.mode === 'Select') {
 	      			// initialise the default state of the variable
 	      			var selectObject = {};
-	      			selectObject[settings.variables[0]] = 0;
+	      			selectObject[settings.variables[0]] = 'percieved';
 	      			if (criteriaEdges[i][settings.variables[0]] !== undefined && criteriaEdges[i][settings.variables[0]] !== '' && criteriaEdges[i][settings.variables[0]] !== 0 ) {
 	      				newNode.children[0].stroke(colors.selected);
 	      				nodeLayer.draw();
@@ -192,6 +193,19 @@ var Canvas = function Canvas(userSettings) {
   		setTimeout(function() {
   			canvas.drawUIComponents();
   		}, 0);
+
+  		function filter(property) {
+  			console.log(property);
+  		}
+
+  		// Are there existing edges? Display them
+  		if (settings.mode === 'Edge') {
+  			var edgeProperties =  {
+							type: settings.edgeType
+						};
+  			var edges = network.getEdges(edgeProperties, filter);
+  			console.log(edges);
+  		}
 
     	// for (var j = 0; j < session.returnData('edges').length; j++) {
      //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
@@ -361,6 +375,41 @@ var Canvas = function Canvas(userSettings) {
 					edge[settings.variables[0]] = 0;
       				network.updateEdge(edge.id, edge);
     			}
+			} else if (settings.mode === 'Edge') {
+					// If this makes a couple, link them.
+					if (selectedNodes[0] === this) {
+						return false;
+					}
+					selectedNodes.push(this);
+					if(selectedNodes.length === 2) {
+						selectedNodes[1].children[0].stroke('white');
+						selectedNodes[0].children[0].stroke('white');
+						var edgeProperties = {
+							from: selectedNodes[0].attrs.to,
+							to: selectedNodes[1].attrs.to,
+							type: settings.edgeType
+						};
+
+						edgeProperties[settings.variables[0]] = 1;
+
+						console.log(edgeProperties);
+
+						if (network.addEdge(edgeProperties) === false) {
+							notify('Canvas removing edge.',2);
+							network.removeEdge(network.getEdges(edgeProperties));
+						} else {
+							//add the edge.
+							network.addEdge(edgeProperties);
+						}
+						selectedNodes = [];
+						nodeLayer.draw(); 
+					} else {
+						// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
+						this.children[0].stroke(colors.selected);
+						// selectedNodes.push(this);
+						// this.children[0].strokeWidth(4);
+						nodeLayer.draw();                
+					}
 			}
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
     		window.dispatchEvent(log);
@@ -369,27 +418,9 @@ var Canvas = function Canvas(userSettings) {
 		}); 
 
 		nodeGroup.on('dbltap dblclick', function() {
-			if (settings.mode === 'edge' || settings.mode === 'position') {
+			if (settings.mode === 'Edge') {
 				notify('double tap',1);
-				// Store this node in our special array for currently selected nodes.
-				selectedNodes.push(this);
-
-				// If this makes a couple, link them.
-				if(selectedNodes.length === 2) {
-					selectedNodes[1].children[0].stroke('white');
-					selectedNodes[0].children[0].stroke('white');
-					if (network.addEdge({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}) === false) {
-						notify('Canvas removing edge.',2);
-						network.removeEdge(network.getEdges({from: selectedNodes[0].attrs.id,to: selectedNodes[1].attrs.id}));
-					}
-					selectedNodes = [];
-					nodeLayer.draw(); 
-				} else {
-					// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
-					this.children[0].stroke(colors.selected);
-					// this.children[0].strokeWidth(4);
-					nodeLayer.draw();                
-				}
+				sourceNode = this;
 			}
 		});      
 
@@ -457,8 +488,13 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.addEdge = function(properties) {
 		notify('Canvas is adding an edge.',2);
-		var fromObject = network.getNode(properties.from);
-		var toObject = network.getNode(properties.to);
+
+		// the below won't work because we are storing the coords in an edge now...
+		// var fromObject = network.getNode(properties.from);
+		// var toObject = network.getNode(properties.to);
+
+		var toObject = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
+		var fromObject = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
 
 		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 		var edge = new Kinetic.Line({
@@ -482,8 +518,9 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.removeEdge = function(properties) {
 
-		var fromNode = network.getNode(properties.from);
-		var toNode = network.getNode(properties.to);
+		var toNode = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
+		var fromNode = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
+
 		notify("Removing edge.");
 		
 
