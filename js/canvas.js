@@ -172,7 +172,7 @@ var Canvas = function Canvas(userSettings) {
 	      		if (settings.mode === 'Select') {
 	      			// initialise the default state of the variable
 	      			var selectObject = {};
-	      			selectObject[settings.variables[0]] = 'percieved';
+	      			selectObject[settings.variables[0]] = 1;
 	      			if (criteriaEdges[i][settings.variables[0]] !== undefined && criteriaEdges[i][settings.variables[0]] !== '' && criteriaEdges[i][settings.variables[0]] !== 0 ) {
 	      				newNode.children[0].stroke(colors.selected);
 	      				nodeLayer.draw();
@@ -196,14 +196,18 @@ var Canvas = function Canvas(userSettings) {
 
   		// Are there existing edges? Display them
   		if (settings.mode === 'Edge') {
+  			
+  			// Set the criteria based on edge type
   			var edgeProperties =  {
 				type: settings.edgeType
 			};
   			
+
+  			// Filter to remove edges involving ego
   			var edges = network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
-  					if (value.from !== 0 && value.to !== 0) {
+  					if (value.from !== network.getNodes({type_t0:'Ego'})[0].id && value.to !== network.getNodes({type_t0:'Ego'})[0].id) {
   						filteredResults.push(value);
   					}
   				});
@@ -216,13 +220,6 @@ var Canvas = function Canvas(userSettings) {
 	  		});
 
   		}
-
-
-
-    	// for (var j = 0; j < session.returnData('edges').length; j++) {
-     //  		canvas.addEdge({from:session.returnData('edges')[j].from, to: session.returnData('edges')[j].to});
-    	// }    	
-
 	};
 
 	canvas.destroy = function() {
@@ -402,7 +399,7 @@ var Canvas = function Canvas(userSettings) {
 							type: settings.edgeType
 						};
 
-						edgeProperties[settings.variables[0]] = 1;
+						edgeProperties[settings.variables[0]] = 'percieved';
 
 						console.log(edgeProperties);
 

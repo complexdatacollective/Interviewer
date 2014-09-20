@@ -1,0 +1,18 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var canvas = new Canvas({
+    	mode:'Edge', //edge, position, select
+		targetEl: $('.container'),
+		edgeType: "Sex",
+    	variables: ['k_or_p_t0'],
+      	criteria: criteria,
+    	heading: "Please draw a line between any two people who have had sex.",
+    	subheading: "Double-tap a person to select them, and then tap others to connect them."
+	});
+  </script>
