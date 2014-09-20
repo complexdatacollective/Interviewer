@@ -1,0 +1,40 @@
+<div class="container full-height">
+ <div id="map"></div>
+</div>
+
+<script>
+
+
+
+        // Initialize the map, point it at the #map element and center it on Chicago
+        var map = L.map('map').setView([41.838299, -87.706953], 11);
+
+        // Add the OpenStreetMap tile layer
+        L.tileLayer(
+          'http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 16,
+          minZoom: 9
+        }).addTo(map);
+
+
+
+        var geojson = new L.geoJson();
+        geojson.addTo(map);
+
+        $.ajax({
+          dataType: "json",
+          url: "data/chicago.json",
+          success: function(data) {
+            $(data.features).each(function(key, data) {
+              geojson.addData(data);
+            });
+          }
+        }).error(function() {});
+
+        // Add a marker
+        var marker = L.marker([41.838299, -87.706953]);
+        marker.bindPopup('<h1>This is a marker</h1>');
+        marker.addTo(map);
+
+</script>

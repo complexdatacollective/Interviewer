@@ -35,7 +35,9 @@ var Session = function Session(options) {
           {label:'CANVAS: alcohol', page:'canvasselect1.html'},
           {label:'ORD: oral sex freq.', page:'ordbin2.html'},
           {label:'ORD: vaginal sex freq.', page:'ordbin3.html'},
-          {label:'ORD: anal sex freq.', page:'ordbin4.html'}
+          {label:'ORD: anal sex freq.', page:'ordbin4.html'},
+          {label:'map', page:'map1.html'}
+
                     ];
   
   var saveTimer;
