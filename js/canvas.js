@@ -197,19 +197,24 @@ var Canvas = function Canvas(userSettings) {
   		// Are there existing edges? Display them
   		if (settings.mode === 'Edge') {
   			var edgeProperties =  {
-							type: settings.edgeType
-						};
+				type: settings.edgeType
+			};
+  			
   			var edges = network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
-  					if (value.from !== 0 || value.to !== 0) {
+  					if (value.from !== 0 && value.to !== 0) {
   						filteredResults.push(value);
   					}
   				});
 
 	  			return filteredResults;
 	  		});
-  			console.log(edges);
+
+	  		$.each(edges, function(index,value) {
+	  			canvas.addEdge(value);
+	  		});
+
   		}
 
 
