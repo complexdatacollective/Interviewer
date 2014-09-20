@@ -22,7 +22,48 @@ html, body {
     // width:96%;
 }
 
-#map { height: 800px; }
+.container {
+    width:80% !important;
+    padding:0 !important;
+    overflow: hidden;
+}
+
+// map
+
+#map { 
+    height: 100%;
+    width:100%;
+}
+
+.leaflet-tile-pane {
+    filter:grayscale();
+}
+
+.map-node-container {
+    width:410px !important;
+    padding:40px !important;
+    background: black;
+    position:absolute;
+    bottom:30px;
+    left:90px;
+    border-radius: 12px;
+}
+
+.map-node-box {
+    display:inline-flex;
+    align-items: center;
+    justify-content: center;
+    height:200px;
+}
+
+.map-node {
+    padding:20px;
+    border-radius: 30px;
+    background: #eee;
+    color:black;
+}
+
+// end map
 
 .followup {
     position:absolute;
@@ -134,11 +175,7 @@ html, body {
     font-size:13px;
 }
 
-.container {
-    width:80% !important;
-    padding:0 !important;
-    overflow: hidden;
-}
+
 
 // name gen mod
 .list-container {

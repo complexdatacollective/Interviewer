@@ -433,7 +433,9 @@ var Canvas = function Canvas(userSettings) {
 		nodeGroup.add(nodeLabel);	
 		
 		nodeLayer.add(nodeGroup);
-		nodeLayer.draw();
+		setTimeout(function() {
+			nodeLayer.draw();
+		}, 0);
 
 	
 		if (!options.coords || options.coords.length === 0) {

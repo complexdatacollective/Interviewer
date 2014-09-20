@@ -105,7 +105,7 @@ var Session = function Session(options) {
     var sessionMenu = menu.addMenu('Session','hi-icon-cog');
     menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
-    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { return true; });
+    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { session.downloadData(); });
     // menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
 
     var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
@@ -113,6 +113,15 @@ var Session = function Session(options) {
       menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
     });
 
+  };
+
+  session.downloadData = function() {
+    var filename = session.returnSessionID()+'.json';
+    var text = JSON.stringify(session.userData, undefined, 2); // indentation level = 2;
+      var pom = document.createElement('a');
+      pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      pom.setAttribute('download', filename);
+      pom.click();
   };
 
   session.reset = function() {
