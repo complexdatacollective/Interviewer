@@ -443,7 +443,8 @@ section.related {
   left: 0 !important;
   width: 400px;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   border-radius: 0;
   -webkit-backface-visibility: hidden;
 }
