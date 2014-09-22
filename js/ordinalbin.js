@@ -72,7 +72,7 @@ var OrdinalBin = function OrdinalBin(options) {
 
     var number = ordinalBin.options.variable.values.length;
     itemW = ($('.container').outerWidth()/number)-20;
-    itemH = $('.container').outerHeight()-300;
+    itemH = $('.container').outerHeight()-400;
 
 
 

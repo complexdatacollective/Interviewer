@@ -68,12 +68,16 @@
 
 
         // Initialize the map, point it at the #map element and center it on Chicago
-        var map = L.map('map').setView([41.838299, -87.706953], 11);
+        var map = L.map('map', {
+            maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]] 
+
+            // -88.504999999,41.338999999,-87.066,42.296999999
+        }).setView([41.798395426119534,-87.839671372338884], 11);
 
         // Add the OpenStreetMap tile layer
         L.tileLayer(
           'img/Tiles/{z}/{x}/{y}.png', {
-          maxZoom: 15,
+          maxZoom: 17,
           minZoom: 11
         }).addTo(map);
 

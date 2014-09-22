@@ -6316,7 +6316,11 @@ html,
 body {
   height: 100%;
   width: 100%;
-  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: "kern" 1;
+     -moz-font-feature-settings: "kern" 1;
+          font-feature-settings: "kern" 1;
   font-weight: 300;
   overflow: hidden;
 }
