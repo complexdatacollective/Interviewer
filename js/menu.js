@@ -60,7 +60,12 @@ var Menu = function Menu(options) {
         if(!targetMenu) {
             //close all menus
             $.each(menus, function(index) {
-                menus[index].items.find('.icon-close').trigger('click');        
+                // menus[index].items.find('.icon-close').trigger('click');        
+                var name = '.'+menus[index].name+'-menu-container';
+                console.log($(name));
+                if($(name).hasClass('active')) {
+                    menus[index].items.find('.icon-close').trigger('click');
+                }
             });
         } else {
             targetMenu.items.find('.icon-close').trigger('click');    
