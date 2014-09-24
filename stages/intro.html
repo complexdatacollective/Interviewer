@@ -14,13 +14,14 @@
 					<label for="sessionID">Session ID:</label>
 				  	<input type="text" class="form-control sessionID" id="sessionID" disabled>
 				</div>
-				<div class="form-group">
-					<label for="startDate">Start Date:</label>
-				  	<input type="text" class="form-control startDate" id="startDate" disabled>
-				</div>
-				<div class="form-group">
-				  	<button type="submit" class="btn btn-primary submit-1">Continue</button>
-				</div>
+                <div class="btn-group" data-toggle="buttons">              
+                    <label class="btn active">
+                      <input type="radio" name='seed_status_t0' checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
+                    </label>
+                    <label class="btn">
+                      <input type="radio" name='seed_status_t0'><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Non-Seed
+                    </label>
+                </div>
 			</form>
 		</div>
 	</div>

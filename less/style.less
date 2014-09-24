@@ -2,10 +2,11 @@
 /* ===================================================================
 Import Bootstrap LESS and Site Specific LESS
 =================================================================== */
- 
 @import '../components/bootstrap/less/bootstrap.less'; /* Compiled in Codekit - referenced here as a Framework */
 @import '../less/variables.less'; /* Your site specific LESS variables - these override BS defaults  */
 @import '../less/colors.less';
+
+
 
 
 html, body {
@@ -16,6 +17,60 @@ html, body {
     font-feature-settings: "kern" 1;
     font-weight:300;
     overflow:hidden;
+}
+
+// radio groups
+label input[type="radio"] ~ i.fa.fa-circle-o{
+    color: #c8c8c8;    display: inline;
+}
+label input[type="radio"] ~ i.fa.fa-check-circle-o{
+    display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-circle-o{
+    display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-check-circle-o{
+    color: @brand-primary;    display: inline;
+}
+label:hover input[type="radio"] ~ i.fa {
+    color: @brand-primary;
+}
+
+
+div[data-toggle="buttons"] label.active{
+    color: @brand-primary;
+}
+
+div[data-toggle="buttons"] label {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 2em;
+    text-align: left;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: none;
+    border: 0px solid 
+    #c8c8c8;
+    border-radius: 3px;
+    color: #c8c8c8;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+div[data-toggle="buttons"] label:hover {
+    color: @brand-primary;
+}
+
+div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 
@@ -101,12 +156,11 @@ html, body {
     height: 875px;
     width: 100%;
     background: transparent;
-    top: 0;
+    top: -1200px;
     left: 0;
     z-index: 9999;
     transition: all 0.5s ease-in-out;
     opacity:0;
-    display:none;
 }
 
 .relationship-close-button {
@@ -120,8 +174,9 @@ html, body {
 }
 
 .open {
-    display: initial;
+    top:0;
     opacity:1;
+    transition: all 0.5s ease-in-out;
 }
 
 .relationship-type {

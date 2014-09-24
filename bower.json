@@ -25,6 +25,8 @@
     "history.js": "~1.8.0",
     "jquery-ui": "~1.11.1",
     "jqueryui-touch-punch": "*",
-    "leaflet": "~0.7.3"
+    "leaflet": "~0.7.3",
+    "components-font-awesome": "~4.2.0",
+    "lato": "~0.2.1"
   }
 }

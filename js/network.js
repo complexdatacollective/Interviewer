@@ -104,6 +104,10 @@ var Network = function Network() {
 
   };
 
+  network.removeEdges = function(edges) {
+    network.removeEdge(edges);
+  };
+
   network.removeEdge = function(edge) {
     if (!edge) {
       return false;

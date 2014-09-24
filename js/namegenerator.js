@@ -20,7 +20,7 @@ var Namegenerator = function Namegenerator(options) {
 
   var alterCount = network.getNodes({type_t0: 'Alter'}).length;
 
-  var relationshipTypes = {
+  var roles = {
   	'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
   	'Family / Relative': ['Parent/Guardian','Brother/Sister','Grandparent','Other Family','Chosen Family'],
   	'Romantic / Sexual Partner': ['Boyfriend/Girlfriend','Ex-Boyfriend/Ex-Girlfriend','Booty Call/Fuck Buddy/Hook Up','One Night Stand','Other type of Partner'],
@@ -51,41 +51,15 @@ var Namegenerator = function Namegenerator(options) {
 
 	};
 
-  var relationshipClickHandler = function() {
-  	var edgeProperties;
-    // console.log($(this));
+  var roleClickHandler = function() {
+
     if ($(this).data('selected') === true) {
       $(this).data('selected', false);
       $(this).removeClass('selected');
 
-      edgeProperties = {
-      	type: 'Role',
-      	from:network.getNodes({type_t0:'Ego'})[0].id, 
-      	to: editing,
-      	reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
-      	reltype_sub_t0: $(this).data('sub-relationship')
-      };
-
-      console.log(edgeProperties);
-      // remove edge
-      network.removeEdge(network.getEdges(edgeProperties));
-
     } else {
       $(this).data('selected', true);
       $(this).addClass('selected');
-
-      // create the edges
-
-      edgeProperties = {
-      	type: 'Role',
-      	from:network.getNodes({type_t0:'Ego'})[0].id, 
-      	to: editing,
-      	reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
-      	reltype_sub_t0: $(this).data('sub-relationship')
-      };
-
-		console.log(edgeProperties);
-      network.addEdge(edgeProperties);
     }
     
   };
@@ -136,7 +110,7 @@ var Namegenerator = function Namegenerator(options) {
 				// 	$("select[name='reltype_sub_t0']").children().remove();
 				// 	$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
 
-				// 	$.each(relationshipTypes[$("select[name='reltype_main_t0']").val()], function(index,value) {
+				// 	$.each(roles[$("select[name='reltype_main_t0']").val()], function(index,value) {
 				// 		$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
 				// 	});
 
@@ -171,7 +145,7 @@ var Namegenerator = function Namegenerator(options) {
 		$("select[name='reltype_sub_t0']").prop( "disabled", false );
 		$("select[name='reltype_sub_t0']").children().remove();
 		$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
-		$.each(relationshipTypes[$("select[name='reltype_main_t0']").val()], function(index,value) {
+		$.each(roles[$("select[name='reltype_main_t0']").val()], function(index,value) {
 			$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
 		});
 	
@@ -354,7 +328,7 @@ var Namegenerator = function Namegenerator(options) {
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.newNodeBox').remove();
 		$('.relationship-types-container').remove();
-		$(document).off("click", '.relationship', relationshipClickHandler);
+		$(document).off("click", '.relationship', roleClickHandler);
 		$(document).off("click", '.relationship-button', namegenerator.toggleRelationshipBox);
 		$(document).off("click", '.relationship-close-button', namegenerator.toggleRelationshipBox);
 	};
@@ -428,9 +402,9 @@ var Namegenerator = function Namegenerator(options) {
 		alterCountBox = $('<div class="relationship-types-container"><h1>Select this Individual\'s Relationship Roles from the List Below</h1><p class="lead">Tap each role to select as many as you think apply, then click the close button (above) to continue.</p><button class="btn btn-primary relationship-close-button">Close</button></div>');
 		$('.newNodeBox').after(alterCountBox);
 		var counter = 0;
-		$.each(relationshipTypes, function(index) {
+		$.each(roles, function(index) {
 			$('.relationship-types-container').append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
-			$.each(relationshipTypes[index], function(relIndex, relValue) {
+			$.each(roles[index], function(relIndex, relValue) {
 				$('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
 			});
 		counter++;
@@ -458,7 +432,7 @@ var Namegenerator = function Namegenerator(options) {
 		$("select[name='reltype_main_t0']").on('change', selectChangeHandler);
 		$("select[name='reltype_sub_t0']").on('change', selectSubChangeHandler);    
 		$('#ngForm').on('submit', submitFormHandler);
-		$(document).on("click", '.relationship', relationshipClickHandler);
+		$(document).on("click", '.relationship', roleClickHandler);
 		$(document).on("click", '.relationship-button', namegenerator.toggleRelationshipBox);
 		$(document).on("click", '.relationship-close-button', namegenerator.toggleRelationshipBox);
 
@@ -478,11 +452,11 @@ var Namegenerator = function Namegenerator(options) {
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
 					console.log(value);
-					$(value).transition({opacity:0,top:'-1000px'},800);
+					$(value).transition({opacity:0,top:'-1000px'},400);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
-							$(childvalue).transition({opacity:0,top:'-200px'}, 800);
-						}, 400+(index*100));
+							$(childvalue).transition({opacity:0,top:'-200px'}, 200);
+						}, 200+(index*100));
 					});
 				}, index*100);
 
@@ -491,7 +465,7 @@ var Namegenerator = function Namegenerator(options) {
 			setTimeout(function() {
 				$('.newNodeBox').show();
 				$('.relationship-types-container').removeClass('open');
-			}, 1500);
+			}, 1000);
 
 		} else {
 			// opening
@@ -512,11 +486,11 @@ var Namegenerator = function Namegenerator(options) {
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
 					console.log(value);
-					$(value).transition({opacity:1,top:'0px'},800);
+					$(value).transition({opacity:1,top:'0px'},600);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
-							$(childvalue).transition({opacity:1,top:0}, 800);
-						}, 400+(index*100));
+							$(childvalue).transition({opacity:1,top:0}, 400);
+						}, 300+(index*100));
 					});
 				}, index*100);
 
