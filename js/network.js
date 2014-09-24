@@ -56,6 +56,7 @@ var Network = function Network() {
   network.addEdge = function(properties) {
 
     if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
+      notify('ERROR: "To" and "From" must BOTH be defined.',2);
       return false;
     }
 
@@ -76,17 +77,15 @@ var Network = function Network() {
 
     extend(edgeProperties, properties);
     var alreadyExists = false;
-    var localEdges = session.returnData('edges');
-    for (var i = 0; i<localEdges.length; i++) {
-      if (localEdges[i].from === edgeProperties.from && localEdges[i].to === edgeProperties.to || localEdges[i].from === edgeProperties.to && localEdges[i].to === edgeProperties.from) {
-        //to and from match. what about type? 
-        if(localEdges[i].type === edgeProperties.type) {
-          if (localEdges[i].type === edgeProperties.type) {
-            alreadyExists = true;
-          }
-        }
-      }
-    }
+    // var localEdges = session.returnData('edges');
+    // for (var i = 0; i<localEdges.length; i++) {
+    //   if (localEdges[i].from === edgeProperties.from && localEdges[i].to === edgeProperties.to || localEdges[i].from === edgeProperties.to && localEdges[i].to === edgeProperties.from) {
+    //     //to and from match. what about type? 
+    //     if(localEdges[i].type === edgeProperties.type) {
+    //         alreadyExists = true;
+    //     }
+    //   }
+    // }
 
     if(alreadyExists === false) {
       session.addData('edges', edgeProperties, true);
@@ -99,6 +98,7 @@ var Network = function Network() {
 
       return edgeProperties.id;      
     } else {
+      notify('ERROR: Edge already exists!',2);
       return false;
     }
 

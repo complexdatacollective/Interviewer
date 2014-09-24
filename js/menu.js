@@ -59,10 +59,8 @@ var Menu = function Menu(options) {
     menu.closeMenu = function(targetMenu) {
         if(!targetMenu) {
             //close all menus
-            $.each(menus, function(index) {
-                // menus[index].items.find('.icon-close').trigger('click');        
+            $.each(menus, function(index) {     
                 var name = '.'+menus[index].name+'-menu-container';
-                console.log($(name));
                 if($(name).hasClass('active')) {
                     menus[index].items.find('.icon-close').trigger('click');
                 }
