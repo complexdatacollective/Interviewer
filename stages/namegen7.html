@@ -1,4 +1,4 @@
-<div class="container full-height">
+<div class="container full-height alt">
 
 </div>
 
@@ -26,6 +26,16 @@
   // add existing nodes
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:9}), function(index,value) {
       namegenerator.addToList(value);
+    });
+
+  // add custom node list
+
+    $('<div class="node-list"><h4>People you already listed:</h4></div>').insertBefore('.nameList');
+    // $('.node-container').append(currentNodeList);
+    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
+      
+      var el = $('<div class="node-list-item">'+value.nname_t0+'</div>')
+      $('.node-list').append(el);
     });
 
 </script>

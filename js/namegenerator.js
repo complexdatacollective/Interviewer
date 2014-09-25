@@ -197,6 +197,7 @@ var Namegenerator = function Namegenerator(options) {
 			var edgeProperties = {};
 
 			if (editing === false) {
+				// We are submitting a new node
 				extend(nodeProperties, newNodeProperties);
 				var newNode = network.addNode(nodeProperties);
 				var id;
@@ -227,14 +228,30 @@ var Namegenerator = function Namegenerator(options) {
 					id = network.addEdge(edgeProperties);
 				});
 
+				// Add role edges
+
+				// Iterate through selected items and create a new role edge for each.
+				$.each($('.relationship.selected'), function() {		
+			      	edgeProperties = {
+			            type: 'Role',
+			            from:network.getNodes({type_t0:'Ego'})[0].id, 
+			            to: newNode,
+			            reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
+			            reltype_sub_t0: $(this).data('sub-relationship')
+			      	};
+				    network.addEdge(edgeProperties);
+				});
+
+
+				// Main edge
 				var edge = network.getEdges({to:newNode, type:"Dyad"})[0];
 				namegenerator.addToList(edge);
 				alterCount++;
 				$('.alter-count-box').html(alterCount);
 
 
-			// END IF NOT EDITING;
 			} else {
+				// We are updating a node
 
 				var color = function() {
 					var el = $('div[data-index='+editing+']');
@@ -270,8 +287,24 @@ var Namegenerator = function Namegenerator(options) {
 				});
 				
 				network.updateNode(nodeID, newNodeProperties);
-
 				var properties = extend(newEdgeProperties,newNodeProperties);
+
+				// update relationship roles
+
+				// Remove existing edges
+				network.removeEdges(network.getEdges({type:"Role", from: network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
+
+
+				$.each($('.relationship.selected'), function() {		
+			      	edgeProperties = {
+			            type: 'Role',
+			            from:network.getNodes({type_t0:'Ego'})[0].id, 
+			            to: editing,
+			            reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
+			            reltype_sub_t0: $(this).data('sub-relationship')
+			      	};
+				    network.addEdge(edgeProperties);
+				});
 
 				$('div[data-index='+editing+']').html("");
 				$('div[data-index='+editing+']').append('<h4>'+properties.nname_t0+'</h4>');
@@ -288,9 +321,10 @@ var Namegenerator = function Namegenerator(options) {
 			// var edge = network.getEdge(editing);;
 			
 			editing = false;
-		}
 
-		  // $('#ngForm').trigger("reset");
+			} // end if editing
+
+		  
 		  namegenerator.closeNodeBox();
 
 		
@@ -307,10 +341,15 @@ var Namegenerator = function Namegenerator(options) {
 	namegenerator.closeNodeBox = function() {
 		$('.content').removeClass('blurry');
 		$('.newNodeBox').transition({scale:0.1,opacity:0},500);
+		setTimeout(function() {
+
+		});
 		nodeBoxOpen = false;
 		$('#ngForm').trigger("reset"); 
 		$('.reltype_oth_t0').hide();
-		editing = false;       
+		editing = false;
+		$('.relationship-button').html('Set Relationship Roles');
+		$('.relationship').removeClass('selected');       
 	};
 
 	namegenerator.destroy = function() {
@@ -445,13 +484,12 @@ var Namegenerator = function Namegenerator(options) {
 			//closing 
 
 			if(editing) {
-				var roleCount = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
+				var roleCount = $('.relationship.selected').length;
 				$('.relationship-button').html(roleCount+' roles selected.');			
 			}
 
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					console.log(value);
 					$(value).transition({opacity:0,top:'-1000px'},400);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
@@ -468,10 +506,7 @@ var Namegenerator = function Namegenerator(options) {
 			}, 1000);
 
 		} else {
-			// opening
-
-			$('.relationship').removeClass('selected');
-			
+			// opening			
 			if(editing) {
 				var roleEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
 				$.each(roleEdges, function(index, value) {
@@ -485,7 +520,6 @@ var Namegenerator = function Namegenerator(options) {
 			$('.relationship-type').css({position:'relative', opacity:0,top:'-1000px'});
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					console.log(value);
 					$(value).transition({opacity:1,top:'0px'},600);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {

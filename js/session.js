@@ -15,16 +15,14 @@ var Session = function Session(options) {
   session.stages = [
           {label:'Intro', page:'intro.html'},
           {label:'NG: closest', page:'namegen1.html'},
-          {label:'NG: time, energy', page:'namegen2.html'},
           {label:'NG: $25', page:'namegen3.html'},
-          {label:'NG: gay issues', page:'namegen4.html'},
-          {label:'NI: drugs or alcohol', page:'listselect1.html'},
+          {label:'NG: time, energy', page:'namegen2.html'},
           {label:'NG: other people drugs or alcohol', page:'namegen5.html'},
           {label:'NG: drugs, two or more', page:'namegenmod6.html'},
-          {label:'NI: sex', page:'listselect2.html'},
-          {label:'NG: other people sex', page:'namegen7.html'},
-          {label:'NG: sex, two or more', page:'namegenmod8.html'},
-          {label:'CANVAS: Graph layout', page:'canvaslayout.html'},
+          {label:'NG: other people sex', page:'namegen7.html'},          
+          {label:'NG: sex, two or more', page:'namegenmod8.html'},          
+          {label:'CANVAS: layout and social network', page:'canvasedge1.html'},
+          {label:'CANVAS: who recruited you?', page:'canvasselect2.html'},
           {label:'ORD: relationship strength', page:'ordbin1.html'},
           {label:'ORD: contact frequency', page:'ordbin1a.html'},
           {label:'CAT: gender identity', page:'multibin1.html'},
@@ -37,11 +35,9 @@ var Session = function Session(options) {
           {label:'ORD: vaginal sex freq.', page:'ordbin3.html'},
           {label:'ORD: anal sex freq.', page:'ordbin4.html'},
           {label:'map', page:'map1.html'},
-          {label:'CANVAS: edge closeness', page:'canvasedge1.html'},
           {label:'CANVAS: edge drugs', page:'canvasedge2.html'},
           {label:'CANVAS: edge sex', page:'canvasedge3.html'},
           {label:'Finish', page:'finish.html'}
-
                     ];
   
   var saveTimer;

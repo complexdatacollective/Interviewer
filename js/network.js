@@ -87,6 +87,12 @@ var Network = function Network() {
     //   }
     // }
 
+    // old way of checking if an edge existed checked for values of to, from, and type. We needed those to not have to be unique.
+    // New way: check if all properties are the same.
+    if (network.getEdges(properties).length > 0) {
+      alreadyExists = true;
+    }
+
     if(alreadyExists === false) {
       session.addData('edges', edgeProperties, true);
       var log = new CustomEvent('log', {"detail":{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
