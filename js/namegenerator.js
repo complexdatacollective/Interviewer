@@ -24,7 +24,7 @@ var Namegenerator = function Namegenerator(options) {
   	'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
   	'Family / Relative': ['Parent/Guardian','Brother/Sister','Grandparent','Other Family','Chosen Family'],
   	'Romantic / Sexual Partner': ['Boyfriend/Girlfriend','Ex-Boyfriend/Ex-Girlfriend','Booty Call/Fuck Buddy/Hook Up','One Night Stand','Other type of Partner'],
-  	'Acquaintaince / Associate': ['Coworker-Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
+  	'Acquaintance / Associate': ['Coworker-Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
   	'Other Support / Source of Advice': ['Teacher/Professor','Counselor/Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
   	'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
   	'Other': []

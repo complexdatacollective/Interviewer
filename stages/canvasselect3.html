@@ -9,9 +9,12 @@
     var canvas = new Canvas({
     	mode:'Select', //edge, position, select
 		  targetEl: $('.container'),
-		  edgeType: "RecruitedBy",
+		  edgeType: "Drugs",
+      variables: [
+        {label:'drug_type', value:'Alcohol'}
+      ],
       criteria: criteria,
-    	heading: "Please tap on the person who recruited you into this study",
+    	heading: "Tap on all of the people with whom you have gotten drunk in the past six months.",
     	subheading: ""
 	});
   </script>

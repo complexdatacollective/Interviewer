@@ -36,7 +36,7 @@ var Canvas = function Canvas(userSettings) {
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
-		concentricCircleNumber: 4,
+		concentricCircleNumber: 1,
 		criteria: {from:network.getNodes({type_t0:'Ego'})[0].id},
 		nodeTypes: [
 		{'name':'Person','color':colors.blue},
@@ -64,9 +64,10 @@ var Canvas = function Canvas(userSettings) {
 	};
 
 	var edgeAddedHandler = function(e) {
-
 		// Ignore edges that original at ego.
-		if(e.from !== network.getNodes({type_t0:'Ego'})[0].id) {
+		if(typeof e.detail.from !== 'undefined' && e.detail.from !== network.getNodes({type_t0:'Ego'})[0].id) {
+			console.log('from');
+			console.log(e.from);
 			canvas.addEdge(e.detail);
 		}
 		
@@ -188,6 +189,7 @@ var Canvas = function Canvas(userSettings) {
   		}, 0);
 
   		// Are there existing edges? Display them
+  		var edges;
   		if (settings.mode === 'Edge') {
   			
   			// Set the criteria based on edge type
@@ -197,7 +199,7 @@ var Canvas = function Canvas(userSettings) {
   			
 
   			// Filter to remove edges involving ego, unless this is edge select mode.
-  			var edges = network.getEdges(edgeProperties, function (results) {
+  			edges = network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
   					if (value.from !== network.getNodes({type_t0:'Ego'})[0].id && value.to !== network.getNodes({type_t0:'Ego'})[0].id) {
@@ -209,6 +211,28 @@ var Canvas = function Canvas(userSettings) {
 	  		});
 
 	  		$.each(edges, function(index,value) {
+	  			canvas.addEdge(value);
+	  		});
+
+  		} else {
+  			// Show the social network
+  			// Filter to remove edges involving ego, unless this is edge select mode.
+  			edges = network.getEdges({type:'Dyad'}, function (results) {
+  				var filteredResults = [];
+  				$.each(results, function(index,value) {
+  					if (value.from !== network.getNodes({type_t0:'Ego'})[0].id && value.to !== network.getNodes({type_t0:'Ego'})[0].id) {
+  						filteredResults.push(value);
+  					}
+  				});
+
+	  			return filteredResults;
+	  		});
+
+  			console.log('social');
+  			console.log(edges);
+	  		$.each(edges, function(index,value) {
+	  			console.log('adding');
+	  			console.log(value);
 	  			canvas.addEdge(value);
 	  		});
 
@@ -383,6 +407,13 @@ var Canvas = function Canvas(userSettings) {
 						type: settings.edgeType,
 						time_point:0
 					};
+
+					if (typeof settings.variables !== 'undefined') {
+						$.each(settings.variables, function(index, value) {
+							edge[value.label] = value.value;
+						});
+					}
+					
 					this.children[0].stroke(colors.selected);
 					network.addEdge(edge);
 
@@ -503,7 +534,6 @@ var Canvas = function Canvas(userSettings) {
 		// the below won't work because we are storing the coords in an edge now...
 		// var fromObject = network.getNode(properties.from);
 		// var toObject = network.getNode(properties.to);
-		if (settings.mode !== 'Select') {
 			notify('Canvas is adding an edge.',2);
 			var toObject = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
 			var fromObject = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
@@ -529,8 +559,6 @@ var Canvas = function Canvas(userSettings) {
 			notify("Created Edge between "+fromObject.label+" and "+toObject.label, "success",2);
 		
 			return true;
-
-		}
    
 	};
 
@@ -624,22 +652,6 @@ var Canvas = function Canvas(userSettings) {
 			circleLayer.add(circleLines);
 
 		}
-
-	  	// create a new node box
-		var deleteNodeBox = new Kinetic.Circle({
-			radius: 50,
-			stroke: '#666',
-			strokeWidth: 0,
-				y: window.innerHeight - 100, //padding
-				x: 100,
-			});
-
-	  	deleteNodeBox.on('click tap', function() {
-
-	  		// Turn this into a delete box
-	  	});
-
-	  	uiLayer.add(deleteNodeBox);
 
 	  	circleLayer.draw();
 	  	uiLayer.draw();
