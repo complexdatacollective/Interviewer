@@ -209,10 +209,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     right:30px;
 }
 
-.selected {
-    border:7px solid gold !important;
-}
-
 .open {
     top:0;
     opacity:1;
@@ -235,15 +231,16 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     height:80px;
     color:white;
     background:rgba(230,230,230,0.3);
-    border:1px solid white;
+    border-radius: 32px;
+    border:1px solid #fff;
     margin:10px;
     display:inline-flex;
     align-items: center;
     justify-content: center;
     z-index:9999;
     cursor: pointer; cursor: hand;
-    border-radius: 32px;
-    transition: all 0.5s ease-in-out;
+    
+    transition: all 0.1s ease-in-out;
 }
 
 .relationship-type h1 {
@@ -251,6 +248,11 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     min-height: 100px;
 }
 
+.selected {
+    border:7px solid rgba(255, 238, 0, 1.0);
+    background: gold;
+    color:black;
+}
 
 // map
 

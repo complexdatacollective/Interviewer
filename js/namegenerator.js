@@ -483,27 +483,33 @@ var Namegenerator = function Namegenerator(options) {
 		if ($('.relationship-types-container').hasClass('open')) {
 			//closing 
 
+			var roleCount = $('.relationship.selected').length;
 			if(editing) {
-				var roleCount = $('.relationship.selected').length;
 				$('.relationship-button').html(roleCount+' roles selected.');			
+			} else {
+				if (roleCount > 0) {
+					$('.relationship-button').html(roleCount+' roles selected.');
+				} else {
+					$('.relationship-button').html('Set Relationship Roles');
+				}
 			}
 
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					$(value).transition({opacity:0,top:'-1000px'},400);
+					$(value).transition({opacity:0,top:'-1000px'},200);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
 							$(childvalue).transition({opacity:0,top:'-200px'}, 200);
-						}, 200+(index*100));
+						}, 100+(index*50));
 					});
-				}, index*100);
+				}, index*50);
 
 			});
 
 			setTimeout(function() {
 				$('.newNodeBox').show();
 				$('.relationship-types-container').removeClass('open');
-			}, 1000);
+			}, 600);
 
 		} else {
 			// opening			
@@ -520,11 +526,11 @@ var Namegenerator = function Namegenerator(options) {
 			$('.relationship-type').css({position:'relative', opacity:0,top:'-1000px'});
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					$(value).transition({opacity:1,top:'0px'},600);
+					$(value).transition({opacity:1,top:'0px'},300);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
-							$(childvalue).transition({opacity:1,top:0}, 400);
-						}, 300+(index*100));
+							$(childvalue).transition({opacity:1,top:0}, 200);
+						}, 150+(index*100));
 					});
 				}, index*100);
 
