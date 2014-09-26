@@ -66,8 +66,6 @@ var Canvas = function Canvas(userSettings) {
 	var edgeAddedHandler = function(e) {
 		// Ignore edges that original at ego.
 		if(typeof e.detail.from !== 'undefined' && e.detail.from !== network.getNodes({type_t0:'Ego'})[0].id) {
-			console.log('from');
-			console.log(e.from);
 			canvas.addEdge(e.detail);
 		}
 		
@@ -228,11 +226,7 @@ var Canvas = function Canvas(userSettings) {
 	  			return filteredResults;
 	  		});
 
-  			console.log('social');
-  			console.log(edges);
 	  		$.each(edges, function(index,value) {
-	  			console.log('adding');
-	  			console.log(value);
 	  			canvas.addEdge(value);
 	  		});
 
@@ -437,14 +431,10 @@ var Canvas = function Canvas(userSettings) {
 
 						edgeProperties[settings.variables[0]] = 'percieved';
 
-						console.log(edgeProperties);
 
 						if (network.addEdge(edgeProperties) === false) {
 							notify('Canvas removing edge.',2);
 							network.removeEdge(network.getEdges(edgeProperties));
-						} else {
-							//add the edge.
-							network.addEdge(edgeProperties);
 						}
 						selectedNodes = [];
 						nodeLayer.draw(); 
