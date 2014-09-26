@@ -28,6 +28,7 @@ var OrdinalBin = function OrdinalBin(options) {
   var stageChangeHandler = function() {
     ordinalBin.destroy();
   };
+  
   var followupHandler = function() {
     var followupVal = $(this).data('value');
     var nodeid = followup;

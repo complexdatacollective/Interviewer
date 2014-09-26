@@ -484,11 +484,17 @@ var Namegenerator = function Namegenerator(options) {
 			//closing 
 
 			var roleCount = $('.relationship.selected').length;
+			var plural = "roles";
+			
+			if (roleCount === 1) {
+				plural = "role";
+			}
+			
 			if(editing) {
-				$('.relationship-button').html(roleCount+' roles selected.');			
+				$('.relationship-button').html(roleCount+' '+plural+' selected.');			
 			} else {
 				if (roleCount > 0) {
-					$('.relationship-button').html(roleCount+' roles selected.');
+					$('.relationship-button').html(roleCount+' '+plural+' selected.');
 				} else {
 					$('.relationship-button').html('Set Relationship Roles');
 				}

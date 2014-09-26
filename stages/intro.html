@@ -15,11 +15,11 @@
 				  	<input type="text" class="form-control sessionID" id="sessionID" disabled>
 				</div>
                 <div class="btn-group" data-toggle="buttons">              
-                    <label class="btn active">
-                      <input type="radio" name='seed_status_t0' checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
+                    <label class="btn">
+                      <input type="radio" name='seed_status_t0' data-value="Seed"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
                     </label>
                     <label class="btn">
-                      <input type="radio" name='seed_status_t0'><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Non-Seed
+                      <input type="radio" name='seed_status_t0' data-value="Non-Seed" ><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Non-Seed
                     </label>
                 </div>
                 <div class="form-group">
@@ -36,19 +36,22 @@
 	$('.startDate').val(readable);
 	$('.sessionID').val(session.returnData('session').sessionID);
 	$('.radarID').val(network.getNode(0).radar_id);
+	$("input:radio[name=seed_status_t0][data-value='"+network.getNode(0).seed_status_t0+"']").prop('checked', true);
+	$("input:radio[name=seed_status_t0][data-value='"+network.getNode(0).seed_status_t0+"']").parent().addClass('active');
 
 
 	$( "#step1" ).submit(function( event ) {
 	  event.preventDefault();
 	  network.addNode({
+	  	id:0,
 	  	label:'Root', 
 	  	type_t0: 'Ego', 
 	  	radar_id: $('.radarID').val(), 
 	  	int_date_t0: session.returnData('session').int_sdate,
-	  	int_stime_t0: session.returnData('session').int_stime
+	  	int_stime_t0: session.returnData('session').int_stime,
+	  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
 	  });
 	  session.nextStage();
 	});
-
 
 </script>

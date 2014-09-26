@@ -422,6 +422,7 @@ var Canvas = function Canvas(userSettings) {
 			} else if (settings.mode === 'Edge') {
 					// If this makes a couple, link them.
 					if (selectedNodes[0] === this) {
+						// Ignore two clicks on the same node
 						return false;
 					}
 					selectedNodes.push(this);

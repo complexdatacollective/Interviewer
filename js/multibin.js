@@ -3,7 +3,7 @@
 var MultiBin = function MultiBin(options) {
 
   //global vars
-  var multiBin = {};
+  var multiBin = {}, followup;
   multiBin.options = {
     targetEl: $('.container'),
     edgeType: 'Dyad',
@@ -22,6 +22,25 @@ var MultiBin = function MultiBin(options) {
 
   var stageChangeHandler = function() {
     multiBin.destroy();
+  };
+
+  var followupHandler = function() {
+    var followupVal = $(this).data('value');
+    var nodeid = followup;
+    var criteria = {
+      to:nodeid
+    };
+
+    extend(criteria, multiBin.options.criteria);
+    var edge = network.getEdges(criteria)[0];
+
+    var followupProperties = {};
+
+    followupProperties[multiBin.options.followup.variable] = followupVal;
+
+    extend(edge, followupProperties);
+    network.updateEdge(edge.id, edge);
+    $('.followup').hide();
   };
 
   var backgroundClickHandler = function(e) {
@@ -93,13 +112,13 @@ var MultiBin = function MultiBin(options) {
           $(this).appendTo('.node-bucket');
           $(this).css('display', '');
           var noun = "people";
-          if ($('.n'+id).children('.active-node-list').children().length === 1) {
+          if ($('.c'+id).children('.active-node-list').children().length === 1) {
             noun = "person";
           }
-          if ($('.n'+id).children('.active-node-list').children().length === 0) {
-            $('.n'+id).children('p').html('(Empty)');
+          if ($('.c'+id).children('.active-node-list').children().length === 0) {
+            $('.c'+id).children('p').html('(Empty)');
           } else {
-          $('.n'+id).children('p').html($('.n'+id).children('.active-node-list').children().length+' '+noun+'.');
+          $('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
           }
 
         });
@@ -117,6 +136,7 @@ var MultiBin = function MultiBin(options) {
     $('.node-bin-static').off("click", nodeBinClickHandler);
     $('.node-item').off("click", nodeClickHandler);
     $('.content').off("click", backgroundClickHandler);
+    $(document).off('click', '.followup-option', followupHandler);
 
   };
 
@@ -127,6 +147,13 @@ var MultiBin = function MultiBin(options) {
 
     // Add node bucket
     multiBin.options.targetEl.append('<div class="node-bucket"></div>');
+
+    if(typeof multiBin.options.followup !== 'undefined') { 
+        multiBin.options.targetEl.append('<div class="followup"><h2>'+multiBin.options.followup.prompt+'</h2></div>');
+        $.each(multiBin.options.followup.values, function(index,value) {
+          $('.followup').append('<span class="btn btn-primary btn-block followup-option" data-value="'+value.value+'">'+value.label+'</span>');
+        });    
+    }  
 
     var number = Math.floor(multiBin.options.variable.values.length*0.66);
     var itemSizeW = $('.container').outerWidth()/number;
@@ -148,13 +175,20 @@ var MultiBin = function MultiBin(options) {
         multiBin.options.targetEl.append('<br>');
         newLine = true;
       }
-      var newBin = $('<div class="node-bin node-bin-static n'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+      var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       multiBin.options.targetEl.append(newBin);
-      $(".n"+index).droppable({ accept: ".draggable", 
+      $(".c"+index).droppable({ accept: ".draggable", 
         drop: function(event, ui) {
           var dropped = ui.draggable;
           var droppedOn = $(this);
+
+          if (multiBin.options.variable.values[index].value>0) {
+            $('.followup').show();
+            followup = $(dropped).data('node-id');
+          }
+
+
           $(dropped).appendTo(droppedOn.children('.active-node-list'));
           var properties = {};
           properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
@@ -165,12 +199,12 @@ var MultiBin = function MultiBin(options) {
           network.updateEdge(edgeID,properties);
           
           var noun = "people";
-          if ($(".n"+index+" .active-node-list").children().length === 1) {
+          if ($(".c"+index+" .active-node-list").children().length === 1) {
             noun = "person";
           }
-          $(".n"+index+" p").html($(".n"+index+" .active-node-list").children().length+' '+noun+'.');
+          $(".c"+index+" p").html($(".c"+index+" .active-node-list").children().length+' '+noun+'.');
 
-          var el = $(".n"+index);
+          var el = $(".c"+index);
             // var origBg = el.css('background-color');
             el.transition({scale:1.2}, 200, 'ease');
             setTimeout(function(){
@@ -216,15 +250,15 @@ var MultiBin = function MultiBin(options) {
     $.each(edges, function(index,value) {
       if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
           index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
-          $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+          $('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
           var noun = "people";
-          if ($('.n'+index).children('.active-node-list').children().length === 1) {
+          if ($('.c'+index).children('.active-node-list').children().length === 1) {
             noun = "person";
           }
-          if ($('.n'+index).children('.active-node-list').children().length === 0) {
-            $('.n'+index).children('p').html('(Empty)');
+          if ($('.c'+index).children('.active-node-list').children().length === 0) {
+            $('.c'+index).children('p').html('(Empty)');
           } else {
-            $('.n'+index).children('p').html($('.n'+index).children('.active-node-list').children().length+' '+noun+'.');
+            $('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
           }  
       } else {
           $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');  
@@ -238,6 +272,7 @@ var MultiBin = function MultiBin(options) {
     $('.node-bin-static').on("click", nodeBinClickHandler);
     $('.node-item').on("click", nodeClickHandler);
     $('.content').on("click", backgroundClickHandler);
+    $(document).on('click', '.followup-option', followupHandler);
 
   };
 

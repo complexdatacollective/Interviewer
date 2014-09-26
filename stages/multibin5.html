@@ -8,18 +8,18 @@
 		from:network.getNodes({type_t0:'Ego'})[0].id
 	}
 
-	var ordinalBin = new OrdinalBin({
+	var multiBin = new MultiBin({
 	    targetEl: $('.container'),
 	    edgeType: 'Dyad',
 	    criteria: criteria,
 	    variable: {
 	      label:'gender_p_t0',
 	      values: [
-	        {label:'Make', value: 0},
-	        {label:'Female', value: 1},
-	        {label:'Transgender: Male to Female', value: 2},
-	        {label:'Transgender: Female to Male', value: 3},
-	        {label:'Not Listed', value: -1}
+	      	'Female',
+	        'Male',
+	        'Transgender:<br> Female to Male',
+	        'Transgender:<br> Male to Female',
+	        'Not Listed'
 	      ]
 	    },
 	   	followup: {
