@@ -54,7 +54,7 @@ var Network = function Network() {
   };
 
   network.addEdge = function(properties) {
-    console.log('add edge called');
+
     if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
       notify('ERROR: "To" and "From" must BOTH be defined.',2);
       return false;
@@ -82,21 +82,23 @@ var Network = function Network() {
     // New way: check if all properties are the same.
     
     var reversed = {}, temp;
-    reversed = properties;
+    reversed = $.extend(true,{}, properties);
     temp = reversed.to;
     reversed.to = reversed.from;
     reversed.from = temp;
 
-    console.log('testing for already existing');
+
+
+
     if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
-      console.log('gotcha');
-      console.log(network.getEdges(properties).length);
-      console.log(network.getEdges(reversed).length);
+
+
+
       alreadyExists = true;
     }
 
     if(alreadyExists === false) {
-      console.log('alreadyExists === false');
+
       session.addData('edges', edgeProperties, true);
       var log = new CustomEvent('log', {"detail":{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
       window.dispatchEvent(log);
@@ -107,7 +109,7 @@ var Network = function Network() {
 
       return edgeProperties.id;      
     } else {
-      console.log('alreadyExists === true');
+
       notify('ERROR: Edge already exists!',2);
       return false;
     }
@@ -236,12 +238,12 @@ var Network = function Network() {
     // Get nodes using .filter(). Function is called for each of nodes.Nodes.
     var result = targetArray.filter(function(el){
       var match = true;
-      // console.log('iterating criteria');
+      
       for (var criteriaKey in criteria) {
-        // console.log('first criteria is '+criteriaKey);
+        
           if (el[criteriaKey] !== undefined) {
-            // console.log('el[criteriaKey] was not undefined. Value is:');
-            // console.log(el[criteriaKey]);
+            
+            
             // current criteria exists in object.
             if (el[criteriaKey] !== criteria[criteriaKey]) {
               match = false;
@@ -257,27 +259,28 @@ var Network = function Network() {
 
     });
 
-    // If  criteria contains to or from also try with those reversed
-
+    // reverse to and from to check for those matches.
     if (typeof criteria.from !== 'undefined' && typeof criteria.to !== 'undefined') {
 
-      var reversed, temp;
-      reversed = criteria;
-      reversed.to = temp;
+      var reversed = {}, temp;
+      reversed = $.extend(true,{}, criteria);
+      temp = reversed.to;
       reversed.to = reversed.from;
       reversed.from = temp;
 
-      // Get nodes using .filter(). Function is called for each of nodes.Nodes.
+
+
+
       var result2 = targetArray.filter(function(el){
         var match = true;
-        // console.log('iterating criteria');
-        for (var criteriaKey in criteria) {
-          // console.log('first criteria is '+criteriaKey);
+        
+        for (var criteriaKey in reversed) {
+          
             if (el[criteriaKey] !== undefined) {
-              // console.log('el[criteriaKey] was not undefined. Value is:');
-              // console.log(el[criteriaKey]);
+              
+              
               // current criteria exists in object.
-              if (el[criteriaKey] !== criteria[criteriaKey]) {
+              if (el[criteriaKey] !== reversed[criteriaKey]) {
                 match = false;
               }  
             } else {
@@ -291,10 +294,8 @@ var Network = function Network() {
 
       });
 
-      result.concat(result2);
-
+      result = result.concat(result2);
     }
-
 
 
     return result;
