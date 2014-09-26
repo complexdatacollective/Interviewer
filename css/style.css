@@ -6185,6 +6185,30 @@ div[data-toggle="buttons"] label:active,
 div[data-toggle="buttons"] label.active {
   box-shadow: none;
 }
+.d0 {
+  background: #67c2d4;
+}
+.d1 {
+  background: #3fb2c9;
+}
+.d2 {
+  background: #2f92a6;
+}
+.d3 {
+  background: #246f7e;
+}
+.d4 {
+  background: #184c57;
+}
+.d5 {
+  background: #0d292f;
+}
+.d6 {
+  background: #020607;
+}
+.d7 {
+  background: #000000;
+}
 .c0 {
   background: #67c2d4;
 }
@@ -6640,13 +6664,13 @@ div[data-toggle="buttons"] label.active {
   background: #67c2d4;
 }
 .n1 {
-  background: #1ecd97;
+  background: #3fb2c9;
 }
 .n2 {
-  background: #b16eff;
+  background: #2f92a6;
 }
 .n3 {
-  background: #fa920d;
+  background: #246f7e;
   width: 250px;
   height: 250px;
 }

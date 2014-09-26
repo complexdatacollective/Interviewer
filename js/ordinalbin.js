@@ -80,10 +80,10 @@ var OrdinalBin = function OrdinalBin(options) {
     // One of these for each bin. One bin for each variable value.
     $.each(ordinalBin.options.variable.values, function(index, value){
 
-      var newBin = $('<div class="ord-node-bin node-bin-static n'+index+'" data-index="'+index.value+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+      var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index.value+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       ordinalBin.options.targetEl.append(newBin);
-      $(".n"+index).droppable({ accept: ".draggable", 
+      $(".d"+index).droppable({ accept: ".draggable", 
         drop: function(event, ui) {
 
           var dropped = ui.draggable;
@@ -105,22 +105,22 @@ var OrdinalBin = function OrdinalBin(options) {
           network.updateEdge(edgeID,properties);
 
           $.each($('.ord-node-bin'), function(oindex) {
-            var length = $(".n"+oindex).children('.active-node-list').children().length;
+            var length = $(".d"+oindex).children('.active-node-list').children().length;
             if (length > 0) {
               var noun = "people";
               if (length === 1) {
                 noun = "person";
               }
 
-              $(".n"+oindex+" p").html(length+' '+noun+'.');              
+              $(".d"+oindex+" p").html(length+' '+noun+'.');              
             } else {
-              $(".n"+oindex+" p").html('(Empty)');
+              $(".d"+oindex+" p").html('(Empty)');
             }
 
 
           });
 
-          var el = $(".n"+index);
+          var el = $(".d"+index);
             // var origBg = el.css('background-color');
             // el.transition({scale:1.2}, 200, 'ease');
             setTimeout(function(){
@@ -148,11 +148,13 @@ var OrdinalBin = function OrdinalBin(options) {
 
 
 
-    // $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+    // $('.dode-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
     $('.ord-node-bin').css({width:itemW,height:itemH});
 
     // get all edges
     var edges = network.getEdges(ordinalBin.options.criteria); 
+    console.log('edges');
+    console.log(edges);
 
     // Add edges to bucket or to bins if they already have variable value.
     $.each(edges, function(index,value) {
@@ -173,20 +175,20 @@ var OrdinalBin = function OrdinalBin(options) {
           });
 
           if (ordinalBin.options.criteria.type !== 'Dyad') {
-            $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+            $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
           } else {
-            $('.n'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+            $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
           }
 
           var noun = "people";
-          var length = $('.n'+index).children('.active-node-list').children().length;
+          var length = $('.d'+index).children('.active-node-list').children().length;
           if (length === 1) {
             noun = "person";
           }
           if (length === 0) {
-            $('.n'+index).children('p').html('(Empty)');
+            $('.d'+index).children('p').html('(Empty)');
           } else {
-            $('.n'+index).children('p').html(length+' '+noun+'.');
+            $('.d'+index).children('p').html(length+' '+noun+'.');
           }  
       } else {
           if (ordinalBin.options.criteria.type !== 'Dyad') {

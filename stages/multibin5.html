@@ -1,0 +1,41 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+	var criteria = {
+		type:'Dyad',
+		from:network.getNodes({type_t0:'Ego'})[0].id
+	}
+
+	var ordinalBin = new OrdinalBin({
+	    targetEl: $('.container'),
+	    edgeType: 'Dyad',
+	    criteria: criteria,
+	    variable: {
+	      label:'gender_p_t0',
+	      values: [
+	        {label:'Make', value: 0},
+	        {label:'Female', value: 1},
+	        {label:'Transgender: Male to Female', value: 2},
+	        {label:'Transgender: Female to Male', value: 3},
+	        {label:'Not Listed', value: -1}
+	      ]
+	    },
+	   	followup: {
+	   	  prompt: 'Which term do you think best describes this persons gender identity?',
+	      variable:'gender_p_other_t0',
+	      values: [
+	        {label:'Never', value: 0},
+	        {label:'Less than half the time', value: 1},
+	        {label:'Half the time', value: 2},
+	        {label:'More than half the time', value: 3},
+	        {label:'Always', value: 4},
+	        {label:'Don\'t want to answer', value: -1}
+	      ]
+	    },
+    	heading: "Please specify how each of these people currently identify their gender.",
+    	subheading: ""
+  	});
+
+</script>

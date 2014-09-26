@@ -73,6 +73,44 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     box-shadow: none;
 }
 
+@ord-background: @brand-primary;
+
+ .d0 {
+    background:@ord-background;
+ }
+
+ .d1 {
+    background:darken(@ord-background, 10%);
+ }
+
+ .d2 {
+    background:darken(@ord-background, 20%);
+ }
+
+ .d3 {
+    background:darken(@ord-background, 30%);
+ }
+
+ .d3 h1, .d3 h4 {
+    // font-size:20px;
+ }
+
+ .d4 {
+    background:darken(@ord-background, 40%);
+ }
+
+ .d5 {
+    background:darken(@ord-background, 50%);
+ }
+
+  .d6 {
+    background:darken(@ord-background, 60%);
+ }
+
+  .d7 {
+    background:darken(@ord-background, 70%);
+ }
+
 
 // colors for boxes etc
 
@@ -108,6 +146,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .c7 {
     background:#D10029;
  }
+
+
 
 /* Horrible windows scrollbars */
 ::-webkit-scrollbar {
@@ -517,20 +557,22 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     transition: all 0.5s ease-in-out;
  }
 
+
+
  .n0 {
-    background:@brand-primary;
+    background:@ord-background;
  }
 
  .n1 {
-    background:@brand-success;
+    background:darken(@ord-background, 10%);
  }
 
  .n2 {
-    background:@brand-info;
+    background:darken(@ord-background, 20%);
  }
 
  .n3 {
-    background:@brand-warning;
+    background:darken(@ord-background, 30%);
     width:250px;
     height:250px;
  }
