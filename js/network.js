@@ -21,7 +21,6 @@ selecting nodes or edges by their various properties, and interating over them.
 var Network = function Network() {
   var network = {};
   var graph = {};
-  // var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
 
   network.init = function() {
 
@@ -33,6 +32,14 @@ var Network = function Network() {
   };
 
   network.addNode = function(properties) {
+
+    // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
+    if (typeof properties.id !== 'undefined' && network.getNode(properties.id) !== false) {
+      notify('Node already exists with id '+properties.id+'. Cancelling!',2);
+      return false;
+    }
+
+    // Locate the next free node ID
     var newNodeID = 0;
     while (network.getNode(newNodeID) !== false) {
       newNodeID++;
@@ -54,6 +61,8 @@ var Network = function Network() {
   };
 
   network.addEdge = function(properties) {
+
+    //TODO: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
     if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
       notify('ERROR: "To" and "From" must BOTH be defined.',2);
@@ -87,12 +96,7 @@ var Network = function Network() {
     reversed.to = reversed.from;
     reversed.from = temp;
 
-
-
-
     if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
-
-
 
       alreadyExists = true;
     }

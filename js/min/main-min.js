@@ -1,2 +1,2 @@
-!function(){window.debugLevel=1,window.menu=new Menu({}),window.session=new Session({}),window.sessionData=session.registerData("session"),window.eventLog=new Logger;var e=new Date,n=e.getUTCMonth()+1,s=e.getUTCDate()+1,i=e.getUTCFullYear(),o={int_sdate:i+"/"+n+"/"+s,int_stime:e.getTime()};session.addData("session",o),window.network=new Network,$(".arrow-next").click(function(){session.nextStage()}),$(".arrow-prev").click(function(){session.prevStage()})}();
+!function(){window.debugLevel=1,window.menu=new Menu({}),window.session=new Session({}),window.eventLog=new Logger,window.network=new Network,$(".arrow-next").click(function(){session.nextStage()}),$(".arrow-prev").click(function(){session.prevStage()})}();
 //# sourceMappingURL=./main-min.js.map

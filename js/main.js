@@ -7,23 +7,9 @@
 
     // Set up a new session
     window.session = new Session({});
-    window.sessionData = session.registerData('session'); //create a data store for this session
-    
+
     // Create a log
     window.eventLog = new Logger();
-
-    // Add the start date to the session.
-    var now = new Date();
-    var month = now.getUTCMonth()+1;
-    var day = now.getUTCDate()+1;
-    var year = now.getUTCFullYear();
-
-    var thisSession = {
-        int_sdate: year + "/" + month + "/" + day,
-        int_stime: now.getTime()
-    }
-
-    session.addData('session', thisSession);
 
     // Build a new network
     window.network = new Network();

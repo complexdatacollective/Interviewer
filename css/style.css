@@ -6460,7 +6460,7 @@ div[data-toggle="buttons"] label.active {
   visibility: hidden;
 }
 .nameList {
-  max-height: 700px;
+  max-height: 900px;
   width: 100%;
   overflow: scroll;
 }

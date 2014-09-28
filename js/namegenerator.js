@@ -1,4 +1,4 @@
-/* global network, extend, notify */
+/* global network, extend, notify, randomBetween */
 /* exported Namegenerator */
 var Namegenerator = function Namegenerator(options) {
 
@@ -29,6 +29,8 @@ var Namegenerator = function Namegenerator(options) {
   	'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
   	'Other': []
   };
+
+  var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
 
   	var keyPressHandler = function(e) {
 	  	if (e.keyCode === 13) {
@@ -328,6 +330,40 @@ var Namegenerator = function Namegenerator(options) {
 		  namegenerator.closeNodeBox();
 
 		
+	};
+
+	namegenerator.generateTestAlters = function(number) {
+
+		if (!number) {
+			notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+			return false;
+		}
+
+			// We must simulate every interaction to ensure that any errors are caught.
+			$('.add-button').click();
+			setTimeout(function() {
+				$("#ngForm").submit();
+			}, 3000);
+
+			$('#fname_t0').val(namesList[Math.floor(randomBetween(0,namesList.length))]);
+			$('#lname_t0').val(namesList[Math.floor(randomBetween(0,namesList.length))]);
+			var lname = $('#fname_t0').val()+" "+$('#lname_t0').val().charAt(0);
+			if ($('#lname_t0').val().length > 0 ) {
+				lname +=".";
+			}
+			$('#nname_t0').val(lname);
+			$('#age_p_t0').val(Math.floor(randomBetween(18,90)));
+				
+			setTimeout(function() {
+				$('.relationship-button').click();
+			}, 500);
+			setTimeout(function() {
+				$($('.relationship')[Math.floor(randomBetween(0,$('.relationship').length))]).addClass('selected');
+				$('.relationship-close-button').click();
+					
+			}, 2000);
+
+
 	};
 
 	namegenerator.openNodeBox = function() {
