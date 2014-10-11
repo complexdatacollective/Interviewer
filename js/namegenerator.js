@@ -257,7 +257,7 @@ var Namegenerator = function Namegenerator(options) {
 
 				var color = function() {
 					var el = $('div[data-index='+editing+']');
-					el.stop().transition({background:'rgb(0, 255, 104)'}, 400, 'ease');
+					el.stop().transition({background:'#1ECD97'}, 400, 'ease');
 					setTimeout(function(){
 						el.stop().transition({ background:'#67c2d4'}, 800, 'ease');
 					}, 700);

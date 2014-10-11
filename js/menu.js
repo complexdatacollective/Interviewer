@@ -33,8 +33,8 @@ var Menu = function Menu(options) {
         $('.menu-btn').transition({opacity:0});
         $('.menu-btn').hide();
         $('.black').hide();
-        $('.arrow-right').transition({right:-550});
-        $('.arrow-left').transition({left:-550});
+        $('.arrow-next').transition({marginRight:-550},1000);
+        $('.arrow-prev').transition({marginLeft:-550},1000);
         $('.content').addClass("pushed");
         $('.pushed').on('click', contentClickHandler);
       },
@@ -47,8 +47,8 @@ var Menu = function Menu(options) {
       },
       onAfterClose : function() {
         $('.black').show();
-        $('.arrow-right').transition({right:0},1000);
-        $('.arrow-left').transition({left:0},1000);
+        $('.arrow-next').transition({marginRight:0},1000);
+        $('.arrow-prev').transition({marginLeft:0},1000);
       }
     };
 
