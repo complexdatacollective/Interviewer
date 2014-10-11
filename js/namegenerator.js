@@ -257,10 +257,10 @@ var Namegenerator = function Namegenerator(options) {
 
 				var color = function() {
 					var el = $('div[data-index='+editing+']');
-					el.stop().transition({background:'rgba(51, 160, 117, 1)'}, 400, 'ease');
+					el.stop().transition({background:'rgb(0, 255, 104)'}, 400, 'ease');
 					setTimeout(function(){
 						el.stop().transition({ background:'rgba(238,238,238, 1)'}, 800, 'ease');
-					}, 1500);
+					}, 700);
 				};	
 				
 				var nodeID = editing;

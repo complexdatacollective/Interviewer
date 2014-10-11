@@ -239,8 +239,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     justify-content: center;
     z-index:9999;
     cursor: pointer; cursor: hand;
-    
-    transition: all 0.1s ease-in-out;
+    font-weight:500;
+    // transition: all 0.1s ease-in-out;
 }
 
 .relationship-type h1 {
@@ -249,9 +249,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .selected {
-    border:7px solid rgba(255, 238, 0, 1.0);
-    background: gold;
-    color:black;
+    border: 7px solid #ffee00;
+    background: rgba(255, 215, 0, 0);
+    color: rgba(255, 255, 255, 1);
 }
 
 // map
@@ -374,19 +374,26 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .card {
-    width:315px;
-    height:180px;
-    border:1px solid white;
-    background: #eee;
-    color:black;
-    display: inline-block;
+    width:280px;
+    height:280px;
+    // border:1px solid white;
+    // background: #eee;
+    // color:black;
+    border: 4px solid darken(@brand-primary, 20%);
+    background: @brand-primary;
+    color:white;
+    display:inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     padding: 20px;
-    margin: 10px;
+    margin: 30px;
     overflow:hidden;
     cursor: pointer; cursor: hand;
     float:left;
     word-wrap: break-word;
-    border-radius: 10px;
+    border-radius: 50%;
+    text-align: center;
 }
 
 .card h4 {

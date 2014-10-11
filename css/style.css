@@ -6290,19 +6290,15 @@ div[data-toggle="buttons"] label.active {
   height: 100%;
   width: 225px;
   margin-left: 10px;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   -webkit-flex-direction: column;
      -moz-box-orient: vertical;
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
@@ -6317,17 +6313,14 @@ div[data-toggle="buttons"] label.active {
   border-radius: 32px;
   border: 1px solid #fff;
   margin: 10px;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6335,8 +6328,7 @@ div[data-toggle="buttons"] label.active {
   z-index: 9999;
   cursor: pointer;
   cursor: hand;
-  -webkit-transition: all 0.1s ease-in-out;
-          transition: all 0.1s ease-in-out;
+  font-weight: 500;
 }
 .relationship-type h1 {
   font-size: 25px;
@@ -6344,8 +6336,8 @@ div[data-toggle="buttons"] label.active {
 }
 .selected {
   border: 7px solid #ffee00;
-  background: gold;
-  color: black;
+  background: rgba(255, 215, 0, 0);
+  color: #ffffff;
 }
 #map {
   height: 100%;
@@ -6365,17 +6357,14 @@ div[data-toggle="buttons"] label.active {
   border-radius: 12px;
 }
 .map-node-box {
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6425,17 +6414,14 @@ div[data-toggle="buttons"] label.active {
   top: 0;
   left: 0;
   background: transparent;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6468,20 +6454,37 @@ div[data-toggle="buttons"] label.active {
   display: none;
 }
 .card {
-  width: 315px;
-  height: 180px;
-  border: 1px solid white;
-  background: #eee;
-  color: black;
-  display: inline-block;
+  width: 280px;
+  height: 280px;
+  border: 4px solid #2f92a6;
+  background: #67c2d4;
+  color: white;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   padding: 20px;
-  margin: 10px;
+  margin: 30px;
   overflow: hidden;
   cursor: pointer;
   cursor: hand;
   float: left;
   word-wrap: break-word;
-  border-radius: 10px;
+  border-radius: 50%;
+  text-align: center;
 }
 .card h4 {
   margin-top: 0;
@@ -6555,17 +6558,14 @@ div[data-toggle="buttons"] label.active {
   color: black;
   background: #eee;
   margin: 10px;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6580,7 +6580,6 @@ div[data-toggle="buttons"] label.active {
   display: none;
 }
 .node-bucket .node-item:first-child {
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
@@ -6592,19 +6591,15 @@ div[data-toggle="buttons"] label.active {
 .node-bin {
   width: 350px;
   height: 350px;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   -webkit-flex-direction: column;
      -moz-box-orient: vertical;
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
@@ -6617,19 +6612,15 @@ div[data-toggle="buttons"] label.active {
 .ord-node-bin {
   width: 350px;
   height: 350px;
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
   -webkit-flex-direction: column;
      -moz-box-orient: vertical;
      -moz-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
@@ -6702,7 +6693,6 @@ div[data-toggle="buttons"] label.active {
   left: 50% !important;
   margin-left: -400px;
   margin-top: -400px;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6712,12 +6702,10 @@ div[data-toggle="buttons"] label.active {
   width: 70% ;
   display: none;
   overflow: scroll;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6727,12 +6715,10 @@ div[data-toggle="buttons"] label.active {
   width: 100%;
   display: block;
   overflow: scroll;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6742,7 +6728,6 @@ div[data-toggle="buttons"] label.active {
   display: inline-block;
 }
 .active-node-list .node-item {
-  display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
   display: -ms-inline-flexbox;
@@ -6754,17 +6739,14 @@ div[data-toggle="buttons"] label.active {
   left: 20px;
   height: 100px;
   width: 100px;
-  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
@@ -6804,17 +6786,14 @@ div[data-toggle="buttons"] label.active {
 .content {
   height: 100%;
   background: #111111;
-  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
