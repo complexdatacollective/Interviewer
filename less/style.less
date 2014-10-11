@@ -195,7 +195,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     position: absolute;
     height: 875px;
     width: 100%;
-    background: transparent;
+    height:100%;
+    background: #eee;
+    color:black;
     top: -1200px;
     left: 0;
     z-index: 9999;
@@ -216,13 +218,15 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .relationship-type {
-    height:100%;
-    width:225px;
+    height:890px;
+    width:258px;
     margin-left:10px;
     // border: 1px solid white;
     display:inline-flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 20px;
+    color:white;
 }
 
 .relationship {
@@ -230,9 +234,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     width:200px;
     height:80px;
     color:white;
-    background:rgba(230,230,230,0.3);
+    background:transparent;
     border-radius: 32px;
-    border:1px solid #fff;
+    border:6px solid rgba(255,255,255,0.5);
     margin:10px;
     display:inline-flex;
     align-items: center;
@@ -249,8 +253,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .selected {
-    border: 7px solid #ffee00;
-    background: rgba(255, 215, 0, 0);
+    border-color: #ffee00;
+    // background: rgba(255, 215, 0, 0);
+    background:rgba(230,230,230,0.3);
     color: rgba(255, 255, 255, 1);
 }
 
@@ -365,7 +370,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
  // Name generator
 .nameList {
     max-height:900px;
-    width:100%;
+    // width:100%;
+    margin:0 auto;
     overflow: scroll;
 }
 
@@ -374,12 +380,12 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .card {
-    width:280px;
-    height:280px;
+    width:233px;
+    height:270px;
     // border:1px solid white;
     // background: #eee;
     // color:black;
-    border: 4px solid darken(@brand-primary, 20%);
+    // border: 4px solid darken(@brand-primary, 20%);
     background: @brand-primary;
     color:white;
     display:inline-flex;
@@ -387,12 +393,12 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     justify-content: center;
     flex-direction: column;
     padding: 20px;
-    margin: 30px;
+    margin: 10px;
     overflow:hidden;
     cursor: pointer; cursor: hand;
     float:left;
     word-wrap: break-word;
-    border-radius: 50%;
+    border-radius: 10px;
     text-align: center;
 }
 
@@ -449,7 +455,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     // margin-top:10px;
     // min-height: 600px;
     width:315px;
-    background: @brand-primary;
+    background: @brand-warning;
     padding:25px;
     float:left;
     overflow: scroll;
@@ -520,7 +526,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     // justify-content: center;
     border-radius: 50%;
     margin:10px;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
 
  }
 
@@ -618,14 +624,14 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 
  .node-bin-active {
-    height: 800px !important;
-    width: 800px !important;
+    height: 900px !important;
+    width: 900px !important;
     position: absolute;
     z-index: 999;
     top: 50% !important;
     left: 50% !important;
-    margin-left: -400px;
-    margin-top: -400px;
+    margin-left: -450px;
+    margin-top: -450px;
     justify-content: center;
  }
 
@@ -825,7 +831,167 @@ label {
     100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }
 
-// menu stuff
+// navigation arrows
 
+.paginate {
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  position: relative;
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  position: absolute;
+  top: 50%;
+  margin-top: -20px;
+  -webkit-filter: drop-shadow(0 2px 0px rgba(0, 0, 0, 0.2)); }
+  .paginate i {
+    position: absolute;
+    top: 40%;
+    left: 0;
+    width: 50px;
+    height: 5px;
+    border-radius: 2.5px;
+    background: #fff;
+    -webkit-transition: all 0.15s ease;
+    -moz-transition: all 0.15s ease;
+    -ms-transition: all 0.15s ease;
+    transition: all 0.15s ease; }
+  .paginate.left {
+    left:2%}
+    .paginate.left i {
+      -webkit-transform-origin: 0% 50%;
+      -moz-transform-origin: 0% 50%;
+      -ms-transform-origin: 0% 50%;
+      transform-origin: 0% 50%; }
+    .paginate.left i:first-child {
+      -webkit-transform: translate(0, -1px) rotate(40deg);
+      -moz-transform: translate(0, -1px) rotate(40deg);
+      -ms-transform: translate(0, -1px) rotate(40deg);
+      transform: translate(0, -1px) rotate(40deg); }
+    .paginate.left i:last-child {
+      -webkit-transform: translate(0, 1px) rotate(-40deg);
+      -moz-transform: translate(0, 1px) rotate(-40deg);
+      -ms-transform: translate(0, 1px) rotate(-40deg);
+      transform: translate(0, 1px) rotate(-40deg); }
+    .paginate.left:hover i:first-child {
+      -webkit-transform: translate(0, -1px) rotate(30deg);
+      -moz-transform: translate(0, -1px) rotate(30deg);
+      -ms-transform: translate(0, -1px) rotate(30deg);
+      transform: translate(0, -1px) rotate(30deg); }
+    .paginate.left:hover i:last-child {
+      -webkit-transform: translate(0, 1px) rotate(-30deg);
+      -moz-transform: translate(0, 1px) rotate(-30deg);
+      -ms-transform: translate(0, 1px) rotate(-30deg);
+      transform: translate(0, 1px) rotate(-30deg); }
+    // .paginate.left:active i:first-child {
+    //   -webkit-transform: translate(1px, -1px) rotate(25deg);
+    //   -moz-transform: translate(1px, -1px) rotate(25deg);
+    //   -ms-transform: translate(1px, -1px) rotate(25deg);
+    //   transform: translate(1px, -1px) rotate(25deg); }
+    // .paginate.left:active i:last-child {
+    //   -webkit-transform: translate(1px, 1px) rotate(-25deg);
+    //   -moz-transform: translate(1px, 1px) rotate(-25deg);
+    //   -ms-transform: translate(1px, 1px) rotate(-25deg);
+    //   transform: translate(1px, 1px) rotate(-25deg); }
+    .paginate.left[data-state=disabled] i:first-child {
+      -webkit-transform: translate(-5px, 0) rotate(0deg);
+      -moz-transform: translate(-5px, 0) rotate(0deg);
+      -ms-transform: translate(-5px, 0) rotate(0deg);
+      transform: translate(-5px, 0) rotate(0deg); }
+    .paginate.left[data-state=disabled] i:last-child {
+      -webkit-transform: translate(-5px, 0) rotate(0deg);
+      -moz-transform: translate(-5px, 0) rotate(0deg);
+      -ms-transform: translate(-5px, 0) rotate(0deg);
+      transform: translate(-5px, 0) rotate(0deg); }
+    .paginate.left[data-state=disabled]:hover i:first-child {
+      -webkit-transform: translate(-5px, 0) rotate(0deg);
+      -moz-transform: translate(-5px, 0) rotate(0deg);
+      -ms-transform: translate(-5px, 0) rotate(0deg);
+      transform: translate(-5px, 0) rotate(0deg); }
+    .paginate.left[data-state=disabled]:hover i:last-child {
+      -webkit-transform: translate(-5px, 0) rotate(0deg);
+      -moz-transform: translate(-5px, 0) rotate(0deg);
+      -ms-transform: translate(-5px, 0) rotate(0deg);
+      transform: translate(-5px, 0) rotate(0deg); }
+  .paginate.right {
+    right: 2%; }
+    .paginate.right i {
+      -webkit-transform-origin: 100% 50%;
+      -moz-transform-origin: 100% 50%;
+      -ms-transform-origin: 100% 50%;
+      transform-origin: 100% 50%; }
+    .paginate.right i:first-child {
+      -webkit-transform: translate(0, 1px) rotate(40deg);
+      -moz-transform: translate(0, 1px) rotate(40deg);
+      -ms-transform: translate(0, 1px) rotate(40deg);
+      transform: translate(0, 1px) rotate(40deg); }
+    .paginate.right i:last-child {
+      -webkit-transform: translate(0, -1px) rotate(-40deg);
+      -moz-transform: translate(0, -1px) rotate(-40deg);
+      -ms-transform: translate(0, -1px) rotate(-40deg);
+      transform: translate(0, -1px) rotate(-40deg); }
+    .paginate.right:hover i:first-child {
+      -webkit-transform: translate(0, 1px) rotate(30deg);
+      -moz-transform: translate(0, 1px) rotate(30deg);
+      -ms-transform: translate(0, 1px) rotate(30deg);
+      transform: translate(0, 1px) rotate(30deg); }
+    .paginate.right:hover i:last-child {
+      -webkit-transform: translate(0, -1px) rotate(-30deg);
+      -moz-transform: translate(0, -1px) rotate(-30deg);
+      -ms-transform: translate(0, -1px) rotate(-30deg);
+      transform: translate(0, -1px) rotate(-30deg); }
+    // .paginate.right:active i:first-child {
+    //   -webkit-transform: translate(1px, 1px) rotate(25deg);
+    //   -moz-transform: translate(1px, 1px) rotate(25deg);
+    //   -ms-transform: translate(1px, 1px) rotate(25deg);
+    //   transform: translate(1px, 1px) rotate(25deg); }
+    // .paginate.right:active i:last-child {
+    //   -webkit-transform: translate(1px, -1px) rotate(-25deg);
+    //   -moz-transform: translate(1px, -1px) rotate(-25deg);
+    //   -ms-transform: translate(1px, -1px) rotate(-25deg);
+    //   transform: translate(1px, -1px) rotate(-25deg); }
+    .paginate.right[data-state=disabled] i:first-child {
+      -webkit-transform: translate(5px, 0) rotate(0deg);
+      -moz-transform: translate(5px, 0) rotate(0deg);
+      -ms-transform: translate(5px, 0) rotate(0deg);
+      transform: translate(5px, 0) rotate(0deg); }
+    .paginate.right[data-state=disabled] i:last-child {
+      -webkit-transform: translate(5px, 0) rotate(0deg);
+      -moz-transform: translate(5px, 0) rotate(0deg);
+      -ms-transform: translate(5px, 0) rotate(0deg);
+      transform: translate(5px, 0) rotate(0deg); }
+    .paginate.right[data-state=disabled]:hover i:first-child {
+      -webkit-transform: translate(5px, 0) rotate(0deg);
+      -moz-transform: translate(5px, 0) rotate(0deg);
+      -ms-transform: translate(5px, 0) rotate(0deg);
+      transform: translate(5px, 0) rotate(0deg); }
+    .paginate.right[data-state=disabled]:hover i:last-child {
+      -webkit-transform: translate(5px, 0) rotate(0deg);
+      -moz-transform: translate(5px, 0) rotate(0deg);
+      -ms-transform: translate(5px, 0) rotate(0deg);
+      transform: translate(5px, 0) rotate(0deg); }
+  .paginate[data-state=disabled] {
+    opacity: 0.3;
+    cursor: default; }
+
+// UI overlay class which gives us control over foreground UI colors
+.overlay {
+    color: #333;
+    background: #eee;
+    border-color:#333;
+}
+
+.overlay .form-control {
+    background:white;
+    color:#000;
+    border:#333;
+}
 
 

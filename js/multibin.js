@@ -84,9 +84,9 @@ var MultiBin = function MultiBin(options) {
           $.each($('.active-node-list').children(), function(index,value) {
             setTimeout(function(){
               $(value).transition({left:0,opacity:1});
-            },50*index);
+            },20*index);
           });
-        },400);
+        },100);
       }
 
       open = true;

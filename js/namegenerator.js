@@ -259,7 +259,7 @@ var Namegenerator = function Namegenerator(options) {
 					var el = $('div[data-index='+editing+']');
 					el.stop().transition({background:'rgb(0, 255, 104)'}, 400, 'ease');
 					setTimeout(function(){
-						el.stop().transition({ background:'rgba(238,238,238, 1)'}, 800, 'ease');
+						el.stop().transition({ background:'#67c2d4'}, 800, 'ease');
 					}, 700);
 				};	
 				
@@ -425,7 +425,7 @@ var Namegenerator = function Namegenerator(options) {
 
 
 		// create node box
-		var newNodeBox = $('<div class="newNodeBox"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul><button type="button" class="btn btn-danger btn-block delete-button">Delete this Node</button></div><div class="col-sm-6 right"></div></form></div>');
+		var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul><button type="button" class="btn btn-danger btn-block delete-button">Delete this Node</button></div><div class="col-sm-6 right"></div></form></div>');
 		// namegenerator.options.targetEl.append(newNodeBox);
 		$('body').append(newNodeBox);
 		$.each(namegenerator.options.variables, function(index, value) {
@@ -538,11 +538,11 @@ var Namegenerator = function Namegenerator(options) {
 
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					$(value).transition({opacity:0,top:'-1000px'},200);
+					$(value).transition({opacity:0,top:'-1000px'},150);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
-							$(childvalue).transition({opacity:0,top:'-200px'}, 200);
-						}, 100+(index*50));
+							$(childvalue).transition({opacity:0,top:'-200px'}, 150);
+						}, 50+(index*20));
 					});
 				}, index*50);
 
@@ -551,7 +551,7 @@ var Namegenerator = function Namegenerator(options) {
 			setTimeout(function() {
 				$('.newNodeBox').show();
 				$('.relationship-types-container').removeClass('open');
-			}, 600);
+			}, 400);
 
 		} else {
 			// opening			
@@ -568,13 +568,13 @@ var Namegenerator = function Namegenerator(options) {
 			$('.relationship-type').css({position:'relative', opacity:0,top:'-1000px'});
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					$(value).transition({opacity:1,top:'0px'},300);
+					$(value).transition({opacity:1,top:'0px'},200);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
-							$(childvalue).transition({opacity:1,top:0}, 200);
-						}, 150+(index*100));
+							$(childvalue).transition({opacity:1,top:0}, 100);
+						}, 100+(index*50));
 					});
-				}, index*100);
+				}, index*80);
 
 			});
 			// $('.content').removeClass('blurry');

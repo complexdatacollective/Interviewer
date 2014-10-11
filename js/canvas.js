@@ -168,13 +168,19 @@ var Canvas = function Canvas(userSettings) {
 	    $('.info-button').on('click', openPopoverHandler);     
 
     	// Are there existing nodes? Display them.
+
+    	// Get all nodes that match the criteria
     	var criteriaEdges = network.getEdges(settings.criteria);
+
+    	// Iterate over them
       	for (var i = 0; i < criteriaEdges.length; i++) {
       		var dyadEdge = network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
       		var newNode = canvas.addNode(dyadEdge);
+
+      		// If we are in select mode, set the initial state
       		if (settings.mode === 'Select') {
       			// set initial state of node according to if an edge exists
-      			if (network.getEdges({from: network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType, time_point:0}).length > 0) {
+      			if (network.getEdges({from: network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType}).length > 0) {
       				newNode.children[0].stroke(colors.selected);
       				nodeLayer.draw();
       			}
@@ -399,7 +405,6 @@ var Canvas = function Canvas(userSettings) {
 						from:network.getNodes({type_t0:'Ego'})[0].id,
 						to: this.attrs.to,
 						type: settings.edgeType,
-						time_point:0
 					};
 
 					if (typeof settings.variables !== 'undefined') {
