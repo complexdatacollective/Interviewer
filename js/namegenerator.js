@@ -425,7 +425,7 @@ var Namegenerator = function Namegenerator(options) {
 
 
 		// create node box
-		var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Node</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul><button type="button" class="btn btn-danger btn-block delete-button">Delete this Node</button></div><div class="col-sm-6 right"></div></form></div>');
+		var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-6 left"><h2 style="margin-top:0">Adding a Person</h2><ul><li>Try to be as accurate as you can, but don\'t worry if you aren\'t sure.</li><li>We are interested in your perceptions, so there are no right answers!</li><li>You can use the tab key to quickly move between the fields.</li><li>You can use the enter key to submit the form.</li></ul></div><div class="col-sm-6 right"></div></form></div>');
 		// namegenerator.options.targetEl.append(newNodeBox);
 		$('body').append(newNodeBox);
 		$.each(namegenerator.options.variables, function(index, value) {
@@ -468,7 +468,7 @@ var Namegenerator = function Namegenerator(options) {
 	
 	$('.newNodeBox .form .right').append('<div class="form-group"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div>');
 	$("select[name='reltype_sub_t0']").prop( "disabled", true );
-	var buttons = $('<div class="col-sm-6 text-center"><button type="submit" class="btn btn-success btn-block submit-1">Add</button></div><div class="col-sm-6"><span class="btn btn-danger btn-block cancel">Cancel</span></div>');
+	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
 
