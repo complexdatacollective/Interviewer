@@ -6780,7 +6780,7 @@ div[data-toggle="buttons"] label.active {
   padding: 5px;
   color: white;
   background: transparent;
-  border-radius: 32px;
+  border-radius: 15px;
   border: 6px solid rgba(255, 255, 255, 0.5);
   margin: 5px;
   display: -webkit-inline-flex;
@@ -6791,6 +6791,7 @@ div[data-toggle="buttons"] label.active {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  text-align: center;
   -webkit-justify-content: center;
      -moz-box-pack: center;
       -ms-flex-pack: center;
