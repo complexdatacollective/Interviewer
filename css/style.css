@@ -6772,6 +6772,7 @@ div[data-toggle="buttons"] label.active {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  text-align: center;
   border-radius: 20px;
   color: white;
   padding: 6px;
@@ -6804,7 +6805,8 @@ div[data-toggle="buttons"] label.active {
   width: 100%;
 }
 .relationship-type h1 {
-  font-size: 19px;
+  font-size: 15px;
+  min-height: 32px;
   margin-top: 8px;
 }
 .selected {
