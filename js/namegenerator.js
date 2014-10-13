@@ -22,10 +22,10 @@ var Namegenerator = function Namegenerator(options) {
 
   var roles = {
   	'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
-  	'Family / Relative': ['Parent/Guardian','Brother/Sister','Grandparent','Other Family','Chosen Family'],
-  	'Romantic / Sexual Partner': ['Boyfriend/Girlfriend','Ex-Boyfriend/Ex-Girlfriend','Booty Call/Fuck Buddy/Hook Up','One Night Stand','Other type of Partner'],
-  	'Acquaintance / Associate': ['Coworker-Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
-  	'Other Support / Source of Advice': ['Teacher/Professor','Counselor/Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
+  	'Family / Relative': ['Parent / Guardian','Brother / Sister','Grandparent','Other Family','Chosen Family'],
+  	'Romantic / Sexual Partner': ['Boyfriend / Girlfriend','Ex-Boyfriend / Ex-Girlfriend','Booty Call / Fuck Buddy / Hook Up','One Night Stand','Other type of Partner'],
+  	'Acquaintance / Associate': ['Coworker / Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
+  	'Other Support / Source of Advice': ['Teacher / Professor','Counselor / Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
   	'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
   	'Other': []
   };
@@ -369,14 +369,16 @@ var Namegenerator = function Namegenerator(options) {
 	namegenerator.openNodeBox = function() {
 		// $('.newNodeBox').show();
 		$('.content').addClass('blurry');
-		$('.newNodeBox').transition({scale:1,opacity:1},300);
+		// $('.newNodeBox').transition({scale:1,opacity:1},300);
+		$('.newNodeBox').addClass('open');
 		$("#ngForm input:text").first().focus();
 		nodeBoxOpen = true;
 	};
 
 	namegenerator.closeNodeBox = function() {
 		$('.content').removeClass('blurry');
-		$('.newNodeBox').transition({scale:0.1,opacity:0},500);
+		// $('.newNodeBox').transition({scale:0.1,opacity:0},500);
+		$('.newNodeBox').removeClass('open');
 		setTimeout(function() {
 
 		});
@@ -474,7 +476,7 @@ var Namegenerator = function Namegenerator(options) {
 
 
 		// relationship types
-		alterCountBox = $('<div class="relationship-types-container"><h1>Select this Individual\'s Relationship Roles from the List Below</h1><p class="lead">Tap each role to select as many as you think apply, then click the close button (above) to continue.</p><button class="btn btn-primary relationship-close-button">Close</button></div>');
+		alterCountBox = $('<div class="relationship-types-container"><button class="btn btn-primary relationship-close-button">Close</button></div>');
 		$('.newNodeBox').after(alterCountBox);
 		var counter = 0;
 		$.each(roles, function(index) {
@@ -518,7 +520,6 @@ var Namegenerator = function Namegenerator(options) {
 	namegenerator.toggleRelationshipBox = function() {
 		if ($('.relationship-types-container').hasClass('open')) {
 			//closing 
-
 			var roleCount = $('.relationship.selected').length;
 			var plural = "roles";
 			
@@ -538,7 +539,7 @@ var Namegenerator = function Namegenerator(options) {
 
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
-					$(value).transition({opacity:0,top:'-1000px'},150);
+					$(value).transition({opacity:0,top:'-100px'},150);
 					$.each($(value).children('.relationship'), function(index, childvalue) {
 						setTimeout(function() {
 							$(childvalue).transition({opacity:0,top:'-200px'}, 150);
@@ -549,8 +550,15 @@ var Namegenerator = function Namegenerator(options) {
 			});
 
 			setTimeout(function() {
-				$('.newNodeBox').show();
+				// $('.newNodeBox').show();
+				
 				$('.relationship-types-container').removeClass('open');
+				$('.relationship-types-container').removeClass('front');
+				$('.newNodeBox').removeClass('back');
+				setTimeout(function() {
+					
+
+				},1000);
 			}, 400);
 
 		} else {
@@ -562,10 +570,10 @@ var Namegenerator = function Namegenerator(options) {
 				});				
 			}
 
-
-			$('.relationship-types-container').addClass('open');
+			$('.newNodeBox').addClass('back');
+			$('.relationship-types-container').addClass('open front');
 			$('.relationship').css({position:'relative', opacity:0,top:'-200px'});
-			$('.relationship-type').css({position:'relative', opacity:0,top:'-1000px'});
+			$('.relationship-type').css({position:'relative', opacity:0,top:'-100px'});
 			$.each($('.relationship-type'), function(index, value) {
 				setTimeout(function() {
 					$(value).transition({opacity:1,top:'0px'},200);
@@ -578,7 +586,7 @@ var Namegenerator = function Namegenerator(options) {
 
 			});
 			// $('.content').removeClass('blurry');
-			$('.newNodeBox').hide();
+			// $('.newNodeBox').hide();
 		}
 	};
 

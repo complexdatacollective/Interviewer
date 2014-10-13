@@ -6262,95 +6262,6 @@ div[data-toggle="buttons"] label.active {
   padding: 0 !important;
   overflow: hidden;
 }
-.relationship-types-container {
-  position: absolute;
-  top: 50%;
-  margin-top: -300px;
-  width: 1100px;
-  height: 600px;
-  left: 50%;
-  margin-left: -550px;
-  padding: 40px;
-  border-radius: 12px;
-  background: #eee;
-  color: black;
-  -webkit-transform: rotateY(180deg);
-          transform: rotateY(180deg);
-  opacity: 0;
-  z-index: -1;
-  border: 1px solid #323232;
-  box-shadow: 0px 5px 61px 20px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-.relationship-close-button {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-}
-.open {
-  opacity: 1;
-  z-index: 9999;
-  -webkit-transition: all 0.5s ease-in-out;
-          transition: all 0.5s ease-in-out;
-  -webkit-transform: rotateY(0deg);
-          transform: rotateY(0deg);
-}
-.relationship-type {
-  height: 890px;
-  width: 258px;
-  margin-left: 10px;
-  display: -webkit-inline-flex;
-  display: -moz-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-flex-direction: column;
-     -moz-box-orient: vertical;
-     -moz-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-align-items: center;
-     -moz-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border-radius: 20px;
-  color: white;
-  padding: 5px;
-}
-.relationship {
-  padding: 20px;
-  width: 200px;
-  height: 80px;
-  color: white;
-  background: transparent;
-  border-radius: 32px;
-  border: 6px solid rgba(255, 255, 255, 0.5);
-  margin: 10px;
-  display: -webkit-inline-flex;
-  display: -moz-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-align-items: center;
-     -moz-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-justify-content: center;
-     -moz-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  z-index: 9999;
-  cursor: pointer;
-  cursor: hand;
-  font-weight: 500;
-}
-.relationship-type h1 {
-  font-size: 25px;
-  min-height: 100px;
-}
-.selected {
-  border-color: #ffee00;
-  background: rgba(230, 230, 230, 0.3);
-  color: #ffffff;
-}
 #map {
   height: 100%;
   width: 100%;
@@ -6790,6 +6701,115 @@ div[data-toggle="buttons"] label.active {
   z-index: 9999;
   border: 1px solid #323232;
   box-shadow: 0px 5px 61px 20px rgba(0, 0, 0, 0.5);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+}
+.relationship-types-container {
+  position: absolute;
+  top: 50%;
+  margin-top: -300px;
+  width: 1100px;
+  height: 600px;
+  left: 50%;
+  margin-left: -550px;
+  padding: 40px;
+  border-radius: 12px;
+  background: #eee;
+  color: black;
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+  opacity: 1;
+  z-index: -1;
+  border: 1px solid #323232;
+  box-shadow: 0px 5px 61px 20px rgba(0, 0, 0, 0.5);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+}
+.relationship-close-button {
+  position: absolute;
+  top: -100px;
+  right: 30px;
+}
+.open {
+  opacity: 1;
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
+  z-index: 9999;
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+}
+.front {
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+  -webkit-transform: perspective(50em) rotateY(0deg);
+          transform: perspective(50em) rotateY(0deg);
+}
+.back {
+  -webkit-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
+  -webkit-transform: perspective(50em) rotateY(180deg);
+          transform: perspective(50em) rotateY(180deg);
+}
+.relationship-type {
+  height: 100%;
+  width: 140px;
+  margin-left: 5px;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+     -moz-box-orient: vertical;
+     -moz-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 20px;
+  color: white;
+  padding: 6px;
+}
+.relationship {
+  padding: 5px;
+  color: white;
+  background: transparent;
+  border-radius: 32px;
+  border: 6px solid rgba(255, 255, 255, 0.5);
+  margin: 5px;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+  cursor: hand;
+  font-weight: 500;
+  font-size: 14px;
+  width: 100%;
+}
+.relationship-type h1 {
+  font-size: 19px;
+  margin-top: 8px;
+}
+.selected {
+  border-color: #ffee00;
+  background: rgba(230, 230, 230, 0.3);
+  color: #ffffff;
 }
 .add-button {
   position: absolute;
@@ -6813,8 +6833,6 @@ div[data-toggle="buttons"] label.active {
           justify-content: center;
   -webkit-transition: all 0.5s ease-in-out;
           transition: all 0.5s ease-in-out;
-  -webkit-transition: -webkit-transform 1s ease-in-out;
-          transition: transform 1s ease-in-out;
 }
 input[type=radio]:checked + label > img {
   background: tomato;
