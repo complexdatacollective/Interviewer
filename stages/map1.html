@@ -83,12 +83,12 @@
 
         $.ajax({
           dataType: "json",
-          url: "data/chicago.json",
+          url: "data/census2010.json",
           success: function(data) {
-            var thisColor = colors[Math.floor(randomBetween(0,colors.length))];
             geojson = L.geoJson(data, {
             onEachFeature: onEachFeature,
             style: function (feature) {
+              var thisColor = colors[Math.floor(randomBetween(0,colors.length))];
               return {color: "#000",stroke:'#ff0000',fillColor:thisColor,weight:1,fillOpacity:0.2,strokeWidth:5};
              }
             }).addTo(map);

@@ -14,12 +14,18 @@
 	        'Hispanic / Latino',
 	        'Asian',
 	        'White',
+	        'Native Hawaiian or Other Pacific Islander',
 	        'Other',
 	        'Don\'t Want to Answer',
 	        'Don\'t Know'
 	      ]
 	    },
-    	heading: "What is each person's race/ethnicity?",
+	   	followup: {
+	   	  prompt: 'Which other term would you use to describe their race or ethnic background?',
+	      variable:'race_p_other_t0',
+	      trigger: ['Other']
+	    },	    
+    	heading: "Please specify how each of these people describe their race or ethnic background.",
     	subheading: "Drag and drop the node below into a category."
   	});
 

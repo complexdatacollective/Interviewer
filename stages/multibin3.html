@@ -14,11 +14,17 @@
 	      	'Heterosexual / Straight',
 	      	'Gay/Lesbian',
 	      	'Queer',
+	      	'Not Listed',
 	        'Don\'t Want to Answer',
 	        'Don\'t Know'
 	      ]
 	    },
-    	heading: "Which of these common terms best describes the way each person identifies?",
+	   	followup: {
+	   	  prompt: 'Which other term would you use to describe their secual orientation?',
+	      variable:'orient_p_other_t0',
+	      trigger: ['Not Listed']
+	    },	
+    	heading: "Please describe how each person describes their sexual orientation.",
     	subheading: "Drag and drop the node below into a category."
   	});
 

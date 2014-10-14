@@ -54,6 +54,13 @@ var MultiBin = function MultiBin(options) {
 		$('.followup').hide();
 	};
 
+	var followupCancelHandler = function() {
+
+		// Clean up
+		$("#"+multiBin.options.followup.variable).val("");
+		$('.followup').hide();
+	};
+
 	var backgroundClickHandler = function(e) {
 		e.stopPropagation();
 		if (e.target !== e.currentTarget) {
@@ -142,7 +149,8 @@ var MultiBin = function MultiBin(options) {
 		$('.node-bin-static').off("click", nodeBinClickHandler);
 		$('.node-item').off("click", nodeClickHandler);
 		$('.content').off("click", backgroundClickHandler);
-		$(document).off('click', '.followup-option', followupHandler);
+		$('.followup-submit').off('click', followupHandler);
+		$('.followup-cancel').off('click', followupCancelHandler);
 
 	};
 
@@ -157,7 +165,14 @@ var MultiBin = function MultiBin(options) {
 		// Create the followup dialog, if it exists
 		if(typeof multiBin.options.followup !== 'undefined') { 
 			multiBin.options.targetEl.append('<div class="followup overlay"><h2>'+multiBin.options.followup.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+multiBin.options.followup.variable+'" id="'+multiBin.options.followup.variable+'" required="" placeholder="Answer here..."></div><div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div></div>');
-		}  
+
+			// Add cancel button if required
+			if (typeof multiBin.options.followup.cancel !== 'undefined') {
+				$('.overlay').children().last('.form-group').prepend('<button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button>');
+			}  
+
+		}
+
 
 		var number = Math.floor(multiBin.options.variable.values.length*0.66);
 		var itemSizeW = $('.container').outerWidth()/number;
@@ -272,6 +287,7 @@ var MultiBin = function MultiBin(options) {
 		$('.node-item').on("click", nodeClickHandler);
 		$('.content').on("click", backgroundClickHandler);
 		$('.followup-submit').on('click', followupHandler);
+		$('.followup-cancel').on('click', followupCancelHandler);
 
 	};
 
