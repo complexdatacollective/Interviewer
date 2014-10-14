@@ -174,9 +174,9 @@ section.related {
   top: 20px;
   right: 20px;
 }
-.morph-button.open .content-style-form-1 h2,
-.morph-button.open .content-style-form-1 p,
-.morph-button.open .content-style-form-1 .icon-close {
+.morph-button.menu-open .content-style-form-1 h2,
+.morph-button.menu-open .content-style-form-1 p,
+.morph-button.menu-open .content-style-form-1 .icon-close {
   opacity: 1;
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
@@ -208,22 +208,22 @@ section.related {
   -webkit-transition-delay: 0.5s;
   transition-delay: 0.5s;
 }
-.morph-button.open .content-style-form-2 h2,
-.morph-button.open .content-style-form-2 p,
-.morph-button.open .content-style-form-2 .icon-close {
+.morph-button.menu-open .content-style-form-2 h2,
+.morph-button.menu-open .content-style-form-2 p,
+.morph-button.menu-open .content-style-form-2 .icon-close {
   opacity: 1;
   -webkit-transform: translateY(0);
   -ms-transform: translateY(0);
       transform: translateY(0);
 }
-.morph-button.open .content-style-form-4 p {
+.morph-button.menu-open .content-style-form-4 p {
   opacity: 1;
   -webkit-transition: opacity 0.4s 0.2s, -webkit-transform 0.4s 0.2s;
   transition: opacity 0.4s 0.2s, transform 0.4s 0.2s;
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-.morph-button.open .content-style-form-4 p:nth-child(2) {
+.morph-button.menu-open .content-style-form-4 p:nth-child(2) {
   -webkit-transition-delay: 0.35s;
   transition-delay: 0.35s;
 }
@@ -271,16 +271,16 @@ section.related {
   vertical-align: middle;
   -webkit-backface-visibility: hidden;
 }
-.morph-button-inflow.open .content-style-social a {
+.morph-button-inflow.menu-open .content-style-social a {
   -webkit-transform: translateX(0);
   -ms-transform: translateX(0);
       transform: translateX(0);
 }
-.morph-button-inflow.open .content-style-social a:nth-child(2) {
+.morph-button-inflow.menu-open .content-style-social a:nth-child(2) {
   -webkit-transition-delay: 0.05s;
   transition-delay: 0.05s;
 }
-.morph-button-inflow.open .content-style-social a:nth-child(3) {
+.morph-button-inflow.menu-open .content-style-social a:nth-child(3) {
   -webkit-transition-delay: 0.1s;
   transition-delay: 0.1s;
 }
@@ -352,13 +352,13 @@ section.related {
   line-height: 80px;
   overflow: hidden;
 }
-.morph-button.open > button {
+.morph-button.menu-open > button {
   pointer-events: none;
 }
 .morph-content {
   pointer-events: none;
 }
-.morph-button.open .morph-content {
+.morph-button.menu-open .morph-content {
   pointer-events: auto;
 }
 /* Common styles for overlay and modal type (fixed morph) */
@@ -374,7 +374,7 @@ section.related {
   -webkit-transition: opacity 0.1s 0.5s;
   transition: opacity 0.1s 0.5s;
 }
-.morph-button-fixed.open > button {
+.morph-button-fixed.menu-open > button {
   opacity: 0;
   -webkit-transition: opacity 0.1s;
   transition: opacity 0.1s;
@@ -386,7 +386,7 @@ section.related {
   -webkit-transition: opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s;
   transition: opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s;
 }
-.morph-button-fixed.open .morph-content {
+.morph-button-fixed.menu-open .morph-content {
   opacity: 1;
 }
 .morph-button-fixed .morph-content > div {
@@ -396,7 +396,7 @@ section.related {
   -webkit-transition: opacity 0.1s, visibility 0s 0.1s, height 0s 0.1s;
   transition: opacity 0.1s, visibility 0s 0.1s, height 0s 0.1s;
 }
-.morph-button-fixed.open .morph-content > div {
+.morph-button-fixed.menu-open .morph-content > div {
   visibility: visible;
   height: auto;
   opacity: 1;
@@ -414,7 +414,7 @@ section.related {
   -webkit-transition: opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, border-radius 0.8s;
   transition: opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, border-radius 0.8s;
 }
-.morph-button-sidebar.open .morph-content {
+.morph-button-sidebar.menu-open .morph-content {
   -webkit-transition: width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, border-radius 0.3s;
   transition: width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, border-radius 0.3s;
 }
@@ -438,7 +438,7 @@ section.related {
 .morph-button-sidebar .morph-content {
   background: #e85657;
 }
-.morph-button-sidebar.open .morph-content {
+.morph-button-sidebar.menu-open .morph-content {
   top: 0 !important;
   left: 0 !important;
   width: 400px;
@@ -450,7 +450,7 @@ section.related {
 }
 /* Let's add some nice easing for all cases */
 .morph-button .morph-content,
-.morph-button.open .morph-content {
+.morph-button.menu-open .morph-content {
   -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
   transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
 }
@@ -466,7 +466,7 @@ section.related {
 }
 /* Media Queries */
 @media screen and (max-width: 600px) {
-  .morph-button-modal.open .morph-content {
+  .morph-button-modal.menu-open .morph-content {
     top: 0% !important;
     left: 0% !important;
     margin: 0;
@@ -498,7 +498,7 @@ section.related {
     bottom: 0px;
     left: 0px;
   }
-  .morph-button-sidebar.open .morph-content {
+  .morph-button-sidebar.menu-open .morph-content {
     height: 100% !important;
   }
 }

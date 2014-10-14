@@ -110,7 +110,7 @@ var Menu = function Menu(options) {
             
             if(targetMenu.expanded === true) {
                 contentEl.removeClass('no-transition');
-                menuContent.removeClass('open');
+                menuContent.removeClass('menu-open');
                 targetMenu.expanded = false;
 
                 $('.menu-btn').transition({opacity:1});
@@ -119,7 +119,7 @@ var Menu = function Menu(options) {
             else {
                 setTimeout( function() { 
                     contentEl.removeClass('no-transition');
-                    menuContent.addClass('open');
+                    menuContent.addClass('menu-open');
                     targetMenu.expanded = true; 
                 }, 25 );
             }
