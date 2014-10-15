@@ -1,4 +1,4 @@
-/* global L */
+/* global L, network */
 /* exported GeoInterface */
 
 
@@ -14,6 +14,9 @@ var GeoInterface = function GeoInterface() {
 
  	var geoInterface = {};
  	var leaflet;
+ 	var edges;
+ 	var variable = 'res_chicago_location_p_t0';
+ 	var currentPersonIndex = 0;
  	var geojson;
  	var mapNodeClicked = false;
     var colors = ['#67c2d4','#1ECD97','#B16EFF','#FA920D','#e85657','#20B0CA','#FF2592','#153AFF','#8708FF'];
@@ -22,38 +25,54 @@ var GeoInterface = function GeoInterface() {
 
 	function toggleFeature(e) {
 		var layer = e.target;
-		console.log(e);
-		console.log(layer);
+		var properties;
 
 		// is there a map node already selected?
 		if (mapNodeClicked === false) {
 	 		// no map node selected, so highlight this one and mark a map node as having been selected.
 	  		highlightFeature(e);
-	  		updateInfoBox('You selected: <strong>'+layer.feature.properties.name+'</strong>. Click the "next" button to place the next person.');
-	  		mapNodeClicked = layer.feature.properties.name;  
+	  		// updateInfoBox('You selected: <strong>'+layer.feature.properties.name+'</strong>. Click the "next" button to place the next person.');
+	  		mapNodeClicked = layer.feature.properties.name;
+
+	  		// Update edge with this info
+	  		properties = {};
+	  		properties[variable] = layer.feature.properties.name;
+	  		network.updateEdge(edges[currentPersonIndex].id, properties);
+
 		} else {
 
 	  	// Map node already selected. Have we clicked the same one again?
 	  		if (layer.feature.properties.name === mapNodeClicked) {
 	    		// Same map node clicked. Reset the styles and mark no node as being selected
-	      		updateInfoBox('Tap on the map to indicate where this person lives.');
 	      		resetHighlight(e);
 	      		mapNodeClicked = false;
-	  		} else {
-		    // Different node clicked. Reset the style and then mark the new one as clicked.
-		      // updateInfoBox('Tap on the map to indicate where this person lives.')
-		      // resetHighlight(e);
-		      // mapNodeClicked = false; 
+		  		properties = {};
+		  		properties[variable] = undefined;
+		  		network.updateEdge(edges[currentPersonIndex].id, properties);
 
+	  		} else {
+		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
 	  		}
 
 		}
 
 	}
 
-  	function updateInfoBox(text) {
-  		$('.map-node-status').html(text);
+  	function highlightCurrent() {
+
+    	if (edges[currentPersonIndex][variable] !== undefined) {	
+			$.each(geojson._layers, function(index,value) {
+				if (value.feature.properties.name === edges[currentPersonIndex][variable]) {
+					selectFeature(value);
+				}
+			});
+
+		} else {
+			resetPosition();
+		}
+
   	}
+
 
   	function highlightFeature(e) {
         var layer = e.target;
@@ -66,10 +85,29 @@ var GeoInterface = function GeoInterface() {
         if (!L.Browser.ie && !L.Browser.opera) {
         	layer.bringToFront();
         }
-      }
+    }
+
+  	function selectFeature(e) {
+        var layer = e;
+        leaflet.fitBounds(e.getBounds(), {maxZoom:12});
+        
+        layer.setStyle({
+        	fillOpacity: 0.8
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera) {
+        	layer.bringToFront();
+        }
+    }
 
   	function resetHighlight(e) {
   		geojson.resetStyle(e.target);
+  	}
+
+  	function resetAllHighlights() {
+		$.each(geojson._layers, function(index,value) {
+			geojson.resetStyle(value);
+		});
   	}
 
   	function onEachFeature(feature, layer) {
@@ -78,14 +116,48 @@ var GeoInterface = function GeoInterface() {
   			mouseout: resetHighlight,
   			click: toggleFeature
   		});
-  	}  
+  	}
+
+  	function resetPosition() {
+  		leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+  	}
+
+  	// Public methods
+
+  	geoInterface.nextPerson = function() {
+  		if (currentPersonIndex < edges.length-1) {
+  			resetAllHighlights();
+	  		currentPersonIndex++;
+	        $('.current-id').html(currentPersonIndex+1);
+	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
+  			
+
+  			// if variable already set, highlight it and zoom to it.
+  			highlightCurrent();
+  		}
+
+  	};
+
+  	geoInterface.previousPerson = function() {
+	  	if (currentPersonIndex > 0) {
+	  		resetAllHighlights();
+	  		currentPersonIndex--;
+	        $('.current-id').html(currentPersonIndex+1);
+	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
+	    
+  			// if variable already set, highlight it and zoom to it.
+  			highlightCurrent();
+
+	    }
+  	};
+
 
   	geoInterface.init = function() {
   		// Initialize the map, point it at the #map element and center it on Chicago
         leaflet = L.map('map', {
             maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]], 
             zoomControl: false
-        }).setView([41.798395426119534,-87.839671372338884], 11);
+        });
 
         // Add the OpenStreetMap tile layer
         L.tileLayer(
@@ -101,18 +173,33 @@ var GeoInterface = function GeoInterface() {
             	geojson = L.geoJson(data, {
                 	onEachFeature: onEachFeature,
                 	style: function () {
-                	// style: function (feature) { // kept as a reference to show that I can access each feature. could be used to populate my own array of features.
                   		return {stroke:'#ff0000',fillColor:colors[1],weight:0,fillOpacity:0.3,strokeWidth:0};
                 	}
             	}).addTo(leaflet);
+
+
+		        // Load initial node
+		        edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: "Chicago"});
+		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
+		        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[0].nname_t0+"</strong> lives.");
+
+
+            	// Highlight initial value, if set
+            	highlightCurrent();
           	}
         }).error(function() {
-        	console.log('nooooo');
         });
+        
+        // Events
+        $('.map-back').on('click', geoInterface.previousPerson);
+        $('.map-forwards').on('click', geoInterface.nextPerson);
+
   	};
 
   	geoInterface.destroy = function() {
     	// Used to unbind events
+    	$('.map-back').off('click', geoInterface.previousPerson);
+        $('.map-forwards').off('click', geoInterface.nextPerson);
   	};
 
   	geoInterface.init();
