@@ -6266,10 +6266,6 @@ div[data-toggle="buttons"] label.active {
   height: 100%;
   width: 100%;
 }
-.leaflet-tile-pane {
-  -webkit-filter: grayscale();
-          filter: grayscale();
-}
 .map-node-container {
   width: 410px !important;
   padding: 40px !important;
