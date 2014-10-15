@@ -38,7 +38,7 @@ var GeoInterface = function GeoInterface() {
 	  		properties = {};
 	  		properties[variable] = layer.feature.properties.name;
 	  		network.updateEdge(edges[currentPersonIndex].id, properties);
-
+	  		$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
 		} else {
 
 	  	// Map node already selected. Have we clicked the same one again?
@@ -63,6 +63,7 @@ var GeoInterface = function GeoInterface() {
     	if (edges[currentPersonIndex][variable] !== undefined) {	
 			$.each(geojson._layers, function(index,value) {
 				if (value.feature.properties.name === edges[currentPersonIndex][variable]) {
+					$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][variable]);
 					selectFeature(value);
 				}
 			});
@@ -89,7 +90,7 @@ var GeoInterface = function GeoInterface() {
 
   	function selectFeature(e) {
         var layer = e;
-        leaflet.fitBounds(e.getBounds(), {maxZoom:12});
+        leaflet.fitBounds(e.getBounds(), {maxZoom:14});
         
         layer.setStyle({
         	fillOpacity: 0.8
@@ -101,10 +102,14 @@ var GeoInterface = function GeoInterface() {
     }
 
   	function resetHighlight(e) {
+  		$('.map-node-location').html('');
+  		mapNodeClicked = false;
   		geojson.resetStyle(e.target);
   	}
 
   	function resetAllHighlights() {
+  		$('.map-node-location').html('');
+  		mapNodeClicked = false;
 		$.each(geojson._layers, function(index,value) {
 			geojson.resetStyle(value);
 		});
@@ -112,8 +117,6 @@ var GeoInterface = function GeoInterface() {
 
   	function onEachFeature(feature, layer) {
   		layer.on({
-  			mouseover: highlightFeature,
-  			mouseout: resetHighlight,
   			click: toggleFeature
   		});
   	}
@@ -131,7 +134,6 @@ var GeoInterface = function GeoInterface() {
 	        $('.current-id').html(currentPersonIndex+1);
 	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
   			
-
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
   		}

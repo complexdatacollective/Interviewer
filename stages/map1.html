@@ -1,24 +1,35 @@
 <div id="map"></div>
 <div class="container map-node-container">
-  <div class="row">
-    <div class="col-sm-12 text-center">
-      <p class="lead map-node-status">Tap on the map to indicate where this person lives.</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4 text-left">
+
+  <div class="row form-group">
+    <div class="col-sm-5 text-left">
       <div class='map-node-navigation'>
-        <span class="btn btn-primary btn-block map-back">Previous</span>
+        <span class="btn btn-primary btn-block map-back"><span class="glyphicon glyphicon-arrow-left"></span></span>
       </div>
     </div>
-    <div class="col-sm-4 text-center">
-        <p class="lead map-counter">1/34</p>
+    <div class="col-sm-2 text-center">
+        <p class="lead map-counter"></p>
     </div>
-    <div class="col-sm-4 text-right">
+    <div class="col-sm-5 text-right">
       <div class='map-node-navigation'>
-        <span class="btn btn-primary btn-block map-forwards">Next</span>
+        <span class="btn btn-primary btn-block map-forwards"><span class="glyphicon glyphicon-arrow-right"></span></span>
       </div>
     </div>  
+  </div>
+  <div class="row form-group">
+    <div class="col-sm-12 text-center">
+      <p class="lead map-node-status"></p>
+      <p class="lead map-node-location"></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 form-group">
+      <button class="btn btn-warning btn-block">Person is Homeless</button>
+    </div>
+    <div class="col-sm-12 form-group">
+      <button class="btn btn-danger btn-block">Person is in Jail</button>
+    </div>
   </div>
 </div>
 
