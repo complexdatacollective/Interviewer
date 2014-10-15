@@ -184,7 +184,7 @@ var MultiBin = function MultiBin(options) {
 		}
 
 		// get all edges
-		var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:multiBin.options.edgeType});
+		var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:multiBin.options.edgeType});
 		var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
@@ -202,7 +202,7 @@ var MultiBin = function MultiBin(options) {
 					var droppedOn = $(this);
 
 			  		// Check if the node has been dropped into a bin that triggers the followup
-				  	if( multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
+				  	if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 				  		$('.followup').show();
 				  		$("#"+multiBin.options.followup.variable).focus();
 				  		followup = $(dropped).data('node-id');
@@ -214,7 +214,7 @@ var MultiBin = function MultiBin(options) {
 					var properties = {};
 					properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
 					// Add the attribute
-					var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:'Dyad'})[0].id;
+					var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
 					console.log(properties);
 					console.log(edgeID);
 					network.updateEdge(edgeID,properties);
@@ -262,9 +262,12 @@ var MultiBin = function MultiBin(options) {
 
 		// Add edges to bucket or to bins if they already have variable value.
 		$.each(edges, function(index,value) {
+
+			// We need the dyad edge so we know the nname for other types of edges
+			var dyadEdge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
 			if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
 				index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
-				$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+				$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
 				var noun = "people";
 				if ($('.c'+index).children('.active-node-list').children().length === 1) {
 					noun = "person";
@@ -275,7 +278,7 @@ var MultiBin = function MultiBin(options) {
 					$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
 				}  
 			} else {
-				$('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');  
+				$('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');  
 			}
 
 		});

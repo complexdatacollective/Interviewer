@@ -1,0 +1,27 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+	var criteria = {
+		type:'Sex',
+		from:network.getNodes({type_t0:'Ego'})[0].id
+	}
+
+	var multiBin = new MultiBin({
+	    targetEl: $('.container'),
+	    edgeType: 'Sex',
+	    criteria: criteria,
+	    variable: {
+	      label:'hiv_status_p_t0',
+	      values: [
+	      	'HIV Negative',
+	      	'HIV Positive',
+	      	'Don\'t Know'
+	      ]
+	    },
+    	heading: "What was the HIV status of these people the last time you had sex?",
+    	subheading: ""
+  	});
+
+</script>
