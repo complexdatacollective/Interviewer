@@ -3,3 +3,5 @@ js/.DS_Store
 img/Tiles
 
 *.codekit
+
+codekit-config.json
