@@ -3,17 +3,23 @@
 </div>
 
 <script>
-var criteria = {
-  type:'Dyad'
-};
+
 	var listSelect = new ListSelect({
-		targetEl: $('.container'),
-		edgeType: "Drugs",
+		  targetEl: $('.container'),
     	variables: [
-        ],
-      criteria: criteria,
-    	heading: "Of the people you listed, who have you used drugs or alcohol with?",
-    	subheading: "Scroll through the list below, and click on a person to select them."
+                    {label:'Marijuana ("Weed", "Pot")',value:'d1_t0'},
+                    {label:'Cocaine or Crack ("Coke", "Snow", "Blow", "Rock", "Freebase")',value:'d2_t0'},
+                    {label:'Heroin ("Smack", "Junk", "Black Tar", "China White")',value:'d3_t0'},
+                    {label:'Methamphetamines ("Meth", "Crystal Meth", "Crank", "Speed")',value:'d4_t0'},
+                    {label:'Opiates or Painkillers ("OxyContin", "Perocet", "Vicodin", "Demerol", "Morphine", "Codeine")',value:'d5_t0'},
+                    {label:'Poppers ("Snappers", "Liquid Gold")',value:'d6_t0'},
+                    {label:'Stimulants or Uppers - <u>other than those prescribed to you</u> ("Adderall", "Ritalin", "Dexadrine")',value:'d7_t0'},
+                    {label:'Depressants or Downers - <u>other than those prescribed to you</u> ("Valium", "Xanax", "Ambien")',value:'d8_t0'},
+                    {label:'Ecstasy ("Molly", "MDMA")',value:'d9_t0'},
+                    {label:'Some other drug',value:'d10_t0'}
+                ],
+    	heading: "Which of the following drugs have you used in the past 6 months?",
+    	subheading: "Tap all that apply."
 	});
 
 </script>

@@ -38,6 +38,7 @@ var Session = function Session(options) {
           {label:'ORD: vaginal sex freq.', page:'ordbin3.html'},
           {label:'ORD: anal sex freq.', page:'ordbin4.html'},
           {label:'map', page:'map1.html'},
+          {label:'List: which drugs?', page:'listselect1.html'},
           {label:'NET: drugs', page:'canvasedge2.html'},
           {label:'NET: sex', page:'canvasedge3.html'},
           {label:'Finish', page:'finish.html'}

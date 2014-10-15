@@ -6418,7 +6418,7 @@ div[data-toggle="buttons"] label.active {
   font-size: 13px;
 }
 .list-container {
-  width: 100%;
+  width: 1260px;
   margin: 0 auto;
   max-height: 78%;
   overflow: scroll;
@@ -6432,9 +6432,20 @@ div[data-toggle="buttons"] label.active {
   cursor: hand;
   border-radius: 10px;
   border: 2px solid #eee;
-  height: 102px;
-  width: 300px;
-  display: inline-block;
+  height: 155px;
+  width: 400px;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   float: left;
   text-align: center;
 }
