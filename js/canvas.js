@@ -147,7 +147,10 @@ var Canvas = function Canvas(userSettings) {
 		notify('Canvas initialising.', 1);
 		extend(settings,userSettings);
 
-		$('<div class="canvas-popover"><div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p><button class="btn btn-primary close-popover" type="button">Okay</button></div></div><span class="hi-icon hi-icon-link info-button">Info</span>').insertBefore( "#kineticCanvas" );
+		// Disabled morph button for now
+		// $('<div class="canvas-popover"><div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p><button class="btn btn-primary close-popover" type="button">Okay</button></div></div><span class="hi-icon hi-icon-link info-button">Info</span>').insertBefore( "#kineticCanvas" );
+
+		$('<div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p></div>').insertBefore( "#kineticCanvas" );
 
 		canvas.initKinetic();
 		

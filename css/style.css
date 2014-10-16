@@ -6320,15 +6320,14 @@ div[data-toggle="buttons"] label.active {
   font-size: 32px;
 }
 .canvas-title {
-  background: black;
+  background: transparent;
   padding: 40px;
-  width: 800px;
+  width: 400px;
   height: 400px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  -webkit-transition: all 0.5s ease-in-out;
-          transition: all 0.5s ease-in-out;
   overflow: hidden;
+  position: absolute;
+  bottom: 20px;
+  right: 50px;
 }
 .canvas-popover {
   width: 100%;
@@ -6350,17 +6349,6 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-pack: center;
           justify-content: center;
   z-index: 9999;
-}
-.canvas-title.closed {
-  position: absolute;
-  border-radius: 50%;
-  background: #333;
-  border: 0;
-  padding: 0;
-  width: 90px;
-  height: 90px;
-  -webkit-transition: all 0.5s ease-in-out;
-          transition: all 0.5s ease-in-out;
 }
 .info-button {
   position: absolute;

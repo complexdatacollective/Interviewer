@@ -205,10 +205,10 @@ var MultiBin = function MultiBin(options) {
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
 
-			if (index+1>number && newLine === false) {
-				multiBin.options.targetEl.append('<br>');
-				newLine = true;
-			}
+			// if (index+1>number && newLine === false) {
+			// 	multiBin.options.targetEl.append('<br>');
+			// 	newLine = true;
+			// }
 			var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
 			newBin.data('index', index);
 			multiBin.options.targetEl.append(newBin);

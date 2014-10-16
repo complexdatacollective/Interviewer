@@ -40,8 +40,9 @@ var Session = function Session(options) {
           {label:'CAT: HIV status of sex partners', page:'multibin7.html'},
           {label:'CAT: Serious relationship?', page:'multibin8.html'},
           {label:'CAT: Vaginal sex?', page:'multibin9.html'},
-          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
+          {label:'CAT: Anal sex?', page:'multibin10.html'},
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
+          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'Finish', page:'finish.html'}
                     ];
   
