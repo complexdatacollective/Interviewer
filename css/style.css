@@ -6367,6 +6367,8 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-pack: center;
           justify-content: center;
   z-index: 9999;
+  display: none;
+  visibility: hidden;
 }
 .info-button {
   position: absolute;
