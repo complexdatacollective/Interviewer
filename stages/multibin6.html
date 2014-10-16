@@ -23,14 +23,18 @@
 	      ]
 	    },
 	   	followup: {
-	   	  prompt: 'Please provide further details of the name of the venue/website/app.',
-	      variable:'loc_met_detail_t0',
 	      trigger: [
 	      	'Bar / Club',
 	        'Online / Mobile App',
 	        'School',
 	        'Work',
 	        'Somewhere Else'
+	      ],
+	      questions: [
+	     	{
+	     		prompt: 'Please provide further details of the name of the venue/website/app.',
+	      		variable:'loc_met_detail_t0'
+	      	}
 	      ]
 	    },
     	heading: "Where did you first meet each of these sexual partners?",

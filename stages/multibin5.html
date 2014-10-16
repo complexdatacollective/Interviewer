@@ -23,9 +23,13 @@
 	      ]
 	    },
 	   	followup: {
-	   	  prompt: 'Which term do you think best describes this persons gender identity?',
-	      variable:'gender_p_other_t0',
-	      trigger: ['Not Listed']
+	   		questions: [
+	   			   	 {
+	   			   	  	prompt: 'Which term do you think best describes this persons gender identity?',
+	      				variable:'gender_p_other_t0'
+	      			}
+	   		],
+	      	trigger: ['Not Listed']
 	    },
     	heading: "Please specify how each of these people currently identify their gender.",
     	subheading: ""

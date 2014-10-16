@@ -21,9 +21,11 @@
 	      ]
 	    },
 	   	followup: {
-	   	  prompt: 'Which other term would you use to describe their race or ethnic background?',
-	      variable:'race_p_other_t0',
-	      trigger: ['Other']
+	      trigger: ['Other'],
+	      questions: [{
+	      		prompt: 'Which other term would you use to describe their race or ethnic background?',
+	      		variable:'race_p_other_t0'
+	      }]
 	    },	    
     	heading: "Please specify how each of these people describe their race or ethnic background.",
     	subheading: "Drag and drop the node below into a category."

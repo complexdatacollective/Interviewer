@@ -20,9 +20,11 @@
 	      ]
 	    },
 	   	followup: {
-	   	  prompt: 'Which other term would you use to describe their secual orientation?',
-	      variable:'orient_p_other_t0',
-	      trigger: ['Not Listed']
+	      trigger: ['Not Listed'],
+	      questions: [{
+	      		prompt: 'Which other term would you use to describe their secual orientation?',
+	      		variable:'orient_p_other_t0'
+	      }]
 	    },	
     	heading: "Please describe how each person describes their sexual orientation.",
     	subheading: "Drag and drop the node below into a category."

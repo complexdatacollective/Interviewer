@@ -1,0 +1,41 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+	var criteria = {
+		type:'Sex',
+		from:network.getNodes({type_t0:'Ego'})[0].id
+	}
+
+	var multiBin = new MultiBin({
+		heading: "Have you had vaginal sex with each of these people in the past six months?",
+    	subheading: "",
+	    targetEl: $('.container'),
+	    edgeType: 'Sex',
+	    criteria: criteria,
+	    variable: {
+	      label:'vaginal_sex_status_t0',
+	      values: [
+	      	'Vaginal Sex',
+	      	'No Vaginal Sex'
+	      ]
+	    },
+	   	followup: {
+	   		trigger: [
+	      		'Vaginal Sex',
+	      		'No Vaginal Sex'
+	      	],
+	   	  	questions: [
+	   	  	{
+	   	  		prompt: 'How many times did you have vaginal sex with them in the past six months?',
+	      		variable:'vaginal_sex_freq_t0',
+			},
+			{
+  				prompt: 'How many of these times did you use a condom?',
+	      		variable:'vaginal_sex_condom_freq_t0',
+	      	}]
+	    }
+  	});
+
+</script>

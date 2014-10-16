@@ -28,7 +28,7 @@ var MultiBin = function MultiBin(options) {
 		// Handle the followup data
 
 		// First, retrieve the relevant values
-		var followupVal = $("#"+multiBin.options.followup.variable).val();
+		
 		var nodeid = followup;
 
 		// Next, get the edge we will be storing on
@@ -42,15 +42,24 @@ var MultiBin = function MultiBin(options) {
 		// Create an empty object for storing the new properties in
 		var followupProperties = {};
 
-		// Assign a new property according to the variable name
-		followupProperties[multiBin.options.followup.variable] = followupVal;
+		// Assign a new property according to the variable name(s)
+		$.each(multiBin.options.followup.questions, function(index) {
+			var followupVal = $("#"+multiBin.options.followup.questions[index].variable).val();
+			followupProperties[multiBin.options.followup.questions[index].variable] = followupVal;
+		});
+
+		
 
 		// Update the edge
 		extend(edge, followupProperties);
 		network.updateEdge(edge.id, edge);
 
 		// Clean up
-		$("#"+multiBin.options.followup.variable).val("");
+		$.each(multiBin.options.followup.questions, function(index) {
+			$("#"+multiBin.options.followup.questions[index].variable).val("");
+		});
+
+		
 		$('.followup').hide();
 	};
 
@@ -164,7 +173,14 @@ var MultiBin = function MultiBin(options) {
 
 		// Create the followup dialog, if it exists
 		if(typeof multiBin.options.followup !== 'undefined') { 
-			multiBin.options.targetEl.append('<div class="followup overlay"><h2>'+multiBin.options.followup.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+multiBin.options.followup.variable+'" id="'+multiBin.options.followup.variable+'" required="" placeholder="Answer here..."></div><div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div></div>');
+			multiBin.options.targetEl.append('<div class="followup overlay"></div>');
+
+			$.each(multiBin.options.followup.questions, function(index) {
+				$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="Answer here..."></div>');
+			});
+
+
+			$('.followup').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
