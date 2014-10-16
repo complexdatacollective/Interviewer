@@ -32,17 +32,17 @@ var Session = function Session(options) {
           {label:'CAT: race/ethnicity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
           {label:'CAT: location', page:'multibin4.html'},
-          {label:'ORD: drug and alcohol freq.', page:'ordbin5.html'},
           {label:'NET NI: used alcohol with', page:'canvasselect1.html'},
           {label:'MAP: location of alters', page:'map1.html'},
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
+          {label:'ORD: Marijuana freq', page:'ordbin6.html'},
+          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'CAT: where met sex partners', page:'multibin6.html'},
           {label:'CAT: HIV status of sex partners', page:'multibin7.html'},
           {label:'CAT: Serious relationship?', page:'multibin8.html'},
           {label:'CAT: Vaginal sex?', page:'multibin9.html'},
           {label:'CAT: Anal sex?', page:'multibin10.html'},
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
-          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'Finish', page:'finish.html'}
                     ];
   
