@@ -7,11 +7,17 @@
 	};
 
     var canvas = new Canvas({
+      heading: "Tap on all of the people with whom you had sex within the past six months.",
+      subheading: "",
     	mode:'Select', //edge, position, select
 		  targetEl: $('.container'),
 		  edgeType: "Sex",
       criteria: criteria,
-    	heading: "Tap on all of the people with whom you had sex within the past six months.",
-    	subheading: ""
+      followup: true
 	});
+
+
+$(function () {
+  $('#datetimepicker1').datetimepicker();
+});
   </script>

@@ -32,7 +32,6 @@ var Session = function Session(options) {
           {label:'CAT: race/ethnicity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
           {label:'CAT: location', page:'multibin4.html'},
-          {label:'NET NI: used alcohol with', page:'canvasselect1.html'},
           {label:'MAP: location of alters', page:'map1.html'},
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
           {label:'ORD: Marijuana freq', page:'ordbin6.html'},

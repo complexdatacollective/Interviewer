@@ -27,6 +27,7 @@
     "jqueryui-touch-punch": "*",
     "leaflet": "~0.7.3",
     "components-font-awesome": "~4.2.0",
-    "lato": "~0.2.1"
+    "lato": "~0.2.1",
+    "bs-datetimepicker": "~3.1.3"
   }
 }
