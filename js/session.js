@@ -37,6 +37,7 @@ var Session = function Session(options) {
           {label:'ORD: Marijuana freq', page:'ordbin6.html'},
           {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'CAT: where met sex partners', page:'multibin6.html'},
+          {label:'DATE: first and last sex', page:'dateinterface1.html'},
           {label:'CAT: HIV status of sex partners', page:'multibin7.html'},
           {label:'CAT: Serious relationship?', page:'multibin8.html'},
           {label:'CAT: Vaginal sex?', page:'multibin9.html'},

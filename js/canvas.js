@@ -152,26 +152,6 @@ var Canvas = function Canvas(userSettings) {
 
 		$('<div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p></div>').insertBefore( "#kineticCanvas" );
 
-		// handle fallback popup
-		if (settings.followup == true) {
-			console.log('called');
-			var markup = '<div class="container datething">'+
-	    					'<div class="row">'+
-						        '<div class="col-sm-6">'+
-						            '<div class="form-group">'+
-						                '<div class="input-group date" id="datetimepicker1">'+
-						                    '<input type="text" class="form-control" />'+
-						                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>'+
-						                    '</span>'+
-						                '</div>'+
-						            '</div>'+
-						        '</div>'+
-						    '</div>'+
-						'</div>';
-		}
-
-		$('body').append(markup);
-
 		canvas.initKinetic();
 		
 	   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
