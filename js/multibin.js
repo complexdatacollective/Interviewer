@@ -200,7 +200,7 @@ var MultiBin = function MultiBin(options) {
 		}
 
 		// get all edges
-		var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:multiBin.options.edgeType});
+		var edges = network.getEdges(multiBin.options.criteria);
 		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
