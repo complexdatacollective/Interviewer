@@ -291,7 +291,7 @@ var Canvas = function Canvas(userSettings) {
 			color: 'rgb(0,0,0)',
 			strokeWidth: 4,	
 			draggable: dragStatus,
-			dragDistance: 10
+			dragDistance: 20
 		};
 
 		extend(nodeOptions, options);
