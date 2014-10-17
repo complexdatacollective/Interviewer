@@ -201,7 +201,7 @@ var MultiBin = function MultiBin(options) {
 
 		// get all edges
 		var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:multiBin.options.edgeType});
-		var newLine = false;
+		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
 
@@ -220,7 +220,7 @@ var MultiBin = function MultiBin(options) {
 			  		// Check if the node has been dropped into a bin that triggers the followup
 				  	if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 				  		$('.followup').show();
-				  		$("#"+multiBin.options.followup.variable).focus();
+				  		$("#"+multiBin.options.followup.questions[0].variable).focus();
 				  		followup = $(dropped).data('node-id');
 				  	} else {
 				  		// Here we need to remove any previously set value for the followup variable, if it exists.

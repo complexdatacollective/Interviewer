@@ -6327,7 +6327,7 @@ div[data-toggle="buttons"] label.active {
   overflow: hidden;
   position: absolute;
   bottom: 20px;
-  right: 50px;
+  left: 10px;
 }
 .canvas-followup {
   margin: 0 auto;
