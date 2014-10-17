@@ -6425,6 +6425,12 @@ div[data-toggle="buttons"] label.active {
   padding: 0;
   font-size: 13px;
 }
+.date-container {
+  width: 1260px;
+  margin: 0 auto;
+  max-height: 78%;
+  overflow: scroll;
+}
 .list-container {
   width: 1260px;
   margin: 0 auto;

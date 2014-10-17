@@ -27,6 +27,7 @@ var DateInterface = function DateInterface(options) {
 
     dateInterface.options.targetEl.append('<h1>'+dateInterface.options.heading+'</h1>');
     dateInterface.options.targetEl.append('<p class="lead">'+dateInterface.options.subheading+'</p>');
+    dateInterface.options.targetEl.append('<div class="date-container"></div>');
 
   	// get edges according to criteria
   	edges = network.getEdges(dateInterface.options.criteria);
@@ -63,10 +64,31 @@ var DateInterface = function DateInterface(options) {
 		    '</div>'+						    
 		'</div>';
 
-		$(markup).appendTo('.container');
+		$(markup).appendTo('.date-container');
 		var dateoptions = {pickTime: false};
+
   		$('#datetimepicker'+counter).datetimepicker(dateoptions);
+  			if (typeof value.sex_first_t0 !== 'undefined') {
+  				$('#datetimepicker'+counter).data("DateTimePicker").setDate(value.sex_first_t0);
+  			}
+            $("#datetimepicker"+counter).on("dp.change",function () {
+            	var properties = {
+            		sex_first_t0: $(this).data("DateTimePicker").getDate().format("MM/DD/YYYY")
+            	};
+               	network.updateEdge(value.id, properties);
+            });
   		$('#datetimepicker'+counter+1).datetimepicker(dateoptions);
+  			if (typeof value.sex_last_t0 !== 'undefined') {
+  				$('#datetimepicker'+counter+1).data("DateTimePicker").setDate(value.sex_last_t0);
+  			}
+            $("#datetimepicker"+counter+1).on("dp.change",function () {
+            	var properties = {
+            		sex_last_t0: $(this).data("DateTimePicker").getDate().format("MM/DD/YYYY")
+            	};
+               	network.updateEdge(value.id, properties);
+            });
+
+
 		counter=counter+2;
 
 
