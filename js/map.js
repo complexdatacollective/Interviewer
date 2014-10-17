@@ -60,13 +60,23 @@ var GeoInterface = function GeoInterface() {
 
   	function highlightCurrent() {
 
-    	if (edges[currentPersonIndex][variable] !== undefined) {	
-			$.each(geojson._layers, function(index,value) {
-				if (value.feature.properties.name === edges[currentPersonIndex][variable]) {
-					$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][variable]);
-					selectFeature(value);
-				}
-			});
+    	if (edges[currentPersonIndex][variable] !== undefined) {
+      if (edges[currentPersonIndex][variable] === 'Homeless' || edges[currentPersonIndex][variable] === 'Jail') {
+        resetPosition();
+        var text = "Homeless";
+        if (edges[currentPersonIndex][variable] === "Jail") {
+          text = "in Jail";
+        }
+        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+text);
+      } else {
+        $.each(geojson._layers, function(index,value) {
+          if (value.feature.properties.name === edges[currentPersonIndex][variable]) {
+            $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][variable]);
+            selectFeature(value);
+          }
+        });        
+      }
+
 
 		} else {
 			resetPosition();
@@ -124,6 +134,22 @@ var GeoInterface = function GeoInterface() {
   	function resetPosition() {
   		leaflet.setView([41.798395426119534,-87.839671372338884], 11);
   	}
+
+    function setHomeless() {
+        resetAllHighlights();
+        var properties = {};
+        properties[variable] = "Homeless";
+        network.updateEdge(edges[currentPersonIndex].id, properties);
+        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
+    }
+
+    function setJail() {
+        resetAllHighlights();
+        var properties = {};
+        properties[variable] = "Jail";
+        network.updateEdge(edges[currentPersonIndex].id, properties);
+        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
+    }
 
   	// Public methods
 
@@ -195,13 +221,17 @@ var GeoInterface = function GeoInterface() {
         // Events
         $('.map-back').on('click', geoInterface.previousPerson);
         $('.map-forwards').on('click', geoInterface.nextPerson);
+        $('.homeless').on('click', setHomeless);
+        $('.jail').on('click', setJail);
 
   	};
 
   	geoInterface.destroy = function() {
     	// Used to unbind events
     	$('.map-back').off('click', geoInterface.previousPerson);
-        $('.map-forwards').off('click', geoInterface.nextPerson);
+      $('.map-forwards').off('click', geoInterface.nextPerson);
+      $('.homeless').on('click', setHomeless);
+      $('.jail').on('click', setJail);
   	};
 
   	geoInterface.init();
