@@ -3,15 +3,14 @@
 </div>
 
 <script>
-	var criteria = {
-		type:'Sex',
-		from:network.getNodes({type_t0:'Ego'})[0].id
-	}
 
 	var multiBin = new MultiBin({
 	    targetEl: $('.container'),
 	    edgeType: 'Sex',
-	    criteria: criteria,
+	    criteria: {
+			type:'Sex',
+			from:network.getNodes({type_t0:'Ego'})[0].id
+		},
 	    variable: {
 	      label:'loc_met_cat_t0',
 	      values: [

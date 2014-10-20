@@ -7,6 +7,10 @@
 	var multiBin = new MultiBin({
 	    targetEl: $('.container'),
 	    edgeType: 'Dyad',
+	    criteria: {
+			type:'Dyad',
+			from:network.getNodes({type_t0:'Ego'})[0].id
+		},
 	    variable: {
 	      label:'orient_p_t0',
 	      values: [
@@ -22,7 +26,7 @@
 	   	followup: {
 	      trigger: ['Not Listed'],
 	      questions: [{
-	      		prompt: 'Which other term would you use to describe their secual orientation?',
+	      		prompt: 'Which other term would you use to describe their sexual orientation?',
 	      		variable:'orient_p_other_t0'
 	      }]
 	    },	

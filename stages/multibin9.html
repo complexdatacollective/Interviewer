@@ -3,17 +3,16 @@
 </div>
 
 <script>
-	var criteria = {
-		type:'Sex',
-		from:network.getNodes({type_t0:'Ego'})[0].id
-	}
 
 	var multiBin = new MultiBin({
 		heading: "Have you had vaginal sex with each of these people in the past six months?",
     	subheading: "",
 	    targetEl: $('.container'),
 	    edgeType: 'Sex',
-	    criteria: criteria,
+		criteria: {
+			type:'Sex',
+			from:network.getNodes({type_t0:'Ego'})[0].id
+		},
 	    variable: {
 	      label:'vaginal_sex_status_t0',
 	      values: [
