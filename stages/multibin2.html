@@ -7,9 +7,13 @@
 	var multiBin = new MultiBin({
 	    targetEl: $('.container'),
 	    edgeType: 'Dyad',
+	    criteria: {
+			type:'Dyad',
+			from:network.getNodes({type_t0:'Ego'})[0].id
+		},
 	    variable: {
-	      label:'race_p_t0',
-	      values: [
+	    label:'race_p_t0',
+	    values: [
 	        'Black / African-American',
 	        'Hispanic / Latino',
 	        'Asian',
