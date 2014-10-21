@@ -6154,6 +6154,31 @@ label input[type="radio"]:checked ~ i.fa.fa-check-circle-o {
 label:hover input[type="radio"] ~ i.fa {
   color: #67c2d4;
 }
+.btn-warning.btn-outline {
+  color: #fa920d;
+  background: transparent;
+  border-color: #e98505;
+}
+.btn-danger.btn-outline {
+  color: #e85657;
+  background: transparent;
+  border-color: #e54041;
+}
+.btn-primary.btn-outline {
+  color: #67c2d4;
+  background: transparent;
+  border-color: #53bace;
+}
+.btn-success.btn-outline {
+  color: #1ecd97;
+  background: transparent;
+  border-color: #1bb787;
+}
+.btn-info.btn-outline {
+  color: #b16eff;
+  background: transparent;
+  border-color: #a355ff;
+}
 div[data-toggle="buttons"] label.active {
   color: #67c2d4;
 }

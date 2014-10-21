@@ -470,7 +470,7 @@ var Namegenerator = function Namegenerator(options) {
 	
 	$('.newNodeBox .form .right').append('<div class="form-group"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div>');
 	$("select[name='reltype_sub_t0']").prop( "disabled", true );
-	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
+	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-outline btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-outline btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
 
