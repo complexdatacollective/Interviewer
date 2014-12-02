@@ -73,7 +73,7 @@ var ListSelect = function ListSelect(options) {
     listSelect.options.targetEl.append('<div class="form-group list-container"></div>');
 
     $.each(listSelect.options.variables, function(index,value) {
-      var el = $('<div class="item" data-nodeid="'+value.value+'"><h3><strong>'+value.label+'</strong></h3></div>');
+      var el = $('<div class="item" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div>');
       var properties = {
         type_t0: "Ego"
       };
