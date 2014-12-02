@@ -437,7 +437,7 @@ var Canvas = function Canvas(userSettings) {
 							type: settings.edgeType
 						};
 
-						edgeProperties[settings.variables[0]] = 'percieved';
+						edgeProperties[settings.variables[0]] = 'perceived';
 
 
 						if (network.addEdge(edgeProperties) === false) {
