@@ -103,7 +103,8 @@ var GeoInterface = function GeoInterface() {
         leaflet.fitBounds(e.getBounds(), {maxZoom:14});
         
         layer.setStyle({
-        	fillOpacity: 0.8
+        	fillOpacity: 0.8,
+          fillColor: '#ff0000'
         });
 
         if (!L.Browser.ie && !L.Browser.opera) {
@@ -201,7 +202,7 @@ var GeoInterface = function GeoInterface() {
             	geojson = L.geoJson(data, {
                 	onEachFeature: onEachFeature,
                 	style: function () {
-                  		return {stroke:'#ff0000',fillColor:colors[1],weight:0,fillOpacity:0.3,strokeWidth:0};
+                  		return {stroke:'#ff0000',fillColor:colors[1],weight:1,fillOpacity:0,strokeWidth:0.2};
                 	}
             	}).addTo(leaflet);
 
