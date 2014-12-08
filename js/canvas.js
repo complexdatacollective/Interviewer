@@ -182,11 +182,31 @@ var Canvas = function Canvas(userSettings) {
 
       		// If we are in select mode, set the initial state
       		if (settings.mode === 'Select') {
-      			// set initial state of node according to if an edge exists
-      			if (network.getEdges({from: network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType}).length > 0) {
-      				newNode.children[0].stroke(colors.selected);
-      				nodeLayer.draw();
-      			}
+      			// test if we are flipping a variable or assigning an edge
+  				if (settings.variable) {
+  					//we are flipping a variable
+  					var properties = {
+  						from: network.getNodes({type_t0:'Ego'})[0].id, 
+  						to: criteriaEdges[i].to,
+  					};
+
+  					properties[settings.variable] = 1;
+
+
+	      			if (network.getEdges(properties).length > 0) {
+	      				newNode.children[0].stroke(colors.selected);
+	      				nodeLayer.draw();
+	      			}  					
+  				} else {
+  					// we are assigning an edge
+	      			// set initial state of node according to if an edge exists
+	      			if (network.getEdges({from: network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType}).length > 0) {
+	      				newNode.children[0].stroke(colors.selected);
+	      				nodeLayer.draw();
+	      			}
+
+  				}
+
       			
       		}
     	}
@@ -223,6 +243,7 @@ var Canvas = function Canvas(userSettings) {
 
   		} else {
   			// Select mode
+
   			// Show the social network
   			// Filter to remove edges involving ego, unless this is edge select mode.
   			edgeProperties = {};
@@ -405,33 +426,55 @@ var Canvas = function Canvas(userSettings) {
 
 		nodeGroup.on('tap click', function() {
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
+    		var currentNode = this;
+
     		window.dispatchEvent(log);
 			if (settings.mode === 'Select') {
 				var edge;
 
-				// Test if there is an existing edge.
-				if (network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to}).length > 0) {
-					// if there is, remove it
-      				this.children[0].stroke('white');
-      				network.removeEdge(network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0]);
-				} else {
-					// else add it
-					edge = {
-						from:network.getNodes({type_t0:'Ego'})[0].id,
-						to: this.attrs.to,
-						type: settings.edgeType,
-					};
+				// Check if we are flipping a binary variable on the Dyad edge or setting an edge
+				if (settings.variable) {
+					// We are flipping a variable
 
-					if (typeof settings.variables !== 'undefined') {
-						$.each(settings.variables, function(index, value) {
-							edge[value.label] = value.value;
-						});
+					var properties = {};
+					var currentValue = network.getEdge(currentNode.attrs.id)[settings.variable];
+					if (currentValue === 0 || typeof currentValue === 'undefined') {
+						properties[settings.variable] = 1;
+						currentNode.children[0].stroke(colors.selected);
+					} else {
+						properties[settings.variable] = 0;
+						currentNode.children[0].stroke('white');
 					}
-					
-					this.children[0].stroke(colors.selected);
-					network.addEdge(edge);
 
+					network.setProperties(network.getEdge(currentNode.attrs.id), properties);
+
+
+				} else {
+					// We are setting an edge
+					// Test if there is an existing edge.
+					if (network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to}).length > 0) {
+						// if there is, remove it
+	      				this.children[0].stroke('white');
+	      				network.removeEdge(network.getEdges({type: settings.edgeType,from:network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0]);
+					} else {
+						// else add it
+						edge = {
+							from:network.getNodes({type_t0:'Ego'})[0].id,
+							to: this.attrs.to,
+							type: settings.edgeType,
+						};
+
+						if (typeof settings.variables !== 'undefined') {
+							$.each(settings.variables, function(index, value) {
+								edge[value.label] = value.value;
+							});
+						}
+						
+						this.children[0].stroke(colors.selected);
+						network.addEdge(edge);
+					}
 				}
+
 
 			} else if (settings.mode === 'Edge') {
 					// If this makes a couple, link them.

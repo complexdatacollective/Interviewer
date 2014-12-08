@@ -1,0 +1,19 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var canvas = new Canvas({
+      heading: "Please tap on anyone who identifies as an American Indian or Alaskan Native.",
+      subheading: "",
+    	mode:'Select', //edge, position, select
+		  targetEl: $('.container'),
+		  variable: "race1_p_t0",
+      criteria: criteria,
+      followup: true
+	});
+
+  </script>
