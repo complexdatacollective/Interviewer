@@ -1,4 +1,4 @@
-/* global History, extend, IOInterface, notify, menu */
+/* global History, extend, IOInterface, notify, menu, network */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -29,14 +29,23 @@ var Session = function Session(options) {
           {label:'ORD: contact frequency', page:'ordbin1a.html'},
           {label:'ORD: relationship strength', page:'ordbin1.html'},
           {label:'NET NI: get advice', page:'canvasselect6.html'},
-	      {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
+	        {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
           {label:'CAT: gender identity', page:'multibin5.html'},
           {label:'CAT: race/ethnicity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
           {label:'CAT: location', page:'multibin4.html'},
           {label:'MAP: location in Chicago', page:'map1.html'},
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
-          {label:'ORD: Marijuana freq', page:'ordbin6.html'},
+          {label:'ORD: Marijuana freq', page:'ordbin6.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d1_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d2_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Heroin freq', page:'ordbin8.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d3_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Methamphetamines freq', page:'ordbin9.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d4_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Painkillers or Opiates freq', page:'ordbin10.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d5_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Poppers freq', page:'ordbin11.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d6_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Stimulants or Amphetamines freq', page:'ordbin12.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d7_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Depressants or Tranquilizers freq', page:'ordbin13.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d8_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d9_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d10_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
           {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'CAT: where met sex partners', page:'multibin6.html'},
           {label:'DATE: first and last sex', page:'dateinterface1.html'},
@@ -181,6 +190,19 @@ var Session = function Session(options) {
   session.goToStage = function(stage) {
     if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
 
+    if (session.stages[stage].skip) {
+      var outcome = session.stages[stage].skip();
+      if (outcome === false) {
+        if (stage > currentStage) {
+          session.goToStage(stage+1);
+        } else {
+          session.goToStage(stage-1);
+
+        }
+        
+        return false;
+      }
+    }
     notify('Session is moving to stage '+stage, 3);
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
