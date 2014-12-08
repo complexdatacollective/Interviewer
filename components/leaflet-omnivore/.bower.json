@@ -1,0 +1,16 @@
+{
+  "name": "leaflet-omnivore",
+  "version": "0.3.0",
+  "description": "a geospatial format parser for Leaflet",
+  "homepage": "https://github.com/mapbox/leaflet-omnivore",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.3.0",
+    "commit": "ae092d0edecb15e1705cd58926c573c1009ac1d3"
+  },
+  "_source": "git://github.com/mapbox/leaflet-omnivore.git",
+  "_target": "~0.3.0",
+  "_originalSource": "leaflet-omnivore",
+  "_direct": true
+}
