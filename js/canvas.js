@@ -191,16 +191,16 @@ var Canvas = function Canvas(userSettings) {
       		}
     	}
   		
-  		setTimeout(function() {
+  		setTimeout(function() { // seems to be needed in Chrome Canary. Why!?
   			canvas.drawUIComponents();
   		}, 0);
 
   		// Are there existing edges? Display them
-  		var edges;
+  		var edges, edgeProperties;
   		if (settings.mode === 'Edge') {
   			
   			// Set the criteria based on edge type
-  			var edgeProperties =  {
+  			edgeProperties =  {
 				type: settings.edgeType
 			};
   			
@@ -222,9 +222,21 @@ var Canvas = function Canvas(userSettings) {
 	  		});
 
   		} else {
+  			// Select mode
   			// Show the social network
   			// Filter to remove edges involving ego, unless this is edge select mode.
-  			edges = network.getEdges({type:'Dyad'}, function (results) {
+  			edgeProperties = {};
+
+  			if (settings.showEdge) {
+  				edgeProperties =  {
+					type: settings.showEdge
+				};
+  			} else {
+  				edgeProperties =  {
+					type: 'Dyad'
+				};
+  			}
+  			edges = network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
   					if (value.from !== network.getNodes({type_t0:'Ego'})[0].id && value.to !== network.getNodes({type_t0:'Ego'})[0].id) {
