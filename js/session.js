@@ -22,7 +22,7 @@ var Session = function Session(options) {
           {label:'NG: sex, two or more', page:'namegenmod8.html'},          
           {label:'NET: layout', page:'canvaslayout.html'},
           {label:'NET EDGE: social', page:'canvasedge1.html'},
-          {label:'NET NI: who recruited', page:'canvasselect2.html'},
+          {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return false; } else { return true; }}}},
           {label:'NET NI: who drunk with', page:'canvasselect3.html'},
           {label:'NET NI: who drugs with', page:'canvasselect4.html'},
           {label:'NET NI: who sex with', page:'canvasselect5.html'},
