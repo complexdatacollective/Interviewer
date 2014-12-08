@@ -36,7 +36,7 @@ var Canvas = function Canvas(userSettings) {
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
-		concentricCircleNumber: 1,
+		concentricCircleNumber: 4,
 		criteria: {from:network.getNodes({type_t0:'Ego'})[0].id},
 		nodeTypes: [
 		{'name':'Person','color':colors.blue},
