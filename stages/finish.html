@@ -1,20 +1,20 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center">
-		  	<h1>Thank you for your time!</h1>
+		  	<h1>Data for Survey</h1>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
-		  	<h4>Partners for next Survey:</h4>
+		  	<h4>Previous 4 Sexual Partners (most to least recent):</h4>
 		  	<ul class="partners">
 		  	</ul>		  	
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
-		  	<h4>Recruiter/Serious Current Relationship:</h4>
-		  	<ul class="recruiter">
+		  	<h4>Current Serious Relationships:</h4>
+		  	<ul class="serious_relationships">
 		  	</ul>
 		</div>
 	</div>
@@ -24,11 +24,18 @@
 (function(){
 
 	var partners = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Sex"});
+	var seriousRelationships = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"SeriousRel"});
 	
+	$.each(seriousRelationships, function(index,value) {
+		var dyadEdge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
+		$('.serious_relationships').append('<li>'+dyadEdge.nname_t0+'</li>');
+	});
+
+
 	var dates = [];
 	$.each(partners, function(index,value) {
 		if (typeof value.sex_last_t0 !=='undefined') {
-			var date = new Date(value.sex_last_t0)
+			var date = new Date(value.sex_last_t0);
 			dates.push(date);			
 		}
 
@@ -46,7 +53,7 @@
 	console.log(asc);
 	var counter = 0;
 	$.each(asc, function(index,value) {
-		if (counter <= 2) {
+		if (counter <= 3) {
 			var formatted = getFormattedDate(value);
 			// get sex edge
 			var sexEdges = network.getEdges({type:"Sex", sex_last_t0: formatted});
@@ -61,15 +68,6 @@
 
 		}
 
-	});
-	
-
-	var recruiter = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to:network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"RecruitedBy"})[0].to, type:'Dyad'})[0].nname_t0;
-
-	$('.recruiter').append('<li>'+recruiter+"</li>");
-
-	network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, {
-		int_ftime_t0: new Date().getTime()
 	});
 
 

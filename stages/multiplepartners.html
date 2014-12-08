@@ -43,8 +43,7 @@
 			multiple_sex_t0: 'no'
 		}
 		network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);	
-		session.goToStage(session.stages.length-1);
-	
+		session.nextStage();
 	});
 
 	$('.multiple-skip').on('click', function() {
@@ -52,9 +51,10 @@
 			multiple_sex_t0: 'skipped'
 		}
 		network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
-		session.goToStage(session.stages.length-1);
-
+		session.nextStage();
 	});
+
+
 
 })();
 
