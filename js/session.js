@@ -15,7 +15,6 @@ var Session = function Session(options) {
   session.stages = [
           {label:'Intro', page:'intro.html'},
           {label:'NG: closest', page:'namegen1.html'},
-          {label:'NG: $25', page:'namegen3.html'},
           {label:'NG: marijuana or other drugs', page:'namegen5.html'},
           {label:'NG: drugs, two or more', page:'namegenmod6.html'},
           {label:'NG: other people sex', page:'namegen7.html'},          
