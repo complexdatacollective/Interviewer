@@ -6388,6 +6388,9 @@ div[data-toggle="buttons"] label.active {
   bottom: 20px;
   left: 10px;
 }
+.canvas-title h3 {
+  font-size: 33px;
+}
 .canvas-followup {
   margin: 0 auto;
   margin-bottom: 35px;
