@@ -36,27 +36,27 @@ var DateInterface = function DateInterface(options) {
   	$.each(edges, function(index,value) {
   		var dyadEdge = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, to:value.to})[0];
 
-		var markup = '<div class="canvas-followup overlay">'+
+		var markup = '<div class="date-picker-item overlay">'+
 			'<div class="row">'+
 				'<div class="col-sm-12">'+
 					'<h2>Regarding <span>'+dyadEdge.nname_t0+'</span></h2>'+
 				'</div>'+
 			'</div>'+
 			'<div class="row">'+
-		        '<div class="col-sm-6">'+
+		        '<div class="col-sm-5">'+
 		        	'<div class="form-group">'+
 		        	'<p class="lead">When was the first time you had sex?</p>'+
 		                '<div class="input-group date" id="datetimepicker'+counter+'">'+
-		                    '<input type="text" class="form-control" />'+
+		                    '<input type="text" class="form-control"/>'+
 		                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
 		                '</div>'+
 		            '</div>'+
 		        '</div>'+
-		        '<div class="col-sm-6">'+
+		        '<div class="col-sm-5 col-sm-offset-2">'+
 		        	'<div class="form-group">'+
 		        	'<p class="lead">When was the last time you had sex?</p>'+
 		                '<div class="input-group date" id="datetimepicker'+counter+1 +'">'+
-		                    '<input type="text" class="form-control" />'+
+		                    '<input type="text" class="form-control"/>'+
 		                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
 		                '</div>'+
 		            '</div>'+
