@@ -1,7 +1,6 @@
 .DS_Store
 js/.DS_Store
 img/Tiles
-data/mongo
 *.codekit
 
 codekit-config.json
