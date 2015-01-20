@@ -6194,7 +6194,7 @@ div[data-toggle="buttons"] label {
   vertical-align: top;
   cursor: pointer;
   background-color: none;
-  border: 0px solid 
+  border: 0px solid
     #c8c8c8;
   border-radius: 3px;
   color: #c8c8c8;
@@ -6818,7 +6818,7 @@ div[data-toggle="buttons"] label.active {
 }
 .relationship-close-button {
   position: absolute;
-  top: -100px;
+  top: -137px;
   right: 30px;
 }
 .open {
@@ -6968,6 +6968,7 @@ input[type=radio]:checked + label > img {
   -webkit-filter: blur(11px);
           filter: blur(11px);
   opacity: 0.4 !important;
+  z-index: 2;
 }
 .new-node-inner {
   background: black;
