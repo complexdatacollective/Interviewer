@@ -1,13 +1,6 @@
 /* global extend, network */
 /* exported DateInterface */
 
-
-/*
-
-
-
-*/
-
 var DateInterface = function DateInterface(options) {
 
   // dateInterface globals
@@ -47,7 +40,7 @@ var DateInterface = function DateInterface(options) {
 		        	'<div class="form-group">'+
 		        	'<p class="lead">When was the first time you had sex?</p>'+
 		                '<div class="input-group date" id="datetimepicker'+counter+'">'+
-		                    '<input type="text" class="form-control"/>'+
+		                    '<input type="text" class="form-control" readonly/>'+
 		                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
 		                '</div>'+
 		            '</div>'+
@@ -56,12 +49,12 @@ var DateInterface = function DateInterface(options) {
 		        	'<div class="form-group">'+
 		        	'<p class="lead">When was the last time you had sex?</p>'+
 		                '<div class="input-group date" id="datetimepicker'+counter+1 +'">'+
-		                    '<input type="text" class="form-control"/>'+
+		                    '<input type="text" class="form-control" readonly />'+
 		                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
 		                '</div>'+
 		            '</div>'+
 		        '</div>'+
-		    '</div>'+						    
+		    '</div>'+
 		'</div>';
 
 		$(markup).appendTo('.date-container');
