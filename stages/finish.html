@@ -8,7 +8,7 @@
 		<div class="col-md-6 col-md-offset-3">
 		  	<h4>Previous 4 Sexual Partners (most to least recent):</h4>
 		  	<ul class="partners">
-		  	</ul>		  	
+		  	</ul>
 		</div>
 	</div>
 	<div class="row">
@@ -30,7 +30,7 @@
 	var seriousRelationships = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"SeriousRel"});
 	// console.log('partners:');
 	// console.log(partners);
-	
+
 
 	// add the serious relationships to the interface
 	$.each(seriousRelationships, function(index,value) {
@@ -43,14 +43,14 @@
 
 	// iterate over the sex partners, and add the last sex date to an array
 	$.each(partners, function(index,value) {
-		if (typeof value.sex_last_t0 !=='undefined') {
+		if (typeof value.sex_last_t0 !=='undefined' && (value.vaginal_sex_status_t0 !== "No Vaginal Sex" || value.anal_sex_status_t0 !== "No Anal Sex")) {
 			// console.log('value: '+ value.sex_last_t0);
 			var date = new Date(value.sex_last_t0);
 			// console.log('date: '+date);
 
-			// check if date already exists. Can't use indexOf here because it uses strict comparison (===) meaning the dates 
+			// check if date already exists. Can't use indexOf here because it uses strict comparison (===) meaning the dates
 			// must be the same *instance* not merely the same value
-			
+
 			var found = false;
 			$.each(dates, function(index, value) {
 				// console.log('comparing:');
@@ -65,7 +65,7 @@
 			});
 			if (!found) {
 				dates.push(date);
-			}	
+			}
 		}
 
 	});
@@ -101,7 +101,7 @@
 				$('.partners').append('<li>'+dyadEdge.nname_t0+'</li>');
 				counter++;
 			});
-			
+
 
 		}
 
