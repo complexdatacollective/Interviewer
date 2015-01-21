@@ -115,13 +115,20 @@ var Session = function Session(options) {
 
   session.options = {
     fnBeforeStageChange : function(oldStage, newStage) {
-      var changeStageStartEvent = new CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
-      window.dispatchEvent(changeStageStartEvent);
+        var eventProperties = {
+            stage: currentStage,
+            timestamp: new Date()
+        };
+        var log = new CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
+        window.dispatchEvent(log);
+
+        var changeStageStartEvent = new CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
+        window.dispatchEvent(changeStageStartEvent);
 
     },
     fnAfterStageChange : function(oldStage, newStage) {
-      var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
-      window.dispatchEvent(changeStageEndEvent);
+        var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
+        window.dispatchEvent(changeStageEndEvent);
     }
   };
 
@@ -259,6 +266,12 @@ var Session = function Session(options) {
       }
     }
     notify('Session is moving to stage '+stage, 3);
+    var eventProperties = {
+        stage: stage,
+        timestamp: new Date()
+    };
+    var log = new CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
+    window.dispatchEvent(log);
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
     $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
@@ -322,6 +335,10 @@ var Session = function Session(options) {
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
 
+  };
+
+  session.currentStage = function() {
+      return currentStage;
   };
 
   session.returnData = function(dataKey) {

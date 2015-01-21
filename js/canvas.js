@@ -1,4 +1,4 @@
-/*global extend, Kinetic, notify, network, menu */
+/*global extend, Kinetic, notify, network, session */
 /* exported Canvas */
 /*jshint bitwise: false*/
 
@@ -10,9 +10,10 @@ var Canvas = function Canvas(userSettings) {
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, canvas = {};
 	var sourceNode;
 	var selectedNodes = [];
+	var log;
 	var menuOpen = false;
 	var cancelKeyBindings = false;
-	var canvasMenu;
+	var taskComprehended = false;
 
 	// Colours
 	var colors = {
@@ -398,6 +399,17 @@ var Canvas = function Canvas(userSettings) {
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+
+
 			notify("dragstart",1);
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
@@ -408,6 +420,16 @@ var Canvas = function Canvas(userSettings) {
 		});
 
 		nodeGroup.on('dragmove', function() {
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+
 			notify("Dragmove",0);
 			var dragNode = nodeOptions.id;
 			$.each(edgeLayer.children, function(index, value) {
@@ -424,7 +446,16 @@ var Canvas = function Canvas(userSettings) {
 		});
 
 		nodeGroup.on('tap click', function() {
-			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+			log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
     		var currentNode = this;
 
     		window.dispatchEvent(log);
@@ -513,6 +544,16 @@ var Canvas = function Canvas(userSettings) {
 		});
 
 		nodeGroup.on('dbltap dblclick', function() {
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+
 			if (settings.mode === 'Edge') {
 				notify('double tap',1);
 				sourceNode = this;
@@ -542,7 +583,7 @@ var Canvas = function Canvas(userSettings) {
 			var currentNode = this;
 
 			// Log the movement and save the graph state.
-			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
+			log = new CustomEvent('log', {"detail":{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
 
     		network.setProperties(network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});

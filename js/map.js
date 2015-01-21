@@ -1,4 +1,4 @@
-/* global L, network */
+/* global L, network, session */
 /* exported GeoInterface */
 
 
@@ -11,7 +11,8 @@ Map module.
 var GeoInterface = function GeoInterface() {
 
   	// map globals
-
+    var log;
+    var taskComprehended = false;
  	var geoInterface = {};
  	var leaflet;
  	var edges;
@@ -24,6 +25,23 @@ var GeoInterface = function GeoInterface() {
   	// Private functions
 
 	function toggleFeature(e) {
+        if (taskComprehended === false) {
+            var eventProperties = {
+                zoomLevel: leaflet.getZoom(),
+                stage: session.currentStage(),
+                timestamp: new Date()
+            };
+            log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+            window.dispatchEvent(log);
+            taskComprehended = true;
+        }
+
+        var mapEventProperties = {
+            zoomLevel: leaflet.getZoom(),
+            timestamp: new Date()
+        };
+        log = new CustomEvent('log', {"detail":{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
+        window.dispatchEvent(log);
 		var layer = e.target;
 		var properties;
 
@@ -53,7 +71,7 @@ var GeoInterface = function GeoInterface() {
           highlightFeature(e);
           properties = {};
           properties[variable] = layer.feature.properties.name;
-          network.updateEdge(edges[currentPersonIndex].id, properties);          
+          network.updateEdge(edges[currentPersonIndex].id, properties);
 		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
 	  		}
 
@@ -78,7 +96,7 @@ var GeoInterface = function GeoInterface() {
               $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][variable]);
               selectFeature(value);
             }
-          });        
+          });
         }
 
   		} else {
@@ -91,7 +109,7 @@ var GeoInterface = function GeoInterface() {
   	function highlightFeature(e) {
         var layer = e.target;
         leaflet.fitBounds(e.target.getBounds(), {maxZoom:14});
-        
+
         layer.setStyle({
         	fillOpacity: 0.8,
           fillColor: colors[1]
@@ -107,7 +125,7 @@ var GeoInterface = function GeoInterface() {
   	function selectFeature(e) {
         var layer = e;
         leaflet.fitBounds(e.getBounds(), {maxZoom:14});
-        
+
         layer.setStyle({
         	fillOpacity: 0.8,
           fillColor: colors[1]
@@ -167,7 +185,7 @@ var GeoInterface = function GeoInterface() {
 	  		currentPersonIndex++;
 	        $('.current-id').html(currentPersonIndex+1);
 	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
-  			
+
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
         if (currentPersonIndex === edges.length-1) {
@@ -191,14 +209,14 @@ var GeoInterface = function GeoInterface() {
 	  		currentPersonIndex--;
 	        $('.current-id').html(currentPersonIndex+1);
 	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
-	    
+
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
         if (currentPersonIndex === edges.length-1) {
           $('.map-forwards').hide();
         } else {
           $('.map-forwards').show();
-        }        
+        }
         if (currentPersonIndex === 0) {
           $('.map-back').hide();
         } else {
@@ -212,7 +230,7 @@ var GeoInterface = function GeoInterface() {
 
   		// Initialize the map, point it at the #map element and center it on Chicago
         leaflet = L.map('map', {
-            maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]], 
+            maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]],
             zoomControl: false
         });
 
@@ -248,18 +266,10 @@ var GeoInterface = function GeoInterface() {
                 $('.map-forwards').hide();
               } else {
                 $('.map-forwards').show();
-              }  
+              }
           	}
         }).error(function() {
         });
-
-        // $.ajax({
-        //     dataType: "json",
-        //     url: "data/transit.json",
-        //     success: function(data) {
-        //       transit = L.geoJson(data, {}).addTo(leaflet);
-        //     }
-        // });      
 
 
         var kmlLayer = new L.KML("data/transit.kml", {
@@ -268,8 +278,7 @@ var GeoInterface = function GeoInterface() {
                     }
                   });
         leaflet.addLayer(kmlLayer);
-        // omnivore.kml('data/transit.kml').addTo(leaflet);
-        
+
         // Events
         $('.map-back').on('click', geoInterface.previousPerson);
         $('.map-forwards').on('click', geoInterface.nextPerson);
@@ -281,9 +290,9 @@ var GeoInterface = function GeoInterface() {
   	geoInterface.destroy = function() {
     	// Used to unbind events
     	$('.map-back').off('click', geoInterface.previousPerson);
-      $('.map-forwards').off('click', geoInterface.nextPerson);
-      $('.homeless').on('click', setHomeless);
-      $('.jail').on('click', setJail);
+        $('.map-forwards').off('click', geoInterface.nextPerson);
+        $('.homeless').on('click', setHomeless);
+        $('.jail').on('click', setJail);
   	};
 
   	geoInterface.init();

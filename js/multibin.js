@@ -1,8 +1,10 @@
-/* global network, extend, notify */
+/* global network, extend, notify, session */
 /* exported MultiBin */
 var MultiBin = function MultiBin(options) {
 
 	//global vars
+	var log;
+	var taskComprehended = false;
 	var multiBin = {}, followup;
 	multiBin.options = {
 		targetEl: $('.container'),
@@ -80,7 +82,17 @@ var MultiBin = function MultiBin(options) {
 				$('.copy').addClass('node-bin-static');
 				$('.copy').children('h1, p').show();
 				$('.copy').removeClass('copy');
-				$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
+				$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function(){
+					if (taskComprehended === false) {
+						var eventProperties = {
+							stage: session.currentStage(),
+							timestamp: new Date()
+						};
+						log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+						window.dispatchEvent(log);
+						taskComprehended = true;
+					}
+				}});
 				open = false;
 			}
 
@@ -92,7 +104,17 @@ var MultiBin = function MultiBin(options) {
 		e.stopPropagation();
 		if (open === false) {
 
-			$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true });
+			$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true, start: function() {
+				if (taskComprehended === false) {
+					var eventProperties = {
+						stage: session.currentStage(),
+						timestamp: new Date()
+					};
+					log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+					window.dispatchEvent(log);
+					taskComprehended = true;
+				}
+			}});
 			if(!$(this).hasClass('.node-bin-active')) {
 				$('.container').children().not(this).addClass('invisible');
 				var position = $(this).offset();
@@ -327,7 +349,17 @@ var MultiBin = function MultiBin(options) {
 			}
 
 		});
-		$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false });
+		$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false , start: function(){
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+		}});
 
 		// Event Listeners
 		window.addEventListener('changeStageStart', stageChangeHandler, false);

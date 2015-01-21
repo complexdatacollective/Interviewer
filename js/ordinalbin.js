@@ -1,9 +1,11 @@
-/* global network, extend, notify */
+/* global network, extend, notify, session */
 /* exported OrdinalBin */
 var OrdinalBin = function OrdinalBin(options) {
 
   //global vars
   var ordinalBin = {};
+  var taskComprehended = false;
+  var log;
   ordinalBin.options = {
     targetEl: $('.container'),
     edgeType: 'Dyad',
@@ -28,7 +30,7 @@ var OrdinalBin = function OrdinalBin(options) {
   var stageChangeHandler = function() {
     ordinalBin.destroy();
   };
-  
+
   var followupHandler = function() {
     var followupVal = $(this).data('value');
     var nodeid = followup;
@@ -64,12 +66,12 @@ var OrdinalBin = function OrdinalBin(options) {
 
     // Add node bucket
     ordinalBin.options.targetEl.append('<div class="node-bucket"></div>');
-    if(typeof ordinalBin.options.followup !== 'undefined') { 
+    if(typeof ordinalBin.options.followup !== 'undefined') {
         ordinalBin.options.targetEl.append('<div class="followup"><h2>'+ordinalBin.options.followup.prompt+'</h2></div>');
         $.each(ordinalBin.options.followup.values, function(index,value) {
           $('.followup').append('<span class="btn btn-primary btn-block followup-option" data-value="'+value.value+'">'+value.label+'</span>');
-        });    
-    }  
+        });
+    }
 
     var number = ordinalBin.options.variable.values.length;
     itemW = ($('.container').outerWidth()/number)-20;
@@ -84,7 +86,7 @@ var OrdinalBin = function OrdinalBin(options) {
       var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index.value+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       ordinalBin.options.targetEl.append(newBin);
-      $(".d"+index).droppable({ accept: ".draggable", 
+      $(".d"+index).droppable({ accept: ".draggable",
         drop: function(event, ui) {
 
           var dropped = ui.draggable;
@@ -94,7 +96,7 @@ var OrdinalBin = function OrdinalBin(options) {
             $('.followup').show();
             followup = $(dropped).data('node-id');
           }
-          
+
           $(dropped).appendTo(droppedOn.children('.active-node-list'));
           $(dropped).css({position: '',top:'',left:''});
           var properties = {};
@@ -113,7 +115,7 @@ var OrdinalBin = function OrdinalBin(options) {
                 noun = "person";
               }
 
-              $(".d"+oindex+" p").html(length+' '+noun+'.');              
+              $(".d"+oindex+" p").html(length+' '+noun+'.');
             } else {
               $(".d"+oindex+" p").html('(Empty)');
             }
@@ -131,12 +133,23 @@ var OrdinalBin = function OrdinalBin(options) {
 
 
 
-            $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() { $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); } });       
-        }, 
+            $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() {
+                if (taskComprehended === false) {
+                    var eventProperties = {
+                        stage: session.currentStage(),
+                        timestamp: new Date()
+                    };
+                    log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                    window.dispatchEvent(log);
+                    taskComprehended = true;
+                }
+                $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); }
+            });
+        },
         over: function() {
             $(this).data('oldBg', $(this).css('background-color'));
             $(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
-          
+
         },
         out: function() {
           $(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
@@ -153,7 +166,7 @@ var OrdinalBin = function OrdinalBin(options) {
     $('.ord-node-bin').css({width:itemW,height:itemH});
 
     // get all edges
-    var edges = network.getEdges(ordinalBin.options.criteria); 
+    var edges = network.getEdges(ordinalBin.options.criteria);
     console.log('edges');
     console.log(edges);
 
@@ -190,18 +203,30 @@ var OrdinalBin = function OrdinalBin(options) {
             $('.d'+index).children('p').html('(Empty)');
           } else {
             $('.d'+index).children('p').html(length+' '+noun+'.');
-          }  
+          }
       } else {
           if (ordinalBin.options.criteria.type !== 'Dyad') {
             $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
           } else {
             $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
           }
-         
+
       }
 
     });
-    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() { $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); } });
+    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() {
+        if (taskComprehended === false) {
+            var eventProperties = {
+                stage: session.currentStage(),
+                timestamp: new Date()
+            };
+            log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+            window.dispatchEvent(log);
+            taskComprehended = true;
+        }
+
+        $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); }
+    });
 
     // Event Listeners
     window.addEventListener('changeStageStart', stageChangeHandler, false);
