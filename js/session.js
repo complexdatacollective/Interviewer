@@ -12,6 +12,24 @@ var Session = function Session(options) {
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
+
+  function drugSkip(drugVar) {
+      if (typeof network !== 'undefined') {
+          var properties = {};
+          properties[drugVar] = 1;
+          // are there actually any drug edges?
+          var drugEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:'Drugs'});
+          var required = network.getNodes(properties);
+
+          if (drugEdges.length === 0 || required.length === 0) {
+              return false;
+          } else {
+              return true;
+          }
+      }
+  }
+
+
   session.stages = [
           {label:'Intro', page:'intro.html'},
           {label:'NG: closest', page:'namegen1.html'},
@@ -36,16 +54,16 @@ var Session = function Session(options) {
           {label:'CAT: location', page:'multibin4.html'},
           {label:'MAP: location in Chicago', page:'map1.html'},
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
-          {label:'ORD: Marijuana freq', page:'ordbin6.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d1_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d2_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Heroin freq', page:'ordbin8.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d3_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Methamphetamines freq', page:'ordbin9.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d4_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Painkillers or Opiates freq', page:'ordbin10.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d5_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Poppers freq', page:'ordbin11.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d6_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Stimulants or Amphetamines freq', page:'ordbin12.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d7_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Depressants or Tranquilizers freq', page:'ordbin13.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d8_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d9_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
-          {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({d10_t0:1}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'ORD: Marijuana freq', page:'ordbin6.html',skip: function() { return drugSkip('d1_t0'); }},
+          {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { return drugSkip('d2_t0'); }},
+          {label:'ORD: Heroin freq', page:'ordbin8.html', skip: function() { return drugSkip('d3_t0'); }},
+          {label:'ORD: Methamphetamines freq', page:'ordbin9.html', skip: function() { return drugSkip('d4_t0'); }},
+          {label:'ORD: Painkillers or Opiates freq', page:'ordbin10.html', skip: function() { return drugSkip('d5_t0'); }},
+          {label:'ORD: Poppers freq', page:'ordbin11.html', skip: function() { return drugSkip('d6_t0'); }},
+          {label:'ORD: Stimulants or Amphetamines freq', page:'ordbin12.html', skip: function() { return drugSkip('d7_t0'); }},
+          {label:'ORD: Depressants or Tranquilizers freq', page:'ordbin13.html', skip: function() { return drugSkip('d8_t0'); }},
+          {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { return drugSkip('d9_t0'); }},
+          {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { return drugSkip('d10_t0'); }},
           {label:'NET EDGE: drugs', page:'canvasedge2.html'},
           {label:'CAT: where met sex partners', page:'multibin6.html'},
           {label:'DATE: first and last sex', page:'dateinterface1.html'},
@@ -55,14 +73,9 @@ var Session = function Session(options) {
               // need to skip male participant with only male sex partners
             //   Dyad edge
             //   gender_p_t0 'Male'
-            console.log('vag sex skip');
                 if (typeof network !== 'undefined') {
-                    console.log('network NOT undefined. continuing.');
                         var totalEdges = network.getEdges({type:'Dyad'});
-                        console.log('total edges: '+totalEdges.length);
                         var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'}).length;
-                        console.log('male edges: '+maleEdges);
-                        console.log('gender of ego is: '+network.getNodes({type_t0:'Ego'})[0].gender_k);
                         if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
                             return false;
                         } else {
@@ -70,27 +83,23 @@ var Session = function Session(options) {
                         }
                     }
                 }
+
           },
           {label:'CAT: Anal sex?', page:'multibin10.html',
           skip: function() {
               // need to skip female participant with only female sex partners
 
-              console.log('anal sex skip');
-              if (typeof network !== 'undefined') {
-                  console.log('network NOT undefined. continuing.');
-                  var totalEdges = network.getEdges({type:'Dyad'});
-                  console.log('total edges: '+totalEdges.length);
-                  var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
-                  console.log('female edges: '+femaleEdges);
-                  console.log('gender of ego is: '+network.getNodes({type_t0:'Ego'})[0].gender_k);
-                  if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
-                      return false;
-                  } else {
-                      return true;
+                  if (typeof network !== 'undefined') {
+                      var totalEdges = network.getEdges({type:'Dyad'});
+                      var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
+                      if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
+                          return false;
+                      } else {
+                          return true;
+                      }
                   }
               }
-          }
-      },
+          },
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
           {label:'SWITCH: multiple sex partners', page:'multiplepartners.html'},
           {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return false; } else { return true; }}}},

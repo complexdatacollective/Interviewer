@@ -25,7 +25,8 @@ var MultiBin = function MultiBin(options) {
 	multiBin.destroy();
 	};
 
-	var followupHandler = function() {
+	var followupHandler = function(e) {
+		e.preventDefault();
 		// Handle the followup data
 
 		// First, retrieve the relevant values

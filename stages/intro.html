@@ -65,7 +65,7 @@
 	</div>
 </div>
 <script>
-
+	$('.arrow-next').attr('disabled','disabled');
 	$('.radarID').focus();
 	var readable = new Date(session.returnData('session').int_stime);
 	$('.startDate').val(readable);
@@ -79,6 +79,7 @@
 
 
 	$( "#step1" ).submit(function( event ) {
+		$('.arrow-next').removeAttr('disabled');
 	  event.preventDefault();
 
 	      // Add the start date to the session.

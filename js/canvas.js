@@ -276,7 +276,7 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.destroy = function() {
 
-        menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
+        // menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
         $('.new-node-form').remove(); // Remove the new node form
 
         window.removeEventListener('nodeAdded', nodeAddedHandler, false);
