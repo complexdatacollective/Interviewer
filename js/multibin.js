@@ -134,10 +134,11 @@ var MultiBin = function MultiBin(options) {
 			properties[multiBin.options.variable.label] = '';
 
 			// dont forget followups
-			$.each(multiBin.options.followup.questions, function(index, value) {
-					properties[value.variable] = "";
-			});
-
+			if(typeof multiBin.options.followup !== 'undefined') {
+				$.each(multiBin.options.followup.questions, function(index, value) {
+						properties[value.variable] = "";
+				});
+			}	
 			network.updateEdge(edgeID,properties);
 			$(this).fadeOut(400, function() {
 				$(this).appendTo('.node-bucket');

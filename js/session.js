@@ -50,7 +50,23 @@ var Session = function Session(options) {
           {label:'CAT: where met sex partners', page:'multibin6.html'},
           {label:'DATE: first and last sex', page:'dateinterface1.html'},
           {label:'CAT: HIV status of sex partners', page:'multibin7.html'},
-          {label:'CAT: Vaginal sex?', page:'multibin9.html'},
+          {label:'CAT: Vaginal sex?', page:'multibin9.html',
+          skip: function() {
+              // need to skip male participant with only male sex partners
+            //   Dyad edge
+            //   gender_p_t0 'Male'
+                if (typeof network !== 'undefined') {
+                        var totalEdges = network.getEdges({type:'Dyad'});
+                        var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'});
+
+                        if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+          },
           {label:'CAT: Anal sex?', page:'multibin10.html'},
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
           {label:'SWITCH: multiple sex partners', page:'multiplepartners.html'},
@@ -192,8 +208,13 @@ var Session = function Session(options) {
   session.goToStage = function(stage) {
     if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
 
+    // Skip logic
     if (session.stages[stage].skip) {
+
+      //evaluate skip function
       var outcome = session.stages[stage].skip();
+
+      // if false, skip the stage
       if (outcome === false) {
         if (stage > currentStage) {
           session.goToStage(stage+1);

@@ -16,10 +16,7 @@
           {label:'Age',variable:'age_p_t0',target:'edge', private: false, type:'number', required:true, edge: 'Dyad',node:''},
           {label:'ng_t0',variable:'ng_t0',target:'edge', private: true, value:1, type:'number', required:true, edge: 'Dyad',node:''},
           {label:'k_or_p_t0',variable:'k_or_p_t0',target:'edge', private: true, value:'known', type:'number', required:true, edge: 'Dyad',node:''},
-          {label:'Relationship Category',variable:'reltype_main_t0',target:'edge', private: false, type:'relationship', required:true, edge: 'Dyad',node:''},
-          {label:'Specific Relationship',variable:'reltype_sub_t0',target:'edge', private: false, type:'subrelationship', required:false, edge: 'Dyad',node:''},
-          {label:'How would you describe the relationship?',variable:'reltype_oth_t0',target:'edge', private: false, type:'text', required:false, edge: 'Dyad',node:''}
-        ],
+    ],
     	heading: "Who are the people you are closest to?",
     	subheading: "That is, people you see or talk to regularly and share your personal thoughts and feelings with."
 	});
@@ -28,6 +25,6 @@
     $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:1}), function(index,value) {
      	namegenerator.addToList(value);
     });
-    
+
 
 </script>
