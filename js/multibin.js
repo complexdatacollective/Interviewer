@@ -184,9 +184,31 @@ var MultiBin = function MultiBin(options) {
 		if(typeof multiBin.options.followup !== 'undefined') {
 			multiBin.options.targetEl.append('<div class="followup overlay"></div>');
 
-			$.each(multiBin.options.followup.questions, function(index) {
-				$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="Answer here..."></div>');
-			});
+			if(multiBin.options.followup.linked === true) {
+				var first = true;
+
+				$.each(multiBin.options.followup.questions, function(index) {
+					$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="0"></div>');
+
+					if (first) {
+						$('#'+multiBin.options.followup.questions[index].variable).change(function() {
+							if ($('#'+multiBin.options.followup.questions[(index+1)].variable).val() > $('#'+multiBin.options.followup.questions[index].variable).val()) {
+								$('#'+multiBin.options.followup.questions[(index+1)].variable).val($('#'+multiBin.options.followup.questions[index].variable).val());
+							}
+							$('#'+multiBin.options.followup.questions[(index+1)].variable).attr('max', $('#'+multiBin.options.followup.questions[index].variable).val());
+
+						});
+					}
+
+
+					first = !first;
+				});
+			} else {
+				$.each(multiBin.options.followup.questions, function(index) {
+					$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="0"></div>');
+				});
+			}
+
 
 
 			$('.followup').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
