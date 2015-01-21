@@ -49,8 +49,6 @@ var MultiBin = function MultiBin(options) {
 			followupProperties[multiBin.options.followup.questions[index].variable] = followupVal;
 		});
 
-
-
 		// Update the edge
 		extend(edge, followupProperties);
 		network.updateEdge(edge.id, edge);
@@ -182,13 +180,13 @@ var MultiBin = function MultiBin(options) {
 
 		// Create the followup dialog, if it exists
 		if(typeof multiBin.options.followup !== 'undefined') {
-			multiBin.options.targetEl.append('<div class="followup overlay"></div>');
+			multiBin.options.targetEl.append('<div class="followup overlay"><form class="followup-form"></form></div>');
 
 			if(typeof multiBin.options.followup.linked !== 'undefined' && multiBin.options.followup.linked === true) {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index) {
-					$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="0"></div>');
+					$('.followup').children('form').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required></div>');
 
 					if (first) {
 						$('#'+multiBin.options.followup.questions[index].variable).change(function() {
@@ -205,13 +203,13 @@ var MultiBin = function MultiBin(options) {
 				});
 			} else {
 				$.each(multiBin.options.followup.questions, function(index) {
-					$('.followup').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required="" placeholder="0"></div>');
+					$('.followup').children('form').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required></div>');
 				});
 			}
 
 
 
-			$('.followup').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
+			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
@@ -335,7 +333,7 @@ var MultiBin = function MultiBin(options) {
 		$('.node-bin-static').on("click", nodeBinClickHandler);
 		$('.node-item').on("click", nodeClickHandler);
 		$('.content').on("click", backgroundClickHandler);
-		$('.followup-submit').on('click', followupHandler);
+		$('.followup-form').on('submit', followupHandler);
 		$('.followup-cancel').on('click', followupCancelHandler);
 
 	};
