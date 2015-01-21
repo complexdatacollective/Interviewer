@@ -6,7 +6,7 @@ var Session = function Session(options) {
   var session = {};
   var currentStage = 0;
   var $content = $('#content');
-   
+
   // Establish a new IOInterface for loading and saving
   window.dataStore = {};
   session.id = 0;
@@ -17,8 +17,8 @@ var Session = function Session(options) {
           {label:'NG: closest', page:'namegen1.html'},
           {label:'NG: marijuana or other drugs', page:'namegen5.html'},
           {label:'NG: drugs, two or more', page:'namegenmod6.html'},
-          {label:'NG: other people sex', page:'namegen7.html'},          
-          {label:'NG: sex, two or more', page:'namegenmod8.html'},          
+          {label:'NG: other people sex', page:'namegen7.html'},
+          {label:'NG: sex, two or more', page:'namegenmod8.html'},
           {label:'NET: layout', page:'canvaslayout.html'},
           {label:'NET EDGE: social', page:'canvasedge1.html'},
           {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return false; } else { return true; }}}},
@@ -28,7 +28,7 @@ var Session = function Session(options) {
           {label:'ORD: contact frequency', page:'ordbin1a.html'},
           {label:'ORD: relationship strength', page:'ordbin1.html'},
           {label:'NET NI: get advice', page:'canvasselect6.html'},
-	        {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
+	      {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
           {label:'CAT: gender identity', page:'multibin5.html'},
           {label:'RACE: Hispanic or Latino', page:'canvasselect14.html'},
           {label:'RACE: Racial Identity', page:'multibin2.html'},
@@ -59,7 +59,7 @@ var Session = function Session(options) {
           {label:'Download Data', page:'download.html'},
           {label:'Finish', page:'finish.html'}
                     ];
-  
+
   var saveTimer;
 
 
@@ -74,16 +74,16 @@ var Session = function Session(options) {
     fnAfterStageChange : function(oldStage, newStage) {
       var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
       window.dispatchEvent(changeStageEndEvent);
-    }    
+    }
   };
 
   session.init = function() {
     notify('Session initialising.', 1);
     // exdend our local options with any passed options
-    extend(session.options,options); 
+    extend(session.options,options);
 
     //bind to the custom state change event to handle spinner interactions
-    window.addEventListener('changeStageStart', function () { 
+    window.addEventListener('changeStageStart', function () {
       $('.loader').transition({opacity:1});
     }, false);
 
@@ -102,15 +102,15 @@ var Session = function Session(options) {
       window.dataStore.load(session.updateUserData);
     } else {
       notify("No existing session found. Creating new session.", 3);
-      session.id = window.dataStore.init(); // returns ID of an unused slot on the server. 
+      session.id = window.dataStore.init(); // returns ID of an unused slot on the server.
     }
-    
+
     session.registerData("session");
     // Historyjs integration for page loading
     History.Adapter.bind(window, 'statechange', function(){
     });
 
-    var State = History.getState();    
+    var State = History.getState();
 
     if(State.data.stage) {
       session.goToStage(State.data.stage);
@@ -118,7 +118,7 @@ var Session = function Session(options) {
       session.goToStage(0);
     }
 
-    window.addEventListener('unsavedChanges', function () { 
+    window.addEventListener('unsavedChanges', function () {
       session.saveManager();
     }, false);
 
@@ -175,7 +175,7 @@ var Session = function Session(options) {
     notify(session.userData, 0);
 
     var newDataLoaded = new Event('newDataLoaded');
-    window.dispatchEvent(newDataLoaded);        
+    window.dispatchEvent(newDataLoaded);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };
@@ -201,7 +201,7 @@ var Session = function Session(options) {
           session.goToStage(stage-1);
 
         }
-        
+
         return false;
       }
     }
@@ -211,9 +211,9 @@ var Session = function Session(options) {
     $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
       $content.load( "stages/"+session.stages[stage].page, function() {
         // This never gets called if there is a JS error. Is there a way to ensure it is?
-        $content.transition({ opacity: '1'},400,'easeInSine');    
+        $content.transition({ opacity: '1'},400,'easeInSine');
       });
-    });                    
+    });
     var oldStage = currentStage;
     currentStage = newStage;
     History.pushState({'stage': stage},null, '?stage='+stage);
@@ -252,8 +252,8 @@ var Session = function Session(options) {
 
   session.addData = function(dataKey, newData, append) {
     /*
-      This function should let any module add data to the session model. The session model 
-      (global data variable) is essentially a key/value store. 
+      This function should let any module add data to the session model. The session model
+      (global data variable) is essentially a key/value store.
     */
 
     if (!append) { append = false; }
@@ -263,7 +263,7 @@ var Session = function Session(options) {
     } else {
       extend(session.userData[dataKey], newData);
     }
-    
+
     notify("Adding data to key '"+dataKey+"'.",2);
     notify(newData, 1);
     var unsavedChanges = new Event('unsavedChanges');
@@ -280,7 +280,7 @@ var Session = function Session(options) {
     } else {
       return session.userData;
     }
-    
+
   };
 
   session.init();
