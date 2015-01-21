@@ -184,7 +184,7 @@ var MultiBin = function MultiBin(options) {
 		if(typeof multiBin.options.followup !== 'undefined') {
 			multiBin.options.targetEl.append('<div class="followup overlay"></div>');
 
-			if(multiBin.options.followup.linked === true) {
+			if(typeof multiBin.options.followup.linked !== 'undefined' && multiBin.options.followup.linked === true) {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index) {
