@@ -6816,9 +6816,12 @@ div[data-toggle="buttons"] label.active {
   -webkit-transition: all 0.5s ease-in-out;
           transition: all 0.5s ease-in-out;
 }
+.logic-error {
+  display: none;
+}
 .relationship-close-button {
   position: absolute;
-  top: -137px;
+  top: -37px;
   right: 30px;
 }
 .open {
