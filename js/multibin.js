@@ -208,15 +208,15 @@ var MultiBin = function MultiBin(options) {
 			if(typeof multiBin.options.followup.linked !== 'undefined' && multiBin.options.followup.linked === true) {
 				var first = true;
 
-				$.each(multiBin.options.followup.questions, function(index) {
-					$('.followup').children('form').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required></div>');
+				$.each(multiBin.options.followup.questions, function(index, value) {
+						$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
 
 					if (first) {
-						$('#'+multiBin.options.followup.questions[index].variable).change(function() {
-							if ($('#'+multiBin.options.followup.questions[(index+1)].variable).val() > $('#'+multiBin.options.followup.questions[index].variable).val()) {
-								$('#'+multiBin.options.followup.questions[(index+1)].variable).val($('#'+multiBin.options.followup.questions[index].variable).val());
+						$('#'+value.variable).change(function() {
+							if ($('#'+multiBin.options.followup.questions[(index+1)].variable).val() > $('#'+value.variable).val()) {
+								$('#'+multiBin.options.followup.questions[(index+1)].variable).val($('#'+value.variable).val());
 							}
-							$('#'+multiBin.options.followup.questions[(index+1)].variable).attr('max', $('#'+multiBin.options.followup.questions[index].variable).val());
+							$('#'+multiBin.options.followup.questions[(index+1)].variable).attr('max', $('#'+value.variable).val());
 
 						});
 					}
@@ -225,8 +225,8 @@ var MultiBin = function MultiBin(options) {
 					first = !first;
 				});
 			} else {
-				$.each(multiBin.options.followup.questions, function(index) {
-					$('.followup').children('form').append('<h2>'+multiBin.options.followup.questions[index].prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+multiBin.options.followup.questions[index].variable+'" id="'+multiBin.options.followup.questions[index].variable+'" required></div>');
+				$.each(multiBin.options.followup.questions, function(index, value) {
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
 				});
 			}
 
