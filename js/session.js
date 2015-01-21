@@ -55,10 +55,14 @@ var Session = function Session(options) {
               // need to skip male participant with only male sex partners
             //   Dyad edge
             //   gender_p_t0 'Male'
+            console.log('vag sex skip');
                 if (typeof network !== 'undefined') {
+                    console.log('network NOT undefined. continuing.');
                         var totalEdges = network.getEdges({type:'Dyad'});
-                        var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'});
-
+                        console.log('total edges: '+totalEdges.length);
+                        var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'}).length;
+                        console.log('male edges: '+maleEdges);
+                        console.log('gender of ego is: '+network.getNodes({type_t0:'Ego'})[0].gender_k);
                         if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
                             return false;
                         } else {
@@ -67,7 +71,26 @@ var Session = function Session(options) {
                     }
                 }
           },
-          {label:'CAT: Anal sex?', page:'multibin10.html'},
+          {label:'CAT: Anal sex?', page:'multibin10.html',
+          skip: function() {
+              // need to skip female participant with only female sex partners
+
+              console.log('anal sex skip');
+              if (typeof network !== 'undefined') {
+                  console.log('network NOT undefined. continuing.');
+                  var totalEdges = network.getEdges({type:'Dyad'});
+                  console.log('total edges: '+totalEdges.length);
+                  var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
+                  console.log('female edges: '+femaleEdges);
+                  console.log('gender of ego is: '+network.getNodes({type_t0:'Ego'})[0].gender_k);
+                  if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
+                      return false;
+                  } else {
+                      return true;
+                  }
+              }
+          }
+      },
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
           {label:'SWITCH: multiple sex partners', page:'multiplepartners.html'},
           {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return false; } else { return true; }}}},

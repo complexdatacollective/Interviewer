@@ -28,7 +28,7 @@ var Canvas = function Canvas(userSettings) {
 		dazzlingblue: '#006bb6',
 		edge: '#e85657',
 		selected: 'gold',
-	};	
+	};
 
 	// Default settings
 	var settings = {
@@ -56,7 +56,7 @@ var Canvas = function Canvas(userSettings) {
 		}
 		text.setX( container.getX() - text.getWidth()/2 );
 		text.setY( (container.getY() - text.getHeight()/1.8) );
-	}	
+	}
 
 	// Private event handling functions
 	var nodeAddedHandler = function(e) {
@@ -68,16 +68,16 @@ var Canvas = function Canvas(userSettings) {
 		if(typeof e.detail.from !== 'undefined' && e.detail.from !== network.getNodes({type_t0:'Ego'})[0].id) {
 			canvas.addEdge(e.detail);
 		}
-		
-	};      
+
+	};
 
 	var nodeRemovedHandler = function(e) {
 		canvas.removeNode(e.detail);
-	};      
+	};
 
 	var edgeRemovedHandler = function(e) {
 		canvas.removeEdge(e.detail);
-	}; 
+	};
 
 	var closePopoverHandler = function() {
 		var buttonOffset = $('.info-button').offset();
@@ -102,9 +102,8 @@ var Canvas = function Canvas(userSettings) {
 		setTimeout(function() {
 			$('.canvas-title').children().show();
 		}, 500);
-		
 
-	};  
+	};
 
 	var keyPressHandler = function(e) {
 		if (!cancelKeyBindings) {
@@ -114,7 +113,7 @@ var Canvas = function Canvas(userSettings) {
 				$('.new-node-form').addClass('node-form-open');
 				$('.content').addClass('blurry'); //blur content background
 				menuOpen = true;
-				$('.name-box').focus();					
+				$('.name-box').focus();
 			}
 
 			// Prevent accidental backspace navigation
@@ -130,7 +129,7 @@ var Canvas = function Canvas(userSettings) {
 				menuOpen = false;
 				var nodeOptions = {
 					label: $('.name-box').val()
-				};				
+				};
 				network.addNode(nodeOptions);
 				$('.name-box').val('');
 			}
@@ -153,14 +152,14 @@ var Canvas = function Canvas(userSettings) {
 		$('<div class="canvas-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p></div>').insertBefore( "#kineticCanvas" );
 
 		canvas.initKinetic();
-		
-	   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
 
-	    menu.addItem(canvasMenu, 'Load Network', 'icon-play', null);
-	    menu.addItem(canvasMenu, 'Create Random Graph', 'icon-play', null);
-	    menu.addItem(canvasMenu, 'Download Network Data', 'icon-play', null);
-	    menu.addItem(canvasMenu, 'Reset Node Positions', 'icon-play', canvas.resetPositions); 
-	    menu.addItem(canvasMenu, 'Clear Graph', 'icon-play', null);          
+		//   	canvasMenu = menu.addMenu('Canvas','hi-icon-support');
+		//
+	    // menu.addItem(canvasMenu, 'Load Network', 'icon-play', null);
+	    // menu.addItem(canvasMenu, 'Create Random Graph', 'icon-play', null);
+	    // menu.addItem(canvasMenu, 'Download Network Data', 'icon-play', null);
+	    // menu.addItem(canvasMenu, 'Reset Node Positions', 'icon-play', canvas.resetPositions);
+	    // menu.addItem(canvasMenu, 'Clear Graph', 'icon-play', null);
 
 	    window.addEventListener('nodeAdded', nodeAddedHandler, false);
 	    window.addEventListener('edgeAdded', edgeAddedHandler, false);
@@ -168,7 +167,7 @@ var Canvas = function Canvas(userSettings) {
 	    window.addEventListener('edgeRemoved', edgeRemovedHandler, false);
 	    window.addEventListener('changeStageStart', stageChangeHandler, false);
 	    $('.close-popover').on('click', closePopoverHandler);
-	    $('.info-button').on('click', openPopoverHandler);     
+	    $('.info-button').on('click', openPopoverHandler);
 
     	// Are there existing nodes? Display them.
 
@@ -186,7 +185,7 @@ var Canvas = function Canvas(userSettings) {
   				if (settings.variable) {
   					//we are flipping a variable
   					var properties = {
-  						from: network.getNodes({type_t0:'Ego'})[0].id, 
+  						from: network.getNodes({type_t0:'Ego'})[0].id,
   						to: criteriaEdges[i].to,
   					};
 
@@ -196,7 +195,7 @@ var Canvas = function Canvas(userSettings) {
 	      			if (network.getEdges(properties).length > 0) {
 	      				newNode.children[0].stroke(colors.selected);
 	      				nodeLayer.draw();
-	      			}  					
+	      			}
   				} else {
   					// we are assigning an edge
 	      			// set initial state of node according to if an edge exists
@@ -207,10 +206,10 @@ var Canvas = function Canvas(userSettings) {
 
   				}
 
-      			
+
       		}
     	}
-  		
+
   		setTimeout(function() { // seems to be needed in Chrome Canary. Why!?
   			canvas.drawUIComponents();
   		}, 0);
@@ -218,12 +217,12 @@ var Canvas = function Canvas(userSettings) {
   		// Are there existing edges? Display them
   		var edges, edgeProperties;
   		if (settings.mode === 'Edge') {
-  			
+
   			// Set the criteria based on edge type
   			edgeProperties =  {
 				type: settings.edgeType
 			};
-  			
+
 
   			// Filter to remove edges involving ego, unless this is edge select mode.
   			edges = network.getEdges(edgeProperties, function (results) {
@@ -278,7 +277,7 @@ var Canvas = function Canvas(userSettings) {
 	canvas.destroy = function() {
 
         menu.removeMenu(canvasMenu); // remove the network menu when we navigate away from the page.
-        $('.new-node-form').remove(); // Remove the new node form 
+        $('.new-node-form').remove(); // Remove the new node form
 
         window.removeEventListener('nodeAdded', nodeAddedHandler, false);
         window.removeEventListener('edgeAdded', edgeAddedHandler, false);
@@ -287,7 +286,7 @@ var Canvas = function Canvas(userSettings) {
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
         $(document).off("keypress", keyPressHandler);
         $('.close-popover').off('click', closePopoverHandler);
-        $('.info-button').off('click', openPopoverHandler); 
+        $('.info-button').off('click', openPopoverHandler);
 
 	};
 
@@ -297,7 +296,7 @@ var Canvas = function Canvas(userSettings) {
     	var dyadEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
       	for (var i = 0; i < dyadEdges.length; i++) {
       		network.updateEdge(dyadEdges[i].id, {coords: []});
-    	}    
+    	}
 	};
 
 	canvas.addNode = function(options) {
@@ -322,7 +321,7 @@ var Canvas = function Canvas(userSettings) {
 			label: 'Undefined',
 			size: settings.defaultNodeSize,
 			color: 'rgb(0,0,0)',
-			strokeWidth: 4,	
+			strokeWidth: 4,
 			draggable: dragStatus,
 			dragDistance: 20
 		};
@@ -340,7 +339,7 @@ var Canvas = function Canvas(userSettings) {
 		var nodeGroup = new Kinetic.Group(nodeOptions);
 
 		switch (nodeOptions.type) {
-			case 'Person':                
+			case 'Person':
 			nodeShape = new Kinetic.Circle({
 				radius: nodeOptions.size,
 				fill:nodeOptions.color,
@@ -368,7 +367,7 @@ var Canvas = function Canvas(userSettings) {
 					stroke: canvas.calculateStrokeColor(nodeOptions.color),
 					strokeWidth: nodeOptions.strokeWidth
 				});
-			break; 
+			break;
 
 			case 'Professional':
 			nodeShape = new Kinetic.Star({
@@ -383,7 +382,7 @@ var Canvas = function Canvas(userSettings) {
 
 		}
 
-		var nodeLabel = new Kinetic.Text({         
+		var nodeLabel = new Kinetic.Text({
 			text: nodeOptions.label,
 			// fontSize: 20,
 			fontFamily: 'Lato',
@@ -396,7 +395,7 @@ var Canvas = function Canvas(userSettings) {
 		});
 
 		notify("Putting node "+nodeOptions.label+" at coordinates x:"+nodeOptions.coords[0]+", y:"+nodeOptions.coords[1], 2);
-		
+
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
 			notify("dragstart",1);
@@ -412,17 +411,17 @@ var Canvas = function Canvas(userSettings) {
 			notify("Dragmove",0);
 			var dragNode = nodeOptions.id;
 			$.each(edgeLayer.children, function(index, value) {
-				
+
 				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
 				if (value.attrs.from.id === dragNode || value.attrs.to.id === dragNode) {
 					var points = [canvas.getNodeByID(value.attrs.from.id).getX(), canvas.getNodeByID(value.attrs.from.id).getY(), canvas.getNodeByID(value.attrs.to.id).getX(), canvas.getNodeByID(value.attrs.to.id).getY()];
 					value.attrs.points = points;
-				
+
 				}
 			});
-			edgeLayer.draw();     
+			edgeLayer.draw();
 
-		});    
+		});
 
 		nodeGroup.on('tap click', function() {
 			var log = new CustomEvent('log', {"detail":{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
@@ -469,7 +468,7 @@ var Canvas = function Canvas(userSettings) {
 								edge[value.label] = value.value;
 							});
 						}
-						
+
 						this.children[0].stroke(colors.selected);
 						network.addEdge(edge);
 					}
@@ -500,25 +499,25 @@ var Canvas = function Canvas(userSettings) {
 							network.removeEdge(network.getEdges(edgeProperties));
 						}
 						selectedNodes = [];
-						nodeLayer.draw(); 
+						nodeLayer.draw();
 					} else {
 						// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
 						this.children[0].stroke(colors.selected);
 						// selectedNodes.push(this);
 						// this.children[0].strokeWidth(4);
-						nodeLayer.draw();                
+						nodeLayer.draw();
 					}
 			}
 			this.moveToTop();
 			nodeLayer.draw();
-		}); 
+		});
 
 		nodeGroup.on('dbltap dblclick', function() {
 			if (settings.mode === 'Edge') {
 				notify('double tap',1);
 				sourceNode = this;
 			}
-		});      
+		});
 
 		nodeGroup.on('dragend', function() {
 			notify('dragend',1);
@@ -557,14 +556,14 @@ var Canvas = function Canvas(userSettings) {
 		padText(nodeLabel,nodeShape,10);
 
 		nodeGroup.add(nodeShape);
-		nodeGroup.add(nodeLabel);	
-		
+		nodeGroup.add(nodeLabel);
+
 		nodeLayer.add(nodeGroup);
 		setTimeout(function() {
 			nodeLayer.draw();
 		}, 0);
 
-	
+
 		if (!options.coords || options.coords.length === 0) {
 			var tween = new Kinetic.Tween({
 				node: nodeGroup,
@@ -574,7 +573,7 @@ var Canvas = function Canvas(userSettings) {
 				easing: Kinetic.Easings.EaseOut
 			});
 			tween.play();
-			network.setProperties(network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});           
+			network.setProperties(network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});
 		}
 
 		return nodeGroup;
@@ -583,7 +582,7 @@ var Canvas = function Canvas(userSettings) {
 	// Edge manipulation functions
 
 	canvas.addEdge = function(properties) {
-		
+
 
 		// the below won't work because we are storing the coords in an edge now...
 		// var fromObject = network.getNode(properties.from);
@@ -607,13 +606,13 @@ var Canvas = function Canvas(userSettings) {
 			edgeLayer.add(edge);
 
 			setTimeout(function() {
-				edgeLayer.draw(); 
+				edgeLayer.draw();
 			},0);
 			nodeLayer.draw();
 			notify("Created Edge between "+fromObject.label+" and "+toObject.label, "success",2);
-		
+
 			return true;
-   
+
 	};
 
 	canvas.removeEdge = function(properties) {
@@ -622,7 +621,7 @@ var Canvas = function Canvas(userSettings) {
 		var fromNode = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
 
 		notify("Removing edge.");
-		
+
 
 
 		// This function is failing because two nodes are matching below
@@ -633,7 +632,7 @@ var Canvas = function Canvas(userSettings) {
 				edgeLayer.children[index].remove();
 				edgeLayer.draw();
 			}
-		}); 
+		});
 
 	};
 
@@ -644,7 +643,7 @@ var Canvas = function Canvas(userSettings) {
 		edgeLayer.clear();
 		nodeLayer.removeChildren();
 		nodeLayer.clear();
-		
+
 	};
 
 	// Main initialisation functions
@@ -676,7 +675,7 @@ var Canvas = function Canvas(userSettings) {
 		var currentColor = settings.concentricCircleColor ;
 		var totalHeight = window.innerHeight-(settings.defaultNodeSize); // Our canvas area is the window height minus twice the node radius (for spacing)
 		var currentOpacity = 0.1;
-		
+
 		//draw concentric circles
 		for(var i = 0; i < settings.concentricCircleNumber; i++) {
 			var ratio = 1-(i/settings.concentricCircleNumber);
@@ -701,8 +700,8 @@ var Canvas = function Canvas(userSettings) {
 			});
 
 			// currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();
-			currentOpacity = currentOpacity+((0.3-currentOpacity)/settings.concentricCircleNumber);        
-			circleLayer.add(circleFills); 
+			currentOpacity = currentOpacity+((0.3-currentOpacity)/settings.concentricCircleNumber);
+			circleLayer.add(circleFills);
 			circleLayer.add(circleLines);
 
 		}
@@ -724,7 +723,7 @@ var Canvas = function Canvas(userSettings) {
 		innerForm.append('<p>Some text accompanying the node creation box.</p>');
 		// TODO: Use a innerForm generation class here.
 		// For now, just an input box.
-		innerForm.append('<input type="text" class="form-control name-box"></input>');		
+		innerForm.append('<input type="text" class="form-control name-box"></input>');
 
 		$('.content').after(form); // add after the content container.
 
@@ -744,7 +743,7 @@ var Canvas = function Canvas(userSettings) {
 
 	canvas.getKineticEdges = function() {
 		return edgeLayer.children;
-	};    
+	};
 
 	canvas.getSimpleNodes = function() {
 		// We need to create a simple representation of the nodes for storing.
@@ -815,7 +814,7 @@ var Canvas = function Canvas(userSettings) {
 	};
 
 	canvas.init();
-	
+
 	return canvas;
-	
+
 };

@@ -13,6 +13,7 @@ var MultiBin = function MultiBin(options) {
 			'Variable 1',
 			]
 		},
+		filter: undefined,
 		heading: "Default Heading",
 		subheading: "Default Subheading."
 	};
@@ -138,7 +139,7 @@ var MultiBin = function MultiBin(options) {
 				$.each(multiBin.options.followup.questions, function(index, value) {
 						properties[value.variable] = "";
 				});
-			}	
+			}
 			network.updateEdge(edgeID,properties);
 			$(this).fadeOut(400, function() {
 				$(this).appendTo('.node-bucket');
@@ -197,7 +198,6 @@ var MultiBin = function MultiBin(options) {
 
 		}
 
-
 		var number = Math.floor(multiBin.options.variable.values.length*0.66);
 		var itemSizeW = $('.container').outerWidth()/number;
 
@@ -208,7 +208,7 @@ var MultiBin = function MultiBin(options) {
 		}
 
 		// get all edges
-		var edges = network.getEdges(multiBin.options.criteria);
+		var edges = network.getEdges(multiBin.options.criteria, multiBin.options.filter);
 		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){

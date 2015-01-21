@@ -13,6 +13,24 @@
 			type:'Sex',
 			from:network.getNodes({type_t0:'Ego'})[0].id
 		},
+		filter: function (results) { //results is passed by getEdges()
+			// Here we are filtering based on gender so that we don't get illogical combinations of sex questions.
+
+			var filteredResults = [];
+			var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
+			$.each(results, function(index,value) {
+
+				var dyadEdge = network.getEdges({type:'Dyad', to:value.to})[0];
+
+				if (egoGender === 'Male' && dyadEdge.gender_p_t0 !== 'Male') {
+					filteredResults.push(value);
+				} else if (egoGender === 'Female' && dyadEdge.gender_p_t0 !== 'Female') {
+					filteredResults.push(value);
+				}
+			});
+
+			return filteredResults;
+		},
 	    variable: {
 	      label:'vaginal_sex_status_t0',
 	      values: [
