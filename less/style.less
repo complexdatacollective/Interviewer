@@ -560,6 +560,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     z-index:9999;
     cursor: pointer; cursor: hand;
     border-radius: 32px;
+    text-shadow:none
  }
 
  .node-bucket .node-item, .node-bin .node-item {
@@ -584,7 +585,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     border-radius: 50%;
     margin:10px;
     padding:5px;
-    text-shadow: 0px 1px 5px rgba(0,0,0,0.5) !important;
+    text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     transition: all 0.3s ease-in-out;
 
  }
@@ -599,9 +600,17 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     // border-radius: 50%;
     // overflow-x: scroll;
     margin:10px;
+    text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     transition: all 0.5s ease-in-out;
     padding:5px;
 
+ }
+
+ .ord-node-bin:last-of-type {
+     position:relative;
+     width:300px;
+     left:30px;
+     background: rgb(76, 10, 10);
  }
 
  .ord-node-bin .node-item {

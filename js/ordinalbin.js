@@ -83,7 +83,7 @@ var OrdinalBin = function OrdinalBin(options) {
     // One of these for each bin. One bin for each variable value.
     $.each(ordinalBin.options.variable.values, function(index, value){
 
-      var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index.value+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+      var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
       newBin.data('index', index);
       ordinalBin.options.targetEl.append(newBin);
       $(".d"+index).droppable({ accept: ".draggable",

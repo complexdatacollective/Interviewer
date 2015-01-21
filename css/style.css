@@ -6583,6 +6583,7 @@ div[data-toggle="buttons"] label.active {
   cursor: pointer;
   cursor: hand;
   border-radius: 32px;
+  text-shadow: none;
 }
 .node-bucket .node-item,
 .node-bin .node-item {
@@ -6616,7 +6617,7 @@ div[data-toggle="buttons"] label.active {
   border-radius: 50%;
   margin: 10px;
   padding: 5px;
-  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
   -webkit-transition: all 0.3s ease-in-out;
           transition: all 0.3s ease-in-out;
 }
@@ -6637,9 +6638,16 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-align: center;
           align-items: center;
   margin: 10px;
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
   -webkit-transition: all 0.5s ease-in-out;
           transition: all 0.5s ease-in-out;
   padding: 5px;
+}
+.ord-node-bin:last-of-type {
+  position: relative;
+  width: 300px;
+  left: 30px;
+  background: #4c0a0a;
 }
 .ord-node-bin .node-item {
   position: relative;
