@@ -21,10 +21,9 @@
 	});
 
   // add existing nodes
-    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:6}), function(index,value) {
-      namegenerator.addToList(value);
-    });
-
+$.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
+	namegenerator.addToList(value);
+});
     // add custom node list
 
     $('<div class="node-list"><h4>People you already listed:</h4></div>').insertBefore('.nameList');
