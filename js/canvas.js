@@ -241,7 +241,7 @@ var Canvas = function Canvas(userSettings) {
 	  			canvas.addEdge(value);
 	  		});
 
-  		} else {
+  		} else if (settings.mode === 'Select') {
   			// Select mode
 
   			// Show the social network
@@ -272,7 +272,9 @@ var Canvas = function Canvas(userSettings) {
 	  			canvas.addEdge(value);
 	  		});
 
-  		}
+  		} else if (settings.mode === 'Position') {
+			// Don't show any edges.
+		}
 	};
 
 	canvas.destroy = function() {
@@ -635,7 +637,7 @@ var Canvas = function Canvas(userSettings) {
 			var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 			var edge = new Kinetic.Line({
 				// dashArray: [10, 10, 00, 10],
-				strokeWidth: 2,
+				strokeWidth: 4,
 				opacity:1,
 				stroke: settings.defaultEdgeColor,
 				// opacity: 0.8,

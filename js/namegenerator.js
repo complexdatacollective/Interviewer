@@ -63,7 +63,7 @@ var Namegenerator = function Namegenerator(options) {
       $(this).data('selected', true);
       $(this).addClass('selected');
     }
-    
+
   };
 
 	var inputKeypressHandler = function(e) {
@@ -80,10 +80,10 @@ var Namegenerator = function Namegenerator(options) {
 						$('#nname_t0').val(lname);
 					};
 
-					setTimeout(updateName,0);  
+					setTimeout(updateName,0);
 
 				}
-			}      
+			}
 		}
 
 	};
@@ -101,7 +101,7 @@ var Namegenerator = function Namegenerator(options) {
 
 		// Update role count
 		var roleCount = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
-		$('.relationship-button').html(roleCount+' roles selected.');		
+		$('.relationship-button').html(roleCount+' roles selected.');
 
 		// Populate the form with this nodes data.
 		$.each(namegenerator.options.variables, function(index, value) {
@@ -124,7 +124,7 @@ var Namegenerator = function Namegenerator(options) {
 				// 		$('.reltype_oth_t0').show();
 				// 	}
 				}else {
-					$('#'+value.variable).val(edge[value.variable]);    
+					$('#'+value.variable).val(edge[value.variable]);
 				}
 				$('.delete-button').show();
 				namegenerator.openNodeBox();
@@ -143,14 +143,14 @@ var Namegenerator = function Namegenerator(options) {
 		if ($("select[name='reltype_main_t0']").val() === "") {
 			$("select[name='reltype_sub_t0']").prop( "disabled", true);
 			return false;
-		} 
+		}
 		$("select[name='reltype_sub_t0']").prop( "disabled", false );
 		$("select[name='reltype_sub_t0']").children().remove();
 		$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
 		$.each(roles[$("select[name='reltype_main_t0']").val()], function(index,value) {
 			$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
 		});
-	
+
 	};
 
 	var selectSubChangeHandler = function() {
@@ -175,10 +175,10 @@ var Namegenerator = function Namegenerator(options) {
 						newEdgeProperties[value.variable] =  value.value;
 					} else {
 						if(value.type === 'relationship' || value.type === 'subrelationship') {
-							newEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val(); 
+							newEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
 						} else {
-							newEdgeProperties[value.variable] =  $('#'+value.variable).val();    
-						} 
+							newEdgeProperties[value.variable] =  $('#'+value.variable).val();
+						}
 					}
 
 				} else if (value.target === 'node') {
@@ -186,9 +186,9 @@ var Namegenerator = function Namegenerator(options) {
 						newNodeProperties[value.variable] =  value.value;
 					} else {
 						if(value.type === 'relationship' || value.type === 'subrelationship') {
-							newNodeProperties[value.variable] =  $("select[name='"+value.variable+"']").val(); 
+							newNodeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
 						} else {
-							newNodeProperties[value.variable] =  $('#'+value.variable).val();    
+							newNodeProperties[value.variable] =  $('#'+value.variable).val();
 						}
 
 					}
@@ -213,10 +213,10 @@ var Namegenerator = function Namegenerator(options) {
 								currentEdgeProperties[value.variable] =  value.value;
 							} else {
 								if(value.type === 'relationship' || value.type === 'subrelationship') {
-									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val(); 
+									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
 								} else {
-									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();    
-								} 
+									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
+								}
 							}
 						}
 					});
@@ -233,10 +233,10 @@ var Namegenerator = function Namegenerator(options) {
 				// Add role edges
 
 				// Iterate through selected items and create a new role edge for each.
-				$.each($('.relationship.selected'), function() {		
+				$.each($('.relationship.selected'), function() {
 			      	edgeProperties = {
 			            type: 'Role',
-			            from:network.getNodes({type_t0:'Ego'})[0].id, 
+			            from:network.getNodes({type_t0:'Ego'})[0].id,
 			            to: newNode,
 			            reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
 			            reltype_sub_t0: $(this).data('sub-relationship')
@@ -261,8 +261,8 @@ var Namegenerator = function Namegenerator(options) {
 					setTimeout(function(){
 						el.stop().transition({ background:'#67c2d4'}, 800, 'ease');
 					}, 700);
-				};	
-				
+				};
+
 				var nodeID = editing;
 				// var nodeID = network.getEdge(editing).to;
 				$.each(namegenerator.options.edgeTypes, function(index,value) {
@@ -274,20 +274,20 @@ var Namegenerator = function Namegenerator(options) {
 								currentEdgeProperties[value.variable] =  value.value;
 							} else {
 								if(value.type === 'relationship' || value.type === 'subrelationship') {
-									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val(); 
+									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
 								} else {
-									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();    
-								} 
+									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
+								}
 							}
 						}
 					});
 
 					var edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:editing,type:value});
 					$.each(edges, function(index,value) {
-						network.updateEdge(value.id,currentEdgeProperties, color);		
+						network.updateEdge(value.id,currentEdgeProperties, color);
 					});
 				});
-				
+
 				network.updateNode(nodeID, newNodeProperties);
 				var properties = extend(newEdgeProperties,newNodeProperties);
 
@@ -297,10 +297,10 @@ var Namegenerator = function Namegenerator(options) {
 				network.removeEdges(network.getEdges({type:"Role", from: network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
 
-				$.each($('.relationship.selected'), function() {		
+				$.each($('.relationship.selected'), function() {
 			      	edgeProperties = {
 			            type: 'Role',
-			            from:network.getNodes({type_t0:'Ego'})[0].id, 
+			            from:network.getNodes({type_t0:'Ego'})[0].id,
 			            to: editing,
 			            reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
 			            reltype_sub_t0: $(this).data('sub-relationship')
@@ -314,22 +314,22 @@ var Namegenerator = function Namegenerator(options) {
 
 				$.each(namegenerator.options.variables, function(index, value) {
 					if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== "") {
-						list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');      
+						list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
 					}
 
 				});
 
 				$('div[data-index='+editing+']').append(list);
 			// var edge = network.getEdge(editing);;
-			
+
 			editing = false;
 
 			} // end if editing
 
-		  
+
 		  namegenerator.closeNodeBox();
 
-		
+
 	};
 
 	namegenerator.generateTestAlters = function(number) {
@@ -353,14 +353,14 @@ var Namegenerator = function Namegenerator(options) {
 			}
 			$('#nname_t0').val(lname);
 			$('#age_p_t0').val(Math.floor(randomBetween(18,90)));
-				
+
 			setTimeout(function() {
 				$('.relationship-button').click();
 			}, 500);
 			setTimeout(function() {
 				$($('.relationship')[Math.floor(randomBetween(0,$('.relationship').length))]).addClass('selected');
 				$('.relationship-close-button').click();
-					
+
 			}, 2000);
 
 
@@ -383,11 +383,11 @@ var Namegenerator = function Namegenerator(options) {
 
 		});
 		nodeBoxOpen = false;
-		$('#ngForm').trigger("reset"); 
+		$('#ngForm').trigger("reset");
 		$('.reltype_oth_t0').hide();
 		editing = false;
 		$('.relationship-button').html('Set Relationship Roles');
-		$('.relationship').removeClass('selected');       
+		$('.relationship').removeClass('selected');
 	};
 
 	namegenerator.destroy = function() {
@@ -400,7 +400,7 @@ var Namegenerator = function Namegenerator(options) {
 		$('.add-button').off('click', namegenerator.openNodeBox);
 		$('.delete-button').off('click', namegenerator.removeFromList);
 		$("select[name='reltype_main_t0']").off('change', selectChangeHandler);
-		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);    
+		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);
 		$('#ngForm').off('submit', submitFormHandler);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.newNodeBox').remove();
@@ -442,7 +442,7 @@ var Namegenerator = function Namegenerator(options) {
 
 					case 'number':
 					formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
-					break; 
+					break;
 
 					case 'relationship':
 					formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'">');
@@ -457,9 +457,9 @@ var Namegenerator = function Namegenerator(options) {
 				$('.newNodeBox .form .right').append(formItem);
 				if (value.required === true) {
 					if (value.type === 'relationship') {
-						$("select[name='"+value.variable+"']").prop("required", true);            
+						$("select[name='"+value.variable+"']").prop("required", true);
 					} else {
-						$('#'+value.variable).prop("required", true);            
+						$('#'+value.variable).prop("required", true);
 					}
 
 				}
@@ -467,7 +467,7 @@ var Namegenerator = function Namegenerator(options) {
 			}
 
 		});
-	
+
 	$('.newNodeBox .form .right').append('<div class="form-group"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div>');
 	$("select[name='reltype_sub_t0']").prop( "disabled", true );
 	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-outline btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-outline btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
@@ -507,7 +507,7 @@ var Namegenerator = function Namegenerator(options) {
 		$("#fname_t0, #lname_t0").on('keyup', inputKeypressHandler);
 		$(document).on("click", ".card", cardClickHandler);
 		$("select[name='reltype_main_t0']").on('change', selectChangeHandler);
-		$("select[name='reltype_sub_t0']").on('change', selectSubChangeHandler);    
+		$("select[name='reltype_sub_t0']").on('change', selectSubChangeHandler);
 		$('#ngForm').on('submit', submitFormHandler);
 		$(document).on("click", '.relationship', roleClickHandler);
 		$(document).on("click", '.relationship-button', namegenerator.toggleRelationshipBox);
@@ -519,16 +519,16 @@ var Namegenerator = function Namegenerator(options) {
 
 	namegenerator.toggleRelationshipBox = function() {
 		if ($('.relationship-types-container').hasClass('open')) {
-			//closing 
+			//closing
 			var roleCount = $('.relationship.selected').length;
 			var plural = "roles";
-			
+
 			if (roleCount === 1) {
 				plural = "role";
 			}
-			
+
 			if(editing) {
-				$('.relationship-button').html(roleCount+' '+plural+' selected.');			
+				$('.relationship-button').html(roleCount+' '+plural+' selected.');
 			} else {
 				if (roleCount > 0) {
 					$('.relationship-button').html(roleCount+' '+plural+' selected.');
@@ -551,23 +551,23 @@ var Namegenerator = function Namegenerator(options) {
 
 			setTimeout(function() {
 				// $('.newNodeBox').show();
-				
+
 				$('.relationship-types-container').removeClass('open');
 				$('.relationship-types-container').removeClass('front');
 				$('.newNodeBox').removeClass('back');
 				setTimeout(function() {
-					
+
 
 				},1000);
 			}, 400);
 
 		} else {
-			// opening			
+			// opening
 			if(editing) {
 				var roleEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
 				$.each(roleEdges, function(index, value) {
  					$('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
-				});				
+				});
 			}
 
 			$('.newNodeBox').addClass('back');
@@ -593,12 +593,12 @@ var Namegenerator = function Namegenerator(options) {
 	namegenerator.addToList = function(properties) {
 		// var index = $(this).data('index');
 		var card;
-		
+
 		card = $('<div class="card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div>');
 		var list = $('<ul></ul>');
 		$.each(namegenerator.options.variables, function(index, value) {
 			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== "") {
-				list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');      
+				list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
 			}
 
 		});
@@ -609,7 +609,7 @@ var Namegenerator = function Namegenerator(options) {
 
 	namegenerator.removeFromList = function() {
 		$('.delete-button').hide();
-		
+
 		var nodeID = editing;
 		// var nodeID = network.getEdge(editing).to;
 
@@ -617,7 +617,7 @@ var Namegenerator = function Namegenerator(options) {
 		network.removeNode(nodeID);
 
 		$('div[data-index='+editing+']').remove();
-	
+
 		editing = false;
 		namegenerator.closeNodeBox();
 	};
