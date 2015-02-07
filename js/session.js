@@ -105,7 +105,9 @@ var Session = function Session(options) {
           {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return false; } else { return true; }}}},
           {label:'Thank You', page:'thanks.html'},
           {label:'Download Data', page:'download.html'},
-          {label:'Finish', page:'finish.html'}
+          {label:'Finish', page:'finish.html'},
+          {label:'TEST: narrative', page:'canvastest1.html'},
+          {label:'TEST: energy', page:'canvastest2.html'}
                     ];
 
   var saveTimer;

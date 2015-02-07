@@ -1,0 +1,16 @@
+<div id="kineticCanvas"></div>
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var canvas = new altCanvas({
+    	mode:'Narrative', //edge, position, select
+		  targetEl: $('.container'),
+    	variables: ['coords_t0'],
+      criteria: criteria,
+    	heading: "",
+      subheading:''
+	});
+  </script>
