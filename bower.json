@@ -30,6 +30,7 @@
     "lato": "~0.2.1",
     "leaflet-omnivore": "~0.3.0",
     "leaflet-plugins": "~1.2.1",
-    "bs-datetimepicker": "~4.0.0"
+    "bs-datetimepicker": "~4.0.0",
+    "leaflet-providers": "~1.0.13"
   }
 }

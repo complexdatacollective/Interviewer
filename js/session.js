@@ -105,9 +105,7 @@ var Session = function Session(options) {
           {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return false; } else { return true; }}}},
           {label:'Thank You', page:'thanks.html'},
           {label:'Download Data', page:'download.html'},
-          {label:'Finish', page:'finish.html'},
-          {label:'TEST: narrative', page:'canvastest1.html'},
-          {label:'TEST: energy', page:'canvastest2.html'}
+          {label:'Finish', page:'finish.html'}
                     ];
 
   var saveTimer;
@@ -150,30 +148,15 @@ var Session = function Session(options) {
 
     // Create our data interface
     window.dataStore = new IOInterface();
-    // Check for an in-progress session
-    if (localStorage.getObject('activeSession')!== false) {
-      session.id = localStorage.getObject('activeSession');
-      notify("Existing session found (session id: "+session.id+"). Loading.", 3);
-      // load data.
-      window.dataStore.init(session.id);
-      window.dataStore.load(session.updateUserData);
-    } else {
-      notify("No existing session found. Creating new session.", 3);
-      session.id = window.dataStore.init(); // returns ID of an unused slot on the server.
-    }
 
-    session.registerData("session");
-    // Historyjs integration for page loading
-    History.Adapter.bind(window, 'statechange', function(){
+    // Check for an in-progress session
+    dataStore.init(function(sessionid) {
+        session.id = sessionid;
+        dataStore.load(session.updateUserData, session.id);
+        session.goToStage(0);
     });
 
-    var State = History.getState();
-
-    if(State.data.stage) {
-      session.goToStage(State.data.stage);
-    } else {
-      session.goToStage(0);
-    }
+    session.registerData("session");
 
     window.addEventListener('unsavedChanges', function () {
       session.saveManager();
@@ -210,8 +193,6 @@ var Session = function Session(options) {
     localStorage.removeItem('log');
     session.id = 0;
     session.currentStage = 0;
-    window.dataStore.save(session.userData);
-    History.pushState({'stage': 0},null, '?stage='+0);
     location.reload();
   };
 
@@ -242,7 +223,7 @@ var Session = function Session(options) {
   };
 
   session.saveData = function() {
-    window.dataStore.save(session.userData);
+    window.dataStore.save(session.userData, session.returnSessionID());
     lastSaveTime = new Date();
   };
 
@@ -284,7 +265,6 @@ var Session = function Session(options) {
     });
     var oldStage = currentStage;
     currentStage = newStage;
-    History.pushState({'stage': stage},null, '?stage='+stage);
     session.options.fnAfterStageChange(oldStage, currentStage);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
