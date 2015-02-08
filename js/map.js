@@ -234,11 +234,14 @@ var GeoInterface = function GeoInterface() {
             zoomControl: false
         });
 
-        // Add the OpenStreetMap tile layer
-        L.tileLayer(
-         	'img/Tiles/{z}/{x}/{y}.png', {
-          	maxZoom: 17,
-          	minZoom: 11
+        L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+            subdomains: '1234',
+            mapID: 'newest',
+            app_id: 'FxdAZ7O0Wh568CHyJWKV',
+            app_code: 'FuQ7aPiHQcR8BSnXBCCmuQ',
+            base: 'base',
+            minZoom: 0,
+            maxZoom: 20
         }).addTo(leaflet);
 
         $.ajax({
@@ -272,12 +275,12 @@ var GeoInterface = function GeoInterface() {
         });
 
 
-        var kmlLayer = new L.KML("data/transit.kml", {
-                  style: function () {
-                      return {stroke:colors[1],fillColor:null,weight:1};
-                    }
-                  });
-        leaflet.addLayer(kmlLayer);
+        // var kmlLayer = new L.KML("data/transit.kml", {
+        //           style: function () {
+        //               return {stroke:colors[1],fillColor:null,weight:1};
+        //             }
+        //           });
+        // leaflet.addLayer(kmlLayer);
 
         // Events
         $('.map-back').on('click', geoInterface.previousPerson);

@@ -1,26 +1,23 @@
-  (function() {
-    // Set the global debug level
-    window.debugLevel = 1;
+var moment = require('moment');
 
-    // Initialise the menu system – other modules depend on it being there.
-    window.menu = new Menu({});
+// Set the global debug level
+window.debugLevel = 10;
 
-    // Set up a new session
-    window.session = new Session({});
+// Initialise the menu system – other modules depend on it being there.
+window.menu = new Menu({});
 
-    // Create a log
-    window.eventLog = new Logger();
+// Set up a new session
+window.session = new Session({});
 
-    // Build a new network
-    window.network = new Network();
+// Create a log
+window.eventLog = new Logger();
 
-    $('.arrow-next').click(function() {
-        session.nextStage();
-    });
-    $('.arrow-prev').click(function() {
-        session.prevStage();
-    });
+// Build a new network
+window.network = new Network();
 
-
-  })();
-
+$('.arrow-next').click(function() {
+    session.nextStage();
+});
+$('.arrow-prev').click(function() {
+    session.prevStage();
+});

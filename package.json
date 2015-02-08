@@ -1,0 +1,35 @@
+{
+  "name": "networkCanvas",
+  "version": "0.0.1",
+  "description": "A tactile tool for personal network capture.",
+  "private": true,
+  "homepage": "https://github.com/jthrilly/networkcanvas",
+  "bugs": "https://github.com/jthrilly/networkcanvas/issues",
+  "author": {
+    "name": "Joshua Melville",
+    "email": "",
+    "url": "https://github.com/jthrilly"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jthrilly/networkcanvas.git"
+  },
+  "dependencies": {
+    "nedb": "^1.1.1",
+    "requirejs": "^2.1.15"
+  },
+  "devDependencies": {},
+  "main": "index.html",
+  "scripts": {
+    "start": "nodewebkit"
+  },
+  "window": {
+    "toolbar": false,
+    "frame": true,
+    "position": "center",
+    "width": 1520,
+    "height": 820,
+    "min_width": 1520,
+    "min_height": 820
+  }
+}

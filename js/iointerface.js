@@ -8,8 +8,8 @@ This module should provide a transparent interface for any part of the applicati
 
 It functions as a key/value store.
 
-  - The requesting module first requests a data slot, or recieves a pointer to an existing one. If a data slot 
-    with the specified key already exists, the pointer is returned, else a new pointer is generated along with 
+  - The requesting module first requests a data slot, or recieves a pointer to an existing one. If a data slot
+    with the specified key already exists, the pointer is returned, else a new pointer is generated along with
     the slot.
   - The ioInterface instance decides when the key store should be synced with the external data store vs. the
     local backup (localStorage API), but this syncing can be triggered manually.
@@ -20,6 +20,11 @@ It functions as a key/value store.
 var IOInterface = function IOInterface() {
 
   // this could be a remote host
+  // Type 3: Persistent datastore with automatic loading
+  var Datastore = require('nedb')
+  , path = require('path')
+  , db = new Datastore({ filename: path.join(require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
+  // You can issue commands right away
   var externalStoreRestUrl = 'http://localhost:3000';
   var collection = 'netCanvas'; // Hard coded name of this collection.
   var id;
@@ -27,91 +32,96 @@ var IOInterface = function IOInterface() {
 
   var interface = {};
 
-  interface.init = function(existingID) {
-    notify('ioInterface initialising.', 1);
-    // If we don't have an existing ID, create a blank entry in mongodb and return its ID
-    if (!existingID) {
-      $.ajax({
-        url: externalStoreRestUrl+'/collections/'+collection+'/',
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: '',
-        success: function(data) {
-          id = data[0]._id;
-          notify("id from last transaction: "+id, 3);
-          session.registerData('session');
-          localStorage.setObject('activeSession', id);
-          session.addData('session', {sessionID: id});
-          return id;
-        },
-        error: function () {
-          return false;
-        }
-      });
-    } else {
-      // If we do have an existing ID, set it for future quries, and return.
-      id = existingID;
-      return id;
-    }
+  interface.init = function(callback) {
+      notify('ioInterface initialising.', 1);
+
+      if (localStorage.getObject('activeSession')!== false) {
+          console.log('existing session found');
+          callback(localStorage.getObject('activeSession'));
+      } else {
+          console.log('no existing session');
+
+          db.insert([{ NetworkCanvas:'initialised'}], function (err, newDoc) {
+              if(err) {
+                  // do something with the error
+                  console.log('error with insert');
+              }
+              console.log(newDoc);
+              console.log(newDoc[0]._id);
+              // Two documents were inserted in the database
+              // newDocs is an array with these documents, augmented with their _id
+              id = newDoc[0]._id;
+              console.log('id has been set as '+id);
+              localStorage.setObject('activeSession', id);
+              callback(newDoc[0]._id);
+          });
+
+      }
 
   };
 
 
-  interface.save = function(userData) {
+  interface.save = function(userData, id) {
     delete session.userData._id;
     notify('IOInterface being asked to synchronise with data store:',2);
     notify('Data to be saved: ', 1);
     notify(userData, 1);
-    $.each(userData, function(key,value) {
-      localStorage.setObject(key, value);  
+
+    db.update({_id: id }, userData, {}, function (err, numReplaced) {
+        if (err) {
+            console.log('saving failed');
+        }
+
+        console.log('saving worked...id for find: '+id);
+        db.find({"_id": id }, function (err, docs) {
+            if (err) {
+
+                console.log('error with finding');
+                console.log(err);
+                // handle error
+            }
+            console.log('data is now: ');
+            console.log(docs[0]);
+        });
     });
 
-    $.ajax({
-      url: externalStoreRestUrl+'/collections/'+collection+'/'+id,
-      type: 'PUT',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(userData),
-      success: function(data) {
-        notify('Result of saving was: ', 2);
-        notify(data, 2);
-      }, 
-      error: function(data) {
-        notify('Saving failed! '+data, 100000);
-      }
-    });
-    
+
   };
 
   interface.update = function(key, userData,id) {
-    $.ajax({
-      url: externalStoreRestUrl+'/collections/'+collection+'/'+id,
-      type: 'PUT',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(userData),
-      success: function() {
-        return true;
-      },
-      error: function () {
-        return false;
-      }
-    });
+      db.update({_id: id }, userData, {}, function (err, numReplaced) {
+          if (err) {
+              console.log('saving failed');
+          }
+
+          console.log('update worked.');
+          db.find({"_id": id }, function (err, docs) {
+              if (err) {
+
+                  console.log('error with finding');
+                  console.log(err);
+                  // handle error
+              }
+              console.log('new data is: ');
+              console.log(docs[0]);
+          });
+      });
 
   };
 
-  interface.load = function(callback) {
+  interface.load = function(callback, id) {
+    console.log('loading...id is '+id);
     notify("ioInterface being asked to load data.", 2);
-    $.getJSON(
-      externalStoreRestUrl+'/collections/'+collection+'/'+id,
-      function(data) {
-        delete data._id;
-        notify("ioInterface returning data.",2);
-        notify(data, 1);
-        callback(data);
-      }
-    );
+    db.find({"_id": id}, function (err, docs) {
+        if (err) {
+            // handle error
+            console.log('error');
+        }
+
+        console.log('loading worked. Returning: ');
+        console.log(docs[0]);
+        callback(docs[0]);
+    });
 
   };
 
