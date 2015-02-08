@@ -1,4 +1,5 @@
 var moment = require('moment');
+var fs = require('fs');
 
 // Set the global debug level
 window.debugLevel = 10;

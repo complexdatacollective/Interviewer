@@ -1,4 +1,4 @@
-/* global console, extend, IOInterface, notify, menu, network */
+/* global console, fs, extend, IOInterface, notify, menu, network */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -30,6 +30,17 @@ var Session = function Session(options) {
         return false;
       }
   }
+
+  function saveFile(path) {
+      var data = JSON.stringify(session.userData, undefined, 2);
+      fs.writeFile(path, data);
+  }
+
+  function clickInput() {
+     var event = document.createEvent('MouseEvents');
+     event.initMouseEvent('click');
+     document.getElementById('save').dispatchEvent(event);
+ }
 
   session.stages = [
           {label:'Intro', page:'intro.html'},
@@ -244,6 +255,10 @@ var Session = function Session(options) {
       $('.loader').transition({opacity:0});
     }, false);
 
+    document.getElementById('save').addEventListener('change', function () {
+        saveFile(this.value);
+    });
+
     // Create our data interface
     dataStore = new IOInterface();
 
@@ -263,7 +278,7 @@ var Session = function Session(options) {
     var sessionMenu = menu.addMenu('Session','hi-icon-cog');
     menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
-    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { session.downloadData(); });
+    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickInput(); });
     menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() { dataStore.reset(session.reset); });
 
     // menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
@@ -276,6 +291,10 @@ var Session = function Session(options) {
   };
 
   session.downloadData = function() {
+
+
+
+
     var filename = session.returnSessionID()+'.json';
     var text = JSON.stringify(session.userData, undefined, 2); // indentation level = 2;
       var pom = document.createElement('a');
