@@ -79,15 +79,56 @@ var Session = function Session(options) {
           {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { return drugSkip('d9_t0'); }},
           {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { return drugSkip('d10_t0'); }},
           {label:'NET EDGE: drugs', page:'canvasedge2.html'},
-          {label:'CAT: where met sex partners', page:'multibin6.html'},
-          {label:'DATE: first and last sex', page:'dateinterface1.html'},
-          {label:'CAT: HIV status of sex partners', page:'multibin7.html'},
+          {label:'CAT: where met sex partners', page:'multibin6.html', skip: function() {
+            // Don't show if ego has had no sex partners
+            if (typeof network !== 'undefined') {
+                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                    if (totalEdges.length > 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+            } else {
+              return false;
+            }
+
+          } },
+          {label:'DATE: first and last sex', page:'dateinterface1.html', skip: function() {
+            // Don't show if ego has had no sex partners
+            if (typeof network !== 'undefined') {
+                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                    if (totalEdges.length > 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+            } else {
+              return false;
+            }
+
+          } },
+          {label:'CAT: HIV status of sex partners', page:'multibin7.html', skip: function() {
+            // Don't show if ego has had no sex partners
+            if (typeof network !== 'undefined') {
+                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                    if (totalEdges.length > 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+            } else {
+              return false;
+            }
+
+          } },
           {label:'CAT: Vaginal sex?', page:'multibin9.html',
           skip: function() {
               // need to skip male participant with only male sex partners
             //   Dyad edge
             //   gender_p_t0 'Male'
                 if (typeof network !== 'undefined') {
+                    var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                    if (sexEdges.length > 0) {
                         var totalEdges = network.getEdges({type:'Dyad'});
                         var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'}).length;
                         if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
@@ -95,28 +136,67 @@ var Session = function Session(options) {
                         } else {
                             return false;
                         }
+                    } else {
+                        return false;
                     }
+                } else {
+                    return false;
                 }
 
-          },
+          } },
           {label:'CAT: Anal sex?', page:'multibin10.html',
           skip: function() {
               // need to skip female participant with only female sex partners
 
                   if (typeof network !== 'undefined') {
-                      var totalEdges = network.getEdges({type:'Dyad'});
-                      var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
-                      if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
+                      var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                      if (sexEdges.length > 0) {
+                          var totalEdges = network.getEdges({type:'Dyad'});
+                          var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
+                          if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
+                              return true;
+                          } else {
+                              return false;
+                          }
+                      } else {
+                        return false;
+                      }
+                  } else {
+                      return false;
+                  }
+          } },
+          {label:'NET EDGE: sex', page:'canvasedge3.html'},
+          {label:'SWITCH: multiple sex partners', page:'multiplepartners.html', skip: function() {
+            // Don't show if ego has had no sex partners
+            if (typeof network !== 'undefined') {
+                var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                if (totalEdges.length > 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+
+          } },
+          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() {
+              if (typeof network !== 'undefined') {
+                  var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                  if (sexEdges.length > 0) {
+                      var required = network.getNodes({multiple_sex_t0: 'yes'});
+                      if (required.length === 0) {
                           return true;
                       } else {
                           return false;
                       }
+                  } else {
+                      return false;
                   }
+              } else {
+                  return false;
               }
-          },
-          {label:'NET EDGE: sex', page:'canvasedge3.html'},
-          {label:'SWITCH: multiple sex partners', page:'multiplepartners.html'},
-          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return true; } else { return false; }}}},
+          } },
           {label:'Thank You', page:'thanks.html'},
           {label:'Download Data', page:'download.html'},
           {label:'Finish', page:'finish.html'}
