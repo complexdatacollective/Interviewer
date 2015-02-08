@@ -12,7 +12,7 @@ Storage.prototype.showUsage = function() {
       total += amount;
       console.log( x + " = " + amount.toFixed(2) + " MB");
     }
-    console.log( "Total: " + total.toFixed(2) + " MB");    
+    console.log( "Total: " + total.toFixed(2) + " MB");
 };
 
 
@@ -25,7 +25,7 @@ Storage.prototype.getObject = function(key) {
         return false;
     } else {
         var value = this.getItem(key);
-        return value && JSON.parse(value);            
+        return value && JSON.parse(value);
     }
 };
 
@@ -47,6 +47,19 @@ Object.defineProperty(Array.prototype, "remove", {
     }
 });
 
+function removeFromObject(item, object) {
+    var removeCounter = 0;
+
+    for (var index = 0; index < object.length; index++) {
+        if (object[index] === item) {
+            object.splice(index, 1);
+            removeCounter++;
+            index--;
+        }
+    }
+    return removeCounter;
+}
+
 // helper functions
 
 function deepEquals(a, x) {
@@ -56,10 +69,10 @@ function deepEquals(a, x) {
             return false;
         }
     }
- 
+
     for (p in a) {
         if (a[p]) {
- 
+
             switch (typeof(a[p])) {
                 case 'object':
                     if (a[p].sort) {
@@ -84,7 +97,7 @@ function deepEquals(a, x) {
             if (x[p]) {
                 return false;
             }
-                
+
         }
     }
     for (p in x) {
@@ -92,7 +105,7 @@ function deepEquals(a, x) {
             return false;
         }
     }
- 
+
     return true;
 }
 
@@ -161,7 +174,7 @@ $.cssHooks.backgroundColor = {
 }
 
 function modifyColor(hex, lum) {
-  
+
     // validate hex string
     hex = String(hex).replace(/[^0-9a-f]/gi, '');
     if (hex.length < 6) {
@@ -178,5 +191,5 @@ function modifyColor(hex, lum) {
     }
 
     return rgb;
-  
+
 }

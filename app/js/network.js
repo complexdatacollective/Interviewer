@@ -1,19 +1,19 @@
 /* exported Network, Node, Edge */
-/* global session, extend, notify, randomBetween */
+/* global removeFromObject, console, session, extend, notify, randomBetween */
 
 
 /*
 
 This is a very important module!
 
-Previously I had been storing Nodes and Edges within the KineticJS framework 
+Previously I had been storing Nodes and Edges within the KineticJS framework
 Nodes were stored as Kinetic Groups (text and a shape), and edges stored as Kinetic Lines.
 
-This approach worked fine when the scope of the interaction was limited to 
-KineticJS, but needs revision when nodes much be created, edited, and managed 
+This approach worked fine when the scope of the interaction was limited to
+KineticJS, but needs revision when nodes much be created, edited, and managed
 from different interfaces.
 
-This module should implement 'networky' methods, and a querying syntax for 
+This module should implement 'networky' methods, and a querying syntax for
 selecting nodes or edges by their various properties, and interating over them.
 
 */
@@ -47,8 +47,8 @@ var Network = function Network() {
     var nodeProperties = {
       id: newNodeID
     };
-    extend(nodeProperties, properties);    
-    
+    extend(nodeProperties, properties);
+
     session.addData('nodes', nodeProperties, true);
     var log = new CustomEvent('log', {"detail":{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
     window.dispatchEvent(log);
@@ -89,7 +89,7 @@ var Network = function Network() {
 
     // old way of checking if an edge existed checked for values of to, from, and type. We needed those to not have to be unique.
     // New way: check if all properties are the same.
-    
+
     var reversed = {}, temp;
     reversed = $.extend(true,{}, properties);
     temp = reversed.to;
@@ -111,7 +111,7 @@ var Network = function Network() {
       var unsavedChanges = new Event('unsavedChanges');
       window.dispatchEvent(unsavedChanges);
 
-      return edgeProperties.id;      
+      return edgeProperties.id;
     } else {
 
       notify('ERROR: Edge already exists!',2);
@@ -125,6 +125,7 @@ var Network = function Network() {
   };
 
   network.removeEdge = function(edge) {
+    console.log(edge);
     if (!edge) {
       return false;
     }
@@ -135,15 +136,17 @@ var Network = function Network() {
     if (typeof edge === 'object' && typeof edge.length !== 'undefined') {
       // we've got an array
       for (var i = 0; i < edge.length; i++) {
-        localEdges.remove(edge[i]);
+        // localEdges.remove(edge[i]);
+        removeFromObject(edge[i], localEdges);
         log = new CustomEvent('log', {"detail":{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
         edgeRemovedEvent = new CustomEvent('edgeRemoved',{"detail":edge[i]});
         window.dispatchEvent(log);
         window.dispatchEvent(edgeRemovedEvent);
       }
     } else {
-      // we've got a single edge
-      localEdges.remove(edge);
+      // we've got a single edge, which is an object {}
+    //   localEdges.remove(edge);
+      removeFromObject(edge, localEdges);
       log = new CustomEvent('log', {"detail":{'eventType': 'edgeRemove', 'eventObject':edge}});
       edgeRemovedEvent = new CustomEvent('edgeRemoved',{"detail":edge});
       window.dispatchEvent(log);
@@ -169,7 +172,8 @@ var Network = function Network() {
         window.dispatchEvent(log);
         nodeRemovedEvent = new CustomEvent('edgeRemoved',{"detail":localNodes[i]});
         window.dispatchEvent(nodeRemovedEvent);
-        localNodes.remove(localNodes[i]);
+        // localNodes.remove(localNodes[i]);
+        removeFromObject(localNodes[i],localNodes);
         session.addData('nodes', localNodes);
         return true;
       }
@@ -242,19 +246,19 @@ var Network = function Network() {
     // Get nodes using .filter(). Function is called for each of nodes.Nodes.
     var result = targetArray.filter(function(el){
       var match = true;
-      
+
       for (var criteriaKey in criteria) {
-        
+
           if (el[criteriaKey] !== undefined) {
-            
-            
+
+
             // current criteria exists in object.
             if (el[criteriaKey] !== criteria[criteriaKey]) {
               match = false;
-            }  
+            }
           } else {
             match = false;
-          }     
+          }
       }
 
       if (match === true) {
@@ -277,19 +281,19 @@ var Network = function Network() {
 
       var result2 = targetArray.filter(function(el){
         var match = true;
-        
+
         for (var criteriaKey in reversed) {
-          
+
             if (el[criteriaKey] !== undefined) {
-              
-              
+
+
               // current criteria exists in object.
               if (el[criteriaKey] !== reversed[criteriaKey]) {
                 match = false;
-              }  
+              }
             } else {
               match = false;
-            }     
+            }
         }
 
         if (match === true) {
@@ -309,7 +313,7 @@ var Network = function Network() {
     var localNodes = session.returnData('nodes');
     var results;
     if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-      results = network.filterObject(localNodes,criteria);  
+      results = network.filterObject(localNodes,criteria);
     } else {
       results = localNodes;
     }
@@ -333,7 +337,7 @@ var Network = function Network() {
     if (filter) {
       results = filter(results);
     }
-  
+
     return results;
   };
 
@@ -343,7 +347,7 @@ var Network = function Network() {
 
   network.getNodeOutboundEdges = function(nodeID) {
     return network.getEdges({from:nodeID});
-  };  
+  };
 
   network.getNodeEdges = function(nodeID) {
     if (network.getNode(nodeID) === false) {
@@ -362,11 +366,11 @@ var Network = function Network() {
     if (typeof object === 'object' && object.length>0) {
       // Multiple objects!
       for (var i = 0; i < object.length; i++) {
-        $.extend(object[i], properties);     
-      }     
+        $.extend(object[i], properties);
+      }
     } else {
       // Just one object.
-        $.extend(object, properties);    
+        $.extend(object, properties);
     }
 
   };
@@ -395,7 +399,7 @@ var Network = function Network() {
       var nodeOptions = {
         coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
       };
-      network.addNode(nodeOptions); 
+      network.addNode(nodeOptions);
     }
 
     notify("Adding edges.",3);
