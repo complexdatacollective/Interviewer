@@ -1,4 +1,4 @@
-/* global moment, extend, network */
+/* global console, moment, extend, network */
 /* exported DateInterface */
 
 var DateInterface = function DateInterface(options) {
@@ -61,9 +61,6 @@ var DateInterface = function DateInterface(options) {
 		                    '<input type="text" class="form-control" readonly />'+
 		                    '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
 		                '</div>'+
-                            '<div class="checkbox">'+
-                                '<label><input type="checkbox" name="checkbox-time" class="checkbox-time checkbox'+(counter+1)+'"> More than 6 months ago.</label>'+
-                        '</div>'+
 		            '</div>'+
 		        '</div>'+
 		    '</div>'+
