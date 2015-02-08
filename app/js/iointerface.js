@@ -1,4 +1,4 @@
-/* global notify, session */
+/* global require, console, notify, session */
 /* exported IOInterface */
 
 
@@ -19,111 +19,124 @@ It functions as a key/value store.
 
 var IOInterface = function IOInterface() {
 
-  // this could be a remote host
-  // Type 3: Persistent datastore with automatic loading
-  var Datastore = require('nedb')
-  , path = require('path')
-  , db = new Datastore({ filename: path.join(require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
-  // You can issue commands right away
-  var externalStoreRestUrl = 'http://localhost:3000';
-  var collection = 'netCanvas'; // Hard coded name of this collection.
-  var id;
-  // var data = {};
+    // this could be a remote host
+    // Type 3: Persistent datastore with automatic loading
+    var Datastore = require('nedb'), path = require('path'), db = new Datastore({ filename: path.join(require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
+    // You can issue commands right away
+    var id;
+    var interface = {};
 
-  var interface = {};
+    interface.init = function(callback) {
+        notify('ioInterface initialising.', 1);
 
-  interface.init = function(callback) {
-      notify('ioInterface initialising.', 1);
+        if (localStorage.getObject('activeSession')!== false) {
+            console.log('existing session found');
+            callback(localStorage.getObject('activeSession'));
+        } else {
+            console.log('no existing session');
 
-      if (localStorage.getObject('activeSession')!== false) {
-          console.log('existing session found');
-          callback(localStorage.getObject('activeSession'));
-      } else {
-          console.log('no existing session');
-
-          db.insert([{ NetworkCanvas:'initialised'}], function (err, newDoc) {
-              if(err) {
+            db.insert([{ NetworkCanvas:'initialised'}], function (err, newDoc) {
+                if(err) {
                   // do something with the error
-                  console.log('error with insert');
-              }
-              console.log(newDoc);
-              console.log(newDoc[0]._id);
-              // Two documents were inserted in the database
-              // newDocs is an array with these documents, augmented with their _id
-              id = newDoc[0]._id;
-              console.log('id has been set as '+id);
-              localStorage.setObject('activeSession', id);
-              callback(newDoc[0]._id);
+                    console.log('error with insert');
+                }
+                console.log(newDoc);
+                console.log(newDoc[0]._id);
+
+                // Two documents were inserted in the database
+                // newDocs is an array with these documents, augmented with their _id
+                id = newDoc[0]._id;
+                console.log('id has been set as '+id);
+                localStorage.setObject('activeSession', id);
+                callback(newDoc[0]._id);
           });
 
-      }
-
-  };
-
-
-  interface.save = function(userData, id) {
-    delete session.userData._id;
-    notify('IOInterface being asked to synchronise with data store:',2);
-    notify('Data to be saved: ', 1);
-    notify(userData, 1);
-
-    db.update({_id: id }, userData, {}, function (err, numReplaced) {
-        if (err) {
-            console.log('saving failed');
         }
 
-        console.log('saving worked...id for find: '+id);
-        db.find({"_id": id }, function (err, docs) {
+    };
+
+
+    interface.save = function(userData, id) {
+        delete session.userData._id;
+        notify('IOInterface being asked to synchronise with data store:',2);
+        notify('Data to be saved: ', 1);
+        notify(userData, 1);
+
+        db.update({_id: id }, userData, {}, function (err) {
             if (err) {
-
-                console.log('error with finding');
-                console.log(err);
-                // handle error
+                console.log('saving failed');
             }
-            console.log('data is now: ');
-            console.log(docs[0]);
+
+            console.log('saving worked...id for find: '+id);
+            db.find({"_id": id }, function (err, docs) {
+                if (err) {
+                    console.log('error with finding');
+                    console.log(err);
+                    // handle error
+                }
+                console.log('data is now: ');
+                console.log(docs[0]);
+            });
         });
-    });
 
+    };
 
-  };
+    interface.update = function(key, userData,id) {
+        db.update({_id: id }, userData, {}, function (err) {
+            if (err) {
+                console.log('saving failed');
+            }
 
-  interface.update = function(key, userData,id) {
-      db.update({_id: id }, userData, {}, function (err, numReplaced) {
-          if (err) {
-              console.log('saving failed');
-          }
+            console.log('update worked.');
+            db.find({"_id": id }, function (err, docs) {
+                if (err) {
+                    console.log('error with finding');
+                    console.log(err);
+                    // handle error
+                }
+                console.log('new data is: ');
+                console.log(docs[0]);
+            });
+        });
 
-          console.log('update worked.');
-          db.find({"_id": id }, function (err, docs) {
-              if (err) {
+    };
 
-                  console.log('error with finding');
-                  console.log(err);
-                  // handle error
-              }
-              console.log('new data is: ');
-              console.log(docs[0]);
-          });
-      });
+    interface.reset = function() {
+        // db.find with empty object returns all objects.
+        db.find({}, function (err, docs) {
+            if (err) {
+                console.log('resetting failed');
+                return false;
+            }
 
-  };
+            var resultLength = docs.length;
+            for (var i = 0; i < resultLength; i++) {
+                interface.deleteDocument(docs[i]._id);
+            }
 
-  interface.load = function(callback, id) {
-    console.log('loading...id is '+id);
-    notify("ioInterface being asked to load data.", 2);
-    db.find({"_id": id}, function (err, docs) {
-        if (err) {
-            // handle error
-            console.log('error');
-        }
+            require('nw.gui').Window.get().reload(3);
+        });
+    };
 
-        console.log('loading worked. Returning: ');
-        console.log(docs[0]);
-        callback(docs[0]);
-    });
+    interface.deleteDocument = function(id) {
+        db.remove({ _id: id }, {}, function (err) {
+            if (err) { console.log('deleting document failed.'); return false; }
+        });
+    };
 
-  };
+    interface.load = function(callback, id) {
+        console.log('loading...id is '+id);
+        notify("ioInterface being asked to load data.", 2);
+        db.find({"_id": id}, function (err, docs) {
+            if (err) {
+                // handle error
+                console.log('error');
+            }
+            console.log('loading worked. Returning: ');
+            console.log(docs[0]);
+            callback(docs[0]);
+        });
+    };
 
-  return interface;
+    return interface;
 };

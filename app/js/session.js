@@ -258,6 +258,8 @@ var Session = function Session(options) {
     menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
     menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { session.downloadData(); });
+    menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() { dataStore.reset(); });
+
     // menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
 
     var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
