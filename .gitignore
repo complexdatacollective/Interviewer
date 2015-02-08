@@ -1,6 +1,5 @@
 .DS_Store
-js/.DS_Store
-img/Tiles
 *.codekit
+build
 
 codekit-config.json
