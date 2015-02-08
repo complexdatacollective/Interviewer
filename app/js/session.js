@@ -1,4 +1,4 @@
-/* global extend, IOInterface, notify, menu, network */
+/* global console, extend, IOInterface, notify, menu, network */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -31,7 +31,6 @@ var Session = function Session(options) {
       }
   }
 
-
   session.stages = [
           {label:'Intro', page:'intro.html'},
           {label:'NG: closest', page:'namegen1.html'},
@@ -55,7 +54,17 @@ var Session = function Session(options) {
           {label:'CAT: sexuality', page:'multibin3.html'},
           {label:'CAT: location', page:'multibin4.html'},
           {label:'MAP: location in Chicago', page:'map1.html', skip: function() {
-
+            // Don't show map if no participants are from chicago
+            if (typeof network !== 'undefined') {
+                    var totalEdges = network.getEdges({type:'Dyad', res_cat_p_t0: 'Chicago'});
+                    if (totalEdges.length > 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+            } else {
+              return false;
+            }
 
           } },
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
@@ -114,8 +123,6 @@ var Session = function Session(options) {
                     ];
 
   var saveTimer;
-
-
   // custom events
 
   session.options = {
@@ -152,7 +159,7 @@ var Session = function Session(options) {
     }, false);
 
     // Create our data interface
-    window.dataStore = new IOInterface();
+    dataStore = new IOInterface();
 
     // Check for an in-progress session
     dataStore.init(function(sessionid) {
@@ -228,7 +235,7 @@ var Session = function Session(options) {
   };
 
   session.saveData = function() {
-    window.dataStore.save(session.userData, session.returnSessionID());
+    dataStore.save(session.userData, session.returnSessionID());
     lastSaveTime = new Date();
   };
 
@@ -243,6 +250,7 @@ var Session = function Session(options) {
 
       // if true, skip the stage
       if (outcome === true) {
+        console.log('Skipping because skip condition was met.');
         if (stage > currentStage) {
           session.goToStage(stage+1);
         } else {

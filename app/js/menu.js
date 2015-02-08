@@ -16,7 +16,7 @@ var Menu = function Menu(options) {
 
     // private
     function extend( a, b ) {
-        for( var key in b ) { 
+        for( var key in b ) {
             if( b.hasOwnProperty( key ) ) {
                 a[key] = b[key];
             }
@@ -59,16 +59,16 @@ var Menu = function Menu(options) {
     menu.closeMenu = function(targetMenu) {
         if(!targetMenu) {
             //close all menus
-            $.each(menus, function(index) {     
+            $.each(menus, function(index) {
                 var name = '.'+menus[index].name+'-menu-container';
                 if($(name).hasClass('active')) {
                     menus[index].items.find('.icon-close').trigger('click');
                 }
             });
         } else {
-            targetMenu.items.find('.icon-close').trigger('click');    
+            targetMenu.items.find('.icon-close').trigger('click');
         }
-        
+
     };
 
     menu.toggle = function(targetMenu) {
@@ -102,12 +102,12 @@ var Menu = function Menu(options) {
             }
 
         }
-        
+
         // add/remove class "open" to the button wraper
-        setTimeout( function() { 
+        setTimeout( function() {
             contentEl[0].style.left = buttonPos.left + 'px';
             contentEl[0].style.top = buttonPos.top + 'px';
-            
+
             if(targetMenu.expanded === true) {
                 contentEl.removeClass('no-transition');
                 menuContent.removeClass('menu-open');
@@ -117,10 +117,10 @@ var Menu = function Menu(options) {
 
             }
             else {
-                setTimeout( function() { 
+                setTimeout( function() {
                     contentEl.removeClass('no-transition');
                     menuContent.addClass('menu-open');
-                    targetMenu.expanded = true; 
+                    targetMenu.expanded = true;
                 }, 25 );
             }
         }, 25 );
@@ -141,8 +141,8 @@ var Menu = function Menu(options) {
         newMenu.items = $('<div class="morph-button morph-button-sidebar morph-button-fixed '+menuContainerClass+'"><div class="morph-content '+menuItemsClass+'"><div><div class="content-style-sidebar"><span class="icon icon-close">Close the overlay</span><h2>'+name+'</h2><ul></ul></div></div></div></div>');
         newMenu.button.after(newMenu.items);
 
-        newMenu.button.on( 'click', function() { 
-            menu.toggle(newMenu); 
+        newMenu.button.on( 'click', function() {
+            menu.toggle(newMenu);
         });
         newMenu.items.find('.icon-close').on('click', function() {
             $('.menu-btn').show();
@@ -154,16 +154,16 @@ var Menu = function Menu(options) {
             setTimeout(function() {
                 newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
                     adding = false;}
-                    );    
+                    );
             }, 500);
-            
+
         } else {
             adding = true;
             newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
                 adding = false; }
-                );    
+                );
         }
-        
+
 
         return newMenu;
 
@@ -172,7 +172,7 @@ var Menu = function Menu(options) {
     menu.removeMenu = function(targetMenu) {
         targetMenu.button.transition({top:-300,opacity:0},1000, function() {
             $(targetMenu.button).remove();
-            $(targetMenu.items).remove();            
+            $(targetMenu.items).remove();
         });
     };
 
@@ -180,7 +180,7 @@ var Menu = function Menu(options) {
         var menuItem = $('<li><a class="icon icon-server '+icon+'" href="#">'+item+'</a></li>');
         targetMenu.items.find('ul').append(menuItem);
         menuItem.on('click', function() {
-            
+            $('.paginate').removeAttr('disabled');
             menu.closeMenu(targetMenu);
             setTimeout(function() {
                 callback();
@@ -192,14 +192,14 @@ var Menu = function Menu(options) {
 //           <li><a class="icon icon-user" href="#">User Profile</a></li>
 //           <li><a class="icon icon-briefcase" href="#">Manage Cases</a></li>
 //           <li><a class="icon icon-globe" href="#">Global Options</a></li>
-// <!-- 
+// <!--
 //           <li><a class="icon icon-zoom-in" href="#">Readability</a></li>
 //           <li><a class="icon icon-microphone" href="#">Speech</a></li>
-//           <li><a class="icon icon-heart" href="#">Favorites</a></li>   -->        
+//           <li><a class="icon icon-heart" href="#">Favorites</a></li>   -->
 
 
 
-    }; 
+    };
 
     menu.init = function() {
         notify('Menu initialising.', 1);

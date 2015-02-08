@@ -1,3 +1,5 @@
 .DS_Store
 *.codekit
 codekit-config.json
+
+app/npm-debug.log

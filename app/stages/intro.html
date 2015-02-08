@@ -47,7 +47,7 @@
 				<div class="row">
 	                <div class="btn-group" data-toggle="buttons">
 	                    <label class="btn">
-	                      <input type="radio" name='seed_status_t0' data-value="Seed"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
+	                      <input type="radio" name='seed_status_t0' data-value="Seed" checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
 	                    </label>
 	                    <label class="btn">
 	                      <input type="radio" name='seed_status_t0' data-value="Non-Seed"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Non-Seed
@@ -115,7 +115,7 @@
 		  	int_date_t0: sdate,
 		  	int_stime_t0: stime,
 			ego_name: $('.participant-name').val(),
-			gender_k: $("input:radio[name=gender_k]:checked").data('value'),					  
+			gender_k: $("input:radio[name=gender_k]:checked").data('value'),
 		  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
 		  });
 
