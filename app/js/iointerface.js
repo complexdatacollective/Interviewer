@@ -101,7 +101,7 @@ var IOInterface = function IOInterface() {
 
     };
 
-    interface.reset = function() {
+    interface.reset = function(callback) {
         // db.find with empty object returns all objects.
         db.find({}, function (err, docs) {
             if (err) {
@@ -114,7 +114,7 @@ var IOInterface = function IOInterface() {
                 interface.deleteDocument(docs[i]._id);
             }
 
-            require('nw.gui').Window.get().reload(3);
+            if (callback) { callback(); }
         });
     };
 
