@@ -1,4 +1,4 @@
-/* global History, extend, IOInterface, notify, menu, network */
+/* global extend, IOInterface, notify, menu, network */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -8,7 +8,7 @@ var Session = function Session(options) {
   var $content = $('#content');
 
   // Establish a new IOInterface for loading and saving
-  window.dataStore = {};
+  var dataStore = {};
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
@@ -22,10 +22,12 @@ var Session = function Session(options) {
           var required = network.getNodes(properties);
 
           if (drugEdges.length === 0 || required.length === 0) {
-              return false;
-          } else {
               return true;
+          } else {
+              return false;
           }
+      } else {
+        return false;
       }
   }
 
@@ -39,7 +41,7 @@ var Session = function Session(options) {
           {label:'NG: sex, two or more', page:'namegenmod8.html'},
           {label:'NET: layout', page:'canvaslayout.html'},
           {label:'NET EDGE: social', page:'canvasedge1.html'},
-          {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return true; } else { return false; }}}},
           {label:'NET NI: who drunk with', page:'canvasselect3.html'},
           {label:'NET NI: who drugs with', page:'canvasselect4.html'},
           {label:'NET NI: who sex with', page:'canvasselect5.html'},
@@ -52,7 +54,10 @@ var Session = function Session(options) {
           {label:'RACE: Racial Identity', page:'multibin2.html'},
           {label:'CAT: sexuality', page:'multibin3.html'},
           {label:'CAT: location', page:'multibin4.html'},
-          {label:'MAP: location in Chicago', page:'map1.html'},
+          {label:'MAP: location in Chicago', page:'map1.html', skip: function() {
+
+
+          } },
           {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
           {label:'ORD: Marijuana freq', page:'ordbin6.html',skip: function() { return drugSkip('d1_t0'); }},
           {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { return drugSkip('d2_t0'); }},
@@ -77,9 +82,9 @@ var Session = function Session(options) {
                         var totalEdges = network.getEdges({type:'Dyad'});
                         var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'}).length;
                         if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
-                            return false;
-                        } else {
                             return true;
+                        } else {
+                            return false;
                         }
                     }
                 }
@@ -93,16 +98,16 @@ var Session = function Session(options) {
                       var totalEdges = network.getEdges({type:'Dyad'});
                       var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
                       if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
-                          return false;
-                      } else {
                           return true;
+                      } else {
+                          return false;
                       }
                   }
               }
           },
           {label:'NET EDGE: sex', page:'canvasedge3.html'},
           {label:'SWITCH: multiple sex partners', page:'multiplepartners.html'},
-          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return false; } else { return true; }}}},
+          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({multiple_sex_t0: 'yes'}); if (required.length === 0) { return true; } else { return false; }}}},
           {label:'Thank You', page:'thanks.html'},
           {label:'Download Data', page:'download.html'},
           {label:'Finish', page:'finish.html'}
@@ -236,8 +241,8 @@ var Session = function Session(options) {
       //evaluate skip function
       var outcome = session.stages[stage].skip();
 
-      // if false, skip the stage
-      if (outcome === false) {
+      // if true, skip the stage
+      if (outcome === true) {
         if (stage > currentStage) {
           session.goToStage(stage+1);
         } else {
