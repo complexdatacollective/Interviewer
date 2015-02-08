@@ -127,17 +127,22 @@ var Session = function Session(options) {
             //   Dyad edge
             //   gender_p_t0 'Male'
                 if (typeof network !== 'undefined') {
+
+                    // Skip if there are no sex edges between ego and some alters
                     var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
                     if (sexEdges.length > 0) {
-                        var totalEdges = network.getEdges({type:'Dyad'});
-                        var maleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Male'}).length;
-                        if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) {
+
+
+                        var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
+                        var maleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
+                        var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
+                        if ((network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) || (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length)) {
                             return true;
                         } else {
                             return false;
                         }
                     } else {
-                        return false;
+                        return true;
                     }
                 } else {
                     return false;
@@ -151,17 +156,18 @@ var Session = function Session(options) {
                   if (typeof network !== 'undefined') {
                       var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
                       if (sexEdges.length > 0) {
-                          var totalEdges = network.getEdges({type:'Dyad'});
-                          var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'}).length;
+                          var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
+                          var femaleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Female'});
                           if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
                               return true;
                           } else {
                               return false;
                           }
                       } else {
-                        return false;
+                        return true;
                       }
                   } else {
+                      console.log('network undefined.');
                       return false;
                   }
           } },
@@ -343,6 +349,7 @@ var Session = function Session(options) {
         return false;
       }
     }
+
     notify('Session is moving to stage '+stage, 3);
     var eventProperties = {
         stage: stage,
