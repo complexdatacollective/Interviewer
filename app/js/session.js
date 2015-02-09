@@ -265,8 +265,10 @@ var Session = function Session(options) {
     // Check for an in-progress session
     dataStore.init(function(sessionid) {
         session.id = sessionid;
-        dataStore.load(session.updateUserData, session.id);
-        session.goToStage(0);
+        dataStore.load(function(data) {
+            session.updateUserData(data);
+            session.goToStage(0);
+        }, session.id);
     });
 
     session.registerData("session");
