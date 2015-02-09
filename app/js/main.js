@@ -1,5 +1,8 @@
+var gui = require('nw.gui');
 var moment = require('moment');
 var fs = require('fs');
+
+var win = gui.Window.get().enterFullscreen();
 
 // Set the global debug level
 window.debugLevel = 10;

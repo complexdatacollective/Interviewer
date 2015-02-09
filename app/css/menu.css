@@ -22,6 +22,7 @@
 *,
 *:after,
 *:before {
+  -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -94,15 +95,11 @@ section.related {
 .content {
   width: 100%;
   position: absolute;
-  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, box-shadow 2s;
-          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, box-shadow 2s;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s, box-shadow 2s;
 }
 .pushed.content {
-  -webkit-transition-duration: 0.5s;
-          transition-duration: 0.5s;
-  -webkit-transform: translateX(200px) scale(0.6);
-      -ms-transform: translateX(200px) scale(0.6);
-          transform: translateX(200px) scale(0.6);
+  transition-duration: 0.5s;
+  transform: translateX(200px) scale(0.6);
   box-shadow: 31px 25px 170px black;
 }
 /* Icons */
@@ -179,8 +176,7 @@ section.related {
 .morph-button.menu-open .content-style-form-1 .icon-close {
   opacity: 1;
   -webkit-transform: scale(1);
-  -ms-transform: scale(1);
-      transform: scale(1);
+  transform: scale(1);
 }
 .js .content-style-form-2 h2,
 .js .content-style-form-2 p,
@@ -189,8 +185,7 @@ section.related {
   -webkit-transition: opacity 0.2s 0.3s, -webkit-transform 0.2s 0.3s;
   transition: opacity 0.2s 0.3s, transform 0.2s 0.3s;
   -webkit-transform: translateY(50px);
-  -ms-transform: translateY(50px);
-      transform: translateY(50px);
+  transform: translateY(50px);
 }
 .content-style-form-2 p:first-child {
   -webkit-transition-delay: 0.35s;
@@ -213,8 +208,7 @@ section.related {
 .morph-button.menu-open .content-style-form-2 .icon-close {
   opacity: 1;
   -webkit-transform: translateY(0);
-  -ms-transform: translateY(0);
-      transform: translateY(0);
+  transform: translateY(0);
 }
 .morph-button.menu-open .content-style-form-4 p {
   opacity: 1;
@@ -256,8 +250,7 @@ section.related {
   -webkit-transition: -webkit-transform 0.3s;
   transition: transform 0.3s;
   -webkit-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-      transform: translateX(100%);
+  transform: translateX(100%);
 }
 .content-style-social a:hover {
   color: #e75854;
@@ -273,8 +266,7 @@ section.related {
 }
 .morph-button-inflow.menu-open .content-style-social a {
   -webkit-transform: translateX(0);
-  -ms-transform: translateX(0);
-      transform: translateX(0);
+  transform: translateX(0);
 }
 .morph-button-inflow.menu-open .content-style-social a:nth-child(2) {
   -webkit-transition-delay: 0.05s;
@@ -528,6 +520,7 @@ section.related {
   height: 100%;
   border-radius: 50%;
   content: '';
+  -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
@@ -613,6 +606,7 @@ section.related {
 .hi-icon {
   background: #333;
   -webkit-transition: -webkit-transform ease-out 0.1s, background 0.2s;
+  -moz-transition: -moz-transform ease-out 0.1s, background 0.2s;
   transition: transform ease-out 0.1s, background 0.2s;
 }
 .hi-icon:after {
@@ -623,18 +617,21 @@ section.related {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
   opacity: 0;
   -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
   -ms-transform: scale(0.9);
   transform: scale(0.9);
 }
 .hi-icon:active {
   background: rgba(255, 255, 255, 0.05);
   -webkit-transform: scale(0.93);
+  -moz-transform: scale(0.93);
   -ms-transform: scale(0.93);
   transform: scale(0.93);
   color: #fff;
 }
 .hi-icon:hover:after {
   -webkit-animation: sonarEffect 1.3s ease-out 75ms;
+  -moz-animation: sonarEffect 1.3s ease-out 75ms;
   animation: sonarEffect 1.3s ease-out 75ms;
 }
 @-webkit-keyframes sonarEffect {
@@ -651,6 +648,20 @@ section.related {
     opacity: 0;
   }
 }
+@-moz-keyframes sonarEffect {
+  0% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.5;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
+    -moz-transform: scale(1.5);
+    opacity: 0;
+  }
+}
 @keyframes sonarEffect {
   0% {
     opacity: 0.3;
@@ -661,9 +672,7 @@ section.related {
   }
   100% {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 10px 10px #111111, 0 0 0 10px rgba(255, 255, 255, 0.7);
-    -webkit-transform: scale(1.5);
-            transform: scale(1.5);
+    transform: scale(1.5);
     opacity: 0;
   }
 }
-/*# sourceMappingURL=menu.css.map */

@@ -6983,8 +6983,6 @@ input[type=radio]:checked + label > img {
           transform: translateY(303px);
 }
 .content.blurry {
-  -webkit-filter: blur(11px);
-          filter: blur(11px);
   opacity: 0.4 !important;
   z-index: 2;
 }
