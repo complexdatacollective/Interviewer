@@ -14,16 +14,21 @@ var ListSelect = function ListSelect(options) {
   extend(listSelect.options, options);
 
   var itemClickHandler = function() {
+    //   console.log('item click handler');
     var properties = {};
     var nodeid = $(this).data('nodeid');
+    // console.log('nodeid: '+nodeid);
 
     if ($(this).data('selected') === true) {
+        // console.log("$(this).data('selected') === true");
       $(this).data('selected', false);
       $(this).css({'border':'2px solid #eee','background':'#eee'});
 
       // remove values
       $.each(listSelect.options.variables, function(index,value) {
-        properties[value.value] = undefined;
+          if (value.value === nodeid) {
+              properties[value.value] = undefined;
+          }
       });
       network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
 
@@ -36,8 +41,6 @@ var ListSelect = function ListSelect(options) {
       $.each(listSelect.options.variables, function(index,value) {
         if (value.value === nodeid) {
           properties[value.value] = 1;
-        } else {
-        //   console.log(nodeid);
         }
 
       });
