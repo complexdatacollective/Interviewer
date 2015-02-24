@@ -1,4 +1,4 @@
-/* global console, fs, extend, IOInterface, notify, menu, network */
+/* global BootstrapDialog, console, fs, extend, IOInterface, notify, menu, network */
 /* exported Session, eventLog */
 var Session = function Session(options) {
 
@@ -279,9 +279,63 @@ var Session = function Session(options) {
 
     var sessionMenu = menu.addMenu('Session','hi-icon-cog');
     menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
-    menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', session.reset);
+    menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
+
+
+            BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_INFO,
+            // size: BootstrapDialog.SIZE_LARGE,
+            title: 'Are you sure?',
+            message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+            buttons: [{
+                label: 'Continue',
+                cssClass: 'btn-success',
+                action: function(){
+                    session.reset();
+                }
+            }, {
+                icon: 'glyphicon glyphicon-ban-circle',
+                label: 'Cancel',
+                cssClass: 'btn-warning',
+                action: function(dialogItself){
+                    dialogItself.close();
+                }
+            }]
+        });
+
+
+    }
+
+
+
+
+    );
     menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickInput(); });
-    menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() { dataStore.reset(session.reset); });
+    menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
+
+        BootstrapDialog.show({
+        type: BootstrapDialog.TYPE_INFO,
+        // size: BootstrapDialog.SIZE_LARGE,
+        title: 'Are you sure?',
+        message: '<h4>Are you sure you want to purge the database?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+        buttons: [{
+            label: 'Continue',
+            cssClass: 'btn-success',
+            action: function(){
+                dataStore.reset(session.reset);
+            }
+        }, {
+            icon: 'glyphicon glyphicon-ban-circle',
+            label: 'Cancel',
+            cssClass: 'btn-warning',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+
+
+    });
 
     // menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
 
