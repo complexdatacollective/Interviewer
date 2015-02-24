@@ -36,7 +36,8 @@ var Session = function Session(options) {
       fs.writeFile(path, data);
   }
 
-  function clickInput() {
+  function clickDownloadInput() {
+     $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
      var event = document.createEvent('MouseEvents');
      event.initMouseEvent('click');
      document.getElementById('save').dispatchEvent(event);
@@ -278,7 +279,7 @@ var Session = function Session(options) {
     }, false);
 
     var sessionMenu = menu.addMenu('Session','hi-icon-cog');
-    menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
+    // menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
 
 
@@ -310,7 +311,7 @@ var Session = function Session(options) {
 
 
     );
-    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickInput(); });
+    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
     menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
 
         BootstrapDialog.show({
