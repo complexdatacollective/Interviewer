@@ -19,12 +19,6 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="form-group">
-						<label for="participant-name">Participant Name:</label>
-						<input type="text" class="form-control participant-name" id="participant-name">
-					</div>
-				</div>
-				<div class="row">
 					<label>Participant's Gender:</label>
 					<br>
 					<div class="btn-group" data-toggle="buttons">
@@ -100,7 +94,6 @@
 		  	radar_id: $('.radarID').val(),
 		  	int_date_t0: sdate,
 		  	int_stime_t0: stime,
-			ego_name: $('.participant-name').val(),
 			gender_k: $("input:radio[name=gender_k]:checked").data('value'),
 		  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
 		  });
@@ -114,7 +107,6 @@
 		  	radar_id: $('.radarID').val(),
 		  	int_date_t0: sdate,
 		  	int_stime_t0: stime,
-			ego_name: $('.participant-name').val(),
 			gender_k: $("input:radio[name=gender_k]:checked").data('value'),
 		  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
 		  });
