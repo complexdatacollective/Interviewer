@@ -24,7 +24,7 @@
     "start": "nodewebkit"
   },
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "position": "center",
     "width": 1520,
