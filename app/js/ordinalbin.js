@@ -1,4 +1,4 @@
-/* global network, extend, notify, session */
+/* global console, network, extend, notify, session */
 /* exported OrdinalBin */
 var OrdinalBin = function OrdinalBin(options) {
 
@@ -133,7 +133,8 @@ var OrdinalBin = function OrdinalBin(options) {
 
 
 
-            $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() {
+            $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+            start: function() {
                 if (taskComprehended === false) {
                     var eventProperties = {
                         stage: session.currentStage(),
@@ -143,7 +144,11 @@ var OrdinalBin = function OrdinalBin(options) {
                     window.dispatchEvent(log);
                     taskComprehended = true;
                 }
-                $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); }
+                // $('.ord-node-bin').css({overflow:'hidden'});
+            },
+            stop: function() {
+                    // $('.ord-node-bin').css({overflow:'scroll'});
+            }
             });
         },
         over: function() {
@@ -214,18 +219,23 @@ var OrdinalBin = function OrdinalBin(options) {
       }
 
     });
-    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function() {
-        if (taskComprehended === false) {
-            var eventProperties = {
-                stage: session.currentStage(),
-                timestamp: new Date()
-            };
-            log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-            window.dispatchEvent(log);
-            taskComprehended = true;
-        }
+    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+        start: function() {
+            if (taskComprehended === false) {
+                var eventProperties = {
+                    stage: session.currentStage(),
+                    timestamp: new Date()
+                };
+                log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                window.dispatchEvent(log);
+                taskComprehended = true;
+            }
 
-        $('.ord-node-bin').children('.active-node-list').css({overflow:'visible'}); }
+            // $('.ord-node-bin').css({overflow:'hidden'});
+        },
+        stop: function() {
+            // $('.ord-node-bin').css({overflow:'scroll'});
+        }
     });
 
     // Event Listeners

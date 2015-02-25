@@ -606,7 +606,19 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     padding:5px;
     text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     transition: all 0.3s ease-in-out;
+    // overflow:scroll;
 
+ }
+
+ .black-overlay {
+     position:absolute;
+     top:0;
+     bottom:0;
+     left:0;
+     right:0;
+     background:rgba(0,0,0,0.6);
+     z-index:99999;
+     display:none;
  }
 
   .ord-node-bin {
@@ -622,6 +634,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     transition: all 0.5s ease-in-out;
     padding:5px;
+    // overflow:scroll
 
  }
 
@@ -728,7 +741,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     // border:1px solid white;
     // height:70%;
     display:none;
-    overflow: scroll;
+    // overflow: scroll;
     align-items: center;
     justify-content: center;
  }
@@ -736,7 +749,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .ord-node-bin  .active-node-list {
     width:100%;
     display:block;
-    overflow: scroll;
+    // overflow: scroll;
     align-items: center;
     justify-content: center;
  }

@@ -63,6 +63,7 @@ var MultiBin = function MultiBin(options) {
 
 
 		$('.followup').hide();
+		$('.black-overlay').hide();
 	};
 
 	var followupCancelHandler = function() {
@@ -70,6 +71,7 @@ var MultiBin = function MultiBin(options) {
 		// Clean up
 		$("#"+multiBin.options.followup.variable).val("");
 		$('.followup').hide();
+		$('.black-overlay').hide();
 	};
 
 	var backgroundClickHandler = function(e) {
@@ -203,7 +205,7 @@ var MultiBin = function MultiBin(options) {
 
 		// Create the followup dialog, if it exists
 		if(typeof multiBin.options.followup !== 'undefined') {
-			multiBin.options.targetEl.append('<div class="followup overlay"><form class="followup-form"></form></div>');
+			$('body').append('<div class="followup overlay"><form class="followup-form"></form></div>');
 
 			if(typeof multiBin.options.followup.linked !== 'undefined' && multiBin.options.followup.linked === true) {
 				var first = true;
@@ -271,6 +273,7 @@ var MultiBin = function MultiBin(options) {
 			  		// Check if the node has been dropped into a bin that triggers the followup
 				  	if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 				  		$('.followup').show();
+						$('.black-overlay').show();
 				  		$("#"+multiBin.options.followup.questions[0].variable).focus();
 				  		followup = $(dropped).data('node-id');
 				  	} else if (typeof multiBin.options.followup !== "undefined") {

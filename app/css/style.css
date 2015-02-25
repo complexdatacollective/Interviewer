@@ -6630,6 +6630,16 @@ div[data-toggle="buttons"] label.active {
   -webkit-transition: all 0.3s ease-in-out;
           transition: all 0.3s ease-in-out;
 }
+.black-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99999;
+  display: none;
+}
 .ord-node-bin {
   width: 350px;
   height: 350px;
@@ -6730,7 +6740,6 @@ div[data-toggle="buttons"] label.active {
 .active-node-list {
   width: 70% ;
   display: none;
-  overflow: scroll;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
@@ -6743,7 +6752,6 @@ div[data-toggle="buttons"] label.active {
 .ord-node-bin .active-node-list {
   width: 100%;
   display: block;
-  overflow: scroll;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
