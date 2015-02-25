@@ -192,6 +192,7 @@ var MultiBin = function MultiBin(options) {
 		$('.content').off("click", backgroundClickHandler);
 		$('.followup-submit').off('click', followupHandler);
 		$('.followup-cancel').off('click', followupCancelHandler);
+		$('.followup').remove();
 
 	};
 
