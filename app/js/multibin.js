@@ -1,4 +1,4 @@
-/* global network, extend, notify, session */
+/* global console, network, extend, notify, session */
 /* exported MultiBin */
 var MultiBin = function MultiBin(options) {
 
@@ -158,7 +158,7 @@ var MultiBin = function MultiBin(options) {
 			// dont forget followups
 			if(typeof multiBin.options.followup !== 'undefined') {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-						properties[value.variable] = "";
+						properties[value.variable] = undefined;
 				});
 			}
 			network.updateEdge(edgeID,properties);
@@ -273,8 +273,36 @@ var MultiBin = function MultiBin(options) {
 				  		$('.followup').show();
 				  		$("#"+multiBin.options.followup.questions[0].variable).focus();
 				  		followup = $(dropped).data('node-id');
-				  	} else {
+				  	} else if (typeof multiBin.options.followup !== "undefined") {
+						console.log('removing followup properties.');
 				  		// Here we need to remove any previously set value for the followup variable, if it exists.
+						var nodeid = $(dropped).data('node-id');
+
+						// Next, get the edge we will be storing on
+						var criteria = {
+							to:nodeid
+						};
+
+						extend(criteria, multiBin.options.criteria);
+						var edge = network.getEdges(criteria)[0];
+
+						// Create an empty object for storing the new properties in
+						var followupProperties = {};
+
+						// Assign a new property according to the variable name(s)
+						$.each(multiBin.options.followup.questions, function(index) {
+							followupProperties[multiBin.options.followup.questions[index].variable] = undefined;
+						});
+
+						// Update the edge
+						extend(edge, followupProperties);
+						network.updateEdge(edge.id, edge);
+
+						// Clean up
+						$.each(multiBin.options.followup.questions, function(index) {
+							$("#"+multiBin.options.followup.questions[index].variable).val("");
+						});
+
 				  	}
 
 					$(dropped).appendTo(droppedOn.children('.active-node-list'));
