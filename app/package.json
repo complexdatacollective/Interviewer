@@ -1,18 +1,18 @@
 {
-  "name": "networkCanvas",
-  "version": "0.0.1",
-  "description": "A tactile tool for personal network capture.",
+  "name": "netCanvas",
+  "version": "1.0.0",
+  "description": "A HTML5 and JavaScript based personal network capture tool for the RADAR project.",
   "private": true,
-  "homepage": "https://github.com/jthrilly/networkcanvas",
-  "bugs": "https://github.com/jthrilly/networkcanvas/issues",
+  "homepage": "https://github.com/jthrilly/netCanvas",
+  "bugs": "https://github.com/jthrilly/netCanvas/issues",
   "author": {
     "name": "Joshua Melville",
-    "email": "",
+    "email": "joshmelville@gmail.com",
     "url": "https://github.com/jthrilly"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jthrilly/networkcanvas.git"
+    "url": "git://github.com/jthrilly/netCanvas.git"
   },
   "dependencies": {
     "nedb": "^1.1.1",
@@ -24,7 +24,7 @@
     "start": "nodewebkit"
   },
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "position": "center",
     "width": 1520,
