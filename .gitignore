@@ -5,3 +5,5 @@ codekit-config.json
 app/npm-debug.log
 
 npm-debug.log
+
+*.zip

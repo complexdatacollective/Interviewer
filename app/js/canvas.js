@@ -1,8 +1,6 @@
-/*global extend, Kinetic, notify, network, session */
+/*global console, extend, Kinetic, notify, network, session */
 /* exported Canvas */
 /*jshint bitwise: false*/
-
-'use strict';
 
 var Canvas = function Canvas(userSettings) {
 
@@ -668,13 +666,14 @@ var Canvas = function Canvas(userSettings) {
 
 
 		// This function is failing because two nodes are matching below
-
-
 		$.each(canvas.getKineticEdges(), function(index, value) {
-			if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
-				edgeLayer.children[index].remove();
-				edgeLayer.draw();
+			if (value !== undefined) {
+				if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
+					edgeLayer.children[index].remove();
+					edgeLayer.draw();
+				}
 			}
+
 		});
 
 	};
