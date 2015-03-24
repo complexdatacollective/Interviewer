@@ -30,9 +30,13 @@
 				// Include results if ego is male and alter is not male
 				// OR
 				// if ego is female and alter is not female
+				// OR
+				// Ego is MTF or FTM trans
 				if (egoGender === 'Male' && dyadEdge.gender_p_t0 !== 'Male') {
 					filteredResults.push(value);
 				} else if (egoGender === 'Female' && dyadEdge.gender_p_t0 !== 'Female') {
+					filteredResults.push(value);
+				} else if (egoGender === 'Transgender: Male to Female' || egoGender === 'Transgender: Female to Male') {
 					filteredResults.push(value);
 				}
 			});
