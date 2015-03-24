@@ -135,28 +135,42 @@ var Session = function Session(options) {
           } },
           {label:'CAT: Vaginal sex?', page:'multibin9.html',
           skip: function() {
-              // need to skip male participant with only male sex partners
-            //   Dyad edge
-            //   gender_p_t0 'Male'
+              // need to skip male participant with only male sex partners or female participant with only female sex partners
+
                 if (typeof network !== 'undefined') {
 
                     // Skip if there are no sex edges between ego and some alters
                     var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
                     if (sexEdges.length > 0) {
 
+                        // Get ego gender
+                        var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
 
+                        // Get total edges ready for counting
                         var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
+
+                        // Get male edges ready for counting
                         var maleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
+
+                        // Get female edges ready for counting
                         var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
-                        if ((network.getNodes({type_t0:'Ego'})[0].gender_k === 'Male' && totalEdges.length === maleEdges.length) || (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length)) {
+
+                        // If ego is male AND total edges is the same as male edges
+                        // OR
+                        // If ego is female and total edges is the same as female edges
+                        if ((egoGender === 'Male' && totalEdges.length === maleEdges.length) || (egoGender === 'Female' && totalEdges.length === femaleEdges.length)) {
+                            // Skip
                             return true;
                         } else {
+                            // Don't skip
                             return false;
                         }
                     } else {
+                        // Skip if there are no sex edges
                         return true;
                     }
                 } else {
+                    // Don't skip if network is undefined
                     return false;
                 }
 
@@ -200,8 +214,10 @@ var Session = function Session(options) {
           } },
           {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() {
               if (typeof network !== 'undefined') {
+
                   var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
                   if (sexEdges.length > 0) {
+                      // it is required that ego has answerd 'yes' to the multiple sex question
                       var required = network.getNodes({multiple_sex_t0: 'yes'});
                       if (required.length === 0) {
                           return true;
@@ -209,7 +225,8 @@ var Session = function Session(options) {
                           return false;
                       }
                   } else {
-                      return false;
+                      // Skip if there are no sex edges
+                      return true;
                   }
               } else {
                   return false;
