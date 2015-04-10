@@ -1,4 +1,3 @@
-var $ = require('jquery');
 /*jshint unused:false*/
 /* global Storage, debugLevel */
 /*jshint bitwise: false*/
@@ -160,7 +159,7 @@ $.cssHooks.backgroundColor = {
         if (elem.currentStyle)
             var bg = elem.currentStyle["backgroundColor"];
         else if (window.getComputedStyle)
-            var bg = document.defaultView.getComputedStyle(elem,
+            var bg = window.document.defaultView.getComputedStyle(elem,
                 null).getPropertyValue("background-color");
         if (bg.search("rgb") == -1)
             return bg;

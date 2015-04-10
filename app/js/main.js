@@ -3,10 +3,6 @@ var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
 
-var $ = require('jquery');
-require('jquery.transit');
-
-
 fs.readdir(path.join(path.resolve(), 'surveys'), function(err, files) {
     if (err) { console.log('error'); return false; }
     console.log("Available surveys:");

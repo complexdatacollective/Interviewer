@@ -1,4 +1,3 @@
-var $ = require('jquery');
 /* global BootstrapDialog, console, fs, extend, IOInterface, global.tools.notify, menu */
 /* exported Session, eventLog */
 var Session = function Session() {
@@ -6,7 +5,7 @@ var Session = function Session() {
   //global vars
   var session = {};
   var currentStage = 0;
-  var $content = $('#content');
+  var content = $('#content');
 
   // Establish a new IOInterface for loading and saving
   var dataStore = {};
@@ -148,7 +147,7 @@ var Session = function Session() {
 
     var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
     $.each(session.stages, function(index,value) {
-      menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
+      global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
     });
 
   };
@@ -241,16 +240,22 @@ var Session = function Session() {
     window.dispatchEvent(log);
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
-    $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
-      $content.load( "stages/"+session.stages[stage].page, function() {
+
+    var path = "./surveys/default/stages/"+session.stages[stage].page;
+    content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
+       content.load( path, function(response, status, xhr) {
+        //   console.log(response);
+        //   console.log(status);
+        //   console.log(xhr);
         // This never gets called if there is a JS error. Is there a way to ensure it is?
-        $content.transition({ opacity: '1'},400,'easeInSine');
+        content.transition({ opacity: '1'},400,'easeInSine');
       });
     });
+
     var oldStage = currentStage;
     currentStage = newStage;
     session.options.fnAfterStageChange(oldStage, currentStage);
-    var unsavedChanges = new Event('unsavedChanges');
+    var unsavedChanges = new window.Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };
 

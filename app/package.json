@@ -19,7 +19,8 @@
     "jquery.transit": "^0.9.12",
     "jsdom": "^4.3.0",
     "nedb": "^1.1.1",
-    "requirejs": "^2.1.15"
+    "requirejs": "^2.1.15",
+    "xmlhttprequest": "^1.7.0"
   },
   "devDependencies": {},
   "main": "index.html",

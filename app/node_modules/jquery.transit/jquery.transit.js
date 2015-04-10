@@ -727,7 +727,7 @@
   // toMS('fast') => $.fx.speeds[i] => "200ms"
   // toMS('normal') //=> $.fx.speeds._default => "400ms"
   // toMS(10) //=> '10ms'
-  // toMS('100ms') //=> '100ms'  
+  // toMS('100ms') //=> '100ms'
   //
   function toMS(duration) {
     var i = duration;

@@ -1,5 +1,3 @@
-var $ = require('jquery');
-
 /* global global.tools.notify, modifyColor */
 /* exported Menu */
 var Menu = function Menu(options) {
@@ -96,7 +94,7 @@ var Menu = function Menu(options) {
                 isAnimating = false;
             } else {
                 menu.options.onBeforeOpen();
-                var col = modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
+                var col = global.tools.modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
                 $('body').css({"background-color":col});
                 menuContent.addClass('active');
                 setTimeout(menu.options.onAfterOpen, 500);
@@ -161,6 +159,7 @@ var Menu = function Menu(options) {
 
         } else {
             adding = true;
+            console.log(newMenu.button);
             newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
                 adding = false; }
                 );
