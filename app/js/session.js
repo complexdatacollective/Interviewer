@@ -1,6 +1,7 @@
-/* global BootstrapDialog, console, fs, extend, IOInterface, notify, menu, network */
+var $ = require('jquery');
+/* global BootstrapDialog, console, fs, extend, IOInterface, global.tools.notify, menu */
 /* exported Session, eventLog */
-var Session = function Session(options) {
+var Session = function Session() {
 
   //global vars
   var session = {};
@@ -12,24 +13,6 @@ var Session = function Session(options) {
   session.id = 0;
   session.userData = {};
   var lastSaveTime;
-
-  function drugSkip(drugVar) {
-      if (typeof network !== 'undefined') {
-          var properties = {};
-          properties[drugVar] = 1;
-          // are there actually any drug edges?
-          var drugEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:'Drugs'});
-          var required = network.getNodes(properties);
-
-          if (drugEdges.length === 0 || required.length === 0) {
-              return true;
-          } else {
-              return false;
-          }
-      } else {
-        return false;
-      }
-  }
 
   function saveFile(path) {
       var data = JSON.stringify(session.userData, undefined, 2);
@@ -43,200 +26,6 @@ var Session = function Session(options) {
      document.getElementById('save').dispatchEvent(event);
  }
 
-  session.stages = [
-          {label:'Intro', page:'intro.html'},
-          {label:'NG: closest', page:'namegen1.html'},
-          {label:'NG: marijuana or other drugs', page:'namegen5.html'},
-          {label:'NG: drugs, two or more', page:'namegenmod6.html'},
-          {label:'NG: other people sex', page:'namegen7.html'},
-          {label:'NG: sex, two or more', page:'namegenmod8.html'},
-          {label:'NET: layout', page:'canvaslayout.html'},
-          {label:'NET EDGE: social', page:'canvasedge1.html'},
-          {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return true; } else { return false; }}}},
-          {label:'NET NI: who drunk with', page:'canvasselect3.html'},
-          {label:'NET NI: who drugs with', page:'canvasselect4.html'},
-          {label:'NET NI: who sex with', page:'canvasselect5.html'},
-          {label:'ORD: contact frequency', page:'ordbin1a.html'},
-          {label:'ORD: relationship strength', page:'ordbin1.html'},
-          {label:'NET NI: get advice', page:'canvasselect6.html'},
-	      {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
-          {label:'CAT: gender identity', page:'multibin5.html'},
-          {label:'RACE: Hispanic or Latino', page:'canvasselect14.html'},
-          {label:'RACE: Racial Identity', page:'multibin2.html'},
-          {label:'CAT: sexuality', page:'multibin3.html'},
-          {label:'CAT: location', page:'multibin4.html'},
-          {label:'MAP: location in Chicago', page:'map1.html', skip: function() {
-            // Don't show map if no participants are from chicago
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Dyad', res_cat_p_t0: 'Chicago'});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
-          {label:'ORD: Marijuana freq', page:'ordbin6.html',skip: function() { return drugSkip('d1_t0'); }},
-          {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { return drugSkip('d2_t0'); }},
-          {label:'ORD: Heroin freq', page:'ordbin8.html', skip: function() { return drugSkip('d3_t0'); }},
-          {label:'ORD: Methamphetamines freq', page:'ordbin9.html', skip: function() { return drugSkip('d4_t0'); }},
-          {label:'ORD: Painkillers or Opiates freq', page:'ordbin10.html', skip: function() { return drugSkip('d5_t0'); }},
-          {label:'ORD: Poppers freq', page:'ordbin11.html', skip: function() { return drugSkip('d6_t0'); }},
-          {label:'ORD: Stimulants or Amphetamines freq', page:'ordbin12.html', skip: function() { return drugSkip('d7_t0'); }},
-          {label:'ORD: Depressants or Tranquilizers freq', page:'ordbin13.html', skip: function() { return drugSkip('d8_t0'); }},
-          {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { return drugSkip('d9_t0'); }},
-          {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { return drugSkip('d10_t0'); }},
-          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
-          {label:'CAT: where met sex partners', page:'multibin6.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'DATE: first and last sex', page:'dateinterface1.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'CAT: HIV status of sex partners', page:'multibin7.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'CAT: Vaginal sex?', page:'multibin9.html',
-          skip: function() {
-              // need to skip male participant with only male sex partners or female participant with only female sex partners
-
-                if (typeof network !== 'undefined') {
-
-                    // Skip if there are no sex edges between ego and some alters
-                    var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (sexEdges.length > 0) {
-
-                        // Get ego gender
-                        var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
-
-                        // Get total edges ready for counting
-                        var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
-
-                        // Get male edges ready for counting
-                        var maleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
-
-                        // Get female edges ready for counting
-                        var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
-
-                        // If ego is male AND total edges is the same as male edges
-                        // OR
-                        // If ego is female and total edges is the same as female edges
-                        if ((egoGender === 'Male' && totalEdges.length === maleEdges.length) || (egoGender === 'Female' && totalEdges.length === femaleEdges.length)) {
-                            // Skip
-                            return true;
-                        } else {
-                            // Don't skip
-                            return false;
-                        }
-                    } else {
-                        // Skip if there are no sex edges
-                        return true;
-                    }
-                } else {
-                    // Don't skip if network is undefined
-                    return false;
-                }
-
-          } },
-          {label:'CAT: Anal sex?', page:'multibin10.html',
-          skip: function() {
-              // need to skip female participant with only female sex partners
-
-                  if (typeof network !== 'undefined') {
-                      var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                      if (sexEdges.length > 0) {
-                          var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
-                          var femaleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Female'});
-                          if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
-                              return true;
-                          } else {
-                              return false;
-                          }
-                      } else {
-                        return true;
-                      }
-                  } else {
-                      console.log('network undefined.');
-                      return false;
-                  }
-          } },
-          {label:'NET EDGE: sex', page:'canvasedge3.html'},
-          {label:'SWITCH: multiple sex partners', page:'multiplepartners.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                if (totalEdges.length > 0) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-
-          } },
-          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() {
-              if (typeof network !== 'undefined') {
-
-                  var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                  if (sexEdges.length > 0) {
-                      // it is required that ego has answerd 'yes' to the multiple sex question
-                      var required = network.getNodes({multiple_sex_t0: 'yes'});
-                      if (required.length === 0) {
-                          return true;
-                      } else {
-                          return false;
-                      }
-                  } else {
-                      // Skip if there are no sex edges
-                      return true;
-                  }
-              } else {
-                  return false;
-              }
-          } },
-          {label:'Thank You', page:'thanks.html'},
-          {label:'Download Data', page:'download.html'},
-          {label:'Finish', page:'finish.html'}
-                    ];
-
   var saveTimer;
   // custom events
 
@@ -246,23 +35,26 @@ var Session = function Session(options) {
             stage: currentStage,
             timestamp: new Date()
         };
-        var log = new CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
+        var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
         window.dispatchEvent(log);
 
-        var changeStageStartEvent = new CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
+        var changeStageStartEvent = new window.CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
         window.dispatchEvent(changeStageStartEvent);
 
     },
     fnAfterStageChange : function(oldStage, newStage) {
-        var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
+        var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
         window.dispatchEvent(changeStageEndEvent);
     }
   };
 
   session.init = function() {
-    notify('Session initialising.', 1);
+    global.tools.notify('Session initialising.', 1);
     // exdend our local options with any passed options
-    extend(session.options,options);
+
+    var study = require('../surveys/default/default.netcanvas');
+    session.stages = study.stages;
+    session.name = study.parameters.name;
 
     //bind to the custom state change event to handle spinner interactions
     window.addEventListener('changeStageStart', function () {
@@ -273,17 +65,14 @@ var Session = function Session(options) {
       $('.loader').transition({opacity:0});
     }, false);
 
-    document.getElementById('save').addEventListener('change', function () {
+    window.document.getElementById('save').addEventListener('change', function () {
         saveFile(this.value);
     });
 
-    // Create our data interface
-    dataStore = new IOInterface();
-
     // Check for an in-progress session
-    dataStore.init(function(sessionid) {
+    global.dataStore.init(function(sessionid) {
         session.id = sessionid;
-        dataStore.load(function(data) {
+        global.dataStore.load(function(data) {
             session.updateUserData(data);
             session.goToStage(0);
         }, session.id);
@@ -295,7 +84,7 @@ var Session = function Session(options) {
       session.saveManager();
     }, false);
 
-    var sessionMenu = menu.addMenu('Session','hi-icon-cog');
+    var sessionMenu = global.menu.addMenu('Session','hi-icon-cog');
     // menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
     menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
 
@@ -378,7 +167,7 @@ var Session = function Session(options) {
   };
 
   session.reset = function() {
-    notify("Resetting session.",2);
+    global.tools.notify("Resetting session.",2);
     localStorage.removeItem('activeSession');
     localStorage.removeItem('nodes');
     localStorage.removeItem('edges');
@@ -395,19 +184,19 @@ var Session = function Session(options) {
   };
 
   session.updateUserData = function(data) {
-    notify("Updating user data.", 2);
-    notify("Using the following to update:", 1);
-    notify(data, 1);
-    notify("session.userData is:", 1);
-    notify(session.userData, 1);
-    extend(session.userData, data);
+    global.tools.notify("Updating user data.", 2);
+    global.tools.notify("Using the following to update:", 1);
+    global.tools.notify(data, 1);
+    global.tools.notify("session.userData is:", 1);
+    global.tools.notify(session.userData, 1);
+    global.tools.extend(session.userData, data);
     // session.userData = $.extend(session.userData,data);
-    notify("Combined output is:", 0);
-    notify(session.userData, 0);
+    global.tools.notify("Combined output is:", 0);
+    global.tools.notify(session.userData, 0);
 
-    var newDataLoaded = new Event('newDataLoaded');
+    var newDataLoaded = new window.Event('newDataLoaded');
     window.dispatchEvent(newDataLoaded);
-    var unsavedChanges = new Event('unsavedChanges');
+    var unsavedChanges = new window.Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
   };
 
@@ -416,7 +205,7 @@ var Session = function Session(options) {
   };
 
   session.saveData = function() {
-    dataStore.save(session.userData, session.returnSessionID());
+    global.dataStore.save(session.userData, session.returnSessionID());
     lastSaveTime = new Date();
   };
 
@@ -443,12 +232,12 @@ var Session = function Session(options) {
       }
     }
 
-    notify('Session is moving to stage '+stage, 3);
+    global.tools.notify('Session is moving to stage '+stage, 3);
     var eventProperties = {
         stage: stage,
         timestamp: new Date()
     };
-    var log = new CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
+    var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
     window.dispatchEvent(log);
     session.options.fnBeforeStageChange(currentStage,stage);
     var newStage = stage;
@@ -477,18 +266,18 @@ var Session = function Session(options) {
   };
 
   session.registerData = function(dataKey, array) {
-    notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
+    global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
     if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
-      notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+      global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
       if (array) {
         session.userData[dataKey] = [];
       } else {
         session.userData[dataKey] = {};
       }
     } else {
-      notify ('A data store with this key already existed. Returning a pointer.',1);
+      global.tools.notify ('A data store with this key already existed. Returning a pointer.',1);
     }
-    var unsavedChanges = new Event('unsavedChanges');
+    var unsavedChanges = new window.Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
     return session.userData[dataKey];
   };
@@ -507,8 +296,8 @@ var Session = function Session(options) {
       extend(session.userData[dataKey], newData);
     }
 
-    notify("Adding data to key '"+dataKey+"'.",2);
-    notify(newData, 1);
+    global.tools.notify("Adding data to key '"+dataKey+"'.",2);
+    global.tools.notify(newData, 1);
     var unsavedChanges = new Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
 
@@ -534,3 +323,5 @@ var Session = function Session(options) {
 
   return session;
 };
+
+module.exports = new Session();

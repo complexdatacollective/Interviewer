@@ -1,23 +1,41 @@
 var gui = require('nw.gui');
 var moment = require('moment');
 var fs = require('fs');
+var path = require('path');
 
-var win = gui.Window.get().enterFullscreen();
+var $ = require('jquery');
+require('jquery.transit');
+
+
+fs.readdir(path.join(path.resolve(), 'surveys'), function(err, files) {
+    if (err) { console.log('error'); return false; }
+    console.log("Available surveys:");
+    console.log(files);
+});
+
+// var win = gui.Window.get().enterFullscreen();
 
 // Set the global debug level
-window.debugLevel = 10;
+global.debugLevel = 10;
+
+// Initialise
+global.tools = require('./js/tools');
 
 // Initialise the menu system – other modules depend on it being there.
-window.menu = new Menu({});
+global.menu = require('./js/menu');
+
+global.dataStore = require('./js/iointerface');
 
 // Set up a new session
-window.session = new Session({});
+global.session = require('./js/session');
+
+
 
 // Create a log
-window.eventLog = new Logger();
+global.eventLog = require('./js/logger');
 
 // Build a new network
-window.network = new Network();
+global.network = require('./js/network');
 
 $('.arrow-next').click(function() {
     session.nextStage();

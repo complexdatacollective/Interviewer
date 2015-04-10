@@ -1,4 +1,6 @@
-/* global notify, modifyColor */
+var $ = require('jquery');
+
+/* global global.tools.notify, modifyColor */
 /* exported Menu */
 var Menu = function Menu(options) {
 
@@ -202,8 +204,8 @@ var Menu = function Menu(options) {
     };
 
     menu.init = function() {
-        notify('Menu initialising.', 1);
-        extend(menu.options,options);
+        global.tools.notify('Menu initialising.', 1);
+        global.tools.extend(menu.options,options);
     };
 
 
@@ -212,3 +214,5 @@ var Menu = function Menu(options) {
     return menu;
 
 };
+
+module.exports = new Menu();

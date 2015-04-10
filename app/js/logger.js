@@ -3,17 +3,17 @@
 
 var Logger = function Logger() {
 
-  var logger = {}; 
+  var logger = {};
 
   // todo: add custom events so that other scripts can listen for log changes (think vis).
 
   logger.init = function() {
     notify('Logger initialising.', 1);
 
-    window.log = session.registerData('log', true);
+    global.log = global.session.registerData('log', true);
 
     // listen for log events
-    window.addEventListener('log', function (e) { 
+    window.addEventListener('log', function (e) {
       logger.addToLog(e.detail);
     }, false);
 
@@ -30,7 +30,7 @@ var Logger = function Logger() {
       'eventTime': new Date()
     };
 
-    session.addData('log', data, true);
+    global.session.addData('log', data, true);
     var eventLogged = new CustomEvent('eventLogged', {"detail":data});
     window.dispatchEvent(eventLogged);
     var unsavedChanges = new Event('unsavedChanges');
@@ -40,11 +40,11 @@ var Logger = function Logger() {
 
   logger.getLog = function() {
     return window.log;
-    
+
   };
 
   logger.getLastEvent = function() {
-    
+
   };
 
   logger.init();

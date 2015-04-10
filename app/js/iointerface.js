@@ -1,4 +1,4 @@
-/* global require, console, notify, session */
+/* global require, console, global.tools.notify, session */
 /* exported IOInterface */
 
 
@@ -21,17 +21,19 @@ var IOInterface = function IOInterface() {
 
     // this could be a remote host
     // Type 3: Persistent datastore with automatic loading
-    var Datastore = require('nedb'), path = require('path'), db = new Datastore({ filename: path.join(require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
-    // You can issue commands right away
+    var Datastore = require('nedb');
+    var path = require('path');
+    var db;
     var id;
     var interface = {};
 
     interface.init = function(callback) {
-        notify('ioInterface initialising.', 1);
+        global.tools.notify('ioInterface initialising.', 1);
+        db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
 
-        if (localStorage.getObject('activeSession')!== false) {
+        if (window.localStorage.getObject('activeSession')!== false) {
             console.log('existing session found');
-            callback(localStorage.getObject('activeSession'));
+            callback(window.localStorage.getObject('activeSession'));
         } else {
             console.log('no existing session');
 
@@ -47,7 +49,7 @@ var IOInterface = function IOInterface() {
                 // newDocs is an array with these documents, augmented with their _id
                 id = newDoc[0]._id;
                 console.log('id has been set as '+id);
-                localStorage.setObject('activeSession', id);
+                window.localStorage.setObject('activeSession', id);
                 callback(newDoc[0]._id);
           });
 
@@ -57,10 +59,10 @@ var IOInterface = function IOInterface() {
 
 
     interface.save = function(userData, id) {
-        delete session.userData._id;
-        notify('IOInterface being asked to synchronise with data store:',2);
-        notify('Data to be saved: ', 1);
-        notify(userData, 1);
+        delete global.session.userData._id;
+        global.tools.notify('IOInterface being asked to synchronise with data store:',2);
+        global.tools.notify('Data to be saved: ', 1);
+        global.tools.notify(userData, 1);
 
         db.update({_id: id }, userData, {}, function (err) {
             if (err) {
@@ -126,7 +128,7 @@ var IOInterface = function IOInterface() {
 
     interface.load = function(callback, id) {
         console.log('loading...id is '+id);
-        notify("ioInterface being asked to load data.", 2);
+        global.tools.notify("ioInterface being asked to load data.", 2);
         db.find({"_id": id}, function (err, docs) {
             if (err) {
                 // handle error
@@ -140,3 +142,5 @@ var IOInterface = function IOInterface() {
 
     return interface;
 };
+
+module.exports = new IOInterface();
