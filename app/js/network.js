@@ -89,7 +89,7 @@ var Network = function Network() {
     // New way: check if all properties are the same.
 
     var reversed = {}, temp;
-    reversed = $.global.tools.extend(true,{}, properties);
+    reversed = $.extend(true,{}, properties);
     temp = reversed.to;
     reversed.to = reversed.from;
     reversed.from = temp;
@@ -269,7 +269,7 @@ var Network = function Network() {
     if (typeof criteria.from !== 'undefined' && typeof criteria.to !== 'undefined') {
 
       var reversed = {}, temp;
-      reversed = $.global.tools.extend(true,{}, criteria);
+      reversed = $.extend(true,{}, criteria);
       temp = reversed.to;
       reversed.to = reversed.from;
       reversed.from = temp;

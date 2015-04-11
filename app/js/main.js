@@ -40,8 +40,8 @@ global.network = require('./js/network');
 global.session.init();
 
 $('.arrow-next').click(function() {
-    session.nextStage();
+    global.session.nextStage();
 });
 $('.arrow-prev').click(function() {
-    session.prevStage();
+    global.session.prevStage();
 });

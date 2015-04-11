@@ -278,12 +278,12 @@ session.addData = function(dataKey, newData, append) {
     if (append === true) { // this is an array
         session.userData[dataKey].push(newData);
     } else {
-        extend(session.userData[dataKey], newData);
+        global.tools.extend(session.userData[dataKey], newData);
     }
 
     global.tools.notify("Adding data to key '"+dataKey+"'.",2);
     global.tools.notify(newData, 1);
-    var unsavedChanges = new Event('unsavedChanges');
+    var unsavedChanges = new window.Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
 
 };
