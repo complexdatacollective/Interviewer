@@ -3,8 +3,8 @@ var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
 
-fs.readdir(path.join(path.resolve(), 'surveys'), function(err, files) {
-    if (err) { console.log('error'); return false; }
+fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
+    if (err) { console.log(err); return false; }
     console.log("Available surveys:");
     console.log(files);
 });
@@ -27,6 +27,10 @@ global.menu = require('./js/menu');
 // Initialise datastore
 global.dataStore = require('./js/iointerface');
 
+
+// Initialise logger
+global.logger = require('./js/logger');
+
 // Set up a new session
 global.session = require('./js/session');
 
@@ -38,6 +42,7 @@ global.network = require('./js/network');
 
 // Initialise session now everything is loaded
 global.session.init();
+global.logger.init();
 
 $('.arrow-next').click(function() {
     global.session.nextStage();

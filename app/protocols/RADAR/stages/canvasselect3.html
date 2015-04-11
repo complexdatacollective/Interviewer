@@ -3,10 +3,11 @@
   <script>
   	var criteria = {
   		type:'Dyad',
-  		from:network.getNodes({type_t0:'Ego'})[0].id
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
 	};
 
-    var canvas = new Canvas({
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
     	mode:'Select', //edge, position, select
 		  targetEl: $('.container'),
 		  edgeType: "Alcohol",

@@ -14,7 +14,7 @@ module.exports = {
         {label:'NG: sex, two or more', page:'namegenmod8.html'},
         {label:'NET: layout', page:'canvaslayout.html'},
         {label:'NET EDGE: social', page:'canvasedge1.html'},
-        {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return true; } else { return false; }}}},
+        {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof global.network !== 'undefined') { var required = global.network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return true; } else { return false; }}}},
         {label:'NET NI: who drunk with', page:'canvasselect3.html'},
         {label:'NET NI: who drugs with', page:'canvasselect4.html'},
         {label:'NET NI: who sex with', page:'canvasselect5.html'},
@@ -29,8 +29,8 @@ module.exports = {
         {label:'CAT: location', page:'multibin4.html'},
         {label:'MAP: location in Chicago', page:'map1.html', skip: function() {
           // Don't show map if no participants are from chicago
-          if (typeof network !== 'undefined') {
-                  var totalEdges = network.getEdges({type:'Dyad', res_cat_p_t0: 'Chicago'});
+          if (typeof global.network !== 'undefined') {
+                  var totalEdges = global.network.getEdges({type:'Dyad', res_cat_p_t0: 'Chicago'});
                   if (totalEdges.length > 0) {
                       return false;
                   } else {
@@ -55,8 +55,8 @@ module.exports = {
         {label:'NET EDGE: drugs', page:'canvasedge2.html'},
         {label:'CAT: where met sex partners', page:'multibin6.html', skip: function() {
           // Don't show if ego has had no sex partners
-          if (typeof network !== 'undefined') {
-                  var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+          if (typeof global.network !== 'undefined') {
+                  var totalEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                   if (totalEdges.length > 0) {
                       return false;
                   } else {
@@ -69,8 +69,8 @@ module.exports = {
         } },
         {label:'DATE: first and last sex', page:'dateinterface1.html', skip: function() {
           // Don't show if ego has had no sex partners
-          if (typeof network !== 'undefined') {
-                  var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+          if (typeof global.network !== 'undefined') {
+                  var totalEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                   if (totalEdges.length > 0) {
                       return false;
                   } else {
@@ -83,8 +83,8 @@ module.exports = {
         } },
         {label:'CAT: HIV status of sex partners', page:'multibin7.html', skip: function() {
           // Don't show if ego has had no sex partners
-          if (typeof network !== 'undefined') {
-                  var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+          if (typeof global.network !== 'undefined') {
+                  var totalEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                   if (totalEdges.length > 0) {
                       return false;
                   } else {
@@ -99,23 +99,23 @@ module.exports = {
         skip: function() {
             // need to skip male participant with only male sex partners or female participant with only female sex partners
 
-              if (typeof network !== 'undefined') {
+              if (typeof global.network !== 'undefined') {
 
                   // Skip if there are no sex edges between ego and some alters
-                  var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                  var sexEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                   if (sexEdges.length > 0) {
 
                       // Get ego gender
-                      var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
+                      var egoGender = global.network.getNodes({type_t0:'Ego'})[0].gender_k;
 
                       // Get total edges ready for counting
-                      var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
+                      var totalEdges = global.network.getEdges({type:'Dyad', from:global.network.getNodes({type_t0:'Ego'})[0].id});
 
                       // Get male edges ready for counting
-                      var maleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
+                      var maleEdges = global.network.getEdges({type:'Dyad', from:global.network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
 
                       // Get female edges ready for counting
-                      var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
+                      var femaleEdges = global.network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
 
                       // If ego is male AND total edges is the same as male edges
                       // OR
@@ -132,7 +132,7 @@ module.exports = {
                       return true;
                   }
               } else {
-                  // Don't skip if network is undefined
+                  // Don't skip if global.network is undefined
                   return false;
               }
 
@@ -141,12 +141,12 @@ module.exports = {
         skip: function() {
             // need to skip female participant with only female sex partners
 
-                if (typeof network !== 'undefined') {
-                    var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                if (typeof global.network !== 'undefined') {
+                    var sexEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                     if (sexEdges.length > 0) {
-                        var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
-                        var femaleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Female'});
-                        if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
+                        var totalEdges = global.network.getEdges({type:'Dyad', from:global.network.getNodes({type_t0:'Ego'})[0].id});
+                        var femaleEdges = global.network.getEdges({type:'Dyad', from:global.network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Female'});
+                        if (global.network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
                             return true;
                         } else {
                             return false;
@@ -155,15 +155,15 @@ module.exports = {
                       return true;
                     }
                 } else {
-                    console.log('network undefined.');
+                    console.log('global.network undefined.');
                     return false;
                 }
         } },
         {label:'NET EDGE: sex', page:'canvasedge3.html'},
         {label:'SWITCH: multiple sex partners', page:'multiplepartners.html', skip: function() {
           // Don't show if ego has had no sex partners
-          if (typeof network !== 'undefined') {
-              var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+          if (typeof global.network !== 'undefined') {
+              var totalEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
               if (totalEdges.length > 0) {
                   return false;
               } else {
@@ -175,12 +175,12 @@ module.exports = {
 
         } },
         {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() {
-            if (typeof network !== 'undefined') {
+            if (typeof global.network !== 'undefined') {
 
-                var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
+                var sexEdges = global.network.getEdges({type:'Sex', from:global.network.getNodes({type_t0:'Ego'})[0].id});
                 if (sexEdges.length > 0) {
                     // it is required that ego has answerd 'yes' to the multiple sex question
-                    var required = network.getNodes({multiple_sex_t0: 'yes'});
+                    var required = global.network.getNodes({multiple_sex_t0: 'yes'});
                     if (required.length === 0) {
                         return true;
                     } else {

@@ -278,7 +278,7 @@ var Sociogram = function Sociogram() {
 	};
 
 	sociogram.destroy = function() {
-
+		console.log('sociogram being destroyed');
         // menu.removeMenu(canvasMenu); // remove the global.network menu when we navigate away from the page.
         $('.new-node-form').remove(); // Remove the new node form
 

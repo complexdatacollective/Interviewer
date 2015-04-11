@@ -3,14 +3,15 @@
   <script>
   	var criteria = {
   		type:'Dyad',
-  		from:network.getNodes({type_t0:'Ego'})[0].id
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
 	};
 
-    var canvas = new Canvas({
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
     	mode:'Select', //edge, position, select
-		  targetEl: $('.container'),
-		  edgeType: "Drugs",
-      criteria: criteria,
+		targetEl: $('.container'),
+		edgeType: "Drugs",
+        criteria: criteria,
     	heading: "Tap on all of the people with whom you used marijuana or other drugs in the past six months.",
     	subheading: ""
 	});

@@ -1,4 +1,4 @@
-/* global console, fs, extend, menu */
+/* global console, fs, menu */
 /* exported Session, eventLog */
 var Session = function Session() {
 
@@ -8,7 +8,6 @@ var Session = function Session() {
     var content = $('#content');
 
     // Establish a new IOInterface for loading and saving
-    var dataStore = {};
     session.id = 0;
     session.userData = {};
     var lastSaveTime;
@@ -122,7 +121,7 @@ var Session = function Session() {
                     label: 'Continue',
                     cssClass: 'btn-success',
                     action: function(){
-                        dataStore.reset(session.reset);
+                        global.dataStore.reset(session.reset);
                     }
                 }, {
                     icon: 'glyphicon glyphicon-ban-circle',
@@ -153,14 +152,14 @@ var Session = function Session() {
 
     session.reset = function() {
         global.tools.notify("Resetting session.",2);
-        localStorage.removeItem('activeSession');
-        localStorage.removeItem('nodes');
-        localStorage.removeItem('edges');
-        localStorage.removeItem('session');
-        localStorage.removeItem('log');
+        window.localStorage.removeItem('activeSession');
+        window.localStorage.removeItem('nodes');
+        window.localStorage.removeItem('edges');
+        window.localStorage.removeItem('session');
+        window.localStorage.removeItem('log');
         session.id = 0;
         session.currentStage = 0;
-        location.reload();
+        window.location.reload();
     };
 
     session.saveManager = function() {

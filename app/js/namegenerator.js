@@ -1,4 +1,4 @@
-/* global randomBetween */
+/* global global.tools.randomBetween */
 /* exported Namegenerator */
 var Namegenerator = function Namegenerator() {
 
@@ -343,20 +343,20 @@ var Namegenerator = function Namegenerator() {
 				$("#ngForm").submit();
 			}, 3000);
 
-			$('#fname_t0').val(namesList[Math.floor(randomBetween(0,namesList.length))]);
-			$('#lname_t0').val(namesList[Math.floor(randomBetween(0,namesList.length))]);
+			$('#fname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
+			$('#lname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
 			var lname = $('#fname_t0').val()+" "+$('#lname_t0').val().charAt(0);
 			if ($('#lname_t0').val().length > 0 ) {
 				lname +=".";
 			}
 			$('#nname_t0').val(lname);
-			$('#age_p_t0').val(Math.floor(randomBetween(18,90)));
+			$('#age_p_t0').val(Math.floor(global.tools.randomBetween(18,90)));
 
 			setTimeout(function() {
 				$('.relationship-button').click();
 			}, 500);
 			setTimeout(function() {
-				$($('.relationship')[Math.floor(randomBetween(0,$('.relationship').length))]).addClass('selected');
+				$($('.relationship')[Math.floor(global.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
 				$('.relationship-close-button').click();
 
 			}, 2000);

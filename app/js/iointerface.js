@@ -1,4 +1,4 @@
-/* global require, console, global.tools.notify, session */
+/* global require, console */
 /* exported IOInterface */
 
 
@@ -39,7 +39,7 @@ var IOInterface = function IOInterface() {
         } else {
             console.log('no existing session');
 
-            db.insert([{ NetworkCanvas:'initialised'}], function (err, newDoc) {
+            db.insert([{}], function (err, newDoc) {
                 if(err) {
                   // do something with the error
                     console.log('error with insert');
