@@ -1,6 +1,6 @@
-/* global console, network, extend, notify, session */
+/* global console */
 /* exported MultiBin */
-var MultiBin = function MultiBin(options) {
+var MultiBin = function MultiBin() {
 
 	//global vars
 	var log;
@@ -12,7 +12,7 @@ var MultiBin = function MultiBin(options) {
 		variable: {
 			label:'multibin_variable',
 			values: [
-			'Variable 1',
+				'Variable 1',
 			]
 		},
 		filter: undefined,
@@ -21,10 +21,9 @@ var MultiBin = function MultiBin(options) {
 	};
 
 	var open = false;
-	extend(multiBin.options, options);
 
 	var stageChangeHandler = function() {
-	multiBin.destroy();
+		multiBin.destroy();
 	};
 
 	var followupHandler = function(e) {
@@ -40,8 +39,8 @@ var MultiBin = function MultiBin(options) {
 			to:nodeid
 		};
 
-		extend(criteria, multiBin.options.criteria);
-		var edge = network.getEdges(criteria)[0];
+		global.tools.extend(criteria, multiBin.options.criteria);
+		var edge = global.network.getEdges(criteria)[0];
 
 		// Create an empty object for storing the new properties in
 		var followupProperties = {};
@@ -53,8 +52,8 @@ var MultiBin = function MultiBin(options) {
 		});
 
 		// Update the edge
-		extend(edge, followupProperties);
-		network.updateEdge(edge.id, edge);
+		global.tools.extend(edge, followupProperties);
+		global.network.updateEdge(edge.id, edge);
 
 		// Clean up
 		$.each(multiBin.options.followup.questions, function(index) {
@@ -87,10 +86,10 @@ var MultiBin = function MultiBin(options) {
 				$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
-							stage: session.currentStage(),
+							stage: global.session.currentStage(),
 							timestamp: new Date()
 						};
-						log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+						log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
 						window.dispatchEvent(log);
 						taskComprehended = true;
 					}
@@ -109,10 +108,10 @@ var MultiBin = function MultiBin(options) {
 			$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
-						stage: session.currentStage(),
+						stage: global.session.currentStage(),
 						timestamp: new Date()
 					};
-					log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+					log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
 					window.dispatchEvent(log);
 					taskComprehended = true;
 				}
@@ -126,21 +125,21 @@ var MultiBin = function MultiBin(options) {
 				nodeBinDetails.removeClass('node-bin-static');
 				nodeBinDetails.children('h1, p').hide();
 
-			// $('.content').append(nodeBinDetails);
-			nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
+				// $('.content').append(nodeBinDetails);
+				nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
 
-			setTimeout(function(){
-				nodeBinDetails.addClass('node-bin-active');
-				$.each($('.active-node-list').children(), function(index,value) {
-					setTimeout(function(){
-						$(value).transition({left:0,opacity:1});
-					},20*index);
-				});
-			},100);
+				setTimeout(function(){
+					nodeBinDetails.addClass('node-bin-active');
+					$.each($('.active-node-list').children(), function(index,value) {
+						setTimeout(function(){
+							$(value).transition({left:0,opacity:1});
+						},20*index);
+					});
+				},100);
+			}
+
+			open = true;
 		}
-
-		open = true;
-	}
 
 	};
 
@@ -149,10 +148,10 @@ var MultiBin = function MultiBin(options) {
 		var el = $(this);
 		var id = $(this).parent().parent().data('index');
 
-		  // has the node been clicked while in the bucket or while in a bin?
-		  if ($(this).parent().hasClass('active-node-list')) {
+		// has the node been clicked while in the bucket or while in a bin?
+		if ($(this).parent().hasClass('active-node-list')) {
 			// it has been clicked while in a bin.
-			var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
+			var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
 			var properties = {};
 			// make the values null when a node has been taken out of a bin
 			properties[multiBin.options.variable.label] = '';
@@ -160,10 +159,10 @@ var MultiBin = function MultiBin(options) {
 			// dont forget followups
 			if(typeof multiBin.options.followup !== 'undefined') {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-						properties[value.variable] = undefined;
+					properties[value.variable] = undefined;
 				});
 			}
-			network.updateEdge(edgeID,properties);
+			global.network.updateEdge(edgeID,properties);
 			$(this).fadeOut(400, function() {
 				$(this).appendTo('.node-bucket');
 				$(this).css('display', '');
@@ -185,7 +184,7 @@ var MultiBin = function MultiBin(options) {
 
 	multiBin.destroy = function() {
 		// Event Listeners
-		notify("Destroying multiBin.",0);
+		global.tools.notify("Destroying multiBin.",0);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.node-bin-static').off("click", nodeBinClickHandler);
 		$('.node-item').off("click", nodeClickHandler);
@@ -196,7 +195,9 @@ var MultiBin = function MultiBin(options) {
 
 	};
 
-	multiBin.init = function() {
+	multiBin.init = function(options) {
+		global.tools.extend(multiBin.options, options);
+
 		// Add header and subheader
 		multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
 		multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
@@ -212,7 +213,7 @@ var MultiBin = function MultiBin(options) {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index, value) {
-						$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
 
 					if (first) {
 						$('#'+value.variable).change(function() {
@@ -254,7 +255,7 @@ var MultiBin = function MultiBin(options) {
 		}
 
 		// get all edges
-		var edges = network.getEdges(multiBin.options.criteria, multiBin.options.filter);
+		var edges = global.network.getEdges(multiBin.options.criteria, multiBin.options.filter);
 		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
@@ -267,143 +268,144 @@ var MultiBin = function MultiBin(options) {
 			newBin.data('index', index);
 			multiBin.options.targetEl.append(newBin);
 			$(".c"+index).droppable({ accept: ".draggable",
-				drop: function(event, ui) {
-					var dropped = ui.draggable;
-					var droppedOn = $(this);
+			drop: function(event, ui) {
+				var dropped = ui.draggable;
+				var droppedOn = $(this);
 
-			  		// Check if the node has been dropped into a bin that triggers the followup
-				  	if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
-				  		$('.followup').show();
-						$('.black-overlay').show();
-				  		$("#"+multiBin.options.followup.questions[0].variable).focus();
-				  		followup = $(dropped).data('node-id');
-				  	} else if (typeof multiBin.options.followup !== "undefined") {
-						console.log('removing followup properties.');
-				  		// Here we need to remove any previously set value for the followup variable, if it exists.
-						var nodeid = $(dropped).data('node-id');
+				// Check if the node has been dropped into a bin that triggers the followup
+				if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
+					$('.followup').show();
+					$('.black-overlay').show();
+					$("#"+multiBin.options.followup.questions[0].variable).focus();
+					followup = $(dropped).data('node-id');
+				} else if (typeof multiBin.options.followup !== "undefined") {
+					console.log('removing followup properties.');
+					// Here we need to remove any previously set value for the followup variable, if it exists.
+					var nodeid = $(dropped).data('node-id');
 
-						// Next, get the edge we will be storing on
-						var criteria = {
-							to:nodeid
-						};
+					// Next, get the edge we will be storing on
+					var criteria = {
+						to:nodeid
+					};
 
-						extend(criteria, multiBin.options.criteria);
-						var edge = network.getEdges(criteria)[0];
+					global.tools.extend(criteria, multiBin.options.criteria);
+					var edge = global.network.getEdges(criteria)[0];
 
-						// Create an empty object for storing the new properties in
-						var followupProperties = {};
+					// Create an empty object for storing the new properties in
+					var followupProperties = {};
 
-						// Assign a new property according to the variable name(s)
-						$.each(multiBin.options.followup.questions, function(index) {
-							followupProperties[multiBin.options.followup.questions[index].variable] = undefined;
-						});
+					// Assign a new property according to the variable name(s)
+					$.each(multiBin.options.followup.questions, function(index) {
+						followupProperties[multiBin.options.followup.questions[index].variable] = undefined;
+					});
 
-						// Update the edge
-						extend(edge, followupProperties);
-						network.updateEdge(edge.id, edge);
+					// Update the edge
+					global.tools.extend(edge, followupProperties);
+					global.network.updateEdge(edge.id, edge);
 
-						// Clean up
-						$.each(multiBin.options.followup.questions, function(index) {
-							$("#"+multiBin.options.followup.questions[index].variable).val("");
-						});
+					// Clean up
+					$.each(multiBin.options.followup.questions, function(index) {
+						$("#"+multiBin.options.followup.questions[index].variable).val("");
+					});
 
-				  	}
-
-					$(dropped).appendTo(droppedOn.children('.active-node-list'));
-					var properties = {};
-					properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
-					// Add the attribute
-					var edgeID = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
-					console.log(properties);
-					console.log(edgeID);
-					network.updateEdge(edgeID,properties);
-
-					var noun = "people";
-					if ($(".c"+index+" .active-node-list").children().length === 1) {
-					  	noun = "person";
-					}
-					$(".c"+index+" p").html($(".c"+index+" .active-node-list").children().length+' '+noun+'.');
-
-					var el = $(".c"+index);
-						// var origBg = el.css('background-color');
-						el.transition({scale:1.2}, 200, 'ease');
-						setTimeout(function(){
-							el.transition({background:el.data('oldBg')}, 200, 'ease');
-							el.transition({ scale:1}, 200, 'ease');
-						}, 0);
-					},
-				over: function() {
-						$(this).data('oldBg', $(this).css('background-color'));
-						$(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
-
-				},
-				out: function() {
-						$(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
 				}
-			});
 
-		});
+				$(dropped).appendTo(droppedOn.children('.active-node-list'));
+				var properties = {};
+				properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
+				// Add the attribute
+				var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
+				console.log(properties);
+				console.log(edgeID);
+				global.network.updateEdge(edgeID,properties);
 
-		// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-		$('.node-bin').css({width:itemSize-20,height:itemSize-20});
-		// $('.node-bin').css({width:itemSize,height:itemSize});
-
-		$('.node-bin h1').css({marginTop: itemSize/3});
-
-		$.each($('.node-bin'), function(index, value) {
-			var oldPos = $(value).offset();
-			$(value).data('oldPos', oldPos);
-			$(value).css(oldPos);
-
-		});
-
-		$('.node-bin').css({position:'absolute'});
-
-		// Add edges to bucket or to bins if they already have variable value.
-		$.each(edges, function(index,value) {
-
-			// We need the dyad edge so we know the nname for other types of edges
-			var dyadEdge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
-			if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
-				index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
-				$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
 				var noun = "people";
-				if ($('.c'+index).children('.active-node-list').children().length === 1) {
+				if ($(".c"+index+" .active-node-list").children().length === 1) {
 					noun = "person";
 				}
-				if ($('.c'+index).children('.active-node-list').children().length === 0) {
-					$('.c'+index).children('p').html('(Empty)');
-				} else {
-					$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
-				}
-			} else {
-				$('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-			}
+				$(".c"+index+" p").html($(".c"+index+" .active-node-list").children().length+' '+noun+'.');
 
+				var el = $(".c"+index);
+				// var origBg = el.css('background-color');
+				el.transition({scale:1.2}, 200, 'ease');
+				setTimeout(function(){
+					el.transition({background:el.data('oldBg')}, 200, 'ease');
+					el.transition({ scale:1}, 200, 'ease');
+				}, 0);
+			},
+			over: function() {
+				$(this).data('oldBg', $(this).css('background-color'));
+				$(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
+
+			},
+			out: function() {
+				$(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
+			}
 		});
-		$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false , start: function(){
-			if (taskComprehended === false) {
-				var eventProperties = {
-					stage: session.currentStage(),
-					timestamp: new Date()
-				};
-				log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-				window.dispatchEvent(log);
-				taskComprehended = true;
+
+	});
+
+	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
+	// $('.node-bin').css({width:itemSize,height:itemSize});
+
+	$('.node-bin h1').css({marginTop: itemSize/3});
+
+	$.each($('.node-bin'), function(index, value) {
+		var oldPos = $(value).offset();
+		$(value).data('oldPos', oldPos);
+		$(value).css(oldPos);
+
+	});
+
+	$('.node-bin').css({position:'absolute'});
+
+	// Add edges to bucket or to bins if they already have variable value.
+	$.each(edges, function(index,value) {
+
+		// We need the dyad edge so we know the nname for other types of edges
+		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
+		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
+			index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
+			$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+			var noun = "people";
+			if ($('.c'+index).children('.active-node-list').children().length === 1) {
+				noun = "person";
 			}
-		}});
+			if ($('.c'+index).children('.active-node-list').children().length === 0) {
+				$('.c'+index).children('p').html('(Empty)');
+			} else {
+				$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
+			}
+		} else {
+			$('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+		}
 
-		// Event Listeners
-		window.addEventListener('changeStageStart', stageChangeHandler, false);
-		$('.node-bin-static').on("click", nodeBinClickHandler);
-		$('.node-item').on("click", nodeClickHandler);
-		$('.content').on("click", backgroundClickHandler);
-		$('.followup-form').on('submit', followupHandler);
-		$('.followup-cancel').on('click', followupCancelHandler);
+	});
+	$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false , start: function(){
+		if (taskComprehended === false) {
+			var eventProperties = {
+				stage: global.session.currentStage(),
+				timestamp: new Date()
+			};
+			log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+			window.dispatchEvent(log);
+			taskComprehended = true;
+		}
+	}});
 
-	};
+	// Event Listeners
+	window.addEventListener('changeStageStart', stageChangeHandler, false);
+	$('.node-bin-static').on("click", nodeBinClickHandler);
+	$('.node-item').on("click", nodeClickHandler);
+	$('.content').on("click", backgroundClickHandler);
+	$('.followup-form').on('submit', followupHandler);
+	$('.followup-cancel').on('click', followupCancelHandler);
 
-multiBin.init();
+};
+
 
 return multiBin;
 };
+
+module.exports = new MultiBin();
