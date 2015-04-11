@@ -227,7 +227,7 @@ var Session = function Session() {
         session.options.fnBeforeStageChange(currentStage,stage);
         var newStage = stage;
 
-        var stagePath = "./protocols/default/stages/"+session.stages[stage].page;
+        var stagePath = "./protocols/"+global.studyProtocol+"/stages/"+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
                 // This never gets called if there is a JS error. Is there a way to ensure it is?
