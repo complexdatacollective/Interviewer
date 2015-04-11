@@ -4,12 +4,13 @@
 
 <script>
 
-	var multiBin = new MultiBin({
+var multiBin = require('./js/multibin.js');
+multiBin.init({
 	    targetEl: $('.container'),
 	    edgeType: 'Dyad',
 	    criteria: {
 			type:'Dyad',
-			from:network.getNodes({type_t0:'Ego'})[0].id
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
 		},
 	    variable: {
 	      label:'res_cat_p_t0',
@@ -28,7 +29,7 @@
 	      		prompt: 'Which city in Illinois do they live in?',
 	      		variable:'res_city_p_t0'
 	      }]
-	    },	
+	    },
     	heading: "Where do each of these people live?",
     	subheading: "Drag and drop the node below into a category."
   	});

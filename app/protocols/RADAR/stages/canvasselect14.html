@@ -3,10 +3,11 @@
   <script>
   	var criteria = {
   		type:'Dyad',
-  		from:network.getNodes({type_t0:'Ego'})[0].id
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
 	};
 
-    var canvas = new Canvas({
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
       heading: "Please tap on anyone who identifies as Hispanic or Latino.",
       subheading: "A person of Cuban, Mexican, Puerto Rican, South or Central American decent (or other Spanish cultural origin), regardless of race.",
     	mode:'Select', //edge, position, select

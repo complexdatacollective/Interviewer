@@ -4,12 +4,13 @@
 
 <script>
 
-	var multiBin = new MultiBin({
+var multiBin = require('./js/multibin.js');
+multiBin.init({
 	    targetEl: $('.container'),
 	    edgeType: 'Dyad',
 	    criteria: {
 			type:'Dyad',
-			from:network.getNodes({type_t0:'Ego'})[0].id
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
 		},
 	    variable: {
 	    label:'race_p_t0',
@@ -28,7 +29,7 @@
 	      		prompt: 'Which other term would you use to describe their race or ethnic background?',
 	      		variable:'race_p_other_t0'
 	      }]
-	    },	    
+	    },
     	heading: "Please specify how each of these people describe their race or ethnic background.",
     	subheading: "Drag and drop the node below into a category."
   	});
