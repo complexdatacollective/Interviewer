@@ -29,6 +29,8 @@ var IOInterface = function IOInterface() {
 
     interface.init = function(callback) {
         global.tools.notify('ioInterface initialising.', 1);
+        console.log('iointerface reporting on session name:');
+        console.log(global.session.name);
         db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
 
         if (window.localStorage.getObject('activeSession')!== false) {

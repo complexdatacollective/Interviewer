@@ -1,20 +1,11 @@
-{
+module.exports = {
     "parameters": {
-        "name": "Default"
+        "name": "RADAR"
     },
     "skipFunctions": {
         "exampleSkip": function() { return false; }
     },
     "stages": [
-        {
-            label:'Intro',
-            page:'intro.html'
-        }
-    ]
-}
-
-
-session.stages = [
         {label:'Intro', page:'intro.html'},
         {label:'NG: closest', page:'namegen1.html'},
         {label:'NG: marijuana or other drugs', page:'namegen5.html'},
@@ -206,4 +197,5 @@ session.stages = [
         {label:'Thank You', page:'thanks.html'},
         {label:'Download Data', page:'download.html'},
         {label:'Finish', page:'finish.html'}
-                  ];
+    ]
+}

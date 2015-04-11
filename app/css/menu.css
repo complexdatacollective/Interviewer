@@ -413,8 +413,8 @@ section.related {
 /* Morph Button Style: Sidebar */
 .morph-button-sidebar,
 .morph-button-sidebar .morph-content {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
 }
 .morph-button-sidebar {
@@ -503,9 +503,9 @@ section.related {
   display: inline-block;
   font-size: 0px;
   cursor: pointer;
-  margin: 15px 15px;
-  width: 90px;
-  height: 90px;
+  margin: 7px 15px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   text-align: center;
   position: relative;
@@ -527,8 +527,8 @@ section.related {
 .hi-icon:before {
   font-family: 'ecoicon';
   speak: none;
-  font-size: 34px;
-  line-height: 90px;
+  font-size: 30px;
+  line-height: 70px;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -604,7 +604,6 @@ section.related {
 }
 /* Effect 8 */
 .hi-icon {
-  background: #333;
   -webkit-transition: -webkit-transform ease-out 0.1s, background 0.2s;
   -moz-transition: -moz-transform ease-out 0.1s, background 0.2s;
   transition: transform ease-out 0.1s, background 0.2s;
