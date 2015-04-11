@@ -364,11 +364,11 @@ var Network = function Network() {
     if (typeof object === 'object' && object.length>0) {
       // Multiple objects!
       for (var i = 0; i < object.length; i++) {
-        $.global.tools.extend(object[i], properties);
+        $.extend(object[i], properties);
       }
     } else {
       // Just one object.
-        $.global.tools.extend(object, properties);
+        $.extend(object, properties);
     }
 
   };

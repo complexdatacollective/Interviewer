@@ -4,7 +4,8 @@
 
 <script>
 
-	var namegenerator = new Namegenerator({
+var namegenerator = require('./js/namegenerator.js');
+	namegenerator.init({
 		targetEl: $('.container'),
       edgeTypes:['Dyad','Sex'],
       variables: [
@@ -21,7 +22,7 @@
 	});
 
   // add existing nodes
-$.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
+$.each(global.network.getEdges({type: 'Dyad', from: global.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
 	namegenerator.addToList(value);
 });
 
@@ -29,7 +30,7 @@ $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0
 
     $('<div class="node-list"><h4>People you already listed:</h4></div>').insertBefore('.nameList');
     // $('.node-container').append(currentNodeList);
-    $.each(network.getEdges({type: 'Dyad', from: network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
+    $.each(global.network.getEdges({type: 'Dyad', from: global.network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
 
       var el = $('<div class="node-list-item">'+value.nname_t0+'</div>')
       $('.node-list').append(el);

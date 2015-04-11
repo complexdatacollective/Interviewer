@@ -41,6 +41,11 @@
 				provider.url = provider.url(parts.splice(1, parts.length - 1).join('.'));
 			}
 
+			var forceHTTP = window.location.protocol === 'file:' || provider.options.forceHTTP;
+			if (provider.url.indexOf('//') === 0 && forceHTTP) {
+				provider.url = 'http:' + provider.url;
+			}
+
 			// replace attribution placeholders with their values from toplevel provider attribution,
 			// recursively
 			var attributionReplacer = function (attr) {
@@ -66,10 +71,9 @@
 	 * see http://leafletjs.com/reference.html#tilelayer for options in the options map.
 	 */
 
-	//jshint maxlen:220
 	L.TileLayer.Provider.providers = {
 		OpenStreetMap: {
-			url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			url: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 			options: {
 				attribution:
 					'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -96,8 +100,15 @@
 				attribution: 'Map data: &copy; <a href="http://www.openseamap.org">OpenSeaMap</a> contributors'
 			}
 		},
+		OpenTopoMap: {
+			url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+			options: {
+				maxZoom: 16,
+				attribution: 'Map data: {attribution.OpenStreetMap}, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			}
+		},
 		Thunderforest: {
-			url: 'http://{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png',
+			url: '//{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png',
 			options: {
 				attribution:
 					'&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, {attribution.OpenStreetMap}',
@@ -146,12 +157,18 @@
 			variants: {
 				Full: 'full',
 				Base: 'base',
-				RoadsAndLabels: 'roads_and_labels',
+				RoadsAndLabels: 'roads_and_labels'
 			}
 		},
 		MapQuestOpen: {
-			url: 'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpeg',
+			/* Mapquest does support https, but with a different subdomain:
+			 * https://otile{s}-s.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}
+			 * which makes implementing protocol relativity impossible.
+			 */
+			url: 'http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}',
 			options: {
+				type: 'map',
+				ext: 'jpg',
 				attribution:
 					'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; ' +
 					'Map data {attribution.OpenStreetMap}',
@@ -160,18 +177,25 @@
 			variants: {
 				OSM: {},
 				Aerial: {
-					url: 'http://oatile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg',
 					options: {
+						type: 'sat',
 						attribution:
 							'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; ' +
 							'Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
+					}
+				},
+				HybridOverlay: {
+					options: {
+						type: 'hyb',
+						ext: 'png',
+						opacity: 0.9
 					}
 				}
 			}
 		},
 		MapBox: {
 			url: function (id) {
-				return 'http://{s}.tiles.mapbox.com/v3/' + id + '/{z}/{x}/{y}.png';
+				return '//{s}.tiles.mapbox.com/v3/' + id + '/{z}/{x}/{y}.png';
 			},
 			options: {
 				attribution:
@@ -181,7 +205,7 @@
 			}
 		},
 		Stamen: {
-			url: 'http://{s}.tile.stamen.com/{variant}/{z}/{x}/{y}.png',
+			url: 'http://{s}.tile.stamen.com/{variant}/{z}/{x}/{y}.{ext}',
 			options: {
 				attribution:
 					'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
@@ -190,7 +214,8 @@
 				subdomains: 'abcd',
 				minZoom: 0,
 				maxZoom: 20,
-				variant: 'toner'
+				variant: 'toner',
+				ext: 'png'
 			},
 			variants: {
 				Toner: 'toner',
@@ -199,31 +224,47 @@
 				TonerLines: 'toner-lines',
 				TonerLabels: 'toner-labels',
 				TonerLite: 'toner-lite',
-				Terrain: {
-					options: {
-						variant: 'terrain',
-						minZoom: 4,
-						maxZoom: 18
-					}
-				},
-				TerrainBackground: {
-					options: {
-						variant: 'terrain-background',
-						minZoom: 4,
-						maxZoom: 18
-					}
-				},
 				Watercolor: {
 					options: {
 						variant: 'watercolor',
 						minZoom: 1,
 						maxZoom: 16
 					}
+				},
+				Terrain: {
+					options: {
+						variant: 'terrain',
+						minZoom: 4,
+						maxZoom: 18,
+						bounds: [[22, -132], [70, -56]]
+					}
+				},
+				TerrainBackground: {
+					options: {
+						variant: 'terrain-background',
+						minZoom: 4,
+						maxZoom: 18,
+						bounds: [[22, -132], [70, -56]]
+					}
+				},
+				TopOSMRelief: {
+					options: {
+						variant: 'toposm-color-relief',
+						ext: 'jpg',
+						bounds: [[22, -132], [51, -56]]
+					}
+				},
+				TopOSMFeatures: {
+					options: {
+						variant: 'toposm-features',
+						bounds: [[22, -132], [51, -56]],
+						opacity: 0.9
+					}
 				}
 			}
 		},
 		Esri: {
-			url: 'http://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
+			url: '//server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
 			options: {
 				variant: 'World_Street_Map',
 				attribution: 'Tiles &copy; Esri'
@@ -337,7 +378,7 @@
 			 * envirionments.
 			 */
 			url:
-				'http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/' +
+				'//{s}.{base}.maps.cit.api.here.com/maptile/2.1/' +
 				'maptile/{mapID}/{variant}/{z}/{x}/{y}/256/png8?' +
 				'app_id={app_id}&app_code={app_code}',
 			options: {
@@ -451,6 +492,108 @@
 				PositronNoLabels: 'light_nolabels',
 				DarkMatter: 'dark_all',
 				DarkMatterNoLabels: 'dark_nolabels'
+			}
+		},
+		HikeBike: {
+			url: 'http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png',
+			options: {
+				attribution: '{attribution.OpenStreetMap}'
+			}
+		},
+		BasemapAT: {
+			url: '//maps{s}.wien.gv.at/basemap/{variant}/normal/google3857/{z}/{y}/{x}.{format}',
+			options: {
+				attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+				subdomains: ['', '1', '2', '3', '4'],
+				bounds: [[46.358770, 8.782379], [49.037872, 17.189532]]
+			},
+			variants: {
+				basemap: {
+					options: {
+						variant: 'geolandbasemap',
+						format: 'jpeg'
+					}
+				},
+				highdpi: {
+					options: {
+						variant: 'bmaphidpi',
+						format: 'jpeg'
+					}
+				},
+				grau: {
+					options: {
+						variant: 'bmapgrau',
+						format: 'png'
+					}
+				},
+				overlay: {
+					options: {
+						variant: 'bmapoverlay',
+						format: 'png'
+					}
+				},
+				orthofoto: {
+					options: {
+						variant: 'bmaporthofoto30cm',
+						format: 'jpeg'
+					}
+				}
+			}
+		},
+		NASAGIBS: {
+			url: '//map1.vis.earthdata.nasa.gov/wmts-webmerc/{variant}/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}',
+			options: {
+				attribution:
+					'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System ' +
+					'(<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+				bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
+				minZoom: 1,
+				maxZoom: 9,
+				format: 'jpg',
+				time: '',
+				tilematrixset: 'GoogleMapsCompatible_Level'
+			},
+			variants: {
+				ModisTerraTrueColorCR: 'MODIS_Terra_CorrectedReflectance_TrueColor',
+				ModisTerraBands367CR: 'MODIS_Terra_CorrectedReflectance_Bands367',
+				ViirsEarthAtNight2012: {
+					options: {
+						variant: 'VIIRS_CityLights_2012',
+						maxZoom: 8
+					}
+				},
+				ModisTerraLSTDay: {
+					options: {
+						variant: 'MODIS_Terra_Land_Surface_Temp_Day',
+						format: 'png',
+						maxZoom: 7,
+						opacity: 0.75
+					}
+				},
+				ModisTerraSnowCover: {
+					options: {
+						variant: 'MODIS_Terra_Snow_Cover',
+						format: 'png',
+						maxZoom: 8,
+						opacity: 0.75
+					}
+				},
+				ModisTerraAOD: {
+					options: {
+						variant: 'MODIS_Terra_Aerosol',
+						format: 'png',
+						maxZoom: 6,
+						opacity: 0.75
+					}
+				},
+				ModisTerraChlorophyll: {
+					options: {
+						variant: 'MODIS_Terra_Chlorophyll_A',
+						format: 'png',
+						maxZoom: 7,
+						opacity: 0.75
+					}
+				}
 			}
 		}
 	};
