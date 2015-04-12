@@ -28,34 +28,44 @@ var IOInterface = function IOInterface() {
     var interface = {};
 
     interface.init = function(callback) {
+        // After init, first priority is to load previous session for this protocol.
+        // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         global.tools.notify('ioInterface initialising.', 1);
         console.log('iointerface reporting on session name:');
         console.log(global.session.name);
-        db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, 'NetworkCanvas.db'), autoload: true });
+        db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, global.session.name+'.db'), autoload: true });
 
-        if (window.localStorage.getObject('activeSession')!== false) {
-            console.log('existing session found');
-            callback(window.localStorage.getObject('activeSession'));
-        } else {
-            console.log('no existing session');
 
-            db.insert([{}], function (err, newDoc) {
-                if(err) {
-                  // do something with the error
-                    console.log('error with insert');
-                }
-                console.log(newDoc);
-                console.log(newDoc[0]._id);
+        db.find({}).sort({date: 1 }).exec(function (err, docs) {
+            console.log(docs);
+            if (err) {
+                // handle error
+                console.log('error with loading the database.');
+            }
+            if (docs.length !== undefined && docs.length > 0) {
+                console.log('found a session. Returning: ');
+                console.log(docs[0]);
+                callback(docs[0]._id);
+            } else {
+                console.log('no existing session, creating one.');
+                var sessionDate = new Date();
+                db.insert([{date:sessionDate}], function (err, newDoc) {
+                    if(err) {
+                      // do something with the error
+                        console.log('error with insert');
+                    }
+                    console.log(newDoc);
+                    console.log(newDoc[0]._id);
 
-                // Two documents were inserted in the database
-                // newDocs is an array with these documents, augmented with their _id
-                id = newDoc[0]._id;
-                console.log('id has been set as '+id);
-                window.localStorage.setObject('activeSession', id);
-                callback(newDoc[0]._id);
-          });
+                    // Two documents were inserted in the database
+                    // newDocs is an array with these documents, augmented with their _id
+                    id = newDoc[0]._id;
+                    console.log('id has been set as '+id);
+                    callback(newDoc[0]._id);
+                });
+            }
 
-        }
+        });
 
     };
 
@@ -122,9 +132,11 @@ var IOInterface = function IOInterface() {
         });
     };
 
-    interface.deleteDocument = function(id) {
-        db.remove({ _id: id }, {}, function (err) {
+    interface.deleteDocument = function(callback) {
+        db.remove({ _id: global.session.id }, {}, function (err) {
             if (err) { console.log('deleting document failed.'); return false; }
+            console.log('Deleted document '+id);
+            if(callback) { callback(); }
         });
     };
 

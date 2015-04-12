@@ -26,16 +26,24 @@ html, body {
 
 // Actual modal
 .modal-content {
-  color:black;
+  color:white;
   position: relative;
-  background-color: @modal-content-bg;
-  border: 1px solid @modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
-  border: 1px solid @modal-content-border-color;
+  background-color: @brand-primary;
+  border: 10px solid @brand-primary; //old browsers fallback (ie8 etc)
+  border: 10px solid @brand-primary;
   border-radius: @border-radius-large;
   .box-shadow(0 3px 9px rgba(0,0,0,.5));
   background-clip: padding-box;
   // Remove focus outline from opened modal
   outline: 0;
+}
+
+.btn-modal-success {
+  .button-variant(@btn-default-color; #ffffff; #ffffff);
+}
+
+.btn-modal-warning {
+  .button-variant(#ffffff; darken(@brand-primary, 10%); darken(@brand-primary, 10%));
 }
 
 // radio groups

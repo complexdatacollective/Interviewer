@@ -1,4 +1,4 @@
-/* global global.tools.notify, modifyColor */
+/* global*/
 /* exported Menu */
 var Menu = function Menu(options) {
 
@@ -12,17 +12,6 @@ var Menu = function Menu(options) {
     var isAnimating = false;
     var menuContainer = $('.menu-container');
     var adding = false;
-
-
-    // private
-    function extend( a, b ) {
-        for( var key in b ) {
-            if( b.hasOwnProperty( key ) ) {
-                a[key] = b[key];
-            }
-        }
-        return a;
-    }
 
     var contentClickHandler = function() {
         menu.closeMenu();
@@ -42,8 +31,8 @@ var Menu = function Menu(options) {
         return false;
       },
       onBeforeClose : function() {
-        $('.pushed').off('click', contentClickHandler);
         $('.content').removeClass("pushed");
+        $('.pushed').off('click', contentClickHandler);
       },
       onAfterClose : function() {
         $('.black').show();

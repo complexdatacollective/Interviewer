@@ -1,4 +1,4 @@
-/* global console, fs, menu */
+ /* global console, fs, menu */
 /* exported Session, eventLog */
 var Session = function Session() {
 
@@ -52,6 +52,7 @@ var Session = function Session() {
         var path = require('path');
         var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/'+global.studyProtocol+'.netcanvas');
 
+        // todo: check this exists
         var study = require(studyPath);
         session.stages = study.stages;
         session.name = study.parameters.name;
@@ -78,8 +79,6 @@ var Session = function Session() {
             }, session.id);
         });
 
-        session.registerData("session");
-
         window.addEventListener('unsavedChanges', function () {
             session.saveManager();
         }, false);
@@ -93,21 +92,20 @@ var Session = function Session() {
                 message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
                 buttons: [{
                     label: 'Continue',
-                    cssClass: 'btn-success',
+                    cssClass: 'btn-modal-success',
                     action: function(){
-                        session.reset();
+                        global.dataStore.deleteDocument(session.reset);
                     }
                 }, {
                     icon: 'glyphicon glyphicon-ban-circle',
-                    label: 'Cancel',
-                    cssClass: 'btn-warning',
+                    label: ' Cancel',
+                    cssClass: 'btn-modal-warning',
                     action: function(dialogItself){
                         dialogItself.close();
                     }
                 }]
             });
         });
-
 
         menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
 
@@ -119,14 +117,14 @@ var Session = function Session() {
                 message: '<h4>Are you sure you want to purge the database?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
                 buttons: [{
                     label: 'Continue',
-                    cssClass: 'btn-success',
+                    cssClass: 'btn-modal-success',
                     action: function(){
                         global.dataStore.reset(session.reset);
                     }
                 }, {
                     icon: 'glyphicon glyphicon-ban-circle',
-                    label: 'Cancel',
-                    cssClass: 'btn-warning',
+                    label: ' Cancel',
+                    cssClass: 'btn-modal-warning',
                     action: function(dialogItself){
                         dialogItself.close();
                     }
@@ -152,14 +150,10 @@ var Session = function Session() {
 
     session.reset = function() {
         global.tools.notify("Resetting session.",2);
-        window.localStorage.removeItem('activeSession');
-        window.localStorage.removeItem('nodes');
-        window.localStorage.removeItem('edges');
-        window.localStorage.removeItem('session');
-        window.localStorage.removeItem('log');
         session.id = 0;
         session.currentStage = 0;
-        window.location.reload();
+        var _window = global.gui.Window.get();
+        _window.reloadDev();
     };
 
     session.saveManager = function() {
@@ -252,56 +246,56 @@ var Session = function Session() {
     session.registerData = function(dataKey, array) {
         global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
         if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
-        global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
-        if (array) {
-            session.userData[dataKey] = [];
+            global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+            if (array) {
+                session.userData[dataKey] = [];
+            } else {
+                session.userData[dataKey] = {};
+            }
         } else {
-            session.userData[dataKey] = {};
+            global.tools.notify ('A data store with this key already existed. Returning a pointer.',1);
         }
-    } else {
-        global.tools.notify ('A data store with this key already existed. Returning a pointer.',1);
-    }
-    var unsavedChanges = new window.Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-    return session.userData[dataKey];
-};
-
-session.addData = function(dataKey, newData, append) {
-    /*
-    This function should let any module add data to the session model. The session model
-    (global data variable) is essentially a key/value store.
-    */
-
-    if (!append) { append = false; }
-
-    if (append === true) { // this is an array
-        session.userData[dataKey].push(newData);
-    } else {
-        global.tools.extend(session.userData[dataKey], newData);
-    }
-
-    global.tools.notify("Adding data to key '"+dataKey+"'.",2);
-    global.tools.notify(newData, 1);
-    var unsavedChanges = new window.Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-
-};
-
-session.currentStage = function() {
-    return currentStage;
-};
-
-session.returnData = function(dataKey) {
-    if (!dataKey) {
-        return session.userData;
-    } else if (typeof session.userData[dataKey] !== 'undefined') {
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
         return session.userData[dataKey];
-    } else {
-        return session.userData;
-    }
-};
+    };
 
-return session;
+    session.addData = function(dataKey, newData, append) {
+        /*
+        This function should let any module add data to the session model. The session model
+        (global data variable) is essentially a key/value store.
+        */
+
+        if (!append) { append = false; }
+
+        if (append === true) { // this is an array
+            session.userData[dataKey].push(newData);
+        } else {
+            global.tools.extend(session.userData[dataKey], newData);
+        }
+
+        global.tools.notify("Adding data to key '"+dataKey+"'.",2);
+        global.tools.notify(newData, 1);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+
+    };
+
+    session.currentStage = function() {
+        return currentStage;
+    };
+
+    session.returnData = function(dataKey) {
+        if (!dataKey) {
+            return session.userData;
+        } else if (typeof session.userData[dataKey] !== 'undefined') {
+            return session.userData[dataKey];
+        } else {
+            return session.userData;
+        }
+    };
+
+    return session;
 };
 
 module.exports = new Session();
