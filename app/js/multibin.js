@@ -1,4 +1,4 @@
-/* global console */
+/* global*/
 /* exported MultiBin */
 var MultiBin = function MultiBin() {
 
@@ -279,7 +279,6 @@ var MultiBin = function MultiBin() {
 					$("#"+multiBin.options.followup.questions[0].variable).focus();
 					followup = $(dropped).data('node-id');
 				} else if (typeof multiBin.options.followup !== "undefined") {
-					console.log('removing followup properties.');
 					// Here we need to remove any previously set value for the followup variable, if it exists.
 					var nodeid = $(dropped).data('node-id');
 
@@ -315,8 +314,6 @@ var MultiBin = function MultiBin() {
 				properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
 				// Add the attribute
 				var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
-				console.log(properties);
-				console.log(edgeID);
 				global.network.updateEdge(edgeID,properties);
 
 				var noun = "people";

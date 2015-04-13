@@ -5,14 +5,12 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-sm-4 col-sm-offset-2">
 		  	<h4>Previous 4 Sexual Partners (most to least recent):</h4>
 		  	<ul class="partners">
 		  	</ul>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-sm-4">
 		  	<h4>Current Serious Relationships:</h4>
 		  	<ul class="serious_relationships">
 		  	</ul>
@@ -24,17 +22,17 @@
 (function(){
 
 	// get the sex partners
-	var partners = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Sex"});
+	var partners = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Sex"});
 
 	// get the serious relationship
-	var seriousRelationships = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"SeriousRel"});
+	var seriousRelationships = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"SeriousRel"});
 	// console.log('partners:');
 	// console.log(partners);
 
 
 	// add the serious relationships to the interface
 	$.each(seriousRelationships, function(index,value) {
-		var dyadEdge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
+		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
 		$('.serious_relationships').append('<li>'+dyadEdge.nname_t0+'</li>');
 	});
 
@@ -92,12 +90,12 @@
 		if (counter <= 3) {
 			var formatted = getFormattedDate(value);
 			// get sex edge
-			var sexEdges = network.getEdges({type:"Sex", sex_last_t0: formatted});
+			var sexEdges = global.network.getEdges({type:"Sex", sex_last_t0: formatted});
 			// console.log('sexEdges for '+formatted);
 			// console.log(sexEdges);
 			// Should only be one, but we loop incase multiple on same day.
 			$.each(sexEdges, function(sexIndex,sexValue) {
-				var dyadEdge = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:sexValue.to})[0];
+				var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:sexValue.to})[0];
 				$('.partners').append('<li>'+dyadEdge.nname_t0+'</li>');
 				counter++;
 			});

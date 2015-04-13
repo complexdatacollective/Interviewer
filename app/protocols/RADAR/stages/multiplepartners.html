@@ -25,15 +25,15 @@
 
 <script>
 (function(){
-  
-  	var properties; 
+
+  	var properties;
 	$('.multiple-yes').on('click', function() {
 
 		properties = {
 			multiple_sex_t0: 'yes'
 		}
-		network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
-		session.nextStage();
+		global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
+		global.session.nextStage();
 
 
 	});
@@ -42,16 +42,16 @@
 		properties = {
 			multiple_sex_t0: 'no'
 		}
-		network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);	
-		session.nextStage();
+		global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
+		global.session.nextStage();
 	});
 
 	$('.multiple-skip').on('click', function() {
 		properties = {
 			multiple_sex_t0: 'skipped'
 		}
-		network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
-		session.nextStage();
+		global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
+		global.session.nextStage();
 	});
 
 

@@ -1,4 +1,4 @@
- /* global console, fs, menu */
+ /* global console */
 /* exported Session, eventLog */
 var Session = function Session() {
 
@@ -14,14 +14,15 @@ var Session = function Session() {
 
     function saveFile(path) {
         var data = JSON.stringify(session.userData, undefined, 2);
+        var fs = require('fs');
         fs.writeFile(path, data);
     }
 
     function clickDownloadInput() {
         $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
-        var event = document.createEvent('MouseEvents');
+        var event = window.document.createEvent('MouseEvents');
         event.initMouseEvent('click');
-        document.getElementById('save').dispatchEvent(event);
+        window.document.getElementById('save').dispatchEvent(event);
     }
 
     var saveTimer;
@@ -85,7 +86,7 @@ var Session = function Session() {
         }, false);
 
         var sessionMenu = global.menu.addMenu('Session','hi-icon-cog');
-        menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
+        global.menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_INFO,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -108,9 +109,9 @@ var Session = function Session() {
             });
         });
 
-        menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
+        global.menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
 
-        menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
+        global.menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_INFO,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -133,7 +134,7 @@ var Session = function Session() {
             });
         });
 
-        var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
+        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
         $.each(session.stages, function(index,value) {
             global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
         });

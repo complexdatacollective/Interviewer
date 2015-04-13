@@ -4,14 +4,15 @@
 
 <script>
 
-	var multiBin = new MultiBin({
+var multiBin = require('./js/multibin.js');
+multiBin.init({
 		heading: "Have you had vaginal sex with each of these people in the past six months?",
     	subheading: "",
 	    targetEl: $('.container'),
 	    edgeType: 'Sex',
 		criteria: {
 			type:'Sex',
-			from:network.getNodes({type_t0:'Ego'})[0].id
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
 		},
 		filter: function (results) { //results is passed by getEdges()
 			// Here we are filtering based on gender so that we don't get illogical combinations of sex questions.
@@ -19,13 +20,13 @@
 			var filteredResults = [];
 
 			// Get ego's gender
-			var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
+			var egoGender = global.network.getNodes({type_t0:'Ego'})[0].gender_k;
 
 			// Iterate over the criteria query results
 			$.each(results, function(index,value) {
 
 				// Get the dyad edge between ago and this alter, based on the information from the current sex edge
-				var dyadEdge = network.getEdges({type:'Dyad', to:value.to})[0];
+				var dyadEdge = global.network.getEdges({type:'Dyad', to:value.to})[0];
 
 				// Include results if ego is male and alter is not male
 				// OR

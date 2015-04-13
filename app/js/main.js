@@ -1,5 +1,6 @@
 global.gui = require('nw.gui');
 var moment = require('moment');
+global.moment = moment; // needed for module access.
 var fs = require('fs');
 var path = require('path');
 

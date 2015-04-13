@@ -4,7 +4,8 @@
 
 <script>
 
-	var listSelect = new ListSelect({
+	var listSelect = require('./js/listselect.js');
+	listSelect.init({
 		targetEl: $('.container'),
     	variables: [
                     {label:'<strong>Marijuana</strong><br>Weed, Pot',value:'d1_t0'},

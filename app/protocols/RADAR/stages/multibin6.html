@@ -4,12 +4,13 @@
 
 <script>
 
-	var multiBin = new MultiBin({
+var multiBin = require('./js/multibin.js');
+multiBin.init({
 	    targetEl: $('.container'),
 	    edgeType: 'Sex',
 	    criteria: {
 			type:'Sex',
-			from:network.getNodes({type_t0:'Ego'})[0].id
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
 		},
 	    variable: {
 	      label:'loc_met_cat_t0',

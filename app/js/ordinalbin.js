@@ -1,4 +1,4 @@
-/* global console */
+/* global*/
 /* exported OrdinalBin */
 var OrdinalBin = function OrdinalBin() {
 
@@ -56,7 +56,6 @@ var OrdinalBin = function OrdinalBin() {
 
     };
 
-
     ordinalBin.init = function(options) {
 
         global.tools.extend(ordinalBin.options, options);
@@ -77,9 +76,6 @@ var OrdinalBin = function OrdinalBin() {
         itemW = ($('.container').outerWidth()/number)-20;
         itemH = $('.container').outerHeight()-270;
 
-
-
-
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){
 
@@ -87,163 +83,152 @@ var OrdinalBin = function OrdinalBin() {
             newBin.data('index', index);
             ordinalBin.options.targetEl.append(newBin);
             $(".d"+index).droppable({ accept: ".draggable",
-            drop: function(event, ui) {
+                drop: function(event, ui) {
 
-                var dropped = ui.draggable;
-                var droppedOn = $(this);
-                console.log('index is: '+ordinalBin.options.variable.values[index].value);
-                if (ordinalBin.options.variable.values[index].value>0) {
-                    $('.followup').show();
-                    followup = $(dropped).data('node-id');
-                }
+                    var dropped = ui.draggable;
+                    var droppedOn = $(this);
+                    if (ordinalBin.options.variable.values[index].value>0) {
+                        $('.followup').show();
+                        followup = $(dropped).data('node-id');
+                    }
 
-                $(dropped).appendTo(droppedOn.children('.active-node-list'));
-                $(dropped).css({position: '',top:'',left:''});
-                var properties = {};
-                properties[ordinalBin.options.variable.label] = ordinalBin.options.variable.values[index].value;
-                // Followup question
+                    $(dropped).appendTo(droppedOn.children('.active-node-list'));
+                    $(dropped).css({position: '',top:'',left:''});
+                    var properties = {};
+                    properties[ordinalBin.options.variable.label] = ordinalBin.options.variable.values[index].value;
+                    // Followup question
 
-                // Add the attribute
-                var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:ordinalBin.options.edgeType})[0].id;
-                global.network.updateEdge(edgeID,properties);
+                    // Add the attribute
+                    var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:ordinalBin.options.edgeType})[0].id;
+                    global.network.updateEdge(edgeID,properties);
 
-                $.each($('.ord-node-bin'), function(oindex) {
-                    var length = $(".d"+oindex).children('.active-node-list').children().length;
-                    if (length > 0) {
-                        var noun = "people";
-                        if (length === 1) {
-                            noun = "person";
+                    $.each($('.ord-node-bin'), function(oindex) {
+                        var length = $(".d"+oindex).children('.active-node-list').children().length;
+                        if (length > 0) {
+                            var noun = "people";
+                            if (length === 1) {
+                                noun = "person";
+                            }
+
+                            $(".d"+oindex+" p").html(length+' '+noun+'.');
+                        } else {
+                            $(".d"+oindex+" p").html('(Empty)');
                         }
 
-                        $(".d"+oindex+" p").html(length+' '+noun+'.');
-                    } else {
-                        $(".d"+oindex+" p").html('(Empty)');
-                    }
+                    });
 
+                    var el = $(".d"+index);
+                    // var origBg = el.css('background-color');
+                    // el.transition({scale:1.2}, 200, 'ease');
+                    setTimeout(function(){
+                        el.transition({background:el.data('oldBg')}, 200, 'ease');
+                        // el.transition({ scale:1}, 200, 'ease');
+                    }, 0);
 
-                });
-
-                var el = $(".d"+index);
-                // var origBg = el.css('background-color');
-                // el.transition({scale:1.2}, 200, 'ease');
-                setTimeout(function(){
-                    el.transition({background:el.data('oldBg')}, 200, 'ease');
-                    // el.transition({ scale:1}, 200, 'ease');
-                }, 0);
-
-
-
-                $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
-                start: function() {
-                    if (taskComprehended === false) {
-                        var eventProperties = {
-                            stage: global.session.currentStage(),
-                            timestamp: new Date()
-                        };
-                        log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-                        window.dispatchEvent(log);
-                        taskComprehended = true;
-                    }
-                    // $('.ord-node-bin').css({overflow:'hidden'});
+                    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+                        start: function() {
+                            if (taskComprehended === false) {
+                                var eventProperties = {
+                                    stage: global.session.currentStage(),
+                                    timestamp: new Date()
+                                };
+                                log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                                window.dispatchEvent(log);
+                                taskComprehended = true;
+                            }
+                            // $('.ord-node-bin').css({overflow:'hidden'});
+                        },
+                        stop: function() {
+                            // $('.ord-node-bin').css({overflow:'scroll'});
+                        }
+                    });
                 },
-                stop: function() {
-                    // $('.ord-node-bin').css({overflow:'scroll'});
+                over: function() {
+                    $(this).data('oldBg', $(this).css('background-color'));
+                    $(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
+
+                },
+                out: function() {
+                    $(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
                 }
             });
-        },
-        over: function() {
-            $(this).data('oldBg', $(this).css('background-color'));
-            $(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
 
-        },
-        out: function() {
-            $(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
-        }
-    });
+        });
 
+        // $('.dode-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+        $('.ord-node-bin').css({width:itemW,height:itemH});
 
+        // get all edges
+        var edges = global.network.getEdges(ordinalBin.options.criteria);
 
-});
+        // Add edges to bucket or to bins if they already have variable value.
+        $.each(edges, function(index,value) {
+            var dyadEdge;
+            if (ordinalBin.options.criteria.type !== 'Dyad') {
+                dyadEdge = global.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
+            }
 
+            if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== "") {
+                // index = ordinalBin.options.variable.values.indexOf(value[ordinalBin.options.variable.label]);
+                index = 'error';
+                $.each(ordinalBin.options.variable.values, function(vindex, vvalue) {
+                    if (value[ordinalBin.options.variable.label] === vvalue.value) {
+                        index = vindex;
+                    }
+                });
 
+                if (ordinalBin.options.criteria.type !== 'Dyad') {
+                    $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                } else {
+                    $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                }
 
-// $('.dode-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-$('.ord-node-bin').css({width:itemW,height:itemH});
+                var noun = "people";
+                var length = $('.d'+index).children('.active-node-list').children().length;
+                if (length === 1) {
+                    noun = "person";
+                }
+                if (length === 0) {
+                    $('.d'+index).children('p').html('(Empty)');
+                } else {
+                    $('.d'+index).children('p').html(length+' '+noun+'.');
+                }
+            } else {
+                if (ordinalBin.options.criteria.type !== 'Dyad') {
+                    $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                } else {
+                    $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                }
 
-// get all edges
-var edges = global.network.getEdges(ordinalBin.options.criteria);
-console.log('edges');
-console.log(edges);
+            }
 
-// Add edges to bucket or to bins if they already have variable value.
-$.each(edges, function(index,value) {
-    var dyadEdge;
-    if (ordinalBin.options.criteria.type !== 'Dyad') {
-        console.log('dyadedge');
-        dyadEdge = global.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
-        console.log(dyadEdge);
-    }
+        });
+        $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+            start: function() {
+                if (taskComprehended === false) {
+                    var eventProperties = {
+                        stage: global.session.currentStage(),
+                        timestamp: new Date()
+                    };
+                    log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                    window.dispatchEvent(log);
+                    taskComprehended = true;
+                }
 
-    if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== "") {
-        // index = ordinalBin.options.variable.values.indexOf(value[ordinalBin.options.variable.label]);
-        index = 'error';
-        $.each(ordinalBin.options.variable.values, function(vindex, vvalue) {
-            if (value[ordinalBin.options.variable.label] === vvalue.value) {
-                index = vindex;
+                // $('.ord-node-bin').css({overflow:'hidden'});
+            },
+            stop: function() {
+                // $('.ord-node-bin').css({overflow:'scroll'});
             }
         });
 
-        if (ordinalBin.options.criteria.type !== 'Dyad') {
-            $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-        } else {
-            $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
-        }
-
-        var noun = "people";
-        var length = $('.d'+index).children('.active-node-list').children().length;
-        if (length === 1) {
-            noun = "person";
-        }
-        if (length === 0) {
-            $('.d'+index).children('p').html('(Empty)');
-        } else {
-            $('.d'+index).children('p').html(length+' '+noun+'.');
-        }
-    } else {
-        if (ordinalBin.options.criteria.type !== 'Dyad') {
-            $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-        } else {
-            $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
-        }
-
-    }
-
-});
-$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
-start: function() {
-    if (taskComprehended === false) {
-        var eventProperties = {
-            stage: global.session.currentStage(),
-            timestamp: new Date()
-        };
-        log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-        window.dispatchEvent(log);
-        taskComprehended = true;
-    }
-
-    // $('.ord-node-bin').css({overflow:'hidden'});
-},
-stop: function() {
-    // $('.ord-node-bin').css({overflow:'scroll'});
-}
-});
-
-// Event Listeners
-window.addEventListener('changeStageStart', stageChangeHandler, false);
-$(window.document).on('click', '.followup-option', followupHandler);
-};
+        // Event Listeners
+        window.addEventListener('changeStageStart', stageChangeHandler, false);
+        $(window.document).on('click', '.followup-option', followupHandler);
+    };
 
 return ordinalBin;
+
 };
 
 module.exports = new OrdinalBin();

@@ -4,14 +4,15 @@
 
 <script>
 
-	var multiBin = new MultiBin({
+var multiBin = require('./js/multibin.js');
+multiBin.init({
 		heading: "Have you had anal sex with each of these people in the past six months?",
     	subheading: "",
 	    targetEl: $('.container'),
 	    edgeType: 'Sex',
 	    criteria: {
 			type:'Sex',
-			from:network.getNodes({type_t0:'Ego'})[0].id
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
 		},
 	    variable: {
 	      label:'anal_sex_status_t0',
