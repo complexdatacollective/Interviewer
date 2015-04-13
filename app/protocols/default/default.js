@@ -8,4 +8,4 @@ module.exports = {
     stages: [
         {label:'Example',page:'intro.html'}
     ]
-}
+};

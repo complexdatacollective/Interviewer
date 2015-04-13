@@ -50,11 +50,12 @@ var Session = function Session() {
         global.tools.notify('Session initialising.', 1);
         // exdend our local options with any passed options
         var path = require('path');
-        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/'+global.studyProtocol+'.netcanvas');
+        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/'+global.studyProtocol+'.js');
 
         // todo: check this exists
         var study = require(studyPath);
         session.stages = study.stages;
+        session.skipFunctions = study.skipFunctions;
         session.name = study.parameters.name;
 
         //bind to the custom state change event to handle spinner interactions
