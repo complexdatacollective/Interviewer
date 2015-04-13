@@ -1,6 +1,6 @@
 {
   "name": "netCanvas",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An NWjs based personal network capture tool, customised for the RADAR project.",
   "private": true,
   "homepage": "https://github.com/jthrilly/netCanvas",
