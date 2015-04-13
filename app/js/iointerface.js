@@ -1,4 +1,4 @@
-/* global require, console */
+/* global require */
 /* exported IOInterface */
 
 
@@ -31,36 +31,27 @@ var IOInterface = function IOInterface() {
         // After init, first priority is to load previous session for this protocol.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         global.tools.notify('ioInterface initialising.', 1);
-        console.log('iointerface reporting on session name:');
-        console.log(global.session.name);
         db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, global.session.name+'.db'), autoload: true });
 
 
         db.find({}).sort({date: 1 }).exec(function (err, docs) {
-            console.log(docs);
             if (err) {
+                return false;
                 // handle error
-                console.log('error with loading the database.');
             }
             if (docs.length !== undefined && docs.length > 0) {
-                console.log('found a session. Returning: ');
-                console.log(docs[0]);
                 callback(docs[0]._id);
             } else {
-                console.log('no existing session, creating one.');
                 var sessionDate = new Date();
                 db.insert([{date:sessionDate}], function (err, newDoc) {
                     if(err) {
+                        return false;
                       // do something with the error
-                        console.log('error with insert');
                     }
-                    console.log(newDoc);
-                    console.log(newDoc[0]._id);
 
                     // Two documents were inserted in the database
                     // newDocs is an array with these documents, augmented with their _id
                     id = newDoc[0]._id;
-                    console.log('id has been set as '+id);
                     callback(newDoc[0]._id);
                 });
             }
@@ -72,45 +63,26 @@ var IOInterface = function IOInterface() {
 
     interface.save = function(userData, id) {
         delete global.session.userData._id;
-        global.tools.notify('IOInterface being asked to synchronise with data store:',2);
-        global.tools.notify('Data to be saved: ', 1);
-        global.tools.notify(userData, 1);
+        global.tools.notify('IOInterface being asked to save to data store.',1);
+        global.tools.notify('Data to be saved: ', 2);
+        global.tools.notify(userData, 2);
 
         db.update({_id: id }, userData, {}, function (err) {
             if (err) {
-                console.log('saving failed');
+                return false;
             }
-
-            console.log('saving worked...id for find: '+id);
-            db.find({"_id": id }, function (err, docs) {
-                if (err) {
-                    console.log('error with finding');
-                    console.log(err);
-                    // handle error
-                }
-                console.log('data is now: ');
-                console.log(docs[0]);
-            });
+            global.tools.notify('Saving complete.', 1);
         });
 
     };
 
     interface.update = function(key, userData,id) {
+        global.tools.notify('IOInterface being asked to update data store.',1);
         db.update({_id: id }, userData, {}, function (err) {
             if (err) {
-                console.log('saving failed');
+                return false;
             }
-
-            console.log('update worked.');
-            db.find({"_id": id }, function (err, docs) {
-                if (err) {
-                    console.log('error with finding');
-                    console.log(err);
-                    // handle error
-                }
-                console.log('new data is: ');
-                console.log(docs[0]);
-            });
+            global.tools.notify('Updating complete.', 1);
         });
 
     };
@@ -119,7 +91,6 @@ var IOInterface = function IOInterface() {
         // db.find with empty object returns all objects.
         db.find({}, function (err, docs) {
             if (err) {
-                console.log('resetting failed');
                 return false;
             }
 
@@ -133,23 +104,23 @@ var IOInterface = function IOInterface() {
     };
 
     interface.deleteDocument = function(callback) {
+        global.tools.notify("ioInterface being asked to delete document.", 2);
         db.remove({ _id: global.session.id }, {}, function (err) {
-            if (err) { console.log('deleting document failed.'); return false; }
-            console.log('Deleted document '+id);
+            if (err) {
+                return false;
+            }
+            global.tools.notify("Deleting complete.", 2);
             if(callback) { callback(); }
         });
     };
 
     interface.load = function(callback, id) {
-        console.log('loading...id is '+id);
         global.tools.notify("ioInterface being asked to load data.", 2);
         db.find({"_id": id}, function (err, docs) {
             if (err) {
                 // handle error
-                console.log('error');
+                return false;
             }
-            console.log('loading worked. Returning: ');
-            console.log(docs[0]);
             callback(docs[0]);
         });
     };

@@ -148,7 +148,6 @@ var Menu = function Menu(options) {
 
         } else {
             adding = true;
-            console.log(newMenu.button);
             newMenu.button.transition({top:0,opacity:1},1000).promise().done( function() {
                 adding = false; }
                 );

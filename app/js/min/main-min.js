@@ -6,11 +6,11 @@ var path = require('path');
 
 console.log("netCanvas "+global.gui.App.manifest.version+" running on NWJS "+process.versions['node-webkit']);
 
-fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
-    if (err) { console.log(err); return false; }
-    console.log("Available survey protocols:");
-    console.log(files);
-});
+// fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
+//     if (err) { console.log(err); return false; }
+//     console.log("Available survey protocols:");
+//     console.log(files);
+// });
 
 // var win = global.gui.Window.get().enterFullscreen();
 
