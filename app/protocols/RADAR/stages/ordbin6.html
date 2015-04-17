@@ -1,0 +1,32 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+
+		var criteria = {
+			type:'Drugs',
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
+		}
+
+		var ordbin = require('./js/ordinalbin.js');
+	    ordbin.init({
+		    targetEl: $('.container'),
+		    edgeType: 'Drugs',
+		    criteria: criteria,
+		    variable: {
+		      label:'d1_freq_p_t0',
+		      values: [
+		        {label:'Daily', value: 3},
+		        {label:'Weekly', value: 2},
+		        {label:'Less Than Weekly', value: 1},
+		        {label:'Not in the past 6 months', value: 0},
+		        {label:'Don\'t Want to Answer', value: -1}
+		      ]
+		    },
+	    	heading: "How often have you used Marijuana with these people in the last 6 months?",
+	    	subheading: ""
+	  	});
+
+
+</script>

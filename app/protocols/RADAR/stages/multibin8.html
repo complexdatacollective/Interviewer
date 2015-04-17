@@ -1,0 +1,26 @@
+	<div class="container full-height text-center">
+
+</div>
+
+<script>
+
+var multiBin = require('./js/multibin.js');
+multiBin.init({
+	    targetEl: $('.container'),
+	    edgeType: 'Dyad',
+	    criteria: {
+			type:'Sex',
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
+		},
+	    variable: {
+	      label:'serious_rel_p_t0',
+	      values: [
+	      	'Serious Relationship',
+	      	'Not Serious'
+	      ]
+	    },
+    	heading: "Were you in a serious relationship with each of these people the last time you had sex?",
+    	subheading: ""
+  	});
+
+</script>

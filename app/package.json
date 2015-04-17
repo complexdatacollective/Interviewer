@@ -1,6 +1,6 @@
 {
   "name": "netCanvas",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An NWjs based personal network capture tool, customised for the RADAR project.",
   "private": true,
   "homepage": "https://github.com/jthrilly/netCanvas",
@@ -15,8 +15,18 @@
     "url": "git://github.com/jthrilly/netCanvas.git"
   },
   "dependencies": {
+    "bootstrap": "^3.3.4",
+    "jquery": "^2.1.3",
+    "jquery-ui": "^1.10.5",
+    "jquery-ui-touch-punch": "^0.2.3",
+    "jquery.transit": "^0.9.12",
+    "jsdom": "^4.3.0",
+    "konva": "^0.9.0",
+    "leaflet": "^0.7.3",
+    "leaflet-providers": "^1.0.27",
     "nedb": "^1.1.1",
-    "requirejs": "^2.1.15"
+    "requirejs": "^2.1.15",
+    "xmlhttprequest": "^1.7.0"
   },
   "devDependencies": {},
   "main": "index.html",
@@ -24,7 +34,7 @@
     "start": "nodewebkit"
   },
   "window": {
-    "toolbar": false,
+    "toolbar": true,
     "frame": true,
     "position": "center",
     "width": 1520,

@@ -1,0 +1,21 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
+      heading: "",
+      subheading: "Tap on all of the people who were involved the <u>last</u> time you had more than one sexual partner during a single sexual encounter.",
+    	mode:'Select', //edge, position, select
+		  targetEl: $('.container'),
+      showEdge: "Sex",
+		  edgeType: "GroupSex",
+      criteria: criteria,
+      followup: true
+	});
+
+  </script>

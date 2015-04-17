@@ -1,0 +1,20 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
+      heading: "Please tap on anyone you are currently in a serious relationship with.",
+      subheading: "",
+    	mode:'Select', //edge, position, select
+		  targetEl: $('.container'),
+		  edgeType: "SeriousRel",
+      criteria: criteria,
+      followup: true
+	});
+
+  </script>

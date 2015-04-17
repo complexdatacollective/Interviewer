@@ -1,8 +1,11 @@
 {
   "name": "leaflet-providers",
-  "version": "1.0.13",
+  "version": "1.0.27",
   "homepage": "https://github.com/leaflet-extras/leaflet-providers",
   "description": "An extension to Leaflet that contains configurations for various free tile providers.",
+  "dependencies": {
+    "leaflet": "~0.7.3"
+  },
   "main": "leaflet-providers.js",
   "keywords": [
     "leaflet",
@@ -19,14 +22,13 @@
     "preview",
     "*.html"
   ],
-  "_release": "1.0.13",
+  "_release": "1.0.27",
   "_resolution": {
     "type": "version",
-    "tag": "1.0.13",
-    "commit": "a27012a02bf98cf3f6b8fd3c637cf0d8605444ef"
+    "tag": "1.0.27",
+    "commit": "cd61a578f5fc77c0ef65270a9069c80fb59907a5"
   },
   "_source": "git://github.com/leaflet-extras/leaflet-providers.git",
   "_target": "~1.0.13",
-  "_originalSource": "leaflet-providers",
-  "_direct": true
+  "_originalSource": "leaflet-providers"
 }

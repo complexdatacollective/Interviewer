@@ -1,0 +1,20 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
+      heading: "Tap on all of the people with whom you had sex in the past six months.",
+      subheading: "",
+    	mode:'Select', //edge, position, select
+		  targetEl: $('.container'),
+		  edgeType: "Sex",
+      criteria: criteria,
+      followup: true
+	});
+
+  </script>

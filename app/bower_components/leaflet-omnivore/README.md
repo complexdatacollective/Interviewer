@@ -24,7 +24,7 @@ so you can specify what you want to add to the map with just a URL.
 use it easily with the [Mapbox Plugins CDN](http://mapbox.com/mapbox.js/plugins/#leaflet-omnivore):
 
 ```html
-<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.1.2/leaflet-omnivore.min.js'></script>
+<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
 ```
 
 
@@ -103,6 +103,19 @@ var customLayer = L.geoJson(null, {
 });
 
 var myLayer = omnivore.csv('foo', null, customLayer);
+```
+
+Adding custom styles to a GeoJSON layer:
+
+```js
+var customLayer = L.geoJson(null, {
+    // http://leafletjs.com/reference.html#geojson-style
+    style: function(feature) {
+        return { color: '#f00' };
+    }
+});
+// this can be any kind of omnivore layer
+var runLayer = omnivore.kml('line.kml', null, customLayer)
 ```
 
 Using a `L.mapbox.featureLayer`:

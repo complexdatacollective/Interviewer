@@ -1,6 +1,6 @@
-/* global network, extend, session, notify */
+/* global*/
 /* exported ListSelect */
-var ListSelect = function ListSelect(options) {
+var ListSelect = function ListSelect() {
 
   //global vars
   var listSelect = {};
@@ -10,8 +10,6 @@ var ListSelect = function ListSelect(options) {
     heading: "This is a default heading",
     subheading: "And this is a default subheading"
   };
-
-  extend(listSelect.options, options);
 
   var itemClickHandler = function() {
     //   console.log('item click handler');
@@ -30,7 +28,7 @@ var ListSelect = function ListSelect(options) {
               properties[value.value] = undefined;
           }
       });
-      network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
+      global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
 
     } else {
       $(this).data('selected', true);
@@ -45,7 +43,7 @@ var ListSelect = function ListSelect(options) {
 
       });
 
-      network.updateNode(network.getNodes({type_t0:'Ego'})[0].id, properties);
+      global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
 
     }
 
@@ -56,20 +54,21 @@ var ListSelect = function ListSelect(options) {
   };
 
   var processSubmitHandler = function() {
-    session.nextStage();
+    global.session.nextStage();
 
   };
 
   listSelect.destroy = function() {
     // Event Listeners
-    notify("Destroying listSelect.",0);
-    $(document).off('click', '.item', itemClickHandler);
-    $(document).off('click', '.continue', processSubmitHandler);
+    global.tools.notify("Destroying listSelect.",0);
+    $(window.document).off('click', '.item', itemClickHandler);
+    $(window.document).off('click', '.continue', processSubmitHandler);
     window.removeEventListener('changeStageStart', stageChangeHandler, false);
 
   };
 
-  listSelect.init = function() {
+  listSelect.init = function(options) {
+      global.tools.extend(listSelect.options, options);
     // Add header and subheader
     listSelect.options.targetEl.append('<h1 class="text-center">'+listSelect.options.heading+'</h1>');
     listSelect.options.targetEl.append('<p class="lead text-center">'+listSelect.options.subheading+'</p>');
@@ -82,7 +81,7 @@ var ListSelect = function ListSelect(options) {
       };
 
       properties[value.value] = 1;
-      if (network.getNodes(properties).length>0) {
+      if (global.network.getNodes(properties).length>0) {
         el.data('selected', true);
         el.css({'border':'2px solid red','background':'#E8C0C0'});
       }
@@ -91,14 +90,14 @@ var ListSelect = function ListSelect(options) {
 
 
     // Event Listeners
-    $(document).on('click', '.item', itemClickHandler);
-    $(document).on('click', '.continue', processSubmitHandler);
+    $(window.document).on('click', '.item', itemClickHandler);
+    $(window.document).on('click', '.continue', processSubmitHandler);
     window.addEventListener('changeStageStart', stageChangeHandler, false);
 
 
   };
 
-  listSelect.init();
-
   return listSelect;
 };
+
+module.exports = new ListSelect();

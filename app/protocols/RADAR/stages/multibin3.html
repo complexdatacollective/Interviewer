@@ -1,0 +1,38 @@
+<div class="container full-height text-center">
+
+</div>
+
+<script>
+
+var multiBin = require('./js/multibin.js');
+multiBin.init({
+	    targetEl: $('.container'),
+	    edgeType: 'Dyad',
+	    criteria: {
+			type:'Dyad',
+			from:global.network.getNodes({type_t0:'Ego'})[0].id
+		},
+	    variable: {
+	      label:'orient_p_t0',
+	      values: [
+	      	'Bisexual',
+	      	'Heterosexual / Straight',
+	      	'Gay / Lesbian',
+	      	'Queer',
+	      	'Not Listed',
+	        'Don\'t Want to Answer',
+	        'Don\'t Know'
+	      ]
+	    },
+	   	followup: {
+	      trigger: ['Not Listed'],
+	      questions: [{
+	      		prompt: 'Which other term would you use to describe their sexual orientation?',
+	      		variable:'orient_p_other_t0'
+	      }]
+	    },
+    	heading: "Please describe how each person describes their sexual orientation.",
+    	subheading: "Drag and drop the node below into a category."
+  	});
+
+</script>

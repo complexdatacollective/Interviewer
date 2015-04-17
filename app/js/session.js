@@ -1,536 +1,303 @@
-/* global BootstrapDialog, console, fs, extend, IOInterface, notify, menu, network */
+ /* global console */
 /* exported Session, eventLog */
-var Session = function Session(options) {
+var Session = function Session() {
 
-  //global vars
-  var session = {};
-  var currentStage = 0;
-  var $content = $('#content');
+    //global vars
+    var session = {};
+    var currentStage = 0;
+    var content = $('#content');
 
-  // Establish a new IOInterface for loading and saving
-  var dataStore = {};
-  session.id = 0;
-  session.userData = {};
-  var lastSaveTime;
+    // Establish a new IOInterface for loading and saving
+    session.id = 0;
+    session.userData = {};
+    var lastSaveTime;
 
-  function drugSkip(drugVar) {
-      if (typeof network !== 'undefined') {
-          var properties = {};
-          properties[drugVar] = 1;
-          // are there actually any drug edges?
-          var drugEdges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:'Drugs'});
-          var required = network.getNodes(properties);
-
-          if (drugEdges.length === 0 || required.length === 0) {
-              return true;
-          } else {
-              return false;
-          }
-      } else {
-        return false;
-      }
-  }
-
-  function saveFile(path) {
-      var data = JSON.stringify(session.userData, undefined, 2);
-      fs.writeFile(path, data);
-  }
-
-  function clickDownloadInput() {
-     $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
-     var event = document.createEvent('MouseEvents');
-     event.initMouseEvent('click');
-     document.getElementById('save').dispatchEvent(event);
- }
-
-  session.stages = [
-          {label:'Intro', page:'intro.html'},
-          {label:'NG: closest', page:'namegen1.html'},
-          {label:'NG: marijuana or other drugs', page:'namegen5.html'},
-          {label:'NG: drugs, two or more', page:'namegenmod6.html'},
-          {label:'NG: other people sex', page:'namegen7.html'},
-          {label:'NG: sex, two or more', page:'namegenmod8.html'},
-          {label:'NET: layout', page:'canvaslayout.html'},
-          {label:'NET EDGE: social', page:'canvasedge1.html'},
-          {label:'NET NI: who recruited', page:'canvasselect2.html', skip: function() { if (typeof network !== 'undefined') { var required = network.getNodes({seed_status_t0:'Non-Seed'}); if (required.length === 0) { return true; } else { return false; }}}},
-          {label:'NET NI: who drunk with', page:'canvasselect3.html'},
-          {label:'NET NI: who drugs with', page:'canvasselect4.html'},
-          {label:'NET NI: who sex with', page:'canvasselect5.html'},
-          {label:'ORD: contact frequency', page:'ordbin1a.html'},
-          {label:'ORD: relationship strength', page:'ordbin1.html'},
-          {label:'NET NI: get advice', page:'canvasselect6.html'},
-	      {label:'NET NI: Serious relationship?', page:'canvasselect8.html'},
-          {label:'CAT: gender identity', page:'multibin5.html'},
-          {label:'RACE: Hispanic or Latino', page:'canvasselect14.html'},
-          {label:'RACE: Racial Identity', page:'multibin2.html'},
-          {label:'CAT: sexuality', page:'multibin3.html'},
-          {label:'CAT: location', page:'multibin4.html'},
-          {label:'MAP: location in Chicago', page:'map1.html', skip: function() {
-            // Don't show map if no participants are from chicago
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Dyad', res_cat_p_t0: 'Chicago'});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'LIST SELECT: which drugs?', page:'listselect1.html'},
-          {label:'ORD: Marijuana freq', page:'ordbin6.html',skip: function() { return drugSkip('d1_t0'); }},
-          {label:'ORD: Cocaine or Crack freq', page:'ordbin7.html', skip: function() { return drugSkip('d2_t0'); }},
-          {label:'ORD: Heroin freq', page:'ordbin8.html', skip: function() { return drugSkip('d3_t0'); }},
-          {label:'ORD: Methamphetamines freq', page:'ordbin9.html', skip: function() { return drugSkip('d4_t0'); }},
-          {label:'ORD: Painkillers or Opiates freq', page:'ordbin10.html', skip: function() { return drugSkip('d5_t0'); }},
-          {label:'ORD: Poppers freq', page:'ordbin11.html', skip: function() { return drugSkip('d6_t0'); }},
-          {label:'ORD: Stimulants or Amphetamines freq', page:'ordbin12.html', skip: function() { return drugSkip('d7_t0'); }},
-          {label:'ORD: Depressants or Tranquilizers freq', page:'ordbin13.html', skip: function() { return drugSkip('d8_t0'); }},
-          {label:'ORD: Ecstasy freq', page:'ordbin14.html', skip: function() { return drugSkip('d9_t0'); }},
-          {label:'ORD: Other Drugs freq', page:'ordbin15.html', skip: function() { return drugSkip('d10_t0'); }},
-          {label:'NET EDGE: drugs', page:'canvasedge2.html'},
-          {label:'CAT: where met sex partners', page:'multibin6.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'DATE: first and last sex', page:'dateinterface1.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'CAT: HIV status of sex partners', page:'multibin7.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                    var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (totalEdges.length > 0) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-            } else {
-              return false;
-            }
-
-          } },
-          {label:'CAT: Vaginal sex?', page:'multibin9.html',
-          skip: function() {
-              // need to skip male participant with only male sex partners or female participant with only female sex partners
-
-                if (typeof network !== 'undefined') {
-
-                    // Skip if there are no sex edges between ego and some alters
-                    var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                    if (sexEdges.length > 0) {
-
-                        // Get ego gender
-                        var egoGender = network.getNodes({type_t0:'Ego'})[0].gender_k;
-
-                        // Get total edges ready for counting
-                        var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
-
-                        // Get male edges ready for counting
-                        var maleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Male'});
-
-                        // Get female edges ready for counting
-                        var femaleEdges = network.getEdges({type:'Dyad', gender_p_t0: 'Female'});
-
-                        // If ego is male AND total edges is the same as male edges
-                        // OR
-                        // If ego is female and total edges is the same as female edges
-                        if ((egoGender === 'Male' && totalEdges.length === maleEdges.length) || (egoGender === 'Female' && totalEdges.length === femaleEdges.length)) {
-                            // Skip
-                            return true;
-                        } else {
-                            // Don't skip
-                            return false;
-                        }
-                    } else {
-                        // Skip if there are no sex edges
-                        return true;
-                    }
-                } else {
-                    // Don't skip if network is undefined
-                    return false;
-                }
-
-          } },
-          {label:'CAT: Anal sex?', page:'multibin10.html',
-          skip: function() {
-              // need to skip female participant with only female sex partners
-
-                  if (typeof network !== 'undefined') {
-                      var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                      if (sexEdges.length > 0) {
-                          var totalEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id});
-                          var femaleEdges = network.getEdges({type:'Dyad', from:network.getNodes({type_t0:'Ego'})[0].id, gender_p_t0: 'Female'});
-                          if (network.getNodes({type_t0:'Ego'})[0].gender_k === 'Female' && totalEdges.length === femaleEdges.length) {
-                              return true;
-                          } else {
-                              return false;
-                          }
-                      } else {
-                        return true;
-                      }
-                  } else {
-                      console.log('network undefined.');
-                      return false;
-                  }
-          } },
-          {label:'NET EDGE: sex', page:'canvasedge3.html'},
-          {label:'SWITCH: multiple sex partners', page:'multiplepartners.html', skip: function() {
-            // Don't show if ego has had no sex partners
-            if (typeof network !== 'undefined') {
-                var totalEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                if (totalEdges.length > 0) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-
-          } },
-          {label:'NET NI: who multiple sex partners', page:'canvasselect7.html', skip: function() {
-              if (typeof network !== 'undefined') {
-
-                  var sexEdges = network.getEdges({type:'Sex', from:network.getNodes({type_t0:'Ego'})[0].id});
-                  if (sexEdges.length > 0) {
-                      // it is required that ego has answerd 'yes' to the multiple sex question
-                      var required = network.getNodes({multiple_sex_t0: 'yes'});
-                      if (required.length === 0) {
-                          return true;
-                      } else {
-                          return false;
-                      }
-                  } else {
-                      // Skip if there are no sex edges
-                      return true;
-                  }
-              } else {
-                  return false;
-              }
-          } },
-          {label:'Thank You', page:'thanks.html'},
-          {label:'Download Data', page:'download.html'},
-          {label:'Finish', page:'finish.html'}
-                    ];
-
-  var saveTimer;
-  // custom events
-
-  session.options = {
-    fnBeforeStageChange : function(oldStage, newStage) {
-        var eventProperties = {
-            stage: currentStage,
-            timestamp: new Date()
-        };
-        var log = new CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
-        window.dispatchEvent(log);
-
-        var changeStageStartEvent = new CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
-        window.dispatchEvent(changeStageStartEvent);
-
-    },
-    fnAfterStageChange : function(oldStage, newStage) {
-        var changeStageEndEvent = new CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
-        window.dispatchEvent(changeStageEndEvent);
+    function saveFile(path) {
+        var data = JSON.stringify(session.userData, undefined, 2);
+        var fs = require('fs');
+        fs.writeFile(path, data);
     }
-  };
 
-  session.init = function() {
-    notify('Session initialising.', 1);
-    // exdend our local options with any passed options
-    extend(session.options,options);
+    function clickDownloadInput() {
+        $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
+        var event = window.document.createEvent('MouseEvents');
+        event.initMouseEvent('click');
+        window.document.getElementById('save').dispatchEvent(event);
+    }
 
-    //bind to the custom state change event to handle spinner interactions
-    window.addEventListener('changeStageStart', function () {
-      $('.loader').transition({opacity:1});
-    }, false);
+    var saveTimer;
+    // custom events
 
-    window.addEventListener('changeStageEnd', function () {
-      $('.loader').transition({opacity:0});
-    }, false);
+    session.options = {
+        fnBeforeStageChange : function(oldStage, newStage) {
+            var eventProperties = {
+                stage: currentStage,
+                timestamp: new Date()
+            };
+            var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
+            window.dispatchEvent(log);
 
-    document.getElementById('save').addEventListener('change', function () {
-        saveFile(this.value);
-    });
+            var changeStageStartEvent = new window.CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
+            window.dispatchEvent(changeStageStartEvent);
 
-    // Create our data interface
-    dataStore = new IOInterface();
+        },
+        fnAfterStageChange : function(oldStage, newStage) {
+            var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
+            window.dispatchEvent(changeStageEndEvent);
+        }
+    };
 
-    // Check for an in-progress session
-    dataStore.init(function(sessionid) {
-        session.id = sessionid;
-        dataStore.load(function(data) {
-            session.updateUserData(data);
-            session.goToStage(0);
-        }, session.id);
-    });
+    session.init = function() {
+        global.tools.notify('Session initialising.', 1);
+        // exdend our local options with any passed options
+        var path = require('path');
+        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/'+global.studyProtocol+'.js');
 
-    session.registerData("session");
+        // todo: check this exists
+        var study = require(studyPath);
+        session.stages = study.stages;
+        session.skipFunctions = study.skipFunctions;
+        session.name = study.parameters.name;
 
-    window.addEventListener('unsavedChanges', function () {
-      session.saveManager();
-    }, false);
+        //bind to the custom state change event to handle spinner interactions
+        window.addEventListener('changeStageStart', function () {
+            $('.loader').transition({opacity:1});
+        }, false);
 
-    var sessionMenu = menu.addMenu('Session','hi-icon-cog');
-    // menu.addItem(sessionMenu, 'Load Data by ID', 'icon-user', function() { return true; });
-    menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
+        window.addEventListener('changeStageEnd', function () {
+            $('.loader').transition({opacity:0});
+        }, false);
 
-
-            BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_INFO,
-            // size: BootstrapDialog.SIZE_LARGE,
-            title: 'Are you sure?',
-            message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
-            buttons: [{
-                label: 'Continue',
-                cssClass: 'btn-success',
-                action: function(){
-                    session.reset();
-                }
-            }, {
-                icon: 'glyphicon glyphicon-ban-circle',
-                label: 'Cancel',
-                cssClass: 'btn-warning',
-                action: function(dialogItself){
-                    dialogItself.close();
-                }
-            }]
+        window.document.getElementById('save').addEventListener('change', function () {
+            saveFile(this.value);
         });
 
+        // Check for an in-progress session
+        global.dataStore.init(function(sessionid) {
+            session.id = sessionid;
+            global.dataStore.load(function(data) {
+                session.updateUserData(data);
+                session.goToStage(0);
+            }, session.id);
+        });
 
-    }
+        window.addEventListener('unsavedChanges', function () {
+            session.saveManager();
+        }, false);
 
+        var sessionMenu = global.menu.addMenu('Session','hi-icon-cog');
+        global.menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
+            window.BootstrapDialog.show({
+                type: window.BootstrapDialog.TYPE_INFO,
+                // size: BootstrapDialog.SIZE_LARGE,
+                title: 'Are you sure?',
+                message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+                buttons: [{
+                    label: 'Continue',
+                    cssClass: 'btn-modal-success',
+                    action: function(){
+                        global.dataStore.deleteDocument(session.reset);
+                    }
+                }, {
+                    icon: 'glyphicon glyphicon-ban-circle',
+                    label: ' Cancel',
+                    cssClass: 'btn-modal-warning',
+                    action: function(dialogItself){
+                        dialogItself.close();
+                    }
+                }]
+            });
+        });
 
+        global.menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
 
+        global.menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
+            window.BootstrapDialog.show({
+                type: window.BootstrapDialog.TYPE_INFO,
+                // size: BootstrapDialog.SIZE_LARGE,
+                title: 'Are you sure?',
+                message: '<h4>Are you sure you want to purge the database?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+                buttons: [{
+                    label: 'Continue',
+                    cssClass: 'btn-modal-success',
+                    action: function(){
+                        global.dataStore.reset(session.reset);
+                    }
+                }, {
+                    icon: 'glyphicon glyphicon-ban-circle',
+                    label: ' Cancel',
+                    cssClass: 'btn-modal-warning',
+                    action: function(dialogItself){
+                        dialogItself.close();
+                    }
+                }]
+            });
+        });
 
-    );
-    menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
-    menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
+        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
+        $.each(session.stages, function(index,value) {
+            global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
+        });
 
-        BootstrapDialog.show({
-        type: BootstrapDialog.TYPE_INFO,
-        // size: BootstrapDialog.SIZE_LARGE,
-        title: 'Are you sure?',
-        message: '<h4>Are you sure you want to purge the database?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
-        buttons: [{
-            label: 'Continue',
-            cssClass: 'btn-success',
-            action: function(){
-                dataStore.reset(session.reset);
+    };
+
+    session.downloadData = function() {
+        var filename = session.returnSessionID()+'.json';
+        var text = JSON.stringify(session.userData, undefined, 2); // indentation level = 2;
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+        pom.click();
+    };
+
+    session.reset = function() {
+        global.tools.notify("Resetting session.",2);
+        session.id = 0;
+        session.currentStage = 0;
+        var _window = global.gui.Window.get();
+        _window.reloadDev();
+    };
+
+    session.saveManager = function() {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(session.saveData, 3000);
+    };
+
+    session.updateUserData = function(data) {
+        global.tools.notify("Updating user data.", 2);
+        global.tools.notify("Using the following to update:", 1);
+        global.tools.notify(data, 1);
+        global.tools.notify("session.userData is:", 1);
+        global.tools.notify(session.userData, 1);
+        global.tools.extend(session.userData, data);
+        // session.userData = $.extend(session.userData,data);
+        global.tools.notify("Combined output is:", 0);
+        global.tools.notify(session.userData, 0);
+
+        var newDataLoaded = new window.Event('newDataLoaded');
+        window.dispatchEvent(newDataLoaded);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+    };
+
+    session.returnSessionID = function() {
+        return session.id;
+    };
+
+    session.saveData = function() {
+        global.dataStore.save(session.userData, session.returnSessionID());
+        lastSaveTime = new Date();
+    };
+
+    session.goToStage = function(stage) {
+        if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
+
+        // Skip logic
+        if (session.stages[stage].skip) {
+
+            //evaluate skip function
+            var outcome = session.stages[stage].skip();
+
+            // if true, skip the stage
+            if (outcome === true) {
+                console.log('Skipping because skip condition was met.');
+                if (stage > currentStage) {
+                    session.goToStage(stage+1);
+                } else {
+                    session.goToStage(stage-1);
+
+                }
+
+                return false;
             }
-        }, {
-            icon: 'glyphicon glyphicon-ban-circle',
-            label: 'Cancel',
-            cssClass: 'btn-warning',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-
-
-    });
-
-    // menu.addItem(sessionMenu, 'Sync with Server', 'icon-cloud', session.saveData);
-
-    var stagesMenu = menu.addMenu('Stages', 'hi-icon-list');
-    $.each(session.stages, function(index,value) {
-      menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
-    });
-
-  };
-
-  session.downloadData = function() {
-
-
-
-
-    var filename = session.returnSessionID()+'.json';
-    var text = JSON.stringify(session.userData, undefined, 2); // indentation level = 2;
-      var pom = document.createElement('a');
-      pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-      pom.setAttribute('download', filename);
-      pom.click();
-  };
-
-  session.reset = function() {
-    notify("Resetting session.",2);
-    localStorage.removeItem('activeSession');
-    localStorage.removeItem('nodes');
-    localStorage.removeItem('edges');
-    localStorage.removeItem('session');
-    localStorage.removeItem('log');
-    session.id = 0;
-    session.currentStage = 0;
-    location.reload();
-  };
-
-  session.saveManager = function() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(session.saveData, 3000);
-  };
-
-  session.updateUserData = function(data) {
-    notify("Updating user data.", 2);
-    notify("Using the following to update:", 1);
-    notify(data, 1);
-    notify("session.userData is:", 1);
-    notify(session.userData, 1);
-    extend(session.userData, data);
-    // session.userData = $.extend(session.userData,data);
-    notify("Combined output is:", 0);
-    notify(session.userData, 0);
-
-    var newDataLoaded = new Event('newDataLoaded');
-    window.dispatchEvent(newDataLoaded);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-  };
-
-  session.returnSessionID = function() {
-    return session.id;
-  };
-
-  session.saveData = function() {
-    dataStore.save(session.userData, session.returnSessionID());
-    lastSaveTime = new Date();
-  };
-
-  session.goToStage = function(stage) {
-    if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
-
-    // Skip logic
-    if (session.stages[stage].skip) {
-
-      //evaluate skip function
-      var outcome = session.stages[stage].skip();
-
-      // if true, skip the stage
-      if (outcome === true) {
-        console.log('Skipping because skip condition was met.');
-        if (stage > currentStage) {
-          session.goToStage(stage+1);
-        } else {
-          session.goToStage(stage-1);
-
         }
 
-        return false;
-      }
-    }
+        global.tools.notify('Session is moving to stage '+stage, 3);
+        var eventProperties = {
+            stage: stage,
+            timestamp: new Date()
+        };
+        var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
+        window.dispatchEvent(log);
+        session.options.fnBeforeStageChange(currentStage,stage);
+        var newStage = stage;
 
-    notify('Session is moving to stage '+stage, 3);
-    var eventProperties = {
-        stage: stage,
-        timestamp: new Date()
+        var stagePath = "./protocols/"+global.studyProtocol+"/stages/"+session.stages[stage].page;
+        content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
+            content.load( stagePath, function() {
+                // This never gets called if there is a JS error. Is there a way to ensure it is?
+                content.transition({ opacity: '1'},400,'easeInSine');
+            });
+        });
+
+        var oldStage = currentStage;
+        currentStage = newStage;
+        session.options.fnAfterStageChange(oldStage, currentStage);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
     };
-    var log = new CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
-    window.dispatchEvent(log);
-    session.options.fnBeforeStageChange(currentStage,stage);
-    var newStage = stage;
-    $content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
-      $content.load( "stages/"+session.stages[stage].page, function() {
-        // This never gets called if there is a JS error. Is there a way to ensure it is?
-        $content.transition({ opacity: '1'},400,'easeInSine');
-      });
-    });
-    var oldStage = currentStage;
-    currentStage = newStage;
-    session.options.fnAfterStageChange(oldStage, currentStage);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-  };
 
-  session.nextStage = function() {
-    session.goToStage(currentStage+1);
-  };
+    session.nextStage = function() {
+        session.goToStage(currentStage+1);
+    };
 
-  session.prevStage = function() {
-    session.goToStage(currentStage-1);
-  };
+    session.prevStage = function() {
+        session.goToStage(currentStage-1);
+    };
 
-  session.addStage = function() {
-  };
+    session.registerData = function(dataKey, array) {
+        global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
+        if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
+            global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+            if (array) {
+                session.userData[dataKey] = [];
+            } else {
+                session.userData[dataKey] = {};
+            }
+        } else {
+            global.tools.notify ('A data store with this key already existed. Returning a pointer.',1);
+        }
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+        return session.userData[dataKey];
+    };
 
-  session.registerData = function(dataKey, array) {
-    notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
-    if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
-      notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
-      if (array) {
-        session.userData[dataKey] = [];
-      } else {
-        session.userData[dataKey] = {};
-      }
-    } else {
-      notify ('A data store with this key already existed. Returning a pointer.',1);
-    }
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-    return session.userData[dataKey];
-  };
+    session.addData = function(dataKey, newData, append) {
+        /*
+        This function should let any module add data to the session model. The session model
+        (global data variable) is essentially a key/value store.
+        */
 
-  session.addData = function(dataKey, newData, append) {
-    /*
-      This function should let any module add data to the session model. The session model
-      (global data variable) is essentially a key/value store.
-    */
+        if (!append) { append = false; }
 
-    if (!append) { append = false; }
+        if (append === true) { // this is an array
+            session.userData[dataKey].push(newData);
+        } else {
+            global.tools.extend(session.userData[dataKey], newData);
+        }
 
-    if (append === true) { // this is an array
-      session.userData[dataKey].push(newData);
-    } else {
-      extend(session.userData[dataKey], newData);
-    }
+        global.tools.notify("Adding data to key '"+dataKey+"'.",2);
+        global.tools.notify(newData, 1);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
 
-    notify("Adding data to key '"+dataKey+"'.",2);
-    notify(newData, 1);
-    var unsavedChanges = new Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
+    };
 
-  };
+    session.currentStage = function() {
+        return currentStage;
+    };
 
-  session.currentStage = function() {
-      return currentStage;
-  };
+    session.returnData = function(dataKey) {
+        if (!dataKey) {
+            return session.userData;
+        } else if (typeof session.userData[dataKey] !== 'undefined') {
+            return session.userData[dataKey];
+        } else {
+            return session.userData;
+        }
+    };
 
-  session.returnData = function(dataKey) {
-
-    if (!dataKey) {
-      return session.userData;
-    } else if (typeof session.userData[dataKey] !== 'undefined') {
-      return session.userData[dataKey];
-    } else {
-      return session.userData;
-    }
-
-  };
-
-  session.init();
-
-  return session;
+    return session;
 };
+
+module.exports = new Session();

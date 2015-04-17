@@ -1,0 +1,110 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+		  	<h1>Data for Survey</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 col-sm-offset-2">
+		  	<h4>Previous 4 Sexual Partners (most to least recent):</h4>
+		  	<ul class="partners">
+		  	</ul>
+		</div>
+		<div class="col-sm-4">
+		  	<h4>Current Serious Relationships:</h4>
+		  	<ul class="serious_relationships">
+		  	</ul>
+		</div>
+	</div>
+</div>
+<script>
+
+(function(){
+
+	// get the sex partners
+	var partners = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Sex"});
+
+	// get the serious relationship
+	var seriousRelationships = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"SeriousRel"});
+	// console.log('partners:');
+	// console.log(partners);
+
+
+	// add the serious relationships to the interface
+	$.each(seriousRelationships, function(index,value) {
+		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
+		$('.serious_relationships').append('<li>'+dyadEdge.nname_t0+'</li>');
+	});
+
+
+	var dates = [];
+
+	// iterate over the sex partners, and add the last sex date to an array
+	$.each(partners, function(index,value) {
+		if (typeof value.sex_last_t0 !=='undefined' && (value.vaginal_sex_status_t0 !== "No Vaginal Sex" || value.anal_sex_status_t0 !== "No Anal Sex")) {
+			// console.log('value: '+ value.sex_last_t0);
+			var date = new Date(value.sex_last_t0);
+			// console.log('date: '+date);
+
+			// check if date already exists. Can't use indexOf here because it uses strict comparison (===) meaning the dates
+			// must be the same *instance* not merely the same value
+
+			var found = false;
+			$.each(dates, function(index, value) {
+				// console.log('comparing:');
+				// console.log(value);
+				// console.log(date);
+				if (value.toString() == date.toString()) {
+					// console.log('same');
+					found = true;
+				} else {
+					// console.log('not the same');
+				}
+			});
+			if (!found) {
+				dates.push(date);
+			}
+		}
+
+	});
+
+	// console.log('dates');
+	// console.log(dates);
+
+	function getFormattedDate(date) {
+		var year = date.getFullYear();
+		var month = (1 + date.getMonth()).toString();
+		month = month.length > 1 ? month : '0' + month;
+		var day = date.getDate().toString();
+		day = day.length > 1 ? day : '0' + day;
+		return month + '/' + day + '/' + year;
+	}
+
+	// sort dates
+	var asc = dates.sort(function(a,b){return b-a});
+	// console.log('sorted dates:');
+	// console.log(asc);
+
+	var counter = 0;
+	$.each(asc, function(index,value) {
+		if (counter <= 3) {
+			var formatted = getFormattedDate(value);
+			// get sex edge
+			var sexEdges = global.network.getEdges({type:"Sex", sex_last_t0: formatted});
+			// console.log('sexEdges for '+formatted);
+			// console.log(sexEdges);
+			// Should only be one, but we loop incase multiple on same day.
+			$.each(sexEdges, function(sexIndex,sexValue) {
+				var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:sexValue.to})[0];
+				$('.partners').append('<li>'+dyadEdge.nname_t0+'</li>');
+				counter++;
+			});
+
+
+		}
+
+	});
+
+
+})();
+</script>

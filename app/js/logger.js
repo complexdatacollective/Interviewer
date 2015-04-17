@@ -1,19 +1,19 @@
 /* exported Logger */
-/* global session, notify */
+/* global*/
 
 var Logger = function Logger() {
 
-  var logger = {}; 
+  var logger = {};
 
   // todo: add custom events so that other scripts can listen for log changes (think vis).
 
   logger.init = function() {
-    notify('Logger initialising.', 1);
+    global.tools.notify('Logger initialising.', 1);
 
-    window.log = session.registerData('log', true);
+    global.log = global.session.registerData('log', true);
 
     // listen for log events
-    window.addEventListener('log', function (e) { 
+    window.addEventListener('log', function (e) {
       logger.addToLog(e.detail);
     }, false);
 
@@ -21,7 +21,7 @@ var Logger = function Logger() {
   };
 
   logger.addToLog = function(e) {
-    notify("Event being added to log.",1);
+    global.tools.notify("Event being added to log.",1);
     if (!e) { return false; }
 
     var data = {
@@ -30,24 +30,24 @@ var Logger = function Logger() {
       'eventTime': new Date()
     };
 
-    session.addData('log', data, true);
-    var eventLogged = new CustomEvent('eventLogged', {"detail":data});
+    global.session.addData('log', data, true);
+    var eventLogged = new window.CustomEvent('eventLogged', {"detail":data});
     window.dispatchEvent(eventLogged);
-    var unsavedChanges = new Event('unsavedChanges');
+    var unsavedChanges = new window.Event('unsavedChanges');
     window.dispatchEvent(unsavedChanges);
     return true;
   };
 
   logger.getLog = function() {
-    return window.log;
-    
+    return global.log;
+
   };
 
   logger.getLastEvent = function() {
-    
-  };
 
-  logger.init();
+  };
 
   return logger;
 };
+
+module.exports = new Logger();

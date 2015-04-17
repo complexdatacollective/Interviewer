@@ -1,0 +1,18 @@
+<div id="kineticCanvas"></div>
+
+  <script>
+  	var criteria = {
+  		type:'Dyad',
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var sociogram = require('./js/sociogram.js');
+    sociogram.init({
+    	mode:'Select', //edge, position, select
+		  targetEl: $('.container'),
+		  edgeType: "Advice",
+      criteria: criteria,
+    	heading: "Who are the people from whom you get advice?",
+    	subheading: ""
+	});
+  </script>

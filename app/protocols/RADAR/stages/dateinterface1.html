@@ -1,0 +1,24 @@
+<div class="container full-height text-center">
+
+</div>
+
+  <script>
+  	var criteria = {
+  		type:'Sex',
+  		from:global.network.getNodes({type_t0:'Ego'})[0].id
+	};
+
+    var dateInterface = require('./js/dateinterface.js');
+    dateInterface.init({
+      heading: "We need more details about the dates you had sex with these people:",
+      subheading: "Please provide answers to the questions below as accurately as possible.",
+		  targetEl: $('.container'),
+		  edgeType: "Sex",
+      criteria: criteria,
+	});
+
+
+$(function () {
+
+});
+  </script>

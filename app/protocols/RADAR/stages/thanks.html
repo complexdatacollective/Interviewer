@@ -1,0 +1,18 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+		  	<h1>You're now finished with the network portion of the visit.</h1>
+		</div>
+	</div>
+</div>
+<script>
+
+(function(){
+
+	global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, {
+		int_ftime_t0: new Date().getTime()
+	});
+
+
+})();
+</script>

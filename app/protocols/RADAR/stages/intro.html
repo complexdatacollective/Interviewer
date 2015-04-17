@@ -1,0 +1,119 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+		  	<h1>Welcome to the Study.</h1>
+		  	<p class="lead">Please enter the study participant's RADAR survey ID.</p>
+		  	<ul class="status">
+		  	</ul>
+		  	<form role="form" id="step1">
+				<div class="row">
+			  		<div class="form-group">
+			  			<label for="radarID">RADAR ID:</label>
+					  	<input type="number" class="form-control radarID" id="radarID" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<label for="sessionID">Session ID:</label>
+					  	<input type="text" class="form-control sessionID" id="sessionID" disabled>
+					</div>
+				</div>
+				<div class="row">
+					<label>Participant's Gender:</label>
+					<br>
+					<div class="btn-group" data-toggle="buttons">
+
+						<label class="btn">
+							<input type="radio" name='gender_k' data-value="Male" checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Male
+						</label>
+						<label class="btn">
+							<input type="radio" name='gender_k' data-value="Female"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Female
+						</label>
+						<label class="btn">
+							<input type="radio" name='gender_k' data-value="Transgender: Female to Male"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Transgender: Female to Male
+						</label>
+						<label class="btn">
+							<input type="radio" name='gender_k' data-value="Transgender: Male to Female"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Transgender: Male to Female
+						</label>
+					</div>
+					<hr>
+				</div>
+				<div class="row">
+	                <div class="btn-group" data-toggle="buttons">
+	                    <label class="btn">
+	                      <input type="radio" name='seed_status_t0' data-value="Seed" checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Seed
+	                    </label>
+	                    <label class="btn">
+	                      <input type="radio" name='seed_status_t0' data-value="Non-Seed"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i> Non-Seed
+	                    </label>
+	                </div>
+					<hr>
+				</div>
+				<div class="row">
+	                <div class="form-group">
+					  	<button type="submit" class="btn btn-primary submit-1">Continue</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$('.arrow-next').attr('disabled','disabled');
+	$('.radarID').focus();
+	var readable = new Date(global.session.returnData('session').int_stime);
+	$('.startDate').val(readable);
+	$('.sessionID').val(global.session.returnSessionID);
+	$('.radarID').val(global.network.getNode(0).radar_id);
+	$('.participant-name').val(global.network.getNode(0).ego_name);
+	$("input:radio[name=gender_k][data-value='"+global.network.getNode(0).gender_k+"']").prop('checked', true);
+	$("input:radio[name=gender_k][data-value='"+global.network.getNode(0).gender_k+"']").parent().addClass('active');
+	$("input:radio[name=seed_status_t0][data-value='"+global.network.getNode(0).seed_status_t0+"']").prop('checked', true);
+	$("input:radio[name=seed_status_t0][data-value='"+global.network.getNode(0).seed_status_t0+"']").parent().addClass('active');
+
+
+	$( "#step1" ).submit(function( event ) {
+		$('.arrow-next').removeAttr('disabled');
+	  event.preventDefault();
+
+	      // Add the start date to the session.
+	    var now = new Date();
+	    var month = now.getUTCMonth()+1;
+	    var day = now.getUTCDate();
+	    var year = now.getUTCFullYear();
+	    var sdate = year + "/" + month + "/" + day;
+	    var stime = now.getTime();
+
+	  // check if root node already exists
+	  if (global.network.getNode(0) !== false) {
+	  	// update any existing node
+		  global.network.updateNode(0,{
+		  	id:0,
+		  	label:'Root',
+		  	type_t0: 'Ego',
+		  	radar_id: $('.radarID').val(),
+		  	int_date_t0: sdate,
+		  	int_stime_t0: stime,
+			gender_k: $("input:radio[name=gender_k]:checked").data('value'),
+		  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
+		  });
+
+	  } else {
+	  	// create a new root node if one doesn't already exist
+		  global.network.addNode({
+		  	id:0,
+		  	label:'Root',
+		  	type_t0: 'Ego',
+		  	radar_id: $('.radarID').val(),
+		  	int_date_t0: sdate,
+		  	int_stime_t0: stime,
+			gender_k: $("input:radio[name=gender_k]:checked").data('value'),
+		  	seed_status_t0: $("input:radio[name=seed_status_t0]:checked").data('value')
+		  });
+
+	  }
+
+	  global.session.nextStage();
+	});
+
+</script>

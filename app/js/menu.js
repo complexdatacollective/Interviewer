@@ -1,4 +1,4 @@
-/* global notify, modifyColor */
+/* global*/
 /* exported Menu */
 var Menu = function Menu(options) {
 
@@ -12,17 +12,6 @@ var Menu = function Menu(options) {
     var isAnimating = false;
     var menuContainer = $('.menu-container');
     var adding = false;
-
-
-    // private
-    function extend( a, b ) {
-        for( var key in b ) {
-            if( b.hasOwnProperty( key ) ) {
-                a[key] = b[key];
-            }
-        }
-        return a;
-    }
 
     var contentClickHandler = function() {
         menu.closeMenu();
@@ -42,8 +31,8 @@ var Menu = function Menu(options) {
         return false;
       },
       onBeforeClose : function() {
-        $('.pushed').off('click', contentClickHandler);
         $('.content').removeClass("pushed");
+        $('.pushed').off('click', contentClickHandler);
       },
       onAfterClose : function() {
         $('.black').show();
@@ -94,7 +83,7 @@ var Menu = function Menu(options) {
                 isAnimating = false;
             } else {
                 menu.options.onBeforeOpen();
-                var col = modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
+                var col = global.tools.modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
                 $('body').css({"background-color":col});
                 menuContent.addClass('active');
                 setTimeout(menu.options.onAfterOpen, 500);
@@ -202,8 +191,8 @@ var Menu = function Menu(options) {
     };
 
     menu.init = function() {
-        notify('Menu initialising.', 1);
-        extend(menu.options,options);
+        global.tools.notify('Menu initialising.', 1);
+        global.tools.extend(menu.options,options);
     };
 
 
@@ -212,3 +201,5 @@ var Menu = function Menu(options) {
     return menu;
 
 };
+
+module.exports = new Menu();

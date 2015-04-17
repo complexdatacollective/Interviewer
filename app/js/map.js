@@ -1,4 +1,4 @@
-/* global L, network, session */
+/* global*/
 /* exported GeoInterface */
 
 
@@ -28,10 +28,10 @@ var GeoInterface = function GeoInterface() {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
-                stage: session.currentStage(),
+                stage: global.session.currentStage(),
                 timestamp: new Date()
             };
-            log = new CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+            log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
             taskComprehended = true;
         }
@@ -40,7 +40,7 @@ var GeoInterface = function GeoInterface() {
             zoomLevel: leaflet.getZoom(),
             timestamp: new Date()
         };
-        log = new CustomEvent('log', {"detail":{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
+        log = new window.CustomEvent('log', {"detail":{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
         window.dispatchEvent(log);
 		var layer = e.target;
 		var properties;
@@ -54,7 +54,7 @@ var GeoInterface = function GeoInterface() {
 	  		// Update edge with this info
 	  		properties = {};
 	  		properties[variable] = layer.feature.properties.name;
-	  		network.updateEdge(edges[currentPersonIndex].id, properties);
+	  		global.network.updateEdge(edges[currentPersonIndex].id, properties);
 	  		$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
 		} else {
 	  	// Map node already selected. Have we clicked the same one again?
@@ -64,14 +64,14 @@ var GeoInterface = function GeoInterface() {
 	      		mapNodeClicked = false;
 		  		properties = {};
 		  		properties[variable] = undefined;
-		  		network.updateEdge(edges[currentPersonIndex].id, properties);
+		  		global.network.updateEdge(edges[currentPersonIndex].id, properties);
 
 	  		} else {
           resetAllHighlights();
           highlightFeature(e);
           properties = {};
           properties[variable] = layer.feature.properties.name;
-          network.updateEdge(edges[currentPersonIndex].id, properties);
+          global.network.updateEdge(edges[currentPersonIndex].id, properties);
 		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
 	  		}
 
@@ -115,7 +115,7 @@ var GeoInterface = function GeoInterface() {
           fillColor: colors[1]
         });
 
-        if (!L.Browser.ie && !L.Browser.opera) {
+        if (!global.L.Browser.ie && !global.L.Browser.opera) {
         	layer.bringToFront();
         }
 
@@ -131,7 +131,7 @@ var GeoInterface = function GeoInterface() {
           fillColor: colors[1]
         });
 
-        if (!L.Browser.ie && !L.Browser.opera) {
+        if (!global.L.Browser.ie && !global.L.Browser.opera) {
         	layer.bringToFront();
         }
     }
@@ -164,7 +164,7 @@ var GeoInterface = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = "Homeless";
-        network.updateEdge(edges[currentPersonIndex].id, properties);
+        global.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
     }
 
@@ -172,9 +172,13 @@ var GeoInterface = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = "Jail";
-        network.updateEdge(edges[currentPersonIndex].id, properties);
+        global.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
     }
+
+    var stageChangeHandler = function() {
+        geoInterface.destroy();
+    };
 
   	// Public methods
 
@@ -229,12 +233,12 @@ var GeoInterface = function GeoInterface() {
   	geoInterface.init = function() {
 
   		// Initialize the map, point it at the #map element and center it on Chicago
-        leaflet = L.map('map', {
+        leaflet = global.L.map('map', {
             maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]],
             zoomControl: false
         });
 
-        L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+        global.L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
             subdomains: '1234',
             mapID: 'newest',
             app_id: 'FxdAZ7O0Wh568CHyJWKV',
@@ -248,7 +252,7 @@ var GeoInterface = function GeoInterface() {
           	dataType: "json",
           	url: "data/census2010.json",
           	success: function(data) {
-            	geojson = L.geoJson(data, {
+            	geojson = global.L.geoJson(data, {
                 	onEachFeature: onEachFeature,
                 	style: function () {
                   		return {weight:1,fillOpacity:0,strokeWidth:0.2, color:colors[1]};
@@ -257,7 +261,7 @@ var GeoInterface = function GeoInterface() {
 
 
 		        // Load initial node
-		        edges = network.getEdges({from:network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: "Chicago"});
+		        edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: "Chicago"});
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 		        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[0].nname_t0+"</strong> lives.");
 
@@ -275,7 +279,7 @@ var GeoInterface = function GeoInterface() {
         });
 
 
-        // var kmlLayer = new L.KML("data/transit.kml", {
+        // var kmlLayer = new global.L.KML("data/transit.kml", {
         //           style: function () {
         //               return {stroke:colors[1],fillColor:null,weight:1};
         //             }
@@ -283,6 +287,7 @@ var GeoInterface = function GeoInterface() {
         // leaflet.addLayer(kmlLayer);
 
         // Events
+        window.addEventListener('changeStageStart', stageChangeHandler, false);
         $('.map-back').on('click', geoInterface.previousPerson);
         $('.map-forwards').on('click', geoInterface.nextPerson);
         $('.homeless').on('click', setHomeless);
@@ -292,13 +297,15 @@ var GeoInterface = function GeoInterface() {
 
   	geoInterface.destroy = function() {
     	// Used to unbind events
+        leaflet.remove();
+        window.removeEventListener('changeStageStart', stageChangeHandler, false);
     	$('.map-back').off('click', geoInterface.previousPerson);
         $('.map-forwards').off('click', geoInterface.nextPerson);
         $('.homeless').on('click', setHomeless);
         $('.jail').on('click', setJail);
   	};
 
-  	geoInterface.init();
-
   	return geoInterface;
 };
+
+module.exports = new GeoInterface();
