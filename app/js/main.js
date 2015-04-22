@@ -3,19 +3,33 @@ var moment = require('moment');
 global.moment = moment; // needed for module access.
 var fs = require('fs');
 var path = require('path');
+var devMode = false;
+global.debugLevel = 1;
 
 console.log("netCanvas "+global.gui.App.manifest.version+" running on NWJS "+process.versions['node-webkit']);
 
-// fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
-//     if (err) { console.log(err); return false; }
-//     console.log("Available survey protocols:");
-//     console.log(files);
-// });
+fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
+    if (err) { console.log(err); return false; }
+    console.log("Available survey protocols:");
+    console.log(files);
+});
 
-var win = global.gui.Window.get().enterFullscreen();
+// Detect dev mode
+var arguments = global.gui.App.argv;
 
-// Set the global debug level
-global.debugLevel = 10;
+// Just futureproofing in case this changes in future nw versions.
+if (typeof arguments === 'Object' && typeof arguments.length !== undefined && arguments.length > 0 && arguments.indexOf('dev') !== -1) {
+    console.log('Development mode enabled.');
+    devMode = true;
+}
+
+
+
+if (devMode) {
+    var win = global.gui.Window.get().enterFullscreen();
+    global.gui.Window.get().showDevTools();
+    global.debugLevel = 10;
+}
 
 // Set the global survey
 // To do: check if this protocol exists elsewhere.
