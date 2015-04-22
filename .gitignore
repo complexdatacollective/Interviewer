@@ -1,4 +1,5 @@
 .DS_Store
+
 *.codekit
 codekit-config.json
 
@@ -7,3 +8,8 @@ app/npm-debug.log
 npm-debug.log
 
 *.zip
+*.app
+
+
+app/protocols/*
+!app/protocols/default

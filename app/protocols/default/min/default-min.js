@@ -1,1 +1,0 @@
-module.exports={parameters:{name:"Default"},skipFunctions:{exampleSkip:function(){return!1}},stages:[{label:"Example",page:"intro.html"}]};

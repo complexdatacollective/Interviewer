@@ -1,11 +1,11 @@
 {
   "name": "netCanvas",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "homepage": "https://github.com/jthrilly/netCanvas",
   "authors": [
     "Joshua Melville <joshmelville@gmail.com>"
   ],
-  "license": "MIT",
+  "license": "GPL",
   "private": true,
   "ignore": [
     "**/.*",
