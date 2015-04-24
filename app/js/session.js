@@ -1,4 +1,4 @@
- /* global console */
+/* global console */
 /* exported Session, eventLog */
 var Session = function Session() {
 
@@ -6,11 +6,9 @@ var Session = function Session() {
     var session = {};
     var currentStage = 0;
     var content = $('#content');
-
-    // Establish a new IOInterface for loading and saving
     session.id = 0;
     session.userData = {};
-    var lastSaveTime;
+    var lastSaveTime, saveTimer;
 
     function saveFile(path) {
         var data = JSON.stringify(session.userData, undefined, 2);
@@ -24,8 +22,6 @@ var Session = function Session() {
         event.initMouseEvent('click');
         window.document.getElementById('save').dispatchEvent(event);
     }
-
-    var saveTimer;
 
     // custom events
     session.options = {
@@ -47,7 +43,6 @@ var Session = function Session() {
         }
     };
 
-
     session.loadProtocol = function() {
         var path = require('path');
 
@@ -65,11 +60,14 @@ var Session = function Session() {
         session.skipFunctions = study.skipFunctions;
 
         // set the study name (used for database name)
-        session.name = study.parameters.name;
+        session.name = study.sessionParameters.name;
     };
 
     session.init = function() {
         global.tools.notify('Session initialising.', 1);
+
+        // register session key
+        global.session = session.registerData('session', true);
 
         //bind to the custom state change event to handle spinner interactions
         window.addEventListener('changeStageStart', function () {
@@ -205,6 +203,8 @@ var Session = function Session() {
         if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
 
         // Skip logic
+
+        // is there a skip function for this stage?
         if (session.stages[stage].skip) {
 
             //evaluate skip function
@@ -257,17 +257,17 @@ var Session = function Session() {
         session.goToStage(currentStage-1);
     };
 
-    session.registerData = function(dataKey, array) {
+    session.registerData = function(dataKey, isArray) {
         global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
         if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
             global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
-            if (array) {
+            if (isArray) {
                 session.userData[dataKey] = [];
             } else {
                 session.userData[dataKey] = {};
             }
         } else {
-            global.tools.notify ('A data store with this key already existed. Returning a pointer.',1);
+            global.tools.notify ('A data store with this key already existed. Returning a reference.',1);
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
