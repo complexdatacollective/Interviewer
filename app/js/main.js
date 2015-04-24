@@ -71,17 +71,19 @@ global.eventLog = require('./js/logger');
 global.network = require('./js/network');
 
 
+
+// to do: expand this function to validate a proposed session, not just check that it exists.
 protocolExists(global.studyProtocol, function(exists){
     if (!exists) {
-        console.log('WARNING: Specified study protocol was not found in the protocols directory. Using default.');
+        console.log('WARNING: Specified study protocol was not found. Using default.');
         global.studyProtocol = 'default';
     }
-    // Initialise session now everything is loaded
+    // Initialise session now.
+    global.session.loadProtocol();
     global.session.init();
     global.logger.init();
 
 });
-
 
 
 $('.arrow-next').click(function() {

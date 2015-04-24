@@ -47,17 +47,29 @@ var Session = function Session() {
         }
     };
 
+
+    session.loadProtocol = function() {
+        var path = require('path');
+
+        // Require the session protocol file.
+        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/protocol.js');
+        var study = require(studyPath);
+
+        // copy the stages
+        session.stages = study.stages;
+
+        // insert the stylesheet
+        $('head').append('<link rel="stylesheet" href="protocols/'+global.studyProtocol+'/css/style.css" type="text/css" />');
+
+        // copy the skip functions
+        session.skipFunctions = study.skipFunctions;
+
+        // set the study name (used for database name)
+        session.name = study.parameters.name;
+    };
+
     session.init = function() {
         global.tools.notify('Session initialising.', 1);
-        // exdend our local options with any passed options
-        var path = require('path');
-        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/'+global.studyProtocol+'.js');
-
-        // todo: check this exists
-        var study = require(studyPath);
-        session.stages = study.stages;
-        session.skipFunctions = study.skipFunctions;
-        session.name = study.parameters.name;
 
         //bind to the custom state change event to handle spinner interactions
         window.addEventListener('changeStageStart', function () {
