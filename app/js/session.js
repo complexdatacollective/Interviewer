@@ -26,8 +26,8 @@ var Session = function Session() {
     }
 
     var saveTimer;
-    // custom events
 
+    // custom events
     session.options = {
         fnBeforeStageChange : function(oldStage, newStage) {
             var eventProperties = {

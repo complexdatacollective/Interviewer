@@ -1,25 +1,53 @@
 global.gui = require('nw.gui');
-var moment = require('moment');
+moment = require('moment');
 global.moment = moment; // needed for module access.
 var fs = require('fs');
 var path = require('path');
+var devMode = false;
+global.debugLevel = 1;
+// Set the global survey
+global.studyProtocol = "RADAR";
 
 console.log("netCanvas "+global.gui.App.manifest.version+" running on NWJS "+process.versions['node-webkit']);
 
-// fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
-//     if (err) { console.log(err); return false; }
-//     console.log("Available survey protocols:");
-//     console.log(files);
-// });
+var protocolExists = function(protocol, callback) {
+    var response = false;
+    var availableProtocols = [];
+    // Print out available survey protocols.
+    fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
+        if (err) { console.log(err); return false; }
+        console.log("Available survey protocols:");
+        files.forEach(function(file) {
+            var stats = fs.statSync(path.join(path.resolve(), 'protocols', file));
+            if (stats.isDirectory()) {
+                console.log(file);
+                availableProtocols.push(file);
+            }
+        });
 
-var win = global.gui.Window.get().enterFullscreen();
+        if (availableProtocols.indexOf(protocol) !== -1) {
+            response = true;
+        }
 
-// Set the global debug level
-global.debugLevel = 10;
+        if (callback) { callback(response); }
+    });
+};
 
-// Set the global survey
-// To do: check if this protocol exists elsewhere.
-global.studyProtocol = "RADAR";
+// Detect dev mode
+var arguments = global.gui.App.argv;
+
+// Just futureproofing in case this changes in future nw versions.
+if (typeof arguments !== 'undefined' && arguments.indexOf('dev') !== -1) {
+    console.log('Development mode enabled.');
+    devMode = true;
+}
+
+if (devMode) {
+    global.gui.Window.get().showDevTools();
+    global.debugLevel = 10;
+} else {
+    global.gui.Window.get().enterFullscreen();
+}
 
 // Require tools
 global.tools = require('./js/tools');
@@ -42,9 +70,19 @@ global.eventLog = require('./js/logger');
 // Build a new network
 global.network = require('./js/network');
 
-// Initialise session now everything is loaded
-global.session.init();
-global.logger.init();
+
+protocolExists(global.studyProtocol, function(exists){
+    if (!exists) {
+        console.log('WARNING: Specified study protocol was not found in the protocols directory. Using default.');
+        global.studyProtocol = 'default';
+    }
+    // Initialise session now everything is loaded
+    global.session.init();
+    global.logger.init();
+
+});
+
+
 
 $('.arrow-next').click(function() {
     global.session.nextStage();
