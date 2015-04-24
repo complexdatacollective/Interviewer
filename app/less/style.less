@@ -24,6 +24,26 @@ html, body {
     z-index:999;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+div.big-check[data-toggle="buttons"] label {
+    display:inline-flex;
+    line-height:3em !important;
+    padding:6px 22px !important;
+}
+
+.btn-group.big-check {
+    padding-bottom:1em;
+}
+
+.check-number {
+    padding-left:8px;
+}
+
 // Actual modal
 .modal-content {
   color:white;
