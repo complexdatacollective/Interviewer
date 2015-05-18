@@ -1,7 +1,7 @@
-/* global*/
+/* global $, window */
 /* exported MultiBin */
 var MultiBin = function MultiBin() {
-
+	'use strict';
 	//global vars
 	var log;
 	var taskComprehended = false;
@@ -16,8 +16,8 @@ var MultiBin = function MultiBin() {
 			]
 		},
 		filter: undefined,
-		heading: "Default Heading",
-		subheading: "Default Subheading."
+		heading: 'Default Heading',
+		subheading: 'Default Subheading.'
 	};
 
 	var open = false;
@@ -47,7 +47,7 @@ var MultiBin = function MultiBin() {
 
 		// Assign a new property according to the variable name(s)
 		$.each(multiBin.options.followup.questions, function(index) {
-			var followupVal = $("#"+multiBin.options.followup.questions[index].variable).val();
+			var followupVal = $('#'+multiBin.options.followup.questions[index].variable).val();
 			followupProperties[multiBin.options.followup.questions[index].variable] = followupVal;
 		});
 
@@ -57,7 +57,7 @@ var MultiBin = function MultiBin() {
 
 		// Clean up
 		$.each(multiBin.options.followup.questions, function(index) {
-			$("#"+multiBin.options.followup.questions[index].variable).val("");
+			$('#'+multiBin.options.followup.questions[index].variable).val('');
 		});
 
 
@@ -68,7 +68,7 @@ var MultiBin = function MultiBin() {
 	var followupCancelHandler = function() {
 
 		// Clean up
-		$("#"+multiBin.options.followup.variable).val("");
+		$('#'+multiBin.options.followup.variable).val('');
 		$('.followup').hide();
 		$('.black-overlay').hide();
 	};
@@ -83,13 +83,13 @@ var MultiBin = function MultiBin() {
 				$('.copy').addClass('node-bin-static');
 				$('.copy').children('h1, p').show();
 				$('.copy').removeClass('copy');
-				$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, start: function(){
+				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
 							stage: global.session.currentStage(),
 							timestamp: new Date()
 						};
-						log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
 						window.dispatchEvent(log);
 						taskComprehended = true;
 					}
@@ -105,13 +105,13 @@ var MultiBin = function MultiBin() {
 		e.stopPropagation();
 		if (open === false) {
 
-			$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: true, start: function() {
+			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
 						stage: global.session.currentStage(),
 						timestamp: new Date()
 					};
-					log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
 					window.dispatchEvent(log);
 					taskComprehended = true;
 				}
@@ -166,9 +166,9 @@ var MultiBin = function MultiBin() {
 			$(this).fadeOut(400, function() {
 				$(this).appendTo('.node-bucket');
 				$(this).css('display', '');
-				var noun = "people";
+				var noun = 'people';
 				if ($('.c'+id).children('.active-node-list').children().length === 1) {
-					noun = "person";
+					noun = 'person';
 				}
 				if ($('.c'+id).children('.active-node-list').children().length === 0) {
 					$('.c'+id).children('p').html('(Empty)');
@@ -184,11 +184,11 @@ var MultiBin = function MultiBin() {
 
 	multiBin.destroy = function() {
 		// Event Listeners
-		global.tools.notify("Destroying multiBin.",0);
+		global.tools.notify('Destroying multiBin.',0);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
-		$('.node-bin-static').off("click", nodeBinClickHandler);
-		$('.node-item').off("click", nodeClickHandler);
-		$('.content').off("click", backgroundClickHandler);
+		$('.node-bin-static').off('click', nodeBinClickHandler);
+		$('.node-item').off('click', nodeClickHandler);
+		$('.content').off('click', backgroundClickHandler);
 		$('.followup-submit').off('click', followupHandler);
 		$('.followup-cancel').off('click', followupCancelHandler);
 		$('.followup').remove();
@@ -267,18 +267,18 @@ var MultiBin = function MultiBin() {
 			var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
 			newBin.data('index', index);
 			multiBin.options.targetEl.append(newBin);
-			$(".c"+index).droppable({ accept: ".draggable",
+			$('.c'+index).droppable({ accept: '.draggable',
 			drop: function(event, ui) {
 				var dropped = ui.draggable;
 				var droppedOn = $(this);
 
 				// Check if the node has been dropped into a bin that triggers the followup
-				if(typeof multiBin.options.followup !== "undefined" && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
+				if(typeof multiBin.options.followup !== 'undefined' && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 					$('.followup').show();
 					$('.black-overlay').show();
-					$("#"+multiBin.options.followup.questions[0].variable).focus();
+					$('#'+multiBin.options.followup.questions[0].variable).focus();
 					followup = $(dropped).data('node-id');
-				} else if (typeof multiBin.options.followup !== "undefined") {
+				} else if (typeof multiBin.options.followup !== 'undefined') {
 					// Here we need to remove any previously set value for the followup variable, if it exists.
 					var nodeid = $(dropped).data('node-id');
 
@@ -304,7 +304,7 @@ var MultiBin = function MultiBin() {
 
 					// Clean up
 					$.each(multiBin.options.followup.questions, function(index) {
-						$("#"+multiBin.options.followup.questions[index].variable).val("");
+						$('#'+multiBin.options.followup.questions[index].variable).val('');
 					});
 
 				}
@@ -316,13 +316,13 @@ var MultiBin = function MultiBin() {
 				var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
 				global.network.updateEdge(edgeID,properties);
 
-				var noun = "people";
-				if ($(".c"+index+" .active-node-list").children().length === 1) {
-					noun = "person";
+				var noun = 'people';
+				if ($('.c'+index+' .active-node-list').children().length === 1) {
+					noun = 'person';
 				}
-				$(".c"+index+" p").html($(".c"+index+" .active-node-list").children().length+' '+noun+'.');
+				$('.c'+index+' p').html($('.c'+index+' .active-node-list').children().length+' '+noun+'.');
 
-				var el = $(".c"+index);
+				var el = $('.c'+index);
 				// var origBg = el.css('background-color');
 				el.transition({scale:1.2}, 200, 'ease');
 				setTimeout(function(){
@@ -361,13 +361,13 @@ var MultiBin = function MultiBin() {
 	$.each(edges, function(index,value) {
 
 		// We need the dyad edge so we know the nname for other types of edges
-		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:"Dyad", to:value.to})[0];
-		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== "") {
+		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
+		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== '') {
 			index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
 			$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-			var noun = "people";
+			var noun = 'people';
 			if ($('.c'+index).children('.active-node-list').children().length === 1) {
-				noun = "person";
+				noun = 'person';
 			}
 			if ($('.c'+index).children('.active-node-list').children().length === 0) {
 				$('.c'+index).children('p').html('(Empty)');
@@ -379,13 +379,13 @@ var MultiBin = function MultiBin() {
 		}
 
 	});
-	$(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false , start: function(){
+	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
 		if (taskComprehended === false) {
 			var eventProperties = {
 				stage: global.session.currentStage(),
 				timestamp: new Date()
 			};
-			log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
 			window.dispatchEvent(log);
 			taskComprehended = true;
 		}
@@ -393,9 +393,9 @@ var MultiBin = function MultiBin() {
 
 	// Event Listeners
 	window.addEventListener('changeStageStart', stageChangeHandler, false);
-	$('.node-bin-static').on("click", nodeBinClickHandler);
-	$('.node-item').on("click", nodeClickHandler);
-	$('.content').on("click", backgroundClickHandler);
+	$('.node-bin-static').on('click', nodeBinClickHandler);
+	$('.node-item').on('click', nodeClickHandler);
+	$('.content').on('click', backgroundClickHandler);
 	$('.followup-form').on('submit', followupHandler);
 	$('.followup-cancel').on('click', followupCancelHandler);
 

@@ -1,4 +1,4 @@
-/* global require */
+/* global window, require */
 /* exported IOInterface */
 
 
@@ -18,16 +18,16 @@ It functions as a key/value store.
 */
 
 var IOInterface = function IOInterface() {
-
+    'use strict';
     // this could be a remote host
     // Type 3: Persistent datastore with automatic loading
     var Datastore = require('nedb');
     var path = require('path');
     var db;
     var id;
-    var interface = {};
+    var ioInterface = {};
 
-    interface.init = function(callback) {
+    ioInterface.init = function(callback) {
         // After init, first priority is to load previous session for this protocol.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         global.tools.notify('ioInterface initialising.', 1);
@@ -61,13 +61,13 @@ var IOInterface = function IOInterface() {
     };
 
 
-    interface.save = function(userData, id) {
-        delete global.session.userData._id;
+    ioInterface.save = function(sessionData, id) {
+        delete global.session.sessionData._id;
         global.tools.notify('IOInterface being asked to save to data store.',1);
         global.tools.notify('Data to be saved: ', 2);
-        global.tools.notify(userData, 2);
+        global.tools.notify(sessionData, 2);
 
-        db.update({_id: id }, userData, {}, function (err) {
+        db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
@@ -76,9 +76,9 @@ var IOInterface = function IOInterface() {
 
     };
 
-    interface.update = function(key, userData,id) {
+    ioInterface.update = function(key, sessionData,id) {
         global.tools.notify('IOInterface being asked to update data store.',1);
-        db.update({_id: id }, userData, {}, function (err) {
+        db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
@@ -87,7 +87,7 @@ var IOInterface = function IOInterface() {
 
     };
 
-    interface.reset = function(callback) {
+    ioInterface.reset = function(callback) {
         // db.find with empty object returns all objects.
         db.find({}, function (err, docs) {
             if (err) {
@@ -96,27 +96,27 @@ var IOInterface = function IOInterface() {
 
             var resultLength = docs.length;
             for (var i = 0; i < resultLength; i++) {
-                interface.deleteDocument(docs[i]._id);
+                ioInterface.deleteDocument(docs[i]._id);
             }
 
             if (callback) { callback(); }
         });
     };
 
-    interface.deleteDocument = function(callback) {
-        global.tools.notify("ioInterface being asked to delete document.", 2);
+    ioInterface.deleteDocument = function(callback) {
+        global.tools.notify('ioInterface being asked to delete document.', 2);
         db.remove({ _id: global.session.id }, {}, function (err) {
             if (err) {
                 return false;
             }
-            global.tools.notify("Deleting complete.", 2);
+            global.tools.notify('Deleting complete.', 2);
             if(callback) { callback(); }
         });
     };
 
-    interface.load = function(callback, id) {
-        global.tools.notify("ioInterface being asked to load data.", 2);
-        db.find({"_id": id}, function (err, docs) {
+    ioInterface.load = function(callback, id) {
+        global.tools.notify('ioInterface being asked to load data.', 2);
+        db.find({'_id': id}, function (err, docs) {
             if (err) {
                 // handle error
                 return false;
@@ -125,7 +125,7 @@ var IOInterface = function IOInterface() {
         });
     };
 
-    return interface;
+    return ioInterface;
 };
 
 module.exports = new IOInterface();

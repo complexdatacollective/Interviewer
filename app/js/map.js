@@ -1,15 +1,12 @@
-/* global*/
+/* global $, window */
 /* exported GeoInterface */
 
-
 /*
-
-Map module.
-
+ Map module.
 */
 
 var GeoInterface = function GeoInterface() {
-
+    'use strict';
   	// map globals
     var log;
     var taskComprehended = false;
@@ -31,7 +28,7 @@ var GeoInterface = function GeoInterface() {
                 stage: global.session.currentStage(),
                 timestamp: new Date()
             };
-            log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+            log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
             taskComprehended = true;
         }
@@ -40,7 +37,7 @@ var GeoInterface = function GeoInterface() {
             zoomLevel: leaflet.getZoom(),
             timestamp: new Date()
         };
-        log = new window.CustomEvent('log', {"detail":{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
+        log = new window.CustomEvent('log', {'detail':{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
         window.dispatchEvent(log);
 		var layer = e.target;
 		var properties;
@@ -85,9 +82,9 @@ var GeoInterface = function GeoInterface() {
         mapNodeClicked = edges[currentPersonIndex][variable];
         if (edges[currentPersonIndex][variable] === 'Homeless' || edges[currentPersonIndex][variable] === 'Jail') {
           resetPosition();
-          var text = "Homeless";
-          if (edges[currentPersonIndex][variable] === "Jail") {
-            text = "in Jail";
+          var text = 'Homeless';
+          if (edges[currentPersonIndex][variable] === 'Jail') {
+            text = 'in Jail';
           }
           $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+text);
         } else {
@@ -163,7 +160,7 @@ var GeoInterface = function GeoInterface() {
     function setHomeless() {
         resetAllHighlights();
         var properties = {};
-        properties[variable] = "Homeless";
+        properties[variable] = 'Homeless';
         global.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
     }
@@ -171,7 +168,7 @@ var GeoInterface = function GeoInterface() {
     function setJail() {
         resetAllHighlights();
         var properties = {};
-        properties[variable] = "Jail";
+        properties[variable] = 'Jail';
         global.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
     }
@@ -188,7 +185,7 @@ var GeoInterface = function GeoInterface() {
   			resetAllHighlights();
 	  		currentPersonIndex++;
 	        $('.current-id').html(currentPersonIndex+1);
-	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
+	        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[currentPersonIndex].nname_t0+'</strong> lives.');
 
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
@@ -212,7 +209,7 @@ var GeoInterface = function GeoInterface() {
 	  		resetAllHighlights();
 	  		currentPersonIndex--;
 	        $('.current-id').html(currentPersonIndex+1);
-	        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[currentPersonIndex].nname_t0+"</strong> lives.");
+	        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[currentPersonIndex].nname_t0+'</strong> lives.');
 
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
@@ -228,7 +225,6 @@ var GeoInterface = function GeoInterface() {
         }
 	    }
   	};
-
 
   	geoInterface.init = function() {
 
@@ -249,8 +245,8 @@ var GeoInterface = function GeoInterface() {
         }).addTo(leaflet);
 
         $.ajax({
-          	dataType: "json",
-          	url: "data/census2010.json",
+          	dataType: 'json',
+          	url: 'data/census2010.json',
           	success: function(data) {
             	geojson = global.L.geoJson(data, {
                 	onEachFeature: onEachFeature,
@@ -259,12 +255,10 @@ var GeoInterface = function GeoInterface() {
                 	}
             	}).addTo(leaflet);
 
-
 		        // Load initial node
-		        edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: "Chicago"});
+		        edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
-		        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[0].nname_t0+"</strong> lives.");
-
+		        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[0].nname_t0+'</strong> lives.');
 
             	// Highlight initial value, if set
             	highlightCurrent();
@@ -275,16 +269,7 @@ var GeoInterface = function GeoInterface() {
                 $('.map-forwards').show();
               }
           	}
-        }).error(function() {
         });
-
-
-        // var kmlLayer = new global.L.KML("data/transit.kml", {
-        //           style: function () {
-        //               return {stroke:colors[1],fillColor:null,weight:1};
-        //             }
-        //           });
-        // leaflet.addLayer(kmlLayer);
 
         // Events
         window.addEventListener('changeStageStart', stageChangeHandler, false);

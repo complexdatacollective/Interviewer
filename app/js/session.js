@@ -1,17 +1,17 @@
-/* global console */
+/* global document, window, $, console */
 /* exported Session, eventLog */
 var Session = function Session() {
-
+    'use strict';
     //global vars
     var session = {};
     var currentStage = 0;
     var content = $('#content');
     session.id = 0;
-    session.userData = {};
+    session.sessionData = {};
     var lastSaveTime, saveTimer;
 
     function saveFile(path) {
-        var data = JSON.stringify(session.userData, undefined, 2);
+        var data = JSON.stringify(session.sessionData, undefined, 2);
         var fs = require('fs');
         fs.writeFile(path, data);
     }
@@ -30,16 +30,24 @@ var Session = function Session() {
                 stage: currentStage,
                 timestamp: new Date()
             };
-            var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
+            var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
 
-            var changeStageStartEvent = new window.CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
+            var changeStageStartEvent = new window.CustomEvent('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageStartEvent);
 
         },
         fnAfterStageChange : function(oldStage, newStage) {
-            var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
+            var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
+            if ((currentStage+1) === session.stages.length) {
+                $('.arrow-next').hide();
+            } else if (currentStage === 0) {
+                $('.arrow-prev').hide();
+            } else {
+                $('.arrow-next').show();
+                $('.arrow-prev').show();
+            }
         }
     };
 
@@ -67,7 +75,16 @@ var Session = function Session() {
         global.tools.notify('Session initialising.', 1);
 
         // register session key
-        global.session = session.registerData('session', true);
+        session.parameters = session.registerData('sessionParameters', true);
+
+        // Navigation arrows.
+        $('.arrow-next').on('click', function() {
+            global.session.nextStage();
+        });
+
+        $('.arrow-prev').on('click',function() {
+            global.session.prevStage();
+        });
 
         //bind to the custom state change event to handle spinner interactions
         window.addEventListener('changeStageStart', function () {
@@ -86,7 +103,7 @@ var Session = function Session() {
         global.dataStore.init(function(sessionid) {
             session.id = sessionid;
             global.dataStore.load(function(data) {
-                session.updateUserData(data);
+                session.updateSessionData(data);
                 session.goToStage(0);
             }, session.id);
         });
@@ -153,7 +170,7 @@ var Session = function Session() {
 
     session.downloadData = function() {
         var filename = session.returnSessionID()+'.json';
-        var text = JSON.stringify(session.userData, undefined, 2); // indentation level = 2;
+        var text = JSON.stringify(session.sessionData, undefined, 2); // indentation level = 2;
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         pom.setAttribute('download', filename);
@@ -161,7 +178,7 @@ var Session = function Session() {
     };
 
     session.reset = function() {
-        global.tools.notify("Resetting session.",2);
+        global.tools.notify('Resetting session.',2);
         session.id = 0;
         session.currentStage = 0;
         var _window = global.gui.Window.get();
@@ -173,16 +190,16 @@ var Session = function Session() {
         saveTimer = setTimeout(session.saveData, 3000);
     };
 
-    session.updateUserData = function(data) {
-        global.tools.notify("Updating user data.", 2);
-        global.tools.notify("Using the following to update:", 1);
+    session.updateSessionData = function(data) {
+        global.tools.notify('Updating user data.', 2);
+        global.tools.notify('Using the following to update:', 1);
         global.tools.notify(data, 1);
-        global.tools.notify("session.userData is:", 1);
-        global.tools.notify(session.userData, 1);
-        global.tools.extend(session.userData, data);
-        // session.userData = $.extend(session.userData,data);
-        global.tools.notify("Combined output is:", 0);
-        global.tools.notify(session.userData, 0);
+        global.tools.notify('session.sessionData is:', 1);
+        global.tools.notify(session.sessionData, 1);
+        global.tools.extend(session.sessionData, data);
+        // session.sessionData = $.extend(session.sessionData,data);
+        global.tools.notify('Combined output is:', 0);
+        global.tools.notify(session.sessionData, 0);
 
         var newDataLoaded = new window.Event('newDataLoaded');
         window.dispatchEvent(newDataLoaded);
@@ -195,12 +212,14 @@ var Session = function Session() {
     };
 
     session.saveData = function() {
-        global.dataStore.save(session.userData, session.returnSessionID());
+        global.dataStore.save(session.sessionData, session.returnSessionID());
         lastSaveTime = new Date();
     };
 
     session.goToStage = function(stage) {
-        if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') { return false; }
+        if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') {
+            return false;
+        }
 
         // Skip logic
 
@@ -229,12 +248,12 @@ var Session = function Session() {
             stage: stage,
             timestamp: new Date()
         };
-        var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
+        var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageVisible', 'eventObject':eventProperties}});
         window.dispatchEvent(log);
         session.options.fnBeforeStageChange(currentStage,stage);
         var newStage = stage;
 
-        var stagePath = "./protocols/"+global.studyProtocol+"/stages/"+session.stages[stage].page;
+        var stagePath ='./protocols/'+global.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
                 // This never gets called if there is a JS error. Is there a way to ensure it is?
@@ -259,19 +278,19 @@ var Session = function Session() {
 
     session.registerData = function(dataKey, isArray) {
         global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
-        if (session.userData[dataKey] === undefined) { // Create it if it doesn't exist.
+        if (session.sessionData[dataKey] === undefined) { // Create it if it doesn't exist.
             global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
             if (isArray) {
-                session.userData[dataKey] = [];
+                session.sessionData[dataKey] = [];
             } else {
-                session.userData[dataKey] = {};
+                session.sessionData[dataKey] = {};
             }
         } else {
             global.tools.notify ('A data store with this key already existed. Returning a reference.',1);
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
-        return session.userData[dataKey];
+        return session.sessionData[dataKey];
     };
 
     session.addData = function(dataKey, newData, append) {
@@ -283,12 +302,12 @@ var Session = function Session() {
         if (!append) { append = false; }
 
         if (append === true) { // this is an array
-            session.userData[dataKey].push(newData);
+            session.sessionData[dataKey].push(newData);
         } else {
-            global.tools.extend(session.userData[dataKey], newData);
+            global.tools.extend(session.sessionData[dataKey], newData);
         }
 
-        global.tools.notify("Adding data to key '"+dataKey+"'.",2);
+        global.tools.notify('Adding data to key "'+dataKey+'".',2);
         global.tools.notify(newData, 1);
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
@@ -301,11 +320,11 @@ var Session = function Session() {
 
     session.returnData = function(dataKey) {
         if (!dataKey) {
-            return session.userData;
-        } else if (typeof session.userData[dataKey] !== 'undefined') {
-            return session.userData[dataKey];
+            return session.sessionData;
+        } else if (typeof session.sessionData[dataKey] !== 'undefined') {
+            return session.sessionData[dataKey];
         } else {
-            return session.userData;
+            return session.sessionData;
         }
     };
 

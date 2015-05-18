@@ -1,7 +1,7 @@
 /*jshint unused:false*/
-/* global Storage, debugLevel */
+/*global window, $, localStorage, Storage, debugLevel, deepEquals */
 /*jshint bitwise: false*/
-
+'use strict';
 // Storage prototypes
 
 window.Storage.prototype.showUsage = function() {
@@ -10,9 +10,9 @@ window.Storage.prototype.showUsage = function() {
     for(var x in localStorage) {
       var amount = (localStorage[x].length * 2) / 1024 / 1024;
       total += amount;
-      console.log( x + " = " + amount.toFixed(2) + " MB");
+      console.log( x + ' = ' + amount.toFixed(2) + ' MB');
     }
-    console.log( "Total: " + total.toFixed(2) + " MB");
+    console.log( 'Total: ' + total.toFixed(2) + ' MB');
 };
 
 
@@ -31,7 +31,7 @@ window.Storage.prototype.getObject = function(key) {
 
 // Array prototypes
 
-Object.defineProperty(Array.prototype, "remove", {
+Object.defineProperty(Array.prototype, 'remove', {
     enumerable: false,
     value: function (item) {
         var removeCounter = 0;
@@ -58,14 +58,14 @@ exports.removeFromObject = function(item, object) {
         }
     }
     return removeCounter;
-}
+};
 
 // helper functions
 
 exports.deepEquals = function(a, x) {
     var p;
     for (p in a) {
-        if (typeof(x[p]) == 'undefined') {
+        if (typeof(x[p]) === 'undefined') {
             return false;
         }
     }
@@ -84,12 +84,12 @@ exports.deepEquals = function(a, x) {
                     }
                     break;
                 case 'function':
-                    if (typeof(x[p]) == 'undefined' || a[p].toString() != x[p].toString()) {
+                    if (typeof(x[p]) === 'undefined' || a[p].toString() !== x[p].toString()) {
                         return false;
                     }
                     break;
                 default:
-                    if (a[p] != x[p]) {
+                    if (a[p] !== x[p]) {
                         return false;
                     }
             }
@@ -101,13 +101,13 @@ exports.deepEquals = function(a, x) {
         }
     }
     for (p in x) {
-        if (typeof(a[p]) == 'undefined') {
+        if (typeof(a[p]) === 'undefined') {
             return false;
         }
     }
 
     return true;
-}
+};
 
 
 
@@ -120,7 +120,7 @@ exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     }
 
     return false;
-}
+};
 
 exports.getValueFromNestedObject = function(targetArray, objectKey) {
     // This function is for checking for keys in arrays of objects.
@@ -131,7 +131,7 @@ exports.getValueFromNestedObject = function(targetArray, objectKey) {
     }
 
     return false;
-}
+};
 
 
 exports.extend = function( a, b ) {
@@ -141,37 +141,41 @@ exports.extend = function( a, b ) {
         }
     }
     return a;
-}
+};
 
 exports.notify = function(text, level){
     level = level || 0;
-    if (level >= window.debugLevel) {
+    if (level >= global.debugLevel) {
         console.log(text);
     }
-}
+};
 
 exports.randomBetween = function(min,max) {
     return Math.random() * (max - min) + min;
-}
+};
+
+
+exports.hex = function (x){
+    return ('0' + parseInt(x).toString(16)).slice(-2);
+};
 
 $.cssHooks.backgroundColor = {
     get: function(elem) {
-        if (elem.currentStyle)
-            var bg = elem.currentStyle["backgroundColor"];
-        else if (window.getComputedStyle)
-            var bg = window.document.defaultView.getComputedStyle(elem,
-                null).getPropertyValue("background-color");
-        if (bg.search("rgb") == -1)
+        var bg;
+        if (elem.currentStyle) {
+            bg = elem.currentStyle.backgroundColor;
+        } else if (window.getComputedStyle) {
+            bg = window.document.defaultView.getComputedStyle(elem,null).getPropertyValue('background-color');
+        }
+
+        if (bg.search('rgb') === -1) {
             return bg;
-        else {
+        } else {
             bg = bg.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-            function hex(x) {
-                return ("0" + parseInt(x).toString(16)).slice(-2);
-            }
-            return "#" + hex(bg[1]) + hex(bg[2]) + hex(bg[3]);
+            return '#' + global.tools.hex(bg[1]) + global.tools.hex(bg[2]) + global.tools.hex(bg[3]);
         }
     }
-}
+};
 
 exports.modifyColor = function(hex, lum) {
 
@@ -183,13 +187,13 @@ exports.modifyColor = function(hex, lum) {
     lum = lum || 0;
 
     // convert to decimal and change luminosity
-    var rgb = "#", c, i;
+    var rgb = '#', c, i;
     for (i = 0; i < 3; i++) {
         c = parseInt(hex.substr(i*2,2), 16);
         c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-        rgb += ("00"+c).substr(c.length);
+        rgb += ('00'+c).substr(c.length);
     }
 
     return rgb;
 
-}
+};

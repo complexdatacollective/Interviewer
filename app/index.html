@@ -9,13 +9,7 @@
         <title>Network Canvas</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="bower_components/leaflet/dist/leaflet.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="stylesheet" type="text/css" href="bower_components/bs-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-        <style>
-          @import 'bower_components/components-font-awesome/css/font-awesome.css';
-          @import 'bower_components/lato/css/lato.css';
-        </style>
     </head>
 <body>
 
@@ -24,14 +18,11 @@
 <div id="content" class="content"></div>
 
 <!-- Menu Container -->
-<div class="menu-container">
-
-</div>
+<div class="menu-container"></div>
 
 <!-- Navigation Arrows -->
 <button class="arrow-prev paginate left"><i></i><i></i></button>
 <button class="arrow-next paginate right"><i></i><i></i></button>
-
 
 <!-- Loader -->
 <div class="loader">
@@ -41,45 +32,8 @@
     </div>
 </div>
 <input id="save" type="file" style="display:none" nwsaveas="output.json" accept=".json"/>
-
-<!-- Components -->
-
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/jquery-ui/jquery-ui.js"></script>
-<script src="bower_components/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-<script src="bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js"></script>
-<script src="bower_components/kineticjs/kinetic.js"></script>
-<!-- <script src="bower_components/moment/moment.js"></script> -->
-<script src="bower_components/jquery.transit/jquery.transit.js"></script>
-<script src="bower_components/leaflet/dist/leaflet-src.js"></script>
-<script src="bower_components/leaflet-providers/leaflet-providers.js"></script>
-
-
-<!-- Modules -->
-<script>
-global.$ = $;
-global.L = L;
-</script>
-<script src="js/main.js"></script>
-<!-- <script src="js/extensions.js"></script>
-<script src="js/network.js"></script>
-<script src="js/canvas.js"></script>
-<script src="js/namegenerator.js"></script>
-<script src="js/listselect.js"></script>
-<script src="js/multibin.js"></script>
-<script src="js/map.js"></script>
-<script src="js/ordinalbin.js"></script>
-<script src="js/iointerface.js"></script>
-<script src="js/session.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/logger.js"></script>
-<script src="js/interview.js"></script>
-<script src="js/dateinterface.js"></script> -->
-
-
-<script src="bower_components/bs-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-
 <div class="black-overlay"></div>
+
+<script src="js/main.js"></script>
 </body>
 </html>

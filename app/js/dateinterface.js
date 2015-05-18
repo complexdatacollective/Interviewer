@@ -1,7 +1,8 @@
-/* global*/
+/* global $ */
 /* exported DateInterface */
 
 var DateInterface = function DateInterface() {
+    'use strict';
 
     // dateInterface globals
 
@@ -11,7 +12,7 @@ var DateInterface = function DateInterface() {
     dateInterface.options = {
         targetEl: $('.container'),
         edgeType: 'Dyad',
-        heading: "Default Heading"
+        heading: 'Default Heading'
     };
 
 
@@ -72,7 +73,7 @@ var DateInterface = function DateInterface() {
             $('#datetimepicker'+counter).datetimepicker(dateoptions);
             $('#datetimepicker'+(counter+1)).datetimepicker(dateoptions);
 
-            $('#datetimepicker'+counter+', #datetimepicker'+(counter+1)).on("dp.change",function (e) {
+            $('#datetimepicker'+counter+', #datetimepicker'+(counter+1)).on('dp.change',function (e) {
                 var properties = {};
                 var target, first, second, incomingDate;
 
@@ -85,7 +86,7 @@ var DateInterface = function DateInterface() {
                         incomingDate = null;
                     } else {
                         properties.sex_first_before_range = false;
-                        incomingDate = $current.data("DateTimePicker").date().format("MM/DD/YYYY");
+                        incomingDate = $current.data('DateTimePicker').date().format('MM/DD/YYYY');
                     }
 
                     target = parseInt($current.attr('id').slice(-1))+1;
@@ -93,7 +94,7 @@ var DateInterface = function DateInterface() {
                     second = parseInt($current.attr('id').slice(-1))+1;
 
                     if (e.date !== null ) {
-                        // $('#datetimepicker'+second).data("DateTimePicker").minDate(e.date);
+                        // $('#datetimepicker'+second).data('DateTimePicker').minDate(e.date);
                     }
 
                     properties.sex_first_t0 = incomingDate;
@@ -105,7 +106,7 @@ var DateInterface = function DateInterface() {
                         incomingDate = null;
                     } else {
                         properties.sex_last_before_range = false;
-                        incomingDate = $current.data("DateTimePicker").date().format("MM/DD/YYYY");
+                        incomingDate = $current.data('DateTimePicker').date().format('MM/DD/YYYY');
                     }
 
                     target = parseInt($current.attr('id').slice(-1))-1;
@@ -122,7 +123,7 @@ var DateInterface = function DateInterface() {
 
                 global.network.updateEdge(value.id, properties);
 
-                if (global.moment($('#datetimepicker'+first).data("DateTimePicker").date()).isAfter($('#datetimepicker'+second).data("DateTimePicker").date())) {
+                if (global.moment($('#datetimepicker'+first).data('DateTimePicker').date()).isAfter($('#datetimepicker'+second).data('DateTimePicker').date())) {
                     $current.parent().parent().parent().children('.logic-error').fadeIn();
                     $('.arrow-next').attr('disabled','disabled');
                 } else {
@@ -135,38 +136,38 @@ var DateInterface = function DateInterface() {
             if (typeof value.sex_first_t0 !== 'undefined') {
                 if (value.sex_first_t0 === null) {
                     $('.checkbox'+counter).prop('checked', true);
-                    $('#datetimepicker'+counter).data("DateTimePicker").date(global.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+                    $('#datetimepicker'+counter).data('DateTimePicker').date(global.moment().subtract(6, 'months').format('MM/DD/YYYY'));
                     $('#datetimepicker'+counter).children().css({opacity:0.5});
-                    $('#datetimepicker'+counter).data("DateTimePicker").disable();
+                    $('#datetimepicker'+counter).data('DateTimePicker').disable();
 
                 } else {
-                    $('#datetimepicker'+counter).data("DateTimePicker").date(value.sex_first_t0);
+                    $('#datetimepicker'+counter).data('DateTimePicker').date(value.sex_first_t0);
                 }
 
             }
             if (typeof value.sex_last_t0 !== 'undefined') {
                 if (value.sex_last_t0 === null) {
                     $('.checkbox'+(counter+1)).prop('checked', true);
-                    $('#datetimepicker'+(counter+1)).data("DateTimePicker").date(global.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+                    $('#datetimepicker'+(counter+1)).data('DateTimePicker').date(global.moment().subtract(6, 'months').format('MM/DD/YYYY'));
                     $('#datetimepicker'+(counter+1)).children().css({opacity:0.5});
-                    $('#datetimepicker'+(counter+1)).data("DateTimePicker").disable();
+                    $('#datetimepicker'+(counter+1)).data('DateTimePicker').disable();
 
                 } else {
-                    $('#datetimepicker'+(counter+1)).data("DateTimePicker").date(value.sex_last_t0);
+                    $('#datetimepicker'+(counter+1)).data('DateTimePicker').date(value.sex_last_t0);
                 }
 
             }
 
-            $(".checkbox"+counter+', .checkbox'+(counter+1)).change(function(e) {
+            $('.checkbox'+counter+', .checkbox'+(counter+1)).change(function(e) {
                 var $target = $(e.target);
                 if(this.checked) {
-                    $target.parent().parent().parent().children('.date').data("DateTimePicker").date(global.moment().subtract(6, 'months').format("MM/DD/YYYY"));
-                    $target.parent().parent().parent().children('.date').data("DateTimePicker").disable();
+                    $target.parent().parent().parent().children('.date').data('DateTimePicker').date(global.moment().subtract(6, 'months').format('MM/DD/YYYY'));
+                    $target.parent().parent().parent().children('.date').data('DateTimePicker').disable();
                     $target.parent().parent().parent().children('.date').children().css({opacity:0.5});
                 } else {
-                    $target.parent().parent().parent().children('.date').data("DateTimePicker").enable();
+                    $target.parent().parent().parent().children('.date').data('DateTimePicker').enable();
                     $target.parent().parent().parent().children('.date').children().css({opacity:1});
-                    $target.parent().parent().parent().children('.date').data("DateTimePicker").date(global.moment().format("MM/DD/YYYY"));
+                    $target.parent().parent().parent().children('.date').data('DateTimePicker').date(global.moment().format('MM/DD/YYYY'));
                 }
             });
 
