@@ -1,3 +1,5 @@
+'use strict';
+
 global.gui = require('nw.gui');
 var moment = require('moment');
 global.moment = moment; // needed for module access.
@@ -6,9 +8,9 @@ var path = require('path');
 var devMode = false;
 global.debugLevel = 10;
 // Set the global survey
-global.studyProtocol = "RADAR";
+global.studyProtocol = 'RADAR';
 
-console.log("netCanvas "+global.gui.App.manifest.version+" running on NWJS "+process.versions['node-webkit']);
+console.log('netCanvas '+global.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
 
 var protocolExists = function(protocol, callback) {
     var response = false;
@@ -16,7 +18,7 @@ var protocolExists = function(protocol, callback) {
     // Print out available survey protocols.
     fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
         if (err) { console.log(err); return false; }
-        console.log("Available survey protocols:");
+        console.log('Available survey protocols:');
         files.forEach(function(file) {
             var stats = fs.statSync(path.join(path.resolve(), 'protocols', file));
             if (stats.isDirectory()) {

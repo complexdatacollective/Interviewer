@@ -1,7 +1,7 @@
-/* global console */
+/* global document, window, $, console */
 /* exported Session, eventLog */
 var Session = function Session() {
-
+    'use strict';
     //global vars
     var session = {};
     var currentStage = 0;
@@ -30,15 +30,15 @@ var Session = function Session() {
                 stage: currentStage,
                 timestamp: new Date()
             };
-            var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
+            var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
 
-            var changeStageStartEvent = new window.CustomEvent('changeStageStart', {"detail":{oldStage: oldStage, newStage: newStage}});
+            var changeStageStartEvent = new window.CustomEvent('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageStartEvent);
 
         },
         fnAfterStageChange : function(oldStage, newStage) {
-            var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {"detail":{oldStage: oldStage, newStage: newStage}});
+            var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
             if ((currentStage+1) === session.stages.length) {
                 $('.arrow-next').hide();
@@ -178,7 +178,7 @@ var Session = function Session() {
     };
 
     session.reset = function() {
-        global.tools.notify("Resetting session.",2);
+        global.tools.notify('Resetting session.',2);
         session.id = 0;
         session.currentStage = 0;
         var _window = global.gui.Window.get();
@@ -191,14 +191,14 @@ var Session = function Session() {
     };
 
     session.updateSessionData = function(data) {
-        global.tools.notify("Updating user data.", 2);
-        global.tools.notify("Using the following to update:", 1);
+        global.tools.notify('Updating user data.', 2);
+        global.tools.notify('Using the following to update:', 1);
         global.tools.notify(data, 1);
-        global.tools.notify("session.sessionData is:", 1);
+        global.tools.notify('session.sessionData is:', 1);
         global.tools.notify(session.sessionData, 1);
         global.tools.extend(session.sessionData, data);
         // session.sessionData = $.extend(session.sessionData,data);
-        global.tools.notify("Combined output is:", 0);
+        global.tools.notify('Combined output is:', 0);
         global.tools.notify(session.sessionData, 0);
 
         var newDataLoaded = new window.Event('newDataLoaded');
@@ -248,12 +248,12 @@ var Session = function Session() {
             stage: stage,
             timestamp: new Date()
         };
-        var log = new window.CustomEvent('log', {"detail":{'eventType': 'stageVisible', 'eventObject':eventProperties}});
+        var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageVisible', 'eventObject':eventProperties}});
         window.dispatchEvent(log);
         session.options.fnBeforeStageChange(currentStage,stage);
         var newStage = stage;
 
-        var stagePath = "./protocols/"+global.studyProtocol+"/stages/"+session.stages[stage].page;
+        var stagePath ='./protocols/'+global.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
                 // This never gets called if there is a JS error. Is there a way to ensure it is?
@@ -307,7 +307,7 @@ var Session = function Session() {
             global.tools.extend(session.sessionData[dataKey], newData);
         }
 
-        global.tools.notify("Adding data to key '"+dataKey+"'.",2);
+        global.tools.notify('Adding data to key "'+dataKey+'".',2);
         global.tools.notify(newData, 1);
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);

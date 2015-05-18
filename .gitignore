@@ -1,5 +1,7 @@
 node_modules/
 tmp/
+build/
+buildTmp/
 .DS_Store
 *.codekit
 codekit-config.json

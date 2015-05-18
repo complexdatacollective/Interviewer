@@ -1,53 +1,53 @@
 /* exported Logger */
-/* global*/
+/* global window */
 
 var Logger = function Logger() {
+    'use strict';
+    var logger = {};
 
-  var logger = {};
+    // todo: add custom events so that other scripts can listen for log changes (think vis).
 
-  // todo: add custom events so that other scripts can listen for log changes (think vis).
+    logger.init = function() {
+        global.tools.notify('Logger initialising.', 1);
 
-  logger.init = function() {
-    global.tools.notify('Logger initialising.', 1);
+        global.log = global.session.registerData('log', true);
 
-    global.log = global.session.registerData('log', true);
+        // listen for log events
+        window.addEventListener('log', function (e) {
+            logger.addToLog(e.detail);
+        }, false);
 
-    // listen for log events
-    window.addEventListener('log', function (e) {
-      logger.addToLog(e.detail);
-    }, false);
-
-    return true;
-  };
-
-  logger.addToLog = function(e) {
-    global.tools.notify("Event being added to log.",1);
-    if (!e) { return false; }
-
-    var data = {
-      'eventType': e.eventType,
-      'targetObject':e.eventObject,
-      'eventTime': new Date()
+        return true;
     };
 
-    global.session.addData('log', data, true);
-    var eventLogged = new window.CustomEvent('eventLogged', {"detail":data});
-    window.dispatchEvent(eventLogged);
-    var unsavedChanges = new window.Event('unsavedChanges');
-    window.dispatchEvent(unsavedChanges);
-    return true;
-  };
+    logger.addToLog = function(e) {
+        global.tools.notify('Event being added to log.',1);
+        if (!e) { return false; }
 
-  logger.getLog = function() {
-    return global.log;
+        var data = {
+            'eventType': e.eventType,
+            'targetObject':e.eventObject,
+            'eventTime': new Date()
+        };
 
-  };
+        global.session.addData('log', data, true);
+        var eventLogged = new window.CustomEvent('eventLogged', {'detail':data});
+        window.dispatchEvent(eventLogged);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+        return true;
+    };
 
-  logger.getLastEvent = function() {
+    logger.getLog = function() {
+        return global.log;
 
-  };
+    };
 
-  return logger;
+    logger.getLastEvent = function() {
+
+    };
+
+    return logger;
 };
 
 module.exports = new Logger();

@@ -1,9 +1,9 @@
-/* global*/
+/* global $ */
 /* exported Menu */
 var Menu = function Menu(options) {
-
-// TODO: Check if a menu exists before adding it. If it does, return false. Unique id = menu name.
-// TODO: Give menus ascending classes.
+    'use strict';
+    // TODO: Check if a menu exists before adding it. If it does, return false. Unique id = menu name.
+    // TODO: Give menus ascending classes.
 
 
 
@@ -24,14 +24,14 @@ var Menu = function Menu(options) {
         $('.black').hide();
         $('.arrow-next').transition({marginRight:-550},1000);
         $('.arrow-prev').transition({marginLeft:-550},1000);
-        $('.content').addClass("pushed");
+        $('.content').addClass('pushed');
         $('.pushed').on('click', contentClickHandler);
       },
       onAfterOpen : function() {
         return false;
       },
       onBeforeClose : function() {
-        $('.content').removeClass("pushed");
+        $('.content').removeClass('pushed');
         $('.pushed').off('click', contentClickHandler);
       },
       onAfterClose : function() {
@@ -83,8 +83,8 @@ var Menu = function Menu(options) {
                 isAnimating = false;
             } else {
                 menu.options.onBeforeOpen();
-                var col = global.tools.modifyColor($('.'+targetMenu.name+'-menu').css("background-color"),-0.2);
-                $('body').css({"background-color":col});
+                var col = global.tools.modifyColor($('.'+targetMenu.name+'-menu').css('background-color'),-0.2);
+                $('body').css({'background-color':col});
                 menuContent.addClass('active');
                 setTimeout(menu.options.onAfterOpen, 500);
                 isAnimating = false;

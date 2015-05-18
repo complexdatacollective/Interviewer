@@ -1,7 +1,7 @@
-/* global*/
+/* global $, window */
 /* exported OrdinalBin */
 var OrdinalBin = function OrdinalBin() {
-
+    'use strict';
     //global vars
     var ordinalBin = {};
     var taskComprehended = false;
@@ -20,8 +20,8 @@ var OrdinalBin = function OrdinalBin() {
                 'Won\'t Answer'
             ]
         },
-        heading: "Default Heading",
-        subheading: "Default Subheading."
+        heading: 'Default Heading',
+        subheading: 'Default Subheading.'
     };
     var itemW,itemH, followup;
 
@@ -50,7 +50,7 @@ var OrdinalBin = function OrdinalBin() {
 
     ordinalBin.destroy = function() {
         // Event Listeners
-        global.tools.notify("Destroying ordinalBin.",0);
+        global.tools.notify('Destroying ordinalBin.',0);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
         $(window.document).off('click', '.followup-option', followupHandler);
 
@@ -82,7 +82,7 @@ var OrdinalBin = function OrdinalBin() {
             var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
             newBin.data('index', index);
             ordinalBin.options.targetEl.append(newBin);
-            $(".d"+index).droppable({ accept: ".draggable",
+            $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
 
                     var dropped = ui.draggable;
@@ -103,21 +103,21 @@ var OrdinalBin = function OrdinalBin() {
                     global.network.updateEdge(edgeID,properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
-                        var length = $(".d"+oindex).children('.active-node-list').children().length;
+                        var length = $('.d'+oindex).children('.active-node-list').children().length;
                         if (length > 0) {
-                            var noun = "people";
+                            var noun = 'people';
                             if (length === 1) {
-                                noun = "person";
+                                noun = 'person';
                             }
 
-                            $(".d"+oindex+" p").html(length+' '+noun+'.');
+                            $('.d'+oindex+' p').html(length+' '+noun+'.');
                         } else {
-                            $(".d"+oindex+" p").html('(Empty)');
+                            $('.d'+oindex+' p').html('(Empty)');
                         }
 
                     });
 
-                    var el = $(".d"+index);
+                    var el = $('.d'+index);
                     // var origBg = el.css('background-color');
                     // el.transition({scale:1.2}, 200, 'ease');
                     setTimeout(function(){
@@ -125,14 +125,14 @@ var OrdinalBin = function OrdinalBin() {
                         // el.transition({ scale:1}, 200, 'ease');
                     }, 0);
 
-                    $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+                    $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, scroll: 'true', refreshPositions: true,
                         start: function() {
                             if (taskComprehended === false) {
                                 var eventProperties = {
                                     stage: global.session.currentStage(),
                                     timestamp: new Date()
                                 };
-                                log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                                log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
                                 window.dispatchEvent(log);
                                 taskComprehended = true;
                             }
@@ -168,7 +168,7 @@ var OrdinalBin = function OrdinalBin() {
                 dyadEdge = global.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
             }
 
-            if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== "") {
+            if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== '') {
                 // index = ordinalBin.options.variable.values.indexOf(value[ordinalBin.options.variable.label]);
                 index = 'error';
                 $.each(ordinalBin.options.variable.values, function(vindex, vvalue) {
@@ -183,10 +183,10 @@ var OrdinalBin = function OrdinalBin() {
                     $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
 
-                var noun = "people";
+                var noun = 'people';
                 var length = $('.d'+index).children('.active-node-list').children().length;
                 if (length === 1) {
-                    noun = "person";
+                    noun = 'person';
                 }
                 if (length === 0) {
                     $('.d'+index).children('p').html('(Empty)');
@@ -203,14 +203,14 @@ var OrdinalBin = function OrdinalBin() {
             }
 
         });
-        $(".draggable").draggable({ cursor: "pointer", revert: "invalid", disabled: false, scroll: 'true', refreshPositions: true,
+        $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, scroll: 'true', refreshPositions: true,
             start: function() {
                 if (taskComprehended === false) {
                     var eventProperties = {
                         stage: global.session.currentStage(),
                         timestamp: new Date()
                     };
-                    log = new window.CustomEvent('log', {"detail":{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+                    log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
                     window.dispatchEvent(log);
                     taskComprehended = true;
                 }

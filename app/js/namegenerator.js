@@ -1,7 +1,7 @@
-/* global global.tools.randomBetween */
+/* global $, window */
 /* exported Namegenerator */
 var Namegenerator = function Namegenerator() {
-
+    'use strict';
   //global vars
   var namegenerator = {};
   namegenerator.options = {
@@ -9,8 +9,8 @@ var Namegenerator = function Namegenerator() {
   	edgeType:'Dyad',
   	targetEl: $('.container'),
   	variables: [],
-  	heading: "This is a default heading",
-  	subheading: "And this is a default subheading"
+  	heading: 'This is a default heading',
+  	subheading: 'And this is a default subheading'
   };
 
   var nodeBoxOpen = false;
@@ -28,7 +28,7 @@ var Namegenerator = function Namegenerator() {
   	'Other': ['Other relationship']
   };
 
-  var namesList = ["Barney","Jonathon","Myles","Alethia","Tammera","Veola","Meredith","Renee","Grisel","Celestina","Fausto","Eliana","Raymundo","Lyle","Carry","Kittie","Melonie","Elke","Mattie","Kieth","Lourie","Marcie","Trinity","Librada","Lloyd","Pearlie","Velvet","Stephan","Hildegard","Winfred","Tempie","Maybelle","Melynda","Tiera","Lisbeth","Kiera","Gaye","Edra","Karissa","Manda","Ethelene","Michelle","Pamella","Jospeh","Tonette","Maren","Aundrea","Madelene","Epifania","Olive"];
+  var namesList = ['Barney','Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
   	var keyPressHandler = function(e) {
 	  	if (e.keyCode === 13) {
@@ -36,7 +36,7 @@ var Namegenerator = function Namegenerator() {
 	  		if (nodeBoxOpen === false) {
 	  			namegenerator.openNodeBox();
 	  		} else if (nodeBoxOpen === true) {
-	  			$(".submit-1").click();
+	  			$('.submit-1').click();
 	  		}
 	  	}
 
@@ -45,7 +45,7 @@ var Namegenerator = function Namegenerator() {
 	  	}
 
 		// Prevent accidental backspace navigation
-		if (e.keyCode === 8 && !$(e.target).is("input, textarea")) {
+		if (e.keyCode === 8 && !$(e.target).is('input, textarea')) {
 			e.preventDefault();
 		}
 
@@ -69,9 +69,9 @@ var Namegenerator = function Namegenerator() {
 			if (e.keyCode !== 13) {
 				if($('#fname_t0').val().length > 0 && $('#fname_t0').val().length > 0) {
 
-					var lname = $('#fname_t0').val()+" "+$('#lname_t0').val().charAt(0);
+					var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
 					if ($('#lname_t0').val().length > 0 ) {
-						lname +=".";
+						lname +='.';
 					}
 
 					var updateName = function() {
@@ -105,19 +105,19 @@ var Namegenerator = function Namegenerator() {
 		$.each(namegenerator.options.variables, function(index, value) {
 			if(value.private === false) {
 				if (value.type === 'relationship') {
-					$("select[name='"+value.variable+"']").val(edge[value.variable]);
+					$('select[name="'+value.variable+'"]').val(edge[value.variable]);
 				// } else if (value.type === 'subrelationship') {
-				// 	$("select[name='reltype_sub_t0']").children().remove();
-				// 	$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
+				// 	$('select[name='reltype_sub_t0']').children().remove();
+				// 	$('select[name='reltype_sub_t0']').append('<option value='>Choose a specific relationship</option>');
 
-				// 	$.each(roles[$("select[name='reltype_main_t0']").val()], function(index,value) {
-				// 		$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
+				// 	$.each(roles[$('select[name='reltype_main_t0']').val()], function(index,value) {
+				// 		$('select[name='reltype_sub_t0']').append('<option value=''+value+''>'+value+'</option>');
 				// 	});
 
-				// 	$("select[name='"+value.variable+"']").val(edge[value.variable]);
-				// 	$("select[name='reltype_sub_t0']").prop( "disabled", false );
+				// 	$('select[name=''+value.variable+'']').val(edge[value.variable]);
+				// 	$('select[name='reltype_sub_t0']').prop( 'disabled', false );
 
-				// 	if(edge.reltype_oth_t0 !== undefined && edge.reltype_oth_t0 !== "") {
+				// 	if(edge.reltype_oth_t0 !== undefined && edge.reltype_oth_t0 !== ') {
 				// 		$('.reltype_oth_t0').val(edge.reltype_oth_t0);
 				// 		$('.reltype_oth_t0').show();
 				// 	}
@@ -138,24 +138,24 @@ var Namegenerator = function Namegenerator() {
 	};
 
 	var selectChangeHandler = function() {
-		if ($("select[name='reltype_main_t0']").val() === "") {
-			$("select[name='reltype_sub_t0']").prop( "disabled", true);
+		if ($('select[name="reltype_main_t0"]').val() === '') {
+			$('select[name="reltype_sub_t0"]').prop( 'disabled', true);
 			return false;
 		}
-		$("select[name='reltype_sub_t0']").prop( "disabled", false );
-		$("select[name='reltype_sub_t0']").children().remove();
-		$("select[name='reltype_sub_t0']").append('<option value="">Choose a specific relationship</option>');
-		$.each(roles[$("select[name='reltype_main_t0']").val()], function(index,value) {
-			$("select[name='reltype_sub_t0']").append('<option value="'+value+'">'+value+'</option>');
+		$('select[name="reltype_sub_t0"]').prop( 'disabled', false );
+		$('select[name="reltype_sub_t0"]').children().remove();
+		$('select[name="reltype_sub_t0"]').append('<option value="">Choose a specific relationship</option>');
+		$.each(roles[$('select[name="reltype_main_t0"]').val()], function(index,value) {
+			$('select[name="reltype_sub_t0"]').append('<option value="'+value+'">'+value+'</option>');
 		});
 
 	};
 
 	var selectSubChangeHandler = function() {
-		if ($("select[name='reltype_sub_t0']").val() === "Other") {
+		if ($('select[name="reltype_sub_t0"]').val() === 'Other') {
 			$('.reltype_oth_t0').show();
 		} else {
-			$('.reltype_oth_t0').val("");
+			$('.reltype_oth_t0').val('');
 			$('.reltype_oth_t0').hide();
 		}
 	};
@@ -173,7 +173,7 @@ var Namegenerator = function Namegenerator() {
 						newEdgeProperties[value.variable] =  value.value;
 					} else {
 						if(value.type === 'relationship' || value.type === 'subrelationship') {
-							newEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
+							newEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
 						} else {
 							newEdgeProperties[value.variable] =  $('#'+value.variable).val();
 						}
@@ -184,7 +184,7 @@ var Namegenerator = function Namegenerator() {
 						newNodeProperties[value.variable] =  value.value;
 					} else {
 						if(value.type === 'relationship' || value.type === 'subrelationship') {
-							newNodeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
+							newNodeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
 						} else {
 							newNodeProperties[value.variable] =  $('#'+value.variable).val();
 						}
@@ -211,7 +211,7 @@ var Namegenerator = function Namegenerator() {
 								currentEdgeProperties[value.variable] =  value.value;
 							} else {
 								if(value.type === 'relationship' || value.type === 'subrelationship') {
-									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
+									currentEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
 								} else {
 									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
 								}
@@ -244,7 +244,7 @@ var Namegenerator = function Namegenerator() {
 
 
 				// Main edge
-				var edge = global.network.getEdges({to:newNode, type:"Dyad"})[0];
+				var edge = global.network.getEdges({to:newNode, type:'Dyad'})[0];
 				namegenerator.addToList(edge);
 				alterCount++;
 				$('.alter-count-box').html(alterCount);
@@ -272,7 +272,7 @@ var Namegenerator = function Namegenerator() {
 								currentEdgeProperties[value.variable] =  value.value;
 							} else {
 								if(value.type === 'relationship' || value.type === 'subrelationship') {
-									currentEdgeProperties[value.variable] =  $("select[name='"+value.variable+"']").val();
+									currentEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
 								} else {
 									currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
 								}
@@ -292,7 +292,7 @@ var Namegenerator = function Namegenerator() {
 				// update relationship roles
 
 				// Remove existing edges
-				global.network.removeEdges(global.network.getEdges({type:"Role", from: global.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
+				global.network.removeEdges(global.network.getEdges({type:'Role', from: global.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
 
 				$.each($('.relationship.selected'), function() {
@@ -306,12 +306,12 @@ var Namegenerator = function Namegenerator() {
 				    global.network.addEdge(edgeProperties);
 				});
 
-				$('div[data-index='+editing+']').html("");
+				$('div[data-index='+editing+']').html('');
 				$('div[data-index='+editing+']').append('<h4>'+properties.nname_t0+'</h4>');
 				var list = $('<ul></ul>');
 
 				$.each(namegenerator.options.variables, function(index, value) {
-					if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== "") {
+					if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
 						list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
 					}
 
@@ -340,14 +340,14 @@ var Namegenerator = function Namegenerator() {
 			// We must simulate every interaction to ensure that any errors are caught.
 			$('.add-button').click();
 			setTimeout(function() {
-				$("#ngForm").submit();
+				$('#ngForm').submit();
 			}, 3000);
 
 			$('#fname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
 			$('#lname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
-			var lname = $('#fname_t0').val()+" "+$('#lname_t0').val().charAt(0);
+			var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
 			if ($('#lname_t0').val().length > 0 ) {
-				lname +=".";
+				lname +='.';
 			}
 			$('#nname_t0').val(lname);
 			$('#age_p_t0').val(Math.floor(global.tools.randomBetween(18,90)));
@@ -369,7 +369,7 @@ var Namegenerator = function Namegenerator() {
 		$('.content').addClass('blurry');
 		// $('.newNodeBox').transition({scale:1,opacity:1},300);
 		$('.newNodeBox').addClass('open');
-		$("#ngForm input:text").first().focus();
+		$('#ngForm input:text').first().focus();
 		nodeBoxOpen = true;
 	};
 
@@ -381,7 +381,7 @@ var Namegenerator = function Namegenerator() {
 
 		});
 		nodeBoxOpen = false;
-		$('#ngForm').trigger("reset");
+		$('#ngForm').trigger('reset');
 		$('.reltype_oth_t0').hide();
 		editing = false;
 		$('.relationship-button').html('Set Relationship Roles');
@@ -391,21 +391,21 @@ var Namegenerator = function Namegenerator() {
 	namegenerator.destroy = function() {
 		global.tools.notify('Destroying namegenerator.',0);
 		// Event listeners
-		$(window.document).off("keydown", keyPressHandler);
+		$(window.document).off('keydown', keyPressHandler);
 		$('.cancel').off('click', cancelBtnHandler);
-		$("#fname_t0, #lname_t0").off('keyup', inputKeypressHandler);
-		$(window.document).off("click", ".card", cardClickHandler);
+		$('#fname_t0, #lname_t0').off('keyup', inputKeypressHandler);
+		$(window.document).off('click', '.card', cardClickHandler);
 		$('.add-button').off('click', namegenerator.openNodeBox);
 		$('.delete-button').off('click', namegenerator.removeFromList);
-		$("select[name='reltype_main_t0']").off('change', selectChangeHandler);
-		$("select[name='reltype_sub_t0']").off('change', selectSubChangeHandler);
+		$('select[name="reltype_main_t0"]').off('change', selectChangeHandler);
+		$('select[name="reltype_sub_t0"]').off('change', selectSubChangeHandler);
 		$('#ngForm').off('submit', submitFormHandler);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.newNodeBox').remove();
 		$('.relationship-types-container').remove();
-		$(window.document).off("click", '.relationship', roleClickHandler);
-		$(window.document).off("click", '.relationship-button', namegenerator.toggleRelationshipBox);
-		$(window.document).off("click", '.relationship-close-button', namegenerator.toggleRelationshipBox);
+		$(window.document).off('click', '.relationship', roleClickHandler);
+		$(window.document).off('click', '.relationship-button', namegenerator.toggleRelationshipBox);
+		$(window.document).off('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
 	};
 
 	namegenerator.init = function(options) {
@@ -451,9 +451,9 @@ var Namegenerator = function Namegenerator() {
 				$('.newNodeBox .form .right').append(formItem);
 				if (value.required === true) {
 					if (value.type === 'relationship') {
-						$("select[name='"+value.variable+"']").prop("required", true);
+						$('select[name="'+value.variable+'"]').prop('required', true);
 					} else {
-						$('#'+value.variable).prop("required", true);
+						$('#'+value.variable).prop('required', true);
 					}
 
 				}
@@ -463,11 +463,10 @@ var Namegenerator = function Namegenerator() {
 		});
 
 	$('.newNodeBox .form .right').append('<div class="form-group"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div>');
-	$("select[name='reltype_sub_t0']").prop( "disabled", true );
+	$('select[name="reltype_sub_t0"]').prop( 'disabled', true );
 	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-outline btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-outline btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
-
 
 		// relationship types
 		alterCountBox = $('<div class="relationship-types-container"><button class="btn btn-primary relationship-close-button">Close</button></div>');
@@ -494,18 +493,18 @@ var Namegenerator = function Namegenerator() {
 
 		// Event listeners
 		window.addEventListener('changeStageStart', stageChangeHandler, false);
-		$(window.document).on("keydown", keyPressHandler);
+		$(window.document).on('keydown', keyPressHandler);
 		$('.cancel').on('click', cancelBtnHandler);
 		$('.add-button').on('click', namegenerator.openNodeBox);
 		$('.delete-button').on('click', namegenerator.removeFromList);
-		$("#fname_t0, #lname_t0").on('keyup', inputKeypressHandler);
-		$(window.document).on("click", ".card", cardClickHandler);
-		$("select[name='reltype_main_t0']").on('change', selectChangeHandler);
-		$("select[name='reltype_sub_t0']").on('change', selectSubChangeHandler);
+		$('#fname_t0, #lname_t0').on('keyup', inputKeypressHandler);
+		$(window.document).on('click', '.card', cardClickHandler);
+		$('select[name="reltype_main_t0"]').on('change', selectChangeHandler);
+		$('select[name="reltype_sub_t0"]').on('change', selectSubChangeHandler);
 		$('#ngForm').on('submit', submitFormHandler);
-		$(window.document).on("click", '.relationship', roleClickHandler);
-		$(window.document).on("click", '.relationship-button', namegenerator.toggleRelationshipBox);
-		$(window.document).on("click", '.relationship-close-button', namegenerator.toggleRelationshipBox);
+		$(window.document).on('click', '.relationship', roleClickHandler);
+		$(window.document).on('click', '.relationship-button', namegenerator.toggleRelationshipBox);
+		$(window.document).on('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
 
 		// Set node count box
 		$('.alter-count-box').html(alterCount);
@@ -515,10 +514,10 @@ var Namegenerator = function Namegenerator() {
 		if ($('.relationship-types-container').hasClass('open')) {
 			//closing
 			var roleCount = $('.relationship.selected').length;
-			var plural = "roles";
+			var plural = 'roles';
 
 			if (roleCount === 1) {
-				plural = "role";
+				plural = 'role';
 			}
 
 			if(editing) {
@@ -591,7 +590,7 @@ var Namegenerator = function Namegenerator() {
 		card = $('<div class="card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div>');
 		var list = $('<ul></ul>');
 		$.each(namegenerator.options.variables, function(index, value) {
-			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== "") {
+			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
 				list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
 			}
 
