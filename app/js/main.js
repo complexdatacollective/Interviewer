@@ -1,10 +1,10 @@
 global.gui = require('nw.gui');
-moment = require('moment');
+var moment = require('moment');
 global.moment = moment; // needed for module access.
 var fs = require('fs');
 var path = require('path');
 var devMode = false;
-global.debugLevel = 1;
+global.debugLevel = 10;
 // Set the global survey
 global.studyProtocol = "RADAR";
 
@@ -34,17 +34,17 @@ var protocolExists = function(protocol, callback) {
 };
 
 // Detect dev mode
-var arguments = global.gui.App.argv;
+var args = global.gui.App.argv;
 
 // Just futureproofing in case this changes in future nw versions.
-if (typeof arguments !== 'undefined' && arguments.indexOf('dev') !== -1) {
+if (typeof args !== 'undefined' && args.indexOf('dev') !== -1) {
     console.log('Development mode enabled.');
     devMode = true;
 }
 
 if (devMode) {
     global.gui.Window.get().showDevTools();
-    global.debugLevel = 10;
+    global.debugLevel = 1;
 } else {
     global.gui.Window.get().enterFullscreen();
 }
@@ -83,12 +83,4 @@ protocolExists(global.studyProtocol, function(exists){
     global.session.init();
     global.logger.init();
 
-});
-
-
-$('.arrow-next').click(function() {
-    global.session.nextStage();
-});
-$('.arrow-prev').click(function() {
-    global.session.prevStage();
 });

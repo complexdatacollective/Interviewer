@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "An NWjs based personal network capture tool, customised for the RADAR project.",
   "private": true,
+  "single-instance": true,
   "homepage": "https://github.com/jthrilly/netCanvas",
   "bugs": "https://github.com/jthrilly/netCanvas/issues",
   "author": {
@@ -34,12 +35,13 @@
     "start": "nodewebkit"
   },
   "window": {
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "position": "center",
     "width": 1520,
     "height": 820,
     "min_width": 1520,
     "min_height": 820
-  }
+    },
+    "chromium-args": "--child-clean-exit"
 }

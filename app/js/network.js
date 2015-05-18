@@ -58,6 +58,35 @@ var Network = function Network() {
     return nodeProperties.id;
   };
 
+  network.createEgo = function(properties) {
+      if (network.egoExists() === false) {
+          var egoProperties = {
+     		  	id:0,
+     		  	type: 'Ego'
+               };
+          global.tools.extend(egoProperties, properties);
+          network.addNode(egoProperties);
+      } else {
+          return false;
+      }
+  };
+
+  network.getEgo = function() {
+       if (network.getNodes({type:'Ego'}).length !== 0) {
+           return network.getNodes({type:'Ego'})[0];
+       } else {
+           return false;
+       }
+  };
+
+  network.egoExists = function() {
+      if (network.getEgo() !== false) {
+          return true;
+      } else {
+          return false;
+      }
+  };
+
   network.addEdge = function(properties) {
 
     //TODO: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.

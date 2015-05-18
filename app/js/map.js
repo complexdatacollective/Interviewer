@@ -1,11 +1,8 @@
 /* global*/
 /* exported GeoInterface */
 
-
 /*
-
-Map module.
-
+ Map module.
 */
 
 var GeoInterface = function GeoInterface() {
@@ -229,7 +226,6 @@ var GeoInterface = function GeoInterface() {
 	    }
   	};
 
-
   	geoInterface.init = function() {
 
   		// Initialize the map, point it at the #map element and center it on Chicago
@@ -259,12 +255,10 @@ var GeoInterface = function GeoInterface() {
                 	}
             	}).addTo(leaflet);
 
-
 		        // Load initial node
 		        edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: "Chicago"});
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 		        $('.map-node-status').html("Tap on the map to indicate the general area where <strong>"+edges[0].nname_t0+"</strong> lives.");
-
 
             	// Highlight initial value, if set
             	highlightCurrent();
@@ -275,16 +269,7 @@ var GeoInterface = function GeoInterface() {
                 $('.map-forwards').show();
               }
           	}
-        }).error(function() {
         });
-
-
-        // var kmlLayer = new global.L.KML("data/transit.kml", {
-        //           style: function () {
-        //               return {stroke:colors[1],fillColor:null,weight:1};
-        //             }
-        //           });
-        // leaflet.addLayer(kmlLayer);
 
         // Events
         window.addEventListener('changeStageStart', stageChangeHandler, false);

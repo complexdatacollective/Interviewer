@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/* global Storage, debugLevel */
+/*global Storage, debugLevel, deepEquals */
 /*jshint bitwise: false*/
 
 // Storage prototypes
@@ -58,14 +58,14 @@ exports.removeFromObject = function(item, object) {
         }
     }
     return removeCounter;
-}
+};
 
 // helper functions
 
 exports.deepEquals = function(a, x) {
     var p;
     for (p in a) {
-        if (typeof(x[p]) == 'undefined') {
+        if (typeof(x[p]) === 'undefined') {
             return false;
         }
     }
@@ -84,7 +84,7 @@ exports.deepEquals = function(a, x) {
                     }
                     break;
                 case 'function':
-                    if (typeof(x[p]) == 'undefined' || a[p].toString() != x[p].toString()) {
+                    if (typeof(x[p]) === 'undefined' || a[p].toString() != x[p].toString()) {
                         return false;
                     }
                     break;
@@ -107,7 +107,7 @@ exports.deepEquals = function(a, x) {
     }
 
     return true;
-}
+};
 
 
 
@@ -120,7 +120,7 @@ exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     }
 
     return false;
-}
+};
 
 exports.getValueFromNestedObject = function(targetArray, objectKey) {
     // This function is for checking for keys in arrays of objects.
@@ -131,7 +131,7 @@ exports.getValueFromNestedObject = function(targetArray, objectKey) {
     }
 
     return false;
-}
+};
 
 
 exports.extend = function( a, b ) {
@@ -141,18 +141,18 @@ exports.extend = function( a, b ) {
         }
     }
     return a;
-}
+};
 
 exports.notify = function(text, level){
     level = level || 0;
-    if (level >= window.debugLevel) {
+    if (level >= global.debugLevel) {
         console.log(text);
     }
-}
+};
 
 exports.randomBetween = function(min,max) {
     return Math.random() * (max - min) + min;
-}
+};
 
 $.cssHooks.backgroundColor = {
     get: function(elem) {
@@ -171,7 +171,7 @@ $.cssHooks.backgroundColor = {
             return "#" + hex(bg[1]) + hex(bg[2]) + hex(bg[3]);
         }
     }
-}
+};
 
 exports.modifyColor = function(hex, lum) {
 
@@ -192,4 +192,4 @@ exports.modifyColor = function(hex, lum) {
 
     return rgb;
 
-}
+};

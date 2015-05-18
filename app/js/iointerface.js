@@ -61,13 +61,13 @@ var IOInterface = function IOInterface() {
     };
 
 
-    interface.save = function(userData, id) {
-        delete global.session.userData._id;
+    interface.save = function(sessionData, id) {
+        delete global.session.sessionData._id;
         global.tools.notify('IOInterface being asked to save to data store.',1);
         global.tools.notify('Data to be saved: ', 2);
-        global.tools.notify(userData, 2);
+        global.tools.notify(sessionData, 2);
 
-        db.update({_id: id }, userData, {}, function (err) {
+        db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
@@ -76,9 +76,9 @@ var IOInterface = function IOInterface() {
 
     };
 
-    interface.update = function(key, userData,id) {
+    interface.update = function(key, sessionData,id) {
         global.tools.notify('IOInterface being asked to update data store.',1);
-        db.update({_id: id }, userData, {}, function (err) {
+        db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
