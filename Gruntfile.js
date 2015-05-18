@@ -374,24 +374,21 @@ module.exports = function (grunt) {
     grunt.file.write(resourcesPath + '/mac/Info.plist', infoPlist, {
       encoding: 'UTF8'
     });
-  })
+});
 
   grunt.registerTask('dist-linux', [
-    'jshint',
     'clean:distLinux64',
     'copy:appLinux',
     'createLinuxApp:Linux64'
   ]);
 
   grunt.registerTask('dist-linux32', [
-    'jshint',
     'clean:distLinux32',
     'copy:appLinux32',
     'createLinuxApp:Linux32'
   ]);
 
   grunt.registerTask('dist-win', [
-    'jshint',
     'clean:distWin',
     'copy:copyWinToTmp',
     'compress:appToTmp',
@@ -401,7 +398,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('dist-mac', [
-    'jshint',
     'clean:distMac64',
     'createPlistFile',
     'copy:webkit64',
@@ -411,7 +407,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('dist-mac32', [
-    'jshint',
     'clean:distMac32',
     'createPlistFile',
     'copy:webkit32',

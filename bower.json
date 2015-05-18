@@ -1,6 +1,35 @@
 {
-  "name": "package",
-  "version": "0.0.0",
-  "dependencies": {}
+  "name": "netCanvas",
+  "version": "2.0.0",
+  "homepage": "https://github.com/jthrilly/netCanvas",
+  "authors": [
+    "Joshua Melville <joshmelville@gmail.com>"
+  ],
+  "license": "GPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "jquery.transit": "~0.9.12",
+    "tinycolor": "~1.0.0",
+    "jquery": "~2.1.1",
+    "jquery-ui": "~1.11.1",
+    "jqueryui-touch-punch": "*",
+    "leaflet": "~0.7.3",
+    "components-font-awesome": "~4.2.0",
+    "lato": "~0.2.1",
+    "leaflet-omnivore": "~0.3.0",
+    "leaflet-plugins": "~1.2.1",
+    "bs-datetimepicker": "~4.0.0",
+    "leaflet-providers": "~1.0.13",
+    "bootstrap3-dialog": "~1.34.2",
+    "konva": "https://github.com/jthrilly/konva.git#~0.9.5"
+  }
 }
-
