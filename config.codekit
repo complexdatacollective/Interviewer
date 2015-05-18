@@ -32375,6 +32375,15 @@
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1
 		},
+	"\/css\/loader.css": {
+		"fileType": 16,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/css\/loader.css",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
 	"\/dist\/macOS\/credits.html": {
 		"fileType": 8192,
 		"ignore": 0,
@@ -64704,7 +64713,7 @@
 		"createSourceMap": 0,
 		"disableJavascript": 0,
 		"fileType": 1,
-		"ieCompatibility": 1,
+		"ieCompatibility": 0,
 		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/less\/loader.less",
@@ -64744,7 +64753,7 @@
 		"createSourceMap": 0,
 		"disableJavascript": 0,
 		"fileType": 1,
-		"ieCompatibility": 1,
+		"ieCompatibility": 0,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/less\/style.less",
@@ -64753,7 +64762,7 @@
 		"outputPathIsSetByUser": 1,
 		"outputStyle": 0,
 		"relativeURLS": 0,
-		"shouldRunAutoprefixer": 0,
+		"shouldRunAutoprefixer": 1,
 		"shouldRunBless": 0,
 		"strictImports": 0,
 		"strictMath": 0,
