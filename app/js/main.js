@@ -95,8 +95,9 @@ protocolExists(global.studyProtocol, function(exists){
         global.studyProtocol = 'default';
     }
     // Initialise session now.
-    global.session.loadProtocol();
-    global.session.init();
+    global.session.init(function() {
+        global.session.loadProtocol();
+    });
     global.logger.init();
 
 });

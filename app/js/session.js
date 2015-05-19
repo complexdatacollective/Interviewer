@@ -69,14 +69,33 @@ var Session = function Session() {
         session.skipFunctions = study.skipFunctions;
 
         // set the study name (used for database name)
-        session.name = study.sessionParameters.name;
+
+        // Check for an in-progress session
+        global.dataStore.init(function(sessionid) {
+            session.id = sessionid;
+            global.dataStore.load(function(data) {
+                console.log(data);
+                console.log(study);
+                global.tools.extend(data.sessionParameters, study.sessionParameters);
+                session.updateSessionData(data);
+                global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
+                if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+                    session.goToStage(session.sessionData.sessionParameters.stage);
+                } else {
+                    session.goToStage(0);
+                }
+
+            }, session.id);
+        });
+
+        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
+        $.each(session.stages, function(index,value) {
+            global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
+        });
     };
 
-    session.init = function() {
+    session.init = function(callback) {
         global.tools.notify('Session initialising.', 1);
-
-        // register session key
-        session.parameters = session.registerData('sessionParameters', true);
 
         // Navigation arrows.
         $('.arrow-next').on('click', function() {
@@ -103,21 +122,6 @@ var Session = function Session() {
         // Build a new network
         var Network = require('../js/network');
         global.network = new Network();
-
-        // Check for an in-progress session
-        global.dataStore.init(function(sessionid) {
-            session.id = sessionid;
-            global.dataStore.load(function(data) {
-                session.updateSessionData(data);
-                global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
-                if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
-                    session.goToStage(session.sessionData.sessionParameters.stage);
-                } else {
-                    session.goToStage(0);
-                }
-
-            }, session.id);
-        });
 
         window.addEventListener('unsavedChanges', function () {
             session.saveManager();
@@ -172,10 +176,9 @@ var Session = function Session() {
             });
         });
 
-        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
-        $.each(session.stages, function(index,value) {
-            global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
-        });
+        if(callback) {
+            callback();
+        }
 
     };
 
@@ -223,6 +226,8 @@ var Session = function Session() {
     };
 
     session.saveData = function() {
+        session.sessionData.nodes = global.network.getNodes();
+        session.sessionData.edges = global.network.getEdges();
         global.dataStore.save(session.sessionData, session.returnSessionID());
         lastSaveTime = new Date();
     };
