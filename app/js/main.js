@@ -1,9 +1,10 @@
-/* global global, $, L */
+/* global global, Konva, $, L */
 
 'use strict';
 
 global.$ = $;
 global.L = L;
+global.Konva = Konva;
 
 global.gui = require('nw.gui');
 var moment = require('moment');

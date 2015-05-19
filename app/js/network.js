@@ -1,5 +1,5 @@
 /* exported Network, Node, Edge */
-/* global $, window, console, randomBetween */
+/* global $, window, randomBetween */
 
 
 /*
@@ -57,8 +57,8 @@ module.exports = function Network() {
             global.tools.notify('Error loading network. Data format incorrect.',1);
             return false;
         } else {
-            _this.nodes = data.nodes;
-            _this.edges = data.edges;
+            _this.nodes = _this.nodes.concat(data.nodes);
+            _this.edges = _this.edges.concat(data.edges);
             return true;
         }
     };
@@ -77,8 +77,8 @@ module.exports = function Network() {
     };
 
     this.getEgo = function() {
-        if (_this.getNodes({type:'Ego'}).length !== 0) {
-            return _this.getNodes({type:'Ego'})[0];
+        if (_this.getNodes({type_t0:'Ego'}).length !== 0) {
+            return _this.getNodes({type_t0:'Ego'})[0];
         } else {
             return false;
         }
@@ -157,7 +157,6 @@ module.exports = function Network() {
     };
 
     this.removeEdge = function(edge) {
-        console.log(edge);
         if (!edge) {
             return false;
         }
@@ -168,7 +167,7 @@ module.exports = function Network() {
             // we've got an array
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                global.tools.removeFromObject(edge[i], _this._this.edges);
+                global.tools.removeFromObject(edge[i], _this.edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -189,16 +188,22 @@ module.exports = function Network() {
         return true;
     };
 
-    this.removeNode = function(id) {
-        var nodeRemovedEvent, log;
+    this.removeNode = function(id, preserveEdges) {
 
-        this.removeEdge(_this.getNodeEdges(id));
+        // Unless second parameter is present, delete this nodes edges
+        if (!preserveEdges) {
+            this.removeEdge(_this.getNodeEdges(id));
+        } else {
+            global.tools.notify('NOTICE: preserving node edges after deletion.',2);
+        }
+
+        var nodeRemovedEvent, log;
 
         for (var i = 0; i<_this.nodes.length; i++) {
             if (_this.nodes[i].id === id) {
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':_this.nodes[i]}});
                 window.dispatchEvent(log);
-                nodeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':_this.nodes[i]});
+                nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':_this.nodes[i]});
                 window.dispatchEvent(nodeRemovedEvent);
                 global.tools.removeFromObject(_this.nodes[i],_this.nodes);
                 return true;
@@ -399,6 +404,11 @@ module.exports = function Network() {
 
     this.returnAllEdges = function() {
         return _this.edges;
+    };
+
+    this.clearGraph = function() {
+        _this.edges = [];
+        _this.nodes = [];
     };
 
     this.createRandomGraph = function(nodeCount,edgeProbability) {

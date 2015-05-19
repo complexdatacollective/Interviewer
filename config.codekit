@@ -27829,7 +27829,7 @@
 		},
 	"\/bower_components\/konva\/konva.min.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/bower_components\/konva\/konva.min.js",
 		"outputAbbreviatedPath": "\/bower_components\/konva\/min\/konva.min-min.js",

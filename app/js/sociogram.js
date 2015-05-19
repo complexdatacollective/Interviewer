@@ -1,20 +1,18 @@
-/* global window, $ */
+/* global Konva, window, $ */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
 // Can be replaced with npm module once v0.9.5 reaches upstream.
-var Kinetic = require('./../bower_components/konva/Konva.js');
-
 var Sociogram = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
-	var sourceNode;
 	var selectedNodes = [];
 	var log;
 	var menuOpen = false;
 	var cancelKeyBindings = false;
 	var taskComprehended = false;
+	var droppedNodes = [];
 
 	// Colours
 	var colors = {
@@ -34,6 +32,7 @@ var Sociogram = function Sociogram() {
 
 	// Default settings
 	var settings = {
+		network: global.network,
 		defaultNodeSize: 35,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
@@ -67,7 +66,7 @@ var Sociogram = function Sociogram() {
 
 	var edgeAddedHandler = function(e) {
 		// Ignore edges that original at ego.
-		if(typeof e.detail.from !== 'undefined' && e.detail.from !== global.network.getNodes({type_t0:'Ego'})[0].id) {
+		if(typeof e.detail.from !== 'undefined' && e.detail.from !== settings.network.getNodes({type_t0:'Ego'})[0].id) {
 			sociogram.addEdge(e.detail);
 		}
 
@@ -123,19 +122,6 @@ var Sociogram = function Sociogram() {
 				e.preventDefault();
 			}
 
-			// Enter key = create new node
-			// if (e.which === 13) {
-			// 	//close menu
-			// 	$('.new-node-form').removeClass('node-form-open');
-			// 	$('.content').removeClass('blurry');
-			// 	menuOpen = false;
-			// 	var nodeOptions = {
-			// 		label: $('.name-box').val()
-			// 	};
-			// 	global.network.addNode(nodeOptions);
-			// 	$('.name-box').val('');
-			// }
-
 		}
 	};
 
@@ -143,25 +129,13 @@ var Sociogram = function Sociogram() {
 		sociogram.destroy();
 	};
 
-
 	sociogram.init = function (userSettings) {
 		global.tools.notify('Sociogram initialising.', 1);
 		global.tools.extend(settings,userSettings);
 
-		// Disabled morph button for now
-		// $('<div class="sociogram-popover"><div class="sociogram-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p><button class="btn btn-primary close-popover" type="button">Okay</button></div></div><span class="hi-icon hi-icon-link info-button">Info</span>').insertBefore( "#kineticCanvas" );
-
 		$('<div class="sociogram-title"><h3>'+settings.heading+'</h3><p class="lead">'+settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
 
 		sociogram.initKinetic();
-
-		//   	canvasMenu = menu.addMenu('Sociogram','hi-icon-support');
-		//
-	    // menu.addItem(canvasMenu, 'Load Network', 'icon-play', null);
-	    // menu.addItem(canvasMenu, 'Create Random Graph', 'icon-play', null);
-	    // menu.addItem(canvasMenu, 'Download Network Data', 'icon-play', null);
-	    // menu.addItem(canvasMenu, 'Reset Node Positions', 'icon-play', sociogram.resetPositions);
-	    // menu.addItem(canvasMenu, 'Clear Graph', 'icon-play', null);
 
 	    window.addEventListener('nodeAdded', nodeAddedHandler, false);
 	    window.addEventListener('edgeAdded', edgeAddedHandler, false);
@@ -174,11 +148,11 @@ var Sociogram = function Sociogram() {
     	// Are there existing nodes? Display them.
 
     	// Get all nodes that match the criteria
-    	var criteriaEdges = global.network.getEdges(settings.criteria);
+    	var criteriaEdges = settings.network.getEdges(settings.criteria);
 
     	// Iterate over them
       	for (var i = 0; i < criteriaEdges.length; i++) {
-      		var dyadEdge = global.network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
+      		var dyadEdge = settings.network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
       		var newNode = sociogram.addNode(dyadEdge);
 
       		// If we are in select mode, set the initial state
@@ -187,28 +161,26 @@ var Sociogram = function Sociogram() {
   				if (settings.variable) {
   					//we are flipping a variable
   					var properties = {
-  						from: global.network.getNodes({type_t0:'Ego'})[0].id,
+  						from: settings.network.getNodes({type_t0:'Ego'})[0].id,
   						to: criteriaEdges[i].to,
   					};
 
   					properties[settings.variable] = 1;
 
 
-	      			if (global.network.getEdges(properties).length > 0) {
+	      			if (settings.network.getEdges(properties).length > 0) {
 	      				newNode.children[0].stroke(colors.selected);
 	      				nodeLayer.draw();
 	      			}
   				} else {
   					// we are assigning an edge
 	      			// set initial state of node according to if an edge exists
-	      			if (global.network.getEdges({from: global.network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType}).length > 0) {
+	      			if (settings.network.getEdges({from: settings.network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: settings.edgeType}).length > 0) {
 	      				newNode.children[0].stroke(colors.selected);
 	      				nodeLayer.draw();
 	      			}
 
   				}
-
-
       		}
     	}
 
@@ -225,12 +197,11 @@ var Sociogram = function Sociogram() {
 				type: settings.edgeType
 			};
 
-
   			// Filter to remove edges involving ego, unless this is edge select mode.
-  			edges = global.network.getEdges(edgeProperties, function (results) {
+  			edges = settings.network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
-  					if (value.from !== global.network.getNodes({type_t0:'Ego'})[0].id && value.to !== global.network.getNodes({type_t0:'Ego'})[0].id) {
+  					if (value.from !== settings.network.getNodes({type_t0:'Ego'})[0].id && value.to !== settings.network.getNodes({type_t0:'Ego'})[0].id) {
   						filteredResults.push(value);
   					}
   				});
@@ -242,7 +213,7 @@ var Sociogram = function Sociogram() {
 	  			sociogram.addEdge(value);
 	  		});
 
-  		} else if (settings.mode === 'Select') {
+  		} else if (settings.mode === 'Select' || settings.mode === 'Update') {
   			// Select mode
 
   			// Show the social global.network
@@ -258,10 +229,10 @@ var Sociogram = function Sociogram() {
 					type: 'Dyad'
 				};
   			}
-  			edges = global.network.getEdges(edgeProperties, function (results) {
+  			edges = settings.network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
-  					if (value.from !== global.network.getNodes({type_t0:'Ego'})[0].id && value.to !== global.network.getNodes({type_t0:'Ego'})[0].id) {
+  					if (value.from !== settings.network.getNodes({type_t0:'Ego'})[0].id && value.to !== settings.network.getNodes({type_t0:'Ego'})[0].id) {
   						filteredResults.push(value);
   					}
   				});
@@ -278,8 +249,13 @@ var Sociogram = function Sociogram() {
 		}
 	};
 
+	sociogram.getDroppedNodes = function() {
+		return droppedNodes;
+	};
+
 	sociogram.destroy = function() {
 		console.log('sociogram being destroyed');
+
         // menu.removeMenu(canvasMenu); // remove the global.network menu when we navigate away from the page.
         $('.new-node-form').remove(); // Remove the new node form
 
@@ -297,9 +273,9 @@ var Sociogram = function Sociogram() {
 	// Node manipulation functions
 
 	sociogram.resetPositions = function() {
-    	var dyadEdges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
+    	var dyadEdges = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
       	for (var i = 0; i < dyadEdges.length; i++) {
-      		global.network.updateEdge(dyadEdges[i].id, {coords: []});
+      		settings.network.updateEdge(dyadEdges[i].id, {coords: []});
     	}
 	};
 
@@ -309,7 +285,7 @@ var Sociogram = function Sociogram() {
 		var nodeShape;
 
 		var nodeID = 0;
-		while (global.network.getNode(nodeID) !== false) {
+		while (settings.network.getNode(nodeID) !== false) {
 			nodeID++;
 		}
 
@@ -340,11 +316,11 @@ var Sociogram = function Sociogram() {
 
 
 
-		var nodeGroup = new Kinetic.Group(nodeOptions);
+		var nodeGroup = new Konva.Group(nodeOptions);
 
 		switch (nodeOptions.type) {
 			case 'Person':
-			nodeShape = new Kinetic.Circle({
+			nodeShape = new Konva.Circle({
 				radius: nodeOptions.size,
 				fill:nodeOptions.color,
 				stroke: 'white',
@@ -353,7 +329,7 @@ var Sociogram = function Sociogram() {
 			break;
 
 			case 'Organisation':
-			nodeShape = new Kinetic.Rect({
+			nodeShape = new Konva.Rect({
 				width: nodeOptions.size*2,
 				height: nodeOptions.size*2,
 				fill:nodeOptions.color,
@@ -364,7 +340,7 @@ var Sociogram = function Sociogram() {
 			break;
 
 			case 'OnlinePerson':
-			nodeShape = new Kinetic.RegularPolygon({
+			nodeShape = new Konva.RegularPolygon({
 				sides: 3,
 				fill:nodeOptions.color,
 					radius: nodeOptions.size*1.2, // How should I calculate the correct multiplier for a triangle?
@@ -374,7 +350,7 @@ var Sociogram = function Sociogram() {
 			break;
 
 			case 'Professional':
-			nodeShape = new Kinetic.Star({
+			nodeShape = new Konva.Star({
 				numPoints: 6,
 				fill:nodeOptions.color,
 				innerRadius: nodeOptions.size-(nodeOptions.size/3),
@@ -386,7 +362,7 @@ var Sociogram = function Sociogram() {
 
 		}
 
-		var nodeLabel = new Kinetic.Text({
+		var nodeLabel = new Konva.Text({
 			text: nodeOptions.label,
 			// fontSize: 20,
 			fontFamily: 'Lato',
@@ -470,7 +446,7 @@ var Sociogram = function Sociogram() {
 					// We are flipping a variable
 
 					var properties = {};
-					var currentValue = global.network.getEdge(currentNode.attrs.id)[settings.variable];
+					var currentValue = settings.network.getEdge(currentNode.attrs.id)[settings.variable];
 					if (currentValue === 0 || typeof currentValue === 'undefined') {
 						properties[settings.variable] = 1;
 						currentNode.children[0].stroke(colors.selected);
@@ -479,20 +455,20 @@ var Sociogram = function Sociogram() {
 						currentNode.children[0].stroke('white');
 					}
 
-					global.network.setProperties(global.network.getEdge(currentNode.attrs.id), properties);
+					settings.network.setProperties(settings.network.getEdge(currentNode.attrs.id), properties);
 
 
 				} else {
 					// We are setting an edge
 					// Test if there is an existing edge.
-					if (global.network.getEdges({type: settings.edgeType,from:global.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to}).length > 0) {
+					if (settings.network.getEdges({type: settings.edgeType,from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to}).length > 0) {
 						// if there is, remove it
 	      				this.children[0].stroke('white');
-	      				global.network.removeEdge(global.network.getEdges({type: settings.edgeType,from:global.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0]);
+	      				settings.network.removeEdge(settings.network.getEdges({type: settings.edgeType,from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0]);
 					} else {
 						// else add it
 						edge = {
-							from:global.network.getNodes({type_t0:'Ego'})[0].id,
+							from:settings.network.getNodes({type_t0:'Ego'})[0].id,
 							to: this.attrs.to,
 							type: settings.edgeType,
 						};
@@ -504,10 +480,22 @@ var Sociogram = function Sociogram() {
 						}
 
 						this.children[0].stroke(colors.selected);
-						global.network.addEdge(edge);
+						settings.network.addEdge(edge);
 					}
 				}
 
+
+			} else if (settings.mode === 'Update') {
+				console.log(currentNode);
+				if (droppedNodes.indexOf(currentNode) === -1) {
+					droppedNodes.push(currentNode.attrs.id);
+					currentNode.children[0].stroke(colors.selected);
+				} else {
+					droppedNodes.remove(currentNode.attrs.id);
+					currentNode.children[0].stroke('white');
+				}
+
+				console.log(droppedNodes);
 
 			} else if (settings.mode === 'Edge') {
 					// If this makes a couple, link them.
@@ -528,9 +516,9 @@ var Sociogram = function Sociogram() {
 						edgeProperties[settings.variables[0]] = 'perceived';
 
 
-						if (global.network.addEdge(edgeProperties) === false) {
+						if (settings.network.addEdge(edgeProperties) === false) {
 							global.tools.notify('Sociogram removing edge.',2);
-							global.network.removeEdge(global.network.getEdges(edgeProperties));
+							settings.network.removeEdge(settings.network.getEdges(edgeProperties));
 						}
 						selectedNodes = [];
 						nodeLayer.draw();
@@ -546,22 +534,22 @@ var Sociogram = function Sociogram() {
 			nodeLayer.draw();
 		});
 
-		nodeGroup.on('dbltap dblclick', function() {
-			if (taskComprehended === false) {
-				var eventProperties = {
-					stage: global.session.currentStage(),
-					timestamp: new Date()
-				};
-				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-				window.dispatchEvent(log);
-				taskComprehended = true;
-			}
-
-			if (settings.mode === 'Edge') {
-				global.tools.notify('double tap',1);
-				sourceNode = this;
-			}
-		});
+		// nodeGroup.on('dbltap dblclick', function() {
+		// 	if (taskComprehended === false) {
+		// 		var eventProperties = {
+		// 			stage: global.session.currentStage(),
+		// 			timestamp: new Date()
+		// 		};
+		// 		log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+		// 		window.dispatchEvent(log);
+		// 		taskComprehended = true;
+		// 	}
+		//
+		// 	if (settings.mode === 'Edge') {
+		// 		global.tools.notify('double tap',1);
+		// 		sourceNode = this;
+		// 	}
+		// });
 
 		nodeGroup.on('dragend', function() {
 			global.tools.notify('dragend',1);
@@ -589,7 +577,7 @@ var Sociogram = function Sociogram() {
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeMove', 'eventObject':eventObject}});
     		window.dispatchEvent(log);
 
-    		global.network.setProperties(global.network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});
+    		settings.network.setProperties(settings.network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -609,15 +597,15 @@ var Sociogram = function Sociogram() {
 
 
 		if (!options.coords || options.coords.length === 0) {
-			var tween = new Kinetic.Tween({
+			var tween = new Konva.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
 				y: 100,
 				duration:0.7,
-				easing: Kinetic.Easings.EaseOut
+				easing: Konva.Easings.EaseOut
 			});
 			tween.play();
-			global.network.setProperties(global.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});
+			settings.network.setProperties(settings.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});
 		}
 
 		return nodeGroup;
@@ -629,14 +617,14 @@ var Sociogram = function Sociogram() {
 
 
 		// the below won't work because we are storing the coords in an edge now...
-		// var fromObject = global.network.getNode(properties.from);
-		// var toObject = global.network.getNode(properties.to);
+		// var fromObject = settings.network.getNode(properties.from);
+		// var toObject = settings.network.getNode(properties.to);
 			global.tools.notify('Sociogram is adding an edge.',2);
-			var toObject = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
-			var fromObject = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
+			var toObject = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
+			var fromObject = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
 
 			var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
-			var edge = new Kinetic.Line({
+			var edge = new Konva.Line({
 				// dashArray: [10, 10, 00, 10],
 				strokeWidth: 4,
 				opacity:1,
@@ -661,12 +649,10 @@ var Sociogram = function Sociogram() {
 
 	sociogram.removeEdge = function(properties) {
 
-		var toNode = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
-		var fromNode = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
+		var toNode = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
+		var fromNode = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
 
 		global.tools.notify('Removing edge.');
-
-
 
 		// This function is failing because two nodes are matching below
 		$.each(sociogram.getKineticEdges(), function(index, value) {
@@ -679,6 +665,10 @@ var Sociogram = function Sociogram() {
 
 		});
 
+	};
+
+	sociogram.removeNode = function() {
+		console.log('removenode kinetic');
 	};
 
 	// Misc functions
@@ -695,22 +685,22 @@ var Sociogram = function Sociogram() {
 
 	sociogram.initKinetic = function () {
 		// Initialise KineticJS stage
-		stage = new Kinetic.Stage({
+		stage = new Konva.Stage({
 			container: 'kineticCanvas',
 			width: window.innerWidth,
 			height: window.innerHeight
 		});
 
-		circleLayer = new Kinetic.Layer();
-		nodeLayer = new Kinetic.Layer();
-		edgeLayer = new Kinetic.Layer();
-		uiLayer = new Kinetic.Layer();
+		circleLayer = new Konva.Layer();
+		nodeLayer = new Konva.Layer();
+		edgeLayer = new Konva.Layer();
+		uiLayer = new Konva.Layer();
 
 		stage.add(circleLayer);
 		stage.add(edgeLayer);
 		stage.add(nodeLayer);
 		stage.add(uiLayer);
-		global.tools.notify('Kinetic stage initialised.',1);
+		global.tools.notify('Konva stage initialised.',1);
 	};
 
 	sociogram.drawUIComponents = function () {
@@ -726,7 +716,7 @@ var Sociogram = function Sociogram() {
 			var ratio = 1-(i/settings.concentricCircleNumber);
 			var currentRadius = (totalHeight/2 * ratio);
 
-			circleLines = new Kinetic.Circle({
+			circleLines = new Konva.Circle({
 				x: window.innerWidth / 2,
 				y: window.innerHeight / 2,
 				radius: currentRadius,
@@ -735,7 +725,7 @@ var Sociogram = function Sociogram() {
 				opacity: 0
 			});
 
-			circleFills = new Kinetic.Circle({
+			circleFills = new Konva.Circle({
 				x: window.innerWidth / 2,
 				y: (window.innerHeight / 2),
 				radius: currentRadius,
