@@ -16,31 +16,23 @@ selecting nodes or edges by their various properties, and interating over them.
 
 */
 
-var Network = function Network() {
+module.exports = function Network() {
     'use strict';
-    var network = {};
-    var graph = {};
+    this.nodes = [];
+    this.edges = [];
+    var _this = this;
 
-    network.init = function() {
-
-        global.tools.notify('Network Initialising', 2);
-        global.nodes = global.session.registerData('nodes', true);
-        global.edges = global.session.registerData('edges', true);
-
-        return true;
-    };
-
-    network.addNode = function(properties) {
+    this.addNode = function(properties) {
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
-        if (typeof properties.id !== 'undefined' && network.getNode(properties.id) !== false) {
+        if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
             global.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
             return false;
         }
 
         // Locate the next free node ID
         var newNodeID = 0;
-        while (network.getNode(newNodeID) !== false) {
+        while (_this.getNode(newNodeID) !== false) {
             newNodeID++;
         }
         var nodeProperties = {
@@ -48,7 +40,8 @@ var Network = function Network() {
         };
         global.tools.extend(nodeProperties, properties);
 
-        global.session.addData('nodes', nodeProperties, true);
+        _this.nodes.push(nodeProperties);
+
         var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
         window.dispatchEvent(log);
         var nodeAddedEvent = new window.CustomEvent('nodeAdded',{'detail':nodeProperties});
@@ -59,36 +52,47 @@ var Network = function Network() {
         return nodeProperties.id;
     };
 
-    network.createEgo = function(properties) {
-        if (network.egoExists() === false) {
+    this.loadNetwork = function(data) {
+        if (!data || !data.nodes || !data.edges) {
+            global.tools.notify('Error loading network. Data format incorrect.',1);
+            return false;
+        } else {
+            _this.nodes = data.nodes;
+            _this.edges = data.edges;
+            return true;
+        }
+    };
+
+    this.createEgo = function(properties) {
+        if (_this.egoExists() === false) {
             var egoProperties = {
                 id:0,
                 type: 'Ego'
             };
             global.tools.extend(egoProperties, properties);
-            network.addNode(egoProperties);
+            _this.addNode(egoProperties);
         } else {
             return false;
         }
     };
 
-    network.getEgo = function() {
-        if (network.getNodes({type:'Ego'}).length !== 0) {
-            return network.getNodes({type:'Ego'})[0];
+    this.getEgo = function() {
+        if (_this.getNodes({type:'Ego'}).length !== 0) {
+            return _this.getNodes({type:'Ego'})[0];
         } else {
             return false;
         }
     };
 
-    network.egoExists = function() {
-        if (network.getEgo() !== false) {
+    this.egoExists = function() {
+        if (_this.getEgo() !== false) {
             return true;
         } else {
             return false;
         }
     };
 
-    network.addEdge = function(properties) {
+    this.addEdge = function(properties) {
 
         //TODO: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
@@ -97,13 +101,13 @@ var Network = function Network() {
             return false;
         }
 
-        if (properties.id !== 'undefined' && network.getEdge(properties.id) !== false) {
+        if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
             global.tools.notify('edge with this id already exists!!!', 2);
             return false;
         }
 
         var position = 0;
-        while(network.getEdge(position) !== false) {
+        while(_this.getEdge(position) !== false) {
             position++;
         }
 
@@ -124,14 +128,14 @@ var Network = function Network() {
         reversed.to = reversed.from;
         reversed.from = temp;
 
-        if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
+        if (_this.getEdges(properties).length > 0 || _this.getEdges(reversed).length > 0) {
 
             alreadyExists = true;
         }
 
         if(alreadyExists === false) {
 
-            global.session.addData('edges', edgeProperties, true);
+            _this.edges.push(edgeProperties);
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
             window.dispatchEvent(log);
             var edgeAddedEvent = new window.CustomEvent('edgeAdded',{'detail':edgeProperties});
@@ -148,24 +152,23 @@ var Network = function Network() {
 
     };
 
-    network.removeEdges = function(edges) {
-        network.removeEdge(edges);
+    this.removeEdges = function(edges) {
+        _this.removeEdge(edges);
     };
 
-    network.removeEdge = function(edge) {
+    this.removeEdge = function(edge) {
         console.log(edge);
         if (!edge) {
             return false;
         }
         var log;
         var edgeRemovedEvent;
-        var localEdges = global.session.returnData('edges');
 
         if (typeof edge === 'object' && typeof edge.length !== 'undefined') {
             // we've got an array
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                global.tools.removeFromObject(edge[i], localEdges);
+                global.tools.removeFromObject(edge[i], _this._this.edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -174,46 +177,41 @@ var Network = function Network() {
         } else {
             // we've got a single edge, which is an object {}
             //   localEdges.remove(edge);
-            global.tools.removeFromObject(edge, localEdges);
+            global.tools.removeFromObject(edge, _this.edges);
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
             window.dispatchEvent(log);
             window.dispatchEvent(edgeRemovedEvent);
         }
 
-        global.session.addData('edges', localEdges);
-
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
         return true;
     };
 
-    network.removeNode = function(id) {
+    this.removeNode = function(id) {
         var nodeRemovedEvent, log;
 
-        network.removeEdge(network.getNodeEdges(id));
+        this.removeEdge(_this.getNodeEdges(id));
 
-        var localNodes = global.session.returnData('nodes');
-        for (var i = 0; i<localNodes.length; i++) {
-            if (localNodes[i].id === id) {
-                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':localNodes[i]}});
+        for (var i = 0; i<_this.nodes.length; i++) {
+            if (_this.nodes[i].id === id) {
+                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':_this.nodes[i]}});
                 window.dispatchEvent(log);
-                nodeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':localNodes[i]});
+                nodeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':_this.nodes[i]});
                 window.dispatchEvent(nodeRemovedEvent);
-                // localNodes.remove(localNodes[i]);
-                global.tools.removeFromObject(localNodes[i],localNodes);
-                global.session.addData('nodes', localNodes);
+                global.tools.removeFromObject(_this.nodes[i],_this.nodes);
                 return true;
             }
         }
         return false;
     };
 
-    network.updateEdge = function(id, properties, callback) {
-        if(network.getEdge(id) === false || properties === undefined) {
+    this.updateEdge = function(id, properties, callback) {
+        if(_this.getEdge(id) === false || properties === undefined) {
             return false;
         }
-        var edge = network.getEdge(id);
+        var edge = _this.getEdge(id);
         var edgeUpdateEvent, log;
 
         global.tools.extend(edge, properties);
@@ -229,11 +227,11 @@ var Network = function Network() {
 
     };
 
-    network.updateNode = function(id, properties, callback) {
-        if(network.getNode(id) === false || properties === undefined) {
+    this.updateNode = function(id, properties, callback) {
+        if(this.getNode(id) === false || properties === undefined) {
             return false;
         }
-        var node = network.getNode(id);
+        var node = this.getNode(id);
         var nodeUpdateEvent, log;
 
         global.tools.extend(node, properties);
@@ -249,36 +247,33 @@ var Network = function Network() {
 
     };
 
-    network.getNode = function(id) {
+    this.getNode = function(id) {
         if (id === undefined) { return false; }
-        var localNodes = global.session.returnData('nodes');
-        for (var i = 0;i<localNodes.length; i++) {
-            if (localNodes[i].id === id) {return localNodes[i]; }
+        for (var i = 0;i<_this.nodes.length; i++) {
+            if (_this.nodes[i].id === id) {return _this.nodes[i]; }
         }
         return false;
 
     };
 
-    network.getEdge = function(id) {
+    this.getEdge = function(id) {
         if (id === undefined) { return false; }
-        var localEdges = global.session.returnData('edges');
-        for (var i = 0;i<localEdges.length; i++) {
-            if (localEdges[i].id === id) {return localEdges[i]; }
+        for (var i = 0;i<_this.edges.length; i++) {
+            if (_this.edges[i].id === id) {return _this.edges[i]; }
         }
         return false;
     };
 
-    network.filterObject = function(targetArray,criteria) {
+    this.filterObject = function(targetArray,criteria) {
         // Return false if no criteria provided
         if (!criteria) { return false; }
-        // Get nodes using .filter(). Function is called for each of nodes.Nodes.
+        // Get _this.nodes using .filter(). Function is called for each of _this.nodes.Nodes.
         var result = targetArray.filter(function(el){
             var match = true;
 
             for (var criteriaKey in criteria) {
 
                 if (el[criteriaKey] !== undefined) {
-
 
                     // current criteria exists in object.
                     if (el[criteriaKey] !== criteria[criteriaKey]) {
@@ -303,9 +298,6 @@ var Network = function Network() {
             temp = reversed.to;
             reversed.to = reversed.from;
             reversed.from = temp;
-
-
-
 
             var result2 = targetArray.filter(function(el){
                 var match = true;
@@ -337,13 +329,12 @@ var Network = function Network() {
         return result;
     };
 
-    network.getNodes = function(criteria, filter) {
-        var localNodes = global.session.returnData('nodes');
+    this.getNodes = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = network.filterObject(localNodes,criteria);
+            results = _this.filterObject(_this.nodes,criteria);
         } else {
-            results = localNodes;
+            results = _this.nodes;
         }
 
         if (filter) {
@@ -353,13 +344,12 @@ var Network = function Network() {
         return results;
     };
 
-    network.getEdges = function(criteria, filter) {
-        var localEdges = global.session.returnData('edges');
+    this.getEdges = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = network.filterObject(localEdges,criteria);
+            results = _this.filterObject(_this.edges,criteria);
         } else {
-            results = localEdges;
+            results = _this.edges;
         }
 
         if (filter) {
@@ -369,25 +359,25 @@ var Network = function Network() {
         return results;
     };
 
-    network.getNodeInboundEdges = function(nodeID) {
-        return network.getEdges({to:nodeID});
+    this.getNodeInboundEdges = function(nodeID) {
+        return _this.getEdges({to:nodeID});
     };
 
-    network.getNodeOutboundEdges = function(nodeID) {
-        return network.getEdges({from:nodeID});
+    this.getNodeOutboundEdges = function(nodeID) {
+        return _this.getEdges({from:nodeID});
     };
 
-    network.getNodeEdges = function(nodeID) {
-        if (network.getNode(nodeID) === false) {
+    this.getNodeEdges = function(nodeID) {
+        if (_this.getNode(nodeID) === false) {
             return false;
         }
-        var inbound = network.getNodeInboundEdges(nodeID);
-        var outbound = network.getNodeOutboundEdges(nodeID);
+        var inbound = _this.getNodeInboundEdges(nodeID);
+        var outbound = _this.getNodeOutboundEdges(nodeID);
         var concat = inbound.concat(outbound);
         return concat;
     };
 
-    network.setProperties = function(object, properties) {
+    this.setProperties = function(object, properties) {
 
         if (typeof object === 'undefined') { return false; }
 
@@ -403,20 +393,15 @@ var Network = function Network() {
 
     };
 
-    network.returnNetwork = function() {
-        return graph;
+    this.returnAllNodes = function() {
+        return _this.nodes;
     };
 
-    network.returnAllNodes = function() {
-        return global.session.returnData('nodes');
+    this.returnAllEdges = function() {
+        return _this.edges;
     };
 
-    network.returnAllEdges = function() {
-        return global.session.returnData('edges');
-    };
-
-    network.createRandomGraph = function(nodeCount,edgeProbability) {
-        var localNodes = global.session.returnData('nodes');
+    this.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
         edgeProbability = edgeProbability || 0.4;
         global.tools.notify('Creating random graph...',1);
@@ -427,22 +412,17 @@ var Network = function Network() {
             var nodeOptions = {
                 coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
             };
-            network.addNode(nodeOptions);
+            this.addNode(nodeOptions);
         }
 
-        global.tools.notify('Adding edges.',3);
-        $.each(localNodes, function (index) {
+        global.tools.notify('Adding _this.edges.',3);
+        $.each(_this.nodes, function (index) {
             if (randomBetween(0, 1) < edgeProbability) {
-                var randomFriend = Math.round(randomBetween(0,localNodes.length-1));
-                network.addEdge({from:localNodes[index].id,to:localNodes[randomFriend].id});
+                var randomFriend = Math.round(randomBetween(0,_this.nodes.length-1));
+                _this.addEdge({from:_this.nodes[index].id,to:_this.nodes[randomFriend].id});
 
             }
         });
     };
 
-    network.init();
-
-    return network;
 };
-
-module.exports = new Network();

@@ -83,8 +83,7 @@ global.session = require('./js/session');
 // Create a log
 global.eventLog = require('./js/logger');
 
-// Build a new network
-global.network = require('./js/network');
+
 
 
 

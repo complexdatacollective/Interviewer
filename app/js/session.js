@@ -100,11 +100,16 @@ var Session = function Session() {
             saveFile(this.value);
         });
 
+        // Build a new network
+        var Network = require('../js/network');
+        global.network = new Network();
+
         // Check for an in-progress session
         global.dataStore.init(function(sessionid) {
             session.id = sessionid;
             global.dataStore.load(function(data) {
                 session.updateSessionData(data);
+                global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
                 if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
                     session.goToStage(session.sessionData.sessionParameters.stage);
                 } else {
@@ -310,6 +315,7 @@ var Session = function Session() {
         (global data variable) is essentially a key/value store.
         */
 
+        // Check if we are appending or overwriting
         if (!append) { append = false; }
 
         if (append === true) { // this is an array
@@ -318,8 +324,11 @@ var Session = function Session() {
             global.tools.extend(session.sessionData[dataKey], newData);
         }
 
+        // Notify
         global.tools.notify('Adding data to key "'+dataKey+'".',2);
         global.tools.notify(newData, 1);
+
+        // Emit an event to trigger data store synchronisation.
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
 
