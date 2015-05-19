@@ -9791,7 +9791,8 @@ div[data-toggle="buttons"] label.active {
   visibility: hidden;
 }
 .nameList {
-  max-height: 900px;
+  height: 100%;
+  width: 100%;
   margin: 0 auto;
   overflow: scroll;
 }
@@ -9799,7 +9800,7 @@ div[data-toggle="buttons"] label.active {
   display: none;
 }
 .card {
-  width: 233px;
+  width: 30%;
   height: 270px;
   background: #67c2d4;
   color: white;
@@ -9826,7 +9827,7 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-direction: column;
           flex-direction: column;
   padding: 20px;
-  margin: 10px;
+  margin: 0 0 20px 20px;
   overflow: hidden;
   cursor: pointer;
   cursor: hand;
@@ -9891,12 +9892,12 @@ div[data-toggle="buttons"] label.active {
   margin: 0;
   font-size: 25px;
 }
+.node-container {
+  height: 85%;
+}
 .node-list {
-  position: absolute;
-  top: 166px;
-  left: 200px;
-  height: 800px;
-  width: 315px;
+  height: 100%;
+  width: 25%;
   background: #fa920d;
   padding: 25px;
   float: left;
@@ -9904,7 +9905,7 @@ div[data-toggle="buttons"] label.active {
   border-radius: 7px;
 }
 .alt .nameList {
-  padding-left: 400px;
+  width: 75%;
   float: right;
 }
 .node-list-item {
@@ -10321,6 +10322,13 @@ input[type="checkbox"] {
   bottom: 20px;
   right: 30px;
 }
+.refresh-button {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 9999;
+}
 .content {
   height: 100%;
   background: #111111;
@@ -10339,8 +10347,6 @@ input[type="checkbox"] {
      -moz-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-transition: all 0.5s ease-in-out;
-          transition: all 0.5s ease-in-out;
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }
@@ -10385,6 +10391,8 @@ input[type=radio]:checked + label > img {
           transform: translateY(303px);
 }
 .content.blurry {
+  -webkit-filter: blur(11px);
+          filter: blur(11px);
   opacity: 0.4 !important;
   z-index: 2;
 }

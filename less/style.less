@@ -466,8 +466,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
  // Name generator
 .nameList {
-    max-height:900px;
-    // width:100%;
+    height:100%;
+    width:100%;
     margin:0 auto;
     overflow: scroll;
 }
@@ -477,7 +477,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .card {
-    width:233px;
+    width:30%;
     height:270px;
     // border:1px solid white;
     // background: #eee;
@@ -490,7 +490,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     justify-content: center;
     flex-direction: column;
     padding: 20px;
-    margin: 10px;
+    margin: 0 0 20px 20px;
     overflow:hidden;
     cursor: pointer; cursor: hand;
     float:left;
@@ -554,15 +554,16 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     font-size:25px;
 }
 
+.node-container {
+    height:85%;
+}
+
 .node-list {
-    position:absolute;
-    top:166px;
-    left:200px;
-    height:800px;
+    height:100%;
     // max-height:700px;
     // margin-top:10px;
     // min-height: 600px;
-    width:315px;
+    width:25%;
     background: @brand-warning;
     padding:25px;
     float:left;
@@ -573,7 +574,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .alt .nameList {
-    padding-left:400px;
+    width:75%;
     float:right;
 }
 
@@ -948,6 +949,13 @@ input[type="checkbox"] {
     right: 30px;
 }
 
+.refresh-button {
+    cursor:pointer;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index:9999;
+}
 
 .content {
     height:100%;
@@ -955,7 +963,7 @@ input[type="checkbox"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.5s ease-in-out;
+    // transition: all 0.5s ease-in-out;
     transform: translate3d(0, 0, 0);
 }
 
@@ -1005,7 +1013,7 @@ input[type=radio]:checked + label>img {
 }
 
 .content.blurry {
-    // filter:blur(11px);
+    filter:blur(11px);
     opacity:0.4 !important;
     z-index: 2;
 }

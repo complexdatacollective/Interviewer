@@ -34,7 +34,7 @@ var IOInterface = function IOInterface() {
         db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, global.session.name+'.db'), autoload: true });
 
 
-        db.find({}).sort({date: 1 }).exec(function (err, docs) {
+        db.find({}).sort({'sessionParameters.date': 1 }).exec(function (err, docs) {
             if (err) {
                 return false;
                 // handle error
@@ -43,7 +43,7 @@ var IOInterface = function IOInterface() {
                 callback(docs[0]._id);
             } else {
                 var sessionDate = new Date();
-                db.insert([{date:sessionDate}], function (err, newDoc) {
+                db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
                     if(err) {
                         return false;
                       // do something with the error

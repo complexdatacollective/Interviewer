@@ -38,6 +38,7 @@ var Session = function Session() {
 
         },
         fnAfterStageChange : function(oldStage, newStage) {
+            session.sessionData.sessionParameters.stage = newStage;
             var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
             if ((currentStage+1) === session.stages.length) {
@@ -104,7 +105,12 @@ var Session = function Session() {
             session.id = sessionid;
             global.dataStore.load(function(data) {
                 session.updateSessionData(data);
-                session.goToStage(0);
+                if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+                    session.goToStage(session.sessionData.sessionParameters.stage);
+                } else {
+                    session.goToStage(0);
+                }
+
             }, session.id);
         });
 
@@ -244,15 +250,20 @@ var Session = function Session() {
         }
 
         global.tools.notify('Session is moving to stage '+stage, 3);
+
+        // Crate stage visible event
         var eventProperties = {
             stage: stage,
             timestamp: new Date()
         };
         var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageVisible', 'eventObject':eventProperties}});
         window.dispatchEvent(log);
-        session.options.fnBeforeStageChange(currentStage,stage);
-        var newStage = stage;
 
+        // Fire before stage change event
+        session.options.fnBeforeStageChange(currentStage,stage);
+
+        // Transition the content
+        var newStage = stage;
         var stagePath ='./protocols/'+global.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
