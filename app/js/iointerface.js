@@ -36,7 +36,7 @@ var IOInterface = function IOInterface() {
         // After init, first priority is to load previous session for this protocol.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         global.tools.notify('ioInterface initialising.', 1);
-        console.log('Using '+global.session.name+' as database name.', 1);
+        global.tools.notify('Using '+global.session.name+' as database name.', 1);
 
         db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, global.session.name+'.db'), autoload: true });
 

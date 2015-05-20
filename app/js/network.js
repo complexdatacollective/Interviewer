@@ -164,7 +164,7 @@ module.exports = function Network() {
         var edgeRemovedEvent;
 
         if (typeof edge === 'object' && typeof edge.length !== 'undefined') {
-            // we've got an array
+            // we've got an array of object edges
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
                 global.tools.removeFromObject(edge[i], _this.edges);
@@ -190,7 +190,7 @@ module.exports = function Network() {
 
     this.removeNode = function(id, preserveEdges) {
 
-        // Unless second parameter is present, delete this nodes edges
+        // Unless second parameter is present, also delete this nodes edges
         if (!preserveEdges) {
             this.removeEdge(_this.getNodeEdges(id));
         } else {
