@@ -100,10 +100,10 @@ var Session = function Session() {
             }, session.id);
         });
 
-        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
-        $.each(session.stages, function(index,value) {
-            global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
-        });
+        // var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
+        // $.each(session.stages, function(index,value) {
+        //     global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
+        // });
     };
 
     session.init = function(callback) {
