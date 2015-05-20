@@ -71,6 +71,12 @@ var Session = function Session() {
         session.skipFunctions = study.skipFunctions;
 
         // set the study name (used for database name)
+        if (study.sessionParameters.name) {
+            session.name = study.sessionParameters.name;
+        } else {
+            throw new Error("Study protocol must have a 'name' under sessionParameters.");
+        }
+
 
         // Check for an in-progress session
         global.dataStore.init(function(sessionid) {
@@ -243,7 +249,14 @@ var Session = function Session() {
     session.saveData = function() {
         session.sessionData.nodes = global.network.getNodes();
         session.sessionData.edges = global.network.getEdges();
-        global.dataStore.save(session.sessionData, session.returnSessionID());
+        if(!global.dataStore.initialised()) {
+            global.tools.notify('Tried to save, but datastore not initaialised. Delaying.', 1);
+            var unsavedChanges = new window.Event('unsavedChanges');
+            window.dispatchEvent(unsavedChanges);
+        } else {
+            global.dataStore.save(session.sessionData, session.returnSessionID());
+        }
+
         lastSaveTime = new Date();
     };
 

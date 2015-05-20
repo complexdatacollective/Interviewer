@@ -26,11 +26,18 @@ var IOInterface = function IOInterface() {
     var db;
     var id;
     var ioInterface = {};
+    var initialised = false;
 
     ioInterface.init = function(callback) {
+
+        if (!callback) {
+            return false;
+        }
         // After init, first priority is to load previous session for this protocol.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         global.tools.notify('ioInterface initialising.', 1);
+        console.log('Using '+global.session.name+' as database name.', 1);
+
         db = new Datastore({ filename: path.join(window.require('nw.gui').App.dataPath, global.session.name+'.db'), autoload: true });
 
 
@@ -40,7 +47,11 @@ var IOInterface = function IOInterface() {
                 // handle error
             }
             if (docs.length !== undefined && docs.length > 0) {
+                global.tools.notify('ioInterface finished initialising.', 1);
+                initialised = true;
                 callback(docs[0]._id);
+
+                return true;
             } else {
                 var sessionDate = new Date();
                 db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
@@ -52,7 +63,11 @@ var IOInterface = function IOInterface() {
                     // Two documents were inserted in the database
                     // newDocs is an array with these documents, augmented with their _id
                     id = newDoc[0]._id;
+
+                    initialised = true;
                     callback(newDoc[0]._id);
+                    global.tools.notify('ioInterface finished initialising.', 1);
+                    return true;
                 });
             }
 
@@ -60,6 +75,13 @@ var IOInterface = function IOInterface() {
 
     };
 
+    ioInterface.initialised = function() {
+        if (initialised) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     ioInterface.save = function(sessionData, id) {
         delete global.session.sessionData._id;
