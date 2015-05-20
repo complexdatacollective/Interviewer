@@ -59,6 +59,8 @@ var Session = function Session() {
         var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/protocol.js');
         var study = require(studyPath);
 
+        session.parameters = session.registerData('sessionParameters');
+        session.updateSessionData({sessionParameters:study.sessionParameters});
         // copy the stages
         session.stages = study.stages;
 
@@ -76,15 +78,19 @@ var Session = function Session() {
             global.dataStore.load(function(data) {
                 console.log(data);
                 console.log(study);
-                global.tools.extend(data.sessionParameters, study.sessionParameters);
-                session.updateSessionData(data);
-                global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
-                if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
-                    session.goToStage(session.sessionData.sessionParameters.stage);
-                } else {
-                    session.goToStage(0);
-                }
 
+                session.updateSessionData(data, function() {
+                    // Only load the network into the model if there is a network to load
+                    if(session.sessionData.nodes && session.sessionData.edges) {
+                        global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
+                    }
+
+                    if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+                        session.goToStage(session.sessionData.sessionParameters.stage);
+                    } else {
+                        session.goToStage(0);
+                    }
+                });
             }, session.id);
         });
 
@@ -204,21 +210,30 @@ var Session = function Session() {
         saveTimer = setTimeout(session.saveData, 3000);
     };
 
-    session.updateSessionData = function(data) {
+    session.updateSessionData = function(data, callback) {
         global.tools.notify('Updating user data.', 2);
         global.tools.notify('Using the following to update:', 1);
         global.tools.notify(data, 1);
         global.tools.notify('session.sessionData is:', 1);
         global.tools.notify(session.sessionData, 1);
-        global.tools.extend(session.sessionData, data);
+
+
+        // Here, we used to simply use our extend method on session.sessionData with the new data.
+        // Switched to $.extend and added 'deep' as first function parameter for this reason.
+
+        $.extend(true, session.sessionData, data);
         // session.sessionData = $.extend(session.sessionData,data);
-        global.tools.notify('Combined output is:', 0);
-        global.tools.notify(session.sessionData, 0);
+        global.tools.notify('Combined output is:', 1);
+        global.tools.notify(session.sessionData, 1);
 
         var newDataLoaded = new window.Event('newDataLoaded');
         window.dispatchEvent(newDataLoaded);
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
+
+        if (callback) {
+            callback();
+        }
     };
 
     session.returnSessionID = function() {
