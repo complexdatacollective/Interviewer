@@ -100,10 +100,10 @@ var Session = function Session() {
             }, session.id);
         });
 
-        // var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
-        // $.each(session.stages, function(index,value) {
-        //     global.menu.addItem(stagesMenu, value.label, 'icon-play', function() {setTimeout(function() {session.goToStage(index);}, 500); });
-        // });
+        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
+        $.each(session.stages, function(index,value) {
+            global.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+        });
     };
 
     session.init = function(callback) {
@@ -140,12 +140,12 @@ var Session = function Session() {
         }, false);
 
         var sessionMenu = global.menu.addMenu('Session','hi-icon-cog');
-        global.menu.addItem(sessionMenu, 'Reset Session', 'icon-globe', function() {
+        global.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
-                type: window.BootstrapDialog.TYPE_INFO,
+                type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
-                title: 'Are you sure?',
-                message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+                title: '',
+                message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT:</strong> This will delete all data.',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
@@ -153,9 +153,8 @@ var Session = function Session() {
                         global.dataStore.deleteDocument(session.reset);
                     }
                 }, {
-                    icon: 'glyphicon glyphicon-ban-circle',
-                    label: ' Cancel',
-                    cssClass: 'btn-modal-warning',
+                    label: 'Cancel',
+                    cssClass: 'btn-modal-danger',
                     action: function(dialogItself){
                         dialogItself.close();
                     }
@@ -163,14 +162,14 @@ var Session = function Session() {
             });
         });
 
-        global.menu.addItem(sessionMenu, 'Download Data', 'icon-briefcase', function() { clickDownloadInput(); });
+        global.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
 
-        global.menu.addItem(sessionMenu, 'Purge Database', 'icon-cloud', function() {
+        global.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
-                type: window.BootstrapDialog.TYPE_INFO,
+                type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
-                title: 'Are you sure?',
-                message: '<h4>Are you sure you want to purge the database?</h4> <p><strong>IMPORTANT: This will delete any data you have already entered.</strong>',
+                title: '',
+                message: '<h4>Are you sure you want to purge the database?</h4><p><strong>IMPORTANT:</strong> This will delete all data.',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
@@ -178,9 +177,8 @@ var Session = function Session() {
                         global.dataStore.reset(session.reset);
                     }
                 }, {
-                    icon: 'glyphicon glyphicon-ban-circle',
                     label: ' Cancel',
-                    cssClass: 'btn-modal-warning',
+                    cssClass: 'btn-modal-danger',
                     action: function(dialogItself){
                         dialogItself.close();
                     }

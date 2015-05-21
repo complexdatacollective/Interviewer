@@ -10,6 +10,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import '../bower_components/bs-datetimepicker/src/less/bootstrap-datetimepicker.less';
 @import (inline) '../bower_components/leaflet/dist/leaflet.css';
 @import '../bower_components/components-font-awesome/less/font-awesome.less';
+@import '../bower_components/bootstrap3-dialog/src/less/bootstrap-dialog.less';
 @import (inline) '../bower_components/lato/css/lato.css';
 
 html, body {
@@ -51,10 +52,11 @@ div.big-check[data-toggle="buttons"] label {
 .modal-content {
   color:white;
   position: relative;
-  background-color: @brand-primary;
-  border: 10px solid @brand-primary; //old browsers fallback (ie8 etc)
-  border: 10px solid @brand-primary;
+  background-color: @brand-danger;
+  border: 10px solid @brand-danger; //old browsers fallback (ie8 etc)
+  border: 10px solid @brand-danger;
   border-radius: @border-radius-large;
+  padding:20px;
   .box-shadow(0 3px 9px rgba(0,0,0,.5));
   background-clip: padding-box;
   // Remove focus outline from opened modal
@@ -65,8 +67,30 @@ div.big-check[data-toggle="buttons"] label {
   .button-variant(@btn-default-color; #ffffff; #ffffff);
 }
 
-.btn-modal-warning {
-  .button-variant(#ffffff; darken(@brand-primary, 10%); darken(@brand-primary, 10%));
+.btn-modal-danger {
+  .button-variant(#ffffff; darken(@brand-danger, 5%); darken(@brand-danger, 5%));
+}
+
+.modal-body {
+    padding:20px 0;
+}
+
+.modal-footer {
+    padding:0;
+}
+
+.modal-header {
+    padding:0;
+    border:0;
+    background:transparent !important;
+}
+
+.btn-modal-danger {
+
+}
+
+.btn {
+    min-width:150px;
 }
 
 // radio groups
@@ -984,14 +1008,6 @@ input[type=radio]:checked + label>img {
 .full-height {
     height:100%;
     // text-align: center;
-}
-
-.Session-menu {
-    background:@brand-primary !important;
-}
-
-.Canvas-menu {
-    background:@brand-success !important;
 }
 
 .btn-link:hover {
