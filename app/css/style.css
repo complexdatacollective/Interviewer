@@ -6195,26 +6195,24 @@ button.close {
 /* Let's add some nice easing for all cases */
 .menu {
   width: 400px;
-  height: 100%;
+  bottom: 0;
   position: absolute;
   top: 0;
-  left: 0;
-  padding: 20px;
-  -webkit-transform: translateX(-400px);
-      -ms-transform: translateX(-400px);
-          transform: translateX(-400px);
+  left: -400px;
   overflow: scroll;
+  padding: 20px;
+  z-index: 9999999;
   -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-  transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+          transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
   -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
           transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
 }
 .menu.open {
   -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
           transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-  -webkit-transform: translateX(0px);
-      -ms-transform: translateX(0px);
-          transform: translateX(0px);
+  -webkit-transform: translateX(400px);
+      -ms-transform: translateX(400px);
+          transform: translateX(400px);
 }
 .icon-close {
   position: absolute;
@@ -6229,6 +6227,7 @@ button.close {
 }
 .menu-content ul {
   padding: 0;
+  height: 100%;
 }
 .menu-content ul li {
   list-style: none;

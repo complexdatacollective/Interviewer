@@ -54,12 +54,9 @@ var Menu = function Menu(options) {
     };
 
     menu.toggle = function(targetMenu) {
-        console.log('toggle');
-        console.log(targetMenu);
         var targetMenuObj = $('.'+targetMenu.name+'-menu');
 
         if (isAnimating === true) {
-            console.log('still animating');
             return false;
         } else {
             isAnimating = true;
@@ -90,13 +87,13 @@ var Menu = function Menu(options) {
         newMenu.button = $('<span class="hi-icon menu-btn '+name+' shown"></span>');
 
         newMenu.button.addClass(icon).html(name);
-        $('body').append(newMenu.button);
+        $('.menu-container').append(newMenu.button);
 
         var menuClass = name+'-menu';
         newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+name+'</h2><ul></ul></div></div>');
         newMenu.closeBtn = $('<span class="icon icon-close"><i class="fa fa-times fa-2x"></i></span>');
         $(newMenu.menu).append(newMenu.closeBtn);
-        $('body').append(newMenu.menu);
+        $('.menu-container').append(newMenu.menu);
 
         newMenu.button.on( 'click', function() {
             $('.menu-btn').removeClass('shown');

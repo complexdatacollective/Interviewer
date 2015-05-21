@@ -100,6 +100,7 @@ var Session = function Session() {
             }, session.id);
         });
 
+        // Initialise the menu system – other modules depend on it being there.
         var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
         $.each(session.stages, function(index,value) {
             global.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
