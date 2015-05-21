@@ -47,13 +47,13 @@
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
 @padding-base-vertical:     14px;
-@padding-base-horizontal:   14px;
+@padding-base-horizontal:   38px;
 
-@padding-large-vertical:    12px;
-@padding-large-horizontal:  18px;
+@padding-large-vertical:    16px;
+@padding-large-horizontal:  45px;
 
-@padding-small-vertical:    8px;
-@padding-small-horizontal:  12px;
+@padding-small-vertical:    10px;
+@padding-small-horizontal:  30px;
 
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     5px;
@@ -135,14 +135,14 @@
 //##
 
 //** `<input>` background color
-@input-bg:                       #000;
+@input-bg:                       #202020;
 //** `<input disabled>` background color
-@input-bg-disabled:              #000;
+@input-bg-disabled:              #202020;
 
 //** Text color for `<input>`s
 @input-color:                    #fff;
 //** `<input>` border color
-@input-border:                   #333;
+@input-border:                   lighten(@input-bg, 15%);
 //** `<input>` border radius
 @input-border-radius:            @border-radius-base;
 //** Border color for inputs on focus

@@ -141,6 +141,17 @@
 		"outputStyle": 0,
 		"syntaxCheckerStyle": 1
 		},
+	"\/app\/js\/min\/role-revisit-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/app\/js\/min\/role-revisit-min.js",
+		"outputAbbreviatedPath": "\/app\/js\/min\/min\/role-revisit-min-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"syntaxCheckerStyle": 1
+		},
 	"\/app\/js\/multibin.js": {
 		"fileType": 64,
 		"ignore": 1,
@@ -180,6 +191,17 @@
 		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/app\/js\/ordinalbin.js",
 		"outputAbbreviatedPath": "\/app\/js\/min\/ordinalbin-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"syntaxCheckerStyle": 1
+		},
+	"\/app\/js\/role-revisit.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/app\/js\/role-revisit.js",
+		"outputAbbreviatedPath": "\/app\/js\/min\/role-revisit-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 0,
@@ -18519,7 +18541,7 @@
 		"disableJavascript": 0,
 		"fileType": 1,
 		"ieCompatibility": 1,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/bower_components\/bootstrap3-dialog\/src\/less\/bootstrap-dialog.less",
 		"outputAbbreviatedPath": "\/bower_components\/bootstrap3-dialog\/src\/css\/bootstrap-dialog.css",
