@@ -45,8 +45,12 @@ var Session = function Session() {
                 $('.arrow-next').hide();
             } else if (currentStage === 0) {
                 $('.arrow-prev').hide();
+                $('.arrow-next').attr('disabled','disabled');
+                $('.arrow-next').off('click', sessionNextHandler);
+
             } else {
-                $('.arrow-next').show();
+                $('.arrow-next').on('click', sessionNextHandler);
+                $('.arrow-next').show().removeAttr('disabled');
                 $('.arrow-prev').show();
             }
         }
@@ -107,17 +111,21 @@ var Session = function Session() {
         });
     };
 
+    function sessionNextHandler() {
+        global.session.nextStage();
+    }
+
+    function sessionPreviousHandler() {
+        global.session.prevStage();
+    }
+
     session.init = function(callback) {
         global.tools.notify('Session initialising.', 1);
 
         // Navigation arrows.
-        $('.arrow-next').on('click', function() {
-            global.session.nextStage();
-        });
+        $('.arrow-next').on('click', sessionNextHandler);
 
-        $('.arrow-prev').on('click',function() {
-            global.session.prevStage();
-        });
+        $('.arrow-prev').on('click', sessionPreviousHandler);
 
         //bind to the custom state change event to handle spinner interactions
         window.addEventListener('changeStageStart', function () {

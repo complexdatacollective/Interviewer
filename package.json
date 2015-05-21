@@ -1,9 +1,9 @@
 {
   "name": "netcanvas",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "",
   "keywords": [],
-  
+
     "homepage": "https://github.com/jthrilly/netcanvas",
     "bugs": "https://github.com/jthrilly/netcanvas/issues",
     "author": {
@@ -15,7 +15,7 @@
       "type": "git",
       "url": "git://github.com/jthrilly/netcanvas.git"
     },
-  
+
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.5",
