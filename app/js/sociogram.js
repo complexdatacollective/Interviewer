@@ -32,7 +32,6 @@ var Sociogram = function Sociogram() {
 
 	// Default settings
 	var settings = {
-		network: global.network,
 		defaultNodeSize: 35,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
@@ -201,7 +200,7 @@ var Sociogram = function Sociogram() {
   			edges = settings.network.getEdges(edgeProperties, function (results) {
   				var filteredResults = [];
   				$.each(results, function(index,value) {
-  					if (value.from !== settings.network.getNodes({type_t0:'Ego'})[0].id && value.to !== settings.network.getNodes({type_t0:'Ego'})[0].id) {
+  					if (value.from !== settings.network.getEgo().id && value.to !== settings.network.getEgo().id) {
   						filteredResults.push(value);
   					}
   				});
@@ -463,14 +462,14 @@ var Sociogram = function Sociogram() {
 				} else {
 					// We are setting an edge
 					// Test if there is an existing edge.
-					if (settings.network.getEdges({type: settings.edgeType,from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to}).length > 0) {
+					if (settings.network.getEdges({type: settings.edgeType,from:settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
 						// if there is, remove it
 	      				this.children[0].stroke('white');
-	      				settings.network.removeEdge(settings.network.getEdges({type: settings.edgeType,from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: this.attrs.to})[0]);
+	      				settings.network.removeEdge(settings.network.getEdges({type: settings.edgeType,from:settings.network.getEgo().id, to: this.attrs.to})[0]);
 					} else {
 						// else add it
 						edge = {
-							from:settings.network.getNodes({type_t0:'Ego'})[0].id,
+							from:settings.network.getEgo().id,
 							to: this.attrs.to,
 							type: settings.edgeType,
 						};
@@ -615,16 +614,25 @@ var Sociogram = function Sociogram() {
 
 	// Edge manipulation functions
 
+	sociogram.debug = function() {
+		console.log(settings);
+		console.log(settings.network);
+	};
+
 	sociogram.addEdge = function(properties) {
 
-
+		sociogram.debug();
 		// the below won't work because we are storing the coords in an edge now...
 		// var fromObject = settings.network.getNode(properties.from);
 		// var toObject = settings.network.getNode(properties.to);
 			global.tools.notify('Sociogram is adding an edge.',2);
-			var toObject = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
-			var fromObject = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
+			console.log(properties);
+			var toObject = settings.network.getEdges({from:settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
+			var fromObject = settings.network.getEdges({from:settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
 
+			console.log(toObject);
+			console.log(fromObject);
+			console.log(settings.network.getEgo());
 			var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 			var edge = new Konva.Line({
 				// dashArray: [10, 10, 00, 10],
@@ -651,8 +659,8 @@ var Sociogram = function Sociogram() {
 
 	sociogram.removeEdge = function(properties) {
 
-		var toNode = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Dyad'})[0];
-		var fromNode = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id, to: properties.from, type:'Dyad'})[0];
+		var toNode = settings.network.getEdges({from:settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
+		var fromNode = settings.network.getEdges({from:settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
 
 		global.tools.notify('Removing edge.');
 
