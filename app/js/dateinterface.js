@@ -47,7 +47,7 @@ var DateInterface = function DateInterface() {
                         '<div class="form-group">'+
                             '<p class="lead">When was the first time you had sex?</p>'+
                             '<div class="input-group date first row'+row+'" id="datetimepicker'+counter+'">'+
-                                '<input type="text" class="form-control" readonly />'+
+                                '<input type="text" class="form-control" />'+
                                 '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
                             '</div>'+
                             '<div class="checkbox">'+
@@ -59,7 +59,7 @@ var DateInterface = function DateInterface() {
                         '<div class="form-group">'+
                             '<p class="lead">When was the last time you had sex?</p>'+
                             '<div class="input-group date second row'+row+'" id="datetimepicker'+(counter+1)+'">'+
-                                '<input type="text" class="form-control" readonly />'+
+                                '<input type="text" class="form-control" />'+
                                 '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>'+
                             '</div>'+
                         '</div>'+

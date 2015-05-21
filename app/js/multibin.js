@@ -240,7 +240,7 @@ var MultiBin = function MultiBin() {
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
-				$('.overlay').children().last('.form-group').prepend('<button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button>');
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
 			}
 
 		}
@@ -250,7 +250,7 @@ var MultiBin = function MultiBin() {
 
 
 		var itemSize = itemSizeW;
-		while(itemSize*2 > $('.container').height()-300) {
+		while(itemSize*2 > $('.container').height()-200) {
 			itemSize = itemSize*0.98;
 		}
 

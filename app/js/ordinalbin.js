@@ -74,7 +74,7 @@ var OrdinalBin = function OrdinalBin() {
 
         var number = ordinalBin.options.variable.values.length;
         itemW = ($('.container').outerWidth()/number)-20;
-        itemH = $('.container').outerHeight()-270;
+        itemH = $('.container').outerHeight()-200;
 
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){

@@ -198,8 +198,8 @@
 		},
 	"\/app\/js\/role-revisit.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/app\/js\/role-revisit.js",
 		"outputAbbreviatedPath": "\/app\/js\/min\/role-revisit-min.js",
 		"outputPathIsOutsideProject": 0,
@@ -18586,7 +18586,7 @@
 		},
 	"\/bower_components\/bs-datetimepicker\/build\/js\/bootstrap-datetimepicker.min.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/bower_components\/bs-datetimepicker\/build\/js\/bootstrap-datetimepicker.min.js",
 		"outputAbbreviatedPath": "\/bower_components\/bs-datetimepicker\/build\/js\/min\/bootstrap-datetimepicker.min-min.js",
@@ -30268,7 +30268,7 @@
 		},
 	"\/bower_components\/moment\/min\/moment.min.js": {
 		"fileType": 64,
-		"ignore": 0,
+		"ignore": 1,
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/bower_components\/moment\/min\/moment.min.js",
 		"outputAbbreviatedPath": "\/bower_components\/moment\/min\/min\/moment.min-min.js",
