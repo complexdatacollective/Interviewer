@@ -43,8 +43,7 @@ var Menu = function Menu(options) {
         if(!targetMenu) {
             //close all menus
             $.each(menus, function(index) {
-                var name = '.'+menus[index].name+'-menu-container';
-                if($(name).hasClass('open')) {
+                if(menus[index].open === true) {
                     menus[index].closeBtn.trigger('click');
                 }
             });

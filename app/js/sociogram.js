@@ -273,14 +273,16 @@ var Sociogram = function Sociogram() {
 	// Node manipulation functions
 
 	sociogram.resetPositions = function() {
-    	var dyadEdges = settings.network.getEdges({from:settings.network.getNodes({type_t0:'Ego'})[0].id,type:'Dyad'});
-      	for (var i = 0; i < dyadEdges.length; i++) {
-      		settings.network.updateEdge(dyadEdges[i].id, {coords: []});
-    	}
+    	var dyadEdges = settings.network.getEdges({type:'Dyad'});
+
+      	$.each(dyadEdges, function(index) {
+			settings.network.updateEdge(dyadEdges[index].id, {coords: []});
+		});
 	};
 
 	sociogram.addNode = function(options) {
 		global.tools.notify('Sociogram is creating a node.',2);
+		console.log(options);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 

@@ -6388,8 +6388,8 @@ button.close {
 }
 .shown {
   opacity: 1;
-  -webkit-transition-delay: 0.5s;
-          transition-delay: 0.5s;
+  -webkit-transition-delay: 0.1s;
+          transition-delay: 0.1s;
 }
 .Session-menu {
   background: #01a6c7 !important;
@@ -9162,6 +9162,9 @@ fieldset[disabled] .btn-modal-danger.active {
 .btn {
   min-width: 150px;
 }
+.big-check .btn {
+  min-width: 0;
+}
 label input[type="radio"] ~ i.fa.fa-circle-o {
   color: #c8c8c8;
   display: inline;
@@ -9341,6 +9344,9 @@ div[data-toggle="buttons"] label.active {
 }
 *:focus {
   outline: none !important;
+}
+.form-control {
+  padding: 14px 14px;
 }
 .container {
   width: 80% !important;

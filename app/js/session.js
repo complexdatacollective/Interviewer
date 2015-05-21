@@ -145,7 +145,7 @@ var Session = function Session() {
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
                 title: '',
-                message: '<h4>Are you sure you want to reset the session?</h4> <p><strong>IMPORTANT:</strong> This will delete all data.',
+                message: '<h3>Are you sure you want to reset the session?</h3> <p><strong>IMPORTANT:</strong> This will delete all data.',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
@@ -169,7 +169,7 @@ var Session = function Session() {
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
                 title: '',
-                message: '<h4>Are you sure you want to purge the database?</h4><p><strong>IMPORTANT:</strong> This will delete all data.',
+                message: '<h3>Are you sure you want to purge the database?</h3><p><strong>IMPORTANT:</strong> This will delete all data.',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
