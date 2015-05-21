@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/*global window, $, localStorage, Storage, debugLevel, deepEquals */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -46,6 +46,11 @@ Object.defineProperty(Array.prototype, 'remove', {
         return removeCounter;
     }
 });
+
+exports.arrayDifference = function(a1, a2) {
+  var a2Set = new Set(a2);
+  return a1.filter(function(x) { return !a2Set.has(x); });
+};
 
 exports.removeFromObject = function(item, object) {
     console.log('removeFromObject');
