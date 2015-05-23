@@ -46,10 +46,8 @@ var Session = function Session() {
             } else if (currentStage === 0) {
                 $('.arrow-prev').hide();
                 $('.arrow-next').attr('disabled','disabled');
-                $('.arrow-next').off('click', sessionNextHandler);
 
             } else {
-                $('.arrow-next').on('click', sessionNextHandler);
                 $('.arrow-next').show().removeAttr('disabled');
                 $('.arrow-prev').show();
             }

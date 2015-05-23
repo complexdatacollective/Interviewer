@@ -337,30 +337,41 @@ var Namegenerator = function Namegenerator() {
 			return false;
 		}
 
-			// We must simulate every interaction to ensure that any errors are caught.
-			$('.add-button').click();
-			setTimeout(function() {
-				$('#ngForm').submit();
-			}, 3000);
+        var eachTime = 4000;
 
-			$('#fname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
-			$('#lname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
-			var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
-			if ($('#lname_t0').val().length > 0 ) {
-				lname +='.';
-			}
-			$('#nname_t0').val(lname);
-			$('#age_p_t0').val(Math.floor(global.tools.randomBetween(18,90)));
+        for (var i = 0; i < number; i++) {
+            setTimeout(function() {
+                // We must simulate every interaction to ensure that any errors are caught.
+    			$('.add-button').click();
+    			setTimeout(function() {
+    				$('#ngForm').submit();
+    			}, 3000);
 
-			setTimeout(function() {
-				$('.relationship-button').click();
-			}, 500);
-			setTimeout(function() {
-				$($('.relationship')[Math.floor(global.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
-				$('.relationship-close-button').click();
+    			$('#fname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
+    			$('#lname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
+    			var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
+    			if ($('#lname_t0').val().length > 0 ) {
+    				lname +='.';
+    			}
+    			$('#nname_t0').val(lname);
+    			$('#age_p_t0').val(Math.floor(global.tools.randomBetween(18,90)));
 
-			}, 2000);
+    			setTimeout(function() {
+    				$('.relationship-button').click();
+    			}, 500);
+    			setTimeout(function() {
 
+                    var roleNumber = Math.floor(global.tools.randomBetween(1,3));
+
+                    for (var j = 0; j < roleNumber; j++) {
+        				$($('.relationship')[Math.floor(global.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
+
+                    }
+
+                    $('.relationship-close-button').click();
+    			}, 2000);
+            }, eachTime*i);
+        }
 
 	};
 
