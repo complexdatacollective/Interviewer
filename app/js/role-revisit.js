@@ -16,8 +16,6 @@ var RoleRevisit = function RoleRevisit() {
     var nodeBoxOpen = false;
     var editing = false;
 
-    var alterCount = global.network.getNodes({type_t0: 'Alter'}).length;
-
     var roles = {
         'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
         'Family / Relative': ['Parent / Guardian','Brother / Sister','Grandparent','Other Family','Chosen Family'],
@@ -113,14 +111,21 @@ var RoleRevisit = function RoleRevisit() {
 
 		card = $('<div class="card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div>');
 		var list = $('<ul></ul>');
-		$.each(roleRevisit.options.variables, function(index, value) {
-			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
-				list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
-			}
 
-		});
-        var roleCount = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'}).length;
-        list.append('<li class="role-count">'+roleCount+' roles selected.</li>');
+        list.append('<li class="'+properties.fname_t0+'"><strong>First Name</strong>: '+properties.fname_t0+'</li>');
+        list.append('<li class="'+properties.lname_t0+'"><strong>Last Name</strong>: '+properties.lname_t0+'</li>');
+
+        var roles = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'});
+        var roleString = "";
+        $.each(roles, function(index, value) {
+            roleString += " "+value.reltype_sub_t0+",";
+        });
+
+        // cut off the last comma
+        roleString = roleString.substring(0, roleString.length - 1);
+        
+        list.append('<li><strong>Roles</strong>: '+roleString+'</li>');
+
 		card.append(list);
 
 		$('.nameList').append(card);
@@ -172,7 +177,6 @@ var RoleRevisit = function RoleRevisit() {
         $(window.document).on('click', '.relationship-close-button', submitFormHandler);
 
         // Set node count box
-        $('.alter-count-box').html(alterCount);
     };
 
     return roleRevisit;
