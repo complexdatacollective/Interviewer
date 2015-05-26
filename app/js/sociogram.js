@@ -12,7 +12,6 @@ var Sociogram = function Sociogram() {
 	var menuOpen = false;
 	var cancelKeyBindings = false;
 	var taskComprehended = false;
-	var droppedNodes = [];
 
 	// Colours
 	var colors = {
@@ -248,8 +247,8 @@ var Sociogram = function Sociogram() {
 		}
 	};
 
-	sociogram.getDroppedNodes = function() {
-		return droppedNodes;
+	sociogram.getSelectedNodes = function() {
+		return selectedNodes;
 	};
 
 	sociogram.destroy = function() {
@@ -488,15 +487,15 @@ var Sociogram = function Sociogram() {
 
 			} else if (settings.mode === 'Update') {
 				console.log(currentNode);
-				if (droppedNodes.indexOf(currentNode) === -1) {
-					droppedNodes.push(currentNode.attrs.id);
+				if (selectedNodes.indexOf(currentNode) === -1) {
+					selectedNodes.push(currentNode.attrs.id);
 					currentNode.children[0].stroke(colors.selected);
 				} else {
-					droppedNodes.remove(currentNode.attrs.id);
+					selectedNodes.remove(currentNode.attrs.id);
 					currentNode.children[0].stroke('white');
 				}
 
-				console.log(droppedNodes);
+				console.log(selectedNodes);
 
 			} else if (settings.mode === 'Edge') {
 					// If this makes a couple, link them.
