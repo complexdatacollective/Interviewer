@@ -22,17 +22,38 @@ module.exports = function Network() {
     this.edges = [];
     var _this = this;
 
-    this.addNode = function(properties) {
+    this.addNode = function(properties, ego) {
+
+        var reserved_ids;
+
+        // Check if we are adding an ego
+        if (!ego) { ego = false;}
+
+        if (ego) {
+            // fetch in use IDs from Ego
+            reserved_ids = [];
+        } else {
+            reserved_ids = _this.getEgo().reserved_ids;
+        }
+
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
+
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
             global.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
             return false;
         }
 
+        // To prevent confusion in longitudinal studies, once an ID has been allocated, it is always reserved.
+        // This reserved list is stored with the ego.
+        if (reserved_ids.indexOf(properties.id) !== -1) {
+            global.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+            return false;
+        }
+
         // Locate the next free node ID
         var newNodeID = 0;
-        while (_this.getNode(newNodeID) !== false) {
+        while (_this.getNode(newNodeID) !== false || reserved_ids.indexOf(newNodeID) !== -1) {
             newNodeID++;
         }
         var nodeProperties = {
@@ -41,6 +62,7 @@ module.exports = function Network() {
         global.tools.extend(nodeProperties, properties);
 
         _this.nodes.push(nodeProperties);
+        reserved_ids.push(newNodeID);
 
         var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
         window.dispatchEvent(log);
@@ -52,13 +74,23 @@ module.exports = function Network() {
         return nodeProperties.id;
     };
 
-    this.loadNetwork = function(data) {
+    this.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
             global.tools.notify('Error loading network. Data format incorrect.',1);
             return false;
         } else {
-            _this.nodes = _this.nodes.concat(data.nodes);
-            _this.edges = _this.edges.concat(data.edges);
+            if (!overwrite) {
+                overwrite = false;
+            }
+
+            if (overwrite) {
+                _this.nodes = data.nodes;
+                _this.dges = data.edges;
+            } else {
+                _this.nodes = _this.nodes.concat(data.nodes);
+                _this.edges = _this.edges.concat(data.edges);
+            }
+
             return true;
         }
     };
@@ -67,10 +99,11 @@ module.exports = function Network() {
         if (_this.egoExists() === false) {
             var egoProperties = {
                 id:0,
-                type: 'Ego'
+                type_t0: 'Ego',
+                reserved_ids: [0]
             };
             global.tools.extend(egoProperties, properties);
-            _this.addNode(egoProperties);
+            _this.addNode(egoProperties, true);
         } else {
             return false;
         }

@@ -193,6 +193,8 @@ var Session = function Session() {
             });
         });
 
+        global.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
+
         if(callback) {
             callback();
         }
