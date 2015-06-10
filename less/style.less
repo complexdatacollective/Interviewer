@@ -536,6 +536,14 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     cursor: pointer; cursor: hand;
 }
 
+.card.ghost {
+    opacity:0;
+    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);;
+}
+
+.card.ghost.show {
+    opacity:1;
+}
 
 
 .inner-card {
@@ -556,6 +564,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .inner-card.ghost {
     background:transparent;
     border:10px dotted @brand-success;
+    color: @brand-success;
 }
 
 .card h4 {

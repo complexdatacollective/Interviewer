@@ -28,7 +28,7 @@ var Namegenerator = function Namegenerator() {
   	'Other': ['Other relationship']
   };
 
-  var namesList = ['Barney','Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
+  var namesList = ['Barney','Joshua','Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
   	var keyPressHandler = function(e) {
 	  	if (e.keyCode === 13) {
@@ -51,18 +51,18 @@ var Namegenerator = function Namegenerator() {
 
 	};
 
-  var roleClickHandler = function() {
+    var roleClickHandler = function() {
 
-    if ($(this).data('selected') === true) {
-      $(this).data('selected', false);
-      $(this).removeClass('selected');
+        if ($(this).data('selected') === true) {
+          $(this).data('selected', false);
+          $(this).removeClass('selected');
 
-    } else {
-      $(this).data('selected', true);
-      $(this).addClass('selected');
-    }
+        } else {
+          $(this).data('selected', true);
+          $(this).addClass('selected');
+        }
 
-  };
+    };
 
 	var inputKeypressHandler = function(e) {
 		if (nodeBoxOpen === true) {
@@ -91,6 +91,9 @@ var Namegenerator = function Namegenerator() {
 	};
 
 	var cardClickHandler = function() {
+        if ($(this).hasClass('ghost')) {
+            return false;
+        }
 		var index = $(this).data('index');
 		var edge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Dyad'})[0];
 

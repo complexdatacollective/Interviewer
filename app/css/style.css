@@ -9593,6 +9593,14 @@ div[data-toggle="buttons"] label.active {
   cursor: pointer;
   cursor: hand;
 }
+.card.ghost {
+  opacity: 0;
+  -webkit-transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+          transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.card.ghost.show {
+  opacity: 1;
+}
 .inner-card {
   height: 190px;
   margin-bottom: 1.5em;
@@ -9623,6 +9631,7 @@ div[data-toggle="buttons"] label.active {
 .inner-card.ghost {
   background: transparent;
   border: 10px dotted #1ecd97;
+  color: #1ecd97;
 }
 .card h4 {
   margin-top: 0;

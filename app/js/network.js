@@ -22,13 +22,16 @@ module.exports = function Network() {
     this.edges = [];
     var _this = this;
 
-    this.addNode = function(properties, ego) {
+    this.addNode = function(properties, ego, force) {
 
         var reserved_ids;
+
+        if (!force) { force = false; }
 
         // Check if we are adding an ego
         if (!ego) { ego = false;}
 
+        // if we are adding an ego create an empty reserved_ids array for later, it not use Ego's.
         if (ego) {
             // fetch in use IDs from Ego
             reserved_ids = [];
@@ -38,7 +41,6 @@ module.exports = function Network() {
 
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
-
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
             global.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
             return false;
@@ -46,12 +48,15 @@ module.exports = function Network() {
 
         // To prevent confusion in longitudinal studies, once an ID has been allocated, it is always reserved.
         // This reserved list is stored with the ego.
-        if (reserved_ids.indexOf(properties.id) !== -1) {
-            global.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
-            return false;
+        if (!force) {
+            if (reserved_ids.indexOf(properties.id) !== -1) {
+                global.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+                return false;
+            }
         }
 
         // Locate the next free node ID
+        // should this be wrapped in a conditional to check if properties.id has been provided? probably.
         var newNodeID = 0;
         while (_this.getNode(newNodeID) !== false || reserved_ids.indexOf(newNodeID) !== -1) {
             newNodeID++;
@@ -127,7 +132,7 @@ module.exports = function Network() {
 
     this.addEdge = function(properties) {
 
-        //TODO: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
+        // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
             global.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
@@ -135,8 +140,13 @@ module.exports = function Network() {
         }
 
         if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
-            global.tools.notify('edge with this id already exists!!!', 2);
-            return false;
+            global.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
+            var newEdgeID = 0;
+            while (_this.getEdge(newEdgeID) !== false) {
+                newEdgeID++;
+            }
+
+            properties.id = newEdgeID;
         }
 
         var position = 0;
@@ -222,6 +232,7 @@ module.exports = function Network() {
     };
 
     this.removeNode = function(id, preserveEdges) {
+        if (!preserveEdges) { preserveEdges = false; }
 
         // Unless second parameter is present, also delete this nodes edges
         if (!preserveEdges) {
