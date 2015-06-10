@@ -126,7 +126,7 @@ var MultiBin = function MultiBin() {
 				nodeBinDetails.children('h1, p').hide();
 
 				// $('.content').append(nodeBinDetails);
-				nodeBinDetails.children('.active-node-list').children('.node-item').css({top:0,left:20,opacity:0});
+				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').css({top:0,left:20,opacity:0});
 
 				setTimeout(function(){
 					nodeBinDetails.addClass('node-bin-active');
@@ -187,7 +187,7 @@ var MultiBin = function MultiBin() {
 		global.tools.notify('Destroying multiBin.',0);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.node-bin-static').off('click', nodeBinClickHandler);
-		$('.node-item').off('click', nodeClickHandler);
+		$('.node-bucket-item').off('click', nodeClickHandler);
 		$('.content').off('click', backgroundClickHandler);
 		$('.followup-submit').off('click', followupHandler);
 		$('.followup-cancel').off('click', followupCancelHandler);
@@ -364,7 +364,7 @@ var MultiBin = function MultiBin() {
 		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
 		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== '') {
 			index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
-			$('.c'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
 			var noun = 'people';
 			if ($('.c'+index).children('.active-node-list').children().length === 1) {
 				noun = 'person';
@@ -375,7 +375,7 @@ var MultiBin = function MultiBin() {
 				$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
 			}
 		} else {
-			$('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+			$('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
 		}
 
 	});
@@ -394,7 +394,7 @@ var MultiBin = function MultiBin() {
 	// Event Listeners
 	window.addEventListener('changeStageStart', stageChangeHandler, false);
 	$('.node-bin-static').on('click', nodeBinClickHandler);
-	$('.node-item').on('click', nodeClickHandler);
+	$('.node-bucket-item').on('click', nodeClickHandler);
 	$('.content').on('click', backgroundClickHandler);
 	$('.followup-form').on('submit', followupHandler);
 	$('.followup-cancel').on('click', followupCancelHandler);

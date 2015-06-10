@@ -178,9 +178,9 @@ var OrdinalBin = function OrdinalBin() {
                 });
 
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
                 } else {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
 
                 var noun = 'people';
@@ -195,9 +195,9 @@ var OrdinalBin = function OrdinalBin() {
                 }
             } else {
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                    $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
                 } else {
-                    $('.node-bucket').append('<div class="node-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                    $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
 
             }

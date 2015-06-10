@@ -11,7 +11,7 @@
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          14px;
+@font-size-base:          16px;
 @font-size-large:         ceil((@font-size-base * 2.05)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
@@ -47,7 +47,7 @@
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
 @padding-base-vertical:     14px;
-@padding-base-horizontal:   38px;
+@padding-base-horizontal:   15px;
 
 @padding-large-vertical:    16px;
 @padding-large-horizontal:  45px;
@@ -135,9 +135,9 @@
 //##
 
 //** `<input>` background color
-@input-bg:                       #202020;
+@input-bg:                       darken(@content-bg, 5%);
 //** `<input disabled>` background color
-@input-bg-disabled:              #202020;
+@input-bg-disabled:              darken(@content-bg, 5%);
 
 //** Text color for `<input>`s
 @input-color:                    #fff;

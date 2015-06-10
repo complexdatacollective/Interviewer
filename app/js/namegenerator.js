@@ -106,21 +106,6 @@ var Namegenerator = function Namegenerator() {
 			if(value.private === false) {
 				if (value.type === 'relationship') {
 					$('select[name="'+value.variable+'"]').val(edge[value.variable]);
-				// } else if (value.type === 'subrelationship') {
-				// 	$('select[name='reltype_sub_t0']').children().remove();
-				// 	$('select[name='reltype_sub_t0']').append('<option value='>Choose a specific relationship</option>');
-
-				// 	$.each(roles[$('select[name='reltype_main_t0']').val()], function(index,value) {
-				// 		$('select[name='reltype_sub_t0']').append('<option value=''+value+''>'+value+'</option>');
-				// 	});
-
-				// 	$('select[name=''+value.variable+'']').val(edge[value.variable]);
-				// 	$('select[name='reltype_sub_t0']').prop( 'disabled', false );
-
-				// 	if(edge.reltype_oth_t0 !== undefined && edge.reltype_oth_t0 !== ') {
-				// 		$('.reltype_oth_t0').val(edge.reltype_oth_t0);
-				// 		$('.reltype_oth_t0').show();
-				// 	}
 				}else {
 					$('#'+value.variable).val(edge[value.variable]);
 				}
@@ -242,22 +227,21 @@ var Namegenerator = function Namegenerator() {
 				    global.network.addEdge(edgeProperties);
 				});
 
-
 				// Main edge
 				var edge = global.network.getEdges({to:newNode, type:'Dyad'})[0];
 				namegenerator.addToList(edge);
 				alterCount++;
 				$('.alter-count-box').html(alterCount);
 
-
 			} else {
 				// We are updating a node
 
 				var color = function() {
-					var el = $('div[data-index='+editing+']');
+					var el = $('div[data-index='+editing+']').children('.inner-card');
+                    var current = el.css("background-color");
 					el.stop().transition({background:'#1ECD97'}, 400, 'ease');
 					setTimeout(function(){
-						el.stop().transition({ background:'#67c2d4'}, 800, 'ease');
+						el.stop().transition({ background: current}, 800, 'ease');
 					}, 700);
 				};
 
@@ -294,7 +278,6 @@ var Namegenerator = function Namegenerator() {
 				// Remove existing edges
 				global.network.removeEdges(global.network.getEdges({type:'Role', from: global.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
-
 				$.each($('.relationship.selected'), function() {
 			      	edgeProperties = {
 			            type: 'Role',
@@ -306,8 +289,8 @@ var Namegenerator = function Namegenerator() {
 				    global.network.addEdge(edgeProperties);
 				});
 
-				$('div[data-index='+editing+']').html('');
-				$('div[data-index='+editing+']').append('<h4>'+properties.nname_t0+'</h4>');
+				$('div[data-index='+editing+']').children('.inner-card').html('');
+				$('div[data-index='+editing+']').children('.inner-card').append('<h4>'+properties.nname_t0+'</h4>');
 				var list = $('<ul></ul>');
 
 				$.each(namegenerator.options.variables, function(index, value) {
@@ -317,8 +300,7 @@ var Namegenerator = function Namegenerator() {
 
 				});
 
-				$('div[data-index='+editing+']').append(list);
-			// var edge = global.network.getEdge(editing);;
+				$('div[data-index='+editing+']').children('.inner-card').append(list);
 
 			editing = false;
 
@@ -422,10 +404,6 @@ var Namegenerator = function Namegenerator() {
 	namegenerator.init = function(options) {
         global.tools.extend(namegenerator.options, options);
 		// create elements
-		var title = $('<h1 class="text-center"></h1>').html(namegenerator.options.heading);
-		namegenerator.options.targetEl.append(title);
-		var subtitle = $('<p class="lead text-center"></p>').html(namegenerator.options.subheading);
-		namegenerator.options.targetEl.append(subtitle);
 		var button = $('<span class="hi-icon hi-icon-user add-button">Add</span>');
 		namegenerator.options.targetEl.append(button);
 		var alterCountBox = $('<div class="alter-count-box"></div>');
@@ -475,12 +453,12 @@ var Namegenerator = function Namegenerator() {
 
 	$('.newNodeBox .form .right').append('<div class="form-group"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div>');
 	$('select[name="reltype_sub_t0"]').prop( 'disabled', true );
-	var buttons = $('<div class="row form-group"><div class="col-sm-6"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-6"><span class="btn btn-warning btn-outline btn-block cancel">Cancel</span></div></div><div class="row form-group"><div class="col-sm-12 text-center"><button type="button" class="btn btn-danger btn-outline btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete this Node</button></div></div>');
+	var buttons = $('<div class="row form-group"><br/></div><div class="row form-group"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
 	$('.newNodeBox .form .right').append(buttons);
 	$('.reltype_oth_t0').hide();
 
 		// relationship types
-		alterCountBox = $('<div class="relationship-types-container"><button class="btn btn-primary relationship-close-button">Close</button></div>');
+		alterCountBox = $('<div class="relationship-types-container"><span class="relationship-close-button">X</span>');
 		$('.newNodeBox').after(alterCountBox);
 		var counter = 0;
 		$.each(roles, function(index) {
@@ -491,16 +469,17 @@ var Namegenerator = function Namegenerator() {
 		counter++;
 		});
 
-
-
-
-		var nodeContainer = $('<div class="node-container"></div>');
+		var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
 		namegenerator.options.targetEl.append(nodeContainer);
 
+        var title = $('<h1 class="text-center"></h1>').html(namegenerator.options.heading);
+		$('.question-container').append(title);
+		var subtitle = $('<p class="lead text-center"></p>').html(namegenerator.options.subheading);
+        $('.question-container').append(subtitle);
 
 		// create namelist container
-		var nameList = $('<div class="table nameList"></div>');
-		$('.node-container').append(nameList);
+		var nameList = $('<div class="node-container nameList"></div>');
+        namegenerator.options.targetEl.append(nameList);
 
 		// Event listeners
 		window.addEventListener('changeStageStart', stageChangeHandler, false);
@@ -598,7 +577,7 @@ var Namegenerator = function Namegenerator() {
 		// var index = $(this).data('index');
 		var card;
 
-		card = $('<div class="card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div>');
+		card = $('<div class="card" data-index="'+properties.to+'"><div class="inner-card"><h4>'+properties.nname_t0+'</h4></div></div>');
 		var list = $('<ul></ul>');
 		$.each(namegenerator.options.variables, function(index, value) {
 			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
@@ -606,7 +585,7 @@ var Namegenerator = function Namegenerator() {
 			}
 
 		});
-		card.append(list);
+		card.children('.inner-card').append(list);
 		$('.nameList').append(card);
 
 	};
@@ -626,12 +605,7 @@ var Namegenerator = function Namegenerator() {
 		namegenerator.closeNodeBox();
 	};
 
-
-	  // namegenerator.remove = function() {
-
-	  // };
-
-	  return namegenerator;
+    return namegenerator;
 };
 
 module.exports = new Namegenerator();
