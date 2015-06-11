@@ -537,7 +537,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .card.ghost {
     opacity:0;
-    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);;
+    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
 }
 
 .card.ghost.show {
@@ -558,7 +558,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     width:100%;
     word-wrap: break-word;
     cursor: pointer; cursor: hand;
+    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
 
+.inner-card.delete {
+    background:@brand-danger;
+    border-color:@brand-danger;
+    opacity:0;
 }
 
 .inner-card.ghost {
@@ -653,7 +659,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .previous-node-list {
-    height:50%;
+    height:100%;
     width:100%;
     background: @brand-info;
     margin-bottom:100px;
@@ -661,23 +667,23 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     overflow: scroll;
     border-radius: 7px;
     z-index:20;
-    padding-bottom:4em;
+    padding-bottom:5em;
 }
 
-.previous-node-list::after {
-    display: block;
-    height:50px;
-    background: linear-gradient(to top, @brand-info 10%, rgba(0, 0, 0, 0) 100%);
-    position:absolute;
-    bottom:45px;
-    left:0;
-    width:25vw;
-    content:'';
-    z-index:99999;
-}
+// .previous-node-list::after {
+//     display: block;
+//     height:140px;
+//     background: linear-gradient(to top, @brand-info 10%, rgba(0, 0, 0, 0) 100%);
+//     position:absolute;
+//     bottom:45px;
+//     left:0;
+//     width:25vw;
+//     content:'';
+//     z-index:99999;
+// }
 
 .current-node-list {
-    height:50%;
+    height:100%;
     width:100%;
     background: @brand-warning;
     padding:15px;
@@ -687,19 +693,23 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     padding-bottom:4em;
 }
 
-.current-node-list::after {
-    display: block;
-    height:50px;
-    background: linear-gradient(to top, @brand-warning 10%, rgba(0, 0, 0, 0) 100%);
-    position:absolute;
-    bottom:45vh;
-    left:0;
-    width:25vw;
-    content:'';
-    z-index:99999;
+// .current-node-list::after {
+//     display: block;
+//     height:50px;
+//     background: linear-gradient(to top, @brand-warning 10%, rgba(0, 0, 0, 0) 100%);
+//     position:fixed;
+//     top:90vh;
+//     left:0;
+//     width:25vw;
+//     content:'';
+//     z-index:99999;
+// }
+
+.node-lists.double {
+    height:50%;
 }
 
-.alt .nameList {
+.nameList.alt {
     width:54vw;
     right:10vw;
     left:initial;

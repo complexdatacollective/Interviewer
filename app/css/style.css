@@ -9627,6 +9627,13 @@ div[data-toggle="buttons"] label.active {
   word-wrap: break-word;
   cursor: pointer;
   cursor: hand;
+  -webkit-transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+          transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.inner-card.delete {
+  background: #e85657;
+  border-color: #e85657;
+  opacity: 0;
 }
 .inner-card.ghost {
   background: transparent;
@@ -9717,7 +9724,7 @@ div[data-toggle="buttons"] label.active {
   background: linear-gradient(to top, #2f3344 10%, rgba(0, 0, 0, 0) 100%);
 }
 .previous-node-list {
-  height: 50%;
+  height: 100%;
   width: 100%;
   background: #b16eff;
   margin-bottom: 100px;
@@ -9725,22 +9732,10 @@ div[data-toggle="buttons"] label.active {
   overflow: scroll;
   border-radius: 7px;
   z-index: 20;
-  padding-bottom: 4em;
-}
-.previous-node-list::after {
-  display: block;
-  height: 50px;
-  background: -webkit-linear-gradient(bottom, #b16eff 10%, rgba(0, 0, 0, 0) 100%);
-  background: linear-gradient(to top, #b16eff 10%, rgba(0, 0, 0, 0) 100%);
-  position: absolute;
-  bottom: 45px;
-  left: 0;
-  width: 25vw;
-  content: '';
-  z-index: 99999;
+  padding-bottom: 5em;
 }
 .current-node-list {
-  height: 50%;
+  height: 100%;
   width: 100%;
   background: #fa920d;
   padding: 15px;
@@ -9749,19 +9744,10 @@ div[data-toggle="buttons"] label.active {
   z-index: 20;
   padding-bottom: 4em;
 }
-.current-node-list::after {
-  display: block;
-  height: 50px;
-  background: -webkit-linear-gradient(bottom, #fa920d 10%, rgba(0, 0, 0, 0) 100%);
-  background: linear-gradient(to top, #fa920d 10%, rgba(0, 0, 0, 0) 100%);
-  position: absolute;
-  bottom: 45vh;
-  left: 0;
-  width: 25vw;
-  content: '';
-  z-index: 99999;
+.node-lists.double {
+  height: 50%;
 }
-.alt .nameList {
+.nameList.alt {
   width: 54vw;
   right: 10vw;
   left: initial;
