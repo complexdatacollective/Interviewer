@@ -512,13 +512,13 @@ var Namegenerator = function Namegenerator() {
         if (namegenerator.options.panels.length > 0) {
 
             // Side container
-            $('<div class="side-container"></div>').insertBefore('.nameList');
+            var sideContainer = $('<div class="side-container"></div>');
 
             // Current side panel shows alters already elicited
             if (namegenerator.options.panels.indexOf('current') !== -1) {
 
                 // add custom node list
-                $('.side-container').append($('<div class="current-node-list node-lists"><h4>People you already listed:</h4></div>'));
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>People you already listed:</h4></div>'));
                 $.each(global.network.getEdges({type: 'Dyad', from: global.network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
 
                     var el = $('<div class="node-list-item">'+value.nname_t0+'</div>');
@@ -536,92 +536,94 @@ var Namegenerator = function Namegenerator() {
                         var Network = require('./network');
                         global.previousNetwork = new Network();
                         global.previousNetwork.loadNetwork(global.session.sessionData.previousNetwork);
-
-                        // Check there is more than one node
-                        if (global.previousNetwork.getNodes().length > 1) {
-                            // Add the previous node list
-                            $('.side-container').append($('<div class="previous-node-list node-lists"><h4>People you listed in other visits:</h4></div>'));
-                            $.each(global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id}), function(index,value) {
-
-                                var el = $('<div class="node-bucket-item draggable" data-id="'+value.to+'">'+value.nname_t0+'</div>');
-                                $('.previous-node-list').append(el);
-                            });
-
-                            // Make nodes draggable
-                            $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false ,
-                                start: function(){
-                                    console.log($(this).parent().css("overflow"));
-                                    $(this).parent().css("overflow","visible");
-                                    console.log($(this).parent().css("overflow"));
-                                },
-                                stop: function() {
-                                    $('previous-node-list').css("overflow","scroll");
-                                    $('current-node-list').css("overflow","scroll");
-                                }
-                            });
-
-                            $('.node-container').droppable({ accept: '.draggable',
-                                drop: function(event, ui) {
-                                    // remove the ghost card
-                                    $('previous-node-list').css("overflow","scroll");
-                                    $('current-node-list').css("overflow","scroll");
-                                    $('.card.ghost').remove();
-
-                                    // get the data we need
-                                    var dropped = ui.draggable;
-                                    var droppedNode = dropped.data("id");
-                                    var droppedNodeEdge = global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id, to: droppedNode})[0];
-
-                                    // update name generator property of dyad edge
-
-                                    // get the current name generator's label
-                                    var ngStep;
-                                    $.each(namegenerator.options.variables, function(index, value) {
-                                        if (value.label === 'ng_t0') { ngStep = value.value; }
-                                    });
-
-                                    droppedNodeEdge.ng_t0 = ngStep;
-
-                                    // Add the dropped node to the list, creating a card for it
-                                    namegenerator.addToList(droppedNodeEdge);
-
-                                    // create a node and edge in the current network
-                                    var oldNode = global.previousNetwork.getNode(droppedNode);
-                                    global.network.addNode(oldNode, false, true);  // (properties, ego, force);
-                                    global.network.addEdge(droppedNodeEdge);
-
-                                    // Remove from previous network
-                                    global.previousNetwork.removeNode(oldNode.id);
-
-                                    global.session.addData('previousNetwork', {nodes: global.previousNetwork.getNodes(), edges: global.previousNetwork.getEdges()});
-                                    $(dropped).remove();
-                                    //hide the ghost card
-                                    $('.card.ghost').removeClass('show');
-                                },
-                                over: function() {
-                                    $(".node-container").scrollTop($(".node-container")[0].scrollHeight);
-                                    $('.node-container').append('<div class="card ghost"><div class="inner-card ghost"><i class="fa fa-5x fa-plus-circle"></i>Add</div></div>');
-                                    setTimeout(function() {
-                                        $('.card.ghost').addClass('show');
-                                    }, 100);
-
-                                },
-                                out: function() {
-                                    $('.card.ghost').removeClass('show');
-                                    setTimeout(function() {
-                                        $('.card.ghost').remove();
-                                    }, 300);
-
-                                }
-                            });
-                        }
                     }
+                    // Check there is more than one node
+                    if (global.previousNetwork.getNodes().length > 1) {
+                        // Add the previous node list
+                        sideContainer.append($('<div class="previous-node-list node-lists"><h4>People you listed in other visits:</h4></div>'));
+                        $.each(global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id}), function(index,value) {
+
+                            var el = $('<div class="node-bucket-item draggable" data-id="'+value.to+'">'+value.nname_t0+'</div>');
+                            sideContainer.children('.previous-node-list').append(el);
+                        });
+
+                        // Make nodes draggable
+                        $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false ,
+                            start: function(){
+                                console.log($(this).parent().css("overflow"));
+                                $(this).parent().css("overflow","visible");
+                                console.log($(this).parent().css("overflow"));
+                            },
+                            stop: function() {
+                                $('previous-node-list').css("overflow","scroll");
+                                $('current-node-list').css("overflow","scroll");
+                            }
+                        });
+
+                        $('.node-container').droppable({ accept: '.draggable',
+                            drop: function(event, ui) {
+                                // remove the ghost card
+                                $('previous-node-list').css("overflow","scroll");
+                                $('current-node-list').css("overflow","scroll");
+                                $('.card.ghost').remove();
+
+                                // get the data we need
+                                var dropped = ui.draggable;
+                                var droppedNode = dropped.data("id");
+                                var droppedNodeEdge = global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id, to: droppedNode})[0];
+
+                                // update name generator property of dyad edge
+
+                                // get the current name generator's label
+                                var ngStep;
+                                $.each(namegenerator.options.variables, function(index, value) {
+                                    if (value.label === 'ng_t0') { ngStep = value.value; }
+                                });
+
+                                droppedNodeEdge.ng_t0 = ngStep;
+
+                                // Add the dropped node to the list, creating a card for it
+                                namegenerator.addToList(droppedNodeEdge);
+
+                                // create a node and edge in the current network
+                                var oldNode = global.previousNetwork.getNode(droppedNode);
+                                global.network.addNode(oldNode, false, true);  // (properties, ego, force);
+                                global.network.addEdge(droppedNodeEdge);
+
+                                // Remove from previous network
+                                global.previousNetwork.removeNode(oldNode.id);
+
+                                global.session.addData('previousNetwork', {nodes: global.previousNetwork.getNodes(), edges: global.previousNetwork.getEdges()});
+                                $(dropped).remove();
+                                //hide the ghost card
+                                $('.card.ghost').removeClass('show');
+                            },
+                            over: function() {
+                                $(".node-container").scrollTop($(".node-container")[0].scrollHeight);
+                                $('.node-container').append('<div class="card ghost"><div class="inner-card ghost"><i class="fa fa-5x fa-plus-circle"></i>Add</div></div>');
+                                setTimeout(function() {
+                                    $('.card.ghost').addClass('show');
+                                }, 100);
+
+                            },
+                            out: function() {
+                                $('.card.ghost').removeClass('show');
+                                setTimeout(function() {
+                                    $('.card.ghost').remove();
+                                }, 300);
+
+                            }
+                        });
+                    }
+
                 } // end if previous network is undefined
             } // end previous panel
 
 
-            if ($('.side-container').children().length > 0) {
+
+            if (sideContainer.children().length > 0) {
                 // move node list to one side
+                sideContainer.insertBefore('.nameList');
                 $('.nameList').addClass('alt');
             }
 
