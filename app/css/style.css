@@ -9395,6 +9395,29 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-pack: center;
           justify-content: center;
 }
+.node-bin-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+     -moz-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 75vh;
+  padding-bottom: 20px;
+}
+.node-question-container {
+  height: 25vh;
+}
 .container.full-height {
   height: 100vh;
 }
@@ -9469,16 +9492,19 @@ div[data-toggle="buttons"] label.active {
 }
 .sociogram-title {
   background: transparent;
-  padding: 40px;
-  width: 400px;
-  height: 400px;
+  padding: 0px;
+  width: 300px;
+  height: 260px;
   overflow: hidden;
   position: absolute;
   bottom: 20px;
-  left: 10px;
+  left: 20px;
 }
 .sociogram-title h3 {
-  font-size: 33px;
+  font-size: 25px;
+}
+.sociogram-title p.lead {
+  font-size: 18px;
 }
 .sociogram-followup {
   margin: 0 auto;
@@ -9795,11 +9821,11 @@ div[data-toggle="buttons"] label.active {
   border-radius: 32px;
   text-shadow: none;
 }
-.node-bucket .node-item,
+.node-bucket .node-bucket-item,
 .node-bin .node-item {
   display: none;
 }
-.node-bucket .node-item:first-child {
+.node-bucket .node-bucket-item:first-child {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
@@ -9810,8 +9836,7 @@ div[data-toggle="buttons"] label.active {
   opacity: 0;
 }
 .node-bin {
-  width: 350px;
-  height: 350px;
+  height: 100%;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
@@ -9830,7 +9855,6 @@ div[data-toggle="buttons"] label.active {
       -ms-flex-align: center;
           align-items: center;
   border-radius: 50%;
-  margin: 10px;
   padding: 5px;
   text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
   -webkit-transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
@@ -9847,8 +9871,7 @@ div[data-toggle="buttons"] label.active {
   display: none;
 }
 .ord-node-bin {
-  width: 350px;
-  height: 350px;
+  height: 100%;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -moz-inline-box;
@@ -9866,12 +9889,35 @@ div[data-toggle="buttons"] label.active {
      -moz-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border-radius: 10px;
-  margin: 10px;
-  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
-  -webkit-transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-          transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+  border-radius: 15px;
   padding: 5px;
+  text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+          transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+}
+.size-1 {
+  width: 100%;
+}
+.size-2 {
+  width: 50%;
+}
+.size-3 {
+  width: 33.33%;
+}
+.size-4 {
+  width: 25%;
+}
+.size-5 {
+  width: 20%;
+}
+.size-6 {
+  width: 16.66%;
+}
+.size-7 {
+  width: 14.28%;
+}
+.size-8 {
+  width: 12.5%;
 }
 .ord-node-bin:last-of-type {
   background: #333;
@@ -9948,7 +9994,6 @@ div[data-toggle="buttons"] label.active {
 }
 .active-node-list {
   width: 70% ;
-  display: none;
   -webkit-box-align: center;
   -webkit-align-items: center;
      -moz-box-align: center;

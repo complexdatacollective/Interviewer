@@ -511,9 +511,6 @@ var Namegenerator = function Namegenerator() {
         // Handle side panels
         if (namegenerator.options.panels.length > 0) {
 
-            // move node list to one side
-            $('.nameList').addClass('alt');
-
             // Side container
             $('<div class="side-container"></div>').insertBefore('.nameList');
 
@@ -621,6 +618,12 @@ var Namegenerator = function Namegenerator() {
                     }
                 } // end if previous network is undefined
             } // end previous panel
+
+
+            if ($('.side-container').children().length > 0) {
+                // move node list to one side
+                $('.nameList').addClass('alt');
+            }
 
             // halve the panel height if we have two
             if ($('.side-container').children().length > 1) {

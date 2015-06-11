@@ -23,7 +23,7 @@ var OrdinalBin = function OrdinalBin() {
         heading: 'Default Heading',
         subheading: 'Default Subheading.'
     };
-    var itemW,itemH, followup;
+    var followup;
 
     var stageChangeHandler = function() {
         ordinalBin.destroy();
@@ -59,41 +59,49 @@ var OrdinalBin = function OrdinalBin() {
     ordinalBin.init = function(options) {
 
         global.tools.extend(ordinalBin.options, options);
+
+        ordinalBin.options.targetEl.append('<div class="node-question-container"></div>');
+
         // Add header and subheader
-        ordinalBin.options.targetEl.append('<h1>'+ordinalBin.options.heading+'</h1>');
-        ordinalBin.options.targetEl.append('<p class="lead">'+ordinalBin.options.subheading+'</p>');
+        $('.node-question-container').append('<h1>'+ordinalBin.options.heading+'</h1>');
+        $('.node-question-container').append('<p class="lead">'+ordinalBin.options.subheading+'</p>');
 
         // Add node bucket
-        ordinalBin.options.targetEl.append('<div class="node-bucket"></div>');
+        $('.node-question-container').append('<div class="node-bucket"></div>');
         if(typeof ordinalBin.options.followup !== 'undefined') {
-            ordinalBin.options.targetEl.append('<div class="followup"><h2>'+ordinalBin.options.followup.prompt+'</h2></div>');
+            $('.node-question-container').append('<div class="followup"><h2>'+ordinalBin.options.followup.prompt+'</h2></div>');
             $.each(ordinalBin.options.followup.values, function(index,value) {
                 $('.followup').append('<span class="btn btn-primary btn-block followup-option" data-value="'+value.value+'">'+value.label+'</span>');
             });
         }
 
-        var number = ordinalBin.options.variable.values.length;
-        itemW = ($('.container').outerWidth()/number)-20;
-        itemH = $('.container').outerHeight()-200;
+        // bin container
+        ordinalBin.options.targetEl.append('<div class="node-bin-container"></div>');
+
+        // Calculate number of bins required
+        var binNumber = ordinalBin.options.variable.values.length;
 
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){
 
-            var newBin = $('<div class="ord-node-bin node-bin-static d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
             newBin.data('index', index);
-            ordinalBin.options.targetEl.append(newBin);
+            $('.node-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
-
+                    console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
                     if (ordinalBin.options.variable.values[index].value>0) {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
+                    console.log(droppedOn.children('.active-node-list'));
+                    console.log(dropped);
+                    dropped.css({position:'inherit'});
+                    droppedOn.children('.active-node-list').append(dropped);
 
                     $(dropped).appendTo(droppedOn.children('.active-node-list'));
-                    $(dropped).css({position: '',top:'',left:''});
                     var properties = {};
                     properties[ordinalBin.options.variable.label] = ordinalBin.options.variable.values[index].value;
                     // Followup question
@@ -118,15 +126,22 @@ var OrdinalBin = function OrdinalBin() {
                     });
 
                     var el = $('.d'+index);
-                    // var origBg = el.css('background-color');
-                    // el.transition({scale:1.2}, 200, 'ease');
+
                     setTimeout(function(){
                         el.transition({background:el.data('oldBg')}, 200, 'ease');
                         // el.transition({ scale:1}, 200, 'ease');
                     }, 0);
 
-                    $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, scroll: 'true', refreshPositions: true,
+                    $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
                         start: function() {
+                            console.log($(this).css('top'));
+                            if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
+                                console.log('has class');
+                                $(this).css({position:'absolute'});
+                            } else {
+                                console.log('not');
+                                $(this).css({position:'relative'});
+                            }
                             if (taskComprehended === false) {
                                 var eventProperties = {
                                     stage: global.session.currentStage(),
@@ -136,9 +151,11 @@ var OrdinalBin = function OrdinalBin() {
                                 window.dispatchEvent(log);
                                 taskComprehended = true;
                             }
+
                             // $('.ord-node-bin').css({overflow:'hidden'});
                         },
                         stop: function() {
+                            $(this).css({position:'inerit'});
                             // $('.ord-node-bin').css({overflow:'scroll'});
                         }
                     });
@@ -155,9 +172,6 @@ var OrdinalBin = function OrdinalBin() {
 
         });
 
-        // $('.dode-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-        $('.ord-node-bin').css({width:itemW,height:itemH});
-
         // get all edges
         var edges = global.network.getEdges(ordinalBin.options.criteria);
 
@@ -169,7 +183,6 @@ var OrdinalBin = function OrdinalBin() {
             }
 
             if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== '') {
-                // index = ordinalBin.options.variable.values.indexOf(value[ordinalBin.options.variable.label]);
                 index = 'error';
                 $.each(ordinalBin.options.variable.values, function(vindex, vvalue) {
                     if (value[ordinalBin.options.variable.label] === vvalue.value) {
@@ -182,17 +195,6 @@ var OrdinalBin = function OrdinalBin() {
                 } else {
                     $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
-
-                var noun = 'people';
-                var length = $('.d'+index).children('.active-node-list').children().length;
-                if (length === 1) {
-                    noun = 'person';
-                }
-                if (length === 0) {
-                    $('.d'+index).children('p').html('(Empty)');
-                } else {
-                    $('.d'+index).children('p').html(length+' '+noun+'.');
-                }
             } else {
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
                     $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
@@ -203,8 +205,10 @@ var OrdinalBin = function OrdinalBin() {
             }
 
         });
-        $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, scroll: 'true', refreshPositions: true,
+        $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
             start: function() {
+                $(this).css({position:'relative'});
+
                 if (taskComprehended === false) {
                     var eventProperties = {
                         stage: global.session.currentStage(),
@@ -218,6 +222,7 @@ var OrdinalBin = function OrdinalBin() {
                 // $('.ord-node-bin').css({overflow:'hidden'});
             },
             stop: function() {
+                $(this).css({position:'inerit'});
                 // $('.ord-node-bin').css({overflow:'scroll'});
             }
         });
