@@ -353,11 +353,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     width:100%;
     height:75vh;
     padding-bottom:20px;
+    flex-flow: row wrap;
 }
 
 .node-question-container {
     height:25vh;
 }
+
 
 .container.full-height {
     height:100vh;
@@ -779,21 +781,32 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
  }
 
  .invisible {
-    opacity:0;
+    // opacity:0;
  }
 
  .node-bin {
-    height:100%;
     display:inline-flex;
     flex-direction: column;
     align-items: center;
-    // justify-content: center;
+    justify-content: center;
     border-radius: 50%;
     padding:5px;
     text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
-    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
-    // overflow:scroll;
+    transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
+    height:21vw;
+    width:21vw;
 
+ }
+
+ .node-bin-active {
+    height: 90vh !important;
+    width: 90vh !important;
+    position: absolute !important;
+    z-index: 999;
+    justify-content: center;
+    top:8vh !important;
+    left:50% !important;
+    margin-left:-45vh;
  }
 
  .black-overlay {
@@ -819,6 +832,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
     // overflow:scroll;
  }
+
+
 
 .size-1 {
      width:100%;
@@ -937,23 +952,32 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 
  .node-bin-active {
-    height: 900px !important;
-    width: 900px !important;
-    position: absolute;
+    height: 90vh !important;
+    width: 90vh !important;
+    position: absolute !important;
     z-index: 999;
-    top: 50% !important;
-    left: 50% !important;
-    margin-left: -450px;
-    margin-top: -450px;
     justify-content: center;
+    top:8vh !important;
+    left:50% !important;
+    margin-left:-45vh;
  }
 
  .active-node-list {
-    width:70% ;
+    width:70%;
+    display:none;
     // overflow: scroll;
     align-items: center;
     justify-content: center;
  }
+
+ .ord-active-node-list {
+    width:70% ;
+    // overflow: scroll;
+    align-items: center;
+    justify-content: center;
+    display:none;
+ }
+
 
 .ord-node-bin  .active-node-list {
     width:100%;

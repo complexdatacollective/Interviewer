@@ -78,7 +78,8 @@ var MultiBin = function MultiBin() {
 		if (e.target !== e.currentTarget) {
 
 			if (open === true) {
-				$('.container').children().removeClass('invisible');
+				$('.node-bin-container').children().show();
+				$('.node-question-container').show();
 				$('.copy').removeClass('node-bin-active');
 				$('.copy').addClass('node-bin-static');
 				$('.copy').children('h1, p').show();
@@ -117,7 +118,8 @@ var MultiBin = function MultiBin() {
 				}
 			}});
 			if(!$(this).hasClass('.node-bin-active')) {
-				$('.container').children().not(this).addClass('invisible');
+				$('.node-bin-container').children().not(this).hide();
+				$('.node-question-container').hide();
 				var position = $(this).offset();
 				var nodeBinDetails = $(this);
 				nodeBinDetails.offset(position);
@@ -198,12 +200,13 @@ var MultiBin = function MultiBin() {
 	multiBin.init = function(options) {
 		global.tools.extend(multiBin.options, options);
 
+		multiBin.options.targetEl.append('<div class="node-question-container"></div>');
+
 		// Add header and subheader
-		multiBin.options.targetEl.append('<h1>'+multiBin.options.heading+'</h1>');
-		multiBin.options.targetEl.append('<p class="lead">'+multiBin.options.subheading+'</p>');
+		$('.node-question-container').append('<h1>'+multiBin.options.heading+'</h1>');
 
 		// Add node bucket
-		multiBin.options.targetEl.append('<div class="node-bucket"></div>');
+		$('.node-question-container').append('<div class="node-bucket"></div>');
 
 		// Create the followup dialog, if it exists
 		if(typeof multiBin.options.followup !== 'undefined') {
@@ -245,6 +248,9 @@ var MultiBin = function MultiBin() {
 
 		}
 
+		// bin container
+        multiBin.options.targetEl.append('<div class="node-bin-container"></div>');
+
 		var number = Math.floor(multiBin.options.variable.values.length*0.66);
 		var itemSizeW = $('.container').outerWidth()/number;
 
@@ -266,7 +272,7 @@ var MultiBin = function MultiBin() {
 			// }
 			var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
 			newBin.data('index', index);
-			multiBin.options.targetEl.append(newBin);
+			$('.node-bin-container').append(newBin);
 			$('.c'+index).droppable({ accept: '.draggable',
 			drop: function(event, ui) {
 				var dropped = ui.draggable;
@@ -346,7 +352,7 @@ var MultiBin = function MultiBin() {
 	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
 	// $('.node-bin').css({width:itemSize,height:itemSize});
 
-	$('.node-bin h1').css({marginTop: itemSize/3});
+	// $('.node-bin h1').css({marginTop: itemSize/3});
 
 	$.each($('.node-bin'), function(index, value) {
 		var oldPos = $(value).offset();
