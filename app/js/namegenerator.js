@@ -240,7 +240,7 @@ var Namegenerator = function Namegenerator() {
 				// We are updating a node
 
 				var color = function() {
-					var el = $('div[data-index='+editing+']').children('.inner-card');
+					var el = $('div[data-index='+editing+']');
                     var current = el.css("background-color");
 					el.stop().transition({background:'#1ECD97'}, 400, 'ease');
 					setTimeout(function(){
@@ -292,8 +292,8 @@ var Namegenerator = function Namegenerator() {
 				    global.network.addEdge(edgeProperties);
 				});
 
-				$('div[data-index='+editing+']').children('.inner-card').html('');
-				$('div[data-index='+editing+']').children('.inner-card').append('<h4>'+properties.nname_t0+'</h4>');
+				$('div[data-index='+editing+']').html('');
+				$('div[data-index='+editing+']').append('<h4>'+properties.nname_t0+'</h4>');
 				var list = $('<ul></ul>');
 
 				$.each(namegenerator.options.variables, function(index, value) {
@@ -303,7 +303,7 @@ var Namegenerator = function Namegenerator() {
 
 				});
 
-				$('div[data-index='+editing+']').children('.inner-card').append(list);
+				$('div[data-index='+editing+']').append(list);
 
 			editing = false;
 
@@ -390,7 +390,7 @@ var Namegenerator = function Namegenerator() {
 		$(window.document).off('keydown', keyPressHandler);
 		$('.cancel').off('click', cancelBtnHandler);
 		$('#fname_t0, #lname_t0').off('keyup', inputKeypressHandler);
-		$(window.document).off('click', '.card', cardClickHandler);
+		$(window.document).off('click', '.inner-card', cardClickHandler);
 		$('.add-button').off('click', namegenerator.openNodeBox);
 		$('.delete-button').off('click', namegenerator.removeFromList);
 		$('select[name="reltype_main_t0"]').off('change', selectChangeHandler);
@@ -491,7 +491,7 @@ var Namegenerator = function Namegenerator() {
 		$('.add-button').on('click', namegenerator.openNodeBox);
 		$('.delete-button').on('click', namegenerator.removeFromList);
 		$('#fname_t0, #lname_t0').on('keyup', inputKeypressHandler);
-		$(window.document).on('click', '.card', cardClickHandler);
+		$(window.document).on('click', '.inner-card', cardClickHandler);
 		$('select[name="reltype_main_t0"]').on('change', selectChangeHandler);
 		$('select[name="reltype_sub_t0"]').on('change', selectSubChangeHandler);
 		$('#ngForm').on('submit', submitFormHandler);
@@ -580,7 +580,7 @@ var Namegenerator = function Namegenerator() {
 		// var index = $(this).data('index');
 		var card;
 
-		card = $('<div class="card" data-index="'+properties.to+'"><div class="inner-card"><h4>'+properties.nname_t0+'</h4></div></div>');
+		card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div></div>');
 		var list = $('<ul></ul>');
 		$.each(namegenerator.options.variables, function(index, value) {
 			if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {

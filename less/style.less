@@ -533,7 +533,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     width:25%;
     color:white;
     padding-left: 1.5em;
-    cursor: pointer; cursor: hand;
 }
 
 .card.ghost {
@@ -553,12 +552,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     border:10px solid darken(@brand-primary, 5%);
     border-radius: 10px;
     text-align: center;
-    display:inline-flex;
-    // align-items: center;
+    display:inline-flex;    // align-items: center;
     justify-content: center;
     flex-direction:column;
     width:100%;
     word-wrap: break-word;
+    cursor: pointer; cursor: hand;
+
 }
 
 .inner-card.ghost {
@@ -624,12 +624,12 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .question-container {
     height:157px;
+    width:85%;
     position:fixed;
     top:0;
-    left:0px;
-    right:0px;
     z-index:10;
-    background: url('../img/fade-top.png');
+    background: linear-gradient(to bottom, @content-bg 10%, rgba(0, 0, 0, 0) 100%);
+    // background: url('../img/fade-top.png');
 }
 
 .node-container {
@@ -648,18 +648,32 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     right:0px;
     height:170px;
     z-index:10;
-    background: url('../img/fade-bottom.png');
+    background: linear-gradient(to top, @content-bg 10%, rgba(0, 0, 0, 0) 100%);
+    // background: url('../img/fade-bottom.png');
 }
 
 .previous-node-list {
     height:50%;
     width:100%;
     background: @brand-info;
+    margin-bottom:100px;
     padding:15px;
     overflow: scroll;
     border-radius: 7px;
     z-index:20;
-    margin-bottom:1em;
+    padding-bottom:4em;
+}
+
+.previous-node-list::after {
+    display: block;
+    height:50px;
+    background: linear-gradient(to top, @brand-info 10%, rgba(0, 0, 0, 0) 100%);
+    position:absolute;
+    bottom:45px;
+    left:0;
+    width:25vw;
+    content:'';
+    z-index:99999;
 }
 
 .current-node-list {
@@ -670,6 +684,19 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     overflow: scroll;
     border-radius: 7px;
     z-index:20;
+    padding-bottom:4em;
+}
+
+.current-node-list::after {
+    display: block;
+    height:50px;
+    background: linear-gradient(to top, @brand-warning 10%, rgba(0, 0, 0, 0) 100%);
+    position:absolute;
+    bottom:45vh;
+    left:0;
+    width:25vw;
+    content:'';
+    z-index:99999;
 }
 
 .alt .nameList {

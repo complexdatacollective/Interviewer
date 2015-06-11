@@ -9590,8 +9590,6 @@ div[data-toggle="buttons"] label.active {
   width: 25%;
   color: white;
   padding-left: 1.5em;
-  cursor: pointer;
-  cursor: hand;
 }
 .card.ghost {
   opacity: 0;
@@ -9627,6 +9625,8 @@ div[data-toggle="buttons"] label.active {
           flex-direction: column;
   width: 100%;
   word-wrap: break-word;
+  cursor: pointer;
+  cursor: hand;
 }
 .inner-card.ghost {
   background: transparent;
@@ -9691,12 +9691,12 @@ div[data-toggle="buttons"] label.active {
 }
 .question-container {
   height: 157px;
+  width: 85%;
   position: fixed;
   top: 0;
-  left: 0px;
-  right: 0px;
   z-index: 10;
-  background: url('../img/fade-top.png');
+  background: -webkit-linear-gradient(top, #2f3344 10%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, #2f3344 10%, rgba(0, 0, 0, 0) 100%);
 }
 .node-container {
   height: 100vh;
@@ -9713,17 +9713,31 @@ div[data-toggle="buttons"] label.active {
   right: 0px;
   height: 170px;
   z-index: 10;
-  background: url('../img/fade-bottom.png');
+  background: -webkit-linear-gradient(bottom, #2f3344 10%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to top, #2f3344 10%, rgba(0, 0, 0, 0) 100%);
 }
 .previous-node-list {
   height: 50%;
   width: 100%;
   background: #b16eff;
+  margin-bottom: 100px;
   padding: 15px;
   overflow: scroll;
   border-radius: 7px;
   z-index: 20;
-  margin-bottom: 1em;
+  padding-bottom: 4em;
+}
+.previous-node-list::after {
+  display: block;
+  height: 50px;
+  background: -webkit-linear-gradient(bottom, #b16eff 10%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to top, #b16eff 10%, rgba(0, 0, 0, 0) 100%);
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  width: 25vw;
+  content: '';
+  z-index: 99999;
 }
 .current-node-list {
   height: 50%;
@@ -9733,6 +9747,19 @@ div[data-toggle="buttons"] label.active {
   overflow: scroll;
   border-radius: 7px;
   z-index: 20;
+  padding-bottom: 4em;
+}
+.current-node-list::after {
+  display: block;
+  height: 50px;
+  background: -webkit-linear-gradient(bottom, #fa920d 10%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to top, #fa920d 10%, rgba(0, 0, 0, 0) 100%);
+  position: absolute;
+  bottom: 45vh;
+  left: 0;
+  width: 25vw;
+  content: '';
+  z-index: 99999;
 }
 .alt .nameList {
   width: 54vw;
