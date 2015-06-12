@@ -9656,8 +9656,8 @@ div[data-toggle="buttons"] label.active {
   word-wrap: break-word;
   cursor: pointer;
   cursor: hand;
-  -webkit-transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-          transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+  -webkit-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out;
 }
 .inner-card.delete {
   background: #e85657;
