@@ -1,0 +1,56 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" value=\"org.apache.cordova.statusbar.StatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.telerik.plugins.wkwebview": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        },
+        "cordova-plugin-webserver": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        }
+    },
+    "dependent_plugins": {}
+}

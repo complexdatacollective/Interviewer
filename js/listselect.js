@@ -28,7 +28,7 @@ var ListSelect = function ListSelect() {
                     properties[value.value] = undefined;
                 }
             });
-            global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
+            window.network.updateNode(window.network.getNodes({type_t0:'Ego'})[0].id, properties);
 
         } else {
             $(this).data('selected', true);
@@ -43,7 +43,7 @@ var ListSelect = function ListSelect() {
 
             });
 
-            global.network.updateNode(global.network.getNodes({type_t0:'Ego'})[0].id, properties);
+            window.network.updateNode(window.network.getNodes({type_t0:'Ego'})[0].id, properties);
 
         }
 
@@ -54,13 +54,13 @@ var ListSelect = function ListSelect() {
     };
 
     var processSubmitHandler = function() {
-        global.session.nextStage();
+        window.session.nextStage();
 
     };
 
     listSelect.destroy = function() {
         // Event Listeners
-        global.tools.notify('Destroying listSelect.',0);
+        window.tools.notify('Destroying listSelect.',0);
         $(window.document).off('click', '.item', itemClickHandler);
         $(window.document).off('click', '.continue', processSubmitHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
@@ -68,7 +68,7 @@ var ListSelect = function ListSelect() {
     };
 
     listSelect.init = function(options) {
-        global.tools.extend(listSelect.options, options);
+        window.tools.extend(listSelect.options, options);
         // Add header and subheader
         listSelect.options.targetEl.append('<h1 class="text-center">'+listSelect.options.heading+'</h1>');
         listSelect.options.targetEl.append('<p class="lead text-center">'+listSelect.options.subheading+'</p>');
@@ -81,7 +81,7 @@ var ListSelect = function ListSelect() {
             };
 
             properties[value.value] = 1;
-            if (global.network.getNodes(properties).length>0) {
+            if (window.network.getNodes(properties).length>0) {
                 el.data('selected', true);
                 el.css({'border':'2px solid red','background':'#E8C0C0'});
             }

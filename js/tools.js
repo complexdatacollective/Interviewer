@@ -154,9 +154,9 @@ exports.extend = function( a, b ) {
 
 exports.notify = function(text, level){
     level = level || 0;
-    if (level >= global.debugLevel) {
-        console.log(text);
-    }
+    // if (level >= window.debugLevel) {
+        console.log(text)
+    // }
 };
 
 exports.randomBetween = function(min,max) {
@@ -181,7 +181,7 @@ $.cssHooks.backgroundColor = {
             return bg;
         } else {
             bg = bg.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-            return '#' + global.tools.hex(bg[1]) + global.tools.hex(bg[2]) + global.tools.hex(bg[3]);
+            return '#' + window.tools.hex(bg[1]) + window.tools.hex(bg[2]) + window.tools.hex(bg[3]);
         }
     }
 };

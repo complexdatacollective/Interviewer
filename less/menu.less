@@ -75,11 +75,11 @@
 
 /* Let's add some nice easing for all cases */
 .menu {
-	width:400px;
+	width:30vw;
 	bottom:0;
 	position:absolute;
 	top:0;
-	left:-400px;
+	left:-30vw;
 	overflow:scroll;
 	padding:20px;
 	z-index:9999999;
@@ -93,7 +93,7 @@
 
 .menu.open {
 	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-	transform: translateX(400px);
+	transform: translateX(30vw);
 }
 
 .icon-close {
@@ -116,8 +116,8 @@
 
 .menu-content ul li {
 	list-style:none;
-	padding:20px 10px;
-	font-size:1.1em;
+	padding:3vmin 2vmin;
+	font-size:2vmin;
 	// border-bottom:1px solid rgba(255,255,255,0.2);
 	// background:red;
 }

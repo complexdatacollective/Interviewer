@@ -2,8 +2,9 @@
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
-    //global vars
+    //window vars
     var session = {};
+    var _this = this;
     var currentStage = 0;
     var content = $('#content');
     session.id = 0;
@@ -12,7 +13,7 @@ var Session = function Session() {
 
     function saveFile(path) {
         var data = JSON.stringify(session.sessionData, undefined, 2);
-        var fs = require('fs');
+        var fs = require('browserify-fs');
         fs.writeFile(path, data);
     }
 
@@ -55,70 +56,78 @@ var Session = function Session() {
     };
 
     session.loadProtocol = function() {
-        var path = require('path');
+        console.log('loading protocol');
 
         // Require the session protocol file.
-        var studyPath = path.normalize('../protocols/'+global.studyProtocol+'/protocol.js');
-        var study = require(studyPath);
+        // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
+        $.getScript( "protocols/"+window.netCanvas.studyProtocol+"/protocol.js", function( data ) {
+            console.log('got data');
+            console.log(protocol);
+            var study = protocol;
 
-        session.parameters = session.registerData('sessionParameters');
-        session.updateSessionData({sessionParameters:study.sessionParameters});
-        // copy the stages
-        session.stages = study.stages;
+            session.parameters = session.registerData('sessionParameters');
+            session.updateSessionData({sessionParameters:study.sessionParameters});
+            // copy the stages
+            session.stages = study.stages;
 
-        // insert the stylesheet
-        $('head').append('<link rel="stylesheet" href="protocols/'+global.studyProtocol+'/css/style.css" type="text/css" />');
+            // insert the stylesheet
+            $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');
 
-        // copy the skip functions
-        session.skipFunctions = study.skipFunctions;
+            // copy the skip functions
+            session.skipFunctions = study.skipFunctions;
 
-        // set the study name (used for database name)
-        if (study.sessionParameters.name) {
-            session.name = study.sessionParameters.name;
-        } else {
-            throw new Error("Study protocol must have a 'name' under sessionParameters.");
-        }
+            // set the study name (used for database name)
+            if (study.sessionParameters.name) {
+                session.name = study.sessionParameters.name;
+            } else {
+                throw new Error("Study protocol must have a 'name' under sessionParameters.");
+            }
 
 
-        // Check for an in-progress session
-        global.dataStore.init(function(sessionid) {
-            session.id = sessionid;
-            global.dataStore.load(function(data) {
-                console.log(data);
-                console.log(study);
+            // Check for an in-progress session
+            window.dataStore.init(function(sessionid) {
+                session.id = sessionid;
+                window.dataStore.load(function(data) {
+                    console.log(data);
+                    console.log(study);
 
-                session.updateSessionData(data, function() {
-                    // Only load the network into the model if there is a network to load
-                    if(session.sessionData.nodes && session.sessionData.edges) {
-                        global.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
-                    }
+                    session.updateSessionData(data, function() {
+                        // Only load the network into the model if there is a network to load
+                        if(session.sessionData.nodes && session.sessionData.edges) {
+                            window.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
+                        }
 
-                    if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
-                        session.goToStage(session.sessionData.sessionParameters.stage);
-                    } else {
-                        session.goToStage(0);
-                    }
-                });
-            }, session.id);
+                        if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+                            session.goToStage(session.sessionData.sessionParameters.stage);
+                        } else {
+                            session.goToStage(0);
+                        }
+                    });
+                }, session.id);
+            });
+
+            // Initialise the menu system – other modules depend on it being there.
+            var stagesMenu = window.menu.addMenu('Stages', 'hi-icon-list');
+            $.each(session.stages, function(index,value) {
+                window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+            });
+        }).fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
         });
 
-        // Initialise the menu system – other modules depend on it being there.
-        var stagesMenu = global.menu.addMenu('Stages', 'hi-icon-list');
-        $.each(session.stages, function(index,value) {
-            global.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
-        });
     };
 
     function sessionNextHandler() {
-        global.session.nextStage();
+        session.nextStage();
     }
 
     function sessionPreviousHandler() {
-        global.session.prevStage();
+        session.prevStage();
     }
 
     session.init = function(callback) {
-        global.tools.notify('Session initialising.', 1);
+        window.tools.notify('Session initialising.', 1);
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);
@@ -139,15 +148,14 @@ var Session = function Session() {
         });
 
         // Build a new network
-        var Network = require('../js/network');
-        global.network = new Network();
+        window.network = new window.netCanvas.Modules.Network();
 
         window.addEventListener('unsavedChanges', function () {
             session.saveManager();
         }, false);
 
-        var sessionMenu = global.menu.addMenu('Session','hi-icon-cog');
-        global.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
+        var sessionMenu = window.menu.addMenu('Session','hi-icon-cog');
+        window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -157,7 +165,7 @@ var Session = function Session() {
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
                     action: function(){
-                        global.dataStore.deleteDocument(session.reset);
+                        window.dataStore.deleteDocument(session.reset);
                     }
                 }, {
                     label: 'Cancel',
@@ -169,9 +177,9 @@ var Session = function Session() {
             });
         });
 
-        global.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
+        window.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
 
-        global.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
+        window.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -181,7 +189,7 @@ var Session = function Session() {
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
                     action: function(){
-                        global.dataStore.reset(session.reset);
+                        window.dataStore.reset(session.reset);
                     }
                 }, {
                     label: ' Cancel',
@@ -193,7 +201,7 @@ var Session = function Session() {
             });
         });
 
-        global.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
+        window.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
 
         if(callback) {
             callback();
@@ -211,10 +219,10 @@ var Session = function Session() {
     };
 
     session.reset = function() {
-        global.tools.notify('Resetting session.',2);
+        window.tools.notify('Resetting session.',2);
         session.id = 0;
         session.currentStage = 0;
-        var _window = global.gui.Window.get();
+        // var _window = window.gui.Window.get();
         _window.reloadDev();
     };
 
@@ -224,11 +232,11 @@ var Session = function Session() {
     };
 
     session.updateSessionData = function(data, callback) {
-        global.tools.notify('Updating user data.', 2);
-        global.tools.notify('Using the following to update:', 1);
-        global.tools.notify(data, 1);
-        global.tools.notify('session.sessionData is:', 1);
-        global.tools.notify(session.sessionData, 1);
+        window.tools.notify('Updating user data.', 2);
+        window.tools.notify('Using the following to update:', 1);
+        window.tools.notify(data, 1);
+        window.tools.notify('session.sessionData is:', 1);
+        window.tools.notify(session.sessionData, 1);
 
 
         // Here, we used to simply use our extend method on session.sessionData with the new data.
@@ -236,8 +244,8 @@ var Session = function Session() {
 
         $.extend(true, session.sessionData, data);
         // session.sessionData = $.extend(session.sessionData,data);
-        global.tools.notify('Combined output is:', 1);
-        global.tools.notify(session.sessionData, 1);
+        window.tools.notify('Combined output is:', 1);
+        window.tools.notify(session.sessionData, 1);
 
         var newDataLoaded = new window.Event('newDataLoaded');
         window.dispatchEvent(newDataLoaded);
@@ -254,14 +262,14 @@ var Session = function Session() {
     };
 
     session.saveData = function() {
-        session.sessionData.nodes = global.network.getNodes();
-        session.sessionData.edges = global.network.getEdges();
-        if(!global.dataStore.initialised()) {
-            global.tools.notify('Tried to save, but datastore not initaialised. Delaying.', 1);
+        session.sessionData.nodes = window.network.getNodes();
+        session.sessionData.edges = window.network.getEdges();
+        if(!window.dataStore.initialised()) {
+            // window.tools.notify('Tried to save, but datastore not initaialised. Delaying.', 1);
             var unsavedChanges = new window.Event('unsavedChanges');
             window.dispatchEvent(unsavedChanges);
         } else {
-            global.dataStore.save(session.sessionData, session.returnSessionID());
+            window.dataStore.save(session.sessionData, session.returnSessionID());
         }
 
         lastSaveTime = new Date();
@@ -294,7 +302,7 @@ var Session = function Session() {
             }
         }
 
-        global.tools.notify('Session is moving to stage '+stage, 3);
+        window.tools.notify('Session is moving to stage '+stage, 3);
 
         // Crate stage visible event
         var eventProperties = {
@@ -309,7 +317,7 @@ var Session = function Session() {
 
         // Transition the content
         var newStage = stage;
-        var stagePath ='./protocols/'+global.studyProtocol+'/stages/'+session.stages[stage].page;
+        var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
                 // This never gets called if there is a JS error. Is there a way to ensure it is?
@@ -333,16 +341,16 @@ var Session = function Session() {
     };
 
     session.registerData = function(dataKey, isArray) {
-        global.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
+        window.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
         if (session.sessionData[dataKey] === undefined) { // Create it if it doesn't exist.
-            global.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+            window.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
             if (isArray) {
                 session.sessionData[dataKey] = [];
             } else {
                 session.sessionData[dataKey] = {};
             }
         } else {
-            global.tools.notify ('A data store with this key already existed. Returning a reference.',1);
+            window.tools.notify ('A data store with this key already existed. Returning a reference.',1);
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
@@ -352,7 +360,7 @@ var Session = function Session() {
     session.addData = function(dataKey, newData, append) {
         /*
         This function should let any module add data to the session model. The session model
-        (global data variable) is essentially a key/value store.
+        (window data variable) is essentially a key/value store.
         */
 
         // Check if we are appending or overwriting
@@ -361,12 +369,12 @@ var Session = function Session() {
         if (append === true) { // this is an array
             session.sessionData[dataKey].push(newData);
         } else {
-            global.tools.extend(session.sessionData[dataKey], newData);
+            window.tools.extend(session.sessionData[dataKey], newData);
         }
 
         // Notify
-        global.tools.notify('Adding data to key "'+dataKey+'".',2);
-        global.tools.notify(newData, 1);
+        window.tools.notify('Adding data to key "'+dataKey+'".',2);
+        window.tools.notify(newData, 1);
 
         // Emit an event to trigger data store synchronisation.
         var unsavedChanges = new window.Event('unsavedChanges');

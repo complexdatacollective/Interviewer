@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported Namegenerator */
-var Namegenerator = function Namegenerator() {
+module.exports = function Namegenerator() {
     'use strict';
     //global vars
     var namegenerator = {};
@@ -17,7 +17,7 @@ var Namegenerator = function Namegenerator() {
     var nodeBoxOpen = false;
     var editing = false;
 
-    var alterCount = global.network.getNodes({type_t0: 'Alter'}).length;
+    var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
 
     var roles = {
         'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
@@ -96,13 +96,13 @@ var Namegenerator = function Namegenerator() {
             return false;
         }
         var index = $(this).data('index');
-        var edge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Dyad'})[0];
+        var edge = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Dyad'})[0];
 
         // Set the value of editing to the node id of the current person
         editing = index;
 
         // Update role count
-        var roleCount = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
+        var roleCount = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
         $('.relationship-button').html(roleCount+' roles selected.');
 
         // Populate the form with this nodes data.
@@ -193,8 +193,8 @@ var Namegenerator = function Namegenerator() {
 
         if (editing === false) {
             // We are submitting a new node
-            global.tools.extend(nodeProperties, newNodeProperties);
-            var newNode = global.network.addNode(nodeProperties);
+            window.tools.extend(nodeProperties, newNodeProperties);
+            var newNode = window.network.addNode(nodeProperties);
             var id;
 
             $.each(namegenerator.options.edgeTypes, function(index,value) {
@@ -214,13 +214,13 @@ var Namegenerator = function Namegenerator() {
                     }
                 });
                 edgeProperties = {
-                    from: global.network.getNodes({type_t0:'Ego'})[0].id,
+                    from: window.network.getNodes({type_t0:'Ego'})[0].id,
                     to: newNode,
                     type:currentEdge
                 };
 
-                global.tools.extend(edgeProperties,currentEdgeProperties);
-                id = global.network.addEdge(edgeProperties);
+                window.tools.extend(edgeProperties,currentEdgeProperties);
+                id = window.network.addEdge(edgeProperties);
             });
 
             // Add role edges
@@ -229,16 +229,16 @@ var Namegenerator = function Namegenerator() {
             $.each($('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
-                    from:global.network.getNodes({type_t0:'Ego'})[0].id,
+                    from:window.network.getNodes({type_t0:'Ego'})[0].id,
                     to: newNode,
                     reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
                     reltype_sub_t0: $(this).data('sub-relationship')
                 };
-                global.network.addEdge(edgeProperties);
+                window.network.addEdge(edgeProperties);
             });
 
             // Main edge
-            var edge = global.network.getEdges({to:newNode, type:'Dyad'})[0];
+            var edge = window.network.getEdges({to:newNode, type:'Dyad'})[0];
             namegenerator.addToList(edge);
             alterCount++;
             $('.alter-count-box').html(alterCount);
@@ -256,7 +256,7 @@ var Namegenerator = function Namegenerator() {
             };
 
             var nodeID = editing;
-            // var nodeID = global.network.getEdge(editing).to;
+            // var nodeID = window.network.getEdge(editing).to;
             $.each(namegenerator.options.edgeTypes, function(index,value) {
                 var currentEdge = value;
                 var currentEdgeProperties = {};
@@ -274,29 +274,29 @@ var Namegenerator = function Namegenerator() {
                     }
                 });
 
-                var edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:editing,type:value});
+                var edges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:editing,type:value});
                 $.each(edges, function(index,value) {
-                    global.network.updateEdge(value.id,currentEdgeProperties, color);
+                    window.network.updateEdge(value.id,currentEdgeProperties, color);
                 });
             });
 
-            global.network.updateNode(nodeID, newNodeProperties);
-            var properties = global.tools.extend(newEdgeProperties,newNodeProperties);
+            window.network.updateNode(nodeID, newNodeProperties);
+            var properties = window.tools.extend(newEdgeProperties,newNodeProperties);
 
             // update relationship roles
 
             // Remove existing edges
-            global.network.removeEdges(global.network.getEdges({type:'Role', from: global.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
+            window.network.removeEdges(window.network.getEdges({type:'Role', from: window.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
             $.each($('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
-                    from:global.network.getNodes({type_t0:'Ego'})[0].id,
+                    from:window.network.getNodes({type_t0:'Ego'})[0].id,
                     to: editing,
                     reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
                     reltype_sub_t0: $(this).data('sub-relationship')
                 };
-                global.network.addEdge(edgeProperties);
+                window.network.addEdge(edgeProperties);
             });
 
             $('div[data-index='+editing+']').html('');
@@ -325,7 +325,7 @@ var Namegenerator = function Namegenerator() {
     namegenerator.generateTestAlters = function(number) {
 
         if (!number) {
-            global.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+            window.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
             return false;
         }
 
@@ -339,24 +339,24 @@ var Namegenerator = function Namegenerator() {
                     $('#ngForm').submit();
                 }, 3000);
 
-                $('#fname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
-                $('#lname_t0').val(namesList[Math.floor(global.tools.randomBetween(0,namesList.length))]);
+                $('#fname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
+                $('#lname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
                 var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
                 if ($('#lname_t0').val().length > 0 ) {
                     lname +='.';
                 }
                 $('#nname_t0').val(lname);
-                $('#age_p_t0').val(Math.floor(global.tools.randomBetween(18,90)));
+                $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
 
                 setTimeout(function() {
                     $('.relationship-button').click();
                 }, 500);
                 setTimeout(function() {
 
-                    var roleNumber = Math.floor(global.tools.randomBetween(1,3));
+                    var roleNumber = Math.floor(window.tools.randomBetween(1,3));
 
                     for (var j = 0; j < roleNumber; j++) {
-                        $($('.relationship')[Math.floor(global.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
+                        $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
 
                     }
 
@@ -392,7 +392,7 @@ var Namegenerator = function Namegenerator() {
     };
 
     namegenerator.destroy = function() {
-        global.tools.notify('Destroying namegenerator.',0);
+        window.tools.notify('Destroying namegenerator.',0);
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $('.cancel').off('click', cancelBtnHandler);
@@ -412,7 +412,7 @@ var Namegenerator = function Namegenerator() {
     };
 
     namegenerator.init = function(options) {
-        global.tools.extend(namegenerator.options, options);
+        window.tools.extend(namegenerator.options, options);
         // create elements
         var button = $('<span class="hi-icon hi-icon-user add-button">Add</span>');
         namegenerator.options.targetEl.append(button);
@@ -510,7 +510,7 @@ var Namegenerator = function Namegenerator() {
         $('.alter-count-box').html(alterCount);
 
         // add existing nodes
-        $.each(global.network.getEdges({type: 'Dyad', from: global.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
+        $.each(window.network.getEdges({type: 'Dyad', from: window.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
             namegenerator.addToList(value);
         });
 
@@ -525,7 +525,7 @@ var Namegenerator = function Namegenerator() {
 
                 // add custom node list
                 sideContainer.append($('<div class="current-node-list node-lists"><h4>People you already listed:</h4></div>'));
-                $.each(global.network.getEdges({type: 'Dyad', from: global.network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
+                $.each(window.network.getEdges({type: 'Dyad', from: window.network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
 
                     var el = $('<div class="node-list-item">'+value.nname_t0+'</div>');
                     sideContainer.children('.current-node-list').append(el);
@@ -537,17 +537,16 @@ var Namegenerator = function Namegenerator() {
                 // add custom node list for previous network
 
                 //first chck if there is a previous network
-                if (typeof global.session.sessionData.previousNetwork !== 'undefined') {
-                    if (typeof global.previousNetwork === 'undefined') {
-                        var Network = require('./network');
-                        global.previousNetwork = new Network();
-                        global.previousNetwork.loadNetwork(global.session.sessionData.previousNetwork);
+                if (typeof window.netCanvas.Modules.session.sessionData.previousNetwork !== 'undefined') {
+                    if (typeof window.previousNetwork === 'undefined') {
+                        window.previousNetwork = new window.netCanvas.Modules.Network();
+                        window.previousNetwork.loadNetwork(window.netCanvas.Modules.session.sessionData.previousNetwork);
                     }
                     // Check there is more than one node
-                    if (global.previousNetwork.getNodes().length > 1) {
+                    if (window.previousNetwork.getNodes().length > 1) {
                         // Add the previous node list
                         sideContainer.append($('<div class="previous-node-list node-lists"><h4>People you listed in other visits:</h4></div>'));
-                        $.each(global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id}), function(index,value) {
+                        $.each(window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id}), function(index,value) {
 
                             var el = $('<div class="node-bucket-item draggable" data-id="'+value.to+'">'+value.nname_t0+'</div>');
                             sideContainer.children('.previous-node-list').append(el);
@@ -587,7 +586,7 @@ var Namegenerator = function Namegenerator() {
                         // get the data we need
                         var dropped = ui.draggable;
                         var droppedNode = dropped.data("id");
-                        var droppedNodeEdge = global.previousNetwork.getEdges({type: 'Dyad', from: global.previousNetwork.getEgo().id, to: droppedNode})[0];
+                        var droppedNodeEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
 
                         // update name generator property of dyad edge
 
@@ -603,19 +602,19 @@ var Namegenerator = function Namegenerator() {
                         namegenerator.addToList(droppedNodeEdge);
 
                         // create a node and edge in the current network
-                        var oldNode = global.previousNetwork.getNode(droppedNode);
+                        var oldNode = window.previousNetwork.getNode(droppedNode);
                         droppedNodeEdge.elicited_previously = true;
-                        global.network.addNode(oldNode, false, true);  // (properties, ego, force);
-                        global.network.addEdge(droppedNodeEdge);
+                        window.network.addNode(oldNode, false, true);  // (properties, ego, force);
+                        window.network.addEdge(droppedNodeEdge);
                         $('.inner-card').last().click();
-                        
+
                         setTimeout(function() {
                             $('.relationship-button').click();
                         }, 300);
                         // Remove from previous network
-                        global.previousNetwork.removeNode(oldNode.id);
+                        window.previousNetwork.removeNode(oldNode.id);
 
-                        global.session.addData('previousNetwork', {nodes: global.previousNetwork.getNodes(), edges: global.previousNetwork.getEdges()});
+                        window.netCanvas.Modules.session.addData('previousNetwork', {nodes: window.previousNetwork.getNodes(), edges: window.previousNetwork.getEdges()});
                         $(dropped).remove();
                         //hide the ghost card
                         $('.card.ghost').removeClass('show');
@@ -693,7 +692,7 @@ var Namegenerator = function Namegenerator() {
         } else {
             // opening
             if(editing) {
-                var roleEdges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
+                var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
                 $.each(roleEdges, function(index, value) {
                     $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
                 });
@@ -740,10 +739,10 @@ var Namegenerator = function Namegenerator() {
         $('.delete-button').hide();
 
         var nodeID = editing;
-        // var nodeID = global.network.getEdge(editing).to;
+        // var nodeID = window.network.getEdge(editing).to;
 
-        // global.network.updateNode(nodeID, newNodeProperties);
-        global.network.removeNode(nodeID);
+        // window.network.updateNode(nodeID, newNodeProperties);
+        window.network.removeNode(nodeID);
 
         $('div[data-index='+editing+']').addClass('delete');
         var tempEditing = editing;
@@ -759,5 +758,3 @@ var Namegenerator = function Namegenerator() {
 
     return namegenerator;
 };
-
-module.exports = new Namegenerator();

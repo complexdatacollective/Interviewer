@@ -25,7 +25,7 @@ var GeoInterface = function GeoInterface() {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
-                stage: global.session.currentStage(),
+                stage: window.session.currentStage(),
                 timestamp: new Date()
             };
             log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -51,7 +51,7 @@ var GeoInterface = function GeoInterface() {
 	  		// Update edge with this info
 	  		properties = {};
 	  		properties[variable] = layer.feature.properties.name;
-	  		global.network.updateEdge(edges[currentPersonIndex].id, properties);
+	  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
 	  		$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
 		} else {
 	  	// Map node already selected. Have we clicked the same one again?
@@ -61,14 +61,14 @@ var GeoInterface = function GeoInterface() {
 	      		mapNodeClicked = false;
 		  		properties = {};
 		  		properties[variable] = undefined;
-		  		global.network.updateEdge(edges[currentPersonIndex].id, properties);
+		  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
 
 	  		} else {
           resetAllHighlights();
           highlightFeature(e);
           properties = {};
           properties[variable] = layer.feature.properties.name;
-          global.network.updateEdge(edges[currentPersonIndex].id, properties);
+          window.network.updateEdge(edges[currentPersonIndex].id, properties);
 		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
 	  		}
 
@@ -112,7 +112,7 @@ var GeoInterface = function GeoInterface() {
           fillColor: colors[1]
         });
 
-        if (!global.L.Browser.ie && !global.L.Browser.opera) {
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
         	layer.bringToFront();
         }
 
@@ -128,7 +128,7 @@ var GeoInterface = function GeoInterface() {
           fillColor: colors[1]
         });
 
-        if (!global.L.Browser.ie && !global.L.Browser.opera) {
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
         	layer.bringToFront();
         }
     }
@@ -161,7 +161,7 @@ var GeoInterface = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = 'Homeless';
-        global.network.updateEdge(edges[currentPersonIndex].id, properties);
+        window.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
     }
 
@@ -169,7 +169,7 @@ var GeoInterface = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = 'Jail';
-        global.network.updateEdge(edges[currentPersonIndex].id, properties);
+        window.network.updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
     }
 
@@ -229,12 +229,12 @@ var GeoInterface = function GeoInterface() {
   	geoInterface.init = function() {
 
   		// Initialize the map, point it at the #map element and center it on Chicago
-        leaflet = global.L.map('map', {
+        leaflet = window.L.map('map', {
             maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]],
             zoomControl: false
         });
 
-        global.L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+        window.L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
             subdomains: '1234',
             mapID: 'newest',
             app_id: 'FxdAZ7O0Wh568CHyJWKV',
@@ -248,7 +248,7 @@ var GeoInterface = function GeoInterface() {
           	dataType: 'json',
           	url: 'data/census2010.json',
           	success: function(data) {
-            	geojson = global.L.geoJson(data, {
+            	geojson = window.L.geoJson(data, {
                 	onEachFeature: onEachFeature,
                 	style: function () {
                   		return {weight:1,fillOpacity:0,strokeWidth:0.2, color:colors[1]};
@@ -256,7 +256,7 @@ var GeoInterface = function GeoInterface() {
             	}).addTo(leaflet);
 
 		        // Load initial node
-		        edges = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
+		        edges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 		        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[0].nname_t0+'</strong> lives.');
 

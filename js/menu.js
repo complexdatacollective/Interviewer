@@ -68,7 +68,7 @@ var Menu = function Menu(options) {
                 isAnimating = false;
             } else {
                 menu.options.onBeforeOpen();
-                var col = global.tools.modifyColor($('.'+targetMenu.name+'-menu').css('background-color'),-0.2);
+                var col = window.tools.modifyColor($('.'+targetMenu.name+'-menu').css('background-color'),-0.2);
                 $('body').css({'background-color':col});
                 targetMenuObj.addClass('open');
                 targetMenu.open = true;
@@ -134,8 +134,8 @@ var Menu = function Menu(options) {
     };
 
     menu.init = function() {
-        global.tools.notify('Menu initialising.', 1);
-        global.tools.extend(menu.options,options);
+        window.tools.notify('Menu initialising.', 1);
+        window.tools.extend(menu.options,options);
     };
 
     menu.init();

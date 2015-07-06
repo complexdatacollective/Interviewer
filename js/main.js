@@ -1,103 +1,121 @@
-/* global global, Konva, $, L */
+/* global window, Konva, $, L */
+    'use strict';
 
-'use strict';
-
-global.$ = $;
-global.L = L;
-global.Konva = Konva;
-
-global.gui = require('nw.gui');
-var moment = require('moment');
-global.moment = moment; // needed for module access.
-var fs = require('fs');
-var path = require('path');
-var devMode = false;
-global.debugLevel = 10;
-// Set the global survey
-global.studyProtocol = 'RADAR';
+    window.$ = $;
+    window.L = L;
+    window.Konva = Konva;
+    window.gui = {};
+	window.netCanvas = {};
 
 
-$('.refresh-button').on('click', function() {
-    console.log('yo');
-    var _window = global.gui.Window.get();
-    _window.reloadDev();
-});
+    var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
+    var isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+    var isNodeWebkit = false;
 
-console.log('netCanvas '+global.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
-
-var protocolExists = function(protocol, callback) {
-    var response = false;
-    var availableProtocols = [];
-    // Print out available survey protocols.
-    fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
-        if (err) { console.log(err); return false; }
-        console.log('Available survey protocols:');
-        files.forEach(function(file) {
-            var stats = fs.statSync(path.join(path.resolve(), 'protocols', file));
-            if (stats.isDirectory()) {
-                console.log(file);
-                availableProtocols.push(file);
-            }
-        });
-
-        if (availableProtocols.indexOf(protocol) !== -1) {
-            response = true;
-        }
-
-        if (callback) { callback(response); }
-    });
-};
-
-// Detect dev mode
-var args = global.gui.App.argv;
-
-// Just futureproofing in case this changes in future nw versions.
-if (typeof args !== 'undefined' && args.indexOf('dev') !== -1) {
-    console.log('Development mode enabled.');
-    devMode = true;
-}
-
-if (devMode) {
-    global.gui.Window.get().showDevTools();
-    $('.refresh-button').show();
-    global.debugLevel = 1;
-} else {
-    $('.refresh-button').hide();
-    global.gui.Window.get().enterFullscreen();
-}
-
-// Require tools
-global.tools = require('./js/tools');
-
-// Initialise the menu system – other modules depend on it being there.
-global.menu = require('./js/menu');
-
-// Initialise datastore
-global.dataStore = require('./js/iointerface');
-
-// Initialise logger
-global.logger = require('./js/logger');
-
-// Set up a new session
-global.session = require('./js/session');
-
-// Create a log
-global.eventLog = require('./js/logger');
-
-
-
-
-
-// to do: expand this function to validate a proposed session, not just check that it exists.
-protocolExists(global.studyProtocol, function(exists){
-    if (!exists) {
-        console.log('WARNING: Specified study protocol was not found. Using default.');
-        global.studyProtocol = 'default';
+    //Is this Node.js?
+    if(isNode) {
+      //If so, test for Node-Webkit
+      try {
+        isNodeWebkit = (typeof nodeRequire('nw.gui') !== "undefined");
+        window.gui = nodeRequire('nw.gui');
+        isNodeWebkit = true;
+      } catch(e) {
+        isNodeWebkit = false;
+      }
     }
-    // Initialise session now.
-    global.session.init(function() {
-        global.session.loadProtocol();
-    });
-    global.logger.init();
 
-});
+
+
+    var moment = require('moment');
+    window.moment = moment; // needed for module access.
+    var fs = require('browserify-fs');
+    var path = require('path');
+    window.netCanvas.devMode = false;
+    window.netCanvas.debugLevel = 10;
+    // Set the window survey
+    window.netCanvas.studyProtocol = 'RADAR';
+
+
+    $('.refresh-button').on('click', function() {
+        console.log('yo');
+        var _window = window.gui.Window.get();
+        _window.reloadDev();
+    });
+
+    // console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+
+    var protocolExists = function(protocol, callback) {
+        var response = false;
+        var availableProtocols = ['RADAR', 'default'];
+
+		if (availableProtocols.indexOf(protocol) !== -1) {
+			response = true;
+		}
+
+        callback(response);
+    };
+
+    // Just futureproofing in case this changes in future nw versions.
+    if (isNodeWebkit && window.gui.App.argv.indexOf('dev') !== -1) {
+        console.log('Development mode enabled.');
+        window.netCanvas.devMode = true;
+    }
+
+    if (window.netCanvas.devMode) {
+        if (isNodeWebkit) {
+            window.gui.Window.get().showDevTools();
+        }
+        $('.refresh-button').show();
+        window.netCanvas.debugLevel = 1;
+    } else {
+        $('.refresh-button').hide();
+        if (isNodeWebkit) {
+            window.gui.Window.get().enterFullscreen();
+        }
+    }
+
+    // Require tools
+    window.tools = require('./tools');
+
+	// Interface Modules
+    window.netCanvas.Modules = {};
+	window.netCanvas.Modules.Network = require('./network.js');
+    window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+	window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
+	window.netCanvas.Modules.IOInterface = require('./iointerface.js');
+	window.netCanvas.Modules.Map = require('./map.js');
+	window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
+	window.netCanvas.Modules.ListSelect = require('./listselect.js');
+	window.netCanvas.Modules.MultiBin = require('./multibin.js');
+	window.netCanvas.Modules.Sociogram = require('./sociogram.js');
+
+    // Initialise the menu system – other modules depend on it being there.
+    window.menu = require('./menu.js');;
+
+    // Initialise datastore
+    window.dataStore = require('./iointerface.js');
+
+    // Initialise logger
+    window.logger = require('./logger.js');
+
+    // Set up a new session
+    window.netCanvas.Modules.session = require('./session.js');
+
+    // to do: expand this function to validate a proposed session, not just check that it exists.
+    protocolExists(window.netCanvas.studyProtocol, function(exists){
+        if (!exists) {
+            console.log('WARNING: Specified study protocol was not found. Using default.');
+            window.netCanvas.studyProtocol = 'default';
+        }
+        // Initialise session now.
+        window.netCanvas.Modules.session.init(function() {
+            window.netCanvas.Modules.session.loadProtocol();
+        });
+        window.logger.init();
+        if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+            FastClick.attach(document.body);
+        }, false);
+}
+
+    });
