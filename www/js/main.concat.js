@@ -1,7 +1,7 @@
 /* global window,$ */
 /* exported DateInterface */
 
-var DateInterface = function DateInterface() {
+module.exports = function DateInterface() {
     'use strict';
 
     // dateInterface globals
@@ -19,8 +19,9 @@ var DateInterface = function DateInterface() {
 
     dateInterface.init = function(options) {
         window.tools.extend(dateInterface.options, options);
-        dateInterface.options.targetEl.append('<h1>'+dateInterface.options.heading+'</h1>');
-        dateInterface.options.targetEl.append('<p class="lead">'+dateInterface.options.subheading+'</p>');
+        dateInterface.options.targetEl.append('<div class="node-question-container"></div>');
+        $('.node-question-container').append('<h1>'+dateInterface.options.heading+'</h1>');
+        $('.node-question-container').append('<p class="lead">'+dateInterface.options.subheading+'</p>');
         dateInterface.options.targetEl.append('<div class="date-container"></div>');
 
         // get edges according to criteria
@@ -186,8 +187,6 @@ var DateInterface = function DateInterface() {
 
     return dateInterface;
 };
-
-module.exports = new DateInterface();
 ;/* exported Interview */
 /* global $ */
 var Interview = function Interview() {
@@ -1340,13 +1339,27 @@ module.exports = function MultiBin() {
 		// bin container
         multiBin.options.targetEl.append('<div class="node-bin-container"></div>');
 
-		var number = Math.floor(multiBin.options.variable.values.length*0.66);
-		var itemSizeW = $('.container').outerWidth()/number;
 
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBin.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
 
-		var itemSize = itemSizeW;
-		while(itemSize*2 > $('.container').height()-200) {
-			itemSize = itemSize*0.98;
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
 		}
 
 		// get all edges
@@ -1438,7 +1451,7 @@ module.exports = function MultiBin() {
 	});
 
 	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
 	// $('.node-bin').css({width:itemSize,height:itemSize});
 
 	// $('.node-bin h1').css({marginTop: itemSize/3});
@@ -2800,7 +2813,7 @@ module.exports = function OrdinalBin() {
         }
 
         // bin container
-        ordinalBin.options.targetEl.append('<div class="node-bin-container"></div>');
+        ordinalBin.options.targetEl.append('<div class="ord-bin-container"></div>');
 
         // Calculate number of bins required
         var binNumber = ordinalBin.options.variable.values.length;
@@ -2810,7 +2823,7 @@ module.exports = function OrdinalBin() {
 
             var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
             newBin.data('index', index);
-            $('.node-bin-container').append(newBin);
+            $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
                     console.log('dropped');

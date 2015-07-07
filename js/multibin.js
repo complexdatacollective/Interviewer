@@ -249,13 +249,27 @@ module.exports = function MultiBin() {
 		// bin container
         multiBin.options.targetEl.append('<div class="node-bin-container"></div>');
 
-		var number = Math.floor(multiBin.options.variable.values.length*0.66);
-		var itemSizeW = $('.container').outerWidth()/number;
 
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBin.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
 
-		var itemSize = itemSizeW;
-		while(itemSize*2 > $('.container').height()-200) {
-			itemSize = itemSize*0.98;
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
 		}
 
 		// get all edges
@@ -347,7 +361,7 @@ module.exports = function MultiBin() {
 	});
 
 	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
 	// $('.node-bin').css({width:itemSize,height:itemSize});
 
 	// $('.node-bin h1').css({marginTop: itemSize/3});

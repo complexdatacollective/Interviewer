@@ -1066,7 +1066,7 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 5vmin;
+  font-size: 4vmin;
 }
 h2,
 .h2 {
@@ -2341,7 +2341,7 @@ output {
   display: block;
   width: 100%;
   height: 7vmin;
-  padding: 1vmin 1vmin;
+  padding: 1vmin 2.5vmin;
   font-size: 2vmin;
   line-height: 1.62857143;
   color: #ffffff;
@@ -2480,7 +2480,7 @@ fieldset[disabled] .checkbox label {
 .input-sm,
 .form-horizontal .form-group-sm .form-control {
   height: 6vmin;
-  padding: 0.5vmin 2vmin;
+  padding: 0.5vmin 5vmin;
   font-size: 2vmin;
   line-height: 1.5;
   border-radius: 6px;
@@ -2496,7 +2496,7 @@ select[multiple].input-sm {
 .input-lg,
 .form-horizontal .form-group-lg .form-control {
   height: 13vmin;
-  padding: 2vmin 2vmin;
+  padding: 2vmin 5vmin;
   font-size: 5vmin;
   line-height: 1.33;
   border-radius: 12px;
@@ -2717,7 +2717,7 @@ select[multiple].input-lg {
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 1vmin 1vmin;
+  padding: 1vmin 2.5vmin;
   font-size: 2vmin;
   line-height: 1.62857143;
   border-radius: 8px;
@@ -3036,14 +3036,14 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-lg,
 .btn-group-lg > .btn {
-  padding: 2vmin 2vmin;
+  padding: 2vmin 5vmin;
   font-size: 5vmin;
   line-height: 1.33;
   border-radius: 12px;
 }
 .btn-sm,
 .btn-group-sm > .btn {
-  padding: 0.5vmin 2vmin;
+  padding: 0.5vmin 5vmin;
   font-size: 2vmin;
   line-height: 1.5;
   border-radius: 6px;
@@ -3427,7 +3427,7 @@ tbody.collapse.in {
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
   height: 13vmin;
-  padding: 2vmin 2vmin;
+  padding: 2vmin 5vmin;
   font-size: 5vmin;
   line-height: 1.33;
   border-radius: 12px;
@@ -3450,7 +3450,7 @@ select[multiple].input-group-lg > .input-group-btn > .btn {
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .btn {
   height: 6vmin;
-  padding: 0.5vmin 2vmin;
+  padding: 0.5vmin 5vmin;
   font-size: 2vmin;
   line-height: 1.5;
   border-radius: 6px;
@@ -3486,7 +3486,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   vertical-align: middle;
 }
 .input-group-addon {
-  padding: 1vmin 1vmin;
+  padding: 1vmin 2.5vmin;
   font-size: 2vmin;
   font-weight: normal;
   line-height: 1;
@@ -3497,12 +3497,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border-radius: 8px;
 }
 .input-group-addon.input-sm {
-  padding: 0.5vmin 2vmin;
+  padding: 0.5vmin 5vmin;
   font-size: 2vmin;
   border-radius: 6px;
 }
 .input-group-addon.input-lg {
-  padding: 2vmin 2vmin;
+  padding: 2vmin 5vmin;
   font-size: 5vmin;
   border-radius: 12px;
 }
@@ -4304,7 +4304,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > span {
   position: relative;
   float: left;
-  padding: 1vmin 1vmin;
+  padding: 1vmin 2.5vmin;
   line-height: 1.62857143;
   text-decoration: none;
   color: #ffffff;
@@ -4356,7 +4356,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 }
 .pagination-lg > li > a,
 .pagination-lg > li > span {
-  padding: 2vmin 2vmin;
+  padding: 2vmin 5vmin;
   font-size: 5vmin;
 }
 .pagination-lg > li:first-child > a,
@@ -4371,7 +4371,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 }
 .pagination-sm > li > a,
 .pagination-sm > li > span {
-  padding: 0.5vmin 2vmin;
+  padding: 0.5vmin 5vmin;
   font-size: 2vmin;
 }
 .pagination-sm > li:first-child > a,
@@ -9424,8 +9424,18 @@ div[data-toggle="buttons"] label.active {
   justify-content: center;
   width: 100%;
   height: 75vh;
-  padding-bottom: 20px;
+  padding-bottom: 1vmin;
   flex-flow: row wrap;
+}
+.ord-bin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 75vh;
+  padding-bottom: 1vmin;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
 .node-question-container {
   height: 25vh;
@@ -9626,11 +9636,11 @@ div[data-toggle="buttons"] label.active {
   font-size: 13px;
 }
 .date-container {
-  width: 1260px;
+  width: 100%;
   margin: 0 auto;
-  max-height: 78%;
+  max-height: 75vh;
   overflow: scroll;
-  min-height: 600px;
+  min-height: 70vmin;
 }
 .list-container {
   width: 100%;
@@ -9732,7 +9742,7 @@ div[data-toggle="buttons"] label.active {
 }
 .node-bucket {
   width: 300px;
-  height: 80px;
+  height: 90px;
   white-space: nowrap;
   margin: 0 auto;
 }
@@ -9764,7 +9774,6 @@ div[data-toggle="buttons"] label.active {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  padding: 5px;
   text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
   transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
   height: 21vw;
@@ -9804,25 +9813,25 @@ div[data-toggle="buttons"] label.active {
   width: 100%;
 }
 .size-2 {
-  width: 50%;
+  width: 49%;
 }
 .size-3 {
-  width: 33.33%;
+  width: 32.33%;
 }
 .size-4 {
-  width: 25%;
+  width: 24%;
 }
 .size-5 {
-  width: 20%;
+  width: 19%;
 }
 .size-6 {
-  width: 16.66%;
+  width: 15.66%;
 }
 .size-7 {
-  width: 14.28%;
+  width: 13.28%;
 }
 .size-8 {
-  width: 12.5%;
+  width: 11.5%;
 }
 .ord-node-bin:last-of-type {
   background: #333;
@@ -9836,10 +9845,10 @@ div[data-toggle="buttons"] label.active {
   margin: 0;
 }
 .node-bin h1 {
-  font-size: 29px;
+  font-size: 3vmin;
 }
 .ord-node-bin h1 {
-  font-size: 29px;
+  font-size: 3vmin;
   transition: all 0.5s ease-in-out;
 }
 .node-bin h4 {
@@ -10256,7 +10265,6 @@ label {
   color: #333;
   background: #eee;
   border-color: #C7C4C4;
-  box-shadow: 0px 5px 61px 20px rgba(0, 0, 0, 0.5);
 }
 .overlay .form-control {
   background: white;

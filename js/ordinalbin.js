@@ -76,7 +76,7 @@ module.exports = function OrdinalBin() {
         }
 
         // bin container
-        ordinalBin.options.targetEl.append('<div class="node-bin-container"></div>');
+        ordinalBin.options.targetEl.append('<div class="ord-bin-container"></div>');
 
         // Calculate number of bins required
         var binNumber = ordinalBin.options.variable.values.length;
@@ -86,7 +86,7 @@ module.exports = function OrdinalBin() {
 
             var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
             newBin.data('index', index);
-            $('.node-bin-container').append(newBin);
+            $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
                     console.log('dropped');

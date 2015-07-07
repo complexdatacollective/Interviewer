@@ -1,7 +1,7 @@
 /* global window,$ */
 /* exported DateInterface */
 
-var DateInterface = function DateInterface() {
+module.exports = function DateInterface() {
     'use strict';
 
     // dateInterface globals
@@ -19,8 +19,9 @@ var DateInterface = function DateInterface() {
 
     dateInterface.init = function(options) {
         window.tools.extend(dateInterface.options, options);
-        dateInterface.options.targetEl.append('<h1>'+dateInterface.options.heading+'</h1>');
-        dateInterface.options.targetEl.append('<p class="lead">'+dateInterface.options.subheading+'</p>');
+        dateInterface.options.targetEl.append('<div class="node-question-container"></div>');
+        $('.node-question-container').append('<h1>'+dateInterface.options.heading+'</h1>');
+        $('.node-question-container').append('<p class="lead">'+dateInterface.options.subheading+'</p>');
         dateInterface.options.targetEl.append('<div class="date-container"></div>');
 
         // get edges according to criteria
@@ -186,5 +187,3 @@ var DateInterface = function DateInterface() {
 
     return dateInterface;
 };
-
-module.exports = new DateInterface();
