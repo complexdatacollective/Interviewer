@@ -1,7 +1,7 @@
-/* global $ */
+/* global window,$ */
 /* exported DateInterface */
 
-var DateInterface = function DateInterface() {
+module.exports = function DateInterface() {
     'use strict';
 
     // dateInterface globals
@@ -19,8 +19,9 @@ var DateInterface = function DateInterface() {
 
     dateInterface.init = function(options) {
         window.tools.extend(dateInterface.options, options);
-        dateInterface.options.targetEl.append('<h1>'+dateInterface.options.heading+'</h1>');
-        dateInterface.options.targetEl.append('<p class="lead">'+dateInterface.options.subheading+'</p>');
+        dateInterface.options.targetEl.append('<div class="node-question-container"></div>');
+        $('.node-question-container').append('<h1>'+dateInterface.options.heading+'</h1>');
+        $('.node-question-container').append('<p class="lead">'+dateInterface.options.subheading+'</p>');
         dateInterface.options.targetEl.append('<div class="date-container"></div>');
 
         // get edges according to criteria
@@ -186,8 +187,6 @@ var DateInterface = function DateInterface() {
 
     return dateInterface;
 };
-
-module.exports = new DateInterface();
 ;/* exported Interview */
 /* global $ */
 var Interview = function Interview() {
@@ -236,7 +235,7 @@ var Interview = function Interview() {
 
     return interview;
 };
-;/* window window, require */
+;/* global window, require */
 /* exported IOInterface */
 
 var IOInterface = function IOInterface() {
@@ -376,7 +375,7 @@ var IOInterface = function IOInterface() {
 module.exports = new IOInterface();
 ;/* global $, window */
 /* exported ListSelect */
-var ListSelect = function ListSelect() {
+module.exports = function ListSelect() {
     'use strict';
     //global vars
     var listSelect = {};
@@ -437,7 +436,7 @@ var ListSelect = function ListSelect() {
     listSelect.destroy = function() {
         // Event Listeners
         window.tools.notify('Destroying listSelect.',0);
-        $(window.document).off('click', '.item', itemClickHandler);
+        $(window.document).off('click', '.inner', itemClickHandler);
         $(window.document).off('click', '.continue', processSubmitHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -451,22 +450,22 @@ var ListSelect = function ListSelect() {
         listSelect.options.targetEl.append('<div class="form-group list-container"></div>');
 
         $.each(listSelect.options.variables, function(index,value) {
-            var el = $('<div class="item" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div>');
+            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div></div>');
             var properties = {
                 type_t0: 'Ego'
             };
 
             properties[value.value] = 1;
             if (window.network.getNodes(properties).length>0) {
-                el.data('selected', true);
-                el.css({'border':'2px solid red','background':'#E8C0C0'});
+                el.find('.inner').data('selected', true);
+                el.find('.inner').css({'border':'2px solid red','background':'#E8C0C0'});
             }
             $('.list-container').append(el);
         });
 
 
         // Event Listeners
-        $(window.document).on('click', '.item', itemClickHandler);
+        $(window.document).on('click', '.inner', itemClickHandler);
         $(window.document).on('click', '.continue', processSubmitHandler);
         window.addEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -475,8 +474,6 @@ var ListSelect = function ListSelect() {
 
     return listSelect;
 };
-
-module.exports = new ListSelect();
 ;/* exported Logger */
 /* global window */
 
@@ -530,127 +527,126 @@ var Logger = function Logger() {
 };
 
 module.exports = new Logger();
-;/* global window, Konva, $, L */
-    'use strict';
+;/* global window, nodeRequire, FastClick, document, Konva, $, L */
+'use strict';
 
-    window.$ = $;
-    window.L = L;
-    window.Konva = Konva;
-    window.gui = {};
-	window.netCanvas = {};
+window.$ = $;
+window.L = L;
+window.Konva = Konva;
+window.gui = {};
+window.netCanvas = {};
 
 
-    var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
-    var isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-    var isNodeWebkit = false;
+window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined');
+window.isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+window.isNodeWebkit = false;
 
-    //Is this Node.js?
-    if(isNode) {
-      //If so, test for Node-Webkit
-      try {
-        isNodeWebkit = (typeof nodeRequire('nw.gui') !== "undefined");
+//Is this Node.js?
+if(window.isNode) {
+    //If so, test for Node-Webkit
+    try {
+        window.isNodeWebkit = (typeof nodeRequire('nw.gui') !== 'undefined');
         window.gui = nodeRequire('nw.gui');
-        isNodeWebkit = true;
-      } catch(e) {
-        isNodeWebkit = false;
-      }
+        window.isNodeWebkit = true;
+    } catch(e) {
+        window.isNodeWebkit = false;
+    }
+}
+
+
+
+var moment = require('moment');
+window.moment = moment; // needed for module access.
+window.netCanvas.devMode = false;
+window.netCanvas.debugLevel = 10;
+// Set the window survey
+window.netCanvas.studyProtocol = 'RADAR';
+
+
+$('.refresh-button').on('click', function() {
+    console.log('yo');
+    var _window = window.gui.Window.get();
+    _window.reloadDev();
+});
+
+// console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+
+var protocolExists = function(protocol, callback) {
+    var response = false;
+    var availableProtocols = ['RADAR', 'default'];
+
+    if (availableProtocols.indexOf(protocol) !== -1) {
+        response = true;
     }
 
+    callback(response);
+};
 
+// Just futureproofing in case this changes in future nw versions.
+if (window.isNodeWebkit && window.gui.App.argv.indexOf('dev') !== -1) {
+    console.log('Development mode enabled.');
+    window.netCanvas.devMode = true;
+}
 
-    var moment = require('moment');
-    window.moment = moment; // needed for module access.
-    var fs = require('browserify-fs');
-    var path = require('path');
-    window.netCanvas.devMode = false;
-    window.netCanvas.debugLevel = 10;
-    // Set the window survey
-    window.netCanvas.studyProtocol = 'RADAR';
+if (window.netCanvas.devMode) {
+    if (window.isNodeWebkit) {
+        window.gui.Window.get().showDevTools();
+    }
+    $('.refresh-button').show();
+    window.netCanvas.debugLevel = 1;
+} else {
+    $('.refresh-button').hide();
+    if (window.isNodeWebkit) {
+        window.gui.Window.get().enterFullscreen();
+    }
+}
 
+// Require tools
+window.tools = require('./tools');
 
-    $('.refresh-button').on('click', function() {
-        console.log('yo');
-        var _window = window.gui.Window.get();
-        _window.reloadDev();
+// Interface Modules
+window.netCanvas.Modules = {};
+window.netCanvas.Modules.Network = require('./network.js');
+window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
+window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
+window.netCanvas.Modules.IOInterface = require('./iointerface.js');
+window.netCanvas.Modules.GeoInterface = require('./map.js');
+window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
+window.netCanvas.Modules.ListSelect = require('./listselect.js');
+window.netCanvas.Modules.MultiBin = require('./multibin.js');
+window.netCanvas.Modules.Sociogram = require('./sociogram.js');
+
+// Initialise the menu system – other modules depend on it being there.
+window.menu = require('./menu.js');
+
+// Initialise datastore
+window.dataStore = require('./iointerface.js');
+
+// Initialise logger
+window.logger = require('./logger.js');
+
+// Set up a new session
+window.netCanvas.Modules.session = require('./session.js');
+
+// to do: expand this function to validate a proposed session, not just check that it exists.
+protocolExists(window.netCanvas.studyProtocol, function(exists){
+    if (!exists) {
+        console.log('WARNING: Specified study protocol was not found. Using default.');
+        window.netCanvas.studyProtocol = 'default';
+    }
+    // Initialise session now.
+    window.netCanvas.Modules.session.init(function() {
+        window.netCanvas.Modules.session.loadProtocol();
     });
-
-    // console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
-
-    var protocolExists = function(protocol, callback) {
-        var response = false;
-        var availableProtocols = ['RADAR', 'default'];
-
-		if (availableProtocols.indexOf(protocol) !== -1) {
-			response = true;
-		}
-
-        callback(response);
-    };
-
-    // Just futureproofing in case this changes in future nw versions.
-    if (isNodeWebkit && window.gui.App.argv.indexOf('dev') !== -1) {
-        console.log('Development mode enabled.');
-        window.netCanvas.devMode = true;
-    }
-
-    if (window.netCanvas.devMode) {
-        if (isNodeWebkit) {
-            window.gui.Window.get().showDevTools();
-        }
-        $('.refresh-button').show();
-        window.netCanvas.debugLevel = 1;
-    } else {
-        $('.refresh-button').hide();
-        if (isNodeWebkit) {
-            window.gui.Window.get().enterFullscreen();
-        }
-    }
-
-    // Require tools
-    window.tools = require('./tools');
-
-	// Interface Modules
-    window.netCanvas.Modules = {};
-	window.netCanvas.Modules.Network = require('./network.js');
-    window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
-	window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
-	window.netCanvas.Modules.IOInterface = require('./iointerface.js');
-	window.netCanvas.Modules.Map = require('./map.js');
-	window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
-	window.netCanvas.Modules.ListSelect = require('./listselect.js');
-	window.netCanvas.Modules.MultiBin = require('./multibin.js');
-	window.netCanvas.Modules.Sociogram = require('./sociogram.js');
-
-    // Initialise the menu system – other modules depend on it being there.
-    window.menu = require('./menu.js');;
-
-    // Initialise datastore
-    window.dataStore = require('./iointerface.js');
-
-    // Initialise logger
-    window.logger = require('./logger.js');
-
-    // Set up a new session
-    window.netCanvas.Modules.session = require('./session.js');
-
-    // to do: expand this function to validate a proposed session, not just check that it exists.
-    protocolExists(window.netCanvas.studyProtocol, function(exists){
-        if (!exists) {
-            console.log('WARNING: Specified study protocol was not found. Using default.');
-            window.netCanvas.studyProtocol = 'default';
-        }
-        // Initialise session now.
-        window.netCanvas.Modules.session.init(function() {
-            window.netCanvas.Modules.session.loadProtocol();
-        });
-        window.logger.init();
-        if ('addEventListener' in document) {
+    window.logger.init();
+    if ('addEventListener' in document) {
         document.addEventListener('DOMContentLoaded', function() {
             FastClick.attach(document.body);
         }, false);
-}
+    }
 
-    });
+});
 ;/* global $, window */
 /* exported GeoInterface */
 
@@ -658,7 +654,7 @@ module.exports = new Logger();
  Map module.
 */
 
-var GeoInterface = function GeoInterface() {
+module.exports = function GeoInterface() {
     'use strict';
   	// map globals
     var log;
@@ -678,7 +674,7 @@ var GeoInterface = function GeoInterface() {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
-                stage: window.session.currentStage(),
+                stage: window.netCanvas.Modules.session.currentStage(),
                 timestamp: new Date()
             };
             log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -945,9 +941,7 @@ var GeoInterface = function GeoInterface() {
 
   	return geoInterface;
 };
-
-module.exports = new GeoInterface();
-;/* global $ */
+;/* global $, window */
 /* exported Menu */
 var Menu = function Menu(options) {
     'use strict';
@@ -1096,7 +1090,7 @@ var Menu = function Menu(options) {
 module.exports = new Menu();
 ;/* global $, window */
 /* exported MultiBin */
-var MultiBin = function MultiBin() {
+module.exports = function MultiBin() {
 	'use strict';
 	//global vars
 	var log;
@@ -1183,7 +1177,7 @@ var MultiBin = function MultiBin() {
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
-							stage: window.session.currentStage(),
+							stage: window.netCanvas.Modules.session.currentStage(),
 							timestamp: new Date()
 						};
 						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1205,7 +1199,7 @@ var MultiBin = function MultiBin() {
 			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
-						stage: window.session.currentStage(),
+						stage: window.netCanvas.Modules.session.currentStage(),
 						timestamp: new Date()
 					};
 					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1312,7 +1306,7 @@ var MultiBin = function MultiBin() {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 
 					if (first) {
 						$('#'+value.variable).change(function() {
@@ -1329,11 +1323,9 @@ var MultiBin = function MultiBin() {
 				});
 			} else {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 				});
 			}
-
-
 
 			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
@@ -1347,13 +1339,27 @@ var MultiBin = function MultiBin() {
 		// bin container
         multiBin.options.targetEl.append('<div class="node-bin-container"></div>');
 
-		var number = Math.floor(multiBin.options.variable.values.length*0.66);
-		var itemSizeW = $('.container').outerWidth()/number;
 
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBin.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
 
-		var itemSize = itemSizeW;
-		while(itemSize*2 > $('.container').height()-200) {
-			itemSize = itemSize*0.98;
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
 		}
 
 		// get all edges
@@ -1445,7 +1451,7 @@ var MultiBin = function MultiBin() {
 	});
 
 	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
 	// $('.node-bin').css({width:itemSize,height:itemSize});
 
 	// $('.node-bin h1').css({marginTop: itemSize/3});
@@ -1484,7 +1490,7 @@ var MultiBin = function MultiBin() {
 	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
 		if (taskComprehended === false) {
 			var eventProperties = {
-				stage: window.session.currentStage(),
+				stage: window.netCanvas.Modules.session.currentStage(),
 				timestamp: new Date()
 			};
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1502,12 +1508,8 @@ var MultiBin = function MultiBin() {
 	$('.followup-cancel').on('click', followupCancelHandler);
 
 };
-
-
 return multiBin;
 };
-
-module.exports = new MultiBin();
 ;/* global $, window */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
@@ -1602,10 +1604,17 @@ module.exports = function Namegenerator() {
     };
 
     var cardClickHandler = function() {
+        // Handles what happens when a card is clicked
+
+        // Don't do anything if this is a 'ghost' card (a placeholder created as a visual indicator while a previous network node is being dragged)
         if ($(this).hasClass('ghost')) {
             return false;
         }
+
+        // Get the ID of the node corresponding to this card, stored in the data-index property.
         var index = $(this).data('index');
+
+        // Get the dyad edge for this node
         var edge = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Dyad'})[0];
 
         // Set the value of editing to the node id of the current person
@@ -1614,6 +1623,12 @@ module.exports = function Namegenerator() {
         // Update role count
         var roleCount = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
         $('.relationship-button').html(roleCount+' roles selected.');
+
+        // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
+        var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
+        $.each(roleEdges, function(index, value) {
+            $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+        });
 
         // Populate the form with this nodes data.
         $.each(namegenerator.options.variables, function(index, value) {
@@ -1640,29 +1655,6 @@ module.exports = function Namegenerator() {
     var cancelBtnHandler = function() {
         $('.delete-button').hide();
         namegenerator.closeNodeBox();
-    };
-
-    var selectChangeHandler = function() {
-        if ($('select[name="reltype_main_t0"]').val() === '') {
-            $('select[name="reltype_sub_t0"]').prop( 'disabled', true);
-            return false;
-        }
-        $('select[name="reltype_sub_t0"]').prop( 'disabled', false );
-        $('select[name="reltype_sub_t0"]').children().remove();
-        $('select[name="reltype_sub_t0"]').append('<option value="">Choose a specific relationship</option>');
-        $.each(roles[$('select[name="reltype_main_t0"]').val()], function(index,value) {
-            $('select[name="reltype_sub_t0"]').append('<option value="'+value+'">'+value+'</option>');
-        });
-
-    };
-
-    var selectSubChangeHandler = function() {
-        if ($('select[name="reltype_sub_t0"]').val() === 'Other') {
-            $('.reltype_oth_t0').show();
-        } else {
-            $('.reltype_oth_t0').val('');
-            $('.reltype_oth_t0').hide();
-        }
     };
 
     var submitFormHandler = function(e) {
@@ -1758,7 +1750,7 @@ module.exports = function Namegenerator() {
 
             var color = function() {
                 var el = $('div[data-index='+editing+']');
-                var current = el.css("background-color");
+                var current = el.css('background-color');
                 el.stop().transition({background:'#1ECD97'}, 400, 'ease');
                 setTimeout(function(){
                     el.stop().transition({ background: current}, 800, 'ease');
@@ -1766,7 +1758,6 @@ module.exports = function Namegenerator() {
             };
 
             var nodeID = editing;
-            // var nodeID = window.network.getEdge(editing).to;
             $.each(namegenerator.options.edgeTypes, function(index,value) {
                 var currentEdge = value;
                 var currentEdgeProperties = {};
@@ -1842,39 +1833,42 @@ module.exports = function Namegenerator() {
         var eachTime = 4000;
 
         for (var i = 0; i < number; i++) {
-            setTimeout(function() {
-                // We must simulate every interaction to ensure that any errors are caught.
-                $('.add-button').click();
-                setTimeout(function() {
-                    $('#ngForm').submit();
-                }, 3000);
-
-                $('#fname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-                $('#lname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-                var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
-                if ($('#lname_t0').val().length > 0 ) {
-                    lname +='.';
-                }
-                $('#nname_t0').val(lname);
-                $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
-
-                setTimeout(function() {
-                    $('.relationship-button').click();
-                }, 500);
-                setTimeout(function() {
-
-                    var roleNumber = Math.floor(window.tools.randomBetween(1,3));
-
-                    for (var j = 0; j < roleNumber; j++) {
-                        $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
-
-                    }
-
-                    $('.relationship-close-button').click();
-                }, 2000);
-            }, eachTime*i);
+            var timer = eachTime*i;
+            setTimeout(namegenerator.generateAlter, timer);
         }
 
+    };
+
+    namegenerator.generateAlter = function() {
+        // We must simulate every interaction to ensure that any errors are caught.
+        $('.add-button').click();
+        setTimeout(function() {
+            $('#ngForm').submit();
+        }, 3000);
+
+        $('#fname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
+        $('#lname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
+        var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
+        if ($('#lname_t0').val().length > 0 ) {
+            lname +='.';
+        }
+        $('#nname_t0').val(lname);
+        $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
+
+        setTimeout(function() {
+            $('.relationship-button').click();
+        }, 500);
+        setTimeout(function() {
+
+            var roleNumber = Math.floor(window.tools.randomBetween(1,3));
+
+            for (var j = 0; j < roleNumber; j++) {
+                $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
+
+            }
+
+            $('.relationship-close-button').click();
+        }, 2000);
     };
 
     namegenerator.openNodeBox = function() {
@@ -1910,8 +1904,6 @@ module.exports = function Namegenerator() {
         $(window.document).off('click', '.inner-card', cardClickHandler);
         $('.add-button').off('click', namegenerator.openNodeBox);
         $('.delete-button').off('click', namegenerator.removeFromList);
-        $('select[name="reltype_main_t0"]').off('change', selectChangeHandler);
-        $('select[name="reltype_sub_t0"]').off('change', selectSubChangeHandler);
         $('#ngForm').off('submit', submitFormHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
         $('.newNodeBox').remove();
@@ -2009,8 +2001,6 @@ module.exports = function Namegenerator() {
         $('.delete-button').on('click', namegenerator.removeFromList);
         $('#fname_t0, #lname_t0').on('keyup', inputKeypressHandler);
         $(window.document).on('click', '.inner-card', cardClickHandler);
-        $('select[name="reltype_main_t0"]').on('change', selectChangeHandler);
-        $('select[name="reltype_sub_t0"]').on('change', selectSubChangeHandler);
         $('#ngForm').on('submit', submitFormHandler);
         $(window.document).on('click', '.relationship', roleClickHandler);
         $(window.document).on('click', '.relationship-button', namegenerator.toggleRelationshipBox);
@@ -2067,8 +2057,6 @@ module.exports = function Namegenerator() {
                 } // end if previous network is undefined
             } // end previous panel
 
-
-
             if (sideContainer.children().length > 0) {
                 // move node list to one side
                 sideContainer.insertBefore('.nameList');
@@ -2076,26 +2064,26 @@ module.exports = function Namegenerator() {
                 // Make nodes draggable
                 $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false ,
                     start: function(){
-                        console.log($(this).parent().css("overflow"));
-                        $(this).parent().css("overflow","visible");
-                        console.log($(this).parent().css("overflow"));
+                        console.log($(this).parent().css('overflow'));
+                        $(this).parent().css('overflow','visible');
+                        console.log($(this).parent().css('overflow'));
                     },
                     stop: function() {
-                        $('previous-node-list').css("overflow","scroll");
-                        $('current-node-list').css("overflow","scroll");
+                        $('previous-node-list').css('overflow','scroll');
+                        $('current-node-list').css('overflow','scroll');
                     }
                 });
 
                 $('.node-container').droppable({ accept: '.draggable',
                     drop: function(event, ui) {
                         // remove the ghost card
-                        $('previous-node-list').css("overflow","scroll");
-                        $('current-node-list').css("overflow","scroll");
+                        $('previous-node-list').css('overflow','scroll');
+                        $('current-node-list').css('overflow','scroll');
                         $('.card.ghost').remove();
 
                         // get the data we need
                         var dropped = ui.draggable;
-                        var droppedNode = dropped.data("id");
+                        var droppedNode = dropped.data('id');
                         var droppedNodeEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
 
                         // update name generator property of dyad edge
@@ -2130,7 +2118,7 @@ module.exports = function Namegenerator() {
                         $('.card.ghost').removeClass('show');
                     },
                     over: function() {
-                        $(".node-container").scrollTop($(".node-container")[0].scrollHeight);
+                        $('.node-container').scrollTop($('.node-container')[0].scrollHeight);
                         $('.node-container').append('<div class="card ghost"><div class="inner-card ghost"><i class="fa fa-5x fa-plus-circle"></i>Add</div></div>');
                         setTimeout(function() {
                             $('.card.ghost').addClass('show');
@@ -2157,7 +2145,7 @@ module.exports = function Namegenerator() {
 
     namegenerator.toggleRelationshipBox = function() {
         if ($('.relationship-types-container').hasClass('open')) {
-            //closing
+            // relationship box is open, so close it
             var roleCount = $('.relationship.selected').length;
             var plural = 'roles';
 
@@ -2193,20 +2181,16 @@ module.exports = function Namegenerator() {
                 $('.relationship-types-container').removeClass('open');
                 $('.relationship-types-container').removeClass('front');
                 $('.newNodeBox').removeClass('back');
-                setTimeout(function() {
-
-
-                },1000);
             }, 400);
 
         } else {
-            // opening
-            if(editing) {
-                var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
-                $.each(roleEdges, function(index, value) {
-                    $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
-                });
-            }
+            // relationship box is closed, so open it
+            // if(editing) {
+            //     var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
+            //     $.each(roleEdges, function(index, value) {
+            //         $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+            //     });
+            // }
 
             $('.newNodeBox').addClass('back');
             $('.relationship-types-container').addClass('open front');
@@ -2249,9 +2233,7 @@ module.exports = function Namegenerator() {
         $('.delete-button').hide();
 
         var nodeID = editing;
-        // var nodeID = window.network.getEdge(editing).to;
 
-        // window.network.updateNode(nodeID, newNodeProperties);
         window.network.removeNode(nodeID);
 
         $('div[data-index='+editing+']').addClass('delete');
@@ -2263,6 +2245,9 @@ module.exports = function Namegenerator() {
         }, 700);
 
         editing = false;
+        var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
+        $('.alter-count-box').html(alterCount);
+
         namegenerator.closeNodeBox();
     };
 
@@ -2752,7 +2737,7 @@ module.exports = function Network() {
 };
 ;/* global $, window */
 /* exported OrdinalBin */
-var OrdinalBin = function OrdinalBin() {
+module.exports = function OrdinalBin() {
     'use strict';
     //global vars
     var ordinalBin = {};
@@ -2828,7 +2813,7 @@ var OrdinalBin = function OrdinalBin() {
         }
 
         // bin container
-        ordinalBin.options.targetEl.append('<div class="node-bin-container"></div>');
+        ordinalBin.options.targetEl.append('<div class="ord-bin-container"></div>');
 
         // Calculate number of bins required
         var binNumber = ordinalBin.options.variable.values.length;
@@ -2838,7 +2823,7 @@ var OrdinalBin = function OrdinalBin() {
 
             var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
             newBin.data('index', index);
-            $('.node-bin-container').append(newBin);
+            $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
                     console.log('dropped');
@@ -2896,7 +2881,7 @@ var OrdinalBin = function OrdinalBin() {
                             }
                             if (taskComprehended === false) {
                                 var eventProperties = {
-                                    stage: window.session.currentStage(),
+                                    stage: window.netCanvas.Modules.session.currentStage(),
                                     timestamp: new Date()
                                 };
                                 log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -2963,7 +2948,7 @@ var OrdinalBin = function OrdinalBin() {
 
                 if (taskComprehended === false) {
                     var eventProperties = {
-                        stage: window.session.currentStage(),
+                        stage: window.netCanvas.Modules.session.currentStage(),
                         timestamp: new Date()
                     };
                     log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -2987,8 +2972,6 @@ var OrdinalBin = function OrdinalBin() {
 return ordinalBin;
 
 };
-
-module.exports = new OrdinalBin();
 ;/*
  RequireJS 2.1.18 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
  Available via the MIT or new BSD license.
@@ -3143,9 +3126,9 @@ var RoleRevisit = function RoleRevisit() {
         list.append('<li class="'+properties.lname_t0+'"><strong>Last Name</strong>: '+properties.lname_t0+'</li>');
 
         var roles = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'});
-        var roleString = "";
+        var roleString = '';
         $.each(roles, function(index, value) {
-            roleString += " "+value.reltype_sub_t0+",";
+            roleString += ' '+value.reltype_sub_t0+',';
         });
 
         // cut off the last comma
@@ -3210,13 +3193,12 @@ var RoleRevisit = function RoleRevisit() {
 };
 
 module.exports = new RoleRevisit();
-;/* global document, window, $, console */
+;/* global document, window, $, console, protocol */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
     //window vars
     var session = {};
-    var _this = this;
     var currentStage = 0;
     var content = $('#content');
     session.id = 0;
@@ -3272,9 +3254,10 @@ var Session = function Session() {
 
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
-        $.getScript( "protocols/"+window.netCanvas.studyProtocol+"/protocol.js", function( data ) {
-            console.log('got data');
-            console.log(protocol);
+        $.getScript( 'protocols/'+window.netCanvas.studyProtocol+'/protocol.js', function() {
+
+            // protocol.js files declare a protocol variable, which is what we use here.
+            // It is implicitly loaded as part of the getScript callback
             var study = protocol;
 
             session.parameters = session.registerData('sessionParameters');
@@ -3292,7 +3275,7 @@ var Session = function Session() {
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
             } else {
-                throw new Error("Study protocol must have a 'name' under sessionParameters.");
+                throw new Error('Study protocol must have key "name" under sessionParameters.');
             }
 
 
@@ -3324,8 +3307,8 @@ var Session = function Session() {
                 window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
             });
         }).fail(function( jqxhr, textStatus, error ) {
-            var err = textStatus + ", " + error;
-            console.log( "Request Failed: " + err );
+            var err = textStatus + ', ' + error;
+            console.log( 'Request Failed: ' + err );
         });
 
     };
@@ -3434,8 +3417,14 @@ var Session = function Session() {
         window.tools.notify('Resetting session.',2);
         session.id = 0;
         session.currentStage = 0;
-        // var _window = window.gui.Window.get();
-        _window.reloadDev();
+
+        if (window.isNodeWebkit) {
+            var _window = window.gui.Window.get();
+            _window.reloadDev();
+        } else {
+            window.location.reload();
+        }
+
     };
 
     session.saveManager = function() {
@@ -3617,7 +3606,7 @@ module.exports = new Session();
 /*jshint bitwise: false*/
 
 // Can be replaced with npm module once v0.9.5 reaches upstream.
-var Sociogram = function Sociogram() {
+module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
@@ -3996,7 +3985,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragstart', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4017,7 +4006,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragmove', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4043,7 +4032,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('tap click', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4153,7 +4142,7 @@ var Sociogram = function Sociogram() {
 		// nodeGroup.on('dbltap dblclick', function() {
 		// 	if (taskComprehended === false) {
 		// 		var eventProperties = {
-		// 			stage: window.session.currentStage(),
+		// 			stage: window.netCanvas.Modules.session.currentStage(),
 		// 			timestamp: new Date()
 		// 		};
 		// 		log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4476,8 +4465,6 @@ var Sociogram = function Sociogram() {
 	return sociogram;
 
 };
-
-module.exports = new Sociogram();
 ;/*jshint unused:false*/
 /*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
 /*jshint bitwise: false*/
@@ -4635,7 +4622,7 @@ exports.extend = function( a, b ) {
 exports.notify = function(text, level){
     level = level || 0;
     // if (level >= window.debugLevel) {
-        console.log(text)
+        console.log(text);
     // }
 };
 

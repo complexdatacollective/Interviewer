@@ -21,6 +21,18 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
+        postcss: {
+            options: {
+                map: true, // inline sourcemaps
+                processors: [
+                    require('autoprefixer-core')(), // add vendor prefixes
+                    require('cssnano')() // minify the result
+                ]
+            },
+            dist: {
+                src: '<%= config.app %>/css/style.css'
+            }
+        },
         notify_hooks: {
             options: {
                 enabled: true,
@@ -89,7 +101,7 @@ module.exports = function (grunt) {
             },
             css: {
                 files: ['less/*.less'],
-                tasks: ['less:style'],
+                tasks: ['less:style','postcss:dist'],
                 options: {
                     livereload: true,
                 }
