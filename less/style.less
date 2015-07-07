@@ -23,6 +23,10 @@ html, body {
     overflow:hidden;
 }
 
+body {
+
+}
+
 .not-listed {
     position:absolute;
     z-index:999;
@@ -152,7 +156,7 @@ div[data-toggle="buttons"] label {
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
-    font-size: 14px;
+    // font-size: 14px;
     font-weight: normal;
     line-height: 2em;
     text-align: left;
@@ -321,13 +325,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 *:focus {outline: none !important;}
 
-.form-control {
-    padding:14px 14px;
-    // width:96%;
-}
-
 .content {
     height:100vh;
+    width:100vw;
     background: @content-bg;
     display: flex;
     align-items: center;
@@ -337,9 +337,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 
 .container {
-    width:85% !important;
-    padding:0 !important;
-    overflow: hidden;
+    // width:85% !important;
+    // padding:0 !important;
+    // overflow: hidden;
     display: flex;
     flex-direction:column;
     align-items: center;
@@ -374,6 +374,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .container.full-height {
     height:100vh;
+
 }
 
 .ui {
@@ -539,11 +540,11 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .side-container {
     position:fixed;
     height:100vh;
-    width:25vw;
+    width:20vw;
     top:0;
     left:10vw;
     margin:0 auto;
-    padding-bottom:50px;
+    padding-bottom:2vmin;
     padding-top:170px;
     display:flex;
     -webkit-box-pack: start;
@@ -563,6 +564,12 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     width:25%;
     color:white;
     padding-left: 1.5em;
+}
+
+@media (max-width: 1024px) {
+    .card {
+        width:50%;
+    }
 }
 
 .card.ghost {
@@ -666,13 +673,15 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .question-container {
-    height:157px;
-    width:85%;
+    height:170px;
+    width:100vw;
+    padding-left:20vmin;
+    padding-right:20vmin;
     position:fixed;
     top:0;
+    left:0;
     z-index:10;
-    background: linear-gradient(to bottom, @content-bg 10%, rgba(0, 0, 0, 0) 100%);
-    // background: url('../img/fade-top.png');
+    background-image:linear-gradient(to bottom, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%) 100%);
 }
 
 .node-container {
@@ -691,7 +700,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     right:0px;
     height:170px;
     z-index:10;
-    background: linear-gradient(to top, @content-bg 10%, rgba(0, 0, 0, 0) 100%);
+    background-image:linear-gradient(to top, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%)  100%);
     // background: url('../img/fade-bottom.png');
 }
 
@@ -747,7 +756,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .nameList.alt {
-    width:54vw;
+    width:60vw;
     right:10vw;
     left:initial;
 }
@@ -1026,6 +1035,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     z-index:12;
 }
 
+@media (max-width: 1024px) {
+    .alter-count-box {
+        display:none;
+    }
+}
+
+
 .black {
     width:100%;
     height:100%;
@@ -1037,23 +1053,23 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .newNodeBox {
     position:absolute;
-    top:50%;
-    margin-top:-300px;
-    width:900px;
-    left:50%;
-    margin-left: -450px;
+    top:20vh;
+    left:20vw;
+    right: 20vw;
+    bottom:20vh;
+    width:60vw;
+    height:60vh;
     padding:25px;
     border-radius:12px;
-    background:black;
-    transform: scale(0.1);
+    background:#eee;
+    transform: translateY(-100vh);
     opacity: 0;
     z-index:9999;
-    border:1px solid rgb(50,50,50);
-    backface-visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+    transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
 }
 
 .relationship-types-container {
+    display:none;
     position:absolute;
     top:50%;
     margin-top:-300px;
@@ -1074,6 +1090,22 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     backface-visibility: hidden;
     transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
 }
+
+.open {
+    opacity:1;
+    transform: translateY(0);
+}
+
+.front {
+    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    transform: perspective(50em) rotateY(0deg);
+}
+
+.back {
+    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    transform: perspective(50em) rotateY(180deg);
+}
+
 
 .logic-error {
     display:none;
@@ -1096,22 +1128,6 @@ input[type="checkbox"] {
     cursor:pointer;
 }
 
-.open {
-    opacity:1;
-    transform:scale(1);
-    z-index:9999;
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-}
-
-.front {
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-    transform: perspective(50em) rotateY(0deg);
-}
-
-.back {
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-    transform: perspective(50em) rotateY(180deg);
-}
 
 .relationship-type {
     height:100%;
@@ -1365,6 +1381,13 @@ label {
   .paginate:disabled {
     opacity: 0.3;
     cursor: default; }
+
+    @media (max-width: 1024px) {
+        .paginate {
+            scale:0.5;
+        }
+    }
+
 
 // UI overlay class which gives us control over foreground UI colors
 .overlay {
