@@ -5,7 +5,7 @@
  Map module.
 */
 
-var GeoInterface = function GeoInterface() {
+module.exports = function GeoInterface() {
     'use strict';
   	// map globals
     var log;
@@ -25,7 +25,7 @@ var GeoInterface = function GeoInterface() {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
-                stage: window.session.currentStage(),
+                stage: window.netCanvas.Modules.session.currentStage(),
                 timestamp: new Date()
             };
             log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -292,5 +292,3 @@ var GeoInterface = function GeoInterface() {
 
   	return geoInterface;
 };
-
-module.exports = new GeoInterface();

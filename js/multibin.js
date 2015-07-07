@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported MultiBin */
-var MultiBin = function MultiBin() {
+module.exports = function MultiBin() {
 	'use strict';
 	//global vars
 	var log;
@@ -87,7 +87,7 @@ var MultiBin = function MultiBin() {
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
-							stage: window.session.currentStage(),
+							stage: window.netCanvas.Modules.session.currentStage(),
 							timestamp: new Date()
 						};
 						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -109,7 +109,7 @@ var MultiBin = function MultiBin() {
 			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
-						stage: window.session.currentStage(),
+						stage: window.netCanvas.Modules.session.currentStage(),
 						timestamp: new Date()
 					};
 					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -216,7 +216,7 @@ var MultiBin = function MultiBin() {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 
 					if (first) {
 						$('#'+value.variable).change(function() {
@@ -233,11 +233,9 @@ var MultiBin = function MultiBin() {
 				});
 			} else {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 				});
 			}
-
-
 
 			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
@@ -388,7 +386,7 @@ var MultiBin = function MultiBin() {
 	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
 		if (taskComprehended === false) {
 			var eventProperties = {
-				stage: window.session.currentStage(),
+				stage: window.netCanvas.Modules.session.currentStage(),
 				timestamp: new Date()
 			};
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -406,9 +404,5 @@ var MultiBin = function MultiBin() {
 	$('.followup-cancel').on('click', followupCancelHandler);
 
 };
-
-
 return multiBin;
 };
-
-module.exports = new MultiBin();

@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported ListSelect */
-var ListSelect = function ListSelect() {
+module.exports = function ListSelect() {
     'use strict';
     //global vars
     var listSelect = {};
@@ -61,7 +61,7 @@ var ListSelect = function ListSelect() {
     listSelect.destroy = function() {
         // Event Listeners
         window.tools.notify('Destroying listSelect.',0);
-        $(window.document).off('click', '.item', itemClickHandler);
+        $(window.document).off('click', '.inner', itemClickHandler);
         $(window.document).off('click', '.continue', processSubmitHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -75,22 +75,22 @@ var ListSelect = function ListSelect() {
         listSelect.options.targetEl.append('<div class="form-group list-container"></div>');
 
         $.each(listSelect.options.variables, function(index,value) {
-            var el = $('<div class="item" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div>');
+            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div></div>');
             var properties = {
                 type_t0: 'Ego'
             };
 
             properties[value.value] = 1;
             if (window.network.getNodes(properties).length>0) {
-                el.data('selected', true);
-                el.css({'border':'2px solid red','background':'#E8C0C0'});
+                el.find('.inner').data('selected', true);
+                el.find('.inner').css({'border':'2px solid red','background':'#E8C0C0'});
             }
             $('.list-container').append(el);
         });
 
 
         // Event Listeners
-        $(window.document).on('click', '.item', itemClickHandler);
+        $(window.document).on('click', '.inner', itemClickHandler);
         $(window.document).on('click', '.continue', processSubmitHandler);
         window.addEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -99,5 +99,3 @@ var ListSelect = function ListSelect() {
 
     return listSelect;
 };
-
-module.exports = new ListSelect();

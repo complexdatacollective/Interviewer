@@ -376,7 +376,7 @@ var IOInterface = function IOInterface() {
 module.exports = new IOInterface();
 ;/* global $, window */
 /* exported ListSelect */
-var ListSelect = function ListSelect() {
+module.exports = function ListSelect() {
     'use strict';
     //global vars
     var listSelect = {};
@@ -437,7 +437,7 @@ var ListSelect = function ListSelect() {
     listSelect.destroy = function() {
         // Event Listeners
         window.tools.notify('Destroying listSelect.',0);
-        $(window.document).off('click', '.item', itemClickHandler);
+        $(window.document).off('click', '.inner', itemClickHandler);
         $(window.document).off('click', '.continue', processSubmitHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -451,22 +451,22 @@ var ListSelect = function ListSelect() {
         listSelect.options.targetEl.append('<div class="form-group list-container"></div>');
 
         $.each(listSelect.options.variables, function(index,value) {
-            var el = $('<div class="item" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div>');
+            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.value+'"><h3>'+value.label+'</h3></div></div>');
             var properties = {
                 type_t0: 'Ego'
             };
 
             properties[value.value] = 1;
             if (window.network.getNodes(properties).length>0) {
-                el.data('selected', true);
-                el.css({'border':'2px solid red','background':'#E8C0C0'});
+                el.find('.inner').data('selected', true);
+                el.find('.inner').css({'border':'2px solid red','background':'#E8C0C0'});
             }
             $('.list-container').append(el);
         });
 
 
         // Event Listeners
-        $(window.document).on('click', '.item', itemClickHandler);
+        $(window.document).on('click', '.inner', itemClickHandler);
         $(window.document).on('click', '.continue', processSubmitHandler);
         window.addEventListener('changeStageStart', stageChangeHandler, false);
 
@@ -475,8 +475,6 @@ var ListSelect = function ListSelect() {
 
     return listSelect;
 };
-
-module.exports = new ListSelect();
 ;/* exported Logger */
 /* global window */
 
@@ -611,9 +609,10 @@ window.tools = require('./tools');
 window.netCanvas.Modules = {};
 window.netCanvas.Modules.Network = require('./network.js');
 window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
 window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
 window.netCanvas.Modules.IOInterface = require('./iointerface.js');
-window.netCanvas.Modules.Map = require('./map.js');
+window.netCanvas.Modules.GeoInterface = require('./map.js');
 window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
 window.netCanvas.Modules.ListSelect = require('./listselect.js');
 window.netCanvas.Modules.MultiBin = require('./multibin.js');
@@ -656,7 +655,7 @@ protocolExists(window.netCanvas.studyProtocol, function(exists){
  Map module.
 */
 
-var GeoInterface = function GeoInterface() {
+module.exports = function GeoInterface() {
     'use strict';
   	// map globals
     var log;
@@ -676,7 +675,7 @@ var GeoInterface = function GeoInterface() {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
-                stage: window.session.currentStage(),
+                stage: window.netCanvas.Modules.session.currentStage(),
                 timestamp: new Date()
             };
             log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -943,8 +942,6 @@ var GeoInterface = function GeoInterface() {
 
   	return geoInterface;
 };
-
-module.exports = new GeoInterface();
 ;/* global $, window */
 /* exported Menu */
 var Menu = function Menu(options) {
@@ -1094,7 +1091,7 @@ var Menu = function Menu(options) {
 module.exports = new Menu();
 ;/* global $, window */
 /* exported MultiBin */
-var MultiBin = function MultiBin() {
+module.exports = function MultiBin() {
 	'use strict';
 	//global vars
 	var log;
@@ -1181,7 +1178,7 @@ var MultiBin = function MultiBin() {
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
-							stage: window.session.currentStage(),
+							stage: window.netCanvas.Modules.session.currentStage(),
 							timestamp: new Date()
 						};
 						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1203,7 +1200,7 @@ var MultiBin = function MultiBin() {
 			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
-						stage: window.session.currentStage(),
+						stage: window.netCanvas.Modules.session.currentStage(),
 						timestamp: new Date()
 					};
 					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1310,7 +1307,7 @@ var MultiBin = function MultiBin() {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 
 					if (first) {
 						$('#'+value.variable).change(function() {
@@ -1327,11 +1324,9 @@ var MultiBin = function MultiBin() {
 				});
 			} else {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 				});
 			}
-
-
 
 			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
@@ -1482,7 +1477,7 @@ var MultiBin = function MultiBin() {
 	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
 		if (taskComprehended === false) {
 			var eventProperties = {
-				stage: window.session.currentStage(),
+				stage: window.netCanvas.Modules.session.currentStage(),
 				timestamp: new Date()
 			};
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -1500,12 +1495,8 @@ var MultiBin = function MultiBin() {
 	$('.followup-cancel').on('click', followupCancelHandler);
 
 };
-
-
 return multiBin;
 };
-
-module.exports = new MultiBin();
 ;/* global $, window */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
@@ -2733,7 +2724,7 @@ module.exports = function Network() {
 };
 ;/* global $, window */
 /* exported OrdinalBin */
-var OrdinalBin = function OrdinalBin() {
+module.exports = function OrdinalBin() {
     'use strict';
     //global vars
     var ordinalBin = {};
@@ -2877,7 +2868,7 @@ var OrdinalBin = function OrdinalBin() {
                             }
                             if (taskComprehended === false) {
                                 var eventProperties = {
-                                    stage: window.session.currentStage(),
+                                    stage: window.netCanvas.Modules.session.currentStage(),
                                     timestamp: new Date()
                                 };
                                 log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -2944,7 +2935,7 @@ var OrdinalBin = function OrdinalBin() {
 
                 if (taskComprehended === false) {
                     var eventProperties = {
-                        stage: window.session.currentStage(),
+                        stage: window.netCanvas.Modules.session.currentStage(),
                         timestamp: new Date()
                     };
                     log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -2968,8 +2959,6 @@ var OrdinalBin = function OrdinalBin() {
 return ordinalBin;
 
 };
-
-module.exports = new OrdinalBin();
 ;/*
  RequireJS 2.1.18 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
  Available via the MIT or new BSD license.
@@ -3604,7 +3593,7 @@ module.exports = new Session();
 /*jshint bitwise: false*/
 
 // Can be replaced with npm module once v0.9.5 reaches upstream.
-var Sociogram = function Sociogram() {
+module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
@@ -3983,7 +3972,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragstart', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4004,7 +3993,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragmove', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4030,7 +4019,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('tap click', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4140,7 +4129,7 @@ var Sociogram = function Sociogram() {
 		// nodeGroup.on('dbltap dblclick', function() {
 		// 	if (taskComprehended === false) {
 		// 		var eventProperties = {
-		// 			stage: window.session.currentStage(),
+		// 			stage: window.netCanvas.Modules.session.currentStage(),
 		// 			timestamp: new Date()
 		// 		};
 		// 		log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -4463,8 +4452,6 @@ var Sociogram = function Sociogram() {
 	return sociogram;
 
 };
-
-module.exports = new Sociogram();
 ;/*jshint unused:false*/
 /*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
 /*jshint bitwise: false*/

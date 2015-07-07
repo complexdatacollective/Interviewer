@@ -3,7 +3,7 @@
 /*jshint bitwise: false*/
 
 // Can be replaced with npm module once v0.9.5 reaches upstream.
-var Sociogram = function Sociogram() {
+module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
@@ -382,7 +382,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragstart', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -403,7 +403,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragmove', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -429,7 +429,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('tap click', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: window.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -539,7 +539,7 @@ var Sociogram = function Sociogram() {
 		// nodeGroup.on('dbltap dblclick', function() {
 		// 	if (taskComprehended === false) {
 		// 		var eventProperties = {
-		// 			stage: window.session.currentStage(),
+		// 			stage: window.netCanvas.Modules.session.currentStage(),
 		// 			timestamp: new Date()
 		// 		};
 		// 		log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -862,5 +862,3 @@ var Sociogram = function Sociogram() {
 	return sociogram;
 
 };
-
-module.exports = new Sociogram();

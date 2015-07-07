@@ -9633,32 +9633,38 @@ div[data-toggle="buttons"] label.active {
   min-height: 600px;
 }
 .list-container {
-  width: 1260px;
+  width: 100%;
   margin: 0 auto;
-  max-height: 78%;
-  overflow: scroll;
+  height: 70vh;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 5px;
 }
 .list-container .item {
-  background: #eee;
-  color: black;
-  padding: 20px;
-  margin: 10px;
-  cursor: pointer;
-  cursor: hand;
-  border-radius: 10px;
-  border: 2px solid #eee;
-  height: 155px;
-  width: 400px;
+  height: 33.33%;
+  width: 25%;
+  padding: 5px;
+}
+.list-container .item .inner {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  float: left;
   text-align: center;
+  cursor: pointer;
+  cursor: hand;
+  border-radius: 10px;
+  background: #eee;
+  border: 2px solid #eee;
+  color: black;
+  padding: 1.5vmin;
+  width: 100%;
+  height: 100%;
 }
 .list-container .item h3 {
   display: inline;
   margin: 0;
-  font-size: 25px;
+  font-size: 2vmin;
 }
 .question-container {
   height: 157px;

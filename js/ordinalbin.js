@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported OrdinalBin */
-var OrdinalBin = function OrdinalBin() {
+module.exports = function OrdinalBin() {
     'use strict';
     //global vars
     var ordinalBin = {};
@@ -144,7 +144,7 @@ var OrdinalBin = function OrdinalBin() {
                             }
                             if (taskComprehended === false) {
                                 var eventProperties = {
-                                    stage: window.session.currentStage(),
+                                    stage: window.netCanvas.Modules.session.currentStage(),
                                     timestamp: new Date()
                                 };
                                 log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -211,7 +211,7 @@ var OrdinalBin = function OrdinalBin() {
 
                 if (taskComprehended === false) {
                     var eventProperties = {
-                        stage: window.session.currentStage(),
+                        stage: window.netCanvas.Modules.session.currentStage(),
                         timestamp: new Date()
                     };
                     log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -235,5 +235,3 @@ var OrdinalBin = function OrdinalBin() {
 return ordinalBin;
 
 };
-
-module.exports = new OrdinalBin();
