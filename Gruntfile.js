@@ -20,7 +20,6 @@
             resources: 'resources'
         };
 
-
         grunt.initConfig({
             browserify: {
                 dist: {
@@ -75,7 +74,7 @@
             watch: {
                 js: {
                     files: ['js/*.js'],
-                    tasks: ['concat:js','browserify:dist'],
+                    tasks: ['jshint','concat:js','browserify:dist'],
                     options: {
                         livereload: true,
                     }
@@ -149,7 +148,7 @@
                 options: {
                     jshintrc: '.jshintrc'
                 },
-                files: '<%= config.app %>/js/*.js'
+                files: ['js/*.js', '!js/require.js']
             },
             copy: {
                 appLinux: {
@@ -514,6 +513,7 @@
         grunt.loadNpmTasks('grunt-contrib-watch');
         grunt.loadNpmTasks('grunt-browserify');
         grunt.loadNpmTasks('grunt-bower-concat');
+        grunt.loadNpmTasks('grunt-postcss');
 
 
     };

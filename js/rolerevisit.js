@@ -116,9 +116,9 @@ var RoleRevisit = function RoleRevisit() {
         list.append('<li class="'+properties.lname_t0+'"><strong>Last Name</strong>: '+properties.lname_t0+'</li>');
 
         var roles = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'});
-        var roleString = "";
+        var roleString = '';
         $.each(roles, function(index, value) {
-            roleString += " "+value.reltype_sub_t0+",";
+            roleString += ' '+value.reltype_sub_t0+',';
         });
 
         // cut off the last comma

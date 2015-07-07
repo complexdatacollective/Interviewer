@@ -1,4 +1,4 @@
-/* global $ */
+/* global window,$ */
 /* exported DateInterface */
 
 var DateInterface = function DateInterface() {

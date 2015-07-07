@@ -155,7 +155,7 @@ exports.extend = function( a, b ) {
 exports.notify = function(text, level){
     level = level || 0;
     // if (level >= window.debugLevel) {
-        console.log(text)
+        console.log(text);
     // }
 };
 

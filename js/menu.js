@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, window */
 /* exported Menu */
 var Menu = function Menu(options) {
     'use strict';

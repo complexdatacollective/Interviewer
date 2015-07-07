@@ -1,4 +1,4 @@
-/* window window, require */
+/* global window, require */
 /* exported IOInterface */
 
 var IOInterface = function IOInterface() {

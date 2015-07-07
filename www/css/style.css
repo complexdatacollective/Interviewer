@@ -6210,7 +6210,7 @@ button.close {
 .pushed.content {
   transition-duration: 0.5s;
   transition: transform all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-  transform: translateX(200px) scale(0.6);
+  transform: translateX(20vmin) scale(0.6);
   box-shadow: 31px 25px 170px black;
 }
 /* Morph Button: Default Styles */
@@ -6233,25 +6233,25 @@ button.close {
 }
 /* Let's add some nice easing for all cases */
 .menu {
-  width: 30vw;
+  width: 20vw;
   bottom: 0;
   position: absolute;
   top: 0;
-  left: -30vw;
+  left: -20vw;
   overflow: scroll;
-  padding: 20px;
+  padding: 2vmin;
   z-index: 9999999;
   transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
   transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
 }
 .menu.open {
   transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-  transform: translateX(30vw);
+  transform: translateX(20vw);
 }
 .icon-close {
   position: absolute;
-  top: 22px;
-  left: 348px;
+  top: 2vmin;
+  right: 2vmin;
   cursor: pointer;
 }
 .menu-content h2 {
@@ -6265,7 +6265,7 @@ button.close {
 }
 .menu-content ul li {
   list-style: none;
-  padding: 3vmin 2vmin;
+  padding: 2vmin 2vmin;
   font-size: 2vmin;
 }
 .menu-content ul li:hover {

@@ -1,10 +1,9 @@
-/* global document, window, $, console */
+/* global document, window, $, console, protocol */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
     //window vars
     var session = {};
-    var _this = this;
     var currentStage = 0;
     var content = $('#content');
     session.id = 0;
@@ -60,9 +59,10 @@ var Session = function Session() {
 
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
-        $.getScript( "protocols/"+window.netCanvas.studyProtocol+"/protocol.js", function( data ) {
-            console.log('got data');
-            console.log(protocol);
+        $.getScript( 'protocols/'+window.netCanvas.studyProtocol+'/protocol.js', function() {
+
+            // protocol.js files declare a protocol variable, which is what we use here.
+            // It is implicitly loaded as part of the getScript callback
             var study = protocol;
 
             session.parameters = session.registerData('sessionParameters');
@@ -80,7 +80,7 @@ var Session = function Session() {
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
             } else {
-                throw new Error("Study protocol must have a 'name' under sessionParameters.");
+                throw new Error('Study protocol must have key "name" under sessionParameters.');
             }
 
 
@@ -112,8 +112,8 @@ var Session = function Session() {
                 window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
             });
         }).fail(function( jqxhr, textStatus, error ) {
-            var err = textStatus + ", " + error;
-            console.log( "Request Failed: " + err );
+            var err = textStatus + ', ' + error;
+            console.log( 'Request Failed: ' + err );
         });
 
     };
@@ -222,8 +222,14 @@ var Session = function Session() {
         window.tools.notify('Resetting session.',2);
         session.id = 0;
         session.currentStage = 0;
-        // var _window = window.gui.Window.get();
-        _window.reloadDev();
+
+        if (window.isNodeWebkit) {
+            var _window = window.gui.Window.get();
+            _window.reloadDev();
+        } else {
+            window.location.reload();
+        }
+
     };
 
     session.saveManager = function() {
