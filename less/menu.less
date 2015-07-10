@@ -48,8 +48,69 @@
 .pushed.content {
 	transition-duration: 0.5s;
 	transition: transform all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-	transform: translateX(30vmin) scale(0.6);
+	transform: translateX(20vmin) scale(0.5);
 	box-shadow: 31px 25px 170px black;
+}
+
+.menu {
+	width:36vw;
+	bottom:0;
+	position:absolute;
+	top:0;
+	left:-36vw;
+	overflow:scroll;
+	padding:2vmin;
+	z-index:9999999;
+	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.menu.open {
+	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+	transform: translateX(36vw);
+}
+
+@media (max-width: @screen-md) {
+
+	.menu-container {
+		display:none;
+	}
+
+	.menu-content ul li span {
+		display:none;
+	}
+}
+
+@media (min-width: @screen-md+1) {
+
+	.pushed.content {
+		transform: translateX(30vmin) scale(0.6);
+	}
+
+	.menu {
+		width:20vw;
+		left:-20vw;
+	}
+
+	.menu.open {
+		transform: translateX(20vw);
+	}
+}
+
+@media (min-width: @screen-lg) {
+
+	.pushed.content {
+		transform: translateX(30vmin) scale(0.6);
+	}
+
+	.menu {
+		width:380px;
+		left:-380px;
+	}
+
+	.menu.open {
+		transform: translateX(380px);
+	}
 }
 
 /* Morph Button: Default Styles */
@@ -73,29 +134,6 @@
 	overflow: hidden;
 }
 
-/* Let's add some nice easing for all cases */
-.menu {
-	width:30vw;
-	bottom:0;
-	position:absolute;
-	top:0;
-	left:-30vw;
-	overflow:scroll;
-	padding:2vmin;
-	z-index:9999999;
-	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-}
-
-.menu-content {
-
-}
-
-.menu.open {
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-	transform: translateX(30vw);
-}
-
 .icon-close {
 	position:absolute;
 	top:2vmin;
@@ -115,11 +153,21 @@
 }
 
 .menu-content ul li {
-	list-style:none;
-	padding:2vmin 2vmin;
-	font-size:2vmin;
-	// border-bottom:1px solid rgba(255,255,255,0.2);
-	// background:red;
+    list-style: none;
+    padding: 3.5vmin;
+	font-size:2.5vmin;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+
+@media (min-width: @screen-md) {
+
+	.menu-content ul li {
+	    list-style: none;
+	    padding: 2vmin;
+		font-size:inherit;
+	    border-bottom: none;
+	}
+
 }
 
 .menu-content ul li:hover {
@@ -170,8 +218,8 @@
 .hi-icon:before {
 	font-family: 'ecoicon';
 	speak: none;
-	font-size: 30px;
-	line-height: 70px;
+	font-size: 3vmin;
+	line-height: 5vmin;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -292,9 +340,6 @@
 
 .hi-icon:active {
 	background: rgba(255,255,255,0.05);
-	-webkit-transform: scale(0.93);
-	-moz-transform: scale(0.93);
-	-ms-transform: scale(0.93);
 	transform: scale(0.93);
 	color: #fff;
 }

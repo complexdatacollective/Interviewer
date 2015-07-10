@@ -23,21 +23,20 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.telerik.plugins.wkwebview": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Telerik-Verified-Plugins/WKWebView.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-webserver": {
         "source": {
             "type": "registry",
             "id": "cordova-plugin-webserver"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "com.telerik.plugins.wkwebview": {
+        "source": {
+            "type": "registry",
+            "id": "com.telerik.plugins.wkwebview"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

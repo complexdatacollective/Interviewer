@@ -540,27 +540,64 @@ window.netCanvas = {};
 window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined');
 window.isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 window.isNodeWebkit = false;
+var moment = require('moment');
+window.moment = moment; // needed for module access.
+window.netCanvas.devMode = false;
+window.netCanvas.debugLevel = 10;
+// Set the window survey
+window.netCanvas.studyProtocol = 'default';
 
 //Is this Node.js?
 if(window.isNode) {
     //If so, test for Node-Webkit
     try {
         window.isNodeWebkit = (typeof nodeRequire('nw.gui') !== 'undefined');
-        window.gui = nodeRequire('nw.gui');
         window.isNodeWebkit = true;
     } catch(e) {
         window.isNodeWebkit = false;
     }
 }
 
+// Arguments
+// build an associative array (argument => value) for command line arguments independant of platform
+
+function getArguments() {
+    var args = false;
+    if (window.isNodeWebkit) {
+        window.gui = nodeRequire('nw.gui');
+        args = window.gui.App.argv;
+
+        return args;
+    } else if (window.isCordova) {
+        // what can we do here?
+    } else {
+        // browser
+        var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
+        query  = window.location.search.substring(1);
+
+        args = {};
+        while ((match = search.exec(query))) {
+            args[decode(match[1])] = decode(match[2]);
+        }
+
+        return args;
+    }
+}
 
 
-var moment = require('moment');
-window.moment = moment; // needed for module access.
-window.netCanvas.devMode = false;
-window.netCanvas.debugLevel = 10;
-// Set the window survey
-window.netCanvas.studyProtocol = 'RADAR';
+var args = getArguments();
+// Enable/disable dev mode
+if (args && args.dev !== -1) {
+    console.log('Development mode enabled.');
+    window.netCanvas.devMode = true;
+}
+
+
+
+
 
 
 $('.refresh-button').on('click', function() {
@@ -569,11 +606,14 @@ $('.refresh-button').on('click', function() {
     _window.reloadDev();
 });
 
-// console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+if (window.isNodeWebkit) {
+    console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+}
+
 
 var protocolExists = function(protocol, callback) {
     var response = false;
-    var availableProtocols = ['RADAR', 'default'];
+    var availableProtocols = ['RADAR', 'default', 'dphil-protocol'];
 
     if (availableProtocols.indexOf(protocol) !== -1) {
         response = true;
@@ -1873,10 +1913,13 @@ module.exports = function Namegenerator() {
 
     namegenerator.openNodeBox = function() {
         // $('.newNodeBox').show();
-        $('.content').addClass('blurry');
+        // $('.content').addClass('blurry');
         // $('.newNodeBox').transition({scale:1,opacity:1},300);
         $('.newNodeBox').addClass('open');
-        $('#ngForm input:text').first().focus();
+        setTimeout(function() {
+            $('#ngForm input:text').first().focus();
+        }, 1000);
+
         nodeBoxOpen = true;
     };
 
@@ -1965,8 +2008,8 @@ module.exports = function Namegenerator() {
 
         });
 
-        $('.newNodeBox .form .fields').append('<div class="form-group"><div class="col-sm-12"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div></div>');
-        var buttons = $('<div class="form-group"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
+        $('.newNodeBox .form .fields').append('<div class="form-group"><div class=""><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div></div>');
+        var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
         $('.newNodeBox .form .fields').append(buttons);
 
         // relationship types

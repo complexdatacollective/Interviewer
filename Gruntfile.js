@@ -59,8 +59,17 @@ module.exports = function (grunt) {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
                 cssDest: '<%= config.app %>/css/_bower.css',
-                bowerOptions: {
-                }
+                mainFiles: {
+                    'jquery': 'dist/jquery.min.js',
+                    'bootstrap': 'dist/bootstrap.min.js',
+                    'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
+                    'jquery-ui': 'jquery-ui.min.js',
+                    'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
+                    'konva': 'konva.min.js',
+                    'leaflet': 'dist/leaflet.js',
+                    'leaflet-omnivore': 'leaflet-omnivore.min.js'
+                },
+                exclude: ['components-font-awesome','lato', 'moment']
             }
         },
         concat: {
@@ -76,7 +85,8 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
-                mangle: false
+                mangle: false,
+                sourceMap: true,
             },
             js: {
                 files: {
@@ -94,7 +104,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['js/*.js'],
-                tasks: ['jshint','concat:js','browserify:dist'],
+                tasks: ['jshint','concat:js','browserify:dist','uglify'],
                 options: {
                     livereload: true,
                 }

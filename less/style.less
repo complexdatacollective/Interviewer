@@ -23,8 +23,10 @@ html, body {
     overflow:hidden;
 }
 
-body {
-
+@media (min-width: 1024px) {
+    body {
+        font-size: 2vmin;
+    }
 }
 
 .not-listed {
@@ -523,20 +525,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
  // Name generator
-.nameList {
-    margin:0 auto;
-    padding-bottom:150px;
-    padding-top:170px;
-    overflow: scroll;
-    display:flex;
-    -webkit-box-pack: start;
-    align-content: flex-start;
-    flex-wrap:wrap;
-    -ms-flex-pack: start;
-    flex-pack:start;
-    justify-content: flex-start;
-}
-
 .side-container {
     position:fixed;
     height:100vh;
@@ -569,6 +557,25 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 @media (max-width: 1024px) {
     .card {
         width:50%;
+    }
+
+    .side-container {
+        position:fixed;
+        height:100vh;
+        width:40vw;
+        top:0;
+        left:10vw;
+        margin:0 auto;
+        padding-bottom:2vmin;
+        padding-top:170px;
+        display:flex;
+        -webkit-box-pack: start;
+        align-content: flex-start;
+        flex-wrap:wrap;
+        -ms-flex-pack: start;
+        flex-pack:start;
+        justify-content: flex-start;
+        z-index:20;
     }
 }
 
@@ -673,35 +680,92 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .question-container {
-    height:170px;
     width:100vw;
     padding-left:20vmin;
     padding-right:20vmin;
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:10;
-    background-image:linear-gradient(to bottom, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%) 100%);
 }
 
 .node-container {
-    height:100vh;
-    position:fixed;
-    top:0;
-    left:10vw;
-    right:10vw;
+    padding-left:10vw;
+    padding-right:10vw;
     margin-left:-1.5em;
 }
 
 .node-container-bottom-bg {
-    position:fixed;
-    bottom:0;
-    left:0px;
-    right:0px;
-    height:170px;
-    z-index:10;
-    background-image:linear-gradient(to top, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%)  100%);
-    // background: url('../img/fade-bottom.png');
+    display:none;
+}
+
+.nameList {
+    padding-bottom:0;
+    padding-top:0;
+    overflow: scroll;
+    display:flex;
+    -webkit-box-pack: start;
+    align-content: flex-start;
+    flex-wrap:wrap;
+    -ms-flex-pack: start;
+    flex-pack:start;
+    justify-content: flex-start;
+}
+
+
+.nameList.alt {
+    width:60vw;
+    right:10vw;
+    left:initial;
+}
+
+
+@media (min-width: 769px) {
+
+    .nameList {
+        margin:0 auto;
+        padding-bottom:150px;
+        padding-top:170px;
+    }
+
+
+    .nameList.alt {
+        width:40vw;
+        right:10vw;
+        left:initial;
+    }
+
+
+    .question-container {
+        height:170px;
+        width:100vw;
+        padding-left:10vmin;
+        padding-right:10vmin;
+        position:fixed;
+        top:0;
+        left:0;
+        z-index:10;
+        background-image:linear-gradient(to bottom, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%) 100%);
+    }
+
+    .node-container {
+        height:100vh;
+        position:fixed;
+        top:0;
+        left:10vw;
+        right:10vw;
+        padding-left:0;
+        padding-right:0;
+        margin-left:-1.5em;
+    }
+
+    .node-container-bottom-bg {
+        display:initial;
+        position:fixed;
+        bottom:0;
+        left:0px;
+        right:0px;
+        height:170px;
+        z-index:10;
+        background-image:linear-gradient(to top, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%)  100%);
+        // background: url('../img/fade-bottom.png');
+    }
 }
 
 .previous-node-list {
@@ -753,12 +817,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .node-lists.double {
     height:50%;
-}
-
-.nameList.alt {
-    width:60vw;
-    right:10vw;
-    left:initial;
 }
 
 .node-list-item {
@@ -1053,19 +1111,25 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .newNodeBox {
     position:absolute;
-    top:20vh;
+    top:15vh;
     left:20vw;
     right: 20vw;
-    bottom:20vh;
-    width:60vw;
-    height:60vh;
-    padding:25px;
+    padding:2vmin;
     border-radius:12px;
     background:#eee;
     transform: translateY(-100vh);
     opacity: 0;
     z-index:9999;
-    transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
+    transition: all 0.5s ease-in-out;
+}
+
+@media (min-width: @screen-lg) {
+    .newNodeBox {
+        top:20vmin;
+        left:30vw;
+        right: 30vw;
+        padding:4vmin;
+    }
 }
 
 .relationship-types-container {
@@ -1384,7 +1448,7 @@ label {
 
     @media (max-width: 1024px) {
         .paginate {
-            scale:0.5;
+            transform:scale(0.5);
         }
     }
 

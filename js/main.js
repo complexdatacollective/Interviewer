@@ -11,27 +11,64 @@ window.netCanvas = {};
 window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined');
 window.isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 window.isNodeWebkit = false;
+var moment = require('moment');
+window.moment = moment; // needed for module access.
+window.netCanvas.devMode = false;
+window.netCanvas.debugLevel = 10;
+// Set the window survey
+window.netCanvas.studyProtocol = 'default';
 
 //Is this Node.js?
 if(window.isNode) {
     //If so, test for Node-Webkit
     try {
         window.isNodeWebkit = (typeof nodeRequire('nw.gui') !== 'undefined');
-        window.gui = nodeRequire('nw.gui');
         window.isNodeWebkit = true;
     } catch(e) {
         window.isNodeWebkit = false;
     }
 }
 
+// Arguments
+// build an associative array (argument => value) for command line arguments independant of platform
+
+function getArguments() {
+    var args = false;
+    if (window.isNodeWebkit) {
+        window.gui = nodeRequire('nw.gui');
+        args = window.gui.App.argv;
+
+        return args;
+    } else if (window.isCordova) {
+        // what can we do here?
+    } else {
+        // browser
+        var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
+        query  = window.location.search.substring(1);
+
+        args = {};
+        while ((match = search.exec(query))) {
+            args[decode(match[1])] = decode(match[2]);
+        }
+
+        return args;
+    }
+}
 
 
-var moment = require('moment');
-window.moment = moment; // needed for module access.
-window.netCanvas.devMode = false;
-window.netCanvas.debugLevel = 10;
-// Set the window survey
-window.netCanvas.studyProtocol = 'RADAR';
+var args = getArguments();
+// Enable/disable dev mode
+if (args && args.dev !== -1) {
+    console.log('Development mode enabled.');
+    window.netCanvas.devMode = true;
+}
+
+
+
+
 
 
 $('.refresh-button').on('click', function() {
@@ -40,11 +77,14 @@ $('.refresh-button').on('click', function() {
     _window.reloadDev();
 });
 
-// console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+if (window.isNodeWebkit) {
+    console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+}
+
 
 var protocolExists = function(protocol, callback) {
     var response = false;
-    var availableProtocols = ['RADAR', 'default'];
+    var availableProtocols = ['RADAR', 'default', 'dphil-protocol'];
 
     if (availableProtocols.indexOf(protocol) !== -1) {
         response = true;

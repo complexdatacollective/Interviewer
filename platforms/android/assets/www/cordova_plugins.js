@@ -162,11 +162,11 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "com.telerik.plugins.wkwebview": "0.4.0",
     "cordova-plugin-file": "2.1.0",
     "cordova-plugin-statusbar": "1.0.1",
     "cordova-plugin-webserver": "1.0.3",
-    "cordova-plugin-whitelist": "1.1.0"
+    "cordova-plugin-whitelist": "1.1.0",
+    "com.telerik.plugins.wkwebview": "0.4.0"
 }
 // BOTTOM OF METADATA
 });

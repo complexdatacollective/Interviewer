@@ -1,4 +1,4 @@
-module.exports = {
+var protocol = {
     sessionParameters: {
         name: "Default"
     },

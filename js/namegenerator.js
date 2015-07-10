@@ -361,10 +361,13 @@ module.exports = function Namegenerator() {
 
     namegenerator.openNodeBox = function() {
         // $('.newNodeBox').show();
-        $('.content').addClass('blurry');
+        // $('.content').addClass('blurry');
         // $('.newNodeBox').transition({scale:1,opacity:1},300);
         $('.newNodeBox').addClass('open');
-        $('#ngForm input:text').first().focus();
+        setTimeout(function() {
+            $('#ngForm input:text').first().focus();
+        }, 1000);
+
         nodeBoxOpen = true;
     };
 
@@ -453,8 +456,8 @@ module.exports = function Namegenerator() {
 
         });
 
-        $('.newNodeBox .form .fields').append('<div class="form-group"><div class="col-sm-12"><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div></div>');
-        var buttons = $('<div class="form-group"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
+        $('.newNodeBox .form .fields').append('<div class="form-group"><div class=""><button type="button" class="btn btn-primary btn-block relationship-button">Set Relationship Roles</div></div></div>');
+        var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
         $('.newNodeBox .form .fields').append(buttons);
 
         // relationship types

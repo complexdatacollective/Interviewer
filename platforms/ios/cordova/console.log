@@ -629,3 +629,20 @@ To disable web storage backup to iCloud, set the BackupWebStorage preference to 
 2015-07-07 16:58:46.825 Network Canvas[35964:1077142] [CDVTimer][file] 2.366006ms
 2015-07-07 16:58:46.825 Network Canvas[35964:1077142] [CDVTimer][TotalPluginStartup] 11.291981ms
 2015-07-07 16:58:46.829 Network Canvas[35964:1077142] Started http daemon: http://localhost:12344/ 
+2015-07-08 10:01:36.162 Network Canvas[51208:1383811] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/28390987-535F-4C60-AEE9-BD2973E76D17/data/Containers/Data/Application/8C009C3D-B2C4-451F-867C-5ECF3933BBF7/Library/Cookies/Cookies.binarycookies
+2015-07-08 10:01:36.248 Network Canvas[51208:1383811] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-08 10:01:36.248 Network Canvas[51208:1383811] Multi-tasking -> Device: YES, App: YES
+2015-07-08 10:01:36.251 Network Canvas[51208:1383811] Unlimited access to network resources
+2015-07-08 10:01:36.253 Network Canvas[51208:1383811] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-07-08 10:01:36.403 Network Canvas[51208:1383811] Using a WKWebView
+2015-07-08 10:01:36.561 Network Canvas[51208:1383811] [CDVTimer][statusbar] 8.697987ms
+2015-07-08 10:01:36.564 Network Canvas[51208:1383811] [CDVTimer][file] 3.320992ms
+2015-07-08 10:01:36.564 Network Canvas[51208:1383811] [CDVTimer][TotalPluginStartup] 12.692034ms
+2015-07-08 10:01:36.568 Network Canvas[51208:1383811] Started http daemon: http://localhost:12344/ 

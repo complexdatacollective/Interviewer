@@ -36,9 +36,6 @@
         }
     },
     "installed_plugins": {
-        "com.telerik.plugins.wkwebview": {
-            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
-        },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.jthrilly.networkcanvas"
         },
@@ -49,6 +46,9 @@
             "PACKAGE_NAME": "com.jthrilly.networkcanvas"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.jthrilly.networkcanvas"
+        },
+        "com.telerik.plugins.wkwebview": {
             "PACKAGE_NAME": "com.jthrilly.networkcanvas"
         }
     },
