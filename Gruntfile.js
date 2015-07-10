@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         postcss: {
             options: {
-                map: true, // inline sourcemaps
+                map: false, // inline sourcemaps
                 processors: [
                     require('autoprefixer-core')(), // add vendor prefixes
                     require('cssnano')() // minify the result
@@ -58,18 +58,18 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css',
-                mainFiles: {
-                    'jquery': 'dist/jquery.min.js',
-                    'bootstrap': 'dist/bootstrap.min.js',
-                    'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
-                    'jquery-ui': 'jquery-ui.min.js',
-                    'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
-                    'konva': 'konva.min.js',
-                    'leaflet': 'dist/leaflet.js',
-                    'leaflet-omnivore': 'leaflet-omnivore.min.js'
-                },
-                exclude: ['components-font-awesome','lato', 'moment']
+                cssDest: '<%= config.app %>/css/_bower.css'
+                // mainFiles: {
+                //     'jquery': 'dist/jquery.min.js',
+                //     'bootstrap': 'dist/bootstrap.min.js',
+                //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
+                //     'jquery-ui': 'jquery-ui.min.js',
+                //     'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
+                //     'konva': 'konva.min.js',
+                //     'leaflet': 'dist/leaflet.js',
+                //     'leaflet-omnivore': 'leaflet-omnivore.min.js'
+                // },
+                // exclude: ['components-font-awesome','lato', 'moment']
             }
         },
         concat: {
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
         uglify: {
             options: {
                 mangle: false,
-                sourceMap: true,
+                sourceMap: false,
             },
             js: {
                 files: {
@@ -104,7 +104,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['js/*.js'],
-                tasks: ['jshint','concat:js','browserify:dist','uglify'],
+                tasks: ['jshint','concat:js','browserify:dist'],
                 options: {
                     livereload: true,
                 }

@@ -1,10 +1,10 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "id": "cordova-plugin-statusbar.statusbar",
+        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
+        "id": "com.telerik.plugins.wkwebview.wkwebview",
         "clobbers": [
-            "window.StatusBar"
+            "wkwebview"
         ]
     },
     {
@@ -154,19 +154,19 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/com.telerik.plugins.wkwebview/www/wkwebview.js",
-        "id": "com.telerik.plugins.wkwebview.wkwebview",
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "id": "cordova-plugin-statusbar.statusbar",
         "clobbers": [
-            "wkwebview"
+            "window.StatusBar"
         ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-statusbar": "1.0.1",
-    "cordova-plugin-file": "2.1.0",
     "com.telerik.plugins.wkwebview": "0.4.0",
+    "cordova-plugin-file": "2.1.0",
+    "cordova-plugin-statusbar": "1.0.1",
     "cordova-plugin-webserver": "1.0.3"
 }
 // BOTTOM OF METADATA
