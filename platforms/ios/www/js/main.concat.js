@@ -538,8 +538,8 @@ $(document).ready(function() {
     window.netCanvas = {};
 
 
-    window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined');
-    window.isCordova = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+    window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined'); // this check doesn't work, because browserify tries to be clever.
+    window.isCordova = !!window.cordova;
     window.isNodeWebkit = false;
     var moment = require('moment');
     window.moment = moment; // needed for module access.

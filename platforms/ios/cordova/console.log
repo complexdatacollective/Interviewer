@@ -11,3 +11,12 @@
 2015-07-10 20:28:21.856 Network Canvas[33583:405743] [CDVTimer][statusbar] 7.947981ms
 2015-07-10 20:28:21.856 Network Canvas[33583:405743] [CDVTimer][TotalPluginStartup] 9.900987ms
 2015-07-10 20:28:21.859 Network Canvas[33583:405743] Started http daemon: http://localhost:12344/ 
+2015-07-10 20:41:42.507 Network Canvas[37905:428787] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/28390987-535F-4C60-AEE9-BD2973E76D17/data/Containers/Data/Application/FD60DB6F-EF13-42C2-BC89-5D4049782540/Library/Cookies/Cookies.binarycookies
+2015-07-10 20:41:42.611 Network Canvas[37905:428787] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-10 20:41:42.611 Network Canvas[37905:428787] Multi-tasking -> Device: YES, App: YES
+2015-07-10 20:41:42.613 Network Canvas[37905:428787] Unlimited access to network resources
+2015-07-10 20:41:42.731 Network Canvas[37905:428787] Using a WKWebView
+2015-07-10 20:41:42.810 Network Canvas[37905:428787] [CDVTimer][file] 1.625001ms
+2015-07-10 20:41:42.818 Network Canvas[37905:428787] [CDVTimer][statusbar] 7.753015ms
+2015-07-10 20:41:42.818 Network Canvas[37905:428787] [CDVTimer][TotalPluginStartup] 9.729981ms
+2015-07-10 20:41:42.821 Network Canvas[37905:428787] Started http daemon: http://localhost:12344/ 

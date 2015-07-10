@@ -10,6 +10,9 @@
     <content src="index.html" />
     <preference name="orientation" value="landscape" />
     <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="BackupWebStorage" value="local" />
+    <preference name="exit-on-suspend" value="true" />
     <plugin name="cordova-plugin-whitelist" version="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
