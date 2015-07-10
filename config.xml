@@ -8,6 +8,7 @@
         Joshua Melville
     </author>
     <content src="index.html" />
+    <icon src="resources/icons/netCanvas-ios.png" />
     <preference name="orientation" value="landscape" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <preference name="DisallowOverscroll" value="true" />

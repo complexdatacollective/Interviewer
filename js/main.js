@@ -105,11 +105,16 @@ $(document).ready(function() {
 
     });
 
+
+    // print some version stuff
     if (window.isNodeWebkit) {
         var version = window.process.versions['node-webkit'];
         console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
+    } else if (window.isCordova) {
+        // can we get meaningful version info on cordova? how about a get request to the package.json?
+        console.log('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
     } else {
-
+        // anything we can do in browser? yes.
     }
 
     var protocolExists = function(protocol, callback) {

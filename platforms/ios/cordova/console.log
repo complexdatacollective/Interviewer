@@ -20,3 +20,21 @@
 2015-07-10 20:41:42.818 Network Canvas[37905:428787] [CDVTimer][statusbar] 7.753015ms
 2015-07-10 20:41:42.818 Network Canvas[37905:428787] [CDVTimer][TotalPluginStartup] 9.729981ms
 2015-07-10 20:41:42.821 Network Canvas[37905:428787] Started http daemon: http://localhost:12344/ 
+2015-07-10 21:10:49.335 Network Canvas[41959:485950] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/28390987-535F-4C60-AEE9-BD2973E76D17/data/Containers/Data/Application/FAD23525-9061-4FBF-B343-48C6239993AD/Library/Cookies/Cookies.binarycookies
+2015-07-10 21:10:49.385 Network Canvas[41959:485950] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-10 21:10:49.385 Network Canvas[41959:485950] Multi-tasking -> Device: YES, App: YES
+2015-07-10 21:10:49.386 Network Canvas[41959:485950] Unlimited access to network resources
+2015-07-10 21:10:49.569 Network Canvas[41959:485950] Using a WKWebView
+2015-07-10 21:10:49.660 Network Canvas[41959:485950] [CDVTimer][file] 1.962960ms
+2015-07-10 21:10:49.670 Network Canvas[41959:485950] [CDVTimer][statusbar] 10.511041ms
+2015-07-10 21:10:49.671 Network Canvas[41959:485950] [CDVTimer][TotalPluginStartup] 12.812018ms
+2015-07-10 21:10:49.673 Network Canvas[41959:485950] Started http daemon: http://localhost:12344/ 
+2015-07-10 21:11:12.916 Network Canvas[45615:490452] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/28390987-535F-4C60-AEE9-BD2973E76D17/data/Containers/Data/Application/2BF00188-B3F6-4D34-98D1-6B0E2F2577A8/Library/Cookies/Cookies.binarycookies
+2015-07-10 21:11:13.033 Network Canvas[45615:490452] Apache Cordova native platform version 3.8.0 is starting.
+2015-07-10 21:11:13.034 Network Canvas[45615:490452] Multi-tasking -> Device: YES, App: YES
+2015-07-10 21:11:13.036 Network Canvas[45615:490452] Unlimited access to network resources
+2015-07-10 21:11:13.156 Network Canvas[45615:490452] Using a WKWebView
+2015-07-10 21:11:13.237 Network Canvas[45615:490452] [CDVTimer][file] 0.977993ms
+2015-07-10 21:11:13.246 Network Canvas[45615:490452] [CDVTimer][statusbar] 9.509027ms
+2015-07-10 21:11:13.246 Network Canvas[45615:490452] [CDVTimer][TotalPluginStartup] 10.825992ms
+2015-07-10 21:11:13.249 Network Canvas[45615:490452] Started http daemon: http://localhost:12344/ 
