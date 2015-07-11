@@ -1112,15 +1112,20 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     padding:2vmin;
     border-radius:12px;
     background:#eee;
+    height:68vmin;
     transform: translateY(-100vh);
     opacity: 0;
     z-index:9999;
-    transition: all 1s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
+
+.newNodeBox > * {
+    transition: all 0.3s ease-in-out;
+}
+
 
 .newNodeBox.content-hidden > * {
     opacity:0;
-
 }
 
 @media (min-width: @screen-lg) {
@@ -1163,9 +1168,8 @@ input[type="checkbox"] {
 
 .relationship-close-button {
     position:absolute;
-    font-size:2.5em;
     color:white;
-    top:-73px;
+    top:-53px;
     right:30px;
     cursor:pointer;
 }

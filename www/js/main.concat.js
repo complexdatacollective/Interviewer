@@ -2051,7 +2051,7 @@ module.exports = function Namegenerator() {
         });
 
 
-        $(relationshipPanelContent).append('<span class="relationship-close-button">X</span>');
+        $(relationshipPanelContent).append('<span class="fa fa-2x fa-times relationship-close-button"></span>');
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         namegenerator.options.targetEl.append(nodeContainer);
 
@@ -2229,6 +2229,7 @@ module.exports = function Namegenerator() {
             $('.newNodeBox').addClass('content-hidden');
 
             setTimeout(function() {
+                $('.newNodeBox').removeClass('relationships');
                 $('.newNodeBox').html(newNodePanelContent);
 
                 if(editing) {
@@ -2240,20 +2241,25 @@ module.exports = function Namegenerator() {
                         $('.relationship-button').html('Set Relationship Roles');
                     }
                 }
-                $('.newNodeBox').removeClass('content-hidden');
-                $('.newNodeBox').removeClass('relationships');
 
-            }, 1000);
+            }, 300);
+            setTimeout(function() {
+                $('.newNodeBox').removeClass('content-hidden');
+            }, 500);
 
         } else {
             // relationship box is closed, so open it
             $('.newNodeBox').addClass('content-hidden');
-            $('.newNodeBox').addClass('relationships');
 
             setTimeout(function() {
+                $('.newNodeBox').addClass('relationships');
                 $('.newNodeBox').html(relationshipPanelContent);
+
+            }, 300);
+
+            setTimeout(function(){
                 $('.newNodeBox').removeClass('content-hidden');
-            }, 1000);
+            }, 500);
 
         }
     };
