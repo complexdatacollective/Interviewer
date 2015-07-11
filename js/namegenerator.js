@@ -16,6 +16,8 @@ module.exports = function Namegenerator() {
 
     var nodeBoxOpen = false;
     var editing = false;
+    var relationshipPanelContent;
+    var newNodePanelContent;
 
     var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
 
@@ -407,14 +409,13 @@ module.exports = function Namegenerator() {
     namegenerator.init = function(options) {
         window.tools.extend(namegenerator.options, options);
         // create elements
-        var button = $('<span class="hi-icon hi-icon-user add-button">Add</span>');
+        var button = $('<span class="fa fa-4x fa-plus-circle add-button"></span>');
         namegenerator.options.targetEl.append(button);
         var alterCountBox = $('<div class="alter-count-box"></div>');
         namegenerator.options.targetEl.append(alterCountBox);
 
         // create node box
-        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0">Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
-
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-2x fa-users"></span> Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // namegenerator.options.targetEl.append(newNodeBox);
         $('body').append(newNodeBox);
@@ -460,18 +461,21 @@ module.exports = function Namegenerator() {
         var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
         $('.newNodeBox .form .fields').append(buttons);
 
+        newNodePanelContent = $('.newNodeBox').html();
+
         // relationship types
-        alterCountBox = $('<div class="relationship-types-container"><span class="relationship-close-button">X</span>');
-        $('.newNodeBox').after(alterCountBox);
+        relationshipPanelContent = $('<div class="relationship-types-container"></div>');
         var counter = 0;
         $.each(roles, function(index) {
-            $('.relationship-types-container').append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
+            $(relationshipPanelContent).append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
             $.each(roles[index], function(relIndex, relValue) {
-                $('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
+                $(relationshipPanelContent).children('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
             });
             counter++;
         });
 
+
+        $(relationshipPanelContent).append('<span class="relationship-close-button">X</span>');
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         namegenerator.options.targetEl.append(nodeContainer);
 
@@ -635,7 +639,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.toggleRelationshipBox = function() {
-        if ($('.relationship-types-container').hasClass('open')) {
+        if ($('.newNodeBox').hasClass('relationships')) {
             // relationship box is open, so close it
             var roleCount = $('.relationship.selected').length;
             var plural = 'roles';
@@ -644,62 +648,37 @@ module.exports = function Namegenerator() {
                 plural = 'role';
             }
 
-            if(editing) {
-                $('.relationship-button').html(roleCount+' '+plural+' selected.');
-            } else {
-                if (roleCount > 0) {
-                    $('.relationship-button').html(roleCount+' '+plural+' selected.');
-                } else {
-                    $('.relationship-button').html('Set Relationship Roles');
-                }
-            }
+            // fade out
 
-            $.each($('.relationship-type'), function(index, value) {
-                setTimeout(function() {
-                    $(value).transition({opacity:0,top:'-100px'},150);
-                    $.each($(value).children('.relationship'), function(index, childvalue) {
-                        setTimeout(function() {
-                            $(childvalue).transition({opacity:0,top:'-200px'}, 150);
-                        }, 50+(index*20));
-                    });
-                }, index*50);
-
-            });
+            $('.newNodeBox').addClass('content-hidden');
 
             setTimeout(function() {
-                // $('.newNodeBox').show();
+                $('.newNodeBox').html(newNodePanelContent);
 
-                $('.relationship-types-container').removeClass('open');
-                $('.relationship-types-container').removeClass('front');
-                $('.newNodeBox').removeClass('back');
-            }, 400);
+                if(editing) {
+                    $('.relationship-button').html(roleCount+' '+plural+' selected.');
+                } else {
+                    if (roleCount > 0) {
+                        $('.relationship-button').html(roleCount+' '+plural+' selected.');
+                    } else {
+                        $('.relationship-button').html('Set Relationship Roles');
+                    }
+                }
+                $('.newNodeBox').removeClass('content-hidden');
+                $('.newNodeBox').removeClass('relationships');
+
+            }, 1000);
 
         } else {
             // relationship box is closed, so open it
-            // if(editing) {
-            //     var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
-            //     $.each(roleEdges, function(index, value) {
-            //         $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
-            //     });
-            // }
+            $('.newNodeBox').addClass('content-hidden');
+            $('.newNodeBox').addClass('relationships');
 
-            $('.newNodeBox').addClass('back');
-            $('.relationship-types-container').addClass('open front');
-            $('.relationship').css({position:'relative', opacity:0,top:'-200px'});
-            $('.relationship-type').css({position:'relative', opacity:0,top:'-100px'});
-            $.each($('.relationship-type'), function(index, value) {
-                setTimeout(function() {
-                    $(value).transition({opacity:1,top:'0px'},200);
-                    $.each($(value).children('.relationship'), function(index, childvalue) {
-                        setTimeout(function() {
-                            $(childvalue).transition({opacity:1,top:0}, 100);
-                        }, 100+(index*50));
-                    });
-                }, index*80);
+            setTimeout(function() {
+                $('.newNodeBox').html(relationshipPanelContent);
+                $('.newNodeBox').removeClass('content-hidden');
+            }, 1000);
 
-            });
-            // $('.content').removeClass('blurry');
-            // $('.newNodeBox').hide();
         }
     };
 

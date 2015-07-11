@@ -84,10 +84,10 @@ var Menu = function Menu(options) {
         var newMenu = {};
         newMenu.name = name;
         newMenu.open = false;
-        newMenu.button = $('<span class="hi-icon menu-btn '+name+' shown"></span>');
-
-        newMenu.button.addClass(icon).html(name);
+        newMenu.button = $('<span class="fa fa-2x fa-'+icon+' menu-btn '+name+'"></span>');
+        // newMenu.button.addClass(icon);
         $('.menu-container').append(newMenu.button);
+        $(newMenu.button).addClass('shown');
 
         var menuClass = name+'-menu';
         newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+name+'</h2><ul></ul></div></div>');

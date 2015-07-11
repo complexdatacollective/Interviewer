@@ -1,4 +1,4 @@
-/* global document, window, $, console, protocol */
+/* global document, window, $, protocol, nodeRequire */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -11,9 +11,14 @@ var Session = function Session() {
     var lastSaveTime, saveTimer;
 
     function saveFile(path) {
-        var data = JSON.stringify(session.sessionData, undefined, 2);
-        var fs = require('browserify-fs');
-        fs.writeFile(path, data);
+        if (window.isNodeWebkit) {
+            var data = JSON.stringify(session.sessionData, undefined, 2);
+            var fs = nodeRequire('fs');
+            fs.writeFile(path, data);
+        } else {
+            window.tools.notify('Not yet implemented on this platform.', 1);
+        }
+
     }
 
     function clickDownloadInput() {
@@ -55,7 +60,6 @@ var Session = function Session() {
     };
 
     session.loadProtocol = function() {
-        console.log('loading protocol');
 
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
@@ -88,8 +92,6 @@ var Session = function Session() {
             window.dataStore.init(function(sessionid) {
                 session.id = sessionid;
                 window.dataStore.load(function(data) {
-                    console.log(data);
-                    console.log(study);
 
                     session.updateSessionData(data, function() {
                         // Only load the network into the model if there is a network to load
@@ -107,13 +109,14 @@ var Session = function Session() {
             });
 
             // Initialise the menu system – other modules depend on it being there.
-            var stagesMenu = window.menu.addMenu('Stages', 'hi-icon-list');
+            var stagesMenu = window.menu.addMenu('Stages', 'bars');
             $.each(session.stages, function(index,value) {
                 window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
             });
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
-            console.log( 'Request Failed: ' + err );
+            window.tools.notify('Error fetching protocol!',1);
+            window.tools.notify(err,1);
         });
 
     };
@@ -154,7 +157,7 @@ var Session = function Session() {
             session.saveManager();
         }, false);
 
-        var sessionMenu = window.menu.addMenu('Session','hi-icon-cog');
+        var sessionMenu = window.menu.addMenu('Session','cogs');
         window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
@@ -296,7 +299,6 @@ var Session = function Session() {
 
             // if true, skip the stage
             if (outcome === true) {
-                console.log('Skipping because skip condition was met.');
                 if (stage > currentStage) {
                     session.goToStage(stage+1);
                 } else {

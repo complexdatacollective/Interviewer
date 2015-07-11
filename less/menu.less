@@ -215,135 +215,6 @@
 	box-sizing: content-box;
 }
 
-.hi-icon:before {
-	font-family: 'ecoicon';
-	speak: none;
-	font-size: 3vmin;
-	line-height: 5vmin;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	display: block;
-	-webkit-font-smoothing: antialiased;
-}
-
-.hi-icon-mobile:before {
-	content: "\e009";
-}
-
-.hi-icon-screen:before {
-	content: "\e00a";
-}
-
-.hi-icon-earth:before {
-	content: "\e002";
-}
-
-.hi-icon-support:before {
-	content: "\e000";
-}
-
-.hi-icon-locked:before {
-	content: "\e001";
-}
-
-.hi-icon-cog:before {
-	content: "\e003";
-}
-
-.hi-icon-clock:before {
-	content: "\e004";
-}
-
-.hi-icon-videos:before {
-	content: "\e005";
-}
-
-.hi-icon-list:before {
-	content: "\e006";
-}
-
-.hi-icon-refresh:before {
-	content: "\e007";
-}
-
-.hi-icon-images:before {
-	content: "\e008";
-}
-
-.hi-icon-pencil:before {
-	content: "\e00b";
-}
-
-.hi-icon-link:before {
-	content: "\e00c";
-}
-
-.hi-icon-mail:before {
-	content: "\e00d";
-}
-
-.hi-icon-location:before {
-	content: "\e00e";
-}
-
-.hi-icon-archive:before {
-	content: "\e00f";
-}
-
-.hi-icon-chat:before {
-	content: "\e010";
-}
-
-.hi-icon-bookmark:before {
-	content: "\e011";
-}
-
-.hi-icon-user:before {
-	content: "\e012";
-}
-
-.hi-icon-contract:before {
-	content: "\e013";
-}
-
-.hi-icon-star:before {
-	content: "\e014";
-}
-
-.hi-icon-star:before {
-	content: "?";
-}
-
-
-/* Effect 8 */
-.hi-icon {
-	// background: #333;
-	-webkit-transition: -webkit-transform ease-out 0.1s, background 0.2s;
-	-moz-transition: -moz-transform ease-out 0.1s, background 0.2s;
-	transition: transform ease-out 0.1s, background 0.2s;
-}
-
-.hi-icon:after {
-	top: 0;
-	left: 0;
-	padding: 0;
-	z-index: -1;
-	box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
-	opacity: 0;
-	-webkit-transform: scale(0.9);
-	-moz-transform: scale(0.9);
-	-ms-transform: scale(0.9);
-	transform: scale(0.9);
-}
-
-.hi-icon:active {
-	background: rgba(255,255,255,0.05);
-	transform: scale(0.93);
-	color: #fff;
-}
-
 .fa-2x {
   vertical-align: middle;
 }
@@ -351,18 +222,20 @@
 // Menus
 
 .menu-btn {
-	transition: transform 1s ease-in-out;
+	transition: all 1s ease-in-out;
 	transition-delay: 0s;
 	position:absolute;
 	top:-100px;
-	left:10px;
+	left:40px;
 	opacity:0;
 	z-index:12;
+	border-radius: 50%;
+	cursor:pointer;
+
 }
 
 .shown {
 	opacity:1;
-	transition-delay: 0.1s;
 }
 
 .Session-menu {
@@ -371,7 +244,7 @@
 }
 
 .Session.shown {
-	transform: translateY(110px);
+	transform: translateY(125px);
 }
 
 .Stages-menu {

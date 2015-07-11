@@ -78,7 +78,7 @@ div.big-check[data-toggle="buttons"] label {
 }
 
 .modal-body {
-    padding:20px 0;
+    padding:0px 0;
 }
 
 .modal-footer {
@@ -1082,14 +1082,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .alter-count-box {
     position:absolute;
     bottom:20px;
-    left:20px;
-    height:100px;
+    left:40px;
     width:100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 55px;
-    text-align: center;
     z-index:12;
 }
 
@@ -1120,7 +1115,12 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     transform: translateY(-100vh);
     opacity: 0;
     z-index:9999;
-    transition: all 0.5s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.newNodeBox.content-hidden > * {
+    opacity:0;
+
 }
 
 @media (min-width: @screen-lg) {
@@ -1132,44 +1132,22 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     }
 }
 
+.relationships {
+    left:10vw;
+    right:10vw;
+
+}
+
 .relationship-types-container {
-    display:none;
-    position:absolute;
-    top:50%;
-    margin-top:-300px;
-    width:1100px;
-    height:600px;
-    left:50%;
-    margin-left: -550px;
-    padding:40px;
-    border-radius:12px;
-    background:#eee;
-    color:black;
-    transform: rotateY(180deg);
-    opacity: 1;
-    z-index:-1;
-    border:1px solid rgb(50,50,50);
-    box-shadow: 0px 5px 61px 20px rgba(0,0,0,0.5);
-    // overflow:hidden;
-    backface-visibility: hidden;
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    display: flex;
+    flex-flow: row nowrap;
+    align-items:stretch;
 }
 
 .open {
     opacity:1;
     transform: translateY(0);
 }
-
-.front {
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-    transform: perspective(50em) rotateY(0deg);
-}
-
-.back {
-    transition: all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-    transform: perspective(50em) rotateY(180deg);
-}
-
 
 .logic-error {
     display:none;
@@ -1194,9 +1172,8 @@ input[type="checkbox"] {
 
 
 .relationship-type {
-    height:100%;
-    width:140px;
     margin-left:5px;
+    flex: 1 0;
     // border: 1px solid white;
     display:inline-flex;
     flex-direction: column;
@@ -1209,7 +1186,7 @@ input[type="checkbox"] {
 
 .relationship {
     padding:5px;
-    // width:200px;
+    width:100%;
     // height:80px;
     color:white;
     background:transparent;
@@ -1223,8 +1200,7 @@ input[type="checkbox"] {
     z-index:9999;
     cursor: pointer; cursor: hand;
     font-weight:500;
-    font-size: 14px;
-    width: 100%;
+    // width: 100%;
 }
 
 .relationship-type h1 {
@@ -1243,15 +1219,16 @@ input[type="checkbox"] {
 .add-button {
     position: absolute;
     bottom: 20px;
-    right: 30px;
+    right: 40px;
     z-index:12;
+    cursor:pointer;
 }
 
 .refresh-button {
     cursor:pointer;
     position: absolute;
     top: 20px;
-    right: 30px;
+    right: 40px;
     z-index:9999;
 }
 
@@ -1322,6 +1299,7 @@ label {
 // navigation arrows
 
 .paginate {
+
   -webkit-appearance: none;
   background: transparent;
   border: 0;
@@ -1331,10 +1309,8 @@ label {
   width: 50px;
   height: 50px;
   cursor: pointer;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
+  transform:scale(0.8);
   position: absolute;
   top: 50%;
   margin-top: -20px;
@@ -1349,98 +1325,61 @@ label {
     background: #fff;
     transition: all 0.15s ease; }
   .paginate.left {
-    left:2%}
+    left:0;}
     .paginate.left i {
-      -webkit-transform-origin: 0% 50%;
-      -moz-transform-origin: 0% 50%;
-      -ms-transform-origin: 0% 50%;
+
       transform-origin: 0% 50%; }
     .paginate.left i:first-child {
-      -webkit-transform: translate(0, -1px) rotate(40deg);
-      -moz-transform: translate(0, -1px) rotate(40deg);
-      -ms-transform: translate(0, -1px) rotate(40deg);
+
       transform: translate(0, -1px) rotate(40deg); }
     .paginate.left i:last-child {
-      -webkit-transform: translate(0, 1px) rotate(-40deg);
-      -moz-transform: translate(0, 1px) rotate(-40deg);
-      -ms-transform: translate(0, 1px) rotate(-40deg);
+
       transform: translate(0, 1px) rotate(-40deg); }
     .paginate.left:hover i:first-child {
-      -webkit-transform: translate(0, -1px) rotate(30deg);
-      -moz-transform: translate(0, -1px) rotate(30deg);
-      -ms-transform: translate(0, -1px) rotate(30deg);
+
       transform: translate(0, -1px) rotate(30deg); }
     .paginate.left:hover i:last-child {
-      -webkit-transform: translate(0, 1px) rotate(-30deg);
-      -moz-transform: translate(0, 1px) rotate(-30deg);
-      -ms-transform: translate(0, 1px) rotate(-30deg);
+
       transform: translate(0, 1px) rotate(-30deg); }
     .paginate.left:disabled i:first-child {
-      -webkit-transform: translate(-5px, 0) rotate(0deg);
-      -moz-transform: translate(-5px, 0) rotate(0deg);
-      -ms-transform: translate(-5px, 0) rotate(0deg);
+
       transform: translate(-5px, 0) rotate(0deg); }
     .paginate.left:disabled i:last-child {
-      -webkit-transform: translate(-5px, 0) rotate(0deg);
-      -moz-transform: translate(-5px, 0) rotate(0deg);
-      -ms-transform: translate(-5px, 0) rotate(0deg);
+
       transform: translate(-5px, 0) rotate(0deg); }
     .paginate.left:disabled:hover i:first-child {
-      -webkit-transform: translate(-5px, 0) rotate(0deg);
-      -moz-transform: translate(-5px, 0) rotate(0deg);
-      -ms-transform: translate(-5px, 0) rotate(0deg);
+
       transform: translate(-5px, 0) rotate(0deg); }
     .paginate.left:disabled:hover i:last-child {
-      -webkit-transform: translate(-5px, 0) rotate(0deg);
-      -moz-transform: translate(-5px, 0) rotate(0deg);
-      -ms-transform: translate(-5px, 0) rotate(0deg);
+
       transform: translate(-5px, 0) rotate(0deg); }
   .paginate.right {
-    right: 2%; }
+    right: 0; }
     .paginate.right i {
-      -webkit-transform-origin: 100% 50%;
-      -moz-transform-origin: 100% 50%;
-      -ms-transform-origin: 100% 50%;
+
       transform-origin: 100% 50%; }
     .paginate.right i:first-child {
-      -webkit-transform: translate(0, 1px) rotate(40deg);
-      -moz-transform: translate(0, 1px) rotate(40deg);
-      -ms-transform: translate(0, 1px) rotate(40deg);
+
       transform: translate(0, 1px) rotate(40deg); }
     .paginate.right i:last-child {
-      -webkit-transform: translate(0, -1px) rotate(-40deg);
-      -moz-transform: translate(0, -1px) rotate(-40deg);
-      -ms-transform: translate(0, -1px) rotate(-40deg);
+
       transform: translate(0, -1px) rotate(-40deg); }
     .paginate.right:hover i:first-child {
-      -webkit-transform: translate(0, 1px) rotate(30deg);
-      -moz-transform: translate(0, 1px) rotate(30deg);
-      -ms-transform: translate(0, 1px) rotate(30deg);
+
       transform: translate(0, 1px) rotate(30deg); }
     .paginate.right:hover i:last-child {
-      -webkit-transform: translate(0, -1px) rotate(-30deg);
-      -moz-transform: translate(0, -1px) rotate(-30deg);
-      -ms-transform: translate(0, -1px) rotate(-30deg);
+
       transform: translate(0, -1px) rotate(-30deg); }
     .paginate.right:disabled i:first-child {
-      -webkit-transform: translate(5px, 0) rotate(0deg);
-      -moz-transform: translate(5px, 0) rotate(0deg);
-      -ms-transform: translate(5px, 0) rotate(0deg);
+
       transform: translate(5px, 0) rotate(0deg); }
     .paginate.right:disabled i:last-child {
-      -webkit-transform: translate(5px, 0) rotate(0deg);
-      -moz-transform: translate(5px, 0) rotate(0deg);
-      -ms-transform: translate(5px, 0) rotate(0deg);
+
       transform: translate(5px, 0) rotate(0deg); }
     .paginate.right:disabled:hover i:first-child {
-      -webkit-transform: translate(5px, 0) rotate(0deg);
-      -moz-transform: translate(5px, 0) rotate(0deg);
-      -ms-transform: translate(5px, 0) rotate(0deg);
+
       transform: translate(5px, 0) rotate(0deg); }
     .paginate.right:disabled:hover i:last-child {
-      -webkit-transform: translate(5px, 0) rotate(0deg);
-      -moz-transform: translate(5px, 0) rotate(0deg);
-      -ms-transform: translate(5px, 0) rotate(0deg);
       transform: translate(5px, 0) rotate(0deg); }
   .paginate:disabled {
     opacity: 0.3;
