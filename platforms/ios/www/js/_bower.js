@@ -16979,6 +16979,149 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 	}
 }());
 
+/**
+ * @author Kyle Florence <kyle[dot]florence[at]gmail[dot]com>
+ * @website https://github.com/kflorence/jquery-deserialize/
+ * @version 1.2.1
+ *
+ * Dual licensed under the MIT and GPLv2 licenses.
+ */
+(function( jQuery, undefined ) {
+
+var push = Array.prototype.push,
+    rcheck = /^(?:radio|checkbox)$/i,
+    rplus = /\+/g,
+    rselect = /^(?:option|select-one|select-multiple)$/i,
+    rvalue = /^(?:button|color|date|datetime|datetime-local|email|hidden|month|number|password|range|reset|search|submit|tel|text|textarea|time|url|week)$/i;
+
+function getElements( elements ) {
+    return elements.map(function() {
+            return this.elements ? jQuery.makeArray( this.elements ) : this;
+        }).filter( ":input:not(:disabled)" ).get();
+}
+
+function getElementsByName( elements ) {
+    var current,
+        elementsByName = {};
+
+    jQuery.each( elements, function( i, element ) {
+        current = elementsByName[ element.name ];
+        elementsByName[ element.name ] = current === undefined ? element :
+            ( jQuery.isArray( current ) ? current.concat( element ) : [ current, element ] );
+    });
+
+    return elementsByName;
+}
+
+jQuery.fn.deserialize = function( data, options ) {
+    var i, length,
+        elements = getElements( this ),
+        normalized = [];
+
+    if ( !data || !elements.length ) {
+        return this;
+    }
+
+    if ( jQuery.isArray( data ) ) {
+        normalized = data;
+
+    } else if ( jQuery.isPlainObject( data ) ) {
+        var key, value;
+
+        for ( key in data ) {
+            jQuery.isArray( value = data[ key ] ) ?
+                push.apply( normalized, jQuery.map( value, function( v ) {
+                    return { name: key, value: v };
+                })) : push.call( normalized, { name: key, value: value } );
+        }
+
+    } else if ( typeof data === "string" ) {
+        var parts;
+
+        data = data.split( "&" );
+
+        for ( i = 0, length = data.length; i < length; i++ ) {
+            parts =  data[ i ].split( "=" );
+            push.call( normalized, {
+                name: decodeURIComponent( parts[ 0 ].replace( rplus, "%20" ) ),
+                value: decodeURIComponent( parts[ 1 ].replace( rplus, "%20" ) )
+            });
+        }
+    }
+
+    if ( !( length = normalized.length ) ) {
+        return this;
+    }
+
+    var current, element, j, len, name, property, type, value,
+        change = jQuery.noop,
+        complete = jQuery.noop,
+        names = {};
+
+    options = options || {};
+    elements = getElementsByName( elements );
+
+    // Backwards compatible with old arguments: data, callback
+    if ( jQuery.isFunction( options ) ) {
+        complete = options;
+
+    } else {
+        change = jQuery.isFunction( options.change ) ? options.change : change;
+        complete = jQuery.isFunction( options.complete ) ? options.complete : complete;
+    }
+
+    for ( i = 0; i < length; i++ ) {
+        current = normalized[ i ];
+
+        name = current.name;
+        value = current.value;
+
+        if ( !( element = elements[ name ] ) ) {
+            continue;
+        }
+
+        type = ( len = element.length ) ? element[ 0 ] : element;
+        type = ( type.type || type.nodeName ).toLowerCase();
+        property = null;
+
+        if ( rvalue.test( type ) ) {
+            if ( len ) {
+                j = names[ name ];
+                element = element[ names[ name ] = ( j == undefined ) ? 0 : ++j ];
+            }
+
+            change.call( element, ( element.value = value ) );
+
+        } else if ( rcheck.test( type ) ) {
+            property = "checked";
+
+        } else if ( rselect.test( type ) ) {
+            property = "selected";
+        }
+
+        if ( property ) {
+            if ( !len ) {
+                element = [ element ];
+                len = 1;
+            }
+
+            for ( j = 0; j < len; j++ ) {
+                current = element[ j ];
+
+                if ( current.value == value ) {
+                    change.call( current, ( current[ property ] = true ) && value );
+                }
+            }
+        }
+    }
+
+    complete.call( this );
+
+    return this;
+};
+
+})( jQuery );
+
 /*! jQuery UI - v1.11.4 - 2015-03-11
 * http://jqueryui.com
 * Includes: core.js, widget.js, mouse.js, position.js, accordion.js, autocomplete.js, button.js, datepicker.js, dialog.js, draggable.js, droppable.js, effect.js, effect-blind.js, effect-bounce.js, effect-clip.js, effect-drop.js, effect-explode.js, effect-fade.js, effect-fold.js, effect-highlight.js, effect-puff.js, effect-pulsate.js, effect-scale.js, effect-shake.js, effect-size.js, effect-slide.js, effect-transfer.js, menu.js, progressbar.js, resizable.js, selectable.js, selectmenu.js, slider.js, sortable.js, spinner.js, tabs.js, tooltip.js
@@ -45455,6 +45598,2519 @@ function stringify(gj) {
 
 },{}]},{},[1])(1)
 });
+L.Control.Distance = L.Control.extend({
+	options: {
+		position: 'topleft',
+		popups: true
+	},
+
+	initialize: function (options) {
+		L.Util.setOptions(this, options);
+		this._line = new L.Polyline([], {editable: true});
+		this._line.on('edit', this._update, this);
+		this._line.on('click', function(e) {});
+		this._active = false;
+	},
+
+	getLine: function() { return this._line; },
+
+	onAdd: function(map) {
+		var className = 'leaflet-control-distance',
+		    container = this._container = L.DomUtil.create('div', className);
+
+		function cb() {
+			if (this._active)
+				this._calc_disable();
+			else
+				this._calc_enable();
+		}
+
+		var link = this._link = this._createButton('Edit', 'leaflet-control-distance leaflet-control-distance-edit', container, cb, this);
+		var del = this._link_delete = this._createButton('Delete', 'leaflet-control-distance leaflet-control-distance-delete', container, this._reset, this);
+		var text = this._text = L.DomUtil.create('div', 'leaflet-control-distance-text', container);
+
+		//text.style.display = 'inline';
+		//text.style.float = 'right';
+
+		this._map.addLayer(this._line);
+		this._calc_disable();
+		return container;
+	},
+
+	_createButton: function (title, className, container, fn, context) {
+		var link = L.DomUtil.create('a', className, container);
+		link.href = '#';
+		link.title = title;
+
+		L.DomEvent
+			.addListener(link, 'click', L.DomEvent.stopPropagation)
+			.addListener(link, 'click', L.DomEvent.preventDefault)
+			.addListener(link, 'click', fn, context);
+
+		return link;
+	},
+
+	onRemove: function(map) {
+		this._calc_disable();
+	},
+	
+	_calc_enable: function() {
+		this._map.on('click', this._add_point, this);
+
+		this._map.getContainer().style.cursor = 'crosshair';
+		//this._map.addLayer(this._line);
+		L.DomUtil.addClass(this._link, 'leaflet-control-distance-active');
+		this._container.appendChild(this._link_delete);
+		this._container.appendChild(this._text);
+		this._active = true;
+		this._line.editing.enable();
+		if (!this._map.hasLayer(this._line))
+			this._map.addLayer(this._line);
+		this._update();
+	},
+
+	_calc_disable: function() {
+		this._map.off('click', this._add_point, this);
+		//this._map.removeLayer(this._line);
+		this._map.getContainer().style.cursor = 'default';
+		this._container.removeChild(this._link_delete);
+		this._container.removeChild(this._text);
+		L.DomUtil.removeClass(this._link, 'leaflet-control-distance-active');
+		this._active = false;
+		this._line.editing.disable();
+	},
+
+	_add_point: function (e) {
+		var len = this._line.getLatLngs().length;
+		this._line.addLatLng(e.latlng);
+		this._line.editing.updateMarkers();
+		this._line.fire('edit', {});
+	},
+
+	_reset: function(e) {
+		this._line.setLatLngs([]);
+		this._line.fire('edit', {});
+		this._line.redraw();
+		this._line.editing.updateMarkers();
+	},
+
+	_update: function(e) {
+		this._text.textContent = this._d2txt(this._distance_calc());
+	},
+
+	_d2txt: function(d) {
+		if (d < 2000)
+			return d.toFixed(0) + ' m';
+		else
+			return (d/1000).toFixed(1) + ' km';
+	},
+
+	_distance_calc: function(e) {
+		var ll = this._line.getLatLngs();
+		var d = 0, p = null;
+		for (var i = 0; i < ll.length; i++) {
+			if (i)
+				d += p.distanceTo(ll[i]);
+			if (this.options.popups) {
+				var m = this._line.editing._markers[i];
+				if (m) {
+					m.bindPopup(this._d2txt(d));
+					m.on('mouseover', m.openPopup, m);
+					m.on('mouseout', m.closePopup, m);
+				}
+				}
+			p = ll[i];
+		}
+		return d;
+	}
+});
+
+/*
+ * Add async initialization of layers to L.Control.Layers
+ */
+L.Control.Layers.include({
+	_loadScripts: function(scripts, cb, args) {
+		if (!scripts || scripts.length === 0)
+			return cb(args);
+		var _this = this, s = scripts.pop(), c;
+		c = L.Control.Layers._script_cache[s];
+		if (c === undefined) {
+			c = {url: s, wait: []};
+			var script = document.createElement('script');
+			script.src = s;
+			script.type = 'text/javascript';
+			script.onload = function () {
+				var i = 0;
+				for (i = 0; i < c.wait.length; i++)
+					c.wait[i]();
+			};
+			c.e = script;
+			document.getElementsByTagName('head')[0].appendChild(script);
+		}
+		function _cb() { _this._loadScripts(scripts, cb, args); }
+		c.wait.push(_cb);
+		if (c.e.readyState === 'completed')
+			_cb();
+		L.Control.Layers._script_cache[s] = c;
+	},
+
+	addLayerDef: function(name, def) {
+		if (this._layer_defs === undefined)
+			this._layer_defs = {};
+		this._layer_defs[name] = def;
+	},
+
+	addLayerDefs: function(defs) {
+		if (this._layer_defs === undefined)
+			this._layer_defs = {};
+		L.Util.extend(this._layer_defs, defs);
+	},
+
+	loadLayer: function(name, deflt) {
+		var _this = this, l = this._layer_defs[name];
+		l['default'] = deflt;
+		this._loadScripts(l.js.reverse(), function(l) {_this._loadLayer(l);}, l);
+	},
+
+	_loadLayer: function(l) {
+		var x = l.init();
+		if (l['default'] && this._map)
+			this._map.addLayer(x);
+		if (!l.overlay)
+			this.addBaseLayer(x, l.name);
+		else
+			this.addOverlay(x, l.name);
+	}
+});
+
+L.Control.Layers._script_cache = {};
+
+L.Control.Permalink = L.Control.extend({
+	includes: L.Mixin.Events, 
+
+	options: {
+		position: 'bottomleft',
+		useAnchor: true,
+		useLocation: false,
+		text: 'Permalink'
+	},
+
+	initialize: function(options) {
+		L.Util.setOptions(this, options);
+		this._params = {};
+		this._set_urlvars();
+		this.on('update', this._set_center, this);
+		for (var i in this) {
+			if (typeof(i) === 'string' && i.indexOf('initialize_') === 0)
+				this[i]();
+		}
+	},
+
+	onAdd: function(map) {
+		this._container = L.DomUtil.create('div', 'leaflet-control-attribution leaflet-control-permalink');
+		L.DomEvent.disableClickPropagation(this._container);
+		this._map = map;
+		this._href = L.DomUtil.create('a', null, this._container);
+		this._href.innerHTML = this.options.text;
+
+		map.on('moveend', this._update_center, this);
+		this.fire('update', {params: this._params});
+		this._update_center();
+
+		if (this.options.useAnchor && 'onhashchange' in window) {
+			var _this = this, fn = window.onhashchange;
+			window.onhashchange = function() {
+				_this._set_urlvars();
+				if (fn) return fn();
+			};
+		}
+
+		this.fire('add', {map: map});
+
+		return this._container;
+	},
+
+	_update_center: function() {
+		if (!this._map) return;
+
+		var center = this._round_point(this._map.getCenter());
+		this._update({zoom: this._map.getZoom(), lat: center.lat, lon: center.lng});
+	},
+
+	_update_href: function() {
+		var params = L.Util.getParamString(this._params);
+		var sep = '?';
+		if (this.options.useAnchor) sep = '#';
+		var url = this._url_base + sep + params.slice(1);
+		if (this._href) this._href.setAttribute('href', url);
+		if (this.options.useLocation)
+			location.replace('#' + params.slice(1));
+		return url;
+	},
+
+	_round_point : function(point) {
+		var bounds = this._map.getBounds(), size = this._map.getSize();
+		var ne = bounds.getNorthEast(), sw = bounds.getSouthWest();
+
+		var round = function (x, p) {
+			if (p === 0) return x;
+			var shift = 1;
+			while (p < 1 && p > -1) {
+				x *= 10;
+				p *= 10;
+				shift *= 10;
+			}
+			return Math.floor(x)/shift;
+		};
+		point.lat = round(point.lat, (ne.lat - sw.lat) / size.y);
+		point.lng = round(point.lng, (ne.lng - sw.lng) / size.x);
+		return point;
+	},
+
+	_update: function(obj, source) {
+		for(var i in obj) {
+			if (!obj.hasOwnProperty(i)) continue;
+			if (obj[i] !== null && obj[i] !== undefined)
+				this._params[i] = obj[i];
+			else
+				delete this._params[i];
+		}
+
+		this._update_href();
+	},
+
+	_set_urlvars: function()
+	{
+		this._url_base = window.location.href.split('#')[0].split('?')[0];
+
+		var p;
+		if (this.options.useAnchor)
+			p = L.UrlUtil.queryParse(L.UrlUtil.hash());
+		else
+			p = L.UrlUtil.queryParse(L.UrlUtil.query());
+		
+		function eq(x, y) {
+			for(var i in x)
+				if (x.hasOwnProperty(i) && x[i] !== y[i])
+					return false;
+			return true;
+		}
+			
+		if (eq(p, this._params) && eq(this._params, p))
+			return;
+		this._params = p;
+		this._update_href();
+		this.fire('update', {params: this._params});
+	},
+
+	_set_center: function(e)
+	{
+		var params = e.params;
+		if (params.zoom === undefined ||
+		    params.lat === undefined ||
+		    params.lon === undefined) return;
+		this._map.setView(new L.LatLng(params.lat, params.lon), params.zoom);
+	}
+});
+
+L.UrlUtil = {
+	queryParse: function(s) {
+		var p = {};
+		var sep = '&';
+		if (s.search('&amp;') !== -1)
+			sep = '&amp;';
+		var params = s.split(sep);
+		for(var i = 0; i < params.length; i++) {
+			var tmp = params[i].split('=');
+			if (tmp.length !== 2) continue;
+			p[tmp[0]] = decodeURI(tmp[1]);
+		}
+		return p;
+	},
+
+	query: function() {
+		var href = window.location.href.split('#')[0], idx = href.indexOf('?');
+		if (idx < 0)
+			return '';
+		return href.slice(idx+1);
+	},
+
+	hash: function() { return window.location.hash.slice(1); },
+
+	updateParamString: function (q, obj) {
+		var p = L.UrlUtil.queryParse(q);
+		for (var i in obj) {
+			if (obj.hasOwnProperty(i))
+				p[i] = obj[i];
+		}
+		return L.Util.getParamString(p).slice(1);
+	}
+};
+
+//#include "Permalink.js
+
+L.Control.Permalink.include({
+	/*
+	options: {
+		useMarker: true,
+		markerOptions: {}
+	},
+	*/
+
+	initialize_layer: function() {
+		this.on('update', this._set_layer, this);
+		this.on('add', this._onadd_layer, this);
+	},
+
+	_onadd_layer: function(e) {
+		this._map.on('layeradd', this._update_layer, this);
+		this._map.on('layerremove', this._update_layer, this);
+		this._update_layer();
+	},
+
+	_update_layer: function() {
+		if (!this.options.layers) return;
+		var layer = this.options.layers.currentBaseLayer();
+		if (layer)
+			this._update({layer: layer.name});
+	},
+
+	_set_layer: function(e) {
+		var p = e.params;
+		if (!this.options.layers || !p.layer) return;
+		this.options.layers.chooseBaseLayer(p.layer);
+	}
+});
+
+L.Control.Layers.include({
+	chooseBaseLayer: function(name) {
+		var layer, obj;
+		for (var i in this._layers) {
+			if (!this._layers.hasOwnProperty(i))
+				continue;
+			obj = this._layers[i];
+			if (!obj.overlay && obj.name === name)
+				layer = obj.layer;
+		}
+		if (!layer || this._map.hasLayer(layer))
+			return;
+
+		for (var j in this._layers) {
+			if (!this._layers.hasOwnProperty(j))
+				continue;
+			obj = this._layers[j];
+			if (!obj.overlay && this._map.hasLayer(obj.layer))
+				this._map.removeLayer(obj.layer);
+		}
+		this._map.addLayer(layer);
+		this._update();
+	},
+
+	currentBaseLayer: function() {
+		for (var i in this._layers) {
+			if (!this._layers.hasOwnProperty(i))
+				continue;
+			var obj = this._layers[i];
+			if (obj.overlay) continue;
+			if (!obj.overlay && this._map.hasLayer(obj.layer))
+				return obj;
+		}
+	}
+});
+
+
+//#include "Permalink.js
+
+L.Control.Permalink.include({
+	/*
+	options: {
+		line: null
+	},
+	*/
+
+	initialize_line: function() {
+		this.on('update', this._set_line, this);
+		this.on('add', this._onadd_line, this);
+	},
+
+	_onadd_line: function(e) {
+		if (!this.options.line) return;
+		this.options.line.on('edit', this._update_line, this);
+		this._update_line();
+	},
+
+	_update_line: function() {
+		if (!this.options.line) return;
+		var line = this.options.line;
+		if (!line) return;
+		var text = [], coords = line.getLatLngs();
+		if (!coords.length)
+			return this._update({line: null});
+		for (var i in coords)
+			text.push(coords[i].lat.toFixed(4) + ',' + coords[i].lng.toFixed(4));
+		this._update({line: text.join(';')});
+	},
+
+	_set_line: function(e) {
+		var p = e.params, l = this.options.line;
+		if (!l || !p.line) return;
+		var coords = [], text = p.line.split(';');
+		for (var i in text) {
+			var ll = text[i].split(',');
+			if (ll.length !== 2) continue;
+			coords.push(new L.LatLng(ll[0], ll[1]));
+		}
+		if (!coords.length) return;
+		l.setLatLngs(coords);
+		if (!this._map.hasLayer(l))
+			this._map.addLayer(l);
+	}
+});
+
+//#include "Permalink.js
+
+L.Control.Permalink.include({
+	/*
+	options: {
+		useMarker: true,
+		markerOptions: {}
+	},
+	*/
+
+	initialize_marker: function() {
+		this.on('update', this._set_marker, this);
+	},
+
+	_set_marker: function(e) {
+		var p = e.params;
+		//if (!this.options.useMarker) return;
+		if (this._marker) return;
+		if (p.marker !== 1) return;
+		if (p.mlat !== undefined && p.mlon !== undefined)
+			return this._update({mlat: null, mlon: null,
+					lat: p.mlat, lon: p.mlon, marker: 1});
+		this._marker = new L.Marker(new L.LatLng(p.lat, p.lon),
+						this.options.markerOptions);
+		this._marker.bindPopup('<a href="' + this._update_href() + '">' + this.options.text + '</a>');
+		this._map.addLayer(this._marker);
+		this._update({marker: null});
+	}
+});
+
+L.Icon.Canvas = L.Icon.extend({
+	options: {
+		iconSize: new L.Point(20, 20), // Have to be supplied
+		/*
+		iconAnchor: (Point)
+		popupAnchor: (Point)
+		*/
+		className: 'leaflet-canvas-icon'
+	},
+
+	createIcon: function () {
+		var e = document.createElement('canvas');
+		this._setIconStyles(e, 'icon');
+		var s = this.options.iconSize;
+		e.width = s.x;
+		e.height = s.y;
+		this.draw(e.getContext('2d'), s.x, s.y);
+		return e;
+	},
+
+	createShadow: function () {
+		return null;
+	},
+
+	draw: function(canvas, width, height) {
+	}
+});
+
+L.DeferredLayer = L.LayerGroup.extend({
+	options: {
+		js: [],
+		init: null
+	},
+
+	_script_cache: {},
+
+	initialize: function(options) {
+		L.Util.setOptions(this, options);
+		L.LayerGroup.prototype.initialize.apply(this);
+		this._loaded = false;
+	},
+
+	onAdd: function(map) {
+		L.LayerGroup.prototype.onAdd.apply(this, [map]);
+		if (this._loaded) return;
+		var loaded = function() {
+			this._loaded = true;
+			var l = this.options.init();
+			if (l)
+				this.addLayer(l);
+		};
+		this._loadScripts(this.options.js.reverse(), L.Util.bind(loaded, this));
+	},
+
+	_loadScripts: function(scripts, cb, args) {
+		if (!scripts || scripts.length === 0)
+			return cb(args);
+		var _this = this, s = scripts.pop(), c;
+		c = this._script_cache[s];
+		if (c === undefined) {
+			c = {url: s, wait: []};
+			var script = document.createElement('script');
+			script.src = s;
+			script.type = 'text/javascript';
+			script.onload = function () {
+				c.e.readyState = 'completed';
+				var i = 0;
+				for (i = 0; i < c.wait.length; i++)
+					c.wait[i]();
+			};
+			c.e = script;
+			document.getElementsByTagName('head')[0].appendChild(script);
+		}
+		function _cb() { _this._loadScripts(scripts, cb, args); }
+		c.wait.push(_cb);
+		if (c.e.readyState === 'completed')
+			_cb();
+		this._script_cache[s] = c;
+	}
+});
+
+/*
+ * Based on comments by @runanet and @coomsie 
+ * https://github.com/CloudMade/Leaflet/issues/386
+ *
+ * Wrapping function is needed to preserve L.Marker.update function
+ */
+(function () {
+	var _old__setPos = L.Marker.prototype._setPos;
+	L.Marker.include({
+		_updateImg: function(i, a, s) {
+			a = L.point(s).divideBy(2)._subtract(L.point(a));
+			var transform = '';
+			transform += ' translate(' + -a.x + 'px, ' + -a.y + 'px)';
+			transform += ' rotate(' + this.options.iconAngle + 'deg)';
+			transform += ' translate(' + a.x + 'px, ' + a.y + 'px)';
+			i.style[L.DomUtil.TRANSFORM] += transform;
+		},
+
+		setIconAngle: function (iconAngle) {
+			this.options.iconAngle = iconAngle;
+			if (this._map)
+				this.update();
+		},
+
+		_setPos: function (pos) {
+			if (this._icon)
+				this._icon.style[L.DomUtil.TRANSFORM] = '';
+			if (this._shadow)
+				this._shadow.style[L.DomUtil.TRANSFORM] = '';
+
+			_old__setPos.apply(this,[pos]);
+
+			if (this.options.iconAngle) {
+				var a = this.options.icon.options.iconAnchor;
+				var s = this.options.icon.options.iconSize;
+				var i;
+				if (this._icon) {
+					i = this._icon;
+					this._updateImg(i, a, s);
+				}
+				if (this._shadow) {
+					if (this.options.icon.options.shadowAnchor)
+						a = this.options.icon.options.shadowAnchor;
+					s = this.options.icon.options.shadowSize;
+					i = this._shadow;
+					this._updateImg(i, a, s);
+				}
+			}
+		}
+	});
+}());
+
+L.Icon.Text = L.Icon.extend({
+	initialize: function (text, options) {
+		this._text = text;
+		L.Icon.prototype.initialize.apply(this, [options]);
+	},
+
+	createIcon: function() {
+		var el = document.createElement('div');
+		el.appendChild(document.createTextNode(this._text));
+		this._setIconStyles(el, 'icon');
+		el.style.textShadow = '2px 2px 2px #fff';
+		return el;
+	},
+
+	createShadow: function() { return null; }
+
+});
+
+L.Marker.Text = L.Marker.extend({
+	initialize: function (latlng, text, options) {
+        	L.Marker.prototype.initialize.apply(this, [latlng, options]);
+		this._fakeicon = new L.Icon.Text(text);
+	},
+
+	_initIcon: function() {
+        	L.Marker.prototype._initIcon.apply(this);
+
+		var i = this._icon, s = this._shadow, obj = this.options.icon;
+		this._icon = this._shadow = null;
+
+		this.options.icon = this._fakeicon;
+        	L.Marker.prototype._initIcon.apply(this);
+		this.options.icon = obj;
+
+		if (s) {
+			s.parentNode.removeChild(s);
+			this._icon.appendChild(s);
+		}
+		
+		i.parentNode.removeChild(i);
+		this._icon.appendChild(i);
+
+		var w = this._icon.clientWidth, h = this._icon.clientHeight;
+		this._icon.style.marginLeft = -w / 2 + 'px';
+		//this._icon.style.backgroundColor = "red";
+		var off = new L.Point(w/2, 0);
+		if (L.Browser.webkit) off.y = -h;
+		L.DomUtil.setPosition(i, off);
+		if (s) L.DomUtil.setPosition(s, off);
+	}
+});
+
+/* global alert: true */
+L.OpenStreetBugs = L.FeatureGroup.extend({
+	options : {
+		serverURL : 'http://openstreetbugs.schokokeks.org/api/0.1/',
+		readonly : false,
+		setCookie : true,
+		username : 'NoName',
+		cookieLifetime : 1000,
+		cookiePath : null,
+		permalinkZoom : 14,
+		permalinkUrl: null,
+		opacity : 0.7,
+		showOpen: true,
+		showClosed: true,
+		iconOpen: 'http://openstreetbugs.schokokeks.org/client/open_bug_marker.png',
+		iconClosed:'http://openstreetbugs.schokokeks.org/client/closed_bug_marker.png',
+		iconActive: undefined,
+		editArea: 0.01,
+		popupOptions: {autoPan: false},
+		dblClick: true
+	},
+
+	initialize : function(options)
+	{
+		var tmp = L.Util.extend({}, this.options.popupOptions, (options || {}).popupOptions);
+		L.Util.setOptions(this, options);
+		this.options.popupOptions = tmp;
+
+		putAJAXMarker.layers.push(this);
+
+		this.bugs = {};
+		this._layers = {};
+
+		var username = this.get_cookie('osbUsername');
+		if (username)
+			this.options.username = username;
+
+		L.OpenStreetBugs.setCSS();
+	},
+
+	onAdd : function(map)
+	{
+		L.FeatureGroup.prototype.onAdd.apply(this, [map]);
+
+		this._map.on('moveend', this.loadBugs, this);
+		this.loadBugs();
+		if (!this.options.readonly) {
+		  if (this.options.dblClick) {
+			  map.doubleClickZoom.disable();
+			  map.on('dblclick', this.addBug, this);
+		  }
+		  else {
+			  map.on('click', this.addBug, this);
+			}
+		}
+		this.fire('add');
+	},
+
+	onRemove : function(map)
+	{
+		this._map.off('moveend', this.loadBugs, this);
+		this._iterateLayers(map.removeLayer, map);
+		delete this._map;
+		if (!this.options.readonly) {
+		  if (this.options.dblClick) {
+			  map.doubleClickZoom.enable();
+			  map.off('dblclick', this.addBug, this);
+		  }
+		  else {
+		    map.off('click', this.addBug, this);
+			}
+		}
+		this.fire('remove');
+	},
+
+	set_cookie : function(name, value)
+	{
+		var expires = (new Date((new Date()).getTime() + 604800000)).toGMTString(); // one week from now
+		document.cookie = name+'='+encodeURIComponent(value)+';';
+	},
+
+	get_cookie : function(name)
+	{
+		var cookies = (document.cookie || '').split(/;\s*/);
+		for(var i=0; i<cookies.length; i++)
+		{
+			var cookie = cookies[i].split('=');
+			if(cookie[0] === name)
+				return decodeURIComponent(cookie[1]);
+		}
+		return null;
+	},
+
+	loadBugs : function()
+	{
+		//if(!this.getVisibility())
+		//	return true;
+
+		var bounds = this._map.getBounds();
+		if(!bounds) return false;
+		var sw = bounds.getSouthWest(), ne = bounds.getNorthEast();
+
+		function round(number, digits) {
+			var factor = Math.pow(10, digits);
+			return Math.round(number*factor)/factor;
+		}
+
+		this.apiRequest('getBugs'
+			+ '?t='+round(ne.lat, 5)
+			+ '&r='+round(ne.lng, 5)
+			+ '&b='+round(sw.lat, 5)
+			+ '&l='+round(sw.lng, 5));
+	},
+
+	apiRequest : function(url, reload)
+	{
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = this.options.serverURL + url + '&nocache='+(new Date()).getTime();
+		var _this = this;
+		script.onload = function(e) {
+			document.body.removeChild(this);
+			if (reload) _this.loadBugs();
+		};
+		document.body.appendChild(script);
+	},
+
+	createMarker: function(id, force)
+	{
+		var bug = putAJAXMarker.bugs[id];
+		if(this.bugs[id])
+		{
+			if (force || this.bugs[id].osb.closed !== bug[2])
+				this.removeLayer(this.bugs[id]);
+			else
+				return;
+		}
+
+		var closed = bug[2];
+
+		if (closed && !this.options.showClosed) return;
+		if (!closed && !this.options.showOpen) return;
+
+		var icon_url = null;
+		var class_popup = ' osb';
+		if (bug[2]) {
+			icon_url = this.options.iconClosed;
+			class_popup += ' osbClosed';
+		}
+		else if (bug[1].length === 1) {
+			icon_url = this.options.iconOpen;
+			class_popup += ' osbOpen';
+		}
+		else {
+		  if (this.options.iconActive) {
+		    icon_url = this.options.iconActive;
+		    class_popup += ' osbActive';
+		  }
+		  else {
+		    icon_url = this.options.iconOpen;
+		    class_popup += ' osbOpen';
+		  }
+		}
+		var feature = new L.Marker(bug[0], {icon:new this.osbIcon({iconUrl: icon_url})});
+		feature.osb = {id: id, closed: closed};
+		this.addLayer(feature);
+		this.bugs[id] = feature;
+		this.setPopupContent(id);
+		feature._popup.options.className += class_popup;
+
+		if (this.options.bugid && (parseInt(this.options.bugid) === id))
+			feature.openPopup();
+
+		//this.events.triggerEvent('markerAdded');
+	},
+
+	osbIcon :  L.Icon.extend({
+		options: {
+			iconUrl: 'http://openstreetbugs.schokokeks.org/client/open_bug_marker.png',
+			iconSize: new L.Point(22, 22),
+			shadowSize: new L.Point(0, 0),
+			iconAnchor: new L.Point(11, 11),
+			popupAnchor: new L.Point(0, -11)
+		}
+	}),
+
+	setPopupContent: function(id) {
+		if(this.bugs[id]._popup_content)
+			return;
+
+		var el1,el2,el3;
+		var layer = this;
+
+		var rawbug = putAJAXMarker.bugs[id];
+		var isclosed = rawbug[2];
+
+		var newContent = L.DomUtil.create('div', 'osb-popup');
+		var h1 = L.DomUtil.create('h1', null, newContent);
+		if (rawbug[2]) 
+			h1.textContent = L.i18n('Fixed Error');
+		else if (rawbug[1].length === 1)
+			h1.textContent = L.i18n('Unresolved Error');
+		else
+			h1.textContent = L.i18n('Active Error');
+
+		var divinfo = L.DomUtil.create('div', 'osb-info', newContent);
+		var table = L.DomUtil.create('table', 'osb-table', divinfo);
+		for(var i=0; i<rawbug[1].length; i++)
+		{
+			var tr = L.DomUtil.create('tr', 'osb-tr-info', table);
+			tr.setAttribute('valign','top');
+			var td_nickname = L.DomUtil.create('td', 'osb-td-nickname', tr);
+			td_nickname.textContent = rawbug[5][i] + ':';
+			var td_datetime = L.DomUtil.create('td', 'osb-td-datetime', tr);
+			td_datetime.textContent = rawbug[6][i];
+			var td_comment = L.DomUtil.create('td', 'osb-td-comment', L.DomUtil.create('tr', 'osb-tr-comment', table));
+			td_comment.setAttribute('colspan','2');
+			td_comment.setAttribute('charoff','2');
+			td_comment.textContent = rawbug[4][i];
+		}
+
+		function create_link(ul, text) {
+			var a = L.DomUtil.create('a', null,
+					L.DomUtil.create('li', null, ul));
+			a.href = '#';
+			a.textContent = L.i18n(text);
+			return a;
+		}
+
+		var ul = L.DomUtil.create('ul', null, newContent);
+		var _this = this;
+		var bug = this.bugs[id];
+
+		function showComment(title, add_comment) {
+			h1.textContent_old = h1.textContent;
+			h1.textContent = L.i18n(title);
+			var form = _this.createCommentForm();
+			form.osbid.value = id;
+			form.cancel.onclick = function (e) {
+				h1.textContent = h1.textContent_old;
+				newContent.removeChild(form);
+				newContent.appendChild(ul);
+			};
+			form.ok.onclick = function(e) {
+				bug.closePopup();
+				if (!add_comment)
+					_this.closeBug(form);
+				else
+					_this.submitComment(form);
+				return false;
+			};
+			newContent.appendChild(form);
+			newContent.removeChild(ul);
+			return false;
+		}
+
+		if (!isclosed && !this.options.readonly) {
+			var a;
+			a = create_link(ul, 'Add comment');
+			a.onclick = function(e) { return showComment('Add comment', true); };
+
+			a = create_link(ul, 'Mark as Fixed');
+			a.onclick = function(e) { return showComment('Close bug', false); };
+		}
+		var a_josm = create_link(ul, 'JOSM');
+		a_josm.onclick = function() { _this.remoteEdit(rawbug[0]); };
+
+		var a_link = create_link(ul, 'Link');
+		var vars = {lat:rawbug[0].lat, lon:rawbug[0].lng, zoom:this.options.permalinkZoom, bugid:id};
+		if (this.options.permalinkUrl)
+			a_link.href = L.Util.template(this.options.permalinkUrl, vars);
+		else
+			a_link.href = location.protocol + '//' + location.host + location.pathname +
+				L.Util.getParamString(vars);
+
+
+		bug._popup_content = newContent;
+		bug.bindPopup(newContent, this.options.popupOptions);
+		bug._popup.options.maxWidth=410;
+		bug._popup.options.minWidth=410;
+		bug.on('mouseover', bug.openTempPopup, bug);
+	},
+
+	submitComment: function(form) {
+		if (!form.osbcomment.value) return;
+		var nickname = form.osbnickname.value || this.options.username;
+		this.apiRequest('editPOIexec'
+			+ '?id='+encodeURIComponent(form.osbid.value)
+			+ '&text='+encodeURIComponent(form.osbcomment.value + ' [' + nickname + ']')
+			+ '&format=js', true
+		);
+		this.set_cookie('osbUsername',nickname);
+		this.options.username=nickname;
+	},
+
+	closeBug: function(form) {
+		var id = form.osbid.value;
+		this.submitComment(form);
+		this.apiRequest('closePOIexec'
+			+ '?id='+encodeURIComponent(id)
+			+ '&format=js', true
+		);
+	},
+
+	createCommentForm: function(elt) {
+		var form = L.DomUtil.create('form', 'osb-add-comment', elt);
+		var content = '';
+		content += '<input name="osbid" type="hidden"/>';
+		content += '<input name="osblat" type="hidden"/>';
+		content += '<input name="osblon" type="hidden"/>';
+		content += '<div><span class="osb-inputlabel">'+L.i18n('Nickname')+':</span><input type="text" name="osbnickname"></div>';
+		content += '<div><span class="osb-inputlabel">'+L.i18n('Comment')+':</span><input type="text" name="osbcomment"></div>';
+		content += '<div class="osb-formfooter"><input type="submit" name="ok"/><input type="button" name="cancel"/></div>';
+		form.innerHTML = content;
+		form.ok.value = L.i18n('OK');
+		form.cancel.value = L.i18n('Cancel');
+		form.osbnickname.value = this.options.username;
+		return form;
+	},
+
+	addBug: function(e) {
+		var newContent = L.DomUtil.create('div', 'osb-popup');
+
+		newContent.innerHTML += '<h1>'+L.i18n('New bug')+'</h1>';
+		newContent.innerHTML += '<div class="osbCreateInfo">'+L.i18n('Find your bug?')+'<br />'+L.i18n('Contact details and someone will fix it.')+'</div>';
+
+		var popup = new L.Popup();
+		var _this = this;
+		var form = this.createCommentForm(newContent);
+		form.osblat.value = e.latlng.lat;
+		form.osblon.value = e.latlng.lng;
+		form.ok.value = L.i18n('Add comment');
+		form.onsubmit = function(e) {
+			_this._map.closePopup(popup);
+			_this.createBug(form);
+			return false;
+		};
+		form.cancel.onclick = function(e) { _this._map.closePopup(popup); };
+
+		popup.setLatLng(e.latlng);
+		popup.setContent(newContent);
+		popup.options.maxWidth=410;
+		popup.options.minWidth=410;
+		popup.options.className += ' osb osbCreate';
+
+		this._map.openPopup(popup);
+	},
+
+	createBug: function(form) {
+		if (!form.osbcomment.value) return;
+		var nickname = form.osbnickname.value || this.options.username;
+		this.apiRequest('addPOIexec'
+			+ '?lat='+encodeURIComponent(form.osblat.value)
+			+ '&lon='+encodeURIComponent(form.osblon.value)
+			+ '&text='+encodeURIComponent(form.osbcomment.value + ' [' + nickname + ']')
+			+ '&format=js', true
+		);
+		this.set_cookie('osbUsername',nickname);
+		this.options.username=nickname;
+	},
+
+	remoteEdit: function(x) {
+		var ydelta = this.options.editArea || 0.01;
+		var xdelta = ydelta * 2;
+		var p = [ 'left='  + (x.lng - xdelta), 'bottom=' + (x.lat - ydelta), 'right=' + (x.lng + xdelta), 'top='    + (x.lat + ydelta)];
+		var url = 'http://localhost:8111/load_and_zoom?' + p.join('&');
+		var frame = L.DomUtil.create('iframe', null);
+		frame.style.display = 'none';
+		frame.src = url;
+		document.body.appendChild(frame);
+		frame.onload = function(e) { document.body.removeChild(frame); };
+		return false;
+	}
+});
+
+L.OpenStreetBugs.setCSS = function() {
+	if(L.OpenStreetBugs.setCSS.done)
+		return;
+	else
+		L.OpenStreetBugs.setCSS.done = true;
+
+	// See http://www.hunlock.com/blogs/Totally_Pwn_CSS_with_Javascript
+	var idx = 0;
+	var addRule = function(selector, rules) {
+		var s = document.styleSheets[0];
+		var rule;
+		if(s.addRule) // M$IE
+			rule = s.addRule(selector, rules, idx);
+		else
+			rule = s.insertRule(selector + ' { ' + rules + ' }', idx);
+		s.style = L.Util.extend(s.style || {}, rules);
+		idx++;
+	};
+
+	addRule('.osb-popup dl', 'margin:0; padding:0;');
+	addRule('.osb-popup dt', 'margin:0; padding:0; font-weight:bold; float:left; clear:left;');
+	addRule('.osb-popup dt:after', 'content: ": ";');
+	addRule('* html .osb-popup dt', 'margin-right:1ex;');
+	addRule('.osb-popup dd', 'margin:0; padding:0;');
+	addRule('.osb-popup ul.buttons', 'list-style-type:none; padding:0; margin:0;');
+	addRule('.osb-popup ul.buttons li', 'display:inline; margin:0; padding:0;');
+	addRule('.osb-popup h3', 'font-size:1.2em; margin:.2em 0 .7em 0;');
+};
+
+function putAJAXMarker(id, lon, lat, text, closed)
+{
+	var comments = text.split(/<hr \/>/);
+	var comments_only = [];
+	var nickname = [];
+	var datetime = [];
+	var info = null;
+	var isplit = 0;
+	var i;
+	for(i=0; i<comments.length; i++) {
+		info = null;
+		isplit = 0;
+		comments[i] = comments[i].replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+		isplit = comments[i].lastIndexOf('[');
+		if (isplit > 0) {
+		  comments_only[i] = comments[i].substr(0,isplit-1);
+		  info = comments[i].substr(isplit+1);
+		  nickname[i] = info.substr(0,info.lastIndexOf(','));
+		  datetime[i] = info.substr(info.lastIndexOf(',')+2);
+		  datetime[i] = datetime[i].substr(0,datetime[i].lastIndexOf(']'));
+		}
+		else {
+		  comments_only[i] = comments[i];
+		}
+	}
+	var old = putAJAXMarker.bugs[id];
+	putAJAXMarker.bugs[id] = [
+		new L.LatLng(lat, lon),
+		comments,
+		closed,
+		text,
+		comments_only,
+		nickname,
+		datetime
+	];
+	var force = (old && old[3]) !== text;
+	for(i=0; i<putAJAXMarker.layers.length; i++)
+		putAJAXMarker.layers[i].createMarker(id, force);
+}
+
+function osbResponse(error)
+{
+	if(error)
+		alert('Error: '+error);
+
+	return;
+}
+
+putAJAXMarker.layers = [ ];
+putAJAXMarker.bugs = { };
+
+L.Marker.include({
+	openTempPopup: function() {
+		this.openPopup();
+		this.off('click', this.openPopup, this);
+
+		function onclick() {
+			this.off('mouseout', onout, this);
+			this.off('click', onclick, this);
+			this.on('click', this.openPopup, this);
+		}
+
+		function onout() {
+			onclick.call(this);
+			this.closePopup();
+		}
+		this.on('mouseout', onout, this);
+		this.on('click', onclick, this);
+	}
+});
+
+L.i18n = function(s) { return (L.i18n.lang[L.i18n.current] || {})[s] || s; };
+L.i18n.current = 'ru';
+L.i18n.lang = {};
+L.i18n.extend = function(lang, args) {
+	L.i18n.lang[lang] = L.Util.extend(L.i18n.lang[lang] || {}, args);
+};
+
+L.i18n.extend('ru', {
+	'Fixed Error':'Ошибка исправлена',
+	'Unresolved Error':'Неисправленная ошибка',
+	'Active Error':'Ошибка уточняется',
+	'Description':'Описание',
+	'Comment':'Описание',
+	'Add comment':'Дополнить',
+	'Mark as Fixed':'Исправлено',
+	'Link':'Ссылка',
+	'Cancel':'Отмена',
+	'New bug':'Я нашел ошибку',
+	'Find your bug?':'Нашли ошибку?',
+	'Contact details and someone will fix it.':'Напишите подробнее и кто-нибудь её исправит.'
+});
+
+L.GPX = L.FeatureGroup.extend({
+	initialize: function(gpx, options) {
+		L.Util.setOptions(this, options);
+		this._gpx = gpx;
+		this._layers = {};
+		
+		if (gpx) {
+			this.addGPX(gpx, options, this.options.async);
+		}
+	},
+	
+	loadXML: function(url, cb, options, async) {
+		if (async === undefined) async = this.options.async;
+		if (options === undefined) options = this.options;
+
+		var req = new window.XMLHttpRequest();
+		req.open('GET', url, async);
+		try {
+			req.overrideMimeType('text/xml'); // unsupported by IE
+		} catch(e) {}
+		req.onreadystatechange = function() {
+			if (req.readyState !== 4) return;
+			if(req.status === 200) cb(req.responseXML, options);
+		};
+		req.send(null);
+	},
+
+	_humanLen: function(l) {
+		if (l < 2000)
+			return l.toFixed(0) + ' m';
+		else
+			return (l/1000).toFixed(1) + ' km';
+	},
+	
+	_polylineLen: function(line)//line is a L.Polyline()
+	{
+		var ll = line._latlngs;
+		var d = 0, p = null;
+		for (var i = 0; i < ll.length; i++)
+		{
+			if(i && p)
+				d += p.distanceTo(ll[i]);
+			p = ll[i];
+		}
+		return d;
+	},
+
+	addGPX: function(url, options, async) {
+		var _this = this;
+		var cb = function(gpx, options) { _this._addGPX(gpx, options); };
+		this.loadXML(url, cb, options, async);
+	},
+
+	_addGPX: function(gpx, options) {
+		var layers = this.parseGPX(gpx, options);
+		if (!layers) return;
+		this.addLayer(layers);
+		this.fire('loaded');
+	},	
+
+	parseGPX: function(xml, options) {
+		var j, i, el, layers = [];
+		var named = false, tags = [['rte','rtept'], ['trkseg','trkpt']];
+
+		for (j = 0; j < tags.length; j++) {
+			el = xml.getElementsByTagName(tags[j][0]);
+			for (i = 0; i < el.length; i++) {
+				var l = this.parse_trkseg(el[i], xml, options, tags[j][1]);
+				for (var k = 0; k < l.length; k++) {
+					if (this.parse_name(el[i], l[k])) named = true;
+					layers.push(l[k]);
+				}
+			}
+		}
+
+		el = xml.getElementsByTagName('wpt');
+		if (options.display_wpt !== false) {
+			for (i = 0; i < el.length; i++) {
+				var marker = this.parse_wpt(el[i], xml, options);
+				if (!marker) continue;
+				if (this.parse_name(el[i], marker)) named = true;
+				layers.push(marker);
+			}
+		}
+
+		if (!layers.length) return;
+		var layer = layers[0];
+		if (layers.length > 1) 
+			layer = new L.FeatureGroup(layers);
+		if (!named) this.parse_name(xml, layer);
+		return layer;
+	},
+
+	parse_name: function(xml, layer) {
+		var i, el, txt='', name, descr='', len=0;
+		el = xml.getElementsByTagName('name');
+		if (el.length)
+			name = el[0].childNodes[0].nodeValue;
+		el = xml.getElementsByTagName('desc');
+		for (i = 0; i < el.length; i++) {
+			for (var j = 0; j < el[i].childNodes.length; j++)
+				descr = descr + el[i].childNodes[j].nodeValue;
+		}
+
+		if(layer instanceof L.Path)
+			len = this._polylineLen(layer);
+
+		if (name) txt += '<h2>' + name + '</h2>' + descr;
+		if (len) txt += '<p>' + this._humanLen(len) + '</p>';
+		
+		if (layer && layer._popup === undefined) layer.bindPopup(txt);
+		return txt;
+	},
+
+	parse_trkseg: function(line, xml, options, tag) {
+		var el = line.getElementsByTagName(tag);
+		if (!el.length) return [];
+		var coords = [];
+		for (var i = 0; i < el.length; i++) {
+			var ll = new L.LatLng(el[i].getAttribute('lat'),
+						el[i].getAttribute('lon'));
+			ll.meta = {};
+			for (var j in el[i].childNodes) {
+				var e = el[i].childNodes[j];
+				if (!e.tagName) continue;
+				ll.meta[e.tagName] = e.textContent;
+			}
+			coords.push(ll);
+		}
+		var l = [new L.Polyline(coords, options)];
+		this.fire('addline', {line:l});
+		return l;
+	},
+
+	parse_wpt: function(e, xml, options) {
+		var m = new L.Marker(new L.LatLng(e.getAttribute('lat'),
+						e.getAttribute('lon')), options);
+		this.fire('addpoint', {point:m});
+		return m;
+	}
+});
+
+//#include 'GPX.js'
+
+(function() {
+
+function d2h(d) {
+	var hex = '0123456789ABCDEF';
+	var r = '';
+	d = Math.floor(d);
+	while (d !== 0) {
+		r = hex[d % 16] + r;
+		d = Math.floor(d / 16);
+	}
+	while (r.length < 2) r = '0' + r;
+	return r;
+}
+
+function gradient(color) {
+	// First arc (0, PI) in HSV colorspace
+	function f2h(d) { return d2h(256 * d); }
+	if (color < 0)
+		return '#FF0000';
+	else if (color < 1.0/3)
+		return '#FF' + f2h(3 * color) + '00';
+	else if (color < 2.0/3)
+		return '#' + f2h(2 - 3 * color) + 'FF00';
+	else if (color < 1)
+		return '#00FF' + f2h(3 * color - 2);
+	else
+		return '#00FFFF';
+}
+
+function gpx2time(s) {
+	// 2011-09-24T12:07:53Z
+	if (s.length !== 10 + 1 + 8 + 1)
+		return new Date();
+	return new Date(s);
+}
+
+L.GPX.include({
+	options: {
+		maxSpeed: 110,
+		chunks: 200
+	},
+
+	speedSplitEnable: function(options) {
+		L.Util.setOptions(this, options);
+		return this.on('addline', this.speed_split, this);
+	},
+
+	speedSplitDisable: function() {
+		return this.off('addline', this.speed_split, this);
+	},
+
+	speed_split: function(e) {
+		var l = e.line.pop(), ll = l.getLatLngs();
+		var chunk = Math.floor(ll.length / this.options.chunks);
+		if (chunk < 3) chunk = 3;
+		var p = null;
+		for (var i = 0; i < ll.length; i += chunk) {
+			var d = 0, t = null;
+			if (i + chunk > ll.length)
+				chunk = ll.length - i;
+			for (var j = 0; j < chunk; j++) {
+				if (p) d += p.distanceTo(ll[i+j]);
+				p = ll[i + j];
+				if (!t) t = gpx2time(p.meta.time);
+			}
+			p = ll[i + chunk - 1];
+			t = (gpx2time(p.meta.time) - t) / (3600 * 1000);
+			var speed = 0.001 * d / t;
+			var color = gradient(speed / this.options.maxSpeed);
+			var poly = new L.Polyline(ll.slice(i, i+chunk+1), {color: color, weight: 2, opacity: 1});
+			poly.bindPopup('Dist: ' + d.toFixed() + 'm; Speed: ' + speed.toFixed(2) + ' km/h');
+			e.line.push(poly);
+		}
+	}
+
+});
+})();
+
+L.KML = L.FeatureGroup.extend({
+	options: {
+		async: true
+	},
+
+	initialize: function(kml, options) {
+		L.Util.setOptions(this, options);
+		this._kml = kml;
+		this._layers = {};
+
+		if (kml) {
+			this.addKML(kml, options, this.options.async);
+		}
+	},
+
+	loadXML: function(url, cb, options, async) {
+		if (async === undefined) async = this.options.async;
+		if (options === undefined) options = this.options;
+
+		var req = new window.XMLHttpRequest();
+		req.open('GET', url, async);
+		try {
+			req.overrideMimeType('text/xml'); // unsupported by IE
+		} catch(e) {}
+		req.onreadystatechange = function() {
+			if (req.readyState !== 4) return;
+			if (req.status === 200) cb(req.responseXML, options);
+		};
+		req.send(null);
+	},
+
+	addKML: function(url, options, async) {
+		var _this = this;
+		var cb = function(gpx, options) { _this._addKML(gpx, options); };
+		this.loadXML(url, cb, options, async);
+	},
+
+	_addKML: function(xml, options) {
+		var layers = L.KML.parseKML(xml);
+		if (!layers || !layers.length) return;
+		for (var i = 0; i < layers.length; i++) {
+			this.fire('addlayer', {
+				layer: layers[i]
+			});
+			this.addLayer(layers[i]);
+		}
+		this.latLngs = L.KML.getLatLngs(xml);
+		this.fire('loaded');
+	},
+
+	latLngs: []
+});
+
+L.Util.extend(L.KML, {
+
+	parseKML: function (xml) {
+		var style = this.parseStyle(xml);
+		this.parseStyleMap(xml, style);
+		var el = xml.getElementsByTagName('Folder');
+		var layers = [], l;
+		for (var i = 0; i < el.length; i++) {
+			if (!this._check_folder(el[i])) { continue; }
+			l = this.parseFolder(el[i], style);
+			if (l) { layers.push(l); }
+		}
+		el = xml.getElementsByTagName('Placemark');
+		for (var j = 0; j < el.length; j++) {
+			if (!this._check_folder(el[j])) { continue; }
+			l = this.parsePlacemark(el[j], xml, style);
+			if (l) { layers.push(l); }
+		}
+		el = xml.getElementsByTagName('GroundOverlay');
+		for (var k = 0; k < el.length; k++) {
+			l = this.parseGroundOverlay(el[k]);
+			if (l) { layers.push(l); }
+		}
+		return layers;
+	},
+
+	// Return false if e's first parent Folder is not [folder]
+	// - returns true if no parent Folders
+	_check_folder: function (e, folder) {
+		e = e.parentElement;
+		while (e && e.tagName !== 'Folder')
+		{
+			e = e.parentElement;
+		}
+		return !e || e === folder;
+	},
+
+	parseStyle: function (xml) {
+		var style = {};
+		var sl = xml.getElementsByTagName('Style');
+
+		//for (var i = 0; i < sl.length; i++) {
+		var attributes = {color: true, width: true, Icon: true, href: true,
+						  hotSpot: true};
+
+		function _parse(xml) {
+			var options = {};
+			for (var i = 0; i < xml.childNodes.length; i++) {
+				var e = xml.childNodes[i];
+				var key = e.tagName;
+				if (!attributes[key]) { continue; }
+				if (key === 'hotSpot')
+				{
+					for (var j = 0; j < e.attributes.length; j++) {
+						options[e.attributes[j].name] = e.attributes[j].nodeValue;
+					}
+				} else {
+					var value = e.childNodes[0].nodeValue;
+					if (key === 'color') {
+						options.opacity = parseInt(value.substring(0, 2), 16) / 255.0;
+						options.color = '#' + value.substring(6, 8) + value.substring(4, 6) + value.substring(2, 4);
+					} else if (key === 'width') {
+						options.weight = value;
+					} else if (key === 'Icon') {
+						ioptions = _parse(e);
+						if (ioptions.href) { options.href = ioptions.href; }
+					} else if (key === 'href') {
+						options.href = value;
+					}
+				}
+			}
+			return options;
+		}
+
+		for (var i = 0; i < sl.length; i++) {
+			var e = sl[i], el;
+			var options = {}, poptions = {}, ioptions = {};
+			el = e.getElementsByTagName('LineStyle');
+			if (el && el[0]) { options = _parse(el[0]); }
+			el = e.getElementsByTagName('PolyStyle');
+			if (el && el[0]) { poptions = _parse(el[0]); }
+			if (poptions.color) { options.fillColor = poptions.color; }
+			if (poptions.opacity) { options.fillOpacity = poptions.opacity; }
+			el = e.getElementsByTagName('IconStyle');
+			if (el && el[0]) { ioptions = _parse(el[0]); }
+			if (ioptions.href) {
+				// save anchor info until the image is loaded
+				options.icon = new L.KMLIcon({
+					iconUrl: ioptions.href,
+					shadowUrl: null,
+					iconAnchorRef: {x: ioptions.x, y: ioptions.y},
+					iconAnchorType:	{x: ioptions.xunits, y: ioptions.yunits}
+				});
+			}
+			style['#' + e.getAttribute('id')] = options;
+		}
+		return style;
+	},
+	
+	parseStyleMap: function (xml, existingStyles) {
+		var sl = xml.getElementsByTagName('StyleMap');
+		
+		for (var i = 0; i < sl.length; i++) {
+			var e = sl[i], el;
+			var smKey, smStyleUrl;
+			
+			el = e.getElementsByTagName('key');
+			if (el && el[0]) { smKey = el[0].textContent; }
+			el = e.getElementsByTagName('styleUrl');
+			if (el && el[0]) { smStyleUrl = el[0].textContent; }
+			
+			if (smKey === 'normal')
+			{
+				existingStyles['#' + e.getAttribute('id')] = existingStyles[smStyleUrl];
+			}
+		}
+		
+		return;
+	},
+
+	parseFolder: function (xml, style) {
+		var el, layers = [], l;
+		el = xml.getElementsByTagName('Folder');
+		for (var i = 0; i < el.length; i++) {
+			if (!this._check_folder(el[i], xml)) { continue; }
+			l = this.parseFolder(el[i], style);
+			if (l) { layers.push(l); }
+		}
+		el = xml.getElementsByTagName('Placemark');
+		for (var j = 0; j < el.length; j++) {
+			if (!this._check_folder(el[j], xml)) { continue; }
+			l = this.parsePlacemark(el[j], xml, style);
+			if (l) { layers.push(l); }
+		}
+		el = xml.getElementsByTagName('GroundOverlay');
+		for (var k = 0; k < el.length; k++) {
+			if (!this._check_folder(el[k], xml)) { continue; }
+			l = this.parseGroundOverlay(el[k]);
+			if (l) { layers.push(l); }
+		}
+		if (!layers.length) { return; }
+		if (layers.length === 1) { return layers[0]; }
+		return new L.FeatureGroup(layers);
+	},
+
+	parsePlacemark: function (place, xml, style) {
+		var i, j, el, options = {};
+		el = place.getElementsByTagName('styleUrl');
+		for (i = 0; i < el.length; i++) {
+			var url = el[i].childNodes[0].nodeValue;
+			for (var a in style[url]) {
+				options[a] = style[url][a];
+			}
+		}
+		var layers = [];
+
+		var parse = ['LineString', 'Polygon', 'Point'];
+		for (j in parse) {
+			// for jshint
+			if (true)
+			{
+				var tag = parse[j];
+				el = place.getElementsByTagName(tag);
+				for (i = 0; i < el.length; i++) {
+					var l = this['parse' + tag](el[i], xml, options);
+					if (l) { layers.push(l); }
+				}
+			}
+		}
+
+		if (!layers.length) {
+			return;
+		}
+		var layer = layers[0];
+		if (layers.length > 1) {
+			layer = new L.FeatureGroup(layers);
+		}
+
+		var name, descr = '';
+		el = place.getElementsByTagName('name');
+		if (el.length && el[0].childNodes.length) {
+			name = el[0].childNodes[0].nodeValue;
+		}
+		el = place.getElementsByTagName('description');
+		for (i = 0; i < el.length; i++) {
+			for (j = 0; j < el[i].childNodes.length; j++) {
+				descr = descr + el[i].childNodes[j].nodeValue;
+			}
+		}
+
+		if (name) {
+			layer.bindPopup('<h2>' + name + '</h2>' + descr);
+		}
+
+		return layer;
+	},
+
+	parseCoords: function (xml) {
+		var el = xml.getElementsByTagName('coordinates');
+		return this._read_coords(el[0]);
+	},
+
+	parseLineString: function (line, xml, options) {
+		var coords = this.parseCoords(line);
+		if (!coords.length) { return; }
+		return new L.Polyline(coords, options);
+	},
+
+	parsePoint: function (line, xml, options) {
+		var el = line.getElementsByTagName('coordinates');
+		if (!el.length) {
+			return;
+		}
+		var ll = el[0].childNodes[0].nodeValue.split(',');
+		return new L.KMLMarker(new L.LatLng(ll[1], ll[0]), options);
+	},
+
+	parsePolygon: function (line, xml, options) {
+		var el, polys = [], inner = [], i, coords;
+		el = line.getElementsByTagName('outerBoundaryIs');
+		for (i = 0; i < el.length; i++) {
+			coords = this.parseCoords(el[i]);
+			if (coords) {
+				polys.push(coords);
+			}
+		}
+		el = line.getElementsByTagName('innerBoundaryIs');
+		for (i = 0; i < el.length; i++) {
+			coords = this.parseCoords(el[i]);
+			if (coords) {
+				inner.push(coords);
+			}
+		}
+		if (!polys.length) {
+			return;
+		}
+		if (options.fillColor) {
+			options.fill = true;
+		}
+		if (polys.length === 1) {
+			return new L.Polygon(polys.concat(inner), options);
+		}
+		return new L.MultiPolygon(polys, options);
+	},
+
+	getLatLngs: function (xml) {
+		var el = xml.getElementsByTagName('coordinates');
+		var coords = [];
+		for (var j = 0; j < el.length; j++) {
+			// text might span many childNodes
+			coords = coords.concat(this._read_coords(el[j]));
+		}
+		return coords;
+	},
+
+	_read_coords: function (el) {
+		var text = '', coords = [], i;
+		for (i = 0; i < el.childNodes.length; i++) {
+			text = text + el.childNodes[i].nodeValue;
+		}
+		text = text.split(/[\s\n]+/);
+		for (i = 0; i < text.length; i++) {
+			var ll = text[i].split(',');
+			if (ll.length < 2) {
+				continue;
+			}
+			coords.push(new L.LatLng(ll[1], ll[0]));
+		}
+		return coords;
+	},
+
+	parseGroundOverlay: function (xml) {
+		var latlonbox = xml.getElementsByTagName('LatLonBox')[0];
+		var bounds = new L.LatLngBounds(
+			[
+				latlonbox.getElementsByTagName('south')[0].childNodes[0].nodeValue,
+				latlonbox.getElementsByTagName('west')[0].childNodes[0].nodeValue
+			],
+			[
+				latlonbox.getElementsByTagName('north')[0].childNodes[0].nodeValue,
+				latlonbox.getElementsByTagName('east')[0].childNodes[0].nodeValue
+			]
+		);
+		var attributes = {Icon: true, href: true, color: true};
+		function _parse(xml) {
+			var options = {}, ioptions = {};
+			for (var i = 0; i < xml.childNodes.length; i++) {
+				var e = xml.childNodes[i];
+				var key = e.tagName;
+				if (!attributes[key]) { continue; }
+				var value = e.childNodes[0].nodeValue;
+				if (key === 'Icon') {
+					ioptions = _parse(e);
+					if (ioptions.href) { options.href = ioptions.href; }
+				} else if (key === 'href') {
+					options.href = value;
+				} else if (key === 'color') {
+					options.opacity = parseInt(value.substring(0, 2), 16) / 255.0;
+					options.color = '#' + value.substring(6, 8) + value.substring(4, 6) + value.substring(2, 4);
+				}
+			}
+			return options;
+		}
+		var options = {};
+		options = _parse(xml);
+		if (latlonbox.getElementsByTagName('rotation')[0] !== undefined) {
+			var rotation = latlonbox.getElementsByTagName('rotation')[0].childNodes[0].nodeValue;
+			options.rotation = parseFloat(rotation);
+		}
+		return new L.RotatedImageOverlay(options.href, bounds, {opacity: options.opacity, angle: options.rotation});
+	}
+
+});
+
+L.KMLIcon = L.Icon.extend({
+
+	createIcon: function () {
+		var img = this._createIcon('icon');
+		img.onload = function () {
+			var i = img;
+			this.style.width = i.width + 'px';
+			this.style.height = i.height + 'px';
+
+			if (this.anchorType.x === 'UNITS_FRACTION' || this.anchorType.x === 'fraction') {
+				img.style.marginLeft = (-this.anchor.x * i.width) + 'px';
+			}
+			if (this.anchorType.y === 'UNITS_FRACTION' || this.anchorType.x === 'fraction') {
+				img.style.marginTop  = (-(1 - this.anchor.y) * i.height) + 'px';
+			}
+			this.style.display = '';
+		};
+		return img;
+	},
+
+	_setIconStyles: function (img, name) {
+		L.Icon.prototype._setIconStyles.apply(this, [img, name]);
+		// save anchor information to the image
+		img.anchor = this.options.iconAnchorRef;
+		img.anchorType = this.options.iconAnchorType;
+	}
+});
+
+
+L.KMLMarker = L.Marker.extend({
+	options: {
+		icon: new L.KMLIcon.Default()
+	}
+});
+
+// Inspired by https://github.com/bbecquet/Leaflet.PolylineDecorator/tree/master/src
+L.RotatedImageOverlay = L.ImageOverlay.extend({
+	options: {
+		angle: 0
+	},
+	_reset: function () {
+		L.ImageOverlay.prototype._reset.call(this);
+		this._rotate();
+	},
+	_animateZoom: function (e) {
+		L.ImageOverlay.prototype._animateZoom.call(this, e);
+		this._rotate();
+	},
+	_rotate: function () {
+        if (L.DomUtil.TRANSFORM) {
+            // use the CSS transform rule if available
+            this._image.style[L.DomUtil.TRANSFORM] += ' rotate(' + this.options.angle + 'deg)';
+        } else if(L.Browser.ie) {
+            // fallback for IE6, IE7, IE8
+            var rad = this.options.angle * (Math.PI / 180),
+                costheta = Math.cos(rad),
+                sintheta = Math.sin(rad);
+            this._image.style.filter += ' progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' + 
+                costheta + ', M12=' + (-sintheta) + ', M21=' + sintheta + ', M22=' + costheta + ')';                
+        }
+	},
+	getBounds: function() {
+		return this._bounds;
+	}
+});
+
+
+L.OSM = L.FeatureGroup.extend({
+	options: {
+		async: true,
+		forceAll: false
+	},
+
+	initialize: function(url, options) {
+		L.Util.setOptions(this, options);
+		this._url = url;
+		this._layers = {};
+		
+		if (url) {
+			this.addXML(url, options, this.options.async);
+		}
+	},
+	
+	loadXML: function(url, cb, options, async) {
+		if (async === undefined) async = this.options.async;
+		if (options === undefined) options = this.options;
+
+		var req = new window.XMLHttpRequest();
+		req.open('GET', url, async);
+		req.overrideMimeType('text/xml');
+		req.onreadystatechange = function() {
+			if (req.readyState !== 4) return;
+			if (req.status === 200) cb(req.responseXML, options);
+		};
+		req.send(null);
+	},
+
+	addXML: function(url, options, async) {
+		var _this = this;
+		var cb = function(xml, options) { _this._addXML(xml, options); };
+		this.loadXML(url, cb, options, async);
+	},
+
+	_addXML: function(xml, options) {
+		var layers = this.parseOSM(xml, options);
+		if (!layers) return;
+		this.addLayer(layers);
+		this.fire('loaded');
+	},
+
+	parseOSM: function(xml, options) {
+		var i, el, ll, layers = [];
+		var nodes = {};
+		var ways = {};
+		var named = false;
+
+		el = xml.getElementsByTagName('node');
+		for (i = 0; i < el.length; i++) {
+			var l = this.parse_node(el[i], xml, options);
+			if (l === undefined) continue;
+			nodes[l.osmid] = l;
+			if (!this.options.forceAll && !l.tags.length) continue;
+			var m = this.named_node(l, options);
+			if (!ll) ll = m.getLatLng();
+			if (this.parse_name(m, l, 'Node')) named = true;
+			layers.push(m);
+		}
+
+		el = xml.getElementsByTagName('way');
+		for (i = 0; i < el.length; i++) {
+			if (i > 10) break;
+			var way = this.parse_way(el[i], nodes, options);
+			if (!way) continue;
+			if (!ll) ll = way.getLatLngs()[0];
+			if (this.parse_name(way, way, 'Way')) named = true;
+			layers.push(way);
+			ways[way.osmid] = way;
+		}
+
+		el = xml.getElementsByTagName('relation');
+		for (i = 0; i < el.length; i++) {
+			if (i > 10) break;
+			var relation = this.parse_relation(el[i], ways, options);
+			if (!relation) continue;
+			if (!ll) ll = relation.getLatLngs()[0];
+			if (this.parse_name(relation, relation, 'Relation')) named = true;
+			layers.push(relation);
+		}
+
+		if (!layers.length) return;
+		var layer = layers[0];
+		if (layers.length > 1) 
+			layer = new L.FeatureGroup(layers);
+		if (!named) this.parse_name(xml, layer);
+		layer.focusPoint = ll;
+		return layer;
+	},
+
+	parse_name: function(layer, obj, obj_name) {
+		if (!this.options.forceAll)
+			if (!obj.tags || !obj.tags.length) return;
+		var i, txt = '<table>';
+		for (i = 0; i < obj.tags.length; i++) {
+			var t = obj.tags[i];
+			txt += '<tr><td>' + t.k + '</td><td>=</td><td>' + t.v + '</td></tr>';
+		}
+		txt += '</table>';
+		txt = '<h2>' + obj_name + ' ' + obj.osmid + '</h2>' + txt;
+		if (layer) layer.bindPopup(txt);
+		return txt;
+	},
+
+	parse_tags: function(line) {
+		var tags = [], el = line.getElementsByTagName('tag');
+		for (var i = 0; i < el.length; i++)
+			tags.push({k: el[i].getAttribute('k'), v: el[i].getAttribute('v')});
+		return tags;
+	},
+
+	parse_node: function(e) {
+		var n = { osmid: e.getAttribute('id'),
+			lat:e.getAttribute('lat'),
+			lon:e.getAttribute('lon')
+		};
+		n.ll = new L.LatLng(n.lat, n.lon);
+		n.tags = this.parse_tags(e);
+		return n;
+	},
+
+	parse_way: function(line, nodes, options) {
+		var el = line.getElementsByTagName('nd');
+		if (!el.length) return;
+		var coords = [], tags = [];
+		for (var i = 0; i < el.length; i++) {
+			var ref = el[i].getAttribute('ref'), n = nodes[ref];
+			if (!n) return;
+			coords.push(n.ll);
+		}
+		var layer = new L.Polyline(coords, options);
+		layer.tags = this.parse_tags(line);
+		layer.osmid = line.getAttribute('id');
+		return layer;
+	},
+
+	parse_relation: function(line, ways, options) {
+		var el = line.getElementsByTagName('member');
+		if (!el.length) return;
+		var rt, coords = [], tags = this.parse_tags(line);
+		var i;
+		for (i = 0; i < tags.length; i++)
+			if (tags[i].k === 'type') rt = tags[i].v;
+
+		if (rt !== 'multipolygon' && rt !== 'boundary' && rt !== 'waterway')
+			return;
+
+		for (i = 0; i < el.length; i++) {
+			var mt = el[i].getAttribute('type'), ref = el[i].getAttribute('ref');
+			if (mt !== 'way') continue;
+			var w = ways[ref];
+			if (!w) return;
+			coords.push(w);
+		}
+		if (!coords.length) return;
+		var layer = new L.MultiPolyline(coords, options);
+		layer.tags = this.parse_tags(line);
+		layer.osmid = line.getAttribute('id');
+		return layer;
+	},
+
+	named_node: function(node, options) {
+		var marker = new L.Marker(new L.LatLng(node.lat, node.lon), options);
+		return marker;
+	}
+});
+
+L.BingLayer = L.TileLayer.extend({
+	options: {
+		subdomains: [0, 1, 2, 3],
+		type: 'Aerial',
+		attribution: 'Bing',
+		culture: ''
+	},
+
+	initialize: function(key, options) {
+		L.Util.setOptions(this, options);
+
+		this._key = key;
+		this._url = null;
+		this.meta = {};
+		this.loadMetadata();
+	},
+
+	tile2quad: function(x, y, z) {
+		var quad = '';
+		for (var i = z; i > 0; i--) {
+			var digit = 0;
+			var mask = 1 << (i - 1);
+			if ((x & mask) !== 0) digit += 1;
+			if ((y & mask) !== 0) digit += 2;
+			quad = quad + digit;
+		}
+		return quad;
+	},
+
+	getTileUrl: function(p, z) {
+		var zoom = this._getZoomForUrl();
+		var subdomains = this.options.subdomains,
+			s = this.options.subdomains[Math.abs((p.x + p.y) % subdomains.length)];
+		return this._url.replace('{subdomain}', s)
+				.replace('{quadkey}', this.tile2quad(p.x, p.y, zoom))
+				.replace('{culture}', this.options.culture);
+	},
+
+	loadMetadata: function() {
+		var _this = this;
+		var cbid = '_bing_metadata_' + L.Util.stamp(this);
+		window[cbid] = function (meta) {
+			_this.meta = meta;
+			window[cbid] = undefined;
+			var e = document.getElementById(cbid);
+			e.parentNode.removeChild(e);
+			if (meta.errorDetails) {
+				return;
+			}
+			_this.initMetadata();
+		};
+		var url = document.location.protocol + '//dev.virtualearth.net/REST/v1/Imagery/Metadata/' + this.options.type + '?include=ImageryProviders&jsonp=' + cbid +
+		          '&key=' + this._key + '&UriScheme=' + document.location.protocol.slice(0, -1);
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = url;
+		script.id = cbid;
+		document.getElementsByTagName('head')[0].appendChild(script);
+	},
+
+	initMetadata: function() {
+		var r = this.meta.resourceSets[0].resources[0];
+		this.options.subdomains = r.imageUrlSubdomains;
+		this._url = r.imageUrl;
+		this._providers = [];
+		if (r.imageryProviders) {
+			for (var i = 0; i < r.imageryProviders.length; i++) {
+				var p = r.imageryProviders[i];
+				for (var j = 0; j < p.coverageAreas.length; j++) {
+					var c = p.coverageAreas[j];
+					var coverage = {zoomMin: c.zoomMin, zoomMax: c.zoomMax, active: false};
+					var bounds = new L.LatLngBounds(
+							new L.LatLng(c.bbox[0]+0.01, c.bbox[1]+0.01),
+							new L.LatLng(c.bbox[2]-0.01, c.bbox[3]-0.01)
+					);
+					coverage.bounds = bounds;
+					coverage.attrib = p.attribution;
+					this._providers.push(coverage);
+				}
+			}
+		}
+		this._update();
+	},
+
+	_update: function() {
+		if (this._url === null || !this._map) return;
+		this._update_attribution();
+		L.TileLayer.prototype._update.apply(this, []);
+	},
+
+	_update_attribution: function() {
+		var bounds = this._map.getBounds();
+		var zoom = this._map.getZoom();
+		for (var i = 0; i < this._providers.length; i++) {
+			var p = this._providers[i];
+			if ((zoom <= p.zoomMax && zoom >= p.zoomMin) &&
+					bounds.intersects(p.bounds)) {
+				if (!p.active && this._map.attributionControl)
+					this._map.attributionControl.addAttribution(p.attrib);
+				p.active = true;
+			} else {
+				if (p.active && this._map.attributionControl)
+					this._map.attributionControl.removeAttribution(p.attrib);
+				p.active = false;
+			}
+		}
+	},
+
+	onRemove: function(map) {
+		for (var i = 0; i < this._providers.length; i++) {
+			var p = this._providers[i];
+			if (p.active && this._map.attributionControl) {
+				this._map.attributionControl.removeAttribution(p.attrib);
+				p.active = false;
+			}
+		}
+        	L.TileLayer.prototype.onRemove.apply(this, [map]);
+	}
+});
+
+L.bingLayer = function (key, options) {
+    return new L.BingLayer(key, options);
+};
+
+/*
+ * Google layer using Google Maps API
+ */
+
+/* global google: true */
+
+L.Google = L.Class.extend({
+	includes: L.Mixin.Events,
+
+	options: {
+		minZoom: 0,
+		maxZoom: 18,
+		tileSize: 256,
+		subdomains: 'abc',
+		errorTileUrl: '',
+		attribution: '',
+		opacity: 1,
+		continuousWorld: false,
+		noWrap: false,
+		mapOptions: {
+			backgroundColor: '#dddddd'
+		}
+	},
+
+	// Possible types: SATELLITE, ROADMAP, HYBRID, TERRAIN
+	initialize: function(type, options) {
+		L.Util.setOptions(this, options);
+
+		this._ready = google.maps.Map !== undefined;
+		if (!this._ready) L.Google.asyncWait.push(this);
+
+		this._type = type || 'SATELLITE';
+	},
+
+	onAdd: function(map, insertAtTheBottom) {
+		this._map = map;
+		this._insertAtTheBottom = insertAtTheBottom;
+
+		// create a container div for tiles
+		this._initContainer();
+		this._initMapObject();
+
+		// set up events
+		map.on('viewreset', this._resetCallback, this);
+
+		this._limitedUpdate = L.Util.limitExecByInterval(this._update, 150, this);
+		map.on('move', this._update, this);
+
+		map.on('zoomanim', this._handleZoomAnim, this);
+
+		//20px instead of 1em to avoid a slight overlap with google's attribution
+		map._controlCorners.bottomright.style.marginBottom = '20px';
+
+		this._reset();
+		this._update();
+	},
+
+	onRemove: function(map) {
+		map._container.removeChild(this._container);
+
+		map.off('viewreset', this._resetCallback, this);
+
+		map.off('move', this._update, this);
+
+		map.off('zoomanim', this._handleZoomAnim, this);
+
+		map._controlCorners.bottomright.style.marginBottom = '0em';
+	},
+
+	getAttribution: function() {
+		return this.options.attribution;
+	},
+
+	setOpacity: function(opacity) {
+		this.options.opacity = opacity;
+		if (opacity < 1) {
+			L.DomUtil.setOpacity(this._container, opacity);
+		}
+	},
+
+	setElementSize: function(e, size) {
+		e.style.width = size.x + 'px';
+		e.style.height = size.y + 'px';
+	},
+
+	_initContainer: function() {
+		var tilePane = this._map._container,
+			first = tilePane.firstChild;
+
+		if (!this._container) {
+			this._container = L.DomUtil.create('div', 'leaflet-google-layer leaflet-top leaflet-left');
+			this._container.id = '_GMapContainer_' + L.Util.stamp(this);
+			this._container.style.zIndex = 'auto';
+		}
+
+		tilePane.insertBefore(this._container, first);
+
+		this.setOpacity(this.options.opacity);
+		this.setElementSize(this._container, this._map.getSize());
+	},
+
+	_initMapObject: function() {
+		if (!this._ready) return;
+		this._google_center = new google.maps.LatLng(0, 0);
+		var map = new google.maps.Map(this._container, {
+			center: this._google_center,
+			zoom: 0,
+			tilt: 0,
+			mapTypeId: google.maps.MapTypeId[this._type],
+			disableDefaultUI: true,
+			keyboardShortcuts: false,
+			draggable: false,
+			disableDoubleClickZoom: true,
+			scrollwheel: false,
+			streetViewControl: false,
+			styles: this.options.mapOptions.styles,
+			backgroundColor: this.options.mapOptions.backgroundColor
+		});
+
+		var _this = this;
+		this._reposition = google.maps.event.addListenerOnce(map, 'center_changed',
+			function() { _this.onReposition(); });
+		this._google = map;
+
+		google.maps.event.addListenerOnce(map, 'idle',
+			function() { _this._checkZoomLevels(); });
+		//Reporting that map-object was initialized.
+		this.fire('MapObjectInitialized', { mapObject: map });
+	},
+
+	_checkZoomLevels: function() {
+		//setting the zoom level on the Google map may result in a different zoom level than the one requested
+		//(it won't go beyond the level for which they have data).
+		// verify and make sure the zoom levels on both Leaflet and Google maps are consistent
+		if (this._google.getZoom() !== this._map.getZoom()) {
+			//zoom levels are out of sync. Set the leaflet zoom level to match the google one
+			this._map.setZoom( this._google.getZoom() );
+		}
+	},
+
+	_resetCallback: function(e) {
+		this._reset(e.hard);
+	},
+
+	_reset: function(clearOldContainer) {
+		this._initContainer();
+	},
+
+	_update: function(e) {
+		if (!this._google) return;
+		this._resize();
+
+		var center = this._map.getCenter();
+		var _center = new google.maps.LatLng(center.lat, center.lng);
+
+		this._google.setCenter(_center);
+		this._google.setZoom(Math.round(this._map.getZoom()));
+
+		this._checkZoomLevels();
+	},
+
+	_resize: function() {
+		var size = this._map.getSize();
+		if (this._container.style.width === size.x &&
+				this._container.style.height === size.y)
+			return;
+		this.setElementSize(this._container, size);
+		this.onReposition();
+	},
+
+
+	_handleZoomAnim: function (e) {
+		var center = e.center;
+		var _center = new google.maps.LatLng(center.lat, center.lng);
+
+		this._google.setCenter(_center);
+		this._google.setZoom(Math.round(e.zoom));
+	},
+
+
+	onReposition: function() {
+		if (!this._google) return;
+		google.maps.event.trigger(this._google, 'resize');
+	}
+});
+
+L.Google.asyncWait = [];
+L.Google.asyncInitialize = function() {
+	var i;
+	for (i = 0; i < L.Google.asyncWait.length; i++) {
+		var o = L.Google.asyncWait[i];
+		o._ready = true;
+		if (o._container) {
+			o._initMapObject();
+			o._update();
+		}
+	}
+	L.Google.asyncWait = [];
+};
+
+/*
+ * L.TileLayer is used for standard xyz-numbered tile layers.
+ */
+
+/* global ymaps: true */
+
+L.Yandex = L.Class.extend({
+	includes: L.Mixin.Events,
+
+	options: {
+		minZoom: 0,
+		maxZoom: 18,
+		attribution: '',
+		opacity: 1,
+		traffic: false
+	},
+
+	possibleShortMapTypes: {
+		schemaMap: 'map',
+		satelliteMap: 'satellite',
+		hybridMap: 'hybrid',
+		publicMap: 'publicMap',
+		publicMapInHybridView: 'publicMapHybrid'
+	},
+	
+	_getPossibleMapType: function (mapType) {
+		var result = 'yandex#map';
+		if (typeof mapType !== 'string') {
+			return result;
+		}
+		for (var key in this.possibleShortMapTypes) {
+			if (mapType === this.possibleShortMapTypes[key]) {
+				result = 'yandex#' + mapType;
+				break;
+			}
+			if (mapType === ('yandex#' + this.possibleShortMapTypes[key])) {
+				result = mapType;
+			}
+		}
+		return result;
+	},
+	
+	// Possible types: yandex#map, yandex#satellite, yandex#hybrid, yandex#publicMap, yandex#publicMapHybrid
+	// Or their short names: map, satellite, hybrid, publicMap, publicMapHybrid
+	initialize: function(type, options) {
+		L.Util.setOptions(this, options);
+		//Assigning an initial map type for the Yandex layer
+		this._type = this._getPossibleMapType(type);
+	},
+
+	onAdd: function(map, insertAtTheBottom) {
+		this._map = map;
+		this._insertAtTheBottom = insertAtTheBottom;
+
+		// create a container div for tiles
+		this._initContainer();
+		this._initMapObject();
+
+		// set up events
+		map.on('viewreset', this._resetCallback, this);
+
+		this._limitedUpdate = L.Util.limitExecByInterval(this._update, 150, this);
+		map.on('move', this._update, this);
+
+		map._controlCorners.bottomright.style.marginBottom = '3em';
+
+		this._reset();
+		this._update(true);
+	},
+
+	onRemove: function(map) {
+		this._map._container.removeChild(this._container);
+
+		this._map.off('viewreset', this._resetCallback, this);
+
+		this._map.off('move', this._update, this);
+
+		map._controlCorners.bottomright.style.marginBottom = '0em';
+	},
+
+	getAttribution: function() {
+		return this.options.attribution;
+	},
+
+	setOpacity: function(opacity) {
+		this.options.opacity = opacity;
+		if (opacity < 1) {
+			L.DomUtil.setOpacity(this._container, opacity);
+		}
+	},
+
+	setElementSize: function(e, size) {
+		e.style.width = size.x + 'px';
+		e.style.height = size.y + 'px';
+	},
+
+	_initContainer: function() {
+		var tilePane = this._map._container,
+			first = tilePane.firstChild;
+
+		if (!this._container) {
+			this._container = L.DomUtil.create('div', 'leaflet-yandex-layer leaflet-top leaflet-left');
+			this._container.id = '_YMapContainer_' + L.Util.stamp(this);
+			this._container.style.zIndex = 'auto';
+		}
+
+		if (this.options.overlay) {
+			first = this._map._container.getElementsByClassName('leaflet-map-pane')[0];
+			first = first.nextSibling;
+			// XXX: Bug with layer order
+			if (L.Browser.opera)
+				this._container.className += ' leaflet-objects-pane';
+		}
+		tilePane.insertBefore(this._container, first);
+
+		this.setOpacity(this.options.opacity);
+		this.setElementSize(this._container, this._map.getSize());
+	},
+
+	_initMapObject: function() {
+		if (this._yandex) return;
+
+		// Check that ymaps.Map is ready
+		if (ymaps.Map === undefined) {
+			return ymaps.load(['package.map'], this._initMapObject, this);
+		}
+
+		// If traffic layer is requested check if control.TrafficControl is ready
+		if (this.options.traffic)
+			if (ymaps.control === undefined ||
+					ymaps.control.TrafficControl === undefined) {
+				return ymaps.load(['package.traffic', 'package.controls'],
+					this._initMapObject, this);
+			}
+		//Creating ymaps map-object without any default controls on it
+		var map = new ymaps.Map(this._container, { center: [0, 0], zoom: 0, behaviors: [], controls: [] });
+
+		if (this.options.traffic)
+			map.controls.add(new ymaps.control.TrafficControl({shown: true}));
+
+		if (this._type === 'yandex#null') {
+			this._type = new ymaps.MapType('null', []);
+			map.container.getElement().style.background = 'transparent';
+		}
+		map.setType(this._type);
+
+		this._yandex = map;
+		this._update(true);
+		
+		//Reporting that map-object was initialized
+		this.fire('MapObjectInitialized', { mapObject: map });
+	},
+
+	_resetCallback: function(e) {
+		this._reset(e.hard);
+	},
+
+	_reset: function(clearOldContainer) {
+		this._initContainer();
+	},
+
+	_update: function(force) {
+		if (!this._yandex) return;
+		this._resize(force);
+
+		var center = this._map.getCenter();
+		var _center = [center.lat, center.lng];
+		var zoom = this._map.getZoom();
+
+		if (force || this._yandex.getZoom() !== zoom)
+			this._yandex.setZoom(zoom);
+		this._yandex.panTo(_center, {duration: 0, delay: 0});
+	},
+
+	_resize: function(force) {
+		var size = this._map.getSize(), style = this._container.style;
+		if (style.width === size.x + 'px' && style.height === size.y + 'px')
+			if (force !== true) return;
+		this.setElementSize(this._container, size);
+		var b = this._map.getBounds(), sw = b.getSouthWest(), ne = b.getNorthEast();
+		this._yandex.container.fitToViewport();
+	}
+});
+
 (function () {
 	'use strict';
 
@@ -46077,6 +48733,660 @@ function stringify(gj) {
 		return new L.TileLayer.Provider(provider, options);
 	};
 }());
+
+(function() {
+  var COUNT_FRAMERATE, COUNT_MS_PER_FRAME, DIGIT_FORMAT, DIGIT_HTML, DIGIT_SPEEDBOOST, DURATION, FORMAT_MARK_HTML, FORMAT_PARSER, FRAMERATE, FRAMES_PER_VALUE, MS_PER_FRAME, MutationObserver, Odometer, RIBBON_HTML, TRANSITION_END_EVENTS, TRANSITION_SUPPORT, VALUE_HTML, addClass, createFromHTML, fractionalPart, now, removeClass, requestAnimationFrame, round, transitionCheckStyles, trigger, truncate, wrapJQuery, _jQueryWrapped, _old, _ref, _ref1,
+    __slice = [].slice;
+
+  VALUE_HTML = '<span class="odometer-value"></span>';
+
+  RIBBON_HTML = '<span class="odometer-ribbon"><span class="odometer-ribbon-inner">' + VALUE_HTML + '</span></span>';
+
+  DIGIT_HTML = '<span class="odometer-digit"><span class="odometer-digit-spacer">8</span><span class="odometer-digit-inner">' + RIBBON_HTML + '</span></span>';
+
+  FORMAT_MARK_HTML = '<span class="odometer-formatting-mark"></span>';
+
+  DIGIT_FORMAT = '(,ddd).dd';
+
+  FORMAT_PARSER = /^\(?([^)]*)\)?(?:(.)(d+))?$/;
+
+  FRAMERATE = 30;
+
+  DURATION = 2000;
+
+  COUNT_FRAMERATE = 20;
+
+  FRAMES_PER_VALUE = 2;
+
+  DIGIT_SPEEDBOOST = .5;
+
+  MS_PER_FRAME = 1000 / FRAMERATE;
+
+  COUNT_MS_PER_FRAME = 1000 / COUNT_FRAMERATE;
+
+  TRANSITION_END_EVENTS = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
+
+  transitionCheckStyles = document.createElement('div').style;
+
+  TRANSITION_SUPPORT = (transitionCheckStyles.transition != null) || (transitionCheckStyles.webkitTransition != null) || (transitionCheckStyles.mozTransition != null) || (transitionCheckStyles.oTransition != null);
+
+  requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+  createFromHTML = function(html) {
+    var el;
+    el = document.createElement('div');
+    el.innerHTML = html;
+    return el.children[0];
+  };
+
+  removeClass = function(el, name) {
+    return el.className = el.className.replace(new RegExp("(^| )" + (name.split(' ').join('|')) + "( |$)", 'gi'), ' ');
+  };
+
+  addClass = function(el, name) {
+    removeClass(el, name);
+    return el.className += " " + name;
+  };
+
+  trigger = function(el, name) {
+    var evt;
+    if (document.createEvent != null) {
+      evt = document.createEvent('HTMLEvents');
+      evt.initEvent(name, true, true);
+      return el.dispatchEvent(evt);
+    }
+  };
+
+  now = function() {
+    var _ref, _ref1;
+    return (_ref = (_ref1 = window.performance) != null ? typeof _ref1.now === "function" ? _ref1.now() : void 0 : void 0) != null ? _ref : +(new Date);
+  };
+
+  round = function(val, precision) {
+    if (precision == null) {
+      precision = 0;
+    }
+    if (!precision) {
+      return Math.round(val);
+    }
+    val *= Math.pow(10, precision);
+    val += 0.5;
+    val = Math.floor(val);
+    return val /= Math.pow(10, precision);
+  };
+
+  truncate = function(val) {
+    if (val < 0) {
+      return Math.ceil(val);
+    } else {
+      return Math.floor(val);
+    }
+  };
+
+  fractionalPart = function(val) {
+    return val - round(val);
+  };
+
+  _jQueryWrapped = false;
+
+  (wrapJQuery = function() {
+    var property, _i, _len, _ref, _results;
+    if (_jQueryWrapped) {
+      return;
+    }
+    if (window.jQuery != null) {
+      _jQueryWrapped = true;
+      _ref = ['html', 'text'];
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        property = _ref[_i];
+        _results.push((function(property) {
+          var old;
+          old = window.jQuery.fn[property];
+          return window.jQuery.fn[property] = function(val) {
+            var _ref1;
+            if ((val == null) || (((_ref1 = this[0]) != null ? _ref1.odometer : void 0) == null)) {
+              return old.apply(this, arguments);
+            }
+            return this[0].odometer.update(val);
+          };
+        })(property));
+      }
+      return _results;
+    }
+  })();
+
+  setTimeout(wrapJQuery, 0);
+
+  Odometer = (function() {
+    function Odometer(options) {
+      var e, k, property, v, _base, _i, _len, _ref, _ref1, _ref2,
+        _this = this;
+      this.options = options;
+      this.el = this.options.el;
+      if (this.el.odometer != null) {
+        return this.el.odometer;
+      }
+      this.el.odometer = this;
+      _ref = Odometer.options;
+      for (k in _ref) {
+        v = _ref[k];
+        if (this.options[k] == null) {
+          this.options[k] = v;
+        }
+      }
+      if ((_base = this.options).duration == null) {
+        _base.duration = DURATION;
+      }
+      this.MAX_VALUES = ((this.options.duration / MS_PER_FRAME) / FRAMES_PER_VALUE) | 0;
+      this.resetFormat();
+      this.value = this.cleanValue((_ref1 = this.options.value) != null ? _ref1 : '');
+      this.renderInside();
+      this.render();
+      try {
+        _ref2 = ['innerHTML', 'innerText', 'textContent'];
+        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+          property = _ref2[_i];
+          if (this.el[property] != null) {
+            (function(property) {
+              return Object.defineProperty(_this.el, property, {
+                get: function() {
+                  var _ref3;
+                  if (property === 'innerHTML') {
+                    return _this.inside.outerHTML;
+                  } else {
+                    return (_ref3 = _this.inside.innerText) != null ? _ref3 : _this.inside.textContent;
+                  }
+                },
+                set: function(val) {
+                  return _this.update(val);
+                }
+              });
+            })(property);
+          }
+        }
+      } catch (_error) {
+        e = _error;
+        this.watchForMutations();
+      }
+      this;
+    }
+
+    Odometer.prototype.renderInside = function() {
+      this.inside = document.createElement('div');
+      this.inside.className = 'odometer-inside';
+      this.el.innerHTML = '';
+      return this.el.appendChild(this.inside);
+    };
+
+    Odometer.prototype.watchForMutations = function() {
+      var e,
+        _this = this;
+      if (MutationObserver == null) {
+        return;
+      }
+      try {
+        if (this.observer == null) {
+          this.observer = new MutationObserver(function(mutations) {
+            var newVal;
+            newVal = _this.el.innerText;
+            _this.renderInside();
+            _this.render(_this.value);
+            return _this.update(newVal);
+          });
+        }
+        this.watchMutations = true;
+        return this.startWatchingMutations();
+      } catch (_error) {
+        e = _error;
+      }
+    };
+
+    Odometer.prototype.startWatchingMutations = function() {
+      if (this.watchMutations) {
+        return this.observer.observe(this.el, {
+          childList: true
+        });
+      }
+    };
+
+    Odometer.prototype.stopWatchingMutations = function() {
+      var _ref;
+      return (_ref = this.observer) != null ? _ref.disconnect() : void 0;
+    };
+
+    Odometer.prototype.cleanValue = function(val) {
+      var _ref;
+      if (typeof val === 'string') {
+        val = val.replace((_ref = this.format.radix) != null ? _ref : '.', '<radix>');
+        val = val.replace(/[.,]/g, '');
+        val = val.replace('<radix>', '.');
+        val = parseFloat(val, 10) || 0;
+      }
+      return round(val, this.format.precision);
+    };
+
+    Odometer.prototype.bindTransitionEnd = function() {
+      var event, renderEnqueued, _i, _len, _ref, _results,
+        _this = this;
+      if (this.transitionEndBound) {
+        return;
+      }
+      this.transitionEndBound = true;
+      renderEnqueued = false;
+      _ref = TRANSITION_END_EVENTS.split(' ');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        event = _ref[_i];
+        _results.push(this.el.addEventListener(event, function() {
+          if (renderEnqueued) {
+            return true;
+          }
+          renderEnqueued = true;
+          setTimeout(function() {
+            _this.render();
+            renderEnqueued = false;
+            return trigger(_this.el, 'odometerdone');
+          }, 0);
+          return true;
+        }, false));
+      }
+      return _results;
+    };
+
+    Odometer.prototype.resetFormat = function() {
+      var format, fractional, parsed, precision, radix, repeating, _ref, _ref1;
+      format = (_ref = this.options.format) != null ? _ref : DIGIT_FORMAT;
+      format || (format = 'd');
+      parsed = FORMAT_PARSER.exec(format);
+      if (!parsed) {
+        throw new Error("Odometer: Unparsable digit format");
+      }
+      _ref1 = parsed.slice(1, 4), repeating = _ref1[0], radix = _ref1[1], fractional = _ref1[2];
+      precision = (fractional != null ? fractional.length : void 0) || 0;
+      return this.format = {
+        repeating: repeating,
+        radix: radix,
+        precision: precision
+      };
+    };
+
+    Odometer.prototype.render = function(value) {
+      var classes, cls, match, newClasses, theme, _i, _len;
+      if (value == null) {
+        value = this.value;
+      }
+      this.stopWatchingMutations();
+      this.resetFormat();
+      this.inside.innerHTML = '';
+      theme = this.options.theme;
+      classes = this.el.className.split(' ');
+      newClasses = [];
+      for (_i = 0, _len = classes.length; _i < _len; _i++) {
+        cls = classes[_i];
+        if (!cls.length) {
+          continue;
+        }
+        if (match = /^odometer-theme-(.+)$/.exec(cls)) {
+          theme = match[1];
+          continue;
+        }
+        if (/^odometer(-|$)/.test(cls)) {
+          continue;
+        }
+        newClasses.push(cls);
+      }
+      newClasses.push('odometer');
+      if (!TRANSITION_SUPPORT) {
+        newClasses.push('odometer-no-transitions');
+      }
+      if (theme) {
+        newClasses.push("odometer-theme-" + theme);
+      } else {
+        newClasses.push("odometer-auto-theme");
+      }
+      this.el.className = newClasses.join(' ');
+      this.ribbons = {};
+      this.formatDigits(value);
+      return this.startWatchingMutations();
+    };
+
+    Odometer.prototype.formatDigits = function(value) {
+      var digit, valueDigit, valueString, wholePart, _i, _j, _len, _len1, _ref, _ref1;
+      this.digits = [];
+      if (this.options.formatFunction) {
+        valueString = this.options.formatFunction(value);
+        _ref = valueString.split('').reverse();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          valueDigit = _ref[_i];
+          if (valueDigit.match(/0-9/)) {
+            digit = this.renderDigit();
+            digit.querySelector('.odometer-value').innerHTML = valueDigit;
+            this.digits.push(digit);
+            this.insertDigit(digit);
+          } else {
+            this.addSpacer(valueDigit);
+          }
+        }
+      } else {
+        wholePart = !this.format.precision || !fractionalPart(value) || false;
+        _ref1 = value.toString().split('').reverse();
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          digit = _ref1[_j];
+          if (digit === '.') {
+            wholePart = true;
+          }
+          this.addDigit(digit, wholePart);
+        }
+      }
+    };
+
+    Odometer.prototype.update = function(newValue) {
+      var diff,
+        _this = this;
+      newValue = this.cleanValue(newValue);
+      if (!(diff = newValue - this.value)) {
+        return;
+      }
+      removeClass(this.el, 'odometer-animating-up odometer-animating-down odometer-animating');
+      if (diff > 0) {
+        addClass(this.el, 'odometer-animating-up');
+      } else {
+        addClass(this.el, 'odometer-animating-down');
+      }
+      this.stopWatchingMutations();
+      this.animate(newValue);
+      this.startWatchingMutations();
+      setTimeout(function() {
+        _this.el.offsetHeight;
+        return addClass(_this.el, 'odometer-animating');
+      }, 0);
+      return this.value = newValue;
+    };
+
+    Odometer.prototype.renderDigit = function() {
+      return createFromHTML(DIGIT_HTML);
+    };
+
+    Odometer.prototype.insertDigit = function(digit, before) {
+      if (before != null) {
+        return this.inside.insertBefore(digit, before);
+      } else if (!this.inside.children.length) {
+        return this.inside.appendChild(digit);
+      } else {
+        return this.inside.insertBefore(digit, this.inside.children[0]);
+      }
+    };
+
+    Odometer.prototype.addSpacer = function(chr, before, extraClasses) {
+      var spacer;
+      spacer = createFromHTML(FORMAT_MARK_HTML);
+      spacer.innerHTML = chr;
+      if (extraClasses) {
+        addClass(spacer, extraClasses);
+      }
+      return this.insertDigit(spacer, before);
+    };
+
+    Odometer.prototype.addDigit = function(value, repeating) {
+      var chr, digit, resetted, _ref;
+      if (repeating == null) {
+        repeating = true;
+      }
+      if (value === '-') {
+        return this.addSpacer(value, null, 'odometer-negation-mark');
+      }
+      if (value === '.') {
+        return this.addSpacer((_ref = this.format.radix) != null ? _ref : '.', null, 'odometer-radix-mark');
+      }
+      if (repeating) {
+        resetted = false;
+        while (true) {
+          if (!this.format.repeating.length) {
+            if (resetted) {
+              throw new Error("Bad odometer format without digits");
+            }
+            this.resetFormat();
+            resetted = true;
+          }
+          chr = this.format.repeating[this.format.repeating.length - 1];
+          this.format.repeating = this.format.repeating.substring(0, this.format.repeating.length - 1);
+          if (chr === 'd') {
+            break;
+          }
+          this.addSpacer(chr);
+        }
+      }
+      digit = this.renderDigit();
+      digit.querySelector('.odometer-value').innerHTML = value;
+      this.digits.push(digit);
+      return this.insertDigit(digit);
+    };
+
+    Odometer.prototype.animate = function(newValue) {
+      if (!TRANSITION_SUPPORT || this.options.animation === 'count') {
+        return this.animateCount(newValue);
+      } else {
+        return this.animateSlide(newValue);
+      }
+    };
+
+    Odometer.prototype.animateCount = function(newValue) {
+      var cur, diff, last, start, tick,
+        _this = this;
+      if (!(diff = +newValue - this.value)) {
+        return;
+      }
+      start = last = now();
+      cur = this.value;
+      return (tick = function() {
+        var delta, dist, fraction;
+        if ((now() - start) > _this.options.duration) {
+          _this.value = newValue;
+          _this.render();
+          trigger(_this.el, 'odometerdone');
+          return;
+        }
+        delta = now() - last;
+        if (delta > COUNT_MS_PER_FRAME) {
+          last = now();
+          fraction = delta / _this.options.duration;
+          dist = diff * fraction;
+          cur += dist;
+          _this.render(Math.round(cur));
+        }
+        if (requestAnimationFrame != null) {
+          return requestAnimationFrame(tick);
+        } else {
+          return setTimeout(tick, COUNT_MS_PER_FRAME);
+        }
+      })();
+    };
+
+    Odometer.prototype.getDigitCount = function() {
+      var i, max, value, values, _i, _len;
+      values = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      for (i = _i = 0, _len = values.length; _i < _len; i = ++_i) {
+        value = values[i];
+        values[i] = Math.abs(value);
+      }
+      max = Math.max.apply(Math, values);
+      return Math.ceil(Math.log(max + 1) / Math.log(10));
+    };
+
+    Odometer.prototype.getFractionalDigitCount = function() {
+      var i, parser, parts, value, values, _i, _len;
+      values = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      parser = /^\-?\d*\.(\d*?)0*$/;
+      for (i = _i = 0, _len = values.length; _i < _len; i = ++_i) {
+        value = values[i];
+        values[i] = value.toString();
+        parts = parser.exec(values[i]);
+        if (parts == null) {
+          values[i] = 0;
+        } else {
+          values[i] = parts[1].length;
+        }
+      }
+      return Math.max.apply(Math, values);
+    };
+
+    Odometer.prototype.resetDigits = function() {
+      this.digits = [];
+      this.ribbons = [];
+      this.inside.innerHTML = '';
+      return this.resetFormat();
+    };
+
+    Odometer.prototype.animateSlide = function(newValue) {
+      var boosted, cur, diff, digitCount, digits, dist, end, fractionalCount, frame, frames, i, incr, j, mark, numEl, oldValue, start, _base, _i, _j, _k, _l, _len, _len1, _len2, _m, _ref, _results;
+      oldValue = this.value;
+      fractionalCount = this.getFractionalDigitCount(oldValue, newValue);
+      if (fractionalCount) {
+        newValue = newValue * Math.pow(10, fractionalCount);
+        oldValue = oldValue * Math.pow(10, fractionalCount);
+      }
+      if (!(diff = newValue - oldValue)) {
+        return;
+      }
+      this.bindTransitionEnd();
+      digitCount = this.getDigitCount(oldValue, newValue);
+      digits = [];
+      boosted = 0;
+      for (i = _i = 0; 0 <= digitCount ? _i < digitCount : _i > digitCount; i = 0 <= digitCount ? ++_i : --_i) {
+        start = truncate(oldValue / Math.pow(10, digitCount - i - 1));
+        end = truncate(newValue / Math.pow(10, digitCount - i - 1));
+        dist = end - start;
+        if (Math.abs(dist) > this.MAX_VALUES) {
+          frames = [];
+          incr = dist / (this.MAX_VALUES + this.MAX_VALUES * boosted * DIGIT_SPEEDBOOST);
+          cur = start;
+          while ((dist > 0 && cur < end) || (dist < 0 && cur > end)) {
+            frames.push(Math.round(cur));
+            cur += incr;
+          }
+          if (frames[frames.length - 1] !== end) {
+            frames.push(end);
+          }
+          boosted++;
+        } else {
+          frames = (function() {
+            _results = [];
+            for (var _j = start; start <= end ? _j <= end : _j >= end; start <= end ? _j++ : _j--){ _results.push(_j); }
+            return _results;
+          }).apply(this);
+        }
+        for (i = _k = 0, _len = frames.length; _k < _len; i = ++_k) {
+          frame = frames[i];
+          frames[i] = Math.abs(frame % 10);
+        }
+        digits.push(frames);
+      }
+      this.resetDigits();
+      _ref = digits.reverse();
+      for (i = _l = 0, _len1 = _ref.length; _l < _len1; i = ++_l) {
+        frames = _ref[i];
+        if (!this.digits[i]) {
+          this.addDigit(' ', i >= fractionalCount);
+        }
+        if ((_base = this.ribbons)[i] == null) {
+          _base[i] = this.digits[i].querySelector('.odometer-ribbon-inner');
+        }
+        this.ribbons[i].innerHTML = '';
+        if (diff < 0) {
+          frames = frames.reverse();
+        }
+        for (j = _m = 0, _len2 = frames.length; _m < _len2; j = ++_m) {
+          frame = frames[j];
+          numEl = document.createElement('div');
+          numEl.className = 'odometer-value';
+          numEl.innerHTML = frame;
+          this.ribbons[i].appendChild(numEl);
+          if (j === frames.length - 1) {
+            addClass(numEl, 'odometer-last-value');
+          }
+          if (j === 0) {
+            addClass(numEl, 'odometer-first-value');
+          }
+        }
+      }
+      if (start < 0) {
+        this.addDigit('-');
+      }
+      mark = this.inside.querySelector('.odometer-radix-mark');
+      if (mark != null) {
+        mark.parent.removeChild(mark);
+      }
+      if (fractionalCount) {
+        return this.addSpacer(this.format.radix, this.digits[fractionalCount - 1], 'odometer-radix-mark');
+      }
+    };
+
+    return Odometer;
+
+  })();
+
+  Odometer.options = (_ref = window.odometerOptions) != null ? _ref : {};
+
+  setTimeout(function() {
+    var k, v, _base, _ref1, _results;
+    if (window.odometerOptions) {
+      _ref1 = window.odometerOptions;
+      _results = [];
+      for (k in _ref1) {
+        v = _ref1[k];
+        _results.push((_base = Odometer.options)[k] != null ? (_base = Odometer.options)[k] : _base[k] = v);
+      }
+      return _results;
+    }
+  }, 0);
+
+  Odometer.init = function() {
+    var el, elements, _i, _len, _ref1, _results;
+    if (document.querySelectorAll == null) {
+      return;
+    }
+    elements = document.querySelectorAll(Odometer.options.selector || '.odometer');
+    _results = [];
+    for (_i = 0, _len = elements.length; _i < _len; _i++) {
+      el = elements[_i];
+      _results.push(el.odometer = new Odometer({
+        el: el,
+        value: (_ref1 = el.innerText) != null ? _ref1 : el.textContent
+      }));
+    }
+    return _results;
+  };
+
+  if ((((_ref1 = document.documentElement) != null ? _ref1.doScroll : void 0) != null) && (document.createEventObject != null)) {
+    _old = document.onreadystatechange;
+    document.onreadystatechange = function() {
+      if (document.readyState === 'complete' && Odometer.options.auto !== false) {
+        Odometer.init();
+      }
+      return _old != null ? _old.apply(this, arguments) : void 0;
+    };
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      if (Odometer.options.auto !== false) {
+        return Odometer.init();
+      }
+    }, false);
+  }
+
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery'], function() {
+      return Odometer;
+    });
+  } else if (typeof exports === !'undefined') {
+    module.exports = Odometer;
+  } else {
+    window.Odometer = Odometer;
+  }
+
+}).call(this);
 
 // TinyColor v1.0.0
 // https://github.com/bgrins/TinyColor

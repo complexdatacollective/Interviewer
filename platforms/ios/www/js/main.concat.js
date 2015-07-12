@@ -545,7 +545,7 @@ $(document).ready(function() {
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.debugLevel = 10;
-    window.netCanvas.studyProtocol = 'default';
+    window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -634,11 +634,16 @@ $(document).ready(function() {
 
     });
 
+
+    // print some version stuff
     if (window.isNodeWebkit) {
         var version = window.process.versions['node-webkit'];
         console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
+    } else if (window.isCordova) {
+        // can we get meaningful version info on cordova? how about a get request to the package.json?
+        console.log('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
     } else {
-
+        // anything we can do in browser? yes.
     }
 
     var protocolExists = function(protocol, callback) {
@@ -1086,10 +1091,10 @@ var Menu = function Menu(options) {
         var newMenu = {};
         newMenu.name = name;
         newMenu.open = false;
-        newMenu.button = $('<span class="hi-icon menu-btn '+name+' shown"></span>');
-
-        newMenu.button.addClass(icon).html(name);
+        newMenu.button = $('<span class="fa fa-2x fa-'+icon+' menu-btn '+name+'"></span>');
+        // newMenu.button.addClass(icon);
         $('.menu-container').append(newMenu.button);
+        $(newMenu.button).addClass('shown');
 
         var menuClass = name+'-menu';
         newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+name+'</h2><ul></ul></div></div>');
@@ -1569,7 +1574,7 @@ module.exports = function MultiBin() {
 };
 return multiBin;
 };
-;/* global $, window */
+;/* global $, window, Odometer, document  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -1587,6 +1592,10 @@ module.exports = function Namegenerator() {
 
     var nodeBoxOpen = false;
     var editing = false;
+    var relationshipPanel;
+    var newNodePanel;
+    var newNodePanelContent;
+    var alterCounter;
 
     var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
 
@@ -1600,7 +1609,7 @@ module.exports = function Namegenerator() {
         'Other': ['Other relationship']
     };
 
-    var namesList = ['Barney','Joshua','Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
+    var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
     var keyPressHandler = function(e) {
         if (e.keyCode === 13) {
@@ -1686,7 +1695,7 @@ module.exports = function Namegenerator() {
         // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
         var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
         $.each(roleEdges, function(index, value) {
-            $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+            $(relationshipPanel).children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
         });
 
         // Populate the form with this nodes data.
@@ -1787,7 +1796,7 @@ module.exports = function Namegenerator() {
             // Add role edges
 
             // Iterate through selected items and create a new role edge for each.
-            $.each($('.relationship.selected'), function() {
+            $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
                     from:window.network.getNodes({type_t0:'Ego'})[0].id,
@@ -1802,7 +1811,7 @@ module.exports = function Namegenerator() {
             var edge = window.network.getEdges({to:newNode, type:'Dyad'})[0];
             namegenerator.addToList(edge);
             alterCount++;
-            $('.alter-count-box').html(alterCount);
+            alterCounter.update(alterCount);
 
         } else {
             // We are updating a node
@@ -1848,7 +1857,7 @@ module.exports = function Namegenerator() {
             // Remove existing edges
             window.network.removeEdges(window.network.getEdges({type:'Role', from: window.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
-            $.each($('.relationship.selected'), function() {
+            $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
                     from:window.network.getNodes({type_t0:'Ego'})[0].id,
@@ -1871,7 +1880,8 @@ module.exports = function Namegenerator() {
             });
 
             $('div[data-index='+editing+']').append(list);
-
+            alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
+            alterCounter.update(alterCount);
             editing = false;
 
         } // end if editing
@@ -1931,10 +1941,11 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.openNodeBox = function() {
-        // $('.newNodeBox').show();
-        // $('.content').addClass('blurry');
-        // $('.newNodeBox').transition({scale:1,opacity:1},300);
         $('.newNodeBox').addClass('open');
+        $('.black-overlay').css({'display':'block'});
+        setTimeout(function() {
+            $('.black-overlay').addClass('show');
+        }, 50);
         setTimeout(function() {
             $('#ngForm input:text').first().focus();
         }, 1000);
@@ -1943,49 +1954,48 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.closeNodeBox = function() {
-        $('.content').removeClass('blurry');
-        // $('.newNodeBox').transition({scale:0.1,opacity:0},500);
+        $('.black-overlay').removeClass('show');
         $('.newNodeBox').removeClass('open');
-        setTimeout(function() {
-
-        });
+        setTimeout(function() { // for some reason this doenst work without an empty setTimeout
+            $('.black-overlay').css({'display':'none'});
+        }, 300);
         nodeBoxOpen = false;
         $('#ngForm').trigger('reset');
-        $('.reltype_oth_t0').hide();
         editing = false;
         $('.relationship-button').html('Set Relationship Roles');
-        $('.relationship').removeClass('selected');
+        $(relationshipPanel).find('.relationship').removeClass('selected');
     };
 
     namegenerator.destroy = function() {
         window.tools.notify('Destroying namegenerator.',0);
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
-        $('.cancel').off('click', cancelBtnHandler);
-        $('#fname_t0, #lname_t0').off('keyup', inputKeypressHandler);
+        $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
+        $(window.document).off('click', '.cancel', cancelBtnHandler);
+        $(window.document).off('click', '.add-button', namegenerator.openNodeBox);
+        $(window.document).off('click', '.delete-button', namegenerator.removeFromList);
         $(window.document).off('click', '.inner-card', cardClickHandler);
-        $('.add-button').off('click', namegenerator.openNodeBox);
-        $('.delete-button').off('click', namegenerator.removeFromList);
-        $('#ngForm').off('submit', submitFormHandler);
-        window.removeEventListener('changeStageStart', stageChangeHandler, false);
-        $('.newNodeBox').remove();
-        $('.relationship-types-container').remove();
+        $(window.document).off('submit', '#ngForm', submitFormHandler);
         $(window.document).off('click', '.relationship', roleClickHandler);
         $(window.document).off('click', '.relationship-button', namegenerator.toggleRelationshipBox);
         $(window.document).off('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
+        window.removeEventListener('changeStageStart', stageChangeHandler, false);
+        $('.newNodeBox').remove();
+        $('.relationship-types-container').remove();
+
+
     };
 
     namegenerator.init = function(options) {
         window.tools.extend(namegenerator.options, options);
         // create elements
-        var button = $('<span class="hi-icon hi-icon-user add-button">Add</span>');
+        var button = $('<span class="fa fa-4x fa-plus-circle add-button"></span>');
         namegenerator.options.targetEl.append(button);
         var alterCountBox = $('<div class="alter-count-box"></div>');
         namegenerator.options.targetEl.append(alterCountBox);
 
         // create node box
-        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0">Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
-
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-2x fa-users"></span> Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // namegenerator.options.targetEl.append(newNodeBox);
         $('body').append(newNodeBox);
@@ -1996,20 +2006,20 @@ module.exports = function Namegenerator() {
 
                 switch(value.type) {
                     case 'text':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'number':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'relationship':
-                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'">');
+                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
 
                     break;
 
                     case 'subrelationship':
-                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'">');
+                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
                     break;
 
                 }
@@ -2031,18 +2041,21 @@ module.exports = function Namegenerator() {
         var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
         $('.newNodeBox .form .fields').append(buttons);
 
+        newNodePanel = $('.newNodeBox').html();
+
         // relationship types
-        alterCountBox = $('<div class="relationship-types-container"><span class="relationship-close-button">X</span>');
-        $('.newNodeBox').after(alterCountBox);
+        relationshipPanel = $('<div class="relationship-types-container"></div>');
         var counter = 0;
         $.each(roles, function(index) {
-            $('.relationship-types-container').append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
+            $(relationshipPanel).append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
             $.each(roles[index], function(relIndex, relValue) {
-                $('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
+                $(relationshipPanel).children('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
             });
             counter++;
         });
 
+
+        $(relationshipPanel).append('<span class="fa fa-2x fa-times relationship-close-button"></span>');
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         namegenerator.options.targetEl.append(nodeContainer);
 
@@ -2058,18 +2071,25 @@ module.exports = function Namegenerator() {
         // Event listeners
         window.addEventListener('changeStageStart', stageChangeHandler, false);
         $(window.document).on('keydown', keyPressHandler);
-        $('.cancel').on('click', cancelBtnHandler);
-        $('.add-button').on('click', namegenerator.openNodeBox);
-        $('.delete-button').on('click', namegenerator.removeFromList);
-        $('#fname_t0, #lname_t0').on('keyup', inputKeypressHandler);
+        $(window.document).on('click', '.cancel', cancelBtnHandler);
+        $(window.document).on('click', '.add-button', namegenerator.openNodeBox);
+        $(window.document).on('click', '.delete-button', namegenerator.removeFromList);
+        $(window.document).on('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
         $(window.document).on('click', '.inner-card', cardClickHandler);
-        $('#ngForm').on('submit', submitFormHandler);
+        $(window.document).on('submit', '#ngForm', submitFormHandler);
         $(window.document).on('click', '.relationship', roleClickHandler);
         $(window.document).on('click', '.relationship-button', namegenerator.toggleRelationshipBox);
         $(window.document).on('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
 
         // Set node count box
-        $('.alter-count-box').html(alterCount);
+        var el = document.querySelector('.alter-count-box');
+
+        alterCounter = new Odometer({
+          el: el,
+          value: alterCount,
+          format: 'dd',
+          theme: 'default'
+        });
 
         // add existing nodes
         $.each(window.network.getEdges({type: 'Dyad', from: window.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
@@ -2126,21 +2146,19 @@ module.exports = function Namegenerator() {
                 // Make nodes draggable
                 $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false ,
                     start: function(){
-                        console.log($(this).parent().css('overflow'));
                         $(this).parent().css('overflow','visible');
-                        console.log($(this).parent().css('overflow'));
                     },
                     stop: function() {
-                        $('previous-node-list').css('overflow','scroll');
-                        $('current-node-list').css('overflow','scroll');
+                        $('.previous-node-list').css('overflow','scroll');
+                        $('.current-node-list').css('overflow','scroll');
                     }
                 });
 
                 $('.node-container').droppable({ accept: '.draggable',
                     drop: function(event, ui) {
                         // remove the ghost card
-                        $('previous-node-list').css('overflow','scroll');
-                        $('current-node-list').css('overflow','scroll');
+                        $('.previous-node-list').css('overflow','scroll');
+                        $('.current-node-list').css('overflow','scroll');
                         $('.card.ghost').remove();
 
                         // get the data we need
@@ -2206,7 +2224,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.toggleRelationshipBox = function() {
-        if ($('.relationship-types-container').hasClass('open')) {
+        if ($('.newNodeBox').hasClass('relationships')) {
             // relationship box is open, so close it
             var roleCount = $('.relationship.selected').length;
             var plural = 'roles';
@@ -2215,62 +2233,67 @@ module.exports = function Namegenerator() {
                 plural = 'role';
             }
 
-            if(editing) {
-                $('.relationship-button').html(roleCount+' '+plural+' selected.');
-            } else {
-                if (roleCount > 0) {
-                    $('.relationship-button').html(roleCount+' '+plural+' selected.');
-                } else {
-                    $('.relationship-button').html('Set Relationship Roles');
-                }
-            }
+            // fade out
 
-            $.each($('.relationship-type'), function(index, value) {
-                setTimeout(function() {
-                    $(value).transition({opacity:0,top:'-100px'},150);
-                    $.each($(value).children('.relationship'), function(index, childvalue) {
-                        setTimeout(function() {
-                            $(childvalue).transition({opacity:0,top:'-200px'}, 150);
-                        }, 50+(index*20));
-                    });
-                }, index*50);
-
-            });
+            $('.newNodeBox').addClass('content-hidden');
 
             setTimeout(function() {
-                // $('.newNodeBox').show();
+                $('.newNodeBox').removeClass('relationships');
+                $('.newNodeBox').html(newNodePanel);
+                setTimeout(function() {
 
-                $('.relationship-types-container').removeClass('open');
-                $('.relationship-types-container').removeClass('front');
-                $('.newNodeBox').removeClass('back');
-            }, 400);
+                });
+                var wasDisabled = false;
+                if ($('input#age_p_t0').is(':disabled')) {
+                    $('input#age_p_t0').prop( 'disabled', false);
+                    wasDisabled = true;
+                }
+                $('#ngForm').deserialize(newNodePanelContent);
+
+                if (wasDisabled === true) {
+                    $('input#age_p_t0').prop( 'disabled', true);
+                }
+
+                if(editing) {
+                    $('.relationship-button').html(roleCount+' '+plural+' selected.');
+                } else {
+                    if (roleCount > 0) {
+                        $('.relationship-button').html(roleCount+' '+plural+' selected.');
+                    } else {
+                        $('.relationship-button').html('Set Relationship Roles');
+                    }
+                }
+
+            }, 300);
+            setTimeout(function() {
+                $('.newNodeBox').removeClass('content-hidden');
+            }, 500);
 
         } else {
             // relationship box is closed, so open it
-            // if(editing) {
-            //     var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
-            //     $.each(roleEdges, function(index, value) {
-            //         $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
-            //     });
-            // }
+            var wasDisabled = false;
+            if ($('input#age_p_t0').is(':disabled')) {
+                wasDisabled = true;
+                $('input#age_p_t0').prop( 'disabled', false);
+            }
+            newNodePanelContent = $('#ngForm').serialize();
 
-            $('.newNodeBox').addClass('back');
-            $('.relationship-types-container').addClass('open front');
-            $('.relationship').css({position:'relative', opacity:0,top:'-200px'});
-            $('.relationship-type').css({position:'relative', opacity:0,top:'-100px'});
-            $.each($('.relationship-type'), function(index, value) {
-                setTimeout(function() {
-                    $(value).transition({opacity:1,top:'0px'},200);
-                    $.each($(value).children('.relationship'), function(index, childvalue) {
-                        setTimeout(function() {
-                            $(childvalue).transition({opacity:1,top:0}, 100);
-                        }, 100+(index*50));
-                    });
-                }, index*80);
+            if (wasDisabled === true) {
+                $('input#age_p_t0').prop( 'disabled', true);
+            }
+            newNodePanel = $('.newNodeBox').html();
+            $('.newNodeBox').addClass('content-hidden');
 
-            });
-            // $('.content').removeClass('blurry');
-            // $('.newNodeBox').hide();
+            setTimeout(function() {
+                $('.newNodeBox').addClass('relationships');
+                $('.newNodeBox').html(relationshipPanel);
+
+            }, 300);
+
+            setTimeout(function(){
+                $('.newNodeBox').removeClass('content-hidden');
+            }, 700);
+
         }
     };
 
@@ -2301,14 +2324,12 @@ module.exports = function Namegenerator() {
         $('div[data-index='+editing+']').addClass('delete');
         var tempEditing = editing;
         setTimeout(function() {
-            console.log('removing');
-            console.log($('div[data-index='+editing+']').parent());
             $('div[data-index='+tempEditing+']').parent().remove();
         }, 700);
 
         editing = false;
         var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
-        $('.alter-count-box').html(alterCount);
+        alterCounter.update(alterCount);
 
         namegenerator.closeNodeBox();
     };
@@ -3255,7 +3276,7 @@ var RoleRevisit = function RoleRevisit() {
 };
 
 module.exports = new RoleRevisit();
-;/* global document, window, $, console, protocol */
+;/* global document, window, $, protocol, nodeRequire */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -3268,9 +3289,14 @@ var Session = function Session() {
     var lastSaveTime, saveTimer;
 
     function saveFile(path) {
-        var data = JSON.stringify(session.sessionData, undefined, 2);
-        var fs = require('browserify-fs');
-        fs.writeFile(path, data);
+        if (window.isNodeWebkit) {
+            var data = JSON.stringify(session.sessionData, undefined, 2);
+            var fs = nodeRequire('fs');
+            fs.writeFile(path, data);
+        } else {
+            window.tools.notify('Not yet implemented on this platform.', 1);
+        }
+
     }
 
     function clickDownloadInput() {
@@ -3312,7 +3338,6 @@ var Session = function Session() {
     };
 
     session.loadProtocol = function() {
-        console.log('loading protocol');
 
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
@@ -3345,8 +3370,6 @@ var Session = function Session() {
             window.dataStore.init(function(sessionid) {
                 session.id = sessionid;
                 window.dataStore.load(function(data) {
-                    console.log(data);
-                    console.log(study);
 
                     session.updateSessionData(data, function() {
                         // Only load the network into the model if there is a network to load
@@ -3364,13 +3387,14 @@ var Session = function Session() {
             });
 
             // Initialise the menu system – other modules depend on it being there.
-            var stagesMenu = window.menu.addMenu('Stages', 'hi-icon-list');
+            var stagesMenu = window.menu.addMenu('Stages', 'bars');
             $.each(session.stages, function(index,value) {
                 window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
             });
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
-            console.log( 'Request Failed: ' + err );
+            window.tools.notify('Error fetching protocol!',1);
+            window.tools.notify(err,1);
         });
 
     };
@@ -3411,7 +3435,7 @@ var Session = function Session() {
             session.saveManager();
         }, false);
 
-        var sessionMenu = window.menu.addMenu('Session','hi-icon-cog');
+        var sessionMenu = window.menu.addMenu('Session','cogs');
         window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
@@ -3553,7 +3577,6 @@ var Session = function Session() {
 
             // if true, skip the stage
             if (outcome === true) {
-                console.log('Skipping because skip condition was met.');
                 if (stage > currentStage) {
                     session.goToStage(stage+1);
                 } else {
