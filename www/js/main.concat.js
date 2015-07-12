@@ -1232,8 +1232,11 @@ module.exports = function MultiBin() {
 		if (e.target !== e.currentTarget) {
 
 			if (open === true) {
-				$('.node-bin-container').children().show();
-				$('.node-question-container').show();
+				setTimeout(function() {
+					$('.node-bin-container').children().css({opacity:1});
+					$('.node-question-container').fadeIn();
+				}, 300);
+
 				$('.copy').removeClass('node-bin-active');
 				$('.copy').addClass('node-bin-static');
 				$('.copy').children('h1, p').show();
@@ -1272,26 +1275,32 @@ module.exports = function MultiBin() {
 				}
 			}});
 			if(!$(this).hasClass('.node-bin-active')) {
-				$('.node-bin-container').children().not(this).hide();
+				$('.node-bin-container').children().not(this).css({opacity:0});
 				$('.node-question-container').hide();
 				var position = $(this).offset();
 				var nodeBinDetails = $(this);
-				nodeBinDetails.offset(position);
-				nodeBinDetails.addClass('node-bin-active copy');
-				nodeBinDetails.removeClass('node-bin-static');
-				nodeBinDetails.children('h1, p').hide();
+				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+				setTimeout(function() {
+					nodeBinDetails.offset(position);
+					nodeBinDetails.addClass('node-bin-active copy');
 
-				// $('.content').append(nodeBinDetails);
-				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').css({top:0,left:20,opacity:0});
+					nodeBinDetails.removeClass('node-bin-static');
+					nodeBinDetails.children('h1, p').hide();
 
-				setTimeout(function(){
+					// $('.content').append(nodeBinDetails);
+
 					nodeBinDetails.addClass('node-bin-active');
-					$.each($('.active-node-list').children(), function(index,value) {
-						setTimeout(function(){
-							$(value).transition({left:0,opacity:1});
-						},20*index);
-					});
-				},100);
+					setTimeout(function(){
+						var timer = 0;
+						$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+							timer = timer + (index*10);
+							setTimeout(function(){
+								$(value).addClass('shown');
+							},timer);
+						});
+					},300);
+				}, 500);
+
 			}
 
 			open = true;

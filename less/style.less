@@ -877,7 +877,19 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     border-radius: 32px;
     text-shadow:none;
     font-size:1.7vmin;
+
  }
+
+.active-node-list .node-bucket-item {
+    transition: all 0.5s ease-in-out;
+    transform:translateX(50px);
+    opacity:0;
+}
+
+.active-node-list .node-bucket-item.shown {
+    transform: translateX(0px); 
+    opacity:1;
+}
 
  .node-bucket .node-bucket-item, .node-bin .node-item {
     display: none;
