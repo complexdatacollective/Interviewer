@@ -899,9 +899,16 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     bottom:0;
     left:0;
     right:0;
-    background:rgba(0,0,0,0.6);
-    z-index:99999;
+    background:rgba(0,0,0,0.7);
+    z-index:20;
+    opacity:0;
     display:none;
+    transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+ }
+
+ .black-overlay.show {
+     display:inline-block;
+     opacity:1;
  }
 
   .ord-node-bin {
@@ -1115,7 +1122,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     height:68vmin;
     transform: translateY(-100vh);
     opacity: 0;
-    z-index:9999;
+    z-index:22;
     transition: all 0.5s ease-in-out;
 }
 
@@ -1147,6 +1154,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     display: flex;
     flex-flow: row nowrap;
     align-items:stretch;
+    height:100%;
 }
 
 .open {
@@ -1186,6 +1194,8 @@ input[type="checkbox"] {
     border-radius: 20px;
     color:white;
     padding:6px;
+    flex-flow: column nowrap;
+    align-items: stretch;
 }
 
 .relationship {
@@ -1196,7 +1206,6 @@ input[type="checkbox"] {
     background:transparent;
     border-radius: 15px;
     border:6px solid rgba(255,255,255,0.5);
-    margin:5px;
     display:inline-flex;
     align-items: center;
     text-align: center;
@@ -1204,7 +1213,9 @@ input[type="checkbox"] {
     z-index:9999;
     cursor: pointer; cursor: hand;
     font-weight:500;
-    // width: 100%;
+    flex: 1 0;
+    margin-bottom: 1vmin;
+    font-size:1.7vmin;
 }
 
 .relationship-type h1 {

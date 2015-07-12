@@ -1592,7 +1592,8 @@ module.exports = function Namegenerator() {
 
     var nodeBoxOpen = false;
     var editing = false;
-    var relationshipPanelContent;
+    var relationshipPanel;
+    var newNodePanel;
     var newNodePanelContent;
 
     var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
@@ -1607,7 +1608,7 @@ module.exports = function Namegenerator() {
         'Other': ['Other relationship']
     };
 
-    var namesList = ['Barney','Joshua','Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
+    var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
     var keyPressHandler = function(e) {
         if (e.keyCode === 13) {
@@ -1693,7 +1694,7 @@ module.exports = function Namegenerator() {
         // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
         var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
         $.each(roleEdges, function(index, value) {
-            $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+            $(relationshipPanel).children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
         });
 
         // Populate the form with this nodes data.
@@ -1794,7 +1795,7 @@ module.exports = function Namegenerator() {
             // Add role edges
 
             // Iterate through selected items and create a new role edge for each.
-            $.each($('.relationship.selected'), function() {
+            $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
                     from:window.network.getNodes({type_t0:'Ego'})[0].id,
@@ -1855,7 +1856,7 @@ module.exports = function Namegenerator() {
             // Remove existing edges
             window.network.removeEdges(window.network.getEdges({type:'Role', from: window.network.getNodes({type_t0:'Ego'})[0].id, to: editing}));
 
-            $.each($('.relationship.selected'), function() {
+            $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
                     from:window.network.getNodes({type_t0:'Ego'})[0].id,
@@ -1938,10 +1939,11 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.openNodeBox = function() {
-        // $('.newNodeBox').show();
-        // $('.content').addClass('blurry');
-        // $('.newNodeBox').transition({scale:1,opacity:1},300);
         $('.newNodeBox').addClass('open');
+        $('.black-overlay').css({'display':'block'});
+        setTimeout(function() {
+            $('.black-overlay').addClass('show');
+        }, 50);
         setTimeout(function() {
             $('#ngForm input:text').first().focus();
         }, 1000);
@@ -1950,36 +1952,36 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.closeNodeBox = function() {
-        $('.content').removeClass('blurry');
-        // $('.newNodeBox').transition({scale:0.1,opacity:0},500);
+        $('.black-overlay').removeClass('show');
         $('.newNodeBox').removeClass('open');
-        setTimeout(function() {
-
-        });
+        setTimeout(function() { // for some reason this doenst work without an empty setTimeout
+            $('.black-overlay').css({'display':'none'});
+        }, 300);
         nodeBoxOpen = false;
         $('#ngForm').trigger('reset');
-        $('.reltype_oth_t0').hide();
         editing = false;
         $('.relationship-button').html('Set Relationship Roles');
-        $('.relationship').removeClass('selected');
+        $(relationshipPanel).children('.relationship').removeClass('selected');
     };
 
     namegenerator.destroy = function() {
         window.tools.notify('Destroying namegenerator.',0);
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
-        $('.cancel').off('click', cancelBtnHandler);
-        $('#fname_t0, #lname_t0').off('keyup', inputKeypressHandler);
+        $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
+        $(window.document).off('click', '.cancel', cancelBtnHandler);
+        $(window.document).off('click', '.add-button', namegenerator.openNodeBox);
+        $(window.document).off('click', '.delete-button', namegenerator.removeFromList);
         $(window.document).off('click', '.inner-card', cardClickHandler);
-        $('.add-button').off('click', namegenerator.openNodeBox);
-        $('.delete-button').off('click', namegenerator.removeFromList);
-        $('#ngForm').off('submit', submitFormHandler);
-        window.removeEventListener('changeStageStart', stageChangeHandler, false);
-        $('.newNodeBox').remove();
-        $('.relationship-types-container').remove();
+        $(window.document).off('submit', '#ngForm', submitFormHandler);
         $(window.document).off('click', '.relationship', roleClickHandler);
         $(window.document).off('click', '.relationship-button', namegenerator.toggleRelationshipBox);
         $(window.document).off('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
+        window.removeEventListener('changeStageStart', stageChangeHandler, false);
+        $('.newNodeBox').remove();
+        $('.relationship-types-container').remove();
+
+
     };
 
     namegenerator.init = function(options) {
@@ -2002,20 +2004,20 @@ module.exports = function Namegenerator() {
 
                 switch(value.type) {
                     case 'text':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'number':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'relationship':
-                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'">');
+                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
 
                     break;
 
                     case 'subrelationship':
-                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" placeholder="'+value.label+'">');
+                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
                     break;
 
                 }
@@ -2037,21 +2039,21 @@ module.exports = function Namegenerator() {
         var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
         $('.newNodeBox .form .fields').append(buttons);
 
-        newNodePanelContent = $('.newNodeBox').html();
+        newNodePanel = $('.newNodeBox').html();
 
         // relationship types
-        relationshipPanelContent = $('<div class="relationship-types-container"></div>');
+        relationshipPanel = $('<div class="relationship-types-container"></div>');
         var counter = 0;
         $.each(roles, function(index) {
-            $(relationshipPanelContent).append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
+            $(relationshipPanel).append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
             $.each(roles[index], function(relIndex, relValue) {
-                $(relationshipPanelContent).children('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
+                $(relationshipPanel).children('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
             });
             counter++;
         });
 
 
-        $(relationshipPanelContent).append('<span class="fa fa-2x fa-times relationship-close-button"></span>');
+        $(relationshipPanel).append('<span class="fa fa-2x fa-times relationship-close-button"></span>');
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         namegenerator.options.targetEl.append(nodeContainer);
 
@@ -2067,12 +2069,12 @@ module.exports = function Namegenerator() {
         // Event listeners
         window.addEventListener('changeStageStart', stageChangeHandler, false);
         $(window.document).on('keydown', keyPressHandler);
-        $('.cancel').on('click', cancelBtnHandler);
-        $('.add-button').on('click', namegenerator.openNodeBox);
-        $('.delete-button').on('click', namegenerator.removeFromList);
-        $('#fname_t0, #lname_t0').on('keyup', inputKeypressHandler);
+        $(window.document).on('click', '.cancel', cancelBtnHandler);
+        $(window.document).on('click', '.add-button', namegenerator.openNodeBox);
+        $(window.document).on('click', '.delete-button', namegenerator.removeFromList);
+        $(window.document).on('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
         $(window.document).on('click', '.inner-card', cardClickHandler);
-        $('#ngForm').on('submit', submitFormHandler);
+        $(window.document).on('submit', '#ngForm', submitFormHandler);
         $(window.document).on('click', '.relationship', roleClickHandler);
         $(window.document).on('click', '.relationship-button', namegenerator.toggleRelationshipBox);
         $(window.document).on('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
@@ -2135,9 +2137,7 @@ module.exports = function Namegenerator() {
                 // Make nodes draggable
                 $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false ,
                     start: function(){
-                        console.log($(this).parent().css('overflow'));
                         $(this).parent().css('overflow','visible');
-                        console.log($(this).parent().css('overflow'));
                     },
                     stop: function() {
                         $('previous-node-list').css('overflow','scroll');
@@ -2230,7 +2230,8 @@ module.exports = function Namegenerator() {
 
             setTimeout(function() {
                 $('.newNodeBox').removeClass('relationships');
-                $('.newNodeBox').html(newNodePanelContent);
+                $('.newNodeBox').html(newNodePanel);
+                $('#ngForm').deserialize(newNodePanelContent);
 
                 if(editing) {
                     $('.relationship-button').html(roleCount+' '+plural+' selected.');
@@ -2249,17 +2250,19 @@ module.exports = function Namegenerator() {
 
         } else {
             // relationship box is closed, so open it
+            newNodePanelContent = $('#ngForm').serialize();
+            newNodePanel = $('.newNodeBox').html();
             $('.newNodeBox').addClass('content-hidden');
 
             setTimeout(function() {
                 $('.newNodeBox').addClass('relationships');
-                $('.newNodeBox').html(relationshipPanelContent);
+                $('.newNodeBox').html(relationshipPanel);
 
             }, 300);
 
             setTimeout(function(){
                 $('.newNodeBox').removeClass('content-hidden');
-            }, 500);
+            }, 700);
 
         }
     };
@@ -2291,8 +2294,6 @@ module.exports = function Namegenerator() {
         $('div[data-index='+editing+']').addClass('delete');
         var tempEditing = editing;
         setTimeout(function() {
-            console.log('removing');
-            console.log($('div[data-index='+editing+']').parent());
             $('div[data-index='+tempEditing+']').parent().remove();
         }, 700);
 
