@@ -1880,7 +1880,8 @@ module.exports = function Namegenerator() {
             });
 
             $('div[data-index='+editing+']').append(list);
-
+            alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
+            alterCounter.update(alterCount);
             editing = false;
 
         } // end if editing
@@ -2085,12 +2086,10 @@ module.exports = function Namegenerator() {
 
         alterCounter = new Odometer({
           el: el,
-          value: 0,
+          value: alterCount,
           format: 'dd',
           theme: 'default'
         });
-
-        alterCounter.update(alterCount);
 
         // add existing nodes
         $.each(window.network.getEdges({type: 'Dyad', from: window.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
@@ -2241,7 +2240,19 @@ module.exports = function Namegenerator() {
             setTimeout(function() {
                 $('.newNodeBox').removeClass('relationships');
                 $('.newNodeBox').html(newNodePanel);
+                setTimeout(function() {
+
+                });
+                var wasDisabled = false;
+                if ($('input#age_p_t0').is(':disabled')) {
+                    $('input#age_p_t0').prop( 'disabled', false);
+                    wasDisabled = true;
+                }
                 $('#ngForm').deserialize(newNodePanelContent);
+
+                if (wasDisabled === true) {
+                    $('input#age_p_t0').prop( 'disabled', true);
+                }
 
                 if(editing) {
                     $('.relationship-button').html(roleCount+' '+plural+' selected.');
@@ -2260,7 +2271,16 @@ module.exports = function Namegenerator() {
 
         } else {
             // relationship box is closed, so open it
+            var wasDisabled = false;
+            if ($('input#age_p_t0').is(':disabled')) {
+                wasDisabled = true;
+                $('input#age_p_t0').prop( 'disabled', false);
+            }
             newNodePanelContent = $('#ngForm').serialize();
+
+            if (wasDisabled === true) {
+                $('input#age_p_t0').prop( 'disabled', true);
+            }
             newNodePanel = $('.newNodeBox').html();
             $('.newNodeBox').addClass('content-hidden');
 

@@ -528,10 +528,10 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
  // Name generator
 .side-container {
     position:fixed;
-    height:100vh;
     width:20vw;
     top:0;
     left:10vw;
+    bottom:1vmin;
     margin:0 auto;
     padding-bottom:2vmin;
     padding-top:170px;
@@ -578,6 +578,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
         height:100vh;
         width:40vw;
         top:0;
+        bottom:0;
         left:10vw;
         margin:0 auto;
         padding-bottom:2vmin;
@@ -729,17 +730,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     left:initial;
 }
 
-
-@media (min-width: 1025px) {
-
-    .nameList.alt {
-        width:60vw;
-        right:10vw;
-        left:initial;
-    }
-
-}
-
 @media (min-width: 769px) {
 
     .nameList {
@@ -782,6 +772,21 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
         background-image:linear-gradient(to top, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%)  100%);
         // background: url('../img/fade-bottom.png');
     }
+}
+
+@media (min-width: 1025px) {
+
+    .nameList.alt {
+        width:60vw;
+        right:10vw;
+        left:initial;
+    }
+
+    .question-container {
+        padding-left:15%;
+        padding-right:15%;
+    }
+
 }
 
 .previous-node-list {
