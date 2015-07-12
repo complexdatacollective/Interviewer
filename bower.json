@@ -23,7 +23,7 @@
     "jquery-ui": "~1.11.1",
     "jqueryui-touch-punch": "*",
     "leaflet": "~0.7.3",
-    "components-font-awesome": "~4.2.0",
+    "components-font-awesome": "latest",
     "lato": "~0.2.1",
     "leaflet-omnivore": "~0.3.0",
     "leaflet-plugins": "~1.2.1",

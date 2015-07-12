@@ -111,7 +111,11 @@ var Session = function Session() {
             // Initialise the menu system – other modules depend on it being there.
             var stagesMenu = window.menu.addMenu('Stages', 'bars');
             $.each(session.stages, function(index,value) {
-                window.menu.addItem(stagesMenu, value.label, null, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+                var icon = null;
+                if (value.icon) {
+                    icon = value.icon;
+                }
+                window.menu.addItem(stagesMenu, value.label, icon, function() {setTimeout(function() {session.goToStage(index);}, 500); });
             });
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;

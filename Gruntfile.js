@@ -201,50 +201,40 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= config.app %>',
-                    dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/app.nw',
+                    dest: '<%= config.distMac32 %>/nwjs.app/Contents/Resources/app.nw',
                     src: '**'
                 }, {
                     expand: true,
                     cwd: '<%= config.resources %>/mac/',
-                    dest: '<%= config.distMac32 %>/node-webkit.app/Contents/',
+                    dest: '<%= config.distMac32 %>/nwjs.app/Contents/',
                     filter: 'isFile',
                     src: '*.plist'
                 }, {
                     expand: true,
                     cwd: '<%= config.resources %>/mac/',
-                    dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/',
+                    dest: '<%= config.distMac32 %>/nwjs.app/Contents/Resources/',
                     filter: 'isFile',
                     src: '*.icns'
-                }, {
-                    expand: true,
-                    cwd: '<%= config.app %>/../node_modules/',
-                    dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/app.nw/node_modules/',
-                    src: '**'
                 }]
             },
             appMacos64: {
                 files: [{
                     expand: true,
                     cwd: '<%= config.app %>',
-                    dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/app.nw',
+                    dest: '<%= config.distMac64 %>/nwjs.app/Contents/Resources/app.nw',
                     src: '**'
                 }, {
                     expand: true,
                     cwd: '<%= config.resources %>/mac/',
-                    dest: '<%= config.distMac64 %>/node-webkit.app/Contents/',
+                    dest: '<%= config.distMac64 %>/nwjs.app/Contents/',
                     filter: 'isFile',
                     src: '*.plist'
                 }, {
                     expand: true,
                     cwd: '<%= config.resources %>/mac/',
-                    dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/',
+                    dest: '<%= config.distMac64 %>/nwjs.app/Contents/Resources/',
                     filter: 'isFile',
                     src: '*.icns'
-                }, {
-                    expand: true,
-                    cwd: '<%= config.app %>/../node_modules/',
-                    dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/app.nw/node_modules/',
-                    src: '**'
                 }]
             },
             webkit32: {
@@ -297,13 +287,13 @@ module.exports = function (grunt) {
         rename: {
             macApp32: {
                 files: [{
-                    src: '<%= config.distMac32 %>/node-webkit.app',
+                    src: '<%= config.distMac32 %>/nwjs.app',
                     dest: '<%= config.distMac32 %>/netCanvas.app'
                 }]
             },
             macApp64: {
                 files: [{
-                    src: '<%= config.distMac64 %>/node-webkit.app',
+                    src: '<%= config.distMac64 %>/nwjs.app',
                     dest: '<%= config.distMac64 %>/netCanvas.app'
                 }]
             },

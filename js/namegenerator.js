@@ -378,6 +378,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.closeNodeBox = function() {
+        $('input#age_p_t0').prop( 'disabled', false);
         $('.black-overlay').removeClass('show');
         $('.newNodeBox').removeClass('open');
         setTimeout(function() { // for some reason this doenst work without an empty setTimeout
@@ -413,13 +414,13 @@ module.exports = function Namegenerator() {
     namegenerator.init = function(options) {
         window.tools.extend(namegenerator.options, options);
         // create elements
-        var button = $('<span class="fa fa-4x fa-plus-circle add-button"></span>');
+        var button = $('<span class="fa fa-4x fa-user-plus add-button"></span>');
         namegenerator.options.targetEl.append(button);
         var alterCountBox = $('<div class="alter-count-box"></div>');
         namegenerator.options.targetEl.append(alterCountBox);
 
         // create node box
-        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-2x fa-users"></span> Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-user-plus"></span> Adding a Person</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // namegenerator.options.targetEl.append(newNodeBox);
         $('body').append(newNodeBox);
@@ -468,18 +469,16 @@ module.exports = function Namegenerator() {
         newNodePanel = $('.newNodeBox').html();
 
         // relationship types
-        relationshipPanel = $('<div class="relationship-types-container"></div>');
+        relationshipPanel = $('<div class="relationship-content"><div class="relationship-close-button">Back <span class="fa fa-2x fa-sign-in"></span></div><div class="col-sm-12 relationship-header"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-connectdevelop"></span> Adding Relationships</h2></div><div class="relationship-types-container"></div></div>');
         var counter = 0;
         $.each(roles, function(index) {
-            $(relationshipPanel).append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
+            $(relationshipPanel).find('.relationship-types-container').append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
             $.each(roles[index], function(relIndex, relValue) {
-                $(relationshipPanel).children('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
+                $(relationshipPanel).find('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
             });
             counter++;
         });
 
-
-        $(relationshipPanel).append('<span class="fa fa-2x fa-times relationship-close-button"></span>');
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         namegenerator.options.targetEl.append(nodeContainer);
 
