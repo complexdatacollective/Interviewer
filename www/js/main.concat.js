@@ -1496,19 +1496,21 @@ module.exports = function MultiBin() {
 
 				var el = $('.c'+index);
 				// var origBg = el.css('background-color');
-				el.transition({scale:1.2}, 200, 'ease');
+				setTimeout(function() {
+					el.addClass('dropped');
+				},0);
+
 				setTimeout(function(){
-					el.transition({background:el.data('oldBg')}, 200, 'ease');
-					el.transition({ scale:1}, 200, 'ease');
-				}, 0);
+					el.removeClass('dropped');
+					el.removeClass('yellow');
+				}, 1000);
 			},
 			over: function() {
-				$(this).data('oldBg', $(this).css('background-color'));
-				$(this).stop().transition({background:'rgba(255, 193, 0, 1.0)'}, 400, 'ease');
+				$(this).addClass('yellow');
 
 			},
 			out: function() {
-				$(this).stop().transition({background:$(this).data('oldBg')}, 500, 'ease');
+				$(this).removeClass('yellow');
 			}
 		});
 

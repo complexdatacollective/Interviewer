@@ -46,7 +46,6 @@
     "grunt-notify": "^0.4.1",
     "grunt-postcss": "^0.5.4",
     "load-grunt-tasks": "^0.6.0",
-    "nedb": "git+https://github.com/jthrilly/nedb.git",
     "pixrem": "^1.3.0",
     "time-grunt": "^0.4.0",
     "yo": "^1.4.7"
