@@ -3,7 +3,7 @@
 /*jshint bitwise: false*/
 
 // Can be replaced with npm module once v0.9.5 reaches upstream.
-var Sociogram = function Sociogram() {
+module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
@@ -31,13 +31,13 @@ var Sociogram = function Sociogram() {
 
 	// Default sociogram.settings
 	sociogram.settings = {
-		network: global.network,
+		network: window.network,
 		defaultNodeSize: 35,
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
 		concentricCircleNumber: 4,
-		criteria: {from:global.network.getNodes({type_t0:'Ego'})[0].id},
+		criteria: {},
 		nodeTypes: [
 		{'name':'Person','color':colors.blue},
 		{'name':'OnlinePerson','color':colors.hemlock},
@@ -129,8 +129,8 @@ var Sociogram = function Sociogram() {
 	};
 
 	sociogram.init = function (userSettings) {
-		global.tools.notify('Sociogram initialising.', 1);
-		global.tools.extend(sociogram.settings,userSettings);
+		window.tools.notify('Sociogram initialising.', 1);
+		window.tools.extend(sociogram.settings,userSettings);
 
 		$('<div class="sociogram-title"><h3>'+sociogram.settings.heading+'</h3><p class="lead">'+sociogram.settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
 
@@ -216,7 +216,7 @@ var Sociogram = function Sociogram() {
   		} else if (sociogram.settings.mode === 'Select' || sociogram.settings.mode === 'Update') {
   			// Select mode
 
-  			// Show the social global.network
+  			// Show the social window.network
   			// Filter to remove edges involving ego, unless this is edge select mode.
   			edgeProperties = {};
 
@@ -256,7 +256,7 @@ var Sociogram = function Sociogram() {
 	sociogram.destroy = function() {
 		console.log('sociogram being destroyed');
 
-        // menu.removeMenu(canvasMenu); // remove the global.network menu when we navigate away from the page.
+        // menu.removeMenu(canvasMenu); // remove the window.network menu when we navigate away from the page.
         $('.new-node-form').remove(); // Remove the new node form
 
         window.removeEventListener('nodeAdded', nodeAddedHandler, false);
@@ -281,7 +281,7 @@ var Sociogram = function Sociogram() {
 	};
 
 	sociogram.addNode = function(options) {
-		global.tools.notify('Sociogram is creating a node.',2);
+		window.tools.notify('Sociogram is creating a node.',2);
 		console.log(options);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
@@ -308,7 +308,7 @@ var Sociogram = function Sociogram() {
 			dragDistance: 20
 		};
 
-		global.tools.extend(nodeOptions, options);
+		window.tools.extend(nodeOptions, options);
 
 		nodeOptions.id = parseInt(nodeOptions.id, 10);
 
@@ -376,13 +376,13 @@ var Sociogram = function Sociogram() {
 
 		});
 
-		global.tools.notify('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1], 2);
+		window.tools.notify('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1], 2);
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: global.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -391,7 +391,7 @@ var Sociogram = function Sociogram() {
 			}
 
 
-			global.tools.notify('dragstart',1);
+			window.tools.notify('dragstart',1);
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -403,7 +403,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('dragmove', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: global.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -411,7 +411,7 @@ var Sociogram = function Sociogram() {
 				taskComprehended = true;
 			}
 
-			global.tools.notify('Dragmove',0);
+			window.tools.notify('Dragmove',0);
 			var dragNode = nodeOptions.id;
 			$.each(edgeLayer.children, function(index, value) {
 
@@ -429,7 +429,7 @@ var Sociogram = function Sociogram() {
 		nodeGroup.on('tap click', function() {
 			if (taskComprehended === false) {
 				var eventProperties = {
-					stage: global.session.currentStage(),
+					stage: window.netCanvas.Modules.session.currentStage(),
 					timestamp: new Date()
 				};
 				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -519,7 +519,7 @@ var Sociogram = function Sociogram() {
 
 
 						if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-							global.tools.notify('Sociogram removing edge.',2);
+							window.tools.notify('Sociogram removing edge.',2);
 							sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
 						}
 						selectedNodes = [];
@@ -539,7 +539,7 @@ var Sociogram = function Sociogram() {
 		// nodeGroup.on('dbltap dblclick', function() {
 		// 	if (taskComprehended === false) {
 		// 		var eventProperties = {
-		// 			stage: global.session.currentStage(),
+		// 			stage: window.netCanvas.Modules.session.currentStage(),
 		// 			timestamp: new Date()
 		// 		};
 		// 		log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -548,13 +548,13 @@ var Sociogram = function Sociogram() {
 		// 	}
 		//
 		// 	if (sociogram.settings.mode === 'Edge') {
-		// 		global.tools.notify('double tap',1);
+		// 		window.tools.notify('double tap',1);
 		// 		sourceNode = this;
 		// 	}
 		// });
 
 		nodeGroup.on('dragend', function() {
-			global.tools.notify('dragend',1);
+			window.tools.notify('dragend',1);
 
 			// set the context
 			var from = {};
@@ -626,7 +626,7 @@ var Sociogram = function Sociogram() {
 		// the below won't work because we are storing the coords in an edge now...
 		// var fromObject = sociogram.settings.network.getNode(properties.from);
 		// var toObject = sociogram.settings.network.getNode(properties.to);
-			global.tools.notify('Sociogram is adding an edge.',2);
+			window.tools.notify('Sociogram is adding an edge.',2);
 			console.log(properties);
 			var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 			var fromObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
@@ -652,7 +652,7 @@ var Sociogram = function Sociogram() {
 				edgeLayer.draw();
 			},0);
 			nodeLayer.draw();
-			global.tools.notify('Created Edge between '+fromObject.label+' and '+toObject.label, 'success',2);
+			window.tools.notify('Created Edge between '+fromObject.label+' and '+toObject.label, 'success',2);
 
 			return true;
 
@@ -663,7 +663,7 @@ var Sociogram = function Sociogram() {
 		var toNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
 
-		global.tools.notify('Removing edge.');
+		window.tools.notify('Removing edge.');
 
 		// This function is failing because two nodes are matching below
 		$.each(sociogram.getKineticEdges(), function(index, value) {
@@ -711,7 +711,7 @@ var Sociogram = function Sociogram() {
 		stage.add(edgeLayer);
 		stage.add(nodeLayer);
 		stage.add(uiLayer);
-		global.tools.notify('Konva stage initialised.',1);
+		window.tools.notify('Konva stage initialised.',1);
 	};
 
 	sociogram.drawUIComponents = function () {
@@ -756,7 +756,7 @@ var Sociogram = function Sociogram() {
 	  	uiLayer.draw();
 
 	  	// sociogram.initNewNodeForm();
-		global.tools.notify('User interface initialised.',1);
+		window.tools.notify('User interface initialised.',1);
 	};
 
 	// New Node Form
@@ -862,5 +862,3 @@ var Sociogram = function Sociogram() {
 	return sociogram;
 
 };
-
-module.exports = new Sociogram();

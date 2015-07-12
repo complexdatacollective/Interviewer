@@ -8,9 +8,9 @@ var Logger = function Logger() {
     // todo: add custom events so that other scripts can listen for log changes (think vis).
 
     logger.init = function() {
-        global.tools.notify('Logger initialising.', 1);
+        window.tools.notify('Logger initialising.', 1);
 
-        global.log = global.session.registerData('log', true);
+        window.log = window.netCanvas.Modules.session.registerData('log', true);
 
         // listen for log events
         window.addEventListener('log', function (e) {
@@ -21,7 +21,7 @@ var Logger = function Logger() {
     };
 
     logger.addToLog = function(e) {
-        global.tools.notify('Event being added to log.',1);
+        window.tools.notify('Event being added to log.',1);
         if (!e) { return false; }
 
         var data = {
@@ -30,7 +30,7 @@ var Logger = function Logger() {
             'eventTime': new Date()
         };
 
-        global.session.addData('log', data, true);
+        window.netCanvas.Modules.session.addData('log', data, true);
         var eventLogged = new window.CustomEvent('eventLogged', {'detail':data});
         window.dispatchEvent(eventLogged);
         var unsavedChanges = new window.Event('unsavedChanges');
@@ -39,7 +39,7 @@ var Logger = function Logger() {
     };
 
     logger.getLog = function() {
-        return global.log;
+        return window.log;
 
     };
 

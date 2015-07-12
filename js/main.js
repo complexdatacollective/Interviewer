@@ -1,103 +1,184 @@
-/* global global, Konva, $, L */
+/* global window, nodeRequire, FastClick, document, Konva, $, L */
+$(document).ready(function() {
+    'use strict';
 
-'use strict';
-
-global.$ = $;
-global.L = L;
-global.Konva = Konva;
-
-global.gui = require('nw.gui');
-var moment = require('moment');
-global.moment = moment; // needed for module access.
-var fs = require('fs');
-var path = require('path');
-var devMode = false;
-global.debugLevel = 10;
-// Set the global survey
-global.studyProtocol = 'RADAR';
+    window.$ = $;
+    window.L = L;
+    window.Konva = Konva;
+    window.gui = {};
+    window.netCanvas = {};
 
 
-$('.refresh-button').on('click', function() {
-    console.log('yo');
-    var _window = global.gui.Window.get();
-    _window.reloadDev();
-});
+    window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined'); // this check doesn't work, because browserify tries to be clever.
+    window.isCordova = !!window.cordova;
+    window.isNodeWebkit = false;
+    var moment = require('moment');
+    window.moment = moment; // needed for module access.
+    window.netCanvas.devMode = false;
+    window.netCanvas.debugLevel = 10;
+    window.netCanvas.studyProtocol = 'RADAR';
 
-console.log('netCanvas '+global.gui.App.manifest.version+' running on NWJS '+process.versions['node-webkit']);
+    //Is this Node.js?
+    if(window.isNode) {
+        //If so, test for Node-Webkit
+        try {
+            window.isNodeWebkit = (typeof nodeRequire('nw.gui') !== 'undefined');
+            window.gui = nodeRequire('nw.gui');
+            window.isNodeWebkit = true;
+        } catch(e) {
+            window.isNodeWebkit = false;
+        }
+    }
 
-var protocolExists = function(protocol, callback) {
-    var response = false;
-    var availableProtocols = [];
-    // Print out available survey protocols.
-    fs.readdir(path.join(path.resolve(), 'protocols'), function(err, files) {
-        if (err) { console.log(err); return false; }
-        console.log('Available survey protocols:');
-        files.forEach(function(file) {
-            var stats = fs.statSync(path.join(path.resolve(), 'protocols', file));
-            if (stats.isDirectory()) {
-                console.log(file);
-                availableProtocols.push(file);
+    // Arguments
+    // build an object (argument: value) for command line arguments independant of platform
+    window.getArguments = function() {
+        var args = false;
+        if (window.isNodeWebkit) {
+            args = window.gui.App.argv;
+            var newArgs = {};
+            for (var i= 0; i < args.length; i++) {
+                if (args[i].indexOf('--') === 0) { // Argument begins with --
+                    var currentArg = args[i].substring(2);
+                    currentArg = currentArg.split('=');
+                    // remove quotes around strings
+                    if (currentArg[1].charAt(0) === '"' && currentArg[1].charAt(currentArg[1].length -1) === '"') {
+                        currentArg[1] = currentArg[1].substr(1,currentArg[1].length -2);
+                    }
+                    newArgs[currentArg[0]] = currentArg[1];
+                }
             }
-        });
+            return newArgs;
+        } else if (window.isCordova) {
+            // what can we do here?
+            return args;
+        } else {
+            // browser
+            var match,
+            pl     = /\+/g,  // Regex for replacing addition symbol with a space
+            search = /([^&=]+)=?([^&]*)/g,
+            decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
+            query  = window.location.search.substring(1);
+
+            args = {};
+            while ((match = search.exec(query))) {
+                args[decode(match[1])] = decode(match[2]);
+            }
+
+            return args;
+        }
+    };
+
+    var args = window.getArguments();
+
+    // Enable dev mode.
+    if (args && (args.dev === 'true' || args.dev === '1')) {
+        console.log('Development mode enabled.');
+        window.netCanvas.devMode = true;
+        if (window.isNodeWebkit) {
+            window.gui.Window.get().showDevTools();
+        } else {
+            // no way to show dev tools on web browser
+        }
+        $('.refresh-button').show();
+        window.netCanvas.debugLevel = 1;
+    } else {
+        $('.refresh-button').hide();
+        if (window.isNodeWebkit) {
+            window.gui.Window.get().enterFullscreen();
+        } else {
+            // no way to enter full screen automatically on web browser.
+            // could show button or prompt?
+        }
+    }
+
+
+    $('.refresh-button').on('click', function() {
+        if(window.isNodeWebkit) {
+            var _window = window.gui.Window.get();
+            _window.reloadDev();
+        } else if (window.isCordova) {
+            window.location.reload();
+        } else {
+            window.location.reload();
+        }
+
+    });
+
+
+    // print some version stuff
+    if (window.isNodeWebkit) {
+        var version = window.process.versions['node-webkit'];
+        console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
+    } else if (window.isCordova) {
+        // can we get meaningful version info on cordova? how about a get request to the package.json?
+        console.log('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
+    } else {
+        // anything we can do in browser? yes.
+    }
+
+    var protocolExists = function(protocol, callback) {
+        var response = false;
+        var availableProtocols = ['RADAR', 'default', 'dphil-protocol'];
 
         if (availableProtocols.indexOf(protocol) !== -1) {
             response = true;
         }
 
-        if (callback) { callback(response); }
-    });
-};
+        callback(response);
+    };
 
-// Detect dev mode
-var args = global.gui.App.argv;
+    // Require tools
+    window.tools = require('./tools');
 
-// Just futureproofing in case this changes in future nw versions.
-if (typeof args !== 'undefined' && args.indexOf('dev') !== -1) {
-    console.log('Development mode enabled.');
-    devMode = true;
-}
+    // Interface Modules
+    window.netCanvas.Modules = {};
+    window.netCanvas.Modules.Network = require('./network.js');
+    window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+    window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
+    window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
+    window.netCanvas.Modules.IOInterface = require('./iointerface.js');
+    window.netCanvas.Modules.GeoInterface = require('./map.js');
+    window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
+    window.netCanvas.Modules.ListSelect = require('./listselect.js');
+    window.netCanvas.Modules.MultiBin = require('./multibin.js');
+    window.netCanvas.Modules.Sociogram = require('./sociogram.js');
 
-if (devMode) {
-    global.gui.Window.get().showDevTools();
-    $('.refresh-button').show();
-    global.debugLevel = 1;
-} else {
-    $('.refresh-button').hide();
-    global.gui.Window.get().enterFullscreen();
-}
+    // Initialise the menu system – other modules depend on it being there.
+    window.menu = require('./menu.js');
 
-// Require tools
-global.tools = require('./js/tools');
+    // Initialise datastore
+    window.dataStore = require('./iointerface.js');
 
-// Initialise the menu system – other modules depend on it being there.
-global.menu = require('./js/menu');
+    // Initialise logger
+    window.logger = require('./logger.js');
 
-// Initialise datastore
-global.dataStore = require('./js/iointerface');
-
-// Initialise logger
-global.logger = require('./js/logger');
-
-// Set up a new session
-global.session = require('./js/session');
-
-// Create a log
-global.eventLog = require('./js/logger');
+    // Set up a new session
+    window.netCanvas.Modules.session = require('./session.js');
 
 
-
-
-
-// to do: expand this function to validate a proposed session, not just check that it exists.
-protocolExists(global.studyProtocol, function(exists){
-    if (!exists) {
-        console.log('WARNING: Specified study protocol was not found. Using default.');
-        global.studyProtocol = 'default';
+    // study protocol
+    if (args && typeof args.protocol !== 'undefined') {
+        window.netCanvas.studyProtocol = args.protocol;
     }
-    // Initialise session now.
-    global.session.init(function() {
-        global.session.loadProtocol();
+
+    // to do: expand this function to validate a proposed session, not just check that it exists.
+    protocolExists(window.netCanvas.studyProtocol, function(exists){
+        if (!exists) {
+            console.log('WARNING: Specified study protocol was not found. Using default.');
+            window.netCanvas.studyProtocol = 'default';
+        }
+        // Initialise session now.
+        window.netCanvas.Modules.session.init(function() {
+            window.netCanvas.Modules.session.loadProtocol();
+        });
+        window.logger.init();
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+
     });
-    global.logger.init();
 
 });

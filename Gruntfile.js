@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 
     // configurable paths
     var config = {
-        app: 'app',
+        app: 'www',
         dist: 'dist',
         distMac32: 'dist/macOS',
         distMac64: 'dist/macOS',
@@ -21,6 +21,57 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
+        postcss: {
+            options: {
+                map: false, // inline sourcemaps
+                processors: [
+                    require('autoprefixer-core')(), // add vendor prefixes
+                    require('cssnano')() // minify the result
+                ]
+            },
+            dist: {
+                src: '<%= config.app %>/css/style.css'
+            }
+        },
+        notify_hooks: {
+            options: {
+                enabled: true,
+                max_jshint_notifications: 5, // maximum number of notifications from jshint output // defaults to the name in package.json, or will use project directory's name
+                success: true, // whether successful grunt executions should be notified automatically
+                duration: 3 // the duration of notification in seconds, for `notify-send only
+            }
+        },
+        browserify: {
+            dist: {
+                files: {
+                    '<%= config.app %>/js/main.min.js': ['js/main.js'],
+                },
+                options: {
+                    fullPaths: false,
+                    postBundleCB: function (err, src, next) {
+                        // HACK: save Node's `require` before it gets overrided by browserify
+                        next(err, "if (typeof require !== 'undefined') {nodeRequire = require;} " + src)
+                    }
+                }
+            }
+        },
+        bower_concat: {
+            all: {
+                dest: '<%= config.app %>/js/_bower.js',
+                cssDest: '<%= config.app %>/css/_bower.css'
+                // mainFiles: {
+                //     'jquery': 'dist/jquery.min.js',
+                //     'bootstrap': 'dist/bootstrap.min.js',
+                //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
+                //     'jquery-ui': 'jquery-ui.min.js',
+                //     'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
+                //     'konva': 'konva.min.js',
+                //     'leaflet': 'dist/leaflet.js',
+                //     'leaflet-omnivore': 'leaflet-omnivore.min.js'
+                // },
+                // exclude: ['components-font-awesome','lato', 'moment']
+            }
+        },
         concat: {
             js: {
                 options: {
@@ -29,37 +80,38 @@ module.exports = function (grunt) {
                 src: [
                     'js/*.js'
                 ],
-                dest: 'app/js/main.min.js'
+                dest: '<%= config.app %>/js/main.concat.js'
             },
         },
         uglify: {
             options: {
-                mangle: false
+                mangle: false,
+                sourceMap: false,
             },
             js: {
                 files: {
-                    'app/js/main.min.js': ['app/js/main.min.js']
+                    '<%= config.app %>/js/main.min.js': ['<%= config.app %>/js/main.min.js']
                 }
             }
         },
         less: {
             style: {
                 files: {
-                    "app/css/style.css": "less/style.less"
+                    "<%= config.app %>/css/style.css": "less/style.less"
                 }
             }
         },
         watch: {
             js: {
                 files: ['js/*.js'],
-                tasks: ['concat:js', 'uglify:js'],
+                tasks: ['jshint','concat:js','browserify:dist'],
                 options: {
                     livereload: true,
                 }
             },
             css: {
                 files: ['less/*.less'],
-                tasks: ['less:style'],
+                tasks: ['less:style','postcss:dist'],
                 options: {
                     livereload: true,
                 }
@@ -126,7 +178,7 @@ module.exports = function (grunt) {
             options: {
                 jshintrc: '.jshintrc'
             },
-            files: '<%= config.app %>/js/*.js'
+            files: ['js/*.js', '!js/require.js']
         },
         copy: {
             appLinux: {
@@ -489,6 +541,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-bower-concat');
+    grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks('grunt-notify');
+
+    // This is required if you use any options.
+    grunt.task.run('notify_hooks');
 
 
 };

@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported OrdinalBin */
-var OrdinalBin = function OrdinalBin() {
+module.exports = function OrdinalBin() {
     'use strict';
     //global vars
     var ordinalBin = {};
@@ -9,7 +9,7 @@ var OrdinalBin = function OrdinalBin() {
     ordinalBin.options = {
         targetEl: $('.container'),
         edgeType: 'Dyad',
-        criteria: {from:global.network.getNodes({type_t0:'Ego'})[0].id},
+        criteria: {},
         variable: {
             label:'gender_p_t0',
             values: [
@@ -36,21 +36,21 @@ var OrdinalBin = function OrdinalBin() {
             to:nodeid
         };
 
-        global.tools.extend(criteria, ordinalBin.options.criteria);
-        var edge = global.network.getEdges(criteria)[0];
+        window.tools.extend(criteria, ordinalBin.options.criteria);
+        var edge = window.network.getEdges(criteria)[0];
 
         var followupProperties = {};
 
         followupProperties[ordinalBin.options.followup.variable] = followupVal;
 
-        global.tools.extend(edge, followupProperties);
-        global.network.updateEdge(edge.id, edge);
+        window.tools.extend(edge, followupProperties);
+        window.network.updateEdge(edge.id, edge);
         $('.followup').hide();
     };
 
     ordinalBin.destroy = function() {
         // Event Listeners
-        global.tools.notify('Destroying ordinalBin.',0);
+        window.tools.notify('Destroying ordinalBin.',0);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
         $(window.document).off('click', '.followup-option', followupHandler);
 
@@ -58,7 +58,7 @@ var OrdinalBin = function OrdinalBin() {
 
     ordinalBin.init = function(options) {
 
-        global.tools.extend(ordinalBin.options, options);
+        window.tools.extend(ordinalBin.options, options);
 
         ordinalBin.options.targetEl.append('<div class="node-question-container"></div>');
 
@@ -76,7 +76,7 @@ var OrdinalBin = function OrdinalBin() {
         }
 
         // bin container
-        ordinalBin.options.targetEl.append('<div class="node-bin-container"></div>');
+        ordinalBin.options.targetEl.append('<div class="ord-bin-container"></div>');
 
         // Calculate number of bins required
         var binNumber = ordinalBin.options.variable.values.length;
@@ -86,7 +86,7 @@ var OrdinalBin = function OrdinalBin() {
 
             var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
             newBin.data('index', index);
-            $('.node-bin-container').append(newBin);
+            $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
                     console.log('dropped');
@@ -107,8 +107,8 @@ var OrdinalBin = function OrdinalBin() {
                     // Followup question
 
                     // Add the attribute
-                    var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:ordinalBin.options.edgeType})[0].id;
-                    global.network.updateEdge(edgeID,properties);
+                    var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:ordinalBin.options.edgeType})[0].id;
+                    window.network.updateEdge(edgeID,properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
                         var length = $('.d'+oindex).children('.active-node-list').children().length;
@@ -144,7 +144,7 @@ var OrdinalBin = function OrdinalBin() {
                             }
                             if (taskComprehended === false) {
                                 var eventProperties = {
-                                    stage: global.session.currentStage(),
+                                    stage: window.netCanvas.Modules.session.currentStage(),
                                     timestamp: new Date()
                                 };
                                 log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -173,13 +173,13 @@ var OrdinalBin = function OrdinalBin() {
         });
 
         // get all edges
-        var edges = global.network.getEdges(ordinalBin.options.criteria);
+        var edges = window.network.getEdges(ordinalBin.options.criteria);
 
         // Add edges to bucket or to bins if they already have variable value.
         $.each(edges, function(index,value) {
             var dyadEdge;
             if (ordinalBin.options.criteria.type !== 'Dyad') {
-                dyadEdge = global.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
+                dyadEdge = window.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
             }
 
             if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== '') {
@@ -211,7 +211,7 @@ var OrdinalBin = function OrdinalBin() {
 
                 if (taskComprehended === false) {
                     var eventProperties = {
-                        stage: global.session.currentStage(),
+                        stage: window.netCanvas.Modules.session.currentStage(),
                         timestamp: new Date()
                     };
                     log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -235,5 +235,3 @@ var OrdinalBin = function OrdinalBin() {
 return ordinalBin;
 
 };
-
-module.exports = new OrdinalBin();

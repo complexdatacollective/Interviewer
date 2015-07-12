@@ -1,6 +1,6 @@
 /* global $, window */
 /* exported MultiBin */
-var MultiBin = function MultiBin() {
+module.exports = function MultiBin() {
 	'use strict';
 	//global vars
 	var log;
@@ -39,8 +39,8 @@ var MultiBin = function MultiBin() {
 			to:nodeid
 		};
 
-		global.tools.extend(criteria, multiBin.options.criteria);
-		var edge = global.network.getEdges(criteria)[0];
+		window.tools.extend(criteria, multiBin.options.criteria);
+		var edge = window.network.getEdges(criteria)[0];
 
 		// Create an empty object for storing the new properties in
 		var followupProperties = {};
@@ -52,8 +52,8 @@ var MultiBin = function MultiBin() {
 		});
 
 		// Update the edge
-		global.tools.extend(edge, followupProperties);
-		global.network.updateEdge(edge.id, edge);
+		window.tools.extend(edge, followupProperties);
+		window.network.updateEdge(edge.id, edge);
 
 		// Clean up
 		$.each(multiBin.options.followup.questions, function(index) {
@@ -87,7 +87,7 @@ var MultiBin = function MultiBin() {
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
-							stage: global.session.currentStage(),
+							stage: window.netCanvas.Modules.session.currentStage(),
 							timestamp: new Date()
 						};
 						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -109,7 +109,7 @@ var MultiBin = function MultiBin() {
 			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
 				if (taskComprehended === false) {
 					var eventProperties = {
-						stage: global.session.currentStage(),
+						stage: window.netCanvas.Modules.session.currentStage(),
 						timestamp: new Date()
 					};
 					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -153,7 +153,7 @@ var MultiBin = function MultiBin() {
 		// has the node been clicked while in the bucket or while in a bin?
 		if ($(this).parent().hasClass('active-node-list')) {
 			// it has been clicked while in a bin.
-			var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
+			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
 			var properties = {};
 			// make the values null when a node has been taken out of a bin
 			properties[multiBin.options.variable.label] = '';
@@ -164,7 +164,7 @@ var MultiBin = function MultiBin() {
 					properties[value.variable] = undefined;
 				});
 			}
-			global.network.updateEdge(edgeID,properties);
+			window.network.updateEdge(edgeID,properties);
 			$(this).fadeOut(400, function() {
 				$(this).appendTo('.node-bucket');
 				$(this).css('display', '');
@@ -186,7 +186,7 @@ var MultiBin = function MultiBin() {
 
 	multiBin.destroy = function() {
 		// Event Listeners
-		global.tools.notify('Destroying multiBin.',0);
+		window.tools.notify('Destroying multiBin.',0);
 		window.removeEventListener('changeStageStart', stageChangeHandler, false);
 		$('.node-bin-static').off('click', nodeBinClickHandler);
 		$('.node-bucket-item').off('click', nodeClickHandler);
@@ -198,7 +198,7 @@ var MultiBin = function MultiBin() {
 	};
 
 	multiBin.init = function(options) {
-		global.tools.extend(multiBin.options, options);
+		window.tools.extend(multiBin.options, options);
 
 		multiBin.options.targetEl.append('<div class="node-question-container"></div>');
 
@@ -216,7 +216,7 @@ var MultiBin = function MultiBin() {
 				var first = true;
 
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 
 					if (first) {
 						$('#'+value.variable).change(function() {
@@ -233,11 +233,9 @@ var MultiBin = function MultiBin() {
 				});
 			} else {
 				$.each(multiBin.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" required></div>');
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 				});
 			}
-
-
 
 			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
 
@@ -251,17 +249,31 @@ var MultiBin = function MultiBin() {
 		// bin container
         multiBin.options.targetEl.append('<div class="node-bin-container"></div>');
 
-		var number = Math.floor(multiBin.options.variable.values.length*0.66);
-		var itemSizeW = $('.container').outerWidth()/number;
 
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBin.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
 
-		var itemSize = itemSizeW;
-		while(itemSize*2 > $('.container').height()-200) {
-			itemSize = itemSize*0.98;
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
 		}
 
 		// get all edges
-		var edges = global.network.getEdges(multiBin.options.criteria, multiBin.options.filter);
+		var edges = window.network.getEdges(multiBin.options.criteria, multiBin.options.filter);
 		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
@@ -293,8 +305,8 @@ var MultiBin = function MultiBin() {
 						to:nodeid
 					};
 
-					global.tools.extend(criteria, multiBin.options.criteria);
-					var edge = global.network.getEdges(criteria)[0];
+					window.tools.extend(criteria, multiBin.options.criteria);
+					var edge = window.network.getEdges(criteria)[0];
 
 					// Create an empty object for storing the new properties in
 					var followupProperties = {};
@@ -305,8 +317,8 @@ var MultiBin = function MultiBin() {
 					});
 
 					// Update the edge
-					global.tools.extend(edge, followupProperties);
-					global.network.updateEdge(edge.id, edge);
+					window.tools.extend(edge, followupProperties);
+					window.network.updateEdge(edge.id, edge);
 
 					// Clean up
 					$.each(multiBin.options.followup.questions, function(index) {
@@ -319,8 +331,8 @@ var MultiBin = function MultiBin() {
 				var properties = {};
 				properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
 				// Add the attribute
-				var edgeID = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
-				global.network.updateEdge(edgeID,properties);
+				var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
+				window.network.updateEdge(edgeID,properties);
 
 				var noun = 'people';
 				if ($('.c'+index+' .active-node-list').children().length === 1) {
@@ -349,7 +361,7 @@ var MultiBin = function MultiBin() {
 	});
 
 	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
-	$('.node-bin').css({width:itemSize-20,height:itemSize-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
 	// $('.node-bin').css({width:itemSize,height:itemSize});
 
 	// $('.node-bin h1').css({marginTop: itemSize/3});
@@ -367,7 +379,7 @@ var MultiBin = function MultiBin() {
 	$.each(edges, function(index,value) {
 
 		// We need the dyad edge so we know the nname for other types of edges
-		var dyadEdge = global.network.getEdges({from:global.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
+		var dyadEdge = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
 		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== '') {
 			index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
 			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
@@ -388,7 +400,7 @@ var MultiBin = function MultiBin() {
 	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
 		if (taskComprehended === false) {
 			var eventProperties = {
-				stage: global.session.currentStage(),
+				stage: window.netCanvas.Modules.session.currentStage(),
 				timestamp: new Date()
 			};
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
@@ -406,9 +418,5 @@ var MultiBin = function MultiBin() {
 	$('.followup-cancel').on('click', followupCancelHandler);
 
 };
-
-
 return multiBin;
 };
-
-module.exports = new MultiBin();

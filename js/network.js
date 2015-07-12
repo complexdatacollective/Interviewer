@@ -42,7 +42,7 @@ module.exports = function Network() {
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
-            global.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
+            window.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
             return false;
         }
 
@@ -50,7 +50,7 @@ module.exports = function Network() {
         // This reserved list is stored with the ego.
         if (!force) {
             if (reserved_ids.indexOf(properties.id) !== -1) {
-                global.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+                window.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
                 return false;
             }
         }
@@ -64,7 +64,7 @@ module.exports = function Network() {
         var nodeProperties = {
             id: newNodeID
         };
-        global.tools.extend(nodeProperties, properties);
+        window.tools.extend(nodeProperties, properties);
 
         _this.nodes.push(nodeProperties);
         reserved_ids.push(newNodeID);
@@ -81,7 +81,7 @@ module.exports = function Network() {
 
     this.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
-            global.tools.notify('Error loading network. Data format incorrect.',1);
+            window.tools.notify('Error loading network. Data format incorrect.',1);
             return false;
         } else {
             if (!overwrite) {
@@ -107,7 +107,7 @@ module.exports = function Network() {
                 type_t0: 'Ego',
                 reserved_ids: [0]
             };
-            global.tools.extend(egoProperties, properties);
+            window.tools.extend(egoProperties, properties);
             _this.addNode(egoProperties, true);
         } else {
             return false;
@@ -135,12 +135,12 @@ module.exports = function Network() {
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
-            global.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
+            window.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
             return false;
         }
 
         if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
-            global.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
+            window.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
             var newEdgeID = 0;
             while (_this.getEdge(newEdgeID) !== false) {
                 newEdgeID++;
@@ -159,7 +159,7 @@ module.exports = function Network() {
             type: 'Default'
         };
 
-        global.tools.extend(edgeProperties, properties);
+        window.tools.extend(edgeProperties, properties);
         var alreadyExists = false;
 
         // old way of checking if an edge existed checked for values of to, from, and type. We needed those to not have to be unique.
@@ -189,7 +189,7 @@ module.exports = function Network() {
             return edgeProperties.id;
         } else {
 
-            global.tools.notify('ERROR: Edge already exists!',2);
+            window.tools.notify('ERROR: Edge already exists!',2);
             return false;
         }
 
@@ -210,7 +210,7 @@ module.exports = function Network() {
             // we've got an array of object edges
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                global.tools.removeFromObject(edge[i], _this.edges);
+                window.tools.removeFromObject(edge[i], _this.edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -219,7 +219,7 @@ module.exports = function Network() {
         } else {
             // we've got a single edge, which is an object {}
             //   localEdges.remove(edge);
-            global.tools.removeFromObject(edge, _this.edges);
+            window.tools.removeFromObject(edge, _this.edges);
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
             window.dispatchEvent(log);
@@ -238,7 +238,7 @@ module.exports = function Network() {
         if (!preserveEdges) {
             this.removeEdge(_this.getNodeEdges(id));
         } else {
-            global.tools.notify('NOTICE: preserving node edges after deletion.',2);
+            window.tools.notify('NOTICE: preserving node edges after deletion.',2);
         }
 
         var nodeRemovedEvent, log;
@@ -249,7 +249,7 @@ module.exports = function Network() {
                 window.dispatchEvent(log);
                 nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':_this.nodes[i]});
                 window.dispatchEvent(nodeRemovedEvent);
-                global.tools.removeFromObject(_this.nodes[i],_this.nodes);
+                window.tools.removeFromObject(_this.nodes[i],_this.nodes);
                 return true;
             }
         }
@@ -263,7 +263,7 @@ module.exports = function Network() {
         var edge = _this.getEdge(id);
         var edgeUpdateEvent, log;
 
-        global.tools.extend(edge, properties);
+        window.tools.extend(edge, properties);
         edgeUpdateEvent = new window.CustomEvent('edgeUpdatedEvent',{'detail':edge});
         window.dispatchEvent(edgeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeUpdate', 'eventObject':edge}});
@@ -283,7 +283,7 @@ module.exports = function Network() {
         var node = this.getNode(id);
         var nodeUpdateEvent, log;
 
-        global.tools.extend(node, properties);
+        window.tools.extend(node, properties);
         nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
         window.dispatchEvent(nodeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
@@ -458,10 +458,10 @@ module.exports = function Network() {
     this.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
         edgeProbability = edgeProbability || 0.4;
-        global.tools.notify('Creating random graph...',1);
+        window.tools.notify('Creating random graph...',1);
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;
-            global.tools.notify('Adding node '+current+' of '+nodeCount,2);
+            window.tools.notify('Adding node '+current+' of '+nodeCount,2);
             // Use random coordinates
             var nodeOptions = {
                 coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
@@ -469,7 +469,7 @@ module.exports = function Network() {
             this.addNode(nodeOptions);
         }
 
-        global.tools.notify('Adding _this.edges.',3);
+        window.tools.notify('Adding _this.edges.',3);
         $.each(_this.nodes, function (index) {
             if (randomBetween(0, 1) < edgeProbability) {
                 var randomFriend = Math.round(randomBetween(0,_this.nodes.length-1));
