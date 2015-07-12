@@ -12,6 +12,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'bower_components/components-font-awesome/less/font-awesome.less';
 @import 'bower_components/bootstrap3-dialog/src/less/bootstrap-dialog.less';
 @import (inline) 'bower_components/lato/css/lato.css';
+@import (inline) 'bower_components/odometer/themes/odometer-theme-default.css';
 
 html, body {
     height:100%;
@@ -554,9 +555,22 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     padding-left: 1.5em;
 }
 
+
+@media (max-width: @screen-lg) {
+
+    .card {
+        width:33.33%;
+    }
+
+}
+
 @media (max-width: 1024px) {
     .card {
         width:50%;
+    }
+
+    .node-container.alt .card {
+        width:100%;
     }
 
     .side-container {
@@ -710,11 +724,21 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 
 .nameList.alt {
-    width:60vw;
+    width:40vw;
     right:10vw;
     left:initial;
 }
 
+
+@media (min-width: 1025px) {
+
+    .nameList.alt {
+        width:60vw;
+        right:10vw;
+        left:initial;
+    }
+
+}
 
 @media (min-width: 769px) {
 
@@ -723,14 +747,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
         padding-bottom:150px;
         padding-top:170px;
     }
-
-
-    .nameList.alt {
-        width:40vw;
-        right:10vw;
-        left:initial;
-    }
-
 
     .question-container {
         height:170px;
@@ -854,7 +870,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     z-index:9999;
     cursor: pointer; cursor: hand;
     border-radius: 32px;
-    text-shadow:none
+    text-shadow:none;
+    font-size:1.7vmin;
  }
 
  .node-bucket .node-bucket-item, .node-bin .node-item {
@@ -1087,7 +1104,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
  }
 
 .alter-count-box {
-    position:absolute;
+    position:absolute !important;
     bottom:20px;
     left:40px;
     width:100px;
@@ -1114,12 +1131,11 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .newNodeBox {
     position:absolute;
     top:15vh;
-    left:20vw;
-    right: 20vw;
-    padding:2vmin;
+    left:30vw;
+    right: 30vw;
+    padding:4vmin;
     border-radius:12px;
     background:#eee;
-    height:68vmin;
     transform: translateY(-100vh);
     opacity: 0;
     z-index:22;
@@ -1135,18 +1151,31 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     opacity:0;
 }
 
-@media (min-width: @screen-lg) {
+@media (max-width: 1024px) {
     .newNodeBox {
-        top:20vmin;
-        left:30vw;
-        right: 30vw;
-        padding:4vmin;
+        top:10vmin;
+        left:20vw;
+        right: 20vw;
+        height:auto;
     }
 }
 
 .relationships {
     left:10vw;
     right:10vw;
+    top:10vmin;
+    bottom:10vmin;
+
+}
+
+@media (max-width: 1024px) {
+    .relationships {
+        left:1vw;
+        right:1vw;
+        bottom:1vmin;
+        top:8vmin;
+
+    }
 
 }
 

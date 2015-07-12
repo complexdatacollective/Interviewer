@@ -1574,7 +1574,7 @@ module.exports = function MultiBin() {
 };
 return multiBin;
 };
-;/* global $, window */
+;/* global $, window, Odometer, document  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -1595,6 +1595,7 @@ module.exports = function Namegenerator() {
     var relationshipPanel;
     var newNodePanel;
     var newNodePanelContent;
+    var alterCounter;
 
     var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
 
@@ -1810,7 +1811,7 @@ module.exports = function Namegenerator() {
             var edge = window.network.getEdges({to:newNode, type:'Dyad'})[0];
             namegenerator.addToList(edge);
             alterCount++;
-            $('.alter-count-box').html(alterCount);
+            alterCounter.update(alterCount);
 
         } else {
             // We are updating a node
@@ -1961,7 +1962,7 @@ module.exports = function Namegenerator() {
         $('#ngForm').trigger('reset');
         editing = false;
         $('.relationship-button').html('Set Relationship Roles');
-        $(relationshipPanel).children('.relationship').removeClass('selected');
+        $(relationshipPanel).find('.relationship').removeClass('selected');
     };
 
     namegenerator.destroy = function() {
@@ -2080,7 +2081,16 @@ module.exports = function Namegenerator() {
         $(window.document).on('click', '.relationship-close-button', namegenerator.toggleRelationshipBox);
 
         // Set node count box
-        $('.alter-count-box').html(alterCount);
+        var el = document.querySelector('.alter-count-box');
+
+        alterCounter = new Odometer({
+          el: el,
+          value: 0,
+          format: 'dd',
+          theme: 'default'
+        });
+
+        alterCounter.update(alterCount);
 
         // add existing nodes
         $.each(window.network.getEdges({type: 'Dyad', from: window.network.getNodes({type_t0:'Ego'})[0].id, ng_t0:namegenerator.options.variables[5].value}), function(index,value) {
@@ -2140,16 +2150,16 @@ module.exports = function Namegenerator() {
                         $(this).parent().css('overflow','visible');
                     },
                     stop: function() {
-                        $('previous-node-list').css('overflow','scroll');
-                        $('current-node-list').css('overflow','scroll');
+                        $('.previous-node-list').css('overflow','scroll');
+                        $('.current-node-list').css('overflow','scroll');
                     }
                 });
 
                 $('.node-container').droppable({ accept: '.draggable',
                     drop: function(event, ui) {
                         // remove the ghost card
-                        $('previous-node-list').css('overflow','scroll');
-                        $('current-node-list').css('overflow','scroll');
+                        $('.previous-node-list').css('overflow','scroll');
+                        $('.current-node-list').css('overflow','scroll');
                         $('.card.ghost').remove();
 
                         // get the data we need
@@ -2299,7 +2309,7 @@ module.exports = function Namegenerator() {
 
         editing = false;
         var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
-        $('.alter-count-box').html(alterCount);
+        alterCounter.update(alterCount);
 
         namegenerator.closeNodeBox();
     };
