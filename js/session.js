@@ -216,6 +216,10 @@ var Session = function Session() {
 
     };
 
+    session.getPrimaryNetwork = function() {
+        return window.network;
+    };
+
     session.downloadData = function() {
         var filename = session.returnSessionID()+'.json';
         var text = JSON.stringify(session.sessionData, undefined, 2); // indentation level = 2;
