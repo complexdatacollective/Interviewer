@@ -16,7 +16,7 @@ $(document).ready(function() {
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.debugLevel = 10;
-    window.netCanvas.studyProtocol = 'RADAR';
+    window.netCanvas.studyProtocol = 'default';
 
     //Is this Node.js?
     if(window.isNode) {

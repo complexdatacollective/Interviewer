@@ -12,6 +12,7 @@ module.exports = function Sociogram() {
 	var menuOpen = false;
 	var cancelKeyBindings = false;
 	var taskComprehended = false;
+	sociogram.mode = 'layout';
 
 	// Colours
 	var colors = {
@@ -33,6 +34,9 @@ module.exports = function Sociogram() {
 	sociogram.settings = {
 		network: window.netCanvas.Modules.session.getPrimaryNetwork(),
 		defaultNodeSize: 35,
+		targetEl: 'kineticCanvas',
+		panels: ['Mode'],
+		initialMode: 'layout',
 		defaultNodeColor: colors.blue,
 		defaultEdgeColor: colors.edge,
 		concentricCircleColor: '#ffffff',
@@ -58,14 +62,28 @@ module.exports = function Sociogram() {
 		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}
 
+	sociogram.getMode = function() {
+		return sociogram.mode;
+	};
+
+	sociogram.setMode = function(newMode) {
+		sociogram.mode = newMode;
+	};
+
 	sociogram.init = function (userSettings) {
 		window.tools.notify('Sociogram initialising.', 1);
 		window.tools.extend(sociogram.settings,userSettings);
 
+		// Set the mode
+		sociogram.mode = sociogram.settings.initialMode;
+
+		// Add the title and heading
 		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
 
+		// Initialise the konva stage
 		sociogram.initKinetic();
 
+		// Add the evevent listeners
 		window.addEventListener('nodeAdded', sociogram.addNode, false);
 		window.addEventListener('edgeAdded', sociogram.addEdge, false);
 		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
@@ -83,7 +101,7 @@ module.exports = function Sociogram() {
 			var newNode = sociogram.addNode(dyadEdge);
 
 			// If we are in select mode, set the initial state
-			if (sociogram.settings.mode === 'Select') {
+			if (sociogram.mode === 'Select') {
 				// test if we are flipping a variable or assigning an edge
 				if (sociogram.settings.variable) {
 					//we are flipping a variable
@@ -116,7 +134,7 @@ module.exports = function Sociogram() {
 
 		// Are there existing edges? Display them
 		var edges, edgeProperties;
-		if (sociogram.settings.mode === 'Edge') {
+		if (sociogram.mode === 'Edge') {
 
 			// Set the criteria based on edge type
 			edgeProperties =  {
@@ -139,7 +157,7 @@ module.exports = function Sociogram() {
 				sociogram.addEdge(value);
 			});
 
-		} else if (sociogram.settings.mode === 'Select' || sociogram.settings.mode === 'Update') {
+		} else if (sociogram.mode === 'Select' || sociogram.mode === 'Update') {
 			// Select mode
 
 			// Show the social window.network
@@ -170,7 +188,7 @@ module.exports = function Sociogram() {
 				sociogram.addEdge(value);
 			});
 
-		} else if (sociogram.settings.mode === 'Position') {
+		} else if (sociogram.mode === 'Position') {
 			// Don't show any edges.
 		}
 	};
@@ -234,7 +252,7 @@ module.exports = function Sociogram() {
 		}
 
 		var dragStatus = false;
-		if (sociogram.settings.mode === 'Position' || sociogram.settings.mode === 'Edge') {
+		if (sociogram.mode === 'Position' || sociogram.mode === 'Edge') {
 			dragStatus = true;
 		}
 
@@ -382,7 +400,7 @@ module.exports = function Sociogram() {
 			var currentNode = this;
 
 			window.dispatchEvent(log);
-			if (sociogram.settings.mode === 'Select') {
+			if (sociogram.mode === 'Select') {
 				var edge;
 
 				// Check if we are flipping a binary variable on the Dyad edge or setting an edge
@@ -429,7 +447,7 @@ module.exports = function Sociogram() {
 				}
 
 
-			} else if (sociogram.settings.mode === 'Update') {
+			} else if (sociogram.mode === 'Update') {
 				if (selectedNodes.indexOf(currentNode) === -1) {
 					selectedNodes.push(currentNode.attrs.id);
 					currentNode.children[0].stroke(colors.selected);
@@ -438,7 +456,7 @@ module.exports = function Sociogram() {
 					currentNode.children[0].stroke('white');
 				}
 
-			} else if (sociogram.settings.mode === 'Edge') {
+			} else if (sociogram.mode === 'Edge') {
 				// If this makes a couple, link them.
 				if (selectedNodes[0] === this) {
 					// Ignore two clicks on the same node
@@ -612,7 +630,7 @@ module.exports = function Sociogram() {
 	sociogram.initKinetic = function () {
 		// Initialise KineticJS stage
 		stage = new Konva.Stage({
-			container: 'kineticCanvas',
+			container: sociogram.settings.targetEl,
 			width: window.innerWidth,
 			height: window.innerHeight
 		});
