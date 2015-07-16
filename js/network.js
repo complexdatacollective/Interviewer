@@ -100,11 +100,16 @@ module.exports = function Network() {
         }
     };
 
+    this.resetNetwork = function() {
+        this.nodes = [];
+        this.edges = [];
+    };
+
     this.createEgo = function(properties) {
         if (_this.egoExists() === false) {
             var egoProperties = {
                 id:0,
-                type_t0: 'Ego',
+                type: 'Ego',
                 reserved_ids: [0]
             };
             window.tools.extend(egoProperties, properties);
@@ -115,8 +120,8 @@ module.exports = function Network() {
     };
 
     this.getEgo = function() {
-        if (_this.getNodes({type_t0:'Ego'}).length !== 0) {
-            return _this.getNodes({type_t0:'Ego'})[0];
+        if (_this.getNodes({type:'Ego'}).length !== 0) {
+            return _this.getNodes({type:'Ego'})[0];
         } else {
             return false;
         }
