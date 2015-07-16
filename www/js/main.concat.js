@@ -3717,13 +3717,14 @@ module.exports = new Session();
 module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
-	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
+	var stage, circleLayer, edgeLayer, nodeLayer, wedgeLayer, uiLayer, sociogram = {};
 	var selectedNodes = [];
 	var log;
 	var menuOpen = false;
 	var cancelKeyBindings = false;
 	var taskComprehended = false;
 	var longPressTimer;
+	var touchNotTap = false;
 
 	// Colours
 	var colors = {
@@ -4152,12 +4153,12 @@ module.exports = function Sociogram() {
 
 
 			window.tools.notify('dragstart',1);
-			//
-			// // Add the current position to the node attributes, so we know where it came from when we stop dragging.
-			// this.attrs.oldx = this.attrs.x;
-			// this.attrs.oldy = this.attrs.y;
-			// this.moveToTop();
-			// nodeLayer.draw();
+
+			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
+			this.attrs.oldx = this.attrs.x;
+			this.attrs.oldy = this.attrs.y;
+			this.moveToTop();
+			nodeLayer.draw();
 		});
 
 		nodeGroup.on('dragmove', function() {
@@ -4172,44 +4173,25 @@ module.exports = function Sociogram() {
 			}
 
 			window.tools.notify('Dragmove',0);
-			// var dragNode = nodeOptions.id;
-			// $.each(edgeLayer.children, function(index, value) {
-			//
-			// 	// value.setPoints([dragNode.getX(), dragNode.getY() ]);
-			// 	if (value.attrs.from.id === dragNode || value.attrs.to.id === dragNode) {
-			// 		var points = [sociogram.getNodeByID(value.attrs.from.id).getX(), sociogram.getNodeByID(value.attrs.from.id).getY(), sociogram.getNodeByID(value.attrs.to.id).getX(), sociogram.getNodeByID(value.attrs.to.id).getY()];
-			// 		value.attrs.points = points;
-			//
-			// 	}
-			// });
-			// edgeLayer.draw();
+			var dragNode = nodeOptions.id;
+
+			// Update the position of any connected edges
+			$.each(edgeLayer.children, function(index, value) {
+
+				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
+				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
+					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
+					value.attrs.points = points;
+
+				}
+			});
+			edgeLayer.draw();
 
 		});
 
 		nodeGroup.on('touchstart mousedown', function() {
-			console.log('touchstart!!!');
-			window.wedge = new Konva.Wedge({
-			   radius: sociogram.settings.options.defaultNodeSize+5,
-			   angle: 0,
-			   fill: 'transparent',
-			   stroke: colors.selected,
-			   opacity:0,
-			   strokeWidth: 10,
-			});
 
 			window.wedge.setAbsolutePosition(this.getAbsolutePosition());
-
-
-			window.wedge.tween = new Konva.Tween({
-				node: window.wedge,
-				opacity:0,
-				duration: 1,
-				easing: Konva.Easings.EaseInOut
-			});
-
-			nodeLayer.add(window.wedge);
-			window.wedge.moveToBottom();
-
 
 			window.wedge.anim = new Konva.Animation(function(frame) {
 				var duration = 1000;
@@ -4219,12 +4201,14 @@ module.exports = function Sociogram() {
 					window.clearTimeout(longPressTimer);
 				} else {
 					window.wedge.opacity(frame.time*(1/duration));
+					window.wedge.setStrokeWidth(1+(frame.time*(20/duration)));
 					window.wedge.setAngle(frame.time*(360/duration));
 				}
 
-			}, nodeLayer);
+			}, wedgeLayer);
 
 			longPressTimer = setTimeout(function() {
+				touchNotTap = true;
 				window.wedge.anim.start();
 			}, 300);
 
@@ -4232,8 +4216,15 @@ module.exports = function Sociogram() {
 
 		nodeGroup.on('touchend mouseup', function() {
 			window.wedge.anim.stop();
+			var tween = new Konva.Tween({
+				 node: window.wedge,
+				 opacity: 0,
+				 duration: 0.5,
+				 onFinish: function(){
+					 tween.destroy();
+				 }
+	 	 	}).play();
 			window.clearTimeout(longPressTimer);
-			window.wedge.tween.play();
 		});
 
 		nodeGroup.on('dbltap dblclick', function() {
@@ -4304,58 +4295,79 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('tap click', function() {
-			console.log('tap');
-			window.wedge.anim.stop();
-			window.clearTimeout(longPressTimer);
-			// if (taskComprehended === false) {
-			// 	var eventProperties = {
-			// 		stage: window.netCanvas.Modules.session.currentStage(),
-			// 		timestamp: new Date()
-			// 	};
-			// 	log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-			// 	window.dispatchEvent(log);
-			// 	taskComprehended = true;
-			// }
-			// log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
-			// var currentNode = this;
-			//
-			// window.dispatchEvent(log);
-			//
-			// if (sociogram.settings.modes.indexOf('Edge') !== -1) {
-			// 	// If this makes a couple, link them.
-			// 	if (selectedNodes[0] === this) {
-			// 		// Ignore two clicks on the same node
-			// 		return false;
-			// 	}
-			// 	selectedNodes.push(this);
-			// 	if(selectedNodes.length === 2) {
-			// 		selectedNodes[1].children[0].stroke('white');
-			// 		selectedNodes[0].children[0].stroke('white');
-			// 		var edgeProperties = {
-			// 			from: selectedNodes[0].attrs.to,
-			// 			to: selectedNodes[1].attrs.to,
-			// 			type: sociogram.settings.edgeType
-			// 		};
-			//
-			// 		edgeProperties[sociogram.settings.variables[0]] = 'perceived';
-			//
-			//
-			// 		if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-			// 			window.tools.notify('Sociogram removing edge.',2);
-			// 			sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
-			// 		}
-			// 		selectedNodes = [];
-			// 		nodeLayer.draw();
-			// 	} else {
-			// 		// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
-			// 		this.children[0].stroke(colors.selected);
-			// 		// selectedNodes.push(this);
-			// 		// this.children[0].strokeWidth(4);
-			// 		nodeLayer.draw();
-			// 	}
-			// }
-			this.moveToTop();
-			nodeLayer.draw();
+			if (!touchNotTap) {
+				console.log('tap');
+				window.wedge.anim.stop();
+				window.clearTimeout(longPressTimer);
+				if (taskComprehended === false) {
+					var eventProperties = {
+						stage: window.netCanvas.Modules.session.currentStage(),
+						timestamp: new Date()
+					};
+					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+					window.dispatchEvent(log);
+					taskComprehended = true;
+				}
+				log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
+				window.dispatchEvent(log);
+
+				if (sociogram.settings.modes.indexOf('Edge') !== -1) {
+
+					// Ignore two clicks on the same node
+					if (selectedNodes[0] === this) {return false;}
+
+					// Push the clicked node into the selected nodes array;
+					selectedNodes.push(this);
+
+					// Check the length of the selected nodes array.
+					if(selectedNodes.length === 2) {
+						//If it containes two nodes, create an edge
+
+						//Reset the styling
+						selectedNodes[1].children[0].stroke(sociogram.settings.options.defaultNodeColor);
+						selectedNodes[0].children[0].stroke(sociogram.settings.options.defaultNodeColor);
+
+						// Create an edge object
+
+						if (sociogram.settings.dataDestination.Edge.target === 'edge')   {// We are storing the edge on an edge
+
+							var edgeProperties = {};
+							console.log(selectedNodes);
+							if (sociogram.settings.criteria.type === 'node') {
+								edgeProperties = {
+									from: selectedNodes[0].attrs.id,
+									to: selectedNodes[1].attrs.id,
+								};
+							}
+
+							// Add the custom variables
+							$.each(sociogram.settings.dataDestination.Edge.variables, function(index, value) {
+								window.tools.extend(edgeProperties, value);
+							});
+
+							console.log(edgeProperties);
+							// Try adding the edge. If it returns fals, it already exists, so remove it.
+							if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+								window.tools.notify('Sociogram removing edge.',2);
+								sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
+							} else {
+								window.tools.notify('Sociogram adding edge.',2);
+							}
+
+							// Empty the selected nodes array and draw the layer.
+							selectedNodes = [];
+						}
+
+					} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
+						this.children[0].stroke(sociogram.settings.options.defaultEdgeColor);
+					}
+				}
+				this.moveToTop();
+				nodeLayer.draw();
+			} else {
+				touchNotTap = false;
+			}
+
 		});
 
 		nodeGroup.on('dragend', function() {
@@ -4421,27 +4433,32 @@ module.exports = function Sociogram() {
 	// Edge manipulation functions
 
 	sociogram.addEdge = function(properties) {
-		if(typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id) {
+		// This doesn't get called directly. Rather, it responds to an event fired by the network module.
+		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
 			properties = properties.detail;
 		} else {
 			return false;
 		}
 
+		console.log(properties);
 		// the below won't work because we are storing the coords in an edge now...
 		window.tools.notify('Sociogram is adding an edge.',2);
-		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
-		var fromObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
+		var toObject = sociogram.getNodeByID(properties.to);
+	 	var fromObject = sociogram.getNodeByID(properties.from);
 
-		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
+		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
 		var edge = new Konva.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 4,
 			opacity:1,
-			stroke: sociogram.settings.defaultEdgeColor,
+			stroke: sociogram.settings.options.defaultEdgeColor,
 			// opacity: 0.8,
-			from: fromObject,
-			to: toObject,
 			points: points
+		});
+
+		edge.setAttrs({
+			from: properties.from,
+			to: properties.to
 		});
 
 		edgeLayer.add(edge);
@@ -4501,12 +4518,14 @@ module.exports = function Sociogram() {
 		});
 
 		circleLayer = new Konva.Layer();
+		wedgeLayer = new Konva.Layer();
 		nodeLayer = new Konva.Layer();
 		edgeLayer = new Konva.Layer();
 		uiLayer = new Konva.Layer();
 
 		stage.add(circleLayer);
 		stage.add(edgeLayer);
+		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
 		stage.add(uiLayer);
 		window.tools.notify('Konva stage initialised.',1);
@@ -4549,6 +4568,39 @@ module.exports = function Sociogram() {
 			circleLayer.add(circleLines);
 
 		}
+
+		// draw wedgex
+
+
+		Konva.selectWedge = function(config) {
+			this._initselectWedge(config);
+		};
+
+		Konva.selectWedge.prototype = {
+			_initselectWedge: function(config) {
+				Konva.Circle.call(this, config);
+			},
+			_sceneFunc: function(context) {
+				context.beginPath();
+				context.arc(0, 0, this.getRadius(), 0, Konva.getAngle(this.getAngle()), this.getClockwise());
+				context.fillStrokeShape(this);
+			}
+		};
+
+		Konva.Util.extend(Konva.selectWedge, Konva.Wedge);
+
+		window.wedge = new Konva.selectWedge({
+			radius: sociogram.settings.options.defaultNodeSize+5,
+			angle: 0,
+			fill: 'transparent',
+			stroke: colors.selected,
+			rotation:-90,
+			opacity:0,
+			strokeWidth: 10,
+		});
+
+		wedgeLayer.add(window.wedge);
+		window.wedge.moveToBottom();
 
 		circleLayer.draw();
 		uiLayer.draw();
