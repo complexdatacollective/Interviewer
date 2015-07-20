@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                 dest: '<%= config.app %>/js/_bower.js',
                 cssDest: '<%= config.app %>/css/_bower.css'
                 // mainFiles: {
-                //     'jquery': 'dist/jquery.min.js',
+                    // 'graham_scan': 'src/graham_scan.js',
                 //     'bootstrap': 'dist/bootstrap.min.js',
                 //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
                 //     'jquery-ui': 'jquery-ui.min.js',

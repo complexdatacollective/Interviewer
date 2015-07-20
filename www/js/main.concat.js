@@ -2352,13 +2352,6 @@ module.exports = function Namegenerator() {
 
 /*
 
-Previously I had been storing Nodes and Edges within the KineticJS framework
-Nodes were stored as Kinetic Groups (text and a shape), and edges stored as Kinetic Lines.
-
-This approach worked fine when the scope of the interaction was limited to
-KineticJS, but needs revision when nodes much be created, edited, and managed
-from different interfaces.
-
 This module should implement 'networky' methods, and a querying syntax for
 selecting nodes or edges by their various properties, and interating over them.
 
@@ -3709,7 +3702,7 @@ var Session = function Session() {
 };
 
 module.exports = new Session();
-;/* global Konva, window, alert, $ */
+;/* global Konva, window, alert, $, ConvexHullGrahamScan */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
@@ -3717,7 +3710,7 @@ module.exports = new Session();
 module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
-	var stage, circleLayer, edgeLayer, nodeLayer, wedgeLayer, uiLayer, sociogram = {};
+	var stage, circleLayer, edgeLayer, nodeLayer, wedgeLayer, hullLayer, uiLayer, sociogram = {};
 	var selectedNodes = [];
 	var log;
 	var menuOpen = false;
@@ -3725,6 +3718,8 @@ module.exports = function Sociogram() {
 	var taskComprehended = false;
 	var longPressTimer;
 	var touchNotTap = false;
+	var hulls = [];
+	var hullShapes = [];
 
 	// Colours
 	var colors = {
@@ -3815,12 +3810,22 @@ module.exports = function Sociogram() {
 		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}
 
+	function toPointFromObject(array) {
+		var newArray = [];
+		for (var i = 0; i<array.length; i++) {
+			newArray.push(array[i].x);
+			newArray.push(array[i].y);
+		}
+
+		return newArray;
+	}
+
 	sociogram.init = function (userSettings) {
 		window.tools.notify('Sociogram initialising.', 1);
 		window.tools.extend(sociogram.settings,userSettings);
 
 		// Add the title and heading
-		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
+		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore('#'+sociogram.settings.targetEl );
 
 		// Initialise the konva stage
 		sociogram.initKinetic();
@@ -3831,6 +3836,19 @@ module.exports = function Sociogram() {
 		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.addEventListener('changeStageStart', sociogram.destroy, false);
+
+
+		// Panels
+		if (sociogram.settings.panels.indexOf('context') !== -1) {
+			$('<div class="context-panel"><h4>Named Contexts:</h4><ul class="context-list"><li class="context" data-context="0"><div class="context-color" style="background:Tomato"></div> Family</li><li class="context" data-context="0"><div class="context-color" style="background:Teal"></div> Friends</li></ul></div>').appendTo('#'+sociogram.settings.targetEl);
+		}
+
+		if (sociogram.settings.panels.indexOf('mode') !== -1) {
+			var sociogramModesMenu = window.menu.addMenu('Modes', 'tasks');
+			window.menu.addItem(sociogramModesMenu, 'Context', null, function() {setTimeout(function() {}, 500); });
+		}
+
+
 
 		// Are there existing nodes? Display them.
 
@@ -4021,6 +4039,64 @@ module.exports = function Sociogram() {
 
 	};
 
+	sociogram.addHull = function() {
+        console.log('adding hull');
+        var convexHull = new ConvexHullGrahamScan();
+        hulls.push(convexHull);
+
+        var color = window.tools.getRandomColor();
+        var hullPoints = [];
+
+        var hullShape = new Konva.Line({
+          points: hullPoints,
+          fill: color,
+          opacity:0.5,
+          stroke: color,
+          lineJoin: 'round',
+          lineCap: 'round',
+          tension : 0.1,
+          strokeWidth: 100,
+          closed : true
+        });
+
+        hullShapes.push(hullShape);
+
+        $('.hull-list').append('<li class="hull" data-hull="'+window.hullShapes.length+'"><div class="color" style="background:'+color+'"></div> Hull '+window.hullShapes.length+'</li>');
+        // $('.hull-list').append('<li>Josh</li>');
+        hullLayer.add(hullShape);
+        hullLayer.draw();
+    };
+
+    sociogram.addPointToHull = function(point, hull) {
+
+        console.log('adding point to hull');
+        console.log('adding hull: '+hull+' to point:');
+        console.log(point);
+
+
+
+        point.attrs.hulls.push(hull);
+        // redraw all hulls here (probably)
+
+        var pointHulls = point.attrs.hulls;
+        for (var i = 0; i < pointHulls.length; i++) {
+            var newHull = new ConvexHullGrahamScan();
+
+            for (var j = 0; j < window.nodeLayer.children.length; j++) {
+                var thisChildHulls = window.nodeLayer.children[j].attrs.hulls;
+                if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+                    var coords = window.nodeLayer.children[j].getPosition();
+                    newHull.addPoint(coords.x, coords.y);
+                }
+            }
+
+            hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+            hullLayer.draw();
+            nodeLayer.draw();
+
+        }
+    };
+
 	// Node manipulation functions
 
 	sociogram.resetPositions = function() {
@@ -4162,6 +4238,20 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dragmove', function() {
+
+			// Cancel wedge actions
+			window.wedge.anim.stop();
+			var tween = new Konva.Tween({
+				 node: window.wedge,
+				 opacity: 0,
+				 duration: 0,
+				 onFinish: function(){
+					 tween.destroy();
+				 }
+			}).play();
+			window.clearTimeout(longPressTimer);
+
+
 			if (taskComprehended === false) {
 				var eventProperties = {
 					stage: window.netCanvas.Modules.session.currentStage(),
@@ -4194,7 +4284,7 @@ module.exports = function Sociogram() {
 			window.wedge.setAbsolutePosition(this.getAbsolutePosition());
 
 			window.wedge.anim = new Konva.Animation(function(frame) {
-				var duration = 1000;
+				var duration = 700;
 				if (frame.time >= duration) {
 					alert('finished');
 					window.wedge.anim.stop();
@@ -4210,7 +4300,7 @@ module.exports = function Sociogram() {
 			longPressTimer = setTimeout(function() {
 				touchNotTap = true;
 				window.wedge.anim.start();
-			}, 300);
+			}, 200);
 
 		});
 
@@ -4219,7 +4309,7 @@ module.exports = function Sociogram() {
 			var tween = new Konva.Tween({
 				 node: window.wedge,
 				 opacity: 0,
-				 duration: 0.5,
+				 duration: 0.3,
 				 onFinish: function(){
 					 tween.destroy();
 				 }
@@ -4384,19 +4474,18 @@ module.exports = function Sociogram() {
 			to.x = this.attrs.x;
 			to.y = this.attrs.y;
 
+
+			this.attrs.coords = [this.attrs.x,this.attrs.y];
+
 			// Add them to an event object for the logger.
 			var eventObject = {
 				from: from,
 				to: to,
 			};
 
-			var currentNode = this;
-
 			// Log the movement and save the graph state.
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeMove', 'eventObject':eventObject}});
 			window.dispatchEvent(log);
-
-			sociogram.settings.network.setProperties(sociogram.settings.network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -4522,11 +4611,13 @@ module.exports = function Sociogram() {
 		nodeLayer = new Konva.Layer();
 		edgeLayer = new Konva.Layer();
 		uiLayer = new Konva.Layer();
+		hullLayer = new Konva.Layer();
 
 		stage.add(circleLayer);
 		stage.add(edgeLayer);
 		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
+		stage.add(hullLayer);
 		stage.add(uiLayer);
 		window.tools.notify('Konva stage initialised.',1);
 	};
@@ -4898,6 +4989,10 @@ $.cssHooks.backgroundColor = {
             return '#' + window.tools.hex(bg[1]) + window.tools.hex(bg[2]) + window.tools.hex(bg[3]);
         }
     }
+};
+
+exports.getRandomColor = function() {
+    return '#' + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
 };
 
 exports.modifyColor = function(hex, lum) {

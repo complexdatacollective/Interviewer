@@ -4,13 +4,6 @@
 
 /*
 
-Previously I had been storing Nodes and Edges within the KineticJS framework
-Nodes were stored as Kinetic Groups (text and a shape), and edges stored as Kinetic Lines.
-
-This approach worked fine when the scope of the interaction was limited to
-KineticJS, but needs revision when nodes much be created, edited, and managed
-from different interfaces.
-
 This module should implement 'networky' methods, and a querying syntax for
 selecting nodes or edges by their various properties, and interating over them.
 

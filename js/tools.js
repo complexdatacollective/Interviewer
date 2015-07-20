@@ -186,6 +186,10 @@ $.cssHooks.backgroundColor = {
     }
 };
 
+exports.getRandomColor = function() {
+    return '#' + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
+};
+
 exports.modifyColor = function(hex, lum) {
 
     // validate hex string
