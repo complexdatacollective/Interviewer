@@ -18,7 +18,6 @@ var Session = function Session() {
         } else {
             window.tools.notify('Not yet implemented on this platform.', 1);
         }
-
     }
 
     function clickDownloadInput() {

@@ -3304,7 +3304,6 @@ var Session = function Session() {
         } else {
             window.tools.notify('Not yet implemented on this platform.', 1);
         }
-
     }
 
     function clickDownloadInput() {
@@ -3716,7 +3715,7 @@ module.exports = function Sociogram() {
 	var menuOpen = false;
 	var cancelKeyBindings = false;
 	var taskComprehended = false;
-	var longPressTimer;
+	var longPressTimer, tapTimer;
 	var touchNotTap = false;
 	var hulls = [];
 	var hullShapes = [];
@@ -3746,11 +3745,11 @@ module.exports = function Sociogram() {
 		// double tap - select mode
 		// long press - community mode
 		modes:['Edge', 'Community', 'Position', 'Select'], //edge - create edges, position - lay out, select - node attributes
-		panels: ['mode', 'context'], // Mode - switch between modes, Context - convex hull drawing and labelling
+	    panels: ['mode', 'context'], // Mode - switch between modes, Context - convex hull drawing and labelling
 		options: {
 			defaultNodeSize: 35,
 			defaultNodeColor: 'white',
-			defaultNodeStrokeWidth: 4,
+			defaultNodeStrokeWidth: 5,
 			defaultLabelColor: 'black',
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',
@@ -3762,41 +3761,51 @@ module.exports = function Sociogram() {
 			{'name':'Organisation','color':colors.cayenne},
 			{'name':'Professional','color':colors.violettulip}
 		],
-		dataDestination: {
-			// indexed by mode. one for each active mode
-			'Edge': {
-				target: 'edge', // edge or node. where do we store the attriute?
-				variables: [
-					{'type': 'Friend'}, // node or edge type. Should this be promoted out of the variables array? Might need to respect existing exdges or nodes. When to we overwrite vs update?
-					{'namegenerator': 'closenest'}
-					// {'weight': function() { some callback eval code }}
-				]
-			},
-			'Select': {
-				target: 'node',
-				variables: [
-					{'drugUser': 'true'}
-				]
-			},
-			'Position': { // probably not needed
-			},
-			'Community' : {
-				target: 'node',
-				variables: [
-					{'memberOf': '$community'} // template language?
-				]
-			}
-		},
-		criteria: { // criteria for being shown on this screen
-			type: 'edge',
-			includeEgo: false,
-			query: {
-				type:'Dyad',
-				from:window.network.getEgo()
-			}
-		},
+	    dataDestination: {
+	        // indexed by mode. one for each active mode
+	        'Edge': {
+	            type: 'edge', // edge or node. where do we store the attriute?
+	            variables: [
+	                {name:'type', value:'Friend'}, // node or edge type. Should this be promoted out of the variables array? Might need to respect existing exdges or nodes. When to we overwrite vs update?
+	                {name:'namegenerator', value: 'closest'}
+	                // {'weight': function() { some callback eval code }}
+	            ]
+	        },
+	        'Select': {
+	            type: 'node', //"hypernode" - create node for attribute type and link with edge?
+	            mode: 'flip', // flip - flip binary value of flip_variable, create - delete or create node or edge
+	            flip_variable: 'drugUser', // O
+	            variables: [
+	                {name: 'drugType', value: 'boozybix'}
+	            ]
+	        },
+	        'Position': {
+	            type: 'node',
+	            variable: 'coords'
+	        },
+	        'Community' : {
+	            type: 'node',
+	            variables: [
+	                {name: 'memberOf', value:'$community'} // template language?
+	            ]
+	        }
+	    },
+	    criteria: { // criteria for being shown on this screen
+	        type: 'node',
+	        includeEgo: false,
+	        query: {
+	        }
+	    },
 		heading: 'A default heading',
 		subheading: 'A default subheading'
+	};
+
+	sociogram.settings.dataOrigin = {
+		// indexed by mode. one for each active mode
+        'Edge': sociogram.settings.dataDestination.Edge,
+        'Select': sociogram.settings.dataDestination.Select,
+        'Position': sociogram.settings.dataDestination.Position,
+        'Community' : sociogram.settings.dataDestination.Community
 	};
 
 	// Private functions
@@ -3837,7 +3846,6 @@ module.exports = function Sociogram() {
 		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.addEventListener('changeStageStart', sociogram.destroy, false);
-
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
@@ -3921,120 +3929,76 @@ module.exports = function Sociogram() {
 
 		// This method uses the dataOrigin settings key to retrieve the initial states of nodes and edges
 
-				// // Select mode
-				// if (sociogram.settings.modes.indexOf('Select') !== -1) {
-				// 	// test if we are flipping a variable or assigning an edge
-				// 	if (sociogram.settings.variable) {
-				// 		//we are flipping a variable
-				// 		var properties = {
-				// 			from: sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id,
-				// 			to: criteriaEdges[i].to,
-				// 		};
-				//
-				// 		properties[sociogram.settings.variable] = 1;
-				//
-				// 		if (sociogram.settings.network.getEdges(properties).length > 0) {
-				// 			newNode.children[0].stroke(colors.selected);
-				// 			nodeLayer.draw();
-				// 		}
-				// 	} else {
-				// 		// we are assigning an edge
-				// 		// set initial state of node according to if an edge exists
-				// 		if (sociogram.settings.network.getEdges({from: sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: sociogram.settings.edgeType}).length > 0) {
-				// 			newNode.children[0].stroke(colors.selected);
-				// 			nodeLayer.draw();
-				// 		}
-				//
-				// 	}
-				// }
+		// Edge Mode
+		if (sociogram.settings.modes.indexOf('Edge') !== -1) {
 
-				// Edge Mode
-				if (sociogram.settings.modes.indexOf('Edge') !== -1) {
+			// get the source of the edges according to dataOrigin
+			if (sociogram.settings.dataOrigin.Edge.type === 'edge') {
+				// Get any edges involving the currently visible nodes (needless complexity?) that meet the criteria
+				var properties = {};
+				$.each(sociogram.settings.dataOrigin.Edge.variables, function(index, value) {
+					properties[value.name] = value.value;
+				});
+				var edges = sociogram.settings.network.getEdges(properties);
+				$.each(edges, function(index, edge) {
+					sociogram.addEdge(edge);
+				});
 
-					// get the source of the edges according to dataOrigin
-					if (sociogram.settings.dataOrigin.Edge.type === 'edge') {
-						// Get any edges involving the currently visible nodes (needless complexity?) that meet the criteria
-						var properties = {};
-						$.each(sociogram.settings.dataOrigin.Edge.variables, function(index, value) {
-							window.tools.extend(properties, value);
-						});
-						var edges = sociogram.settings.network.getEdges(properties);
-						$.each(edges, function(index, edge) {
-							console.log('edge');
-							console.log(edge);
-							sociogram.addEdge(edge);
-						});
+			} else if (sociogram.settings.dataOrigin.Edge.type === 'node') {
+				console.log('Not yet implemented.');
+			} else {
+				console.log('Error.');
+			}
 
-					} else if (sociogram.settings.dataOrigin.Edge.type === 'node') {
-						console.log('Not yet implemented.');
-					} else {
-						console.log('Error.');
+		}
+
+		// Select Mode
+		if (sociogram.settings.modes.indexOf('Select') !== -1) {
+			// Select mode
+
+			if (sociogram.settings.dataOrigin.Select.mode === 'flip') {
+				var selectNodes = sociogram.settings.network.getNodes({});
+				$.each(selectNodes, function(index, node) {
+					var currentValue = node[sociogram.settings.dataOrigin.Select.flip_variable];
+					if (currentValue === 1) {
+						// this node is selected
+						var currentNode = sociogram.getNodeByID(node.id);
+						currentNode.children[0].stroke(colors.selected);
 					}
+				});
 
-				}
-				//
-				// // Select Mode
-				// if (sociogram.settings.modes.indexOf('Select') !== -1 || sociogram.settings.modes.indexOf('Update') !== -1) {
-				// 	// Select mode
-				//
-				// 	// Show the social window.network
-				// 	// Filter to remove edges involving ego, unless this is edge select mode.
-				// 	edgeProperties = {};
-				//
-				// 	if (sociogram.settings.showEdge) {
-				// 		edgeProperties =  {
-				// 			type: sociogram.settings.showEdge
-				// 		};
-				// 	} else {
-				// 		edgeProperties =  {
-				// 			type: 'Dyad'
-				// 		};
-				// 	}
-				// 	edges = sociogram.settings.network.getEdges(edgeProperties, function (results) {
-				// 		var filteredResults = [];
-				// 		$.each(results, function(index,value) {
-				// 			if (value.from !== sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id && value.to !== sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id) {
-				// 				filteredResults.push(value);
-				// 			}
-				// 		});
-				//
-				// 		return filteredResults;
-				// 	});
-				//
-				// 	$.each(edges, function(index,value) {
-				// 		sociogram.addEdge(value);
-				// 	});
-				//
-				// }
+			} else if (sociogram.settings.dataOrigin.Select.mode === 'create') {
+				console.log('not yet implemented');
+			} else {
+				// error state
+			}
 
-				// Layout Mode
-				if (sociogram.settings.modes.indexOf('Position') !== -1) {
-					console.log('Position mode enabled');
-					// Get the dataOrigin for position
-					if (sociogram.settings.dataOrigin.Position.type === 'node') {
-						// position data is coming from the node
-						var nodes = sociogram.getKineticNodes();
-						$.each(nodes, function(index,node) {
-							console.log('setting position');
-							console.log(node);
-							console.log(sociogram.settings.dataOrigin.Position.variable);
-							console.log(node.attrs[sociogram.settings.dataOrigin.Position.variable]);
-							node.setPosition(node.attrs[sociogram.settings.dataOrigin.Position.variable]);
-						});
+		}
 
-					} else if (sociogram.settings.dataOrigin.Position.type === 'edge') {
-						// position data is coming from the edge
+		// Layout Mode
+		if (sociogram.settings.modes.indexOf('Position') !== -1) {
+			console.log('Position mode enabled');
+			// Get the dataOrigin for position
+			if (sociogram.settings.dataOrigin.Position.type === 'node') {
+				// position data is coming from the node
+				var layoutNodes = sociogram.getKineticNodes();
+				$.each(layoutNodes, function(index,node) {
+					node.setPosition(node.attrs[sociogram.settings.dataOrigin.Position.variable]);
+				});
 
-					} else {
-						// error!
-					}
+			} else if (sociogram.settings.dataOrigin.Position.type === 'edge') {
+				// position data is coming from the edge
 
-				}
+			} else {
+				// error!
+			}
 
-				// Community mode
-				if (sociogram.settings.modes.indexOf('Community') !== -1) {
+		}
 
-				}
+		// Community mode
+		if (sociogram.settings.modes.indexOf('Community') !== -1) {
+
+		}
 	};
 
 	sociogram.getSelectedNodes = function() {
@@ -4132,10 +4096,7 @@ module.exports = function Sociogram() {
         }
     };
 
-	// Node manipulation functions
-
 	sociogram.addNode = function(options) {
-		console.log(options);
 		window.tools.notify('Sociogram is creating a node.',2);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
@@ -4187,7 +4148,8 @@ module.exports = function Sociogram() {
 			nodeShape = new Konva.Circle({
 				radius: nodeOptions.size,
 				fill:nodeOptions.color,
-				strokeWidth: nodeOptions.strokeWidth
+				strokeWidth: nodeOptions.strokeWidth,
+				stroke: nodeOptions.stroke
 			});
 			break;
 
@@ -4225,6 +4187,14 @@ module.exports = function Sociogram() {
 
 		}
 
+		var selectCircle = new Konva.Circle({
+			radius: nodeOptions.size+(nodeOptions.strokeWidth),
+			fill:'transparent',
+			strokeWidth: nodeOptions.strokeWidth,
+			stroke: sociogram.settings.options.defaultEdgeColor,
+			opacity:0
+		});
+
 		var nodeLabel = new Konva.Text({
 			text: nodeOptions.label,
 			// fontSize: 20,
@@ -4252,7 +4222,6 @@ module.exports = function Sociogram() {
 				window.dispatchEvent(log);
 				taskComprehended = true;
 			}
-
 
 			window.tools.notify('dragstart',1);
 
@@ -4345,144 +4314,197 @@ module.exports = function Sociogram() {
 
 		nodeGroup.on('dbltap dblclick', function() {
 			console.log('double tap');
-			// if (taskComprehended === false) {
-			// 	var eventProperties = {
-			// 		stage: window.netCanvas.Modules.session.currentStage(),
-			// 		timestamp: new Date()
-			// 	};
-			// 	log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-			// 	window.dispatchEvent(log);
-			// 	taskComprehended = true;
-			// }
-			// log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
-			// var currentNode = this;
-			//
-			// window.dispatchEvent(log);
-			// if (sociogram.settings.modes.indexOf('Select') !== -1) {
-			// 	var edge;
-			//
-			// 	// Check if we are flipping a binary variable on the Dyad edge or setting an edge
-			// 	if (sociogram.settings.variable) {
-			// 		// We are flipping a variable
-			//
-			// 		var properties = {};
-			// 		var currentValue = sociogram.settings.network.getEdge(currentNode.attrs.id)[sociogram.settings.variable];
-			// 		if (currentValue === 0 || typeof currentValue === 'undefined') {
-			// 			properties[sociogram.settings.variable] = 1;
-			// 			currentNode.children[0].stroke(colors.selected);
-			// 		} else {
-			// 			properties[sociogram.settings.variable] = 0;
-			// 			currentNode.children[0].stroke('white');
-			// 		}
-			//
-			// 		sociogram.settings.network.setProperties(sociogram.settings.network.getEdge(currentNode.attrs.id), properties);
-			//
-			//
-			// 	} else {
-			// 		// We are setting an edge
-			// 		// Test if there is an existing edge.
-			// 		if (sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
-			// 			// if there is, remove it
-			// 			this.children[0].stroke('white');
-			// 			sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to})[0]);
-			// 		} else {
-			// 			// else add it
-			// 			edge = {
-			// 				from:sociogram.settings.network.getEgo().id,
-			// 				to: this.attrs.to,
-			// 				type: sociogram.settings.edgeType,
-			// 			};
-			//
-			// 			if (typeof sociogram.settings.variables !== 'undefined') {
-			// 				$.each(sociogram.settings.variables, function(index, value) {
-			// 					edge[value.label] = value.value;
-			// 				});
-			// 			}
-			//
-			// 			this.children[0].stroke(colors.selected);
-			// 			sociogram.settings.network.addEdge(edge);
-			// 		}
-			// 	}
-			//
-			//
-			// }
+			selectedNodes = [];
+			window.clearTimeout(tapTimer);
+
+			if (taskComprehended === false) {
+				var eventProperties = {
+					stage: window.netCanvas.Modules.session.currentStage(),
+					timestamp: new Date()
+				};
+				log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+				window.dispatchEvent(log);
+				taskComprehended = true;
+			}
+			log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
+			window.dispatchEvent(log);
+
+			var currentNode = this;
+
+			// if select mode enabled
+			if (sociogram.settings.modes.indexOf('Select') !== -1) {
+
+				// Select mode target (node or edge)
+				if (sociogram.settings.dataDestination.Select.type === 'node') {
+					// target is node
+
+					// flip variable or create node?
+					if (sociogram.settings.dataDestination.Select.mode === 'flip') {
+						// flip variable
+
+						// Get current variable value
+						var properties = {};
+						var currentValue = sociogram.settings.network.getNode(currentNode.attrs.id)[sociogram.settings.dataDestination.Select.flip_variable];
+
+
+
+						// flip
+						if (currentValue === 0 || typeof currentValue === 'undefined') {
+							// add static variables, if present
+							$.each(sociogram.settings.dataDestination.Select.variables, function(index, value) {
+								properties[value.name] = value.value;
+							});
+							properties[sociogram.settings.dataDestination.Select.flip_variable] = 1;
+							currentNode.children[0].stroke(colors.selected);
+						} else {
+							// remove static variables, if present
+							$.each(sociogram.settings.dataDestination.Select.variables, function(index, value) {
+								properties[value.name] = undefined;
+							});
+							properties[sociogram.settings.dataDestination.Select.flip_variable] = 0;
+							currentNode.children[0].stroke(sociogram.settings.options.defaultNodeColor);
+						}
+
+						sociogram.settings.network.updateNode(currentNode.attrs.id, properties, function() {
+							console.log('select node updated');
+						});
+
+					} else if (sociogram.settings.dataDestination.Select.mode === 'create') {
+						// create node
+
+					} else {
+						// error state
+					}
+				} else if (sociogram.settings.dataDestination.Select.type === 'edge') {
+					// target is edge
+
+					// flip variable or create edge?
+					if (sociogram.settings.dataDestination.Select.mode === 'flip') {
+						// flip variable
+
+					} else if (sociogram.settings.dataDestination.Select.mode === 'create') {
+						// create edge
+
+						// // Test if there is an existing edge.
+						// if (sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
+						// 	// if there is, remove it
+						// 	this.children[0].stroke('white');
+						// 	sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to})[0]);
+						// } else {
+						// 	// else add it
+						// 	edge = {
+						// 		from:sociogram.settings.network.getEgo().id,
+						// 		to: this.attrs.to,
+						// 		type: sociogram.settings.edgeType,
+						// 	};
+						//
+						// 	if (typeof sociogram.settings.variables !== 'undefined') {
+						// 		$.each(sociogram.settings.variables, function(index, value) {
+						// 			edge[value.label] = value.value;
+						// 		});
+						// 	}
+						//
+						// 	this.children[0].stroke(colors.selected);
+						// 	sociogram.settings.network.addEdge(edge);
+						// }
+
+					} else {
+						// error state
+					}
+
+				} else {
+					window.tools.notify('Error with select dataDestination', 1);
+				}
+
+			}
 			this.moveToTop();
 			nodeLayer.draw();
 		});
 
 		nodeGroup.on('tap click', function() {
+			console.log('tap');
+			var currentNode = this;
 			if (!touchNotTap) {
-				console.log('tap');
+				console.log('NOT touchNotTap');
 				window.wedge.anim.stop();
-				window.clearTimeout(longPressTimer);
-				if (taskComprehended === false) {
-					var eventProperties = {
-						stage: window.netCanvas.Modules.session.currentStage(),
-						timestamp: new Date()
-					};
-					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-					window.dispatchEvent(log);
-					taskComprehended = true;
+				if (tapTimer !== null) {
+					window.clearTimeout(tapTimer);
 				}
-				log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
-				window.dispatchEvent(log);
-
-				if (sociogram.settings.modes.indexOf('Edge') !== -1) {
-
-					// Ignore two clicks on the same node
-					if (selectedNodes[0] === this) {return false;}
-
-					// Push the clicked node into the selected nodes array;
-					selectedNodes.push(this);
-
-					// Check the length of the selected nodes array.
-					if(selectedNodes.length === 2) {
-						//If it containes two nodes, create an edge
-
-						//Reset the styling
-						selectedNodes[1].children[0].stroke(sociogram.settings.options.defaultNodeColor);
-						selectedNodes[0].children[0].stroke(sociogram.settings.options.defaultNodeColor);
-
-						// Create an edge object
-
-						if (sociogram.settings.dataDestination.Edge.type === 'edge')   {// We are storing the edge on an edge
-
-							var edgeProperties = {};
-							console.log(selectedNodes);
-							if (sociogram.settings.criteria.type === 'node') {
-								edgeProperties = {
-									from: selectedNodes[0].attrs.id,
-									to: selectedNodes[1].attrs.id,
-								};
-							}
-
-							// Add the custom variables
-							$.each(sociogram.settings.dataDestination.Edge.variables, function(index, value) {
-								window.tools.extend(edgeProperties, value);
-							});
-
-							console.log(edgeProperties);
-							// Try adding the edge. If it returns fals, it already exists, so remove it.
-							if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-								window.tools.notify('Sociogram removing edge.',2);
-								sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
-							} else {
-								window.tools.notify('Sociogram adding edge.',2);
-							}
-
-							// Empty the selected nodes array and draw the layer.
-							selectedNodes = [];
-						} else if (sociogram.settings.dataDestination.Edge.type === 'node')   {// We are storing the edge as a node attribute
-							window.tools.notify('Storing edges as a node attribute is not yet implemented.', 1);
-						} else {
-							window.tools.notify('Error with edge destination.', 1);
-						}
-					} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
-						this.children[0].stroke(sociogram.settings.options.defaultEdgeColor);
+				tapTimer = setTimeout(function(){
+					console.log('tapTimer');
+					window.clearTimeout(longPressTimer);
+					if (taskComprehended === false) {
+						var eventProperties = {
+							stage: window.netCanvas.Modules.session.currentStage(),
+							timestamp: new Date()
+						};
+						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+						window.dispatchEvent(log);
+						taskComprehended = true;
 					}
-				}
-				this.moveToTop();
-				nodeLayer.draw();
+					log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':currentNode.attrs.id}});
+					window.dispatchEvent(log);
+
+					if (sociogram.settings.modes.indexOf('Edge') !== -1) {
+
+						// Ignore two clicks on the same node
+						if (selectedNodes[0] === currentNode) {
+							selectedNodes[0].children[2].opacity(0);
+							selectedNodes = [];
+							nodeLayer.draw();
+							return false;
+						}
+
+						// Push the clicked node into the selected nodes array;
+						selectedNodes.push(currentNode);
+
+						// Check the length of the selected nodes array.
+						if(selectedNodes.length === 2) {
+							//If it containes two nodes, create an edge
+
+							//Reset the styling
+							selectedNodes[1].children[2].opacity(0);
+							selectedNodes[0].children[2].opacity(0);
+
+							// Create an edge object
+
+							if (sociogram.settings.dataDestination.Edge.type === 'edge')   {// We are storing the edge on an edge
+
+								var edgeProperties = {};
+								if (sociogram.settings.criteria.type === 'node') {
+									edgeProperties = {
+										from: selectedNodes[0].attrs.id,
+										to: selectedNodes[1].attrs.id,
+									};
+								}
+
+								// Add the custom variables
+								$.each(sociogram.settings.dataDestination.Edge.variables, function(index, value) {
+									edgeProperties[value.name] = value.value;
+								});
+
+								// Try adding the edge. If it returns fals, it already exists, so remove it.
+								if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+									window.tools.notify('Sociogram removing edge.',2);
+									sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
+								} else {
+									window.tools.notify('Sociogram adding edge.',2);
+								}
+
+								// Empty the selected nodes array and draw the layer.
+								selectedNodes = [];
+							} else if (sociogram.settings.dataDestination.Edge.type === 'node')   {// We are storing the edge as a node attribute
+								window.tools.notify('Storing edges as a node attribute is not yet implemented.', 1);
+							} else {
+								window.tools.notify('Error with edge destination.', 1);
+							}
+						} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
+							currentNode.children[2].opacity(1);
+						}
+					}
+					currentNode.moveToTop();
+					nodeLayer.draw();
+				}, 200);
 			} else {
 				touchNotTap = false;
 			}
@@ -4519,9 +4541,6 @@ module.exports = function Sociogram() {
 			// store properties according to data destination
 			if (sociogram.settings.dataDestination.Position.type === 'node') {
 				// Find the node we need to store the coordinates on, and update it.
-				console.log('updating coords');
-				console.log(this.attrs.id);
-				console.log(this.attrs.coords);
 
 				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
 				var properties = {};
@@ -4547,6 +4566,7 @@ module.exports = function Sociogram() {
 
 		nodeGroup.add(nodeShape);
 		nodeGroup.add(nodeLabel);
+		nodeGroup.add(selectCircle);
 
 		nodeLayer.add(nodeGroup);
 		setTimeout(function() {
@@ -4579,12 +4599,11 @@ module.exports = function Sociogram() {
 			properties = properties.detail;
 		} else if (typeof properties.from !== 'undefined' && typeof properties.to !== 'undefined' && properties.from !== sociogram.settings.network.getEgo().id) {
 			// We have been called by another sociogram method
-			properties = properties;	
+			properties = properties;
 		} else {
 			return false;
 		}
 
-		console.log(properties);
 		// the below won't work because we are storing the coords in an edge now...
 		window.tools.notify('Sociogram is adding an edge.',2);
 		var toObject = sociogram.getNodeByID(properties.to);
