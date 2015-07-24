@@ -1224,8 +1224,7 @@ module.exports = function MultiBin() {
 		$('.black-overlay').hide();
 	};
 
-	var backgroundClickHandler = function(e) {
-		console.log('backgroundclick');
+	var backgroundClickHandler = function() {
 		if ($('.node-bin-active').length > 0) {
 
 				setTimeout(function() {
@@ -1250,23 +1249,14 @@ module.exports = function MultiBin() {
 				}});
 
 		} else {
-			console.log('mismatch');
-			console.log(e.target);
-			console.log(e.currentTarget);
 		}
 
 	};
 
 	var nodeBinClickHandler = function(e) {
 		if (e.target === this) {
-			console.log(this);
-			console.log($(this).attr('class'));
-			console.log($(this).hasClass('node-bin-active'));
-			console.log('nodebinclickhandler');
-			console.log(e);
 
 				if(!$(this).hasClass('node-bin-active')) {
-					console.log('doesnt');
 					$('.node-bin-container').children().not(this).css({opacity:0});
 					$('.node-question-container').hide();
 					var position = $(this).offset();
@@ -1300,8 +1290,6 @@ module.exports = function MultiBin() {
 	};
 
 	var nodeClickHandler = function(e) {
-		console.log('nodeclickhandler');
-		console.log(e);
 		e.preventDefault();
 		e.stopPropagation();
 		e.stopImmediatePropagation();
