@@ -92,6 +92,7 @@ module.exports = function OrdinalBin() {
                     console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
+
                     if (ordinalBin.options.variable.values[index].value>0) {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');

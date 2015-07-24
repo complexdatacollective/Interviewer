@@ -1309,6 +1309,7 @@ module.exports = function MultiBin() {
 	};
 
 	var nodeClickHandler = function(e) {
+		console.log('node clicked');
 		e.stopPropagation();
 		var el = $(this);
 		var id = $(this).parent().parent().data('index');
@@ -1329,6 +1330,7 @@ module.exports = function MultiBin() {
 			}
 			window.network.updateEdge(edgeID,properties);
 			$(this).fadeOut(400, function() {
+				$(this).css({'top':0, 'left' :0});
 				$(this).appendTo('.node-bucket');
 				$(this).css('display', '');
 				var noun = 'people';
@@ -1452,7 +1454,7 @@ module.exports = function MultiBin() {
 			drop: function(event, ui) {
 				var dropped = ui.draggable;
 				var droppedOn = $(this);
-
+                $(dropped).css({'top':0, 'left' :0});
 				// Check if the node has been dropped into a bin that triggers the followup
 				if(typeof multiBin.options.followup !== 'undefined' && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 					$('.followup').show();
@@ -2923,6 +2925,7 @@ module.exports = function OrdinalBin() {
                     console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
+
                     if (ordinalBin.options.variable.values[index].value>0) {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
