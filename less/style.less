@@ -1169,7 +1169,8 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     left:30vw;
     right: 30vw;
     padding:4vmin;
-    height:75vmin;
+    min-height: 580px;
+    max-height:75vmin;
     border-radius:12px;
     background:#eee;
     transform: translateY(-100vh);
@@ -1199,11 +1200,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .relationships {
     left:10vw;
     right:10vw;
+    height:75vmin !important;
 
 }
 
 @media (max-width: 1024px) {
     .relationships {
+        height:auto;
         left:1vw;
         right:1vw;
         bottom:1vmin;

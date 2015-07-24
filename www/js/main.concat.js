@@ -1952,6 +1952,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.openNodeBox = function() {
+        $('.newNodeBox').height($('.newNodeBox').height());
         $('.newNodeBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
         setTimeout(function() {
