@@ -20,14 +20,11 @@ module.exports = function MultiBin() {
 		subheading: 'Default Subheading.'
 	};
 
-	var open = false;
-
 	var stageChangeHandler = function() {
 		multiBin.destroy();
 	};
 
-	var followupHandler = function(e) {
-		e.preventDefault();
+	var followupHandler = function() {
 		// Handle the followup data
 
 		// First, retrieve the relevant values
@@ -74,19 +71,18 @@ module.exports = function MultiBin() {
 	};
 
 	var backgroundClickHandler = function(e) {
-		e.stopPropagation();
-		if (e.target !== e.currentTarget) {
+		console.log('backgroundclick');
+		if ($('.node-bin-active').length > 0) {
 
-			if (open === true) {
 				setTimeout(function() {
 					$('.node-bin-container').children().css({opacity:1});
 					$('.node-question-container').fadeIn();
 				}, 300);
 
-				$('.copy').removeClass('node-bin-active');
-				$('.copy').addClass('node-bin-static');
-				$('.copy').children('h1, p').show();
-				$('.copy').removeClass('copy');
+				var current = $('.node-bin-active');
+				$(current).removeClass('node-bin-active');
+				$(current).addClass('node-bin-static');
+				$(current).children('h1, p').show();
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
@@ -98,65 +94,64 @@ module.exports = function MultiBin() {
 						taskComprehended = true;
 					}
 				}});
-				open = false;
-			}
 
+		} else {
+			console.log('mismatch');
+			console.log(e.target);
+			console.log(e.currentTarget);
 		}
 
 	};
 
 	var nodeBinClickHandler = function(e) {
-		e.stopPropagation();
-		if (open === false) {
+		if (e.target === this) {
+			console.log(this);
+			console.log($(this).attr('class'));
+			console.log($(this).hasClass('node-bin-active'));
+			console.log('nodebinclickhandler');
+			console.log(e);
 
-			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
-				if (taskComprehended === false) {
-					var eventProperties = {
-						stage: window.netCanvas.Modules.session.currentStage(),
-						timestamp: new Date()
-					};
-					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-					window.dispatchEvent(log);
-					taskComprehended = true;
+				if(!$(this).hasClass('node-bin-active')) {
+					console.log('doesnt');
+					$('.node-bin-container').children().not(this).css({opacity:0});
+					$('.node-question-container').hide();
+					var position = $(this).offset();
+					var nodeBinDetails = $(this);
+					nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+					setTimeout(function() {
+						nodeBinDetails.offset(position);
+						nodeBinDetails.addClass('node-bin-active');
+
+						nodeBinDetails.removeClass('node-bin-static');
+						nodeBinDetails.children('h1, p').hide();
+
+						// $('.content').append(nodeBinDetails);
+
+						nodeBinDetails.addClass('node-bin-active');
+						setTimeout(function(){
+							var timer = 0;
+							$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+								timer = timer + (index*10);
+								setTimeout(function(){
+									$(value).on('click', nodeClickHandler);
+									$(value).addClass('shown');
+								},timer);
+							});
+						},300);
+					}, 500);
+
 				}
-			}});
-			if(!$(this).hasClass('.node-bin-active')) {
-				$('.node-bin-container').children().not(this).css({opacity:0});
-				$('.node-question-container').hide();
-				var position = $(this).offset();
-				var nodeBinDetails = $(this);
-				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
-				setTimeout(function() {
-					nodeBinDetails.offset(position);
-					nodeBinDetails.addClass('node-bin-active copy');
-
-					nodeBinDetails.removeClass('node-bin-static');
-					nodeBinDetails.children('h1, p').hide();
-
-					// $('.content').append(nodeBinDetails);
-
-					nodeBinDetails.addClass('node-bin-active');
-					setTimeout(function(){
-						var timer = 0;
-						$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
-							timer = timer + (index*10);
-							setTimeout(function(){
-								$(value).addClass('shown');
-							},timer);
-						});
-					},300);
-				}, 500);
-
-			}
-
-			open = true;
 		}
 
 	};
 
 	var nodeClickHandler = function(e) {
-		console.log('node clicked');
+		console.log('nodeclickhandler');
+		console.log(e);
+		e.preventDefault();
 		e.stopPropagation();
+		e.stopImmediatePropagation();
+
 		var el = $(this);
 		var id = $(this).parent().parent().data('index');
 
@@ -175,21 +170,20 @@ module.exports = function MultiBin() {
 				});
 			}
 			window.network.updateEdge(edgeID,properties);
-			$(this).fadeOut(400, function() {
-				$(this).css({'top':0, 'left' :0});
-				$(this).appendTo('.node-bucket');
-				$(this).css('display', '');
-				var noun = 'people';
-				if ($('.c'+id).children('.active-node-list').children().length === 1) {
-					noun = 'person';
-				}
-				if ($('.c'+id).children('.active-node-list').children().length === 0) {
-					$('.c'+id).children('p').html('(Empty)');
-				} else {
-					$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
-				}
 
-			});
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
 
 		}
 
@@ -425,7 +419,6 @@ module.exports = function MultiBin() {
 	// Event Listeners
 	window.addEventListener('changeStageStart', stageChangeHandler, false);
 	$('.node-bin-static').on('click', nodeBinClickHandler);
-	$('.node-bucket-item').on('click', nodeClickHandler);
 	$('.content').on('click', backgroundClickHandler);
 	$('.followup-form').on('submit', followupHandler);
 	$('.followup-cancel').on('click', followupCancelHandler);
