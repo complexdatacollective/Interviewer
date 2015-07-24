@@ -342,12 +342,20 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .container {
     // width:85% !important;
     // padding:0 !important;
-    // overflow: hidden;
+    overflow: hidden;
     display: flex;
     flex-direction:column;
     align-items: center;
     justify-content: center;
 }
+
+@media (min-width: @screen-lg) {
+    .container {
+        width: 80% !important;
+    }
+
+}
+
 
 .node-bin-container {
     display: flex;
