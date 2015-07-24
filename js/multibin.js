@@ -57,7 +57,6 @@ module.exports = function MultiBin() {
 			$('#'+multiBin.options.followup.questions[index].variable).val('');
 		});
 
-
 		$('.followup').hide();
 		$('.black-overlay').hide();
 	};
