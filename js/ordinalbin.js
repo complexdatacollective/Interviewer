@@ -84,7 +84,7 @@ module.exports = function OrdinalBin() {
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){
 
-            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
+            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="ord-active-node-list"></div></div>');
             newBin.data('index', index);
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
@@ -97,12 +97,12 @@ module.exports = function OrdinalBin() {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
-                    console.log(droppedOn.children('.active-node-list'));
+                    console.log(droppedOn.children('.ord-active-node-list'));
                     console.log(dropped);
                     dropped.css({position:'inherit'});
-                    droppedOn.children('.active-node-list').append(dropped);
+                    droppedOn.children('.ord-active-node-list').append(dropped);
 
-                    $(dropped).appendTo(droppedOn.children('.active-node-list'));
+                    $(dropped).appendTo(droppedOn.children('.ord-active-node-list'));
                     var properties = {};
                     properties[ordinalBin.options.variable.label] = ordinalBin.options.variable.values[index].value;
                     // Followup question
@@ -112,7 +112,7 @@ module.exports = function OrdinalBin() {
                     window.network.updateEdge(edgeID,properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
-                        var length = $('.d'+oindex).children('.active-node-list').children().length;
+                        var length = $('.d'+oindex).children('.ord-active-node-list').children().length;
                         if (length > 0) {
                             var noun = 'people';
                             if (length === 1) {
@@ -192,9 +192,9 @@ module.exports = function OrdinalBin() {
                 });
 
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
                 } else {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
             } else {
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
