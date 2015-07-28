@@ -1,5 +1,5 @@
 /* exported Network, Node, Edge */
-/* global $, window, randomBetween */
+/* global $, window, randomBetween, deepmerge */
 
 
 /*
@@ -261,7 +261,7 @@ module.exports = function Network() {
         var edge = _this.getEdge(id);
         var edgeUpdateEvent, log;
 
-        window.tools.extend(edge, properties);
+        $.extend(edge, properties);
         edgeUpdateEvent = new window.CustomEvent('edgeUpdatedEvent',{'detail':edge});
         window.dispatchEvent(edgeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeUpdate', 'eventObject':edge}});
@@ -281,7 +281,7 @@ module.exports = function Network() {
         var node = this.getNode(id);
         var nodeUpdateEvent, log;
 
-        window.tools.extend(node, properties);
+        $.extend(node, properties);
         nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
         window.dispatchEvent(nodeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
@@ -292,6 +292,25 @@ module.exports = function Network() {
             callback();
         }
 
+    };
+
+    this.deepUpdateNode = function(id, properties, callback) {
+        if(this.getNode(id) === false || properties === undefined) {
+            return false;
+        }
+        var node = this.getNode(id);
+        var nodeUpdateEvent, log;
+
+        node = deepmerge(node, properties);
+        nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
+        window.dispatchEvent(nodeUpdateEvent);
+        log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
+        window.dispatchEvent(log);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+        if(callback) {
+            callback();
+        }
     };
 
     this.getNode = function(id) {

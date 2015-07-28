@@ -69,8 +69,6 @@ exports.removeFromObject = function(item, object) {
     return removeCounter;
 };
 
-// helper functions
-
 exports.deepEquals = function(a, x) {
     var p;
     for (p in a) {
