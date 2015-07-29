@@ -42,19 +42,23 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-div.big-check[data-toggle="buttons"] label {
-    display:inline-flex;
-    line-height:3em !important;
-    padding:6px 22px !important;
-}
-
-.btn-group.big-check {
-    padding-bottom:1em;
-}
-
 .check-number {
     padding-left:8px;
 }
+
+/*** custom checkboxes ***/
+
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+
+input[type=checkbox] + label:before { content: "\f10c"; } /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f111"; } /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 10px; } /* allow space for check mark */
 
 // Actual modal
 .modal-content {
@@ -97,31 +101,6 @@ div.big-check[data-toggle="buttons"] label {
 
 }
 
-.btn {
-    min-width:100px;
-}
-
-.big-check .btn {
-    min-width:0;
-}
-
-// radio groups
-label input[type="radio"] ~ i.fa.fa-circle-o{
-    color: #c8c8c8;    display: inline;
-}
-label input[type="radio"] ~ i.fa.fa-check-circle-o{
-    display: none;
-}
-label input[type="radio"]:checked ~ i.fa.fa-circle-o{
-    display: none;
-}
-label input[type="radio"]:checked ~ i.fa.fa-check-circle-o{
-    color: @brand-primary;    display: inline;
-}
-label:hover input[type="radio"] ~ i.fa {
-    color: @brand-primary;
-}
-
 .btn-warning.btn-outline {
     color:@btn-warning-bg;
     background:transparent;
@@ -150,42 +129,6 @@ label:hover input[type="radio"] ~ i.fa {
     color:@btn-info-bg;
     background:transparent;
     border-color:@btn-info-border;
-}
-
-div[data-toggle="buttons"] label.active{
-    color: @brand-primary;
-}
-
-div[data-toggle="buttons"] label {
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    // font-size: 14px;
-    font-weight: normal;
-    line-height: 2em;
-    text-align: left;
-    white-space: nowrap;
-    vertical-align: top;
-    cursor: pointer;
-    background-color: none;
-    border: 0px solid
-    #c8c8c8;
-    border-radius: 3px;
-    color: #c8c8c8;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-
-div[data-toggle="buttons"] label:hover {
-    color: @brand-primary;
-}
-
-div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
-    -webkit-box-shadow: none;
-    box-shadow: none;
 }
 
 @ord-background: @brand-primary;
@@ -1239,14 +1182,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     display:none;
 }
 
-input[type="checkbox"] {
-    margin: 11px 0 0;
-}
-
-.checkbox label {
-    font-size: 22px;
-}
-
 .relationship-close-button {
     position:absolute;
     top:34px;
@@ -1318,11 +1253,6 @@ input[type="checkbox"] {
     top: 20px;
     right: 40px;
     z-index:9999;
-}
-
-
-input[type=radio]:checked + label>img {
-    background: tomato;
 }
 
 .btn-link:hover {

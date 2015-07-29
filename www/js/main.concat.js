@@ -3808,6 +3808,7 @@ module.exports = function Sociogram() {
 	        },
 	        'Community' : {
 	            type: 'node',
+				name: 'Groups',
 				variable: 'special_hulls'
 	        }
 	    },
@@ -3878,7 +3879,7 @@ module.exports = function Sociogram() {
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
-			$('<div class="context-panel"><h4>Named Contexts:</h4><ul class="context-list"></ul></div>').appendTo('#'+sociogram.settings.targetEl);
+			$('<div class="context-panel"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="context-list"></ul><div class="context-footer"><div class="checkbox"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show" checked> <label for="context-checkbox-show">Show</label></div</div></div>').appendTo('#'+sociogram.settings.targetEl);
 		}
 
 		if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -3974,9 +3975,7 @@ module.exports = function Sociogram() {
 				});
 
 			} else if (sociogram.settings.dataOrigin.Edge.type === 'node') {
-				console.log('Not yet implemented.');
 			} else {
-				console.log('Error.');
 			}
 
 		}
@@ -3997,7 +3996,6 @@ module.exports = function Sociogram() {
 				});
 
 			} else if (sociogram.settings.dataOrigin.Select.mode === 'create') {
-				console.log('not yet implemented');
 			} else {
 				// error state
 			}
@@ -4006,7 +4004,6 @@ module.exports = function Sociogram() {
 
 		// Layout Mode
 		if (sociogram.settings.modes.indexOf('Position') !== -1) {
-			console.log('Position mode enabled');
 			// Get the dataOrigin for position
 			if (sociogram.settings.dataOrigin.Position.type === 'node') {
 				// position data is coming from the node
@@ -4026,13 +4023,11 @@ module.exports = function Sociogram() {
 
 		// Community mode
 		if (sociogram.settings.modes.indexOf('Community') !== -1) {
-			console.log('Community mode enabled.');
 			if (sociogram.settings.dataOrigin.Community.type === 'node') {
 				// position data is coming from the node
 				var communityNodes = sociogram.getKineticNodes();
 				$.each(communityNodes, function(index,node) {
 					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
-						console.log(hullIndex+' '+hullValue);
 						sociogram.addPointToHull(node, hullValue);
 					});
 
@@ -4085,7 +4080,6 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
-		console.log('adding hull');
 		var thisHull = {};
 		thisHull.label = label ? label : 'New Group';
         thisHull.hull = new ConvexHullGrahamScan();
@@ -4115,9 +4109,6 @@ module.exports = function Sociogram() {
     };
 
     sociogram.addPointToHull = function(point, hullLabel) {
-		console.log('adding point to hull');
-		console.log(point);
-		console.log('label: '+hullLabel);
 		// if a hull with hullLabel doesnt exist, create one
 
 		var found = false;
@@ -4163,9 +4154,6 @@ module.exports = function Sociogram() {
                     newHull.addPoint(coords.x, coords.y);
                 }
             }
-			console.log(hullShapes);
-			console.log(i);
-			console.log(hullShapes[i]);
             hullShapes[i].setPoints(toPointFromObject(newHull.getHull()));
             hullLayer.draw();
             nodeLayer.draw();
@@ -4209,8 +4197,6 @@ module.exports = function Sociogram() {
 			dragDistance: 20
 		};
 		nodeOptions[sociogram.settings.dataOrigin.Community.variable] = [];
-		console.log('options:');
-		console.log(options);
 		window.tools.extend(nodeOptions, options);
 
 		nodeOptions.id = parseInt(nodeOptions.id, 10);
@@ -4218,8 +4204,6 @@ module.exports = function Sociogram() {
 		nodeOptions.type = 'Person'; // We don't need different node shapes for RADAR
 		nodeOptions.x = nodeOptions.coords[0];
 		nodeOptions.y = nodeOptions.coords[1];
-
-
 
 		var nodeGroup = new Konva.Group(nodeOptions);
 
@@ -4412,7 +4396,6 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dbltap dblclick', function() {
-			console.log('double tap');
 			selectedNodes = [];
 			$.each(sociogram.getKineticNodes(), function(index, value) {
 				value.children[2].opacity(0);
@@ -4468,7 +4451,6 @@ module.exports = function Sociogram() {
 						}
 
 						sociogram.settings.network.updateNode(currentNode.attrs.id, properties, function() {
-							console.log('select node updated');
 						});
 
 					} else if (sociogram.settings.dataDestination.Select.mode === 'create') {
@@ -4524,16 +4506,13 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('tap click', function() {
-			console.log('tap');
 			var currentNode = this;
 			if (!touchNotTap) {
-				console.log('NOT touchNotTap');
 				window.wedge.anim.stop();
 				if (tapTimer !== null) {
 					window.clearTimeout(tapTimer);
 				}
 				tapTimer = setTimeout(function(){
-					console.log('tapTimer');
 					window.clearTimeout(longPressTimer);
 					if (taskComprehended === false) {
 						var eventProperties = {
@@ -4680,12 +4659,12 @@ module.exports = function Sociogram() {
 			var tween = new Konva.Tween({
 				node: nodeGroup,
 				x: $(window).width()-150,
-				y: 100,
+				y: $(window).height()-150,
 				duration:0.7,
 				easing: Konva.Easings.EaseOut
 			});
 			tween.play();
-			sociogram.settings.network.setProperties(sociogram.settings.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});
+			sociogram.settings.network.setProperties(sociogram.settings.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, $(window).height()-150]});
 		}
 
 		return nodeGroup;
@@ -4710,8 +4689,6 @@ module.exports = function Sociogram() {
 		window.tools.notify('Sociogram is adding an edge.',2);
 		var toObject = sociogram.getNodeByID(properties.to);
 	 	var fromObject = sociogram.getNodeByID(properties.from);
-		console.log(properties);
-		console.log(fromObject);
 		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
 		var edge = new Konva.Line({
 			// dashArray: [10, 10, 00, 10],
