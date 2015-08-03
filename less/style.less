@@ -27,7 +27,7 @@ html, body {
 
 @media (min-width: 1024px) {
     body {
-        font-size: 2vmin;
+        font-size: 1.8vmin;
     }
 }
 
@@ -52,12 +52,14 @@ input[type=checkbox] { display:none; } /* to hide the checkbox itself */
 input[type=checkbox] + label:before {
   font-family: FontAwesome;
   display: inline-block;
+  cursor:pointer;
+  pointer-events: all;
 }
 
 input[type=checkbox] + label:before { content: "\f10c"; } /* unchecked icon */
 input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
 
-input[type=checkbox]:checked + label:before { content: "\f111"; } /* checked icon */
+input[type=checkbox]:checked + label:before { content: "\f058"; color: @brand-primary } /* checked icon */
 input[type=checkbox]:checked + label:before { letter-spacing: 10px; } /* allow space for check mark */
 
 // Actual modal

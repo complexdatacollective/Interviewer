@@ -545,7 +545,7 @@ $(document).ready(function() {
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.debugLevel = 10;
-    window.netCanvas.studyProtocol = 'default';
+    window.netCanvas.studyProtocol = 'dphil-protocol';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -3350,15 +3350,17 @@ var Session = function Session() {
             session.sessionData.sessionParameters.stage = newStage;
             var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
-            if ((currentStage+1) === session.stages.length) {
-                $('.arrow-next').hide();
-            } else if (currentStage === 0) {
-                $('.arrow-prev').hide();
-                $('.arrow-next').attr('disabled','disabled');
-
-            } else {
-                $('.arrow-next').show().removeAttr('disabled');
-                $('.arrow-prev').show();
+            if ((currentStage+1) === session.stages.length) { // last stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-next').attr('disabled', 'disabled');
+                if (currentStage === 0) { // first and last stage
+                    $('.arrow-prev').attr('disabled', 'disabled');
+                }
+            } else if (currentStage === 0) { // first stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-prev').attr('disabled', 'disabled');
+            } else {    // neither
+                $('.paginate').removeAttr('disabled');
             }
         }
     };
@@ -3879,7 +3881,7 @@ module.exports = function Sociogram() {
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
-			$('<div class="context-panel"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="context-list"></ul><div class="context-footer"><div class="checkbox"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show" checked> <label for="context-checkbox-show">Show</label></div</div></div>').appendTo('#'+sociogram.settings.targetEl);
+			$('<div class="context-panel"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="context-list"></ul><div class="context-footer"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show" checked> <label for="context-checkbox-show">Show</label></div></div>').appendTo('#'+sociogram.settings.targetEl);
 		}
 
 		if (sociogram.settings.panels.indexOf('mode') !== -1) {

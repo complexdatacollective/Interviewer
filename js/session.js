@@ -45,15 +45,17 @@ var Session = function Session() {
             session.sessionData.sessionParameters.stage = newStage;
             var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
-            if ((currentStage+1) === session.stages.length) {
-                $('.arrow-next').hide();
-            } else if (currentStage === 0) {
-                $('.arrow-prev').hide();
-                $('.arrow-next').attr('disabled','disabled');
-
-            } else {
-                $('.arrow-next').show().removeAttr('disabled');
-                $('.arrow-prev').show();
+            if ((currentStage+1) === session.stages.length) { // last stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-next').attr('disabled', 'disabled');
+                if (currentStage === 0) { // first and last stage
+                    $('.arrow-prev').attr('disabled', 'disabled');
+                }
+            } else if (currentStage === 0) { // first stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-prev').attr('disabled', 'disabled');
+            } else {    // neither
+                $('.paginate').removeAttr('disabled');
             }
         }
     };
