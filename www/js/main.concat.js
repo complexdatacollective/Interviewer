@@ -3862,6 +3862,16 @@ module.exports = function Sociogram() {
 		sociogram.addEdge(e.detail);
 	}
 
+	function showHullHandler(e) {
+		if (e.target.checked) {
+			hullLayer.opacity(1);
+		} else {
+			hullLayer.opacity(0);
+		}
+
+		hullLayer.draw();
+	}
+
 	sociogram.init = function (userSettings) {
 		window.tools.notify('Sociogram initialising.', 1);
 		$.extend(true, sociogram.settings,userSettings);
@@ -3878,6 +3888,7 @@ module.exports = function Sociogram() {
 		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.addEventListener('changeStageStart', sociogram.destroy, false);
+		$(window.document).on('change', '#context-checkbox-show', showHullHandler);
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
@@ -4078,6 +4089,7 @@ module.exports = function Sociogram() {
 		window.removeEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.removeEventListener('changeStageStart', sociogram.destroy, false);
 		$(window.document).off('keypress', sociogram.keyPressHandler);
+		$(window.document).off('change', '#context-checkbox-show', showHullHandler);
 
 	};
 
@@ -4941,6 +4953,10 @@ module.exports = function Sociogram() {
 
 	sociogram.getNodeLayer = function() {
 		return nodeLayer;
+	};
+
+	sociogram.getHullLayer = function() {
+			return hullLayer;
 	};
 
 	sociogram.getNodeByID = function(id) {
