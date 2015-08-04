@@ -21,6 +21,14 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
+        jsdoc: {
+            dist: {
+                src: ['js/*.js'],
+                options: {
+                    destination: 'doc'
+                }
+            }
+        },
         postcss: {
             options: {
                 map: false, // inline sourcemaps
@@ -535,6 +543,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-notify');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
     // This is required if you use any options.
     grunt.task.run('notify_hooks');

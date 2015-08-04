@@ -2,11 +2,10 @@
 /* global $, window, randomBetween, deepmerge */
 
 
-/*
-
-This module should implement 'networky' methods, and a querying syntax for
-selecting nodes or edges by their various properties, and interating over them.
-
+/**
+* This module should implement 'networky' methods, and a querying syntax for
+* selecting nodes or edges by their various properties, and interating over them.
+* @constructor
 */
 
 module.exports = function Network() {

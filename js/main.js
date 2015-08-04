@@ -31,7 +31,7 @@ $(document).ready(function() {
     }
 
     // Arguments
-    // build an object (argument: value) for command line arguments independant of platform
+    /** build an object (argument: value) for command line arguments independant of platform **/
     window.getArguments = function() {
         var args = false;
         if (window.isNodeWebkit) {
