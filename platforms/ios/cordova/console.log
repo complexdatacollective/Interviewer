@@ -56,3 +56,24 @@
 2015-07-12 14:54:12.105 Network Canvas[61338:958879] [CDVTimer][statusbar] 8.594990ms
 2015-07-12 14:54:12.105 Network Canvas[61338:958879] [CDVTimer][TotalPluginStartup] 9.980977ms
 2015-07-12 14:54:12.107 Network Canvas[61338:958879] Started http daemon: http://localhost:12344/ 
+2015-08-03 19:37:28.471 Network Canvas[12663:415823] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/6FB1A616-34D2-4893-8838-5BA2E07B86C5/data/Containers/Data/Application/10FDDA5D-499C-49CF-A772-8612D9D6A060/Library/Cookies/Cookies.binarycookies
+2015-08-03 19:37:28.665 Network Canvas[12663:415823] Apache Cordova native platform version 3.8.0 is starting.
+2015-08-03 19:37:28.665 Network Canvas[12663:415823] Multi-tasking -> Device: YES, App: YES
+2015-08-03 19:37:28.672 Network Canvas[12663:415823] Unlimited access to network resources
+2015-08-03 19:37:28.850 Network Canvas[12663:415823] Using a WKWebView
+2015-08-03 19:37:29.015 Network Canvas[12663:415823] [CDVTimer][file] 1.483023ms
+2015-08-03 19:37:29.020 Network Canvas[12663:415823] [CDVTimer][statusbar] 5.456030ms
+2015-08-03 19:37:29.020 Network Canvas[12663:415823] [CDVTimer][TotalPluginStartup] 7.664025ms
+2015-08-03 19:37:29.027 Network Canvas[12663:415823] Started http daemon: http://localhost:12344/ 
+2015-08-03 19:39:59.104 Network Canvas[14668:420530] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/joshua/Library/Developer/CoreSimulator/Devices/28390987-535F-4C60-AEE9-BD2973E76D17/data/Containers/Data/Application/7CD7E5FF-7BE0-4A28-BAFB-43160AC0ACFC/Library/Cookies/Cookies.binarycookies
+2015-08-03 19:39:59.217 Network Canvas[14668:420530] Apache Cordova native platform version 3.8.0 is starting.
+2015-08-03 19:39:59.218 Network Canvas[14668:420530] Multi-tasking -> Device: YES, App: YES
+2015-08-03 19:39:59.220 Network Canvas[14668:420530] Unlimited access to network resources
+2015-08-03 19:39:59.328 Network Canvas[14668:420530] Using a WKWebView
+2015-08-03 19:39:59.413 Network Canvas[14668:420530] [CDVTimer][file] 2.577960ms
+2015-08-03 19:39:59.421 Network Canvas[14668:420530] [CDVTimer][statusbar] 8.295000ms
+2015-08-03 19:39:59.421 Network Canvas[14668:420530] [CDVTimer][TotalPluginStartup] 11.532009ms
+2015-08-03 19:39:59.424 Network Canvas[14668:420530] Started http daemon: http://localhost:12344/ 
+2015-08-04 14:38:58.409 Network Canvas[14668:610115] Communications error: <OS_xpc_error: <error: 0x38545f4> { count = 1, contents =
+	"XPCErrorDescription" => <string: 0x385483c> { length = 22, contents = "Connection interrupted" }
+}>

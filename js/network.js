@@ -24,12 +24,18 @@ module.exports = function Network() {
         // Check if we are adding an ego
         if (!ego) { ego = false;}
 
-        // if we are adding an ego create an empty reserved_ids array for later, it not use Ego's.
+        // if we are adding an ego create an empty reserved_ids array for later, if not use Ego's.
         if (ego) {
             // fetch in use IDs from Ego
             reserved_ids = [];
         } else {
-            reserved_ids = _this.getEgo().reserved_ids;
+            // We aren't adding an Ego, so make sure an Ego exists
+            if (_this.egoExists()) {
+                reserved_ids = _this.getEgo().reserved_ids;
+            } else {
+                throw new Error('You must add an Ego before attempting to add other nodes.');
+            }
+
         }
 
 
@@ -108,7 +114,7 @@ module.exports = function Network() {
             window.tools.extend(egoProperties, properties);
             _this.addNode(egoProperties, true);
         } else {
-            return false;
+            throw new Error('Ego already exists.');
         }
     };
 
