@@ -608,16 +608,16 @@ module.exports = function Sociogram() {
 		nodeGroup.on('dragmove', function() {
 
 			// Cancel wedge actions
-			window.wedge.anim.stop();
-			var tween = new Konva.Tween({
-				 node: window.wedge,
-				 opacity: 0,
-				 duration: 0,
-				 onFinish: function(){
-					 tween.destroy();
-				 }
-			}).play();
-			window.clearTimeout(longPressTimer);
+			// window.wedge.anim.stop();
+			// var tween = new Konva.Tween({
+			// 	 node: window.wedge,
+			// 	 opacity: 0,
+			// 	 duration: 0,
+			// 	 onFinish: function(){
+			// 		 tween.destroy();
+			// 	 }
+			// }).play();
+			// window.clearTimeout(longPressTimer);
 
 			if (taskComprehended === false) {
 				var eventProperties = {
@@ -630,36 +630,9 @@ module.exports = function Sociogram() {
 			}
 
 			window.tools.notify('Dragmove',0);
-			var dragNode = nodeOptions.id;
 
-			// Update the position of any connected edges and hulls
-			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
-			for (var i = 0; i < pointHulls.length; i++) {
-				var newHull = new ConvexHullGrahamScan();
 
-				for (var j = 0; j < nodeLayer.children.length; j++) {
-					var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
-					if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
-						var coords = nodeLayer.children[j].getPosition();
-						newHull.addPoint(coords.x, coords.y);
-					}
-				}
 
-				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
-				hullLayer.draw();
-
-			}
-
-			$.each(edgeLayer.children, function(index, value) {
-
-				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
-				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
-					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
-					value.attrs.points = points;
-
-				}
-			});
-			edgeLayer.draw();
 
 		});
 
@@ -927,6 +900,35 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dragend', function() {
+			var dragNode = nodeOptions.id;
+			// Update the position of any connected edges and hulls
+			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
+			for (var i = 0; i < pointHulls.length; i++) {
+				var newHull = new ConvexHullGrahamScan();
+
+				for (var j = 0; j < nodeLayer.children.length; j++) {
+					var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
+					if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+						var coords = nodeLayer.children[j].getPosition();
+						newHull.addPoint(coords.x, coords.y);
+					}
+				}
+
+				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				hullLayer.draw();
+
+			}
+
+			$.each(edgeLayer.children, function(index, value) {
+
+				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
+				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
+					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
+					value.attrs.points = points;
+
+				}
+			});
+			edgeLayer.draw();
 
 			window.tools.notify('dragend',1);
 
