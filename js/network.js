@@ -487,7 +487,7 @@ module.exports = function Network() {
 
     network.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
-        edgeProbability = edgeProbability || 0.4;
+        edgeProbability = edgeProbability || 0.2;
         window.tools.notify('Creating random graph...',1);
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;

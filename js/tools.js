@@ -4,17 +4,24 @@
 'use strict';
 // Storage prototypes
 
-window.Storage.prototype.showUsage = function() {
-
+window.Storage.prototype.showTotalUsage = function() {
     var total = 0;
     for(var x in localStorage) {
-      var amount = (localStorage[x].length * 2) / 1024 / 1024;
-      total += amount;
-      console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        if (localStorage.hasOwnProperty(x)) {
+            var amount = (localStorage[x].length * 2) / 1024 / 1024;
+            total += amount;
+            console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        }
     }
     console.log( 'Total: ' + total.toFixed(2) + ' MB');
 };
 
+window.Storage.prototype.getKeyUsage = function(key) {
+    if (localStorage.hasOwnProperty(key)) {
+        var amount = (localStorage[key].length * 2) / 1024 / 1024;
+        return amount.toFixed(2);
+    }
+};
 
 window.Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -143,8 +150,8 @@ exports.getKValueFromNestedObject = function(targetArray, objectKey) {
 exports.getValueFromName = function(targetArray, name) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
-        for (var prop in targetArray[i]){
-            if (prop === name) { return targetArray[i].value; }
+        if (typeof targetArray[i].name !== 'undefined' && typeof targetArray[i].value !== 'undefined' && targetArray[i].name === name) {
+            return targetArray[i].value;
         }
     }
 

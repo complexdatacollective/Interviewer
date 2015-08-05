@@ -154,6 +154,10 @@ module.exports = function Sociogram() {
 		selectedHull = clicked.data('hull');
 	}
 
+	function groupButtonClickHandler() {
+		sociogram.addHull();
+	}
+
 	sociogram.init = function (userSettings) {
 		window.tools.notify('Sociogram initialising.', 1);
 		$.extend(true, sociogram.settings,userSettings);
@@ -163,15 +167,6 @@ module.exports = function Sociogram() {
 
 		// Initialise the konva stage
 		sociogram.initKinetic();
-
-		// Add the evevent listeners
-		window.addEventListener('nodeAdded', addNodeHandler, false);
-		window.addEventListener('edgeAdded', addEdgeHandler, false);
-		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
-		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
-		window.addEventListener('changeStageStart', sociogram.destroy, false);
-		$(window.document).on('change', '#context-checkbox-show', showHullHandler);
-		$(window.document).on('click', '.hull', hullListClickHandler);
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
@@ -242,12 +237,24 @@ module.exports = function Sociogram() {
 			}
 		}
 
+		// Add the evevent listeners
+		window.addEventListener('nodeAdded', addNodeHandler, false);
+		window.addEventListener('edgeAdded', addEdgeHandler, false);
+		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
+		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
+		window.addEventListener('changeStageStart', sociogram.destroy, false);
+		$(window.document).on('change', '#context-checkbox-show', showHullHandler);
+		$(window.document).on('click', '.hull', hullListClickHandler);
+		$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
+
 		// Update initial states of all nodes and edges;
 		sociogram.updateInitialNodeState();
 
 		setTimeout(function() { // seems to be needed in Chrome Canary. Why!?
 			sociogram.drawUIComponents();
 		}, 0);
+
+
 	};
 
 
@@ -326,7 +333,6 @@ module.exports = function Sociogram() {
 				var communityNodes = sociogram.getKineticNodes();
 				$.each(communityNodes, function(index,node) {
 					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
-						console.log('Adding '+node.attrs.name+' to '+hullValue);
 						sociogram.addPointToHull(node, hullValue);
 					});
 				});
@@ -379,9 +385,8 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
-		console.log ('addHull called with label '+label);
 		var thisHull = {};
-		thisHull.label = label ? label : 'New Group';
+		thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
         thisHull.hull = new ConvexHullGrahamScan();
 
 		var color = colors[Object.keys(colors)[Object.keys(hullShapes).length]];
@@ -402,13 +407,11 @@ module.exports = function Sociogram() {
 
         hullLayer.add(hullShapes[label]);
         hullLayer.draw();
-		console.log(hullShapes[label]);
     };
 
     sociogram.addPointToHull = function(point, hullLabel) {
 		// if a hull with hullLabel doesnt exist, create one
 
-		console.log('adding point to hull. label requested: '+hullLabel);
 		var found = false;
 
 			if ($('li[data-hull="'+hullLabel+'"]').length > 0) {
@@ -416,13 +419,8 @@ module.exports = function Sociogram() {
 			}
 
 		if (!found ) {
-			console.log('label didnt already exist, so adding hull.');
 			sociogram.addHull(hullLabel);
-		} else {
-			console.log('label existed. No need to create hull.');
 		}
-
-
 
 		// store properties according to data destination
 		if (sociogram.settings.dataDestination.Community.type === 'node') {
@@ -433,18 +431,13 @@ module.exports = function Sociogram() {
 				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
 				var properties = {};
 				properties[sociogram.settings.dataDestination.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
-				point[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
-				console.log('properties');
-				console.log(properties);
-
-
+				point.attrs[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
 
 				// Update the node with the object
 				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
 					window.tools.notify('Network node updated', 1);
 				});
 			} else {
-				console.log('NOT STORING');
 			}
 
 		} else if (sociogram.settings.dataDestination.Position.type === 'edge') {
@@ -452,28 +445,23 @@ module.exports = function Sociogram() {
 		}
 
         // redraw all hulls here
-		console.log('redrawing hulls');
         var pointHulls = point.attrs[sociogram.settings.dataOrigin.Community.variable];
-		console.log('current node has the following hulls:');
-		console.log(pointHulls);
         for (var i = 0; i < pointHulls.length; i++) {
-			console.log('iterating current node hulls: '+pointHulls[i]);
             var newHull = new ConvexHullGrahamScan();
 
             for (var j = 0; j < nodeLayer.children.length; j++) {
-				console.log('iterating nodeLayer');
                 var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
-                console.log('current childs hulls: '+ thisChildHulls);
 				if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
-					console.log('child shares hull with current node');
                     var coords = nodeLayer.children[j].getPosition();
                     newHull.addPoint(coords.x, coords.y);
-					console.log(newHull);
                 }
             }
 
-			console.log('FINISHED. updating points for hullShape '+i);
-            hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+
+			// We need this check because on load all hull shapes might not be defined yet.
+			if (typeof hullShapes[pointHulls[i]] !== 'undefined') {
+				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+			}
 
 			hullLayer.draw();
             nodeLayer.draw();
@@ -687,7 +675,6 @@ module.exports = function Sociogram() {
 					$('.hull').removeClass('active'); // deselect all groups
 
 					$('.context-header h4').html('Groups for '+currentNode.label);
-					console.log(currentNode.attrs[sociogram.settings.dataOrigin.Community.variable]);
 					$.each(currentNode.attrs[sociogram.settings.dataOrigin.Community.variable], function(index, value) {
 						$('[data-hull="'+value+'"]').addClass('active');
 					});
@@ -928,7 +915,6 @@ module.exports = function Sociogram() {
 							currentNode.children[2].opacity(1);
 						}
 					} else if (selectedHull !== null) {
-						console.log('theres a selected hull');
 						sociogram.addPointToHull(currentNode,selectedHull);
 					}
 					currentNode.moveToTop();
@@ -1144,7 +1130,6 @@ module.exports = function Sociogram() {
 		backgroundRect.on('tap click', function() {
 			selectedHull = null;
 			$('.hull').removeClass('active'); // deselect all groups
-			console.log('background');
 		});
 
 		stage.add(circleLayer);
