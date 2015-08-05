@@ -105,16 +105,16 @@ module.exports = function (grunt) {
         less: {
             style: {
                 files: {
-                    "<%= config.app %>/css/style.css": "less/style.less"
+                    '<%= config.app %>/css/style.css': 'less/style.less'
                 }
             }
         },
         watch: {
             js: {
                 files: ['js/*.js'],
-                tasks: ['jshint','concat:js','browserify:dist'],
+                tasks: ['concat:js','browserify:dist'],
                 options: {
-                    livereload: true,
+                    livereload: true
                 }
             },
             css: {

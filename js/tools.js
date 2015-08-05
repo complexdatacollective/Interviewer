@@ -129,11 +129,22 @@ exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     return false;
 };
 
-exports.getValueFromNestedObject = function(targetArray, objectKey) {
+exports.getKValueFromNestedObject = function(targetArray, objectKey) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
         for (var prop in targetArray[i]){
             if (prop === objectKey) { return targetArray[i][prop]; }
+        }
+    }
+
+    return false;
+};
+
+exports.getValueFromName = function(targetArray, name) {
+    // This function is for checking for keys in arrays of objects.
+    for (var i = 0; i<targetArray.length; i++){
+        for (var prop in targetArray[i]){
+            if (prop === name) { return targetArray[i].value; }
         }
     }
 
@@ -152,9 +163,9 @@ exports.extend = function( a, b ) {
 
 exports.notify = function(text, level){
     level = level || 0;
-    // if (level >= window.debugLevel) {
+    if (level <= window.debugLevel) {
         console.log(text);
-    // }
+    }
 };
 
 exports.randomBetween = function(min,max) {

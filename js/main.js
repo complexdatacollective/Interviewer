@@ -15,7 +15,7 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
-    window.netCanvas.debugLevel = 10;
+    window.netCanvas.debugLevel = 0;
     window.netCanvas.studyProtocol = 'dphil-protocol';
 
     //Is this Node.js?

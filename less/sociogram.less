@@ -1,3 +1,43 @@
+// sociogram
+.sociogram-followup h2 {
+	margin-top: 0;
+}
+
+.sociogram-popover {
+	position: absolute;
+	z-index: 9999;
+	top: 0;
+	left: 0;
+	display: inline-flex;
+	display: none;
+	visibility: hidden;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	align-items: center;
+	justify-content: center;
+}
+
+.sociogram-title {
+	position: absolute;
+	bottom: 30px;
+	left: 50px;
+	overflow: hidden;
+	width: 241px;
+	height: 260px;
+	padding: 0;
+	background: transparent;
+}
+
+.sociogram-followup {
+	z-index: 9999;
+	width: 800px;
+	margin: 0 auto;
+	margin-bottom: 35px;
+	padding: 40px;
+	border-radius: 10px;
+}
+
 .context-panel {
     position: absolute;
     top: 3vmin;
@@ -19,12 +59,13 @@
     list-style:none;
     overflow:scroll;
     min-height:15vh;
-    max-height:60vh;
+    max-height:31vh;
     padding-left:0;
 }
 
 .hull {
     padding:10px;
+    cursor: pointer;
 }
 
 .hull.selected {
@@ -32,7 +73,7 @@
 }
 
 .context-color {
-    height:14px;
-    width:14px;
+    height:17px;
+    width:17px;
     display:inline-block;
 }
