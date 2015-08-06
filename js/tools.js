@@ -59,6 +59,11 @@ exports.arrayDifference = function(a1, a2) {
   return a1.filter(function(x) { return !a2Set.has(x); });
 };
 
+exports.euclideanDistance = function(point1, point2) {
+    var d1 = point1[0] - point2[0], d2 = point1[1] - point2[1];
+    return Math.sqrt(d1 * d1 + d2 * d2);
+};
+
 exports.removeFromObject = function(item, object) {
     console.log('removeFromObject');
     console.log(item);

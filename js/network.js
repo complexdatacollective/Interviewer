@@ -1,5 +1,5 @@
 /* exported Network, Node, Edge */
-/* global $, window, randomBetween, deepmerge */
+/* global $, window, deepmerge */
 
 
 /**
@@ -13,6 +13,7 @@ module.exports = function Network() {
     var nodes = [];
     var edges = [];
     var network = {};
+    var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
     /**
     * @public
@@ -494,6 +495,7 @@ module.exports = function Network() {
             window.tools.notify('Adding node '+current+' of '+nodeCount,2);
             // Use random coordinates
             var nodeOptions = {
+                name: namesList[Math.floor(window.tools.randomBetween(0,namesList.length))],
                 coords: [Math.round(window.tools.randomBetween(100,window.innerWidth-100)),Math.round(window.tools.randomBetween(100,window.innerHeight-100))]
             };
             network.addNode(nodeOptions);
