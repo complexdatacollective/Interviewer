@@ -1,18 +1,20 @@
-//! moment.js locale configuration
-//! locale : frisian (fy)
-//! author : Robin van der Vliet : https://github.com/robin0van0der0v
+// moment.js locale configuration
+// locale : frisian (fy)
+// author : Robin van der Vliet : https://github.com/robin0van0der0v
 
-(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['moment'], factory) :
-   factory(global.moment)
-}(this, function (moment) { 'use strict';
-
-
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['moment'], factory); // AMD
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('../moment')); // Node
+    } else {
+        factory((typeof global !== 'undefined' ? global : this).moment); // node or other global
+    }
+}(function (moment) {
     var monthsShortWithDots = 'jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.'.split('_'),
         monthsShortWithoutDots = 'jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des'.split('_');
 
-    var fy = moment.defineLocale('fy', {
+    return moment.defineLocale('fy', {
         months : 'jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber'.split('_'),
         monthsShort : function (m, format) {
             if (/-MMM-/.test(format)) {
@@ -64,7 +66,4 @@
             doy : 4  // The week that contains Jan 4th is the first week of the year.
         }
     });
-
-    return fy;
-
 }));

@@ -54,6 +54,21 @@ Object.defineProperty(Array.prototype, 'remove', {
     }
 });
 
+exports.Events = {
+    register: function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+            $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+        }
+
+    },
+    unbind: function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+        }
+    }
+};
+
 exports.arrayDifference = function(a1, a2) {
   var a2Set = new Set(a2);
   return a1.filter(function(x) { return !a2Set.has(x); });

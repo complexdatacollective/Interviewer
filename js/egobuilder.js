@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, window */
 /* exported EgoBuilder */
 
 module.exports = function EgoBuilder() {
@@ -9,20 +9,6 @@ module.exports = function EgoBuilder() {
 
     var defaultProperties = {};
 
-    var registerEvents = function(eventsArray, eventsList) {
-        for (var i = 0; i < eventsList.length; i++) {
-            eventsArray.push(eventsList[i]);
-            $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
-        }
-
-    };
-
-    var unbindEvents = function(eventsArray) {
-        for (var i = 0; i < eventsArray.length; i++) {
-            $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
-        }
-    };
-
     egoBuilder.init = function(properties) {
 
         // Event listeners
@@ -32,21 +18,15 @@ module.exports = function EgoBuilder() {
                 handler: egoBuilder.destroy,
                 targetEl:  'window.document',
                 subTargetEl: ''
-            },
-            {
-                event: 'click',
-                handler: test,
-                targetEl:  '.blah',
-                subTargetEl: ''
             }
         ];
-        registerEvents(egoBuilderEvents, events);
+        window.tools.Events.register(egoBuilderEvents, events);
 
         $.extend(defaultProperties, properties);
     };
 
     egoBuilder.destroy = function() {
-        unbindEvents(egoBuilderEvents);
+        window.tools.Events.unbind(egoBuilderEvents);
     };
 
     return egoBuilder;

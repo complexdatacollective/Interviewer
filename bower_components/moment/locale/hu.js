@@ -1,18 +1,22 @@
-//! moment.js locale configuration
-//! locale : hungarian (hu)
-//! author : Adam Brunner : https://github.com/adambrunner
+// moment.js locale configuration
+// locale : hungarian (hu)
+// author : Adam Brunner : https://github.com/adambrunner
 
-(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['moment'], factory) :
-   factory(global.moment)
-}(this, function (moment) { 'use strict';
-
-
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['moment'], factory); // AMD
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('../moment')); // Node
+    } else {
+        factory((typeof global !== 'undefined' ? global : this).moment); // node or other global
+    }
+}(function (moment) {
     var weekEndings = 'vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton'.split(' ');
+
     function translate(number, withoutSuffix, key, isFuture) {
         var num = number,
             suffix;
+
         switch (key) {
         case 's':
             return (isFuture || withoutSuffix) ? 'néhány másodperc' : 'néhány másodperce';
@@ -37,13 +41,15 @@
         case 'yy':
             return num + (isFuture || withoutSuffix ? ' év' : ' éve');
         }
+
         return '';
     }
+
     function week(isFuture) {
         return (isFuture ? '' : '[múlt] ') + '[' + weekEndings[this.day()] + '] LT[-kor]';
     }
 
-    var hu = moment.defineLocale('hu', {
+    return moment.defineLocale('hu', {
         months : 'január_február_március_április_május_június_július_augusztus_szeptember_október_november_december'.split('_'),
         monthsShort : 'jan_feb_márc_ápr_máj_jún_júl_aug_szept_okt_nov_dec'.split('_'),
         weekdays : 'vasárnap_hétfő_kedd_szerda_csütörtök_péntek_szombat'.split('_'),
@@ -102,7 +108,4 @@
             doy : 7  // The week that contains Jan 1st is the first week of the year.
         }
     });
-
-    return hu;
-
 }));

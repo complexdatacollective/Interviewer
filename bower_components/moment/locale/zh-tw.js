@@ -1,22 +1,24 @@
-//! moment.js locale configuration
-//! locale : traditional chinese (zh-tw)
-//! author : Ben : https://github.com/ben-lin
+// moment.js locale configuration
+// locale : traditional chinese (zh-tw)
+// author : Ben : https://github.com/ben-lin
 
-(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['moment'], factory) :
-   factory(global.moment)
-}(this, function (moment) { 'use strict';
-
-
-    var zh_tw = moment.defineLocale('zh-tw', {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['moment'], factory); // AMD
+    } else if (typeof exports === 'object') {
+        module.exports = factory(require('../moment')); // Node
+    } else {
+        factory((typeof global !== 'undefined' ? global : this).moment); // node or other global
+    }
+}(function (moment) {
+    return moment.defineLocale('zh-tw', {
         months : '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
         monthsShort : '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
         weekdays : '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
         weekdaysShort : '週日_週一_週二_週三_週四_週五_週六'.split('_'),
         weekdaysMin : '日_一_二_三_四_五_六'.split('_'),
         longDateFormat : {
-            LT : 'Ah點mm分',
+            LT : 'Ah點mm',
             LTS : 'Ah點m分s秒',
             L : 'YYYY年MMMD日',
             LL : 'YYYY年MMMD日',
@@ -94,7 +96,4 @@
             yy : '%d年'
         }
     });
-
-    return zh_tw;
-
 }));
