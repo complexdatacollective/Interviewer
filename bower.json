@@ -36,6 +36,7 @@
     "odometer": "~0.4.7",
     "graham_scan": "git@github.com:brian3kb/graham_scan_js.git#master",
     "deepmerge": "~0.2.10",
-    "alpaca": "~1.5.13"
+    "alpaca-dist": "https://github.com/jthrilly/alpaca-dist.git",
+    "handlebars": "~3.0.3"
   }
 }

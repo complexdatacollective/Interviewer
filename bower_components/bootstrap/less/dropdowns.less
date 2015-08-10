@@ -16,7 +16,6 @@
 }
 
 // The dropdown wrapper (div)
-.dropup,
 .dropdown {
   position: relative;
 }
@@ -104,15 +103,16 @@
   &:focus {
     color: @dropdown-link-disabled-color;
   }
-
-  // Nuke hover/focus effects
+}
+// Nuke hover/focus effects
+.dropdown-menu > .disabled > a {
   &:hover,
   &:focus {
     text-decoration: none;
     background-color: transparent;
     background-image: none; // Remove CSS gradient
     .reset-filter();
-    cursor: @cursor-disabled;
+    cursor: not-allowed;
   }
 }
 
@@ -191,7 +191,7 @@
   .dropdown-menu {
     top: auto;
     bottom: 100%;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
   }
 }
 
@@ -212,3 +212,4 @@
     }
   }
 }
+

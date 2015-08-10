@@ -6,13 +6,11 @@
  */
 'use strict';
 
-var Remarkable = require('remarkable');
+var markdown = require('markdown').markdown;
 
 function markdown2html(markdownString) {
-  var md = new Remarkable();
-
   // the slice removes the <p>...</p> wrapper output by Markdown processor
-  return md.render(markdownString.trim()).slice(3, -5);
+  return markdown.toHTML(markdownString.trim()).slice(3, -4);
 }
 
 
@@ -35,9 +33,9 @@ Mini-language:
 var CUSTOMIZABLE_HEADING = /^[/]{2}={2}(.*)$/;
 var UNCUSTOMIZABLE_HEADING = /^[/]{2}-{2}(.*)$/;
 var SUBSECTION_HEADING = /^[/]{2}={3}(.*)$/;
-var SECTION_DOCSTRING = /^[/]{2}#{2}(.+)$/;
-var VAR_ASSIGNMENT = /^(@[a-zA-Z0-9_-]+):[ ]*([^ ;][^;]*);[ ]*$/;
-var VAR_DOCSTRING = /^[/]{2}[*]{2}(.+)$/;
+var SECTION_DOCSTRING = /^[/]{2}#{2}(.*)$/;
+var VAR_ASSIGNMENT = /^(@[a-zA-Z0-9_-]+):[ ]*([^ ;][^;]+);[ ]*$/;
+var VAR_DOCSTRING = /^[/]{2}[*]{2}(.*)$/;
 
 function Section(heading, customizable) {
   this.heading = heading.trim();

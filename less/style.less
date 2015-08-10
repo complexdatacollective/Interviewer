@@ -13,6 +13,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'bower_components/bootstrap3-dialog/src/less/bootstrap-dialog.less';
 @import (inline) 'bower_components/lato/css/lato.css';
 @import (inline) 'bower_components/odometer/themes/odometer-theme-default.css';
+@import (inline) 'bower_components/alpaca-dist/alpaca.css';
 @import 'sociogram.less';
 
 html, body {
@@ -33,6 +34,10 @@ html, body {
 	body {
 		font-size: 1.8vmin;
 	}
+}
+
+.radio .control-label {
+	display:block;
 }
 
 .not-listed {
@@ -76,6 +81,35 @@ input[type=checkbox]:checked + label:before {
 input[type=checkbox]:checked + label:before {
 	letter-spacing: 10px;
 } /* allow space for check mark */
+
+
+/*** custom radio ***/
+
+input[type=radio] {
+	display: none;
+} /* to hide the radiobox itself */
+
+input[type=radio] + label:before {
+	font-family: FontAwesome;
+	display: inline-block;
+	cursor: pointer;
+	pointer-events: all;
+	font-size: @font-size-large;
+}
+
+input[type=radio] + label:before {
+	content: '\f10c';
+	letter-spacing: 10px;
+}
+
+input[type=radio]:checked + label:before {
+	content: '\f058';
+	color: @brand-primary;
+	letter-spacing: 10px;
+}
+
+
+
 .modal-content {
 	position: relative;
 	padding: 20px;

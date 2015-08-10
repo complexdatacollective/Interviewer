@@ -66,7 +66,8 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css'
+                cssDest: '<%= config.app %>/css/_bower.css',
+                dependencies: {}
                 // mainFiles: {
                     // 'graham_scan': 'src/graham_scan.js',
                 //     'bootstrap': 'dist/bootstrap.min.js',
