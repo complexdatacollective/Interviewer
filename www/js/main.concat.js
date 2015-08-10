@@ -187,6 +187,59 @@ module.exports = function DateInterface() {
 
     return dateInterface;
 };
+;/* global $ */
+/* exported EgoBuilder */
+
+module.exports = function EgoBuilder() {
+    'use strict';
+
+    var egoBuilder = {};
+    var egoBuilderEvents = [];
+
+    var defaultProperties = {};
+
+    var registerEvents = function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+            $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+        }
+
+    };
+
+    var unbindEvents = function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+        }
+    };
+
+    egoBuilder.init = function(properties) {
+
+        // Event listeners
+        var events = [
+            {
+                event: 'stageChangeStart',
+                handler: egoBuilder.destroy,
+                targetEl:  'window.document',
+                subTargetEl: ''
+            },
+            {
+                event: 'click',
+                handler: test,
+                targetEl:  '.blah',
+                subTargetEl: ''
+            }
+        ];
+        registerEvents(egoBuilderEvents, events);
+
+        $.extend(defaultProperties, properties);
+    };
+
+    egoBuilder.destroy = function() {
+        unbindEvents(egoBuilderEvents);
+    };
+
+    return egoBuilder;
+};
 ;/* exported Interview */
 /* global $ */
 var Interview = function Interview() {
@@ -664,6 +717,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
+    window.netCanvas.Modules.EgoBuilder = require('./egobuilder.js');
 
     // Initialise the menu system – other modules depend on it being there.
     window.menu = require('./menu.js');
@@ -4100,8 +4154,11 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
+		console.log('addhull');
+
 		var thisHull = {};
 		thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
+		console.log(label);
         thisHull.hull = new ConvexHullGrahamScan();
 
 		var color = colors[Object.keys(colors)[Object.keys(hullShapes).length]];

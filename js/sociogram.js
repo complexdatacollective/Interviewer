@@ -367,8 +367,11 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
+		console.log('addhull');
+
 		var thisHull = {};
 		thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
+		console.log(label);
         thisHull.hull = new ConvexHullGrahamScan();
 
 		var color = colors[Object.keys(colors)[Object.keys(hullShapes).length]];
