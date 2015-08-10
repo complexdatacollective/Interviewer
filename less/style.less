@@ -13,7 +13,6 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'bower_components/bootstrap3-dialog/src/less/bootstrap-dialog.less';
 @import (inline) 'bower_components/lato/css/lato.css';
 @import (inline) 'bower_components/odometer/themes/odometer-theme-default.css';
-@import (inline) 'bower_components/alpaca-dist/alpaca.css';
 @import 'sociogram.less';
 
 html, body {
@@ -43,6 +42,10 @@ html, body {
 .not-listed {
 	position: absolute;
 	z-index: 999;
+}
+
+form {
+	width: 100%;
 }
 
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {

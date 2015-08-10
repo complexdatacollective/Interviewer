@@ -194,11 +194,16 @@ module.exports = function EgoBuilder() {
     'use strict';
 
     var egoBuilder = {};
-    var egoBuilderEvents = [];
+    var form;
+    egoBuilder.options = {
+        targetEl: $('.container'),
+        heading: 'This is a default heading',
+        formTitle: 'Create a new case'
+    };
 
-    var defaultProperties = {};
+    var moduleEvents = [];
 
-    egoBuilder.init = function(properties) {
+    egoBuilder.init = function(options) {
 
         // Event listeners
         var events = [
@@ -209,13 +214,81 @@ module.exports = function EgoBuilder() {
                 subTargetEl: ''
             }
         ];
-        window.tools.Events.register(egoBuilderEvents, events);
+        window.tools.Events.register(moduleEvents, events);
 
-        $.extend(defaultProperties, properties);
+        $.extend(egoBuilder.options, options);
+
+        egoBuilder.options.targetEl.append('<h1>'+egoBuilder.options.heading+'</h1>');
+
+        // Build form
+        form = new window.netCanvas.Modules.FormBuilder();
+
+        form.build(egoBuilder.options.targetEl, {
+        	'title':egoBuilder.options.formTitle,
+            'fields': {
+                'name': {
+                    'type':'string',
+                    'title':'Name',
+                    'required':true,
+        			'placeholder': 'Please enter your name.'
+                },
+                'case_number': {
+                    'type':'number',
+                    'title':'Case Number',
+                    'required':true
+                }
+            },
+            'options':{
+                'attributes':{
+                    'action':'http://httpbin.org/post',
+                    'method':'post'
+                },
+        		onSubmit: function(data) {
+                    var properties = {};
+                    for (var i = 0; i < data.length; i++) {
+                        properties[data[i].name] = data[i].value;
+                    }
+        			egoBuilder.updateEgo(properties);
+        		},
+                onLoad: function() {
+                    egoBuilder.loadEgoData();
+                },
+                'buttons':{
+                    'submit':{
+        				label: 'Start',
+        				id: 'submit-btn',
+        				type: 'submit',
+        				class: 'btn-primary'
+        			}
+                }
+            }
+        });
+    };
+
+    egoBuilder.updateEgo = function(data) {
+        console.log('update ego');
+        console.log(data);
+        if (window.network.egoExists()) {
+            window.network.updateNode(window.network.getEgo().id, data, function() {
+                alert('updated');
+            });
+        } else {
+            window.network.createEgo(data);
+        }
+
+    };
+
+    egoBuilder.loadEgoData = function() {
+
+        if (window.network.egoExists()) {
+            var ego = window.network.getEgo();
+            form.addData(ego);
+        }
+
     };
 
     egoBuilder.destroy = function() {
-        window.tools.Events.unbind(egoBuilderEvents);
+        window.tools.Events.unbind(moduleEvents);
     };
 
     return egoBuilder;
@@ -229,6 +302,18 @@ module.exports = function FormBuilder() {
     var formBuilder = {};
     var thisForm;
     var html = '<form></form>';
+    var moduleEvents = [];
+
+    formBuilder.init = function() {
+        // Event listeners
+        window.tools.Events.register(moduleEvents, [
+            {
+                event: 'stageChangeStart',
+                handler: formBuilder.destroy,
+                targetEl:  'window.document'
+            }
+        ]);
+    };
 
     formBuilder.build = function(element, form) {
         thisForm = form;
@@ -238,28 +323,31 @@ module.exports = function FormBuilder() {
         // Form fields
         $.each(form.fields, function(formIndex, formValue) {
             var wrapper, variableComponent, variableLabel, checkLabel;
+                var placeholder = formValue.placeholder? formValue.placeholder : '';
+                var required = formValue.required? 'required' : '';
+
                 if (formValue.type === 'string') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formValue.name+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="text" class="form-control" id="'+formValue.name+'" placeholder="'+formValue.placeholder+'">';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'number') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formValue.name+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="number" class="form-control" id="'+formValue.name+'" placeholder="'+formValue.placeholder+'">';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'email') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formValue.name+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="email" class="form-control" id="'+formValue.name+'" placeholder="'+formValue.placeholder+'">';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'textarea') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formValue.name+'">'+formValue.title+'</label>';
-                    variableComponent = '<textarea class="form-control" id="'+formValue.name+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" placeholder="'+formValue.placeholder+'"></textarea>';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" placeholder="'+placeholder+'" '+required+'></textarea>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'radio') {
@@ -269,44 +357,142 @@ module.exports = function FormBuilder() {
                     wrapper = $(wrapper).append(variableLabel);
 
                     $.each(formValue.variables, function(checkIndex, checkValue){
-                        variableComponent = '<input type="radio" name="'+formValue.name+'" value="'+checkValue.value+'" id="'+checkValue.id+'">';
+                        variableComponent = '<input type="radio" name="'+formIndex+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="radio-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
                     html = $(html).append(wrapper);
                 }
         });
+
         // Buttons
         $.each(form.options.buttons, function(buttonIndex, buttonValue){
-            html = $(html).append('<button type="'+buttonValue.type+'" class="btn btn-default '+buttonValue.class+'">'+buttonValue.label+'</button>');
+            var button = '<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn btn-default '+buttonValue.class+'">'+buttonValue.label+'</button>';
+            html = $(html).append(button);
         });
 
         // Write to DOM
-        element.html(html);
+        element.append(html);
+
+        // Events
+
+        // submit
+        window.tools.Events.register(moduleEvents, [{
+            targetEl: $(html),
+            event: 'submit',
+            handler: function(e) {
+                e.preventDefault();
+                var data = $(this).serializeArray();
+                form.options.onSubmit(data);
+            }
+        }]);
+
+        // onLoad
+        window.tools.Events.register(moduleEvents, [{
+            targetEl: $(html),
+            event: 'formLoaded',
+            handler: function() {
+                form.options.onLoad();
+            }
+        }]);
+
+        $.each(form.options.buttons, function(buttonIndex, buttonValue){
+            if(buttonValue.action !== 'undefined') {
+                window.tools.Events.register(moduleEvents, [{
+                    targetEl: $('#'+buttonValue.id),
+                    event: 'click',
+                    handler: buttonValue.action
+                }]);
+            }
+        });
 
         // Data population
-        formBuilder.addData(form.data);
+        if (typeof form.data !== 'undefined') {
+            formBuilder.addData(form.data);
+        }
+
+        $(html).trigger('formLoaded');
 
     };
 
+    formBuilder.destroy = function() {
+        window.tools.Events.unbind(moduleEvents);
+    };
+
     formBuilder.addData = function(data) {
+        console.log('formbuilder add data');
+        console.log(data);
         $.each(data, function(dataIndex, dataValue) {
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number') {
-                    $('#'+thisForm.fields[dataIndex].name).val(dataValue);
+                    $('#'+dataIndex).val(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'textarea') {
-                    $('#'+thisForm.fields[dataIndex].name).html(dataValue);
+                    $('#'+dataIndex).html(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'radio') {
-                    $('input:radio[name="'+thisForm.fields[dataIndex].name+'"][value="'+dataValue+'"]').prop('checked', true);
+                    $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
                 }
             } else {
-                console.warn('Data provided for undefined field.');
+                console.warn('Data provided for undefined field '+dataIndex);
             }
         });
     };
 
+    formBuilder.init();
+
     return formBuilder;
 };
+
+
+// form = new window.netCanvas.Modules.FormBuilder();
+//
+// form.build(egoBuilder.options.targetEl, {
+//     'title':egoBuilder.options.formTitle,
+//     'fields': {
+//         'name': {
+//             'type':'string',
+//             'title':'Name',
+//             'required':true,
+//             'name': 'participant_name',
+//             'placeholder': 'Please enter your name.'
+//         },
+//         'feedback': {
+//             'title':'Feedback',
+//             'type': 'textarea',
+//             'name': 'your_feedback',
+//             'rows': 5,
+//             'cols': 40,
+//             'placeholder': 'Please enter your feedback.'
+//         },
+//         'ranking': {
+//             'type':'radio',
+//             'name':'my_radio',
+//             'title':'Ranking',
+//             'variables':[
+//                 {label:'Value 1', value:'value1', id:'radio1'},
+//                 {label:'Value 2', value:'value2', id:'radio2'},
+//                 {label:'Value 3', value:'value3', id:'radio3'}
+//             ],
+//             'required':true
+//         }
+//     },
+//     'options':{
+//         'attributes':{
+//             'action':'http://httpbin.org/post',
+//             'method':'post'
+//         },
+//         onSubmit: function() {
+//             console.log('FORM subMITTED');
+//         },
+//         'buttons':{
+//             'submit':{
+//                 label: 'Submit',
+//                 id: 'submit-btn',
+//                 type: 'submit',
+//                 class: 'btn-primary'
+//             }
+//         }
+//     }
+// });
 ;/* exported Interview */
 /* global $ */
 var Interview = function Interview() {
