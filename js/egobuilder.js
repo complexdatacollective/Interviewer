@@ -1,4 +1,4 @@
-/* global $, window */
+/* global $, window, alert */
 /* exported EgoBuilder */
 
 module.exports = function EgoBuilder() {
@@ -85,6 +85,7 @@ module.exports = function EgoBuilder() {
             });
         } else {
             window.network.createEgo(data);
+            alert('created');
         }
 
     };

@@ -33,8 +33,8 @@ module.exports = function (grunt) {
             options: {
                 map: false, // inline sourcemaps
                 processors: [
-                    require('autoprefixer-core')(), // add vendor prefixes
-                    require('cssnano')() // minify the result
+                    require('autoprefixer-core')() // add vendor prefixes
+                    // require('cssnano')() // minify the result
                 ]
             },
             dist: {
@@ -66,7 +66,6 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css',
                 dependencies: {}
                 // mainFiles: {
                     // 'graham_scan': 'src/graham_scan.js',

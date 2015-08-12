@@ -145,6 +145,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
     window.netCanvas.Modules.EgoBuilder = require('./egobuilder.js');
     window.netCanvas.Modules.FormBuilder = require('./formbuilder.js');
+    window.netCanvas.Modules.ContextGenerator = require('./contextgenerator.js');
 
     // Initialise the menu system – other modules depend on it being there.
     window.menu = require('./menu.js');
