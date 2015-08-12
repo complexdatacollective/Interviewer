@@ -105,7 +105,7 @@
 
 @btn-default-color:              #333;
 @btn-default-bg:                 #fff;
-@btn-default-border:             #ccc;
+@btn-default-border:             darken(#fff, 5%);
 
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
@@ -146,8 +146,8 @@
 //** `<input>` border radius
 @input-border-radius:            @border-radius-base;
 //** Border color for inputs on focus
-// @input-border-focus:             @brand-primary;
-@input-border-focus:             transparent;
+@input-border-focus:             @brand-primary;
+// @input-border-focus:             transparent;
 
 //** Placeholder text color
 @input-color-placeholder:        @gray-light;
@@ -159,7 +159,7 @@
 //** Small `.form-control` height
 @input-height-small:             (floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2);
 
-@legend-color:                   @text-color;
+@legend-color:                   inherit;
 @legend-border-color:            #e5e5e5;
 
 //** Background color for textual input addons

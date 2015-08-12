@@ -5,6 +5,7 @@ module.exports = function ContextGenerator() {
 	//global vars
 	var taskComprehended = false;
 	var moduleEvents = [];
+	var contexts = [];
 	var contextGenerator = {};
 	var promptSwiper;
 
@@ -21,6 +22,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.destroy = function() {
 		promptSwiper.destroy();
+		$('.new-context-form').remove();
 		window.tools.Events.unbind(moduleEvents);
 	};
 
@@ -38,14 +40,14 @@ module.exports = function ContextGenerator() {
 		}
 
 		// Events
-		var events = [
+		var event = [
 			{
 				event: 'stageChangeStart',
 				handler: contextGenerator.destroy,
 				targetEl:  'window.document'
 			}
 		];
-		window.tools.Events.register(moduleEvents, events);
+		window.tools.Events.register(moduleEvents, event);
 
 		// containers
 		contextGenerator.options.targetEl.append('<div class="contexthull-title-container"></div><div class="contexthull-hull-container"></div>');
@@ -73,19 +75,77 @@ module.exports = function ContextGenerator() {
 			out: function( event, ui ) {
 				$(this).removeClass('delete');
 				$(ui.draggable).removeClass('delete');
+			},
+			drop: function( event, ui ) {
+				contextGenerator.removeContext($(ui.draggable).data('context'));
 			}
 		});
 
 		// New context buttons
-		contextGenerator.options.targetEl.append('<div class="new-context-button"><span class="fa fa-3x fa-plus"></span></div>');
+		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-3x fa-plus"></span></div>');
 
-		contextGenerator.addContext();
+		event = [
+			{
+				event: 'click',
+				handler: contextGenerator.showNewContextForm,
+				targetEl:  '.new-context-button'
+			}
+		];
+		window.tools.Events.register(moduleEvents, event);
 
+		// New context form
+		$('body').append('<div class="new-context-form"></div>');
+		var form = new window.netCanvas.Modules.FormBuilder();
+		form.build($('.new-context-form'), {
+			title: 'Create a New Context',
+			fields: {
+				name: {
+					type: 'string',
+					placeholder: 'Name of Context',
+					required: true,
+
+				}
+			},
+			options: {
+				onSubmit: function(data) {
+					if (contexts.indexOf(data.name) === -1) {
+						contextGenerator.addContext(data.name);
+						form.reset();
+						contextGenerator.hideNewContextForm();
+					} else {
+						form.showError('Error: the name you have chosen is already in use.');
+					}
+				},
+				onLoad: function() {
+
+				},
+				buttons: {
+					submit: {
+						label: 'Create',
+						id: 'submit-btn',
+						type: 'submit',
+						class: 'btn-primary'
+					},
+					cancel: {
+						label: 'Cancel',
+						id: 'cancel-btn',
+						type: 'button',
+						class: 'btn-default',
+						action: function() {
+							contextGenerator.hideNewContextForm();
+						}
+					}
+				}
+			}
+		});
+
+		// Add existing data, if present
+		contextGenerator.addExistingContexts();
 
 	};
 
-	contextGenerator.addNodeToContext = function(context) {
-		$('.circle-responsive').append('<div class="node-circle-container"><div class="node-circle">JR</div></div>');
+	contextGenerator.addNodeToContext = function(node) {
+		$('.circle-responsive').append('<div class="node-circle-container"><div class="node-circle">'+node.name+'</div></div>');
 	};
 
 	contextGenerator.showBin = function() {
@@ -96,8 +156,37 @@ module.exports = function ContextGenerator() {
 		$('.contexthull-bin-footer').removeClass('show');
 	};
 
-	contextGenerator.addExistingContexts = function() {
+	contextGenerator.showNewContextForm = function() {
+		$('.new-context-form, .black-overlay').addClass('show');
+		setTimeout(function() {
+			$('#name').focus();
+		}, 500);
+	};
 
+	contextGenerator.hideNewContextForm = function() {
+		$('.new-context-form, .black-overlay').removeClass('show');
+	};
+
+	contextGenerator.addExistingContexts = function() {
+		// This module recieves one or more arrays of strings indicating the contexts that already exists.
+
+		// First, we create a super array of all unique items across all variable arrays.
+		var tempArray = [];
+		var ego = window.network.getEgo();
+		var toCheck = contextGenerator.options.variable;
+		for (var i = 0; i < toCheck.length; i++) {
+			// Check for this variable in Ego
+			if (typeof ego[toCheck[i]] !== 'undefined' && typeof ego[toCheck[i]] === 'object' && typeof ego[toCheck[i]].length !== 'undefined') {
+				// the target is an array, so we can copy it to our tempArray
+				tempArray = tempArray.concat(ego[toCheck[i]]);
+			} else {
+				console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
+			}
+		}
+		tempArray.toUnique();
+		for (var j = 0; j < tempArray.length; j++) {
+			contextGenerator.addContext(tempArray[j]);
+		}
 	};
 
 	contextGenerator.makeDraggable = function() {
@@ -105,20 +194,39 @@ module.exports = function ContextGenerator() {
 			zIndex: 100,
 			revert: true,
 			revertDuration: 200,
-			start: function( event, ui ) {
+			start: function() {
 				$(this).addClass('smaller');
 				contextGenerator.showBin();
 			},
-			stop: function( event, ui ) {
+			stop: function() {
 				$(this).removeClass('smaller');
 				contextGenerator.hideBin();
 			}
 		});
 	};
 
-	contextGenerator.addContext = function() {
-		$('.contexthull-hull-container').append('<div class="circle-responsive"><div class="circle-content">I am a Circle!</div></div>');
+	contextGenerator.addContext = function(name) {
+		if (!name) {
+			throw new Error('No name provided for new context.');
+		}
+		contexts.push(name);
+		$('.contexthull-hull-container').append('<div class="circle-responsive" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
 		contextGenerator.makeDraggable();
+
+	};
+
+	contextGenerator.removeContext = function(name) {
+		if (!name) {
+			throw new Error('No name provided to contextGenerator.deleteContext().');
+		}
+
+		if (contexts.remove(name) !== 0) {
+			$('div[data-context="'+name+'"]').remove();
+			return true;
+		} else {
+			console.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
+			return false;
+		}
 
 	};
 
@@ -370,11 +478,7 @@ module.exports = function EgoBuilder() {
                     'method':'post'
                 },
         		onSubmit: function(data) {
-                    var properties = {};
-                    for (var i = 0; i < data.length; i++) {
-                        properties[data[i].name] = data[i].value;
-                    }
-        			egoBuilder.updateEgo(properties);
+        			egoBuilder.updateEgo(data);
         		},
                 onLoad: function() {
                     egoBuilder.loadEgoData();
@@ -442,20 +546,35 @@ module.exports = function FormBuilder() {
         ]);
     };
 
+    formBuilder.reset = function() {
+        $(html).find('.alert').fadeOut();
+        $(html)[0].reset();
+    };
+
+    formBuilder.showError = function(error) {
+        $(html).find('.alert').fadeIn();
+        $(html).find('.error').html(error);
+    };
+
     formBuilder.build = function(element, form) {
         thisForm = form;
         // Form options
-        html = $(html).append('<legend>'+form.title+'</legend>');
+        if (typeof form.title !== 'undefined') {
+            html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
+        }
 
         // Form fields
         $.each(form.fields, function(formIndex, formValue) {
-            var wrapper, variableComponent, variableLabel, checkLabel;
+            var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
                 var placeholder = formValue.placeholder? formValue.placeholder : '';
                 var required = formValue.required? 'required' : '';
 
                 if (formValue.type === 'string') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    if (typeof formValue.title !== 'undefined') {
+                        variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    }
+
                     variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
@@ -493,11 +612,12 @@ module.exports = function FormBuilder() {
         });
 
         // Buttons
+        var buttonGroup = '<div class="text-right button-group"></div>';
         $.each(form.options.buttons, function(buttonIndex, buttonValue){
-            var button = '<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn btn-default '+buttonValue.class+'">'+buttonValue.label+'</button>';
-            html = $(html).append(button);
-        });
+            buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
 
+        });
+        html = $(html).append(buttonGroup);
         // Write to DOM
         element.append(html);
 
@@ -510,7 +630,11 @@ module.exports = function FormBuilder() {
             handler: function(e) {
                 e.preventDefault();
                 var data = $(this).serializeArray();
-                form.options.onSubmit(data);
+                var cleanData = {};
+                for (var i = 0; i < data.length; i++) {
+                    cleanData[data[i].name] = data[i].value;
+                }
+                form.options.onSubmit(cleanData);
             }
         }]);
 
@@ -5586,7 +5710,19 @@ window.Storage.prototype.getObject = function(key) {
     }
 };
 
+
+
 // Array prototypes
+
+Object.defineProperty(Array.prototype, 'toUnique', {
+    enumerable: false,
+    value: function() {
+        var b,c;
+        b=this.length;
+        while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        // return  // not needed ;)
+    }
+});
 
 Object.defineProperty(Array.prototype, 'remove', {
     enumerable: false,

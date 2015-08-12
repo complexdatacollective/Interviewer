@@ -20,20 +20,35 @@ module.exports = function FormBuilder() {
         ]);
     };
 
+    formBuilder.reset = function() {
+        $(html).find('.alert').fadeOut();
+        $(html)[0].reset();
+    };
+
+    formBuilder.showError = function(error) {
+        $(html).find('.alert').fadeIn();
+        $(html).find('.error').html(error);
+    };
+
     formBuilder.build = function(element, form) {
         thisForm = form;
         // Form options
-        html = $(html).append('<legend>'+form.title+'</legend>');
+        if (typeof form.title !== 'undefined') {
+            html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
+        }
 
         // Form fields
         $.each(form.fields, function(formIndex, formValue) {
-            var wrapper, variableComponent, variableLabel, checkLabel;
+            var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
                 var placeholder = formValue.placeholder? formValue.placeholder : '';
                 var required = formValue.required? 'required' : '';
 
                 if (formValue.type === 'string') {
                     wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    if (typeof formValue.title !== 'undefined') {
+                        variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    }
+
                     variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
@@ -71,11 +86,12 @@ module.exports = function FormBuilder() {
         });
 
         // Buttons
+        var buttonGroup = '<div class="text-right button-group"></div>';
         $.each(form.options.buttons, function(buttonIndex, buttonValue){
-            var button = '<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn btn-default '+buttonValue.class+'">'+buttonValue.label+'</button>';
-            html = $(html).append(button);
-        });
+            buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
 
+        });
+        html = $(html).append(buttonGroup);
         // Write to DOM
         element.append(html);
 
@@ -88,7 +104,11 @@ module.exports = function FormBuilder() {
             handler: function(e) {
                 e.preventDefault();
                 var data = $(this).serializeArray();
-                form.options.onSubmit(data);
+                var cleanData = {};
+                for (var i = 0; i < data.length; i++) {
+                    cleanData[data[i].name] = data[i].value;
+                }
+                form.options.onSubmit(cleanData);
             }
         }]);
 

@@ -36,7 +36,19 @@ window.Storage.prototype.getObject = function(key) {
     }
 };
 
+
+
 // Array prototypes
+
+Object.defineProperty(Array.prototype, 'toUnique', {
+    enumerable: false,
+    value: function() {
+        var b,c;
+        b=this.length;
+        while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        // return  // not needed ;)
+    }
+});
 
 Object.defineProperty(Array.prototype, 'remove', {
     enumerable: false,

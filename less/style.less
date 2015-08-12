@@ -121,7 +121,7 @@ input[type=radio]:checked + label:before {
 	color: white;
 
 	border: 10px solid @brand-danger;
-	border-radius: @border-radius-large;
+	border-radius: @border-radius-base;
 	outline: 0;
 	background-color: @brand-danger;
 	background-clip: padding-box;
@@ -260,7 +260,7 @@ input[type=radio]:checked + label:before {
 	margin: 0 auto;
 	margin-bottom: 35px;
 	padding: 40px;
-	border-radius: 10px;
+	border-radius: @border-radius-base;
 }
 
 .date-picker-item h2 {
@@ -391,7 +391,7 @@ input[type=radio]:checked + label:before {
 	left: 90px;
 	width: 475px !important;
 	padding: 30px !important;
-	border-radius: 12px;
+	border-radius: @border-radius-base;
 	background: black;
 }
 
@@ -426,7 +426,7 @@ input[type=radio]:checked + label:before {
 	margin-left: -300px;
 	padding: 40px;
 	border: 1px solid #333333;
-	border-radius: 12px;
+	border-radius: @border-radius-base;
 	background: black;
 }
 
@@ -538,7 +538,7 @@ input[type=radio]:checked + label:before {
 	text-align: center;
 	word-wrap: break-word;
 	border: 10px solid darken(@brand-primary, 5%);
-	border-radius: 10px;
+	border-radius: @border-radius-base;
 	background: @brand-primary;
 	justify-content: center;
 }
@@ -601,7 +601,7 @@ input[type=radio]:checked + label:before {
 	text-align: center;
 	color: black;
 	border: 2px solid #eeeeee;
-	border-radius: 10px;
+	border-radius: @border-radius-base;
 	background: #eeeeee;
 	align-items: center;
 	justify-content: center;
@@ -712,7 +712,7 @@ input[type=radio]:checked + label:before {
 	margin-bottom: 100px;
 	padding: 15px;
 	padding-bottom: 5em;
-	border-radius: 7px;
+	border-radius: @border-radius-base;
 	background: @brand-info;
 }
 
@@ -723,7 +723,7 @@ input[type=radio]:checked + label:before {
 	height: 100%;
 	padding: 15px;
 	padding-bottom: 4em;
-	border-radius: 7px;
+	border-radius: @border-radius-base;
 	background: @brand-warning;
 }
 
@@ -845,13 +845,12 @@ input[type=radio]:checked + label:before {
 	bottom: 0;
 	left: 0;
 	display: none;
-	transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+	transition: all 0.3s ease;
 	opacity: 0;
 	background: rgba(0,0,0,0.7);
 }
 
 .black-overlay.show {
-	display: inline-block;
 	opacity: 1;
 }
 
@@ -862,7 +861,7 @@ input[type=radio]:checked + label:before {
 	padding: 5px;
 	transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
 
-	border-radius: 15px;
+	border-radius: @border-radius-large;
 	text-shadow: 0 1px 5px rgba(0,0,0,0.5);
 	align-items: center;
 }
@@ -1061,7 +1060,7 @@ input[type=radio]:checked + label:before {
 	transition: all 0.5s ease-in-out;
 	transform: translateY(-100vh);
 	opacity: 0;
-	border-radius: 12px;
+	border-radius: @border-radius-base;
 	background: #eeeeee;
 }
 
@@ -1159,7 +1158,7 @@ input[type=radio]:checked + label:before {
 
 	color: white;
 	border: 6px solid rgba(255,255,255,0.5);
-	border-radius: 15px;
+	border-radius: @border-radius-large;
 	background: transparent;
 	align-items: center;
 	justify-content: center;

@@ -55,11 +55,7 @@ module.exports = function EgoBuilder() {
                     'method':'post'
                 },
         		onSubmit: function(data) {
-                    var properties = {};
-                    for (var i = 0; i < data.length; i++) {
-                        properties[data[i].name] = data[i].value;
-                    }
-        			egoBuilder.updateEgo(properties);
+        			egoBuilder.updateEgo(data);
         		},
                 onLoad: function() {
                     egoBuilder.loadEgoData();

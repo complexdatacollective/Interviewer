@@ -1,4 +1,5 @@
 .contexthull-title-container {
+    text-align:center;
     width:100%;
     height:15vh;
 }
@@ -6,6 +7,11 @@
 .contexthull-hull-container {
     width:100%;
     height:85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap:wrap
+
 }
 
 .swiper-container {
@@ -272,7 +278,7 @@
 }
 
 .contexthull-bin-footer {
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.5);
     text-align:center;
     height:15vh;
     line-height:19vh;
@@ -307,4 +313,23 @@
     bottom:5vmin;
     right: 5vmin;
     border-radius:50%;
+}
+
+.new-context-form {
+    position:absolute;
+    top:40%;
+    left:50%;
+    width:65vmin;
+    margin-left:-32.5vmin;
+    padding: 5vmin;
+    border-radius: @border-radius-base;
+    background: @modal-base;
+    color: @modal-text;
+    transition: all 0.5s ease;
+    transform: translateY(100vh);
+    z-index:99;
+}
+
+.new-context-form.show {
+    transform: translateY(0);
 }
