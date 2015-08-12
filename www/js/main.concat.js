@@ -60,9 +60,6 @@ module.exports = function ContextGenerator() {
 			speed: 1000
 		});
 
-		// Ghost context
-		$('.contexthull-hull-container').append('<div class="circle-responsive"><div class="circle-content">I am a Circle!</div></div>');
-
 		// bin
 		contextGenerator.options.targetEl.append('<div class="contexthull-bin-footer"><span class="contexthull-bin fa fa-4x fa-trash-o"></span></div>');
 		$('.contexthull-bin').droppable({
@@ -79,21 +76,11 @@ module.exports = function ContextGenerator() {
 			}
 		});
 
+		// New context buttons
+		contextGenerator.options.targetEl.append('<div class="new-context-button"><span class="fa fa-3x fa-plus"></span></div>');
+
 		contextGenerator.addContext();
 
-		$('.circle-responsive').draggable({
-  			zIndex: 100,
-			revert: true,
-			revertDuration: 200,
-			start: function( event, ui ) {
-				$(this).addClass('smaller');
-				contextGenerator.showBin();
-			},
-			stop: function( event, ui ) {
-				$(this).removeClass('smaller');
-				contextGenerator.hideBin();
-			}
-		});
 
 	};
 
@@ -113,10 +100,25 @@ module.exports = function ContextGenerator() {
 
 	};
 
+	contextGenerator.makeDraggable = function() {
+		$('.circle-responsive').draggable({
+			zIndex: 100,
+			revert: true,
+			revertDuration: 200,
+			start: function( event, ui ) {
+				$(this).addClass('smaller');
+				contextGenerator.showBin();
+			},
+			stop: function( event, ui ) {
+				$(this).removeClass('smaller');
+				contextGenerator.hideBin();
+			}
+		});
+	};
+
 	contextGenerator.addContext = function() {
 		$('.contexthull-hull-container').append('<div class="circle-responsive"><div class="circle-content">I am a Circle!</div></div>');
-		$('.contexthull-hull-container').append('<div class="circle-responsive"><div class="circle-content">I am a Circle!</div></div>');
-		$('.contexthull-hull-container').append('<div class="circle-responsive"><div class="circle-content">I am a Circle!</div></div>');
+		contextGenerator.makeDraggable();
 
 	};
 
