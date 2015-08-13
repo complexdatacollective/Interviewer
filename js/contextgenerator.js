@@ -3,7 +3,6 @@
 module.exports = function ContextGenerator() {
 	'use strict';
 	//global vars
-	var taskComprehended = false;
 	var moduleEvents = [];
 	var contexts = [];
 	var contextGenerator = {};
@@ -11,8 +10,9 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
-		variable: ['contexts'],
-		dataDestination: 'contexts',
+		egoData: ['contexts'],
+		nodeDestination: 'contexts',
+		createNodes: true,
 		prompts: [
 			'Prompt 1',
 			'Prompt 2',
@@ -33,13 +33,11 @@ module.exports = function ContextGenerator() {
 
 
 		// Events
-		var event = [
-			{
-				event: 'stageChangeStart',
-				handler: contextGenerator.destroy,
-				targetEl:  'window.document'
-			}
-		];
+		var event = [{
+			event: 'stageChangeStart',
+			handler: contextGenerator.destroy,
+			targetEl:  'window.document'
+		}];
 		window.tools.Events.register(moduleEvents, event);
 
 		// containers
@@ -59,7 +57,7 @@ module.exports = function ContextGenerator() {
 		contextGenerator.options.targetEl.append('<div class="contexthull-bin-footer"><span class="contexthull-bin fa fa-4x fa-trash-o"></span></div>');
 		$('.contexthull-bin').droppable({
 			accept: '.circle-responsive',
-			tolerance: 'touch',
+			// tolerance: 'fit',
 			hoverClass: 'delete',
 			over: function( event, ui ) {
 				$(this).addClass('delete');
@@ -77,13 +75,11 @@ module.exports = function ContextGenerator() {
 		// New context buttons
 		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-3x fa-plus"></span></div>');
 
-		event = [
-			{
-				event: 'click',
-				handler: contextGenerator.showNewContextForm,
-				targetEl:  '.new-context-button'
-			}
-		];
+		event = [{
+			event: 'click',
+			handler: contextGenerator.showNewContextForm,
+			targetEl:  '.new-context-button'
+		}];
 		window.tools.Events.register(moduleEvents, event);
 
 		// New context form
@@ -104,7 +100,7 @@ module.exports = function ContextGenerator() {
 					if (contexts.indexOf(data.name) === -1) {
 						// Update ego
 						var properties = {};
-						properties[contextGenerator.options.dataDestination] = contexts;
+						properties[contextGenerator.options.nodeDestination] = contexts;
 						window.network.updateNode(window.network.getEgo().id, properties);
 						contextGenerator.addContext(data.name);
 						form.reset();
@@ -112,9 +108,6 @@ module.exports = function ContextGenerator() {
 					} else {
 						form.showError('Error: the name you have chosen is already in use.');
 					}
-				},
-				onLoad: function() {
-
 				},
 				buttons: {
 					submit: {
@@ -171,7 +164,7 @@ module.exports = function ContextGenerator() {
 		// First, we create a super array of all unique items across all variable arrays.
 		var tempArray = [];
 		var ego = window.network.getEgo();
-		var toCheck = contextGenerator.options.variable;
+		var toCheck = contextGenerator.options.egoData;
 		for (var i = 0; i < toCheck.length; i++) {
 			// Check for this variable in Ego
 			if (typeof ego[toCheck[i]] !== 'undefined' && typeof ego[toCheck[i]] === 'object' && typeof ego[toCheck[i]].length !== 'undefined') {
@@ -184,20 +177,25 @@ module.exports = function ContextGenerator() {
 
 		console.log(tempArray);
 		tempArray.toUnique();
-		// for (var j = 0; j < tempArray.length; j++) {
-		// 	contextGenerator.addContext(tempArray[j]);
-		// }
+		for (var j = 0; j < tempArray.length; j++) {
+			contextGenerator.addContext(tempArray[j]);
+		}
 	};
 
 	contextGenerator.makeDraggable = function() {
 		$('.circle-responsive').draggable({
 			zIndex: 100,
 			revert: true,
+			refreshPositions: true,
 			revertDuration: 200,
 			scroll: false,
+			helper: function() {
+				contextGenerator.showBin();
+				return this;
+			},
 			start: function() {
 				$(this).addClass('smaller');
-				contextGenerator.showBin();
+
 			},
 			stop: function() {
 				$(this).removeClass('smaller');
@@ -213,6 +211,14 @@ module.exports = function ContextGenerator() {
 		contexts.push(name);
 		$('.contexthull-hull-container').append('<div class="circle-responsive" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
 		contextGenerator.makeDraggable();
+		if (contextGenerator.options.createNodes === true) {
+			var event = [{
+				event: 'click',
+				handler: window.nameGenForm.show,
+				targetEl:  '[data-context="'+name+'"]'
+			}];
+			window.tools.Events.register(moduleEvents, event);
+		}
 
 	};
 
@@ -223,7 +229,7 @@ module.exports = function ContextGenerator() {
 
 		if (contexts.remove(name) !== 0) {
 			var properties = {};
-			properties[contextGenerator.options.dataDestination] = contexts;
+			properties[contextGenerator.options.nodeDestination] = contexts;
 			window.network.updateNode(window.network.getEgo().id, properties);
 			$('div[data-context="'+name+'"]').remove();
 			return true;

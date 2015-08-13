@@ -79,7 +79,19 @@ var Session = function Session() {
             $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');
 
             // copy the skip functions
-            session.skipFunctions = study.skipFunctions;
+            if (typeof study.skipFunctions !== 'undefined') {
+                session.skipFunctions = study.skipFunctions;
+            }
+
+
+            // create the sessionGlobals
+            if (typeof study.globals !=='undefined') {
+                session.globals = study.globals;
+                // iterate through and execute;
+                $.each(session.globals, function(index, value) {
+                    value();
+                });
+            }
 
             // set the study name (used for database name)
             if (study.sessionParameters.name) {
@@ -87,7 +99,6 @@ var Session = function Session() {
             } else {
                 throw new Error('Study protocol must have key "name" under sessionParameters.');
             }
-
 
             // Check for an in-progress session
             window.dataStore.init(function(sessionid) {

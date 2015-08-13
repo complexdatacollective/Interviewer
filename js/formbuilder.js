@@ -1,4 +1,4 @@
-/* global $, window */
+/* global $, window, jQuery */
 /* exported FormBuilder */
 
 module.exports = function FormBuilder() {
@@ -92,10 +92,29 @@ module.exports = function FormBuilder() {
 
         });
         html = $(html).append(buttonGroup);
-        // Write to DOM
-        element.append(html);
 
-        // Events
+        // Check if we are outputting html or writing to DOM
+        if (element instanceof jQuery) {
+            // Write to DOM
+            html = $(html).uniqueId();
+            element.append(html);
+            formBuilder.addEvents();
+            // Data population
+            if (typeof form.data !== 'undefined') {
+                formBuilder.addData(form.data);
+            }
+            $(html).trigger('formLoaded');
+        } else if (element === 'html') {
+            // return the html for the form
+            html = $(html).uniqueId();
+            return html;
+        } else {
+            throw new Error('Formbuilder didn\'t understand the itended output destination of the build method.');
+        }
+
+    };
+
+    formBuilder.addEvents = function() {
 
         // submit
         window.tools.Events.register(moduleEvents, [{
@@ -108,21 +127,23 @@ module.exports = function FormBuilder() {
                 for (var i = 0; i < data.length; i++) {
                     cleanData[data[i].name] = data[i].value;
                 }
-                form.options.onSubmit(cleanData);
+                thisForm.options.onSubmit(cleanData);
             }
         }]);
 
         // onLoad
-        window.tools.Events.register(moduleEvents, [{
-            targetEl: $(html),
-            event: 'formLoaded',
-            handler: function() {
-                form.options.onLoad();
-            }
-        }]);
+        if (typeof thisForm.options.onLoad !== 'undefined') {
+            window.tools.Events.register(moduleEvents, [{
+                targetEl: $(html),
+                event: 'formLoaded',
+                handler: function() {
+                    thisForm.options.onLoad(thisForm);
+                }
+            }]);
+        }
 
-        $.each(form.options.buttons, function(buttonIndex, buttonValue){
-            if(buttonValue.action !== 'undefined') {
+        $.each(thisForm.options.buttons, function(buttonIndex, buttonValue){
+            if(typeof buttonValue.action !== 'undefined') {
                 window.tools.Events.register(moduleEvents, [{
                     targetEl: $('#'+buttonValue.id),
                     event: 'click',
@@ -130,13 +151,6 @@ module.exports = function FormBuilder() {
                 }]);
             }
         });
-
-        // Data population
-        if (typeof form.data !== 'undefined') {
-            formBuilder.addData(form.data);
-        }
-
-        $(html).trigger('formLoaded');
 
     };
 

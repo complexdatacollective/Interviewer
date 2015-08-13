@@ -113,20 +113,23 @@ input[type=radio]:checked + label:before {
 	letter-spacing: 10px;
 }
 
+.dialog {
+	position:absolute;
+	background: @modal-base;
+	padding: 5vmin;
+	border-radius: @border-radius-large;
+	width:70vmin;
+	margin-left: -35vmin;
+	color: @text-dark;
+	left:50%;
+	top:20%;
+	transition: 0.5s all ease;
+	transform: translateY(-100vh);
+	z-index:99;
+}
 
-
-.modal-content {
-	position: relative;
-	padding: 20px;
-	color: white;
-
-	border: 10px solid @brand-danger;
-	border-radius: @border-radius-base;
-	outline: 0;
-	background-color: @brand-danger;
-	background-clip: padding-box;
-
-	.box-shadow(0 3px 9px rgba(0,0,0,0.5));
+.dialog.show {
+	transform: translateY(0);
 }
 
 .btn-modal-success {
@@ -136,18 +139,17 @@ input[type=radio]:checked + label:before {
 .btn-modal-danger {
 	.button-variant(#ffffff; darken(@brand-danger, 5%); darken(@brand-danger, 5%));
 }
-
-.modal-body {
-	padding: 0 0;
-}
-
-.modal-footer {
-	padding: 0;
-}
-
+//
+// .modal-body {
+// 	padding: 0 0;
+// }
+//
+// .modal-footer {
+// 	padding: 0;
+// }
+//
 .modal-header {
-	padding: 0;
-	border: 0;
+	border:0;
 	background: transparent !important;
 }
 
@@ -1197,20 +1199,6 @@ input[type=radio]:checked + label:before {
 	text-decoration: none !important;
 }
 
-.new-node-form {
-	position: fixed;
-	top: -333px;
-	left: 0;
-	width: 100%;
-	height: auto;
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
-}
-
-.new-node-form.node-form-open {
-	transition-duration: 0.2s;
-	transform: translateY(303px);
-}
-
 .content.blurry {
 	z-index: 13;
 	filter: blur(11px);
@@ -1279,7 +1267,7 @@ label {
 	background: #ffffff;
 }
 .paginate.left {
-	left: 0;
+	left: 10px;
 }
 .paginate.left i {
 	transform-origin: 0% 50%;
@@ -1309,7 +1297,7 @@ label {
 	transform: translate(-5px, 0) rotate(0deg);
 }
 .paginate.right {
-	right: 0;
+	right: 10px;
 }
 .paginate.right i {
 	transform-origin: 100% 50%;

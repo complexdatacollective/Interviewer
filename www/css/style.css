@@ -10244,6 +10244,16 @@ button.swiper-pagination-bullet {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 8px;
   padding: 1.5vmin;
+  -webkit-transition: all 1s ease;
+          transition: all 1s ease;
+  -webkit-transform: translateX(35vmin);
+      -ms-transform: translateX(35vmin);
+          transform: translateX(35vmin);
+}
+.context-panel.show {
+  -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
 }
 .context-footer {
   padding: 0 10px;
@@ -10302,10 +10312,11 @@ button.swiper-pagination-bullet {
   font-size: 4vh;
 }
 .circle-responsive.smaller {
-  -webkit-transform: scale(0.8);
-      -ms-transform: scale(0.8);
-          transform: scale(0.8);
+  -webkit-transform: scale(0.6);
+      -ms-transform: scale(0.6);
+          transform: scale(0.6);
   opacity: 0.5;
+  z-index: 99;
 }
 .circle-responsive {
   float: left;
@@ -12715,33 +12726,27 @@ button.swiper-pagination-bullet {
 .contexthull-bin-footer {
   background: rgba(0, 0, 0, 0.5);
   text-align: center;
-  height: 15vh;
-  line-height: 19vh;
+  height: 20vh;
+  line-height: 25vh;
   -webkit-transition: all 1s ease;
           transition: all 1s ease;
-  -webkit-transform: translateY(15vh);
-      -ms-transform: translateY(15vh);
-          transform: translateY(15vh);
   position: absolute;
-  bottom: 0;
+  bottom: -216px;
   left: 0;
   right: 0;
 }
 .contexthull-bin {
   -webkit-transition: all 0.5s ease;
           transition: all 0.5s ease;
-  padding: 40px;
 }
 .contexthull-bin.delete {
   color: #e85657;
-  -webkit-transform: scale(1.3);
-      -ms-transform: scale(1.3);
-          transform: scale(1.3);
+  -webkit-transform: scale(2);
+      -ms-transform: scale(2);
+          transform: scale(2);
 }
 .contexthull-bin-footer.show {
-  -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-          transform: translateY(0);
+  bottom: 0;
 }
 .new-context-button {
   height: 10vmin;
@@ -12863,16 +12868,27 @@ input[type=radio]:checked + label:before {
   color: #01a6c7;
   letter-spacing: 10px;
 }
-.modal-content {
-  position: relative;
-  padding: 20px;
-  color: white;
-  border: 10px solid #e85657;
-  border-radius: 8px;
-  outline: 0;
-  background-color: #e85657;
-  background-clip: padding-box;
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+.dialog {
+  position: absolute;
+  background: #eeeeee;
+  padding: 5vmin;
+  border-radius: 12px;
+  width: 70vmin;
+  margin-left: -35vmin;
+  color: #575757;
+  left: 50%;
+  top: 20%;
+  -webkit-transition: 0.5s all ease;
+          transition: 0.5s all ease;
+  -webkit-transform: translateY(-100vh);
+      -ms-transform: translateY(-100vh);
+          transform: translateY(-100vh);
+  z-index: 99;
+}
+.dialog.show {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
 }
 .btn-modal-success {
   color: #333333;
@@ -13006,14 +13022,7 @@ fieldset[disabled] .btn-modal-danger.active {
   color: #e54041;
   background-color: #ffffff;
 }
-.modal-body {
-  padding: 0 0;
-}
-.modal-footer {
-  padding: 0;
-}
 .modal-header {
-  padding: 0;
   border: 0;
   background: transparent !important;
 }
@@ -14128,22 +14137,6 @@ fieldset[disabled] .btn-modal-danger.active {
 .btn-link:hover {
   text-decoration: none !important;
 }
-.new-node-form {
-  position: fixed;
-  top: -333px;
-  left: 0;
-  width: 100%;
-  height: auto;
-  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
-          transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1) 0.1s;
-}
-.new-node-form.node-form-open {
-  -webkit-transition-duration: 0.2s;
-          transition-duration: 0.2s;
-  -webkit-transform: translateY(303px);
-      -ms-transform: translateY(303px);
-          transform: translateY(303px);
-}
 .content.blurry {
   z-index: 13;
   -webkit-filter: blur(11px);
@@ -14211,7 +14204,7 @@ label {
   background: #ffffff;
 }
 .paginate.left {
-  left: 0;
+  left: 10px;
 }
 .paginate.left i {
   -webkit-transform-origin: 0% 50%;
@@ -14259,7 +14252,7 @@ label {
           transform: translate(-5px, 0) rotate(0deg);
 }
 .paginate.right {
-  right: 0;
+  right: 10px;
 }
 .paginate.right i {
   -webkit-transform-origin: 100% 50%;
