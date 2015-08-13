@@ -28,6 +28,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.init = function(options) {
 		window.tools.extend(contextGenerator.options, options);
+		console.log(options);
 
 		if (taskComprehended === false) {
 			var eventProperties = {
@@ -109,6 +110,10 @@ module.exports = function ContextGenerator() {
 			options: {
 				onSubmit: function(data) {
 					if (contexts.indexOf(data.name) === -1) {
+						// Update ego
+						var properties = {};
+						properties[contextGenerator.options.dataDestination] = contexts;
+						window.network.updateNode(window.network.getEgo().id, properties);
 						contextGenerator.addContext(data.name);
 						form.reset();
 						contextGenerator.hideNewContextForm();
@@ -133,6 +138,7 @@ module.exports = function ContextGenerator() {
 						class: 'btn-default',
 						action: function() {
 							contextGenerator.hideNewContextForm();
+							form.reset();
 						}
 					}
 				}
@@ -194,6 +200,7 @@ module.exports = function ContextGenerator() {
 			zIndex: 100,
 			revert: true,
 			revertDuration: 200,
+			scroll: false,
 			start: function() {
 				$(this).addClass('smaller');
 				contextGenerator.showBin();
@@ -221,6 +228,9 @@ module.exports = function ContextGenerator() {
 		}
 
 		if (contexts.remove(name) !== 0) {
+			var properties = {};
+			properties[contextGenerator.options.dataDestination] = contexts;
+			window.network.updateNode(window.network.getEgo().id, properties);
 			$('div[data-context="'+name+'"]').remove();
 			return true;
 		} else {

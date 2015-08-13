@@ -37,6 +37,8 @@ module.exports = function Sociogram() {
 		selected: '#ffbf00',
 	};
 
+	var hullColors = ['#01a6c7','#1ECD97', '#B16EFF','#FA920D','#e85657','Gold','Pink','Saddlebrown','Teal','Silver'];
+
 	// Default sociogram.settings
 	sociogram.settings = {
 		network: window.netCanvas.Modules.session.getPrimaryNetwork(),
@@ -106,7 +108,10 @@ module.exports = function Sociogram() {
         'Edge': sociogram.settings.dataDestination.Edge,
         'Select': sociogram.settings.dataDestination.Select,
         'Position': sociogram.settings.dataDestination.Position,
-        'Community' : sociogram.settings.dataDestination.Community
+        'Community' : sociogram.settings.dataDestination.Community,
+		'egoGroups': {
+			variable: ['contexts']
+		}
 	};
 
 	// Private functions
@@ -345,6 +350,30 @@ module.exports = function Sociogram() {
 				// error!
 			}
 		}
+
+		// Empty groups
+		if (typeof sociogram.settings.dataOrigin.egoGroups !== 'undefined') {
+			// First, we create a super array of all unique items across all variable arrays.
+			var tempArray = [];
+			var ego = window.network.getEgo();
+			var toCheck = sociogram.settings.dataOrigin.egoGroups.variable;
+			for (var i = 0; i < toCheck.length; i++) {
+				// Check for this variable in Ego
+				if (typeof ego[toCheck[i]] !== 'undefined' && typeof ego[toCheck[i]] === 'object' && typeof ego[toCheck[i]].length !== 'undefined') {
+					// the target is an array, so we can copy it to our tempArray
+					tempArray = tempArray.concat(ego[toCheck[i]]);
+				} else {
+					console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
+				}
+			}
+			tempArray.toUnique();
+
+			for (var j = 0; j < tempArray.length; j++) {
+				sociogram.addHull(tempArray[j]);
+			}
+		} else {
+			console.warn('undefined');
+		}
 	};
 
 	sociogram.getSelectedNodes = function() {
@@ -367,33 +396,34 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
-		console.log('addhull');
+		// ignore groups that already exist
+		if (typeof hullShapes[label] === 'undefined') {
+			var thisHull = {};
+			thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
+	        thisHull.hull = new ConvexHullGrahamScan();
 
-		var thisHull = {};
-		thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
-		console.log(label);
-        thisHull.hull = new ConvexHullGrahamScan();
+			var color = hullColors[$('.list-group-item').length];
 
-		var color = colors[Object.keys(colors)[Object.keys(hullShapes).length]];
+	        var hullShape = new Konva.Line({
+	          points: [window.outerWidth/2, window.outerHeight/2],
+	          fill: color,
+	          opacity:0.5,
+	          stroke: color,
+	          lineJoin: 'round',
+	          lineCap: 'round',
+			  transformsEnabled: 'position',
+			  hitGraphEnabled: false,
+	          tension : 0.1,
+	          strokeWidth: 100,
+	          closed : true
+	        });
+			hullShapes[label] = hullShape;
+			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
 
-        var hullShape = new Konva.Line({
-          points: [window.outerWidth/2, window.outerHeight/2],
-          fill: color,
-          opacity:0.5,
-          stroke: color,
-          lineJoin: 'round',
-          lineCap: 'round',
-		  transformsEnabled: 'position',
-		  hitGraphEnabled: false,
-          tension : 0.1,
-          strokeWidth: 100,
-          closed : true
-        });
-		hullShapes[label] = hullShape;
-		$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
+	        hullLayer.add(hullShapes[label]);
+	        hullLayer.draw();
+		}
 
-        hullLayer.add(hullShapes[label]);
-        hullLayer.draw();
     };
 
     sociogram.addPointToHull = function(point, hullLabel) {
@@ -450,9 +480,6 @@ module.exports = function Sociogram() {
 				// hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
 
 				var tweenPoints = toPointFromObject(newHull.getHull());
-				console.log('difference:');
-				console.log(hullShapes[pointHulls[i]].getPoints());
-				console.log(tweenPoints);
 
 				// check if more points than currently exist
 				if (tweenPoints.length > hullShapes[pointHulls[i]].getPoints().length) {
@@ -473,14 +500,16 @@ module.exports = function Sociogram() {
 					hullShapes[pointHulls[i]].setPoints(currentPoints);
 				}
 
-				var tween = new Konva.Tween({
-					node: hullShapes[pointHulls[i]],
-					points: tweenPoints,
-					duration: 1,
-					onFinish: function(){
-						tween.destroy();
-					}
-				}).play();
+				// var tween = new Konva.Tween({
+				// 	node: hullShapes[pointHulls[i]],
+				// 	points: tweenPoints,
+				// 	duration: 1,
+				// 	onFinish: function(){
+				// 		tween.destroy();
+				// 	}
+				// }).play();
+
+				hullShapes[pointHulls[i]].setPoints(tweenPoints);
 			}
 
 			hullLayer.draw();
@@ -692,14 +721,7 @@ module.exports = function Sociogram() {
 			window.wedge.anim = new Konva.Animation(function(frame) {
 				var duration = 500;
 				if (frame.time >= duration) { // point of selection
-					$('.hull').removeClass('active'); // deselect all groups
-
-					$('.context-header h4').html('Groups for '+currentNode.label);
-					$.each(currentNode.attrs[sociogram.settings.dataOrigin.Community.variable], function(index, value) {
-						$('[data-hull="'+value+'"]').addClass('active');
-					});
-					window.wedge.anim.stop();
-					window.clearTimeout(longPressTimer);
+					currentNode.fire('longPress');
 				} else {
 					window.wedge.opacity(frame.time*(1/duration));
 					window.wedge.setStrokeWidth(1+(frame.time*(20/duration)));
@@ -713,6 +735,19 @@ module.exports = function Sociogram() {
 				window.wedge.anim.start();
 			}, 200);
 
+		});
+
+		nodeGroup.on('longPress', function() {
+			var currentNode = this;
+			$('.hull').removeClass('active'); // deselect all groups
+
+			// Update side panel
+			$('.context-header h4').html('Groups for '+currentNode.attrs.label);
+			$.each(currentNode.attrs[sociogram.settings.dataOrigin.Community.variable], function(index, value) {
+				$('[data-hull="'+value+'"]').addClass('active');
+			});
+			window.wedge.anim.stop();
+			window.clearTimeout(longPressTimer);
 		});
 
 		nodeGroup.on('touchend mouseup', function() {
