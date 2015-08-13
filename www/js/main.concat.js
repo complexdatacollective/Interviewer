@@ -12,6 +12,7 @@ module.exports = function ContextGenerator() {
 	contextGenerator.options = {
 		targetEl: $('.container'),
 		variable: ['contexts'],
+		dataDestination: 'contexts',
 		prompts: [
 			'Prompt 1',
 			'Prompt 2',
@@ -30,15 +31,6 @@ module.exports = function ContextGenerator() {
 		window.tools.extend(contextGenerator.options, options);
 		console.log(options);
 
-		if (taskComprehended === false) {
-			var eventProperties = {
-				stage: window.netCanvas.Modules.session.currentStage(),
-				timestamp: new Date()
-			};
-			var log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-			window.dispatchEvent(log);
-			taskComprehended = true;
-		}
 
 		// Events
 		var event = [
@@ -189,10 +181,12 @@ module.exports = function ContextGenerator() {
 				console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
 			}
 		}
+
+		console.log(tempArray);
 		tempArray.toUnique();
-		for (var j = 0; j < tempArray.length; j++) {
-			contextGenerator.addContext(tempArray[j]);
-		}
+		// for (var j = 0; j < tempArray.length; j++) {
+		// 	contextGenerator.addContext(tempArray[j]);
+		// }
 	};
 
 	contextGenerator.makeDraggable = function() {
@@ -511,10 +505,12 @@ module.exports = function EgoBuilder() {
         if (window.network.egoExists()) {
             window.network.updateNode(window.network.getEgo().id, data, function() {
                 alert('updated');
+                window.netCanvas.Modules.session.nextStage();
             });
         } else {
             window.network.createEgo(data);
-            alert('created');
+            window.netCanvas.Modules.session.nextStage();
+
         }
 
     };
@@ -681,8 +677,6 @@ module.exports = function FormBuilder() {
     };
 
     formBuilder.addData = function(data) {
-        console.log('formbuilder add data');
-        console.log(data);
         $.each(data, function(dataIndex, dataValue) {
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number') {
@@ -5764,7 +5758,12 @@ Object.defineProperty(Array.prototype, 'toUnique', {
     value: function() {
         var b,c;
         b=this.length;
-        while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        if (this.length > 0) {
+            while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        } else {
+            return this;
+        }
+
         // return  // not needed ;)
     }
 });

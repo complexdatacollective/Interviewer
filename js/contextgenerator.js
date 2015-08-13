@@ -12,6 +12,7 @@ module.exports = function ContextGenerator() {
 	contextGenerator.options = {
 		targetEl: $('.container'),
 		variable: ['contexts'],
+		dataDestination: 'contexts',
 		prompts: [
 			'Prompt 1',
 			'Prompt 2',
@@ -30,15 +31,6 @@ module.exports = function ContextGenerator() {
 		window.tools.extend(contextGenerator.options, options);
 		console.log(options);
 
-		if (taskComprehended === false) {
-			var eventProperties = {
-				stage: window.netCanvas.Modules.session.currentStage(),
-				timestamp: new Date()
-			};
-			var log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-			window.dispatchEvent(log);
-			taskComprehended = true;
-		}
 
 		// Events
 		var event = [
@@ -189,10 +181,12 @@ module.exports = function ContextGenerator() {
 				console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
 			}
 		}
+
+		console.log(tempArray);
 		tempArray.toUnique();
-		for (var j = 0; j < tempArray.length; j++) {
-			contextGenerator.addContext(tempArray[j]);
-		}
+		// for (var j = 0; j < tempArray.length; j++) {
+		// 	contextGenerator.addContext(tempArray[j]);
+		// }
 	};
 
 	contextGenerator.makeDraggable = function() {

@@ -78,10 +78,12 @@ module.exports = function EgoBuilder() {
         if (window.network.egoExists()) {
             window.network.updateNode(window.network.getEgo().id, data, function() {
                 alert('updated');
+                window.netCanvas.Modules.session.nextStage();
             });
         } else {
             window.network.createEgo(data);
-            alert('created');
+            window.netCanvas.Modules.session.nextStage();
+
         }
 
     };

@@ -145,8 +145,6 @@ module.exports = function FormBuilder() {
     };
 
     formBuilder.addData = function(data) {
-        console.log('formbuilder add data');
-        console.log(data);
         $.each(data, function(dataIndex, dataValue) {
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number') {

@@ -45,7 +45,12 @@ Object.defineProperty(Array.prototype, 'toUnique', {
     value: function() {
         var b,c;
         b=this.length;
-        while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        if (this.length > 0) {
+            while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        } else {
+            return this;
+        }
+
         // return  // not needed ;)
     }
 });
