@@ -1,4 +1,4 @@
-/* exported Network, Node, Edge */
+/* exported Network, Node, Edge, document */
 /* global $, window, deepmerge */
 
 

@@ -75,13 +75,22 @@ exports.Events = {
     register: function(eventsArray, eventsList) {
         for (var i = 0; i < eventsList.length; i++) {
             eventsArray.push(eventsList[i]);
-            $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+            if (typeof eventsList[i].subTarget !== 'undefined') {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+            } else {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+            }
+
         }
 
     },
     unbind: function(eventsArray) {
         for (var i = 0; i < eventsArray.length; i++) {
-            $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            if (typeof eventsArray[i].subTarget !== 'undefined') {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].subTarget, eventsArray[i].handler);
+            } else {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            }
         }
     }
 };

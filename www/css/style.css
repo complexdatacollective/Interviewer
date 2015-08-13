@@ -10316,7 +10316,6 @@ button.swiper-pagination-bullet {
       -ms-transform: scale(0.6);
           transform: scale(0.6);
   opacity: 0.5;
-  z-index: 99;
 }
 .circle-responsive {
   float: left;
@@ -10408,6 +10407,7 @@ button.swiper-pagination-bullet {
   margin: -2em;
   /* 2em = 4em/2 */
   /* half the width */
+  text-align: center;
 }
 .node-circle-container:nth-of-type(2) {
   width: 6em;
@@ -12730,8 +12730,11 @@ button.swiper-pagination-bullet {
   line-height: 25vh;
   -webkit-transition: all 1s ease;
           transition: all 1s ease;
+  -webkit-transform: translateY(20vh);
+      -ms-transform: translateY(20vh);
+          transform: translateY(20vh);
   position: absolute;
-  bottom: -216px;
+  bottom: 0;
   left: 0;
   right: 0;
 }
@@ -12746,7 +12749,9 @@ button.swiper-pagination-bullet {
           transform: scale(2);
 }
 .contexthull-bin-footer.show {
-  bottom: 0;
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
 }
 .new-context-button {
   height: 10vmin;

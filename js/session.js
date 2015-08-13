@@ -37,6 +37,7 @@ var Session = function Session() {
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
 
+            // $(document).trigger('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             var changeStageStartEvent = new window.CustomEvent('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageStartEvent);
 

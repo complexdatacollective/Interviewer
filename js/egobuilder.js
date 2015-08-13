@@ -19,10 +19,10 @@ module.exports = function EgoBuilder() {
         // Event listeners
         var events = [
             {
-                event: 'stageChangeStart',
+                event: 'changeStageStart',
                 handler: egoBuilder.destroy,
                 targetEl:  'window.document',
-                subTargetEl: ''
+                subTarget: ''
             }
         ];
         window.tools.Events.register(moduleEvents, events);

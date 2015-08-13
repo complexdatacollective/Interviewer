@@ -1,4 +1,4 @@
-/* global $, window, Swiper */
+/* global $, window, Swiper, document */
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -22,9 +22,14 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.destroy = function() {
+		console.log('contextGenerator.destroy()');
 		promptSwiper.destroy();
 		$('.new-context-form').remove();
 		window.tools.Events.unbind(moduleEvents);
+	};
+
+	contextGenerator.nodeAdded = function(e) {
+		contextGenerator.addNodeToContext(e.originalEvent.detail);
 	};
 
 	contextGenerator.init = function(options) {
@@ -34,10 +39,16 @@ module.exports = function ContextGenerator() {
 
 		// Events
 		var event = [{
-			event: 'stageChangeStart',
+			event: 'changeStageStart',
 			handler: contextGenerator.destroy,
-			targetEl:  'window.document'
-		}];
+			targetEl:  window
+		},
+		{
+			event: 'nodeAdded',
+			handler: contextGenerator.nodeAdded,
+			targetEl:  window
+		}
+	];
 		window.tools.Events.register(moduleEvents, event);
 
 		// containers
@@ -56,8 +67,8 @@ module.exports = function ContextGenerator() {
 		// bin
 		contextGenerator.options.targetEl.append('<div class="contexthull-bin-footer"><span class="contexthull-bin fa fa-4x fa-trash-o"></span></div>');
 		$('.contexthull-bin').droppable({
-			accept: '.circle-responsive',
-			// tolerance: 'fit',
+			// accept: '.circle-responsive',
+			tolerance: 'touch',
 			hoverClass: 'delete',
 			over: function( event, ui ) {
 				$(this).addClass('delete');
@@ -136,7 +147,8 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		$('.circle-responsive').append('<div class="node-circle-container"><div class="node-circle">'+node.name+'</div></div>');
+		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle">'+node.label+'</div></div>');
+		contextGenerator.makeNodesDraggable();
 	};
 
 	contextGenerator.showBin = function() {
@@ -159,7 +171,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addExistingContexts = function() {
-		// This module recieves one or more arrays of strings indicating the contexts that already exists.
+		// This module recieves one or more arrays of strings indicating the contexts that already exist.
 
 		// First, we create a super array of all unique items across all variable arrays.
 		var tempArray = [];
@@ -180,6 +192,22 @@ module.exports = function ContextGenerator() {
 		for (var j = 0; j < tempArray.length; j++) {
 			contextGenerator.addContext(tempArray[j]);
 		}
+
+		// Add any nodes to the contexts
+		var nodes = window.network.getNodes();
+		$.each(nodes, function(nodeIndex, nodeValue) {
+			// only deal with nodes that have a single context. is this right?
+			if (typeof nodeValue[contextGenerator.options.nodeDestination] !== 'undefined' && nodeValue[contextGenerator.options.nodeDestination].length === 1) {
+				// Check if the context exists
+				if (contexts.indexOf(nodeValue[contextGenerator.options.nodeDestination][0] !== -1)) {
+					contextGenerator.addNodeToContext(nodeValue);
+				} else {
+					console.warn('A node was found with a context that didn\'t exist!');
+				}
+ 			}
+
+		});
+
 	};
 
 	contextGenerator.makeDraggable = function() {
@@ -189,16 +217,30 @@ module.exports = function ContextGenerator() {
 			refreshPositions: true,
 			revertDuration: 200,
 			scroll: false,
-			helper: function() {
-				contextGenerator.showBin();
-				return this;
-			},
 			start: function() {
+				contextGenerator.showBin();
 				$(this).addClass('smaller');
 
 			},
 			stop: function() {
 				$(this).removeClass('smaller');
+				contextGenerator.hideBin();
+			}
+		});
+	};
+
+	contextGenerator.makeNodesDraggable = function() {
+		$('.node-circle').draggable({
+			zIndex: 100,
+			revert: true,
+			revertDuration: 200,
+			refreshPositions: true,
+			scroll: false,
+			start: function() {
+				contextGenerator.showBin();
+
+			},
+			stop: function() {
 				contextGenerator.hideBin();
 			}
 		});
@@ -214,12 +256,21 @@ module.exports = function ContextGenerator() {
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
 				event: 'click',
-				handler: window.nameGenForm.show,
+				handler: contextGenerator.openNewNodeForm,
 				targetEl:  '[data-context="'+name+'"]'
 			}];
 			window.tools.Events.register(moduleEvents, event);
 		}
 
+	};
+
+	contextGenerator.openNewNodeForm = function() {
+		console.log($(this).data('context'));
+		var properties = {};
+		properties[contextGenerator.options.nodeDestination] = [];
+		properties[contextGenerator.options.nodeDestination].push($(this).data('context'));
+		// Append a hidden input with the context in it
+		window.nameGenForm.show(properties);
 	};
 
 	contextGenerator.removeContext = function(name) {
