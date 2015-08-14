@@ -49,25 +49,25 @@ module.exports = function FormBuilder() {
                         variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     }
 
-                    variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
+                    variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'number') {
                     wrapper = '<div class="form-group"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
+                    variableComponent = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'email') {
                     wrapper = '<div class="form-group"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" '+required+'>';
+                    variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'textarea') {
                     wrapper = '<div class="form-group"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
-                    variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" placeholder="'+placeholder+'" '+required+'></textarea>';
+                    variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" autocomplete="off" placeholder="'+placeholder+'" '+required+'></textarea>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     html = $(html).append(wrapper);
                 } else if (formValue.type === 'radio') {

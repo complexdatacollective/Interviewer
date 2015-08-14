@@ -2,17 +2,15 @@
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
-// Can be replaced with npm module once v0.9.5 reaches upstream.
 module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage, circleLayer, edgeLayer, nodeLayer, wedgeLayer, hullLayer, uiLayer, sociogram = {};
+	var moduleEvents = [];
 	var selectedNodes = [];
+	var selectedNode = null;
 	var selectedHull = null;
 	var log;
-	var optHulls = {};
-	var optEdges = {};
-	var protoNode = {};
 	var taskComprehended = false;
 	var longPressTimer, tapTimer;
 	var touchNotTap = false;
@@ -88,7 +86,7 @@ module.exports = function Sociogram() {
 	            variable: 'coords'
 	        },
 	        'Community' : {
-	            type: 'node',
+	            type: 'node', // node, edge, ego
 				name: 'Groups',
 				variable: 'special_hulls'
 	        }
@@ -108,10 +106,7 @@ module.exports = function Sociogram() {
         'Edge': sociogram.settings.dataDestination.Edge,
         'Select': sociogram.settings.dataDestination.Select,
         'Position': sociogram.settings.dataDestination.Position,
-        'Community' : sociogram.settings.dataDestination.Community,
-		'egoGroups': {
-			variable: ['contexts']
-		}
+        'Community' : sociogram.settings.dataDestination.Community
 	};
 
 	// Private functions
@@ -145,7 +140,7 @@ module.exports = function Sociogram() {
 	}
 
 	function showHullHandler(e) {
-		if (e.target.checked) {
+		if (e && e.target.checked) {
 			hullLayer.opacity(1);
 		} else {
 			hullLayer.opacity(0);
@@ -161,6 +156,7 @@ module.exports = function Sociogram() {
 	}
 
 	function groupButtonClickHandler() {
+		console.log('groupbutton click');
 		sociogram.addHull();
 	}
 
@@ -176,7 +172,7 @@ module.exports = function Sociogram() {
 
 		// Panels
 		if (sociogram.settings.panels.indexOf('context') !== -1) {
-			$('<div class="context-panel"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New Group</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show" checked> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+			$('<div class="context-panel show"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New Group</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
 		}
 
 		if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -252,6 +248,10 @@ module.exports = function Sociogram() {
 		$(window.document).on('change', '#context-checkbox-show', showHullHandler);
 		$(window.document).on('click', '.hull', hullListClickHandler);
 		$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
+
+
+		// Hide the hulls initially
+		showHullHandler();
 
 		// Update initial states of all nodes and edges;
 		sociogram.updateInitialNodeState();
@@ -333,13 +333,43 @@ module.exports = function Sociogram() {
 		}
 
 		// Community mode
+
 		if (sociogram.settings.modes.indexOf('Community') !== -1) {
+			var communityNodes;
+
 			if (sociogram.settings.dataOrigin.Community.type === 'node') {
 				// community data is coming from the node
-				var communityNodes = sociogram.getKineticNodes();
+				communityNodes = sociogram.getKineticNodes();
 				$.each(communityNodes, function(index,node) {
 					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
 						sociogram.addPointToHull(node, hullValue);
+					});
+				});
+
+			} else if (sociogram.settings.dataOrigin.Community.type === 'ego') {
+				// community data is coming from ego
+				if (typeof window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable] === 'undefined') {
+					console.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
+					var properties = {};
+					properties[sociogram.settings.dataOrigin.Community.egoVariable] = [];
+					window.network.updateNode(window.network.getEgo().id, properties);
+				}
+
+				var egoHulls = window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable];
+				$.each(egoHulls, function(hullIndex, hullValue) {
+					sociogram.addHull(hullValue);
+				});
+
+				communityNodes = sociogram.getKineticNodes();
+				$.each(communityNodes, function(index,node) {
+					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
+
+						// Difference from node mode is we check if the node hull has been defined by ego too
+
+						if (egoHulls.indexOf(hullValue) !== -1) {
+							sociogram.addPointToHull(node, hullValue);
+						}
+
 					});
 				});
 
@@ -351,29 +381,6 @@ module.exports = function Sociogram() {
 			}
 		}
 
-		// Empty groups
-		if (typeof sociogram.settings.dataOrigin.egoGroups !== 'undefined') {
-			// First, we create a super array of all unique items across all variable arrays.
-			var tempArray = [];
-			var ego = window.network.getEgo();
-			var toCheck = sociogram.settings.dataOrigin.egoGroups.variable;
-			for (var i = 0; i < toCheck.length; i++) {
-				// Check for this variable in Ego
-				if (typeof ego[toCheck[i]] !== 'undefined' && typeof ego[toCheck[i]] === 'object' && typeof ego[toCheck[i]].length !== 'undefined') {
-					// the target is an array, so we can copy it to our tempArray
-					tempArray = tempArray.concat(ego[toCheck[i]]);
-				} else {
-					console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
-				}
-			}
-			tempArray.toUnique();
-
-			for (var j = 0; j < tempArray.length; j++) {
-				sociogram.addHull(tempArray[j]);
-			}
-		} else {
-			console.warn('undefined');
-		}
 	};
 
 	sociogram.getSelectedNodes = function() {
@@ -381,10 +388,6 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.destroy = function() {
-
-		// menu.removeMenu(canvasMenu); // remove the window.network menu when we navigate away from the page.
-		$('.new-node-form').remove(); // Remove the new node form
-
 		window.removeEventListener('nodeAdded', addNodeHandler, false);
 		window.removeEventListener('edgeAdded', addEdgeHandler, false);
 		window.removeEventListener('nodeRemoved', sociogram.removeNode, false);
@@ -397,9 +400,10 @@ module.exports = function Sociogram() {
 
 	sociogram.addHull = function(label) {
 		// ignore groups that already exist
+		label = label ? label : 'New Group '+$('li[data-hull]').length;
 		if (typeof hullShapes[label] === 'undefined') {
 			var thisHull = {};
-			thisHull.label = label ? label : 'New Group '+$('li[data-hull]').length;
+			thisHull.label = label;
 	        thisHull.hull = new ConvexHullGrahamScan();
 
 			var color = hullColors[$('.list-group-item').length];
@@ -419,34 +423,69 @@ module.exports = function Sociogram() {
 	        });
 			hullShapes[label] = hullShape;
 			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
-
+			$('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
 	        hullLayer.add(hullShapes[label]);
 	        hullLayer.draw();
+
+			// If the data origin is ego, also add the new hull to ego
+			if (sociogram.settings.dataOrigin.Community.type === 'ego') {
+				// If ego doesn't have the variable set, create it
+
+				var properties;
+				if (typeof window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable] === 'undefined') {
+					properties = {};
+					properties[sociogram.settings.dataOrigin.Community.egoVariable] = [];
+					window.network.updateNode(window.network.getEgo().id, properties);
+				}
+
+				// get existing data
+				var egoContexts = window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable];
+				if (egoContexts.indexOf(thisHull.label) === -1) {
+					// Update ego
+					egoContexts.push(thisHull.label);
+					window.netCanvas.Modules.session.saveData();
+				}
+
+			}
+
 		}
 
     };
 
-    sociogram.addPointToHull = function(point, hullLabel) {
-		// if a hull with hullLabel doesnt exist, create one
-
+	sociogram.hullExists = function(hullLabel) {
 		var found = false;
+		if ($('li[data-hull="'+hullLabel+'"]').length > 0) {
+			found = true;
+		}
+		return found;
+	};
 
-			if ($('li[data-hull="'+hullLabel+'"]').length > 0) {
-				found = true;
-			}
-
-		if (!found ) {
+    sociogram.addPointToHull = function(point, hullLabel) {
+		console.log('addpointtohull');
+		console.log(point);
+		console.log(hullLabel);
+		var properties;
+		// if a hull with hullLabel doesnt exist, create one
+		if (!sociogram.hullExists(hullLabel)) {
 			sociogram.addHull(hullLabel);
 		}
 
 		// store properties according to data destination
 		if (sociogram.settings.dataDestination.Community.type === 'node') {
+
+			// If the point doesn't have the destination attribute, create it
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = [];
+				window.network.updateNode(point.attrs.id, properties);
+			}
+
 			// Only store if the node doesn't already have the hull present
 			if (point.attrs[sociogram.settings.dataDestination.Community.variable].indexOf(hullLabel) === -1) {
 				// Find the node we need to store the hull value in, and update it.
 
 				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
-				var properties = {};
+				properties = {};
 				properties[sociogram.settings.dataDestination.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
 				point.attrs[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
 
@@ -455,6 +494,32 @@ module.exports = function Sociogram() {
 					window.tools.notify('Network node updated', 1);
 				});
 			} else {
+				console.warn('Node already had the given context present.');
+			}
+
+		} else if (sociogram.settings.dataDestination.Community.type === 'ego') {
+			// If the point doesn't have the destination attribute, create it
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
+				console.warn('node did not have teh data destinateion community attribute. A blank array was created.');
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = [];
+				window.network.updateNode(point.attrs.id, properties);
+			}
+			// Only store if the node doesn't already have the hull present
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable].indexOf(hullLabel) === -1) {
+				// Find the node we need to store the hull value in, and update it.
+
+				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+				point.attrs[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+
+				// Update the node with the object
+				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
+					window.tools.notify('Network node updated', 1);
+				});
+			} else {
+				console.warn('Node already had the given context present.');
 			}
 
 		} else if (sociogram.settings.dataDestination.Position.type === 'edge') {
@@ -647,7 +712,6 @@ module.exports = function Sociogram() {
 				}
 			});
 
-
 		});
 
 		nodeGroup.on('dragmove', function() {
@@ -738,6 +802,7 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('longPress', function() {
+			selectedNode = this;
 			var currentNode = this;
 			$('.hull').removeClass('active'); // deselect all groups
 
@@ -1069,10 +1134,14 @@ module.exports = function Sociogram() {
 
 
 		if (!options.coords || options.coords.length === 0) {
+			nodeGroup.position({
+				x: 0,
+				y:$(window).height()/2
+			});
 			var tween = new Konva.Tween({
 				node: nodeGroup,
-				x: $(window).width()-150,
-				y: $(window).height()-150,
+				x: 200,
+				y: $(window).height()/2,
 				duration:0.7,
 				easing: Konva.Easings.EaseOut
 			});
@@ -1210,6 +1279,7 @@ module.exports = function Sociogram() {
 		backgroundLayer.add(backgroundRect);
 		backgroundRect.on('tap click', function() {
 			selectedHull = null;
+			selectedNode = null;
 			$('.hull').removeClass('active'); // deselect all groups
 		});
 
@@ -1239,6 +1309,15 @@ module.exports = function Sociogram() {
 
 	sociogram.drawUIComponents = function () {
 
+		// New context buttons
+		$('#'+sociogram.settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
+		var events = [{
+			event: 'click',
+			handler: window.nameGenForm.show,
+			targetEl:  '.new-node-button'
+		}];
+		window.tools.Events.register(moduleEvents, events);
+
 		// Draw all UI components
 		var previousSkew = 0;
 		var circleFills, circleLines;
@@ -1249,7 +1328,7 @@ module.exports = function Sociogram() {
 		//draw concentric circles
 		for(var i = 0; i < sociogram.settings.options.concentricCircleNumber; i++) {
 			var ratio = (1-(i/sociogram.settings.options.concentricCircleNumber));
-			var skew = i > 0 ? (ratio * 3) * (totalHeight/70) : 0;
+			var skew = i > 0 ? (ratio * 6) * (totalHeight/70) : 0;
 			var currentRadius = totalHeight/2 * ratio;
 			currentRadius = sociogram.settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
 			previousSkew = skew;
@@ -1317,7 +1396,6 @@ module.exports = function Sociogram() {
 
 		circleLayer.draw();
 
-		// sociogram.initNewNodeForm();
 		window.tools.notify('User interface initialised.',1);
 	};
 

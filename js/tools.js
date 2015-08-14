@@ -36,6 +36,12 @@ window.Storage.prototype.getObject = function(key) {
     }
 };
 
+jQuery.fn.scrollTo = function(elem, speed) {
+    $(this).animate({
+        scrollTop:  $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+    }, speed == undefined ? 1000 : speed);
+    return this;
+};
 
 
 // Array prototypes
@@ -106,9 +112,6 @@ exports.euclideanDistance = function(point1, point2) {
 };
 
 exports.removeFromObject = function(item, object) {
-    console.log('removeFromObject');
-    console.log(item);
-    console.log(object);
     var removeCounter = 0;
 
     for (var index = 0; index < object.length; index++) {
@@ -118,7 +121,6 @@ exports.removeFromObject = function(item, object) {
             index--;
         }
     }
-    console.log(object);
     return removeCounter;
 };
 
@@ -168,8 +170,6 @@ exports.deepEquals = function(a, x) {
 
     return true;
 };
-
-
 
 exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     // This function is for checking for keys in arrays of objects.

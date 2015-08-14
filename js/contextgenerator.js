@@ -79,12 +79,17 @@ module.exports = function ContextGenerator() {
 				$(ui.draggable).removeClass('delete');
 			},
 			drop: function( event, ui ) {
-				contextGenerator.removeContext($(ui.draggable).data('context'));
+				if ($(ui.draggable).hasClass('circle-responsive')) {
+					contextGenerator.removeContext($(ui.draggable).data('context'));
+				} else {
+					contextGenerator.removeNode($(ui.draggable).data('id'));
+				}
+
 			}
 		});
 
 		// New context buttons
-		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-3x fa-plus"></span></div>');
+		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 
 		event = [{
 			event: 'click',
@@ -147,7 +152,9 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle">'+node.label+'</div></div>');
+		console.log('adding node to context');
+		console.log(node);
+		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
 
@@ -174,27 +181,22 @@ module.exports = function ContextGenerator() {
 		// This module recieves one or more arrays of strings indicating the contexts that already exist.
 
 		// First, we create a super array of all unique items across all variable arrays.
-		var tempArray = [];
-		var ego = window.network.getEgo();
-		var toCheck = contextGenerator.options.egoData;
-		for (var i = 0; i < toCheck.length; i++) {
-			// Check for this variable in Ego
-			if (typeof ego[toCheck[i]] !== 'undefined' && typeof ego[toCheck[i]] === 'object' && typeof ego[toCheck[i]].length !== 'undefined') {
-				// the target is an array, so we can copy it to our tempArray
-				tempArray = tempArray.concat(ego[toCheck[i]]);
-			} else {
-				console.warn('Your variable "'+toCheck[i]+'" was either undefined or not an array when it was read from the Ego node.');
-			}
-		}
-
-		console.log(tempArray);
-		tempArray.toUnique();
-		for (var j = 0; j < tempArray.length; j++) {
-			contextGenerator.addContext(tempArray[j]);
+		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
+		for (var j = 0; j < egoData.length; j++) {
+			contextGenerator.addContext(egoData[j]);
 		}
 
 		// Add any nodes to the contexts
-		var nodes = window.network.getNodes();
+		var nodes = window.network.getNodes({}, function (results) {
+			var filteredResults = [];
+			$.each(results, function(index,value) {
+				if (value.type !== 'Ego') {
+					filteredResults.push(value);
+				}
+			});
+
+			return filteredResults;
+		});
 		$.each(nodes, function(nodeIndex, nodeValue) {
 			// only deal with nodes that have a single context. is this right?
 			if (typeof nodeValue[contextGenerator.options.nodeDestination] !== 'undefined' && nodeValue[contextGenerator.options.nodeDestination].length === 1) {
@@ -280,14 +282,36 @@ module.exports = function ContextGenerator() {
 
 		if (contexts.remove(name) !== 0) {
 			var properties = {};
-			properties[contextGenerator.options.nodeDestination] = contexts;
+			properties[contextGenerator.options.egoData] = contexts;
 			window.network.updateNode(window.network.getEgo().id, properties);
+
+			// Remove nodes
+			var childNodes = $('div[data-context="'+name+'"]').children('.node-circle-container');
+			$.each(childNodes, function(nodeIndex, nodeValue) {
+				var thisId = $(nodeValue).children('.node-circle');
+				contextGenerator.removeNode($(thisId).data('id'));
+			});
 			$('div[data-context="'+name+'"]').remove();
 			return true;
 		} else {
 			console.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
 			return false;
 		}
+
+	};
+
+	contextGenerator.removeNode = function(id) {
+		if (!id) {
+			throw new Error('No id provided to contextGenerator.deleteNode().');
+		}
+
+		if (window.network.removeNode(id)) {
+			$('div[data-id="'+id+'"]').remove();
+			return true;
+		} else {
+			console.warn('contextGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+		}
+
 
 	};
 
