@@ -1,4 +1,4 @@
-/* global $, window, Swiper, document */
+/* global $, window, Swiper */
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -206,7 +206,9 @@ module.exports = function ContextGenerator() {
 				} else {
 					console.warn('A node was found with a context that didn\'t exist!');
 				}
- 			}
+ 			} else {
+				console.warn('Ignored a node with multiple contexts.');
+			}
 
 		});
 
@@ -4865,9 +4867,6 @@ module.exports = function Sociogram() {
 	};
 
     sociogram.addPointToHull = function(point, hullLabel) {
-		console.log('addpointtohull');
-		console.log(point);
-		console.log(hullLabel);
 		var properties;
 		// if a hull with hullLabel doesnt exist, create one
 		if (!sociogram.hullExists(hullLabel)) {
@@ -4897,14 +4896,12 @@ module.exports = function Sociogram() {
 				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
 					window.tools.notify('Network node updated', 1);
 				});
-			} else {
-				console.warn('Node already had the given context present.');
 			}
 
 		} else if (sociogram.settings.dataDestination.Community.type === 'ego') {
 			// If the point doesn't have the destination attribute, create it
 			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
-				console.warn('node did not have teh data destinateion community attribute. A blank array was created.');
+				console.warn('Node did not have the data destinateion community attribute. A blank array was created.');
 				properties = {};
 				properties[sociogram.settings.dataDestination.Community.variable] = [];
 				window.network.updateNode(point.attrs.id, properties);
@@ -4922,10 +4919,7 @@ module.exports = function Sociogram() {
 				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
 					window.tools.notify('Network node updated', 1);
 				});
-			} else {
-				console.warn('Node already had the given context present.');
 			}
-
 		} else if (sociogram.settings.dataDestination.Position.type === 'edge') {
 			// not yet implemented
 		}

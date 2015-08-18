@@ -1,4 +1,4 @@
-/* global $, window, Swiper, document */
+/* global $, window, Swiper */
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -206,7 +206,9 @@ module.exports = function ContextGenerator() {
 				} else {
 					console.warn('A node was found with a context that didn\'t exist!');
 				}
- 			}
+ 			} else {
+				console.warn('Ignored a node with multiple contexts.');
+			}
 
 		});
 
