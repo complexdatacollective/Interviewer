@@ -24,7 +24,8 @@ module.exports = function MultiBin() {
 		multiBin.destroy();
 	};
 
-	var followupHandler = function() {
+	var followupHandler = function(e) {
+		e.preventDefault();
 		// Handle the followup data
 
 		// First, retrieve the relevant values
@@ -233,7 +234,7 @@ module.exports = function MultiBin() {
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
-				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
 			}
 
 		}

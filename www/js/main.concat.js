@@ -1178,7 +1178,8 @@ module.exports = function MultiBin() {
 		multiBin.destroy();
 	};
 
-	var followupHandler = function() {
+	var followupHandler = function(e) {
+		e.preventDefault();
 		// Handle the followup data
 
 		// First, retrieve the relevant values
@@ -1387,7 +1388,7 @@ module.exports = function MultiBin() {
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
-				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
 			}
 
 		}
@@ -4233,7 +4234,7 @@ module.exports = function Sociogram() {
 		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined') {
 			properties = properties.detail;
 		}
-	
+
 		// the below won't work because we are storing the coords in an edge now...
 		window.tools.notify('Sociogram is adding an edge.',2);
 		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];

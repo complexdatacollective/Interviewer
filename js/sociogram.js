@@ -543,7 +543,7 @@ module.exports = function Sociogram() {
 		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined') {
 			properties = properties.detail;
 		}
-	
+
 		// the below won't work because we are storing the coords in an edge now...
 		window.tools.notify('Sociogram is adding an edge.',2);
 		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
