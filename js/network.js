@@ -172,7 +172,6 @@ module.exports = function Network() {
         reversed.from = temp;
 
         if (_this.getEdges(properties).length > 0 || _this.getEdges(reversed).length > 0) {
-
             alreadyExists = true;
         }
 
@@ -188,7 +187,6 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-
             window.tools.notify('ERROR: Edge already exists!',2);
             return false;
         }

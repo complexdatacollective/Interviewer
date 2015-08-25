@@ -574,23 +574,45 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.removeEdge = function(properties) {
-		properties = properties.details;
 
+		if (!properties) {
+			throw new Error('No properties passed to sociogram.removeEdge().');
+		}
+
+		// Test if we are being called by an event, or directly
+		if (typeof properties.detail !== 'undefined') {
+			console.warn('removeEdge called by event');
+			properties = properties.detail;
+		}
+
+		console.warn(properties);
 		var toNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
+
+		console.warn(toNode);
+		console.warn(fromNode);
 
 		window.tools.notify('Removing edge.');
 
 		// This function is failing because two nodes are matching below
+		var found = false;
 		$.each(sociogram.getKineticEdges(), function(index, value) {
 			if (value !== undefined) {
 				if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
+					console.warn('match');
+					found = true;
 					edgeLayer.children[index].remove();
 					edgeLayer.draw();
 				}
 			}
 
 		});
+
+		if (!found) {
+			throw new Error('sociogram.removeEdge() failed!');
+		} else {
+			return true;
+		}
 
 	};
 
