@@ -67,7 +67,7 @@ $(document).ready(function() {
             return args;
         }
     };
-    
+
     // Initialise logging and custom notification
     window.note = log.noConflict();
     note.setLevel('warn', false);
@@ -86,7 +86,7 @@ $(document).ready(function() {
         }
         $('.refresh-button').show();
         window.netCanvas.debugLevel = 'warn';
-        note.setLevel('trace', false);
+        note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {

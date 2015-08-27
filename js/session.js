@@ -1,4 +1,4 @@
-/* global document, window, $, protocol, nodeRequire */
+/* global document, window, $, protocol, nodeRequire, note */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -16,7 +16,7 @@ var Session = function Session() {
             var fs = nodeRequire('fs');
             fs.writeFile(path, data);
         } else {
-            window.tools.notify('Not yet implemented on this platform.', 1);
+            note.warn('saveFile() is not yet implemented on this platform!');
         }
 
     }
@@ -119,8 +119,8 @@ var Session = function Session() {
             });
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
-            window.tools.notify('Error fetching protocol!',1);
-            window.tools.notify(err,1);
+            note.error('Error fetching protocol!');
+            note.trace(err);
         });
 
     };
@@ -134,7 +134,7 @@ var Session = function Session() {
     }
 
     session.init = function(callback) {
-        window.tools.notify('Session initialising.', 1);
+        note.debug('Session initialising.');
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);
@@ -230,7 +230,7 @@ var Session = function Session() {
     };
 
     session.reset = function() {
-        window.tools.notify('Resetting session.',2);
+        note.info('Resetting session.');
         session.id = 0;
         session.currentStage = 0;
 
@@ -249,20 +249,15 @@ var Session = function Session() {
     };
 
     session.updateSessionData = function(data, callback) {
-        window.tools.notify('Updating user data.', 2);
-        window.tools.notify('Using the following to update:', 1);
-        window.tools.notify(data, 1);
-        window.tools.notify('session.sessionData is:', 1);
-        window.tools.notify(session.sessionData, 1);
+        note.debug('Updating user data.');
+        note.debug('Using the following to update:');
+        note.debug(data);
 
 
         // Here, we used to simply use our extend method on session.sessionData with the new data.
+        // This failed for arrays.
         // Switched to $.extend and added 'deep' as first function parameter for this reason.
-
         $.extend(true, session.sessionData, data);
-        // session.sessionData = $.extend(session.sessionData,data);
-        window.tools.notify('Combined output is:', 1);
-        window.tools.notify(session.sessionData, 1);
 
         var newDataLoaded = new window.Event('newDataLoaded');
         window.dispatchEvent(newDataLoaded);
@@ -282,7 +277,6 @@ var Session = function Session() {
         session.sessionData.nodes = window.network.getNodes();
         session.sessionData.edges = window.network.getEdges();
         if(!window.dataStore.initialised()) {
-            // window.tools.notify('Tried to save, but datastore not initaialised. Delaying.', 1);
             var unsavedChanges = new window.Event('unsavedChanges');
             window.dispatchEvent(unsavedChanges);
         } else {
@@ -318,7 +312,7 @@ var Session = function Session() {
             }
         }
 
-        window.tools.notify('Session is moving to stage '+stage, 3);
+        note.info('Session is moving to stage '+stage, 3);
 
         // Crate stage visible event
         var eventProperties = {
@@ -336,7 +330,6 @@ var Session = function Session() {
         var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
-                // This never gets called if there is a JS error. Is there a way to ensure it is?
                 content.transition({ opacity: '1'},400,'easeInSine');
             });
         });
@@ -357,16 +350,16 @@ var Session = function Session() {
     };
 
     session.registerData = function(dataKey, isArray) {
-        window.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
+        note.info('A script requested a data store be registered with the key "'+dataKey+'".');
         if (session.sessionData[dataKey] === undefined) { // Create it if it doesn't exist.
-            window.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+            note.debug('Key named "'+dataKey+'" was not already registered. Creating.');
             if (isArray) {
                 session.sessionData[dataKey] = [];
             } else {
                 session.sessionData[dataKey] = {};
             }
         } else {
-            window.tools.notify ('A data store with this key already existed. Returning a reference.',1);
+            note.debug('A data store with this key already existed. Returning a reference.');
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
@@ -389,8 +382,8 @@ var Session = function Session() {
         }
 
         // Notify
-        window.tools.notify('Adding data to key "'+dataKey+'".',2);
-        window.tools.notify(newData, 1);
+        note.debug('Adding data to key "'+dataKey+'".');
+        note.debug(newData);
 
         // Emit an event to trigger data store synchronisation.
         var unsavedChanges = new window.Event('unsavedChanges');
