@@ -91,7 +91,7 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.update = function(key, sessionData,id) {
-        window.tools.notify('IOInterface being asked to update data store.',1);
+        note.debug('IOInterface being asked to update data store.');
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;

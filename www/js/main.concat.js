@@ -328,7 +328,7 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.update = function(key, sessionData,id) {
-        window.tools.notify('IOInterface being asked to update data store.',1);
+        note.debug('IOInterface being asked to update data store.');
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
@@ -536,7 +536,7 @@ var Logger = function Logger() {
 };
 
 module.exports = new Logger();
-;/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note */
+;/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit */
 $(document).ready(function() {
     'use strict';
 
@@ -609,6 +609,7 @@ $(document).ready(function() {
     // Initialise logging and custom notification
     window.note = log.noConflict();
     note.setLevel('warn', false);
+
     window.logger = require('./logger.js');
 
     var args = window.getArguments();
@@ -623,7 +624,6 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        window.netCanvas.debugLevel = 'warn';
         note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
@@ -634,7 +634,6 @@ $(document).ready(function() {
             // could show button or prompt?
         }
     }
-
 
     $('.refresh-button').on('click', function() {
         if(window.isNodeWebkit) {
@@ -648,6 +647,22 @@ $(document).ready(function() {
 
     });
 
+    // Override notifications on node webkit to use native notifications
+    if (isNodeWebkit === true) {
+        note.error = function(msg) {
+            tools.nwNotification({
+                icon: 'img/error.png',
+                body: msg
+            });
+        };
+
+        note.warn = function(msg) {
+            tools.nwNotification({
+                icon: 'img/alert.png',
+                body: msg
+            });
+        };
+    }
 
     // print some version stuff
     if (window.isNodeWebkit) {
@@ -4491,7 +4506,7 @@ module.exports = function Sociogram() {
 
 };
 ;/*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -4562,6 +4577,24 @@ exports.removeFromObject = function(item, object) {
 };
 
 // helper functions
+
+exports.nwNotification = function(options) {
+    var notification = new Notification('Network Canvas:',options);
+    notification.onclick = function () {
+        // alert('Notification Clicked');
+    };
+
+    notification.onshow = function () {
+        // play sound on show
+        // myAud=document.getElementById("audio1");
+        // myAud.play();
+
+        // auto close after 1 second
+        // setTimeout(function() {
+        //     notification.close();
+        // }, 1000);
+    };
+};
 
 exports.deepEquals = function(a, x) {
     var p;

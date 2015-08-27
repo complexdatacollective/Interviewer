@@ -1,4 +1,4 @@
-/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note */
+/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit */
 $(document).ready(function() {
     'use strict';
 
@@ -71,6 +71,7 @@ $(document).ready(function() {
     // Initialise logging and custom notification
     window.note = log.noConflict();
     note.setLevel('warn', false);
+
     window.logger = require('./logger.js');
 
     var args = window.getArguments();
@@ -85,7 +86,6 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        window.netCanvas.debugLevel = 'warn';
         note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
@@ -96,7 +96,6 @@ $(document).ready(function() {
             // could show button or prompt?
         }
     }
-
 
     $('.refresh-button').on('click', function() {
         if(window.isNodeWebkit) {
@@ -110,6 +109,22 @@ $(document).ready(function() {
 
     });
 
+    // Override notifications on node webkit to use native notifications
+    if (isNodeWebkit === true) {
+        note.error = function(msg) {
+            tools.nwNotification({
+                icon: 'img/error.png',
+                body: msg
+            });
+        };
+
+        note.warn = function(msg) {
+            tools.nwNotification({
+                icon: 'img/alert.png',
+                body: msg
+            });
+        };
+    }
 
     // print some version stuff
     if (window.isNodeWebkit) {
