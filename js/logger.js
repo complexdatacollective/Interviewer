@@ -11,7 +11,7 @@ var Logger = function Logger() {
         window.tools.notify('Logger initialising.', 1);
 
         window.log = window.netCanvas.Modules.session.registerData('log', true);
-
+        
         // listen for log events
         window.addEventListener('log', function (e) {
             logger.addToLog(e.detail);
