@@ -53,9 +53,6 @@ exports.arrayDifference = function(a1, a2) {
 };
 
 exports.removeFromObject = function(item, object) {
-    console.log('removeFromObject');
-    console.log(item);
-    console.log(object);
     var removeCounter = 0;
 
     for (var index = 0; index < object.length; index++) {
@@ -65,7 +62,6 @@ exports.removeFromObject = function(item, object) {
             index--;
         }
     }
-    console.log(object);
     return removeCounter;
 };
 

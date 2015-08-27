@@ -1,4 +1,4 @@
-/* global $, window, Odometer, document  */
+/* global $, window, Odometer, document, note  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -316,7 +316,7 @@ module.exports = function Namegenerator() {
     namegenerator.generateTestAlters = function(number) {
 
         if (!number) {
-            window.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+            note.error('You must specify the number of test alters you want to create. Cancelling!');
             return false;
         }
 
@@ -390,7 +390,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.destroy = function() {
-        window.tools.notify('Destroying namegenerator.',0);
+        note.debug('Destroying namegenerator.');
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);

@@ -21,7 +21,6 @@ var Logger = function Logger() {
     };
 
     logger.addToLog = function(e) {
-        window.tools.notify('Event being added to log.',1);
         if (!e) { return false; }
 
         var data = {
@@ -40,7 +39,6 @@ var Logger = function Logger() {
 
     logger.getLog = function() {
         return window.log;
-
     };
 
     logger.getLastEvent = function() {

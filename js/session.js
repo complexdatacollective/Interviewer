@@ -84,7 +84,7 @@ var Session = function Session() {
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
             } else {
-                throw new Error('Study protocol must have key "name" under sessionParameters.');
+                note.error('Study protocol must have key "name" under sessionParameters.');
             }
 
 
@@ -312,7 +312,7 @@ var Session = function Session() {
             }
         }
 
-        note.info('Session is moving to stage '+stage, 3);
+        note.info('Session is moving to stage '+stage);
 
         // Crate stage visible event
         var eventProperties = {

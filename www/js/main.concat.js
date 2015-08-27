@@ -506,7 +506,6 @@ var Logger = function Logger() {
     };
 
     logger.addToLog = function(e) {
-        window.tools.notify('Event being added to log.',1);
         if (!e) { return false; }
 
         var data = {
@@ -525,7 +524,6 @@ var Logger = function Logger() {
 
     logger.getLog = function() {
         return window.log;
-
     };
 
     logger.getLastEvent = function() {
@@ -1032,7 +1030,7 @@ module.exports = function GeoInterface() {
 
   	return geoInterface;
 };
-;/* global $, window */
+;/* global $, window, note */
 /* exported Menu */
 var Menu = function Menu(options) {
     'use strict';
@@ -1168,7 +1166,8 @@ var Menu = function Menu(options) {
     };
 
     menu.init = function() {
-        window.tools.notify('Menu initialising.', 1);
+        note.info('Menu initialising.');
+
         window.tools.extend(menu.options,options);
     };
 
@@ -1595,7 +1594,7 @@ module.exports = function MultiBin() {
 };
 return multiBin;
 };
-;/* global $, window, Odometer, document  */
+;/* global $, window, Odometer, document, note  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -1913,7 +1912,7 @@ module.exports = function Namegenerator() {
     namegenerator.generateTestAlters = function(number) {
 
         if (!number) {
-            window.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+            note.error('You must specify the number of test alters you want to create. Cancelling!');
             return false;
         }
 
@@ -1987,7 +1986,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.destroy = function() {
-        window.tools.notify('Destroying namegenerator.',0);
+        note.debug('Destroying namegenerator.');
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
@@ -2355,8 +2354,7 @@ module.exports = function Namegenerator() {
     return namegenerator;
 };
 ;/* exported Network, Node, Edge */
-/* global $, window, randomBetween */
-
+/* global $, window,note, tools */
 
 /*
 
@@ -2398,7 +2396,7 @@ module.exports = function Network() {
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
-            window.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
+            note.error('Node already exists with id '+properties.id+'. Cancelling!');
             return false;
         }
 
@@ -2406,7 +2404,7 @@ module.exports = function Network() {
         // This reserved list is stored with the ego.
         if (!force) {
             if (reserved_ids.indexOf(properties.id) !== -1) {
-                window.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+                note.error('Node id '+properties.id+' is already in use with this ego. Cancelling!');
                 return false;
             }
         }
@@ -2437,7 +2435,7 @@ module.exports = function Network() {
 
     this.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
-            window.tools.notify('Error loading network. Data format incorrect.',1);
+            note.error('Error loading network. Data format incorrect.');
             return false;
         } else {
             if (!overwrite) {
@@ -2491,12 +2489,12 @@ module.exports = function Network() {
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
-            window.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
+            note.error('Error while executing network.addEdge(). "To" and "From" must BOTH be defined.');
             return false;
         }
 
         if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
-            window.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
+            note.warn('An edge with this id already exists! I\'m generating a new one for you.');
             var newEdgeID = 0;
             while (_this.getEdge(newEdgeID) !== false) {
                 newEdgeID++;
@@ -2543,7 +2541,7 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-            window.tools.notify('ERROR: Edge already exists!',2);
+            note.error('ERROR: Edge already exists!');
             return false;
         }
 
@@ -2572,7 +2570,6 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            //   localEdges.remove(edge);
             window.tools.removeFromObject(edge, _this.edges);
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
@@ -2592,7 +2589,7 @@ module.exports = function Network() {
         if (!preserveEdges) {
             this.removeEdge(_this.getNodeEdges(id));
         } else {
-            window.tools.notify('NOTICE: preserving node edges after deletion.',2);
+            note.info('NOTICE: preserving node edges after deletion.');
         }
 
         var nodeRemovedEvent, log;
@@ -2812,21 +2809,21 @@ module.exports = function Network() {
     this.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
         edgeProbability = edgeProbability || 0.4;
-        window.tools.notify('Creating random graph...',1);
+        note.info('Creating random graph...');
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;
             window.tools.notify('Adding node '+current+' of '+nodeCount,2);
             // Use random coordinates
             var nodeOptions = {
-                coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
+                coords: [Math.round(tools.randomBetween(100,window.innerWidth-100)),Math.round(tools.randomBetween(100,window.innerHeight-100))]
             };
             this.addNode(nodeOptions);
         }
 
-        window.tools.notify('Adding _this.edges.',3);
+        note.debug('Adding _this.edges.');
         $.each(_this.nodes, function (index) {
-            if (randomBetween(0, 1) < edgeProbability) {
-                var randomFriend = Math.round(randomBetween(0,_this.nodes.length-1));
+            if (tools.randomBetween(0, 1) < edgeProbability) {
+                var randomFriend = Math.round(tools.randomBetween(0,_this.nodes.length-1));
                 _this.addEdge({from:_this.nodes[index].id,to:_this.nodes[randomFriend].id});
 
             }
@@ -3379,7 +3376,7 @@ var Session = function Session() {
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
             } else {
-                throw new Error('Study protocol must have key "name" under sessionParameters.');
+                note.error('Study protocol must have key "name" under sessionParameters.');
             }
 
 
@@ -3607,7 +3604,7 @@ var Session = function Session() {
             }
         }
 
-        note.info('Session is moving to stage '+stage, 3);
+        note.info('Session is moving to stage '+stage);
 
         // Crate stage visible event
         var eventProperties = {
@@ -3704,7 +3701,7 @@ var Session = function Session() {
 };
 
 module.exports = new Session();
-;/* global Konva, window, $ */
+;/* global Konva, window, $, note */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
@@ -3765,7 +3762,7 @@ module.exports = function Sociogram() {
 	}
 
 	sociogram.init = function (userSettings) {
-		window.tools.notify('Sociogram initialising.', 1);
+		note.info('Sociogram initialising.');
 		window.tools.extend(sociogram.settings,userSettings);
 
 		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
@@ -3929,8 +3926,7 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addNode = function(options) {
-		window.tools.notify('Sociogram is creating a node.',2);
-		console.log(options);
+		note.debug('Sociogram is creating a node.');
 		// options = options.details;
 
 		// Placeholder for getting the number of nodes we have.
@@ -3945,7 +3941,6 @@ module.exports = function Sociogram() {
 		if (sociogram.settings.mode === 'Position' || sociogram.settings.mode === 'Edge') {
 			dragStatus = true;
 		}
-		console.log(options);
 		options.label = options.nname_t0;
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
@@ -4026,7 +4021,7 @@ module.exports = function Sociogram() {
 
 		});
 
-		window.tools.notify('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1], 2);
+		note.debug('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1]);
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
@@ -4041,7 +4036,7 @@ module.exports = function Sociogram() {
 			}
 
 
-			window.tools.notify('dragstart',1);
+			note.debug('dragstart');
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -4061,7 +4056,7 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
-			window.tools.notify('Dragmove',0);
+			note.debug('Dragmove');
 			var dragNode = nodeOptions.id;
 			$.each(edgeLayer.children, function(index, value) {
 
@@ -4166,7 +4161,7 @@ module.exports = function Sociogram() {
 
 
 					if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-						window.tools.notify('Sociogram removing edge.',2);
+						note.debug('Sociogram removing edge.');
 						sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
 					}
 					selectedNodes = [];
@@ -4184,7 +4179,7 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dragend', function() {
-			window.tools.notify('dragend',1);
+			note.debug('dragend');
 
 			// set the context
 			var from = {};
@@ -4251,7 +4246,7 @@ module.exports = function Sociogram() {
 		}
 
 		// the below won't work because we are storing the coords in an edge now...
-		window.tools.notify('Sociogram is adding an edge.',2);
+		note.debug('Sociogram is adding an edge.');
 		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
 
@@ -4273,7 +4268,7 @@ module.exports = function Sociogram() {
 			edgeLayer.draw();
 		},0);
 		nodeLayer.draw();
-		window.tools.notify('Created Edge between '+fromObject.label+' and '+toObject.label, 'success',2);
+		note.debug('Created Edge between '+fromObject.label+' and '+toObject.label);
 
 		return true;
 
@@ -4282,30 +4277,24 @@ module.exports = function Sociogram() {
 	sociogram.removeEdge = function(properties) {
 
 		if (!properties) {
-			throw new Error('No properties passed to sociogram.removeEdge().');
+			note.error('No properties passed to sociogram.removeEdge()!');
 		}
 
 		// Test if we are being called by an event, or directly
 		if (typeof properties.detail !== 'undefined') {
-			console.warn('removeEdge called by event');
 			properties = properties.detail;
 		}
 
-		console.warn(properties);
 		var toNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
 
-		console.warn(toNode);
-		console.warn(fromNode);
-
-		window.tools.notify('Removing edge.');
+		note.debug('Removing edge.');
 
 		// This function is failing because two nodes are matching below
 		var found = false;
 		$.each(sociogram.getKineticEdges(), function(index, value) {
 			if (value !== undefined) {
 				if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
-					console.warn('match');
 					found = true;
 					edgeLayer.children[index].remove();
 					edgeLayer.draw();
@@ -4315,7 +4304,7 @@ module.exports = function Sociogram() {
 		});
 
 		if (!found) {
-			throw new Error('sociogram.removeEdge() failed!');
+			note.error('sociogram.removeEdge() failed! Couldn\'t find the specified edge.');
 		} else {
 			return true;
 		}
@@ -4354,7 +4343,7 @@ module.exports = function Sociogram() {
 		stage.add(edgeLayer);
 		stage.add(nodeLayer);
 		stage.add(uiLayer);
-		window.tools.notify('Konva stage initialised.',1);
+		note.debug('Konva stage initialised.');
 	};
 
 	sociogram.drawUIComponents = function () {
@@ -4399,7 +4388,7 @@ module.exports = function Sociogram() {
 		uiLayer.draw();
 
 		// sociogram.initNewNodeForm();
-		window.tools.notify('User interface initialised.',1);
+		note.debug('User interface initialised.');
 	};
 
 	// New Node Form
@@ -4560,9 +4549,6 @@ exports.arrayDifference = function(a1, a2) {
 };
 
 exports.removeFromObject = function(item, object) {
-    console.log('removeFromObject');
-    console.log(item);
-    console.log(object);
     var removeCounter = 0;
 
     for (var index = 0; index < object.length; index++) {
@@ -4572,7 +4558,6 @@ exports.removeFromObject = function(item, object) {
             index--;
         }
     }
-    console.log(object);
     return removeCounter;
 };
 

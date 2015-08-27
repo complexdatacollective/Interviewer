@@ -1,6 +1,5 @@
 /* exported Network, Node, Edge */
-/* global $, window, randomBetween */
-
+/* global $, window,note, tools */
 
 /*
 
@@ -42,7 +41,7 @@ module.exports = function Network() {
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
-            window.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
+            note.error('Node already exists with id '+properties.id+'. Cancelling!');
             return false;
         }
 
@@ -50,7 +49,7 @@ module.exports = function Network() {
         // This reserved list is stored with the ego.
         if (!force) {
             if (reserved_ids.indexOf(properties.id) !== -1) {
-                window.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+                note.error('Node id '+properties.id+' is already in use with this ego. Cancelling!');
                 return false;
             }
         }
@@ -81,7 +80,7 @@ module.exports = function Network() {
 
     this.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
-            window.tools.notify('Error loading network. Data format incorrect.',1);
+            note.error('Error loading network. Data format incorrect.');
             return false;
         } else {
             if (!overwrite) {
@@ -135,12 +134,12 @@ module.exports = function Network() {
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
-            window.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
+            note.error('Error while executing network.addEdge(). "To" and "From" must BOTH be defined.');
             return false;
         }
 
         if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
-            window.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
+            note.warn('An edge with this id already exists! I\'m generating a new one for you.');
             var newEdgeID = 0;
             while (_this.getEdge(newEdgeID) !== false) {
                 newEdgeID++;
@@ -187,7 +186,7 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-            window.tools.notify('ERROR: Edge already exists!',2);
+            note.error('ERROR: Edge already exists!');
             return false;
         }
 
@@ -216,7 +215,6 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            //   localEdges.remove(edge);
             window.tools.removeFromObject(edge, _this.edges);
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
@@ -236,7 +234,7 @@ module.exports = function Network() {
         if (!preserveEdges) {
             this.removeEdge(_this.getNodeEdges(id));
         } else {
-            window.tools.notify('NOTICE: preserving node edges after deletion.',2);
+            note.info('NOTICE: preserving node edges after deletion.');
         }
 
         var nodeRemovedEvent, log;
@@ -456,21 +454,21 @@ module.exports = function Network() {
     this.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
         edgeProbability = edgeProbability || 0.4;
-        window.tools.notify('Creating random graph...',1);
+        note.info('Creating random graph...');
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;
             window.tools.notify('Adding node '+current+' of '+nodeCount,2);
             // Use random coordinates
             var nodeOptions = {
-                coords: [Math.round(randomBetween(100,window.innerWidth-100)),Math.round(randomBetween(100,window.innerHeight-100))]
+                coords: [Math.round(tools.randomBetween(100,window.innerWidth-100)),Math.round(tools.randomBetween(100,window.innerHeight-100))]
             };
             this.addNode(nodeOptions);
         }
 
-        window.tools.notify('Adding _this.edges.',3);
+        note.debug('Adding _this.edges.');
         $.each(_this.nodes, function (index) {
-            if (randomBetween(0, 1) < edgeProbability) {
-                var randomFriend = Math.round(randomBetween(0,_this.nodes.length-1));
+            if (tools.randomBetween(0, 1) < edgeProbability) {
+                var randomFriend = Math.round(tools.randomBetween(0,_this.nodes.length-1));
                 _this.addEdge({from:_this.nodes[index].id,to:_this.nodes[randomFriend].id});
 
             }

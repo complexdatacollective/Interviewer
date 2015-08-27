@@ -1,4 +1,4 @@
-/* global $, window */
+/* global $, window, note */
 /* exported Menu */
 var Menu = function Menu(options) {
     'use strict';
@@ -134,7 +134,8 @@ var Menu = function Menu(options) {
     };
 
     menu.init = function() {
-        window.tools.notify('Menu initialising.', 1);
+        note.info('Menu initialising.');
+
         window.tools.extend(menu.options,options);
     };
 
