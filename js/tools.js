@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -122,6 +122,26 @@ exports.removeFromObject = function(item, object) {
         }
     }
     return removeCounter;
+};
+
+// helper functions
+
+exports.nwNotification = function(options) {
+    var notification = new Notification('Network Canvas:',options);
+    notification.onclick = function () {
+        // alert('Notification Clicked');
+    };
+
+    notification.onshow = function () {
+        // play sound on show
+        // myAud=document.getElementById("audio1");
+        // myAud.play();
+
+        // auto close after 1 second
+        // setTimeout(function() {
+        //     notification.close();
+        // }, 1000);
+    };
 };
 
 exports.deepEquals = function(a, x) {

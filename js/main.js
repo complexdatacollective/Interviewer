@@ -1,4 +1,4 @@
-/* global window, nodeRequire, FastClick, document, Konva, $, L */
+/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit */
 $(document).ready(function() {
     'use strict';
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.debugLevel = 0;
-    window.netCanvas.studyProtocol = 'dphil-protocol';
+    window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -69,11 +69,17 @@ $(document).ready(function() {
         }
     };
 
+    // Initialise logging and custom notification
+    window.note = log.noConflict();
+    note.setLevel('warn', false);
+
+    window.logger = require('./logger.js');
+
     var args = window.getArguments();
 
     // Enable dev mode.
-    if (args && (args.dev === 'true' || args.dev === '1')) {
-        console.log('Development mode enabled.');
+    if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+        note.info('Development mode enabled.');
         window.netCanvas.devMode = true;
         if (window.isNodeWebkit) {
             window.gui.Window.get().showDevTools();
@@ -81,7 +87,7 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        window.netCanvas.debugLevel = 1;
+        note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {
@@ -91,7 +97,6 @@ $(document).ready(function() {
             // could show button or prompt?
         }
     }
-
 
     $('.refresh-button').on('click', function() {
         if(window.isNodeWebkit) {
@@ -105,14 +110,30 @@ $(document).ready(function() {
 
     });
 
+    // Override notifications on node webkit to use native notifications
+    if (isNodeWebkit === true) {
+        note.error = function(msg) {
+            tools.nwNotification({
+                icon: 'img/error.png',
+                body: msg
+            });
+        };
+
+        note.warn = function(msg) {
+            tools.nwNotification({
+                icon: 'img/alert.png',
+                body: msg
+            });
+        };
+    }
 
     // print some version stuff
     if (window.isNodeWebkit) {
         var version = window.process.versions['node-webkit'];
-        console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
+        note.info('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
     } else if (window.isCordova) {
         // can we get meaningful version info on cordova? how about a get request to the package.json?
-        console.log('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
+        note.info('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
     } else {
         // anything we can do in browser? yes.
     }
@@ -152,8 +173,6 @@ $(document).ready(function() {
     // Initialise datastore
     window.dataStore = require('./iointerface.js');
 
-    // Initialise logger
-    window.logger = require('./logger.js');
 
     // Set up a new session
     window.netCanvas.Modules.session = require('./session.js');
@@ -167,7 +186,7 @@ $(document).ready(function() {
     // to do: expand this function to validate a proposed session, not just check that it exists.
     protocolExists(window.netCanvas.studyProtocol, function(exists){
         if (!exists) {
-            console.log('WARNING: Specified study protocol was not found. Using default.');
+            note.warn('WARNING: Specified study protocol was not found. Using default.');
             window.netCanvas.studyProtocol = 'default';
         }
         // Initialise session now.

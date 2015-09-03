@@ -12050,6 +12050,11 @@ fieldset[disabled] .btn-modal-danger.active {
           justify-content: center;
   max-width: 1600px;
 }
+@media (min-width: 1400px) {
+  .container {
+    width: 80% !important;
+  }
+}
 .node-bin-container {
   display: -webkit-box;
   display: -webkit-flex;
@@ -12529,6 +12534,9 @@ fieldset[disabled] .btn-modal-danger.active {
           transform: translateX(50px);
   opacity: 0;
 }
+.ord-active-node-list .node-bucket-item {
+  opacity: 1;
+}
 .active-node-list .node-bucket-item.shown {
   -webkit-transform: translateX(0px);
       -ms-transform: translateX(0px);
@@ -12860,10 +12868,11 @@ fieldset[disabled] .btn-modal-danger.active {
 }
 @media (max-width: 1024px) {
   .relationships {
-    top: 1vmin;
+    height: auto;
+    left: 1vw;
     right: 1vw;
     bottom: 1vmin;
-    left: 1vw;
+    top: 1vmin;
   }
 }
 .relationship-content {

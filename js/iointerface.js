@@ -1,10 +1,8 @@
-/* global window, require */
+/* global window, require, note, nodeRequire, isNodeWebkit */
 /* exported IOInterface */
 
 var IOInterface = function IOInterface() {
     'use strict';
-    // this could be a remote host
-    // Type 3: Persistent datastore with automatic loading
     var Datastore = require('nedb');
     var path = require('path');
     var db;
@@ -14,26 +12,32 @@ var IOInterface = function IOInterface() {
 
     ioInterface.init = function(callback) {
 
+        var dbLocation = path.join('database/', window.netCanvas.Modules.session.name+'.db');
+
+        // Use the node version of nedb when in the node webkit environment.
+        if(isNodeWebkit === true) {
+            Datastore = nodeRequire('nedb');
+            path = nodeRequire('path');
+            dbLocation = path.join(nodeRequire('nw.gui').App.dataPath, window.netCanvas.Modules.session.name+'.db');
+        }
+
         if (!callback) {
             return false;
         }
         // After init, first priority is to tro to load previous session for this protocol.
         // We might not be able to, because of space constraints.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
-        window.tools.notify('ioInterface initialising.', 1);
-        window.tools.notify('Using '+window.netCanvas.Modules.session.name+' as database name.', 1);
+        note.info('ioInterface initialising.');
+        note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');
 
-        db = new Datastore({ filename: path.join('database/', window.netCanvas.Modules.session.name+'.db'), autoload: true });
-        console.log('db created');
-        console.log(db);
-
+        db = new Datastore({ filename: dbLocation, autoload: true });
         db.find({}).sort({'sessionParameters.date': 1 }).exec(function (err, docs) {
             if (err) {
                 return false;
                 // handle error
             }
             if (docs.length !== undefined && docs.length > 0) {
-                window.tools.notify('ioInterface finished initialising.', 1);
+                note.debug('ioInterface finished initialising.');
                 initialised = true;
                 callback(docs[0]._id);
 
@@ -42,8 +46,8 @@ var IOInterface = function IOInterface() {
                 var sessionDate = new Date();
                 db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
                     if(err) {
+                        note.error(err);
                         return false;
-                      // do something with the error
                     }
 
                     // Two documents were inserted in the database
@@ -52,13 +56,17 @@ var IOInterface = function IOInterface() {
 
                     initialised = true;
                     callback(newDoc[0]._id);
-                    window.tools.notify('ioInterface finished initialising.', 1);
+                    note.debug('ioInterface finished initialising.');
                     return true;
                 });
             }
 
         });
 
+    };
+
+    ioInterface.getDB = function() {
+        return db;
     };
 
     ioInterface.initialised = function() {
@@ -71,26 +79,25 @@ var IOInterface = function IOInterface() {
 
     ioInterface.save = function(sessionData, id) {
         delete window.netCanvas.Modules.session.sessionData._id;
-        window.tools.notify('IOInterface being asked to save to data store.',1);
-        window.tools.notify('Data to be saved: ', 2);
-        window.tools.notify(sessionData, 2);
+        note.info('IOInterface saving.');
+        note.debug(sessionData);
 
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
-            window.tools.notify('Saving complete.', 1);
+            note.debug('Saving complete.');
         });
 
     };
 
     ioInterface.update = function(key, sessionData,id) {
-        window.tools.notify('IOInterface being asked to update data store.',1);
+        note.debug('IOInterface being asked to update data store.');
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
-            window.tools.notify('Updating complete.', 1);
+            note.debug('Updating complete.');
         });
 
     };
@@ -99,6 +106,7 @@ var IOInterface = function IOInterface() {
         // db.find with empty object returns all objects.
         db.find({}, function (err, docs) {
             if (err) {
+                note.error(err);
                 return false;
             }
 
@@ -112,18 +120,19 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.deleteDocument = function(callback) {
-        window.tools.notify('ioInterface being asked to delete document.', 2);
+        note.info('ioInterface deleting document.');
         db.remove({ _id: window.netCanvas.Modules.session.id }, {}, function (err) {
             if (err) {
+                note.error(err);
                 return false;
             }
-            window.tools.notify('Deleting complete.', 2);
+            note.debug('Deleting complete.');
             if(callback) { callback(); }
         });
     };
 
     ioInterface.load = function(callback, id) {
-        window.tools.notify('ioInterface being asked to load data.', 2);
+        note.info('ioInterface loading data.');
         db.find({'_id': id}, function (err, docs) {
             if (err) {
                 // handle error

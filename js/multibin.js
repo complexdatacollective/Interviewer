@@ -20,8 +20,6 @@ module.exports = function MultiBin() {
 		subheading: 'Default Subheading.'
 	};
 
-	var open = false;
-
 	var stageChangeHandler = function() {
 		multiBin.destroy();
 	};
@@ -60,7 +58,6 @@ module.exports = function MultiBin() {
 			$('#'+multiBin.options.followup.questions[index].variable).val('');
 		});
 
-
 		$('.followup').hide();
 		$('.black-overlay').hide();
 	};
@@ -73,20 +70,18 @@ module.exports = function MultiBin() {
 		$('.black-overlay').hide();
 	};
 
-	var backgroundClickHandler = function(e) {
-		e.stopPropagation();
-		if (e.target !== e.currentTarget) {
+	var backgroundClickHandler = function() {
+		if ($('.node-bin-active').length > 0) {
 
-			if (open === true) {
 				setTimeout(function() {
 					$('.node-bin-container').children().css({opacity:1});
 					$('.node-question-container').fadeIn();
 				}, 300);
 
-				$('.copy').removeClass('node-bin-active');
-				$('.copy').addClass('node-bin-static');
-				$('.copy').children('h1, p').show();
-				$('.copy').removeClass('copy');
+				var current = $('.node-bin-active');
+				$(current).removeClass('node-bin-active');
+				$(current).addClass('node-bin-static');
+				$(current).children('h1, p').show();
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
@@ -98,64 +93,53 @@ module.exports = function MultiBin() {
 						taskComprehended = true;
 					}
 				}});
-				open = false;
-			}
 
+		} else {
 		}
 
 	};
 
 	var nodeBinClickHandler = function(e) {
-		e.stopPropagation();
-		if (open === false) {
+		if (e.target === this) {
 
-			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
-				if (taskComprehended === false) {
-					var eventProperties = {
-						stage: window.netCanvas.Modules.session.currentStage(),
-						timestamp: new Date()
-					};
-					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-					window.dispatchEvent(log);
-					taskComprehended = true;
+				if(!$(this).hasClass('node-bin-active')) {
+					$('.node-bin-container').children().not(this).css({opacity:0});
+					$('.node-question-container').hide();
+					var position = $(this).offset();
+					var nodeBinDetails = $(this);
+					nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+					setTimeout(function() {
+						nodeBinDetails.offset(position);
+						nodeBinDetails.addClass('node-bin-active');
+
+						nodeBinDetails.removeClass('node-bin-static');
+						nodeBinDetails.children('h1, p').hide();
+
+						// $('.content').append(nodeBinDetails);
+
+						nodeBinDetails.addClass('node-bin-active');
+						setTimeout(function(){
+							var timer = 0;
+							$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+								timer = timer + (index*10);
+								setTimeout(function(){
+									$(value).on('click', nodeClickHandler);
+									$(value).addClass('shown');
+								},timer);
+							});
+						},300);
+					}, 500);
+
 				}
-			}});
-			if(!$(this).hasClass('.node-bin-active')) {
-				$('.node-bin-container').children().not(this).css({opacity:0});
-				$('.node-question-container').hide();
-				var position = $(this).offset();
-				var nodeBinDetails = $(this);
-				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
-				setTimeout(function() {
-					nodeBinDetails.offset(position);
-					nodeBinDetails.addClass('node-bin-active copy');
-
-					nodeBinDetails.removeClass('node-bin-static');
-					nodeBinDetails.children('h1, p').hide();
-
-					// $('.content').append(nodeBinDetails);
-
-					nodeBinDetails.addClass('node-bin-active');
-					setTimeout(function(){
-						var timer = 0;
-						$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
-							timer = timer + (index*10);
-							setTimeout(function(){
-								$(value).addClass('shown');
-							},timer);
-						});
-					},300);
-				}, 500);
-
-			}
-
-			open = true;
 		}
 
 	};
 
 	var nodeClickHandler = function(e) {
+		e.preventDefault();
 		e.stopPropagation();
+		e.stopImmediatePropagation();
+
 		var el = $(this);
 		var id = $(this).parent().parent().data('index');
 
@@ -174,20 +158,20 @@ module.exports = function MultiBin() {
 				});
 			}
 			window.network.updateEdge(edgeID,properties);
-			$(this).fadeOut(400, function() {
-				$(this).appendTo('.node-bucket');
-				$(this).css('display', '');
-				var noun = 'people';
-				if ($('.c'+id).children('.active-node-list').children().length === 1) {
-					noun = 'person';
-				}
-				if ($('.c'+id).children('.active-node-list').children().length === 0) {
-					$('.c'+id).children('p').html('(Empty)');
-				} else {
-					$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
-				}
 
-			});
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
 
 		}
 
@@ -250,7 +234,7 @@ module.exports = function MultiBin() {
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
-				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
 			}
 
 		}
@@ -298,7 +282,7 @@ module.exports = function MultiBin() {
 			drop: function(event, ui) {
 				var dropped = ui.draggable;
 				var droppedOn = $(this);
-
+                $(dropped).css({'top':0, 'left' :0});
 				// Check if the node has been dropped into a bin that triggers the followup
 				if(typeof multiBin.options.followup !== 'undefined' && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 					$('.followup').show();
@@ -423,7 +407,6 @@ module.exports = function MultiBin() {
 	// Event Listeners
 	window.addEventListener('changeStageStart', stageChangeHandler, false);
 	$('.node-bin-static').on('click', nodeBinClickHandler);
-	$('.node-bucket-item').on('click', nodeClickHandler);
 	$('.content').on('click', backgroundClickHandler);
 	$('.followup-form').on('submit', followupHandler);
 	$('.followup-cancel').on('click', followupCancelHandler);

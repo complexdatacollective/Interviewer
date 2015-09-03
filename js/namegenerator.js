@@ -1,4 +1,4 @@
-/* global $, window, Odometer, document  */
+/* global $, window, Odometer, document, note  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -57,13 +57,10 @@ module.exports = function Namegenerator() {
     };
 
     var roleClickHandler = function() {
-
-        if ($(this).data('selected') === true) {
-            $(this).data('selected', false);
+        if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
         } else {
-            $(this).data('selected', true);
             $(this).addClass('selected');
         }
 
@@ -119,7 +116,7 @@ module.exports = function Namegenerator() {
         // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
         var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
         $.each(roleEdges, function(index, value) {
-            $(relationshipPanel).children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+            $(relationshipPanel).children('.relationship-types-container').children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected');
         });
 
         // Populate the form with this nodes data.
@@ -319,7 +316,7 @@ module.exports = function Namegenerator() {
     namegenerator.generateTestAlters = function(number) {
 
         if (!number) {
-            window.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+            note.error('You must specify the number of test alters you want to create. Cancelling!');
             return false;
         }
 
@@ -365,6 +362,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.openNodeBox = function() {
+        $('.newNodeBox').height($('.newNodeBox').height());
         $('.newNodeBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
         setTimeout(function() {
@@ -392,7 +390,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.destroy = function() {
-        window.tools.notify('Destroying namegenerator.',0);
+        note.debug('Destroying namegenerator.');
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);

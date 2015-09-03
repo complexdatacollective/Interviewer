@@ -33,11 +33,13 @@
     "konva": "https://github.com/jthrilly/konva.git#~0.9.5",
     "fastclick": "~1.0.6",
     "jquery-deserialize": "~1.3.1",
-    "odometer": "~0.4.7",
+    "odometer": "~0.4.7",  
     "graham_scan": "git@github.com:brian3kb/graham_scan_js.git#master",
     "deepmerge": "~0.2.10",
     "swiper": "~3.1.0",
     "interact": "~1.2.4",
-    "seiyria-bootstrap-slider": "~5.0.13"
+    "seiyria-bootstrap-slider": "~5.0.13",
+    "loglevel": "~1.3.1"
+
   }
 }

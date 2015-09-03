@@ -1,5 +1,5 @@
 /* exported Logger */
-/* global window */
+/* global window, note */
 
 var Logger = function Logger() {
     'use strict';
@@ -8,7 +8,7 @@ var Logger = function Logger() {
     // todo: add custom events so that other scripts can listen for log changes (think vis).
 
     logger.init = function() {
-        window.tools.notify('Logger initialising.', 1);
+        note.info('Logger initialising.');
 
         window.log = window.netCanvas.Modules.session.registerData('log', true);
 
@@ -37,7 +37,7 @@ var Logger = function Logger() {
         window.dispatchEvent(unsavedChanges);
         return true;
     };
-    
+
     return logger;
 };
 

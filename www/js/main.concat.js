@@ -893,13 +893,11 @@ var Interview = function Interview() {
 
     return interview;
 };
-;/* global window, require */
+;/* global window, require, note, nodeRequire, isNodeWebkit */
 /* exported IOInterface */
 
 var IOInterface = function IOInterface() {
     'use strict';
-    // this could be a remote host
-    // Type 3: Persistent datastore with automatic loading
     var Datastore = require('nedb');
     var path = require('path');
     var db;
@@ -909,26 +907,32 @@ var IOInterface = function IOInterface() {
 
     ioInterface.init = function(callback) {
 
+        var dbLocation = path.join('database/', window.netCanvas.Modules.session.name+'.db');
+
+        // Use the node version of nedb when in the node webkit environment.
+        if(isNodeWebkit === true) {
+            Datastore = nodeRequire('nedb');
+            path = nodeRequire('path');
+            dbLocation = path.join(nodeRequire('nw.gui').App.dataPath, window.netCanvas.Modules.session.name+'.db');
+        }
+
         if (!callback) {
             return false;
         }
         // After init, first priority is to tro to load previous session for this protocol.
         // We might not be able to, because of space constraints.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
-        window.tools.notify('ioInterface initialising.', 1);
-        window.tools.notify('Using '+window.netCanvas.Modules.session.name+' as database name.', 1);
+        note.info('ioInterface initialising.');
+        note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');
 
-        db = new Datastore({ filename: path.join('database/', window.netCanvas.Modules.session.name+'.db'), autoload: true });
-        console.log('db created');
-        console.log(db);
-
+        db = new Datastore({ filename: dbLocation, autoload: true });
         db.find({}).sort({'sessionParameters.date': 1 }).exec(function (err, docs) {
             if (err) {
                 return false;
                 // handle error
             }
             if (docs.length !== undefined && docs.length > 0) {
-                window.tools.notify('ioInterface finished initialising.', 1);
+                note.debug('ioInterface finished initialising.');
                 initialised = true;
                 callback(docs[0]._id);
 
@@ -937,8 +941,8 @@ var IOInterface = function IOInterface() {
                 var sessionDate = new Date();
                 db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
                     if(err) {
+                        note.error(err);
                         return false;
-                      // do something with the error
                     }
 
                     // Two documents were inserted in the database
@@ -947,13 +951,17 @@ var IOInterface = function IOInterface() {
 
                     initialised = true;
                     callback(newDoc[0]._id);
-                    window.tools.notify('ioInterface finished initialising.', 1);
+                    note.debug('ioInterface finished initialising.');
                     return true;
                 });
             }
 
         });
 
+    };
+
+    ioInterface.getDB = function() {
+        return db;
     };
 
     ioInterface.initialised = function() {
@@ -966,26 +974,25 @@ var IOInterface = function IOInterface() {
 
     ioInterface.save = function(sessionData, id) {
         delete window.netCanvas.Modules.session.sessionData._id;
-        window.tools.notify('IOInterface being asked to save to data store.',1);
-        window.tools.notify('Data to be saved: ', 2);
-        window.tools.notify(sessionData, 2);
+        note.info('IOInterface saving.');
+        note.debug(sessionData);
 
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
-            window.tools.notify('Saving complete.', 1);
+            note.debug('Saving complete.');
         });
 
     };
 
     ioInterface.update = function(key, sessionData,id) {
-        window.tools.notify('IOInterface being asked to update data store.',1);
+        note.debug('IOInterface being asked to update data store.');
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
             }
-            window.tools.notify('Updating complete.', 1);
+            note.debug('Updating complete.');
         });
 
     };
@@ -994,6 +1001,7 @@ var IOInterface = function IOInterface() {
         // db.find with empty object returns all objects.
         db.find({}, function (err, docs) {
             if (err) {
+                note.error(err);
                 return false;
             }
 
@@ -1007,18 +1015,19 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.deleteDocument = function(callback) {
-        window.tools.notify('ioInterface being asked to delete document.', 2);
+        note.info('ioInterface deleting document.');
         db.remove({ _id: window.netCanvas.Modules.session.id }, {}, function (err) {
             if (err) {
+                note.error(err);
                 return false;
             }
-            window.tools.notify('Deleting complete.', 2);
+            note.debug('Deleting complete.');
             if(callback) { callback(); }
         });
     };
 
     ioInterface.load = function(callback, id) {
-        window.tools.notify('ioInterface being asked to load data.', 2);
+        note.info('ioInterface loading data.');
         db.find({'_id': id}, function (err, docs) {
             if (err) {
                 // handle error
@@ -1134,7 +1143,7 @@ module.exports = function ListSelect() {
     return listSelect;
 };
 ;/* exported Logger */
-/* global window */
+/* global window, note */
 
 var Logger = function Logger() {
     'use strict';
@@ -1143,7 +1152,7 @@ var Logger = function Logger() {
     // todo: add custom events so that other scripts can listen for log changes (think vis).
 
     logger.init = function() {
-        window.tools.notify('Logger initialising.', 1);
+        note.info('Logger initialising.');
 
         window.log = window.netCanvas.Modules.session.registerData('log', true);
 
@@ -1172,12 +1181,12 @@ var Logger = function Logger() {
         window.dispatchEvent(unsavedChanges);
         return true;
     };
-    
+
     return logger;
 };
 
 module.exports = new Logger();
-;/* global window, nodeRequire, FastClick, document, Konva, $, L */
+;/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit */
 $(document).ready(function() {
     'use strict';
 
@@ -1195,7 +1204,7 @@ $(document).ready(function() {
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.debugLevel = 0;
-    window.netCanvas.studyProtocol = 'dphil-protocol';
+    window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -1248,11 +1257,17 @@ $(document).ready(function() {
         }
     };
 
+    // Initialise logging and custom notification
+    window.note = log.noConflict();
+    note.setLevel('warn', false);
+
+    window.logger = require('./logger.js');
+
     var args = window.getArguments();
 
     // Enable dev mode.
-    if (args && (args.dev === 'true' || args.dev === '1')) {
-        console.log('Development mode enabled.');
+    if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+        note.info('Development mode enabled.');
         window.netCanvas.devMode = true;
         if (window.isNodeWebkit) {
             window.gui.Window.get().showDevTools();
@@ -1260,7 +1275,7 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        window.netCanvas.debugLevel = 1;
+        note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {
@@ -1270,7 +1285,6 @@ $(document).ready(function() {
             // could show button or prompt?
         }
     }
-
 
     $('.refresh-button').on('click', function() {
         if(window.isNodeWebkit) {
@@ -1284,14 +1298,30 @@ $(document).ready(function() {
 
     });
 
+    // Override notifications on node webkit to use native notifications
+    if (isNodeWebkit === true) {
+        note.error = function(msg) {
+            tools.nwNotification({
+                icon: 'img/error.png',
+                body: msg
+            });
+        };
+
+        note.warn = function(msg) {
+            tools.nwNotification({
+                icon: 'img/alert.png',
+                body: msg
+            });
+        };
+    }
 
     // print some version stuff
     if (window.isNodeWebkit) {
         var version = window.process.versions['node-webkit'];
-        console.log('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
+        note.info('netCanvas '+window.gui.App.manifest.version+' running on NWJS '+version);
     } else if (window.isCordova) {
         // can we get meaningful version info on cordova? how about a get request to the package.json?
-        console.log('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
+        note.info('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
     } else {
         // anything we can do in browser? yes.
     }
@@ -1331,8 +1361,6 @@ $(document).ready(function() {
     // Initialise datastore
     window.dataStore = require('./iointerface.js');
 
-    // Initialise logger
-    window.logger = require('./logger.js');
 
     // Set up a new session
     window.netCanvas.Modules.session = require('./session.js');
@@ -1346,7 +1374,7 @@ $(document).ready(function() {
     // to do: expand this function to validate a proposed session, not just check that it exists.
     protocolExists(window.netCanvas.studyProtocol, function(exists){
         if (!exists) {
-            console.log('WARNING: Specified study protocol was not found. Using default.');
+            note.warn('WARNING: Specified study protocol was not found. Using default.');
             window.netCanvas.studyProtocol = 'default';
         }
         // Initialise session now.
@@ -1657,7 +1685,7 @@ module.exports = function GeoInterface() {
 
   	return geoInterface;
 };
-;/* global $, window, module, alert */
+;/* global $, window, module, note, alert */
 /* exported Menu */
 module.exports = function Menu(options) {
     'use strict';
@@ -1729,7 +1757,7 @@ module.exports = function Menu(options) {
     };
 
     menu.init = function(options) {
-        window.tools.notify('Menu initialising.', 1);
+        note.info('Menu initialising.');
         window.tools.extend(menu.options,options);
 
         var newMenu = {};
@@ -1786,8 +1814,6 @@ module.exports = function MultiBin() {
 		subheading: 'Default Subheading.'
 	};
 
-	var open = false;
-
 	var stageChangeHandler = function() {
 		multiBin.destroy();
 	};
@@ -1826,7 +1852,6 @@ module.exports = function MultiBin() {
 			$('#'+multiBin.options.followup.questions[index].variable).val('');
 		});
 
-
 		$('.followup').hide();
 		$('.black-overlay').hide();
 	};
@@ -1839,20 +1864,18 @@ module.exports = function MultiBin() {
 		$('.black-overlay').hide();
 	};
 
-	var backgroundClickHandler = function(e) {
-		e.stopPropagation();
-		if (e.target !== e.currentTarget) {
+	var backgroundClickHandler = function() {
+		if ($('.node-bin-active').length > 0) {
 
-			if (open === true) {
 				setTimeout(function() {
 					$('.node-bin-container').children().css({opacity:1});
 					$('.node-question-container').fadeIn();
 				}, 300);
 
-				$('.copy').removeClass('node-bin-active');
-				$('.copy').addClass('node-bin-static');
-				$('.copy').children('h1, p').show();
-				$('.copy').removeClass('copy');
+				var current = $('.node-bin-active');
+				$(current).removeClass('node-bin-active');
+				$(current).addClass('node-bin-static');
+				$(current).children('h1, p').show();
 				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
 					if (taskComprehended === false) {
 						var eventProperties = {
@@ -1864,64 +1887,53 @@ module.exports = function MultiBin() {
 						taskComprehended = true;
 					}
 				}});
-				open = false;
-			}
 
+		} else {
 		}
 
 	};
 
 	var nodeBinClickHandler = function(e) {
-		e.stopPropagation();
-		if (open === false) {
+		if (e.target === this) {
 
-			$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: true, start: function() {
-				if (taskComprehended === false) {
-					var eventProperties = {
-						stage: window.netCanvas.Modules.session.currentStage(),
-						timestamp: new Date()
-					};
-					log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-					window.dispatchEvent(log);
-					taskComprehended = true;
+				if(!$(this).hasClass('node-bin-active')) {
+					$('.node-bin-container').children().not(this).css({opacity:0});
+					$('.node-question-container').hide();
+					var position = $(this).offset();
+					var nodeBinDetails = $(this);
+					nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+					setTimeout(function() {
+						nodeBinDetails.offset(position);
+						nodeBinDetails.addClass('node-bin-active');
+
+						nodeBinDetails.removeClass('node-bin-static');
+						nodeBinDetails.children('h1, p').hide();
+
+						// $('.content').append(nodeBinDetails);
+
+						nodeBinDetails.addClass('node-bin-active');
+						setTimeout(function(){
+							var timer = 0;
+							$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+								timer = timer + (index*10);
+								setTimeout(function(){
+									$(value).on('click', nodeClickHandler);
+									$(value).addClass('shown');
+								},timer);
+							});
+						},300);
+					}, 500);
+
 				}
-			}});
-			if(!$(this).hasClass('.node-bin-active')) {
-				$('.node-bin-container').children().not(this).css({opacity:0});
-				$('.node-question-container').hide();
-				var position = $(this).offset();
-				var nodeBinDetails = $(this);
-				nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
-				setTimeout(function() {
-					nodeBinDetails.offset(position);
-					nodeBinDetails.addClass('node-bin-active copy');
-
-					nodeBinDetails.removeClass('node-bin-static');
-					nodeBinDetails.children('h1, p').hide();
-
-					// $('.content').append(nodeBinDetails);
-
-					nodeBinDetails.addClass('node-bin-active');
-					setTimeout(function(){
-						var timer = 0;
-						$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
-							timer = timer + (index*10);
-							setTimeout(function(){
-								$(value).addClass('shown');
-							},timer);
-						});
-					},300);
-				}, 500);
-
-			}
-
-			open = true;
 		}
 
 	};
 
 	var nodeClickHandler = function(e) {
+		e.preventDefault();
 		e.stopPropagation();
+		e.stopImmediatePropagation();
+
 		var el = $(this);
 		var id = $(this).parent().parent().data('index');
 
@@ -1940,20 +1952,20 @@ module.exports = function MultiBin() {
 				});
 			}
 			window.network.updateEdge(edgeID,properties);
-			$(this).fadeOut(400, function() {
-				$(this).appendTo('.node-bucket');
-				$(this).css('display', '');
-				var noun = 'people';
-				if ($('.c'+id).children('.active-node-list').children().length === 1) {
-					noun = 'person';
-				}
-				if ($('.c'+id).children('.active-node-list').children().length === 0) {
-					$('.c'+id).children('p').html('(Empty)');
-				} else {
-					$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
-				}
 
-			});
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
 
 		}
 
@@ -2016,7 +2028,7 @@ module.exports = function MultiBin() {
 
 			// Add cancel button if required
 			if (typeof multiBin.options.followup.cancel !== 'undefined') {
-				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button type="submit" class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBin.options.followup.cancel+'</button></div>');
 			}
 
 		}
@@ -2064,7 +2076,7 @@ module.exports = function MultiBin() {
 			drop: function(event, ui) {
 				var dropped = ui.draggable;
 				var droppedOn = $(this);
-
+                $(dropped).css({'top':0, 'left' :0});
 				// Check if the node has been dropped into a bin that triggers the followup
 				if(typeof multiBin.options.followup !== 'undefined' && multiBin.options.followup.trigger.indexOf(multiBin.options.variable.values[index]) >=0 ) {
 					$('.followup').show();
@@ -2189,7 +2201,6 @@ module.exports = function MultiBin() {
 	// Event Listeners
 	window.addEventListener('changeStageStart', stageChangeHandler, false);
 	$('.node-bin-static').on('click', nodeBinClickHandler);
-	$('.node-bucket-item').on('click', nodeClickHandler);
 	$('.content').on('click', backgroundClickHandler);
 	$('.followup-form').on('submit', followupHandler);
 	$('.followup-cancel').on('click', followupCancelHandler);
@@ -2197,7 +2208,7 @@ module.exports = function MultiBin() {
 };
 return multiBin;
 };
-;/* global $, window, Odometer, document  */
+;/* global $, window, Odometer, document, note  */
 /* exported Namegenerator */
 module.exports = function Namegenerator() {
     'use strict';
@@ -2256,13 +2267,10 @@ module.exports = function Namegenerator() {
     };
 
     var roleClickHandler = function() {
-
-        if ($(this).data('selected') === true) {
-            $(this).data('selected', false);
+        if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
 
         } else {
-            $(this).data('selected', true);
             $(this).addClass('selected');
         }
 
@@ -2318,7 +2326,7 @@ module.exports = function Namegenerator() {
         // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
         var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
         $.each(roleEdges, function(index, value) {
-            $(relationshipPanel).children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
+            $(relationshipPanel).children('.relationship-types-container').children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected');
         });
 
         // Populate the form with this nodes data.
@@ -2518,7 +2526,7 @@ module.exports = function Namegenerator() {
     namegenerator.generateTestAlters = function(number) {
 
         if (!number) {
-            window.tools.notify('You must specify the number of test alters you want to create. Cancelling!', 2);
+            note.error('You must specify the number of test alters you want to create. Cancelling!');
             return false;
         }
 
@@ -2564,6 +2572,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.openNodeBox = function() {
+        $('.newNodeBox').height($('.newNodeBox').height());
         $('.newNodeBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
         setTimeout(function() {
@@ -2591,7 +2600,7 @@ module.exports = function Namegenerator() {
     };
 
     namegenerator.destroy = function() {
-        window.tools.notify('Destroying namegenerator.',0);
+        note.debug('Destroying namegenerator.');
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $(window.document).off('keyup', '#fname_t0, #lname_t0', inputKeypressHandler);
@@ -2959,8 +2968,7 @@ module.exports = function Namegenerator() {
     return namegenerator;
 };
 ;/* exported Network, Node, Edge, document */
-/* global $, window, deepmerge */
-
+/* global $, window, note, deepmerge, tools */
 
 /**
 * This module should implement 'networky' methods, and a querying syntax for
@@ -3009,7 +3017,7 @@ module.exports = function Network() {
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
         if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
-            window.tools.notify('Node already exists with id '+properties.id+'. Cancelling!',2);
+            note.error('Node already exists with id '+properties.id+'. Cancelling!');
             return false;
         }
 
@@ -3017,7 +3025,7 @@ module.exports = function Network() {
         // This reserved list is stored with the ego.
         if (!force) {
             if (reserved_ids.indexOf(properties.id) !== -1) {
-                window.tools.notify('Node id '+properties.id+' is already in use with this ego. Cancelling!',2);
+                note.error('Node id '+properties.id+' is already in use with this ego. Cancelling!');
                 return false;
             }
         }
@@ -3048,7 +3056,7 @@ module.exports = function Network() {
 
     network.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
-            window.tools.notify('Error loading network. Data format incorrect.',1);
+            note.error('Error loading network. Data format incorrect.');
             return false;
         } else {
             if (!overwrite) {
@@ -3107,12 +3115,13 @@ module.exports = function Network() {
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
-            window.tools.notify('ERROR: "To" and "From" must BOTH be defined.',2);
+            note.error('Error while executing network.addEdge(). "To" and "From" must BOTH be defined.');
             return false;
         }
 
-        if (properties.id !== 'undefined' && network.getEdge(properties.id) !== false) {
-            window.tools.notify('An edge with this id already exists! I\'m generating a new one for you.', 2);
+        if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
+            note.warn('An edge with this id already exists! I\'m generating a new one for you.');
+
             var newEdgeID = 0;
             while (network.getEdge(newEdgeID) !== false) {
                 newEdgeID++;
@@ -3144,7 +3153,6 @@ module.exports = function Network() {
         reversed.from = temp;
 
         if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
-
             alreadyExists = true;
         }
 
@@ -3160,8 +3168,7 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-
-            window.tools.notify('ERROR: Edge already exists!',2);
+            note.error('ERROR: Edge already exists!');
             return false;
         }
 
@@ -3190,8 +3197,8 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            //   localEdges.remove(edge);
             window.tools.removeFromObject(edge, edges);
+
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
             window.dispatchEvent(log);
@@ -3210,7 +3217,7 @@ module.exports = function Network() {
         if (!preserveEdges) {
             network.removeEdge(network.getNodeEdges(id));
         } else {
-            window.tools.notify('NOTICE: preserving node edges after deletion.',2);
+            note.info('NOTICE: preserving node edges after deletion.');
         }
 
         var nodeRemovedEvent, log;
@@ -3448,8 +3455,10 @@ module.exports = function Network() {
 
     network.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
-        edgeProbability = edgeProbability || 0.2;
-        window.tools.notify('Creating random graph...',1);
+
+        edgeProbability = edgeProbability || 0.4;
+        note.info('Creating random graph...');
+
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;
             window.tools.notify('Adding node '+current+' of '+nodeCount,2);
@@ -3461,7 +3470,7 @@ module.exports = function Network() {
             network.addNode(nodeOptions);
         }
 
-        window.tools.notify('Adding edges.',3);
+        note.debug('Adding edges.');
         $.each(nodes, function (index) {
             if (window.tools.randomBetween(0, 1) < edgeProbability) {
                 var randomFriend = Math.round(window.tools.randomBetween(0,nodes.length-1));
@@ -3560,7 +3569,7 @@ module.exports = function OrdinalBin() {
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){
 
-            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="active-node-list"></div></div>');
+            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="ord-active-node-list"></div></div>');
             newBin.data('index', index);
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
@@ -3568,16 +3577,17 @@ module.exports = function OrdinalBin() {
                     console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
+
                     if (ordinalBin.options.variable.values[index].value>0) {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
-                    console.log(droppedOn.children('.active-node-list'));
+                    console.log(droppedOn.children('.ord-active-node-list'));
                     console.log(dropped);
                     dropped.css({position:'inherit'});
-                    droppedOn.children('.active-node-list').append(dropped);
+                    droppedOn.children('.ord-active-node-list').append(dropped);
 
-                    $(dropped).appendTo(droppedOn.children('.active-node-list'));
+                    $(dropped).appendTo(droppedOn.children('.ord-active-node-list'));
                     var properties = {};
                     properties[ordinalBin.options.variable.label] = ordinalBin.options.variable.values[index].value;
                     // Followup question
@@ -3587,7 +3597,7 @@ module.exports = function OrdinalBin() {
                     window.network.updateEdge(edgeID,properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
-                        var length = $('.d'+oindex).children('.active-node-list').children().length;
+                        var length = $('.d'+oindex).children('.ord-active-node-list').children().length;
                         if (length > 0) {
                             var noun = 'people';
                             if (length === 1) {
@@ -3667,9 +3677,9 @@ module.exports = function OrdinalBin() {
                 });
 
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
+                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
                 } else {
-                    $('.d'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
+                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
                 }
             } else {
                 if (ordinalBin.options.criteria.type !== 'Dyad') {
@@ -3932,7 +3942,7 @@ var RoleRevisit = function RoleRevisit() {
 };
 
 module.exports = new RoleRevisit();
-;/* global document, window, $, protocol, nodeRequire */
+;/* global document, window, $, protocol, nodeRequire, note */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -3950,7 +3960,7 @@ var Session = function Session() {
             var fs = nodeRequire('fs');
             fs.writeFile(path, data);
         } else {
-            window.tools.notify('Not yet implemented on this platform.', 1);
+            note.warn('saveFile() is not yet implemented on this platform!');
         }
     }
 
@@ -4032,7 +4042,7 @@ var Session = function Session() {
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
             } else {
-                throw new Error('Study protocol must have key "name" under sessionParameters.');
+                note.error('Study protocol must have key "name" under sessionParameters.');
             }
 
             // Check for an in-progress session
@@ -4081,8 +4091,8 @@ var Session = function Session() {
 
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
-            window.tools.notify('Error fetching protocol!',1);
-            window.tools.notify(err,1);
+            note.error('Error fetching protocol!');
+            note.trace(err);
         });
 
     };
@@ -4096,7 +4106,7 @@ var Session = function Session() {
     }
 
     session.init = function(callback) {
-        window.tools.notify('Session initialising.', 1);
+        note.debug('Session initialising.');
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);
@@ -4198,7 +4208,7 @@ var Session = function Session() {
     };
 
     session.reset = function() {
-        window.tools.notify('Resetting session.',2);
+        note.info('Resetting session.');
         session.id = 0;
         session.currentStage = 0;
 
@@ -4217,20 +4227,15 @@ var Session = function Session() {
     };
 
     session.updateSessionData = function(data, callback) {
-        window.tools.notify('Updating user data.', 2);
-        window.tools.notify('Using the following to update:', 1);
-        window.tools.notify(data, 1);
-        window.tools.notify('session.sessionData is:', 1);
-        window.tools.notify(session.sessionData, 1);
+        note.debug('Updating user data.');
+        note.debug('Using the following to update:');
+        note.debug(data);
 
 
         // Here, we used to simply use our extend method on session.sessionData with the new data.
+        // This failed for arrays.
         // Switched to $.extend and added 'deep' as first function parameter for this reason.
-
         $.extend(true, session.sessionData, data);
-        // session.sessionData = $.extend(session.sessionData,data);
-        window.tools.notify('Combined output is:', 1);
-        window.tools.notify(session.sessionData, 1);
 
         var newDataLoaded = new window.Event('newDataLoaded');
         window.dispatchEvent(newDataLoaded);
@@ -4250,7 +4255,6 @@ var Session = function Session() {
         session.sessionData.nodes = window.network.getNodes();
         session.sessionData.edges = window.network.getEdges();
         if(!window.dataStore.initialised()) {
-            // window.tools.notify('Tried to save, but datastore not initaialised. Delaying.', 1);
             var unsavedChanges = new window.Event('unsavedChanges');
             window.dispatchEvent(unsavedChanges);
         } else {
@@ -4286,7 +4290,7 @@ var Session = function Session() {
             }
         }
 
-        window.tools.notify('Session is moving to stage '+stage, 3);
+        note.info('Session is moving to stage '+stage);
 
         // Crate stage visible event
         var eventProperties = {
@@ -4304,7 +4308,6 @@ var Session = function Session() {
         var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
-                // This never gets called if there is a JS error. Is there a way to ensure it is?
                 content.transition({ opacity: '1'},400,'easeInSine');
             });
         });
@@ -4325,16 +4328,16 @@ var Session = function Session() {
     };
 
     session.registerData = function(dataKey, isArray) {
-        window.tools.notify('A script requested a data store be registered with the key "'+dataKey+'".', 2);
+        note.info('A script requested a data store be registered with the key "'+dataKey+'".');
         if (session.sessionData[dataKey] === undefined) { // Create it if it doesn't exist.
-            window.tools.notify('Key named "'+dataKey+'" was not already registered. Creating.', 1);
+            note.debug('Key named "'+dataKey+'" was not already registered. Creating.');
             if (isArray) {
                 session.sessionData[dataKey] = [];
             } else {
                 session.sessionData[dataKey] = {};
             }
         } else {
-            window.tools.notify ('A data store with this key already existed. Returning a reference.',1);
+            note.debug('A data store with this key already existed. Returning a reference.');
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
@@ -4357,8 +4360,8 @@ var Session = function Session() {
         }
 
         // Notify
-        window.tools.notify('Adding data to key "'+dataKey+'".',2);
-        window.tools.notify(newData, 1);
+        note.debug('Adding data to key "'+dataKey+'".');
+        note.debug(newData);
 
         // Emit an event to trigger data store synchronisation.
         var unsavedChanges = new window.Event('unsavedChanges');
@@ -4384,7 +4387,7 @@ var Session = function Session() {
 };
 
 module.exports = new Session();
-;/* global Konva, window, $, ConvexHullGrahamScan */
+;/* global Konva, window, $, note, ConvexHullGrahamScan */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
@@ -4547,7 +4550,8 @@ module.exports = function Sociogram() {
 	}
 
 	sociogram.init = function (userSettings) {
-		window.tools.notify('Sociogram initialising.', 1);
+
+		note.info('Sociogram initialising.');
 		$.extend(true, sociogram.settings,userSettings);
 
 		// Add the title and heading
@@ -4647,7 +4651,6 @@ module.exports = function Sociogram() {
 
 
 	};
-
 
 	sociogram.updateInitialNodeState = function() {
 		/**
@@ -4962,7 +4965,9 @@ module.exports = function Sociogram() {
     };
 
 	sociogram.addNode = function(options) {
-		window.tools.notify('Sociogram is creating a node.',2);
+
+		note.debug('Sociogram is creating a node.');
+
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 
@@ -4996,6 +5001,7 @@ module.exports = function Sociogram() {
 			draggable: dragStatus,
 			dragDistance: 20
 		};
+
 		nodeOptions[sociogram.settings.dataOrigin.Community.variable] = [];
 		window.tools.extend(nodeOptions, options);
 
@@ -5035,7 +5041,7 @@ module.exports = function Sociogram() {
 
 		});
 
-		window.tools.notify('Putting node '+nodeOptions.label+' with ID '+nodeOptions.id+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1], 2);
+		note.debug('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1]);
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
@@ -5052,7 +5058,7 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
-			window.tools.notify('dragstart',1);
+			note.debug('dragstart');
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -5115,6 +5121,8 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
+			note.debug('Dragmove');
+
 			var dragNode = nodeOptions.id;
 			// Update the position of any connected edges and hulls
 			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
@@ -5144,13 +5152,6 @@ module.exports = function Sociogram() {
 				}
 			});
 			edgeLayer.batchDraw();
-
-
-			window.tools.notify('Dragmove',0);
-
-
-
-
 		});
 
 		nodeGroup.on('touchstart mousedown', function() {
@@ -5302,12 +5303,13 @@ module.exports = function Sociogram() {
 						// 	sociogram.settings.network.addEdge(edge);
 						// }
 
+
 					} else {
-						// error state
+
 					}
 
 				} else {
-					window.tools.notify('Error with select dataDestination', 1);
+					note.error('Error with select dataDestination');
 				}
 
 			}
@@ -5419,6 +5421,7 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dragend', function() {
+
 			var dragNode = nodeOptions.id;
 			// Update the position of any connected edges and hulls
 			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
@@ -5449,7 +5452,7 @@ module.exports = function Sociogram() {
 			});
 			edgeLayer.draw();
 
-			window.tools.notify('dragend',1);
+			note.debug('dragend');
 
 			// set the context
 			var from = {};
@@ -5532,6 +5535,7 @@ module.exports = function Sociogram() {
 	// Edge manipulation functions
 
 	sociogram.addEdge = function(properties) {
+
 		// This doesn't *usually* get called directly. Rather, it responds to an event fired by the network module.
 
 		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
@@ -5550,10 +5554,11 @@ module.exports = function Sociogram() {
 		}
 
 		// the below won't work because we are storing the coords in an edge now...
-		window.tools.notify('Sociogram is adding an edge.',2);
+		note.debug('Sociogram is adding an edge.');
 		var toObject = sociogram.getNodeByID(properties.to);
 	 	var fromObject = sociogram.getNodeByID(properties.from);
 		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
+
 		var edge = new Konva.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 4,
@@ -5576,7 +5581,7 @@ module.exports = function Sociogram() {
 			edgeLayer.draw();
 		},0);
 		nodeLayer.draw();
-		window.tools.notify('Created Edge between '+fromObject.label+' and '+toObject.label, 'success',2);
+		note.debug('Created Edge between '+fromObject.label+' and '+toObject.label);
 
 		return true;
 
@@ -5592,18 +5597,26 @@ module.exports = function Sociogram() {
 		var toObject = properties.to;
 	 	var fromObject = properties.from;
 
-		window.tools.notify('Removing edge.');
+		note.debug('Removing edge.');
 
 		// This function is failing because two nodes are matching below
+		var found = false;
 		$.each(sociogram.getKineticEdges(), function(index, value) {
 			if (value !== undefined) {
 				if (value.attrs.from === fromObject && value.attrs.to === toObject || value.attrs.from === toObject && value.attrs.to === fromObject ) {
+					found = true;
 					edgeLayer.children[index].remove();
 					edgeLayer.draw();
 				}
 			}
 
 		});
+
+		if (!found) {
+			note.error('sociogram.removeEdge() failed! Couldn\'t find the specified edge.');
+		} else {
+			return true;
+		}
 
 	};
 
@@ -5667,7 +5680,8 @@ module.exports = function Sociogram() {
 		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
 
-		window.tools.notify('Konva stage initialised.',1);
+		note.debug('Konva stage initialised.');
+
 	};
 
 	sociogram.generateHull = function(points) {
@@ -5740,7 +5754,6 @@ module.exports = function Sociogram() {
 
 		// draw wedgex
 
-
 		Konva.selectWedge = function(config) {
 			this._initselectWedge(config);
 		};
@@ -5773,7 +5786,7 @@ module.exports = function Sociogram() {
 
 		circleLayer.draw();
 
-		window.tools.notify('User interface initialised.',1);
+		note.debug('User interface initialised.');
 	};
 
 	// Get & set functions
@@ -5870,7 +5883,7 @@ module.exports = function Sociogram() {
 
 };
 ;/*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -5993,6 +6006,26 @@ exports.removeFromObject = function(item, object) {
         }
     }
     return removeCounter;
+};
+
+// helper functions
+
+exports.nwNotification = function(options) {
+    var notification = new Notification('Network Canvas:',options);
+    notification.onclick = function () {
+        // alert('Notification Clicked');
+    };
+
+    notification.onshow = function () {
+        // play sound on show
+        // myAud=document.getElementById("audio1");
+        // myAud.play();
+
+        // auto close after 1 second
+        // setTimeout(function() {
+        //     notification.close();
+        // }, 1000);
+    };
 };
 
 exports.deepEquals = function(a, x) {

@@ -1,4 +1,4 @@
-/* global Konva, window, $, ConvexHullGrahamScan */
+/* global Konva, window, $, note, ConvexHullGrahamScan */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
@@ -161,7 +161,8 @@ module.exports = function Sociogram() {
 	}
 
 	sociogram.init = function (userSettings) {
-		window.tools.notify('Sociogram initialising.', 1);
+
+		note.info('Sociogram initialising.');
 		$.extend(true, sociogram.settings,userSettings);
 
 		// Add the title and heading
@@ -261,7 +262,6 @@ module.exports = function Sociogram() {
 
 
 	};
-
 
 	sociogram.updateInitialNodeState = function() {
 		/**
@@ -576,7 +576,9 @@ module.exports = function Sociogram() {
     };
 
 	sociogram.addNode = function(options) {
-		window.tools.notify('Sociogram is creating a node.',2);
+
+		note.debug('Sociogram is creating a node.');
+
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 
@@ -610,6 +612,7 @@ module.exports = function Sociogram() {
 			draggable: dragStatus,
 			dragDistance: 20
 		};
+
 		nodeOptions[sociogram.settings.dataOrigin.Community.variable] = [];
 		window.tools.extend(nodeOptions, options);
 
@@ -649,7 +652,7 @@ module.exports = function Sociogram() {
 
 		});
 
-		window.tools.notify('Putting node '+nodeOptions.label+' with ID '+nodeOptions.id+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1], 2);
+		note.debug('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1]);
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
@@ -666,7 +669,7 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
-			window.tools.notify('dragstart',1);
+			note.debug('dragstart');
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
 			this.attrs.oldx = this.attrs.x;
@@ -729,6 +732,8 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
+			note.debug('Dragmove');
+
 			var dragNode = nodeOptions.id;
 			// Update the position of any connected edges and hulls
 			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
@@ -758,13 +763,6 @@ module.exports = function Sociogram() {
 				}
 			});
 			edgeLayer.batchDraw();
-
-
-			window.tools.notify('Dragmove',0);
-
-
-
-
 		});
 
 		nodeGroup.on('touchstart mousedown', function() {
@@ -916,12 +914,13 @@ module.exports = function Sociogram() {
 						// 	sociogram.settings.network.addEdge(edge);
 						// }
 
+
 					} else {
-						// error state
+
 					}
 
 				} else {
-					window.tools.notify('Error with select dataDestination', 1);
+					note.error('Error with select dataDestination');
 				}
 
 			}
@@ -1033,6 +1032,7 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('dragend', function() {
+
 			var dragNode = nodeOptions.id;
 			// Update the position of any connected edges and hulls
 			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
@@ -1063,7 +1063,7 @@ module.exports = function Sociogram() {
 			});
 			edgeLayer.draw();
 
-			window.tools.notify('dragend',1);
+			note.debug('dragend');
 
 			// set the context
 			var from = {};
@@ -1146,6 +1146,7 @@ module.exports = function Sociogram() {
 	// Edge manipulation functions
 
 	sociogram.addEdge = function(properties) {
+
 		// This doesn't *usually* get called directly. Rather, it responds to an event fired by the network module.
 
 		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
@@ -1164,10 +1165,11 @@ module.exports = function Sociogram() {
 		}
 
 		// the below won't work because we are storing the coords in an edge now...
-		window.tools.notify('Sociogram is adding an edge.',2);
+		note.debug('Sociogram is adding an edge.');
 		var toObject = sociogram.getNodeByID(properties.to);
 	 	var fromObject = sociogram.getNodeByID(properties.from);
 		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
+
 		var edge = new Konva.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 4,
@@ -1190,7 +1192,7 @@ module.exports = function Sociogram() {
 			edgeLayer.draw();
 		},0);
 		nodeLayer.draw();
-		window.tools.notify('Created Edge between '+fromObject.label+' and '+toObject.label, 'success',2);
+		note.debug('Created Edge between '+fromObject.label+' and '+toObject.label);
 
 		return true;
 
@@ -1206,18 +1208,26 @@ module.exports = function Sociogram() {
 		var toObject = properties.to;
 	 	var fromObject = properties.from;
 
-		window.tools.notify('Removing edge.');
+		note.debug('Removing edge.');
 
 		// This function is failing because two nodes are matching below
+		var found = false;
 		$.each(sociogram.getKineticEdges(), function(index, value) {
 			if (value !== undefined) {
 				if (value.attrs.from === fromObject && value.attrs.to === toObject || value.attrs.from === toObject && value.attrs.to === fromObject ) {
+					found = true;
 					edgeLayer.children[index].remove();
 					edgeLayer.draw();
 				}
 			}
 
 		});
+
+		if (!found) {
+			note.error('sociogram.removeEdge() failed! Couldn\'t find the specified edge.');
+		} else {
+			return true;
+		}
 
 	};
 
@@ -1281,7 +1291,8 @@ module.exports = function Sociogram() {
 		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
 
-		window.tools.notify('Konva stage initialised.',1);
+		note.debug('Konva stage initialised.');
+
 	};
 
 	sociogram.generateHull = function(points) {
@@ -1354,7 +1365,6 @@ module.exports = function Sociogram() {
 
 		// draw wedgex
 
-
 		Konva.selectWedge = function(config) {
 			this._initselectWedge(config);
 		};
@@ -1387,7 +1397,7 @@ module.exports = function Sociogram() {
 
 		circleLayer.draw();
 
-		window.tools.notify('User interface initialised.',1);
+		note.debug('User interface initialised.');
 	};
 
 	// Get & set functions

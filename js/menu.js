@@ -1,4 +1,4 @@
-/* global $, window, module, alert */
+/* global $, window, module, note, alert */
 /* exported Menu */
 module.exports = function Menu(options) {
     'use strict';
@@ -70,7 +70,7 @@ module.exports = function Menu(options) {
     };
 
     menu.init = function(options) {
-        window.tools.notify('Menu initialising.', 1);
+        note.info('Menu initialising.');
         window.tools.extend(menu.options,options);
 
         var newMenu = {};
