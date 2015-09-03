@@ -21,12 +21,20 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
+        jsdoc: {
+            dist: {
+                src: ['js/*.js'],
+                options: {
+                    destination: 'doc'
+                }
+            }
+        },
         postcss: {
             options: {
                 map: false, // inline sourcemaps
                 processors: [
-                    require('autoprefixer-core')(), // add vendor prefixes
-                    require('cssnano')() // minify the result
+                    require('autoprefixer-core')() // add vendor prefixes
+                    // require('cssnano')() // minify the result
                 ]
             },
             dist: {
@@ -58,9 +66,9 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css'
+                dependencies: {}
                 // mainFiles: {
-                //     'jquery': 'dist/jquery.min.js',
+                    // 'graham_scan': 'src/graham_scan.js',
                 //     'bootstrap': 'dist/bootstrap.min.js',
                 //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
                 //     'jquery-ui': 'jquery-ui.min.js',
@@ -97,16 +105,16 @@ module.exports = function (grunt) {
         less: {
             style: {
                 files: {
-                    "<%= config.app %>/css/style.css": "less/style.less"
+                    '<%= config.app %>/css/style.css': 'less/style.less'
                 }
             }
         },
         watch: {
             js: {
                 files: ['js/*.js'],
-                tasks: ['jshint','concat:js','browserify:dist'],
+                tasks: ['concat:js','browserify:dist'],
                 options: {
-                    livereload: true,
+                    livereload: true
                 }
             },
             css: {
@@ -535,6 +543,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-notify');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
     // This is required if you use any options.
     grunt.task.run('notify_hooks');

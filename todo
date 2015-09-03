@@ -1,0 +1,2 @@
+* addNode method should have configurable uniqueness parameters. Default would be id, but could be extended to require unique name, first name, etc.
+* new node form should be a fundamental module which is always created.

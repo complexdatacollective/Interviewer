@@ -4,17 +4,24 @@
 'use strict';
 // Storage prototypes
 
-window.Storage.prototype.showUsage = function() {
-
+window.Storage.prototype.showTotalUsage = function() {
     var total = 0;
     for(var x in localStorage) {
-      var amount = (localStorage[x].length * 2) / 1024 / 1024;
-      total += amount;
-      console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        if (localStorage.hasOwnProperty(x)) {
+            var amount = (localStorage[x].length * 2) / 1024 / 1024;
+            total += amount;
+            console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        }
     }
     console.log( 'Total: ' + total.toFixed(2) + ' MB');
 };
 
+window.Storage.prototype.getKeyUsage = function(key) {
+    if (localStorage.hasOwnProperty(key)) {
+        var amount = (localStorage[key].length * 2) / 1024 / 1024;
+        return amount.toFixed(2);
+    }
+};
 
 window.Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -29,7 +36,30 @@ window.Storage.prototype.getObject = function(key) {
     }
 };
 
+jQuery.fn.scrollTo = function(elem, speed) {
+    $(this).animate({
+        scrollTop:  $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+    }, speed == undefined ? 1000 : speed);
+    return this;
+};
+
+
 // Array prototypes
+
+Object.defineProperty(Array.prototype, 'toUnique', {
+    enumerable: false,
+    value: function() {
+        var b,c;
+        b=this.length;
+        if (this.length > 0) {
+            while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        } else {
+            return this;
+        }
+
+        // return  // not needed ;)
+    }
+});
 
 Object.defineProperty(Array.prototype, 'remove', {
     enumerable: false,
@@ -47,9 +77,38 @@ Object.defineProperty(Array.prototype, 'remove', {
     }
 });
 
+exports.Events = {
+    register: function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+            if (typeof eventsList[i].subTarget !== 'undefined') {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+            } else {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+            }
+
+        }
+
+    },
+    unbind: function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            if (typeof eventsArray[i].subTarget !== 'undefined') {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].subTarget, eventsArray[i].handler);
+            } else {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            }
+        }
+    }
+};
+
 exports.arrayDifference = function(a1, a2) {
   var a2Set = new Set(a2);
   return a1.filter(function(x) { return !a2Set.has(x); });
+};
+
+exports.euclideanDistance = function(point1, point2) {
+    var d1 = point1[0] - point2[0], d2 = point1[1] - point2[1];
+    return Math.sqrt(d1 * d1 + d2 * d2);
 };
 
 exports.removeFromObject = function(item, object) {
@@ -132,8 +191,6 @@ exports.deepEquals = function(a, x) {
     return true;
 };
 
-
-
 exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
@@ -145,11 +202,22 @@ exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     return false;
 };
 
-exports.getValueFromNestedObject = function(targetArray, objectKey) {
+exports.getKValueFromNestedObject = function(targetArray, objectKey) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
         for (var prop in targetArray[i]){
             if (prop === objectKey) { return targetArray[i][prop]; }
+        }
+    }
+
+    return false;
+};
+
+exports.getValueFromName = function(targetArray, name) {
+    // This function is for checking for keys in arrays of objects.
+    for (var i = 0; i<targetArray.length; i++){
+        if (typeof targetArray[i].name !== 'undefined' && typeof targetArray[i].value !== 'undefined' && targetArray[i].name === name) {
+            return targetArray[i].value;
         }
     }
 
@@ -168,9 +236,9 @@ exports.extend = function( a, b ) {
 
 exports.notify = function(text, level){
     level = level || 0;
-    // if (level >= window.debugLevel) {
+    if (level <= window.debugLevel) {
         console.log(text);
-    // }
+    }
 };
 
 exports.randomBetween = function(min,max) {
@@ -198,6 +266,10 @@ $.cssHooks.backgroundColor = {
             return '#' + window.tools.hex(bg[1]) + window.tools.hex(bg[2]) + window.tools.hex(bg[3]);
         }
     }
+};
+
+exports.getRandomColor = function() {
+    return '#' + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
 };
 
 exports.modifyColor = function(hex, lum) {

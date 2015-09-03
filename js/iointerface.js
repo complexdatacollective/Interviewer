@@ -24,7 +24,8 @@ var IOInterface = function IOInterface() {
         if (!callback) {
             return false;
         }
-        // After init, first priority is to load previous session for this protocol.
+        // After init, first priority is to tro to load previous session for this protocol.
+        // We might not be able to, because of space constraints.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         note.info('ioInterface initialising.');
         note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');

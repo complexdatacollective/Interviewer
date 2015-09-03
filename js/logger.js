@@ -12,11 +12,12 @@ var Logger = function Logger() {
 
         window.log = window.netCanvas.Modules.session.registerData('log', true);
 
-        // listen for log events
-        window.addEventListener('log', function (e) {
-            logger.addToLog(e.detail);
-        }, false);
-
+        // listen for log events on node webkit only due to space constraints.
+        if (window.isNodeWebkit) {
+            window.addEventListener('log', function (e) {
+                logger.addToLog(e.detail);
+            }, false);
+        }
         return true;
     };
 
@@ -35,14 +36,6 @@ var Logger = function Logger() {
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
         return true;
-    };
-
-    logger.getLog = function() {
-        return window.log;
-    };
-
-    logger.getLastEvent = function() {
-
     };
 
     return logger;

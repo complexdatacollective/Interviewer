@@ -18,7 +18,6 @@ var Session = function Session() {
         } else {
             note.warn('saveFile() is not yet implemented on this platform!');
         }
-
     }
 
     function clickDownloadInput() {
@@ -38,6 +37,7 @@ var Session = function Session() {
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
 
+            // $(document).trigger('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             var changeStageStartEvent = new window.CustomEvent('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageStartEvent);
 
@@ -46,15 +46,17 @@ var Session = function Session() {
             session.sessionData.sessionParameters.stage = newStage;
             var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
-            if ((currentStage+1) === session.stages.length) {
-                $('.arrow-next').hide();
-            } else if (currentStage === 0) {
-                $('.arrow-prev').hide();
-                $('.arrow-next').attr('disabled','disabled');
-
-            } else {
-                $('.arrow-next').show().removeAttr('disabled');
-                $('.arrow-prev').show();
+            if ((currentStage+1) === session.stages.length) { // last stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-next').attr('disabled', 'disabled');
+                if (currentStage === 0) { // first and last stage
+                    $('.arrow-prev').attr('disabled', 'disabled');
+                }
+            } else if (currentStage === 0) { // first stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-prev').attr('disabled', 'disabled');
+            } else {    // neither
+                $('.paginate').removeAttr('disabled');
             }
         }
     };
@@ -78,7 +80,19 @@ var Session = function Session() {
             $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');
 
             // copy the skip functions
-            session.skipFunctions = study.skipFunctions;
+            if (typeof study.skipFunctions !== 'undefined') {
+                session.skipFunctions = study.skipFunctions;
+            }
+
+
+            // create the sessionGlobals
+            if (typeof study.globals !=='undefined') {
+                session.globals = study.globals;
+                // iterate through and execute;
+                $.each(session.globals, function(index, value) {
+                    value();
+                });
+            }
 
             // set the study name (used for database name)
             if (study.sessionParameters.name) {
@@ -86,7 +100,6 @@ var Session = function Session() {
             } else {
                 note.error('Study protocol must have key "name" under sessionParameters.');
             }
-
 
             // Check for an in-progress session
             window.dataStore.init(function(sessionid) {
@@ -109,14 +122,29 @@ var Session = function Session() {
             });
 
             // Initialise the menu system – other modules depend on it being there.
-            var stagesMenu = window.menu.addMenu('Stages', 'bars');
+            var stagesMenuOptions = {
+                name: 'Stages',
+                icon: 'fa-bars',
+                items: []
+            };
+
             $.each(session.stages, function(index,value) {
                 var icon = null;
                 if (value.icon) {
                     icon = value.icon;
                 }
-                window.menu.addItem(stagesMenu, value.label, icon, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+                var itemObject = {
+                    label: value.label,
+                    icon: icon,
+                    action: function() {setTimeout(function() {session.goToStage(index);}, 500); }
+                };
+
+                stagesMenuOptions.items.push(itemObject);
+
             });
+
+            window.stagesMenu = new window.netCanvas.Modules.Menu(stagesMenuOptions);
+
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
             note.error('Error fetching protocol!');
@@ -161,8 +189,14 @@ var Session = function Session() {
             session.saveManager();
         }, false);
 
-        var sessionMenu = window.menu.addMenu('Session','cogs');
-        window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
+        var sessionMenuOptions = {
+            name: 'Session',
+            icon: 'fa-cogs',
+            items: []
+        };
+
+        window.sessionMenu = new window.netCanvas.Modules.Menu(sessionMenuOptions);
+        window.sessionMenu.addItem('Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -184,9 +218,9 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
+        window.sessionMenu.addItem('Download Data', 'fa-download', function() { clickDownloadInput(); });
 
-        window.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
+        window.sessionMenu.addItem('Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -208,7 +242,7 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
+        window.sessionMenu.addItem('Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
 
         if(callback) {
             callback();

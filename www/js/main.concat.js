@@ -1,4 +1,325 @@
-/* global window,$ */
+/* global $, window, Swiper */
+/* exported ContextGenerator */
+module.exports = function ContextGenerator() {
+	'use strict';
+	//global vars
+	var moduleEvents = [];
+	var contexts = [];
+	var contextGenerator = {};
+	var promptSwiper;
+
+	contextGenerator.options = {
+		targetEl: $('.container'),
+		egoData: ['contexts'],
+		nodeDestination: 'contexts',
+		createNodes: true,
+		prompts: [
+			'Prompt 1',
+			'Prompt 2',
+			'Prompt 3',
+			'Prompt 4'
+		],
+	};
+
+	contextGenerator.destroy = function() {
+		console.log('contextGenerator.destroy()');
+		promptSwiper.destroy();
+		$('.new-context-form').remove();
+		window.tools.Events.unbind(moduleEvents);
+	};
+
+	contextGenerator.nodeAdded = function(e) {
+		contextGenerator.addNodeToContext(e.originalEvent.detail);
+	};
+
+	contextGenerator.init = function(options) {
+		window.tools.extend(contextGenerator.options, options);
+		console.log(options);
+
+
+		// Events
+		var event = [{
+			event: 'changeStageStart',
+			handler: contextGenerator.destroy,
+			targetEl:  window
+		},
+		{
+			event: 'nodeAdded',
+			handler: contextGenerator.nodeAdded,
+			targetEl:  window
+		}
+	];
+		window.tools.Events.register(moduleEvents, event);
+
+		// containers
+		contextGenerator.options.targetEl.append('<div class="contexthull-title-container"></div><div class="contexthull-hull-container"></div>');
+
+		// Prompts
+		$('.contexthull-title-container').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
+		for (var i = 0; i < contextGenerator.options.prompts.length; i++) {
+			$('.swiper-wrapper').append('<div class="swiper-slide">'+contextGenerator.options.prompts[i]+'</div>');
+		}
+		promptSwiper = new Swiper ('.swiper-container', {
+			pagination: '.swiper-pagination',
+			speed: 1000
+		});
+
+		// bin
+		contextGenerator.options.targetEl.append('<div class="contexthull-bin-footer"><span class="contexthull-bin fa fa-4x fa-trash-o"></span></div>');
+		$('.contexthull-bin').droppable({
+			// accept: '.circle-responsive',
+			tolerance: 'touch',
+			hoverClass: 'delete',
+			over: function( event, ui ) {
+				$(this).addClass('delete');
+				$(ui.draggable).addClass('delete');
+			},
+			out: function( event, ui ) {
+				$(this).removeClass('delete');
+				$(ui.draggable).removeClass('delete');
+			},
+			drop: function( event, ui ) {
+				if ($(ui.draggable).hasClass('circle-responsive')) {
+					contextGenerator.removeContext($(ui.draggable).data('context'));
+				} else {
+					contextGenerator.removeNode($(ui.draggable).data('id'));
+				}
+
+			}
+		});
+
+		// New context buttons
+		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
+
+		event = [{
+			event: 'click',
+			handler: contextGenerator.showNewContextForm,
+			targetEl:  '.new-context-button'
+		}];
+		window.tools.Events.register(moduleEvents, event);
+
+		// New context form
+		$('body').append('<div class="new-context-form"></div>');
+		var form = new window.netCanvas.Modules.FormBuilder();
+		form.build($('.new-context-form'), {
+			title: 'Create a New Context',
+			fields: {
+				name: {
+					type: 'string',
+					placeholder: 'Name of Context',
+					required: true,
+
+				}
+			},
+			options: {
+				onSubmit: function(data) {
+					if (contexts.indexOf(data.name) === -1) {
+						// Update ego
+						var properties = {};
+						properties[contextGenerator.options.nodeDestination] = contexts;
+						window.network.updateNode(window.network.getEgo().id, properties);
+						contextGenerator.addContext(data.name);
+						form.reset();
+						contextGenerator.hideNewContextForm();
+					} else {
+						form.showError('Error: the name you have chosen is already in use.');
+					}
+				},
+				buttons: {
+					submit: {
+						label: 'Create',
+						id: 'submit-btn',
+						type: 'submit',
+						class: 'btn-primary'
+					},
+					cancel: {
+						label: 'Cancel',
+						id: 'cancel-btn',
+						type: 'button',
+						class: 'btn-default',
+						action: function() {
+							contextGenerator.hideNewContextForm();
+							form.reset();
+						}
+					}
+				}
+			}
+		});
+
+		// Add existing data, if present
+		contextGenerator.addExistingContexts();
+
+	};
+
+	contextGenerator.addNodeToContext = function(node) {
+		console.log('adding node to context');
+		console.log(node);
+		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
+		contextGenerator.makeNodesDraggable();
+	};
+
+	contextGenerator.showBin = function() {
+		$('.contexthull-bin-footer').addClass('show');
+	};
+
+	contextGenerator.hideBin = function() {
+		$('.contexthull-bin-footer').removeClass('show');
+	};
+
+	contextGenerator.showNewContextForm = function() {
+		$('.new-context-form, .black-overlay').addClass('show');
+		setTimeout(function() {
+			$('#name').focus();
+		}, 500);
+	};
+
+	contextGenerator.hideNewContextForm = function() {
+		$('.new-context-form, .black-overlay').removeClass('show');
+	};
+
+	contextGenerator.addExistingContexts = function() {
+		// This module recieves one or more arrays of strings indicating the contexts that already exist.
+
+		// First, we create a super array of all unique items across all variable arrays.
+		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
+		for (var j = 0; j < egoData.length; j++) {
+			contextGenerator.addContext(egoData[j]);
+		}
+
+		// Add any nodes to the contexts
+		var nodes = window.network.getNodes({}, function (results) {
+			var filteredResults = [];
+			$.each(results, function(index,value) {
+				if (value.type !== 'Ego') {
+					filteredResults.push(value);
+				}
+			});
+
+			return filteredResults;
+		});
+		$.each(nodes, function(nodeIndex, nodeValue) {
+			// only deal with nodes that have a single context. is this right?
+			if (typeof nodeValue[contextGenerator.options.nodeDestination] !== 'undefined' && nodeValue[contextGenerator.options.nodeDestination].length === 1) {
+				// Check if the context exists
+				if (contexts.indexOf(nodeValue[contextGenerator.options.nodeDestination][0] !== -1)) {
+					contextGenerator.addNodeToContext(nodeValue);
+				} else {
+					console.warn('A node was found with a context that didn\'t exist!');
+				}
+ 			} else {
+				console.warn('Ignored a node with multiple contexts.');
+			}
+
+		});
+
+	};
+
+	contextGenerator.makeDraggable = function() {
+		$('.circle-responsive').draggable({
+			zIndex: 100,
+			revert: true,
+			refreshPositions: true,
+			revertDuration: 200,
+			scroll: false,
+			start: function() {
+				contextGenerator.showBin();
+				$(this).addClass('smaller');
+
+			},
+			stop: function() {
+				$(this).removeClass('smaller');
+				contextGenerator.hideBin();
+			}
+		});
+	};
+
+	contextGenerator.makeNodesDraggable = function() {
+		$('.node-circle').draggable({
+			zIndex: 100,
+			revert: true,
+			revertDuration: 200,
+			refreshPositions: true,
+			scroll: false,
+			start: function() {
+				contextGenerator.showBin();
+
+			},
+			stop: function() {
+				contextGenerator.hideBin();
+			}
+		});
+	};
+
+	contextGenerator.addContext = function(name) {
+		if (!name) {
+			throw new Error('No name provided for new context.');
+		}
+		contexts.push(name);
+		$('.contexthull-hull-container').append('<div class="circle-responsive" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
+		contextGenerator.makeDraggable();
+		if (contextGenerator.options.createNodes === true) {
+			var event = [{
+				event: 'click',
+				handler: contextGenerator.openNewNodeForm,
+				targetEl:  '[data-context="'+name+'"]'
+			}];
+			window.tools.Events.register(moduleEvents, event);
+		}
+
+	};
+
+	contextGenerator.openNewNodeForm = function() {
+		console.log($(this).data('context'));
+		var properties = {};
+		properties[contextGenerator.options.nodeDestination] = [];
+		properties[contextGenerator.options.nodeDestination].push($(this).data('context'));
+		// Append a hidden input with the context in it
+		window.nameGenForm.show(properties);
+	};
+
+	contextGenerator.removeContext = function(name) {
+		if (!name) {
+			throw new Error('No name provided to contextGenerator.deleteContext().');
+		}
+
+		if (contexts.remove(name) !== 0) {
+			var properties = {};
+			properties[contextGenerator.options.egoData] = contexts;
+			window.network.updateNode(window.network.getEgo().id, properties);
+
+			// Remove nodes
+			var childNodes = $('div[data-context="'+name+'"]').children('.node-circle-container');
+			$.each(childNodes, function(nodeIndex, nodeValue) {
+				var thisId = $(nodeValue).children('.node-circle');
+				contextGenerator.removeNode($(thisId).data('id'));
+			});
+			$('div[data-context="'+name+'"]').remove();
+			return true;
+		} else {
+			console.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
+			return false;
+		}
+
+	};
+
+	contextGenerator.removeNode = function(id) {
+		if (!id) {
+			throw new Error('No id provided to contextGenerator.deleteNode().');
+		}
+
+		if (window.network.removeNode(id)) {
+			$('div[data-id="'+id+'"]').remove();
+			return true;
+		} else {
+			console.warn('contextGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+		}
+
+
+	};
+
+	return contextGenerator;
+};
+;/* global window,$ */
 /* exported DateInterface */
 
 module.exports = function DateInterface() {
@@ -187,6 +508,343 @@ module.exports = function DateInterface() {
 
     return dateInterface;
 };
+;/* global $, window, alert */
+/* exported EgoBuilder */
+
+module.exports = function EgoBuilder() {
+    'use strict';
+
+    var egoBuilder = {};
+    var form;
+    egoBuilder.options = {
+        targetEl: $('.container'),
+        heading: 'This is a default heading',
+        formTitle: 'Create a new case'
+    };
+
+    var moduleEvents = [];
+
+    egoBuilder.init = function(options) {
+
+        // Event listeners
+        var events = [
+            {
+                event: 'changeStageStart',
+                handler: egoBuilder.destroy,
+                targetEl:  'window.document',
+                subTarget: ''
+            }
+        ];
+        window.tools.Events.register(moduleEvents, events);
+
+        $.extend(egoBuilder.options, options);
+
+        egoBuilder.options.targetEl.append('<h1>'+egoBuilder.options.heading+'</h1>');
+
+        // Build form
+        form = new window.netCanvas.Modules.FormBuilder();
+
+        form.build(egoBuilder.options.targetEl, {
+        	'title':egoBuilder.options.formTitle,
+            'fields': {
+                'name': {
+                    'type':'string',
+                    'title':'Name',
+                    'required':true,
+        			'placeholder': 'Please enter your name.'
+                },
+                'case_number': {
+                    'type':'number',
+                    'title':'Case Number',
+                    'required':true
+                }
+            },
+            'options':{
+                'attributes':{
+                    'action':'http://httpbin.org/post',
+                    'method':'post'
+                },
+        		onSubmit: function(data) {
+        			egoBuilder.updateEgo(data);
+        		},
+                onLoad: function() {
+                    egoBuilder.loadEgoData();
+                },
+                'buttons':{
+                    'submit':{
+        				label: 'Start',
+        				id: 'submit-btn',
+        				type: 'submit',
+        				class: 'btn-primary'
+        			}
+                }
+            }
+        });
+    };
+
+    egoBuilder.updateEgo = function(data) {
+        console.log('update ego');
+        console.log(data);
+        if (window.network.egoExists()) {
+            window.network.updateNode(window.network.getEgo().id, data, function() {
+                alert('updated');
+                window.netCanvas.Modules.session.nextStage();
+            });
+        } else {
+            window.network.createEgo(data);
+            window.netCanvas.Modules.session.nextStage();
+
+        }
+
+    };
+
+    egoBuilder.loadEgoData = function() {
+
+        if (window.network.egoExists()) {
+            var ego = window.network.getEgo();
+            form.addData(ego);
+        }
+
+    };
+
+    egoBuilder.destroy = function() {
+        window.tools.Events.unbind(moduleEvents);
+    };
+
+    return egoBuilder;
+};
+;/* global $, window, jQuery */
+/* exported FormBuilder */
+
+module.exports = function FormBuilder() {
+    'use strict';
+
+    var formBuilder = {};
+    var thisForm;
+    var html = '<form></form>';
+    var moduleEvents = [];
+
+    formBuilder.init = function() {
+        // Event listeners
+        window.tools.Events.register(moduleEvents, [
+            {
+                event: 'stageChangeStart',
+                handler: formBuilder.destroy,
+                targetEl:  'window.document'
+            }
+        ]);
+    };
+
+    formBuilder.reset = function() {
+        $(html).find('.alert').fadeOut();
+        $(html)[0].reset();
+    };
+
+    formBuilder.showError = function(error) {
+        $(html).find('.alert').fadeIn();
+        $(html).find('.error').html(error);
+    };
+
+    formBuilder.build = function(element, form) {
+        thisForm = form;
+        // Form options
+        if (typeof form.title !== 'undefined') {
+            html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
+        }
+
+        // Form fields
+        $.each(form.fields, function(formIndex, formValue) {
+            var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
+                var placeholder = formValue.placeholder? formValue.placeholder : '';
+                var required = formValue.required? 'required' : '';
+
+                if (formValue.type === 'string') {
+                    wrapper = '<div class="form-group"></div>';
+                    if (typeof formValue.title !== 'undefined') {
+                        variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    }
+
+                    variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
+                    wrapper = $(wrapper).append(variableLabel+variableComponent);
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'number') {
+                    wrapper = '<div class="form-group"></div>';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
+                    wrapper = $(wrapper).append(variableLabel+variableComponent);
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'email') {
+                    wrapper = '<div class="form-group"></div>';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
+                    wrapper = $(wrapper).append(variableLabel+variableComponent);
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'textarea') {
+                    wrapper = '<div class="form-group"></div>';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" autocomplete="off" placeholder="'+placeholder+'" '+required+'></textarea>';
+                    wrapper = $(wrapper).append(variableLabel+variableComponent);
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'radio') {
+                    wrapper = '<div class="form-group"></div>';
+                    variableComponent = '';
+                    variableLabel = '<label class="control-label">'+formValue.title+'</label>';
+                    wrapper = $(wrapper).append(variableLabel);
+
+                    $.each(formValue.variables, function(checkIndex, checkValue){
+                        variableComponent = '<input type="radio" name="'+formIndex+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
+                        checkLabel = '<label class="radio-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
+                        wrapper = $(wrapper).append(variableComponent+checkLabel);
+                    });
+                    html = $(html).append(wrapper);
+                }
+        });
+
+        // Buttons
+        var buttonGroup = '<div class="text-right button-group"></div>';
+        $.each(form.options.buttons, function(buttonIndex, buttonValue){
+            buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
+
+        });
+        html = $(html).append(buttonGroup);
+
+        // Check if we are outputting html or writing to DOM
+        if (element instanceof jQuery) {
+            // Write to DOM
+            html = $(html).uniqueId();
+            element.append(html);
+            formBuilder.addEvents();
+            // Data population
+            if (typeof form.data !== 'undefined') {
+                formBuilder.addData(form.data);
+            }
+            $(html).trigger('formLoaded');
+        } else if (element === 'html') {
+            // return the html for the form
+            html = $(html).uniqueId();
+            return html;
+        } else {
+            throw new Error('Formbuilder didn\'t understand the itended output destination of the build method.');
+        }
+
+    };
+
+    formBuilder.addEvents = function() {
+
+        // submit
+        window.tools.Events.register(moduleEvents, [{
+            targetEl: $(html),
+            event: 'submit',
+            handler: function(e) {
+                e.preventDefault();
+                var data = $(this).serializeArray();
+                var cleanData = {};
+                for (var i = 0; i < data.length; i++) {
+                    cleanData[data[i].name] = data[i].value;
+                }
+                thisForm.options.onSubmit(cleanData);
+            }
+        }]);
+
+        // onLoad
+        if (typeof thisForm.options.onLoad !== 'undefined') {
+            window.tools.Events.register(moduleEvents, [{
+                targetEl: $(html),
+                event: 'formLoaded',
+                handler: function() {
+                    thisForm.options.onLoad(thisForm);
+                }
+            }]);
+        }
+
+        $.each(thisForm.options.buttons, function(buttonIndex, buttonValue){
+            if(typeof buttonValue.action !== 'undefined') {
+                window.tools.Events.register(moduleEvents, [{
+                    targetEl: $('#'+buttonValue.id),
+                    event: 'click',
+                    handler: buttonValue.action
+                }]);
+            }
+        });
+
+    };
+
+    formBuilder.destroy = function() {
+        window.tools.Events.unbind(moduleEvents);
+    };
+
+    formBuilder.addData = function(data) {
+        $.each(data, function(dataIndex, dataValue) {
+            if (thisForm.fields[dataIndex] !== undefined) {
+                if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number') {
+                    $('#'+dataIndex).val(dataValue);
+                } else if (thisForm.fields[dataIndex].type === 'textarea') {
+                    $('#'+dataIndex).html(dataValue);
+                } else if (thisForm.fields[dataIndex].type === 'radio') {
+                    $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
+                }
+            } else {
+                console.warn('Data provided for undefined field '+dataIndex);
+            }
+        });
+    };
+
+    formBuilder.init();
+
+    return formBuilder;
+};
+
+
+// form = new window.netCanvas.Modules.FormBuilder();
+//
+// form.build(egoBuilder.options.targetEl, {
+//     'title':egoBuilder.options.formTitle,
+//     'fields': {
+//         'name': {
+//             'type':'string',
+//             'title':'Name',
+//             'required':true,
+//             'name': 'participant_name',
+//             'placeholder': 'Please enter your name.'
+//         },
+//         'feedback': {
+//             'title':'Feedback',
+//             'type': 'textarea',
+//             'name': 'your_feedback',
+//             'rows': 5,
+//             'cols': 40,
+//             'placeholder': 'Please enter your feedback.'
+//         },
+//         'ranking': {
+//             'type':'radio',
+//             'name':'my_radio',
+//             'title':'Ranking',
+//             'variables':[
+//                 {label:'Value 1', value:'value1', id:'radio1'},
+//                 {label:'Value 2', value:'value2', id:'radio2'},
+//                 {label:'Value 3', value:'value3', id:'radio3'}
+//             ],
+//             'required':true
+//         }
+//     },
+//     'options':{
+//         'attributes':{
+//             'action':'http://httpbin.org/post',
+//             'method':'post'
+//         },
+//         onSubmit: function() {
+//             console.log('FORM subMITTED');
+//         },
+//         'buttons':{
+//             'submit':{
+//                 label: 'Submit',
+//                 id: 'submit-btn',
+//                 type: 'submit',
+//                 class: 'btn-primary'
+//             }
+//         }
+//     }
+// });
 ;/* exported Interview */
 /* global $ */
 var Interview = function Interview() {
@@ -261,7 +919,8 @@ var IOInterface = function IOInterface() {
         if (!callback) {
             return false;
         }
-        // After init, first priority is to load previous session for this protocol.
+        // After init, first priority is to tro to load previous session for this protocol.
+        // We might not be able to, because of space constraints.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         note.info('ioInterface initialising.');
         note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');
@@ -497,11 +1156,12 @@ var Logger = function Logger() {
 
         window.log = window.netCanvas.Modules.session.registerData('log', true);
 
-        // listen for log events
-        window.addEventListener('log', function (e) {
-            logger.addToLog(e.detail);
-        }, false);
-
+        // listen for log events on node webkit only due to space constraints.
+        if (window.isNodeWebkit) {
+            window.addEventListener('log', function (e) {
+                logger.addToLog(e.detail);
+            }, false);
+        }
         return true;
     };
 
@@ -520,14 +1180,6 @@ var Logger = function Logger() {
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
         return true;
-    };
-
-    logger.getLog = function() {
-        return window.log;
-    };
-
-    logger.getLastEvent = function() {
-
     };
 
     return logger;
@@ -551,6 +1203,7 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
+    window.netCanvas.debugLevel = 0;
     window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
@@ -566,7 +1219,7 @@ $(document).ready(function() {
     }
 
     // Arguments
-    // build an object (argument: value) for command line arguments independant of platform
+    /** build an object (argument: value) for command line arguments independant of platform **/
     window.getArguments = function() {
         var args = false;
         if (window.isNodeWebkit) {
@@ -699,9 +1352,11 @@ $(document).ready(function() {
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
+    window.netCanvas.Modules.EgoBuilder = require('./egobuilder.js');
+    window.netCanvas.Modules.FormBuilder = require('./formbuilder.js');
+    window.netCanvas.Modules.ContextGenerator = require('./contextgenerator.js');
+    window.netCanvas.Modules.Menu = require('./menu.js');
 
-    // Initialise the menu system – other modules depend on it being there.
-    window.menu = require('./menu.js');
 
     // Initialise datastore
     window.dataStore = require('./iointerface.js');
@@ -1030,154 +1685,113 @@ module.exports = function GeoInterface() {
 
   	return geoInterface;
 };
-;/* global $, window, note */
+;/* global $, window, module, note, alert */
 /* exported Menu */
-var Menu = function Menu(options) {
+module.exports = function Menu(options) {
     'use strict';
-    // TODO: Check if a menu exists before adding it. If it does, return false. Unique id = menu name.
-    // TODO: Give menus ascending classes.
-
     var menu = {};
-    var menus = [];
-    var isAnimating = false;
-
-    var contentClickHandler = function() {
-        menu.closeMenu();
-    };
+    var menuEl;
 
     menu.options = {
-      onBeforeOpen : function() {
-        $('.black').hide();
-        $('.arrow-next').transition({marginRight:-550},1000);
-        $('.arrow-prev').transition({marginLeft:-550},1000);
-        $('.content').addClass('pushed');
-        $('.pushed').on('click', contentClickHandler);
-      },
-      onAfterOpen : function() {
-        return false;
-      },
-      onBeforeClose : function() {
-        $('.content').removeClass('pushed');
-        $('.pushed').off('click', contentClickHandler);
-      },
-      onAfterClose : function() {
-        $('body').css({'background-color':''});
-        $('.arrow-next').transition({marginRight:0},1000);
-        $('.arrow-prev').transition({marginLeft:0},1000);
-      }
-    };
-
-    menu.getMenus = function() {
-        return menus;
-    };
-
-    menu.closeMenu = function(targetMenu) {
-        if(!targetMenu) {
-            //close all menus
-            $.each(menus, function(index) {
-                if(menus[index].open === true) {
-                    menus[index].closeBtn.trigger('click');
+        name: 'Default',
+        icon: 'fa-icon',
+        items: [
+            {
+                label: 'Label',
+                icon: 'fa-bars',
+                action: function() {
+                    alert('Yo');
                 }
-            });
-        } else {
-            targetMenu.closeBtn.trigger('click');
-        }
-
-    };
-
-    menu.toggle = function(targetMenu) {
-        var targetMenuObj = $('.'+targetMenu.name+'-menu');
-
-        if (isAnimating === true) {
-            return false;
-        } else {
-            isAnimating = true;
-            if(targetMenu.open === true) {
-                menu.options.onBeforeClose();
-                targetMenuObj.removeClass('open');
-                targetMenu.open = false;
-                setTimeout(menu.options.onAfterClose, 1000);
-                isAnimating = false;
-            } else {
-                menu.options.onBeforeOpen();
-                var col = window.tools.modifyColor($('.'+targetMenu.name+'-menu').css('background-color'),-0.2);
-                $('body').css({'background-color':col});
-                targetMenuObj.addClass('open');
-                targetMenu.open = true;
-                setTimeout(menu.options.onAfterOpen, 500);
-                isAnimating = false;
             }
+        ]
+    };
 
-        }
+    menu.getMenu = function() {
+        return menuEl;
+    };
+
+    menu.closeMenu = function() {
+
+        var targetMenuObj = $('.'+menuEl.name+'-menu');
+        $('.paginate').removeClass('slide');
+        $('.content').removeClass('pushed');
+        targetMenuObj.removeClass('open');
+
+        setTimeout(function() {
+            $('body').removeClass(menuEl.name);
+        }, 500);
 
     };
 
-    menu.addMenu = function(name, icon) {
-        var newMenu = {};
-        newMenu.name = name;
-        newMenu.open = false;
-        newMenu.button = $('<span class="fa fa-2x fa-'+icon+' menu-btn '+name+'"></span>');
-        // newMenu.button.addClass(icon);
-        $('.menu-container').append(newMenu.button);
-        $(newMenu.button).addClass('shown');
-
-        var menuClass = name+'-menu';
-        newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+name+'</h2><ul></ul></div></div>');
-        newMenu.closeBtn = $('<span class="icon icon-close"><i class="fa fa-times fa-2x"></i></span>');
-        $(newMenu.menu).append(newMenu.closeBtn);
-        $('.menu-container').append(newMenu.menu);
-
-        newMenu.button.on( 'click', function() {
-            $('.menu-btn').removeClass('shown');
-            menu.toggle(newMenu);
-        });
-
-        newMenu.closeBtn.on( 'click', function() {
-            $('.menu-btn').addClass('shown');
-            menu.toggle(newMenu);
-        });
-
-        menus.push(newMenu);
-
-        return newMenu;
+    menu.openMenu = function() {
+        $('body').addClass(menuEl.name);
+        var targetMenuObj = $('.'+menuEl.name+'-menu');
+        setTimeout(function() {
+            $('.paginate').addClass('slide');
+            $('.content').addClass('pushed');
+            targetMenuObj.addClass('open');
+        }, 10);
 
     };
 
-    menu.removeMenu = function(targetMenu) {
-        $(targetMenu.button).remove();
-        $(targetMenu.items).remove();
+    menu.destroy = function() {
+        $(menuEl.button).remove();
+        $(menuEl.menu).remove();
     };
 
-    menu.addItem = function(targetMenu,item,icon,callback) {
+    menu.addItem = function(label,icon,callback) {
         var listIcon = 'fa-file-text';
         if (icon) {
             listIcon = icon;
         }
-        var menuItem = $('<li><span class="fa '+listIcon+' menu-icon"></span> '+item+'</li>');
-        targetMenu.menu.find('ul').append(menuItem);
+        var menuItem = $('<li><span class="fa '+listIcon+' menu-icon"></span> '+label+'</li>');
+        menuEl.menu.find('ul').append(menuItem);
         menuItem.on('click', function() {
             $('.paginate').removeAttr('disabled');
-            menu.closeMenu(targetMenu);
+            menu.closeMenu();
             setTimeout(function() {
                 callback();
-            },500);
+            }, 200);
         });
 
     };
 
-    menu.init = function() {
+    menu.init = function(options) {
         note.info('Menu initialising.');
-
         window.tools.extend(menu.options,options);
+
+        var newMenu = {};
+        newMenu.name = options.name;
+        newMenu.button = $('<span class="fa fa-2x '+options.icon+' menu-btn shown '+options.name+'"></span>');
+        $('.menu-container').append(newMenu.button);
+
+        var menuClass = options.name+'-menu';
+        newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+options.name+'</h2><ul></ul></div></div>');
+        newMenu.closeBtn = $('<span class="icon icon-close"><i class="fa fa-times fa-2x"></i></span>');
+        $(newMenu.menu).append(newMenu.closeBtn);
+        $('.menu-container').append(newMenu.menu);
+
+        newMenu.button.on('click', function() {
+            menu.openMenu();
+        });
+
+        newMenu.closeBtn.on( 'click', function() {
+            menu.closeMenu();
+        });
+
+        menuEl = newMenu;
+
+        $.each(menu.options.items, function(index, value) {
+            menu.addItem(value.label, value.icon, value.action);
+        });
+
     };
 
-    menu.init();
+    menu.init(options);
 
     return menu;
 
 };
-
-module.exports = new Menu();
 ;/* global $, window */
 /* exported MultiBin */
 module.exports = function MultiBin() {
@@ -2353,30 +2967,31 @@ module.exports = function Namegenerator() {
 
     return namegenerator;
 };
-;/* exported Network, Node, Edge */
-/* global $, window,note, tools */
+;/* exported Network, Node, Edge, document */
+/* global $, window, note, deepmerge, tools */
 
-/*
-
-Previously I had been storing Nodes and Edges within the KineticJS framework
-Nodes were stored as Kinetic Groups (text and a shape), and edges stored as Kinetic Lines.
-
-This approach worked fine when the scope of the interaction was limited to
-KineticJS, but needs revision when nodes much be created, edited, and managed
-from different interfaces.
-
-This module should implement 'networky' methods, and a querying syntax for
-selecting nodes or edges by their various properties, and interating over them.
-
+/**
+* This module should implement 'networky' methods, and a querying syntax for
+* selecting nodes or edges by their various properties, and interating over them.
+* @constructor
 */
 
 module.exports = function Network() {
     'use strict';
-    this.nodes = [];
-    this.edges = [];
-    var _this = this;
+    var nodes = [];
+    var edges = [];
+    var network = {};
+    var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
-    this.addNode = function(properties, ego, force) {
+    /**
+    * @public
+    * @name Network#addNode
+    * @function
+    * @param {object} properties An object containing the desired node properties.
+    * @param {boolean} [ego=false] Whether or not the node being added is an Ego.
+    * @param {boolean} [force=false] Override reserved IDs.
+    */
+    network.addNode = function(properties, ego, force) {
 
         var reserved_ids;
 
@@ -2385,12 +3000,18 @@ module.exports = function Network() {
         // Check if we are adding an ego
         if (!ego) { ego = false;}
 
-        // if we are adding an ego create an empty reserved_ids array for later, it not use Ego's.
+        // if we are adding an ego create an empty reserved_ids array for later, if not use Ego's.
         if (ego) {
             // fetch in use IDs from Ego
             reserved_ids = [];
         } else {
-            reserved_ids = _this.getEgo().reserved_ids;
+            // We aren't adding an Ego, so make sure an Ego exists
+            if (network.egoExists()) {
+                reserved_ids = network.getEgo().reserved_ids;
+            } else {
+                throw new Error('You must add an Ego before attempting to add other nodes.');
+            }
+
         }
 
 
@@ -2412,7 +3033,7 @@ module.exports = function Network() {
         // Locate the next free node ID
         // should this be wrapped in a conditional to check if properties.id has been provided? probably.
         var newNodeID = 0;
-        while (_this.getNode(newNodeID) !== false || reserved_ids.indexOf(newNodeID) !== -1) {
+        while (network.getNode(newNodeID) !== false || reserved_ids.indexOf(newNodeID) !== -1) {
             newNodeID++;
         }
         var nodeProperties = {
@@ -2420,7 +3041,7 @@ module.exports = function Network() {
         };
         window.tools.extend(nodeProperties, properties);
 
-        _this.nodes.push(nodeProperties);
+        nodes.push(nodeProperties);
         reserved_ids.push(newNodeID);
 
         var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
@@ -2433,7 +3054,7 @@ module.exports = function Network() {
         return nodeProperties.id;
     };
 
-    this.loadNetwork = function(data, overwrite) {
+    network.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
             note.error('Error loading network. Data format incorrect.');
             return false;
@@ -2443,48 +3064,53 @@ module.exports = function Network() {
             }
 
             if (overwrite) {
-                _this.nodes = data.nodes;
-                _this.dges = data.edges;
+                nodes = data.nodes;
+                network.dges = data.edges;
             } else {
-                _this.nodes = _this.nodes.concat(data.nodes);
-                _this.edges = _this.edges.concat(data.edges);
+                nodes = nodes.concat(data.nodes);
+                edges = edges.concat(data.edges);
             }
 
             return true;
         }
     };
 
-    this.createEgo = function(properties) {
-        if (_this.egoExists() === false) {
+    network.resetNetwork = function() {
+        nodes = [];
+        edges = [];
+    };
+
+    network.createEgo = function(properties) {
+        if (network.egoExists() === false) {
             var egoProperties = {
                 id:0,
-                type_t0: 'Ego',
+                type: 'Ego',
                 reserved_ids: [0]
             };
             window.tools.extend(egoProperties, properties);
-            _this.addNode(egoProperties, true);
+            network.addNode(egoProperties, true);
+        } else {
+            throw new Error('Ego already exists.');
+        }
+    };
+
+    network.getEgo = function() {
+        if (network.getNodes({type:'Ego'}).length !== 0) {
+            return network.getNodes({type:'Ego'})[0];
         } else {
             return false;
         }
     };
 
-    this.getEgo = function() {
-        if (_this.getNodes({type_t0:'Ego'}).length !== 0) {
-            return _this.getNodes({type_t0:'Ego'})[0];
-        } else {
-            return false;
-        }
-    };
-
-    this.egoExists = function() {
-        if (_this.getEgo() !== false) {
+    network.egoExists = function() {
+        if (network.getEgo() !== false) {
             return true;
         } else {
             return false;
         }
     };
 
-    this.addEdge = function(properties) {
+    network.addEdge = function(properties) {
 
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
@@ -2495,8 +3121,9 @@ module.exports = function Network() {
 
         if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
             note.warn('An edge with this id already exists! I\'m generating a new one for you.');
+
             var newEdgeID = 0;
-            while (_this.getEdge(newEdgeID) !== false) {
+            while (network.getEdge(newEdgeID) !== false) {
                 newEdgeID++;
             }
 
@@ -2504,7 +3131,7 @@ module.exports = function Network() {
         }
 
         var position = 0;
-        while(_this.getEdge(position) !== false) {
+        while(network.getEdge(position) !== false) {
             position++;
         }
 
@@ -2525,13 +3152,13 @@ module.exports = function Network() {
         reversed.to = reversed.from;
         reversed.from = temp;
 
-        if (_this.getEdges(properties).length > 0 || _this.getEdges(reversed).length > 0) {
+        if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
             alreadyExists = true;
         }
 
         if(alreadyExists === false) {
 
-            _this.edges.push(edgeProperties);
+            edges.push(edgeProperties);
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
             window.dispatchEvent(log);
             var edgeAddedEvent = new window.CustomEvent('edgeAdded',{'detail':edgeProperties});
@@ -2547,11 +3174,11 @@ module.exports = function Network() {
 
     };
 
-    this.removeEdges = function(edges) {
-        _this.removeEdge(edges);
+    network.removeEdges = function(edges) {
+        network.removeEdge(edges);
     };
 
-    this.removeEdge = function(edge) {
+    network.removeEdge = function(edge) {
         if (!edge) {
             return false;
         }
@@ -2562,7 +3189,7 @@ module.exports = function Network() {
             // we've got an array of object edges
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                window.tools.removeFromObject(edge[i], _this.edges);
+                window.tools.removeFromObject(edge[i], edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -2570,7 +3197,8 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            window.tools.removeFromObject(edge, _this.edges);
+            window.tools.removeFromObject(edge, edges);
+
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
             window.dispatchEvent(log);
@@ -2582,39 +3210,39 @@ module.exports = function Network() {
         return true;
     };
 
-    this.removeNode = function(id, preserveEdges) {
+    network.removeNode = function(id, preserveEdges) {
         if (!preserveEdges) { preserveEdges = false; }
 
         // Unless second parameter is present, also delete this nodes edges
         if (!preserveEdges) {
-            this.removeEdge(_this.getNodeEdges(id));
+            network.removeEdge(network.getNodeEdges(id));
         } else {
             note.info('NOTICE: preserving node edges after deletion.');
         }
 
         var nodeRemovedEvent, log;
 
-        for (var i = 0; i<_this.nodes.length; i++) {
-            if (_this.nodes[i].id === id) {
-                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':_this.nodes[i]}});
+        for (var i = 0; i<nodes.length; i++) {
+            if (nodes[i].id === id) {
+                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':nodes[i]}});
                 window.dispatchEvent(log);
-                nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':_this.nodes[i]});
+                nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':nodes[i]});
                 window.dispatchEvent(nodeRemovedEvent);
-                window.tools.removeFromObject(_this.nodes[i],_this.nodes);
+                window.tools.removeFromObject(nodes[i],nodes);
                 return true;
             }
         }
         return false;
     };
 
-    this.updateEdge = function(id, properties, callback) {
-        if(_this.getEdge(id) === false || properties === undefined) {
+    network.updateEdge = function(id, properties, callback) {
+        if(network.getEdge(id) === false || properties === undefined) {
             return false;
         }
-        var edge = _this.getEdge(id);
+        var edge = network.getEdge(id);
         var edgeUpdateEvent, log;
 
-        window.tools.extend(edge, properties);
+        $.extend(edge, properties);
         edgeUpdateEvent = new window.CustomEvent('edgeUpdatedEvent',{'detail':edge});
         window.dispatchEvent(edgeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeUpdate', 'eventObject':edge}});
@@ -2627,14 +3255,14 @@ module.exports = function Network() {
 
     };
 
-    this.updateNode = function(id, properties, callback) {
+    network.updateNode = function(id, properties, callback) {
         if(this.getNode(id) === false || properties === undefined) {
             return false;
         }
         var node = this.getNode(id);
         var nodeUpdateEvent, log;
 
-        window.tools.extend(node, properties);
+        $.extend(node, properties);
         nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
         window.dispatchEvent(nodeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
@@ -2647,27 +3275,46 @@ module.exports = function Network() {
 
     };
 
-    this.getNode = function(id) {
+    network.deepUpdateNode = function(id, properties, callback) {
+        if(this.getNode(id) === false || properties === undefined) {
+            return false;
+        }
+        var node = this.getNode(id);
+        var nodeUpdateEvent, log;
+
+        node = deepmerge(node, properties);
+        nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
+        window.dispatchEvent(nodeUpdateEvent);
+        log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
+        window.dispatchEvent(log);
+        var unsavedChanges = new window.Event('unsavedChanges');
+        window.dispatchEvent(unsavedChanges);
+        if(callback) {
+            callback();
+        }
+    };
+
+    network.getNode = function(id) {
         if (id === undefined) { return false; }
-        for (var i = 0;i<_this.nodes.length; i++) {
-            if (_this.nodes[i].id === id) {return _this.nodes[i]; }
+        for (var i = 0;i<nodes.length; i++) {
+            if (nodes[i].id === id) {return nodes[i]; }
         }
         return false;
 
     };
 
-    this.getEdge = function(id) {
+    network.getEdge = function(id) {
         if (id === undefined) { return false; }
-        for (var i = 0;i<_this.edges.length; i++) {
-            if (_this.edges[i].id === id) {return _this.edges[i]; }
+        for (var i = 0;i<edges.length; i++) {
+            if (edges[i].id === id) {return edges[i]; }
         }
         return false;
     };
 
-    this.filterObject = function(targetArray,criteria) {
+    network.filterObject = function(targetArray,criteria) {
         // Return false if no criteria provided
         if (!criteria) { return false; }
-        // Get _this.nodes using .filter(). Function is called for each of _this.nodes.Nodes.
+        // Get nodes using .filter(). Function is called for each of nodes.Nodes.
         var result = targetArray.filter(function(el){
             var match = true;
 
@@ -2729,12 +3376,12 @@ module.exports = function Network() {
         return result;
     };
 
-    this.getNodes = function(criteria, filter) {
+    network.getNodes = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = _this.filterObject(_this.nodes,criteria);
+            results = network.filterObject(nodes,criteria);
         } else {
-            results = _this.nodes;
+            results = nodes;
         }
 
         if (filter) {
@@ -2744,12 +3391,12 @@ module.exports = function Network() {
         return results;
     };
 
-    this.getEdges = function(criteria, filter) {
+    network.getEdges = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = _this.filterObject(_this.edges,criteria);
+            results = network.filterObject(edges,criteria);
         } else {
-            results = _this.edges;
+            results = edges;
         }
 
         if (filter) {
@@ -2759,25 +3406,25 @@ module.exports = function Network() {
         return results;
     };
 
-    this.getNodeInboundEdges = function(nodeID) {
-        return _this.getEdges({to:nodeID});
+    network.getNodeInboundEdges = function(nodeID) {
+        return network.getEdges({to:nodeID});
     };
 
-    this.getNodeOutboundEdges = function(nodeID) {
-        return _this.getEdges({from:nodeID});
+    network.getNodeOutboundEdges = function(nodeID) {
+        return network.getEdges({from:nodeID});
     };
 
-    this.getNodeEdges = function(nodeID) {
-        if (_this.getNode(nodeID) === false) {
+    network.getNodeEdges = function(nodeID) {
+        if (network.getNode(nodeID) === false) {
             return false;
         }
-        var inbound = _this.getNodeInboundEdges(nodeID);
-        var outbound = _this.getNodeOutboundEdges(nodeID);
+        var inbound = network.getNodeInboundEdges(nodeID);
+        var outbound = network.getNodeOutboundEdges(nodeID);
         var concat = inbound.concat(outbound);
         return concat;
     };
 
-    this.setProperties = function(object, properties) {
+    network.setProperties = function(object, properties) {
 
         if (typeof object === 'undefined') { return false; }
 
@@ -2793,42 +3440,47 @@ module.exports = function Network() {
 
     };
 
-    this.returnAllNodes = function() {
-        return _this.nodes;
+    network.returnAllNodes = function() {
+        return nodes;
     };
 
-    this.returnAllEdges = function() {
-        return _this.edges;
+    network.returnAllEdges = function() {
+        return edges;
     };
 
-    this.clearGraph = function() {
-        _this.edges = [];
-        _this.nodes = [];
+    network.clearGraph = function() {
+        edges = [];
+        nodes = [];
     };
 
-    this.createRandomGraph = function(nodeCount,edgeProbability) {
+    network.createRandomGraph = function(nodeCount,edgeProbability) {
         nodeCount = nodeCount || 10;
+
         edgeProbability = edgeProbability || 0.4;
         note.info('Creating random graph...');
+
         for (var i=0;i<nodeCount;i++) {
             var current = i+1;
             window.tools.notify('Adding node '+current+' of '+nodeCount,2);
             // Use random coordinates
             var nodeOptions = {
-                coords: [Math.round(tools.randomBetween(100,window.innerWidth-100)),Math.round(tools.randomBetween(100,window.innerHeight-100))]
+                name: namesList[Math.floor(window.tools.randomBetween(0,namesList.length))],
+                coords: [Math.round(window.tools.randomBetween(100,window.innerWidth-100)),Math.round(window.tools.randomBetween(100,window.innerHeight-100))]
             };
-            this.addNode(nodeOptions);
+            network.addNode(nodeOptions);
         }
 
-        note.debug('Adding _this.edges.');
-        $.each(_this.nodes, function (index) {
-            if (tools.randomBetween(0, 1) < edgeProbability) {
-                var randomFriend = Math.round(tools.randomBetween(0,_this.nodes.length-1));
-                _this.addEdge({from:_this.nodes[index].id,to:_this.nodes[randomFriend].id});
+        note.debug('Adding edges.');
+        $.each(nodes, function (index) {
+            if (window.tools.randomBetween(0, 1) < edgeProbability) {
+                var randomFriend = Math.round(window.tools.randomBetween(0,nodes.length-1));
+                network.addEdge({from:nodes[index].id,to:nodes[randomFriend].id});
 
             }
         });
     };
+
+    return network;
 
 };
 ;/* global $, window */
@@ -3310,7 +3962,6 @@ var Session = function Session() {
         } else {
             note.warn('saveFile() is not yet implemented on this platform!');
         }
-
     }
 
     function clickDownloadInput() {
@@ -3330,6 +3981,7 @@ var Session = function Session() {
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'stageCompleted', 'eventObject':eventProperties}});
             window.dispatchEvent(log);
 
+            // $(document).trigger('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             var changeStageStartEvent = new window.CustomEvent('changeStageStart', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageStartEvent);
 
@@ -3338,15 +3990,17 @@ var Session = function Session() {
             session.sessionData.sessionParameters.stage = newStage;
             var changeStageEndEvent = new window.CustomEvent('changeStageEnd', {'detail':{oldStage: oldStage, newStage: newStage}});
             window.dispatchEvent(changeStageEndEvent);
-            if ((currentStage+1) === session.stages.length) {
-                $('.arrow-next').hide();
-            } else if (currentStage === 0) {
-                $('.arrow-prev').hide();
-                $('.arrow-next').attr('disabled','disabled');
-
-            } else {
-                $('.arrow-next').show().removeAttr('disabled');
-                $('.arrow-prev').show();
+            if ((currentStage+1) === session.stages.length) { // last stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-next').attr('disabled', 'disabled');
+                if (currentStage === 0) { // first and last stage
+                    $('.arrow-prev').attr('disabled', 'disabled');
+                }
+            } else if (currentStage === 0) { // first stage
+                $('.paginate').removeAttr('disabled');
+                $('.arrow-prev').attr('disabled', 'disabled');
+            } else {    // neither
+                $('.paginate').removeAttr('disabled');
             }
         }
     };
@@ -3370,7 +4024,19 @@ var Session = function Session() {
             $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');
 
             // copy the skip functions
-            session.skipFunctions = study.skipFunctions;
+            if (typeof study.skipFunctions !== 'undefined') {
+                session.skipFunctions = study.skipFunctions;
+            }
+
+
+            // create the sessionGlobals
+            if (typeof study.globals !=='undefined') {
+                session.globals = study.globals;
+                // iterate through and execute;
+                $.each(session.globals, function(index, value) {
+                    value();
+                });
+            }
 
             // set the study name (used for database name)
             if (study.sessionParameters.name) {
@@ -3378,7 +4044,6 @@ var Session = function Session() {
             } else {
                 note.error('Study protocol must have key "name" under sessionParameters.');
             }
-
 
             // Check for an in-progress session
             window.dataStore.init(function(sessionid) {
@@ -3401,14 +4066,29 @@ var Session = function Session() {
             });
 
             // Initialise the menu system – other modules depend on it being there.
-            var stagesMenu = window.menu.addMenu('Stages', 'bars');
+            var stagesMenuOptions = {
+                name: 'Stages',
+                icon: 'fa-bars',
+                items: []
+            };
+
             $.each(session.stages, function(index,value) {
                 var icon = null;
                 if (value.icon) {
                     icon = value.icon;
                 }
-                window.menu.addItem(stagesMenu, value.label, icon, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+                var itemObject = {
+                    label: value.label,
+                    icon: icon,
+                    action: function() {setTimeout(function() {session.goToStage(index);}, 500); }
+                };
+
+                stagesMenuOptions.items.push(itemObject);
+
             });
+
+            window.stagesMenu = new window.netCanvas.Modules.Menu(stagesMenuOptions);
+
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
             note.error('Error fetching protocol!');
@@ -3453,8 +4133,14 @@ var Session = function Session() {
             session.saveManager();
         }, false);
 
-        var sessionMenu = window.menu.addMenu('Session','cogs');
-        window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
+        var sessionMenuOptions = {
+            name: 'Session',
+            icon: 'fa-cogs',
+            items: []
+        };
+
+        window.sessionMenu = new window.netCanvas.Modules.Menu(sessionMenuOptions);
+        window.sessionMenu.addItem('Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -3476,9 +4162,9 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
+        window.sessionMenu.addItem('Download Data', 'fa-download', function() { clickDownloadInput(); });
 
-        window.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
+        window.sessionMenu.addItem('Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -3500,7 +4186,7 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
+        window.sessionMenu.addItem('Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
 
         if(callback) {
             callback();
@@ -3701,52 +4387,115 @@ var Session = function Session() {
 };
 
 module.exports = new Session();
-;/* global Konva, window, $, note */
+;/* global Konva, window, $, note, ConvexHullGrahamScan */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
-// Can be replaced with npm module once v0.9.5 reaches upstream.
 module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
-	var stage, circleLayer, edgeLayer, nodeLayer, uiLayer, sociogram = {};
+	var stage, circleLayer, edgeLayer, nodeLayer, wedgeLayer, hullLayer, uiLayer, sociogram = {};
+	var moduleEvents = [];
 	var selectedNodes = [];
+	var selectedNode = null;
+	var selectedHull = null;
 	var log;
-	var menuOpen = false;
-	var cancelKeyBindings = false;
 	var taskComprehended = false;
+	var longPressTimer, tapTimer;
+	var touchNotTap = false;
+	var hullShapes = {};
 
 	// Colours
 	var colors = {
 		blue: '#0174DF',
+		tomato: '#FF6347',
+		teal: '#008080',
+		hullpurple: '#9a208e',
+		freesia: '#ffd600',
+		hullgreen: '#6ac14c',
+		cayenne: '#c40000',
 		placidblue: '#83b5dd',
 		violettulip: '#9B90C8',
 		hemlock: '#9eccb3',
 		paloma: '#aab1b0',
-		freesia: '#ffd600',
-		cayenne: '#c40000',
-		celosiaorange: '#f47d44',
 		sand: '#ceb48d',
 		dazzlingblue: '#006bb6',
-		edge: '#e85657',
-		selected: 'gold',
+		edge: '#dd393a',
+		selected: '#ffbf00',
 	};
+
+	var hullColors = ['#01a6c7','#1ECD97', '#B16EFF','#FA920D','#e85657','Gold','Pink','Saddlebrown','Teal','Silver'];
 
 	// Default sociogram.settings
 	sociogram.settings = {
 		network: window.netCanvas.Modules.session.getPrimaryNetwork(),
-		defaultNodeSize: 35,
-		defaultNodeColor: colors.blue,
-		defaultEdgeColor: colors.edge,
-		concentricCircleColor: '#ffffff',
-		concentricCircleNumber: 4,
-		criteria: {},
+		targetEl: 'kineticCanvas',
+		// consecutive single tap - edge mode
+		// drag - layout mode
+		// double tap - select mode
+		// long press - community mode
+		modes:['Edge', 'Community', 'Position', 'Select'], //edge - create edges, position - lay out, select - node attributes
+	    panels: ['mode', 'context'], // Mode - switch between modes, Context - convex hull drawing and labelling
+		options: {
+			defaultNodeSize: 35,
+			defaultNodeColor: 'white',
+			defaultNodeStrokeWidth: 5,
+			defaultLabelColor: 'black',
+			defaultEdgeColor: colors.edge,
+			concentricCircleColor: '#ffffff',
+			concentricCircleNumber: 4,
+			concentricCircleSkew: false
+		},
 		nodeTypes: [
 			{'name':'Person','color':colors.blue},
 			{'name':'OnlinePerson','color':colors.hemlock},
 			{'name':'Organisation','color':colors.cayenne},
 			{'name':'Professional','color':colors.violettulip}
-		]
+		],
+	    dataDestination: {
+	        // indexed by mode. one for each active mode
+	        'Edge': {
+	            type: 'edge', // edge or node. where do we store the attriute?
+	            variables: [
+	                {name:'type', value:'Friend'}, // node or edge type. Should this be promoted out of the variables array? Might need to respect existing exdges or nodes. When to we overwrite vs update?
+	                {name:'namegenerator', value: 'closest'}
+	                // {'weight': function() { some callback eval code }}
+	            ]
+	        },
+	        'Select': {
+	            type: 'node', //"hypernode" - create node for attribute type and link with edge?
+	            mode: 'flip', // flip - flip binary value of flip_variable, create - delete or create node or edge
+	            flip_variable: 'drugUser', // O
+	            variables: [
+	                {name: 'drugType', value: 'boozybix'}
+	            ]
+	        },
+	        'Position': {
+	            type: 'node',
+	            variable: 'coords'
+	        },
+	        'Community' : {
+	            type: 'node', // node, edge, ego
+				name: 'Groups',
+				variable: 'special_hulls'
+	        }
+	    },
+	    criteria: { // criteria for being shown on this screen
+	        type: 'node',
+	        includeEgo: false,
+	        query: {
+	        }
+	    },
+		heading: 'A default heading',
+		subheading: 'A default subheading'
+	};
+
+	sociogram.settings.dataOrigin = {
+		// indexed by mode. one for each active mode
+        'Edge': sociogram.settings.dataDestination.Edge,
+        'Select': sociogram.settings.dataDestination.Select,
+        'Position': sociogram.settings.dataDestination.Position,
+        'Community' : sociogram.settings.dataDestination.Community
 	};
 
 	// Private functions
@@ -3761,173 +4510,463 @@ module.exports = function Sociogram() {
 		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}
 
+	function toPointFromObject(array) {
+		var newArray = [];
+		for (var i = 0; i<array.length; i++) {
+			newArray.push(array[i].x);
+			newArray.push(array[i].y);
+		}
+
+		return newArray;
+	}
+
+	function addNodeHandler(e) {
+		sociogram.addNode(e.detail);
+	}
+
+	function addEdgeHandler(e) {
+		sociogram.addEdge(e.detail);
+	}
+
+	function showHullHandler(e) {
+		if (e && e.target.checked) {
+			hullLayer.opacity(1);
+		} else {
+			hullLayer.opacity(0);
+		}
+
+		hullLayer.draw();
+	}
+
+	function hullListClickHandler(e) {
+		var clicked = $(e.target).closest('li');
+		clicked.addClass('active');
+		selectedHull = clicked.data('hull');
+	}
+
+	function groupButtonClickHandler() {
+		console.log('groupbutton click');
+		sociogram.addHull();
+	}
+
 	sociogram.init = function (userSettings) {
+
 		note.info('Sociogram initialising.');
-		window.tools.extend(sociogram.settings,userSettings);
+		$.extend(true, sociogram.settings,userSettings);
 
-		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore( '#kineticCanvas' );
+		// Add the title and heading
+		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore('#'+sociogram.settings.targetEl );
 
+		// Initialise the konva stage
 		sociogram.initKinetic();
 
-		window.addEventListener('nodeAdded', sociogram.addNode, false);
-		window.addEventListener('edgeAdded', sociogram.addEdge, false);
+		// Panels
+		if (sociogram.settings.panels.indexOf('context') !== -1) {
+			$('<div class="context-panel show"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New Group</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+		}
+
+		if (sociogram.settings.panels.indexOf('mode') !== -1) {
+			console.warn('The "mode" panel is not yet implemented.');
+		}
+
+		/**
+		* Are there existing nodes? Display them.
+		* Get all nodes or that match the criteria
+		* First, are we dealing with a node or an edge query?
+		* - If a node query, simply query the nodes and use the node properties to create sociogram.nodes
+		* - If an edge query, do three things:
+		* 		- Run the edge query
+		* 		- If the nodePropertiesEdge key exists, use that to get the sociogram.node properties
+		* 		- If it doesn't, use the edge properties instead.
+		*/
+
+		if (sociogram.settings.criteria.type === 'edge') {
+
+			// Get edges according to criteria query
+			var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria.query);
+
+			// Iterate over them
+			for (var i = 0; i < criteriaEdges.length; i++) {
+
+				var dyadEdge;
+
+				// If the 'nodePropertiesEdge' key is set, use that to get the sociogram.node properties.
+				if (typeof sociogram.settings.criteria.nodePropertiesEdge !== 'undefined') {
+					dyadEdge = sociogram.settings.network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:sociogram.settings.criteria.nodePropertiesEdge})[0];
+				} else {
+				// If 'nodePropertiesEdge' key is not set, simply copy the edge values to the sociogram.nodes
+					dyadEdge = criteriaEdges[i];
+				}
+				// Create the sociogram.node
+				sociogram.addNode(dyadEdge);
+
+			}
+
+		} else if (sociogram.settings.criteria.type === 'node') {
+
+			var criteriaNodes;
+
+			// get nodes according to criteria query
+			// filter out ego if required
+			if (sociogram.settings.criteria.includeEgo !== true) {
+				criteriaNodes = sociogram.settings.network.getNodes(sociogram.settings.criteria.query, function (results) {
+					var filteredResults = [];
+					$.each(results, function(index,value) {
+						if (value.type !== 'Ego') {
+							filteredResults.push(value);
+						}
+					});
+
+					return filteredResults;
+				});
+			} else {
+				criteriaNodes = sociogram.settings.network.getNodes(sociogram.settings.criteria.query);
+			}
+
+			for (var j = 0; j < criteriaNodes.length; j++) {
+				sociogram.addNode(criteriaNodes[j]);
+			}
+		}
+
+		// Add the evevent listeners
+		window.addEventListener('nodeAdded', addNodeHandler, false);
+		window.addEventListener('edgeAdded', addEdgeHandler, false);
 		window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.addEventListener('changeStageStart', sociogram.destroy, false);
+		$(window.document).on('change', '#context-checkbox-show', showHullHandler);
+		$(window.document).on('click', '.hull', hullListClickHandler);
+		$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
 
-		// Are there existing nodes? Display them.
 
-		// Get all nodes that match the criteria
-		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria);
+		// Hide the hulls initially
+		showHullHandler();
 
-		// Iterate over them
-		for (var i = 0; i < criteriaEdges.length; i++) {
-			var dyadEdge = sociogram.settings.network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
-			var newNode = sociogram.addNode(dyadEdge);
-
-			// If we are in select mode, set the initial state
-			if (sociogram.settings.mode === 'Select') {
-				// test if we are flipping a variable or assigning an edge
-				if (sociogram.settings.variable) {
-					//we are flipping a variable
-					var properties = {
-						from: sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id,
-						to: criteriaEdges[i].to,
-					};
-
-					properties[sociogram.settings.variable] = 1;
-
-					if (sociogram.settings.network.getEdges(properties).length > 0) {
-						newNode.children[0].stroke(colors.selected);
-						nodeLayer.draw();
-					}
-				} else {
-					// we are assigning an edge
-					// set initial state of node according to if an edge exists
-					if (sociogram.settings.network.getEdges({from: sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id, to: criteriaEdges[i].to, type: sociogram.settings.edgeType}).length > 0) {
-						newNode.children[0].stroke(colors.selected);
-						nodeLayer.draw();
-					}
-
-				}
-			}
-		}
+		// Update initial states of all nodes and edges;
+		sociogram.updateInitialNodeState();
 
 		setTimeout(function() { // seems to be needed in Chrome Canary. Why!?
 			sociogram.drawUIComponents();
 		}, 0);
 
-		// Are there existing edges? Display them
-		var edges, edgeProperties;
-		if (sociogram.settings.mode === 'Edge') {
 
-			// Set the criteria based on edge type
-			edgeProperties =  {
-				type: sociogram.settings.edgeType
-			};
+	};
 
-			// Filter to remove edges involving ego, unless this is edge select mode.
-			edges = sociogram.settings.network.getEdges(edgeProperties, function (results) {
-				var filteredResults = [];
-				$.each(results, function(index,value) {
-					if (value.from !== sociogram.settings.network.getEgo().id && value.to !== sociogram.settings.network.getEgo().id) {
-						filteredResults.push(value);
-					}
+	sociogram.updateInitialNodeState = function() {
+		/**
+		* Uses settings.dataOrigin to set the initial state of all nodes and edges.
+		*/
+
+		// Edge Mode
+		if (sociogram.settings.modes.indexOf('Edge') !== -1) {
+
+			// get the source of the edges according to dataOrigin
+			if (sociogram.settings.dataOrigin.Edge.type === 'edge') {
+				// Get any edges involving the currently visible nodes (needless complexity?) that meet the criteria
+				var properties = {};
+				$.each(sociogram.settings.dataOrigin.Edge.variables, function(index, value) {
+					properties[value.name] = value.value;
+				});
+				var edges = sociogram.settings.network.getEdges(properties);
+				$.each(edges, function(index, edge) {
+					sociogram.addEdge(edge);
 				});
 
-				return filteredResults;
-			});
+			} else if (sociogram.settings.dataOrigin.Edge.type === 'node') {
+				throw new Error('Not yet implemented.');
+			} else {
+			}
 
-			$.each(edges, function(index,value) {
-				sociogram.addEdge(value);
-			});
+		}
 
-		} else if (sociogram.settings.mode === 'Select' || sociogram.settings.mode === 'Update') {
+		// Select Mode
+		if (sociogram.settings.modes.indexOf('Select') !== -1) {
 			// Select mode
 
-			// Show the social window.network
-			// Filter to remove edges involving ego, unless this is edge select mode.
-			edgeProperties = {};
-
-			if (sociogram.settings.showEdge) {
-				edgeProperties =  {
-					type: sociogram.settings.showEdge
-				};
-			} else {
-				edgeProperties =  {
-					type: 'Dyad'
-				};
-			}
-			edges = sociogram.settings.network.getEdges(edgeProperties, function (results) {
-				var filteredResults = [];
-				$.each(results, function(index,value) {
-					if (value.from !== sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id && value.to !== sociogram.settings.network.getNodes({type_t0:'Ego'})[0].id) {
-						filteredResults.push(value);
+			if (sociogram.settings.dataOrigin.Select.mode === 'flip') {
+				var selectNodes = sociogram.settings.network.getNodes({});
+				$.each(selectNodes, function(index, node) {
+					var currentValue = node[sociogram.settings.dataOrigin.Select.flip_variable];
+					if (currentValue === 1) {
+						// this node is selected
+						var currentNode = sociogram.getNodeByID(node.id);
+						currentNode.children[0].stroke(colors.selected);
 					}
 				});
 
-				return filteredResults;
-			});
+			} else if (sociogram.settings.dataOrigin.Select.mode === 'create') {
+			} else {
+				// error state
+			}
 
-			$.each(edges, function(index,value) {
-				sociogram.addEdge(value);
-			});
-
-		} else if (sociogram.settings.mode === 'Position') {
-			// Don't show any edges.
 		}
+
+		// Layout Mode
+		if (sociogram.settings.modes.indexOf('Position') !== -1) {
+			// Get the dataOrigin for position
+			if (sociogram.settings.dataOrigin.Position.type === 'node') {
+				// position data is coming from the node
+				var layoutNodes = sociogram.getKineticNodes();
+				$.each(layoutNodes, function(index,node) {
+					node.setPosition(node.attrs[sociogram.settings.dataOrigin.Position.variable]);
+				});
+
+			} else if (sociogram.settings.dataOrigin.Position.type === 'edge') {
+				// position data is coming from the edge
+
+			} else {
+				// error!
+			}
+
+		}
+
+		// Community mode
+
+		if (sociogram.settings.modes.indexOf('Community') !== -1) {
+			var communityNodes;
+
+			if (sociogram.settings.dataOrigin.Community.type === 'node') {
+				// community data is coming from the node
+				communityNodes = sociogram.getKineticNodes();
+				$.each(communityNodes, function(index,node) {
+					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
+						sociogram.addPointToHull(node, hullValue);
+					});
+				});
+
+			} else if (sociogram.settings.dataOrigin.Community.type === 'ego') {
+				// community data is coming from ego
+				if (typeof window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable] === 'undefined') {
+					console.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
+					var properties = {};
+					properties[sociogram.settings.dataOrigin.Community.egoVariable] = [];
+					window.network.updateNode(window.network.getEgo().id, properties);
+				}
+
+				var egoHulls = window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable];
+				$.each(egoHulls, function(hullIndex, hullValue) {
+					sociogram.addHull(hullValue);
+				});
+
+				communityNodes = sociogram.getKineticNodes();
+				$.each(communityNodes, function(index,node) {
+					$.each(node.attrs[sociogram.settings.dataOrigin.Community.variable], function (hullIndex, hullValue) {
+
+						// Difference from node mode is we check if the node hull has been defined by ego too
+
+						if (egoHulls.indexOf(hullValue) !== -1) {
+							sociogram.addPointToHull(node, hullValue);
+						}
+
+					});
+				});
+
+			} else if (sociogram.settings.dataOrigin.Community.type === 'edge') {
+				// community data is coming from an edge
+
+			} else {
+				// error!
+			}
+		}
+
 	};
 
 	sociogram.getSelectedNodes = function() {
 		return selectedNodes;
 	};
 
-	sociogram.keyPressHandler = function(e) {
-		if (!cancelKeyBindings) {
-
-			if (!menuOpen) {
-				//open the menu
-				$('.new-node-form').addClass('node-form-open');
-				$('.content').addClass('blurry'); //blur content background
-				menuOpen = true;
-				$('.name-box').focus();
-			}
-
-			// Prevent accidental backspace navigation
-			if (e.which === 8 && !$(e.target).is('input, textarea, div')) {
-				e.preventDefault();
-			}
-
-		}
-	};
-
 	sociogram.destroy = function() {
-
-		// menu.removeMenu(canvasMenu); // remove the window.network menu when we navigate away from the page.
-		$('.new-node-form').remove(); // Remove the new node form
-
-		window.removeEventListener('nodeAdded', sociogram.addNode, false);
-		window.removeEventListener('edgeAdded', sociogram.addEdge, false);
+		window.removeEventListener('nodeAdded', addNodeHandler, false);
+		window.removeEventListener('edgeAdded', addEdgeHandler, false);
 		window.removeEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.removeEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.removeEventListener('changeStageStart', sociogram.destroy, false);
 		$(window.document).off('keypress', sociogram.keyPressHandler);
+		$(window.document).off('change', '#context-checkbox-show', showHullHandler);
 
 	};
 
-	// Node manipulation functions
+	sociogram.addHull = function(label) {
+		// ignore groups that already exist
+		label = label ? label : 'New Group '+$('li[data-hull]').length;
+		if (typeof hullShapes[label] === 'undefined') {
+			var thisHull = {};
+			thisHull.label = label;
+	        thisHull.hull = new ConvexHullGrahamScan();
 
-	sociogram.resetPositions = function() {
-		var dyadEdges = sociogram.settings.network.getEdges({type:'Dyad'});
+			var color = hullColors[$('.list-group-item').length];
 
-		$.each(dyadEdges, function(index) {
-			sociogram.settings.network.updateEdge(dyadEdges[index].id, {coords: []});
-		});
+	        var hullShape = new Konva.Line({
+	          points: [window.outerWidth/2, window.outerHeight/2],
+	          fill: color,
+	          opacity:0.5,
+	          stroke: color,
+	          lineJoin: 'round',
+	          lineCap: 'round',
+			  transformsEnabled: 'position',
+			  hitGraphEnabled: false,
+	          tension : 0.1,
+	          strokeWidth: 100,
+	          closed : true
+	        });
+			hullShapes[label] = hullShape;
+			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
+			$('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
+	        hullLayer.add(hullShapes[label]);
+	        hullLayer.draw();
+
+			// If the data origin is ego, also add the new hull to ego
+			if (sociogram.settings.dataOrigin.Community.type === 'ego') {
+				// If ego doesn't have the variable set, create it
+
+				var properties;
+				if (typeof window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable] === 'undefined') {
+					properties = {};
+					properties[sociogram.settings.dataOrigin.Community.egoVariable] = [];
+					window.network.updateNode(window.network.getEgo().id, properties);
+				}
+
+				// get existing data
+				var egoContexts = window.network.getEgo()[sociogram.settings.dataOrigin.Community.egoVariable];
+				if (egoContexts.indexOf(thisHull.label) === -1) {
+					// Update ego
+					egoContexts.push(thisHull.label);
+					window.netCanvas.Modules.session.saveData();
+				}
+
+			}
+
+		}
+
+    };
+
+	sociogram.hullExists = function(hullLabel) {
+		var found = false;
+		if ($('li[data-hull="'+hullLabel+'"]').length > 0) {
+			found = true;
+		}
+		return found;
 	};
+
+    sociogram.addPointToHull = function(point, hullLabel) {
+		var properties;
+		// if a hull with hullLabel doesnt exist, create one
+		if (!sociogram.hullExists(hullLabel)) {
+			sociogram.addHull(hullLabel);
+		}
+
+		// store properties according to data destination
+		if (sociogram.settings.dataDestination.Community.type === 'node') {
+
+			// If the point doesn't have the destination attribute, create it
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = [];
+				window.network.updateNode(point.attrs.id, properties);
+			}
+
+			// Only store if the node doesn't already have the hull present
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable].indexOf(hullLabel) === -1) {
+				// Find the node we need to store the hull value in, and update it.
+
+				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+				point.attrs[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+
+				// Update the node with the object
+				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
+					window.tools.notify('Network node updated', 1);
+				});
+			}
+
+		} else if (sociogram.settings.dataDestination.Community.type === 'ego') {
+			// If the point doesn't have the destination attribute, create it
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
+				console.warn('Node did not have the data destinateion community attribute. A blank array was created.');
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = [];
+				window.network.updateNode(point.attrs.id, properties);
+			}
+			// Only store if the node doesn't already have the hull present
+			if (point.attrs[sociogram.settings.dataDestination.Community.variable].indexOf(hullLabel) === -1) {
+				// Find the node we need to store the hull value in, and update it.
+
+				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
+				properties = {};
+				properties[sociogram.settings.dataDestination.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+				point.attrs[sociogram.settings.dataOrigin.Community.variable] = point.attrs[sociogram.settings.dataOrigin.Community.variable].concat([hullLabel]);
+
+				// Update the node with the object
+				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
+					window.tools.notify('Network node updated', 1);
+				});
+			}
+		} else if (sociogram.settings.dataDestination.Position.type === 'edge') {
+			// not yet implemented
+		}
+
+        // redraw all hulls here
+        var pointHulls = point.attrs[sociogram.settings.dataOrigin.Community.variable];
+        for (var i = 0; i < pointHulls.length; i++) {
+            var newHull = new ConvexHullGrahamScan();
+
+            for (var j = 0; j < nodeLayer.children.length; j++) {
+                var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
+				if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+                    var coords = nodeLayer.children[j].getPosition();
+                    newHull.addPoint(coords.x, coords.y);
+                }
+            }
+
+
+			// We need this check because on load all hull shapes might not be defined yet.
+			if (typeof hullShapes[pointHulls[i]] !== 'undefined') {
+				// hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+
+				var tweenPoints = toPointFromObject(newHull.getHull());
+
+				// check if more points than currently exist
+				if (tweenPoints.length > hullShapes[pointHulls[i]].getPoints().length) {
+					// We need a add a new point which can then be animated
+					// We calculate which of the existing points is closest, then duplicate it
+					var currentPoints = hullShapes[pointHulls[i]].getPoints();
+					var closest = '';
+					var distance = 0;
+					var newPointPos = [point.getPosition().x, point.getPosition().y];
+					for (var k = 0; k < currentPoints.length; k+=2) {
+						if(window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos) > distance) {
+							distance = window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos);
+							closest = [currentPoints[k], currentPoints[k+1]];
+						}
+					}
+					currentPoints.push(closest[0]);
+					currentPoints.push(closest[1]);
+					hullShapes[pointHulls[i]].setPoints(currentPoints);
+				}
+
+				// var tween = new Konva.Tween({
+				// 	node: hullShapes[pointHulls[i]],
+				// 	points: tweenPoints,
+				// 	duration: 1,
+				// 	onFinish: function(){
+				// 		tween.destroy();
+				// 	}
+				// }).play();
+
+				hullShapes[pointHulls[i]].setPoints(tweenPoints);
+			}
+
+			hullLayer.draw();
+            nodeLayer.draw();
+
+        }
+
+    };
 
 	sociogram.addNode = function(options) {
+
 		note.debug('Sociogram is creating a node.');
-		// options = options.details;
 
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
@@ -3938,21 +4977,32 @@ module.exports = function Sociogram() {
 		}
 
 		var dragStatus = false;
-		if (sociogram.settings.mode === 'Position' || sociogram.settings.mode === 'Edge') {
+		if (sociogram.settings.modes.indexOf('Position') !== -1 || sociogram.settings.modes.indexOf('Edge') !== -1) {
 			dragStatus = true;
 		}
-		options.label = options.nname_t0;
+
+		// Try to guess at a label if one isn't provided.
+		// Is there a better way of doing this?
+		if (typeof options.label === 'undefined' && typeof options.nname_t0 !== 'undefined') { // for RADAR use nickname
+			options.label = options.nname_t0;
+		} else if (typeof options.label === 'undefined' && typeof options.name !== 'undefined'){
+			options.label = options.name;
+		}
+
 		var nodeOptions = {
 			coords: [$(window).width()+50,100],
 			id: nodeID,
 			label: 'Undefined',
-			size: sociogram.settings.defaultNodeSize,
-			color: 'rgb(0,0,0)',
-			strokeWidth: 4,
+			transformsEnabled: 'position',
+			size: sociogram.settings.options.defaultNodeSize,
+			color: sociogram.settings.options.defaultNodeColor,
+			strokeWidth: sociogram.settings.options.defaultNodeStrokeWidth,
+			stroke: sociogram.settings.options.defaultNodeColor,
 			draggable: dragStatus,
 			dragDistance: 20
 		};
 
+		nodeOptions[sociogram.settings.dataOrigin.Community.variable] = [];
 		window.tools.extend(nodeOptions, options);
 
 		nodeOptions.id = parseInt(nodeOptions.id, 10);
@@ -3961,59 +5011,29 @@ module.exports = function Sociogram() {
 		nodeOptions.x = nodeOptions.coords[0];
 		nodeOptions.y = nodeOptions.coords[1];
 
-
-
 		var nodeGroup = new Konva.Group(nodeOptions);
 
-		switch (nodeOptions.type) {
-			case 'Person':
-			nodeShape = new Konva.Circle({
-				radius: nodeOptions.size,
-				fill:nodeOptions.color,
-				stroke: 'white',
-				strokeWidth: nodeOptions.strokeWidth
-			});
-			break;
+		var selectCircle = new Konva.Circle({
+			radius: nodeOptions.size+(nodeOptions.strokeWidth*2),
+			fill:sociogram.settings.options.defaultEdgeColor,
+			transformsEnabled: 'position',
+			opacity:0
+		});
 
-			case 'Organisation':
-			nodeShape = new Konva.Rect({
-				width: nodeOptions.size*2,
-				height: nodeOptions.size*2,
-				fill:nodeOptions.color,
-				stroke: sociogram.calculateStrokeColor(nodeOptions.color),
-				strokeWidth: nodeOptions.strokeWidth,
-				// offset: {x: nodeOptions.size, y: nodeOptions.size}
-			});
-			break;
-
-			case 'OnlinePerson':
-			nodeShape = new Konva.RegularPolygon({
-				sides: 3,
-				fill:nodeOptions.color,
-				radius: nodeOptions.size*1.2, // How should I calculate the correct multiplier for a triangle?
-				stroke: sociogram.calculateStrokeColor(nodeOptions.color),
-				strokeWidth: nodeOptions.strokeWidth
-			});
-			break;
-
-			case 'Professional':
-			nodeShape = new Konva.Star({
-				numPoints: 6,
-				fill:nodeOptions.color,
-				innerRadius: nodeOptions.size-(nodeOptions.size/3),
-				outerRadius: nodeOptions.size+(nodeOptions.size/3),
-				stroke: sociogram.calculateStrokeColor(nodeOptions.color),
-				strokeWidth: nodeOptions.strokeWidth
-			});
-			break;
-
-		}
+		nodeShape = new Konva.Circle({
+			radius: nodeOptions.size,
+			fill:nodeOptions.color,
+			transformsEnabled: 'position',
+			strokeWidth: nodeOptions.strokeWidth,
+			stroke: nodeOptions.stroke
+		});
 
 		var nodeLabel = new Konva.Text({
 			text: nodeOptions.label,
 			// fontSize: 20,
 			fontFamily: 'Lato',
-			fill: 'white',
+			transformsEnabled: 'position',
+			fill: sociogram.settings.options.defaultLabelColor,
 			align: 'center',
 			// offsetX: (nodeOptions.size*-1)-10, //left right
 			// offsetY:(nodeOptions.size*1)-10, //up down
@@ -4025,6 +5045,9 @@ module.exports = function Sociogram() {
 
 		// Node event handlers
 		nodeGroup.on('dragstart', function() {
+
+			window.wedge.anim.stop();
+			window.clearTimeout(longPressTimer);
 			if (taskComprehended === false) {
 				var eventProperties = {
 					stage: window.netCanvas.Modules.session.currentStage(),
@@ -4035,7 +5058,6 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 
-
 			note.debug('dragstart');
 
 			// Add the current position to the node attributes, so we know where it came from when we stop dragging.
@@ -4043,9 +5065,52 @@ module.exports = function Sociogram() {
 			this.attrs.oldy = this.attrs.y;
 			this.moveToTop();
 			nodeLayer.draw();
+
+			var dragNode = nodeOptions.id;
+			// Update the position of any connected edges and hulls
+			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
+			for (var i = 0; i < pointHulls.length; i++) {
+				var newHull = new ConvexHullGrahamScan();
+
+				for (var j = 0; j < nodeLayer.children.length; j++) {
+					var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
+					if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+						var coords = nodeLayer.children[j].getPosition();
+						newHull.addPoint(coords.x, coords.y);
+					}
+				}
+
+				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				hullLayer.batchDraw();
+
+			}
+
+			$.each(edgeLayer.children, function(index, value) {
+
+				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
+				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
+					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
+					value.attrs.points = points;
+
+				}
+			});
+
 		});
 
 		nodeGroup.on('dragmove', function() {
+
+			// Cancel wedge actions
+			window.wedge.anim.stop();
+			var tween = new Konva.Tween({
+				 node: window.wedge,
+				 opacity: 0,
+				 duration: 0,
+				 onFinish: function(){
+					 tween.destroy();
+				 }
+			}).play();
+			window.clearTimeout(longPressTimer);
+
 			if (taskComprehended === false) {
 				var eventProperties = {
 					stage: window.netCanvas.Modules.session.currentStage(),
@@ -4057,21 +5122,99 @@ module.exports = function Sociogram() {
 			}
 
 			note.debug('Dragmove');
+
 			var dragNode = nodeOptions.id;
+			// Update the position of any connected edges and hulls
+			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
+			for (var i = 0; i < pointHulls.length; i++) {
+				var newHull = new ConvexHullGrahamScan();
+
+				for (var j = 0; j < nodeLayer.children.length; j++) {
+					var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
+					if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+						var coords = nodeLayer.children[j].getPosition();
+						newHull.addPoint(coords.x, coords.y);
+					}
+				}
+
+				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				hullLayer.batchDraw();
+
+			}
+
 			$.each(edgeLayer.children, function(index, value) {
 
 				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
-				if (value.attrs.from.id === dragNode || value.attrs.to.id === dragNode) {
-					var points = [sociogram.getNodeByID(value.attrs.from.id).getX(), sociogram.getNodeByID(value.attrs.from.id).getY(), sociogram.getNodeByID(value.attrs.to.id).getX(), sociogram.getNodeByID(value.attrs.to.id).getY()];
+				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
+					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
 					value.attrs.points = points;
 
 				}
 			});
-			edgeLayer.draw();
+			edgeLayer.batchDraw();
+		});
+
+		nodeGroup.on('touchstart mousedown', function() {
+
+			var currentNode = this;
+
+			window.wedge.setAbsolutePosition(this.getAbsolutePosition());
+
+			window.wedge.anim = new Konva.Animation(function(frame) {
+				var duration = 500;
+				if (frame.time >= duration) { // point of selection
+					currentNode.fire('longPress');
+				} else {
+					window.wedge.opacity(frame.time*(1/duration));
+					window.wedge.setStrokeWidth(1+(frame.time*(20/duration)));
+					window.wedge.setAngle(frame.time*(360/duration));
+				}
+
+			}, wedgeLayer);
+
+			longPressTimer = setTimeout(function() {
+				touchNotTap = true;
+				window.wedge.anim.start();
+			}, 200);
 
 		});
 
-		nodeGroup.on('tap click', function() {
+		nodeGroup.on('longPress', function() {
+			selectedNode = this;
+			var currentNode = this;
+			$('.hull').removeClass('active'); // deselect all groups
+
+			// Update side panel
+			$('.context-header h4').html('Groups for '+currentNode.attrs.label);
+			$.each(currentNode.attrs[sociogram.settings.dataOrigin.Community.variable], function(index, value) {
+				$('[data-hull="'+value+'"]').addClass('active');
+			});
+			window.wedge.anim.stop();
+			window.clearTimeout(longPressTimer);
+		});
+
+		nodeGroup.on('touchend mouseup', function() {
+
+			window.wedge.anim.stop();
+			var tween = new Konva.Tween({
+				 node: window.wedge,
+				 opacity: 0,
+				 duration: 0.3,
+				 onFinish: function(){
+					 tween.destroy();
+				 }
+	 	 	}).play();
+			window.clearTimeout(longPressTimer);
+		});
+
+		nodeGroup.on('dbltap dblclick', function() {
+
+			selectedNodes = [];
+			$.each(sociogram.getKineticNodes(), function(index, value) {
+				value.children[0].opacity(0);
+			});
+			window.clearTimeout(tapTimer);
+
 			if (taskComprehended === false) {
 				var eventProperties = {
 					stage: window.netCanvas.Modules.session.currentStage(),
@@ -4082,103 +5225,233 @@ module.exports = function Sociogram() {
 				taskComprehended = true;
 			}
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':this.attrs.id}});
+			window.dispatchEvent(log);
+
 			var currentNode = this;
 
-			window.dispatchEvent(log);
-			if (sociogram.settings.mode === 'Select') {
-				var edge;
+			// if select mode enabled
+			if (sociogram.settings.modes.indexOf('Select') !== -1) {
 
-				// Check if we are flipping a binary variable on the Dyad edge or setting an edge
-				if (sociogram.settings.variable) {
-					// We are flipping a variable
+				// Select mode target (node or edge)
+				if (sociogram.settings.dataDestination.Select.type === 'node') {
+					// target is node
 
-					var properties = {};
-					var currentValue = sociogram.settings.network.getEdge(currentNode.attrs.id)[sociogram.settings.variable];
-					if (currentValue === 0 || typeof currentValue === 'undefined') {
-						properties[sociogram.settings.variable] = 1;
-						currentNode.children[0].stroke(colors.selected);
-					} else {
-						properties[sociogram.settings.variable] = 0;
-						currentNode.children[0].stroke('white');
-					}
+					// flip variable or create node?
+					if (sociogram.settings.dataDestination.Select.mode === 'flip') {
+						// flip variable
 
-					sociogram.settings.network.setProperties(sociogram.settings.network.getEdge(currentNode.attrs.id), properties);
+						// Get current variable value
+						var properties = {};
+						var currentValue = sociogram.settings.network.getNode(currentNode.attrs.id)[sociogram.settings.dataDestination.Select.flip_variable];
 
-
-				} else {
-					// We are setting an edge
-					// Test if there is an existing edge.
-					if (sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
-						// if there is, remove it
-						this.children[0].stroke('white');
-						sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to})[0]);
-					} else {
-						// else add it
-						edge = {
-							from:sociogram.settings.network.getEgo().id,
-							to: this.attrs.to,
-							type: sociogram.settings.edgeType,
-						};
-
-						if (typeof sociogram.settings.variables !== 'undefined') {
-							$.each(sociogram.settings.variables, function(index, value) {
-								edge[value.label] = value.value;
+						// flip
+						if (currentValue === 0 || typeof currentValue === 'undefined') {
+							// add static variables, if present
+							$.each(sociogram.settings.dataDestination.Select.variables, function(index, value) {
+								properties[value.name] = value.value;
 							});
+							properties[sociogram.settings.dataDestination.Select.flip_variable] = 1;
+							currentNode.children[1].stroke(colors.selected);
+						} else {
+							// remove static variables, if present
+							$.each(sociogram.settings.dataDestination.Select.variables, function(index, value) {
+								properties[value.name] = undefined;
+							});
+							properties[sociogram.settings.dataDestination.Select.flip_variable] = 0;
+							currentNode.children[1].stroke(sociogram.settings.options.defaultNodeColor);
 						}
 
-						this.children[0].stroke(colors.selected);
-						sociogram.settings.network.addEdge(edge);
+						sociogram.settings.network.updateNode(currentNode.attrs.id, properties, function() {
+						});
+
+					} else if (sociogram.settings.dataDestination.Select.mode === 'create') {
+						// create node
+
+					} else {
+						// error state
 					}
-				}
+				} else if (sociogram.settings.dataDestination.Select.type === 'edge') {
+					// target is edge
+
+					// flip variable or create edge?
+					if (sociogram.settings.dataDestination.Select.mode === 'flip') {
+						// flip variable
+
+					} else if (sociogram.settings.dataDestination.Select.mode === 'create') {
+						// create edge
+
+						// // Test if there is an existing edge.
+						// if (sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
+						// 	// if there is, remove it
+						// 	this.children[0].stroke('white');
+						// 	sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges({type: sociogram.settings.edgeType,from:sociogram.settings.network.getEgo().id, to: this.attrs.to})[0]);
+						// } else {
+						// 	// else add it
+						// 	edge = {
+						// 		from:sociogram.settings.network.getEgo().id,
+						// 		to: this.attrs.to,
+						// 		type: sociogram.settings.edgeType,
+						// 	};
+						//
+						// 	if (typeof sociogram.settings.variables !== 'undefined') {
+						// 		$.each(sociogram.settings.variables, function(index, value) {
+						// 			edge[value.label] = value.value;
+						// 		});
+						// 	}
+						//
+						// 	this.children[0].stroke(colors.selected);
+						// 	sociogram.settings.network.addEdge(edge);
+						// }
 
 
-			} else if (sociogram.settings.mode === 'Update') {
-				if (selectedNodes.indexOf(currentNode) === -1) {
-					selectedNodes.push(currentNode.attrs.id);
-					currentNode.children[0].stroke(colors.selected);
-				} else {
-					selectedNodes.remove(currentNode.attrs.id);
-					currentNode.children[0].stroke('white');
-				}
+					} else {
 
-			} else if (sociogram.settings.mode === 'Edge') {
-				// If this makes a couple, link them.
-				if (selectedNodes[0] === this) {
-					// Ignore two clicks on the same node
-					return false;
-				}
-				selectedNodes.push(this);
-				if(selectedNodes.length === 2) {
-					selectedNodes[1].children[0].stroke('white');
-					selectedNodes[0].children[0].stroke('white');
-					var edgeProperties = {
-						from: selectedNodes[0].attrs.to,
-						to: selectedNodes[1].attrs.to,
-						type: sociogram.settings.edgeType
-					};
-
-					edgeProperties[sociogram.settings.variables[0]] = 'perceived';
-
-
-					if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-						note.debug('Sociogram removing edge.');
-						sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
 					}
-					selectedNodes = [];
-					nodeLayer.draw();
+
 				} else {
-					// If not, simply turn the node stroke to the selected style so we can see that it has been selected.
-					this.children[0].stroke(colors.selected);
-					// selectedNodes.push(this);
-					// this.children[0].strokeWidth(4);
-					nodeLayer.draw();
+					note.error('Error with select dataDestination');
 				}
+
 			}
 			this.moveToTop();
 			nodeLayer.draw();
 		});
 
+		nodeGroup.on('tap click', function() {
+			/**
+			* Tap (or click when using a mouse) events on a node trigger one of two actions:
+			*
+			* (1) If a hull is currently selected, tapping a node will add it to the selected hull. Any other events
+			* (for example edge creation) will be ignored.
+			*
+			* (2) If edge creation mode is enabled and there are no selected hulls, tapping a node will mark it as being selected for potential linking.
+			* If the node is the first to be selected, nothing more will happen. If it is the second, an edge will be
+			* created according to the edge destination settings.
+			*/
+
+			var currentNode = this; // Store the context
+
+			if (!touchNotTap) { /** check we aren't in the middle of a touch */
+
+				window.wedge.anim.stop(); // Cancel any existing touch hold animations
+
+				if (tapTimer !== null) { window.clearTimeout(tapTimer); } // clear any previous tapTimer
+
+				/** Conduct all tap actions inside a short timeout to give space for a double tap event to cancel it. */
+				tapTimer = setTimeout(function(){
+					window.clearTimeout(longPressTimer);
+					if (taskComprehended === false) {
+						var eventProperties = {
+							stage: window.netCanvas.Modules.session.currentStage(),
+							timestamp: new Date()
+						};
+						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+						window.dispatchEvent(log);
+						taskComprehended = true;
+					}
+					log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':currentNode.attrs.id}});
+					window.dispatchEvent(log);
+
+					/** Test if there is a currently selected hull and edge creation mode is enabled */
+					if (selectedHull === null && sociogram.settings.modes.indexOf('Edge') !== -1) {
+
+						// Ignore two clicks on the same node
+						if (selectedNodes[0] === currentNode) {
+							selectedNodes[0].children[0].opacity(0);
+							selectedNodes = [];
+							nodeLayer.draw();
+							return false;
+						}
+
+						// Push the clicked node into the selected nodes array;
+						selectedNodes.push(currentNode);
+
+						// Check the length of the selected nodes array.
+						if(selectedNodes.length === 2) {
+							//If it containes two nodes, create an edge
+
+							//Reset the styling
+							selectedNodes[1].children[0].opacity(0);
+							selectedNodes[0].children[0].opacity(0);
+
+							// Create an edge object
+							if (sociogram.settings.dataDestination.Edge.type === 'edge')   {// We are storing the edge on an edge
+
+								var edgeProperties = {};
+								if (sociogram.settings.criteria.type === 'node') {
+									edgeProperties = {
+										from: selectedNodes[0].attrs.id,
+										to: selectedNodes[1].attrs.id,
+									};
+								}
+
+								// Add the custom variables
+								$.each(sociogram.settings.dataDestination.Edge.variables, function(index, value) {
+									edgeProperties[value.name] = value.value;
+								});
+
+								// Try adding the edge. If it returns fals, it already exists, so remove it.
+								if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+									window.tools.notify('Sociogram removing edge.',2);
+									sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
+								} else {
+									window.tools.notify('Sociogram adding edge.',2);
+								}
+
+								// Empty the selected nodes array and draw the layer.
+								selectedNodes = [];
+							} else if (sociogram.settings.dataDestination.Edge.type === 'node')   {// We are storing the edge as a node attribute
+								window.tools.notify('Storing edges as a node attribute is not yet implemented.', 1);
+							} else {
+								window.tools.notify('Error with edge destination.', 1);
+							}
+						} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
+							currentNode.children[0].opacity(1);
+						}
+					} else if (selectedHull !== null) {
+						sociogram.addPointToHull(currentNode,selectedHull);
+					}
+					currentNode.moveToTop();
+					nodeLayer.draw();
+				}, 200);
+			} else {
+				touchNotTap = false;
+			}
+
+		});
+
 		nodeGroup.on('dragend', function() {
+
+			var dragNode = nodeOptions.id;
+			// Update the position of any connected edges and hulls
+			var pointHulls = this.attrs[sociogram.settings.dataOrigin.Community.variable];
+			for (var i = 0; i < pointHulls.length; i++) {
+				var newHull = new ConvexHullGrahamScan();
+
+				for (var j = 0; j < nodeLayer.children.length; j++) {
+					var thisChildHulls = nodeLayer.children[j].attrs[sociogram.settings.dataOrigin.Community.variable];
+					if (thisChildHulls.indexOf(pointHulls[i]) !== -1) {
+						var coords = nodeLayer.children[j].getPosition();
+						newHull.addPoint(coords.x, coords.y);
+					}
+				}
+
+				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				hullLayer.draw();
+
+			}
+
+			$.each(edgeLayer.children, function(index, value) {
+
+				// value.setPoints([dragNode.getX(), dragNode.getY() ]);
+				if (value.attrs.from === dragNode || value.attrs.to === dragNode) {
+					var points = [sociogram.getNodeByID(value.attrs.from).getX(), sociogram.getNodeByID(value.attrs.from).getY(), sociogram.getNodeByID(value.attrs.to).getX(), sociogram.getNodeByID(value.attrs.to).getY()];
+					value.attrs.points = points;
+
+				}
+			});
+			edgeLayer.draw();
+
 			note.debug('dragend');
 
 			// set the context
@@ -4192,19 +5465,34 @@ module.exports = function Sociogram() {
 			to.x = this.attrs.x;
 			to.y = this.attrs.y;
 
+			this.attrs.coords = [this.attrs.x,this.attrs.y];
+
 			// Add them to an event object for the logger.
 			var eventObject = {
 				from: from,
 				to: to,
 			};
 
-			var currentNode = this;
-
 			// Log the movement and save the graph state.
 			log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeMove', 'eventObject':eventObject}});
 			window.dispatchEvent(log);
 
-			sociogram.settings.network.setProperties(sociogram.settings.network.getEdge(currentNode.attrs.id), {coords: [currentNode.attrs.x,currentNode.attrs.y]});
+			// store properties according to data destination
+			if (sociogram.settings.dataDestination.Position.type === 'node') {
+				// Find the node we need to store the coordinates on, and update it.
+
+				// Create a dummy object so we can use the variable name set in sociogram.settings.dataDestination
+				var properties = {};
+				properties[sociogram.settings.dataDestination.Position.variable] = this.attrs.coords;
+
+				// Update the node with the object
+				sociogram.settings.network.updateNode(this.attrs.id, properties, function() {
+					window.tools.notify('Network node updated', 1);
+				});
+
+			} else if (sociogram.settings.dataDestination.Position.type === 'edge') {
+				// not yet implemented
+			}
 
 			// remove the attributes, just incase.
 			delete this.attrs.oldx;
@@ -4214,25 +5502,31 @@ module.exports = function Sociogram() {
 
 		padText(nodeLabel,nodeShape,10);
 
+		nodeGroup.add(selectCircle);
 		nodeGroup.add(nodeShape);
 		nodeGroup.add(nodeLabel);
 
 		nodeLayer.add(nodeGroup);
+
 		setTimeout(function() {
 			nodeLayer.draw();
 		}, 0);
 
 
 		if (!options.coords || options.coords.length === 0) {
+			nodeGroup.position({
+				x: 0,
+				y:$(window).height()/2
+			});
 			var tween = new Konva.Tween({
 				node: nodeGroup,
-				x: $(window).width()-150,
-				y: 100,
+				x: 200,
+				y: $(window).height()/2,
 				duration:0.7,
 				easing: Konva.Easings.EaseOut
 			});
 			tween.play();
-			sociogram.settings.network.setProperties(sociogram.settings.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, 100]});
+			sociogram.settings.network.setProperties(sociogram.settings.network.getNode(nodeOptions.id),{coords:[$(window).width()-150, $(window).height()-150]});
 		}
 
 		return nodeGroup;
@@ -4241,25 +5535,44 @@ module.exports = function Sociogram() {
 	// Edge manipulation functions
 
 	sociogram.addEdge = function(properties) {
-		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined') {
+
+		// This doesn't *usually* get called directly. Rather, it responds to an event fired by the network module.
+
+		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
+			// We have been called by an event
 			properties = properties.detail;
+		} else if (typeof properties.from !== 'undefined' && typeof properties.to !== 'undefined' && properties.from !== sociogram.settings.network.getEgo().id) {
+			// We have been called by another sociogram method
+			properties = properties;
+		} else {
+			return false;
+		}
+
+		// ignore edges that don't match our criteria
+		if (properties.type !== window.tools.getValueFromName(sociogram.settings.dataOrigin.Edge.variables, 'type')) {
+			return false;
 		}
 
 		// the below won't work because we are storing the coords in an edge now...
 		note.debug('Sociogram is adding an edge.');
-		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
-		var fromObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
+		var toObject = sociogram.getNodeByID(properties.to);
+	 	var fromObject = sociogram.getNodeByID(properties.from);
+		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
 
-		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 		var edge = new Konva.Line({
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 4,
+			transformsEnabled: 'position',
+			hitGraphEnabled: false,
 			opacity:1,
-			stroke: sociogram.settings.defaultEdgeColor,
+			stroke: sociogram.settings.options.defaultEdgeColor,
 			// opacity: 0.8,
-			from: fromObject,
-			to: toObject,
 			points: points
+		});
+
+		edge.setAttrs({
+			from: properties.from,
+			to: properties.to
 		});
 
 		edgeLayer.add(edge);
@@ -4275,18 +5588,14 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.removeEdge = function(properties) {
-
-		if (!properties) {
-			note.error('No properties passed to sociogram.removeEdge()!');
-		}
-
-		// Test if we are being called by an event, or directly
-		if (typeof properties.detail !== 'undefined') {
+		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
 			properties = properties.detail;
+		} else {
+			return false;
 		}
 
-		var toNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
-		var fromNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
+		var toObject = properties.to;
+	 	var fromObject = properties.from;
 
 		note.debug('Removing edge.');
 
@@ -4294,7 +5603,7 @@ module.exports = function Sociogram() {
 		var found = false;
 		$.each(sociogram.getKineticEdges(), function(index, value) {
 			if (value !== undefined) {
-				if (value.attrs.from === fromNode && value.attrs.to === toNode || value.attrs.from === toNode && value.attrs.to === fromNode ) {
+				if (value.attrs.from === fromObject && value.attrs.to === toObject || value.attrs.from === toObject && value.attrs.to === fromObject ) {
 					found = true;
 					edgeLayer.children[index].remove();
 					edgeLayer.draw();
@@ -4324,45 +5633,102 @@ module.exports = function Sociogram() {
 
 	};
 
+	sociogram.getStage = function() {
+		return stage;
+	};
+
 	// Main initialisation functions
 
 	sociogram.initKinetic = function () {
 		// Initialise KineticJS stage
 		stage = new Konva.Stage({
-			container: 'kineticCanvas',
+			container: sociogram.settings.targetEl,
 			width: window.innerWidth,
 			height: window.innerHeight
 		});
 
-		circleLayer = new Konva.Layer();
+		circleLayer = new Konva.FastLayer();
+		hullLayer = new Konva.FastLayer();
+		wedgeLayer = new Konva.FastLayer();
 		nodeLayer = new Konva.Layer();
-		edgeLayer = new Konva.Layer();
-		uiLayer = new Konva.Layer();
+		edgeLayer = new Konva.FastLayer();
+
+		/**
+		* This hack allows us to detect clicks that happen outside of nodes, hulls, or edges.
+		* We create a transparent rectangle on a special background layer which sits between the UI layer and the interaction layers.
+		* We then listen to click events on this shape.
+ 		*/
+		var backgroundLayer = new Konva.Layer();
+		var backgroundRect = new Konva.Rect({
+	        x: 0,
+	        y: 0,
+	        width: stage.width(),
+	        height: stage.height(),
+	        fill: 'transparent',
+	      });
+		backgroundLayer.add(backgroundRect);
+		backgroundRect.on('tap click', function() {
+			selectedHull = null;
+			selectedNode = null;
+			$('.hull').removeClass('active'); // deselect all groups
+		});
 
 		stage.add(circleLayer);
+		stage.add(backgroundLayer);
+		stage.add(hullLayer);
 		stage.add(edgeLayer);
+		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
-		stage.add(uiLayer);
+
 		note.debug('Konva stage initialised.');
+
+	};
+
+	sociogram.generateHull = function(points) {
+
+        var newHull = new ConvexHullGrahamScan();
+
+        for (var i = 0; i < points.length; i++) {
+            var coords = points[i].getPosition();
+            newHull.addPoint(coords.x, coords.y);
+        }
+
+		return toPointFromObject(newHull.getHull());
+
+
 	};
 
 	sociogram.drawUIComponents = function () {
 
+		// New context buttons
+		$('#'+sociogram.settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
+		var events = [{
+			event: 'click',
+			handler: window.nameGenForm.show,
+			targetEl:  '.new-node-button'
+		}];
+		window.tools.Events.register(moduleEvents, events);
+
 		// Draw all UI components
+		var previousSkew = 0;
 		var circleFills, circleLines;
-		var currentColor = sociogram.settings.concentricCircleColor ;
-		var totalHeight = window.innerHeight-(sociogram.settings.defaultNodeSize); // Our sociogram area is the window height minus twice the node radius (for spacing)
+		var currentColor = sociogram.settings.options.concentricCircleColor;
+		var totalHeight = window.innerHeight-(sociogram.settings.options.defaultNodeSize); // Our sociogram area is the window height minus twice the node radius (for spacing)
 		var currentOpacity = 0.1;
 
 		//draw concentric circles
-		for(var i = 0; i < sociogram.settings.concentricCircleNumber; i++) {
-			var ratio = 1-(i/sociogram.settings.concentricCircleNumber);
-			var currentRadius = (totalHeight/2 * ratio);
-
+		for(var i = 0; i < sociogram.settings.options.concentricCircleNumber; i++) {
+			var ratio = (1-(i/sociogram.settings.options.concentricCircleNumber));
+			var skew = i > 0 ? (ratio * 6) * (totalHeight/70) : 0;
+			var currentRadius = totalHeight/2 * ratio;
+			currentRadius = sociogram.settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
+			previousSkew = skew;
 			circleLines = new Konva.Circle({
 				x: window.innerWidth / 2,
 				y: window.innerHeight / 2,
 				radius: currentRadius,
+				transformsEnabled: 'none',
+				hitGraphEnabled: false,
 				stroke: 'white',
 				strokeWidth: 1.5,
 				opacity: 0
@@ -4373,45 +5739,55 @@ module.exports = function Sociogram() {
 				y: (window.innerHeight / 2),
 				radius: currentRadius,
 				fill: currentColor,
+				transformsEnabled: 'none',
+				hitGraphEnabled: false,
 				opacity: currentOpacity,
 				strokeWidth: 0,
 			});
 
 			// currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();
-			currentOpacity = currentOpacity+((0.3-currentOpacity)/sociogram.settings.concentricCircleNumber);
+			currentOpacity = currentOpacity+((0.3-currentOpacity)/sociogram.settings.options.concentricCircleNumber);
 			circleLayer.add(circleFills);
 			circleLayer.add(circleLines);
 
 		}
 
-		circleLayer.draw();
-		uiLayer.draw();
+		// draw wedgex
 
-		// sociogram.initNewNodeForm();
+		Konva.selectWedge = function(config) {
+			this._initselectWedge(config);
+		};
+
+		Konva.selectWedge.prototype = {
+			_initselectWedge: function(config) {
+				Konva.Circle.call(this, config);
+			},
+			_sceneFunc: function(context) {
+				context.beginPath();
+				context.arc(0, 0, this.getRadius(), 0, Konva.getAngle(this.getAngle()), this.getClockwise());
+				context.fillStrokeShape(this);
+			}
+		};
+
+		Konva.Util.extend(Konva.selectWedge, Konva.Wedge);
+
+		window.wedge = new Konva.selectWedge({
+			radius: sociogram.settings.options.defaultNodeSize+5,
+			angle: 0,
+			fill: 'transparent',
+			stroke: colors.selected,
+			rotation:-90,
+			opacity:0,
+			strokeWidth: 10,
+		});
+
+		wedgeLayer.add(window.wedge);
+		window.wedge.moveToBottom();
+
+		circleLayer.draw();
+
 		note.debug('User interface initialised.');
 	};
-
-	// New Node Form
-
-	sociogram.initNewNodeForm = function() {
-		var form = $('<div class="new-node-form"></div>');
-		var innerForm = $('<div class="new-node-inner"></div>');
-		form.append(innerForm);
-		innerForm.append('<h1>Add a new contact</h1>');
-		innerForm.append('<p>Some text accompanying the node creation box.</p>');
-		// TODO: Use a innerForm generation class here.
-		// For now, just an input box.
-		innerForm.append('<input type="text" class="form-control name-box"></input>');
-
-		$('.content').after(form); // add after the content container.
-
-
-		// Key bindings
-		$(window.document).on('keypress', sociogram.keyPressHandler);
-
-	};
-
-
 
 	// Get & set functions
 
@@ -4465,6 +5841,18 @@ module.exports = function Sociogram() {
 		return edgeLayer;
 	};
 
+	sociogram.getNodeLayer = function() {
+		return nodeLayer;
+	};
+
+	sociogram.getUILayer = function() {
+		return uiLayer;
+	};
+
+	sociogram.getHullLayer = function() {
+			return hullLayer;
+	};
+
 	sociogram.getNodeByID = function(id) {
 		var node = {},
 		nodes = sociogram.getKineticNodes();
@@ -4500,17 +5888,24 @@ module.exports = function Sociogram() {
 'use strict';
 // Storage prototypes
 
-window.Storage.prototype.showUsage = function() {
-
+window.Storage.prototype.showTotalUsage = function() {
     var total = 0;
     for(var x in localStorage) {
-      var amount = (localStorage[x].length * 2) / 1024 / 1024;
-      total += amount;
-      console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        if (localStorage.hasOwnProperty(x)) {
+            var amount = (localStorage[x].length * 2) / 1024 / 1024;
+            total += amount;
+            console.log( x + ' = ' + amount.toFixed(2) + ' MB');
+        }
     }
     console.log( 'Total: ' + total.toFixed(2) + ' MB');
 };
 
+window.Storage.prototype.getKeyUsage = function(key) {
+    if (localStorage.hasOwnProperty(key)) {
+        var amount = (localStorage[key].length * 2) / 1024 / 1024;
+        return amount.toFixed(2);
+    }
+};
 
 window.Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -4525,7 +5920,30 @@ window.Storage.prototype.getObject = function(key) {
     }
 };
 
+jQuery.fn.scrollTo = function(elem, speed) {
+    $(this).animate({
+        scrollTop:  $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+    }, speed == undefined ? 1000 : speed);
+    return this;
+};
+
+
 // Array prototypes
+
+Object.defineProperty(Array.prototype, 'toUnique', {
+    enumerable: false,
+    value: function() {
+        var b,c;
+        b=this.length;
+        if (this.length > 0) {
+            while(c=--b) while(c--) this[b]!==this[c]||this.splice(c,1)
+        } else {
+            return this;
+        }
+
+        // return  // not needed ;)
+    }
+});
 
 Object.defineProperty(Array.prototype, 'remove', {
     enumerable: false,
@@ -4543,9 +5961,38 @@ Object.defineProperty(Array.prototype, 'remove', {
     }
 });
 
+exports.Events = {
+    register: function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+            if (typeof eventsList[i].subTarget !== 'undefined') {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+            } else {
+                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+            }
+
+        }
+
+    },
+    unbind: function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            if (typeof eventsArray[i].subTarget !== 'undefined') {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].subTarget, eventsArray[i].handler);
+            } else {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            }
+        }
+    }
+};
+
 exports.arrayDifference = function(a1, a2) {
   var a2Set = new Set(a2);
   return a1.filter(function(x) { return !a2Set.has(x); });
+};
+
+exports.euclideanDistance = function(point1, point2) {
+    var d1 = point1[0] - point2[0], d2 = point1[1] - point2[1];
+    return Math.sqrt(d1 * d1 + d2 * d2);
 };
 
 exports.removeFromObject = function(item, object) {
@@ -4628,8 +6075,6 @@ exports.deepEquals = function(a, x) {
     return true;
 };
 
-
-
 exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
@@ -4641,11 +6086,22 @@ exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     return false;
 };
 
-exports.getValueFromNestedObject = function(targetArray, objectKey) {
+exports.getKValueFromNestedObject = function(targetArray, objectKey) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
         for (var prop in targetArray[i]){
             if (prop === objectKey) { return targetArray[i][prop]; }
+        }
+    }
+
+    return false;
+};
+
+exports.getValueFromName = function(targetArray, name) {
+    // This function is for checking for keys in arrays of objects.
+    for (var i = 0; i<targetArray.length; i++){
+        if (typeof targetArray[i].name !== 'undefined' && typeof targetArray[i].value !== 'undefined' && targetArray[i].name === name) {
+            return targetArray[i].value;
         }
     }
 
@@ -4664,9 +6120,9 @@ exports.extend = function( a, b ) {
 
 exports.notify = function(text, level){
     level = level || 0;
-    // if (level >= window.debugLevel) {
+    if (level <= window.debugLevel) {
         console.log(text);
-    // }
+    }
 };
 
 exports.randomBetween = function(min,max) {
@@ -4694,6 +6150,10 @@ $.cssHooks.backgroundColor = {
             return '#' + window.tools.hex(bg[1]) + window.tools.hex(bg[2]) + window.tools.hex(bg[3]);
         }
     }
+};
+
+exports.getRandomColor = function() {
+    return '#' + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
 };
 
 exports.modifyColor = function(hex, lum) {
