@@ -1211,16 +1211,19 @@ input[type=radio]:checked + label:before {
 	background: black;
 }
 
-.arrow-nav {
-	position: fixed;
-	top: 43%;
+.arrow-next {
+	transition: transform 2s ease;
+	&.slide {
+		transform: translateX(550px);
+	}
 }
-.arrow-right {
-	right: 0;
+.arrow-prev {
+	transition: transform 2s ease;
+	&.slide {
+		transform: translateX(-550px);
+	}
 }
-.arrow-left {
-	left: 0;
-}
+
 
 #refresh-button {
 	position: fixed;

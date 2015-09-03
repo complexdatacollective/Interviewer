@@ -133,12 +133,8 @@
     @degree: (360/@segments)*@index;
     @plus: @index + 2;
     .node-circle-container:nth-of-type(@{plus}) {
-        // width: unit(@size, em);
-        // height: unit(@size, em);
-        // margin: unit(((@size /2) * -1), em);
         .node-circle {
             transform: rotate(unit(@degree, deg)) translate(@translate-distance) rotate(unit((@degree * -1), deg)) scale(@size);
-            // line-height:unit(@size, em);
         }
     }
     .loop(@index + 1, @translate-distance, @size);

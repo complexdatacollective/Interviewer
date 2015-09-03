@@ -122,14 +122,29 @@ var Session = function Session() {
             });
 
             // Initialise the menu system – other modules depend on it being there.
-            var stagesMenu = window.menu.addMenu('Stages', 'bars');
+            var stagesMenuOptions = {
+                name: 'Stages',
+                icon: 'fa-bars',
+                items: []
+            };
+
             $.each(session.stages, function(index,value) {
                 var icon = null;
                 if (value.icon) {
                     icon = value.icon;
                 }
-                window.menu.addItem(stagesMenu, value.label, icon, function() {setTimeout(function() {session.goToStage(index);}, 500); });
+                var itemObject = {
+                    label: value.label,
+                    icon: icon,
+                    action: function() {setTimeout(function() {session.goToStage(index);}, 500); }
+                };
+
+                stagesMenuOptions.items.push(itemObject);
+
             });
+
+            window.stagesMenu = new window.netCanvas.Modules.Menu(stagesMenuOptions);
+
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
             window.tools.notify('Error fetching protocol!',1);
@@ -174,8 +189,14 @@ var Session = function Session() {
             session.saveManager();
         }, false);
 
-        var sessionMenu = window.menu.addMenu('Session','cogs');
-        window.menu.addItem(sessionMenu, 'Reset Session', 'fa-undo', function() {
+        var sessionMenuOptions = {
+            name: 'Session',
+            icon: 'fa-cogs',
+            items: []
+        };
+
+        window.sessionMenu = new window.netCanvas.Modules.Menu(sessionMenuOptions);
+        window.sessionMenu.addItem('Reset Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -197,9 +218,9 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Download Data', 'fa-download', function() { clickDownloadInput(); });
+        window.sessionMenu.addItem('Download Data', 'fa-download', function() { clickDownloadInput(); });
 
-        window.menu.addItem(sessionMenu, 'Purge Database', 'fa-trash', function() {
+        window.sessionMenu.addItem('Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
@@ -221,7 +242,7 @@ var Session = function Session() {
             });
         });
 
-        window.menu.addItem(sessionMenu, 'Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
+        window.sessionMenu.addItem('Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
 
         if(callback) {
             callback();
