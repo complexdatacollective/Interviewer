@@ -6749,6 +6749,7 @@ button.close {
 }
 .menu-container {
   height: 100%;
+  width: 100px;
 }
 .content {
   width: 100%;

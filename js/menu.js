@@ -32,7 +32,7 @@ module.exports = function Menu(options) {
 
         setTimeout(function() {
             $('body').removeClass(menuEl.name);
-        }, 1000);
+        }, 500);
 
     };
 
@@ -62,7 +62,9 @@ module.exports = function Menu(options) {
         menuItem.on('click', function() {
             $('.paginate').removeAttr('disabled');
             menu.closeMenu();
-            callback();
+            setTimeout(function() {
+                callback();
+            }, 200);
         });
 
     };

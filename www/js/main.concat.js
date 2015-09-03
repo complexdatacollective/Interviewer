@@ -1691,7 +1691,7 @@ module.exports = function Menu(options) {
 
         setTimeout(function() {
             $('body').removeClass(menuEl.name);
-        }, 1000);
+        }, 500);
 
     };
 
@@ -1721,7 +1721,9 @@ module.exports = function Menu(options) {
         menuItem.on('click', function() {
             $('.paginate').removeAttr('disabled');
             menu.closeMenu();
-            callback();
+            setTimeout(function() {
+                callback();
+            }, 200);
         });
 
     };
@@ -4560,8 +4562,7 @@ module.exports = function Sociogram() {
 		}
 
 		if (sociogram.settings.panels.indexOf('mode') !== -1) {
-			var sociogramModesMenu = window.menu.addMenu('Modes', 'check-circle-o');
-			window.menu.addItem(sociogramModesMenu, 'Context', null, function() {setTimeout(function() {}, 500); });
+			console.warn('The "mode" panel is not yet implemented.');
 		}
 
 		/**
