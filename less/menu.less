@@ -56,14 +56,13 @@
 
 .menu {
 	width:36vw;
-	bottom:0;
-	position:absolute;
+	height:100vh;
+	position:fixed;
+	// z-index:9999;
 	top:0;
-	left:-36vw;
-	overflow:scroll;
+	left:0;
 	padding:2vmin;
-	z-index:9999999;
-	transform: translateX(0);
+	transform: translateX(-36vw);
 	transition: all 0.5s ease;
 }
 
@@ -144,6 +143,10 @@
 	cursor:pointer;
 }
 
+.menu-content {
+	height:100%;
+}
+
 .menu-content h2 {
 	margin-top:0;
 	margin-bottom:1em;
@@ -153,6 +156,8 @@
 .menu-content ul {
 	padding:0;
 	height:100%;
+	overflow:scroll;
+	padding-bottom:50px;
 }
 
 .menu-content ul li {

@@ -6769,16 +6769,14 @@ button.close {
 }
 .menu {
   width: 36vw;
-  bottom: 0;
-  position: absolute;
+  height: 100vh;
+  position: fixed;
   top: 0;
-  left: -36vw;
-  overflow: scroll;
+  left: 0;
   padding: 2vmin;
-  z-index: 9999999;
-  -webkit-transform: translateX(0);
-      -ms-transform: translateX(0);
-          transform: translateX(0);
+  -webkit-transform: translateX(-36vw);
+      -ms-transform: translateX(-36vw);
+          transform: translateX(-36vw);
   -webkit-transition: all 0.5s ease;
           transition: all 0.5s ease;
 }
@@ -6855,6 +6853,9 @@ button.close {
   right: 2vmin;
   cursor: pointer;
 }
+.menu-content {
+  height: 100%;
+}
 .menu-content h2 {
   margin-top: 0;
   margin-bottom: 1em;
@@ -6863,6 +6864,8 @@ button.close {
 .menu-content ul {
   padding: 0;
   height: 100%;
+  overflow: scroll;
+  padding-bottom: 50px;
 }
 .menu-content ul li {
   list-style: none;

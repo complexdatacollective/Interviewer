@@ -21,6 +21,19 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
+        bump: {
+            options: {
+                files: ['package.json','www/package.json','bower.json'],
+                updateConfigs: [],
+                commit: false,
+                commitMessage: '',
+                createTag: false,
+                push: false,
+                globalReplace: false,
+                prereleaseName: false,
+                regExp: false
+            }
+        },
         jsdoc: {
             dist: {
                 src: ['js/*.js'],
@@ -314,6 +327,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-bump');
 
     grunt.registerTask('watch', [ 'watch' ]);
 
@@ -431,6 +445,7 @@ module.exports = function (grunt) {
         var appPath = config.app;
         var resourcesPath = config.resources;
         var mainPackageJSON = grunt.file.readJSON('package.json');
+        var bowerJSON = grunt.file.readJSON('bower.json');
         var appPackageJSON = grunt.file.readJSON(appPath + '/package.json');
         var infoPlistTmp = grunt.file.read(resourcesPath + '/mac/Info.plist.tmp', {
             encoding: 'UTF8'
@@ -441,8 +456,44 @@ module.exports = function (grunt) {
             }
         });
         mainPackageJSON.version = version;
+        bowerJSON.version = version;
         appPackageJSON.version = version;
         grunt.file.write('package.json', JSON.stringify(mainPackageJSON, null, 2), {
+            encoding: 'UTF8'
+        });
+        grunt.file.write('bower.json', JSON.stringify(bowerJSON, null, 2), {
+            encoding: 'UTF8'
+        });
+        grunt.file.write(appPath + '/package.json', JSON.stringify(appPackageJSON, null, 2), {
+            encoding: 'UTF8'
+        });
+        grunt.file.write(resourcesPath + '/mac/Info.plist', infoPlist, {
+            encoding: 'UTF8'
+        });
+    });
+
+    grunt.registerTask('sgetVersion', 'Get current project version', function (version) {
+        var config = grunt.config.get(['config']);
+        var appPath = config.app;
+        var resourcesPath = config.resources;
+        var mainPackageJSON = grunt.file.readJSON('package.json');
+        var bowerJSON = grunt.file.readJSON('bower.json');
+        var appPackageJSON = grunt.file.readJSON(appPath + '/package.json');
+        var infoPlistTmp = grunt.file.read(resourcesPath + '/mac/Info.plist.tmp', {
+            encoding: 'UTF8'
+        });
+        var infoPlist = grunt.template.process(infoPlistTmp, {
+            data: {
+                version: version
+            }
+        });
+        mainPackageJSON.version = version;
+        bowerJSON.version = version;
+        appPackageJSON.version = version;
+        grunt.file.write('package.json', JSON.stringify(mainPackageJSON, null, 2), {
+            encoding: 'UTF8'
+        });
+        grunt.file.write('bower.json', JSON.stringify(bowerJSON, null, 2), {
             encoding: 'UTF8'
         });
         grunt.file.write(appPath + '/package.json', JSON.stringify(appPackageJSON, null, 2), {

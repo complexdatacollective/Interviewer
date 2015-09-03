@@ -29,6 +29,7 @@ module.exports = function Menu(options) {
         $('.paginate').removeClass('slide');
         $('.content').removeClass('pushed');
         targetMenuObj.removeClass('open');
+        $('.menu-btn').show();
 
         setTimeout(function() {
             $('body').removeClass(menuEl.name);
@@ -43,6 +44,7 @@ module.exports = function Menu(options) {
             $('.paginate').addClass('slide');
             $('.content').addClass('pushed');
             targetMenuObj.addClass('open');
+            $('.menu-btn').hide();
         }, 10);
 
     };
