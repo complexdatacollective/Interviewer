@@ -126,8 +126,9 @@ module.exports = function Network() {
     };
 
     network.getEgo = function() {
-        if (network.getNodes({type:'Ego'}).length !== 0) {
-            return network.getNodes({type:'Ego'})[0];
+        note.debug('network.getEgo() called.');
+        if (network.getNodes({type_t0:'Ego'}).length !== 0) {
+            return network.getNodes({type_t0:'Ego'})[0];
         } else {
             return false;
         }
@@ -141,8 +142,33 @@ module.exports = function Network() {
         }
     };
 
-    network.addEdge = function(properties) {
+    network.edgeExists = function(edge) {
+        note.debug('network.edgeExists() called.');
+        if (typeof edge === 'undefined') {
+            note.error('ERROR: No edge passed to network.edgeExists().');
+            return false;
+        }
+        // old way of checking if an edge existed checked for values of to, from, and type. We needed those to not have to be unique.
+        // New way: check if all properties are the same.
 
+        var reversed = {}, temp;
+        reversed = $.extend(true,{}, edge); // Creates a copy not a reference
+        temp = reversed.to; // Switch the order (do the reversing)
+        reversed.to = reversed.from;
+        reversed.from = temp;
+
+        var straightExists = (network.getEdges(edge).length > 0) ? true : false;
+        var reverseExists = (network.getEdges(reversed).length > 0) ? true : false;
+
+        if (straightExists === true || reverseExists === true) { // Test if an edge matches either the proposed edge or the reversed edge.
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    this.addEdge = function(properties) {
+        note.debug('network.addEdge() called.');
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 
         if (typeof properties.from === 'undefined' || typeof properties.to === 'undefined') {
@@ -150,7 +176,7 @@ module.exports = function Network() {
             return false;
         }
 
-        if (properties.id !== 'undefined' && _this.getEdge(properties.id) !== false) {
+        if (properties.id !== 'undefined' && network.getEdge(properties.id) !== false) {
             note.warn('An edge with this id already exists! I\'m generating a new one for you.');
 
             var newEdgeID = 0;
@@ -166,28 +192,15 @@ module.exports = function Network() {
             position++;
         }
 
+        // Required variables (id and type) generated here. These are overwritten as long as the values have been provided.
         var edgeProperties = {
             id: position,
             type: 'Default'
         };
 
         window.tools.extend(edgeProperties, properties);
-        var alreadyExists = false;
 
-        // old way of checking if an edge existed checked for values of to, from, and type. We needed those to not have to be unique.
-        // New way: check if all properties are the same.
-
-        var reversed = {}, temp;
-        reversed = $.extend(true,{}, properties);
-        temp = reversed.to;
-        reversed.to = reversed.from;
-        reversed.from = temp;
-
-        if (network.getEdges(properties).length > 0 || network.getEdges(reversed).length > 0) {
-            alreadyExists = true;
-        }
-
-        if(alreadyExists === false) {
+        if(network.edgeExists(edgeProperties) === false) {
 
             edges.push(edgeProperties);
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
@@ -199,17 +212,20 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-            note.error('ERROR: Edge already exists!');
+            note.warn('Warning: Proposed edge already exists. Cancelling.');
             return false;
         }
 
     };
 
     network.removeEdges = function(edges) {
+        note.debug('network.removeEdges() called.');
         network.removeEdge(edges);
     };
 
     network.removeEdge = function(edge) {
+        note.debug('network.removeEdge() called.');
+
         if (!edge) {
             return false;
         }
@@ -242,6 +258,8 @@ module.exports = function Network() {
     };
 
     network.removeNode = function(id, preserveEdges) {
+        note.debug('network.removeNode() called.');
+
         if (!preserveEdges) { preserveEdges = false; }
 
         // Unless second parameter is present, also delete this nodes edges
@@ -267,6 +285,7 @@ module.exports = function Network() {
     };
 
     network.updateEdge = function(id, properties, callback) {
+        note.debug('network.updateEdge() called.');
         if(network.getEdge(id) === false || properties === undefined) {
             return false;
         }
@@ -287,6 +306,8 @@ module.exports = function Network() {
     };
 
     network.updateNode = function(id, properties, callback) {
+        note.debug('network.updateNode() called.');
+
         if(this.getNode(id) === false || properties === undefined) {
             return false;
         }

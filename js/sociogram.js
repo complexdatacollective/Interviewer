@@ -915,8 +915,38 @@ module.exports = function Sociogram() {
 						// }
 
 
-					} else {
+					}
+				}
 
+			} else if (sociogram.settings.mode === 'Edge') {
+				// If this makes a couple, link them.
+				if (selectedNodes[0] === this) {
+					// Ignore two clicks on the same node
+					return false;
+				}
+				selectedNodes.push(this);
+				if(selectedNodes.length === 2) {
+					selectedNodes[1].children[0].stroke('white');
+					selectedNodes[0].children[0].stroke('white');
+					var edgeProperties = {
+						from: selectedNodes[0].attrs.to,
+						to: selectedNodes[1].attrs.to,
+						type: sociogram.settings.edgeType
+					};
+
+					edgeProperties[sociogram.settings.variables[0]] = 'perceived';
+
+
+					if (sociogram.settings.network.edgeExists(edgeProperties) === true) {
+						note.debug('Sociogram removing edge.');
+						sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
+					} else {
+						if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+							note.error('Error! Edge creation failed.');
+							throw new Error('Error! Edge creation failed.');
+						} else {
+							note.debug('Edge created by consecutive tap.');
+						}
 					}
 
 				} else {
@@ -1199,16 +1229,19 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.removeEdge = function(properties) {
-		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
+
+		note.debug('sociogram.removeEdge() called.');
+		if (!properties) {
+			note.error('No properties passed to sociogram.removeEdge()!');
+		}
+
+		// Test if we are being called by an event, or directly
+		if (typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
 			properties = properties.detail;
-		} else {
-			return false;
 		}
 
 		var toObject = properties.to;
 	 	var fromObject = properties.from;
-
-		note.debug('Removing edge.');
 
 		// This function is failing because two nodes are matching below
 		var found = false;
