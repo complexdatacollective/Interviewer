@@ -1185,6 +1185,8 @@ module.exports = function MultiBin() {
 	//global vars
 	var log;
 	var taskComprehended = false;
+	var animating = false;
+	var open = false;
 	var multiBin = {}, followup;
 	multiBin.options = {
 		targetEl: $('.container'),
@@ -1250,39 +1252,50 @@ module.exports = function MultiBin() {
 		$('.black-overlay').hide();
 	};
 
-	var backgroundClickHandler = function() {
-		if ($('.node-bin-active').length > 0) {
+	var backgroundClickHandler = function(e) {
+		e.stopPropagation();
+		if(open === true) {
+			if ($('.node-bin-active').length > 0) {
+					animating = true;
+					setTimeout(function() {
+						$('.node-bin-container').children().css({opacity:1});
+						$('.node-question-container').fadeIn();
+					}, 300);
 
-				setTimeout(function() {
-					$('.node-bin-container').children().css({opacity:1});
-					$('.node-question-container').fadeIn();
-				}, 300);
+					var current = $('.node-bin-active');
+					$(current).removeClass('node-bin-active');
+					$(current).addClass('node-bin-static');
+					$(current).children('h1, p').show();
+					$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
+						if (taskComprehended === false) {
+							var eventProperties = {
+								stage: window.netCanvas.Modules.session.currentStage(),
+								timestamp: new Date()
+							};
+							log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+							window.dispatchEvent(log);
+							taskComprehended = true;
+						}
+					}});
 
-				var current = $('.node-bin-active');
-				$(current).removeClass('node-bin-active');
-				$(current).addClass('node-bin-static');
-				$(current).children('h1, p').show();
-				$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
-					if (taskComprehended === false) {
-						var eventProperties = {
-							stage: window.netCanvas.Modules.session.currentStage(),
-							timestamp: new Date()
-						};
-						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-						window.dispatchEvent(log);
-						taskComprehended = true;
-					}
-				}});
+					setTimeout(function() {
+						open = false;
+						animating = false;
+					}, 500);
 
+			}
 		} else {
 		}
 
+
 	};
 
-	var nodeBinClickHandler = function(e) {
-		if (e.target === this) {
+	var nodeBinClickHandler = function() {
+		if (open === false) {
 
 				if(!$(this).hasClass('node-bin-active')) {
+					animating = true;
+					open = true;
 					$('.node-bin-container').children().not(this).css({opacity:0});
 					$('.node-question-container').hide();
 					var position = $(this).offset();
@@ -1308,9 +1321,15 @@ module.exports = function MultiBin() {
 								},timer);
 							});
 						},300);
+						open = true;
+					}, 500);
+
+					setTimeout(function() {
+						animating = false;
 					}, 500);
 
 				}
+		} else {
 		}
 
 	};
