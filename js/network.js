@@ -127,8 +127,8 @@ module.exports = function Network() {
 
     network.getEgo = function() {
         note.debug('network.getEgo() called.');
-        if (network.getNodes({type_t0:'Ego'}).length !== 0) {
-            return network.getNodes({type_t0:'Ego'})[0];
+        if (network.getNodes({type:'Ego'}).length !== 0) {
+            return network.getNodes({type:'Ego'})[0];
         } else {
             return false;
         }
