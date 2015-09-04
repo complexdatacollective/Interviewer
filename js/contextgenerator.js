@@ -147,7 +147,15 @@ module.exports = function ContextGenerator() {
 		});
 
 		// Add existing data, if present
-		contextGenerator.addExistingContexts();
+		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
+			console.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
+			var properties = {};
+			properties[contextGenerator.options.egoData] = [];
+			window.network.updateNode(window.network.getEgo().id, properties);
+		} else {
+			contextGenerator.addExistingContexts();
+		}
+
 
 	};
 
