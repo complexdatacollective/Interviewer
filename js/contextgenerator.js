@@ -1,4 +1,4 @@
-/* global $, window, Swiper */
+/* global $, window, Swiper, note */
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -22,7 +22,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.destroy = function() {
-		console.log('contextGenerator.destroy()');
+		note.info('Context generator destroyed.');
 		promptSwiper.destroy();
 		$('.new-context-form').remove();
 		window.tools.Events.unbind(moduleEvents);
@@ -33,10 +33,8 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.init = function(options) {
+		note.info('Context generator initialised.');
 		window.tools.extend(contextGenerator.options, options);
-		console.log(options);
-
-
 		// Events
 		var event = [{
 			event: 'changeStageStart',
@@ -148,7 +146,7 @@ module.exports = function ContextGenerator() {
 
 		// Add existing data, if present
 		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
-			console.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
+			note.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
 			var properties = {};
 			properties[contextGenerator.options.egoData] = [];
 			window.network.updateNode(window.network.getEgo().id, properties);
@@ -160,8 +158,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		console.log('adding node to context');
-		console.log(node);
+		node.debug('adding node to context');
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
@@ -212,10 +209,10 @@ module.exports = function ContextGenerator() {
 				if (contexts.indexOf(nodeValue[contextGenerator.options.nodeDestination][0] !== -1)) {
 					contextGenerator.addNodeToContext(nodeValue);
 				} else {
-					console.warn('A node was found with a context that didn\'t exist!');
+					note.warn('A node was found with a context that didn\'t exist!');
 				}
  			} else {
-				console.warn('Ignored a node with multiple contexts.');
+				note.debug('Ignored a node with multiple contexts.');
 			}
 
 		});
@@ -260,6 +257,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.addContext = function(name) {
 		if (!name) {
+			note.error('No name provided for new context.');
 			throw new Error('No name provided for new context.');
 		}
 		contexts.push(name);
@@ -277,7 +275,6 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.openNewNodeForm = function() {
-		console.log($(this).data('context'));
 		var properties = {};
 		properties[contextGenerator.options.nodeDestination] = [];
 		properties[contextGenerator.options.nodeDestination].push($(this).data('context'));
@@ -287,6 +284,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.removeContext = function(name) {
 		if (!name) {
+			note.error('No name provided to contextGenerator.deleteContext().');
 			throw new Error('No name provided to contextGenerator.deleteContext().');
 		}
 
@@ -304,7 +302,7 @@ module.exports = function ContextGenerator() {
 			$('div[data-context="'+name+'"]').remove();
 			return true;
 		} else {
-			console.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
+			note.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
 			return false;
 		}
 
@@ -312,6 +310,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.removeNode = function(id) {
 		if (!id) {
+			note.error('No id provided to contextGenerator.deleteNode().');
 			throw new Error('No id provided to contextGenerator.deleteNode().');
 		}
 
@@ -319,10 +318,8 @@ module.exports = function ContextGenerator() {
 			$('div[data-id="'+id+'"]').remove();
 			return true;
 		} else {
-			console.warn('contextGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+			note.warn('contextGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
 		}
-
-
 	};
 
 	return contextGenerator;

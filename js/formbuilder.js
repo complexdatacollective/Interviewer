@@ -182,7 +182,7 @@ module.exports = function FormBuilder() {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
                 }
             } else {
-                console.warn('Data provided for undefined field '+dataIndex);
+                note.debug('Data provided for undefined field '+dataIndex);
             }
         });
     };
