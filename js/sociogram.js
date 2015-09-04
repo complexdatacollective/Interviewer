@@ -457,9 +457,17 @@ module.exports = function Sociogram() {
 					edgeProperties[sociogram.settings.variables[0]] = 'perceived';
 
 
-					if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+					if (sociogram.settings.network.edgeExists(edgeProperties) === true) {
 						note.debug('Sociogram removing edge.');
 						sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
+					} else {
+						if (sociogram.settings.network.addEdge(edgeProperties) === false) {
+							note.error('Error! Edge creation failed.');
+							throw new Error('Error! Edge creation failed.');
+						} else {
+							note.debug('Edge created by consecutive tap.');
+						}
+
 					}
 					selectedNodes = [];
 					nodeLayer.draw();
@@ -572,7 +580,7 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.removeEdge = function(properties) {
-
+		note.debug('sociogram.removeEdge() called.');
 		if (!properties) {
 			note.error('No properties passed to sociogram.removeEdge()!');
 		}
@@ -584,8 +592,6 @@ module.exports = function Sociogram() {
 
 		var toNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromNode = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
-
-		note.debug('Removing edge.');
 
 		// This function is failing because two nodes are matching below
 		var found = false;
