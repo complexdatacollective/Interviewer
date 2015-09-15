@@ -10,7 +10,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
-		egoData: ['contexts'],
+		egoData: 'contexts',
 		nodeDestination: 'contexts',
 		createNodes: true,
 		prompts: [
@@ -136,6 +136,7 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
+							alert('cancel');
 							contextGenerator.hideNewContextForm();
 							form.reset();
 						}
@@ -158,7 +159,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		node.debug('adding node to context');
+		note.debug('adding node to context');
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
@@ -513,7 +514,7 @@ module.exports = function DateInterface() {
 
     return dateInterface;
 };
-;/* global $, window, jQuery */
+;/* global $, window, jQuery, note */
 /* exported FormBuilder */
 
 module.exports = function FormBuilder() {
@@ -613,6 +614,7 @@ module.exports = function FormBuilder() {
 
         // Check if we are outputting html or writing to DOM
         if (element instanceof jQuery) {
+            note.debug('Formbuilder outputting to jQuery object.');
             // Write to DOM
             html = $(html).uniqueId();
             element.append(html);
@@ -623,6 +625,7 @@ module.exports = function FormBuilder() {
             }
             $(html).trigger('formLoaded');
         } else if (element === 'html') {
+            note.debug('Formbuilder outputting HTML.');
             // return the html for the form
             html = $(html).uniqueId();
             return html;

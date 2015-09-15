@@ -10,7 +10,7 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
-		egoData: ['contexts'],
+		egoData: 'contexts',
 		nodeDestination: 'contexts',
 		createNodes: true,
 		prompts: [
@@ -136,6 +136,7 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
+							alert('cancel');
 							contextGenerator.hideNewContextForm();
 							form.reset();
 						}
@@ -158,7 +159,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		node.debug('adding node to context');
+		note.debug('adding node to context');
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
