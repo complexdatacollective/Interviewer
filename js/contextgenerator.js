@@ -136,7 +136,6 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
-							alert('cancel');
 							contextGenerator.hideNewContextForm();
 							form.reset();
 						}

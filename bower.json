@@ -1,6 +1,6 @@
 {
   "name": "netCanvas",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "homepage": "https://github.com/jthrilly/netCanvas",
   "authors": [
     "Joshua Melville <joshmelville@gmail.com>"
@@ -37,7 +37,6 @@
     "graham_scan": "git@github.com:brian3kb/graham_scan_js.git#master",
     "deepmerge": "~0.2.10",
     "swiper": "~3.1.0",
-    "interact": "~1.2.4",
     "seiyria-bootstrap-slider": "~5.0.13",
     "loglevel": "~1.3.1"
   }

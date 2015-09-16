@@ -136,7 +136,6 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
-							alert('cancel');
 							contextGenerator.hideNewContextForm();
 							form.reset();
 						}
@@ -572,11 +571,39 @@ module.exports = function FormBuilder() {
                     variableComponent = '<input type="hidden" id="'+formIndex+'" name="'+formIndex+'" autocomplete="off" '+required+'>';
                     html = $(html).append(variableComponent);
                 } else if (formValue.type === 'number') {
-                    wrapper = '<div class="form-group"></div>';
-                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
-                    variableComponent = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
-                    wrapper = $(wrapper).append(variableLabel+variableComponent);
-                    html = $(html).append(wrapper);
+
+                    // Create component container
+                    var component = '<div class="form-group"></div>';
+
+                    // Append Label
+                    component = $(component).append('<label for="'+formIndex+'">'+formValue.title+'</label>');
+
+                    // Create input group container
+                    var inputGroup = '<div class="input-group"></div>';
+
+                    // Check if we have a prefix
+                    if (typeof formValue.prefix !== 'undefined') {
+                        // If we do, append it
+                        inputGroup = $(inputGroup).append('<span class="input-group-addon">'+formValue.prefix+'</span>');
+                    }
+
+                    // Create an input element
+                    var input = '<input type="number" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
+
+                    // Set the input attributes
+                    var properties = {};
+                    properties.min = 0;
+                    properties.max = 10;
+                    input = $(input).attr(properties);
+
+                    // Append the input to the input group
+                    inputGroup = $(inputGroup).append(input);
+
+                    // Appent the input group to the componens
+                    component = $(component).append(inputGroup);
+
+                    // Append the component to the form
+                    html = $(html).append(component);
                 } else if (formValue.type === 'email') {
                     wrapper = '<div class="form-group"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
