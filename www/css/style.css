@@ -10191,6 +10191,7 @@ form {
   width: 100%;
 }
 .page-header {
+  padding-bottom: 0;
   margin: 44px 0 44px;
 }
 input[type=number]::-webkit-inner-spin-button,
@@ -10256,6 +10257,9 @@ input[type=radio]:checked + label:before {
 }
 .radio .control-label {
   display: block;
+}
+.modal-body {
+  color: #575757;
 }
 .sociogram-followup h2 {
   margin-top: 0;

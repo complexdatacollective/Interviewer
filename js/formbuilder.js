@@ -10,6 +10,7 @@ module.exports = function FormBuilder() {
     var moduleEvents = [];
 
     formBuilder.init = function() {
+        note.info('FormBuilder initialised.');
         // Event listeners
         window.tools.Events.register(moduleEvents, [
             {
@@ -82,14 +83,18 @@ module.exports = function FormBuilder() {
                     // Set the input attributes
                     var properties = {};
                     properties.min = formValue.min ? formValue.min : '0';
-                    properties.max = formValue.max ? formValue.max : '10000';
+                    properties.max = formValue.max ? formValue.max : '';
                     input = $(input).attr(properties);
 
-                    // Append the input to the input group
-                    inputGroup = $(inputGroup).append(input);
+                    // Append the input to the input group or the component
+                    if (typeof formValue.prefix !== 'undefined') {
+                        inputGroup = $(inputGroup).append(input);
+                        // Appent the input group to the componens
+                        component = $(component).append(inputGroup);
 
-                    // Appent the input group to the componens
-                    component = $(component).append(inputGroup);
+                    } else {
+                        component = $(component).append(input);
+                    }
 
                     // Append the component to the form
                     html = $(html).append(component);

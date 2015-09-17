@@ -45,8 +45,7 @@ module.exports = function ContextGenerator() {
 			event: 'nodeAdded',
 			handler: contextGenerator.nodeAdded,
 			targetEl:  window
-		}
-	];
+		}];
 		window.tools.Events.register(moduleEvents, event);
 
 		// containers
@@ -186,8 +185,10 @@ module.exports = function ContextGenerator() {
 		// First, we create a super array of all unique items across all variable arrays.
 		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
 
-		contextGenerator.addContext(egoData);
-
+		$.each(egoData, function(index, value) {
+			contextGenerator.addContext(value);
+		});
+		
 		// Add any nodes to the contexts
 		var nodes = window.network.getNodes({}, function (results) {
 			var filteredResults = [];
