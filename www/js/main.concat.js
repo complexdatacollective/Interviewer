@@ -154,7 +154,6 @@ module.exports = function ContextGenerator() {
 			contextGenerator.addExistingContexts();
 		}
 
-
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
@@ -183,13 +182,11 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addExistingContexts = function() {
-		// This module recieves one or more arrays of strings indicating the contexts that already exist.
 
 		// First, we create a super array of all unique items across all variable arrays.
 		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
-		for (var j = 0; j < egoData.length; j++) {
-			contextGenerator.addContext(egoData[j]);
-		}
+
+		contextGenerator.addContext(egoData);
 
 		// Add any nodes to the contexts
 		var nodes = window.network.getNodes({}, function (results) {
@@ -548,6 +545,10 @@ module.exports = function FormBuilder() {
     formBuilder.build = function(element, form) {
         thisForm = form;
         // Form options
+        if (typeof form.heading !== 'undefined') {
+            html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
+        }
+
         if (typeof form.title !== 'undefined') {
             html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
         }
@@ -592,8 +593,8 @@ module.exports = function FormBuilder() {
 
                     // Set the input attributes
                     var properties = {};
-                    properties.min = 0;
-                    properties.max = 10;
+                    properties.min = formValue.min ? formValue.min : '0';
+                    properties.max = formValue.max ? formValue.max : '10000';
                     input = $(input).attr(properties);
 
                     // Append the input to the input group
@@ -625,6 +626,23 @@ module.exports = function FormBuilder() {
                     $.each(formValue.variables, function(checkIndex, checkValue){
                         variableComponent = '<input type="radio" name="'+formIndex+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="radio-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
+                        wrapper = $(wrapper).append(variableComponent+checkLabel);
+                    });
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'checkbox') {
+                    // inline or regular?
+                    var inline = formValue.inline ? 'checkbox-inline' : 'checkbox';
+
+                    // Create wrapper element
+                    wrapper = '<div class="form-group"></div>';
+                    variableComponent = '';
+                    variableLabel = '<label class="control-label">'+formValue.title+'</label>';
+                    wrapper = $(wrapper).append(variableLabel);
+
+                    // Append checkboxes
+                    $.each(formValue.variables, function(checkIndex, checkValue){
+                        variableComponent = '<input type="checkbox" name="'+checkValue.id+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
+                        checkLabel = '<label class="'+inline+'" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
                     html = $(html).append(wrapper);
@@ -1146,7 +1164,6 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
-    window.netCanvas.debugLevel = 0;
     window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
@@ -1210,6 +1227,7 @@ $(document).ready(function() {
 
     // Enable dev mode.
     if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+        note.setLevel('info', false);
         note.info('Development mode enabled.');
         window.netCanvas.devMode = true;
         if (window.isNodeWebkit) {
@@ -1218,7 +1236,6 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {
@@ -1226,6 +1243,16 @@ $(document).ready(function() {
         } else {
             // no way to enter full screen automatically on web browser.
             // could show button or prompt?
+        }
+    }
+
+    // enable custom log level
+    if (args && typeof args.debugLevel !== 'undefined') {
+        try {
+            note.setLevel(args.debugLevel, false);
+            note.info('Console logging level set to '+args.debugLevel);
+        } catch (e) {
+            note.error('Invalid debugLevel parameter "'+args.debugLevel+'"');
         }
     }
 

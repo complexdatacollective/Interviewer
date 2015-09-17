@@ -10187,6 +10187,76 @@ button.swiper-pagination-bullet {
   }
 }
 
+form {
+  width: 100%;
+}
+.page-header {
+  margin: 44px 0 44px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+.input-group-addon {
+  color: #ffffff;
+}
+.check-number {
+  padding-left: 8px;
+}
+/*** custom checkboxes ***/
+input[type=checkbox] {
+  display: none;
+}
+/* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  cursor: pointer;
+  pointer-events: all;
+  font-size: 33px;
+}
+input[type=checkbox] + label:before {
+  content: '\f10c';
+}
+/* unchecked icon */
+input[type=checkbox] + label:before {
+  letter-spacing: 10px;
+}
+/* space between checkbox and label */
+input[type=checkbox]:checked + label:before {
+  content: '\f058';
+  color: #01a6c7;
+}
+/* checked icon */
+input[type=checkbox]:checked + label:before {
+  letter-spacing: 10px;
+}
+/* allow space for check mark */
+/*** custom radio ***/
+input[type=radio] {
+  display: none;
+}
+/* to hide the radiobox itself */
+input[type=radio] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  cursor: pointer;
+  pointer-events: all;
+  font-size: 33px;
+}
+input[type=radio] + label:before {
+  content: '\f10c';
+  letter-spacing: 10px;
+}
+input[type=radio]:checked + label:before {
+  content: '\f058';
+  color: #01a6c7;
+  letter-spacing: 10px;
+}
+.radio .control-label {
+  display: block;
+}
 .sociogram-followup h2 {
   margin-top: 0;
 }
@@ -11659,72 +11729,9 @@ body {
     font-size: 1.8vmin;
   }
 }
-.radio .control-label {
-  display: block;
-}
 .not-listed {
   position: absolute;
   z-index: 999;
-}
-form {
-  width: 100%;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-}
-.check-number {
-  padding-left: 8px;
-}
-/*** custom checkboxes ***/
-input[type=checkbox] {
-  display: none;
-}
-/* to hide the checkbox itself */
-input[type=checkbox] + label:before {
-  font-family: FontAwesome;
-  display: inline-block;
-  cursor: pointer;
-  pointer-events: all;
-}
-input[type=checkbox] + label:before {
-  content: '\f10c';
-}
-/* unchecked icon */
-input[type=checkbox] + label:before {
-  letter-spacing: 10px;
-}
-/* space between checkbox and label */
-input[type=checkbox]:checked + label:before {
-  content: '\f058';
-  color: #01a6c7;
-}
-/* checked icon */
-input[type=checkbox]:checked + label:before {
-  letter-spacing: 10px;
-}
-/* allow space for check mark */
-/*** custom radio ***/
-input[type=radio] {
-  display: none;
-}
-/* to hide the radiobox itself */
-input[type=radio] + label:before {
-  font-family: FontAwesome;
-  display: inline-block;
-  cursor: pointer;
-  pointer-events: all;
-  font-size: 33px;
-}
-input[type=radio] + label:before {
-  content: '\f10c';
-  letter-spacing: 10px;
-}
-input[type=radio]:checked + label:before {
-  content: '\f058';
-  color: #01a6c7;
-  letter-spacing: 10px;
 }
 .dialog {
   position: absolute;

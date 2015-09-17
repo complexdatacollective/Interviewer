@@ -14,6 +14,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import (inline) 'bower_components/lato/css/lato.css';
 @import (inline) 'bower_components/odometer/themes/odometer-theme-default.css';
 @import (inline) 'bower_components/swiper/dist/css/swiper.css';
+@import 'form.less';
 @import 'sociogram.less';
 @import 'contextgenerator.less';
 
@@ -37,80 +38,10 @@ html, body {
 	}
 }
 
-.radio .control-label {
-	display:block;
-}
 
 .not-listed {
 	position: absolute;
 	z-index: 999;
-}
-
-form {
-	width: 100%;
-}
-
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
-	margin: 0;
-	-webkit-appearance: none;
-}
-
-.check-number {
-	padding-left: 8px;
-}
-
-/*** custom checkboxes ***/
-
-input[type=checkbox] {
-	display: none;
-} /* to hide the checkbox itself */
-
-input[type=checkbox] + label:before {
-	font-family: FontAwesome;
-	display: inline-block;
-	cursor: pointer;
-	pointer-events: all;
-}
-
-input[type=checkbox] + label:before {
-	content: '\f10c';
-} /* unchecked icon */
-input[type=checkbox] + label:before {
-	letter-spacing: 10px;
-} /* space between checkbox and label */
-
-input[type=checkbox]:checked + label:before {
-	content: '\f058';
-	color: @brand-primary;
-} /* checked icon */
-input[type=checkbox]:checked + label:before {
-	letter-spacing: 10px;
-} /* allow space for check mark */
-
-
-/*** custom radio ***/
-
-input[type=radio] {
-	display: none;
-} /* to hide the radiobox itself */
-
-input[type=radio] + label:before {
-	font-family: FontAwesome;
-	display: inline-block;
-	cursor: pointer;
-	pointer-events: all;
-	font-size: @font-size-large;
-}
-
-input[type=radio] + label:before {
-	content: '\f10c';
-	letter-spacing: 10px;
-}
-
-input[type=radio]:checked + label:before {
-	content: '\f058';
-	color: @brand-primary;
-	letter-spacing: 10px;
 }
 
 .dialog {

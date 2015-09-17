@@ -33,6 +33,10 @@ module.exports = function FormBuilder() {
     formBuilder.build = function(element, form) {
         thisForm = form;
         // Form options
+        if (typeof form.heading !== 'undefined') {
+            html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
+        }
+
         if (typeof form.title !== 'undefined') {
             html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
         }
@@ -77,8 +81,8 @@ module.exports = function FormBuilder() {
 
                     // Set the input attributes
                     var properties = {};
-                    properties.min = 0;
-                    properties.max = 10;
+                    properties.min = formValue.min ? formValue.min : '0';
+                    properties.max = formValue.max ? formValue.max : '10000';
                     input = $(input).attr(properties);
 
                     // Append the input to the input group
@@ -110,6 +114,23 @@ module.exports = function FormBuilder() {
                     $.each(formValue.variables, function(checkIndex, checkValue){
                         variableComponent = '<input type="radio" name="'+formIndex+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="radio-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
+                        wrapper = $(wrapper).append(variableComponent+checkLabel);
+                    });
+                    html = $(html).append(wrapper);
+                } else if (formValue.type === 'checkbox') {
+                    // inline or regular?
+                    var inline = formValue.inline ? 'checkbox-inline' : 'checkbox';
+
+                    // Create wrapper element
+                    wrapper = '<div class="form-group"></div>';
+                    variableComponent = '';
+                    variableLabel = '<label class="control-label">'+formValue.title+'</label>';
+                    wrapper = $(wrapper).append(variableLabel);
+
+                    // Append checkboxes
+                    $.each(formValue.variables, function(checkIndex, checkValue){
+                        variableComponent = '<input type="checkbox" name="'+checkValue.id+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
+                        checkLabel = '<label class="'+inline+'" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
                     html = $(html).append(wrapper);

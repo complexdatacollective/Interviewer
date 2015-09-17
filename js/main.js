@@ -15,7 +15,6 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
-    window.netCanvas.debugLevel = 0;
     window.netCanvas.studyProtocol = 'RADAR';
 
     //Is this Node.js?
@@ -79,6 +78,7 @@ $(document).ready(function() {
 
     // Enable dev mode.
     if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+        note.setLevel('info', false);
         note.info('Development mode enabled.');
         window.netCanvas.devMode = true;
         if (window.isNodeWebkit) {
@@ -87,7 +87,6 @@ $(document).ready(function() {
             // no way to show dev tools on web browser
         }
         $('.refresh-button').show();
-        note.setLevel('info', false);
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {
@@ -95,6 +94,16 @@ $(document).ready(function() {
         } else {
             // no way to enter full screen automatically on web browser.
             // could show button or prompt?
+        }
+    }
+
+    // enable custom log level
+    if (args && typeof args.debugLevel !== 'undefined') {
+        try {
+            note.setLevel(args.debugLevel, false);
+            note.info('Console logging level set to '+args.debugLevel);
+        } catch (e) {
+            note.error('Invalid debugLevel parameter "'+args.debugLevel+'"');
         }
     }
 

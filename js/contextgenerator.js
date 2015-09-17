@@ -154,7 +154,6 @@ module.exports = function ContextGenerator() {
 			contextGenerator.addExistingContexts();
 		}
 
-
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
@@ -183,13 +182,11 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addExistingContexts = function() {
-		// This module recieves one or more arrays of strings indicating the contexts that already exist.
 
 		// First, we create a super array of all unique items across all variable arrays.
 		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
-		for (var j = 0; j < egoData.length; j++) {
-			contextGenerator.addContext(egoData[j]);
-		}
+
+		contextGenerator.addContext(egoData);
 
 		// Add any nodes to the contexts
 		var nodes = window.network.getNodes({}, function (results) {
