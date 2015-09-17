@@ -10190,6 +10190,21 @@ button.swiper-pagination-bullet {
 form {
   width: 100%;
 }
+legend {
+  border: 0;
+}
+.form-group {
+  padding-bottom: 50px;
+}
+.form-group:nth-last-child(2) {
+  padding-bottom: 0;
+}
+label:not(.checkbox) {
+  font-size: 2vmin;
+}
+label.checkbox {
+  left: 50px;
+}
 .page-header {
   padding-bottom: 0;
   margin: 44px 0 44px;

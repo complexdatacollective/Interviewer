@@ -2,6 +2,27 @@ form {
 	width: 100%;
 }
 
+legend {
+	border:0;
+}
+
+.form-group {
+	padding-bottom: 50px;
+}
+
+.form-group:nth-last-child(2) {
+	padding-bottom:0;
+}
+
+label:not(.checkbox) {
+	font-size:2vmin;
+}
+
+// Indent non-inline checkboxes
+label.checkbox {
+	left:50px;
+}
+
 .page-header {
 	padding-bottom:0;
   	margin: (@line-height-computed * 2) 0 (@line-height-computed*2);

@@ -647,7 +647,7 @@ module.exports = function FormBuilder() {
 
                     // Append checkboxes
                     $.each(formValue.variables, function(checkIndex, checkValue){
-                        variableComponent = '<input type="checkbox" name="'+checkValue.id+'" value="'+checkValue.value+'" id="'+checkValue.id+'" '+required+'>';
+                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+formIndex+'" value="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="'+inline+'" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
@@ -695,13 +695,28 @@ module.exports = function FormBuilder() {
                 targetEl: $(html),
                 event: 'submit',
                 handler: function(e) {
+                    note.debug('FormBuilder: Form submitted.');
                     e.preventDefault();
+
                     var data = $(this).serializeArray();
                     var cleanData = {};
                     for (var i = 0; i < data.length; i++) {
-                        cleanData[data[i].name] = data[i].value;
+
+                        // To handle checkboxes, we check if the key already exists first. If it
+                        // does, we append new values to an array.
+                        if (typeof cleanData[data[i].name] !== 'undefined') {
+                            cleanData[data[i].name] = [cleanData[data[i].name]];
+                            cleanData[data[i].name].push(data[i].value);
+                        } else {
+                            cleanData[data[i].name] = data[i].value;
+                        }
+
                     }
-                    thisForm.options.onSubmit(cleanData);
+
+                    if (typeof thisForm.options.onSubmit !== 'undefined') {
+                        thisForm.options.onSubmit(cleanData);
+                    }
+
                 }
             },
             {
@@ -741,7 +756,10 @@ module.exports = function FormBuilder() {
     };
 
     formBuilder.addData = function(data) {
+        note.debug('FormBuilder.addData()');
+
         $.each(data, function(dataIndex, dataValue) {
+            console.log(dataIndex);
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number' || thisForm.fields[dataIndex].type === 'hidden') {
                     $('#'+dataIndex).val(dataValue);
@@ -749,9 +767,28 @@ module.exports = function FormBuilder() {
                     $('#'+dataIndex).html(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'radio') {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
+                } else if (thisForm.fields[dataIndex].type === 'checkbox') {
+                    console.log('checkboxxxx');
+                    console.log(dataIndex);
+                    console.log(dataValue);
+                    // If single value, use directly
+                    if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
+                        // If array, iterate
+                        for (var i = 0; i < dataValue.length; i++) {
+                            $('input:checkbox[value="'+dataValue[i]+'"]').prop('checked', true);
+                        }
+                    } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'string') {
+                        $('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
+                    }
+
+
+
+
                 }
             } else {
-                note.debug('Data provided for undefined field '+dataIndex);
+                // If the dataIndex doesn't exist as a key in the fields object, it could be a sub-key
+                // if, for example, it is the child of a checkbox variable
+                note.debug('FormBuilder: Data provided for undefined field "'+dataIndex+'"');
             }
         });
     };
