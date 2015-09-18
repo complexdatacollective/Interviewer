@@ -7,6 +7,7 @@ module.exports = function ContextGenerator() {
 	var contexts = [];
 	var contextGenerator = {};
 	var promptSwiper;
+	var currentPrompt = 0;
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
@@ -59,6 +60,11 @@ module.exports = function ContextGenerator() {
 		promptSwiper = new Swiper ('.swiper-container', {
 			pagination: '.swiper-pagination',
 			speed: 1000
+		});
+
+		// Update current prompt counter
+		promptSwiper.on('slideChangeEnd', function () {
+    		currentPrompt = promptSwiper.activeIndex;
 		});
 
 		// bin
@@ -131,7 +137,7 @@ module.exports = function ContextGenerator() {
 					},
 					cancel: {
 						label: 'Cancel',
-						id: 'cancel-btn',
+						id: 'context-cancel-btn',
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
@@ -188,7 +194,7 @@ module.exports = function ContextGenerator() {
 		$.each(egoData, function(index, value) {
 			contextGenerator.addContext(value);
 		});
-		
+
 		// Add any nodes to the contexts
 		var nodes = window.network.getNodes({}, function (results) {
 			var filteredResults = [];
