@@ -77,6 +77,21 @@ Object.defineProperty(Array.prototype, 'remove', {
     }
 });
 
+
+// Returns an array of linearly spaced numbers within a range.
+exports.getLinearRange = function(min, max, number) {
+    number++;
+    var increment =  Math.round(100/number);
+    var returnArray = [];
+    for (var i = 1; i < number; i++) {
+        returnArray.push(increment*i);
+    }
+
+    return returnArray;
+};
+
+
+//
 exports.Events = {
     register: function(eventsArray, eventsList) {
         for (var i = 0; i < eventsList.length; i++) {

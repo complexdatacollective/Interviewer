@@ -135,7 +135,7 @@ Options can be passed either as a data (data-slider-foo) attribute, or as part o
 | formatter |	function |	returns the plain value |	formatter callback. Return the value wanted to be displayed in the tooltip |
 | natural_arrow_keys | bool | false | The natural order is used for the arrow keys. Arrow up select the upper slider value for vertical sliders, arrow right the righter slider value for a horizontal slider - no matter if the slider was reversed or not. By default the arrow keys are oriented by arrow up/right to the higher slider value, arrow down/left to the lower slider value. |
 | ticks | array | [ ] | Used to define the values of ticks. Tick marks are indicators to denote special values in the range. This option overwrites min and max options. |
-| ticks_positions | array | [ ] | Defines the positions of the tick values in percentages. The first value should alwasy be 0, the last value should always be 100 percent. |
+| ticks_positions | array | [ ] | Defines the positions of the tick values in percentages. The first value should always be 0, the last value should always be 100 percent. |
 | ticks_labels | array | [ ] | Defines the labels below the tick marks. Accepts HTML input. |
 | ticks_snap_bounds | float | 0 | Used to define the snap bounds of a tick. Snaps to the tick if value is within these bounds. |
 | scale | string | 'linear' | Set to 'logarithmic' to use a logarithmic scale. |
@@ -186,10 +186,11 @@ After bumping, type `npm publish` to update on NPM.
 
 Other Platforms & Libraries
 ===========================
-- [Ruby on Rails](https://github.com/stationkeeping/bootstrap-slider-rails)
+- [Ruby on Rails](https://github.com/YourCursus/bootstrap-slider-rails)
 - [knockout.js](https://github.com/cosminstefanxp/bootstrap-slider-knockout-binding) ([@cosminstefanxp](https://github.com/cosminstefanxp), [#81](https://github.com/seiyria/bootstrap-slider/issues/81))
 - [AngularJS](https://github.com/seiyria/angular-bootstrap-slider)
-- [NuGet](https://www.nuget.org/packages/bootstrap.slider)
+- [EmberJS](https://github.com/lifegadget/ui-slider) ([@ksnyde](https://github.com/ksnyde))
+- [NuGet](https://www.nuget.org/packages/bootstrap-slider/) ([@ChrisMissal](https://github.com/ChrisMissal))
 - [MeteorJS](https://github.com/kidovate/meteor-bootstrap-slider)
 - [Maven](http://mvnrepository.com/artifact/org.webjars.bower/seiyria-bootstrap-slider)
 

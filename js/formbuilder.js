@@ -8,6 +8,7 @@ module.exports = function FormBuilder() {
     var thisForm;
     var html = '<form></form>';
     var moduleEvents = [];
+    var deferredTasks = [];
 
     formBuilder.init = function() {
         note.info('FormBuilder initialised.');
@@ -29,6 +30,20 @@ module.exports = function FormBuilder() {
     formBuilder.showError = function(error) {
         $(html).find('.alert').fadeIn();
         $(html).find('.error').html(error);
+    };
+
+    formBuilder.addDeferred = function(item) {
+        note.debug('FormBuilder: adding deferred form task.');
+        deferredTasks.push(item);
+    };
+
+    formBuilder.runDeferred = function() {
+        note.debug('FormBuilder: running deferred form initialisation actions.');
+        for (var i = 0; i < deferredTasks.length; i++) {
+            if (typeof deferredTasks[i].action === 'function') {
+                deferredTasks[i].action();
+            }
+        }
     };
 
     formBuilder.build = function(element, form) {
@@ -98,6 +113,19 @@ module.exports = function FormBuilder() {
 
                     // Append the component to the form
                     html = $(html).append(component);
+                } else if (formValue.type === 'slider') {
+                    wrapper = '<div class="form-group"></div>';
+                    variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
+                    variableComponent = '<input type="text" class="form-control slider" id="'+formIndex+'" name="'+formIndex+'">';
+                    // Initialise sliders through deferred action
+                    formBuilder.addDeferred({
+                        action: function() {
+                            $('#'+formIndex).bootstrapSlider({min: 0, max: 100, value: formValue.initial });
+                        }
+                    });
+
+                    wrapper = $(wrapper).append(variableLabel+variableComponent);
+                    html = $(html).append(wrapper);
                 } else if (formValue.type === 'email') {
                     wrapper = '<div class="form-group"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
@@ -171,6 +199,8 @@ module.exports = function FormBuilder() {
             throw new Error('Formbuilder didn\'t understand the intended output destination of the build method.');
         }
 
+        formBuilder.runDeferred();
+
     };
 
     formBuilder.addEvents = function() {
@@ -190,9 +220,12 @@ module.exports = function FormBuilder() {
                     for (var i = 0; i < data.length; i++) {
 
                         // To handle checkboxes, we check if the key already exists first. If it
-                        // does, we append new values to an array.
-                        if (typeof cleanData[data[i].name] !== 'undefined') {
+                        // does, we append new values to an array. This keeps compatibility with
+                        // single form fields, but might need revising.
+                        if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] !== 'object') {
                             cleanData[data[i].name] = [cleanData[data[i].name]];
+                            cleanData[data[i].name].push(data[i].value);
+                        } else if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] === 'object'){
                             cleanData[data[i].name].push(data[i].value);
                         } else {
                             cleanData[data[i].name] = data[i].value;
@@ -250,14 +283,21 @@ module.exports = function FormBuilder() {
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number' || thisForm.fields[dataIndex].type === 'hidden') {
                     $('#'+dataIndex).val(dataValue);
+                } else if (thisForm.fields[dataIndex].type === 'slider') {
+                    var dataValueArray = dataValue.split(',').map(Number);
+                    if (dataValueArray.length>1) {
+                        $('#'+dataIndex).val(dataValue);
+                        $('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValueArray });
+                    } else {
+                        $('#'+dataIndex).val(dataValue[0]);
+                        $('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValue[0] });
+                    }
                 } else if (thisForm.fields[dataIndex].type === 'textarea') {
                     $('#'+dataIndex).html(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'radio') {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
                 } else if (thisForm.fields[dataIndex].type === 'checkbox') {
-                    console.log('checkboxxxx');
-                    console.log(dataIndex);
-                    console.log(dataValue);
+
                     // If single value, use directly
                     if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
                         // If array, iterate
@@ -267,9 +307,6 @@ module.exports = function FormBuilder() {
                     } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'string') {
                         $('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
                     }
-
-
-
 
                 }
             } else {
