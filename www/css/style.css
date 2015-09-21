@@ -10478,58 +10478,64 @@ input[type=radio]:checked + label:before {
   height: 40vmin;
   margin: 1vmin;
 }
-.circle-responsive:nth-of-type(2) {
+.circle-responsive[data-index='1'] {
+  border-color: #01a6c7;
+}
+.circle-responsive[data-index='1'] .node-circle {
+  background: #01a6c7;
+}
+.circle-responsive[data-index='2'] {
   border-color: #1ecd97;
 }
-.circle-responsive:nth-of-type(2) .node-circle {
+.circle-responsive[data-index='2'] .node-circle {
   background: #1ecd97;
 }
-.circle-responsive:nth-of-type(3) {
+.circle-responsive[data-index='3'] {
   border-color: #b16eff;
 }
-.circle-responsive:nth-of-type(3) .node-circle {
+.circle-responsive[data-index='3'] .node-circle {
   background: #b16eff;
 }
-.circle-responsive:nth-of-type(4) {
+.circle-responsive[data-index='4'] {
   border-color: #fa920d;
 }
-.circle-responsive:nth-of-type(4) .node-circle {
+.circle-responsive[data-index='4'] .node-circle {
   background: #fa920d;
 }
-.circle-responsive:nth-of-type(5) {
+.circle-responsive[data-index='5'] {
   border-color: #e85657;
 }
-.circle-responsive:nth-of-type(5) .node-circle {
+.circle-responsive[data-index='5'] .node-circle {
   background: #e85657;
 }
-.circle-responsive:nth-of-type(6) {
+.circle-responsive[data-index='6'] {
   border-color: Gold;
 }
-.circle-responsive:nth-of-type(6) .node-circle {
+.circle-responsive[data-index='6'] .node-circle {
   background: Gold;
 }
-.circle-responsive:nth-of-type(7) {
+.circle-responsive[data-index='7'] {
   border-color: Pink;
 }
-.circle-responsive:nth-of-type(7) .node-circle {
+.circle-responsive[data-index='7'] .node-circle {
   background: Pink;
 }
-.circle-responsive:nth-of-type(8) {
+.circle-responsive[data-index='8'] {
   border-color: saddlebrown;
 }
-.circle-responsive:nth-of-type(8) .node-circle {
+.circle-responsive[data-index='8'] .node-circle {
   background: saddlebrown;
 }
-.circle-responsive:nth-of-type(9) {
+.circle-responsive[data-index='9'] {
   border-color: Teal;
 }
-.circle-responsive:nth-of-type(9) .node-circle {
+.circle-responsive[data-index='9'] .node-circle {
   background: Teal;
 }
-.circle-responsive:nth-of-type(10) {
+.circle-responsive[data-index='10'] {
   border-color: Silver;
 }
-.circle-responsive:nth-of-type(10) .node-circle {
+.circle-responsive[data-index='10'] .node-circle {
   background: Silver;
 }
 .circle-responsive.delete {

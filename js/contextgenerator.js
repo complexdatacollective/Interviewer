@@ -1,4 +1,4 @@
-/* global $, window, Swiper, note, alert */
+/* global $, window, Swiper, note*/
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -175,6 +175,8 @@ module.exports = function ContextGenerator() {
 			options: {
 				onSubmit: function(data) {
 					contextGenerator.mergeContexts(data.source, data.target, data.name);
+					window.forms.mergeContextForm.reset();
+					window.forms.mergeContextForm.hide();
 				},
 				buttons: {
 					submit: {
@@ -190,6 +192,7 @@ module.exports = function ContextGenerator() {
 						class: 'btn-default',
 						action: function() {
 							mergeContextForm.reset();
+							window.forms.mergeContextForm.hide();
 						}
 					}
 				}
@@ -313,13 +316,13 @@ module.exports = function ContextGenerator() {
 				if ($(ui.draggable).hasClass('circle-responsive')) {
 					window.forms.mergeContextForm.addData({
 						name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
-						source: 'test',
-						target: 'test'
+						source: $(ui.draggable).data('context'),
+						target: $(this).data('context')
 					});
 					window.forms.mergeContextForm.show();
-					// alert('context dopped');
+
 				} else if ($(ui.draggable).hasClass('node-circle')) {
-					// alert('node dropped?');
+					contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('context'));
 				} else {
 					$(this).removeClass('merge');
 					$(ui.draggable).removeClass('merge');
@@ -347,15 +350,34 @@ module.exports = function ContextGenerator() {
 
 	};
 
-	contextGenerator.mergeContexts = function (source, target, newname) {
-		console.log('mergecontexts');
-		console.log(source);
-		console.log(target);
-		console.log(newname);
-	};
+	contextGenerator.mergeContexts = function (source, target, newName) {
+		if (!source || !target || !newName) {
+			note.error('ContextGenerator: mergeContexts() needs better parameters!');
+			return false;
+		}
 
-	contextGenerator.moveNode = function(node) {
-		console.log(node);
+		// Create a new context with the combined name.
+		contextGenerator.addContext(newName);
+
+		// Move nodes from the source and target to the new context
+		var sourceNodes = contextGenerator.getContextNodes(source);
+		console.log('sourceNodes');
+		console.log(sourceNodes);
+		var targetNodes = contextGenerator.getContextNodes(target);
+		console.log('targetNodes');
+		console.log(targetNodes);
+		$.each(sourceNodes, function(index, value) {
+			console.log('moving node '+value+' to '+newName);
+			contextGenerator.moveNode(value, newName);
+		});
+		$.each(targetNodes, function(index, value) {
+			console.log('moving node '+value+' to '+newName);
+			contextGenerator.moveNode(value, newName);
+		});
+
+		// Remove previous contexts
+		contextGenerator.removeContext(source);
+		contextGenerator.removeContext(target);
 
 	};
 
@@ -365,7 +387,7 @@ module.exports = function ContextGenerator() {
 			throw new Error('No name provided for new context.');
 		}
 		contexts.push(name);
-		$('.contexthull-hull-container').append('<div class="circle-responsive" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
+		$('.contexthull-hull-container').append('<div class="circle-responsive" data-index="'+contexts.length+'" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
 		contextGenerator.makeDraggable();
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
@@ -412,6 +434,23 @@ module.exports = function ContextGenerator() {
 
 	};
 
+	contextGenerator.getContextNodes = function(name) {
+		if (!name) {
+			note.error('No name provided to contextGenerator.getContextNodes().');
+		}
+
+		var nodes = [];
+		// Remove nodes
+		var childNodes = $('div[data-context="'+name+'"]').children('.node-circle-container');
+		$.each(childNodes, function(nodeIndex, nodeValue) {
+			var thisId = $(nodeValue).children('.node-circle');
+			nodes.push($(thisId).data('id'));
+		});
+
+		return nodes;
+
+	};
+
 	contextGenerator.removeNode = function(id) {
 		if (!id) {
 			note.error('No id provided to contextGenerator.deleteNode().');
@@ -420,10 +459,25 @@ module.exports = function ContextGenerator() {
 
 		if (window.network.removeNode(id)) {
 			$('div[data-id="'+id+'"]').remove();
+			note.info('Deleted node with id '+id);
 			return true;
 		} else {
 			note.warn('contextGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+			return false;
 		}
+	};
+
+	contextGenerator.moveNode = function(node, targetContext) {
+
+		var properties = {};
+		properties[contextGenerator.options.nodeDestination] = [];
+		properties[contextGenerator.options.nodeDestination].push(targetContext);
+		window.network.updateNode(node, properties, function() {
+			var target = $('div[data-context="'+targetContext+'"]');
+			var element = $('div[data-id="'+node+'"]').parent();
+			$(element).appendTo(target);
+			return true;
+		});
 	};
 
 	return contextGenerator;
