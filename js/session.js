@@ -162,7 +162,7 @@ var Session = function Session() {
     }
 
     session.init = function(callback) {
-        note.debug('Session initialising.');
+        note.info('Session initialising.');
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);

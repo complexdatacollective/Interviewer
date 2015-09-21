@@ -1,7 +1,7 @@
 /* global $, window, jQuery, note */
 /* exported FormBuilder */
 
-module.exports = function FormBuilder() {
+module.exports = function FormBuilder(formName) {
     'use strict';
 
     var formBuilder = {};
@@ -9,8 +9,13 @@ module.exports = function FormBuilder() {
     var html = '<form></form>';
     var moduleEvents = [];
     var deferredTasks = [];
+    var formFields;
+    var name = formName ? formName : 'Default';
+    window.forms = window.forms || {};
+    window.forms[name] = formBuilder;
 
     formBuilder.init = function() {
+
         note.info('FormBuilder initialised.');
         // Event listeners
         window.tools.Events.register(moduleEvents, [
@@ -33,17 +38,19 @@ module.exports = function FormBuilder() {
     };
 
     formBuilder.addDeferred = function(item) {
-        note.debug('FormBuilder: adding deferred form task.');
+        note.debug('FormBuilder ['+name+']: adding deferred form task.');
         deferredTasks.push(item);
     };
 
     formBuilder.runDeferred = function() {
-        note.debug('FormBuilder: running deferred form initialisation actions.');
+        note.debug('FormBuilder ['+name+']: running deferred form initialisation actions.');
         for (var i = 0; i < deferredTasks.length; i++) {
             if (typeof deferredTasks[i].action === 'function') {
                 deferredTasks[i].action();
             }
         }
+
+        deferredTasks = [];
     };
 
     formBuilder.build = function(element, form) {
@@ -57,28 +64,69 @@ module.exports = function FormBuilder() {
             html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
         }
 
+
+
         // Form fields
-        $.each(form.fields, function(formIndex, formValue) {
-            var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
+        formFields = '<div class="form-fields"></div>';
+        formBuilder.addFields(form.fields);
+        html = $(html).append(formFields);
+
+        // Buttons
+        var buttonGroup = '<div class="text-right button-group"></div>';
+        $.each(form.options.buttons, function(buttonIndex, buttonValue){
+            buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
+
+        });
+        html = $(html).append(buttonGroup);
+
+        // Check if we are outputting html or writing to DOM
+        if (element instanceof jQuery) {
+            note.debug('Formbuilder ['+name+'] outputting to jQuery object.');
+            // Write to DOM
+            html = $(html).uniqueId();
+            element.append(html);
+            formBuilder.addEvents();
+            // Data population
+            if (typeof form.data !== 'undefined') {
+                formBuilder.addData(form.data);
+            }
+            $(html).trigger('formLoaded');
+        } else if (element === 'html') {
+            note.debug('Formbuilder ['+name+'] outputting HTML.');
+            // return the html for the form
+            html = $(html).uniqueId();
+            return html;
+        } else {
+            throw new Error('Formbuilder ['+name+'] didn\'t understand the intended output destination of the build method.');
+        }
+
+        formBuilder.runDeferred();
+
+    };
+
+    formBuilder.addFields = function(fields) {
+        $.each(fields, function(formIndex, formValue) {
+            if (!formBuilder.fieldExists(formIndex)) {
+                var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
                 var placeholder = formValue.placeholder? formValue.placeholder : '';
                 var required = formValue.required? 'required' : '';
 
                 if (formValue.type === 'string') {
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     if (typeof formValue.title !== 'undefined') {
                         variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     }
 
                     variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'hidden') {
                     variableComponent = '<input type="hidden" id="'+formIndex+'" name="'+formIndex+'" autocomplete="off" '+required+'>';
-                    html = $(html).append(variableComponent);
+                    formFields = $(formFields).append(variableComponent);
                 } else if (formValue.type === 'number') {
 
                     // Create component container
-                    var component = '<div class="form-group"></div>';
+                    var component = '<div class="form-group" data-component="'+formIndex+'"></div>';
 
                     // Append Label
                     component = $(component).append('<label for="'+formIndex+'">'+formValue.title+'</label>');
@@ -112,9 +160,9 @@ module.exports = function FormBuilder() {
                     }
 
                     // Append the component to the form
-                    html = $(html).append(component);
+                    formFields = $(formFields).append(component);
                 } else if (formValue.type === 'slider') {
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<input type="text" class="form-control slider" id="'+formIndex+'" name="'+formIndex+'">';
                     // Initialise sliders through deferred action
@@ -125,21 +173,21 @@ module.exports = function FormBuilder() {
                     });
 
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'email') {
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'textarea') {
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" autocomplete="off" placeholder="'+placeholder+'" '+required+'></textarea>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'radio') {
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableComponent = '';
                     variableLabel = '<label class="control-label">'+formValue.title+'</label>';
                     wrapper = $(wrapper).append(variableLabel);
@@ -149,13 +197,13 @@ module.exports = function FormBuilder() {
                         checkLabel = '<label class="radio-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'checkbox') {
                     // inline or regular?
                     var inline = formValue.inline ? 'checkbox-inline' : 'checkbox';
 
                     // Create wrapper element
-                    wrapper = '<div class="form-group"></div>';
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableComponent = '';
                     variableLabel = '<label class="control-label">'+formValue.title+'</label>';
                     wrapper = $(wrapper).append(variableLabel);
@@ -166,41 +214,25 @@ module.exports = function FormBuilder() {
                         checkLabel = '<label class="'+inline+'" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
-                    html = $(html).append(wrapper);
+                    formFields = $(formFields).append(wrapper);
                 }
-        });
-
-        // Buttons
-        var buttonGroup = '<div class="text-right button-group"></div>';
-        $.each(form.options.buttons, function(buttonIndex, buttonValue){
-            buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
-
-        });
-        html = $(html).append(buttonGroup);
-
-        // Check if we are outputting html or writing to DOM
-        if (element instanceof jQuery) {
-            note.debug('Formbuilder outputting to jQuery object.');
-            // Write to DOM
-            html = $(html).uniqueId();
-            element.append(html);
-            formBuilder.addEvents();
-            // Data population
-            if (typeof form.data !== 'undefined') {
-                formBuilder.addData(form.data);
+            } else {
+                note.error('FormBuilder ['+name+']: Field with id "'+formIndex+'" already exists!');
             }
-            $(html).trigger('formLoaded');
-        } else if (element === 'html') {
-            note.debug('Formbuilder outputting HTML.');
-            // return the html for the form
-            html = $(html).uniqueId();
-            return html;
+
+        });
+    };
+
+    formBuilder.removeField = function(id) {
+        $('[data-component="'+id+'"]').remove();
+    };
+
+    formBuilder.fieldExists = function(id) {
+        if ($(html).find('[data-component="'+id+'"]').length > 0) {
+            return true;
         } else {
-            throw new Error('Formbuilder didn\'t understand the intended output destination of the build method.');
+            return false;
         }
-
-        formBuilder.runDeferred();
-
     };
 
     formBuilder.addEvents = function() {
@@ -212,7 +244,8 @@ module.exports = function FormBuilder() {
                 targetEl: $(html),
                 event: 'submit',
                 handler: function(e) {
-                    note.debug('FormBuilder: Form submitted.');
+                    note.debug('FormBuilder ['+name+']: Form submitted.');
+
                     e.preventDefault();
 
                     var data = $(this).serializeArray();
@@ -232,7 +265,7 @@ module.exports = function FormBuilder() {
                         }
 
                     }
-
+                    note.debug(data);
                     if (typeof thisForm.options.onSubmit !== 'undefined') {
                         thisForm.options.onSubmit(cleanData);
                     }
@@ -276,24 +309,24 @@ module.exports = function FormBuilder() {
     };
 
     formBuilder.addData = function(data) {
-        note.debug('FormBuilder.addData()');
+        note.debug('FormBuilder ['+name+']: addData()');
 
         $.each(data, function(dataIndex, dataValue) {
             console.log(dataIndex);
             if (thisForm.fields[dataIndex] !== undefined) {
                 if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number' || thisForm.fields[dataIndex].type === 'hidden') {
-                    $('#'+dataIndex).val(dataValue);
+                    $(html).find('#'+dataIndex).val(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'slider') {
                     var dataValueArray = dataValue.split(',').map(Number);
                     if (dataValueArray.length>1) {
-                        $('#'+dataIndex).val(dataValue);
-                        $('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValueArray });
+                        $(html).find('#'+dataIndex).val(dataValue);
+                        $(html).find('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValueArray });
                     } else {
-                        $('#'+dataIndex).val(dataValue[0]);
-                        $('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValue[0] });
+                        $(html).find('#'+dataIndex).val(dataValue[0]);
+                        $(html).find('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValue[0] });
                     }
                 } else if (thisForm.fields[dataIndex].type === 'textarea') {
-                    $('#'+dataIndex).html(dataValue);
+                    $(html).find('#'+dataIndex).html(dataValue);
                 } else if (thisForm.fields[dataIndex].type === 'radio') {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
                 } else if (thisForm.fields[dataIndex].type === 'checkbox') {
@@ -302,17 +335,17 @@ module.exports = function FormBuilder() {
                     if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
                         // If array, iterate
                         for (var i = 0; i < dataValue.length; i++) {
-                            $('input:checkbox[value="'+dataValue[i]+'"]').prop('checked', true);
+                            $(html).find('input:checkbox[value="'+dataValue[i]+'"]').prop('checked', true);
                         }
                     } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'string') {
-                        $('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
+                        $(html).find('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
                     }
 
                 }
             } else {
                 // If the dataIndex doesn't exist as a key in the fields object, it could be a sub-key
                 // if, for example, it is the child of a checkbox variable
-                note.debug('FormBuilder: Data provided for undefined field "'+dataIndex+'"');
+                note.debug('FormBuilder ['+name+']: Data provided for undefined field "'+dataIndex+'"');
             }
         });
     };

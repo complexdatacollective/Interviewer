@@ -10221,9 +10221,6 @@ form {
 legend {
   border: 0;
 }
-.form-group {
-  padding-bottom: 50px;
-}
 .form-group:nth-last-child(2) {
   padding-bottom: 0;
 }
@@ -10466,12 +10463,15 @@ input[type=radio]:checked + label:before {
   -webkit-transform: scale(0.6);
       -ms-transform: scale(0.6);
           transform: scale(0.6);
-  opacity: 0.5;
+  opacity: 0.8;
 }
 .circle-responsive {
   float: left;
-  -webkit-transition: width 0.2s ease, -webkit-transform 0.5s ease;
-          transition: width 0.2s ease, transform 0.5s ease;
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: width 0.2s ease, -webkit-transform 0.5s ease, opacity 0.5s ease, -webkit-filter 0.5s ease, width 0.2s ease, -webkit-transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+          transition: width 0.2s ease, transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
   border: 18px outset #01a6c7;
   border-radius: 50%;
   width: 40vmin;
@@ -10538,6 +10538,12 @@ input[type=radio]:checked + label:before {
   -webkit-transform: scale(0.4);
       -ms-transform: scale(0.4);
           transform: scale(0.4);
+  -webkit-filter: grayscale(80%);
+          filter: grayscale(80%);
+}
+.circle-responsive.merge {
+  background: #1ecd97;
+  border-color: white;
 }
 .node-circle {
   display: block;
@@ -10561,6 +10567,7 @@ input[type=radio]:checked + label:before {
   /* 2em = 4em/2 */
   /* half the width */
   text-align: center;
+  z-index: 9999;
 }
 .node-circle-container:nth-of-type(2) .node-circle {
   -webkit-transform: rotate(0deg) translate(30vmin) rotate(0deg) scale(1);
@@ -11735,7 +11742,6 @@ input[type=radio]:checked + label:before {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 999;
 }
 .contexthull-bin {
   -webkit-transition: all 0.5s ease;
@@ -11780,6 +11786,28 @@ input[type=radio]:checked + label:before {
   z-index: 99;
 }
 .new-context-form.show {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+.merge-context-form {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 65vmin;
+  margin-left: -32.5vmin;
+  padding: 5vmin;
+  border-radius: 8px;
+  background: #eeeeee;
+  color: #000000;
+  -webkit-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+  -webkit-transform: translateY(100vh);
+      -ms-transform: translateY(100vh);
+          transform: translateY(100vh);
+  z-index: 99;
+}
+.merge-context-form.show {
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
           transform: translateY(0);

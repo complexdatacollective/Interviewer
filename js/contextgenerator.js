@@ -1,4 +1,4 @@
-/* global $, window, Swiper, note */
+/* global $, window, Swiper, note, alert */
 /* exported ContextGenerator */
 module.exports = function ContextGenerator() {
 	'use strict';
@@ -8,6 +8,7 @@ module.exports = function ContextGenerator() {
 	var contextGenerator = {};
 	var promptSwiper;
 	var currentPrompt = 0;
+	var mergeContextForm;
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
@@ -103,8 +104,8 @@ module.exports = function ContextGenerator() {
 
 		// New context form
 		$('body').append('<div class="new-context-form"></div>');
-		var form = new window.netCanvas.Modules.FormBuilder();
-		form.build($('.new-context-form'), {
+		var newContextForm = new window.netCanvas.Modules.FormBuilder('newContextForm');
+		newContextForm.build($('.new-context-form'), {
 			title: 'Create a New Context',
 			fields: {
 				name: {
@@ -122,16 +123,16 @@ module.exports = function ContextGenerator() {
 						properties[contextGenerator.options.nodeDestination] = contexts;
 						window.network.updateNode(window.network.getEgo().id, properties);
 						contextGenerator.addContext(data.name);
-						form.reset();
+						newContextForm.reset();
 						contextGenerator.hideNewContextForm();
 					} else {
-						form.showError('Error: the name you have chosen is already in use.');
+						newContextForm.showError('Error: the name you have chosen is already in use.');
 					}
 				},
 				buttons: {
 					submit: {
 						label: 'Create',
-						id: 'submit-btn',
+						id: 'context-submit-btn',
 						type: 'submit',
 						class: 'btn-primary'
 					},
@@ -142,12 +143,67 @@ module.exports = function ContextGenerator() {
 						class: 'btn-default',
 						action: function() {
 							contextGenerator.hideNewContextForm();
-							form.reset();
+							newContextForm.reset();
 						}
 					}
 				}
 			}
 		});
+
+		$('body').append('<div class="merge-context-form"></div>');
+		mergeContextForm = new window.netCanvas.Modules.FormBuilder('mergeContextForm');
+		mergeContextForm.build($('.merge-context-form'), {
+			title: 'What should the merged context be called?',
+			fields: {
+				name: {
+					type: 'string',
+					placeholder: 'Name of Context',
+					required: true,
+
+				},
+				source: {
+					'type':'hidden',
+					'title':'source',
+					'name': 'source',
+				},
+				target: {
+					'type':'hidden',
+					'title':'target',
+					'name': 'target',
+				}
+			},
+			options: {
+				onSubmit: function(data) {
+					contextGenerator.mergeContexts(data.source, data.target, data.name);
+				},
+				buttons: {
+					submit: {
+						label: 'Create',
+						id: 'merge-submit-btn',
+						type: 'submit',
+						class: 'btn-primary'
+					},
+					cancel: {
+						label: 'Cancel',
+						id: 'merge-cancel-btn',
+						type: 'button',
+						class: 'btn-default',
+						action: function() {
+							mergeContextForm.reset();
+						}
+					}
+				}
+			}
+		});
+
+		window.forms.mergeContextForm.hide = function() {
+			window.forms.mergeContextForm.reset();
+			$('.merge-context-form, .black-overlay').removeClass('show');
+		};
+		window.forms.mergeContextForm.show = function() {
+			$('.merge-context-form, .black-overlay').addClass('show');
+
+		};
 
 		// Add existing data, if present
 		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
@@ -240,6 +296,38 @@ module.exports = function ContextGenerator() {
 				contextGenerator.hideBin();
 			}
 		});
+
+		$('.circle-responsive').droppable({
+			// accept: '.circle-responsive',
+			// tolerance: 'fit',
+			hoverClass: 'merge',
+			over: function(event, ui) {
+				// $(this).addClass('merge');
+				$(ui.draggable).addClass('merge');
+			},
+			out: function( event, ui ) {
+
+				$(ui.draggable).removeClass('merge');
+			},
+			drop: function( event, ui ) {
+				if ($(ui.draggable).hasClass('circle-responsive')) {
+					window.forms.mergeContextForm.addData({
+						name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
+						source: 'test',
+						target: 'test'
+					});
+					window.forms.mergeContextForm.show();
+					// alert('context dopped');
+				} else if ($(ui.draggable).hasClass('node-circle')) {
+					// alert('node dropped?');
+				} else {
+					$(this).removeClass('merge');
+					$(ui.draggable).removeClass('merge');
+					// contextGenerator.removeNode($(ui.draggable).data('id'));
+				}
+
+			}
+		});
 	};
 
 	contextGenerator.makeNodesDraggable = function() {
@@ -251,12 +339,24 @@ module.exports = function ContextGenerator() {
 			scroll: false,
 			start: function() {
 				contextGenerator.showBin();
-
 			},
 			stop: function() {
 				contextGenerator.hideBin();
 			}
 		});
+
+	};
+
+	contextGenerator.mergeContexts = function (source, target, newname) {
+		console.log('mergecontexts');
+		console.log(source);
+		console.log(target);
+		console.log(newname);
+	};
+
+	contextGenerator.moveNode = function(node) {
+		console.log(node);
+
 	};
 
 	contextGenerator.addContext = function(name) {

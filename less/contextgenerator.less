@@ -30,12 +30,14 @@
 
 .circle-responsive.smaller {
     transform: scale(0.6);
-    opacity:0.5;
+    opacity:0.8;
+    // z-index:99999;
 }
 
 .circle-responsive {
     float:left;
-    transition: width 0.2s ease, transform 0.5s ease;
+    transform: scale(1);
+    transition: width 0.2s ease, transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
     border: 18px outset @brand-primary;
     border-radius: 50%;
     width:40vmin;
@@ -108,6 +110,17 @@
     background: @brand-danger;
     border-color: @brand-danger;
     transform: scale(0.4);
+    filter: grayscale(80%);
+}
+
+.circle-responsive.merge {
+    background: @brand-success;
+    border-color: white;
+    // transform: scale(1.2);
+}
+
+.circle-responsive.smaller.merge {
+    // transform: scale(1);
 }
 
 .node-circle {
@@ -121,6 +134,7 @@
     line-height:16rem;
     font-size:2rem;
     overflow:hidden;
+
 }
 
 .node-circle-container {
@@ -131,6 +145,7 @@
 	width: 8em; height: 8em;
 	margin: -4em; /* 2em = 4em/2 */ /* half the width */
     text-align:center;
+    z-index:9999;
 }
 
 @segments: 10;
@@ -292,7 +307,6 @@
     bottom:0;
     left:0;
     right:0;
-    z-index:999;
 }
 
 .contexthull-bin {
@@ -336,6 +350,26 @@
 }
 
 .new-context-form.show {
+    transform: translateY(0);
+
+}
+
+.merge-context-form {
+    position:absolute;
+    top:40%;
+    left:50%;
+    width:65vmin;
+    margin-left:-32.5vmin;
+    padding: 5vmin;
+    border-radius: @border-radius-base;
+    background: @modal-base;
+    color: @modal-text;
+    transition: all 0.5s ease;
+    transform: translateY(100vh);
+    z-index:99;
+}
+
+.merge-context-form.show {
     transform: translateY(0);
 
 }
