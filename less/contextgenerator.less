@@ -122,7 +122,8 @@
 }
 
 .circle-responsive.merge {
-    background: @brand-success;
+    background: white;
+    color: @text-dark;
     border-color: white;
     // transform: scale(1.2);
 }
@@ -132,10 +133,13 @@
 }
 
 .node-circle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width:100%;
     height:100%;
     border-radius: 50%;
+    // border: 1vmin solid transparent;
     // transform: 34vmin;
     background:@brand-primary;
     color:white;
@@ -143,6 +147,10 @@
     font-size:2rem;
     overflow:hidden;
 
+}
+
+.node-circle.border {
+    // border-color: white;
 }
 
 .node-circle-container {
@@ -153,7 +161,6 @@
 	width: 8em; height: 8em;
 	margin: -4em; /* 2em = 4em/2 */ /* half the width */
     text-align:center;
-    z-index:9999;
 }
 
 @segments: 10;
@@ -245,7 +252,7 @@
 .circle-responsive:nth-child(7):nth-last-child(1) {
 	width: 35vmin;
     height: 35vmin;
-    margin:0.8vmin;
+    margin:0vmin;
     .loop(0, 12vmin, 0.5);
 }
 
@@ -260,7 +267,7 @@
 .circle-responsive:nth-child(8):nth-last-child(1) {
 	width: 35vmin;
     height: 35vmin;
-    margin:0.8vmin;
+    margin:0vmin;
     .loop(0, 12vmin, 0.5);
 }
 /* nine items */
@@ -273,9 +280,9 @@
 .circle-responsive:nth-child(7):nth-last-child(3),
 .circle-responsive:nth-child(8):nth-last-child(2),
 .circle-responsive:nth-child(9):nth-last-child(1) {
-	width: 29vmin;
-    height: 29vmin;
-    margin:0.2vmin;
+	width: 28vmin;
+    height: 28vmin;
+    margin:0vmin;
     .loop(0, 10vmin, 0.4);
 }
 /* ten items */
@@ -289,9 +296,9 @@
 .circle-responsive:nth-child(8):nth-last-child(3),
 .circle-responsive:nth-child(9):nth-last-child(2),
 .circle-responsive:nth-child(10):nth-last-child(1) {
-	width: 29vmin;
-    height: 29vmin;
-    margin:0.2vmin;
+	width: 28vmin;
+    height: 28vmin;
+    margin:0vmin;
     .loop(0, 10vmin, 0.4);
 }
 
@@ -305,16 +312,13 @@
 }
 
 .contexthull-bin-footer {
-    background: rgba(0,0,0,0.5);
-    text-align:center;
     height:15vh;
     line-height:19vh;
     transition: all 1s ease;
     transform: translateY(15vh);
     position:absolute;
     bottom:0;
-    left:0;
-    right:0;
+    left:5vmin;
 }
 
 .contexthull-bin {

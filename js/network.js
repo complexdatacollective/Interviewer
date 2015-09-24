@@ -167,7 +167,7 @@ module.exports = function Network() {
         }
     };
 
-    this.addEdge = function(properties) {
+    network.addEdge = function(properties) {
         note.debug('network.addEdge() called.');
         // todo: make nickname unique, and provide callback so that interface can respond if a non-unique nname is used.
 

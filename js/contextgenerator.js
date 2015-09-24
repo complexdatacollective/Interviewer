@@ -27,6 +27,7 @@ module.exports = function ContextGenerator() {
 		note.info('Context generator destroyed.');
 		promptSwiper.destroy();
 		$('.new-context-form').remove();
+		$('.merge-context-form').remove();
 		window.tools.Events.unbind(moduleEvents);
 	};
 
@@ -284,10 +285,11 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.makeDraggable = function() {
 		$('.circle-responsive').draggable({
-			zIndex: 100,
+			// zIndex: 100,
 			revert: true,
 			refreshPositions: true,
 			revertDuration: 200,
+			stack: '.circle-responsive',
 			scroll: false,
 			start: function() {
 				contextGenerator.showBin();
@@ -314,6 +316,8 @@ module.exports = function ContextGenerator() {
 			},
 			drop: function( event, ui ) {
 				if ($(ui.draggable).hasClass('circle-responsive')) {
+					$(this).removeClass('merge');
+					$(ui.draggable).removeClass('merge');
 					window.forms.mergeContextForm.addData({
 						name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
 						source: $(ui.draggable).data('context'),
@@ -322,7 +326,15 @@ module.exports = function ContextGenerator() {
 					window.forms.mergeContextForm.show();
 
 				} else if ($(ui.draggable).hasClass('node-circle')) {
-					contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('context'));
+					$(this).removeClass('merge');
+					$(ui.draggable).removeClass('merge');
+					// check if we are dropping back where we started, and cancel if so.
+					console.log($(ui.draggable).parent().parent().data('context'));
+					console.log($(this).data('context'));
+					if ($(this).data('context') !== $(ui.draggable).parent().parent().data('context')) {
+						contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('context'));
+					}
+
 				} else {
 					$(this).removeClass('merge');
 					$(ui.draggable).removeClass('merge');
@@ -335,15 +347,17 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.makeNodesDraggable = function() {
 		$('.node-circle').draggable({
-			zIndex: 100,
+			stack: '.circle-responsive',
 			revert: true,
 			revertDuration: 200,
 			refreshPositions: true,
 			scroll: false,
 			start: function() {
+				$(this).addClass('border');
 				contextGenerator.showBin();
 			},
 			stop: function() {
+				$(this).removeClass('border');
 				contextGenerator.hideBin();
 			}
 		});
@@ -387,7 +401,13 @@ module.exports = function ContextGenerator() {
 			throw new Error('No name provided for new context.');
 		}
 		contexts.push(name);
-		$('.contexthull-hull-container').append('<div class="circle-responsive" data-index="'+contexts.length+'" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
+
+		// use lowest available color
+		var color = 1;
+		while ($('.circle-responsive[data-index='+color+']').length > 0) {
+			color++;
+		}
+		$('.contexthull-hull-container').append('<div class="circle-responsive" data-index="'+color+'" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
 		contextGenerator.makeDraggable();
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
