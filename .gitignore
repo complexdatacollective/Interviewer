@@ -10,5 +10,6 @@ npm-debug.log
 *.app
 app/protocols/*
 !app/protocols/default
-
+node_modules/
+*/node_modules/
 *.pbxproj
