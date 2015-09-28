@@ -6,6 +6,9 @@ var defaults = {
     // autoplay
     autoplay: false,
     autoplayDisableOnInteraction: true,
+    // To support iOS's swipe-to-go-back gesture (when being used in-app, with UIWebView).
+    iOSEdgeSwipeDetection: false,
+    iOSEdgeSwipeThreshold: 20,
     // Free mode
     freeMode: false,
     freeModeMomentum: true,
@@ -46,6 +49,7 @@ var defaults = {
     mousewheelReleaseOnEdges: false,
     mousewheelInvert: false,
     mousewheelForceToAxis: false,
+    mousewheelSensitivity: 1,
     // Hash Navigation
     hashnav: false,
     // Slides grid
@@ -688,8 +692,8 @@ s.updateSlidesProgress = function (translate) {
     if (s.slides.length === 0) return;
     if (typeof s.slides[0].swiperSlideOffset === 'undefined') s.updateSlidesOffset();
 
-    var offsetCenter = s.params.centeredSlides ? -translate + s.size / 2 : -translate;
-    if (s.rtl) offsetCenter = s.params.centeredSlides ? translate - s.size / 2 : translate;
+    var offsetCenter = -translate;
+    if (s.rtl) offsetCenter = translate;
 
     // Visible Slides
     var containerBox = s.container[0].getBoundingClientRect();
@@ -698,10 +702,9 @@ s.updateSlidesProgress = function (translate) {
     s.slides.removeClass(s.params.slideVisibleClass);
     for (var i = 0; i < s.slides.length; i++) {
         var slide = s.slides[i];
-        var slideCenterOffset = (s.params.centeredSlides === true) ? slide.swiperSlideSize / 2 : 0;
-        var slideProgress = (offsetCenter - slide.swiperSlideOffset - slideCenterOffset) / (slide.swiperSlideSize + s.params.spaceBetween);
+        var slideProgress = (offsetCenter - slide.swiperSlideOffset) / (slide.swiperSlideSize + s.params.spaceBetween);
         if (s.params.watchSlidesVisibility) {
-            var slideBefore = -(offsetCenter - slide.swiperSlideOffset - slideCenterOffset);
+            var slideBefore = -(offsetCenter - slide.swiperSlideOffset);
             var slideAfter = slideBefore + s.slidesSizesGrid[i];
             var isVisible =
                 (slideBefore >= 0 && slideBefore < s.size) ||
@@ -1154,12 +1157,21 @@ s.onTouchStart = function (e) {
     if (s.params.swipeHandler) {
         if (!findElementInEvent(e, s.params.swipeHandler)) return;
     }
+
+    var startX = s.touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
+    var startY = s.touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+    
+    // Do NOT start if iOS edge swipe is detected. Otherwise iOS app (UIWebView) cannot swipe-to-go-back anymore
+    if(s.device.ios && s.params.iOSEdgeSwipeDetection && startX <= s.params.iOSEdgeSwipeThreshold) {
+        return;
+    }
+
     isTouched = true;
     isMoved = false;
     isScrolling = undefined;
     startMoving = undefined;
-    s.touches.startX = s.touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
-    s.touches.startY = s.touches.currentY = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
+    s.touches.startX = startX;
+    s.touches.startY = startY;
     touchStartTime = Date.now();
     s.allowClick = true;
     s.updateContainerSize();
@@ -1597,14 +1609,6 @@ s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
     if (s.snapIndex >= s.snapGrid.length) s.snapIndex = s.snapGrid.length - 1;
 
     var translate = - s.snapGrid[s.snapIndex];
-    
-    // Directions locks
-    if (!s.params.allowSwipeToNext && translate < s.translate && translate < s.minTranslate()) {
-        return false;
-    }
-    if (!s.params.allowSwipeToPrev && translate > s.translate && translate > s.maxTranslate()) {
-        return false;
-    }
 
     // Stop autoplay
     if (s.params.autoplay && s.autoplaying) {
@@ -1624,6 +1628,16 @@ s.slideTo = function (slideIndex, speed, runCallbacks, internal) {
             slideIndex = i;
         }
     }
+
+    // Directions locks
+    if (!s.params.allowSwipeToNext && translate < s.translate && translate < s.minTranslate()) {
+        return false;
+    }
+    if (!s.params.allowSwipeToPrev && translate > s.translate && translate > s.maxTranslate()) {
+        if ((s.activeIndex || 0) !== slideIndex ) return false;
+    }
+
+    // Update Index
     if (typeof speed === 'undefined') speed = s.params.speed;
     s.previousIndex = s.activeIndex || 0;
     s.activeIndex = slideIndex;
@@ -1867,6 +1881,9 @@ s.createLoop = function () {
     s.wrapper.children('.' + s.params.slideClass + '.' + s.params.slideDuplicateClass).remove();
 
     var slides = s.wrapper.children('.' + s.params.slideClass);
+
+    if(s.params.slidesPerView === 'auto' && !s.params.loopedSlides) s.params.loopedSlides = slides.length;
+
     s.loopedSlides = parseInt(s.params.loopedSlides || s.params.slidesPerView, 10);
     s.loopedSlides = s.loopedSlides + s.params.loopAdditionalSlides;
     if (s.loopedSlides > slides.length) {

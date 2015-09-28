@@ -29,6 +29,5 @@
   },
   "_source": "git://github.com/nrf110/deepmerge.git",
   "_target": "~0.2.10",
-  "_originalSource": "deepmerge",
-  "_direct": true
+  "_originalSource": "deepmerge"
 }

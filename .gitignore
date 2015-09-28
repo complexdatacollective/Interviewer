@@ -1,7 +1,6 @@
+bower_components/
 platforms/
 tmp/
-dist/
-build/
 buildTmp/
 .DS_Store
 app/npm-debug.log

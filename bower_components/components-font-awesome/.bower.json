@@ -10,6 +10,7 @@
     "scss/font-awesome.scss",
     "fonts/fontawesome-webfont.eot",
     "fonts/fontawesome-webfont.woff",
+    "fonts/fontawesome-webfont.woff2",
     "fonts/fontawesome-webfont.ttf",
     "fonts/fontawesome-webfont.svg"
   ],
@@ -23,12 +24,12 @@
     "composer.json"
   ],
   "homepage": "https://github.com/components/font-awesome",
-  "version": "4.3.0",
-  "_release": "4.3.0",
+  "version": "4.4.0",
+  "_release": "4.4.0",
   "_resolution": {
     "type": "version",
-    "tag": "4.3.0",
-    "commit": "73acf4d65eadd8d127bafc7bd510240ea3979e83"
+    "tag": "4.4.0",
+    "commit": "7dffacc72e566e5db6272244effc06f64fe9f185"
   },
   "_source": "git://github.com/components/font-awesome.git",
   "_target": "*",
