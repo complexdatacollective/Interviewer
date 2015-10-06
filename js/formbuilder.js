@@ -53,8 +53,24 @@ module.exports = function FormBuilder(formName) {
         deferredTasks = [];
     };
 
+    // show and hide methods
+    formBuilder.show = function() {
+        alert('show');
+        element.addClass('show');
+        $('.black-overlay').addClass('show');
+        $(element.attr('class')+' :input:visible:enabled:first').focus();
+    };
+
+    formBuilder.hide = function () {
+        element.removeClass('show');
+        $('.black-overlay').removeClass('show');
+        thisForm.reset();
+    };
+
+
     formBuilder.build = function(element, form) {
         thisForm = form;
+
         // Form options
         if (typeof form.heading !== 'undefined') {
             html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
@@ -270,6 +286,15 @@ module.exports = function FormBuilder(formName) {
                         thisForm.options.onSubmit(cleanData);
                     }
 
+                }
+            },
+            {
+                targetEl: $(window.document),
+                subTarget: $('#'+thisForm.options.buttons.cancel.id),
+                event: 'click',
+                handler: function() {
+                    note.debug('FormBuilder ['+name+']: Form cancelled.');
+                    thisForm.hide();
                 }
             },
             {

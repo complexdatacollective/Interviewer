@@ -1,4 +1,8 @@
 // sociogram
+input[type=checkbox] + label[for="context-checkbox-show"]:before {
+	font-size:inherit;
+}
+
 .sociogram-followup h2 {
 	margin-top: 0;
 }
@@ -38,18 +42,7 @@
 	border-radius: 10px;
 }
 
-.new-node-button {
-    height:8vmin;
-    width:8vmin;
-    line-height:8vmin;
-    background:@brand-danger;
-    position:absolute;
-    bottom:3.5vmin;
-    right: 5vmin;
-    border-radius:50%;
-}
-
-.context-panel {
+.details-panel {
     position: absolute;
     top: 3vmin;
     right: 3vmin;
@@ -61,7 +54,7 @@
 	transform: translateX(35vmin);
 }
 
-.context-panel.show {
+.details-panel.show {
 	transform: translateX(0);
 }
 

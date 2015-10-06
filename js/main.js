@@ -78,15 +78,26 @@ $(document).ready(function() {
 
     // Enable dev mode.
     if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+
+        // Set the debug level
         note.setLevel('info', false);
         note.info('Development mode enabled.');
+
+        // Set dev mode to true
         window.netCanvas.devMode = true;
+
+        // Show dev tools if we are in node webkit
         if (window.isNodeWebkit) {
             window.gui.Window.get().showDevTools();
         } else {
             // no way to show dev tools on web browser
         }
+
+        // Show the refresh button
         $('.refresh-button').show();
+
+        // Disable caching of AJAX requests
+        $.ajaxSetup({ cache: false });
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {

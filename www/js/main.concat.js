@@ -746,8 +746,24 @@ module.exports = function FormBuilder(formName) {
         deferredTasks = [];
     };
 
+    // show and hide methods
+    formBuilder.show = function() {
+        alert('show');
+        element.addClass('show');
+        $('.black-overlay').addClass('show');
+        $(element.attr('class')+' :input:visible:enabled:first').focus();
+    };
+
+    formBuilder.hide = function () {
+        element.removeClass('show');
+        $('.black-overlay').removeClass('show');
+        thisForm.reset();
+    };
+
+
     formBuilder.build = function(element, form) {
         thisForm = form;
+
         // Form options
         if (typeof form.heading !== 'undefined') {
             html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
@@ -963,6 +979,15 @@ module.exports = function FormBuilder(formName) {
                         thisForm.options.onSubmit(cleanData);
                     }
 
+                }
+            },
+            {
+                targetEl: $(window.document),
+                subTarget: $('#'+thisForm.options.buttons.cancel.id),
+                event: 'click',
+                handler: function() {
+                    note.debug('FormBuilder ['+name+']: Form cancelled.');
+                    thisForm.hide();
                 }
             },
             {
@@ -1520,15 +1545,26 @@ $(document).ready(function() {
 
     // Enable dev mode.
     if (args && typeof args.dev !== 'undefined' && args.dev !== false && args.dev !== 0) {
+
+        // Set the debug level
         note.setLevel('info', false);
         note.info('Development mode enabled.');
+
+        // Set dev mode to true
         window.netCanvas.devMode = true;
+
+        // Show dev tools if we are in node webkit
         if (window.isNodeWebkit) {
             window.gui.Window.get().showDevTools();
         } else {
             // no way to show dev tools on web browser
         }
+
+        // Show the refresh button
         $('.refresh-button').show();
+
+        // Disable caching of AJAX requests
+        $.ajaxSetup({ cache: false });
     } else {
         $('.refresh-button').hide();
         if (window.isNodeWebkit) {
@@ -4705,6 +4741,8 @@ module.exports = function Sociogram() {
 	var selectedHull = null;
 	var log;
 	var taskComprehended = false;
+	var showNewNodeCircle;
+	var newNodeCircleVisible = false;
 	var longPressTimer, tapTimer;
 	var touchNotTap = false;
 	var hullShapes = {};
@@ -4739,7 +4777,7 @@ module.exports = function Sociogram() {
 		// double tap - select mode
 		// long press - community mode
 		modes:['Edge', 'Community', 'Position', 'Select'], //edge - create edges, position - lay out, select - node attributes
-	    panels: ['mode', 'context'], // Mode - switch between modes, Context - convex hull drawing and labelling
+	    panels: ['mode', 'details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
 			defaultNodeSize: 35,
 			defaultNodeColor: 'white',
@@ -4748,7 +4786,8 @@ module.exports = function Sociogram() {
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',
 			concentricCircleNumber: 4,
-			concentricCircleSkew: false
+			concentricCircleSkew: false,
+			showMe: true
 		},
 		nodeTypes: [
 			{'name':'Person','color':colors.blue},
@@ -4825,6 +4864,8 @@ module.exports = function Sociogram() {
 	}
 
 	function addNodeHandler(e) {
+		console.log('addnodehandler');
+		console.log(e);
 		sociogram.addNode(e.detail);
 	}
 
@@ -4865,8 +4906,8 @@ module.exports = function Sociogram() {
 		sociogram.initKinetic();
 
 		// Panels
-		if (sociogram.settings.panels.indexOf('context') !== -1) {
-			$('<div class="context-panel show"><div class="context-header"><h4>'+sociogram.settings.dataOrigin.Community.name+'</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New Group</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+		if (sociogram.settings.panels.indexOf('details') !== -1) {
+			$('<div class="details-panel show"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
 		}
 
 		if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -5115,7 +5156,7 @@ module.exports = function Sociogram() {
 	        });
 			hullShapes[label] = hullShape;
 			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
-			$('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
+			// $('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
 	        hullLayer.add(hullShapes[label]);
 	        hullLayer.draw();
 
@@ -5249,16 +5290,16 @@ module.exports = function Sociogram() {
 					hullShapes[pointHulls[i]].setPoints(currentPoints);
 				}
 
-				// var tween = new Konva.Tween({
-				// 	node: hullShapes[pointHulls[i]],
-				// 	points: tweenPoints,
-				// 	duration: 1,
-				// 	onFinish: function(){
-				// 		tween.destroy();
-				// 	}
-				// }).play();
+				var tween = new Konva.Tween({
+					node: hullShapes[pointHulls[i]],
+					points: tweenPoints,
+					duration: 1,
+					onFinish: function(){
+						tween.destroy();
+					}
+				}).play();
 
-				hullShapes[pointHulls[i]].setPoints(tweenPoints);
+				// hullShapes[pointHulls[i]].setPoints(tweenPoints);
 			}
 
 			hullLayer.draw();
@@ -5270,8 +5311,8 @@ module.exports = function Sociogram() {
 
 	sociogram.addNode = function(options) {
 
-		note.debug('Sociogram is creating a node.');
-
+		note.info('Sociogram is creating a node.');
+		note.debug(options);
 		// Placeholder for getting the number of nodes we have.
 		var nodeShape;
 
@@ -5786,7 +5827,7 @@ module.exports = function Sociogram() {
 			});
 			edgeLayer.draw();
 
-			note.debug('dragend');
+			note.debug('Drag ended at x: '+this.attrs.x+' y: '+this.attrs.y);
 
 			// set the context
 			var from = {};
@@ -5984,7 +6025,7 @@ module.exports = function Sociogram() {
 			height: window.innerHeight
 		});
 
-		circleLayer = new Konva.FastLayer();
+		circleLayer = new Konva.Layer();
 		hullLayer = new Konva.FastLayer();
 		wedgeLayer = new Konva.FastLayer();
 		nodeLayer = new Konva.Layer();
@@ -6064,7 +6105,6 @@ module.exports = function Sociogram() {
 				x: window.innerWidth / 2,
 				y: window.innerHeight / 2,
 				radius: currentRadius,
-				transformsEnabled: 'none',
 				hitGraphEnabled: false,
 				stroke: 'white',
 				strokeWidth: 1.5,
@@ -6076,7 +6116,6 @@ module.exports = function Sociogram() {
 				y: (window.innerHeight / 2),
 				radius: currentRadius,
 				fill: currentColor,
-				transformsEnabled: 'none',
 				hitGraphEnabled: false,
 				opacity: currentOpacity,
 				strokeWidth: 0,
@@ -6087,6 +6126,68 @@ module.exports = function Sociogram() {
 			circleLayer.add(circleFills);
 			circleLayer.add(circleLines);
 
+		}
+
+		// Node container
+		var newNodeCircle = new Konva.Circle({
+			radius: 60,
+			transformsEnabled: 'none',
+			hitGraphEnabled: false,
+			stroke: 'white',
+			strokeWidth: 10
+		});
+
+		var newNodeText = new Konva.Text({
+			text: 'Unplaced Nodes',
+			align: 'center',
+			offset: {x:50,y:100},
+			fontSize: 15,
+			fontFamily: 'Helvetica',
+			fill: 'white'
+		 });
+
+		 var newNodeCircleGroup = new Konva.Group({
+			x: 200,
+ 			y: window.innerHeight / 2,
+		 });
+
+		newNodeCircleGroup.add(newNodeText);
+		newNodeCircleGroup.add(newNodeCircle);
+		circleLayer.add(newNodeCircleGroup);
+
+		showNewNodeCircle = new Konva.Tween({
+			node: newNodeCircleGroup,
+			opacity: 1,
+			duration: 1
+		});
+
+		// Draw 'me'
+		if (true) {
+			// var meGroup = new Konva.Group({
+			// 	x: window.innerWidth / 2,
+			// 	y: window.innerHeight / 2
+			// });
+
+			var meCircle = new Konva.Circle({
+				radius: 60,
+				x: window.innerWidth / 2,
+				y: window.innerHeight / 2,
+				hitGraphEnabled: false,
+				fill: '#D0D2DC',
+			});
+
+			var meText = new Konva.Text({
+				x: window.innerWidth / 2,
+				y: window.innerHeight / 2,
+				text: 'me',
+				align: 'center',
+				offset: {x:28,y:22},
+				fontSize: 40,
+				fontFamily: 'Helvetica',
+				fill: 'black'
+			 });
+			circleLayer.add(meCircle);
+			circleLayer.add(meText);
 		}
 
 		// draw wedgex
