@@ -60,7 +60,10 @@ module.exports = function FormBuilder(formName) {
         console.log(targetEl);
         targetEl.addClass('show');
         $('.black-overlay').addClass('show');
-        // $(element.attr('class')+' :input:visible:enabled:first').focus();
+        setTimeout(function() {
+            $('#'+$(html).attr('id')+' :input:visible:enabled:first').focus();
+        }, 500);
+
     };
 
     formBuilder.hide = function () {
