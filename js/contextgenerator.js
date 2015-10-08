@@ -96,13 +96,6 @@ module.exports = function ContextGenerator() {
 		// New context buttons
 		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 
-		event = [{
-			event: 'click',
-			handler: contextGenerator.showNewContextForm,
-			targetEl:  '.new-context-button'
-		}];
-		window.tools.Events.register(moduleEvents, event);
-
 		// New context form
 		$('body').append('<div class="new-context-form"></div>');
 		var newContextForm = new window.netCanvas.Modules.FormBuilder('newContextForm');
@@ -125,7 +118,7 @@ module.exports = function ContextGenerator() {
 						window.network.updateNode(window.network.getEgo().id, properties);
 						contextGenerator.addContext(data.name);
 						newContextForm.reset();
-						contextGenerator.hideNewContextForm();
+						newContextForm.hide();
 					} else {
 						newContextForm.showError('Error: the name you have chosen is already in use.');
 					}
@@ -143,13 +136,20 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
-							contextGenerator.hideNewContextForm();
 							newContextForm.reset();
+							newContextForm.hide();
 						}
 					}
 				}
 			}
 		});
+
+		event = [{
+			event: 'click',
+			handler: window.forms.newContextForm.show,
+			targetEl:  '.new-context-button'
+		}];
+		window.tools.Events.register(moduleEvents, event);
 
 		$('body').append('<div class="merge-context-form"></div>');
 		mergeContextForm = new window.netCanvas.Modules.FormBuilder('mergeContextForm');
@@ -200,15 +200,6 @@ module.exports = function ContextGenerator() {
 			}
 		});
 
-		window.forms.mergeContextForm.hide = function() {
-			window.forms.mergeContextForm.reset();
-			$('.merge-context-form, .black-overlay').removeClass('show');
-		};
-		window.forms.mergeContextForm.show = function() {
-			$('.merge-context-form, .black-overlay').addClass('show');
-
-		};
-
 		// Add existing data, if present
 		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
 			note.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
@@ -233,17 +224,6 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.hideBin = function() {
 		$('.contexthull-bin-footer').removeClass('show');
-	};
-
-	contextGenerator.showNewContextForm = function() {
-		$('.new-context-form, .black-overlay').addClass('show');
-		setTimeout(function() {
-			$('#name').focus();
-		}, 500);
-	};
-
-	contextGenerator.hideNewContextForm = function() {
-		$('.new-context-form, .black-overlay').removeClass('show');
 	};
 
 	contextGenerator.addExistingContexts = function() {

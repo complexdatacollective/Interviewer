@@ -12,7 +12,7 @@ module.exports = function Sociogram() {
 	var selectedHull = null;
 	var log;
 	var taskComprehended = false;
-	var showNewNodeCircle;
+	var newNodeCircleTween;
 	var newNodeCircleVisible = false;
 	var longPressTimer, tapTimer;
 	var touchNotTap = false;
@@ -1409,9 +1409,9 @@ module.exports = function Sociogram() {
 		});
 
 		var newNodeText = new Konva.Text({
-			text: 'Unplaced Nodes',
+			text: 'Need Positioning',
 			align: 'center',
-			offset: {x:50,y:100},
+			offset: {x:55,y:100},
 			fontSize: 15,
 			fontFamily: 'Helvetica',
 			fill: 'white'
@@ -1419,6 +1419,7 @@ module.exports = function Sociogram() {
 
 		 var newNodeCircleGroup = new Konva.Group({
 			x: 200,
+			opacity:0,
  			y: window.innerHeight / 2,
 		 });
 
@@ -1426,18 +1427,14 @@ module.exports = function Sociogram() {
 		newNodeCircleGroup.add(newNodeCircle);
 		circleLayer.add(newNodeCircleGroup);
 
-		showNewNodeCircle = new Konva.Tween({
+		newNodeCircleTween = new Konva.Tween({
 			node: newNodeCircleGroup,
 			opacity: 1,
 			duration: 1
 		});
 
 		// Draw 'me'
-		if (true) {
-			// var meGroup = new Konva.Group({
-			// 	x: window.innerWidth / 2,
-			// 	y: window.innerHeight / 2
-			// });
+		if (sociogram.settings.showMe === true) {
 
 			var meCircle = new Konva.Circle({
 				radius: 60,

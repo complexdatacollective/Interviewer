@@ -12277,7 +12277,7 @@ body {
 }
 @media (min-width: 1024px) {
   body {
-    font-size: 1.8vmin;
+    font-size: 1.6vmin;
   }
 }
 .not-listed {
@@ -13576,8 +13576,9 @@ fieldset[disabled] .btn-modal-danger.active {
 .refresh-button {
   position: absolute;
   z-index: 9999;
-  top: 20px;
-  right: 40px;
+  bottom: 20px;
+  right: 50%;
+  margin-right: -15px;
   cursor: pointer;
 }
 .btn-link:hover {

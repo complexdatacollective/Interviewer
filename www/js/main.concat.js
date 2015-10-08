@@ -96,13 +96,6 @@ module.exports = function ContextGenerator() {
 		// New context buttons
 		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 
-		event = [{
-			event: 'click',
-			handler: contextGenerator.showNewContextForm,
-			targetEl:  '.new-context-button'
-		}];
-		window.tools.Events.register(moduleEvents, event);
-
 		// New context form
 		$('body').append('<div class="new-context-form"></div>');
 		var newContextForm = new window.netCanvas.Modules.FormBuilder('newContextForm');
@@ -125,7 +118,7 @@ module.exports = function ContextGenerator() {
 						window.network.updateNode(window.network.getEgo().id, properties);
 						contextGenerator.addContext(data.name);
 						newContextForm.reset();
-						contextGenerator.hideNewContextForm();
+						newContextForm.hide();
 					} else {
 						newContextForm.showError('Error: the name you have chosen is already in use.');
 					}
@@ -143,13 +136,20 @@ module.exports = function ContextGenerator() {
 						type: 'button',
 						class: 'btn-default',
 						action: function() {
-							contextGenerator.hideNewContextForm();
 							newContextForm.reset();
+							newContextForm.hide();
 						}
 					}
 				}
 			}
 		});
+
+		event = [{
+			event: 'click',
+			handler: window.forms.newContextForm.show,
+			targetEl:  '.new-context-button'
+		}];
+		window.tools.Events.register(moduleEvents, event);
 
 		$('body').append('<div class="merge-context-form"></div>');
 		mergeContextForm = new window.netCanvas.Modules.FormBuilder('mergeContextForm');
@@ -200,15 +200,6 @@ module.exports = function ContextGenerator() {
 			}
 		});
 
-		window.forms.mergeContextForm.hide = function() {
-			window.forms.mergeContextForm.reset();
-			$('.merge-context-form, .black-overlay').removeClass('show');
-		};
-		window.forms.mergeContextForm.show = function() {
-			$('.merge-context-form, .black-overlay').addClass('show');
-
-		};
-
 		// Add existing data, if present
 		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
 			note.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
@@ -233,17 +224,6 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.hideBin = function() {
 		$('.contexthull-bin-footer').removeClass('show');
-	};
-
-	contextGenerator.showNewContextForm = function() {
-		$('.new-context-form, .black-overlay').addClass('show');
-		setTimeout(function() {
-			$('#name').focus();
-		}, 500);
-	};
-
-	contextGenerator.hideNewContextForm = function() {
-		$('.new-context-form, .black-overlay').removeClass('show');
 	};
 
 	contextGenerator.addExistingContexts = function() {
@@ -703,6 +683,7 @@ module.exports = function FormBuilder(formName) {
     var moduleEvents = [];
     var deferredTasks = [];
     var formFields;
+    var targetEl;
     var name = formName ? formName : 'Default';
     window.forms = window.forms || {};
     window.forms[name] = formBuilder;
@@ -748,22 +729,24 @@ module.exports = function FormBuilder(formName) {
 
     // show and hide methods
     formBuilder.show = function() {
-        alert('show');
-        element.addClass('show');
+        note.debug('FormBuilder ['+name+']: show.');
+        console.log(targetEl);
+        targetEl.addClass('show');
         $('.black-overlay').addClass('show');
-        $(element.attr('class')+' :input:visible:enabled:first').focus();
+        // $(element.attr('class')+' :input:visible:enabled:first').focus();
     };
 
     formBuilder.hide = function () {
-        element.removeClass('show');
+        note.debug('FormBuilder ['+name+']: hide.');
+        targetEl.removeClass('show');
         $('.black-overlay').removeClass('show');
-        thisForm.reset();
+        $(thisForm).trigger('reset');
     };
 
 
     formBuilder.build = function(element, form) {
         thisForm = form;
-
+        targetEl = element;
         // Form options
         if (typeof form.heading !== 'undefined') {
             html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
@@ -981,15 +964,15 @@ module.exports = function FormBuilder(formName) {
 
                 }
             },
-            {
-                targetEl: $(window.document),
-                subTarget: $('#'+thisForm.options.buttons.cancel.id),
-                event: 'click',
-                handler: function() {
-                    note.debug('FormBuilder ['+name+']: Form cancelled.');
-                    thisForm.hide();
-                }
-            },
+            // {
+            //     targetEl: $(window.document),
+            //     subTarget: $('#'+thisForm.options.buttons.cancel.id),
+            //     event: 'click',
+            //     handler: function() {
+            //         note.debug('FormBuilder ['+name+']: Form cancelled.');
+            //         formBuilder.hide();
+            //     }
+            // },
             {
                 targetEl: $('input'),
                 event: 'change paste keyup',
@@ -4741,7 +4724,7 @@ module.exports = function Sociogram() {
 	var selectedHull = null;
 	var log;
 	var taskComprehended = false;
-	var showNewNodeCircle;
+	var newNodeCircleTween;
 	var newNodeCircleVisible = false;
 	var longPressTimer, tapTimer;
 	var touchNotTap = false;
@@ -6138,9 +6121,9 @@ module.exports = function Sociogram() {
 		});
 
 		var newNodeText = new Konva.Text({
-			text: 'Unplaced Nodes',
+			text: 'Need Positioning',
 			align: 'center',
-			offset: {x:50,y:100},
+			offset: {x:55,y:100},
 			fontSize: 15,
 			fontFamily: 'Helvetica',
 			fill: 'white'
@@ -6148,6 +6131,7 @@ module.exports = function Sociogram() {
 
 		 var newNodeCircleGroup = new Konva.Group({
 			x: 200,
+			opacity:0,
  			y: window.innerHeight / 2,
 		 });
 
@@ -6155,18 +6139,14 @@ module.exports = function Sociogram() {
 		newNodeCircleGroup.add(newNodeCircle);
 		circleLayer.add(newNodeCircleGroup);
 
-		showNewNodeCircle = new Konva.Tween({
+		newNodeCircleTween = new Konva.Tween({
 			node: newNodeCircleGroup,
 			opacity: 1,
 			duration: 1
 		});
 
 		// Draw 'me'
-		if (true) {
-			// var meGroup = new Konva.Group({
-			// 	x: window.innerWidth / 2,
-			// 	y: window.innerHeight / 2
-			// });
+		if (sociogram.settings.showMe === true) {
 
 			var meCircle = new Konva.Circle({
 				radius: 60,

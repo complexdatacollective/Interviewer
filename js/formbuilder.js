@@ -10,6 +10,7 @@ module.exports = function FormBuilder(formName) {
     var moduleEvents = [];
     var deferredTasks = [];
     var formFields;
+    var targetEl;
     var name = formName ? formName : 'Default';
     window.forms = window.forms || {};
     window.forms[name] = formBuilder;
@@ -55,22 +56,24 @@ module.exports = function FormBuilder(formName) {
 
     // show and hide methods
     formBuilder.show = function() {
-        alert('show');
-        element.addClass('show');
+        note.debug('FormBuilder ['+name+']: show.');
+        console.log(targetEl);
+        targetEl.addClass('show');
         $('.black-overlay').addClass('show');
-        $(element.attr('class')+' :input:visible:enabled:first').focus();
+        // $(element.attr('class')+' :input:visible:enabled:first').focus();
     };
 
     formBuilder.hide = function () {
-        element.removeClass('show');
+        note.debug('FormBuilder ['+name+']: hide.');
+        targetEl.removeClass('show');
         $('.black-overlay').removeClass('show');
-        thisForm.reset();
+        $(thisForm).trigger('reset');
     };
 
 
     formBuilder.build = function(element, form) {
         thisForm = form;
-
+        targetEl = element;
         // Form options
         if (typeof form.heading !== 'undefined') {
             html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
@@ -288,15 +291,15 @@ module.exports = function FormBuilder(formName) {
 
                 }
             },
-            {
-                targetEl: $(window.document),
-                subTarget: $('#'+thisForm.options.buttons.cancel.id),
-                event: 'click',
-                handler: function() {
-                    note.debug('FormBuilder ['+name+']: Form cancelled.');
-                    thisForm.hide();
-                }
-            },
+            // {
+            //     targetEl: $(window.document),
+            //     subTarget: $('#'+thisForm.options.buttons.cancel.id),
+            //     event: 'click',
+            //     handler: function() {
+            //         note.debug('FormBuilder ['+name+']: Form cancelled.');
+            //         formBuilder.hide();
+            //     }
+            // },
             {
                 targetEl: $('input'),
                 event: 'change paste keyup',
