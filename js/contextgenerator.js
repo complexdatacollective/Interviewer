@@ -9,6 +9,12 @@ module.exports = function ContextGenerator() {
 	var promptSwiper;
 	var currentPrompt = 0;
 	var mergeContextForm;
+	var temporaryFields = {
+		contexts: {
+			title: 'contexts',
+			type: 'hidden'
+		}
+	};
 
 	contextGenerator.options = {
 		targetEl: $('.container'),
@@ -25,6 +31,9 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.destroy = function() {
 		note.info('Context generator destroyed.');
+
+		window.forms.nameGenForm.removeFields(temporaryFields);
+
 		promptSwiper.destroy();
 		$('.new-context-form').remove();
 		$('.merge-context-form').remove();
@@ -37,6 +46,10 @@ module.exports = function ContextGenerator() {
 
 	contextGenerator.init = function(options) {
 		note.info('Context generator initialised.');
+
+		// Add temporary fields to newNodeForm
+		window.forms.nameGenForm.addFields(temporaryFields);
+
 		window.tools.extend(contextGenerator.options, options);
 		// Events
 		var event = [{
@@ -213,7 +226,15 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
-		note.debug('adding node to context');
+		// fix the context variable as an array.
+		var contextArray = [];
+		contextArray.push(node.contexts);
+		window.network.updateNode(node.id, {contexts: contextArray});
+		console.log(node.id+' updated');
+
+
+		note.debug('contextGenerator: adding node to context');
+		note.debug(node);
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
@@ -392,12 +413,19 @@ module.exports = function ContextGenerator() {
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
 				event: 'click',
-				handler: contextGenerator.openNewNodeForm,
+				handler: contextGenerator.showNewNodeForm,
 				targetEl:  '[data-context="'+name+'"]'
 			}];
 			window.tools.Events.register(moduleEvents, event);
 		}
 
+	};
+
+	contextGenerator.showNewNodeForm = function() {
+		var target = $(this).data('context');
+		console.log(target);
+		window.forms.nameGenForm.addData({contexts: target});
+		window.forms.nameGenForm.show();
 	};
 
 	contextGenerator.openNewNodeForm = function() {

@@ -15,6 +15,7 @@ module.exports = function Sociogram() {
 	var newNodeCircleTween;
 	var nodesWithoutPositions = 0;
 	var newNodeCircleVisible = false;
+	var hullsShown = false;
 	var longPressTimer, tapTimer;
 	var touchNotTap = false;
 	var hullShapes = {};
@@ -145,16 +146,6 @@ module.exports = function Sociogram() {
 		sociogram.addEdge(e.detail);
 	}
 
-	function showHullHandler(e) {
-		if (e && e.target.checked) {
-			hullLayer.opacity(1);
-		} else {
-			hullLayer.opacity(0);
-		}
-
-		hullLayer.draw();
-	}
-
 	function hullListClickHandler(e) {
 		var clicked = $(e.target).closest('li');
 		clicked.addClass('active');
@@ -254,18 +245,30 @@ module.exports = function Sociogram() {
 			window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 			window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 			window.addEventListener('changeStageStart', sociogram.destroy, false);
-			$(window.document).on('change', '#context-checkbox-show', showHullHandler);
+			$(window.document).on('change', '#context-checkbox-show', sociogram.toggleHulls);
 			$(window.document).on('click', '.hull', hullListClickHandler);
 			$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
 
 
 			// Hide the hulls initially
-			showHullHandler();
+			sociogram.toggleHulls();
 
 			// Update initial states of all nodes and edges;
 			sociogram.updateInitialNodeState();
 
 		});
+	};
+
+	sociogram.toggleHulls = function(e) {
+		if ((e && e.target.checked) || hullsShown === false) {
+			hullLayer.opacity(1);
+			hullsShown = true;
+		} else {
+			hullLayer.opacity(0);
+			hullsShown = false;
+		}
+
+		hullLayer.draw();
 	};
 
 	sociogram.updateInitialNodeState = function() {
@@ -398,7 +401,7 @@ module.exports = function Sociogram() {
 		window.removeEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.removeEventListener('changeStageStart', sociogram.destroy, false);
 		$(window.document).off('keypress', sociogram.keyPressHandler);
-		$(window.document).off('change', '#context-checkbox-show', showHullHandler);
+		$(window.document).off('change', '#context-checkbox-show', sociogram.toggleHulls);
 
 	};
 
@@ -1374,7 +1377,7 @@ module.exports = function Sociogram() {
 			$('#'+sociogram.settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 			var events = [{
 				event: 'click',
-				handler: window.nameGenForm.show,
+				handler: window.forms.nameGenForm.show,
 				targetEl:  '.new-node-button'
 			}];
 			window.tools.Events.register(moduleEvents, events);

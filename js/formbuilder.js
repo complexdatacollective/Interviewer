@@ -91,6 +91,7 @@ module.exports = function FormBuilder(formName) {
         // Form fields
         formFields = '<div class="form-fields"></div>';
         formBuilder.addFields(form.fields);
+
         html = $(html).append(formFields);
 
         // Buttons
@@ -106,6 +107,7 @@ module.exports = function FormBuilder(formName) {
             note.debug('Formbuilder ['+name+'] outputting to jQuery object.');
             // Write to DOM
             html = $(html).uniqueId();
+            thisForm.id = $(html).prop('id');
             element.append(html);
             formBuilder.addEvents();
             // Data population
@@ -117,6 +119,7 @@ module.exports = function FormBuilder(formName) {
             note.debug('Formbuilder ['+name+'] outputting HTML.');
             // return the html for the form
             html = $(html).uniqueId();
+            thisForm.id = $(html).prop('id');
             return html;
         } else {
             throw new Error('Formbuilder ['+name+'] didn\'t understand the intended output destination of the build method.');
@@ -127,24 +130,25 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.addFields = function(fields) {
+
         $.each(fields, function(formIndex, formValue) {
             if (!formBuilder.fieldExists(formIndex)) {
                 var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
                 var placeholder = formValue.placeholder? formValue.placeholder : '';
                 var required = formValue.required? 'required' : '';
 
-                if (formValue.type === 'string') {
+                if (formValue.type === 'string' || formValue.type === 'hidden') {
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
-                    if (typeof formValue.title !== 'undefined') {
+                    if (typeof formValue.title !== 'undefined' && formValue.type !== 'hidden') {
                         variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     }
 
-                    variableComponent = '<input type="text" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
+                    variableComponent = '<input type="'+formValue.type+'" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
-                } else if (formValue.type === 'hidden') {
-                    variableComponent = '<input type="hidden" id="'+formIndex+'" name="'+formIndex+'" autocomplete="off" '+required+'>';
-                    formFields = $(formFields).append(variableComponent);
+                // } else if (formValue.type === 'hidden') {
+                //     variableComponent = '<input type="hidden" id="'+formIndex+'" name="'+formIndex+'" autocomplete="off" '+required+'>';
+                //     formFields = $(formFields).append(variableComponent);
                 } else if (formValue.type === 'number') {
 
                     // Create component container
@@ -245,13 +249,27 @@ module.exports = function FormBuilder(formName) {
         });
     };
 
+    formBuilder.removeFields = function(fields) {
+        $.each(fields, function(fieldIndex) {
+            formBuilder.removeField(fieldIndex);
+        });
+    };
+
     formBuilder.removeField = function(id) {
         $('[data-component="'+id+'"]').remove();
     };
 
     formBuilder.fieldExists = function(id) {
-        if ($(html).find('[data-component="'+id+'"]').length > 0) {
+        if ($('#'+thisForm.id).find('#'+id).length > 0) {
             return true;
+        } else {
+            return false;
+        }
+    };
+
+    formBuilder.fieldType = function(id) {
+        if (formBuilder.fieldExists(id)) {
+            return $($('#'+thisForm.id).find('#'+id)[0]).prop('type');
         } else {
             return false;
         }
@@ -344,10 +362,11 @@ module.exports = function FormBuilder(formName) {
 
         $.each(data, function(dataIndex, dataValue) {
             console.log(dataIndex);
-            if (thisForm.fields[dataIndex] !== undefined) {
-                if (thisForm.fields[dataIndex].type === 'string' || thisForm.fields[dataIndex].type === 'email' || thisForm.fields[dataIndex].type === 'number' || thisForm.fields[dataIndex].type === 'hidden') {
+            if (formBuilder.fieldExists(dataIndex)) {
+                var currentType = formBuilder.fieldType(dataIndex);
+                if (currentType === 'string' || currentType === 'email' || currentType === 'number' || currentType === 'hidden') {
                     $(html).find('#'+dataIndex).val(dataValue);
-                } else if (thisForm.fields[dataIndex].type === 'slider') {
+                } else if (currentType === 'slider') {
                     var dataValueArray = dataValue.split(',').map(Number);
                     if (dataValueArray.length>1) {
                         $(html).find('#'+dataIndex).val(dataValue);
@@ -356,11 +375,11 @@ module.exports = function FormBuilder(formName) {
                         $(html).find('#'+dataIndex).val(dataValue[0]);
                         $(html).find('#'+dataIndex).bootstrapSlider({min: 0, max: 100, value: dataValue[0] });
                     }
-                } else if (thisForm.fields[dataIndex].type === 'textarea') {
+                } else if (currentType === 'textarea') {
                     $(html).find('#'+dataIndex).html(dataValue);
-                } else if (thisForm.fields[dataIndex].type === 'radio') {
+                } else if (currentType === 'radio') {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
-                } else if (thisForm.fields[dataIndex].type === 'checkbox') {
+                } else if (currentType === 'checkbox') {
 
                     // If single value, use directly
                     if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
