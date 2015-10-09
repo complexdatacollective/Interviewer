@@ -144,6 +144,7 @@ module.exports = function Network() {
 
     network.edgeExists = function(edge) {
         note.debug('network.edgeExists() called.');
+        note.debug(edge);
         if (typeof edge === 'undefined') {
             note.error('ERROR: No edge passed to network.edgeExists().');
             return false;
@@ -177,32 +178,25 @@ module.exports = function Network() {
             note.error('Error while executing network.addEdge(). "To" and "From" must BOTH be defined.');
             return false;
         }
-
-        if (properties.id !== 'undefined' && network.getEdge(properties.id) !== false) {
-            note.warn('An edge with this id already exists! I\'m generating a new one for you.');
-
-            var newEdgeID = 0;
-            while (network.getEdge(newEdgeID) !== false) {
-                newEdgeID++;
-            }
-
-            properties.id = newEdgeID;
-        }
-
-        var position = 0;
-        while(network.getEdge(position) !== false) {
-            position++;
-        }
-
         // Required variables (id and type) generated here. These are overwritten as long as the values have been provided.
         var edgeProperties = {
-            id: position,
             type: 'Default'
         };
 
         window.tools.extend(edgeProperties, properties);
 
         if(network.edgeExists(edgeProperties) === false) {
+
+            if (edgeProperties.id === 'undefined' || network.getEdge(edgeProperties.id) !== false) {
+                note.warn('Either you didn\'t provide an ID, or an edge with this id already exists! I\'m generating a new one for you.');
+
+                var newEdgeID = 0;
+                while (network.getEdge(newEdgeID) !== false) {
+                    newEdgeID++;
+                }
+
+                edgeProperties.id = newEdgeID;
+            }
 
             edges.push(edgeProperties);
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
@@ -214,7 +208,6 @@ module.exports = function Network() {
 
             return edgeProperties.id;
         } else {
-            note.warn('Warning: Proposed edge already exists. Cancelling.');
             return false;
         }
 

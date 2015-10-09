@@ -1136,9 +1136,8 @@ module.exports = function Sociogram() {
 						to: selectedNodes[1].attrs.to,
 						type: sociogram.settings.edgeType
 					};
-
-					edgeProperties[sociogram.settings.variables[0]] = 'perceived';
-
+					console.log('EDGE PROPS');
+					console.log(edgeProperties);
 
 					if (sociogram.settings.network.edgeExists(edgeProperties) === true) {
 						note.debug('Sociogram removing edge.');
@@ -1234,12 +1233,14 @@ module.exports = function Sociogram() {
 									edgeProperties[value.name] = value.value;
 								});
 
+								console.log('PROPS');
+								console.log(edgeProperties);
 								// Try adding the edge. If it returns fals, it already exists, so remove it.
 								if (sociogram.settings.network.addEdge(edgeProperties) === false) {
-									window.tools.notify('Sociogram removing edge.',2);
+									note.debug('Sociogram removing edge.',2);
 									sociogram.settings.network.removeEdge(sociogram.settings.network.getEdges(edgeProperties));
 								} else {
-									window.tools.notify('Sociogram adding edge.',2);
+									note.debug('Sociogram added edge.',2);
 								}
 
 								// Empty the selected nodes array and draw the layer.
@@ -1353,8 +1354,10 @@ module.exports = function Sociogram() {
 
 		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== sociogram.settings.network.getEgo().id) {
 			// We have been called by an event
+			console.log('called by event');
 			properties = properties.detail;
 		} else if (typeof properties.from !== 'undefined' && typeof properties.to !== 'undefined' && properties.from !== sociogram.settings.network.getEgo().id) {
+			console.log('called by method');
 			// We have been called by another sociogram method
 			properties = properties;
 		} else {
@@ -1394,7 +1397,7 @@ module.exports = function Sociogram() {
 			edgeLayer.draw();
 		},0);
 		nodeLayer.draw();
-		note.debug('Created Edge between '+fromObject.label+' and '+toObject.label);
+		note.debug('Created Edge between '+fromObject.attrs.label+' and '+toObject.attrs.label);
 
 		return true;
 
