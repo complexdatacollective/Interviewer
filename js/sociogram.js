@@ -173,7 +173,7 @@ module.exports = function Sociogram() {
 
 			// Panels
 			if (sociogram.settings.panels.indexOf('details') !== -1) {
-				$('<div class="details-panel"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+				$('<div class="details-panel show"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
 			}
 
 			if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -260,10 +260,13 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.toggleHulls = function(e) {
+		note.info('Sociogram: toggleHulls()');
 		if ((e && e.target.checked) || hullsShown === false) {
+			note.debug('showing hulls');
 			hullLayer.opacity(1);
 			hullsShown = true;
 		} else {
+			console.log('bummer');
 			hullLayer.opacity(0);
 			hullsShown = false;
 		}
@@ -406,6 +409,7 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addHull = function(label) {
+		note.info('Sociogram.addHull ['+label+']');
 		// ignore groups that already exist
 		label = label ? label : 'New Group '+$('li[data-hull]').length;
 		if (typeof hullShapes[label] === 'undefined') {
@@ -544,36 +548,36 @@ module.exports = function Sociogram() {
 				// hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
 
 				var tweenPoints = toPointFromObject(newHull.getHull());
-
-				// check if more points than currently exist
-				if (tweenPoints.length > hullShapes[pointHulls[i]].getPoints().length) {
-					// We need a add a new point which can then be animated
-					// We calculate which of the existing points is closest, then duplicate it
-					var currentPoints = hullShapes[pointHulls[i]].getPoints();
-					var closest = '';
-					var distance = 0;
-					var newPointPos = [point.getPosition().x, point.getPosition().y];
-					for (var k = 0; k < currentPoints.length; k+=2) {
-						if(window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos) > distance) {
-							distance = window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos);
-							closest = [currentPoints[k], currentPoints[k+1]];
-						}
-					}
-					currentPoints.push(closest[0]);
-					currentPoints.push(closest[1]);
-					hullShapes[pointHulls[i]].setPoints(currentPoints);
-				}
-
-				var tween = new Konva.Tween({
-					node: hullShapes[pointHulls[i]],
-					points: tweenPoints,
-					duration: 1,
-					onFinish: function(){
-						tween.destroy();
-					}
-				}).play();
-
-				// hullShapes[pointHulls[i]].setPoints(tweenPoints);
+				//
+				// // check if more points than currently exist
+				// if (tweenPoints.length > hullShapes[pointHulls[i]].getPoints().length) {
+				// 	// We need a add a new point which can then be animated
+				// 	// We calculate which of the existing points is closest, then duplicate it
+				// 	var currentPoints = hullShapes[pointHulls[i]].getPoints();
+				// 	var closest = '';
+				// 	var distance = 0;
+				// 	var newPointPos = [point.getPosition().x, point.getPosition().y];
+				// 	for (var k = 0; k < currentPoints.length; k+=2) {
+				// 		if(window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos) > distance) {
+				// 			distance = window.tools.euclideanDistance([currentPoints[k], currentPoints[k+1]], newPointPos);
+				// 			closest = [currentPoints[k], currentPoints[k+1]];
+				// 		}
+				// 	}
+				// 	currentPoints.push(closest[0]);
+				// 	currentPoints.push(closest[1]);
+				// 	hullShapes[pointHulls[i]].setPoints(currentPoints);
+				// }
+				//
+				// // var tween = new Konva.Tween({
+				// // 	node: hullShapes[pointHulls[i]],
+				// // 	points: tweenPoints,
+				// // 	duration: 1,
+				// // 	onFinish: function(){
+				// // 		tween.destroy();
+				// // 	}
+				// // }).play();
+				//
+				hullShapes[pointHulls[i]].setPoints(tweenPoints);
 			}
 
 			hullLayer.draw();

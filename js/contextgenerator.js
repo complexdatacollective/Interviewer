@@ -226,13 +226,17 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addNodeToContext = function(node) {
+		note.info('contextGenerator.addNodeToContext():'+node.first_name);
 		// fix the context variable as an array.
-		var contextArray = [];
-		contextArray.push(node.contexts);
-		window.network.updateNode(node.id, {contexts: contextArray});
-		console.log(node.id+' updated');
-
-
+		if (typeof node.contexts !== 'object') {
+			var contextArray = [];
+			contextArray.push(node.contexts);
+			var updateNode = window.network.getNode(node.id);
+			updateNode.contexts = contextArray;
+			window.netCanvas.Modules.session.saveData();
+			console.log(node.id+' updated');
+		}
+		
 		note.debug('contextGenerator: adding node to context');
 		note.debug(node);
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
@@ -248,7 +252,7 @@ module.exports = function ContextGenerator() {
 	};
 
 	contextGenerator.addExistingContexts = function() {
-
+		note.info('contextGenerator.addExistingContexts()');
 		// First, we create a super array of all unique items across all variable arrays.
 		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
 
@@ -256,7 +260,7 @@ module.exports = function ContextGenerator() {
 			contextGenerator.addContext(value);
 		});
 
-		// Add any nodes to the contexts
+		// Add any nodes to the contexts (filter to ignore ego)
 		var nodes = window.network.getNodes({}, function (results) {
 			var filteredResults = [];
 			$.each(results, function(index,value) {
@@ -267,9 +271,15 @@ module.exports = function ContextGenerator() {
 
 			return filteredResults;
 		});
+
 		$.each(nodes, function(nodeIndex, nodeValue) {
+			console.log(nodeIndex);
+			console.log(nodeValue);
 			// only deal with nodes that have a single context. is this right?
 			if (typeof nodeValue[contextGenerator.options.nodeDestination] !== 'undefined' && nodeValue[contextGenerator.options.nodeDestination].length === 1) {
+				alert(nodeValue.first_name);
+				alert(nodeValue[contextGenerator.options.nodeDestination].length);
+				console.log(contexts);
 				// Check if the context exists
 				if (contexts.indexOf(nodeValue[contextGenerator.options.nodeDestination][0] !== -1)) {
 					contextGenerator.addNodeToContext(nodeValue);
