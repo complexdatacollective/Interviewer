@@ -1475,7 +1475,7 @@ module.exports = function Sociogram() {
 
 
 			// Draw 'me'
-			if (sociogram.settings.showMe === true) {
+			if (sociogram.settings.options.showMe === true) {
 
 				var meCircle = new Konva.Circle({
 					radius: 60,
