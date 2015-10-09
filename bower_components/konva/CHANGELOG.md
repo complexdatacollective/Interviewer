@@ -4,13 +4,50 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Not released][Not released]
 
+### Added
+- RGBA filter. Thanks to [@codefo](https://github.com/codefo)
+
+### Fixed
+- Correct calculation in `getClientRect` method of `Konva.Line` and `Konva.Container`.
+- Correct `toObject()` behaviour for node with attrs with extended native prototypes
+- Fixed bug for caching where buffer canvas is required
+
+### Changed
+- Dragging now works much better. If your pointer is out of stage content dragging will still continue.
+- `Konva.Node.create` not works with objects.
+- `Konva.Tween` now supports tweening points to state with different length
+
+## [0.9.5][2015-05-28]
+
 ### Fixed
 - `to` don't throw error if no `onFinish` callback
+- HDPI support for desktop
+- Fix bug when filters are not correct for HDPI
+- Fix bug when hit area is not correct for HDPI
+- Fix bug for incorrect `getClientRect` calculation
+- Repair fill gradient for text
 
 ### Changed
 - context wrapper is more capable with native context.
-  So you can use `context.fillStyle` in your `sceneFunc` without accessing native context.
-  
+  So you can use `context.fillStyle` property in your `sceneFunc` without accessing native context.
+- `toDataURL` now handle pixelRatio. you can pass `config.pixelRatio` argument
+- Correct `clone()` for custom nodes
+- `FastLayer` now can have transforms
+- `stage.toDataURL()` method now works in synchronous way. So `callback` argument is not required.
+- `container.find(selector)` method now have validation step. So if you forgot to add `#` or `.` you will see a warning message in the console.
+
+### Added
+- new `Konva.Image.fromURL` method
+
+### Deprecated
+- `fillRed`, `fillGreen`, `fillBlue`, `fillAlpha` are deprecated. Use `fill` instead.
+- `strokeRed`, `strokeGreen`, `strokeBlue`, `strokeAlpha` are deprecated. Use `stroke` instead.
+- `shadowRed`, `shadowGreen`, `shadowBlue`, `shadowAlpha` are deprecated. Use `shadow` instead.
+- `dashArray` is deprecated. Use `dash` instead.
+- `drawFunc` is deprecated. Use `sceneFunc` instead.
+- `drawHitFunc` is deprecated. Use `hitFunc` instead.
+- `rotateDeg` is deprecated. Use `rotate` instead.
+
 
 ## [0.9.0][2015-02-27]
 
@@ -31,7 +68,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - new `shadowForStrokeEnabled` property for shape. See [http://konvajs.github.io/docs/performance/All_Performance_Tips.html](http://konvajs.github.io/docs/performance/All_Performance_Tips.html)
 - new `getClientRect` method.
 - new `to` method for every nodes for shorter tweening
-    
+
 ## [0.8.0] - 2015-02-04
 
 * Bug Fixes
@@ -57,7 +94,7 @@ Differents from last official `KineticJS` release
     * Correct mouseover/mouseout/mouseenter/mouseleave events for groups
     * cache node before adding to layer
     * `intersects` function now works for shapes with shadow
-    
+
 * Enhancements
     * `cornerRadius` of Rect is limited by `width/2` and `height/2`
     * `black` is default fill for text
@@ -77,4 +114,3 @@ Differents from last official `KineticJS` release
     * new Arrow plugin
     * multiple names: `node.name('foo bar'); container.find('.foo');` (thanks [@mattslocum](https://github.com/mattslocum))
     * `Container.findOne()`
-    
