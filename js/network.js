@@ -301,7 +301,8 @@ module.exports = function Network() {
     };
 
     network.updateNode = function(id, properties, callback) {
-        note.debug('network.updateNode() called.');
+        note.info('network.updateNode() called.');
+        note.debug(properties);
 
         if(this.getNode(id) === false || properties === undefined) {
             return false;
