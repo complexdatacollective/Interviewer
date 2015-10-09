@@ -1,7 +1,57 @@
 // sociogram
-input[type=checkbox] + label[for="context-checkbox-show"]:before {
-	font-size:inherit;
+label[for="context-checkbox-show"] {
+	position:absolute;
+	right: 160px;
+    bottom: 170px;
+	color: rgba(255,255,255,0);
+	transition: color 1s ease;
 }
+
+label.show[for="context-checkbox-show"] {
+	color: rgba(255,255,255,1);
+}
+
+
+label[for="context-checkbox-show"]:before {
+	font-size:inherit;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+/*** custom checkboxes ***/
+input.show-contexts-checkbox[type=checkbox] {
+	display: none;
+} /* to hide the checkbox itself */
+
+input.show-contexts-checkbox[type=checkbox] + label:before {
+	font-family: FontAwesome;
+	display: inline-block;
+	cursor: pointer;
+	pointer-events: all;
+    font-size: 6.5vmin;
+}
+
+input.show-contexts-checkbox[type=checkbox] + label:before {
+	content: '\f070';
+} /* unchecked icon */
+input.show-contexts-checkbox[type=checkbox] + label:before {
+	letter-spacing: 10px;
+	position: absolute;
+	right: -108px;
+	bottom: -29px;
+	color: rgba(255,255,255,1);
+} /* space between checkbox and label */
+
+input.show-contexts-checkbox[type=checkbox]:checked + label:before {
+	content: '\f06e';
+	color: @brand-primary;
+} /* checked icon */
+input.show-contexts-checkbox[type=checkbox]:checked + label:before {
+	letter-spacing: 10px;
+} /* allow space for check mark */
+
+
 
 .sociogram-followup h2 {
 	margin-top: 0;

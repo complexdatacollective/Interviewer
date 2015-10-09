@@ -171,9 +171,12 @@ module.exports = function Sociogram() {
 		// Draw ui compoennts
 		sociogram.drawUIComponents(function() {
 
+			// Show hulls checkbox
+			$('#'+sociogram.settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
+
 			// Panels
 			if (sociogram.settings.panels.indexOf('details') !== -1) {
-				$('<div class="details-panel show"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div> <div class="pull-right"><input type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Show</label></div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+				$('<div class="details-panel show"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div></div></div>').appendTo('#'+sociogram.settings.targetEl);
 			}
 
 			if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -436,6 +439,7 @@ module.exports = function Sociogram() {
 			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
 			// $('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
 	        hullLayer.add(hullShapes[label]);
+			hullLayer.opacity(0);
 	        hullLayer.draw();
 
 			// If the data origin is ego, also add the new hull to ego
