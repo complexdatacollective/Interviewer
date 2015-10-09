@@ -101,7 +101,7 @@ module.exports = function (grunt) {
                 src: [
                     'js/*.js'
                 ],
-                dest: '<%= config.app %>/js/main.concat.js'
+                dest: '<%= config.app %>/js/main.min.js'
             },
         },
         uglify: {

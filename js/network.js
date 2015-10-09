@@ -161,8 +161,10 @@ module.exports = function Network() {
         var reverseExists = (network.getEdges(reversed).length > 0) ? true : false;
 
         if (straightExists === true || reverseExists === true) { // Test if an edge matches either the proposed edge or the reversed edge.
+            note.debug('network.edgeExists() true.');
             return true;
         } else {
+            note.debug('network.edgeExists() false.');
             return false;
         }
     };
