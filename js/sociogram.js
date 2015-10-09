@@ -176,7 +176,7 @@ module.exports = function Sociogram() {
 
 			// Panels
 			if (sociogram.settings.panels.indexOf('details') !== -1) {
-				$('<div class="details-panel show"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div></div></div>').appendTo('#'+sociogram.settings.targetEl);
+				$('<div class="details-panel"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New '+sociogram.settings.dataOrigin.Community.name+'</div></div></div>').appendTo('#'+sociogram.settings.targetEl);
 			}
 
 			if (sociogram.settings.panels.indexOf('mode') !== -1) {
@@ -264,16 +264,21 @@ module.exports = function Sociogram() {
 
 	sociogram.toggleHulls = function(e) {
 		note.info('Sociogram: toggleHulls()');
+
 		if ((e && e.target.checked) || hullsShown === false) {
+			$('label[for="context-checkbox-show"]').html('Contexts shown');
 			note.debug('showing hulls');
 			hullLayer.opacity(1);
 			hullsShown = true;
 		} else {
-			console.log('bummer');
+			$('label[for="context-checkbox-show"]').html('Contexts hidden');
 			hullLayer.opacity(0);
 			hullsShown = false;
 		}
-
+		$('label[for="context-checkbox-show"]').addClass('show');
+		setTimeout(function() {
+			$('label[for="context-checkbox-show"]').removeClass('show');
+		}, 2000);
 		hullLayer.draw();
 	};
 
@@ -834,6 +839,7 @@ module.exports = function Sociogram() {
 			window.wedge.anim = new Konva.Animation(function(frame) {
 				var duration = 500;
 				if (frame.time >= duration) { // point of selection
+					window.wedge.setAngle(360);
 					currentNode.fire('longPress');
 				} else {
 					window.wedge.opacity(frame.time*(1/duration));
@@ -851,6 +857,7 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('longPress', function() {
+			sociogram.showDetailsPanel();
 			selectedNode = this;
 			var currentNode = this;
 			$('.hull').removeClass('active'); // deselect all groups
@@ -1343,6 +1350,7 @@ module.exports = function Sociogram() {
 	      });
 		backgroundLayer.add(backgroundRect);
 		backgroundRect.on('tap click', function() {
+			sociogram.hideDetailsPanel();
 			selectedHull = null;
 			selectedNode = null;
 			$('.hull').removeClass('active'); // deselect all groups
@@ -1357,6 +1365,14 @@ module.exports = function Sociogram() {
 
 		note.debug('Konva stage initialised.');
 
+	};
+
+	sociogram.showDetailsPanel = function() {
+		$('.details-panel').addClass('show');
+	};
+
+	sociogram.hideDetailsPanel = function() {
+		$('.details-panel').removeClass('show');
 	};
 
 	sociogram.generateHull = function(points) {
@@ -1374,7 +1390,6 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.drawUIComponents = function (callback) {
-
 
 		// Load the image
 		var imageObj = new Image();

@@ -10773,6 +10773,7 @@ label[for="context-checkbox-show"] {
   color: rgba(255, 255, 255, 0);
   -webkit-transition: color 1s ease;
           transition: color 1s ease;
+  font-size: 14px;
 }
 label.show[for="context-checkbox-show"] {
   color: #ffffff;
@@ -10803,7 +10804,7 @@ input.show-contexts-checkbox[type=checkbox] + label:before {
   letter-spacing: 10px;
   position: absolute;
   right: -108px;
-  bottom: -29px;
+  bottom: -36px;
   color: #ffffff;
 }
 /* space between checkbox and label */
