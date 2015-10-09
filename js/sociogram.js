@@ -323,13 +323,10 @@ module.exports = function Sociogram() {
 			if (sociogram.settings.dataOrigin.Select.mode === 'flip') {
 				var selectNodes = sociogram.settings.network.getNodes();
 				$.each(selectNodes, function(index, node) {
-					console.log(node);
-					console.log(node[sociogram.settings.dataOrigin.Select.flip_variable]);
 					var currentValue = node[sociogram.settings.dataOrigin.Select.flip_variable];
 					if (currentValue === 1) {
 						// this node is selected
 						var currentNode = sociogram.getNodeByID(node.id);
-						console.log(currentNode);
 						currentNode.children[1].stroke(colors.selected);
 					}
 				});
@@ -447,7 +444,7 @@ module.exports = function Sociogram() {
 			  transformsEnabled: 'position',
 			  hitGraphEnabled: false,
 	          tension : 0.1,
-	          strokeWidth: 100,
+	          strokeWidth: 80,
 	          closed : true
 	        });
 			hullShapes[label] = hullShape;
