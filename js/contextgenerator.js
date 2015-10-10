@@ -7,6 +7,7 @@ module.exports = function ContextGenerator() {
 	var contexts = [];
 	var contextGenerator = {};
 	var promptSwiper;
+	var dragging = false;
 	var currentPrompt = 0;
 	var mergeContextForm;
 	var temporaryFields = {
@@ -116,7 +117,7 @@ module.exports = function ContextGenerator() {
 			title: 'Create a New Context',
 			fields: {
 				name: {
-					type: 'string',
+					type: 'text',
 					placeholder: 'Name of Context',
 					required: true,
 
@@ -169,8 +170,8 @@ module.exports = function ContextGenerator() {
 		mergeContextForm.build($('.merge-context-form'), {
 			title: 'What should the merged context be called?',
 			fields: {
-				name: {
-					type: 'string',
+				merged_name: {
+					type: 'text',
 					placeholder: 'Name of Context',
 					required: true,
 
@@ -188,7 +189,7 @@ module.exports = function ContextGenerator() {
 			},
 			options: {
 				onSubmit: function(data) {
-					contextGenerator.mergeContexts(data.source, data.target, data.name);
+					contextGenerator.mergeContexts(data.source, data.target, data.merged_name);
 					window.forms.mergeContextForm.reset();
 					window.forms.mergeContextForm.hide();
 				},
@@ -234,9 +235,8 @@ module.exports = function ContextGenerator() {
 			var updateNode = window.network.getNode(node.id);
 			updateNode.contexts = contextArray;
 			window.netCanvas.Modules.session.saveData();
-			console.log(node.id+' updated');
 		}
-		
+
 		note.debug('contextGenerator: adding node to context');
 		note.debug(node);
 		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
@@ -273,13 +273,8 @@ module.exports = function ContextGenerator() {
 		});
 
 		$.each(nodes, function(nodeIndex, nodeValue) {
-			console.log(nodeIndex);
-			console.log(nodeValue);
 			// only deal with nodes that have a single context. is this right?
 			if (typeof nodeValue[contextGenerator.options.nodeDestination] !== 'undefined' && nodeValue[contextGenerator.options.nodeDestination].length === 1) {
-				alert(nodeValue.first_name);
-				alert(nodeValue[contextGenerator.options.nodeDestination].length);
-				console.log(contexts);
 				// Check if the context exists
 				if (contexts.indexOf(nodeValue[contextGenerator.options.nodeDestination][0] !== -1)) {
 					contextGenerator.addNodeToContext(nodeValue);
@@ -303,11 +298,13 @@ module.exports = function ContextGenerator() {
 			stack: '.circle-responsive',
 			scroll: false,
 			start: function() {
+				dragging = true;
 				contextGenerator.showBin();
 				$(this).addClass('smaller');
 
 			},
 			stop: function() {
+				setTimeout(function(){dragging = false;}, 100);
 				$(this).removeClass('smaller');
 				contextGenerator.hideBin();
 			}
@@ -326,22 +323,24 @@ module.exports = function ContextGenerator() {
 				$(ui.draggable).removeClass('merge');
 			},
 			drop: function( event, ui ) {
+				setTimeout(function(){dragging = false;}, 100);
 				if ($(ui.draggable).hasClass('circle-responsive')) {
 					$(this).removeClass('merge');
 					$(ui.draggable).removeClass('merge');
-					window.forms.mergeContextForm.addData({
-						name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
+					var props = {
+						merged_name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
 						source: $(ui.draggable).data('context'),
 						target: $(this).data('context')
-					});
+					};
+					console.log(props);
+					window.forms.mergeContextForm.addData(props);
 					window.forms.mergeContextForm.show();
+					window.forms.nameGenForm.hide();
 
 				} else if ($(ui.draggable).hasClass('node-circle')) {
 					$(this).removeClass('merge');
 					$(ui.draggable).removeClass('merge');
 					// check if we are dropping back where we started, and cancel if so.
-					console.log($(ui.draggable).parent().parent().data('context'));
-					console.log($(this).data('context'));
 					if ($(this).data('context') !== $(ui.draggable).parent().parent().data('context')) {
 						contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('context'));
 					}
@@ -381,22 +380,18 @@ module.exports = function ContextGenerator() {
 			return false;
 		}
 
+		note.warning('I\'m not clever enough to check for nodes not visible that are already in both contexts...but I soon will be.');
+
 		// Create a new context with the combined name.
 		contextGenerator.addContext(newName);
 
 		// Move nodes from the source and target to the new context
 		var sourceNodes = contextGenerator.getContextNodes(source);
-		console.log('sourceNodes');
-		console.log(sourceNodes);
 		var targetNodes = contextGenerator.getContextNodes(target);
-		console.log('targetNodes');
-		console.log(targetNodes);
 		$.each(sourceNodes, function(index, value) {
-			console.log('moving node '+value+' to '+newName);
 			contextGenerator.moveNode(value, newName);
 		});
 		$.each(targetNodes, function(index, value) {
-			console.log('moving node '+value+' to '+newName);
 			contextGenerator.moveNode(value, newName);
 		});
 
@@ -431,11 +426,17 @@ module.exports = function ContextGenerator() {
 
 	};
 
-	contextGenerator.showNewNodeForm = function() {
-		var target = $(this).data('context');
-		console.log(target);
-		window.forms.nameGenForm.addData({contexts: target});
-		window.forms.nameGenForm.show();
+	contextGenerator.showNewNodeForm = function(e) {
+		if (!dragging) {
+			console.log('show new node form');
+			console.log(e);
+			console.log(e.target);
+			console.log(this);
+			var target = $(this).data('context');
+			window.forms.nameGenForm.addData({contexts: target});
+			window.forms.nameGenForm.show();
+		}
+
 	};
 
 	contextGenerator.openNewNodeForm = function() {

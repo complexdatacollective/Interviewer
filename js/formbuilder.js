@@ -57,7 +57,6 @@ module.exports = function FormBuilder(formName) {
     // show and hide methods
     formBuilder.show = function() {
         note.debug('FormBuilder ['+name+']: show.');
-        console.log(targetEl);
         targetEl.addClass('show');
         $('.black-overlay').addClass('show');
         setTimeout(function() {
@@ -137,7 +136,7 @@ module.exports = function FormBuilder(formName) {
                 var placeholder = formValue.placeholder? formValue.placeholder : '';
                 var required = formValue.required? 'required' : '';
 
-                if (formValue.type === 'string' || formValue.type === 'hidden') {
+                if (formValue.type === 'text' || formValue.type === 'hidden') {
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     if (typeof formValue.title !== 'undefined' && formValue.type !== 'hidden') {
                         variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
@@ -261,8 +260,10 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.fieldExists = function(id) {
         if ($('#'+thisForm.id).find('#'+id).length > 0) {
+            console.log('field '+id+' exists');
             return true;
         } else {
+            console.log('field '+id+' not found');
             return false;
         }
     };
@@ -359,12 +360,15 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.addData = function(data) {
         note.debug('FormBuilder ['+name+']: addData()');
+        note.debug(data);
 
         $.each(data, function(dataIndex, dataValue) {
-            console.log(dataIndex);
+            console.log('analysing '+dataIndex);
             if (formBuilder.fieldExists(dataIndex)) {
+                console.log(dataIndex);
                 var currentType = formBuilder.fieldType(dataIndex);
-                if (currentType === 'string' || currentType === 'email' || currentType === 'number' || currentType === 'hidden') {
+                if (currentType === 'text' || currentType === 'email' || currentType === 'number' || currentType === 'hidden') {
+                    console.log('assigning '+dataValue+' to '+dataIndex);
                     $(html).find('#'+dataIndex).val(dataValue);
                 } else if (currentType === 'slider') {
                     var dataValueArray = dataValue.split(',').map(Number);
@@ -391,6 +395,8 @@ module.exports = function FormBuilder(formName) {
                         $(html).find('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
                     }
 
+                } else {
+                    console.warn('currentType '+currentType+' not understood.');
                 }
             } else {
                 // If the dataIndex doesn't exist as a key in the fields object, it could be a sub-key
@@ -444,7 +450,6 @@ module.exports = function FormBuilder(formName) {
 //             'method':'post'
 //         },
 //         onSubmit: function() {
-//             console.log('FORM subMITTED');
 //         },
 //         'buttons':{
 //             'submit':{

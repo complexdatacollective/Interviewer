@@ -982,8 +982,10 @@ module.exports = function Sociogram() {
 		});
 
 		nodeGroup.on('longPress', function() {
+			console.log('longpress');
 			sociogram.showDetailsPanel();
 			selectedNode = this;
+			console.log(selectedNode);
 			var currentNode = this;
 			$('.hull').removeClass('active'); // deselect all groups
 
