@@ -498,7 +498,7 @@ module.exports = function Sociogram() {
 
 		// store properties according to data destination
 		if (sociogram.settings.dataDestination.Community.type === 'node') {
-			note.info('sociogram.addPointToHull(): Storing in node mode');
+			note.debug('sociogram.addPointToHull(): Storing in node mode');
 			// If the point doesn't have the destination attribute, create it
 			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
 				properties = {};
@@ -517,7 +517,7 @@ module.exports = function Sociogram() {
 
 				// Update the node with the object
 				sociogram.settings.network.updateNode(point.attrs.id, properties, function() {
-					window.tools.notify('Network node updated', 1);
+					note.debug('Network node updated', 1);
 				});
 			}
 
@@ -525,7 +525,7 @@ module.exports = function Sociogram() {
 			note.info('sociogram.addPointToHull(): Storing in ego mode');
 			// If the point doesn't have the destination attribute, create it
 			if (point.attrs[sociogram.settings.dataDestination.Community.variable] === 'undefined') {
-				console.warn('Node did not have the data destinateion community attribute. A blank array was created.');
+				note.warn('Node did not have the data destinateion community attribute. A blank array was created.');
 				properties = {};
 				properties[sociogram.settings.dataDestination.Community.variable] = [];
 				window.network.updateNode(point.attrs.id, properties);
