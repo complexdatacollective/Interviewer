@@ -362,6 +362,7 @@ var Session = function Session() {
         // Transition the content
         var newStage = stage;
         var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
+        stagePath += '?_=' + (new Date()).getTime();
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {
                 content.transition({ opacity: '1'},400,'easeInSine');
