@@ -54,6 +54,10 @@
 	list-style-type: none;
 }
 
+.card.dragging .inner-card {
+    transform: scale(0.5);
+}
+
 
 // bin
 .delete-bin-footer {
@@ -64,6 +68,7 @@
     position:absolute;
     bottom:0;
     left:5vmin;
+    z-index: 25;
 }
 
 .delete-bin-footer.show {

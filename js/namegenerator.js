@@ -235,11 +235,12 @@ module.exports = function NameGenerator() {
 
         		// bin
         		options.targetEl.append('<div class="delete-bin-footer"><span class="delete-bin fa fa-4x fa-trash-o"></span></div>');
-        		$('.contexthull-bin').droppable({
-        			// accept: '.circle-responsive',
+        		$('.delete-bin').droppable({
+        			accept: '.card',
         			tolerance: 'touch',
         			hoverClass: 'delete',
         			over: function( event, ui ) {
+                        console.log('over');
         				$(this).addClass('delete');
         				$(ui.draggable).addClass('delete');
         			},
@@ -248,12 +249,8 @@ module.exports = function NameGenerator() {
         				$(ui.draggable).removeClass('delete');
         			},
         			drop: function( event, ui ) {
-        				if ($(ui.draggable).hasClass('circle-responsive')) {
-        					nameGenerator.removeContext($(ui.draggable).data('context'));
-        				} else {
-        					nameGenerator.removeNode($(ui.draggable).data('id'));
-        				}
-
+                        console.log(ui.draggable);
+        				nameGenerator.removeNode($(ui.draggable).data('index'));
         			}
         		});
 
@@ -303,17 +300,21 @@ module.exports = function NameGenerator() {
 
     nameGenerator.makeDraggable = function() {
         $('.card').draggable({
+            appendTo: 'body',
+            helper: 'clone',
             revert: true,
             revertDuration: 200,
             refreshPositions: true,
             scroll: false,
-            helper: 'clone',
-            start: function() {
-                $(this).addClass('border');
+            start: function(event, ui) {
+                console.log(ui);
+                $(ui.helper).addClass('dragging');
+                // $('.nameList').css({overflow:'auto'});
                 nameGenerator.showBin();
             },
-            stop: function() {
-                $(this).removeClass('border');
+            stop: function(event, ui) {
+                $(ui.helper).removeClass('dragging');
+                // $('.nameList').css({overflow:'scroll'});
                 nameGenerator.hideBin();
             }
         });
@@ -332,7 +333,7 @@ module.exports = function NameGenerator() {
 
         var card;
 
-        card = $('<div class="card"><div class="inner-card" data-index="'+properties.id+'"><h4>'+properties.label+'</h4></div></div>');
+        card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card"><h4>'+properties.label+'</h4></div></div>');
         var list = $('<ul></ul>');
         list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
         card.children('.inner-card').append(list);
@@ -340,23 +341,34 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGenerator.removeCard = function() {
+    nameGenerator.removeNode = function(id) {
+        if (!id) {
+            note.error('No id provided to nameGenerator.deleteNode().');
+            return false;
+        }
 
-        var nodeID = editing;
+        if (window.network.removeNode(id)) {
+            if(nameGenerator.removeCard(id)) {
+                note.info('Deleted node with id '+id);
+                return true;
+            } else {
+                note.error('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+                return false;
+            }
 
-        window.network.removeNode(nodeID);
+        } else {
+            note.warn('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+            return false;
+        }
+    };
 
-        $('div[data-index='+editing+']').addClass('delete');
-        var tempEditing = editing;
-        setTimeout(function() {
-            $('div[data-index='+tempEditing+']').parent().remove();
-        }, 700);
+    nameGenerator.removeCard = function(id) {
 
-        editing = false;
-        var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
+        $('div[data-index='+id+']').remove();
+
+        var alterCount = $('.card').length;
         alterCounter.update(alterCount);
-
-        nameGenerator.closeNodeBox();
+        return true;
     };
 
     return nameGenerator;

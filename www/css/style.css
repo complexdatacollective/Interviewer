@@ -12366,6 +12366,11 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   padding: 0;
   list-style-type: none;
 }
+.card.dragging .inner-card {
+  -webkit-transform: scale(0.5);
+      -ms-transform: scale(0.5);
+          transform: scale(0.5);
+}
 .delete-bin-footer {
   height: 15vh;
   line-height: 19vh;
@@ -12377,6 +12382,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   position: absolute;
   bottom: 0;
   left: 5vmin;
+  z-index: 25;
 }
 .delete-bin-footer.show {
   -webkit-transform: translateY(0);
@@ -13413,8 +13419,8 @@ fieldset[disabled] .btn-modal-danger.active {
   font-size: 55px;
   position: absolute !important;
   z-index: 12;
-  bottom: 20px;
-  left: 40px;
+  bottom: 12.5vmin;
+  right: 2.8vmin;
   width: 100px;
 }
 @media (max-width: 1024px) {
