@@ -19,6 +19,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'modal.less';
 @import 'sociogram.less';
 @import 'contextgenerator.less';
+@import 'namegenerator.less';
 
 html, body {
 	font-weight: 300;
@@ -414,98 +415,6 @@ html, body {
 
 .delete-button {
 	display: none;
-}
-
-.card {
-	width: 25%;
-	padding-left: 1.5em;
-	color: white;
-}
-
-
-@media (max-width: @screen-lg) {
-	.card {
-		width: 33.33%;
-	}
-}
-
-@media (max-width: 1024px) {
-	.card {
-		width: 50%;
-	}
-
-	.node-container.alt .card {
-		width: 100%;
-	}
-
-	.side-container {
-		position: fixed;
-		z-index: 20;
-		top: 0;
-		bottom: 0;
-		left: 10vw;
-		display: flex;
-		    flex-pack: start;
-		width: 40vw;
-		height: 100vh;
-		margin: 0 auto;
-		padding-top: 170px;
-		padding-bottom: 2vmin;
-		-ms-flex-pack: start;
-		-webkit-box-pack: start;
-		align-content: flex-start;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-	}
-}
-
-.card.ghost {
-	transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
-	opacity: 0;
-}
-
-.card.ghost.show {
-	opacity: 1;
-}
-
-
-.inner-card {
-	flex-direction: column;
-	width: 100%;
-	height: 190px;
-	margin-bottom: 1.5em;
-	cursor: pointer;
-	cursor: hand;
-	transition: all 0.3s ease-in-out;
-	text-align: center;
-	word-wrap: break-word;
-	border: 10px solid darken(@brand-primary, 5%);
-	border-radius: @border-radius-base;
-	background: @brand-primary;
-	justify-content: center;
-}
-
-.inner-card.delete {
-	opacity: 0;
-	border-color: @brand-danger;
-	background: @brand-danger;
-}
-
-.inner-card.ghost {
-	color: @brand-success;
-	border: 10px dotted @brand-success;
-	background: transparent;
-}
-
-.card h4 {
-	margin-top: 0;
-}
-
-.card ul {
-	font-size: 13px;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
 }
 
 
@@ -1143,6 +1052,7 @@ html, body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	z-index: 20;
 }
 
 .refresh-button {
@@ -1217,6 +1127,7 @@ label {
 	background: transparent;
 	-webkit-filter: drop-shadow(0 2px 0px rgba(0, 0, 0, 0.2));
 	-webkit-appearance: none;
+	z-index:21;
 }
 .paginate i {
 	position: absolute;

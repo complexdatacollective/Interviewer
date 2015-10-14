@@ -7,8 +7,8 @@ module.exports = function FormBuilder(formName) {
     var formBuilder = {};
     var thisForm;
     var html = '<form></form>';
-    var moduleEvents = [];
     var deferredTasks = [];
+    var moduleEvents = [];
     var formFields;
     var targetEl;
     var name = formName ? formName : 'Default';
@@ -18,14 +18,6 @@ module.exports = function FormBuilder(formName) {
     formBuilder.init = function() {
 
         note.info('FormBuilder initialised.');
-        // Event listeners
-        window.tools.Events.register(moduleEvents, [
-            {
-                event: 'stageChangeStart',
-                handler: formBuilder.destroy,
-                targetEl:  'window.document'
-            }
-        ]);
     };
 
     formBuilder.reset = function() {
@@ -355,6 +347,7 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.destroy = function() {
+        alert('formBuilder ['+name+'] destroy()');
         window.tools.Events.unbind(moduleEvents);
     };
 

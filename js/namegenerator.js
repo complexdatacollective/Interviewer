@@ -186,14 +186,29 @@ module.exports = function NameGenerator() {
 
     nameGenerator.bindEvents = function() {
         // Event listeners
-        var events = [
-            {event: 'changeStageStart', handler: nameGenerator.destroy, targetEl:  window},
-            {event: 'keydown', handler: keyPressHandler, targetEl: window},
-            {event: 'click', handler: nameGenerator.openNodeBox, targetEl: window, subTarget: '.add-button'},
-        ];
+        // Events
+		var event = [{
+			event: 'changeStageStart',
+			handler: nameGenerator.destroy,
+			targetEl:  window
+		},
+		{
+			event: 'nodeAdded',
+			handler: nameGenerator.nodeAdded,
+			targetEl:  window
+		},
+        {
+            event: 'click',
+            handler: window.forms.nameGenForm.show,
+            targetEl:  '.new-node-button'
+        }];
+		window.tools.Events.register(moduleEvents, event);
 
-        window.tools.Events.register(moduleEvents, events);
 
+    };
+
+    nameGenerator.nodeAdded = function(e) {
+        nameGenerator.addCard(e.originalEvent.detail);
     };
 
     nameGenerator.init = function(userOptions) {
@@ -218,6 +233,31 @@ module.exports = function NameGenerator() {
         options.targetEl.append(nameList);
 
 
+        		// bin
+        		options.targetEl.append('<div class="delete-bin-footer"><span class="delete-bin fa fa-4x fa-trash-o"></span></div>');
+        		$('.contexthull-bin').droppable({
+        			// accept: '.circle-responsive',
+        			tolerance: 'touch',
+        			hoverClass: 'delete',
+        			over: function( event, ui ) {
+        				$(this).addClass('delete');
+        				$(ui.draggable).addClass('delete');
+        			},
+        			out: function( event, ui ) {
+        				$(this).removeClass('delete');
+        				$(ui.draggable).removeClass('delete');
+        			},
+        			drop: function( event, ui ) {
+        				if ($(ui.draggable).hasClass('circle-responsive')) {
+        					nameGenerator.removeContext($(ui.draggable).data('context'));
+        				} else {
+        					nameGenerator.removeNode($(ui.draggable).data('id'));
+        				}
+
+        			}
+        		});
+
+
         // Set node count box
         var el = document.querySelector('.alter-count-box');
 
@@ -228,29 +268,79 @@ module.exports = function NameGenerator() {
           theme: 'default'
         });
 
-        // add existing nodes
-        $.each(window.network.getEdges({type: 'Dyad', from: window.network.getEgo().id}), function(index,value) {
-            nameGenerator.addToList(value);
-        });
+        nameGenerator.addExistingData();
+        nameGenerator.bindEvents();
     };
 
-    nameGenerator.addToList = function(properties) {
+    nameGenerator.addExistingData = function () {
+        // add existing nodes
+
+        var properties = {};
+        // build properties array from dataOrigin
+        $.each(options.dataOrigin.variables, function(variableIndex, variableValue){
+            properties[variableValue.label] = variableValue.value;
+        });
+
+        var nodes = window.network.getNodes(properties, function (results) {
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.type !== 'Ego') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
+        $.each(nodes, function(index,value) {
+            nameGenerator.addCard(value);
+        });
+
+        alterCounter.update(nodes.length);
+        nameGenerator.makeDraggable();
+
+    };
+
+    nameGenerator.makeDraggable = function() {
+        $('.card').draggable({
+            revert: true,
+            revertDuration: 200,
+            refreshPositions: true,
+            scroll: false,
+            helper: 'clone',
+            start: function() {
+                $(this).addClass('border');
+                nameGenerator.showBin();
+            },
+            stop: function() {
+                $(this).removeClass('border');
+                nameGenerator.hideBin();
+            }
+        });
+
+    };
+
+    nameGenerator.showBin = function() {
+        $('.delete-bin-footer').addClass('show');
+    };
+
+    nameGenerator.hideBin = function() {
+        $('.delete-bin-footer').removeClass('show');
+    };
+
+    nameGenerator.addCard = function(properties) {
+
         var card;
 
-        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.nname_t0+'</h4></div></div>');
+        card = $('<div class="card"><div class="inner-card" data-index="'+properties.id+'"><h4>'+properties.label+'</h4></div></div>');
         var list = $('<ul></ul>');
-        $.each(options.variables, function(index, value) {
-            if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
-                list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
-            }
-
-        });
+        list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
         card.children('.inner-card').append(list);
         $('.nameList').append(card);
 
     };
 
-    nameGenerator.removeFromList = function() {
+    nameGenerator.removeCard = function() {
 
         var nodeID = editing;
 

@@ -1496,7 +1496,7 @@ module.exports = function Sociogram() {
 		imageObj.src = 'img/drag-text.png';
 		imageObj.onload = function() {
 
-			// New context buttons
+			// New node button
 			$('#'+sociogram.settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 			var events = [{
 				event: 'click',
