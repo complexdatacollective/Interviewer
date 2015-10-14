@@ -426,25 +426,12 @@ module.exports = function ContextGenerator() {
 
 	};
 
-	contextGenerator.showNewNodeForm = function(e) {
+	contextGenerator.showNewNodeForm = function() {
 		if (!dragging) {
-			console.log('show new node form');
-			console.log(e);
-			console.log(e.target);
-			console.log(this);
 			var target = $(this).data('context');
 			window.forms.nameGenForm.addData({contexts: target});
 			window.forms.nameGenForm.show();
 		}
-
-	};
-
-	contextGenerator.openNewNodeForm = function() {
-		var properties = {};
-		properties[contextGenerator.options.nodeDestination] = [];
-		properties[contextGenerator.options.nodeDestination].push($(this).data('context'));
-		// Append a hidden input with the context in it
-		window.nameGenForm.show(properties);
 	};
 
 	contextGenerator.removeContext = function(name) {

@@ -394,24 +394,6 @@ html, body {
 	bottom: 20px;
 	visibility: hidden;
 }
-.side-container {
-	position: fixed;
-	z-index: 20;
-	top: 0;
-	bottom: 1vmin;
-	left: 10vw;
-	display: flex;
-	    flex-pack: start;
-	width: 20vw;
-	margin: 0 auto;
-	padding-top: 170px;
-	padding-bottom: 2vmin;
-	-ms-flex-pack: start;
-	-webkit-box-pack: start;
-	align-content: flex-start;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-}
 
 .delete-button {
 	display: none;
@@ -468,124 +450,6 @@ html, body {
 	width: 100vw;
 	padding-right: 20vmin;
 	padding-left: 20vmin;
-}
-
-.node-container {
-	margin-left: -1.5em;
-	padding-right: 10vw;
-	padding-left: 10vw;
-}
-
-.node-container-bottom-bg {
-	display: none;
-}
-
-.nameList {
-	display: flex;
-	overflow: scroll;
-	    flex-pack: start;
-	padding-top: 0;
-	padding-bottom: 0;
-	-ms-flex-pack: start;
-	-webkit-box-pack: start;
-	align-content: flex-start;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-}
-
-
-.nameList.alt {
-	right: 10vw;
-	left: initial;
-	width: 40vw;
-}
-
-@media (min-width: 769px) {
-	.nameList {
-		margin: 0 auto;
-		padding-top: 170px;
-		padding-bottom: 150px;
-	}
-
-	.question-container {
-		position: fixed;
-		z-index: 10;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 170px;
-		padding-right: 10vmin;
-		padding-left: 10vmin;
-		background-image: linear-gradient(to bottom, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%) 100%);
-	}
-
-	.node-container {
-		position: fixed;
-		top: 0;
-		right: 10vw;
-		left: 10vw;
-		height: 100vh;
-		margin-left: -1.5em;
-		padding-right: 0;
-		padding-left: 0;
-	}
-
-	.node-container-bottom-bg {
-		position: fixed;
-		z-index: 10;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		display: initial;
-		height: 170px;
-		background-image: linear-gradient(to top, @content-bg 0%, @content-bg 10%, fade(@content-bg, 0%)  100%);
-	}
-}
-
-@media (min-width: 1025px) {
-	.nameList.alt {
-		right: 10vw;
-		left: initial;
-		width: 60vw;
-	}
-
-	.question-container {
-		padding-right: 15%;
-		padding-left: 15%;
-	}
-}
-
-.previous-node-list {
-	z-index: 20;
-	overflow: scroll;
-	width: 100%;
-	height: 100%;
-	margin-bottom: 100px;
-	padding: 15px;
-	padding-bottom: 5em;
-	border-radius: @border-radius-base;
-	background: @brand-info;
-}
-
-.current-node-list {
-	z-index: 20;
-	overflow: scroll;
-	width: 100%;
-	height: 100%;
-	padding: 15px;
-	padding-bottom: 4em;
-	border-radius: @border-radius-base;
-	background: @brand-warning;
-}
-
-.node-lists.double {
-	height: 50%;
-}
-
-.node-list-item {
-	font-size: 1.1em;
-	display: inline-block;
-	margin: 10px;
 }
 
 .menu-info {
@@ -876,6 +740,10 @@ html, body {
 	display: inline-block;
 }
 
+.odometer-inside {
+	text-align: center;
+}
+
 .active-node-list .node-item {
 	display: inline-flex;
 }
@@ -885,7 +753,7 @@ html, body {
 	position: absolute !important;
 	z-index: 12;
 	bottom: 12.5vmin;
-    right: 2.8vmin;
+    right: 4.5vmin;
 	width: 100px;
 }
 

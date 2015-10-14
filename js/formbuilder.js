@@ -10,6 +10,7 @@ module.exports = function FormBuilder(formName) {
     var deferredTasks = [];
     var moduleEvents = [];
     var formFields;
+    var temporaryFields = [];
     var targetEl;
     var name = formName ? formName : 'Default';
     window.forms = window.forms || {};
@@ -59,6 +60,7 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.hide = function () {
         note.debug('FormBuilder ['+name+']: hide.');
+        formBuilder.removeTemporaryFields();
         targetEl.removeClass('show');
         $('.black-overlay').removeClass('show');
         $(thisForm).trigger('reset');
@@ -76,8 +78,6 @@ module.exports = function FormBuilder(formName) {
         if (typeof form.title !== 'undefined') {
             html = $(html).append('<legend>'+form.title+'</legend><div class="alert alert-danger" role="alert" style="display: none;"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <span class="error"></span></div>');
         }
-
-
 
         // Form fields
         formFields = '<div class="form-fields"></div>';
@@ -118,6 +118,24 @@ module.exports = function FormBuilder(formName) {
 
         formBuilder.runDeferred();
 
+    };
+
+    formBuilder.removeTemporaryFields = function() {
+        note.debug('FormBuilder ['+name+']: removeTemporaryFields()');
+        console.log(temporaryFields);
+        $.each(temporaryFields, function(fieldIndex, fieldValue) {
+            formBuilder.removeField(fieldValue.id);
+        });
+    };
+
+    formBuilder.addTemporaryFields = function(fields) {
+        note.debug('FormBuilder ['+name+']: addTemporaryFields()');
+        $.each(fields, function(fieldIndex, fieldValue) {
+            fieldValue.id = fieldIndex;
+            temporaryFields.push(fieldValue);
+        });
+
+        formBuilder.addFields(fields);
     };
 
     formBuilder.addFields = function(fields) {
@@ -241,6 +259,7 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.removeFields = function(fields) {
+        note.debug('FormBuilder ['+name+']: removeFields()');
         $.each(fields, function(fieldIndex) {
             formBuilder.removeField(fieldIndex);
         });

@@ -95,11 +95,6 @@ module.exports = function NameGenerator() {
 
     };
 
-    var submitFormHandler = function(e) {
-            alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
-            alterCounter.update(alterCount);
-    };
-
     nameGenerator.generateTestAlters = function(number) {
 
         if (!number) {
@@ -199,7 +194,7 @@ module.exports = function NameGenerator() {
 		},
         {
             event: 'click',
-            handler: window.forms.nameGenForm.show,
+            handler: nameGenerator.showNewNodeForm,
             targetEl:  '.new-node-button'
         }];
 		window.tools.Events.register(moduleEvents, event);
@@ -208,7 +203,10 @@ module.exports = function NameGenerator() {
     };
 
     nameGenerator.nodeAdded = function(e) {
-        nameGenerator.addCard(e.originalEvent.detail);
+        nameGenerator.addCard(e.originalEvent.detail, function() {
+            nameGenerator.updateCounter();
+            nameGenerator.makeDraggable();
+        });
     };
 
     nameGenerator.init = function(userOptions) {
@@ -218,7 +216,6 @@ module.exports = function NameGenerator() {
         $(options.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
         var alterCountBox = $('<div class="alter-count-box"></div>');
         options.targetEl.append(alterCountBox);
-
 
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         options.targetEl.append(nodeContainer);
@@ -232,27 +229,26 @@ module.exports = function NameGenerator() {
         var nameList = $('<div class="node-container nameList"></div>');
         options.targetEl.append(nameList);
 
-
-        		// bin
-        		options.targetEl.append('<div class="delete-bin-footer"><span class="delete-bin fa fa-4x fa-trash-o"></span></div>');
-        		$('.delete-bin').droppable({
-        			accept: '.card',
-        			tolerance: 'touch',
-        			hoverClass: 'delete',
-        			over: function( event, ui ) {
-                        console.log('over');
-        				$(this).addClass('delete');
-        				$(ui.draggable).addClass('delete');
-        			},
-        			out: function( event, ui ) {
-        				$(this).removeClass('delete');
-        				$(ui.draggable).removeClass('delete');
-        			},
-        			drop: function( event, ui ) {
-                        console.log(ui.draggable);
-        				nameGenerator.removeNode($(ui.draggable).data('index'));
-        			}
-        		});
+		// bin
+		options.targetEl.append('<div class="delete-bin-footer"><span class="delete-bin fa fa-4x fa-trash-o"></span></div>');
+		$('.delete-bin').droppable({
+			accept: '.card',
+			tolerance: 'touch',
+			hoverClass: 'delete',
+			over: function( event, ui ) {
+                console.log('over');
+				$(this).addClass('delete');
+				$(ui.draggable).addClass('delete');
+			},
+			out: function( event, ui ) {
+				$(this).removeClass('delete');
+				$(ui.draggable).removeClass('delete');
+			},
+			drop: function( event, ui ) {
+                console.log(ui.draggable);
+				nameGenerator.removeNode($(ui.draggable).data('index'));
+			}
+		});
 
 
         // Set node count box
@@ -266,6 +262,7 @@ module.exports = function NameGenerator() {
         });
 
         nameGenerator.addExistingData();
+        nameGenerator.handlePanels();
         nameGenerator.bindEvents();
     };
 
@@ -293,9 +290,17 @@ module.exports = function NameGenerator() {
             nameGenerator.addCard(value);
         });
 
-        alterCounter.update(nodes.length);
+        nameGenerator.updateCounter();
         nameGenerator.makeDraggable();
 
+    };
+
+    nameGenerator.updateCounter = function(number) {
+        if (!number) {
+            alterCounter.update(options.network.getNodes().length);
+        } else {
+            alterCounter.update(number);
+        }
     };
 
     nameGenerator.makeDraggable = function() {
@@ -308,17 +313,85 @@ module.exports = function NameGenerator() {
             scroll: false,
             start: function(event, ui) {
                 console.log(ui);
+                $(this).addClass('invisible');
                 $(ui.helper).addClass('dragging');
-                // $('.nameList').css({overflow:'auto'});
                 nameGenerator.showBin();
             },
             stop: function(event, ui) {
+                $(this).removeClass('invisible');
                 $(ui.helper).removeClass('dragging');
-                // $('.nameList').css({overflow:'scroll'});
                 nameGenerator.hideBin();
             }
         });
 
+    };
+
+    nameGenerator.showNewNodeForm = function() {
+
+        // add fields from dataTarget
+        var properties = {};
+        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
+            properties[targetValue.label] = {
+                type:'hidden',
+                title: targetValue.label
+            };
+        });
+        window.forms.nameGenForm.addTemporaryFields(properties);
+
+        // Add data from fields
+        properties = {};
+        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
+            properties[targetValue.label] = targetValue.value;
+        });
+        window.forms.nameGenForm.addData(properties);
+
+
+        window.forms.nameGenForm.show();
+    };
+
+    nameGenerator.handlePanels = function() {
+        note.debug('nameGenerator.handlePanels()');
+        if (options.panels && typeof options.panels === 'object' && options.panels.length > 0) {
+
+            // Side container
+            var sideContainer = $('<div class="side-container"></div>');
+
+            // Current side panel shows alters already elicited
+            if (options.panels.indexOf('current') !== -1) {
+
+                // add custom node list
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>People you already named:</h4></div>'));
+
+
+                var nodes = window.network.getNodes({}, function (results) {
+                    var filteredResults = [];
+                    $.each(results, function(index,value) {
+                        if (value.type !== 'Ego') {
+                            filteredResults.push(value);
+                        }
+                    });
+
+                    return filteredResults;
+                });
+
+                $.each(nodes, function(index,value) {
+                    var el = $('<div class="node-list-item">'+value.label+'</div>');
+                    sideContainer.children('.current-node-list').append(el);
+                });
+            }
+
+            if (sideContainer.children().length > 0) {
+                // move node list to one side
+                sideContainer.insertBefore('.nameList');
+                $('.nameList').addClass('alt');
+            }
+
+            // halve the panel height if we have two
+            if ($('.side-container').children().length > 1) {
+                $('.node-lists').addClass('double');
+            }
+
+        } // end if panels
     };
 
     nameGenerator.showBin = function() {
@@ -329,7 +402,7 @@ module.exports = function NameGenerator() {
         $('.delete-bin-footer').removeClass('show');
     };
 
-    nameGenerator.addCard = function(properties) {
+    nameGenerator.addCard = function(properties, callback) {
 
         var card;
 
@@ -339,6 +412,11 @@ module.exports = function NameGenerator() {
         card.children('.inner-card').append(list);
         $('.nameList').append(card);
 
+        if (callback) {
+            callback();
+        }
+
+        return true;
     };
 
     nameGenerator.removeNode = function(id) {
