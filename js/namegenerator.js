@@ -49,49 +49,28 @@ module.exports = function NameGenerator() {
     var cardClickHandler = function() {
         // Handles what happens when a card is clicked
 
-        // Don't do anything if this is a 'ghost' card (a placeholder created as a visual indicator while a previous network node is being dragged)
-        if ($(this).hasClass('ghost')) {
-            return false;
-        }
-
         // Get the ID of the node corresponding to this card, stored in the data-index property.
         var index = $(this).data('index');
 
-        // Get the dyad edge for this node
-        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'Dyad'})[0];
+        var node = options.network.getNode(index);
 
-        // Set the value of editing to the node id of the current person
-        editing = index;
-
-        // Update role count
-        var roleCount = window.network.getEdges({from:window.network.getEgo().id, to: editing, type:'Role'}).length;
-        $('.relationship-button').html(roleCount+' roles selected.');
-
-        // Make the relevant relationships selected on the relationships panel, even though it isnt visible yet
-        var roleEdges = window.network.getEdges({from:window.network.getEgo().id, to: editing, type:'Role'});
-        $.each(roleEdges, function(index, value) {
-            $(relationshipPanel).children('.relationship-types-container').children('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected');
+        // add fields from dataTarget
+        var properties = {};
+        properties.id = {
+            type:'hidden',
+            title: 'id'
+        };
+        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
+            properties[targetValue.label] = {
+                type:'hidden',
+                title: targetValue.label
+            };
         });
+        window.forms.nameGenForm.addTemporaryFields(properties);
 
-        // Populate the form with this nodes data.
-        $.each(options.variables, function(index, value) {
-            if(value.private === false) {
-                if (value.type === 'relationship') {
-                    $('select[name="'+value.variable+'"]').val(edge[value.variable]);
-                }else {
-                    $('#'+value.variable).val(edge[value.variable]);
-                }
-                $('.delete-button').show();
+        window.forms.nameGenForm.addData(node);
+        window.forms.nameGenForm.show();
 
-                if (edge.elicited_previously === true) {
-                    $('input#age_p_t0').prop( 'disabled', true);
-                } else {
-                    $('input#age_p_t0').prop( 'disabled', false);
-                }
-                nameGenerator.openNodeBox();
-            }
-
-        });
 
     };
 
@@ -192,6 +171,11 @@ module.exports = function NameGenerator() {
 			handler: nameGenerator.nodeAdded,
 			targetEl:  window
 		},
+        {
+            event: 'click',
+            handler: cardClickHandler,
+            targetEl:  '.card'
+        },
         {
             event: 'click',
             handler: nameGenerator.showNewNodeForm,
@@ -443,9 +427,8 @@ module.exports = function NameGenerator() {
     nameGenerator.removeCard = function(id) {
 
         $('div[data-index='+id+']').remove();
+        nameGenerator.updateCounter();
 
-        var alterCount = $('.card').length;
-        alterCounter.update(alterCount);
         return true;
     };
 

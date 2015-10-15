@@ -301,16 +301,20 @@ module.exports = function Network() {
     };
 
     network.updateNode = function(id, properties, callback) {
-        note.info('network.updateNode() called.');
+        note.info('network.updateNode() called for node id '+id+'.');
+        console.log(typeof id);
         note.debug(properties);
 
         if(this.getNode(id) === false || properties === undefined) {
+            note.error('network.updateNode() couldn\'t find node with id '+id);
             return false;
         }
         var node = this.getNode(id);
         var nodeUpdateEvent, log;
 
         $.extend(node, properties);
+        console.log('node:');
+        console.log(node);
         nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
         window.dispatchEvent(nodeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});
@@ -343,6 +347,9 @@ module.exports = function Network() {
     };
 
     network.getNode = function(id) {
+        // Ensure that ID is always treated as int for === comparisons to work reliably.
+        id = parseInt(id);
+        
         if (id === undefined) { return false; }
         for (var i = 0;i<nodes.length; i++) {
             if (nodes[i].id === id) {return nodes[i]; }

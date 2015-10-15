@@ -12342,7 +12342,6 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 }
 .side-container {
   position: fixed;
-  z-index: 20;
   top: 0;
   bottom: 1vmin;
   left: 8vw;
@@ -12431,10 +12430,9 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   background: #b16eff;
 }
 .current-node-list {
-  z-index: 20;
   overflow: scroll;
   width: 100%;
-  height: 100%;
+  height: 85%;
   padding: 20px;
   padding-bottom: 4em;
   border-radius: 8px;
@@ -12539,6 +12537,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-transform: scale(0.5);
       -ms-transform: scale(0.5);
           transform: scale(0.5);
+  z-index: 20;
 }
 .delete-bin-footer {
   height: 15vh;

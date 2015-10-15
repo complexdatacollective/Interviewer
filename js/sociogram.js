@@ -174,8 +174,10 @@ module.exports = function Sociogram() {
 		sociogram.drawUIComponents(function() {
 
 			// Show hulls checkbox
-			$('#'+sociogram.settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
-
+			if (sociogram.settings.modes.indexOf('community') !== -1) {
+				$('#'+sociogram.settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
+			}
+			
 			// Panels
 			if (sociogram.settings.panels.indexOf('details') !== -1) {
 				$('<div class="details-panel"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New context</div></div></div>').appendTo('#'+sociogram.settings.targetEl);

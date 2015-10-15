@@ -32,7 +32,6 @@
 
 .side-container {
 	position: fixed;
-	z-index: 20;
 	top: 0;
 	bottom: 1vmin;
 	left: 8vw;
@@ -118,10 +117,9 @@
 }
 
 .current-node-list {
-	z-index: 20;
 	overflow: scroll;
 	width: 100%;
-	height: 100%;
+	height: 85%;
 	padding: @padding-base-vertical;
 	padding-bottom: 4em;
 	border-radius: @border-radius-base;
@@ -209,6 +207,7 @@
 
 .card.dragging .inner-card {
     transform: scale(0.5);
+	z-index: 20;
 }
 
 
