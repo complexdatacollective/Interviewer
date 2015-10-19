@@ -248,9 +248,9 @@ var Session = function Session() {
         return key += session.sessionData.sessionParameters.interviewerID;
     };
 
-    session.saveEncryptedSession = function(data) {
+    session.encryptSessionData = function(data) {
         if (window.isNodeWebkit) {
-            // safe to use native modules.
+            // safe to use node modules.
             var fs = nodeRequire('fs');
             var gui = nodeRequire('nw.gui');
             var saltedKey = session.getSaltedKey();
@@ -259,11 +259,10 @@ var Session = function Session() {
             var path = nodeRequire('path');
             var fileName = Math.floor(Date.now() / 1000).toString();
             var location = path.join(gui.App.dataPath, fileName+'.netCanvas');
-            fs.writeFile(location, encrypted, function (err) {
+            fs.writeFile(location, encrypted, 'utf8', function (err) {
             if (err) {
                 throw err;
             }
-                console.log('It\'s saved at '+location);
                 return true;
             });
         } else {
@@ -271,14 +270,6 @@ var Session = function Session() {
             return false;
         }
 
-    };
-
-    session.decryptData = function(data) {
-
-        var saltedKey = session.getSaltedKey();
-        var decrypted = CryptoJS.AES.decrypt(data, saltedKey);
-
-        return decrypted.toString(CryptoJS.enc.Utf8);
     };
 
     session.saveManager = function() {
