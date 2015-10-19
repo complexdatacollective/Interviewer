@@ -58,17 +58,10 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css'
-                // mainFiles: {
-                //     'jquery': 'dist/jquery.min.js',
-                //     'bootstrap': 'dist/bootstrap.min.js',
-                //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
-                //     'jquery-ui': 'jquery-ui.min.js',
-                //     'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
-                //     'konva': 'konva.min.js',
-                //     'leaflet': 'dist/leaflet.js',
-                //     'leaflet-omnivore': 'leaflet-omnivore.min.js'
-                // },
+                cssDest: '<%= config.app %>/css/_bower.css',
+                mainFiles: {
+                    'cryptojslib': 'rollups/aes.js'
+                }
                 // exclude: ['components-font-awesome','lato', 'moment']
             }
         },

@@ -1,4 +1,4 @@
-/* global document, window, $, protocol, nodeRequire, note */
+/* global document, window, $, protocol, nodeRequire, note, CryptoJS */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -6,6 +6,7 @@ var Session = function Session() {
     var session = {};
     var currentStage = 0;
     var content = $('#content');
+    var key = 'N3"u6tH@2wH9UM205niU=45J7y<(3=OC{2<:Lb+KqD2HG9!f6{VVL#&2/Mt+lV3';
     session.id = 0;
     session.sessionData = {};
     var lastSaveTime, saveTimer;
@@ -241,6 +242,43 @@ var Session = function Session() {
             window.location.reload();
         }
 
+    };
+
+    session.getSaltedKey = function() {
+        return key += session.sessionData.sessionParameters.interviewerID;
+    };
+
+    session.saveEncryptedSession = function(data) {
+        if (window.isNodeWebkit) {
+            // safe to use native modules.
+            var fs = nodeRequire('fs');
+            var gui = nodeRequire('nw.gui');
+            var saltedKey = session.getSaltedKey();
+            var text = JSON.stringify(data, undefined, 2); // indentation level = 2;
+            var encrypted = CryptoJS.AES.encrypt(text, saltedKey);
+            var path = nodeRequire('path');
+            var fileName = Math.floor(Date.now() / 1000).toString();
+            var location = path.join(gui.App.dataPath, fileName+'.netCanvas');
+            fs.writeFile(location, encrypted, function (err) {
+            if (err) {
+                throw err;
+            }
+                console.log('It\'s saved at '+location);
+                return true;
+            });
+        } else {
+            note.warn('session.saveEncryptedData() can only be run from within node webkit.');
+            return false;
+        }
+
+    };
+
+    session.decryptData = function(data) {
+
+        var saltedKey = session.getSaltedKey();
+        var decrypted = CryptoJS.AES.decrypt(data, saltedKey);
+
+        return decrypted.toString(CryptoJS.enc.Utf8);
     };
 
     session.saveManager = function() {
