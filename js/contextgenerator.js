@@ -108,7 +108,7 @@ module.exports = function ContextGenerator() {
 		});
 
 		// New context buttons
-		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
+		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-pencil"></span></div>');
 
 		// New context form
 		$('body').append('<div class="new-context-form"></div>');

@@ -172,6 +172,11 @@ module.exports = function NameGenerator() {
 			targetEl:  window
 		},
         {
+            event: 'nodeUpdate',
+            handler: nameGenerator.nodeEdited,
+            targetEl:  window
+        },
+        {
             event: 'click',
             handler: cardClickHandler,
             targetEl:  '.card'
@@ -189,6 +194,12 @@ module.exports = function NameGenerator() {
     nameGenerator.nodeAdded = function(e) {
         nameGenerator.addCard(e.originalEvent.detail, function() {
             nameGenerator.updateCounter();
+            nameGenerator.makeDraggable();
+        });
+    };
+
+    nameGenerator.nodeEdited = function(e) {
+        nameGenerator.editCard(e.originalEvent.detail, function() {
             nameGenerator.makeDraggable();
         });
     };
@@ -391,6 +402,23 @@ module.exports = function NameGenerator() {
         var card;
 
         card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card"><h4>'+properties.label+'</h4></div></div>');
+        var list = $('<ul></ul>');
+        list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
+        card.children('.inner-card').append(list);
+        $('.nameList').append(card);
+
+        if (callback) {
+            callback();
+        }
+
+        return true;
+    };
+
+    nameGenerator.editCard = function(properties, callback) {
+
+        var card;
+        $('.card[data-index='+properties.id+']').children('inner-card').find('h4').html(properties.label);
+
         var list = $('<ul></ul>');
         list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
         card.children('.inner-card').append(list);

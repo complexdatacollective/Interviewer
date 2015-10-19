@@ -12255,7 +12255,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   height: 8vmin;
   width: 8vmin;
   line-height: 8vmin;
-  background: #e85657;
+  background: #1ecd97;
   position: absolute;
   bottom: 3.5vmin;
   right: 5vmin;
