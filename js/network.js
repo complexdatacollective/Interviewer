@@ -219,9 +219,11 @@ module.exports = function Network() {
     };
 
     network.removeEdge = function(edge) {
+        var counter = 0;
         note.debug('network.removeEdge() called.');
 
         if (!edge) {
+            note.error('network.removeEdge(): No edge specified!');
             return false;
         }
         var log;
@@ -231,7 +233,7 @@ module.exports = function Network() {
             // we've got an array of object edges
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                window.tools.removeFromObject(edge[i], edges);
+                counter = window.tools.removeFromObject(edge[i], edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -239,7 +241,7 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            window.tools.removeFromObject(edge, edges);
+            counter = window.tools.removeFromObject(edge, edges);
 
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
@@ -249,7 +251,11 @@ module.exports = function Network() {
 
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
-        return true;
+        if (counter > 0) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
     network.removeNode = function(id, preserveEdges) {
@@ -349,7 +355,7 @@ module.exports = function Network() {
     network.getNode = function(id) {
         // Ensure that ID is always treated as int for === comparisons to work reliably.
         id = parseInt(id);
-        
+
         if (id === undefined) { return false; }
         for (var i = 0;i<nodes.length; i++) {
             if (nodes[i].id === id) {return nodes[i]; }

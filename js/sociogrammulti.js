@@ -138,10 +138,6 @@ module.exports = function SociogramMulti() {
 		sociogramMulti.addNode(e.detail);
 	}
 
-	function addEdgeHandler(e) {
-		sociogramMulti.addEdge(e.detail);
-	}
-
 	function hullListClickHandler(e) {
 		var clicked = $(e.target).closest('li');
 		var selectedHull = clicked.data('hull');
@@ -187,7 +183,6 @@ module.exports = function SociogramMulti() {
             sociogramMulti.changeData();
         });
 
-
 		// Initialise the konva stage
 		sociogramMulti.initKinetic();
 
@@ -208,7 +203,7 @@ module.exports = function SociogramMulti() {
 
 			// Add the evevent listeners
 			window.addEventListener('nodeAdded', addNodeHandler, false);
-			window.addEventListener('edgeAdded', sociogramMulti.updateNodeState.updateNodeState, false);
+			window.addEventListener('edgeAdded', sociogramMulti.updateNodeState, false);
 			window.addEventListener('nodeRemoved', sociogramMulti.removeNode, false);
 			window.addEventListener('edgeRemoved', sociogramMulti.removeEdge, false);
 			window.addEventListener('changeStageStart', sociogramMulti.destroy, false);
@@ -350,23 +345,17 @@ module.exports = function SociogramMulti() {
 		// Select Mode
 		if (typeof settings.prompts[currentPrompt].showSelected === 'object') {
 
-			if (settings.dataOrigin.Select.mode === 'flip') {
-				var selectNodes = settings.network.getNodes();
-				$.each(selectNodes, function(index, node) {
-					var currentValue = node[settings.dataOrigin.Select.flip_variable];
-					if (currentValue === 1) {
-						// this node is selected
-						var currentNode = sociogramMulti.getNodeByID(node.id);
-						currentNode.children[1].stroke(colors.selected);
-					}
-				});
+			var selectNodes = settings.network.getNodes();
+			$.each(selectNodes, function(index, node) {
+				var currentValue = node[settings.prompts[currentPrompt].showSelected.label];
+				if (currentValue === 1) {
+					// this node is selected
+					var currentNode = sociogramMulti.getNodeByID(node.id);
+					currentNode.children[1].stroke(colors.selected);
+				}
+			});
 
-				nodeLayer.draw();
-
-			} else if (settings.dataOrigin.Select.mode === 'create') {
-			} else {
-				// error state
-			}
+			nodeLayer.draw();
 
 		}
 
@@ -950,9 +939,10 @@ module.exports = function SociogramMulti() {
 		nodeGroup.on('dbltap dblclick', function() {
 
 			selectedNodes = [];
-			$.each(sociogramMulti.getKineticNodes(), function(index, value) {
-				value.children[0].opacity(0);
-			});
+			// var kineticNodes = sociogramMulti.getKineticNodes();
+			// $.each(kineticNodes, function(index, value) {
+			// 	value.children[0].opacity(0);
+			// });
 			window.clearTimeout(tapTimer);
 
 			if (taskComprehended === false) {
@@ -970,85 +960,27 @@ module.exports = function SociogramMulti() {
 			var currentNode = this;
 
 			// if select mode enabled
-			if (settings.modes.indexOf('Select') !== -1) {
+			if (typeof settings.prompts[currentPrompt].showSelected === 'object') {
 
-				// Select mode target (node or edge)
-				if (settings.dataDestination.Select.type === 'node') {
-					// target is node
+				// flip variable
 
-					// flip variable or create node?
-					if (settings.dataDestination.Select.mode === 'flip') {
-						// flip variable
+				// Get current variable value
+				var properties = {};
+				var currentValue = settings.network.getNode(currentNode.attrs.id)[settings.prompts[currentPrompt].showSelected.label];
 
-						// Get current variable value
-						var properties = {};
-						var currentValue = settings.network.getNode(currentNode.attrs.id)[settings.dataDestination.Select.flip_variable];
-
-						// flip
-						if (currentValue === 0 || typeof currentValue === 'undefined') {
-							// add static variables, if present
-							$.each(settings.dataDestination.Select.variables, function(index, value) {
-								properties[value.name] = value.value;
-							});
-							properties[settings.dataDestination.Select.flip_variable] = 1;
-							currentNode.children[1].stroke(colors.selected);
-						} else {
-							// remove static variables, if present
-							var node = window.network.getNode(currentNode.attrs.id);
-							$.each(settings.dataDestination.Select.variables, function(index, value) {
-								node[value.name] = null;
-							});
-							node[settings.dataDestination.Select.flip_variable] = 0;
-							currentNode.children[1].stroke(settings.options.defaultNodeColor);
-						}
-
-						settings.network.updateNode(currentNode.attrs.id, properties);
-
-					} else if (settings.dataDestination.Select.mode === 'create') {
-						// create node
-						note.warn('Select mode create is not implemented yet.');
-
-					} else {
-						// error state
-						note.error('sociogram: Error! Didnt understand settings.dataDestination.Select.mode');
-					}
-				} else if (settings.dataDestination.Select.type === 'edge') {
-					// target is edge
-					note.warn('Select mode edge destination not yet implemented.');
-
-					// flip variable or create edge?
-					if (settings.dataDestination.Select.mode === 'flip') {
-						// flip variable
-
-					} else if (settings.dataDestination.Select.mode === 'create') {
-						// create edge
-
-						// // Test if there is an existing edge.
-						// if (settings.network.getEdges({type: settings.edgeType,from:settings.network.getEgo().id, to: this.attrs.to}).length > 0) {
-						// 	// if there is, remove it
-						// 	this.children[0].stroke('white');
-						// 	settings.network.removeEdge(settings.network.getEdges({type: settings.edgeType,from:settings.network.getEgo().id, to: this.attrs.to})[0]);
-						// } else {
-						// 	// else add it
-						// 	edge = {
-						// 		from:settings.network.getEgo().id,
-						// 		to: this.attrs.to,
-						// 		type: settings.edgeType,
-						// 	};
-						//
-						// 	if (typeof settings.variables !== 'undefined') {
-						// 		$.each(settings.variables, function(index, value) {
-						// 			edge[value.label] = value.value;
-						// 		});
-						// 	}
-						//
-						// 	this.children[0].stroke(colors.selected);
-						// 	settings.network.addEdge(edge);
-						// }
-
-
-					}
+				// flip
+				if (currentValue === 0 || typeof currentValue === 'undefined') {
+					properties[settings.prompts[currentPrompt].showSelected.label] = 1;
+					currentNode.children[1].stroke(colors.selected);
+				} else {
+					// remove static variables, if present
+					var node = window.network.getNode(currentNode.attrs.id);
+					node[settings.prompts[currentPrompt].showSelected.label] = 0;
+					currentNode.children[1].stroke(settings.options.defaultNodeColor);
 				}
+
+				settings.network.updateNode(currentNode.attrs.id, properties);
+
 			}
 			this.moveToTop();
 			nodeLayer.draw();
@@ -1090,7 +1022,7 @@ module.exports = function SociogramMulti() {
 					window.dispatchEvent(log);
 
 					/** Test if edge creation mode is enabled */
-					if (settings.modes.indexOf('Edge') !== -1) {
+					if (typeof settings.prompts[currentPrompt].showEdges === 'object') {
 
 						// Ignore two clicks on the same node
 						if (selectedNodes[0] === currentNode) {
@@ -1112,22 +1044,20 @@ module.exports = function SociogramMulti() {
 							selectedNodes[0].children[0].opacity(0);
 
 							// Create an edge object
-							if (settings.dataDestination.Edge.type === 'edge')   {// We are storing the edge on an edge
 
 								var edgeProperties = {};
-								if (settings.criteria.type === 'node') {
-									edgeProperties = {
-										from: selectedNodes[0].attrs.id,
-										to: selectedNodes[1].attrs.id,
-									};
-								}
+								edgeProperties = {
+									from: selectedNodes[0].attrs.id,
+									to: selectedNodes[1].attrs.id,
+								};
 
 								// Add the custom variables
-								$.each(settings.dataDestination.Edge.variables, function(index, value) {
-									edgeProperties[value.name] = value.value;
+								$.each(settings.prompts[currentPrompt].showEdges, function(index, value) {
+									edgeProperties[value.label] = value.value;
 								});
 
 								// Try adding the edge. If it returns fals, it already exists, so remove it.
+								console.log(edgeProperties);
 								if (settings.network.addEdge(edgeProperties) === false) {
 									note.debug('Sociogram removing edge.',2);
 									settings.network.removeEdge(settings.network.getEdges(edgeProperties));
@@ -1137,11 +1067,7 @@ module.exports = function SociogramMulti() {
 
 								// Empty the selected nodes array and draw the layer.
 								selectedNodes = [];
-							} else if (settings.dataDestination.Edge.type === 'node')   {// We are storing the edge as a node attribute
-								window.tools.notify('Storing edges as a node attribute is not yet implemented.', 1);
-							} else {
-								window.tools.notify('Error with edge destination.', 1);
-							}
+
 						} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
 							currentNode.children[0].opacity(1);
 						}
@@ -1413,6 +1339,51 @@ module.exports = function SociogramMulti() {
 
 	};
 
+	sociogramMulti.showNewNodeForm = function() {
+			var properties = {};
+			if (settings.prompts[currentPrompt].dataType === 'namegenerator') {
+				// add fields from dataTarget
+		        properties = {};
+				$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
+					properties[formValue.label] = {
+		                type:formValue.type,
+		                title: formValue.label
+		            };
+				});
+
+		        window.forms.nameGenForm.addTemporaryFields(properties);
+
+		        // Add data from fields
+		        properties = {};
+				$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
+				properties[formValue.label] = formValue.value;
+				});
+
+		        window.forms.nameGenForm.addData(properties);
+			}
+
+			// Handle select data
+			if (typeof settings.prompts[currentPrompt].showSelected === 'object') {
+				// add fields from dataTarget
+				properties = {};
+
+					properties[settings.prompts[currentPrompt].showSelected.label] = {
+						type:'hidden',
+						title: settings.prompts[currentPrompt].showSelected.label
+					};
+
+				window.forms.nameGenForm.addTemporaryFields(properties);
+
+				// Add data from fields
+				properties = {};
+				properties[settings.prompts[currentPrompt].showSelected.label] = 1;
+
+				window.forms.nameGenForm.addData(properties);
+			}
+
+		    window.forms.nameGenForm.show();
+	};
+
 	sociogramMulti.drawUIComponents = function (callback) {
 
 		// Load the image
@@ -1424,7 +1395,7 @@ module.exports = function SociogramMulti() {
 			$('#'+settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
 			var events = [{
 				event: 'click',
-				handler: window.forms.nameGenForm.show,
+				handler: sociogramMulti.showNewNodeForm,
 				targetEl:  '.new-node-button'
 			}, {
 				event: 'click',
