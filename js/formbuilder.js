@@ -21,6 +21,10 @@ module.exports = function FormBuilder(formName) {
         note.info('FormBuilder initialised.');
     };
 
+    formBuilder.getID = function() {
+        return thisForm.id;
+    };
+
     formBuilder.reset = function() {
         $(html).find('.alert').fadeOut();
         $(html)[0].reset();

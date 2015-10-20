@@ -347,10 +347,12 @@ module.exports = function SociogramMulti() {
 
 			var selectNodes = settings.network.getNodes();
 			$.each(selectNodes, function(index, node) {
-				var currentValue = node[settings.prompts[currentPrompt].showSelected.label];
-				if (currentValue === 1) {
+				console.log(node);
+				var currentValue = node[settings.prompts[currentPrompt].showSelected.variable];
+				if (currentValue == settings.prompts[currentPrompt].showSelected.value) {
 					// this node is selected
 					var currentNode = sociogramMulti.getNodeByID(node.id);
+					console.log(currentNode);
 					currentNode.children[1].stroke(colors.selected);
 				}
 			});
@@ -966,16 +968,17 @@ module.exports = function SociogramMulti() {
 
 				// Get current variable value
 				var properties = {};
-				var currentValue = settings.network.getNode(currentNode.attrs.id)[settings.prompts[currentPrompt].showSelected.label];
-
+				var currentValue = settings.network.getNode(currentNode.attrs.id)[settings.prompts[currentPrompt].showSelected.variable];
+				console.log(currentValue);
 				// flip
-				if (currentValue === 0 || typeof currentValue === 'undefined') {
-					properties[settings.prompts[currentPrompt].showSelected.label] = 1;
+				if (currentValue != settings.prompts[currentPrompt].showSelected.value || typeof currentValue === 'undefined') {
+					properties[settings.prompts[currentPrompt].showSelected.variable] = settings.prompts[currentPrompt].showSelected.value;
 					currentNode.children[1].stroke(colors.selected);
 				} else {
 					// remove static variables, if present
+					alert('boo');
 					var node = window.network.getNode(currentNode.attrs.id);
-					node[settings.prompts[currentPrompt].showSelected.label] = 0;
+					node[settings.prompts[currentPrompt].showSelected.variable] = 0;
 					currentNode.children[1].stroke(settings.options.defaultNodeColor);
 				}
 
@@ -1367,16 +1370,16 @@ module.exports = function SociogramMulti() {
 				// add fields from dataTarget
 				properties = {};
 
-					properties[settings.prompts[currentPrompt].showSelected.label] = {
+					properties[settings.prompts[currentPrompt].showSelected.variable] = {
 						type:'hidden',
-						title: settings.prompts[currentPrompt].showSelected.label
+						title: settings.prompts[currentPrompt].showSelected.variable
 					};
 
 				window.forms.nameGenForm.addTemporaryFields(properties);
 
 				// Add data from fields
 				properties = {};
-				properties[settings.prompts[currentPrompt].showSelected.label] = 1;
+				properties[settings.prompts[currentPrompt].showSelected.variable] = settings.prompts[currentPrompt].showSelected.value;
 
 				window.forms.nameGenForm.addData(properties);
 			}
@@ -1402,6 +1405,16 @@ module.exports = function SociogramMulti() {
 				handler: hullListClickHandler,
 				targetEl:  window.document,
 				subTarget:  '.list-group-item',
+			},
+			{
+				event: 'submit',
+				handler: function() {
+					setTimeout(function() {
+						sociogramMulti.updateNodeState();
+					},100);
+				},
+				targetEl: window.document,
+				subtarget: window.forms.nameGenForm.getID()
 			}
 		];
 			window.tools.Events.register(moduleEvents, events);

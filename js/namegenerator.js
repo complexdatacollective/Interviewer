@@ -81,7 +81,7 @@ module.exports = function NameGenerator() {
             return false;
         }
 
-        var eachTime = 4000;
+        var eachTime = 1000;
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
@@ -90,36 +90,40 @@ module.exports = function NameGenerator() {
 
     };
 
+    nameGenerator.updateSidePanel = function() {
+        // Empty it
+        $('.current-node-list').children().remove();
+
+        // ignore ego and any nodes that are visible in the main node list
+        var nodes = options.network.getNodes({}, function (results) {
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.type !== 'Ego' && $('[data-index='+value.id+']').length === 0) {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
+        $.each(nodes, function(index,value) {
+            var el = $('<div class="node-list-item">'+value.label+'</div>');
+            $('.current-node-list').append(el);
+        });
+
+    };
+
     nameGenerator.generateAlter = function() {
         // We must simulate every interaction to ensure that any errors are caught.
-        $('.add-button').click();
+        $('.new-node-button').click();
         setTimeout(function() {
-            $('#ngForm').submit();
-        }, 3000);
-
-        $('#fname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-        $('#lname_t0').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-        var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
-        if ($('#lname_t0').val().length > 0 ) {
-            lname +='.';
-        }
-        $('#nname_t0').val(lname);
-        $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
-
-        setTimeout(function() {
-            $('.relationship-button').click();
+            $('#new-node-submit-btn').click();
         }, 500);
-        setTimeout(function() {
 
-            var roleNumber = Math.floor(window.tools.randomBetween(1,3));
+        $('#first_name').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
+        $('#last_name').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
 
-            for (var j = 0; j < roleNumber; j++) {
-                $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
-
-            }
-
-            $('.relationship-close-button').click();
-        }, 2000);
+        $('#label').val($('#first_name').val());
     };
 
     nameGenerator.openNodeBox = function() {
@@ -292,7 +296,7 @@ module.exports = function NameGenerator() {
 
     nameGenerator.updateCounter = function(number) {
         if (!number) {
-            alterCounter.update(options.network.getNodes().length);
+            alterCounter.update(options.network.getNodes().length-1);
         } else {
             alterCounter.update(number);
         }
@@ -364,21 +368,7 @@ module.exports = function NameGenerator() {
                 $('.nameList').addClass('alt');
             }
 
-            var nodes = options.network.getNodes({}, function (results) {
-                var filteredResults = [];
-                $.each(results, function(index,value) {
-                    if (value.type !== 'Ego') {
-                        filteredResults.push(value);
-                    }
-                });
-
-                return filteredResults;
-            });
-
-            $.each(nodes, function(index,value) {
-                var el = $('<div class="node-list-item">'+value.label+'</div>');
-                $('.current-node-list').append(el);
-            });
+            nameGenerator.updateSidePanel();
 
             // halve the panel height if we have two
             if ($('.side-container').children().length > 1) {
