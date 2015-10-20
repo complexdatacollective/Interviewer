@@ -71,7 +71,7 @@ module.exports = function ContextGenerator() {
 		// Prompts
 		$('.contexthull-title-container').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
 		for (var i = 0; i < contextGenerator.options.prompts.length; i++) {
-			$('.swiper-wrapper').append('<div class="swiper-slide">'+contextGenerator.options.prompts[i]+'</div>');
+			$('.swiper-wrapper').append('<div class="swiper-slide"><h2>'+contextGenerator.options.prompts[i]+'</h2></div>');
 		}
 		promptSwiper = new Swiper ('.swiper-container', {
 			pagination: '.swiper-pagination',

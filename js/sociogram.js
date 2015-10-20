@@ -48,7 +48,7 @@ module.exports = function Sociogram() {
 		// drag - layout mode
 		// double tap - select mode
 		// long press - community mode
-		modes:['Edge', 'Community', 'Position', 'Select'], //edge - create edges, position - lay out, select - node attributes
+		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 	    panels: ['mode', 'details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
 			defaultNodeSize: 30,
@@ -70,29 +70,29 @@ module.exports = function Sociogram() {
 	    dataDestination: {
 	        // indexed by mode. one for each active mode
 	        'Edge': {
-	            type: 'edge', // edge or node. where do we store the attriute?
-	            variables: [
-	                {name:'type', value:'Friend'}, // node or edge type. Should this be promoted out of the variables array? Might need to respect existing exdges or nodes. When to we overwrite vs update?
-	                {name:'namegenerator', value: 'closest'}
-	                // {'weight': function() { some callback eval code }}
-	            ]
+	            // type: 'edge', // edge or node. where do we store the attriute?
+	            // variables: [
+	            //     {name:'type', value:'Friend'}, // node or edge type. Should this be promoted out of the variables array? Might need to respect existing exdges or nodes. When to we overwrite vs update?
+	            //     {name:'namegenerator', value: 'closest'}
+	            //     // {'weight': function() { some callback eval code }}
+	            // ]
 	        },
 	        'Select': {
-	            type: 'node', //"hypernode" - create node for attribute type and link with edge?
-	            mode: 'flip', // flip - flip binary value of flip_variable, create - delete or create node or edge
-	            flip_variable: 'drugUser', // O
-	            variables: [
-	                {name: 'drugType', value: 'boozybix'}
-	            ]
+	            // type: 'node', //"hypernode" - create node for attribute type and link with edge?
+	            // mode: 'flip', // flip - flip binary value of flip_variable, create - delete or create node or edge
+	            // flip_variable: 'drugUser', // O
+	            // variables: [
+	            //     {name: 'drugType', value: 'boozybix'}
+	            // ]
 	        },
 	        'Position': {
-	            type: 'node',
-	            variable: 'coords'
+	            // type: 'node',
+	            // variable: 'coords'
 	        },
 	        'Community' : {
-	            type: 'node', // node, edge, ego
-				name: 'Groups',
-				variable: 'special_hulls'
+	            // type: 'node', // node, edge, ego
+				// name: 'Groups',
+				// variable: 'special_hulls'
 	        }
 	    },
 	    criteria: { // criteria for being shown on this screen
@@ -162,8 +162,10 @@ module.exports = function Sociogram() {
 	sociogram.init = function (userSettings) {
 
 		note.info('Sociogram initialising.');
-		$.extend(true, sociogram.settings,userSettings);
+		console.log(userSettings);
 
+		$.extend(true, sociogram.settings,userSettings);
+		console.log(sociogram.settings);
 		// Add the title and heading
 		$('<div class="sociogram-title"><h4>'+sociogram.settings.heading+'</h4><p>'+sociogram.settings.subheading+'</p></div>').insertBefore('#'+sociogram.settings.targetEl );
 
@@ -174,10 +176,10 @@ module.exports = function Sociogram() {
 		sociogram.drawUIComponents(function() {
 
 			// Show hulls checkbox
-			if (sociogram.settings.modes.indexOf('community') !== -1) {
+			if (sociogram.settings.modes.indexOf('Community') !== -1) {
 				$('#'+sociogram.settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
 			}
-			
+
 			// Panels
 			if (sociogram.settings.panels.indexOf('details') !== -1) {
 				$('<div class="details-panel"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New context</div></div></div>').appendTo('#'+sociogram.settings.targetEl);
@@ -320,7 +322,6 @@ module.exports = function Sociogram() {
 
 		// Select Mode
 		if (sociogram.settings.modes.indexOf('Select') !== -1) {
-			// Select mode
 
 			if (sociogram.settings.dataOrigin.Select.mode === 'flip') {
 				var selectNodes = sociogram.settings.network.getNodes();
@@ -826,7 +827,7 @@ module.exports = function Sociogram() {
 			});
 			new Konva.Tween({
 				node: nodeGroup,
-				x: 200,
+				x: 145,
 				y: $(window).height()/2,
 				duration:0.7,
 				easing: Konva.Easings.EaseOut
@@ -1523,7 +1524,7 @@ module.exports = function Sociogram() {
 			//draw concentric circles
 			for(var i = 0; i < sociogram.settings.options.concentricCircleNumber; i++) {
 				var ratio = (1-(i/sociogram.settings.options.concentricCircleNumber));
-				var skew = i > 0 ? (ratio * 6) * (totalHeight/70) : 0;
+				var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
 				var currentRadius = totalHeight/2 * ratio;
 				currentRadius = sociogram.settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
 				previousSkew = skew;
@@ -1585,7 +1586,7 @@ module.exports = function Sociogram() {
 			// add the shape to the layer
 
 			var newNodeCircleGroup = new Konva.Group({
-			 x: 200,
+			 x: 145,
 			 opacity:0,
 			 y: window.innerHeight / 2,
 			});
@@ -1605,7 +1606,7 @@ module.exports = function Sociogram() {
 			if (sociogram.settings.options.showMe === true) {
 
 				var meCircle = new Konva.Circle({
-					radius: 60,
+					radius: 50,
 					x: window.innerWidth / 2,
 					y: window.innerHeight / 2,
 					hitGraphEnabled: false,

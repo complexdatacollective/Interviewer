@@ -32,7 +32,7 @@ module.exports = function NameGenerator() {
     var alterCounter;
     var moduleEvents = [];
 
-    var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
+    var alterCount = options.network.getNodes({type_t0: 'Alter'}).length;
 
     var roles = {
         'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
@@ -270,7 +270,7 @@ module.exports = function NameGenerator() {
             properties[variableValue.label] = variableValue.value;
         });
 
-        var nodes = window.network.getNodes(properties, function (results) {
+        var nodes = options.network.getNodes(properties, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {
@@ -355,24 +355,7 @@ module.exports = function NameGenerator() {
             if (options.panels.indexOf('current') !== -1) {
 
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>People you already named:</h4></div>'));
-
-
-                var nodes = window.network.getNodes({}, function (results) {
-                    var filteredResults = [];
-                    $.each(results, function(index,value) {
-                        if (value.type !== 'Ego') {
-                            filteredResults.push(value);
-                        }
-                    });
-
-                    return filteredResults;
-                });
-
-                $.each(nodes, function(index,value) {
-                    var el = $('<div class="node-list-item">'+value.label+'</div>');
-                    sideContainer.children('.current-node-list').append(el);
-                });
+                sideContainer.append($('<div class="current-panel"><h4>People you already named:</h4><div class="current-node-list node-lists"></div></div>'));
             }
 
             if (sideContainer.children().length > 0) {
@@ -380,6 +363,22 @@ module.exports = function NameGenerator() {
                 sideContainer.insertBefore('.nameList');
                 $('.nameList').addClass('alt');
             }
+
+            var nodes = options.network.getNodes({}, function (results) {
+                var filteredResults = [];
+                $.each(results, function(index,value) {
+                    if (value.type !== 'Ego') {
+                        filteredResults.push(value);
+                    }
+                });
+
+                return filteredResults;
+            });
+
+            $.each(nodes, function(index,value) {
+                var el = $('<div class="node-list-item">'+value.label+'</div>');
+                $('.current-node-list').append(el);
+            });
 
             // halve the panel height if we have two
             if ($('.side-container').children().length > 1) {
@@ -401,7 +400,7 @@ module.exports = function NameGenerator() {
 
         var card;
 
-        card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card"><h4>'+properties.label+'</h4></div></div>');
+        card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card shown"><h4>'+properties.label+'</h4></div></div>');
         var list = $('<ul></ul>');
         list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
         card.children('.inner-card').append(list);
@@ -437,7 +436,7 @@ module.exports = function NameGenerator() {
             return false;
         }
 
-        if (window.network.removeNode(id)) {
+        if (options.network.removeNode(id)) {
             if(nameGenerator.removeCard(id)) {
                 note.info('Deleted node with id '+id);
                 return true;

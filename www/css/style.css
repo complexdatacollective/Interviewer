@@ -10930,6 +10930,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 .swiper-container {
   width: 100%;
   height: 100%;
+  text-align: center;
 }
 .swiper-slide h2 {
   font-size: 3.4vh;
@@ -12354,8 +12355,6 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   margin: 0 auto;
   padding-top: 170px;
   padding-bottom: 2vmin;
-  -ms-flex-pack: start;
-  -webkit-box-pack: start;
   -webkit-align-content: flex-start;
       -ms-flex-line-pack: start;
           align-content: flex-start;
@@ -12366,6 +12365,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-justify-content: flex-start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  z-index: 10;
 }
 @media (min-width: 769px) {
   .nameList {
@@ -12429,10 +12429,10 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   border-radius: 8px;
   background: #b16eff;
 }
-.current-node-list {
+.current-panel {
   overflow: scroll;
   width: 100%;
-  height: 85%;
+  height: 100%;
   padding: 20px;
   padding-bottom: 4em;
   border-radius: 8px;
@@ -12475,6 +12475,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 .card {
   padding-left: 1em;
   color: white;
+  z-index: 99;
 }
 .card.ghost {
   -webkit-transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
@@ -12513,6 +12514,16 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-transform: scale(0.2);
+      -ms-transform: scale(0.2);
+          transform: scale(0.2);
+  opacity: 0;
+}
+.inner-card.shown {
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
 }
 .inner-card.delete {
   opacity: 0;

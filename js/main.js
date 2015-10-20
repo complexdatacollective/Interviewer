@@ -176,6 +176,7 @@ $(document).ready(function() {
     window.netCanvas.Modules = {};
     window.netCanvas.Modules.Network = require('./network.js');
     window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+    window.netCanvas.Modules.NameGeneratorMulti = require('./namegeneratormulti.js');
     window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
     window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
     window.netCanvas.Modules.IOInterface = require('./iointerface.js');
@@ -184,6 +185,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
+    window.netCanvas.Modules.SociogramMulti = require('./sociogrammulti.js');
     window.netCanvas.Modules.FormBuilder = require('./formbuilder.js');
     window.netCanvas.Modules.ContextGenerator = require('./contextgenerator.js');
     window.netCanvas.Modules.Menu = require('./menu.js');
