@@ -44,9 +44,9 @@ module.exports = function SociogramMulti() {
 		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 	    panels: ['details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
-			defaultNodeSize: 28,
+			defaultNodeSize: 29,
 			defaultNodeColor: 'white',
-			defaultNodeStrokeWidth: 8,
+			defaultNodeStrokeWidth: 7,
 			defaultLabelColor: 'black',
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',
@@ -178,7 +178,7 @@ module.exports = function SociogramMulti() {
         });
 
         // Update current prompt counter
-        promptSwiper.on('slideChangeStart', function () {
+        promptSwiper.on('slideChangeEnd', function () {
             currentPrompt = promptSwiper.activeIndex;
             sociogramMulti.changeData();
         });
@@ -1343,48 +1343,56 @@ module.exports = function SociogramMulti() {
 	};
 
 	sociogramMulti.showNewNodeForm = function() {
-			var properties = {};
-			if (settings.prompts[currentPrompt].dataType === 'namegenerator') {
-				// add fields from dataTarget
-		        properties = {};
-				$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
-					properties[formValue.label] = {
-		                type:formValue.type,
-		                title: formValue.label
-		            };
-				});
+		window.forms.nameGenForm.removeTemporaryFields();
+		var properties = {};
+		// if (settings.prompts[currentPrompt].dataType === 'namegenerator') {
+		// 	// add fields from dataTarget
+	    //     properties = {};
+		// 	$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
+		// 		properties[formValue.label] = {
+	    //             type:formValue.type,
+	    //             title: formValue.label
+	    //         };
+		// 	});
+		//
+	    //     window.forms.nameGenForm.addTemporaryFields(properties);
+		//
+	    //     // Add data from fields
+	    //     properties = {};
+		// 	$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
+		// 	properties[formValue.label] = formValue.value;
+		// 	});
+		//
+	    //     window.forms.nameGenForm.addData(properties);
+		// }
 
-		        window.forms.nameGenForm.addTemporaryFields(properties);
 
-		        // Add data from fields
-		        properties = {};
-				$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
-				properties[formValue.label] = formValue.value;
-				});
-
-		        window.forms.nameGenForm.addData(properties);
-			}
-
-			// Handle select data
-			if (typeof settings.prompts[currentPrompt].showSelected === 'object') {
+		for (var i =0; i <= currentPrompt; i++) {
+			// check if current previous prompt has a select element
+			if (typeof settings.prompts[i].showSelected === 'object') {
 				// add fields from dataTarget
 				properties = {};
 
-					properties[settings.prompts[currentPrompt].showSelected.variable] = {
-						type:'hidden',
-						title: settings.prompts[currentPrompt].showSelected.variable
-					};
+				properties[settings.prompts[i].showSelected.group] = {
+					'type': 'button-checkbox',
+					'inline': true,
+					'title':settings.prompts[i].showSelected.group,
+					'variables':[
+						{label:settings.prompts[i].showSelected.shortLabel, id:settings.prompts[i].showSelected.variable},
+					]
+				};
 
 				window.forms.nameGenForm.addTemporaryFields(properties);
 
 				// Add data from fields
 				properties = {};
-				properties[settings.prompts[currentPrompt].showSelected.variable] = settings.prompts[currentPrompt].showSelected.value;
+				properties[settings.prompts[currentPrompt].showSelected.variable] = settings.prompts[currentPrompt].showSelected.variable;
 
 				window.forms.nameGenForm.addData(properties);
 			}
+		}
 
-		    window.forms.nameGenForm.show();
+	    window.forms.nameGenForm.show();
 	};
 
 	sociogramMulti.drawUIComponents = function (callback) {

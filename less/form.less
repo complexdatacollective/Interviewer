@@ -106,6 +106,35 @@ input[type=checkbox]:checked + label:before {
 	letter-spacing: 10px;
 } /* allow space for check mark */
 
+// button checkboxes
+
+input.btn-checkbox[type=checkbox] {
+	display: none;
+} /* to hide the checkbox itself */
+
+input.btn-checkbox[type=checkbox] + label:before {
+	font-family: FontAwesome;
+	display: inline-block;
+	cursor: pointer;
+	pointer-events: all;
+    font-size: @font-size-large;
+}
+
+input.btn-checkbox[type=checkbox] + label:before {
+	content: '\f10c';
+} /* unchecked icon */
+input.btn-checkbox[type=checkbox] + label:before {
+	letter-spacing: 10px;
+} /* space between checkbox and label */
+
+input.btn-checkbox[type=checkbox]:checked + label:before {
+	content: '\f058';
+	color: @brand-primary;
+} /* checked icon */
+input.btn-checkbox[type=checkbox]:checked + label:before {
+	letter-spacing: 10px;
+} /* allow space for check mark */
+
 
 /*** custom radio ***/
 

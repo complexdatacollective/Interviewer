@@ -64,10 +64,15 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.hide = function () {
         note.debug('FormBuilder ['+name+']: hide.');
-        formBuilder.removeTemporaryFields();
         targetEl.removeClass('show');
         $('.black-overlay').removeClass('show');
-        $(thisForm).trigger('reset');
+        setTimeout(function() {
+            formBuilder.removeTemporaryFields();
+            $(thisForm).trigger('reset');
+        }, 1500);
+
+
+
     };
 
 
@@ -143,12 +148,14 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.addFields = function(fields) {
-
+        var wrapper, variableComponent, variableLabel, checkLabel, placeholder, required;
+        note.debug('Adding fields');
         $.each(fields, function(formIndex, formValue) {
+            note.debug('adding '+formIndex);
             if (!formBuilder.fieldExists(formIndex)) {
-                var wrapper, variableComponent = '', variableLabel = '', checkLabel = '';
-                var placeholder = formValue.placeholder? formValue.placeholder : '';
-                var required = formValue.required? 'required' : '';
+                variableComponent = ''; variableLabel = ''; checkLabel = '';
+                placeholder = formValue.placeholder? formValue.placeholder : '';
+                required = formValue.required? 'required' : '';
 
                 if (formValue.type === 'text' || formValue.type === 'hidden') {
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
@@ -254,7 +261,40 @@ module.exports = function FormBuilder(formName) {
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
                     formFields = $(formFields).append(wrapper);
+                } else if (formValue.type === 'button-checkbox') {
+                    // Create wrapper element
+                    wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
+                    variableComponent = '';
+                    variableLabel = '<label class="control-label">'+formValue.title+'</label>';
+                    wrapper = $(wrapper).append(variableLabel);
+
+                    // Append checkboxes
+                    $.each(formValue.variables, function(checkIndex, checkValue){
+                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+formIndex+'" value="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
+                        checkLabel = '<label class="checkbox-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
+                        wrapper = $(wrapper).append(variableComponent+checkLabel);
+                    });
+                    formFields = $(formFields).append(wrapper);
                 }
+            } else if(formBuilder.fieldExists(formIndex)) {
+                variableComponent = ''; variableLabel = ''; checkLabel = '';
+                placeholder = formValue.placeholder? formValue.placeholder : '';
+                required = formValue.required? 'required' : '';
+
+
+                if (formValue.type === 'button-checkbox') {
+                    // This field exists. If we are trying to define it again, perhaps it is a checkbox group
+                    // If it is, we should append the label and input to the existing form group
+                    // Create wrapper element
+
+                    // Append checkboxes
+                    $.each(formValue.variables, function(checkIndex, checkValue){
+                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+formIndex+'" value="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
+                        checkLabel = '<label class="checkbox-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
+                        $(formFields).find('[data-component="'+formIndex+'"]').append(variableComponent+checkLabel);
+                    });
+                }
+
             } else {
                 note.error('FormBuilder ['+name+']: Field with id "'+formIndex+'" already exists!');
             }
@@ -275,7 +315,10 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.fieldExists = function(id) {
         if ($('#'+thisForm.id).find('#'+id).length > 0) {
-            console.log('field '+id+' exists');
+            note.debug('field '+id+' exists');
+            return true;
+        } else if ($('#'+thisForm.id).find('[data-component="'+id+'"]').length > 0) {
+            note.debug('field '+id+' exists as a checkbox.');
             return true;
         } else {
             console.log('field '+id+' not found');
@@ -376,13 +419,15 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.addData = function(data) {
         note.debug('FormBuilder ['+name+']: addData()');
-        note.debug(data);
 
         $.each(data, function(dataIndex, dataValue) {
-            console.log('analysing '+dataIndex);
+            console.log('formbuilder.addData() analysing data for '+dataIndex);
             if (formBuilder.fieldExists(dataIndex)) {
-                console.log(dataIndex);
+
+                // For standard inputs
                 var currentType = formBuilder.fieldType(dataIndex);
+                // But we need this for checkboxes
+                currentType = currentType ? currentType : 'checkbox';
                 if (currentType === 'text' || currentType === 'email' || currentType === 'number' || currentType === 'hidden') {
                     console.log('assigning '+dataValue+' to '+dataIndex);
                     $(html).find('#'+dataIndex).val(dataValue);
