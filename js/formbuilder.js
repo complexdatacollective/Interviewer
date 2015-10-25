@@ -270,7 +270,7 @@ module.exports = function FormBuilder(formName) {
 
                     // Append checkboxes
                     $.each(formValue.variables, function(checkIndex, checkValue){
-                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+formIndex+'" value="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
+                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="checkbox-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         wrapper = $(wrapper).append(variableComponent+checkLabel);
                     });
@@ -289,7 +289,7 @@ module.exports = function FormBuilder(formName) {
 
                     // Append checkboxes
                     $.each(formValue.variables, function(checkIndex, checkValue){
-                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+formIndex+'" value="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
+                        variableComponent = '<input type="checkbox" data-field="'+formIndex+'" name="'+checkValue.id+'" id="'+checkValue.id+'" '+required+'>';
                         checkLabel = '<label class="checkbox-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         $(formFields).find('[data-component="'+formIndex+'"]').append(variableComponent+checkLabel);
                     });
@@ -354,12 +354,20 @@ module.exports = function FormBuilder(formName) {
                         // To handle checkboxes, we check if the key already exists first. If it
                         // does, we append new values to an array. This keeps compatibility with
                         // single form fields, but might need revising.
+
+                        // Handle checkbox values
+                        if (data[i].value === 'on') { data[i].value = 1; }
+
+                        // This code takes the serialised output and puts it in the structured required to store within noded/edges.
                         if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] !== 'object') {
+                            // if it isn't an object, its a string. Create an empty array and store by itself.
                             cleanData[data[i].name] = [cleanData[data[i].name]];
                             cleanData[data[i].name].push(data[i].value);
                         } else if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] === 'object'){
+                            // Its already an object, so append our new item
                             cleanData[data[i].name].push(data[i].value);
                         } else {
+                            // it is undefined? Weird.
                             cleanData[data[i].name] = data[i].value;
                         }
 
@@ -413,7 +421,6 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.destroy = function() {
-        alert('formBuilder ['+name+'] destroy()');
         window.tools.Events.unbind(moduleEvents);
     };
 
@@ -423,11 +430,12 @@ module.exports = function FormBuilder(formName) {
         $.each(data, function(dataIndex, dataValue) {
             console.log('formbuilder.addData() analysing data for '+dataIndex);
             if (formBuilder.fieldExists(dataIndex)) {
-
                 // For standard inputs
                 var currentType = formBuilder.fieldType(dataIndex);
+
                 // But we need this for checkboxes
                 currentType = currentType ? currentType : 'checkbox';
+                console.log('Identified '+dataIndex+' as type '+currentType);
                 if (currentType === 'text' || currentType === 'email' || currentType === 'number' || currentType === 'hidden') {
                     console.log('assigning '+dataValue+' to '+dataIndex);
                     $(html).find('#'+dataIndex).val(dataValue);
@@ -445,7 +453,9 @@ module.exports = function FormBuilder(formName) {
                 } else if (currentType === 'radio') {
                     $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
                 } else if (currentType === 'checkbox') {
-
+                    console.log('adding checkbox data');
+                    console.log(dataIndex);
+                    console.log(dataValue);
                     // If single value, use directly
                     if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
                         // If array, iterate
@@ -454,6 +464,9 @@ module.exports = function FormBuilder(formName) {
                         }
                     } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'string') {
                         $(html).find('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
+                    } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'number') {
+                        $(html).find('#'+dataIndex).prop('checked', true);
+
                     }
 
                 } else {

@@ -548,7 +548,7 @@ module.exports = function SociogramMulti() {
 		var properties;
 
 		// store properties according to data destination
-		if (settings.dataDestination.Community.type === 'node') {
+		if (settings.dataOrigin.Community.type === 'node') {
 
 			// If the point doesn't have the attribute, fail
 			if (point.attrs[settings.dataDestination.Community.variable] === 'undefined') {
@@ -577,26 +577,26 @@ module.exports = function SociogramMulti() {
 				});
 			}
 
-		} else if (settings.dataDestination.Community.type === 'ego') {
+		} else if (settings.dataOrigin.Community.type === 'ego') {
 
 			// If the point doesn't have the attribute, fail
-			if (point.attrs[settings.dataDestination.Community.variable] === 'undefined') {
+			if (point.attrs[settings.dataOrigin.Community.variable] === 'undefined') {
 				note.error('sociogramMulti.removePointFromHull(): Error! The point wasn\'t attached to a hull named '+hullLabel);
 				return false;
 			}
 
 			// If the hull isnt in the node, fail
-			if (point.attrs[settings.dataDestination.Community.variable].indexOf(hullLabel) === -1) {
+			if (point.attrs[settings.dataOrigin.Community.variable].indexOf(hullLabel) === -1) {
 				note.error('sociogramMulti.removePointFromHull(): Error! The point wasn\'t attached to a hull named '+hullLabel);
 				return false;
 			} else {
 				// Find the node we need to store the hull value in, and update it.
 
-				// Create a dummy object so we can use the variable name set in settings.dataDestination
+				// Create a dummy object so we can use the variable name set in settings.dataOrigin
 				properties = {};
 				var egoPointHulls = point.attrs.contexts;
 				egoPointHulls.remove(hullLabel);
-				properties[settings.dataDestination.Community.variable] = egoPointHulls;
+				properties[settings.dataOrigin.Community.variable] = egoPointHulls;
 				point.attrs.contexts = egoPointHulls;
 
 				// Update the node with the object
@@ -605,7 +605,7 @@ module.exports = function SociogramMulti() {
 					note.debug(properties);
 				});
 			}
-		} else if (settings.dataDestination.Position.type === 'edge') {
+		} else if (settings.dataOrigin.Position.type === 'edge') {
 			// not yet implemented
 		}
 
@@ -1386,7 +1386,7 @@ module.exports = function SociogramMulti() {
 
 				// Add data from fields
 				properties = {};
-				properties[settings.prompts[currentPrompt].showSelected.variable] = settings.prompts[currentPrompt].showSelected.variable;
+				properties[settings.prompts[currentPrompt].showSelected.variable] = 1;
 
 				window.forms.nameGenForm.addData(properties);
 			}
