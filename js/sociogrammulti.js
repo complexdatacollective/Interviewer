@@ -174,6 +174,7 @@ module.exports = function SociogramMulti() {
 
         promptSwiper = new Swiper ('.swiper-container', {
             pagination: '.swiper-pagination',
+			paginationClickable: true,
             speed: 1000
         });
 

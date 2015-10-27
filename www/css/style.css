@@ -10658,8 +10658,26 @@ form {
 legend {
   border: 0;
 }
+.form-group {
+  margin-bottom: 15px;
+  display: inline-block;
+  padding: 10px;
+}
 .form-group:nth-last-child(2) {
   padding-bottom: 0;
+}
+.text-right.button-group {
+  padding-top: 30px;
+}
+label.control-label {
+  width: 100%;
+  border-bottom: 1px solid #bebebe;
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+label.checkbox-inline {
+  padding-left: 0px;
+  padding-right: 20px;
 }
 label.checkbox {
   left: 50px;
@@ -12636,8 +12654,8 @@ body {
   background: #eeeeee;
   padding: 5vmin;
   border-radius: 12px;
-  width: 70vmin;
-  margin-left: -35vmin;
+  width: 85vmin;
+  margin-left: -42.5vmin;
   color: #575757;
   left: 50%;
   top: 10px;
