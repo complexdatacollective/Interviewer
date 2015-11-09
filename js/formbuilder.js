@@ -6,6 +6,10 @@ module.exports = function FormBuilder(formName) {
 
     var formBuilder = {};
     var thisForm;
+    var formOptions = {
+        open: false,
+        inline: false
+    };
     var html = '<form></form>';
     var deferredTasks = [];
     var moduleEvents = [];
@@ -75,11 +79,16 @@ module.exports = function FormBuilder(formName) {
 
     };
 
-
-    formBuilder.build = function(element, form) {
+    formBuilder.build = function(element, form, options) {
+        var userOptions = options || {};
+        $.extend(formOptions, userOptions);
         thisForm = form;
         targetEl = element;
         // Form options
+        if (formOptions.inline === true) {
+            html = $(html).addClass('inline-form');
+        }
+
         if (typeof form.heading !== 'undefined') {
             html = $(html).append('<div class="page-header"><h1>'+form.heading+'</h1></div>');
         }
@@ -423,6 +432,14 @@ module.exports = function FormBuilder(formName) {
             }
         });
 
+    };
+
+    formBuilder.isOpen = function() {
+        return true;
+    };
+
+    formBuilder.isClosed = function() {
+        return false;
     };
 
     formBuilder.destroy = function() {

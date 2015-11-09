@@ -335,7 +335,7 @@ module.exports = function ContextGenerator() {
 					console.log(props);
 					window.forms.mergeContextForm.addData(props);
 					window.forms.mergeContextForm.show();
-					window.forms.nameGenForm.hide();
+					// window.forms.nameGenForm.hide(); // Why was this here?
 
 				} else if ($(ui.draggable).hasClass('node-circle')) {
 					$(this).removeClass('merge');
