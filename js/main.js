@@ -1,4 +1,4 @@
-/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit */
+/* global window, nodeRequire, FastClick, document, Konva, $, L, log, note, tools, isNodeWebkit, UAParser */
 $(document).ready(function() {
     'use strict';
 
@@ -132,11 +132,16 @@ $(document).ready(function() {
 
     // Override notifications on node webkit to use native notifications
     if (isNodeWebkit === true) {
+        var oldError = note.error;
+        var oldWarn = note.warn;
+        
         note.error = function(msg) {
             tools.nwNotification({
                 icon: 'img/error.png',
                 body: msg
             });
+
+            oldError(msg);
         };
 
         note.warn = function(msg) {
@@ -144,6 +149,8 @@ $(document).ready(function() {
                 icon: 'img/alert.png',
                 body: msg
             });
+
+            oldWarn(msg);
         };
     }
 
@@ -156,6 +163,8 @@ $(document).ready(function() {
         note.info('netCanvas running on cordova '+window.cordova.version+' on '+window.cordova.platformId);
     } else {
         // anything we can do in browser? yes.
+        var parser = new UAParser();
+        note.info('netCanvas running on '+parser.getBrowser().name+' '+parser.getBrowser().major+' on '+parser.getOS().name+' '+parser.getOS().version);
     }
 
     var protocolExists = function(protocol, callback) {

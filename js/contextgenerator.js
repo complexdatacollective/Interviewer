@@ -99,7 +99,7 @@ module.exports = function ContextGenerator() {
 			},
 			drop: function( event, ui ) {
 				if ($(ui.draggable).hasClass('circle-responsive')) {
-					contextGenerator.removeContext($(ui.draggable).data('context'));
+					contextGenerator.removeContext($(ui.draggable).data('index'));
 				} else {
 					contextGenerator.removeNode($(ui.draggable).data('id'));
 				}
@@ -239,7 +239,12 @@ module.exports = function ContextGenerator() {
 
 		note.debug('contextGenerator: adding node to context');
 		note.debug(node);
-		$('[data-context="'+node[contextGenerator.options.nodeDestination]+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
+		var thisContext = window.tools.htmlUnEscape(node[contextGenerator.options.nodeDestination]);
+		console.log(thisContext);
+		var context = contexts.indexOf(thisContext);
+		note.debug(contexts);
+		console.log(context);
+		$('[data-index="'+context+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
 
@@ -329,20 +334,20 @@ module.exports = function ContextGenerator() {
 					$(ui.draggable).removeClass('merge');
 					var props = {
 						merged_name: $(ui.draggable).data('context')+'/'+$(this).data('context'),
-						source: $(ui.draggable).data('context'),
-						target: $(this).data('context')
+						source: $(ui.draggable).data('index'),
+						target: $(this).data('index')
 					};
 					console.log(props);
 					window.forms.mergeContextForm.addData(props);
 					window.forms.mergeContextForm.show();
-					// window.forms.nameGenForm.hide(); // Why was this here?
+					// window.forms.nameGenForm.hide(); // Why did I do this?
 
 				} else if ($(ui.draggable).hasClass('node-circle')) {
 					$(this).removeClass('merge');
 					$(ui.draggable).removeClass('merge');
 					// check if we are dropping back where we started, and cancel if so.
 					if ($(this).data('context') !== $(ui.draggable).parent().parent().data('context')) {
-						contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('context'));
+						contextGenerator.moveNode($(ui.draggable).data('id'), $(this).data('index'));
 					}
 
 				} else {
@@ -374,8 +379,8 @@ module.exports = function ContextGenerator() {
 
 	};
 
-	contextGenerator.mergeContexts = function (source, target, newName) {
-		if (!source || !target || !newName) {
+	contextGenerator.mergeContexts = function (sourceIndex, targetIndex, newName) {
+		if (!sourceIndex || !targetIndex || !newName) {
 			note.error('ContextGenerator: mergeContexts() needs better parameters!');
 			return false;
 		}
@@ -383,21 +388,21 @@ module.exports = function ContextGenerator() {
 		note.warn('I\'m not clever enough to check for nodes not visible that are already in both contexts...but I soon will be.');
 
 		// Create a new context with the combined name.
-		contextGenerator.addContext(newName);
+		var newContextIndex = contextGenerator.addContext(newName);
 
 		// Move nodes from the source and target to the new context
-		var sourceNodes = contextGenerator.getContextNodes(source);
-		var targetNodes = contextGenerator.getContextNodes(target);
+		var sourceNodes = contextGenerator.getContextNodes(sourceIndex);
+		var targetNodes = contextGenerator.getContextNodes(targetIndex);
 		$.each(sourceNodes, function(index, value) {
-			contextGenerator.moveNode(value, newName);
+			contextGenerator.moveNode(value, newContextIndex);
 		});
 		$.each(targetNodes, function(index, value) {
-			contextGenerator.moveNode(value, newName);
+			contextGenerator.moveNode(value, newContextIndex);
 		});
 
 		// Remove previous contexts
-		contextGenerator.removeContext(source);
-		contextGenerator.removeContext(target);
+		contextGenerator.removeContext(sourceIndex);
+		contextGenerator.removeContext(targetIndex);
 
 	};
 
@@ -409,20 +414,22 @@ module.exports = function ContextGenerator() {
 		contexts.push(name);
 
 		// use lowest available color
-		var color = 1;
+		var color = 0;
 		while ($('.circle-responsive[data-index='+color+']').length > 0) {
 			color++;
 		}
-		$('.contexthull-hull-container').append('<div class="circle-responsive" data-index="'+color+'" data-context="'+name+'"><div class="circle-content">'+name+'</div></div>');
+		$('.contexthull-hull-container').append('<div class="circle-responsive" data-index="'+color+'" data-context="'+window.tools.htmlEscape(name)+'"><div class="circle-content">'+name+'</div></div>');
 		contextGenerator.makeDraggable();
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
 				event: 'click',
 				handler: contextGenerator.showNewNodeForm,
-				targetEl:  '[data-context="'+name+'"]'
+				targetEl:  '[data-index="'+color+'"]'
 			}];
 			window.tools.Events.register(moduleEvents, event);
 		}
+
+		return color;
 
 	};
 
@@ -434,7 +441,12 @@ module.exports = function ContextGenerator() {
 		}
 	};
 
-	contextGenerator.removeContext = function(name) {
+	contextGenerator.removeContext = function(index) {
+		console.log(contexts);
+		console.log(index);
+		var name = contexts[index];
+
+		console.log(name);
 		if (!name) {
 			note.error('No name provided to contextGenerator.deleteContext().');
 			throw new Error('No name provided to contextGenerator.deleteContext().');
@@ -446,12 +458,15 @@ module.exports = function ContextGenerator() {
 			window.network.updateNode(window.network.getEgo().id, properties);
 
 			// Remove nodes
-			var childNodes = $('div[data-context="'+name+'"]').children('.node-circle-container');
+			var childNodes = $('div[data-index="'+index+'"]').children('.node-circle-container');
 			$.each(childNodes, function(nodeIndex, nodeValue) {
 				var thisId = $(nodeValue).children('.node-circle');
 				contextGenerator.removeNode($(thisId).data('id'));
 			});
-			$('div[data-context="'+name+'"]').remove();
+			console.log('trying to remove element');
+			console.log(name);
+			console.log(index);
+			$('div[data-index="'+index+'"]').remove();
 			return true;
 		} else {
 			note.warn('contextGenerator.deleteContext() couldn\'t find a context with name '+name+'. Nothing was deleted.');
@@ -460,14 +475,14 @@ module.exports = function ContextGenerator() {
 
 	};
 
-	contextGenerator.getContextNodes = function(name) {
-		if (!name) {
-			note.error('No name provided to contextGenerator.getContextNodes().');
+	contextGenerator.getContextNodes = function(index) {
+		if (!index) {
+			note.error('No context index provided to contextGenerator.getContextNodes().');
 		}
 
 		var nodes = [];
 		// Remove nodes
-		var childNodes = $('div[data-context="'+name+'"]').children('.node-circle-container');
+		var childNodes = $('div[data-index="'+index+'"]').children('.node-circle-container');
 		$.each(childNodes, function(nodeIndex, nodeValue) {
 			var thisId = $(nodeValue).children('.node-circle');
 			nodes.push($(thisId).data('id'));
@@ -497,9 +512,9 @@ module.exports = function ContextGenerator() {
 
 		var properties = {};
 		properties[contextGenerator.options.nodeDestination] = [];
-		properties[contextGenerator.options.nodeDestination].push(targetContext);
+		properties[contextGenerator.options.nodeDestination].push(contexts[targetContext]);
 		window.network.updateNode(node, properties, function() {
-			var target = $('div[data-context="'+targetContext+'"]');
+			var target = $('div[data-index="'+targetContext+'"]');
 			var element = $('div[data-id="'+node+'"]').parent();
 			$(element).appendTo(target);
 			return true;

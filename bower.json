@@ -38,6 +38,7 @@
     "tinycolor": "~1.0.0",
     "jquery-ui": "~1.11.4",
     "konva": "~0.10.0",
-    "jquery": "*"
+    "jquery": "*",
+    "ua-parser-js": "~0.7.9"
   }
 }

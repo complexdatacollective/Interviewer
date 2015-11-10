@@ -139,6 +139,28 @@ exports.removeFromObject = function(item, object) {
     return removeCounter;
 };
 
+
+// HTML entity encode/decode
+exports.htmlEscape = function(str) {
+    return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+};
+
+// I needed the opposite function today, so adding here too:
+exports.htmlUnEscape = function (value) {
+    return String(value)
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+};
+
+
 // helper functions
 
 exports.nwNotification = function(options) {
