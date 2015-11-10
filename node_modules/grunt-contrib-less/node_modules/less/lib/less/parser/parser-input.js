@@ -29,55 +29,10 @@ module.exports = function() {
     parserInput.forget = function() {
         saveStack.pop();
     };
-    function sync() {
-        if (parserInput.i > currentPos) {
-            current = current.slice(parserInput.i - currentPos);
-            currentPos = parserInput.i;
-        }
-    }
     parserInput.isWhitespace = function (offset) {
         var pos = parserInput.i + (offset || 0),
             code = input.charCodeAt(pos);
         return (code === CHARCODE_SPACE || code === CHARCODE_CR || code === CHARCODE_TAB || code === CHARCODE_LF);
-    };
-    //
-    // Parse from a token, regexp or string, and move forward if match
-    //
-    parserInput.$ = function(tok) {
-        var tokType = typeof tok,
-            match, length;
-
-        // Either match a single character in the input,
-        // or match a regexp in the current chunk (`current`).
-        //
-        if (tokType === "string") {
-            if (input.charAt(parserInput.i) !== tok) {
-                return null;
-            }
-            skipWhitespace(1);
-            return tok;
-        }
-
-        // regexp
-        sync();
-        if (! (match = tok.exec(current))) {
-            return null;
-        }
-
-        length = match[0].length;
-
-        // The match is confirmed, add the match length to `i`,
-        // and consume any extra white-space characters (' ' || '\n')
-        // which come after that. The reason for this is that LeSS's
-        // grammar is mostly white-space insensitive.
-        //
-        skipWhitespace(length);
-
-        if (typeof match === 'string') {
-            return match;
-        } else {
-            return match.length === 1 ? match[0] : match;
-        }
     };
 
     // Specialization of $(tok)
@@ -86,6 +41,7 @@ module.exports = function() {
             current = current.slice(parserInput.i - currentPos);
             currentPos = parserInput.i;
         }
+
         var m = tok.exec(current);
         if (!m) {
             return null;
@@ -99,13 +55,54 @@ module.exports = function() {
         return m.length === 1 ? m[0] : m;
     };
 
-    // Specialization of $(tok)
     parserInput.$char = function(tok) {
         if (input.charAt(parserInput.i) !== tok) {
             return null;
         }
         skipWhitespace(1);
         return tok;
+    };
+
+    parserInput.$str = function(tok) {
+        var tokLength = tok.length;
+
+        // https://jsperf.com/string-startswith/21
+        for (var i = 0; i < tokLength; i++) {
+            if (input.charAt(parserInput.i + i) !== tok.charAt(i)) {
+                return null;
+            }
+        }
+
+        skipWhitespace(tokLength);
+        return tok;
+    };
+
+    parserInput.$quoted = function() {
+
+        var startChar = input.charAt(parserInput.i);
+        if (startChar !== "'" && startChar !== '"') {
+            return;
+        }
+        var length = input.length,
+            currentPosition = parserInput.i;
+
+        for (var i = 1; i + currentPosition < length; i++) {
+            var nextChar = input.charAt(i + currentPosition);
+            switch(nextChar) {
+                case "\\":
+                    i++;
+                    continue;
+                case "\r":
+                case "\n":
+                    break;
+                case startChar:
+                    var str = input.substr(currentPosition, i + 1);
+                    skipWhitespace(i + 1);
+                    return str;
+                default:
+            }
+        }
+        return null;
     };
 
     var CHARCODE_SPACE = 32,
@@ -136,7 +133,7 @@ module.exports = function() {
                 nextChar = inp.charAt(parserInput.i + 1);
                 if (nextChar === '/') {
                     comment = {index: parserInput.i, isLineComment: true};
-                    var nextNewLine = inp.indexOf("\n", parserInput.i + 1);
+                    var nextNewLine = inp.indexOf("\n", parserInput.i + 2);
                     if (nextNewLine < 0) {
                         nextNewLine = endIndex;
                     }
@@ -145,12 +142,11 @@ module.exports = function() {
                     parserInput.commentStore.push(comment);
                     continue;
                 } else if (nextChar === '*') {
-                    var haystack = inp.substr(parserInput.i);
-                    var comment_search_result = haystack.match(/^\/\*(?:[^*]|\*+[^\/*])*\*+\//);
-                    if (comment_search_result) {
+                    var nextStarSlash = inp.indexOf("*/", parserInput.i + 2);
+                    if (nextStarSlash >= 0) {
                         comment = {
                             index: parserInput.i,
-                            text: comment_search_result[0],
+                            text: inp.substr(parserInput.i, nextStarSlash + 2 - parserInput.i),
                             isLineComment: false
                         };
                         parserInput.i += comment.text.length - 1;
@@ -170,8 +166,7 @@ module.exports = function() {
         currentPos = parserInput.i;
 
         if (!current.length) {
-            if (j < chunks.length - 1)
-            {
+            if (j < chunks.length - 1) {
                 current = chunks[++j];
                 skipWhitespace(0); // skip space at the beginning of a chunk
                 return true; // things changed
@@ -186,7 +181,13 @@ module.exports = function() {
     // just return the match.
     parserInput.peek = function(tok) {
         if (typeof tok === 'string') {
-            return input.charAt(parserInput.i) === tok;
+            // https://jsperf.com/string-startswith/21
+            for (var i = 0; i < tok.length; i++) {
+                if (input.charAt(parserInput.i + i) !== tok.charAt(i)) {
+                    return false;
+                }
+            }
+            return true;
         } else {
             return tok.test(current);
         }
