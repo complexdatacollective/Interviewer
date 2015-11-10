@@ -24,16 +24,19 @@
     "package.json",
     ".travis.yml",
     ".gitignore",
-    "Gruntfile.js"
+    "Gruntfile.js",
+    "gulpfile.js"
   ],
   "main": "konva.min.js",
-  "_release": "8006bed344",
+  "version": "0.10.0",
+  "_release": "0.10.0",
   "_resolution": {
-    "type": "commit",
-    "commit": "8006bed344354dec55516630fad0fb1cd86926d9"
+    "type": "version",
+    "tag": "0.10.0",
+    "commit": "50b30b6cfdb253fe750314c026486b38c1bc30c7"
   },
-  "_source": "https://github.com/konvajs/konva.git",
-  "_target": "8006bed344354dec55516630fad0fb1cd86926d9",
-  "_originalSource": "https://github.com/konvajs/konva.git",
+  "_source": "git://github.com/konvajs/konva.git",
+  "_target": "~0.10.0",
+  "_originalSource": "konva",
   "_direct": true
 }
