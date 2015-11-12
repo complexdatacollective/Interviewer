@@ -196,12 +196,12 @@ var Session = function Session() {
         };
 
         window.sessionMenu = new window.netCanvas.Modules.Menu(sessionMenuOptions);
-        window.sessionMenu.addItem('Reset Session', 'fa-undo', function() {
+        window.sessionMenu.addItem('Reset this Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
                 title: '',
-                message: '<h3>Are you sure you want to reset the session?</h3> <p><strong>IMPORTANT:</strong> This will delete all data.',
+                message: '<h3>Are you sure you want to reset the session?</h3> <p><strong>IMPORTANT:</strong> This will delete all data from this session. Data from other sessions will not be deleted (use purge database if you wish to delete this data too).',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
