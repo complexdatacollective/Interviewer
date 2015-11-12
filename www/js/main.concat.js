@@ -3338,6 +3338,7 @@ var Session = function Session() {
     var content = $('#content');
     var key = 'N3"u6tH@2wH9UM205niU=45J7y<(3=OC{2<:Lb+KqD2HG9!f6{VVL#&2/Mt+lV3';
     session.id = 0;
+    var navigationDisabled = false;
     session.sessionData = {};
     var lastSaveTime, saveTimer;
 
@@ -3564,6 +3565,7 @@ var Session = function Session() {
         note.info('Resetting session.');
         session.id = 0;
         session.currentStage = 0;
+        window.netCanvas.Modules.session.enableNavigation();
 
         if (window.isNodeWebkit) {
             var _window = window.gui.Window.get();
@@ -3600,6 +3602,17 @@ var Session = function Session() {
             return false;
         }
 
+    };
+
+    session.disableNavigation = function() {
+        navigationDisabled = true;
+        // $('.arrow-prev, .arrow-prev').hide();
+        $('.arrow-next, .arrow-prev').attr('disabled','disabled');
+    };
+
+    session.enableNavigation = function() {
+        navigationDisabled = false;
+        $('.arrow-next, .arrow-prev').removeAttr('disabled');
     };
 
     session.saveManager = function() {
@@ -3647,6 +3660,12 @@ var Session = function Session() {
 
     session.goToStage = function(stage) {
         if (typeof stage === 'undefined' || typeof session.stages[stage] === 'undefined') {
+            return false;
+        }
+
+        // Disabled Navigation
+        if (navigationDisabled === true) {
+            note.warn('Session navigation is disabled until you complete the current step.');
             return false;
         }
 
