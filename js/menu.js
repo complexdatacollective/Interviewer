@@ -124,7 +124,6 @@ var Menu = function Menu(options) {
         var menuItem = $('<li><span class="fa '+listIcon+' menu-icon"></span> '+item+'</li>');
         targetMenu.menu.find('ul').append(menuItem);
         menuItem.on('click', function() {
-            $('.paginate').removeAttr('disabled');
             menu.closeMenu(targetMenu);
             setTimeout(function() {
                 callback();

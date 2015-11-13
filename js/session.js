@@ -9,6 +9,7 @@ var Session = function Session() {
     var key = 'N3"u6tH@2wH9UM205niU=45J7y<(3=OC{2<:Lb+KqD2HG9!f6{VVL#&2/Mt+lV3';
     session.id = 0;
     var navigationDisabled = false;
+    var allowedStages = [0]; //We can always go back to the intro screen;
     session.sessionData = {};
     var lastSaveTime, saveTimer;
 
@@ -52,10 +53,8 @@ var Session = function Session() {
                 $('.arrow-next').hide();
             } else if (currentStage === 0) {
                 $('.arrow-prev').hide();
-                $('.arrow-next').attr('disabled','disabled');
-
             } else {
-                $('.arrow-next').show().removeAttr('disabled');
+                $('.arrow-next').show();
                 $('.arrow-prev').show();
             }
         }
@@ -275,12 +274,14 @@ var Session = function Session() {
     };
 
     session.disableNavigation = function() {
+        note.info('disableNavigation');
         navigationDisabled = true;
         // $('.arrow-prev, .arrow-prev').hide();
         $('.arrow-next, .arrow-prev').attr('disabled','disabled');
     };
 
     session.enableNavigation = function() {
+        note.info('enableNavigation');
         navigationDisabled = false;
         $('.arrow-next, .arrow-prev').removeAttr('disabled');
     };
@@ -334,10 +335,13 @@ var Session = function Session() {
         }
 
         // Disabled Navigation
-        if (navigationDisabled === true) {
+        if (allowedStages.indexOf(stage) === -1 && navigationDisabled === true) {
             note.warn('Session navigation is disabled until you complete the current step.');
             return false;
         }
+
+        // If we have got this far, make sure that the navigation is enabled again
+        if (session.navigationDisabled === true) { session.enableNavigation(); }
 
         // Skip logic
 
@@ -351,12 +355,11 @@ var Session = function Session() {
             if (outcome === true) {
                 if (stage > currentStage) {
                     session.goToStage(stage+1);
+                    return false;
                 } else {
                     session.goToStage(stage-1);
-
+                    return false;
                 }
-
-                return false;
             }
         }
 
@@ -399,7 +402,7 @@ var Session = function Session() {
 
     session.registerData = function(dataKey, isArray) {
         note.info('A script requested a data store be registered with the key "'+dataKey+'".');
-        if (session.sessionData[dataKey] === undefined) { // Create it if it doesn't exist.
+        if (typeof session.sessionData[dataKey] === 'undefined') { // Create it if it doesn't exist.
             note.debug('Key named "'+dataKey+'" was not already registered. Creating.');
             if (isArray) {
                 session.sessionData[dataKey] = [];
@@ -407,11 +410,22 @@ var Session = function Session() {
                 session.sessionData[dataKey] = {};
             }
         } else {
-            note.debug('A data store with this key already existed. Returning a reference.');
+            note.debug('A data store with this key already existed.');
         }
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
         return session.sessionData[dataKey];
+    };
+
+    session.unRegisterData = function(dataKey) {
+        if (session.sessionData[dataKey] === undefined) {
+            note.error('session.unRegisterData(): the dataKey specified was not found.');
+            return false;
+        }
+
+        note.debug('session.unRegisterData(): deleting '+dataKey+' from sessionData.');
+        delete session.sessionData[dataKey];
+        return true;
     };
 
     session.addData = function(dataKey, newData, append) {
@@ -436,6 +450,8 @@ var Session = function Session() {
         // Emit an event to trigger data store synchronisation.
         var unsavedChanges = new window.Event('unsavedChanges');
         window.dispatchEvent(unsavedChanges);
+
+        return session.sessionData[dataKey];
 
     };
 

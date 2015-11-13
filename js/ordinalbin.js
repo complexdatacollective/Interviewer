@@ -133,33 +133,7 @@ module.exports = function OrdinalBin() {
                         // el.transition({ scale:1}, 200, 'ease');
                     }, 0);
 
-                    $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
-                        start: function() {
-                            console.log($(this).css('top'));
-                            if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
-                                console.log('has class');
-                                $(this).css({position:'absolute'});
-                            } else {
-                                console.log('not');
-                                $(this).css({position:'relative'});
-                            }
-                            if (taskComprehended === false) {
-                                var eventProperties = {
-                                    stage: window.netCanvas.Modules.session.currentStage(),
-                                    timestamp: new Date()
-                                };
-                                log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-                                window.dispatchEvent(log);
-                                taskComprehended = true;
-                            }
-
-                            // $('.ord-node-bin').css({overflow:'hidden'});
-                        },
-                        stop: function() {
-                            $(this).css({position:'inerit'});
-                            // $('.ord-node-bin').css({overflow:'scroll'});
-                        }
-                    });
+                    ordinalBin.makeDraggable();
                 },
                 over: function() {
                     $(this).data('oldBg', $(this).css('background-color'));
@@ -206,10 +180,31 @@ module.exports = function OrdinalBin() {
             }
 
         });
-        $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
-            start: function() {
-                $(this).css({position:'relative'});
+        ordinalBin.makeDraggable();
 
+        // Event Listeners
+        window.addEventListener('changeStageStart', stageChangeHandler, false);
+        $(window.document).on('click', '.followup-option', followupHandler);
+    };
+
+    ordinalBin.makeDraggable = function() {
+        $('.draggable').draggable({
+            cursor: 'pointer',
+            revert: 'invalid',
+            appendTo: 'body',
+            scroll: false,
+            helper: 'clone',
+            start: function() {
+                // console.log($(this).css('top'));
+                // if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
+                //     console.log('has class');
+                //     $(this).css({position:'absolute'});
+                // } else {
+                //     console.log('not');
+                //     $(this).css({position:'relative'});
+                // }
+
+                $(this).parent().css('overflow','inherit');
                 if (taskComprehended === false) {
                     var eventProperties = {
                         stage: window.netCanvas.Modules.session.currentStage(),
@@ -224,13 +219,9 @@ module.exports = function OrdinalBin() {
             },
             stop: function() {
                 $(this).css({position:'inerit'});
-                // $('.ord-node-bin').css({overflow:'scroll'});
+                $('.ord-node-bin').css({overflowY:'scroll'});
             }
         });
-
-        // Event Listeners
-        window.addEventListener('changeStageStart', stageChangeHandler, false);
-        $(window.document).on('click', '.followup-option', followupHandler);
     };
 
 return ordinalBin;
