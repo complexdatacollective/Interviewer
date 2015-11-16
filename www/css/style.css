@@ -12414,6 +12414,13 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
       -ms-flex-pack: start;
           justify-content: flex-start;
   z-index: 10;
+  opacity: 1;
+  -webkit-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+}
+.side-container.out {
+  left: -30vw;
+  opacity: 0;
 }
 @media (min-width: 769px) {
   .nameList {
@@ -12486,6 +12493,9 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   border-radius: 8px;
   background: #FA920D;
 }
+.current-panel h4 {
+  font-size: 20px;
+}
 .node-lists.double {
   height: 50%;
 }
@@ -12519,6 +12529,22 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
           justify-content: center;
   float: left;
   font-size: 14px;
+  border: 5px solid #fba93f;
+  -webkit-transform: scale(0);
+      -ms-transform: scale(0);
+          transform: scale(0);
+  opacity: 0;
+  -webkit-transition: border 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), -webkit-transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+          transition: border 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.current-node-list .node-list-item.shown {
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
+  opacity: 1;
+}
+.current-node-list .node-list-item.selected {
+  border: 5px solid #FFDD36;
 }
 .card {
   padding-left: 1em;
