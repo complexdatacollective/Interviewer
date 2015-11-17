@@ -15,7 +15,7 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
-    window.netCanvas.studyProtocol = 'RADAR';
+    window.netCanvas.studyProtocol = 'dphil-protocol';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -134,7 +134,7 @@ $(document).ready(function() {
     if (isNodeWebkit === true) {
         var oldError = note.error;
         var oldWarn = note.warn;
-        
+
         note.error = function(msg) {
             tools.nwNotification({
                 icon: 'img/error.png',

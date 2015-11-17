@@ -30,8 +30,6 @@ module.exports = function NameGeneratorMulti() {
 
     var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
-    var alterCount = 0;
-
     var cardClickHandler = function() {
         // Handles what happens when a card is clicked
 
@@ -149,7 +147,7 @@ module.exports = function NameGeneratorMulti() {
         note.info('nameGeneratorMulti initialising.');
         window.tools.extend(options, userOptions);
 
-        alterCount = options.network.getNodes({type_t0: 'Alter'}).length;
+        var alterCount = nameGeneratorMulti.getNodes().length;
 
         // create elements
         $(options.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
@@ -294,8 +292,8 @@ module.exports = function NameGeneratorMulti() {
 
             setTimeout(function() {
                 $(el).addClass('shown');
-
-            },index*50);
+                nameGeneratorMulti.makeDraggable();
+            },50+(index*50));
 
         });
 
@@ -312,7 +310,7 @@ module.exports = function NameGeneratorMulti() {
         $.each(nodes, function(index,value) {
             setTimeout(function() {
                 nameGeneratorMulti.addCard(value);
-            }, index * 100);
+            }, index * 40);
         });
 
         nameGeneratorMulti.updateSidePanel();
@@ -432,7 +430,7 @@ module.exports = function NameGeneratorMulti() {
                     var sideContainer = $('<div class="side-container out"></div>');
 
                     // Current side panel shows alters already elicited
-                    sideContainer.append($('<div class="current-panel"><h4>Other people you have mentioned:</h4><div class="current-node-list node-lists"></div></div>'));
+                    sideContainer.append($('<div class="current-panel"><h4>Other people you have mentioned:</h4><div class="current-node-list node-lists"></div><div class="current-node-list-background"></div></div>'));
 
                     if (sideContainer.children().length > 0) {
                         // move node list to one side
@@ -451,10 +449,10 @@ module.exports = function NameGeneratorMulti() {
                 }
             } else {
                 $('.side-container').addClass('out');
-                $('.nameList').removeClass('alt');
                 setTimeout(function() {
+                    $('.nameList').removeClass('alt');
                     $('.side-container').remove();
-                }, 1000);
+                }, 500);
 
             }
 
@@ -487,7 +485,7 @@ module.exports = function NameGeneratorMulti() {
 
         setTimeout(function() {
             $('[data-index='+properties.id+']').children('.inner-card').addClass('shown');
-        },100);
+        },20);
 
 
         if (callback) {
@@ -523,6 +521,7 @@ module.exports = function NameGeneratorMulti() {
         if (options.network.removeNode(id)) {
             if(nameGeneratorMulti.removeCard(id)) {
                 note.info('Deleted node with id '+id);
+                nameGeneratorMulti.handlePanels();
                 return true;
             } else {
                 note.error('nameGeneratorMulti.removeNode() tried to remove node with ID '+id+', but failed.');

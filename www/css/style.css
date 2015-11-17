@@ -12354,13 +12354,66 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
       -ms-transform: translateY(0);
           transform: translateY(0);
 }
+.swiper-slide {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.swiper-slide h2 {
+  margin: 0;
+}
+.swiper-container-horizontal > .swiper-pagination {
+  bottom: 0px;
+}
 .node-container {
   margin-left: -1.5em;
   padding-right: 10vw;
   padding-left: 10vw;
 }
+.question-container {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 130px;
+  padding-right: 10vmin;
+  padding-left: 10vmin;
+  background-image: -webkit-linear-gradient(top, #2f3344 0%, #2f3344 20%, rgba(47, 51, 68, 0.6) 60%, rgba(47, 51, 68, 0) 100%);
+  background-image: linear-gradient(to bottom, #2f3344 0%, #2f3344 20%, rgba(47, 51, 68, 0.6) 60%, rgba(47, 51, 68, 0) 100%);
+}
+.node-container {
+  position: fixed;
+  top: 0;
+  right: 20vw;
+  left: 20vw;
+  height: 100vh;
+  margin-left: -1.5em;
+  padding-right: 0;
+  padding-left: 0;
+}
 .node-container-bottom-bg {
   display: none;
+}
+.node-container-bottom-bg {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: initial;
+  height: 170px;
+  background-image: -webkit-linear-gradient(bottom, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
+  background-image: linear-gradient(to top, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
 }
 .nameList {
   display: -webkit-box;
@@ -12369,8 +12422,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   display: flex;
   overflow: scroll;
   flex-pack: start;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-bottom: 100px;
   -ms-flex-pack: start;
   -webkit-box-pack: start;
   -webkit-align-content: flex-start;
@@ -12383,11 +12435,13 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-justify-content: flex-start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  -webkit-transition: left 1s ease;
+          transition: left 1s ease;
+  padding-top: 170px;
 }
 .nameList.alt {
   right: 10vw;
-  left: initial;
-  width: 40vw;
+  left: 33vw;
 }
 .side-container {
   position: fixed;
@@ -12422,57 +12476,6 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   left: -30vw;
   opacity: 0;
 }
-@media (min-width: 769px) {
-  .nameList {
-    margin: 0 auto;
-    padding-top: 170px;
-    padding-bottom: 150px;
-  }
-  .question-container {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 170px;
-    padding-right: 10vmin;
-    padding-left: 10vmin;
-    background-image: -webkit-linear-gradient(top, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
-    background-image: linear-gradient(to bottom, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
-  }
-  .node-container {
-    position: fixed;
-    top: 0;
-    right: 10vw;
-    left: 10vw;
-    height: 100vh;
-    margin-left: -1.5em;
-    padding-right: 0;
-    padding-left: 0;
-  }
-  .node-container-bottom-bg {
-    position: fixed;
-    z-index: 10;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: initial;
-    height: 170px;
-    background-image: -webkit-linear-gradient(bottom, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
-    background-image: linear-gradient(to top, #2f3344 0%, #2f3344 10%, rgba(47, 51, 68, 0) 100%);
-  }
-}
-@media (min-width: 1025px) {
-  .nameList.alt {
-    right: 10vw;
-    left: initial;
-    width: 60vw;
-  }
-  .question-container {
-    padding-right: 15%;
-    padding-left: 15%;
-  }
-}
 .previous-node-list {
   z-index: 20;
   overflow: scroll;
@@ -12488,13 +12491,30 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   overflow: scroll;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 0 20px;
   padding-bottom: 4em;
   border-radius: 8px;
   background: #FA920D;
 }
 .current-panel h4 {
   font-size: 20px;
+  margin: 0;
+  position: fixed;
+  padding: 30px 20px;
+  z-index: 999;
+  background-image: -webkit-linear-gradient(top, #FA920D 0%, #FA920D 30%, rgba(250, 146, 13, 0.6) 60%, rgba(250, 146, 13, 0) 100%);
+  background-image: linear-gradient(to bottom, #FA920D 0%, #FA920D 30%, rgba(250, 146, 13, 0.6) 60%, rgba(250, 146, 13, 0) 100%);
+}
+.current-node-list {
+  margin-top: 60px;
+}
+.current-node-list-background {
+  background-image: -webkit-linear-gradient(bottom, #FA920D 0%, #FA920D 30%, rgba(250, 146, 13, 0.6) 60%, rgba(250, 146, 13, 0) 100%);
+  background-image: linear-gradient(to top, #FA920D 0%, #FA920D 30%, rgba(250, 146, 13, 0.6) 60%, rgba(250, 146, 13, 0) 100%);
+  width: 18vw;
+  height: 100px;
+  position: fixed;
+  bottom: 40px;
 }
 .node-lists.double {
   height: 50%;
@@ -12503,6 +12523,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   font-size: 1.1em;
   display: inline-block;
   margin: 10px;
+  cursor: pointer;
 }
 .current-node-list .node-list-item {
   background-color: #fba93f;

@@ -348,7 +348,6 @@ module.exports = function SociogramMulti() {
 
 			var selectNodes = settings.network.getNodes();
 			$.each(selectNodes, function(index, node) {
-				console.log(node);
 				var currentValue = node[settings.prompts[currentPrompt].showSelected.variable];
 				if (currentValue == settings.prompts[currentPrompt].showSelected.value) {
 					// this node is selected
