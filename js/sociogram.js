@@ -146,6 +146,7 @@ module.exports = function Sociogram() {
 	function hullListClickHandler(e) {
 		var clicked = $(e.target).closest('li');
 		var selectedHull = clicked.data('hull');
+		console.log(selectedNode);
 		if (selectedNode.attrs.contexts.indexOf(selectedHull) !== -1 ) {
 			clicked.removeClass('active');
 			sociogram.removePointFromHull(selectedNode, selectedHull);
