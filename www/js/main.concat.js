@@ -1625,7 +1625,16 @@ module.exports = function Namegenerator() {
         variables: [],
         heading: 'This is a default heading',
         subheading: 'And this is a default subheading',
-        panels: []
+        panels: [],
+        roles: {
+            'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
+            'Family / Relative': ['Parent / Guardian','Brother / Sister','Grandparent','Other Family','Chosen Family'],
+            'Romantic / Sexual Partner': ['Boyfriend / Girlfriend','Ex-Boyfriend / Ex-Girlfriend','Booty Call / Fuck Buddy / Hook Up','One Night Stand','Other type of Partner'],
+            'Acquaintance / Associate': ['Coworker / Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
+            'Other Support / Source of Advice': ['Teacher / Professor','Counselor / Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
+            'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
+            'Other': ['Other relationship']
+        }
     };
 
     var nodeBoxOpen = false;
@@ -1636,16 +1645,6 @@ module.exports = function Namegenerator() {
     var alterCounter;
 
     var alterCount = window.network.getNodes({type_t0: 'Alter'}).length;
-
-    var roles = {
-        'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
-        'Family / Relative': ['Parent / Guardian','Brother / Sister','Grandparent','Other Family','Chosen Family'],
-        'Romantic / Sexual Partner': ['Boyfriend / Girlfriend','Ex-Boyfriend / Ex-Girlfriend','Booty Call / Fuck Buddy / Hook Up','One Night Stand','Other type of Partner'],
-        'Acquaintance / Associate': ['Coworker / Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
-        'Other Support / Source of Advice': ['Teacher / Professor','Counselor / Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
-        'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
-        'Other': ['Other relationship']
-    };
 
     var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
@@ -2025,6 +2024,7 @@ module.exports = function Namegenerator() {
 
     namegenerator.init = function(options) {
         window.tools.extend(namegenerator.options, options);
+        // $.extend(true, namegenerator.options, options);
         // create elements
         var button = $('<span class="fa fa-4x fa-user-plus add-button"></span>');
         namegenerator.options.targetEl.append(button);
@@ -2083,9 +2083,9 @@ module.exports = function Namegenerator() {
         // relationship types
         relationshipPanel = $('<div class="relationship-content"><div class="relationship-close-button">Back <span class="fa fa-2x fa-sign-in"></span></div><div class="col-sm-12 relationship-header"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-connectdevelop"></span> Adding Relationships</h2></div><div class="relationship-types-container"></div></div>');
         var counter = 0;
-        $.each(roles, function(index) {
+        $.each(namegenerator.options.roles, function(index) {
             $(relationshipPanel).find('.relationship-types-container').append('<div class="relationship-type rel-'+counter+' c'+counter+'" data-main-relationship="'+counter+'"><h1>'+index+'</h1></div>');
-            $.each(roles[index], function(relIndex, relValue) {
+            $.each(namegenerator.options.roles[index], function(relIndex, relValue) {
                 $(relationshipPanel).find('.rel-'+counter).append('<div class="relationship" data-sub-relationship="'+relValue+'">'+relValue+'</div>');
             });
             counter++;
@@ -3833,6 +3833,7 @@ module.exports = function Sociogram() {
 		concentricCircleColor: '#ffffff',
 		concentricCircleNumber: 4,
 		criteria: {},
+		filter: null,
 		nodeTypes: [
 			{'name':'Person','color':colors.blue},
 			{'name':'OnlinePerson','color':colors.hemlock},
@@ -3870,7 +3871,7 @@ module.exports = function Sociogram() {
 		// Are there existing nodes? Display them.
 
 		// Get all nodes that match the criteria
-		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria);
+		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria, sociogram.settings.filter);
 
 		// Iterate over them
 		for (var i = 0; i < criteriaEdges.length; i++) {

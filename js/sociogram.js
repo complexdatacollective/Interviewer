@@ -38,6 +38,7 @@ module.exports = function Sociogram() {
 		concentricCircleColor: '#ffffff',
 		concentricCircleNumber: 4,
 		criteria: {},
+		filter: null,
 		nodeTypes: [
 			{'name':'Person','color':colors.blue},
 			{'name':'OnlinePerson','color':colors.hemlock},
@@ -75,7 +76,7 @@ module.exports = function Sociogram() {
 		// Are there existing nodes? Display them.
 
 		// Get all nodes that match the criteria
-		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria);
+		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria, sociogram.settings.filter);
 
 		// Iterate over them
 		for (var i = 0; i < criteriaEdges.length; i++) {
