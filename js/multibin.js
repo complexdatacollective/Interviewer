@@ -17,6 +17,7 @@ module.exports = function MultiBin() {
 				'Variable 1',
 			]
 		},
+		criteria: {},
 		filter: undefined,
 		heading: 'Default Heading',
 		subheading: 'Default Subheading.'
