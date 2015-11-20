@@ -375,7 +375,6 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     height:75vh;
     padding-bottom:1vmin;
     flex-flow: row wrap;
-    justify-content: space-between
 }
 
 .node-question-container {
@@ -981,8 +980,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     flex-direction: column;
     align-items: center;
     // justify-content: center;
-    border-radius: 15px;
-    padding:5px;
+    border-radius: @border-radius-large;
     text-shadow: 0px 1px 5px rgba(0,0,0,0.5);
     transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
     // overflow:scroll;
@@ -992,34 +990,50 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 
 .size-1 {
      width:100%;
+     border:15px solid @content-bg;
+     border-radius: @border-radius-large;
  }
 
 .size-2 {
-     width:49%;
+     width:50%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 .size-3 {
-     width:32.33%;
+     width:33%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 .size-4 {
-     width:24%;
+     width:25%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 .size-5 {
-     width:19%;
+     width:20%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 .size-6 {
-     width:15.66%;
+     width:16.65%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;;
  }
 
 .size-7 {
-     width:13.28%;
+     width:14.2%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 .size-8 {
-     width:11.5%;
+     width:12.5%;
+     border:8px solid @content-bg;
+     border-radius: 20pt;
  }
 
 
