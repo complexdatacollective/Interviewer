@@ -551,10 +551,26 @@ module.exports = function Sociogram() {
 			properties = properties.detail;
 		}
 
-		// the below won't work because we are storing the coords in an edge now...
 		note.debug('Sociogram is adding an edge.');
+
+
+		// Get all nodes that match the criteria
+		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria, sociogram.settings.filter);
+		var criteriaDyadEdge = [];
+		// Iterate over them
+		for (var i = 0; i < criteriaEdges.length; i++) {
+			criteriaDyadEdge.push(sociogram.settings.network.getEdges({from:window.network.getEgo().id, to:criteriaEdges[i].to, type:'Dyad'})[0]);
+		}
+
+		// Get the dyad edges of the from and to IDs so we can get the coordinates.
 		var toObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.to, type:'Dyad'})[0];
 		var fromObject = sociogram.settings.network.getEdges({from:sociogram.settings.network.getEgo().id, to: properties.from, type:'Dyad'})[0];
+
+		// Test if the proposed edge if between two nodes that are included in our interface criteria
+		if (criteriaDyadEdge.indexOf(toObject) === -1 || criteriaDyadEdge.indexOf(fromObject) === -1) {
+			note.debug('Cancelled adding edge between two nodes, because one or both were not visible.');
+			return false;
+		}
 
 		var points = [fromObject.coords[0], fromObject.coords[1], toObject.coords[0], toObject.coords[1]];
 		var edge = new Konva.Line({
