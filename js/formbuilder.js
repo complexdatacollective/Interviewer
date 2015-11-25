@@ -1,4 +1,4 @@
-/* global $, window, jQuery, note */
+/* global $, window, jQuery, note, alert */
 /* exported FormBuilder */
 
 module.exports = function FormBuilder(formName) {
@@ -32,6 +32,14 @@ module.exports = function FormBuilder(formName) {
     formBuilder.reset = function() {
         $(html).find('.alert').fadeOut();
         $(html)[0].reset();
+
+        // Reset all custom components
+        $.each (thisForm.fields, function(fieldIndex, fieldValue) {
+            if (fieldValue.type === 'custom') {
+                thisForm.options.customFields[fieldValue.customType].reset();
+            }
+        });
+
     };
 
     formBuilder.showError = function(error) {
@@ -80,6 +88,9 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.build = function(element, form, options) {
+        // element = target element to inject the form into
+        // form = an object containing the form fields and configuration options. Also contains load, show, hide, and submit events.
+        // options = buttons and custom field type definitions.
         var userOptions = options || {};
         $.extend(formOptions, userOptions);
         thisForm = form;
@@ -175,7 +186,34 @@ module.exports = function FormBuilder(formName) {
                     variableComponent = '<input type="'+formValue.type+'" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
+                } else if (formValue.type === 'custom') {
+                    note.warn('formBuilder.addFields(): Custom form field detected');
 
+                    // Check if we have been supplied a definition
+                    if (typeof formValue.customType !== 'undefined' && typeof thisForm.options.customFields[formValue.customType] !== 'undefined') {
+                        // Check if the definition has a markup function
+                        if (typeof thisForm.options.customFields[formValue.customType].markup !== 'undefined') {
+                            wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
+                            // Pass the markup method the fields options, incase it needs them
+                            wrapper = $(wrapper).append(thisForm.options.customFields[formValue.customType].markup(formValue.options));
+                            formFields = $(formFields).append(wrapper);
+
+
+                            // Initialise components as required
+                            if (typeof thisForm.options.customFields[formValue.customType].markup !== 'undefined') {
+                                formBuilder.addDeferred({
+                                    action: thisForm.options.customFields[formValue.customType].initialise
+                                });
+                            }
+
+                        } else {
+                            note.warn('formBuilder.addFields(): Form of type "'+formValue.customType+'" did not have any markup.');
+                        }
+                    } else {
+                        note.warn('formBuilder.addFields(): Could not find a definition for custom form type "'+formValue.customType+'"');
+                    }
+
+                    // formValue.customType
                 } else if (formValue.type === 'hidden') {
                     wrapper = '<div class="hidden-form-group" data-component="'+formIndex+'"></div>';
 
@@ -387,8 +425,8 @@ module.exports = function FormBuilder(formName) {
 
                     }
                     note.debug(data);
-                    if (typeof thisForm.options.onSubmit !== 'undefined') {
-                        thisForm.options.onSubmit(cleanData);
+                    if (typeof thisForm.submit !== 'undefined') {
+                        thisForm.submit(cleanData);
                     }
 
                 }
@@ -412,12 +450,12 @@ module.exports = function FormBuilder(formName) {
         ]);
 
         // onLoad
-        if (typeof thisForm.options.onLoad !== 'undefined') {
+        if (typeof thisForm.load !== 'undefined') {
             window.tools.Events.register(moduleEvents, [{
                 targetEl: $(html),
                 event: 'formLoaded',
                 handler: function() {
-                    thisForm.options.onLoad(thisForm);
+                    thisForm.load(thisForm);
                 }
             }]);
         }

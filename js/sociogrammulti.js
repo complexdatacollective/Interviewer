@@ -443,6 +443,7 @@ module.exports = function SociogramMulti() {
 	};
 
     sociogramMulti.addPointToHull = function(point, hullLabel) {
+		// check if hull is already present
 		note.info('sociogramMulti.addPointToHull()');
 		var properties;
 		// if a hull with hullLabel doesnt exist, create one
@@ -451,7 +452,6 @@ module.exports = function SociogramMulti() {
 			sociogramMulti.addHull(hullLabel);
 		}
 
-		note.info('sociogramMulti.addPointToHull(): Storing in ego mode');
 		// If the point doesn't have the destination attribute, create it
 		if (point.attrs.contexts === 'undefined') {
 			note.warn('Node did not have the data destinateion community attribute. A blank array was created.');
@@ -1167,10 +1167,12 @@ module.exports = function SociogramMulti() {
 
 		// This doesn't *usually* get called directly. Rather, it responds to an event fired by the network module.
 
-		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== settings.network.getEgo().id) {
+		var egoID = settings.network.getEgo().id;
+
+		if(typeof properties.detail !== 'undefined' && typeof properties.detail.from !== 'undefined' && properties.detail.from !== egoID) {
 			// We have been called by an event
 			properties = properties.detail;
-		} else if (typeof properties.from !== 'undefined' && typeof properties.to !== 'undefined' && properties.from !== settings.network.getEgo().id) {
+		} else if (typeof properties.from !== 'undefined' && typeof properties.to !== 'undefined' && properties.from !== egoID) {
 			// We have been called by another sociogram method
 			properties = properties;
 		} else {
@@ -1205,7 +1207,7 @@ module.exports = function SociogramMulti() {
 			edgeLayer.draw();
 		},0);
 		nodeLayer.draw();
-		note.debug('Created Edge between '+fromObject.attrs.label+' and '+toObject.attrs.label);
+		note.trace('Created Edge between '+fromObject.attrs.label+' and '+toObject.attrs.label);
 
 		return true;
 

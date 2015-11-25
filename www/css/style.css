@@ -10652,7 +10652,7 @@ button.swiper-pagination-bullet {
   }
 }
 
-form {
+contr {
   width: 100%;
 }
 legend {
@@ -10660,6 +10660,7 @@ legend {
 }
 .form-group {
   margin-bottom: 15px;
+  text-align: center;
   padding: 10px;
 }
 .form-group:nth-last-child(2) {
@@ -10675,7 +10676,7 @@ label.control-label {
   width: 100%;
   border-bottom: 1px solid #bebebe;
   margin-top: 5px;
-  margin-bottom: 2px;
+  margin-bottom: 15px;
 }
 label.checkbox-inline {
   padding-left: 0px;

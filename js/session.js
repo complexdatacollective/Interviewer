@@ -84,16 +84,6 @@ var Session = function Session() {
                 session.skipFunctions = study.skipFunctions;
             }
 
-
-            // create the sessionGlobals
-            if (typeof study.globals !=='undefined') {
-                session.globals = study.globals;
-                // iterate through and execute;
-                $.each(session.globals, function(index, value) {
-                    value();
-                });
-            }
-
             // set the study name (used for database name)
             if (study.sessionParameters.name) {
                 session.name = study.sessionParameters.name;
@@ -118,6 +108,16 @@ var Session = function Session() {
                             session.goToStage(0);
                         }
                     });
+
+                    // create the sessionGlobals
+                    if (typeof study.globals !=='undefined') {
+                        session.globals = study.globals;
+                        // iterate through and execute;
+                        $.each(session.globals, function(index, value) {
+                            value();
+                        });
+                    }
+
                 }, session.id);
             });
 
