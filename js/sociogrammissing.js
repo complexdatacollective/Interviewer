@@ -482,32 +482,7 @@ module.exports = function SociogramMissing() {
 		* We create a transparent rectangle on a special background layer which sits between the UI layer and the interaction layers.
 		* We then listen to click events on this shape.
  		*/
-		var backgroundLayer = new Konva.Layer();
-		var backgroundRect = new Konva.Rect({
-	        x: 0,
-	        y: 0,
-	        width: stage.width(),
-	        height: stage.height(),
-	        fill: 'transparent',
-	      });
-		backgroundLayer.add(backgroundRect);
-		backgroundRect.on('tap click', function() {
-			sociogramMissing.hideDetailsPanel();
-			selectedNode = null;
-			$('.hull').removeClass('active'); // deselect all groups
-
-			//deselect Nodes
-			selectedNodes = [];
-			$.each(sociogramMissing.getKineticNodes(), function(nodesIndex, nodesValue) {
-				nodesValue.children[0].opacity(0);
-			});
-
-			nodeLayer.draw();
-
-		});
-
 		stage.add(circleLayer);
-		stage.add(backgroundLayer);
 		stage.add(edgeLayer);
 		stage.add(nodeLayer);
 

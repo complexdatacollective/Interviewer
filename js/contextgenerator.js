@@ -244,7 +244,7 @@ module.exports = function ContextGenerator() {
 		var context = contexts.indexOf(thisContext);
 		note.debug(contexts);
 		console.log(context);
-		$('[data-index="'+context+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
+		$('.circle-responsive[data-index="'+context+'"]').append('<div class="node-circle-container"><div class="node-circle" data-id="'+node.id+'">'+node.label+'</div></div>');
 		contextGenerator.makeNodesDraggable();
 	};
 
@@ -424,7 +424,7 @@ module.exports = function ContextGenerator() {
 			var event = [{
 				event: 'click',
 				handler: contextGenerator.showNewNodeForm,
-				targetEl:  '[data-index="'+color+'"]'
+				targetEl:  '.circle-responsive[data-index="'+color+'"]'
 			}];
 			window.tools.Events.register(moduleEvents, event);
 		}

@@ -10672,11 +10672,16 @@ legend {
 .text-right.button-group {
   padding-top: 30px;
 }
+label {
+  text-align: left;
+  width: 100%;
+}
 label.control-label {
   width: 100%;
   border-bottom: 1px solid #bebebe;
   margin-top: 5px;
   margin-bottom: 15px;
+  text-align: left;
 }
 label.checkbox-inline {
   padding-left: 0px;
