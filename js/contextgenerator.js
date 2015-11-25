@@ -123,20 +123,20 @@ module.exports = function ContextGenerator() {
 
 				}
 			},
+			submit: function(data) {
+				if (contexts.indexOf(data.name) === -1) {
+					// Update ego
+					var properties = {};
+					properties[contextGenerator.options.nodeDestination] = contexts;
+					window.network.updateNode(window.network.getEgo().id, properties);
+					contextGenerator.addContext(data.name);
+					newContextForm.reset();
+					newContextForm.hide();
+				} else {
+					newContextForm.showError('Error: the name you have chosen is already in use.');
+				}
+			},
 			options: {
-				onSubmit: function(data) {
-					if (contexts.indexOf(data.name) === -1) {
-						// Update ego
-						var properties = {};
-						properties[contextGenerator.options.nodeDestination] = contexts;
-						window.network.updateNode(window.network.getEgo().id, properties);
-						contextGenerator.addContext(data.name);
-						newContextForm.reset();
-						newContextForm.hide();
-					} else {
-						newContextForm.showError('Error: the name you have chosen is already in use.');
-					}
-				},
 				buttons: {
 					submit: {
 						label: 'Create',
@@ -187,12 +187,12 @@ module.exports = function ContextGenerator() {
 					'name': 'target',
 				}
 			},
+			submit: function(data) {
+				contextGenerator.mergeContexts(data.source, data.target, data.merged_name);
+				window.forms.mergeContextForm.reset();
+				window.forms.mergeContextForm.hide();
+			},
 			options: {
-				onSubmit: function(data) {
-					contextGenerator.mergeContexts(data.source, data.target, data.merged_name);
-					window.forms.mergeContextForm.reset();
-					window.forms.mergeContextForm.hide();
-				},
 				buttons: {
 					submit: {
 						label: 'Create',
@@ -287,7 +287,7 @@ module.exports = function ContextGenerator() {
 					note.warn('A node was found with a context that didn\'t exist!');
 				}
  			} else {
-				note.debug('Ignored a node with multiple contexts.');
+				note.debug('Ignored a node because it either had multiple or no contexts.'+nodeValue.id);
 			}
 
 		});

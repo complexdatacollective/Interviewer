@@ -283,7 +283,6 @@ module.exports = function SociogramMulti() {
 
 		if ((e && e.target.checked) || hullsShown === false) {
 			$('label[for="context-checkbox-show"]').html('Contexts shown');
-			note.debug('showing hulls');
 			new Konva.Tween({
 				node: hullLayer,
 				duration: 0.5,

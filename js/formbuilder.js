@@ -65,6 +65,7 @@ module.exports = function FormBuilder(formName) {
 
     // show and hide methods
     formBuilder.show = function() {
+        thisForm.show();
         note.debug('FormBuilder ['+name+']: show.');
         targetEl.addClass('show');
         $('.black-overlay').addClass('show');
@@ -144,8 +145,6 @@ module.exports = function FormBuilder(formName) {
         } else {
             throw new Error('Formbuilder ['+name+'] didn\'t understand the intended output destination of the build method.');
         }
-
-        formBuilder.runDeferred();
 
     };
 
@@ -352,6 +351,8 @@ module.exports = function FormBuilder(formName) {
             }
 
         });
+
+        formBuilder.runDeferred();
     };
 
     formBuilder.removeFields = function(fields) {
@@ -400,6 +401,8 @@ module.exports = function FormBuilder(formName) {
                     e.preventDefault();
 
                     var data = $(this).serializeArray();
+                    console.log('raw form');
+                    console.log(data);
                     var cleanData = {};
                     for (var i = 0; i < data.length; i++) {
 
@@ -412,34 +415,28 @@ module.exports = function FormBuilder(formName) {
 
                         // This code takes the serialised output and puts it in the structured required to store within noded/edges.
                         if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] !== 'object') {
+                            console.log('ONE');
                             // if it isn't an object, its a string. Create an empty array and store by itself.
                             cleanData[data[i].name] = [cleanData[data[i].name]];
                             cleanData[data[i].name].push(data[i].value);
                         } else if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] === 'object'){
+                            console.log('TWO');
                             // Its already an object, so append our new item
                             cleanData[data[i].name].push(data[i].value);
                         } else {
-                            // it is undefined? Weird.
+                            console.log('THREE');
+                            // This is for regular text fields. Simple store the key value pair.
                             cleanData[data[i].name] = data[i].value;
                         }
 
                     }
-                    note.debug(data);
+                    note.debug(cleanData);
                     if (typeof thisForm.submit !== 'undefined') {
                         thisForm.submit(cleanData);
                     }
 
                 }
             },
-            // {
-            //     targetEl: $(window.document),
-            //     subTarget: $('#'+thisForm.options.buttons.cancel.id),
-            //     event: 'click',
-            //     handler: function() {
-            //         note.debug('FormBuilder ['+name+']: Form cancelled.');
-            //         formBuilder.hide();
-            //     }
-            // },
             {
                 targetEl: $('input'),
                 event: 'change paste keyup',
@@ -544,54 +541,3 @@ module.exports = function FormBuilder(formName) {
 
     return formBuilder;
 };
-
-
-// form = new window.netCanvas.Modules.FormBuilder();
-//
-// form.build(egoBuilder.options.targetEl, {
-//     'title':egoBuilder.options.formTitle,
-//     'fields': {
-//         'name': {
-//             'type':'string',
-//             'title':'Name',
-//             'required':true,
-//             'name': 'participant_name',
-//             'placeholder': 'Please enter your name.'
-//         },
-//         'feedback': {
-//             'title':'Feedback',
-//             'type': 'textarea',
-//             'name': 'your_feedback',
-//             'rows': 5,
-//             'cols': 40,
-//             'placeholder': 'Please enter your feedback.'
-//         },
-//         'ranking': {
-//             'type':'radio',
-//             'name':'my_radio',
-//             'title':'Ranking',
-//             'variables':[
-//                 {label:'Value 1', value:'value1', id:'radio1'},
-//                 {label:'Value 2', value:'value2', id:'radio2'},
-//                 {label:'Value 3', value:'value3', id:'radio3'}
-//             ],
-//             'required':true
-//         }
-//     },
-//     'options':{
-//         'attributes':{
-//             'action':'http://httpbin.org/post',
-//             'method':'post'
-//         },
-//         onSubmit: function() {
-//         },
-//         'buttons':{
-//             'submit':{
-//                 label: 'Submit',
-//                 id: 'submit-btn',
-//                 type: 'submit',
-//                 class: 'btn-primary'
-//             }
-//         }
-//     }
-// });
