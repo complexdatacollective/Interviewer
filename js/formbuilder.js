@@ -92,6 +92,7 @@ module.exports = function FormBuilder(formName) {
         // element = target element to inject the form into
         // form = an object containing the form fields and configuration options. Also contains load, show, hide, and submit events.
         // options = buttons and custom field type definitions.
+
         var userOptions = options || {};
         $.extend(formOptions, userOptions);
         thisForm = form;
@@ -430,7 +431,9 @@ module.exports = function FormBuilder(formName) {
                         }
 
                     }
+
                     note.debug(cleanData);
+
                     if (typeof thisForm.submit !== 'undefined') {
                         thisForm.submit(cleanData);
                     }

@@ -101,8 +101,14 @@ module.exports = function SociogramMulti() {
 	}
 
 	function hullListClickHandler(e) {
+		console.log('hullListClickHandler');
+		console.log(e);
+		var _this = this;
+		console.log(_this);
 		var clicked = $(e.target).closest('li');
+		console.log(clicked);
 		var selectedHull = clicked.data('hull');
+		console.log(selectedHull);
 		if (selectedNode.attrs.contexts.indexOf(selectedHull) !== -1 ) {
 			clicked.removeClass('active');
 			sociogramMulti.removePointFromHull(selectedNode, selectedHull);
