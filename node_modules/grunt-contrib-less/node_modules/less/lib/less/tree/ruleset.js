@@ -4,6 +4,7 @@ var Node = require("./node"),
     Element = require("./element"),
     Paren = require("./paren"),
     contexts = require("../contexts"),
+    globalFunctionRegistry = require("../functions/function-registry"),
     defaultFunc = require("../functions/default"),
     getDebugInfo = require("./debug-info");
 
@@ -65,6 +66,19 @@ Ruleset.prototype.eval = function (context) {
     if (!hasOnePassingSelector) {
         rules.length = 0;
     }
+
+    // inherit a function registry from the frames stack when possible;
+    // otherwise from the global registry
+    ruleset.functionRegistry = (function (frames) {
+        var i = 0,
+            n = frames.length,
+            found;
+        for ( ; i !== n ; ++i ) {
+            found = frames[ i ].functionRegistry;
+            if ( found ) { return found; }
+        }
+        return globalFunctionRegistry;
+    }(context.frames)).inherit();
 
     // push the current ruleset to the frames stack
     var ctxFrames = context.frames;
@@ -241,7 +255,7 @@ Ruleset.prototype.variable = function (name) {
     return this.variables()[name];
 };
 Ruleset.prototype.rulesets = function () {
-    if (!this.rules) { return null; }
+    if (!this.rules) { return []; }
 
     var filtRules = [], rules = this.rules, cnt = rules.length,
         i, rule;
@@ -298,8 +312,6 @@ Ruleset.prototype.genCSS = function (context, output) {
     var i, j,
         charsetRuleNodes = [],
         ruleNodes = [],
-        rulesetNodes = [],
-        rulesetNodeCnt,
         debugInfo,     // Line number debugging
         rule,
         path;
@@ -314,31 +326,38 @@ Ruleset.prototype.genCSS = function (context, output) {
         tabSetStr = context.compress ? '' : Array(context.tabLevel).join("  "),
         sep;
 
-    function isRulesetLikeNode(rule, root) {
+    function isRulesetLikeNode(rule) {
         // if it has nested rules, then it should be treated like a ruleset
         // medias and comments do not have nested rules, but should be treated like rulesets anyway
         // some directives and anonymous nodes are ruleset like, others are not
         if (typeof rule.isRulesetLike === "boolean") {
             return rule.isRulesetLike;
         } else if (typeof rule.isRulesetLike === "function") {
-            return rule.isRulesetLike(root);
+            return rule.isRulesetLike();
         }
 
         //anything else is assumed to be a rule
         return false;
     }
 
+    var charsetNodeIndex = 0;
+    var importNodeIndex = 0;
     for (i = 0; i < this.rules.length; i++) {
         rule = this.rules[i];
-        if (isRulesetLikeNode(rule, this.root)) {
-            rulesetNodes.push(rule);
-        } else {
-            //charsets should float on top of everything
-            if (rule.isCharset && rule.isCharset()) {
-                charsetRuleNodes.push(rule);
-            } else {
-                ruleNodes.push(rule);
+        if (rule.type === "Comment") {
+            if (importNodeIndex === i) {
+                importNodeIndex++;
             }
+            ruleNodes.push(rule);
+        } else if (rule.isCharset && rule.isCharset()) {
+            ruleNodes.splice(charsetNodeIndex, 0, rule);
+            charsetNodeIndex++;
+            importNodeIndex++;
+        } else if (rule.type === "Import") {
+            ruleNodes.splice(importNodeIndex, 0, rule);
+            importNodeIndex++;
+        } else {
+            ruleNodes.push(rule);
         }
     }
     ruleNodes = charsetRuleNodes.concat(ruleNodes);
@@ -379,10 +398,13 @@ Ruleset.prototype.genCSS = function (context, output) {
     for (i = 0; i < ruleNodes.length; i++) {
         rule = ruleNodes[i];
 
-        // @page{ directive ends up with root elements inside it, a mix of rules and rulesets
-        // In this instance we do not know whether it is the last property
-        if (i + 1 === ruleNodes.length && (!this.root || rulesetNodes.length === 0 || this.firstRoot)) {
+        if (i + 1 === ruleNodes.length) {
             context.lastRule = true;
+        }
+
+        var currentLastRule = context.lastRule;
+        if (isRulesetLikeNode(rule)) {
+            context.lastRule = false;
         }
 
         if (rule.genCSS) {
@@ -390,6 +412,8 @@ Ruleset.prototype.genCSS = function (context, output) {
         } else if (rule.value) {
             output.add(rule.value.toString());
         }
+
+        context.lastRule = currentLastRule;
 
         if (!context.lastRule) {
             output.add(context.compress ? '' : ('\n' + tabRuleStr));
@@ -401,17 +425,6 @@ Ruleset.prototype.genCSS = function (context, output) {
     if (!this.root) {
         output.add((context.compress ? '}' : '\n' + tabSetStr + '}'));
         context.tabLevel--;
-    }
-
-    sep = (context.compress ? "" : "\n") + (this.root ? tabRuleStr : tabSetStr);
-    rulesetNodeCnt = rulesetNodes.length;
-    if (rulesetNodeCnt) {
-        if (ruleNodes.length && sep) { output.add(sep); }
-        rulesetNodes[0].genCSS(context, output);
-        for (i = 1; i < rulesetNodeCnt; i++) {
-            if (sep) { output.add(sep); }
-            rulesetNodes[i].genCSS(context, output);
-        }
     }
 
     if (!output.isEmpty() && !context.compress && this.firstRoot) {

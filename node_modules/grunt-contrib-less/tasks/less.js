@@ -2,7 +2,7 @@
  * grunt-contrib-less
  * http://gruntjs.com/
  *
- * Copyright (c) 2014 Tyler Kellen, contributors
+ * Copyright (c) 2015 Tyler Kellen, contributors
  * Licensed under the MIT license.
  */
 
@@ -26,6 +26,11 @@ module.exports = function(grunt) {
       grunt.verbose.warn('Destination not written because no source files were provided.');
     }
 
+    var tally = {
+      sheets: 0,
+      maps: 0
+    };
+
     async.eachSeries(this.files, function(f, nextFileObj) {
       var destFile = f.dest;
 
@@ -34,9 +39,8 @@ module.exports = function(grunt) {
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
-        } else {
-          return true;
         }
+        return true;
       });
 
       if (files.length === 0) {
@@ -65,7 +69,8 @@ module.exports = function(grunt) {
                 sourceMapFilename = destFile + '.map';
               }
               grunt.file.write(sourceMapFilename, output.map);
-              grunt.log.writeln('File ' + chalk.cyan(options.sourceMapFilename) + ' created.');
+              grunt.verbose.writeln('File ' + chalk.cyan(sourceMapFilename) + ' created.');
+              tally.maps++;
             }
             process.nextTick(next);
           },
@@ -78,19 +83,30 @@ module.exports = function(grunt) {
         } else {
           var allCss = compiled.join(options.compress ? '' : grunt.util.normalizelf(grunt.util.linefeed));
           grunt.file.write(destFile, allCss);
-          grunt.log.writeln('File ' + chalk.cyan(destFile) + ' created');
+          grunt.verbose.writeln('File ' + chalk.cyan(destFile) + ' created');
+          tally.sheets++;
         }
         nextFileObj();
       });
 
-    }, done);
+    }, function () {
+      if (tally.sheets) {
+        grunt.log.ok(tally.sheets + ' ' + grunt.util.pluralize(tally.sheets, 'stylesheet/stylesheets') + ' created.');
+      }
+
+      if (tally.maps) {
+        grunt.log.ok(tally.maps + ' ' + grunt.util.pluralize(tally.maps, 'sourcemap/sourcemaps') + ' created.');
+      }
+
+      done();
+    });
   });
 
   var compileLess = function(srcFile, destFile, options) {
     options = _.assign({filename: srcFile}, options);
     options.paths = options.paths || [path.dirname(srcFile)];
 
-    if (typeof options.paths === 'function') {
+    if (_.isFunction(options.paths)) {
       try {
         options.paths = options.paths(srcFile);
       } catch (e) {
@@ -98,11 +114,11 @@ module.exports = function(grunt) {
       }
     }
 
-    if (options.sourceMap && !options.sourceMapFilename) {
+    if (options.sourceMap && !options.sourceMapFileInline && !options.sourceMapFilename) {
       options.sourceMapFilename = destFile + '.map';
     }
 
-    if (typeof options.sourceMapBasepath === 'function') {
+    if (_.isFunction(options.sourceMapBasepath)) {
       try {
         options.sourceMapBasepath = options.sourceMapBasepath(srcFile);
       } catch (e) {
@@ -110,7 +126,7 @@ module.exports = function(grunt) {
       }
     }
 
-    if (typeof(options.sourceMap) === "boolean" && options.sourceMap) {
+    if (_.isBoolean(options.sourceMap) && options.sourceMap) {
       options.sourceMap = {
         sourceMapBasepath: options.sourceMapBasepath,
         sourceMapFilename: options.sourceMapFilename,
@@ -128,10 +144,9 @@ module.exports = function(grunt) {
     // Equivalent to --modify-vars option.
     // Properties under options.modifyVars are appended as less variables
     // to override global variables.
-    var modifyVarsOutput = parseVariableOptions(options['modifyVars']);
+    var modifyVarsOutput = parseVariableOptions(options.modifyVars);
     if (modifyVarsOutput) {
-      srcCode += '\n';
-      srcCode += modifyVarsOutput;
+      srcCode += '\n' + modifyVarsOutput;
     }
 
     // Load custom functions
@@ -141,7 +156,7 @@ module.exports = function(grunt) {
           var args = [].slice.call(arguments);
           args.unshift(less);
           var res = options.customFunctions[name].apply(this, args);
-            return typeof res === 'object' ? res : new less.tree.Anonymous(res);
+            return _.isObject(res) ? res : new less.tree.Anonymous(res);
         });
       });
     }

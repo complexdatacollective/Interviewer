@@ -63,8 +63,10 @@ Dimension.prototype.operate = function (context, op, other) {
 
     if (op === '+' || op === '-') {
         if (unit.numerator.length === 0 && unit.denominator.length === 0) {
-            unit.numerator = other.unit.numerator.slice(0);
-            unit.denominator = other.unit.denominator.slice(0);
+            unit = other.unit.clone();
+            if (this.unit.backupUnit) {
+                unit.backupUnit = this.unit.backupUnit;
+            }
         } else if (other.unit.numerator.length === 0 && unit.denominator.length === 0) {
             // do nothing
         } else {
@@ -125,7 +127,7 @@ Dimension.prototype.convertTo = function (conversions) {
         conversions = derivedConversions;
     }
     applyUnit = function (atomicUnit, denominator) {
-      /*jshint loopfunc:true */
+        /* jshint loopfunc:true */
         if (group.hasOwnProperty(atomicUnit)) {
             if (denominator) {
                 value = value / (group[atomicUnit] / group[targetUnit]);

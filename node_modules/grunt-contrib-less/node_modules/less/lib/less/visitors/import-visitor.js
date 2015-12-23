@@ -103,6 +103,8 @@ ImportVisitor.prototype = {
 
         var importVisitor = this,
             inlineCSS = importNode.options.inline,
+            isPlugin = importNode.options.plugin,
+            isOptional = importNode.options.optional,
             duplicateImport = importedAtRoot || fullPath in importVisitor.recursionDetector;
 
         if (!context.importMultiple) {
@@ -119,11 +121,15 @@ ImportVisitor.prototype = {
             }
         }
 
+        if (!fullPath && isOptional) {
+            importNode.skip = true;
+        }
+
         if (root) {
             importNode.root = root;
             importNode.importedFilename = fullPath;
 
-            if (!inlineCSS && (context.importMultiple || !duplicateImport)) {
+            if (!inlineCSS && !isPlugin && (context.importMultiple || !duplicateImport)) {
                 importVisitor.recursionDetector[fullPath] = true;
 
                 var oldContext = this.context;
@@ -144,7 +150,16 @@ ImportVisitor.prototype = {
         }
     },
     visitRule: function (ruleNode, visitArgs) {
-        visitArgs.visitDeeper = false;
+        if (ruleNode.value.type === "DetachedRuleset") {
+            this.context.frames.unshift(ruleNode);
+        } else {
+            visitArgs.visitDeeper = false;
+        }
+    },
+    visitRuleOut : function(ruleNode) {
+        if (ruleNode.value.type === "DetachedRuleset") {
+            this.context.frames.shift();
+        }
     },
     visitDirective: function (directiveNode, visitArgs) {
         this.context.frames.unshift(directiveNode);

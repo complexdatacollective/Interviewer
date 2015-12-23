@@ -198,8 +198,7 @@ ProcessExtendsVisitor.prototype = {
             if (iterationCount > 100) {
                 var selectorOne = "{unable to calculate}";
                 var selectorTwo = "{unable to calculate}";
-                try
-                {
+                try {
                     selectorOne = extendsToAdd[0].selfSelectors[0].toCSS();
                     selectorTwo = extendsToAdd[0].selector.toCSS();
                 }
@@ -436,7 +435,6 @@ ProcessExtendsVisitor.prototype = {
     },
     visitMediaOut: function (mediaNode) {
         var lastIndex = this.allExtendsStack.length - 1;
-        this.checkExtendsForNonMatched(this.allExtendsStack[lastIndex]);
         this.allExtendsStack.length = lastIndex;
     },
     visitDirective: function (directiveNode, visitArgs) {
@@ -446,7 +444,6 @@ ProcessExtendsVisitor.prototype = {
     },
     visitDirectiveOut: function (directiveNode) {
         var lastIndex = this.allExtendsStack.length - 1;
-        this.checkExtendsForNonMatched(this.allExtendsStack[lastIndex]);
         this.allExtendsStack.length = lastIndex;
     }
 };

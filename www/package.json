@@ -29,8 +29,8 @@
     "toolbar": false,
     "frame": true,
     "position": "center",
-    "width": 1520,
-    "height": 820,
+    "width": 1920,
+    "height": 1080,
     "min_width": 100,
     "min_height": 80
     },

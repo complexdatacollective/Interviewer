@@ -331,10 +331,11 @@ module.exports = function() {
     function toCSS(options, path, callback) {
         options = options || {};
         var str = fs.readFileSync(path, 'utf8'), addPath = require('path').dirname(path);
-
-        options.paths = options.paths || [];
-        if (!contains(options.paths, addPath)) {
-            options.paths.push(addPath);
+        if (typeof options.paths !== "string") {
+            options.paths = options.paths || [];
+            if (!contains(options.paths, addPath)) {
+                options.paths.push(addPath);
+            }
         }
         options.filename = require('path').resolve(process.cwd(), path);
         options.optimization = options.optimization || 0;
@@ -344,7 +345,10 @@ module.exports = function() {
         } else if (options.modifyVars) {
             options.modifyVars = options.getVars(path);
         }
-
+        if (options.plugin) {
+            var Plugin = require(require('path').resolve(process.cwd(), options.plugin));
+            options.plugins = [Plugin];
+        }
         less.render(str, options, callback);
     }
 
