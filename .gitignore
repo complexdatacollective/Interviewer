@@ -6,9 +6,9 @@ dist/
 build/
 buildTmp/
 .DS_Store
-app/npm-debug.log
+www/npm-debug.log
 npm-debug.log
 *.zip
 *.app
-app/protocols/*
-!app/protocols/default
+www/protocols/*
+!www/protocols/default
