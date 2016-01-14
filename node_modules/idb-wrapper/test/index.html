@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mocha</title>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha">
+      <h2>
+        <input type="checkbox" id="exclude-ie">
+        <label for="exclude-ie">Exclude multiEntry and compound index tests</label>
+      </h2>
+      <button>Run Tests…</button>
+    </div>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../idbstore.min.js"></script>
+    <script>
+      mocha.setup('bdd');
+      var expect = chai.expect,
+          ieCheckbox = document.getElementById('exclude-ie');
+
+      document.getElementsByTagName('button')[0].addEventListener('click', function () {
+        window.excludeIE = ieCheckbox.checked;
+        mocha.run();
+      })
+    </script>
+    <script src="idbwrapper_spec.js"></script>
+  </body>
+</html>
