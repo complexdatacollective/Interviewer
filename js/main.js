@@ -15,7 +15,7 @@ $(document).ready(function() {
     var moment = require('moment');
     window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
-    window.netCanvas.studyProtocol = 'RADAR';
+    window.netCanvas.studyProtocol = 'radar-protocol';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -139,7 +139,7 @@ $(document).ready(function() {
 
     var protocolExists = function(protocol, callback) {
         var response = false;
-        var availableProtocols = ['RADAR', 'default', 'dphil-protocol'];
+        var availableProtocols = ['radar-protocol', 'default', 'dphil-protocol'];
 
         if (availableProtocols.indexOf(protocol) !== -1) {
             response = true;
