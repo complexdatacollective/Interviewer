@@ -12,8 +12,6 @@ $(document).ready(function() {
     window.isNode = (typeof process !== 'undefined' && typeof require !== 'undefined'); // this check doesn't work, because browserify tries to be clever.
     window.isCordova = !!window.cordova;
     window.isNodeWebkit = false;
-    var moment = require('moment');
-    window.moment = moment; // needed for module access.
     window.netCanvas.devMode = false;
     window.netCanvas.studyProtocol = 'dphil-protocol';
 

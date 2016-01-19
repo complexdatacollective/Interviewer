@@ -16,6 +16,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "nedb": "latest",
+    "nw": "^0.12.3",
     "requirejs": "latest"
   },
   "devDependencies": {
@@ -41,6 +42,10 @@
     "grunt-postcss": "latest",
     "load-grunt-tasks": "latest",
     "time-grunt": "latest"
+  },
+  "scripts": {
+    "start": "nw www/",
+    "test": "nw www/ --dev=1"
   },
   "version": "3.0.17"
 }
