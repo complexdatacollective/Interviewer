@@ -65,7 +65,14 @@ module.exports = function FormBuilder(formName) {
 
     // show and hide methods
     formBuilder.show = function() {
-        thisForm.show();
+
+        // Run custom show or hide functions, if present
+        if (typeof thisForm.show === 'function') {
+            thisForm.show();            
+        }
+
+
+
         note.debug('FormBuilder ['+name+']: show.');
         targetEl.addClass('show');
         $('.black-overlay').addClass('show');

@@ -1,48 +1,32 @@
-/* global $, window, Odometer, document, note  */
+/* global $, window, Odometer, document, note, Swiper  */
 /* exported Namegenerator */
 module.exports = function NameGenerator() {
     'use strict';
     //global vars
-    var nameGenerator = {};
+    var nameGeneratorMulti = {};
     var options = {
-    	targetEl: $('.container'),
+        targetEl: $('.container'),
+    	panels: ['current'],
     	network: window.network,
     	form: window.forms.newNodeForm,
-    	heading: 'Within the last 6 months or so, who have you felt particularly close to, or discussed important personal matters with?',
-    	subheading: '',
-    	panels: [],
-    	dataOrigin: {
-    		type: 'node', // edge or node.
-    		variables: []
-    	},
-    	dataTarget: {
-    		type: 'node',
-    		variables: [
-    			{label: 'ng', value: 'close'},
-    			{label: 'contexts', value: []}
+    	data: {
+    		origin: 'node', // edge or node.
+    		namegenerators: [
+    			{
+    				prompt: 'Name generator prompt',
+    				label: 'name generator label',
+    				variables: [
+    					{label: 'extra-variable', value: 'true', type: 'select'}
+    				]
+    			}
     		]
     	}
     };
 
-    var nodeBoxOpen = false;
-    var editing = false;
-    var relationshipPanel;
-    var newNodePanel;
-    var newNodePanelContent;
+    var promptSwiper;
+    var currentPrompt = 0;
     var alterCounter;
     var moduleEvents = [];
-
-    var alterCount = options.network.getNodes({type_t0: 'Alter'}).length;
-
-    var roles = {
-        'Friend': ['Best Friend','Friend','Ex-friend','Other type'],
-        'Family / Relative': ['Parent / Guardian','Brother / Sister','Grandparent','Other Family','Chosen Family'],
-        'Romantic / Sexual Partner': ['Boyfriend / Girlfriend','Ex-Boyfriend / Ex-Girlfriend','Booty Call / Fuck Buddy / Hook Up','One Night Stand','Other type of Partner'],
-        'Acquaintance / Associate': ['Coworker / Colleague','Classmate','Roommate','Friend of a Friend','Neighbor','Other'],
-        'Other Support / Source of Advice': ['Teacher / Professor','Counselor / Therapist','Community Agency Staff','Religious Leader','Mentor','Coach','Other'],
-        'Drug Use': ['Someone you use drugs with','Someone you buy drugs from'],
-        'Other': ['Other relationship']
-    };
 
     var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
@@ -54,13 +38,13 @@ module.exports = function NameGenerator() {
 
         var node = options.network.getNode(index);
 
-        // add fields from dataTarget
+        // add fields from data
         var properties = {};
         properties.id = {
             type:'hidden',
             title: 'id'
         };
-        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
+        $.each(options.data.namegenerators, function(targetIndex, targetValue) {
             properties[targetValue.label] = {
                 type:'hidden',
                 title: targetValue.label
@@ -74,46 +58,23 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGenerator.generateTestAlters = function(number) {
+    nameGeneratorMulti.generateTestAlters = function(number) {
 
         if (!number) {
             note.error('You must specify the number of test alters you want to create. Cancelling!');
             return false;
         }
 
-        var eachTime = 1000;
+        var eachTime = 1500;
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
-            setTimeout(nameGenerator.generateAlter, timer);
+            setTimeout(nameGeneratorMulti.generateAlter, timer);
         }
 
     };
 
-    nameGenerator.updateSidePanel = function() {
-        // Empty it
-        $('.current-node-list').children().remove();
-
-        // ignore ego and any nodes that are visible in the main node list
-        var nodes = options.network.getNodes({}, function (results) {
-            var filteredResults = [];
-            $.each(results, function(index,value) {
-                if (value.type !== 'Ego' && $('[data-index='+value.id+']').length === 0) {
-                    filteredResults.push(value);
-                }
-            });
-
-            return filteredResults;
-        });
-
-        $.each(nodes, function(index,value) {
-            var el = $('<div class="node-list-item">'+value.label+'</div>');
-            $('.current-node-list').append(el);
-        });
-
-    };
-
-    nameGenerator.generateAlter = function() {
+    nameGeneratorMulti.generateAlter = function() {
         // We must simulate every interaction to ensure that any errors are caught.
         $('.new-node-button').click();
         setTimeout(function() {
@@ -126,68 +87,42 @@ module.exports = function NameGenerator() {
         $('#label').val($('#first_name').val());
     };
 
-    nameGenerator.openNodeBox = function() {
-        $('.newNodeBox').height($('.newNodeBox').height());
-        $('.newNodeBox').addClass('open');
-        $('.black-overlay').css({'display':'block'});
-        setTimeout(function() {
-            $('.black-overlay').addClass('show');
-        }, 50);
-        setTimeout(function() {
-            $('#ngForm input:text').first().focus();
-        }, 1000);
-
-        nodeBoxOpen = true;
-    };
-
-    nameGenerator.closeNodeBox = function() {
-        $('input#age_p_t0').prop( 'disabled', false);
-        $('.black-overlay').removeClass('show');
-        $('.newNodeBox').removeClass('open');
-        setTimeout(function() { // for some reason this doenst work without an empty setTimeout
-            $('.black-overlay').css({'display':'none'});
-        }, 300);
-        nodeBoxOpen = false;
-        $('#ngForm').trigger('reset');
-        editing = false;
-        $('.relationship-button').html('Set Relationship Roles');
-        $(relationshipPanel).find('.relationship').removeClass('selected');
-    };
-
-    nameGenerator.destroy = function() {
-        note.debug('Destroying nameGenerator.');
+    nameGeneratorMulti.destroy = function() {
+        note.debug('Destroying nameGeneratorMulti.');
 
         // Event listeners
+        promptSwiper.destroy();
         window.tools.Events.unbind(moduleEvents);
 
     };
 
-    nameGenerator.bindEvents = function() {
+    nameGeneratorMulti.bindEvents = function() {
         // Event listeners
         // Events
 		var event = [{
 			event: 'changeStageStart',
-			handler: nameGenerator.destroy,
+			handler: nameGeneratorMulti.destroy,
 			targetEl:  window
 		},
 		{
 			event: 'nodeAdded',
-			handler: nameGenerator.nodeAdded,
+			handler: nameGeneratorMulti.nodeAdded,
 			targetEl:  window
 		},
         {
             event: 'nodeUpdate',
-            handler: nameGenerator.nodeEdited,
+            handler: nameGeneratorMulti.nodeEdited,
             targetEl:  window
         },
         {
             event: 'click',
-            handler: cardClickHandler,
-            targetEl:  '.card'
+            handler: nameGeneratorMulti.toggleSelectable,
+            targetEl: window.document,
+            subTarget:  '.node-list-item'
         },
         {
             event: 'click',
-            handler: nameGenerator.showNewNodeForm,
+            handler: nameGeneratorMulti.showNewNodeForm,
             targetEl:  '.new-node-button'
         }];
 		window.tools.Events.register(moduleEvents, event);
@@ -195,22 +130,25 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGenerator.nodeAdded = function(e) {
-        nameGenerator.addCard(e.originalEvent.detail, function() {
-            nameGenerator.updateCounter();
-            nameGenerator.makeDraggable();
+    nameGeneratorMulti.nodeAdded = function(e) {
+        nameGeneratorMulti.addCard(e.originalEvent.detail, function() {
+            nameGeneratorMulti.updateCounter();
+            nameGeneratorMulti.makeDraggable();
         });
     };
 
-    nameGenerator.nodeEdited = function(e) {
-        nameGenerator.editCard(e.originalEvent.detail, function() {
-            nameGenerator.makeDraggable();
+    nameGeneratorMulti.nodeEdited = function(e) {
+        nameGeneratorMulti.editCard(e.originalEvent.detail, function() {
+            nameGeneratorMulti.makeDraggable();
         });
     };
 
-    nameGenerator.init = function(userOptions) {
-
+    nameGeneratorMulti.init = function(userOptions) {
+        note.info('nameGeneratorMulti initialising.');
         window.tools.extend(options, userOptions);
+
+        var alterCount = nameGeneratorMulti.getNodes().length;
+
         // create elements
         $(options.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
         var alterCountBox = $('<div class="alter-count-box"></div>');
@@ -219,10 +157,23 @@ module.exports = function NameGenerator() {
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         options.targetEl.append(nodeContainer);
 
-        var title = $('<h1 class="text-center"></h1>').html(options.heading);
-        $('.question-container').append(title);
-        var subtitle = $('<p class="lead text-center"></p>').html(options.subheading);
-        $('.question-container').append(subtitle);
+
+        // Prompts
+        $('.question-container').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
+        for (var i = 0; i < options.data.namegenerators.length; i++) {
+            $('.swiper-wrapper').append('<div class="swiper-slide"><h2>'+options.data.namegenerators[i].prompt+'</h2></div>');
+        }
+        promptSwiper = new Swiper ('.swiper-container', {
+            pagination: '.swiper-pagination',
+            speed: 1000
+        });
+
+        // Update current prompt counter
+        promptSwiper.on('slideChangeStart', function () {
+            currentPrompt = promptSwiper.activeIndex;
+            nameGeneratorMulti.handlePanels();
+            nameGeneratorMulti.changeData();
+        });
 
         // create namelist container
         var nameList = $('<div class="node-container nameList"></div>');
@@ -231,11 +182,10 @@ module.exports = function NameGenerator() {
 		// bin
 		options.targetEl.append('<div class="delete-bin-footer"><span class="delete-bin fa fa-4x fa-trash-o"></span></div>');
 		$('.delete-bin').droppable({
-			accept: '.card',
+			accept: '.card, .node-list-item',
 			tolerance: 'touch',
 			hoverClass: 'delete',
 			over: function( event, ui ) {
-                console.log('over');
 				$(this).addClass('delete');
 				$(ui.draggable).addClass('delete');
 			},
@@ -244,8 +194,7 @@ module.exports = function NameGenerator() {
 				$(ui.draggable).removeClass('delete');
 			},
 			drop: function( event, ui ) {
-                console.log(ui.draggable);
-				nameGenerator.removeNode($(ui.draggable).data('index'));
+				nameGeneratorMulti.removeNode($(ui.draggable).data('index'));
 			}
 		});
 
@@ -260,21 +209,25 @@ module.exports = function NameGenerator() {
           theme: 'default'
         });
 
-        nameGenerator.addExistingData();
-        nameGenerator.handlePanels();
-        nameGenerator.bindEvents();
+        nameGeneratorMulti.handlePanels();
+        nameGeneratorMulti.addData();
+        nameGeneratorMulti.bindEvents();
     };
 
-    nameGenerator.addExistingData = function () {
-        // add existing nodes
+    nameGeneratorMulti.changeData = function() {
+            $('.inner-card, .node-list-item').removeClass('shown');
+            setTimeout(function() {
+                $('.card, .node-list-item').remove();
+                nameGeneratorMulti.addData();
+            }, 1000);
+    };
 
-        var properties = {};
-        // build properties array from dataOrigin
-        $.each(options.dataOrigin.variables, function(variableIndex, variableValue){
-            properties[variableValue.label] = variableValue.value;
-        });
-
-        var nodes = options.network.getNodes(properties, function (results) {
+    nameGeneratorMulti.getNodes = function(criteria) {
+        console.log('getnodes');
+        console.log(criteria);
+        var filterCriteria = criteria || {};
+        // ignore ego and any nodes that are visible in the main node list
+        var nodes = options.network.getNodes(filterCriteria, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {
@@ -285,16 +238,87 @@ module.exports = function NameGenerator() {
             return filteredResults;
         });
 
-        $.each(nodes, function(index,value) {
-            nameGenerator.addCard(value);
-        });
+        return nodes;
+    };
 
-        nameGenerator.updateCounter();
-        nameGenerator.makeDraggable();
+    nameGeneratorMulti.toggleSelectable = function() {
+        var clicked = this;
+        var properties = {};
+
+        // get the togglePabelVariable for the current name generator
+        if (options.data.namegenerators[currentPrompt].togglePanelVariable !== 'undefined') {
+            $.each(options.data.namegenerators[currentPrompt].variables, function(variableIndex, variableValue) {
+                if (variableValue.label === options.data.namegenerators[currentPrompt].togglePanelVariable) {
+                    if ($(clicked).hasClass('selected')) {
+                        properties[options.data.namegenerators[currentPrompt].togglePanelVariable] = '';
+                    } else {
+                        properties[options.data.namegenerators[currentPrompt].togglePanelVariable] = variableValue.value;
+                    }
+                }
+            });
+
+            options.network.updateNode($(clicked).data('index'), properties, function() {
+                $(clicked).toggleClass('selected');
+            });
+        }
 
     };
 
-    nameGenerator.updateCounter = function(number) {
+    nameGeneratorMulti.updateSidePanel = function() {
+        console.log('updatesidepanel');
+
+        // Empty it
+        $('.current-node-list').children().remove();
+
+        // ignore ego and any nodes that are visible in the main node list
+        var nodes = nameGeneratorMulti.getNodes();
+
+        var filteredResults = [];
+        $.each(nodes, function(index,value) {
+            if (value.namegenerator !== options.data.namegenerators[currentPrompt].label) {
+                filteredResults.push(value);
+            }
+        });
+
+        $.each(filteredResults, function(index,value) {
+            var selected = '';
+
+            if (value[options.data.namegenerators[currentPrompt].togglePanelVariable] === 'true') {
+                selected = 'selected';
+            }
+
+            var el = $('<div class="node-list-item '+selected+'" data-index="'+value.id+'">'+value.label+'</div>');
+            $('.current-node-list').append(el);
+
+            setTimeout(function() {
+                $(el).addClass('shown');
+                nameGeneratorMulti.makeDraggable();
+            },50+(index*50));
+
+        });
+
+    };
+
+    nameGeneratorMulti.addData = function () {
+        console.log('add data');
+        var properties = {};
+        // build properties array from data
+        properties.namegenerator = options.data.namegenerators[currentPrompt].label;
+        console.log(properties);
+        var nodes = nameGeneratorMulti.getNodes(properties);
+        console.log(nodes);
+        $.each(nodes, function(index,value) {
+            setTimeout(function() {
+                nameGeneratorMulti.addCard(value);
+            }, index * 40);
+        });
+
+        nameGeneratorMulti.updateSidePanel();
+        nameGeneratorMulti.updateCounter();
+
+    };
+
+    nameGeneratorMulti.updateCounter = function(number) {
         if (!number) {
             alterCounter.update(options.network.getNodes().length-1);
         } else {
@@ -302,7 +326,7 @@ module.exports = function NameGenerator() {
         }
     };
 
-    nameGenerator.makeDraggable = function() {
+    nameGeneratorMulti.makeDraggable = function() {
         $('.card').draggable({
             appendTo: 'body',
             helper: 'clone',
@@ -311,90 +335,158 @@ module.exports = function NameGenerator() {
             refreshPositions: true,
             scroll: false,
             start: function(event, ui) {
-                console.log(ui);
                 $(this).addClass('invisible');
                 $(ui.helper).addClass('dragging');
-                nameGenerator.showBin();
+                nameGeneratorMulti.showBin();
             },
             stop: function(event, ui) {
                 $(this).removeClass('invisible');
                 $(ui.helper).removeClass('dragging');
-                nameGenerator.hideBin();
+                nameGeneratorMulti.hideBin();
+            }
+        });
+
+        $('.node-list-item').draggable({
+            // appendTo: 'body',
+            helper: 'clone',
+            revert: true,
+            revertDuration: 200,
+            refreshPositions: true,
+            scroll: false,
+            stack: '.node-list-item',
+            start: function(event, ui) {
+                nameGeneratorMulti.showBin();
+                $(ui.helper).addClass('dragging');
+            },
+            stop: function(event, ui) {
+                $(ui.helper).removeClass('dragging');
+                nameGeneratorMulti.hideBin();
             }
         });
 
     };
 
-    nameGenerator.showNewNodeForm = function() {
+    nameGeneratorMulti.showNewNodeForm = function() {
 
-        // add fields from dataTarget
+        // add fields from data
         var properties = {};
-        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
-            properties[targetValue.label] = {
+            properties.namegenerator = {
                 type:'hidden',
-                title: targetValue.label
+                title: 'namegenerator'
             };
-        });
+
+        // Add additional variables, if present
+        if (typeof options.data.namegenerators[currentPrompt].variables !== 'undefined' && options.data.namegenerators[currentPrompt].variables.length > 0) {
+            $.each(options.data.namegenerators[currentPrompt].variables, function(variableIndex, variableValue) {
+
+                properties[variableValue.label] = {
+                    type: 'hidden',
+                    title: variableValue.label
+                };
+            });
+        }
+
         window.forms.nameGenForm.addTemporaryFields(properties);
 
         // Add data from fields
         properties = {};
-        $.each(options.dataTarget.variables, function(targetIndex, targetValue) {
-            properties[targetValue.label] = targetValue.value;
-        });
-        window.forms.nameGenForm.addData(properties);
+        properties.namegenerator = options.data.namegenerators[currentPrompt].label;
 
+        // Add data to additional variables, if present
+        if (typeof options.data.namegenerators[currentPrompt].variables !== 'undefined' && options.data.namegenerators[currentPrompt].variables.length > 0) {
+
+            // Is there a cute way to do the below using map?
+            $.each(options.data.namegenerators[currentPrompt].variables, function(variableIndex, variableValue) {
+                properties[variableValue.label] = variableValue.value;
+            });
+        }
+
+
+        window.forms.nameGenForm.addData(properties);
 
         window.forms.nameGenForm.show();
     };
 
-    nameGenerator.handlePanels = function() {
-        note.debug('nameGenerator.handlePanels()');
-        if (options.panels && typeof options.panels === 'object' && options.panels.length > 0) {
+    nameGeneratorMulti.handlePanels = function() {
+        note.debug('nameGeneratorMulti.handlePanels()');
 
-            // Side container
-            var sideContainer = $('<div class="side-container"></div>');
+        if (options.panels.indexOf('current') !== -1) {
+            // We are trying to add a panel which shows the current nodes.
 
-            // Current side panel shows alters already elicited
-            if (options.panels.indexOf('current') !== -1) {
+            // First, check there are some current nodes:
+            // ignore ego and any nodes that are visible in the main node list
+            var nodes = nameGeneratorMulti.getNodes();
 
-                // add custom node list
-                sideContainer.append($('<div class="current-panel"><h4>People you already named:</h4><div class="current-node-list node-lists"></div></div>'));
+            var filteredResults = [];
+            $.each(nodes, function(index,value) {
+                if (value.namegenerator !== options.data.namegenerators[currentPrompt].label) {
+                    filteredResults.push(value);
+                }
+            });
+
+            if (filteredResults.length > 0) {
+                if ($('.side-container').length === 0) {
+                    // Side container
+                    var sideContainer = $('<div class="side-container out"></div>');
+
+                    // Current side panel shows alters already elicited
+                    sideContainer.append($('<div class="current-panel"><h4>Other people you have mentioned:</h4><div class="current-node-list node-lists"></div><div class="current-node-list-background"></div></div>'));
+
+                    if (sideContainer.children().length > 0) {
+                        // move node list to one side
+                        sideContainer.insertBefore('.nameList');
+                        setTimeout(function() {
+                            $('.nameList').addClass('alt');
+                            $('.side-container').removeClass('out');
+                        }, 10);
+
+
+                    }
+                }
+                // halve the panel height if we have two
+                if ($('.side-container').children().length > 1) {
+                    $('.node-lists').addClass('double');
+                }
+            } else {
+                $('.side-container').addClass('out');
+                setTimeout(function() {
+                    $('.nameList').removeClass('alt');
+                    $('.side-container').remove();
+                }, 500);
+
             }
 
-            if (sideContainer.children().length > 0) {
-                // move node list to one side
-                sideContainer.insertBefore('.nameList');
-                $('.nameList').addClass('alt');
-            }
+        }
 
-            nameGenerator.updateSidePanel();
-
-            // halve the panel height if we have two
-            if ($('.side-container').children().length > 1) {
-                $('.node-lists').addClass('double');
-            }
-
-        } // end if panels
     };
 
-    nameGenerator.showBin = function() {
+    nameGeneratorMulti.showBin = function() {
         $('.delete-bin-footer').addClass('show');
     };
 
-    nameGenerator.hideBin = function() {
+    nameGeneratorMulti.hideBin = function() {
         $('.delete-bin-footer').removeClass('show');
     };
 
-    nameGenerator.addCard = function(properties, callback) {
+    nameGeneratorMulti.addCard = function(properties, callback) {
 
         var card;
 
-        card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card shown"><h4>'+properties.label+'</h4></div></div>');
+        card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card"><h4>'+properties.label+'</h4></div></div>');
         var list = $('<ul></ul>');
         list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
         card.children('.inner-card').append(list);
         $('.nameList').append(card);
+
+        $(card).on('click', cardClickHandler);
+
+        nameGeneratorMulti.updateCounter();
+        nameGeneratorMulti.makeDraggable();
+
+        setTimeout(function() {
+            $('[data-index='+properties.id+']').children('.inner-card').addClass('shown');
+        },20);
+
 
         if (callback) {
             callback();
@@ -403,7 +495,7 @@ module.exports = function NameGenerator() {
         return true;
     };
 
-    nameGenerator.editCard = function(properties, callback) {
+    nameGeneratorMulti.editCard = function(properties, callback) {
 
         var card;
         $('.card[data-index='+properties.id+']').children('inner-card').find('h4').html(properties.label);
@@ -420,34 +512,35 @@ module.exports = function NameGenerator() {
         return true;
     };
 
-    nameGenerator.removeNode = function(id) {
+    nameGeneratorMulti.removeNode = function(id) {
         if (!id) {
-            note.error('No id provided to nameGenerator.deleteNode().');
+            note.error('No id provided to nameGeneratorMulti.deleteNode().');
             return false;
         }
 
         if (options.network.removeNode(id)) {
-            if(nameGenerator.removeCard(id)) {
+            if(nameGeneratorMulti.removeCard(id)) {
                 note.info('Deleted node with id '+id);
+                nameGeneratorMulti.handlePanels();
                 return true;
             } else {
-                note.error('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+                note.error('nameGeneratorMulti.removeNode() tried to remove node with ID '+id+', but failed.');
                 return false;
             }
 
         } else {
-            note.warn('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
+            note.warn('nameGeneratorMulti.removeNode() tried to remove node with ID '+id+', but failed.');
             return false;
         }
     };
 
-    nameGenerator.removeCard = function(id) {
+    nameGeneratorMulti.removeCard = function(id) {
 
         $('div[data-index='+id+']').remove();
-        nameGenerator.updateCounter();
+        nameGeneratorMulti.updateCounter();
 
         return true;
     };
 
-    return nameGenerator;
+    return nameGeneratorMulti;
 };

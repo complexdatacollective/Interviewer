@@ -183,7 +183,6 @@ $(document).ready(function() {
     window.netCanvas.Modules = {};
     window.netCanvas.Modules.Network = require('./network.js');
     window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
-    window.netCanvas.Modules.NameGeneratorMulti = require('./namegeneratormulti.js');
     window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
     window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
     window.netCanvas.Modules.IOInterface = require('./iointerface.js');

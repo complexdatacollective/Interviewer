@@ -183,7 +183,8 @@
 	font-size: 20px;
 	margin: 0;
 	position:fixed;
-	padding:@padding-base-horizontal @padding-base-vertical;
+	padding:@padding-base-horizontal 0px @padding-base-horizontal @padding-base-vertical;
+	margin-left: (@padding-base-horizontal*-1);
 	z-index:999;
 	// background-image: linear-gradient(to bottom, @content-bg 0%, @content-bg 20%, fade(@content-bg, 60%) 60%, fade(@content-bg, 0%) 100%);
 	background-image: linear-gradient(to bottom, @brand-warning 0%, @brand-warning 30%, fade(@brand-warning, 60%) 60%, fade(@brand-warning, 0%) 100%);

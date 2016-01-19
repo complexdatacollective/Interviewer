@@ -1,6 +1,5 @@
 platforms/
 tmp/
-dist/
 buildTmp/
 .DS_Store
 www/npm-debug.log

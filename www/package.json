@@ -1,5 +1,6 @@
 {
   "name": "netCanvas",
+  "version": "3.1.0",
   "description": "An NWjs based personal network capture tool, customised for the RADAR project.",
   "private": true,
   "single-instance": true,
@@ -32,6 +33,5 @@
     "height": 820,
     "min_width": 100,
     "min_height": 80
-  },
-  "version": "3.0.17"
+  }
 }

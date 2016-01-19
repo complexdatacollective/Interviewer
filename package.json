@@ -1,5 +1,6 @@
 {
   "name": "netCanvas",
+  "version": "3.1.0",
   "description": "A cross platform personal network capture tool.",
   "keywords": [],
   "homepage": "https://github.com/jthrilly/netcanvas",
@@ -46,6 +47,5 @@
   "scripts": {
     "start": "nw www/",
     "test": "nw www/ --dev=1"
-  },
-  "version": "3.0.17"
+  }
 }
