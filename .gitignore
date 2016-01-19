@@ -1,4 +1,3 @@
-bower_components/
 platforms/
 tmp/
 dist/
@@ -10,6 +9,4 @@ npm-debug.log
 *.app
 www/protocols/*
 !www/protocols/default
-node_modules/
-*/node_modules/
 *.pbxproj
