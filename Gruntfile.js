@@ -46,7 +46,7 @@ module.exports = function (grunt) {
             options: {
                 map: false, // inline sourcemaps
                 processors: [
-                    require('autoprefixer-core')() // add vendor prefixes
+                    require('autoprefixer')() // add vendor prefixes
                     // require('cssnano')() // minify the result
                 ]
             },
@@ -127,14 +127,14 @@ module.exports = function (grunt) {
                 files: ['js/*.js'],
                 tasks: ['concat:js','browserify:dist'],
                 options: {
-                    livereload: true
+                    livereload: false
                 }
             },
             css: {
                 files: ['less/*.less'],
                 tasks: ['less:style','postcss:dist'],
                 options: {
-                    livereload: true,
+                    livereload: false,
                 }
             }
         },
