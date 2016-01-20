@@ -16,6 +16,7 @@ var defaults = {
     freeModeMomentumBounce: true,
     freeModeMomentumBounceRatio: 1,
     freeModeSticky: false,
+    freeModeMinimumVelocity: 0.02,
     // Set wrapper width
     setWrapperSize: false,
     // Virtual Translate
@@ -43,6 +44,8 @@ var defaults = {
     // Scrollbar
     scrollbar: null,
     scrollbarHide: true,
+    scrollbarDraggable: false,
+    scrollbarSnapOnRelease: false,
     // Keyboard Mousewheel
     keyboardControl: false,
     mousewheelControl: false,
@@ -188,9 +191,6 @@ for (var def in defaults) {
 
 // Swiper
 var s = this;
-
-// Version
-s.version = '3.1.0';
 
 // Params
 s.params = params;
@@ -375,7 +375,7 @@ if (s.params.grabCursor) {
 s.imagesToLoad = [];
 s.imagesLoaded = 0;
 
-s.loadImage = function (imgElement, src, checkForComplete, callback) {
+s.loadImage = function (imgElement, src, srcset, checkForComplete, callback) {
     var image;
     function onReady () {
         if (callback) callback();
@@ -385,7 +385,12 @@ s.loadImage = function (imgElement, src, checkForComplete, callback) {
             image = new window.Image();
             image.onload = onReady;
             image.onerror = onReady;
-            image.src = src;
+            if (srcset) {
+                image.srcset = srcset;
+            }
+            if (src) {
+                image.src = src;
+            }
         } else {
             onReady();
         }
@@ -405,7 +410,7 @@ s.preloadImages = function () {
         }
     }
     for (var i = 0; i < s.imagesToLoad.length; i++) {
-        s.loadImage(s.imagesToLoad[i], (s.imagesToLoad[i].currentSrc || s.imagesToLoad[i].getAttribute('src')), true, _onReady);
+        s.loadImage(s.imagesToLoad[i], (s.imagesToLoad[i].currentSrc || s.imagesToLoad[i].getAttribute('src')), (s.imagesToLoad[i].srcset || s.imagesToLoad[i].getAttribute('srcset')), true, _onReady);
     }
 };
 
@@ -540,6 +545,9 @@ s.updateSlidesSize = function () {
         else {
             slidesNumberEvenToRows = Math.ceil(s.slides.length / s.params.slidesPerColumn) * s.params.slidesPerColumn;
         }
+        if (s.params.slidesPerView !== 'auto' && s.params.slidesPerColumnFill === 'row') {
+            slidesNumberEvenToRows = Math.max(slidesNumberEvenToRows, s.params.slidesPerView * s.params.slidesPerColumn);
+        }
     }
 
     // Calc slides
@@ -625,7 +633,6 @@ s.updateSlidesSize = function () {
         index ++;
     }
     s.virtualSize = Math.max(s.virtualSize, s.size) + s.params.slidesOffsetAfter;
-
     var newSlidesGrid;
 
     if (
@@ -1089,27 +1096,36 @@ s.updateClickedSlide = function (e) {
     }
     if (s.params.slideToClickedSlide && s.clickedIndex !== undefined && s.clickedIndex !== s.activeIndex) {
         var slideToIndex = s.clickedIndex,
-            realIndex;
+            realIndex,
+            duplicatedSlides;
         if (s.params.loop) {
+            if (s.animating) return;
             realIndex = $(s.clickedSlide).attr('data-swiper-slide-index');
-            if (slideToIndex > s.slides.length - s.params.slidesPerView) {
-                s.fixLoop();
-                slideToIndex = s.wrapper.children('.' + s.params.slideClass + '[data-swiper-slide-index="' + realIndex + '"]').eq(0).index();
-                setTimeout(function () {
+            if (s.params.centeredSlides) {
+                if ((slideToIndex < s.loopedSlides - s.params.slidesPerView/2) || (slideToIndex > s.slides.length - s.loopedSlides + s.params.slidesPerView/2)) {
+                    s.fixLoop();
+                    slideToIndex = s.wrapper.children('.' + s.params.slideClass + '[data-swiper-slide-index="' + realIndex + '"]:not(.swiper-slide-duplicate)').eq(0).index();
+                    setTimeout(function () {
+                        s.slideTo(slideToIndex);
+                    }, 0);
+                }
+                else {
                     s.slideTo(slideToIndex);
-                }, 0);
-            }
-            else if (slideToIndex < s.params.slidesPerView - 1) {
-                s.fixLoop();
-                var duplicatedSlides = s.wrapper.children('.' + s.params.slideClass + '[data-swiper-slide-index="' + realIndex + '"]');
-                slideToIndex = duplicatedSlides.eq(duplicatedSlides.length - 1).index();
-                setTimeout(function () {
-                    s.slideTo(slideToIndex);
-                }, 0);
+                }
             }
             else {
-                s.slideTo(slideToIndex);
+                if (slideToIndex > s.slides.length - s.params.slidesPerView) {
+                    s.fixLoop();
+                    slideToIndex = s.wrapper.children('.' + s.params.slideClass + '[data-swiper-slide-index="' + realIndex + '"]:not(.swiper-slide-duplicate)').eq(0).index();
+                    setTimeout(function () {
+                        s.slideTo(slideToIndex);
+                    }, 0);
+                }
+                else {
+                    s.slideTo(slideToIndex);
+                }
             }
+                
         }
         else {
             s.slideTo(slideToIndex);
@@ -1423,7 +1439,7 @@ s.onTouchEnd = function (e) {
                 var time = lastMoveEvent.time - velocityEvent.time;
                 s.velocity = distance / time;
                 s.velocity = s.velocity / 2;
-                if (Math.abs(s.velocity) < 0.02) {
+                if (Math.abs(s.velocity) < s.params.freeModeMinimumVelocity) {
                     s.velocity = 0;
                 }
                 // this implies that the user stopped moving a finger then released.
@@ -1751,6 +1767,12 @@ s.setWrapperTranslate = function (translate, updateActiveIndex, byController) {
     else {
         y = translate;
     }
+
+    if (s.params.roundLengths) {
+        x = round(x);
+        y = round(y);
+    }
+
     if (!s.params.virtualTranslate) {
         if (s.support.transforms3d) s.wrapper.transform('translate3d(' + x + 'px, ' + y + 'px, ' + z + 'px)');
         else s.wrapper.transform('translate(' + x + 'px, ' + y + 'px)');
@@ -1788,9 +1810,15 @@ s.getTranslate = function (el, axis) {
 
     curStyle = window.getComputedStyle(el, null);
     if (window.WebKitCSSMatrix) {
+        curTransform = curStyle.transform || curStyle.webkitTransform;
+        if (curTransform.split(',').length > 6) {
+            curTransform = curTransform.split(', ').map(function(a){
+                return a.replace(',','.');
+            }).join(', ');
+        }
         // Some old versions of Webkit choke when 'none' is passed; pass
         // empty string instead in this case
-        transformMatrix = new window.WebKitCSSMatrix(curStyle.webkitTransform === 'none' ? '' : curStyle.webkitTransform);
+        transformMatrix = new window.WebKitCSSMatrix(curTransform === 'none' ? '' : curTransform);
     }
     else {
         transformMatrix = curStyle.MozTransform || curStyle.OTransform || curStyle.MsTransform || curStyle.msTransform  || curStyle.transform || curStyle.getPropertyValue('transform').replace('translate(', 'matrix(1, 0, 0, 1,');

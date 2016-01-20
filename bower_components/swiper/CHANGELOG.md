@@ -1,5 +1,22 @@
 # Change Log
 
+## Swiper 3.1.7 - Released on October 10, 2015
+  * Fixed issue with lazy loading trying to download `undefined`-src images
+  * Fixed lazy loading on slides using jQuery version
+  * Fixed issue with `slideToClickedSlide` with `loop` and `centeredSlides`
+  * Fixed issue with wrong slides fill when number of slides less than `slidesPerView * slidesPerColumn` with `slidesPerColumnFill: 'row'`
+  * Minor fixes
+
+## Swiper 3.1.5 - Released on September 28, 2015
+  * Added support for images `srcset` with lazy loading using `data-srcset` attribute
+  * Fixed new Chrome errors with `WebkitCSSMatrix`
+  * Fixed issue with `slideToClickedSlide` with `loop` and `centeredSlides`
+  * New `freeModeMinimumVelocity` parameter to set minimum required touch velocity to trigger free mode momentum
+  * Ability to make the Scrollbar draggable using new paramaters:
+    * `scrollbarDraggable` - (boolean) by default is `false`. Allows to enable draggable scrollbar
+    * `scrollbarSnapOnRelease` - (boolean) by default is `false`. Control slider snap on scrollbar release
+  * Minor fixes
+
 ## Swiper 3.1.2 - Released on August 22, 2015
   * Fixed issues with loop and mousewheel when swiper stopped on last slide
   * Imporved mouse wheel behavior in latest Chrome

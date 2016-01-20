@@ -37,6 +37,5 @@
   },
   "_source": "git://github.com/konvajs/konva.git",
   "_target": "~0.10.0",
-  "_originalSource": "konva",
-  "_direct": true
+  "_originalSource": "konva"
 }

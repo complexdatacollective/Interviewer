@@ -1,6 +1,5 @@
-/*! loglevel - v1.4.0 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
+/*! loglevel - v1.3.1 - https://github.com/pimterry/loglevel - (c) 2015 Tim Perry - licensed MIT */
 (function (root, definition) {
-    "use strict";
     if (typeof module === 'object' && module.exports && typeof require === 'function') {
         module.exports = definition();
     } else if (typeof define === 'function' && typeof define.amd === 'object') {
@@ -9,7 +8,7 @@
         root.log = definition();
     }
 }(this, function () {
-    "use strict";
+    var self = {};
     var noop = function() {};
     var undefinedType = "undefined";
 
@@ -41,31 +40,13 @@
         }
     }
 
-    // these private functions always need `this` to be set properly
-
-    function enableLoggingWhenConsoleArrives(methodName, level, loggerName) {
+    function enableLoggingWhenConsoleArrives(methodName, level) {
         return function () {
             if (typeof console !== undefinedType) {
-                replaceLoggingMethods.call(this, level, loggerName);
-                this[methodName].apply(this, arguments);
+                replaceLoggingMethods(level);
+                self[methodName].apply(self, arguments);
             }
         };
-    }
-
-    function replaceLoggingMethods(level, loggerName) {
-        /*jshint validthis:true */
-        for (var i = 0; i < logMethods.length; i++) {
-            var methodName = logMethods[i];
-            this[methodName] = (i < level) ?
-                noop :
-                this.methodFactory(methodName, level, loggerName);
-        }
-    }
-
-    function defaultMethodFactory(methodName, level, loggerName) {
-        /*jshint validthis:true */
-        return realMethod(methodName) ||
-               enableLoggingWhenConsoleArrives.apply(this, arguments);
     }
 
     var logMethods = [
@@ -76,143 +57,98 @@
         "error"
     ];
 
-    function Logger(name, defaultLevel, factory) {
-      var self = this;
-      var currentLevel;
-      var storageKey = "loglevel";
-      if (name) {
-        storageKey += ":" + name;
-      }
+    function replaceLoggingMethods(level) {
+        for (var i = 0; i < logMethods.length; i++) {
+            var methodName = logMethods[i];
+            self[methodName] = (i < level) ? noop : self.methodFactory(methodName, level);
+        }
+    }
 
-      function persistLevelIfPossible(levelNum) {
-          var levelName = (logMethods[levelNum] || 'silent').toUpperCase();
+    function persistLevelIfPossible(levelNum) {
+        var levelName = (logMethods[levelNum] || 'silent').toUpperCase();
 
-          // Use localStorage if available
-          try {
-              window.localStorage[storageKey] = levelName;
-              return;
-          } catch (ignore) {}
+        // Use localStorage if available
+        try {
+            window.localStorage['loglevel'] = levelName;
+            return;
+        } catch (ignore) {}
 
-          // Use session cookie as fallback
-          try {
-              window.document.cookie =
-                encodeURIComponent(storageKey) + "=" + levelName + ";";
-          } catch (ignore) {}
-      }
+        // Use session cookie as fallback
+        try {
+            window.document.cookie = "loglevel=" + levelName + ";";
+        } catch (ignore) {}
+    }
 
-      function getPersistedLevel() {
-          var storedLevel;
+    function loadPersistedLevel() {
+        var storedLevel;
 
-          try {
-              storedLevel = window.localStorage[storageKey];
-          } catch (ignore) {}
+        try {
+            storedLevel = window.localStorage['loglevel'];
+        } catch (ignore) {}
 
-          if (typeof storedLevel === undefinedType) {
-              try {
-                  var cookie = window.document.cookie;
-                  var location = cookie.indexOf(
-                      encodeURIComponent(storageKey) + "=");
-                  if (location) {
-                      storedLevel = /^([^;]+)/.exec(cookie.slice(location))[1];
-                  }
-              } catch (ignore) {}
-          }
+        if (typeof storedLevel === undefinedType) {
+            try {
+                storedLevel = /loglevel=([^;]+)/.exec(window.document.cookie)[1];
+            } catch (ignore) {}
+        }
+        
+        if (self.levels[storedLevel] === undefined) {
+            storedLevel = "WARN";
+        }
 
-          // If the stored level is not valid, treat it as if nothing was stored.
-          if (self.levels[storedLevel] === undefined) {
-              storedLevel = undefined;
-          }
-
-          return storedLevel;
-      }
-
-      /*
-       *
-       * Public API
-       *
-       */
-
-      self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
-          "ERROR": 4, "SILENT": 5};
-
-      self.methodFactory = factory || defaultMethodFactory;
-
-      self.getLevel = function () {
-          return currentLevel;
-      };
-
-      self.setLevel = function (level, persist) {
-          if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
-              level = self.levels[level.toUpperCase()];
-          }
-          if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
-              currentLevel = level;
-              if (persist !== false) {  // defaults to true
-                  persistLevelIfPossible(level);
-              }
-              replaceLoggingMethods.call(self, level, name);
-              if (typeof console === undefinedType && level < self.levels.SILENT) {
-                  return "No console available for logging";
-              }
-          } else {
-              throw "log.setLevel() called with invalid level: " + level;
-          }
-      };
-
-      self.setDefaultLevel = function (level) {
-          if (!getPersistedLevel()) {
-              self.setLevel(level, false);
-          }
-      };
-
-      self.enableAll = function(persist) {
-          self.setLevel(self.levels.TRACE, persist);
-      };
-
-      self.disableAll = function(persist) {
-          self.setLevel(self.levels.SILENT, persist);
-      };
-
-      // Initialize with the right level
-      var initialLevel = getPersistedLevel();
-      if (initialLevel == null) {
-          initialLevel = defaultLevel == null ? "WARN" : defaultLevel;
-      }
-      self.setLevel(initialLevel, false);
+        self.setLevel(self.levels[storedLevel], false);
     }
 
     /*
      *
-     * Package-level API
+     * Public API
      *
      */
 
-    var defaultLogger = new Logger();
+    self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
+        "ERROR": 4, "SILENT": 5};
 
-    var _loggersByName = {};
-    defaultLogger.getLogger = function getLogger(name) {
-        if (typeof name !== "string" || name === "") {
-          throw new TypeError("You must supply a name when creating a logger.");
-        }
+    self.methodFactory = function (methodName, level) {
+        return realMethod(methodName) ||
+               enableLoggingWhenConsoleArrives(methodName, level);
+    };
 
-        var logger = _loggersByName[name];
-        if (!logger) {
-          logger = _loggersByName[name] = new Logger(
-            name, defaultLogger.getLevel(), defaultLogger.methodFactory);
+    self.setLevel = function (level, persist) {
+        if (typeof level === "string" && self.levels[level.toUpperCase()] !== undefined) {
+            level = self.levels[level.toUpperCase()];
         }
-        return logger;
+        if (typeof level === "number" && level >= 0 && level <= self.levels.SILENT) {
+            if (persist !== false) {  // defaults to true
+                persistLevelIfPossible(level);
+            }
+            replaceLoggingMethods(level);
+            if (typeof console === undefinedType && level < self.levels.SILENT) {
+                return "No console available for logging";
+            }
+        } else {
+            throw "log.setLevel() called with invalid level: " + level;
+        }
+    };
+
+    self.enableAll = function(persist) {
+        self.setLevel(self.levels.TRACE, persist);
+    };
+
+    self.disableAll = function(persist) {
+        self.setLevel(self.levels.SILENT, persist);
     };
 
     // Grab the current global log variable in case of overwrite
     var _log = (typeof window !== undefinedType) ? window.log : undefined;
-    defaultLogger.noConflict = function() {
+    self.noConflict = function() {
         if (typeof window !== undefinedType &&
-               window.log === defaultLogger) {
+               window.log === self) {
             window.log = _log;
         }
 
-        return defaultLogger;
+        return self;
     };
 
-    return defaultLogger;
+    loadPersistedLevel();
+    return self;
 }));

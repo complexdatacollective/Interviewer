@@ -7,14 +7,7 @@
   "version": "3.1.0",
   "license": "GPL",
   "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "components",
-    "test",
-    "tests"
-  ],
+  "ignore": [],
   "dependencies": {
     "bootstrap": "~3.3.5",
     "bootstrap3-dialog": "~1.34.2",
