@@ -32,6 +32,8 @@
     "jquery-ui": "~1.11.4",
     "konva": "~0.10.0",
     "jquery": "*",
-    "ua-parser-js": "~0.7.9"
+    "ua-parser-js": "~0.7.9",
+    "interact": "~1.2.6",
+    "jquery-touch-events": "~1.0.1"
   }
 }

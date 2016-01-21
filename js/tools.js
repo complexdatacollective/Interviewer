@@ -2,6 +2,44 @@
 /*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
 /*jshint bitwise: false*/
 'use strict';
+
+//$.uniqueId taken from jQuery-UI 1.9
+( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [ "jquery", "./version" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+
+return $.fn.extend( {
+	uniqueId: ( function() {
+		var uuid = 0;
+
+		return function() {
+			return this.each( function() {
+				if ( !this.id ) {
+					this.id = "ui-id-" + ( ++uuid );
+				}
+			} );
+		};
+	} )(),
+
+	removeUniqueId: function() {
+		return this.each( function() {
+			if ( /^ui-id-\d+$/.test( this.id ) ) {
+				$( this ).removeAttr( "id" );
+			}
+		} );
+	}
+} );
+
+} ) );
+
 // Storage prototypes
 
 window.Storage.prototype.showTotalUsage = function() {

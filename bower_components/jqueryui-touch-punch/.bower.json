@@ -15,5 +15,6 @@
   },
   "_source": "git://github.com/furf/jquery-ui-touch-punch.git",
   "_target": "*",
-  "_originalSource": "jqueryui-touch-punch"
+  "_originalSource": "jqueryui-touch-punch",
+  "_direct": true
 }

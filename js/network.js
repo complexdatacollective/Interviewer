@@ -308,7 +308,7 @@ module.exports = function Network() {
 
     network.updateNode = function(id, properties, callback) {
         note.info('network.updateNode() called for node id '+id+'.');
-        console.log(typeof id);
+        // console.log(typeof id);
         note.debug(properties);
 
         if(this.getNode(id) === false || properties === undefined) {
@@ -319,8 +319,8 @@ module.exports = function Network() {
         var nodeUpdateEvent, log;
 
         $.extend(node, properties);
-        console.log('node:');
-        console.log(node);
+        // console.log('node:');
+        // console.log(node);
         nodeUpdateEvent = new window.CustomEvent('nodeUpdatedEvent',{'detail':node});
         window.dispatchEvent(nodeUpdateEvent);
         log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeUpdate', 'eventObject':node}});

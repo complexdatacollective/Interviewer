@@ -3,7 +3,7 @@
 module.exports = function NameGenerator() {
     'use strict';
     //global vars
-    var nameGeneratorMulti = {};
+    var nameGenerator = {};
     var options = {
         targetEl: $('.container'),
     	panels: ['current'],
@@ -58,7 +58,7 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGeneratorMulti.generateTestAlters = function(number) {
+    nameGenerator.generateTestAlters = function(number) {
 
         if (!number) {
             note.error('You must specify the number of test alters you want to create. Cancelling!');
@@ -69,12 +69,12 @@ module.exports = function NameGenerator() {
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
-            setTimeout(nameGeneratorMulti.generateAlter, timer);
+            setTimeout(nameGenerator.generateAlter, timer);
         }
 
     };
 
-    nameGeneratorMulti.generateAlter = function() {
+    nameGenerator.generateAlter = function() {
         // We must simulate every interaction to ensure that any errors are caught.
         $('.new-node-button').click();
         setTimeout(function() {
@@ -87,8 +87,8 @@ module.exports = function NameGenerator() {
         $('#label').val($('#first_name').val());
     };
 
-    nameGeneratorMulti.destroy = function() {
-        note.debug('Destroying nameGeneratorMulti.');
+    nameGenerator.destroy = function() {
+        note.debug('Destroying nameGenerator.');
 
         // Event listeners
         promptSwiper.destroy();
@@ -96,33 +96,33 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGeneratorMulti.bindEvents = function() {
+    nameGenerator.bindEvents = function() {
         // Event listeners
         // Events
 		var event = [{
 			event: 'changeStageStart',
-			handler: nameGeneratorMulti.destroy,
+			handler: nameGenerator.destroy,
 			targetEl:  window
 		},
 		{
 			event: 'nodeAdded',
-			handler: nameGeneratorMulti.nodeAdded,
+			handler: nameGenerator.nodeAdded,
 			targetEl:  window
 		},
         {
             event: 'nodeUpdate',
-            handler: nameGeneratorMulti.nodeEdited,
+            handler: nameGenerator.nodeEdited,
             targetEl:  window
         },
         {
-            event: 'click',
-            handler: nameGeneratorMulti.toggleSelectable,
+            event: 'click tap',
+            handler: nameGenerator.toggleSelectable,
             targetEl: window.document,
             subTarget:  '.node-list-item'
         },
         {
             event: 'click',
-            handler: nameGeneratorMulti.showNewNodeForm,
+            handler: nameGenerator.showNewNodeForm,
             targetEl:  '.new-node-button'
         }];
 		window.tools.Events.register(moduleEvents, event);
@@ -130,24 +130,24 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGeneratorMulti.nodeAdded = function(e) {
-        nameGeneratorMulti.addCard(e.originalEvent.detail, function() {
-            nameGeneratorMulti.updateCounter();
-            nameGeneratorMulti.makeDraggable();
+    nameGenerator.nodeAdded = function(e) {
+        nameGenerator.addCard(e.originalEvent.detail, function() {
+            nameGenerator.updateCounter();
+            // nameGenerator.makeDraggable();
         });
     };
 
-    nameGeneratorMulti.nodeEdited = function(e) {
-        nameGeneratorMulti.editCard(e.originalEvent.detail, function() {
-            nameGeneratorMulti.makeDraggable();
+    nameGenerator.nodeEdited = function(e) {
+        nameGenerator.editCard(e.originalEvent.detail, function() {
+            // nameGenerator.makeDraggable();
         });
     };
 
-    nameGeneratorMulti.init = function(userOptions) {
-        note.info('nameGeneratorMulti initialising.');
+    nameGenerator.init = function(userOptions) {
+        note.info('nameGenerator initialising.');
         window.tools.extend(options, userOptions);
 
-        var alterCount = nameGeneratorMulti.getNodes().length;
+        var alterCount = nameGenerator.getNodes().length;
 
         // create elements
         $(options.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
@@ -171,8 +171,8 @@ module.exports = function NameGenerator() {
         // Update current prompt counter
         promptSwiper.on('slideChangeStart', function () {
             currentPrompt = promptSwiper.activeIndex;
-            nameGeneratorMulti.handlePanels();
-            nameGeneratorMulti.changeData();
+            nameGenerator.handlePanels();
+            nameGenerator.changeData();
         });
 
         // create namelist container
@@ -194,7 +194,7 @@ module.exports = function NameGenerator() {
 				$(ui.draggable).removeClass('delete');
 			},
 			drop: function( event, ui ) {
-				nameGeneratorMulti.removeNode($(ui.draggable).data('index'));
+				nameGenerator.removeNode($(ui.draggable).data('index'));
 			}
 		});
 
@@ -209,22 +209,22 @@ module.exports = function NameGenerator() {
           theme: 'default'
         });
 
-        nameGeneratorMulti.handlePanels();
-        nameGeneratorMulti.addData();
-        nameGeneratorMulti.bindEvents();
+        nameGenerator.handlePanels();
+        nameGenerator.addData();
+        nameGenerator.bindEvents();
     };
 
-    nameGeneratorMulti.changeData = function() {
+    nameGenerator.changeData = function() {
             $('.inner-card, .node-list-item').removeClass('shown');
             setTimeout(function() {
                 $('.card, .node-list-item').remove();
-                nameGeneratorMulti.addData();
+                nameGenerator.addData();
             }, 1000);
     };
 
-    nameGeneratorMulti.getNodes = function(criteria) {
-        console.log('getnodes');
-        console.log(criteria);
+    nameGenerator.getNodes = function(criteria) {
+        // console.log('getnodes');
+        // console.log(criteria);
         var filterCriteria = criteria || {};
         // ignore ego and any nodes that are visible in the main node list
         var nodes = options.network.getNodes(filterCriteria, function (results) {
@@ -241,7 +241,7 @@ module.exports = function NameGenerator() {
         return nodes;
     };
 
-    nameGeneratorMulti.toggleSelectable = function() {
+    nameGenerator.toggleSelectable = function() {
         var clicked = this;
         var properties = {};
 
@@ -264,14 +264,14 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGeneratorMulti.updateSidePanel = function() {
-        console.log('updatesidepanel');
+    nameGenerator.updateSidePanel = function() {
+        // console.log('updatesidepanel');
 
         // Empty it
         $('.current-node-list').children().remove();
 
         // ignore ego and any nodes that are visible in the main node list
-        var nodes = nameGeneratorMulti.getNodes();
+        var nodes = nameGenerator.getNodes();
 
         var filteredResults = [];
         $.each(nodes, function(index,value) {
@@ -292,33 +292,33 @@ module.exports = function NameGenerator() {
 
             setTimeout(function() {
                 $(el).addClass('shown');
-                nameGeneratorMulti.makeDraggable();
+                // nameGenerator.makeDraggable();
             },50+(index*50));
 
         });
 
     };
 
-    nameGeneratorMulti.addData = function () {
-        console.log('add data');
+    nameGenerator.addData = function () {
+        // console.log('add data');
         var properties = {};
         // build properties array from data
         properties.namegenerator = options.data.namegenerators[currentPrompt].label;
-        console.log(properties);
-        var nodes = nameGeneratorMulti.getNodes(properties);
-        console.log(nodes);
+        // console.log(properties);
+        var nodes = nameGenerator.getNodes(properties);
+        // console.log(nodes);
         $.each(nodes, function(index,value) {
             setTimeout(function() {
-                nameGeneratorMulti.addCard(value);
+                nameGenerator.addCard(value);
             }, index * 40);
         });
 
-        nameGeneratorMulti.updateSidePanel();
-        nameGeneratorMulti.updateCounter();
+        nameGenerator.updateSidePanel();
+        nameGenerator.updateCounter();
 
     };
 
-    nameGeneratorMulti.updateCounter = function(number) {
+    nameGenerator.updateCounter = function(number) {
         if (!number) {
             alterCounter.update(options.network.getNodes().length-1);
         } else {
@@ -326,7 +326,7 @@ module.exports = function NameGenerator() {
         }
     };
 
-    nameGeneratorMulti.makeDraggable = function() {
+    nameGenerator.makeDraggable = function() {
         $('.card').draggable({
             appendTo: 'body',
             helper: 'clone',
@@ -337,12 +337,12 @@ module.exports = function NameGenerator() {
             start: function(event, ui) {
                 $(this).addClass('invisible');
                 $(ui.helper).addClass('dragging');
-                nameGeneratorMulti.showBin();
+                nameGenerator.showBin();
             },
             stop: function(event, ui) {
                 $(this).removeClass('invisible');
                 $(ui.helper).removeClass('dragging');
-                nameGeneratorMulti.hideBin();
+                nameGenerator.hideBin();
             }
         });
 
@@ -352,21 +352,24 @@ module.exports = function NameGenerator() {
             revert: true,
             revertDuration: 200,
             refreshPositions: true,
+            distance: 50,
             scroll: false,
             stack: '.node-list-item',
             start: function(event, ui) {
-                nameGeneratorMulti.showBin();
+                console.log('dragstart');
+                nameGenerator.showBin();
                 $(ui.helper).addClass('dragging');
             },
             stop: function(event, ui) {
+                console.log('dragstop');
                 $(ui.helper).removeClass('dragging');
-                nameGeneratorMulti.hideBin();
+                nameGenerator.hideBin();
             }
         });
 
     };
 
-    nameGeneratorMulti.showNewNodeForm = function() {
+    nameGenerator.showNewNodeForm = function() {
 
         // add fields from data
         var properties = {};
@@ -407,15 +410,15 @@ module.exports = function NameGenerator() {
         window.forms.nameGenForm.show();
     };
 
-    nameGeneratorMulti.handlePanels = function() {
-        note.debug('nameGeneratorMulti.handlePanels()');
+    nameGenerator.handlePanels = function() {
+        note.debug('nameGenerator.handlePanels()');
 
         if (options.panels.indexOf('current') !== -1) {
             // We are trying to add a panel which shows the current nodes.
 
             // First, check there are some current nodes:
             // ignore ego and any nodes that are visible in the main node list
-            var nodes = nameGeneratorMulti.getNodes();
+            var nodes = nameGenerator.getNodes();
 
             var filteredResults = [];
             $.each(nodes, function(index,value) {
@@ -460,15 +463,15 @@ module.exports = function NameGenerator() {
 
     };
 
-    nameGeneratorMulti.showBin = function() {
+    nameGenerator.showBin = function() {
         $('.delete-bin-footer').addClass('show');
     };
 
-    nameGeneratorMulti.hideBin = function() {
+    nameGenerator.hideBin = function() {
         $('.delete-bin-footer').removeClass('show');
     };
 
-    nameGeneratorMulti.addCard = function(properties, callback) {
+    nameGenerator.addCard = function(properties, callback) {
 
         var card;
 
@@ -480,8 +483,8 @@ module.exports = function NameGenerator() {
 
         $(card).on('click', cardClickHandler);
 
-        nameGeneratorMulti.updateCounter();
-        nameGeneratorMulti.makeDraggable();
+        nameGenerator.updateCounter();
+        // nameGenerator.makeDraggable();
 
         setTimeout(function() {
             $('[data-index='+properties.id+']').children('.inner-card').addClass('shown');
@@ -495,7 +498,7 @@ module.exports = function NameGenerator() {
         return true;
     };
 
-    nameGeneratorMulti.editCard = function(properties, callback) {
+    nameGenerator.editCard = function(properties, callback) {
 
         var card;
         $('.card[data-index='+properties.id+']').children('inner-card').find('h4').html(properties.label);
@@ -512,35 +515,35 @@ module.exports = function NameGenerator() {
         return true;
     };
 
-    nameGeneratorMulti.removeNode = function(id) {
+    nameGenerator.removeNode = function(id) {
         if (!id) {
-            note.error('No id provided to nameGeneratorMulti.deleteNode().');
+            note.error('No id provided to nameGenerator.deleteNode().');
             return false;
         }
 
         if (options.network.removeNode(id)) {
-            if(nameGeneratorMulti.removeCard(id)) {
+            if(nameGenerator.removeCard(id)) {
                 note.info('Deleted node with id '+id);
-                nameGeneratorMulti.handlePanels();
+                nameGenerator.handlePanels();
                 return true;
             } else {
-                note.error('nameGeneratorMulti.removeNode() tried to remove node with ID '+id+', but failed.');
+                note.error('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
                 return false;
             }
 
         } else {
-            note.warn('nameGeneratorMulti.removeNode() tried to remove node with ID '+id+', but failed.');
+            note.warn('nameGenerator.removeNode() tried to remove node with ID '+id+', but failed.');
             return false;
         }
     };
 
-    nameGeneratorMulti.removeCard = function(id) {
+    nameGenerator.removeCard = function(id) {
 
         $('div[data-index='+id+']').remove();
-        nameGeneratorMulti.updateCounter();
+        nameGenerator.updateCounter();
 
         return true;
     };
 
-    return nameGeneratorMulti;
+    return nameGenerator;
 };
