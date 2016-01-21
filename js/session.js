@@ -279,7 +279,7 @@ var Session = function Session() {
 
     session.saveManager = function() {
         clearTimeout(saveTimer);
-        saveTimer = setTimeout(session.saveData, 3000);
+        saveTimer = setTimeout(session.saveData, 1000);
     };
 
     session.updateSessionData = function(data, callback) {

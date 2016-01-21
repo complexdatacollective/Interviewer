@@ -11,6 +11,7 @@ module.exports = function SociogramMissing() {
 	var newNodeCircleTween, promptSwiper, log, tapTimer;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
 	var taskComprehended  = false;
+	var moduleEvents = [];
 
 	// Colours
 	var colors = {
@@ -117,13 +118,15 @@ module.exports = function SociogramMissing() {
 			sociogramMissing.addNodeData();
 
 			// Add the evevent listeners
-			window.addEventListener('nodeAdded', addNodeHandler, false);
-			window.addEventListener('edgeAdded', sociogramMissing.updateNodeState, false);
-			window.addEventListener('nodeRemoved', sociogramMissing.removeNode, false);
-			window.addEventListener('edgeRemoved', sociogramMissing.removeEdge, false);
-			window.addEventListener('changeStageStart', sociogramMissing.destroy, false);
-			$(window.document).on('change', '#context-checkbox-show', sociogramMissing.toggleHulls);
-			$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
+			sociogramMissing.bindEvents();
+
+			// window.addEventListener('nodeAdded', addNodeHandler, false);
+			// window.addEventListener('edgeAdded', sociogramMissing.updateNodeState, false);
+			// window.addEventListener('nodeRemoved', sociogramMissing.removeNode, false);
+			// window.addEventListener('edgeRemoved', sociogramMissing.removeEdge, false);
+			// window.addEventListener('changeStageStart', sociogramMissing.destroy, false);
+			// $(window.document).on('change', '#context-checkbox-show', sociogramMissing.toggleHulls);
+			// $(window.document).on('click', '.new-group-button', groupButtonClickHandler);
 
 			// Update initial states of all nodes and edges;
 			sociogramMissing.updateNodeState();
@@ -131,8 +134,43 @@ module.exports = function SociogramMissing() {
 		});
 	};
 
-	sociogramMissing.addNodeData = function() {
+	sociogramMissing.bindEvents = function() {
+		// Events
+		var event = [
+			{
+				event: 'changeStageStart',
+				handler: sociogramMissing.destroy,
+				targetEl:  window
+			},
+			{
+				event: 'nodeAdded',
+				handler: addNodeHandler,
+				targetEl:  window
+			},
+			{
+				event: 'edgeAdded',
+				handler: sociogramMissing.updateNodeState,
+				targetEl:  window
+			},
+			{
+				event: 'nodeRemoved',
+				handler: sociogramMissing.removeNode,
+				targetEl:  window
+			},
+			{
+				event: 'edgeRemoved',
+				handler: sociogramMissing.removeEdge,
+				targetEl:  window
+			}
+		];
+		window.tools.Events.register(moduleEvents, event);
 
+
+	};
+
+	sociogramMissing.addNodeData = function() {
+		note.info('sociogramMissing.addNodeData()');
+		note.debug('sociogramMissing.addNodeData() Getting criteriaNodes...');
 		var criteriaNodes = settings.network.getNodes({}, function (results) {
 			var filteredResults = [];
 			$.each(results, function(index,value) {
@@ -144,6 +182,7 @@ module.exports = function SociogramMissing() {
 			return filteredResults;
 		});
 
+		note.debug('sociogramMissing.addNodeData() adding criteriaNodes...');
 		for (var j = 0; j < criteriaNodes.length; j++) {
 			sociogramMissing.addNode(criteriaNodes[j]);
 		}
@@ -174,7 +213,7 @@ module.exports = function SociogramMissing() {
 
 	sociogramMissing.updateNodeState = function() {
 		/**
-		* Updates visible attributes based on current prompt task
+		* Updates visible attributes based on current prompt
 		*/
 
 		var selectNodes = settings.network.getNodes();
@@ -197,14 +236,8 @@ module.exports = function SociogramMissing() {
 	};
 
 	sociogramMissing.destroy = function() {
-		window.removeEventListener('nodeAdded', addNodeHandler, false);
-		window.removeEventListener('edgeAdded', sociogramMissing.updateNodeState, false);
-		window.removeEventListener('nodeRemoved', sociogramMissing.removeNode, false);
-		window.removeEventListener('edgeRemoved', sociogramMissing.removeEdge, false);
-		window.removeEventListener('changeStageStart', sociogramMissing.destroy, false);
-		$(window.document).off('keypress', sociogramMissing.keyPressHandler);
-		$(window.document).off('change', '#context-checkbox-show', sociogramMissing.toggleHulls);
-
+		note.debug('Destroying sociogramMissing.');
+		window.tools.Events.unbind(moduleEvents);
 	};
 
 	sociogramMissing.addNode = function(options) {
