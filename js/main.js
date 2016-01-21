@@ -192,6 +192,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
     window.netCanvas.Modules.SociogramMissing = require('./sociogrammissing.js');
+    window.netCanvas.Modules.SociogramNarrative = require('./sociogramnarrative.js');
     window.netCanvas.Modules.FormBuilder = require('./formbuilder.js');
     window.netCanvas.Modules.ContextGenerator = require('./contextgenerator.js');
     window.netCanvas.Modules.Menu = require('./menu.js');
