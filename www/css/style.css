@@ -10817,6 +10817,8 @@ label[for="context-checkbox-show"] {
   -webkit-transition: color 1s ease;
   transition: color 1s ease;
   font-size: 14px;
+  text-align: right;
+  width: 150px;
 }
 label.show[for="context-checkbox-show"] {
   color: #ffffff;

@@ -6,8 +6,8 @@ module.exports = function Sociogram() {
 	'use strict';
 	// Global variables
 	var stage = {}, circleLayer = {}, edgeLayer = {}, nodeLayer = {}, wedgeLayer = {}, hullLayer = {}, hullShapes = {}, uiLayer = {}, sociogram = {};
-	var moduleEvents = [], selectedNodes = [];
-	var selectedNode = null;
+	var moduleEvents = [], selectedNodes = [], moduleEvents = [];
+	sociogram.selectedNode = null;
 	var newNodeCircleTween, promptSwiper, log, longPressTimer, tapTimer;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
 	var newNodeCircleVisible = false, hullsShown = false, taskComprehended = false, touchNotTap = false;
@@ -100,23 +100,23 @@ module.exports = function Sociogram() {
 		sociogram.addNode(e.detail);
 	}
 
-	function hullListClickHandler(e) {
-		console.log('hullListClickHandler');
-		console.log(e);
+	sociogram.hullListClickHandler = function(e) {
+		console.log('sociogram: hullListClickHandler');
 		var _this = this;
-		console.log(_this);
 		var clicked = $(e.target).closest('li');
-		console.log(clicked);
 		var selectedHull = clicked.data('hull');
+		console.log('selectedHull');
 		console.log(selectedHull);
-		if (selectedNode.attrs.contexts.indexOf(selectedHull) !== -1 ) {
+		console.log('selectedNode:');
+		console.log(sociogram.selectedNode);
+		if (sociogram.selectedNode.attrs.contexts.indexOf(selectedHull) !== -1 ) {
 			clicked.removeClass('active');
-			sociogram.removePointFromHull(selectedNode, selectedHull);
+			sociogram.removePointFromHull(sociogram.selectedNode, selectedHull);
 		} else {
 			clicked.addClass('active');
-			sociogram.addPointToHull(selectedNode, selectedHull);
+			sociogram.addPointToHull(sociogram.selectedNode, selectedHull);
 		}
-	}
+	};
 
 	function groupButtonClickHandler() {
 		sociogram.addHull();
@@ -134,7 +134,6 @@ module.exports = function Sociogram() {
 		$.extend(true, settings,userSettings);
 		// Add the title and heading
 		$('<div class="sociogram-title"></div>').insertBefore('#'+settings.targetEl );
-
 
 		// Creater swiper pages
 
@@ -181,18 +180,90 @@ module.exports = function Sociogram() {
 			sociogram.addNodeData();
 
 			// Add the evevent listeners
-			window.addEventListener('nodeAdded', addNodeHandler, false);
-			window.addEventListener('edgeAdded', sociogram.updateState, false);
-			window.addEventListener('nodeRemoved', sociogram.removeNode, false);
-			window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
-			window.addEventListener('changeStageStart', sociogram.destroy, false);
-			$(window.document).on('change', '#context-checkbox-show', sociogram.toggleHulls);
-			$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
+			sociogram.bindEvents();
+			// window.addEventListener('nodeAdded', addNodeHandler, false);
+			// window.addEventListener('edgeAdded', sociogram.updateState, false);
+			// window.addEventListener('nodeRemoved', sociogram.removeNode, false);
+			// window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
+			// window.addEventListener('changeStageStart', sociogram.destroy, false);
+			// $(window.document).on('change', '#context-checkbox-show', sociogram.toggleHulls);
+			// $(window.document).on('click', '.new-group-button', groupButtonClickHandler);
 
 			// Update initial states of all nodes and edges;
 			sociogram.updateState();
 
 		});
+	};
+
+	sociogram.bindEvents = function() {
+		// Events
+		var event = [
+			{
+				event: 'changeStageStart',
+				handler: sociogram.destroy,
+				targetEl:  window
+			},
+			{
+				event: 'nodeAdded',
+				handler: addNodeHandler,
+				targetEl:  window
+			},
+			{
+				event: 'edgeAdded',
+				handler: sociogram.updateState,
+				targetEl:  window
+			},
+			{
+				event: 'nodeRemoved',
+				handler: sociogram.removeNode,
+				targetEl:  window
+			},
+			{
+				event: 'nodeRemoved',
+				handler: sociogram.removeNode,
+				targetEl:  window
+			},
+			{
+				event: 'change',
+				handler: sociogram.toggleHulls,
+				subTarget: '#context-checkbox-show',
+				targetEl:  window.document
+			},
+			{
+				event: 'click',
+				handler: groupButtonClickHandler,
+				subTarget: '.new-group-button',
+				targetEl:  window.document
+			},
+			{
+				event: 'click',
+				handler: sociogram.showNewNodeForm,
+				targetEl:  '.new-node-button'
+			}, {
+				event: 'click',
+				handler: sociogram.hullListClickHandler,
+				targetEl:  window.document,
+				subTarget:  '.list-group-item',
+			},
+			{
+				event: 'submit',
+				handler: function() {
+					setTimeout(function() {
+						sociogram.updateState();
+					},100);
+				},
+				targetEl: window.document,
+				subtarget: window.forms.nameGenForm.getID()
+			}
+		];
+		window.tools.Events.register(moduleEvents, event);
+
+	};
+
+	sociogram.destroy = function() {
+		note.info('sociogram.destroy();');
+		stage.destroy();
+		window.tools.Events.unbind(moduleEvents);
 	};
 
 	sociogram.addNodeData = function() {
@@ -225,7 +296,6 @@ module.exports = function Sociogram() {
 		$.each(layoutNodes, function(index,node) {
 			node.setPosition(node.attrs.coords);
 		});
-
 
 		// Community
 		var communityNodes;
@@ -326,8 +396,6 @@ module.exports = function Sociogram() {
 
 		}
 
-
-
 		// Select Mode
 		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'object') {
 
@@ -352,15 +420,10 @@ module.exports = function Sociogram() {
 		return selectedNodes;
 	};
 
-	sociogram.destroy = function() {
-		window.removeEventListener('nodeAdded', addNodeHandler, false);
-		window.removeEventListener('edgeAdded', sociogram.updateState, false);
-		window.removeEventListener('nodeRemoved', sociogram.removeNode, false);
-		window.removeEventListener('edgeRemoved', sociogram.removeEdge, false);
-		window.removeEventListener('changeStageStart', sociogram.destroy, false);
-		$(window.document).off('keypress', sociogram.keyPressHandler);
-		$(window.document).off('change', '#context-checkbox-show', sociogram.toggleHulls);
-
+	sociogram.timeSelectedNode = function() {
+		setInterval(function() {
+			console.log(sociogram.selectedNode);
+		}, 1000);
 	};
 
 	sociogram.addHull = function(label) {
@@ -897,8 +960,9 @@ module.exports = function Sociogram() {
 		nodeGroup.on('longPress', function() {
 			console.log('longpress');
 			sociogram.showDetailsPanel();
-			selectedNode = this;
-			console.log(selectedNode);
+			console.log('!!!setting selected node: longpress')
+			sociogram.selectedNode = this;
+			console.log(sociogram.selectedNode);
 			var currentNode = this;
 			$('.hull').removeClass('active'); // deselect all groups
 
@@ -1294,8 +1358,10 @@ module.exports = function Sociogram() {
 	      });
 		backgroundLayer.add(backgroundRect);
 		backgroundRect.on('tap click', function() {
+			note.debug('sociogram: backgroundRect tap');
 			sociogram.hideDetailsPanel();
-			selectedNode = null;
+			console.log('!!! sociogram.selectedNode set to null');
+			sociogram.selectedNode = null;
 			$('.hull').removeClass('active'); // deselect all groups
 
 			//deselect Nodes
@@ -1346,27 +1412,6 @@ module.exports = function Sociogram() {
 		window.forms.nameGenForm.removeTemporaryFields();
 		// debugger;
 		var properties = {};
-		// if (settings.prompts[currentPrompt].dataType === 'namegenerator') {
-		// 	// add fields from dataTarget
-	    //     properties = {};
-		// 	$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
-		// 		properties[formValue.label] = {
-	    //             type:formValue.type,
-	    //             title: formValue.label
-	    //         };
-		// 	});
-		//
-	    //     window.forms.nameGenForm.addTemporaryFields(properties);
-		//
-	    //     // Add data from fields
-	    //     properties = {};
-		// 	$.each(settings.prompts[currentPrompt].formVariables, function(formIndex,formValue) {
-		// 	properties[formValue.label] = formValue.value;
-		// 	});
-		//
-	    //     window.forms.nameGenForm.addData(properties);
-		// }
-
 
 		for (var i =0; i <= currentPrompt; i++) {
 			// check if current previous prompt has a select element
@@ -1397,6 +1442,10 @@ module.exports = function Sociogram() {
 
 	};
 
+	sociogram.getModuleEvents = function() {
+		return moduleEvents;
+	};
+
 	sociogram.drawUIComponents = function (callback) {
 
 		// Load the image
@@ -1406,28 +1455,6 @@ module.exports = function Sociogram() {
 
 			// New node button
 			$('#'+settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
-			var events = [{
-				event: 'click',
-				handler: sociogram.showNewNodeForm,
-				targetEl:  '.new-node-button'
-			}, {
-				event: 'click',
-				handler: hullListClickHandler,
-				targetEl:  window.document,
-				subTarget:  '.list-group-item',
-			},
-			{
-				event: 'submit',
-				handler: function() {
-					setTimeout(function() {
-						sociogram.updateState();
-					},100);
-				},
-				targetEl: window.document,
-				subtarget: window.forms.nameGenForm.getID()
-			}
-		];
-			window.tools.Events.register(moduleEvents, events);
 
 			// Draw all UI components
 			var previousSkew = 0;
@@ -1478,17 +1505,6 @@ module.exports = function Sociogram() {
 				stroke: 'white',
 				strokeWidth: 7
 			});
-
-			// var newNodeText = new Konva.Text({
-			// 	text: 'Need Positioning',
-			// 	align: 'center',
-			// 	offset: {x:55,y:100},
-			// 	fontSize: 15,
-			// 	fontFamily: 'Helvetica',
-			// 	fill: 'white'
-			//  });
-
-
 
 			var newNodeText = new Konva.Image({
 			 x: -20,

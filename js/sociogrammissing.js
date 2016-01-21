@@ -63,22 +63,6 @@ module.exports = function SociogramMissing() {
 		sociogramMissing.addNode(e.detail);
 	}
 
-	function hullListClickHandler(e) {
-		var clicked = $(e.target).closest('li');
-		var selectedHull = clicked.data('hull');
-		if (selectedNode.attrs.contexts.indexOf(selectedHull) !== -1 ) {
-			clicked.removeClass('active');
-			sociogramMissing.removePointFromHull(selectedNode, selectedHull);
-		} else {
-			clicked.addClass('active');
-			sociogramMissing.addPointToHull(selectedNode, selectedHull);
-		}
-	}
-
-	function groupButtonClickHandler() {
-		sociogramMissing.addHull();
-	}
-
 	sociogramMissing.changeData = function() {
 		sociogramMissing.resetNodeState();
 		sociogramMissing.updateNodeState();
@@ -228,6 +212,7 @@ module.exports = function SociogramMissing() {
 
 	sociogramMissing.destroy = function() {
 		note.debug('Destroying sociogramMissing.');
+		stage.destroy();
 		window.tools.Events.unbind(moduleEvents);
 	};
 
@@ -522,11 +507,6 @@ module.exports = function SociogramMissing() {
 				event: 'click',
 				handler: sociogramMissing.showNewNodeForm,
 				targetEl:  '.new-node-button'
-			}, {
-				event: 'click',
-				handler: hullListClickHandler,
-				targetEl:  window.document,
-				subTarget:  '.list-group-item',
 			},
 			{
 				event: 'submit',
