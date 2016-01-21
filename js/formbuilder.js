@@ -162,6 +162,8 @@ module.exports = function FormBuilder(formName) {
         $.each(temporaryFields, function(fieldIndex, fieldValue) {
             formBuilder.removeField(fieldValue.id);
         });
+
+        temporaryFields = [];
     };
 
     formBuilder.addTemporaryFields = function(fields) {
