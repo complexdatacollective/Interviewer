@@ -108,8 +108,7 @@ module.exports = function OrdinalBin() {
                     // Followup question
 
                     // Add the attribute
-                    var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:ordinalBin.options.edgeType})[0].id;
-                    window.network.updateEdge(edgeID,properties);
+                    window.network.updateNode($(dropped).data('node-id'),properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
                         var length = $('.d'+oindex).children('.ord-active-node-list').children().length;
@@ -173,15 +172,20 @@ module.exports = function OrdinalBin() {
 
         });
 
-        // get all edges
-        var edges = window.network.getEdges(ordinalBin.options.criteria);
+        // get all nodes, ignoring ego
+        var nodes = window.network.getNodes(ordinalBin.options.criteria, function (results) {
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.type !== 'Ego') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
 
         // Add edges to bucket or to bins if they already have variable value.
-        $.each(edges, function(index,value) {
-            var dyadEdge;
-            if (ordinalBin.options.criteria.type !== 'Dyad') {
-                dyadEdge = window.network.getEdges({from: value.from, to:value.to, type:'Dyad'})[0];
-            }
+        $.each(nodes, function(index,value) {
 
             if (value[ordinalBin.options.variable.label] !== undefined && value[ordinalBin.options.variable.label] !== '') {
                 index = 'error';
@@ -191,18 +195,10 @@ module.exports = function OrdinalBin() {
                     }
                 });
 
-                if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-                } else {
-                    $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
-                }
-            } else {
-                if (ordinalBin.options.criteria.type !== 'Dyad') {
-                    $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');
-                } else {
-                    $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+value.nname_t0+'</div>');
-                }
+                $('.d'+index).children('.ord-active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.id+'">'+value.label+'</div>');
 
+            } else {
+                $('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.id+'">'+value.label+'</div>');
             }
 
         });

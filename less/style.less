@@ -18,6 +18,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'form.less';
 @import 'modal.less';
 @import 'sociogram.less';
+@import 'ordbin.less';
 @import 'contextgenerator.less';
 @import 'namegenerator.less';
 
@@ -489,10 +490,6 @@ html, body {
 	opacity: 0;
 }
 
-.ord-active-node-list .node-bucket-item {
-    opacity:1;
-}
-
 .active-node-list .node-bucket-item.shown {
 	transform: translateX(0px);
 	opacity: 1;
@@ -715,22 +712,6 @@ html, body {
 .active-node-list {
 	display: none;
 	width: 70%;
-
-	align-items: center;
-	justify-content: center;
-}
-
-.ord-active-node-list {
-	display: none;
-	width: 70% ;
-
-	align-items: center;
-	justify-content: center;
-}
-
-.ord-node-bin  .active-node-list {
-	display: block;
-	width: 100%;
 
 	align-items: center;
 	justify-content: center;

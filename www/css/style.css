@@ -10948,6 +10948,34 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   width: 17px;
   display: inline-block;
 }
+.ord-active-node-list .node-bucket-item {
+  opacity: 1;
+}
+.ord-active-node-list {
+  width: 70% ;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+              -ms-grid-row-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.ord-node-bin .active-node-list {
+  display: block;
+  width: 100%;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+              -ms-grid-row-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
 .contexthull-title-container {
   text-align: center;
   width: 100%;
@@ -13120,9 +13148,6 @@ fieldset[disabled] .btn-modal-danger.focus {
           transform: translateX(50px);
   opacity: 0;
 }
-.ord-active-node-list .node-bucket-item {
-  opacity: 1;
-}
 .active-node-list .node-bucket-item.shown {
   -webkit-transform: translateX(0px);
           transform: translateX(0px);
@@ -13353,32 +13378,6 @@ fieldset[disabled] .btn-modal-danger.focus {
 .active-node-list {
   display: none;
   width: 70%;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-              -ms-grid-row-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-.ord-active-node-list {
-  display: none;
-  width: 70% ;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-              -ms-grid-row-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-.ord-node-bin .active-node-list {
-  display: block;
-  width: 100%;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
