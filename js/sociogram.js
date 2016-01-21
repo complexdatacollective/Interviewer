@@ -124,7 +124,7 @@ module.exports = function Sociogram() {
 
 	sociogram.changeData = function() {
 		sociogram.resetNodeState();
-		sociogram.updateNodeState();
+		sociogram.updateState();
 	};
 
 	sociogram.init = function (userSettings) {
@@ -182,7 +182,7 @@ module.exports = function Sociogram() {
 
 			// Add the evevent listeners
 			window.addEventListener('nodeAdded', addNodeHandler, false);
-			window.addEventListener('edgeAdded', sociogram.updateNodeState, false);
+			window.addEventListener('edgeAdded', sociogram.updateState, false);
 			window.addEventListener('nodeRemoved', sociogram.removeNode, false);
 			window.addEventListener('edgeRemoved', sociogram.removeEdge, false);
 			window.addEventListener('changeStageStart', sociogram.destroy, false);
@@ -190,7 +190,7 @@ module.exports = function Sociogram() {
 			$(window.document).on('click', '.new-group-button', groupButtonClickHandler);
 
 			// Update initial states of all nodes and edges;
-			sociogram.updateNodeState();
+			sociogram.updateState();
 
 		});
 	};
@@ -301,24 +301,32 @@ module.exports = function Sociogram() {
 
 	};
 
-	sociogram.updateNodeState = function() {
+	sociogram.updateState = function() {
 		/**
 		* Updates visible attributes based on current prompt task
 		*/
 
 		// Edge Mode
-		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showEdges === 'object') {
+		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showEdges === 'object' && typeof settings.prompts[currentPrompt].showEdges.criteria === 'object') {
 
 			var properties = {};
-			$.each(settings.prompts[currentPrompt].showEdges, function(index, value) {
+			$.each(settings.prompts[currentPrompt].showEdges.criteria, function(index, value) {
 				properties[value.label] = value.value;
 			});
 			var edges = settings.network.getEdges(properties);
 			$.each(edges, function(index, edge) {
-				sociogram.addEdge(edge);
+				if (typeof settings.prompts[currentPrompt].showEdges.options === "object") {
+					console.log('%c edge options!','background: #222; color: #bada55');
+					sociogram.addEdge(edge, settings.prompts[currentPrompt].showEdges.options);
+				} else {
+					sociogram.addEdge(edge);
+				}
+
 			});
 
 		}
+
+
 
 		// Select Mode
 		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'object') {
@@ -346,7 +354,7 @@ module.exports = function Sociogram() {
 
 	sociogram.destroy = function() {
 		window.removeEventListener('nodeAdded', addNodeHandler, false);
-		window.removeEventListener('edgeAdded', sociogram.updateNodeState, false);
+		window.removeEventListener('edgeAdded', sociogram.updateState, false);
 		window.removeEventListener('nodeRemoved', sociogram.removeNode, false);
 		window.removeEventListener('edgeRemoved', sociogram.removeEdge, false);
 		window.removeEventListener('changeStageStart', sociogram.destroy, false);
@@ -369,7 +377,7 @@ module.exports = function Sociogram() {
 	        var hullShape = new Konva.Line({
 	          points: [window.outerWidth/2, window.outerHeight/2],
 	          fill: color,
-	          opacity:0.5,
+	          opacity:0.3,
 	          stroke: color,
 	          lineJoin: 'round',
 	          lineCap: 'round',
@@ -1032,7 +1040,7 @@ module.exports = function Sociogram() {
 								};
 
 								// Add the custom variables
-								$.each(settings.prompts[currentPrompt].showEdges, function(index, value) {
+								$.each(settings.prompts[currentPrompt].showEdges.criteria, function(index, value) {
 									edgeProperties[value.label] = value.value;
 								});
 
@@ -1140,7 +1148,8 @@ module.exports = function Sociogram() {
 
 	// Edge manipulation functions
 
-	sociogram.addEdge = function(properties) {
+	sociogram.addEdge = function(properties, options) {
+		note.info('sogioram.addEdge()');
 
 		// This doesn't *usually* get called directly. Rather, it responds to an event fired by the network module.
 
@@ -1162,16 +1171,27 @@ module.exports = function Sociogram() {
 	 	var fromObject = sociogram.getNodeByID(properties.from);
 		var points = [fromObject.attrs.coords[0], fromObject.attrs.coords[1], toObject.attrs.coords[0], toObject.attrs.coords[1]];
 
-		var edge = new Konva.Line({
+		var edgeOptions = {
 			// dashArray: [10, 10, 00, 10],
 			strokeWidth: 4,
+			fill: 'red',
+			width:10,
 			transformsEnabled: 'position',
 			hitGraphEnabled: false,
 			opacity:1,
 			stroke: settings.options.defaultEdgeColor,
 			// opacity: 0.8,
 			points: points
-		});
+		}
+
+		// Handle options parameter to allow overriding default values
+		if (options) {
+			console.log('extending with options');
+			$.extend(edgeOptions, options);
+			console.log(edgeOptions);
+		}
+
+		var edge = new Konva.Line(edgeOptions);
 
 		edge.setAttrs({
 			from: properties.from,
@@ -1400,7 +1420,7 @@ module.exports = function Sociogram() {
 				event: 'submit',
 				handler: function() {
 					setTimeout(function() {
-						sociogram.updateNodeState();
+						sociogram.updateState();
 					},100);
 				},
 				targetEl: window.document,

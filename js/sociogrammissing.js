@@ -120,14 +120,6 @@ module.exports = function SociogramMissing() {
 			// Add the evevent listeners
 			sociogramMissing.bindEvents();
 
-			// window.addEventListener('nodeAdded', addNodeHandler, false);
-			// window.addEventListener('edgeAdded', sociogramMissing.updateNodeState, false);
-			// window.addEventListener('nodeRemoved', sociogramMissing.removeNode, false);
-			// window.addEventListener('edgeRemoved', sociogramMissing.removeEdge, false);
-			// window.addEventListener('changeStageStart', sociogramMissing.destroy, false);
-			// $(window.document).on('change', '#context-checkbox-show', sociogramMissing.toggleHulls);
-			// $(window.document).on('click', '.new-group-button', groupButtonClickHandler);
-
 			// Update initial states of all nodes and edges;
 			sociogramMissing.updateNodeState();
 
@@ -165,7 +157,6 @@ module.exports = function SociogramMissing() {
 		];
 		window.tools.Events.register(moduleEvents, event);
 
-
 	};
 
 	sociogramMissing.addNodeData = function() {
@@ -197,7 +188,7 @@ module.exports = function SociogramMissing() {
 
 	sociogramMissing.resetNodeState = function() {
 
-		// Reset select
+		// Reset nodes
 		var kineticNodes = sociogramMissing.getKineticNodes();
 		$.each(kineticNodes, function(nodeIndex, nodeValue) {
 			nodeValue.children[1].stroke(settings.options.defaultNodeColor);
