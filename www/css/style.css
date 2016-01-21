@@ -12368,16 +12368,16 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   overflow: scroll;
   width: 100%;
   height: 100%;
-  padding: 0 20px;
-  padding-bottom: 4em;
+  padding: 0 30px 4em 30px;
   border-radius: 8px;
   background: #FA920D;
 }
 .current-panel h4 {
   font-size: 20px;
+  margin: 0;
   position: fixed;
   padding: 20px 0px 20px 0;
-  margin: 0;
+  margin-left: -10px;
   border-radius: 8px;
   z-index: 999;
   background-image: -webkit-linear-gradient(top, #FA920D 0%, #FA920D 30%, rgba(250, 146, 13, 0.6) 60%, rgba(250, 146, 13, 0) 100%);
@@ -12400,15 +12400,14 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 .node-list-item {
   font-size: 1.1em;
   display: inline-block;
-  margin: 10px;
+  margin: 6px;
   cursor: pointer;
 }
 .current-node-list .node-list-item {
   background-color: #fba93f;
   border-radius: 50%;
-  padding: 10px;
-  width: 90px;
-  height: 90px;
+  width: 95px;
+  height: 95px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -12427,7 +12426,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
       -ms-flex-pack: center;
           justify-content: center;
   float: left;
-  font-size: 14px;
+  font-size: 16px;
   border: 5px solid #fba93f;
   -webkit-transform: scale(0);
           transform: scale(0);

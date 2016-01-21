@@ -65,15 +65,14 @@ module.exports = function FormBuilder(formName) {
 
     // show and hide methods
     formBuilder.show = function() {
-
+        note.debug('FormBuilder ['+name+']: show()');
         // Run custom show or hide functions, if present
         if (typeof thisForm.show === 'function') {
-            thisForm.show();            
+            note.debug('FormBuilder ['+name+']: show.() running custom show function.');
+            thisForm.show();
         }
 
 
-
-        note.debug('FormBuilder ['+name+']: show.');
         targetEl.addClass('show');
         $('.black-overlay').addClass('show');
         setTimeout(function() {
@@ -125,10 +124,11 @@ module.exports = function FormBuilder(formName) {
 
         // Buttons
         var buttonGroup = '<div class="text-right button-group"></div>';
+
         $.each(form.options.buttons, function(buttonIndex, buttonValue){
             buttonGroup = $(buttonGroup).append('<button id="'+buttonValue.id+'" type="'+buttonValue.type+'" class="btn '+buttonValue.class+'">'+buttonValue.label+'</button>&nbsp;');
-
         });
+
         html = $(html).append(buttonGroup);
 
         // Check if we are outputting html or writing to DOM
@@ -176,15 +176,17 @@ module.exports = function FormBuilder(formName) {
 
     formBuilder.addFields = function(fields) {
         var wrapper, variableComponent, variableLabel, checkLabel, placeholder, required;
-        note.debug('Adding fields');
+        note.debug('FormBuilder ['+name+']: addFields(). Iterating through fields.');
         $.each(fields, function(formIndex, formValue) {
-            note.debug('adding '+formIndex);
+            note.debug('FormBuilder ['+name+']: addFields() adding '+formIndex);
             if (!formBuilder.fieldExists(formIndex)) {
+                note.debug('FormBuilder ['+name+']: addFields() creating field for '+formIndex);
                 variableComponent = ''; variableLabel = ''; checkLabel = '';
                 placeholder = formValue.placeholder? formValue.placeholder : '';
                 required = formValue.required? 'required' : '';
 
                 if (formValue.type === 'text') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is text.');
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     if (typeof formValue.title !== 'undefined') {
                         variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
@@ -194,7 +196,7 @@ module.exports = function FormBuilder(formName) {
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'custom') {
-                    note.warn('formBuilder.addFields(): Custom form field detected');
+                    note.debug('formBuilder.addFields(): '+formIndex+' is a custom form field!');
 
                     // Check if we have been supplied a definition
                     if (typeof formValue.customType !== 'undefined' && typeof thisForm.options.customFields[formValue.customType] !== 'undefined') {
@@ -214,14 +216,15 @@ module.exports = function FormBuilder(formName) {
                             }
 
                         } else {
-                            note.warn('formBuilder.addFields(): Form of type "'+formValue.customType+'" did not have any markup.');
+                            note.warn('formBuilder.addFields(): Custom field of type "'+formValue.customType+'" did not have any markup defined. It will be ignored.');
                         }
                     } else {
-                        note.warn('formBuilder.addFields(): Could not find a definition for custom form type "'+formValue.customType+'"');
+                        note.warn('formBuilder.addFields(): Could not find a definition for the custom field type "'+formValue.customType+'". Ignoring.');
                     }
 
                     // formValue.customType
                 } else if (formValue.type === 'hidden') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is hidden.');
                     wrapper = '<div class="hidden-form-group" data-component="'+formIndex+'"></div>';
 
                     variableComponent = '<input type="'+formValue.type+'" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
@@ -229,6 +232,7 @@ module.exports = function FormBuilder(formName) {
                     formFields = $(formFields).append(wrapper);
 
                 } else if (formValue.type === 'number') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is number.');
 
                     // Create component container
                     var component = '<div class="form-group" data-component="'+formIndex+'"></div>';
@@ -267,6 +271,7 @@ module.exports = function FormBuilder(formName) {
                     // Append the component to the form
                     formFields = $(formFields).append(component);
                 } else if (formValue.type === 'slider') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is slider.');
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<input type="text" class="form-control slider" id="'+formIndex+'" name="'+formIndex+'">';
@@ -280,18 +285,21 @@ module.exports = function FormBuilder(formName) {
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'email') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is email.');
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<input type="email" class="form-control" id="'+formIndex+'" name="'+formIndex+'" placeholder="'+placeholder+'" autocomplete="off" '+required+'>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'textarea') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is textarea.');
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableLabel = '<label for="'+formIndex+'">'+formValue.title+'</label>';
                     variableComponent = '<textarea class="form-control" id="'+formIndex+'" name="'+formIndex+'" rows="'+formValue.rows+'" cols="'+formValue.cols+'" autocomplete="off" placeholder="'+placeholder+'" '+required+'></textarea>';
                     wrapper = $(wrapper).append(variableLabel+variableComponent);
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'radio') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is radio.');
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableComponent = '';
                     variableLabel = '<label class="control-label">'+formValue.title+'</label>';
@@ -304,6 +312,7 @@ module.exports = function FormBuilder(formName) {
                     });
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'checkbox') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is checkbox.');
                     // inline or regular?
                     var inline = formValue.inline ? 'checkbox-inline' : 'checkbox';
 
@@ -321,6 +330,7 @@ module.exports = function FormBuilder(formName) {
                     });
                     formFields = $(formFields).append(wrapper);
                 } else if (formValue.type === 'button-checkbox') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' type is button-checkbox.');
                     // Create wrapper element
                     wrapper = '<div class="form-group" data-component="'+formIndex+'"></div>';
                     variableComponent = '';
@@ -336,12 +346,14 @@ module.exports = function FormBuilder(formName) {
                     formFields = $(formFields).append(wrapper);
                 }
             } else if(formBuilder.fieldExists(formIndex)) {
+                note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' already existed...analysing further.');
                 variableComponent = ''; variableLabel = ''; checkLabel = '';
                 placeholder = formValue.placeholder? formValue.placeholder : '';
                 required = formValue.required? 'required' : '';
 
 
                 if (formValue.type === 'button-checkbox') {
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' a checkbox...builting an array.');
                     // This field exists. If we are trying to define it again, perhaps it is a checkbox group
                     // If it is, we should append the label and input to the existing form group
                     // Create wrapper element
@@ -352,10 +364,10 @@ module.exports = function FormBuilder(formName) {
                         checkLabel = '<label class="checkbox-inline" for="'+checkValue.id+'">'+checkValue.label+'</label>';
                         $(formFields).find('[data-component="'+formIndex+'"]').append(variableComponent+checkLabel);
                     });
+                } else {
+                    note.error('FormBuilder ['+name+']: Field with id "'+formIndex+'" already exists!');
                 }
 
-            } else {
-                note.error('FormBuilder ['+name+']: Field with id "'+formIndex+'" already exists!');
             }
 
         });
@@ -375,24 +387,22 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.fieldExists = function(id) {
+        console.log('FormBuilder ['+name+']: fieldExists() '+id+'...');
         if ($('#'+thisForm.id).find('#'+id).length > 0) {
-            note.debug('field '+id+' exists');
+            note.debug('...exists');
             return true;
         } else if ($('#'+thisForm.id).find('[data-component="'+id+'"]').length > 0) {
-            note.debug('field '+id+' exists as a checkbox.');
+            note.debug('...exists as a checkbox.');
             return true;
         } else {
-            console.log('field '+id+' not found');
+            console.log('...not found');
             return false;
         }
     };
 
     formBuilder.fieldType = function(id) {
-        if (formBuilder.fieldExists(id)) {
-            return $($('#'+thisForm.id).find('#'+id)[0]).prop('type');
-        } else {
-            return false;
-        }
+        var fieldType = $($('#'+thisForm.id).find('#'+id)[0]).prop('type') || false;
+        return fieldType;
     };
 
     formBuilder.addEvents = function() {
@@ -492,11 +502,12 @@ module.exports = function FormBuilder(formName) {
     };
 
     formBuilder.addData = function(data) {
-        note.debug('FormBuilder ['+name+']: addData()');
-
+        note.info('FormBuilder ['+name+']: addData()');
+        note.debug(data);
         $.each(data, function(dataIndex, dataValue) {
-            console.log('formbuilder.addData() analysing data for '+dataIndex);
+            console.log('formbuilder.addData() analysing data for field '+dataIndex);
             if (formBuilder.fieldExists(dataIndex)) {
+                note.debug(dataIndex+' exists. Continuing...');
                 // For standard inputs
                 var currentType = formBuilder.fieldType(dataIndex);
 
@@ -518,7 +529,7 @@ module.exports = function FormBuilder(formName) {
                 } else if (currentType === 'textarea') {
                     $(html).find('#'+dataIndex).html(dataValue);
                 } else if (currentType === 'radio') {
-                    $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true);
+                    $('input:radio[name="'+dataIndex+'"][value="'+dataValue+'"]').prop('checked', true).trigger("change");
                 } else if (currentType === 'checkbox') {
                     console.log('adding checkbox data');
                     console.log(dataIndex);
@@ -527,12 +538,12 @@ module.exports = function FormBuilder(formName) {
                     if (typeof dataValue !== 'undefined' && typeof dataValue === 'object') {
                         // If array, iterate
                         for (var i = 0; i < dataValue.length; i++) {
-                            $(html).find('input:checkbox[value="'+dataValue[i]+'"]').prop('checked', true);
+                            $(html).find('input:checkbox[value="'+dataValue[i]+'"]').prop('checked', true).trigger("change");
                         }
                     } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'string') {
-                        $(html).find('input:checkbox[value="'+dataValue+'"]').prop('checked', true);
+                        $(html).find('input:checkbox[value="'+dataValue+'"]').prop('checked', true).trigger("change");
                     } else if (typeof dataValue !== 'undefined' && typeof dataValue === 'number') {
-                        $(html).find('#'+dataIndex).prop('checked', true);
+                        $(html).find('#'+dataIndex).prop('checked', true).trigger("change");
 
                     }
 

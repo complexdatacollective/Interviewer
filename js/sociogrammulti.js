@@ -415,7 +415,7 @@ module.exports = function SociogramMulti() {
 		var properties;
 		// if a hull with hullLabel doesnt exist, create one
 		if (!sociogramMulti.hullExists(hullLabel)) {
-			note.warn('sociogramMulti.addPointToHull(): the hull label didn\'t exist, so a new hull was created.');
+			note.warn('sociogramMulti.addPointToHull(): the hull label "'+hullLabel+'" didn\'t exist, so a new hull was created.');
 			sociogramMulti.addHull(hullLabel);
 		}
 
@@ -774,6 +774,8 @@ module.exports = function SociogramMulti() {
 					}
 				}
 
+				console.log(hullShapes);
+				console.log(pointHulls[i]);
 				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
 				hullLayer.batchDraw();
 

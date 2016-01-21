@@ -31,6 +31,7 @@ module.exports = function NameGenerator() {
     var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
     var cardClickHandler = function() {
+        window.forms.nameGenForm.show();
         // Handles what happens when a card is clicked
 
         // Get the ID of the node corresponding to this card, stored in the data-index property.
@@ -44,6 +45,10 @@ module.exports = function NameGenerator() {
             type:'hidden',
             title: 'id'
         };
+        properties.namegenerator = {
+            type:'hidden',
+            title: 'namegenerator'
+        };
         $.each(options.data.namegenerators, function(targetIndex, targetValue) {
             properties[targetValue.label] = {
                 type:'hidden',
@@ -53,7 +58,7 @@ module.exports = function NameGenerator() {
         window.forms.nameGenForm.addTemporaryFields(properties);
 
         window.forms.nameGenForm.addData(node);
-        window.forms.nameGenForm.show();
+
 
 
     };
@@ -115,7 +120,7 @@ module.exports = function NameGenerator() {
             targetEl:  window
         },
         {
-            event: 'click tap',
+            event: 'tap',
             handler: nameGenerator.toggleSelectable,
             targetEl: window.document,
             subTarget:  '.node-list-item'
@@ -133,13 +138,13 @@ module.exports = function NameGenerator() {
     nameGenerator.nodeAdded = function(e) {
         nameGenerator.addCard(e.originalEvent.detail, function() {
             nameGenerator.updateCounter();
-            // nameGenerator.makeDraggable();
+            nameGenerator.makeDraggable();
         });
     };
 
     nameGenerator.nodeEdited = function(e) {
         nameGenerator.editCard(e.originalEvent.detail, function() {
-            // nameGenerator.makeDraggable();
+            nameGenerator.makeDraggable();
         });
     };
 
@@ -292,7 +297,7 @@ module.exports = function NameGenerator() {
 
             setTimeout(function() {
                 $(el).addClass('shown');
-                // nameGenerator.makeDraggable();
+                nameGenerator.makeDraggable();
             },50+(index*50));
 
         });
@@ -370,7 +375,7 @@ module.exports = function NameGenerator() {
     };
 
     nameGenerator.showNewNodeForm = function() {
-
+        console.log('nameGenerator.showNewNodeForm()');
         // add fields from data
         var properties = {};
             properties.namegenerator = {
@@ -379,6 +384,7 @@ module.exports = function NameGenerator() {
             };
 
         // Add additional variables, if present
+        console.log('nameGenerator.showNewNodeForm() adding additional variables');
         if (typeof options.data.namegenerators[currentPrompt].variables !== 'undefined' && options.data.namegenerators[currentPrompt].variables.length > 0) {
             $.each(options.data.namegenerators[currentPrompt].variables, function(variableIndex, variableValue) {
 
@@ -389,6 +395,7 @@ module.exports = function NameGenerator() {
             });
         }
 
+        console.log('nameGenerator.showNewNodeForm() adding temporary fields');
         window.forms.nameGenForm.addTemporaryFields(properties);
 
         // Add data from fields
@@ -404,9 +411,10 @@ module.exports = function NameGenerator() {
             });
         }
 
-
+        console.log('nameGenerator.showNewNodeForm() adding data');
         window.forms.nameGenForm.addData(properties);
 
+        console.log('nameGenerator.showNewNodeForm() showing form');
         window.forms.nameGenForm.show();
     };
 
@@ -484,7 +492,7 @@ module.exports = function NameGenerator() {
         $(card).on('click', cardClickHandler);
 
         nameGenerator.updateCounter();
-        // nameGenerator.makeDraggable();
+        nameGenerator.makeDraggable();
 
         setTimeout(function() {
             $('[data-index='+properties.id+']').children('.inner-card').addClass('shown');
