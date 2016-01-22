@@ -73,11 +73,12 @@ module.exports = function FormBuilder(formName) {
         }
 
 
-        targetEl.addClass('show');
+
         $('.black-overlay').addClass('show');
         setTimeout(function() {
+            targetEl.addClass('show');
             $('#'+$(html).attr('id')+' :input:visible:enabled:first').focus();
-        }, 500);
+        }, 100);
 
     };
 

@@ -408,14 +408,33 @@ module.exports = function Sociogram() {
 				var currentValue = node[settings.prompts[currentPrompt].showSelected.variable];
 				if (currentValue == settings.prompts[currentPrompt].showSelected.value) {
 					// this node is selected
-					var currentNode = sociogram.getNodeByID(node.id);
-					console.log(currentNode);
-					currentNode.children[1].stroke(colors.selected);
+					var sociogramNode = sociogram.getNodeByID(node.id);
+					sociogramNode.children[1].stroke(colors.selected);
 				}
 			});
 
 			nodeLayer.draw();
 
+		} else if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'string' && settings.prompts[currentPrompt].showSelected === 'multiple'){
+			// special mode where we show selected nodes from multiple variables to help with edge creation.
+			var selectNodes = settings.network.getNodes();
+			var variables = settings.prompts[currentPrompt].selectVariables;
+			console.log('variables');
+			console.log(variables);
+			$.each(selectNodes, function(index, node) {
+				for (var variable in variables) {
+					var currentValue = node[variables[variable]];
+					console.log(node);
+					console.log(variable);
+					if (currentValue) {
+						// this node is selected
+						var sociogramNode = sociogram.getNodeByID(node.id);
+						sociogramNode.children[1].stroke(colors.selected);
+					}
+				}
+			});
+
+			nodeLayer.draw();
 		}
 
 	};

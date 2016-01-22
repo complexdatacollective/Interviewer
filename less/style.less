@@ -53,13 +53,11 @@ button.btn-checkbox {
 }
 
 .dialog {
-	position:absolute;
 	background: @modal-base;
 	padding: @padding-base-horizontal;
 	border-radius: @border-radius-large;
 	color: @text-dark;
-	left:50%;
-	top:10px;
+	width:722px;
 	transition: 0.5s all ease;
 	transform: translateY(-100vh);
 	z-index:99;
@@ -563,13 +561,13 @@ button.btn-checkbox {
 	bottom: 0;
 	left: 0;
 	display: none;
-	transition: all 0.3s ease;
-	opacity: 0;
 	background: rgba(0,0,0,0.7);
+	justify-content: center;
+	align-items: center;
 }
 
 .black-overlay.show {
-	opacity: 1;
+	display:flex !important;
 }
 
 .ord-node-bin {

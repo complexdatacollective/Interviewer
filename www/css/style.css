@@ -12603,13 +12603,11 @@ button.btn-checkbox {
   z-index: 999;
 }
 .dialog {
-  position: absolute;
   background: #eee;
   padding: 25px;
   border-radius: 12px;
   color: #575757;
-  left: 50%;
-  top: 10px;
+  width: 722px;
   -webkit-transition: 0.5s all ease;
   transition: 0.5s all ease;
   -webkit-transform: translateY(-100vh);
@@ -13253,13 +13251,22 @@ fieldset[disabled] .btn-modal-danger.focus {
   bottom: 0;
   left: 0;
   display: none;
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  opacity: 0;
   background: rgba(0, 0, 0, 0.7);
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+              -ms-grid-row-align: center;
+          align-items: center;
 }
 .black-overlay.show {
-  opacity: 1;
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
 }
 .ord-node-bin {
   display: -webkit-inline-box;
