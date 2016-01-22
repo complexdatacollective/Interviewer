@@ -114,7 +114,7 @@ module.exports = function ContextGenerator() {
 		$('body').append('<div class="new-context-form"></div>');
 		var newContextForm = new window.netCanvas.Modules.FormBuilder('newContextForm');
 		newContextForm.build($('.new-context-form'), {
-			title: 'Create a New Context',
+			title: 'What should your context be called?',
 			fields: {
 				name: {
 					type: 'text',
