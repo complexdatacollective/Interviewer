@@ -40,6 +40,41 @@ return $.fn.extend( {
 
 } ) );
 
+// String methods
+
+String.prototype.wrap= function(n, hyphen){
+	var str1, tem, ax, diff, lim, S= [];
+	var A = this.split('/\\s*\/');
+	n = n || 50;
+	hyphen= hyphen || n*2;
+	hyphen= Math.floor(hyphen/2);
+	while(A.length){
+		str1= A.shift();
+		while(str1 && str1.length> n){
+			if(ax=== 0 && /^\\S/.test(str1)) S[S.length-1]+= '-';
+			tem= str1.substring(0, n);
+			ax= tem.lastIndexOf(' ')+ 1;
+			if(ax== 0){
+				S.push(str1.substring(0, n-1));
+				str1= str1.substring(n-1);
+			}
+			else{
+				tem= str1.substring(0, ax);
+				diff= n-ax;
+				if(diff> hyphen){
+					lim=ax+ hyphen;
+					while(ax<lim && /\\w/.test(str1.charAt(ax))) ++ax;
+					tem= str1.substring(0, ax)+'-';
+				}
+				str1= str1.substring(ax);
+				S.push(tem);
+			}
+		}
+		if(str1) S.push(str1);
+	}
+	var br = '\n';
+	return S.join(br);
+}
 // Storage prototypes
 
 window.Storage.prototype.showTotalUsage = function() {

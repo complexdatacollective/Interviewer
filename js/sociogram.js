@@ -219,8 +219,8 @@ module.exports = function Sociogram() {
 				targetEl:  window
 			},
 			{
-				event: 'nodeRemoved',
-				handler: sociogram.removeNode,
+				event: 'edgeRemoved',
+				handler: sociogram.removeEdge,
 				targetEl:  window
 			},
 			{
@@ -440,7 +440,7 @@ module.exports = function Sociogram() {
 	        var hullShape = new Konva.Line({
 	          points: [window.outerWidth/2, window.outerHeight/2],
 	          fill: color,
-	          opacity:0.3,
+	          opacity:0.5,
 	          stroke: color,
 	          lineJoin: 'round',
 	          lineCap: 'round',
@@ -757,24 +757,32 @@ module.exports = function Sociogram() {
 			fill:nodeOptions.color,
 			transformsEnabled: 'position',
 			strokeWidth: nodeOptions.strokeWidth,
-			stroke: nodeOptions.stroke
+			stroke: nodeOptions.stroke,
+			shadowColor: 'black',
+			shadowBlur: 2,
+			shadowOffset: {x : 0, y : 0},
+			shadowOpacity: 1
 		});
 
+		var label = nodeOptions.label.wrap(8,2);
 		var nodeLabel = new Konva.Text({
-			text: nodeOptions.label,
-			// fontSize: 20,
+			text: label,
+			fontSize: 13,
 			fontFamily: 'Lato',
 			transformsEnabled: 'position',
 			fill: settings.options.defaultLabelColor,
 			align: 'center',
-			// offsetX: (nodeOptions.size*-1)-10, //left right
-			// offsetY:(nodeOptions.size*1)-10, //up down
+			// width: (settings.options.defaultNodeSize*2),
+			// height: (settings.options.defaultNodeSize*2),
+			// x: -35,
+			// y: -5,
+			// lineHeight: (settings.options.defaultNodeSize*2),
 			fontStyle:500
 		});
 
-		note.debug('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1]);
-
 		padText(nodeLabel,nodeShape,10);
+
+		note.debug('Putting node '+nodeOptions.label+' at coordinates x:'+nodeOptions.coords[0]+', y:'+nodeOptions.coords[1]);
 
 		nodeGroup.add(selectCircle);
 		nodeGroup.add(nodeShape);
@@ -1237,15 +1245,20 @@ module.exports = function Sociogram() {
 
 		var edgeOptions = {
 			// dashArray: [10, 10, 00, 10],
-			strokeWidth: 4,
-			fill: 'red',
-			width:10,
+			strokeWidth: 6,
 			transformsEnabled: 'position',
 			hitGraphEnabled: false,
 			opacity:1,
+			// fill: '#ff0000',
+			// closed: false,
+			// width:100,
 			stroke: settings.options.defaultEdgeColor,
 			// opacity: 0.8,
-			points: points
+			points: points,
+			shadowColor: 'black',
+			shadowBlur: 0.3,
+			shadowOffset: {x : 0, y : 0},
+			shadowOpacity: 1
 		}
 
 		// Handle options parameter to allow overriding default values

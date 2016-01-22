@@ -10811,8 +10811,8 @@ input[type=radio]:checked + label:before {
 }
 label[for="context-checkbox-show"] {
   position: absolute;
-  right: 160px;
-  bottom: 170px;
+  right: 158px;
+  bottom: 190px;
   color: rgba(255, 255, 255, 0);
   -webkit-transition: color 1s ease;
   transition: color 1s ease;
@@ -13579,12 +13579,12 @@ fieldset[disabled] .btn-modal-danger.focus {
   cursor: pointer;
 }
 .new-node-button {
-  height: 8vmin;
-  width: 8vmin;
+  height: 100px;
+  width: 100px;
   background: #e85657;
   position: absolute;
-  bottom: 3.5vmin;
-  right: 5vmin;
+  bottom: 40px;
+  right: 45px;
   border-radius: 50%;
   display: -webkit-box;
   display: -webkit-flex;
