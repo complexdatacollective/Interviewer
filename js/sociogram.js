@@ -169,7 +169,7 @@ module.exports = function Sociogram() {
 	        });
 		} else if (settings.prompts.length === 1) {
 			$('.sociogram-title').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
-			$('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[i].prompt+'</h4></div>');
+			$('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[0].prompt+'</h4></div>');
 		}
 
 		// Initialise the konva stage
@@ -271,7 +271,7 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.addNodeData = function() {
-
+		note.debug('sociogram.addNodeData()');
 		var criteriaNodes;
 
 		// get nodes according to criteria query
@@ -292,6 +292,7 @@ module.exports = function Sociogram() {
 		}
 
 		for (var j = 0; j < criteriaNodes.length; j++) {
+			note.debug('sociogram.addNodeData() adding '+j);
 			sociogram.addNode(criteriaNodes[j]);
 		}
 
@@ -565,6 +566,7 @@ module.exports = function Sociogram() {
                     var coords = nodeLayer.children[j].getPosition();
 
 					// Add it to the new hull
+
                     newHull.addPoint(coords.x, coords.y);
                 }
             }
@@ -1159,7 +1161,7 @@ module.exports = function Sociogram() {
 					}
 					currentNode.moveToTop();
 					nodeLayer.draw();
-				}, 400);
+				}, 200);
 			} else {
 				touchNotTap = false;
 			}
@@ -1446,9 +1448,9 @@ module.exports = function Sociogram() {
 	};
 
 	sociogram.showNewNodeForm = function() {
-		// debugger;
+
 		window.forms.nameGenForm.removeTemporaryFields();
-		// debugger;
+
 		var properties = {};
 
 		for (var i =0; i <= currentPrompt; i++) {

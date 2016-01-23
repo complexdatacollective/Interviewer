@@ -348,11 +348,7 @@
 }
 
 .new-context-form {
-    position:absolute;
-    top:40%;
-    left:50%;
     width:40vmin;
-    margin-left:-20vmin;
     padding: @padding-base-horizontal;
     border-radius: @border-radius-base;
     background: @modal-base;
@@ -360,6 +356,7 @@
     transition: all 0.5s ease;
     transform: translateY(100vh);
     z-index:99;
+    display:none;
 }
 
 .new-context-form.show {
@@ -368,11 +365,7 @@
 }
 
 .merge-context-form {
-    position:absolute;
-    top:40%;
-    left:50%;
     width:65vmin;
-    margin-left:-32.5vmin;
     padding: 5vmin;
     border-radius: @border-radius-base;
     background: @modal-base;
@@ -380,6 +373,7 @@
     transition: all 0.5s ease;
     transform: translateY(100vh);
     z-index:99;
+    display:none;
 }
 
 .merge-context-form.show {

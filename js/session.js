@@ -163,6 +163,7 @@ var Session = function Session() {
 
     session.init = function(callback) {
         note.info('Session initialising.');
+        window.test = setInterval(function(){ console.log('checking...'); if (network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);

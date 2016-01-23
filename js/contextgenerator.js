@@ -111,7 +111,7 @@ module.exports = function ContextGenerator() {
 		contextGenerator.options.targetEl.append('<div class="new-context-button text-center"><span class="fa fa-2x fa-pencil"></span></div>');
 
 		// New context form
-		$('body').append('<div class="new-context-form"></div>');
+		$('.black-overlay').append('<div class="new-context-form"></div>');
 		var newContextForm = new window.netCanvas.Modules.FormBuilder('newContextForm');
 		newContextForm.build($('.new-context-form'), {
 			title: 'What should your context be called?',
@@ -165,7 +165,7 @@ module.exports = function ContextGenerator() {
 		}];
 		window.tools.Events.register(moduleEvents, event);
 
-		$('body').append('<div class="merge-context-form"></div>');
+		$('.black-overlay').append('<div class="merge-context-form"></div>');
 		mergeContextForm = new window.netCanvas.Modules.FormBuilder('mergeContextForm');
 		mergeContextForm.build($('.merge-context-form'), {
 			title: 'What should the merged context be called?',

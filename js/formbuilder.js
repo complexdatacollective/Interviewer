@@ -73,23 +73,31 @@ module.exports = function FormBuilder(formName) {
         }
 
 
-
+        targetEl.css('display','block');
         $('.black-overlay').addClass('show');
         setTimeout(function() {
             targetEl.addClass('show');
-            $('#'+$(html).attr('id')+' :input:visible:enabled:first').focus();
         }, 100);
+
+        setTimeout(function() {
+            $('#'+$(html).attr('id')+' :input:visible:enabled:first').focus();
+        }, 800);
 
     };
 
     formBuilder.hide = function () {
         note.debug('FormBuilder ['+name+']: hide.');
         targetEl.removeClass('show');
-        $('.black-overlay').removeClass('show');
+
         setTimeout(function() {
-            formBuilder.removeTemporaryFields();
             $(thisForm).trigger('reset');
-        }, 1500);
+            formBuilder.removeTemporaryFields();
+        }, 500);
+
+        setTimeout(function() {
+            $('.black-overlay').removeClass('show');
+            targetEl.css('display','none');
+        }, 800);
 
 
 

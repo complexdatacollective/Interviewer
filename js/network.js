@@ -47,7 +47,7 @@ module.exports = function Network() {
 
 
         // Check if an ID has been passed, and then check if the ID is already in use. Cancel if it is.
-        if (typeof properties.id !== 'undefined' && this.getNode(properties.id) !== false) {
+        if (typeof properties.id !== 'undefined' && this.getNode(properties.id) === true) {
             note.error('Node already exists with id '+properties.id+'. Cancelling!');
             return false;
         }

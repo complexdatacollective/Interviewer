@@ -12222,11 +12222,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   border-radius: 50%;
 }
 .new-context-form {
-  position: absolute;
-  top: 40%;
-  left: 50%;
   width: 40vmin;
-  margin-left: -20vmin;
   padding: 25px;
   border-radius: 8px;
   background: #eee;
@@ -12236,17 +12232,14 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-transform: translateY(100vh);
           transform: translateY(100vh);
   z-index: 99;
+  display: none;
 }
 .new-context-form.show {
   -webkit-transform: translateY(0);
           transform: translateY(0);
 }
 .merge-context-form {
-  position: absolute;
-  top: 40%;
-  left: 50%;
   width: 65vmin;
-  margin-left: -32.5vmin;
   padding: 5vmin;
   border-radius: 8px;
   background: #eee;
@@ -12256,6 +12249,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-transform: translateY(100vh);
           transform: translateY(100vh);
   z-index: 99;
+  display: none;
 }
 .merge-context-form.show {
   -webkit-transform: translateY(0);
@@ -12594,6 +12588,9 @@ body {
   body {
     font-size: 1.6vmin;
   }
+}
+.new-node-form {
+  display: none;
 }
 button.btn-checkbox {
   font-size: 16px;
