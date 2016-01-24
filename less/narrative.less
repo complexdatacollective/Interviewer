@@ -1,0 +1,65 @@
+.key-panel {
+    background: @panel-bg;
+    width:300px;
+    padding: @padding-base-vertical @padding-base-horizontal;
+    position:absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: @border-radius-base;
+}
+
+.key-panel-row {
+    // padding:14px;
+}
+
+.edge-key-text {
+    line-height: 43px;
+    padding-left:10px;
+}
+
+.reset-state-button {
+    background: @brand-primary;
+    width:100px;
+    height:100px;
+    position: absolute;
+    bottom: 40px;
+    right: 45px;
+    border-radius: 50%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+.edge-key-icon {
+    text-align: center;
+}
+
+svg.edge-icon {
+    width:40px;
+    height:40px;
+}
+
+.edge-icon.social line {
+    stroke: @brand-primary;
+}
+
+.edge-icon.negative line {
+    stroke: @brand-danger;
+}
+
+.context-icon.social path {
+    fill: @brand-primary;
+}
+
+.context-icon.lcil path {
+    fill: @brand-info;
+}
+
+.context-icon.university path {
+    fill: @brand-success;
+}
+
+.context-icon.camp path {
+    fill: @brand-warning;
+}

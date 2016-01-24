@@ -300,6 +300,7 @@ module.exports = function ContextGenerator() {
 			revert: true,
 			refreshPositions: true,
 			revertDuration: 200,
+			distance: 50,
 			stack: '.circle-responsive',
 			scroll: false,
 			start: function() {
@@ -422,7 +423,7 @@ module.exports = function ContextGenerator() {
 		contextGenerator.makeDraggable();
 		if (contextGenerator.options.createNodes === true) {
 			var event = [{
-				event: 'click',
+				event: 'tap',
 				handler: contextGenerator.showNewNodeForm,
 				targetEl:  '.circle-responsive[data-index="'+color+'"]'
 			}];

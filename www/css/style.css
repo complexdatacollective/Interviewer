@@ -5393,7 +5393,7 @@ button.list-group-item-danger.active:focus {
 }
 .panel {
   margin-bottom: 22px;
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
   border: 1px solid transparent;
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -12569,6 +12569,66 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
+.key-panel {
+  background: rgba(0, 0, 0, 0.5);
+  width: 300px;
+  padding: 15px 25px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 8px;
+}
+.edge-key-text {
+  line-height: 43px;
+  padding-left: 10px;
+}
+.reset-state-button {
+  background: #01a6c7;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  bottom: 40px;
+  right: 45px;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 20;
+}
+.edge-key-icon {
+  text-align: center;
+}
+svg.edge-icon {
+  width: 40px;
+  height: 40px;
+}
+.edge-icon.social line {
+  stroke: #01a6c7;
+}
+.edge-icon.negative line {
+  stroke: #e85657;
+}
+.context-icon.social path {
+  fill: #01a6c7;
+}
+.context-icon.lcil path {
+  fill: #B16EFF;
+}
+.context-icon.university path {
+  fill: #1ECD97;
+}
+.context-icon.camp path {
+  fill: #FA920D;
+}
 html,
 body {
   font-weight: 300;
@@ -12604,7 +12664,7 @@ button.btn-checkbox {
   padding: 25px;
   border-radius: 12px;
   color: #575757;
-  width: 722px;
+  width: 780px;
   -webkit-transition: 0.5s all ease;
   transition: 0.5s all ease;
   -webkit-transform: translateY(-100vh);
