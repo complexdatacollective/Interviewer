@@ -12579,7 +12579,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   border-radius: 8px;
 }
 .key-panel-text {
-  line-height: 52px;
+  height: 52px;
   padding-left: 10px;
 }
 .reset-state-button {
@@ -12611,26 +12611,15 @@ svg.key-panel-icon {
   width: 40px;
   height: 40px;
 }
-.node-icon circle {
-  stroke: #ffbf00;
+.edge-icon {
+  width: 30px;
+  height: 30px;
 }
 .edge-icon.social line {
   stroke: #01a6c7;
 }
 .edge-icon.negative line {
   stroke: #e85657;
-}
-.context-icon.social path {
-  fill: #01a6c7;
-}
-.context-icon.lcil path {
-  fill: #B16EFF;
-}
-.context-icon.university path {
-  fill: #1ECD97;
-}
-.context-icon.camp path {
-  fill: #FA920D;
 }
 a:hover,
 a:focus {

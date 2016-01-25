@@ -77,17 +77,10 @@ module.exports = function (grunt) {
         },
         bower_concat: {
             all: {
-                dest: '<%= config.app %>/js/_bower.js'
-                // mainFiles: {
-                    // 'graham_scan': 'src/graham_scan.js',
-                //     'bootstrap': 'dist/bootstrap.min.js',
-                //     'bs-datatimepicker': 'build/js/bootstrap-datetimepicker.min.js',
-                //     'jquery-ui': 'jquery-ui.min.js',
-                //     'jqueryui-touch-punch': 'jquery.ui.touch-punch.min.js',
-                //     'konva': 'konva.min.js',
-                //     'leaflet': 'dist/leaflet.js',
-                //     'leaflet-omnivore': 'leaflet-omnivore.min.js'
-                // },
+                dest: '<%= config.app %>/js/_bower.js',
+                mainFiles: {
+                    'graham_scan': 'src/graham_scan.js'
+                }
                 // exclude: ['components-font-awesome','lato', 'moment']
             }
         },

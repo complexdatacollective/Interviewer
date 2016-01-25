@@ -18402,9 +18402,182 @@ return function deepmerge(target, src) {
  * Graham's Scan Convex Hull Algorithm
  * @desc An implementation of the Graham's Scan Convex Hull algorithm in JavaScript.
  * @author Brian Barnett, brian@3kb.co.uk, http://brianbar.net/ || http://3kb.co.uk/
- * @version 1.0.3
+ * @version 1.0.4
  */
-function ConvexHullGrahamScan(){this.anchorPoint=void 0,this.reverse=!1,this.points=[]}ConvexHullGrahamScan.prototype={constructor:ConvexHullGrahamScan,Point:function(a,b){this.x=a,this.y=b},_findPolarAngle:function(a,b){var c=57.295779513082,d=b.x-a.x,e=b.y-a.y;if(0==d&&0==e)return 0;var f=Math.atan2(e,d)*c;return this.reverse?0>=f&&(f+=360):f>=0&&(f+=360),f},addPoint:function(a,b){return void 0===this.anchorPoint?void(this.anchorPoint=new this.Point(a,b)):this.anchorPoint.y>b&&this.anchorPoint.x>a||this.anchorPoint.y===b&&this.anchorPoint.x>a||this.anchorPoint.y>b&&this.anchorPoint.x===a?(this.points.push(new this.Point(this.anchorPoint.x,this.anchorPoint.y)),void(this.anchorPoint=new this.Point(a,b))):void this.points.push(new this.Point(a,b))},_sortPoints:function(){var a=this;return this.points.sort(function(b,c){var d=a._findPolarAngle(a.anchorPoint,b),e=a._findPolarAngle(a.anchorPoint,c);return e>d?-1:d>e?1:0})},_checkPoints:function(a,b,c){var d,e=this._findPolarAngle(a,b),f=this._findPolarAngle(a,c);return e>f?(d=e-f,!(d>180)):f>e?(d=f-e,d>180):!0},getHull:function(){var a,b,c=[];if(this.reverse=this.points.every(function(a){return a.x<0&&a.y<0}),a=this._sortPoints(),b=a.length,4>b)return a.unshift(this.anchorPoint),a;for(c.push(a.shift(),a.shift());;){var d,e,f;if(c.push(a.shift()),d=c[c.length-3],e=c[c.length-2],f=c[c.length-1],this._checkPoints(d,e,f)&&c.splice(c.length-2,1),0==a.length){if(b==c.length){var g=this.anchorPoint;return c.some(function(a){return a.x==g.x&&a.y==g.y})||c.unshift(this.anchorPoint),c}a=c,b=a.length,c=[],c.push(a.shift(),a.shift())}}}},"function"==typeof define&&define.amd&&define(function(){return ConvexHullGrahamScan}),"undefined"!=typeof module&&(module.exports=ConvexHullGrahamScan);
+function ConvexHullGrahamScan() {
+    this.anchorPoint = undefined;
+    this.reverse = false;
+    this.points = [];
+}
+
+ConvexHullGrahamScan.prototype = {
+
+    constructor: ConvexHullGrahamScan,
+
+    Point: function (x, y) {
+        this.x = x;
+        this.y = y;
+    },
+
+    _findPolarAngle: function (a, b) {
+        var ONE_RADIAN = 57.295779513082;
+        var deltaX, deltaY;
+
+        //if the points are undefined, return a zero difference angle.
+        if (!a || !b) return 0;
+
+        deltaX = (b.x - a.x);
+        deltaY = (b.y - a.y);
+
+        if (deltaX == 0 && deltaY == 0) {
+            return 0;
+        }
+
+        var angle = Math.atan2(deltaY, deltaX) * ONE_RADIAN;
+
+        if (this.reverse){
+            if (angle <= 0) {
+                angle += 360;
+            }
+        }else{
+            if (angle >= 0) {
+                angle += 360;
+            }
+        }
+
+        return angle;
+    },
+
+    addPoint: function (x, y) {
+        //Check to see if anchorPoint has been defined yet.
+        if (this.anchorPoint === undefined) {
+            //Create new anchorPoint.
+            this.anchorPoint = new this.Point(x, y);
+            return;
+            // Sets anchorPoint if point being added is further left.
+        } else if (
+            (this.anchorPoint.y > y && this.anchorPoint.x > x) ||
+            (this.anchorPoint.y === y && this.anchorPoint.x > x) ||
+            (this.anchorPoint.y > y && this.anchorPoint.x === x)
+        ) {
+            this.points.push(new this.Point(this.anchorPoint.x, this.anchorPoint.y));
+            this.anchorPoint = new this.Point(x, y);
+            return;
+        }
+
+        this.points.push(new this.Point(x, y));
+    },
+
+    _sortPoints: function () {
+        var self = this;
+
+        return this.points.sort(function (a, b) {
+            var polarA = self._findPolarAngle(self.anchorPoint, a);
+            var polarB = self._findPolarAngle(self.anchorPoint, b);
+
+            if (polarA < polarB) {
+                return -1;
+            }
+            if (polarA > polarB) {
+                return 1;
+            }
+
+            return 0;
+        });
+    },
+
+    _checkPoints: function (p0, p1, p2) {
+        var difAngle;
+        var cwAngle = this._findPolarAngle(p0, p1);
+        var ccwAngle = this._findPolarAngle(p0, p2);
+
+        if (cwAngle > ccwAngle) {
+
+            difAngle = cwAngle - ccwAngle;
+
+            return !(difAngle > 180);
+
+        } else if (cwAngle < ccwAngle) {
+
+            difAngle = ccwAngle - cwAngle;
+
+            return (difAngle > 180);
+
+        }
+
+        return true;
+    },
+
+    getHull: function () {
+        var hullPoints = [],
+            points,
+            pointsLength;
+
+        this.reverse = this.points.every(function(point){
+            return (point.x < 0 && point.y < 0);
+        });
+
+        points = this._sortPoints();
+        pointsLength = points.length;
+
+        //If there are less than 3 points, joining these points creates a correct hull.
+        if (pointsLength < 3) {
+            points.unshift(this.anchorPoint);
+            return points;
+        }
+
+        //move first two points to output array
+        hullPoints.push(points.shift(), points.shift());
+
+        //scan is repeated until no concave points are present.
+        while (true) {
+            var p0,
+                p1,
+                p2;
+
+            hullPoints.push(points.shift());
+
+            p0 = hullPoints[hullPoints.length - 3];
+            p1 = hullPoints[hullPoints.length - 2];
+            p2 = hullPoints[hullPoints.length - 1];
+
+            if (this._checkPoints(p0, p1, p2)) {
+                hullPoints.splice(hullPoints.length - 2, 1);
+            }
+
+            if (points.length == 0) {
+                if (pointsLength == hullPoints.length) {
+                    //check for duplicate anchorPoint edge-case, if not found, add the anchorpoint as the first item.
+                    var ap = this.anchorPoint;
+                    //remove any udefined elements in the hullPoints array.
+                    hullPoints = hullPoints.filter(function(p) { return !!p; });
+                    if (!hullPoints.some(function(p){
+                            return(p.x == ap.x && p.y == ap.y);
+                        })) {
+                        hullPoints.unshift(this.anchorPoint);
+                    }
+                    return hullPoints;
+                }
+                points = hullPoints;
+                pointsLength = points.length;
+                hullPoints = [];
+                hullPoints.push(points.shift(), points.shift());
+            }
+        }
+    }
+};
+
+// EXPORTS
+
+if (typeof define === 'function' && define.amd) {
+    define(function() {
+        return ConvexHullGrahamScan;
+    });
+}
+if (typeof module !== 'undefined') {
+    module.exports = ConvexHullGrahamScan;
+}
+
 /**
  * @author Kyle Florence <kyle[dot]florence[at]gmail[dot]com>
  * @website https://github.com/kflorence/jquery-deserialize/

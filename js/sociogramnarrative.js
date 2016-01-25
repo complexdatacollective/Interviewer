@@ -75,12 +75,12 @@ module.exports = function sociogramNarrative() {
 		edges: [
 			{
 				types:['negative'],
-				keyLabel: 'People who don\'t get on',
+				keyLabel: 'Don\'t get on',
 				stroke: '#e85657'
 			},
 			{
 				types:['social'],
-				keyLabel: 'People who spend time together',
+				keyLabel: 'Spend time together',
 				stroke: '#01a6c7'
 			}
 		],
@@ -150,6 +150,7 @@ module.exports = function sociogramNarrative() {
 				$('#'+settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
 			}
 
+			// Set node states
 			sociogramNarrative.addNodeData();
 
 			// Add the evevent listeners
@@ -214,6 +215,9 @@ module.exports = function sociogramNarrative() {
 		note.info('sociogramNarrative.destroy();');
 		stage.destroy();
 		window.tools.Events.unbind(moduleEvents);
+
+		$('#accordion').off('hidden.bs.collapse', toggleChevron);
+		$('#accordion').off('shown.bs.collapse', toggleChevron);
 	};
 
 	sociogramNarrative.addNodeData = function() {
@@ -322,15 +326,201 @@ module.exports = function sociogramNarrative() {
 
 	};
 
+	sociogramNarrative.drawUIComponents = function (callback) {
+
+		// Load the image
+		var imageObj = new Image();
+		imageObj.src = 'img/drag-text.png';
+		imageObj.onload = function() {
+
+			// New node button
+			$('#'+settings.targetEl).append('<div class="reset-state-button text-center"><span class="fa fa-2x fa-refresh"></span></div>');
+
+			// Key panel
+			$('#'+settings.targetEl).append('<div class="key-panel" id="accordion" role="tablist" aria-multiselectable="true"></div>');
+
+			$('.key-panel').append(`
+
+				<div class="">
+					<div class="panel-heading" role="tab" id="headingOne">
+						<h5>
+							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							Links
+							<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+						</h5>
+					</div>
+					<div id="collapseOne" class="links-panel panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+
+					</div>
+				</div>
+				<div class="">
+					<div class="panel-heading" role="tab" id="headingTwo">
+						<h5>
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+							Highlighted
+							<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+						</h5>
+					</div>
+					<div id="collapseTwo" class="nodes-panel panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+
+					</div>
+				</div>
+				<div class="">
+					<div class="panel-heading" role="tab" id="headingThree">
+						<h5>
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							Contexts
+							<i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
+						</h5>
+					</div>
+					<div id="collapseThree" class="contexts-panel panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+					</div>
+				</div>
+				<div class="row">
+					<button class="btn btn-primary btn-sm pull-right change">Change <span class="fa fa-arrow-right"></span></button>
+				</div>
+			`);
+
+
+			// Draw all UI components
+			var previousSkew = 0;
+			var circleFills, circleLines;
+			var currentColor = settings.options.concentricCircleColor;
+			var totalHeight = window.innerHeight-(settings.options.defaultNodeSize); // Our sociogram area is the window height minus twice the node radius (for spacing)
+			var currentOpacity = 0.1;
+
+			//draw concentric circles
+			for(var i = 0; i < settings.options.concentricCircleNumber; i++) {
+				var ratio = (1-(i/settings.options.concentricCircleNumber));
+				var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
+				var currentRadius = totalHeight/2 * ratio;
+				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
+				previousSkew = skew;
+				circleLines = new Konva.Circle({
+					x: window.innerWidth / 2,
+					y: window.innerHeight / 2,
+					radius: currentRadius,
+					hitGraphEnabled: false,
+					stroke: 'white',
+					strokeWidth: 1.5,
+					opacity: 0
+				});
+
+				circleFills = new Konva.Circle({
+					x: window.innerWidth / 2,
+					y: (window.innerHeight / 2),
+					radius: currentRadius,
+					fill: currentColor,
+					hitGraphEnabled: false,
+					opacity: currentOpacity,
+					strokeWidth: 0,
+				});
+
+				// currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();
+				currentOpacity = currentOpacity+((0.3-currentOpacity)/settings.options.concentricCircleNumber);
+				circleLayer.add(circleFills);
+				circleLayer.add(circleLines);
+
+			}
+
+			// Draw 'me'
+			if (settings.options.showMe === true) {
+
+				var meCircle = new Konva.Circle({
+					radius: 50,
+					x: window.innerWidth / 2,
+					y: window.innerHeight / 2,
+					hitGraphEnabled: false,
+					fill: '#D0D2DC',
+				});
+
+				var meText = new Konva.Text({
+					x: window.innerWidth / 2,
+					y: window.innerHeight / 2,
+					text: 'me',
+					align: 'center',
+					offset: {x:28,y:22},
+					fontSize: 40,
+					fontFamily: 'Helvetica',
+					fill: 'black'
+				 });
+				circleLayer.add(meCircle);
+				circleLayer.add(meText);
+			}
+
+			circleLayer.draw();
+
+			note.debug('User interface initialised.');
+
+			if (callback) {
+				callback();
+			}
+		};
+	};
+
+	sociogramNarrative.updateKeyPanel = function() {
+		var markup = '';
+		var panel;
+
+		// Links panel
+		panel = $('.links-panel');
+		if (typeof settings.edges !== 'undefined' && typeof settings.edges === 'object') {
+			$.each(settings.edges, function(edgeIndex, edgeValue) {
+				markup = `<div class="key-panel-row row">
+					<div class="col-md-3 key-panel-icon edge-key-icon">
+						<svg class="panel-icon edge-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<g>
+								<line style="stroke:${edgeValue.stroke};fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
+								<line style="stroke:${edgeValue.stroke};fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
+								<circle style="fill:#F1F2F2;" cx="48.25" cy="251.75" r="47.25"/>
+								<circle style="fill:#F1F2F2;" cx="251.75" cy="48.25" r="47.25"/>
+								<circle style="fill:#F1F2F2;" cx="48.25" cy="48.25" r="47.25"/>
+							</g>
+						</svg>
+					</div>
+					<div class="col-md-9 key-panel-text edge-key-text">
+						<span class="edge-key-label">${edgeValue.keyLabel}</span>
+					</div>
+				</div>`;
+
+				panel.append(markup);
+			});
+
+		}
+
+
+		// Node panel
+		panel = $('.nodes-panel');
+		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
+			$.each(settings.selected, function(selectedIndex, selectedValue) {
+				markup = `<div class="key-panel-row row">
+						<div class="col-md-3 key-panel-icon node-key-icon">
+							<svg class="panel-icon node-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								 viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<circle style="stroke:${selectedValue.color};fill:#FFFFFF;stroke-width:40;stroke-miterlimit:10;" cx="150" cy="150" r="108.333"/>
+							</svg>
+						</div>
+						<div class="col-md-9 key-panel-text node-key-text">
+							<span class="node-key-label">${selectedValue.label}</span>
+						</div>
+					</div>`;
+
+				panel.append(markup);
+			});
+
+		}
+
+	};
+
 	sociogramNarrative.updateState = function() {
 		/**
 		* Updates visible attributes based on current prompt task
 		*/
+		var nodes = settings.network.getNodes();
+		var edges = settings.network.getEdges();
 
 		// Edges
 		if (typeof settings.edges !== 'undefined' && typeof settings.edges === 'object') {
-			// get all edges in preparation
-			var edges = settings.network.getEdges();
 
 			// Iterate over settings.edge
 			$.each(settings.edges, function(index, value) {
@@ -352,20 +542,17 @@ module.exports = function sociogramNarrative() {
 		edgeLayer.draw();
 
 		// Selected nodes
+
 		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
 			console.log('selectedmode');
-			var nodes = settings.network.getNodes();
 			// Iterate over select settings
 			$.each(settings.selected, function(index, value) {
 
 				// Iterate over nodes
 				$.each(nodes, function(index, node) {
-					console.log('testing node '+index);
-					console.log(node);
 					// If any of value.variables = 1, select node
 					var found = false;
 					$.each(value.variables, function(valueIndex, valueValue) {
-						console.log('looking for '+valueValue);
 						if (typeof node[valueValue] !== 'undefined' && node[valueValue] === 'true') {
 							console.log('found');
 							found = true;
@@ -374,7 +561,6 @@ module.exports = function sociogramNarrative() {
 
 					// this node is selected
 					if (found) {
-						console.log('selecting node');
 						var sociogramNode = sociogramNarrative.getNodeByID(node.id);
 						sociogramNode.children[1].stroke(value.color);
 					}
@@ -384,26 +570,44 @@ module.exports = function sociogramNarrative() {
 
 			nodeLayer.draw();
 		}
-		//
-		// } else if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'string' && settings.prompts[currentPrompt].showSelected === 'multiple'){
-		// 	// special mode where we show selected nodes from multiple variables to help with edge creation.
-		// 	var selectNodes = settings.network.getNodes();
-		// 	var variables = settings.prompts[currentPrompt].selectVariables;
-		// 	$.each(selectNodes, function(index, node) {
-		// 		for (var variable in variables) {
-		// 			var currentValue = node[variables[variable]];
-		// 			console.log(node);
-		// 			console.log(variable);
-		// 			if (currentValue) {
-		// 				// this node is selected
-		// 				var sociogramNode = sociogramNarrative.getNodeByID(node.id);
-		// 				sociogramNode.children[1].stroke(colors.selected);
-		// 			}
-		// 		}
-		// 	});
-		//
-		// 	nodeLayer.draw();
-		// }
+
+		// Node sizing
+		if (typeof settings.size !== 'undefined' && typeof settings.size === 'object') {
+			var high = 0;
+			var low = 0;
+			// Iterate over nodes
+			$.each(nodes, function(index, node) {
+				if (node.type !== 'Ego') {
+					var nodeTotal = 0;
+
+					$.each(settings.size, function(sizeIndex, sizeValue) {
+						if (typeof node[sizeValue] !== 'undefined') {
+							nodeTotal += node[sizeValue];
+						}
+					});
+
+					nodeTotal = nodeTotal > 0 ? nodeTotal : 0;
+
+					high = nodeTotal > high ? nodeTotal : high;
+					low = nodeTotal < low ? nodeTotal : low;
+
+
+
+					// set size of the node as proporton of range
+					var sociogramNode = sociogramNarrative.getNodeByID(node.id);
+
+					// make low 0.85 of default
+					// make high 1.5 of default
+					var range = high;
+					var nodeProportion = (nodeTotal/range);
+					var nodeRatio = 0.85 + (nodeProportion * 0.65);
+					var ratio = nodeRatio * settings.options.defaultNodeSize;
+					sociogramNode.children[1].setAttr('radius', ratio);
+				}
+			});
+
+			nodeLayer.draw();
+		}
 
 	};
 
@@ -461,6 +665,26 @@ module.exports = function sociogramNarrative() {
 				}
 
 			}
+
+			// Contexts panel
+			var panel = $('.contexts-panel');
+			var markup = `<div class="key-panel-row row">
+				<div class="col-md-3 key-panel-icon context-key-icon">
+				<svg class="panel-icon context-icon camp" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+				<g>
+						<path style="fill:${color}" d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
+						<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
+						<circle style="fill:#FFFFFF;" cx="69.357" cy="224.153" r="43.677"/>
+						<circle style="fill:#FFFFFF;" cx="230.991" cy="224.153" r="43.677"/>
+				</g>
+				</svg>
+				</div>
+				<div class="col-md-9 key-panel-text context-key-text">
+					<span class="context-key-label">${label}</span>
+				</div>
+			</div>`;
+
+			panel.append(markup);
 
 		}
 
@@ -1217,243 +1441,6 @@ module.exports = function sociogramNarrative() {
 
 	sociogramNarrative.getModuleEvents = function() {
 		return moduleEvents;
-	};
-
-	sociogramNarrative.drawUIComponents = function (callback) {
-
-		// Load the image
-		var imageObj = new Image();
-		imageObj.src = 'img/drag-text.png';
-		imageObj.onload = function() {
-
-			// New node button
-			$('#'+settings.targetEl).append('<div class="reset-state-button text-center"><span class="fa fa-2x fa-refresh"></span></div>');
-
-			// Key panel
-			$('#'+settings.targetEl).append('<div class="key-panel" id="accordion" role="tablist" aria-multiselectable="true"></div>');
-
-			$('.key-panel').append(`
-
-				<div class="">
-				    <div class="panel-heading" role="tab" id="headingOne">
-				        <h5>
-				            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				            Links
-				            <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
-				        </h5>
-				    </div>
-				    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon edge-key-icon">
-								<svg class="panel-icon edge-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-									<g>
-										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
-										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
-										<circle style="fill:#F1F2F2;" cx="48.25" cy="251.75" r="47.25"/>
-										<circle style="fill:#F1F2F2;" cx="251.75" cy="48.25" r="47.25"/>
-										<circle style="fill:#F1F2F2;" cx="48.25" cy="48.25" r="47.25"/>
-									</g>
-								</svg>
-							</div>
-							<div class="col-md-9 key-panel-text edge-key-text">
-								<span class="edge-key-label">Spend time together</span>
-							</div>
-						</div>
-							<div class="key-panel-row row">
-								<div class="col-md-3 key-panel-icon edge-key-icon">
-									<svg class="panel-icon edge-icon negative" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-										<g>
-											<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
-											<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
-											<circle style="fill:#F1F2F2;" cx="48.25" cy="251.75" r="47.25"/>
-											<circle style="fill:#F1F2F2;" cx="251.75" cy="48.25" r="47.25"/>
-											<circle style="fill:#F1F2F2;" cx="48.25" cy="48.25" r="47.25"/>
-										</g>
-									</svg>
-								</div>
-								<div class="col-md-9 key-panel-text edge-key-text">
-									<span class="edge-key-label">Don't get along</span>
-								</div>
-							</div>
-				    </div>
-				</div>
-				<div class="">
-				    <div class="panel-heading" role="tab" id="headingTwo">
-				        <h5>
-				            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-				            Highlighted
-				            <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
-				        </h5>
-				    </div>
-				    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon node-key-icon">
-								<svg class="panel-icon node-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									 viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-								<circle id="XMLID_1_" style="fill:#FFFFFF;stroke-width:60;stroke-miterlimit:10;" cx="150" cy="150" r="108.333"/>
-								</svg>
-							</div>
-							<div class="col-md-9 key-panel-text node-key-text">
-								<span class="node-key-label">Gave me advice</span>
-							</div>
-						</div>
-				    </div>
-				</div>
-				<div class="">
-				    <div class="panel-heading" role="tab" id="headingThree">
-				        <h5>
-				            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-				            Contexts
-				            <i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
-				        </h5>
-				    </div>
-				    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon context-key-icon">
-							<svg class="panel-icon context-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-							<g>
-									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
-									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
-									<circle style="fill:#FFFFFF;" cx="69.357" cy="224.153" r="43.677"/>
-									<circle style="fill:#FFFFFF;" cx="230.991" cy="224.153" r="43.677"/>
-							</g>
-							</svg>
-							</div>
-							<div class="col-md-9 key-panel-text context-key-text">
-								<span class="context-key-label">Friends from home</span>
-							</div>
-						</div>
-
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon context-key-icon">
-							<svg class="panel-icon context-icon lcil" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-							<g>
-									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
-									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
-									<circle style="fill:#FFFFFF;" cx="69.357" cy="224.153" r="43.677"/>
-									<circle style="fill:#FFFFFF;" cx="230.991" cy="224.153" r="43.677"/>
-							</g>
-							</svg>
-							</div>
-							<div class="col-md-9 key-panel-text context-key-text">
-								<span class="context-key-label">LCiL</span>
-							</div>
-						</div>
-
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon context-key-icon">
-							<svg class="panel-icon context-icon university" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-							<g>
-									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
-									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
-									<circle style="fill:#FFFFFF;" cx="69.357" cy="224.153" r="43.677"/>
-									<circle style="fill:#FFFFFF;" cx="230.991" cy="224.153" r="43.677"/>
-							</g>
-							</svg>
-							</div>
-							<div class="col-md-9 key-panel-text context-key-text">
-								<span class="context-key-label">University</span>
-							</div>
-						</div>
-
-						<div class="key-panel-row row">
-							<div class="col-md-3 key-panel-icon context-key-icon">
-							<svg class="panel-icon context-icon camp" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-							<g>
-									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
-									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
-									<circle style="fill:#FFFFFF;" cx="69.357" cy="224.153" r="43.677"/>
-									<circle style="fill:#FFFFFF;" cx="230.991" cy="224.153" r="43.677"/>
-							</g>
-							</svg>
-							</div>
-							<div class="col-md-9 key-panel-text context-key-text">
-								<span class="context-key-label">Camp</span>
-							</div>
-						</div>
-				    </div>
-					<div class="row">
-						<button class="btn btn-primary btn-sm pull-right change">Change <span class="fa fa-arrow-right"></span></button>
-					</div>
-				</div>
-
-			`);
-
-
-			// Draw all UI components
-			var previousSkew = 0;
-			var circleFills, circleLines;
-			var currentColor = settings.options.concentricCircleColor;
-			var totalHeight = window.innerHeight-(settings.options.defaultNodeSize); // Our sociogram area is the window height minus twice the node radius (for spacing)
-			var currentOpacity = 0.1;
-
-			//draw concentric circles
-			for(var i = 0; i < settings.options.concentricCircleNumber; i++) {
-				var ratio = (1-(i/settings.options.concentricCircleNumber));
-				var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
-				var currentRadius = totalHeight/2 * ratio;
-				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
-				previousSkew = skew;
-				circleLines = new Konva.Circle({
-					x: window.innerWidth / 2,
-					y: window.innerHeight / 2,
-					radius: currentRadius,
-					hitGraphEnabled: false,
-					stroke: 'white',
-					strokeWidth: 1.5,
-					opacity: 0
-				});
-
-				circleFills = new Konva.Circle({
-					x: window.innerWidth / 2,
-					y: (window.innerHeight / 2),
-					radius: currentRadius,
-					fill: currentColor,
-					hitGraphEnabled: false,
-					opacity: currentOpacity,
-					strokeWidth: 0,
-				});
-
-				// currentColor = tinycolor.darken(currentColor, amount = 15).toHexString();
-				currentOpacity = currentOpacity+((0.3-currentOpacity)/settings.options.concentricCircleNumber);
-				circleLayer.add(circleFills);
-				circleLayer.add(circleLines);
-
-			}
-
-			// Draw 'me'
-			if (settings.options.showMe === true) {
-
-				var meCircle = new Konva.Circle({
-					radius: 50,
-					x: window.innerWidth / 2,
-					y: window.innerHeight / 2,
-					hitGraphEnabled: false,
-					fill: '#D0D2DC',
-				});
-
-				var meText = new Konva.Text({
-					x: window.innerWidth / 2,
-					y: window.innerHeight / 2,
-					text: 'me',
-					align: 'center',
-					offset: {x:28,y:22},
-					fontSize: 40,
-					fontFamily: 'Helvetica',
-					fill: 'black'
-				 });
-				circleLayer.add(meCircle);
-				circleLayer.add(meText);
-			}
-
-			circleLayer.draw();
-
-			note.debug('User interface initialised.');
-
-			if (callback) {
-				callback();
-			}
-		};
 	};
 
 	// Get & set functions
