@@ -18,7 +18,8 @@
   "dependencies": {
     "nedb": "latest",
     "nw": "^0.12.3",
-    "requirejs": "latest"
+    "requirejs": "latest",
+    "tmp": "0.0.28"
   },
   "devDependencies": {
     "autoprefixer": "latest",

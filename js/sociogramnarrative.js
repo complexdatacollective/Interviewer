@@ -6,7 +6,7 @@ module.exports = function sociogramNarrative() {
 	'use strict';
 	// Global variables
 	var stage = {}, circleLayer = {}, edgeLayer = {}, nodeLayer = {}, wedgeLayer = {}, hullLayer = {}, hullShapes = {}, uiLayer = {}, sociogramNarrative = {};
-	var moduleEvents = [], selectedNodes = [];
+	var moduleEvents = [], selectedNodes = [], hulls = [];
 	sociogramNarrative.selectedNode = null;
 	var newNodeCircleTween, log;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
@@ -71,7 +71,33 @@ module.exports = function sociogramNarrative() {
 	        includeEgo: false,
 	        query: {
 	        }
-	    }
+	    },
+		edges: [
+			{
+				types:['negative'],
+				keyLabel: 'People who don\'t get on',
+				stroke: '#e85657'
+			},
+			{
+				types:['social'],
+				keyLabel: 'People who spend time together',
+				stroke: '#01a6c7'
+			}
+		],
+		selected: [
+			{
+				variables: ['advice_refused', 'advice_negative', 'info_refused', 'support_failed'],
+				label: 'Had a negative interaction with',
+				color: '#e85657'
+			},
+			{
+				variables: ['advice_given'],
+				label: 'Got advice from',
+				color: '#01a6c7'
+			}
+
+		],
+		size: ['ord_stress']
 	};
 
 	// Private functions
@@ -124,11 +150,6 @@ module.exports = function sociogramNarrative() {
 				$('#'+settings.targetEl).append('<input class="show-contexts-checkbox" type="checkbox" name="context-checkbox-show" id="context-checkbox-show"> <label for="context-checkbox-show">Contexts shown</label>');
 			}
 
-			// Panels
-			if (settings.panels.indexOf('details') !== -1) {
-				$('<div class="details-panel"><div class="context-header"><h4>Details</h4></div><ul class="list-group context-list"></ul><div class="context-footer"><div class="pull-left new-group-button"><span class="fa fa-plus-circle"></span> New context</div></div></div>').appendTo('#'+settings.targetEl);
-			}
-
 			sociogramNarrative.addNodeData();
 
 			// Add the evevent listeners
@@ -139,6 +160,13 @@ module.exports = function sociogramNarrative() {
 
 		});
 	};
+
+	function toggleChevron(e) {
+		$(e.target)
+			.prev('.panel-heading')
+			.find('i.indicator')
+			.toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+	}
 
 	sociogramNarrative.bindEvents = function() {
 		// Events
@@ -176,6 +204,9 @@ module.exports = function sociogramNarrative() {
 			}
 		];
 		window.tools.Events.register(moduleEvents, event);
+
+		$('#accordion').on('hidden.bs.collapse', toggleChevron);
+		$('#accordion').on('shown.bs.collapse', toggleChevron);
 
 	};
 
@@ -296,60 +327,83 @@ module.exports = function sociogramNarrative() {
 		* Updates visible attributes based on current prompt task
 		*/
 
-		// Edge Mode
-		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showEdges === 'object' && typeof settings.prompts[currentPrompt].showEdges.criteria === 'object') {
+		// Edges
+		if (typeof settings.edges !== 'undefined' && typeof settings.edges === 'object') {
+			// get all edges in preparation
+			var edges = settings.network.getEdges();
 
-			var properties = {};
-			$.each(settings.prompts[currentPrompt].showEdges.criteria, function(index, value) {
-				properties[value.label] = value.value;
-			});
-			var edges = settings.network.getEdges(properties);
-			$.each(edges, function(index, edge) {
-				if (typeof settings.prompts[currentPrompt].showEdges.options === 'object') {
-					console.log('%c edge options!','background: #222; color: #bada55');
-					sociogramNarrative.addEdge(edge, settings.prompts[currentPrompt].showEdges.options);
-				} else {
-					sociogramNarrative.addEdge(edge);
-				}
-
-			});
-
-		}
-
-		// Select Mode
-		if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'object') {
-
-			var selectNodes = settings.network.getNodes();
-			$.each(selectNodes, function(index, node) {
-				var currentValue = node[settings.prompts[currentPrompt].showSelected.variable];
-				if (currentValue == settings.prompts[currentPrompt].showSelected.value) {
-					// this node is selected
-					var sociogramNode = sociogramNarrative.getNodeByID(node.id);
-					sociogramNode.children[1].stroke(colors.selected);
-				}
-			});
-
-			nodeLayer.draw();
-
-		} else if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'string' && settings.prompts[currentPrompt].showSelected === 'multiple'){
-			// special mode where we show selected nodes from multiple variables to help with edge creation.
-			var selectNodes = settings.network.getNodes();
-			var variables = settings.prompts[currentPrompt].selectVariables;
-			$.each(selectNodes, function(index, node) {
-				for (var variable in variables) {
-					var currentValue = node[variables[variable]];
-					console.log(node);
-					console.log(variable);
-					if (currentValue) {
-						// this node is selected
-						var sociogramNode = sociogramNarrative.getNodeByID(node.id);
-						sociogramNode.children[1].stroke(colors.selected);
+			// Iterate over settings.edge
+			$.each(settings.edges, function(index, value) {
+				// Now iterate over all edges
+				$.each(edges, function(index, edge) {
+					// For each edge, check if it is of the type indicated in settings.edges
+					if (value.types.indexOf(edge.type) !== -1) {
+						var options = {
+							stroke: value.stroke
+						};
+						sociogramNarrative.addEdge(edge, options);
 					}
-				}
+
+				});
+			});
+
+		}
+
+		edgeLayer.draw();
+
+		// Selected nodes
+		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
+			console.log('selectedmode');
+			var nodes = settings.network.getNodes();
+			// Iterate over select settings
+			$.each(settings.selected, function(index, value) {
+
+				// Iterate over nodes
+				$.each(nodes, function(index, node) {
+					console.log('testing node '+index);
+					console.log(node);
+					// If any of value.variables = 1, select node
+					var found = false;
+					$.each(value.variables, function(valueIndex, valueValue) {
+						console.log('looking for '+valueValue);
+						if (typeof node[valueValue] !== 'undefined' && node[valueValue] === 'true') {
+							console.log('found');
+							found = true;
+						}
+					});
+
+					// this node is selected
+					if (found) {
+						console.log('selecting node');
+						var sociogramNode = sociogramNarrative.getNodeByID(node.id);
+						sociogramNode.children[1].stroke(value.color);
+					}
+
+				});
 			});
 
 			nodeLayer.draw();
 		}
+		//
+		// } else if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showSelected === 'string' && settings.prompts[currentPrompt].showSelected === 'multiple'){
+		// 	// special mode where we show selected nodes from multiple variables to help with edge creation.
+		// 	var selectNodes = settings.network.getNodes();
+		// 	var variables = settings.prompts[currentPrompt].selectVariables;
+		// 	$.each(selectNodes, function(index, node) {
+		// 		for (var variable in variables) {
+		// 			var currentValue = node[variables[variable]];
+		// 			console.log(node);
+		// 			console.log(variable);
+		// 			if (currentValue) {
+		// 				// this node is selected
+		// 				var sociogramNode = sociogramNarrative.getNodeByID(node.id);
+		// 				sociogramNode.children[1].stroke(colors.selected);
+		// 			}
+		// 		}
+		// 	});
+		//
+		// 	nodeLayer.draw();
+		// }
 
 	};
 
@@ -366,7 +420,7 @@ module.exports = function sociogramNarrative() {
 			thisHull.label = label;
 	        thisHull.hull = new ConvexHullGrahamScan();
 
-			var color = hullColors[$('.list-group-item').length];
+			var color = hullColors[hulls.length];
 
 	        var hullShape = new Konva.Line({
 	          points: [window.outerWidth/2, window.outerHeight/2],
@@ -382,8 +436,7 @@ module.exports = function sociogramNarrative() {
 	          closed : true
 	        });
 			hullShapes[label] = hullShape;
-			$('.context-list').append('<li class="list-group-item hull" data-hull="'+thisHull.label+'"><div class="context-color" style="background:'+color+'"></div> <span class="context-label">'+thisHull.label+'</span> <span class="pull-right fa fa-pencil"></span></li>');
-			// $('.context-list').scrollTo('li[data-hull="'+thisHull.label+'"]', 500);
+			hulls.push(thisHull.label);
 	        hullLayer.add(hullShapes[label]);
 			hullLayer.opacity(0);
 	        hullLayer.draw();
@@ -415,7 +468,7 @@ module.exports = function sociogramNarrative() {
 
 	sociogramNarrative.hullExists = function(hullLabel) {
 		var found = false;
-		if ($('li[data-hull="'+hullLabel+'"]').length > 0) {
+		if (hulls.indexOf(hullLabel) !== -1) {
 			found = true;
 		}
 		return found;
@@ -674,7 +727,11 @@ module.exports = function sociogramNarrative() {
 						newHull.addPoint(coords.x, coords.y);
 					}
 				}
-				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				var hull = newHull.getHull();
+				console.log(hull);
+				var pointFromObject = toPointFromObject(hull);
+				console.log(pointFromObject);
+				hullShapes[pointHulls[i]].setPoints(pointFromObject);
 				hullLayer.batchDraw();
 
 			}
@@ -717,8 +774,12 @@ module.exports = function sociogramNarrative() {
 						newHull.addPoint(coords.x, coords.y);
 					}
 				}
-
-				hullShapes[pointHulls[i]].setPoints(toPointFromObject(newHull.getHull()));
+				console.log(newHull);
+				var hull = newHull.getHull();
+				console.log(hull);
+				var pointFromObject = toPointFromObject(hull);
+				console.log(pointFromObject);
+				hullShapes[pointHulls[i]].setPoints(pointFromObject);
 				hullLayer.batchDraw();
 
 			}
@@ -806,9 +867,6 @@ module.exports = function sociogramNarrative() {
 
 			if (!touchNotTap) { /** check we aren't in the middle of a touch */
 
-				/** Conduct all tap actions inside a short timeout to give space for a double tap event to cancel it. */
-
-					window.clearTimeout(longPressTimer);
 					if (taskComprehended === false) {
 						var eventProperties = {
 							stage: window.netCanvas.Modules.session.currentStage(),
@@ -1178,16 +1236,16 @@ module.exports = function sociogramNarrative() {
 
 				<div class="">
 				    <div class="panel-heading" role="tab" id="headingOne">
-				        <h4 class="panel-title">
+				        <h5>
 				            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 				            Links
-				            </a>
-				        </h4>
+				            <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+				        </h5>
 				    </div>
 				    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 						<div class="key-panel-row row">
-							<div class="col-md-3 edge-key-icon">
-								<svg class="edge-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<div class="col-md-3 key-panel-icon edge-key-icon">
+								<svg class="panel-icon edge-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 									<g>
 										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
 										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
@@ -1197,13 +1255,13 @@ module.exports = function sociogramNarrative() {
 									</g>
 								</svg>
 							</div>
-							<div class="col-md-9 edge-key-text">
+							<div class="col-md-9 key-panel-text edge-key-text">
 								<span class="edge-key-label">Spend time together</span>
 							</div>
 						</div>
 							<div class="key-panel-row row">
-								<div class="col-md-3 edge-key-icon">
-									<svg class="edge-icon negative" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+								<div class="col-md-3 key-panel-icon edge-key-icon">
+									<svg class="panel-icon edge-icon negative" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 										<g>
 											<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
 											<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
@@ -1213,7 +1271,7 @@ module.exports = function sociogramNarrative() {
 										</g>
 									</svg>
 								</div>
-								<div class="col-md-9 edge-key-text">
+								<div class="col-md-9 key-panel-text edge-key-text">
 									<span class="edge-key-label">Don't get along</span>
 								</div>
 							</div>
@@ -1221,43 +1279,38 @@ module.exports = function sociogramNarrative() {
 				</div>
 				<div class="">
 				    <div class="panel-heading" role="tab" id="headingTwo">
-				        <h4 class="panel-title">
-				            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				        <h5>
+				            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
 				            Highlighted
-				            </a>
-				        </h4>
+				            <i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+				        </h5>
 				    </div>
-				    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
 						<div class="key-panel-row row">
-							<div class="col-md-3 node-key-icon">
-								<svg class="node-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
-									<g>
-										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="252.815" x2="255.998" y2="48.25"/>
-										<line style="fill:none;stroke-width:25;stroke-miterlimit:10;" x1="48.25" y1="48.25" x2="255.998" y2="48.25"/>
-										<circle style="fill:#F1F2F2;" cx="48.25" cy="251.75" r="47.25"/>
-										<circle style="fill:#F1F2F2;" cx="251.75" cy="48.25" r="47.25"/>
-										<circle style="fill:#F1F2F2;" cx="48.25" cy="48.25" r="47.25"/>
-									</g>
+							<div class="col-md-3 key-panel-icon node-key-icon">
+								<svg class="panel-icon node-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+									 viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+								<circle id="XMLID_1_" style="fill:#FFFFFF;stroke-width:60;stroke-miterlimit:10;" cx="150" cy="150" r="108.333"/>
 								</svg>
 							</div>
-							<div class="col-md-9 node-key-text">
-								<span class="node-key-label">Spend time together</span>
+							<div class="col-md-9 key-panel-text node-key-text">
+								<span class="node-key-label">Gave me advice</span>
 							</div>
 						</div>
 				    </div>
 				</div>
 				<div class="">
 				    <div class="panel-heading" role="tab" id="headingThree">
-				        <h4 class="panel-title">
+				        <h5>
 				            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-				            Collapsible Group Item #3
-				            </a>
-				        </h4>
+				            Contexts
+				            <i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
+				        </h5>
 				    </div>
 				    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 						<div class="key-panel-row row">
-							<div class="col-md-3 context-key-icon">
-							<svg class="context-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<div class="col-md-3 key-panel-icon context-key-icon">
+							<svg class="panel-icon context-icon social" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 							<g>
 									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
 									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
@@ -1266,14 +1319,14 @@ module.exports = function sociogramNarrative() {
 							</g>
 							</svg>
 							</div>
-							<div class="col-md-9 context-key-text">
+							<div class="col-md-9 key-panel-text context-key-text">
 								<span class="context-key-label">Friends from home</span>
 							</div>
 						</div>
 
 						<div class="key-panel-row row">
-							<div class="col-md-3 context-key-icon">
-							<svg class="context-icon lcil" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<div class="col-md-3 key-panel-icon context-key-icon">
+							<svg class="panel-icon context-icon lcil" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 							<g>
 									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
 									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
@@ -1282,14 +1335,14 @@ module.exports = function sociogramNarrative() {
 							</g>
 							</svg>
 							</div>
-							<div class="col-md-9 context-key-text">
+							<div class="col-md-9 key-panel-text context-key-text">
 								<span class="context-key-label">LCiL</span>
 							</div>
 						</div>
 
 						<div class="key-panel-row row">
-							<div class="col-md-3 context-key-icon">
-							<svg class="context-icon university" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<div class="col-md-3 key-panel-icon context-key-icon">
+							<svg class="panel-icon context-icon university" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 							<g>
 									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
 									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
@@ -1298,14 +1351,14 @@ module.exports = function sociogramNarrative() {
 							</g>
 							</svg>
 							</div>
-							<div class="col-md-9 context-key-text">
+							<div class="col-md-9 key-panel-text context-key-text">
 								<span class="context-key-label">University</span>
 							</div>
 						</div>
 
 						<div class="key-panel-row row">
-							<div class="col-md-3 context-key-icon">
-							<svg class="context-icon camp" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
+							<div class="col-md-3 key-panel-icon context-key-icon">
+							<svg class="panel-icon context-icon camp" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 300 300" style="enable-background:new 0 0 300 300;" xml:space="preserve">
 							<g>
 									<path d="M76.495,285.593c-63.25,0-89.125-44.817-57.5-99.593L92.5,58.686c31.625-54.776,83.375-54.776,115,0L281.005,186c31.625,54.776,5.75,99.593-57.5,99.593H76.495z"/>
 									<circle style="fill:#FFFFFF;" cx="150" cy="83.675" r="44.761"/>
@@ -1314,13 +1367,13 @@ module.exports = function sociogramNarrative() {
 							</g>
 							</svg>
 							</div>
-							<div class="col-md-9 context-key-text">
+							<div class="col-md-9 key-panel-text context-key-text">
 								<span class="context-key-label">Camp</span>
 							</div>
 						</div>
 				    </div>
 					<div class="row">
-						<button class="btn btn-primary pull-right change">Change</button>
+						<button class="btn btn-primary btn-sm pull-right change">Change <span class="fa fa-arrow-right"></span></button>
 					</div>
 				</div>
 

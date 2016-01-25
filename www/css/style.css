@@ -12578,8 +12578,8 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   right: 20px;
   border-radius: 8px;
 }
-.edge-key-text {
-  line-height: 43px;
+.key-panel-text {
+  line-height: 52px;
   padding-left: 10px;
 }
 .reset-state-button {
@@ -12604,12 +12604,15 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
           justify-content: center;
   z-index: 20;
 }
-.edge-key-icon {
+.key-panel-icon {
   text-align: center;
 }
-svg.edge-icon {
+svg.key-panel-icon {
   width: 40px;
   height: 40px;
+}
+.node-icon circle {
+  stroke: #ffbf00;
 }
 .edge-icon.social line {
   stroke: #01a6c7;
@@ -12628,6 +12631,15 @@ svg.edge-icon {
 }
 .context-icon.camp path {
   fill: #FA920D;
+}
+a:hover,
+a:focus {
+  text-decoration: none;
+  color: #ffffff;
+}
+.key-panel .btn-sm,
+.btn-group-sm > .btn {
+  padding: 16.5px 15px;
 }
 html,
 body {

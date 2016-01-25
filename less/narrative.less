@@ -12,8 +12,8 @@
     // padding:14px;
 }
 
-.edge-key-text {
-    line-height: 43px;
+.key-panel-text {
+    line-height: 52px;
     padding-left:10px;
 }
 
@@ -31,13 +31,17 @@
     z-index: 20;
 }
 
-.edge-key-icon {
+.key-panel-icon {
     text-align: center;
 }
 
-svg.edge-icon {
+svg.key-panel-icon {
     width:40px;
     height:40px;
+}
+
+.node-icon circle {
+    stroke: #ffbf00;
 }
 
 .edge-icon.social line {
@@ -62,4 +66,13 @@ svg.edge-icon {
 
 .context-icon.camp path {
     fill: @brand-warning;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+    color: @link-color;
+}
+
+.key-panel .btn-sm, .btn-group-sm > .btn {
+    padding: 16.5px 15px;
 }

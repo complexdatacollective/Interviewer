@@ -16,7 +16,6 @@ module.exports = function (grunt) {
         distLinux32: 'build/Linux32',
         distLinux64: 'build/Linux64',
         distWin: 'build/Win',
-        tmp: 'build/tmp',
         resources: 'resources'
     };
 
@@ -78,8 +77,7 @@ module.exports = function (grunt) {
         },
         bower_concat: {
             all: {
-                dest: '<%= config.app %>/js/_bower.js',
-                dependencies: {}
+                dest: '<%= config.app %>/js/_bower.js'
                 // mainFiles: {
                     // 'graham_scan': 'src/graham_scan.js',
                 //     'bootstrap': 'dist/bootstrap.min.js',
