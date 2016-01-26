@@ -1,3 +1,7 @@
+.panel-heading {
+    padding: 5px 15px;
+}
+
 .key-panel {
     background: @panel-bg;
     width:300px;
@@ -6,6 +10,38 @@
     top: 20px;
     right: 20px;
     border-radius: @border-radius-base;
+    overflow: hidden;
+}
+
+.key-panel-initial {
+    transition: 0.5s all ease;
+    transform: translateX(-300px);
+    opacity:0;
+}
+
+.key-panel-initial.show {
+    transform: translateX(0);
+    opacity:1;
+}
+
+.key-panel-options {
+    transition: 0.5s all ease;
+    opacity:0;
+    transform: translateX(300px);
+    position:absolute;
+    top:0;
+    height:100%;
+    width:250px;
+}
+
+.key-panel-options.show {
+    transform: translateX(0);
+    opacity:1;
+}
+
+.key-panel-options .button-row {
+    position:absolute;
+    bottom: @padding-base-vertical;
 }
 
 .key-panel-row {
@@ -15,6 +51,21 @@
 .key-panel-text {
     height: 52px;
     padding-left:10px;
+    display:flex;
+    align-items:center;
+}
+
+// dropdown doesnt cover svg images for some reason
+.btn-group.bootstrap-select.open {
+    z-index:999;
+}
+
+.dropdown-menu {
+    font-size: 16px !important;
+}
+
+.dropdown-menu > li > a {
+    padding: 10px 20px;
 }
 
 .reset-state-button {
@@ -32,10 +83,16 @@
 }
 
 .key-panel-icon {
-    text-align: center;
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
 
-svg.key-panel-icon {
+.key-panel-row {
+    display: flex;
+}
+
+svg.panel-icon {
     width:40px;
     height:40px;
 }

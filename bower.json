@@ -34,6 +34,7 @@
     "jquery": "*",
     "ua-parser-js": "~0.7.9",
     "interact": "~1.2.6",
-    "jquery-touch-events": "~1.0.1"
+    "jquery-touch-events": "~1.0.1",
+    "bootstrap-select": "~1.9.4"
   }
 }

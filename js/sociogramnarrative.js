@@ -74,11 +74,6 @@ module.exports = function sociogramNarrative() {
 	    },
 		edges: [
 			{
-				types:['negative'],
-				keyLabel: 'Don\'t get on',
-				stroke: '#e85657'
-			},
-			{
 				types:['social'],
 				keyLabel: 'Spend time together',
 				stroke: '#01a6c7'
@@ -86,18 +81,13 @@ module.exports = function sociogramNarrative() {
 		],
 		selected: [
 			{
-				variables: ['advice_refused', 'advice_negative', 'info_refused', 'support_failed'],
-				label: 'Had a negative interaction with',
-				color: '#e85657'
-			},
-			{
 				variables: ['advice_given'],
 				label: 'Got advice from',
 				color: '#01a6c7'
 			}
 
 		],
-		size: ['ord_stress']
+		size: ['ord_helpfulness']
 	};
 
 	// Private functions
@@ -159,6 +149,9 @@ module.exports = function sociogramNarrative() {
 			// Update initial states of all nodes and edges;
 			sociogramNarrative.updateState();
 
+			// Update key
+			sociogramNarrative.updateKeyPanel();
+
 		});
 	};
 
@@ -167,6 +160,28 @@ module.exports = function sociogramNarrative() {
 			.prev('.panel-heading')
 			.find('i.indicator')
 			.toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+	}
+
+	function toggleKeyOptions() {
+		$('.key-panel-initial, .key-panel-options').toggleClass('show');
+	}
+
+	function presetSelectHandler() {
+		var name = this.value;
+
+		$.each(settings.presets, function(presetIndex, presetValue) {
+			if (presetValue.name === name) {
+				settings.edges = presetValue.edges;
+				settings.selected = presetValue.selected;
+				settings.size = presetValue.size;
+			}
+		});
+
+
+		sociogramNarrative.resetNodeState();
+
+		sociogramNarrative.updateState();
+		sociogramNarrative.updateKeyPanel();
 	}
 
 	sociogramNarrative.bindEvents = function() {
@@ -202,12 +217,26 @@ module.exports = function sociogramNarrative() {
 				handler: sociogramNarrative.toggleHulls,
 				subTarget: '#context-checkbox-show',
 				targetEl:  window.document
+			},
+			{
+				event: 'click',
+				handler: toggleKeyOptions,
+				targetEl: window.document,
+				subTarget: '.btn.change'
+			},
+			{
+				event: 'change',
+				targetEl: window.document,
+				subTarget: '#key-panel-preset-select',
+				handler: presetSelectHandler
 			}
 		];
 		window.tools.Events.register(moduleEvents, event);
 
-		$('#accordion').on('hidden.bs.collapse', toggleChevron);
-		$('#accordion').on('shown.bs.collapse', toggleChevron);
+		$('#accordion1').on('hidden.bs.collapse', toggleChevron);
+		$('#accordion1').on('shown.bs.collapse', toggleChevron);
+		$('#accordion2').on('hidden.bs.collapse', toggleChevron);
+		$('#accordion2').on('shown.bs.collapse', toggleChevron);
 
 	};
 
@@ -216,8 +245,10 @@ module.exports = function sociogramNarrative() {
 		stage.destroy();
 		window.tools.Events.unbind(moduleEvents);
 
-		$('#accordion').off('hidden.bs.collapse', toggleChevron);
-		$('#accordion').off('shown.bs.collapse', toggleChevron);
+		$('#accordion1').off('hidden.bs.collapse', toggleChevron);
+		$('#accordion1').off('shown.bs.collapse', toggleChevron);
+		$('#accordion2').off('hidden.bs.collapse', toggleChevron);
+		$('#accordion2').off('shown.bs.collapse', toggleChevron);
 	};
 
 	sociogramNarrative.addNodeData = function() {
@@ -337,14 +368,27 @@ module.exports = function sociogramNarrative() {
 			$('#'+settings.targetEl).append('<div class="reset-state-button text-center"><span class="fa fa-2x fa-refresh"></span></div>');
 
 			// Key panel
-			$('#'+settings.targetEl).append('<div class="key-panel" id="accordion" role="tablist" aria-multiselectable="true"></div>');
+			$('#'+settings.targetEl).append('<div class="key-panel"></div>');
 
 			$('.key-panel').append(`
-
+			<div class="key-panel-initial show" id="accordion1" role="tablist" aria-multiselectable="true">
+				<div class="">
+					<div class="panel-heading" role="tab" id="presets-heading">
+						<h5>
+							<a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapsePreset" aria-expanded="false" aria-controls="collapsePreset">
+							Presets
+							<i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
+						</h5>
+					</div>
+					<div id="collapsePreset" class="presets-panel-options panel-collapse collapse" role="tabpanel" aria-labelledby="presets-heading">
+						<select class="selectpicker" title="None" id="key-panel-preset-select">
+						</select>
+					</div>
+				</div>
 				<div class="">
 					<div class="panel-heading" role="tab" id="headingOne">
 						<h5>
-							<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 							Links
 							<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
 						</h5>
@@ -356,7 +400,7 @@ module.exports = function sociogramNarrative() {
 				<div class="">
 					<div class="panel-heading" role="tab" id="headingTwo">
 						<h5>
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
 							Highlighted
 							<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
 						</h5>
@@ -368,7 +412,7 @@ module.exports = function sociogramNarrative() {
 				<div class="">
 					<div class="panel-heading" role="tab" id="headingThree">
 						<h5>
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
 							Contexts
 							<i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
 						</h5>
@@ -379,8 +423,61 @@ module.exports = function sociogramNarrative() {
 				<div class="row">
 					<button class="btn btn-primary btn-sm pull-right change">Change <span class="fa fa-arrow-right"></span></button>
 				</div>
+			</div>
+			<div class="key-panel-options" id="accordion2" role="tablist" aria-multiselectable="true">
+				<div>
+					<div class="panel-heading" role="tab">
+						<h4>Options</h4>
+					</div>
+					<div class="">
+						<div class="panel-heading" role="tab" id="options-headingOne">
+							<h5>
+								<a role="button" data-toggle="collapse" data-parent="#accordion2" href="#options-collapseOne" aria-expanded="true" aria-controls="options-collapseOne">
+								Links
+								<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+							</h5>
+						</div>
+						<div id="options-collapseOne" class="links-panel-options panel-collapse collapse in" role="tabpanel" aria-labelledby="options-headingOne">
+
+						</div>
+					</div>
+					<div class="">
+						<div class="panel-heading" role="tab" id="options-headingTwo">
+							<h5>
+								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#options-collapseTwo" aria-expanded="true" aria-controls="options-collapseTwo">
+								Highlighted
+								<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+							</h5>
+						</div>
+						<div id="options-collapseTwo" class="nodes-panel-options panel-collapse collapse in" role="tabpanel" aria-labelledby="options-headingTwo">
+
+						</div>
+					</div>
+					<div class="">
+						<div class="panel-heading" role="tab" id="options-headingThree">
+							<h5>
+								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#options-collapseThree" aria-expanded="false" aria-controls="options-collapseThree">
+								Contexts
+								<i class="indicator glyphicon glyphicon-chevron-up pull-right"></i></a>
+							</h5>
+						</div>
+						<div id="options-collapseThree" class="contexts-panel-options panel-collapse collapse" role="tabpanel" aria-labelledby="options-headingThree">
+						</div>
+					</div>
+					<div class="row button-row">
+						<button class="btn btn-primary btn-sm pull-left change"><span class="fa fa-arrow-left"></span> Finished</button>
+					</div>
+				</div>
+			</div>
 			`);
 
+
+			// Handle preset select
+			$.each(settings.presets, function(presetIndex, presetValue) {
+				$('#key-panel-preset-select').append('<option value="'+presetValue.name+'">'+presetValue.name+'</option>');
+			});
+
+			$('select').selectpicker();
 
 			// Draw all UI components
 			var previousSkew = 0;
@@ -464,6 +561,7 @@ module.exports = function sociogramNarrative() {
 
 		// Links panel
 		panel = $('.links-panel');
+		panel.children().remove();
 		if (typeof settings.edges !== 'undefined' && typeof settings.edges === 'object') {
 			$.each(settings.edges, function(edgeIndex, edgeValue) {
 				markup = `<div class="key-panel-row row">
@@ -491,6 +589,7 @@ module.exports = function sociogramNarrative() {
 
 		// Node panel
 		panel = $('.nodes-panel');
+		panel.children().remove();
 		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
 			$.each(settings.selected, function(selectedIndex, selectedValue) {
 				markup = `<div class="key-panel-row row">

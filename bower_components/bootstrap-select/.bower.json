@@ -1,0 +1,42 @@
+{
+  "name": "bootstrap-select",
+  "main": [
+    "less/bootstrap-select.less",
+    "dist/css/bootstrap-select.css",
+    "dist/js/bootstrap-select.js"
+  ],
+  "homepage": "http://silviomoreto.github.io/bootstrap-select",
+  "authors": [
+    "silviomoreto"
+  ],
+  "keywords": [
+    "form",
+    "bootstrap",
+    "select",
+    "replacement"
+  ],
+  "dependencies": {
+    "jquery": ">=1.8"
+  },
+  "license": "MIT",
+  "ignore": [
+    ".gitignore",
+    "CONTRIBUTING.md",
+    "Gruntfile.js",
+    "README.md",
+    "composer.json",
+    "package.json",
+    "test.html"
+  ],
+  "version": "1.9.4",
+  "_release": "1.9.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.9.4",
+    "commit": "418bf9bacb2afd41aa1711194987908f458d26ce"
+  },
+  "_source": "git://github.com/silviomoreto/bootstrap-select.git",
+  "_target": "~1.9.4",
+  "_originalSource": "bootstrap-select",
+  "_direct": true
+}
