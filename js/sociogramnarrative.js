@@ -1263,77 +1263,19 @@ module.exports = function sociogramNarrative() {
 
 			var currentNode = this; // Store the context
 
-			if (!touchNotTap) { /** check we aren't in the middle of a touch */
+			// var tween = new Konva.Tween({
+			// 	node: currentNode
+			// }).play();
+			console.log(currentNode);
+			currentNode.children[1].shadowColor('#FA920D');
+			var animation = new Konva.Animation(function(frame) {
+				var blur = ((Math.sin(frame.time/300)+1)/2)*60;
+				console.log(blur);
+				currentNode.children[1].setAttr('shadowBlur', blur);
+				nodeLayer.batchDraw();
+			});
 
-					if (taskComprehended === false) {
-						var eventProperties = {
-							stage: window.netCanvas.Modules.session.currentStage(),
-							timestamp: new Date()
-						};
-						log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
-						window.dispatchEvent(log);
-						taskComprehended = true;
-					}
-					log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeClick', 'eventObject':currentNode.attrs.id}});
-					window.dispatchEvent(log);
-
-					/** Test if edge creation mode is enabled */
-					if (typeof settings.prompts[currentPrompt] !== 'undefined' && typeof settings.prompts[currentPrompt].showEdges === 'object') {
-
-						// Ignore two clicks on the same node
-						if (selectedNodes[0] === currentNode) {
-							selectedNodes[0].children[0].opacity(0);
-							selectedNodes = [];
-							nodeLayer.draw();
-							return false;
-						}
-
-						// Push the clicked node into the selected nodes array;
-						selectedNodes.push(currentNode);
-
-						// Check the length of the selected nodes array.
-						if(selectedNodes.length === 2) {
-							//If it containes two nodes, create an edge
-
-							//Reset the styling
-							selectedNodes[1].children[0].opacity(0);
-							selectedNodes[0].children[0].opacity(0);
-
-							// Create an edge object
-
-								var edgeProperties = {};
-								edgeProperties = {
-									from: selectedNodes[0].attrs.id,
-									to: selectedNodes[1].attrs.id,
-								};
-
-								// Add the custom variables
-								$.each(settings.prompts[currentPrompt].showEdges.criteria, function(index, value) {
-									edgeProperties[value.label] = value.value;
-								});
-
-								// Try adding the edge. If it returns fals, it already exists, so remove it.
-								console.log(edgeProperties);
-								if (settings.network.addEdge(edgeProperties) === false) {
-									note.debug('Sociogram removing edge.',2);
-									settings.network.removeEdge(settings.network.getEdges(edgeProperties));
-								} else {
-									note.debug('Sociogram added edge.',2);
-								}
-
-								// Empty the selected nodes array and draw the layer.
-								selectedNodes = [];
-
-						} else { // First node selected. Simply turn the node stroke to the selected style so we can see that it has been selected.
-							currentNode.children[0].opacity(1);
-						}
-					}
-					currentNode.moveToTop();
-					nodeLayer.draw();
-			} else {
-				touchNotTap = false;
-			}
-
+			animation.start();
 		});
 
 		nodeGroup.on('dragend', function() {
@@ -1535,63 +1477,92 @@ module.exports = function sociogramNarrative() {
 
 	// Main initialisation functions
 	// a flag we use to see if we're dragging the mouse
-        var isMouseDown=false;
         // a reference to the line we are currently drawing
-        var newline;
-        // a reference to the array of points making newline
-        var points=[];
 
-		// On mousedown
+		var annotations = [];
+		var currentAnnotation;
 
-		// On mousedown
-         // Set the isMouseDown flag to true
-         // Create a new line,
-         // Clear the points array for new points
-         // set newline reference to the newly created line
-         function onMousedown() {
-             isMouseDown = true;
-             points=[];
-			 var position = stage.getPointerPosition();
-			 points.push(position.x,position.y);
-             var line = new Konva.Line({
-                 points: points,
-                 stroke: 'red',
-                 strokeWidth: 5,
-                 lineCap: 'round',
-                 lineJoin: 'round'
-             });
-             backgroundLayer.add(line);
-             newline=line;
-			 line.moveToTop();
-         }
+		function Annotation() {
 
-         // on mouseup end the line by clearing the isMouseDown flag
-         function onMouseup() {
-             isMouseDown=false;
-			new Konva.Tween({
-				node: newline,
-				opacity: 0,
-				duration: 15,
-				onFinish: function(){
-					this.destroy();
-				}
-			}).play();
+			var annotation = {
+				points: [],
+				isMouseDown: false
+			};
 
-         }
+			annotation.onMouseDown = function() {
+				console.log('mousedown');
+				annotations.push(annotation);
+				currentAnnotation = annotation;
+				console.log(annotations);
+				annotation.isMouseDown = true;
+				var position = stage.getPointerPosition();
+				annotation.points.push(position.x,position.y);
+				annotation.line = new Konva.Line({
+					points: annotation.points,
+					stroke: 'red',
+					strokeWidth: 5,
+					lineCap: 'round',
+					lineJoin: 'round'
+				});
+				backgroundLayer.add(annotation.line);
+			};
 
-         // on mousemove
-         // Add the current mouse position to the points[] array
-         // Update newline to include all points in points[]
-         // and redraw the layer
-         function onMousemove() {
-             if(!isMouseDown){return;}
+			annotation.onMouseUp = function() {
+				console.log('mouseup');
+				currentAnnotation = null;
+				annotation.isMouseDown=false;
+				annotation.tween = new Konva.Tween({
+					node: annotation.line,
+					opacity: 0,
+					duration: 15,
+					onFinish: function(){
+					}
+				}).play();
+			};
 
-			 var position = stage.getPointerPosition();
-			 points.push(position.x,position.y);
-             newline.setPoints(points);
-			 backgroundLayer.drawScene();
-         }
+			annotation.onMouseMove = function() {
 
+				if(!annotation.isMouseDown){return;}
+				console.log('mousemove');
+				var position = stage.getPointerPosition();
+				annotation.points.push(position.x,position.y);
+				annotation.line.setPoints(annotation.points);
+				backgroundLayer.draw();
+			};
+
+			annotation.init = function() {
+				// make sure we have cancelled all other annotations
+				$.each(annotations, function(index, value) {
+					value.onMouseUp();
+				});
+			};
+
+			annotation.init();
+
+			return annotation;
+		}
+
+
+
+		function killAnnotation(target) {
+			stage.off('mouseup touchend', function(){killAnnotation(target);});
+			stage.off('mousemove touchmove', function(){drawAnnotation(target);});
+			target.onMouseUp();
+		}
+
+		function drawAnnotation(target) {
+			target.onMouseMove();
+		}
+
+		function newAnnotation() {
+			console.log('1');
+			var blah = new Annotation();
+			blah.onMouseDown();
+			console.log(blah);
+
+			stage.on('mouseup touchend', function(){killAnnotation(blah);});
+			stage.on('mousemove touchmove', function(){drawAnnotation(blah);});
+		}
 
 	sociogramNarrative.initKinetic = function () {
 		// Initialise KineticJS stage
@@ -1621,14 +1592,8 @@ module.exports = function sociogramNarrative() {
 			fill: 'transparent'
 	      });
 		backgroundLayer.add(backgroundRect);
-		// Set the isMouseDown flag to true
-		// Create a new line,
-		// Clear the points array for new points
-		// set newline reference to the newly created line
 
-		backgroundRect.on('mousedown touchstart', function(){onMousedown();});
-        backgroundRect.on('mouseup touchend', function(){onMouseup();});
-        backgroundRect.on('mousemove touchmove', function(){onMousemove();});
+		stage.on('mousedown touchstart', function(){newAnnotation();});
 
 		stage.add(circleLayer);
 		stage.add(hullLayer);
