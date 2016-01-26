@@ -10937,9 +10937,6 @@ label.checkbox-inline {
   padding-left: 0px;
   padding-right: 20px;
 }
-label.checkbox {
-  left: 50px;
-}
 .slider.slider-horizontal {
   width: 100%;
   height: 50px;
@@ -12834,7 +12831,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 .key-panel {
   background: rgba(0, 0, 0, 0.5);
   width: 300px;
-  padding: 15px 25px;
+  padding: 25px 15px;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -12844,34 +12841,24 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
 .key-panel-initial {
   -webkit-transition: 0.5s all ease;
   transition: 0.5s all ease;
-  -webkit-transform: translateX(-300px);
-          transform: translateX(-300px);
-  opacity: 0;
-}
-.key-panel-initial.show {
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
   opacity: 1;
 }
-.key-panel-options {
-  -webkit-transition: 0.5s all ease;
-  transition: 0.5s all ease;
-  opacity: 0;
-  -webkit-transform: translateX(300px);
-          transform: translateX(300px);
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 250px;
+.defaultOnly {
+  display: block;
 }
-.key-panel-options.show {
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
-  opacity: 1;
+.settingsOnly {
+  display: none;
 }
-.key-panel-options .button-row {
+.key-panel-initial.show .settingsOnly {
+  display: block;
+}
+.key-panel-initial.show .defaultOnly {
+  display: none;
+}
+.button-row {
   position: absolute;
-  bottom: 15px;
+  bottom: 25px;
+  width: 100%;
 }
 .key-panel-text {
   height: 52px;
@@ -12973,11 +12960,6 @@ body {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
-}
-@media (min-width: 1024px) {
-  body {
-    font-size: 1.6vmin;
-  }
 }
 .new-node-form {
   display: none;

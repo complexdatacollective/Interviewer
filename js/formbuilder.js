@@ -364,7 +364,7 @@ module.exports = function FormBuilder(formName) {
 
 
                 if (formValue.type === 'button-checkbox') {
-                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' a checkbox...builting an array.');
+                    note.debug('FormBuilder ['+name+']: addFields() '+formIndex+' a checkbox...building an array.');
                     // This field exists. If we are trying to define it again, perhaps it is a checkbox group
                     // If it is, we should append the label and input to the existing form group
                     // Create wrapper element

@@ -5,7 +5,8 @@
 .key-panel {
     background: @panel-bg;
     width:300px;
-    padding: @padding-base-vertical @padding-base-horizontal;
+    // min-height:500px;
+    padding:@padding-base-horizontal @padding-base-vertical;
     position:absolute;
     top: 20px;
     right: 20px;
@@ -15,33 +16,58 @@
 
 .key-panel-initial {
     transition: 0.5s all ease;
-    transform: translateX(-300px);
-    opacity:0;
+    // transform: translateX(-300px);
+    opacity:1;
+    // position:absolute;
+    // height:100%;
+    // width:270px;
+    // top:0;
+    // padding-top: @padding-base-horizontal;
+}
+
+// .key-panel-initial.show {
+//     transform: translateX(0);
+//     opacity:1;
+// }
+//
+// .key-panel-options {
+//     transition: 0.5s all ease;
+//     opacity:0;
+//     transform: translateX(300px);
+//     position:absolute;
+//     top:0;
+//     height:100%;
+//     width:270px;
+// }
+//
+// .key-panel-options.show {
+//     transform: translateX(0);
+//     opacity:1;
+// }
+
+.defaultOnly {
+    display:block
+}
+
+
+.settingsOnly {
+    display:none;
 }
 
 .key-panel-initial.show {
-    transform: translateX(0);
-    opacity:1;
+    .settingsOnly {
+        display:block;
+    }
+
+    .defaultOnly {
+        display:none;
+    }
 }
 
-.key-panel-options {
-    transition: 0.5s all ease;
-    opacity:0;
-    transform: translateX(300px);
+.button-row {
     position:absolute;
-    top:0;
-    height:100%;
-    width:250px;
-}
-
-.key-panel-options.show {
-    transform: translateX(0);
-    opacity:1;
-}
-
-.key-panel-options .button-row {
-    position:absolute;
-    bottom: @padding-base-vertical;
+    bottom: @padding-base-horizontal;
+    width:100%;
 }
 
 .key-panel-row {
