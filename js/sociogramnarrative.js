@@ -5,11 +5,11 @@
 module.exports = function sociogramNarrative() {
 	'use strict';
 	// Global variables
-	var stage = {}, circleLayer = {}, edgeLayer = {}, nodeLayer = {}, wedgeLayer = {}, hullLayer = {}, hullShapes = {}, uiLayer = {}, sociogramNarrative = {};
+	var stage = {}, circleLayer = {}, backgroundLayer = {}, edgeLayer = {}, nodeLayer = {}, wedgeLayer = {}, hullLayer = {}, hullShapes = {}, uiLayer = {}, sociogramNarrative = {};
 	var moduleEvents = [], selectedNodes = [], hulls = [];
 	sociogramNarrative.selectedNode = null;
 	var viewingOptions = false;
-	var newNodeCircleTween, log;
+	var newNodeCircleTween, log, backgroundRect;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
 	var newNodeCircleVisible = false, hullsShown = false, taskComprehended = false, touchNotTap = false;
 
@@ -187,9 +187,6 @@ module.exports = function sociogramNarrative() {
 			}
 		});
 
-
-		sociogramNarrative.resetNodeState();
-
 		sociogramNarrative.updateState();
 		sociogramNarrative.updateKeyPanel();
 	}
@@ -358,7 +355,9 @@ module.exports = function sociogramNarrative() {
 		$.each(kineticNodes, function(nodeIndex, nodeValue) {
 			nodeValue.children[1].stroke(settings.options.defaultNodeColor);
 			// Reset sizes
-			nodeValue.children[1].setAttr('radius', settings.defaultNodeSize);
+			nodeValue.children[1].setAttr('radius', settings.options.defaultNodeSize);
+			nodeValue.children[1].fill('white');
+			nodeValue.children[2].fill('black');
 		});
 
 		nodeLayer.batchDraw();
@@ -366,9 +365,6 @@ module.exports = function sociogramNarrative() {
 		// Reset edges
 		edgeLayer.removeChildren();
 		edgeLayer.batchDraw();
-
-
-
 	};
 
 	sociogramNarrative.drawUIComponents = function (callback) {
@@ -691,6 +687,8 @@ module.exports = function sociogramNarrative() {
 		/**
 		* Updates visible attributes based on current prompt task
 		*/
+
+		sociogramNarrative.resetNodeState();
 		var nodes = settings.network.getNodes();
 		var edges = settings.network.getEdges();
 
@@ -717,7 +715,6 @@ module.exports = function sociogramNarrative() {
 		edgeLayer.draw();
 
 		// Selected nodes
-
 		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
 			console.log('selectedmode');
 			// Iterate over select settings
@@ -728,7 +725,7 @@ module.exports = function sociogramNarrative() {
 					// If any of value.variables = 1, select node
 					var found = false;
 					$.each(value.variables, function(valueIndex, valueValue) {
-						if (typeof node[valueValue] !== 'undefined' && node[valueValue] === 'true') {
+						if (typeof node[valueValue] !== 'undefined' && (node[valueValue] === 'true' || node[valueValue] === 1 || node[valueValue] === '1') ) {
 							console.log('found');
 							found = true;
 						}
@@ -738,6 +735,8 @@ module.exports = function sociogramNarrative() {
 					if (found) {
 						var sociogramNode = sociogramNarrative.getNodeByID(node.id);
 						sociogramNode.children[1].stroke(value.color);
+						sociogramNode.children[1].fill(value.color);
+						sociogramNode.children[2].fill('white');
 					}
 
 				});
@@ -775,7 +774,7 @@ module.exports = function sociogramNarrative() {
 					// make high 1.5 of default
 					var range = high;
 					var nodeProportion = (nodeTotal/range);
-					var nodeRatio = 0.85 + (nodeProportion * 0.65);
+					var nodeRatio = 0.80 + (nodeProportion * 0.35);
 					var ratio = nodeRatio * settings.options.defaultNodeSize;
 					sociogramNode.children[1].setAttr('radius', ratio);
 				}
@@ -1535,6 +1534,64 @@ module.exports = function sociogramNarrative() {
 	};
 
 	// Main initialisation functions
+	// a flag we use to see if we're dragging the mouse
+        var isMouseDown=false;
+        // a reference to the line we are currently drawing
+        var newline;
+        // a reference to the array of points making newline
+        var points=[];
+
+		// On mousedown
+
+		// On mousedown
+         // Set the isMouseDown flag to true
+         // Create a new line,
+         // Clear the points array for new points
+         // set newline reference to the newly created line
+         function onMousedown() {
+             isMouseDown = true;
+             points=[];
+			 var position = stage.getPointerPosition();
+			 points.push(position.x,position.y);
+             var line = new Konva.Line({
+                 points: points,
+                 stroke: 'red',
+                 strokeWidth: 5,
+                 lineCap: 'round',
+                 lineJoin: 'round'
+             });
+             backgroundLayer.add(line);
+             newline=line;
+			 line.moveToTop();
+         }
+
+         // on mouseup end the line by clearing the isMouseDown flag
+         function onMouseup() {
+             isMouseDown=false;
+			new Konva.Tween({
+				node: newline,
+				opacity: 0,
+				duration: 15,
+				onFinish: function(){
+					this.destroy();
+				}
+			}).play();
+
+         }
+
+         // on mousemove
+         // Add the current mouse position to the points[] array
+         // Update newline to include all points in points[]
+         // and redraw the layer
+         function onMousemove() {
+             if(!isMouseDown){return;}
+
+			 var position = stage.getPointerPosition();
+			 points.push(position.x,position.y);
+             newline.setPoints(points);
+			 backgroundLayer.drawScene();
+         }
+
 
 	sociogramNarrative.initKinetic = function () {
 		// Initialise KineticJS stage
@@ -1555,36 +1612,28 @@ module.exports = function sociogramNarrative() {
 		* We create a transparent rectangle on a special background layer which sits between the UI layer and the interaction layers.
 		* We then listen to click events on this shape.
  		*/
-		var backgroundLayer = new Konva.Layer();
-		var backgroundRect = new Konva.Rect({
+		backgroundLayer = new Konva.Layer();
+		backgroundRect = new Konva.Rect({
 	        x: 0,
 	        y: 0,
 	        width: stage.width(),
 	        height: stage.height(),
-	        fill: 'transparent',
+			fill: 'transparent'
 	      });
 		backgroundLayer.add(backgroundRect);
-		backgroundRect.on('tap click', function() {
-			note.debug('sociogram: backgroundRect tap');
-			sociogramNarrative.hideDetailsPanel();
-			console.log('!!! sociogramNarrative.selectedNode set to null');
-			sociogramNarrative.selectedNode = null;
-			$('.hull').removeClass('active'); // deselect all groups
+		// Set the isMouseDown flag to true
+		// Create a new line,
+		// Clear the points array for new points
+		// set newline reference to the newly created line
 
-			//deselect Nodes
-			selectedNodes = [];
-			$.each(sociogramNarrative.getKineticNodes(), function(nodesIndex, nodesValue) {
-				nodesValue.children[0].opacity(0);
-			});
-
-			nodeLayer.draw();
-
-		});
+		backgroundRect.on('mousedown touchstart', function(){onMousedown();});
+        backgroundRect.on('mouseup touchend', function(){onMouseup();});
+        backgroundRect.on('mousemove touchmove', function(){onMousemove();});
 
 		stage.add(circleLayer);
-		stage.add(backgroundLayer);
 		stage.add(hullLayer);
 		stage.add(edgeLayer);
+		stage.add(backgroundLayer);
 		stage.add(wedgeLayer);
 		stage.add(nodeLayer);
 
@@ -1634,6 +1683,10 @@ module.exports = function sociogramNarrative() {
 
 	sociogramNarrative.getNodeLayer = function() {
 		return nodeLayer;
+	};
+
+	sociogramNarrative.getBackgroundLayer = function() {
+		return backgroundLayer;
 	};
 
 	sociogramNarrative.getUILayer = function() {
