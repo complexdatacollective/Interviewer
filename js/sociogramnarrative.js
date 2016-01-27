@@ -1001,10 +1001,16 @@ module.exports = function sociogramNarrative() {
 			// At the end of this loop we should have a newHull with points for all nodes
 
 			// We need this check because on load all hull shapes might not be defined yet.
+			var hullPoints = newHull.getHull();
+			if (hullPoints.length === 1 && typeof hullPoints[0] === 'undefined') {
+				console.log('catching');
+				hullPoints = [];
+			}
+			console.log(hullPoints);
 			if (typeof hullShapes[pointHulls[i]] !== 'undefined') {
 				var tween = new Konva.Tween({
 					node: hullShapes[pointHulls[i]],
-					points: toPointFromObject(newHull.getHull()),
+					points: toPointFromObject(hullPoints),
 					duration: 0.5,
 					onFinish: function(){
 						tween.destroy();
@@ -1634,7 +1640,7 @@ module.exports = function sociogramNarrative() {
 		}
 
 		function newAnnotation(e) {
-			$(':focus').blur(); 
+			$(':focus').blur();
 			if (e.target === backgroundRect) {
 				// console.log(e);
 				// setTimeout(function() {
