@@ -227,6 +227,11 @@ module.exports = function sociogramNarrative() {
 				targetEl: window.document,
 				subTarget: '#key-panel-preset-select',
 				handler: presetSelectHandler
+			},
+			{
+				event: 'click',
+				targetEl: '.reset-state-button',
+				handler: sociogramNarrative.resetButton
 			}
 		];
 		window.tools.Events.register(moduleEvents, event);
@@ -485,6 +490,41 @@ module.exports = function sociogramNarrative() {
 
 			}
 
+			// Node container
+			var newNodeCircle = new Konva.Circle({
+				radius: 60,
+				transformsEnabled: 'none',
+				hitGraphEnabled: false,
+				stroke: 'white',
+				strokeWidth: 7
+			});
+
+			var newNodeText = new Konva.Image({
+			 x: -20,
+			 y: -180,
+			 image: imageObj,
+			 width: 200,
+			 height: 105
+			});
+
+			// add the shape to the layer
+
+			var newNodeCircleGroup = new Konva.Group({
+			 x: 145,
+			 opacity:0,
+			 y: window.innerHeight / 2,
+			});
+
+			newNodeCircleGroup.add(newNodeText);
+			newNodeCircleGroup.add(newNodeCircle);
+			circleLayer.add(newNodeCircleGroup);
+
+			newNodeCircleTween = new Konva.Tween({
+			 node: newNodeCircleGroup,
+			 opacity: 1,
+			 duration: 1
+			});
+
 			// Draw 'me'
 			if (settings.options.showMe === true) {
 
@@ -713,7 +753,7 @@ module.exports = function sociogramNarrative() {
 
 		// Selected nodes
 		if (typeof settings.selected !== 'undefined' && typeof settings.selected === 'object') {
-			console.log('selectedmode');
+			// console.log('selectedmode');
 			// Iterate over select settings
 			$.each(settings.selected, function(index, value) {
 
@@ -723,7 +763,7 @@ module.exports = function sociogramNarrative() {
 					var found = false;
 					$.each(value.variables, function(valueIndex, valueValue) {
 						if (typeof node[valueValue] !== 'undefined' && (node[valueValue] === 'true' || node[valueValue] === 1 || node[valueValue] === '1') ) {
-							console.log('found');
+							// console.log('found');
 							found = true;
 						}
 					});
@@ -784,6 +824,27 @@ module.exports = function sociogramNarrative() {
 
 	sociogramNarrative.getSelectedNodes = function() {
 		return selectedNodes;
+	};
+
+	sociogramNarrative.resetButton = function() {
+		$.each(animations, function(index, value) {
+			value.stop();
+		});
+
+		var kineticNodes = sociogramNarrative.getKineticNodes();
+
+		$.each(kineticNodes, function(index, value) {
+			value.children[1].setAttr('shadowColor', 'black');
+			value.children[1].setAttr('shadowBlur', 2);
+		});
+
+		console.log(annotations);
+		$.each(annotations, function(index, value) {
+			value.tween.finish();
+			value.tween.destroy();
+		});
+
+		backgroundLayer.draw();
 	};
 
 	sociogramNarrative.addHull = function(label) {
@@ -1105,6 +1166,15 @@ module.exports = function sociogramNarrative() {
 			this.attrs.oldx = this.attrs.x;
 			this.attrs.oldy = this.attrs.y;
 
+			if (this.attrs.positioned === false ) {
+				this.attrs.positioned = true;
+				nodesWithoutPositions--;
+				if (nodesWithoutPositions < 1) {
+					newNodeCircleTween.reverse();
+					newNodeCircleVisible = false;
+				}
+			}
+
 			this.moveToTop();
 			nodeLayer.draw();
 
@@ -1123,9 +1193,9 @@ module.exports = function sociogramNarrative() {
 					}
 				}
 				var hull = newHull.getHull();
-				console.log(hull);
+				// console.log(hull);
 				var pointFromObject = toPointFromObject(hull);
-				console.log(pointFromObject);
+				// console.log(pointFromObject);
 				hullShapes[pointHulls[i]].setPoints(pointFromObject);
 				hullLayer.batchDraw();
 
@@ -1169,11 +1239,11 @@ module.exports = function sociogramNarrative() {
 						newHull.addPoint(coords.x, coords.y);
 					}
 				}
-				console.log(newHull);
+				// console.log(newHull);
 				var hull = newHull.getHull();
-				console.log(hull);
+				// console.log(hull);
 				var pointFromObject = toPointFromObject(hull);
-				console.log(pointFromObject);
+				// console.log(pointFromObject);
 				hullShapes[pointHulls[i]].setPoints(pointFromObject);
 				hullLayer.batchDraw();
 
@@ -1263,7 +1333,7 @@ module.exports = function sociogramNarrative() {
 			// var tween = new Konva.Tween({
 			// 	node: currentNode
 			// }).play();
-			console.log(currentNode);
+			// console.log(currentNode);
 			currentNode.children[1].shadowColor('#FA920D');
 			var animation = new Konva.Animation(function(frame) {
 				var blur = ((Math.sin(frame.time/200)+1)/2)*60;
@@ -1396,9 +1466,9 @@ module.exports = function sociogramNarrative() {
 
 		// Handle options parameter to allow overriding default values
 		if (options) {
-			console.log('extending with options');
+			// console.log('extending with options');
 			$.extend(edgeOptions, options);
-			console.log(edgeOptions);
+			// console.log(edgeOptions);
 		}
 
 		var edge = new Konva.Line(edgeOptions);
@@ -1488,10 +1558,10 @@ module.exports = function sociogramNarrative() {
 			};
 
 			annotation.onMouseDown = function() {
-				console.log('mousedown');
+				// console.log('mousedown');
 				annotations.push(annotation);
 				currentAnnotation = annotation;
-				console.log(annotations);
+				// console.log(annotations);
 				annotation.isMouseDown = true;
 				var position = stage.getPointerPosition();
 				annotation.points.push(position.x,position.y);
@@ -1506,7 +1576,7 @@ module.exports = function sociogramNarrative() {
 			};
 
 			annotation.onMouseUp = function() {
-				console.log('mouseup');
+				// console.log('mouseup');
 				currentAnnotation = null;
 				annotation.isMouseDown=false;
 				annotation.tween = new Konva.Tween({
@@ -1521,7 +1591,7 @@ module.exports = function sociogramNarrative() {
 			annotation.onMouseMove = function() {
 
 				if(!annotation.isMouseDown){return;}
-				console.log('mousemove');
+				// console.log('mousemove');
 				var position = stage.getPointerPosition();
 				annotation.points.push(position.x,position.y);
 				annotation.line.setPoints(annotation.points);
@@ -1554,11 +1624,11 @@ module.exports = function sociogramNarrative() {
 
 		function newAnnotation(e) {
 			if (e.target === backgroundRect) {
-				console.log(e);
+				// console.log(e);
 				// setTimeout(function() {
 					var blah = new Annotation();
 					blah.onMouseDown();
-					console.log(blah);
+					// console.log(blah);
 
 					stage.on('mouseup touchend', function(){killAnnotation(blah);});
 					stage.on('mousemove touchmove', function(){drawAnnotation(blah);});

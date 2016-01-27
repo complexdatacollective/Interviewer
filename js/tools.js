@@ -179,7 +179,7 @@ exports.Events = {
 
 			if (eventsList[i].targetEl && eventsList[i].handler && eventsList[i].event) {
 				if (typeof eventsList[i].subTarget !== 'undefined') {
-					console.log('$('+eventsList[i].targetEl+').on('+eventsList[i].event+', '+eventsList[i].subTarget+', '+eventsList[i].handler+')');
+					// console.log('$('+eventsList[i].targetEl+').on('+eventsList[i].event+', '+eventsList[i].subTarget+', '+eventsList[i].handler+')');
 	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
 	            } else {
 	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);

@@ -1,4 +1,4 @@
-/* global window, alert, note, $ */
+/* global window, alert, note, $, Mousetrap */
 
 var Hacks = function Hacks() {
     'use strict';
@@ -8,26 +8,29 @@ var Hacks = function Hacks() {
 
         // Events
         var event = [
-            // {
-            //     event: 'keydown',
-            //     handler: hacks.handleKeyPress,
-            //     targetEl:  window.document
-            // },
-            // {
-            //     event: 'keyup',
-            //     handler: hacks.handleKeyPress,
-            //     targetEl: window.document
-            // },
+            {
+                event: 'keydown',
+                targetEl: window.document,
+                handler: hacks.handleKeyPress
+            },
             {
                 event: 'keyup',
-                target: window.document,
+                targetEl: window.document,
                 subTarget: '#first_name, #last_name',
                 handler: hacks.nicknameGenerator
             }
         ];
         window.tools.Events.register(moduleEvents, event);
 
-        // $(window.document).on('keyup', '#first_name, #last_name', hacks.nicknameGenerator);
+        // Mousetrap events
+        Mousetrap.bind(['command+k', 'ctrl+k'], function() {
+            // show hide key
+            // $('.')
+        });
+
+        Mousetrap.bind(['command+r', 'ctrl+r'], function() {
+            alert('MOFO');
+        });
 
     };
 
