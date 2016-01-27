@@ -11,7 +11,19 @@ module.exports = function SociogramMissing() {
 	var newNodeCircleTween, promptSwiper, log, tapTimer;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
 	var taskComprehended  = false;
-	var moduleEvents = [];
+	var missingMap = {};
+	var variableOrder = [
+		'support_emotional',
+		'support_practical',
+		'support_failed',
+		'advice_given',
+		'advice_sought',
+		'advice_refused',
+		'advice_negative',
+		'info_given',
+		'info_refused',
+		'technologically_mediated'
+	];
 
 	// Colours
 	var colors = {
@@ -64,6 +76,48 @@ module.exports = function SociogramMissing() {
 		sociogramMissing.updateNodeState();
 	};
 
+	sociogramMissing.generateMissingMap = function() {
+
+
+
+		var nodes = window.network.getNodes({}, function (results) {
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.type !== 'Ego') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
+		// missing map = {
+		// 	advice_given: [21,5,4]
+		// }
+
+		$.each(variableOrder, function(index, value) {
+			missingMap[value] = [];
+			// console.log(missingMap);
+		});
+
+		$.each(nodes, function(nodeIndex, nodeValue) {
+			var nodeNg = nodeValue.namegenerator;
+			var ngIndex = variableOrder.indexOf(nodeNg);
+			missingMap[nodeNg] = missingMap.nodeNg || [];
+
+			Object.keys(missingMap).forEach(function(missingKey) {
+				if (variableOrder.indexOf(missingKey) < ngIndex) {
+					missingMap[missingKey] = missingMap[missingKey] || [];
+					missingMap[missingKey].push(nodeValue.id);
+				}
+			});
+
+		});
+
+		return missingMap;
+
+	};
+
 	sociogramMissing.init = function (userSettings) {
 
 		note.info('SociogramMissing initialising.');
@@ -73,8 +127,14 @@ module.exports = function SociogramMissing() {
 		$('<div class="sociogram-title"></div>').insertBefore('#'+settings.targetEl );
 
 		$('.sociogram-title').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
+		var missingMap = sociogramMissing.generateMissingMap();
         for (var i = 0; i < settings.prompts.length; i++) {
-            $('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[i].prompt+'</h4></div>');
+			if (missingMap[settings.prompts[i].variable].length > 0) {
+				$('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[i].prompt+'</h4></div>');
+			} else {
+				note.info('Skipping prompt '+i+' because no missing nodes.');
+			}
+
         }
 
         promptSwiper = new Swiper ('.swiper-container', {
@@ -167,6 +227,7 @@ module.exports = function SociogramMissing() {
 		var kineticNodes = sociogramMissing.getKineticNodes();
 		$.each(kineticNodes, function(nodeIndex, nodeValue) {
 			nodeValue.children[1].stroke(settings.options.defaultNodeColor);
+			nodeValue.children[1].opacity(1);
 		});
 
 		nodeLayer.batchDraw();
@@ -177,18 +238,53 @@ module.exports = function SociogramMissing() {
 
 	};
 
+	sociogramMissing.nodeAlreadyAsked = function(id) {
+		// console.log('nodeAlreadyAsked '+id);
+		var node = window.network.getNode(id);
+		// console.log(node.label);
+		var nodeNg = node.namegenerator;
+		// console.log(nodeNg);
+		// console.log(settings.prompts[currentPrompt].variable);
+		// console.log(variableOrder.indexOf(nodeNg));
+		// console.log(variableOrder.indexOf(settings.prompts[currentPrompt].variable));
+		if (variableOrder.indexOf(nodeNg) < variableOrder.indexOf(settings.prompts[currentPrompt].variable)) {
+			// console.log('returning true.');
+			// console.log('-----');
+			return true;
+		} else {
+			// console.log('returning false');
+			// console.log('-----');
+			return false;
+		}
+
+	};
+
 	sociogramMissing.updateNodeState = function() {
 		/**
 		* Updates visible attributes based on current prompt
 		*/
 
-		var selectNodes = settings.network.getNodes();
+		var selectNodes = window.network.getNodes({}, function (results) {
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.type !== 'Ego') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
 		$.each(selectNodes, function(index, node) {
 			var currentValue = node[settings.prompts[currentPrompt].variable];
+			var currentNode = sociogramMissing.getNodeByID(node.id);
 			if (currentValue) {
 				// this node is selected
-				var currentNode = sociogramMissing.getNodeByID(node.id);
 				currentNode.children[1].stroke(colors.selected);
+			}
+
+			if (sociogramMissing.nodeAlreadyAsked(node.id)) {
+				currentNode.children[1].opacity(0.3);
 			}
 		});
 
