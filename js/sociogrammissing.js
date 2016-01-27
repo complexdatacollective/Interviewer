@@ -35,7 +35,7 @@ module.exports = function SociogramMissing() {
 	// Default settings
 	var settings = {
 		options: {
-			defaultNodeSize: 30,
+			defaultNodeSize: 27,
 			defaultNodeColor: 'white',
 			defaultNodeStrokeWidth: 4,
 			defaultLabelColor: 'black',
@@ -531,9 +531,12 @@ module.exports = function SociogramMissing() {
 		//draw concentric circles
 		for(var i = 0; i < settings.options.concentricCircleNumber; i++) {
 			var ratio = (1-(i/settings.options.concentricCircleNumber));
-			var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
+			var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 			var currentRadius = totalHeight/2 * ratio;
 			currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
+			if (i === settings.options.concentricCircleNumber-1) {
+				currentRadius += 50;
+			}
 			previousSkew = skew;
 			circleLines = new Konva.Circle({
 				x: window.innerWidth / 2,

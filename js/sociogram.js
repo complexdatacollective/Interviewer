@@ -44,7 +44,7 @@ module.exports = function Sociogram() {
 		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 	    panels: ['details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
-			defaultNodeSize: 29,
+			defaultNodeSize: 27,
 			defaultNodeColor: 'white',
 			defaultNodeStrokeWidth: 7,
 			defaultLabelColor: 'black',
@@ -988,7 +988,7 @@ module.exports = function Sociogram() {
 			longPressTimer = setTimeout(function() {
 				touchNotTap = true;
 				window.wedge.anim.start();
-			}, 150);
+			}, 350);
 
 		});
 
@@ -1506,9 +1506,12 @@ module.exports = function Sociogram() {
 			//draw concentric circles
 			for(var i = 0; i < settings.options.concentricCircleNumber; i++) {
 				var ratio = (1-(i/settings.options.concentricCircleNumber));
-				var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
+				var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 				var currentRadius = totalHeight/2 * ratio;
 				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
+				if (i === settings.options.concentricCircleNumber-1) {
+					currentRadius += 50;
+				}
 				previousSkew = skew;
 				circleLines = new Konva.Circle({
 					x: window.innerWidth / 2,

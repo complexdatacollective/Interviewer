@@ -1,4 +1,4 @@
-/* global Konva, window, $, note, ConvexHullGrahamScan, Image, Swiper */
+/* global Konva, window, $, note, ConvexHullGrahamScan, Image */
 /* exported Sociogram */
 /*jshint bitwise: false*/
 
@@ -6,12 +6,12 @@ module.exports = function sociogramNarrative() {
 	'use strict';
 	// Global variables
 	var stage = {}, circleLayer = {}, backgroundLayer = {}, edgeLayer = {}, nodeLayer = {}, wedgeLayer = {}, hullLayer = {}, hullShapes = {}, uiLayer = {}, sociogramNarrative = {};
-	var moduleEvents = [], selectedNodes = [], hulls = [];
+	var moduleEvents = [], selectedNodes = [], hulls = [], animations = [];
 	sociogramNarrative.selectedNode = null;
 	var viewingOptions = false;
 	var newNodeCircleTween, log, backgroundRect;
 	var nodesWithoutPositions = 0, currentPrompt = 0;
-	var newNodeCircleVisible = false, hullsShown = false, taskComprehended = false, touchNotTap = false;
+	var newNodeCircleVisible = false, hullsShown = false, taskComprehended = false;
 
 	// Colours
 	var colors = {
@@ -45,7 +45,7 @@ module.exports = function sociogramNarrative() {
 		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 	    panels: ['details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
-			defaultNodeSize: 29,
+			defaultNodeSize: 27,
 			defaultNodeColor: 'white',
 			defaultNodeStrokeWidth: 7,
 			defaultLabelColor: 'black',
@@ -79,16 +79,7 @@ module.exports = function sociogramNarrative() {
 				keyLabel: 'Spend time together',
 				stroke: '#01a6c7'
 			}
-		],
-		selected: [
-			{
-				variables: ['advice_given'],
-				label: 'Got advice from',
-				color: '#01a6c7'
-			}
-
-		],
-		size: ['ord_helpfulness']
+		]
 	};
 
 	// Private functions
@@ -248,6 +239,9 @@ module.exports = function sociogramNarrative() {
 	};
 
 	sociogramNarrative.destroy = function() {
+		$.each(animations, function(index, value) {
+			value.stop();
+		});
 		note.info('sociogramNarrative.destroy();');
 		stage.destroy();
 		window.tools.Events.unbind(moduleEvents);
@@ -457,9 +451,12 @@ module.exports = function sociogramNarrative() {
 			//draw concentric circles
 			for(var i = 0; i < settings.options.concentricCircleNumber; i++) {
 				var ratio = (1-(i/settings.options.concentricCircleNumber));
-				var skew = i > 0 ? (ratio * 5) * (totalHeight/70) : 0;
+				var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 				var currentRadius = totalHeight/2 * ratio;
 				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
+				if (i === settings.options.concentricCircleNumber-1) {
+					currentRadius += 50;
+				}
 				previousSkew = skew;
 				circleLines = new Konva.Circle({
 					x: window.innerWidth / 2,
@@ -774,7 +771,7 @@ module.exports = function sociogramNarrative() {
 					// make high 1.5 of default
 					var range = high;
 					var nodeProportion = (nodeTotal/range);
-					var nodeRatio = 0.80 + (nodeProportion * 0.35);
+					var nodeRatio = 0.80 + (nodeProportion * 0.50);
 					var ratio = nodeRatio * settings.options.defaultNodeSize;
 					sociogramNode.children[1].setAttr('radius', ratio);
 				}
@@ -1269,11 +1266,12 @@ module.exports = function sociogramNarrative() {
 			console.log(currentNode);
 			currentNode.children[1].shadowColor('#FA920D');
 			var animation = new Konva.Animation(function(frame) {
-				var blur = ((Math.sin(frame.time/300)+1)/2)*60;
-				console.log(blur);
+				var blur = ((Math.sin(frame.time/200)+1)/2)*60;
 				currentNode.children[1].setAttr('shadowBlur', blur);
 				nodeLayer.batchDraw();
 			});
+
+			animations.push(animation);
 
 			animation.start();
 		});
@@ -1527,7 +1525,7 @@ module.exports = function sociogramNarrative() {
 				var position = stage.getPointerPosition();
 				annotation.points.push(position.x,position.y);
 				annotation.line.setPoints(annotation.points);
-				backgroundLayer.draw();
+				backgroundLayer.batchDraw();
 			};
 
 			annotation.init = function() {
@@ -1554,14 +1552,18 @@ module.exports = function sociogramNarrative() {
 			target.onMouseMove();
 		}
 
-		function newAnnotation() {
-			console.log('1');
-			var blah = new Annotation();
-			blah.onMouseDown();
-			console.log(blah);
+		function newAnnotation(e) {
+			if (e.target === backgroundRect) {
+				console.log(e);
+				// setTimeout(function() {
+					var blah = new Annotation();
+					blah.onMouseDown();
+					console.log(blah);
 
-			stage.on('mouseup touchend', function(){killAnnotation(blah);});
-			stage.on('mousemove touchmove', function(){drawAnnotation(blah);});
+					stage.on('mouseup touchend', function(){killAnnotation(blah);});
+					stage.on('mousemove touchmove', function(){drawAnnotation(blah);});
+				// }, 100);
+			}
 		}
 
 	sociogramNarrative.initKinetic = function () {
@@ -1593,7 +1595,7 @@ module.exports = function sociogramNarrative() {
 	      });
 		backgroundLayer.add(backgroundRect);
 
-		stage.on('mousedown touchstart', function(){newAnnotation();});
+		stage.on('mousedown touchstart', function(e){newAnnotation(e);});
 
 		stage.add(circleLayer);
 		stage.add(hullLayer);

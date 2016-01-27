@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert, note */
 /*jshint bitwise: false*/
 'use strict';
 
@@ -152,12 +152,19 @@ Object.defineProperty(Array.prototype, 'remove', {
 
 
 // Returns an array of linearly spaced numbers within a range.
-exports.getLinearRange = function(min, max, number) {
+exports.getLinearRange = function(min, max, number, accuracy) {
     number++;
-    var increment =  Math.round(100/number);
+	var start = min || 0;
+	accuracy = accuracy || 2;
+	var range = max - min;
+	console.log('range ' +range);
+    var increment =  range/number;
+	console.log('increment '+ increment);
     var returnArray = [];
-    for (var i = 1; i < number; i++) {
-        returnArray.push(increment*i);
+
+    for (var i = 0; i <= number; i++) {
+		var current = start + (increment*i);
+        returnArray.push(current.toFixed(accuracy));
     }
 
     return returnArray;
@@ -169,11 +176,20 @@ exports.Events = {
     register: function(eventsArray, eventsList) {
         for (var i = 0; i < eventsList.length; i++) {
             eventsArray.push(eventsList[i]);
-            if (typeof eventsList[i].subTarget !== 'undefined') {
-                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
-            } else {
-                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
-            }
+
+			if (eventsList[i].targetEl && eventsList[i].handler && eventsList[i].event) {
+				if (typeof eventsList[i].subTarget !== 'undefined') {
+					console.log('$('+eventsList[i].targetEl+').on('+eventsList[i].event+', '+eventsList[i].subTarget+', '+eventsList[i].handler+')');
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+	            } else {
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+	            }
+			} else {
+				note.warn('An event was misspecified, and has been ignored.');
+				note.debug(eventsList[i]);
+			}
+
+
 
         }
 
