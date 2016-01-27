@@ -115,7 +115,7 @@ module.exports = function NameGenerator() {
 			targetEl:  window
 		},
         {
-            event: 'nodeUpdate',
+            event: 'nodeUpdatedEvent',
             handler: nameGenerator.nodeEdited,
             targetEl:  window
         },
@@ -357,7 +357,7 @@ module.exports = function NameGenerator() {
             revert: true,
             revertDuration: 200,
             refreshPositions: true,
-            distance: 50,
+        distance: 50,
             scroll: false,
             stack: '.node-list-item',
             start: function(event, ui) {
@@ -507,14 +507,13 @@ module.exports = function NameGenerator() {
     };
 
     nameGenerator.editCard = function(properties, callback) {
+        console.log(properties);
 
-        var card;
-        $('.card[data-index='+properties.id+']').children('inner-card').find('h4').html(properties.label);
+        var card = $('.card[data-index="'+properties.id+'"]');
+        card.children('.inner-card').find('h4').html(properties.label);
 
-        var list = $('<ul></ul>');
-        list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
-        card.children('.inner-card').append(list);
-        $('.nameList').append(card);
+        var list = card.children('.inner-card').find('ul');
+        list.html('<li>'+properties.first_name+' '+properties.last_name+'</li>');
 
         if (callback) {
             callback();

@@ -106,17 +106,17 @@ var Hacks = function Hacks() {
 
         // enter key
         if (e.keyCode === 13) {
-            alert('enter key');
+            // alert('enter key');
         }
 
         // Escape key
         if (e.keyCode === 27) {
-            alert('escape key');
+            // alert('escape key');
         }
 
         // Prevent accidental backspace navigation
         if (e.keyCode === 8 && !$(e.target).is('input, textarea')) {
-            alert('backspace disabled');
+            // alert('backspace disabled');
             e.preventDefault();
         }
 
