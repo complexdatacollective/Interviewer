@@ -1634,6 +1634,7 @@ module.exports = function sociogramNarrative() {
 		}
 
 		function newAnnotation(e) {
+			$(':focus').blur(); 
 			if (e.target === backgroundRect) {
 				// console.log(e);
 				// setTimeout(function() {

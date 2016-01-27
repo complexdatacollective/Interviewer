@@ -150,6 +150,18 @@ Object.defineProperty(Array.prototype, 'remove', {
     }
 });
 
+Object.defineProperty(Array.prototype, 'replace', {
+    enumerable: false,
+    value: function (item1, item2) {
+        for (var index = 0; index < this.length; index++) {
+            if (this[index] === item1) {
+				this[index] = item2;
+            }
+        }
+        return this;
+    }
+});
+
 
 // Returns an array of linearly spaced numbers within a range.
 exports.getLinearRange = function(min, max, number, accuracy) {

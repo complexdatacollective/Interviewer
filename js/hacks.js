@@ -1,4 +1,4 @@
-/* global window, alert, note, $, Mousetrap */
+/* global window, alert, note, $, Mousetrap, network, netCanvas */
 
 var Hacks = function Hacks() {
     'use strict';
@@ -23,8 +23,10 @@ var Hacks = function Hacks() {
         window.tools.Events.register(moduleEvents, event);
 
         // Mousetrap events
-        Mousetrap.bind(['command+k', 'ctrl+k'], function() {
+        Mousetrap.bind(['command+k', 'ctrl+k'], function(e) {
+            e.preventDefault();
             // show hide key
+            $(':focus').blur();
             $('.key-panel').toggleClass('on');
         });
 
@@ -32,6 +34,29 @@ var Hacks = function Hacks() {
             alert('MOFO');
         });
 
+    };
+
+    hacks.renameContext = function(contextName, newName) {
+        // get ego
+        var ego = network.getEgo();
+        ego.contexts.replace(contextName, newName);
+
+
+
+        //get nodes
+        var nodes = network.getNodes();
+        $.each(nodes, function(nodeIndex, nodeValue) {
+            if (nodeValue.contexts) {
+                nodeValue.contexts.replace(contextName, newName);
+            }
+        });
+
+        // save everything
+        netCanvas.Modules.session.saveData();
+
+
+        // refresh stage
+        $('.refresh-button').trigger('click');
     };
 
     hacks.unbindEvents = function() {
