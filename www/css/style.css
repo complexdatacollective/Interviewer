@@ -12837,11 +12837,14 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   right: 20px;
   border-radius: 8px;
   overflow: hidden;
-}
-.key-panel-initial {
   -webkit-transition: 0.5s all ease;
   transition: 0.5s all ease;
-  opacity: 1;
+  -webkit-transform: translateX(350px);
+          transform: translateX(350px);
+}
+.key-panel.on {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
 }
 .defaultOnly {
   display: block;

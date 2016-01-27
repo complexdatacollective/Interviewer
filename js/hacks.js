@@ -25,7 +25,7 @@ var Hacks = function Hacks() {
         // Mousetrap events
         Mousetrap.bind(['command+k', 'ctrl+k'], function() {
             // show hide key
-            // $('.')
+            $('.key-panel').toggleClass('on');
         });
 
         Mousetrap.bind(['command+r', 'ctrl+r'], function() {

@@ -377,7 +377,7 @@ module.exports = function sociogramNarrative() {
 			$('#'+settings.targetEl).append('<div class="reset-state-button text-center"><span class="fa fa-2x fa-refresh"></span></div>');
 
 			// Key panel
-			$('#'+settings.targetEl).append('<div class="key-panel"></div>');
+			$('#'+settings.targetEl).append('<div class="key-panel on"></div>');
 
 			$('.key-panel').append(`
 			<div class="key-panel-initial" id="accordion1" role="tablist" aria-multiselectable="true">
@@ -792,10 +792,15 @@ module.exports = function sociogramNarrative() {
 					var nodeTotal = 0;
 
 					$.each(settings.size, function(sizeIndex, sizeValue) {
-						if (typeof node[sizeValue] !== 'undefined') {
+						if (typeof node[sizeValue] !== 'undefined' && typeof node[sizeValue] === 'number') {
+							console.log('updating nodeTotal with '+node[sizeValue]);
 							nodeTotal += node[sizeValue];
 						}
 					});
+
+					if (typeof nodeTotal !== 'number') {
+						nodeTotal = 0;
+					}
 
 					nodeTotal = nodeTotal > 0 ? nodeTotal : 0;
 
@@ -809,10 +814,16 @@ module.exports = function sociogramNarrative() {
 
 					// make low 0.85 of default
 					// make high 1.5 of default
+					// console.log('nodeTotal '+nodeTotal);
 					var range = high;
+					// console.log('range '+range);
 					var nodeProportion = (nodeTotal/range);
+					nodeProportion = nodeProportion || 0;
+					// console.log('node proportion '+nodeProportion);
 					var nodeRatio = 0.80 + (nodeProportion * 0.50);
+					// console.log('noderatio '+nodeRatio);
 					var ratio = nodeRatio * settings.options.defaultNodeSize;
+					// console.log(ratio);
 					sociogramNode.children[1].setAttr('radius', ratio);
 				}
 			});
