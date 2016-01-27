@@ -1455,7 +1455,8 @@ module.exports = function Sociogram() {
 
 		for (var i =0; i <= currentPrompt; i++) {
 			// check if current previous prompt has a select element
-			if (typeof settings.prompts[i].showSelected === 'object') {
+			console.log(settings.prompts);
+			if (typeof settings.prompts === 'object' && typeof settings.prompts[i] !== 'undefined' && typeof settings.prompts[i].showSelected === 'object') {
 				// add fields from dataTarget
 				properties = {};
 

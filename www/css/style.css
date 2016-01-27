@@ -12974,6 +12974,9 @@ button.btn-checkbox {
   position: absolute;
   z-index: 999;
 }
+.form-group[data-component="contexts"] {
+  width: 100%;
+}
 .dialog {
   background: #eee;
   padding: 25px;

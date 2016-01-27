@@ -59,10 +59,6 @@ module.exports = function SociogramMissing() {
 		text.setY( (container.getY() - text.getHeight()/1.8) );
 	}
 
-	function addNodeHandler(e) {
-		sociogramMissing.addNode(e.detail);
-	}
-
 	sociogramMissing.changeData = function() {
 		sociogramMissing.resetNodeState();
 		sociogramMissing.updateNodeState();
@@ -116,11 +112,6 @@ module.exports = function SociogramMissing() {
 			{
 				event: 'changeStageStart',
 				handler: sociogramMissing.destroy,
-				targetEl:  window
-			},
-			{
-				event: 'nodeAdded',
-				handler: addNodeHandler,
 				targetEl:  window
 			},
 			{
@@ -500,26 +491,6 @@ module.exports = function SociogramMissing() {
 	};
 
 	sociogramMissing.drawUIComponents = function (callback) {
-
-		// New node button
-		$('#'+settings.targetEl).append('<div class="new-node-button text-center"><span class="fa fa-2x fa-plus"></span></div>');
-		var events = [{
-				event: 'click',
-				handler: sociogramMissing.showNewNodeForm,
-				targetEl:  '.new-node-button'
-			},
-			{
-				event: 'submit',
-				handler: function() {
-					setTimeout(function() {
-						sociogramMissing.updateNodeState();
-					},100);
-				},
-				targetEl: window.document,
-				subtarget: window.forms.nameGenForm.getID()
-			}
-		];
-		window.tools.Events.register(moduleEvents, events);
 
 		// Draw all UI components
 		var previousSkew = 0;

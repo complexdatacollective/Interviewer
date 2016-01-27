@@ -21,10 +21,10 @@ var Session = function Session() {
     }
 
     function clickDownloadInput() {
+        console.log('clickdownloadinput');
         $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
-        var event = window.document.createEvent('MouseEvents');
-        event.initMouseEvent('click');
-        window.document.getElementById('save').dispatchEvent(event);
+        $('#save').trigger('click');
+        session.downloadData();
     }
 
     // custom events
@@ -219,7 +219,7 @@ var Session = function Session() {
             });
         });
 
-        window.sessionMenu.addItem('Download Data', 'fa-download', function() { clickDownloadInput(); });
+        window.sessionMenu.addItem('Download Data', 'fa-download', clickDownloadInput);
 
         window.sessionMenu.addItem('Purge Database', 'fa-trash', function() {
             window.BootstrapDialog.show({
@@ -256,6 +256,7 @@ var Session = function Session() {
     };
 
     session.downloadData = function() {
+        console.log('downloadData()');
         var filename = session.returnSessionID()+'.json';
         var text = JSON.stringify(session.sessionData, undefined, 2); // indentation level = 2;
         var pom = document.createElement('a');
