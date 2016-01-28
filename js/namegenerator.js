@@ -86,10 +86,9 @@ module.exports = function NameGenerator() {
             $('#new-node-submit-btn').click();
         }, 500);
 
-        $('#first_name').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-        $('#last_name').val(namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]);
-
-        $('#label').val($('#first_name').val());
+        var name = namesList[Math.floor(window.tools.randomBetween(0,namesList.length))]+' '+namesList[Math.floor(window.tools.randomBetween(0,namesList.length))];
+        $('#name').val(name);
+        window.hacks.nicknameGenerator({keyCode: '12'});
     };
 
     nameGenerator.destroy = function() {
@@ -357,7 +356,7 @@ module.exports = function NameGenerator() {
             revert: true,
             revertDuration: 200,
             refreshPositions: true,
-        distance: 50,
+            distance: 50,
             scroll: false,
             stack: '.node-list-item',
             start: function(event, ui) {
@@ -485,11 +484,11 @@ module.exports = function NameGenerator() {
 
         card = $('<div class="card" data-index="'+properties.id+'"><div class="inner-card"><h4>'+properties.label+'</h4></div></div>');
         var list = $('<ul></ul>');
-        list.append('<li>'+properties.first_name+' '+properties.last_name+'</li>');
+        list.append('<li>'+properties.name+'</li>');
         card.children('.inner-card').append(list);
         $('.nameList').append(card);
 
-        $(card).on('click', cardClickHandler);
+        $(card).on('tap', cardClickHandler);
 
         nameGenerator.updateCounter();
         nameGenerator.makeDraggable();
@@ -513,7 +512,7 @@ module.exports = function NameGenerator() {
         card.children('.inner-card').find('h4').html(properties.label);
 
         var list = card.children('.inner-card').find('ul');
-        list.html('<li>'+properties.first_name+' '+properties.last_name+'</li>');
+        list.append('<li>'+properties.name+'</li>');
 
         if (callback) {
             callback();

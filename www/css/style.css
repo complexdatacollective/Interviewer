@@ -11208,16 +11208,24 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   opacity: 1;
 }
 .ord-active-node-list {
-  width: 70% ;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  overflow-x: scroll;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
-              -ms-grid-row-align: center;
           align-items: center;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  padding-bottom: 200px;
 }
 .ord-node-bin .active-node-list {
   display: block;
@@ -12974,7 +12982,7 @@ button.btn-checkbox {
   position: absolute;
   z-index: 999;
 }
-.form-group[data-component="contexts"] {
+.form-group {
   width: 100%;
 }
 .dialog {
@@ -13492,29 +13500,31 @@ fieldset[disabled] .btn-modal-danger.focus {
   white-space: nowrap;
 }
 .node-bucket-item {
-  font-size: 1.7vmin;
-  z-index: 9999;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  height: 60px;
-  margin: 10px;
-  padding: 20px;
-  cursor: pointer;
-  cursor: hand;
-  color: black;
-  border-radius: 32px;
-  background: #eeeeee;
-  text-shadow: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+  font-size: 14px;
+  border: 0;
+  background: white;
+  color: black;
+  margin: 6px;
 }
 .active-node-list .node-bucket-item {
   -webkit-transition: all 0.5s ease-in-out;
@@ -13658,7 +13668,6 @@ fieldset[disabled] .btn-modal-danger.focus {
   -webkit-transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
   transition: all 0.3s cubic-bezier(0.7, 0, 0.3, 1);
   border-radius: 12px;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;

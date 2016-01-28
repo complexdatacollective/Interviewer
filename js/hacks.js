@@ -16,8 +16,17 @@ var Hacks = function Hacks() {
             {
                 event: 'keyup',
                 targetEl: window.document,
-                subTarget: '#first_name, #last_name',
+                subTarget: '#name',
                 handler: hacks.nicknameGenerator
+            },
+            {
+                event: 'onmousedown',
+                targetEl: window.document,
+                handler: function disableclick(event) {
+                    if(event.button===2) {
+                        return false;
+                    }
+                }
             }
         ];
         window.tools.Events.register(moduleEvents, event);
@@ -79,15 +88,29 @@ var Hacks = function Hacks() {
         console.log('nickname');
         // If key is NOT the enter key
         if (e.keyCode !== 13) {
-            if($('#first_name').val().length > 0 && $('#first_name').val().length > 0) {
+            if($('#name').val().length > 0) {
+                var split = $('#name').val();
+                split = split.split(' ');
+                var fname = split[0];
+                var lname;
+                if (split.length > 1) {
+                    lname = split[split.length-1];
+                    if (lname.length > 0) {
+                        lname = lname[0]+'.';
+                    } else {
+                        lname = '';
+                    }
 
-                var lname = $('#first_name').val()+' '+$('#last_name').val().charAt(0);
-                if ($('#last_name').val().length > 0 ) {
-                    lname +='.';
+
+                } else {
+                    lname = '';
                 }
 
+                var label = fname+' '+lname;
+
+
                 var updateName = function() {
-                    $('#label').val(lname);
+                    $('#label').val(label);
                 };
 
                 setTimeout(updateName,0);

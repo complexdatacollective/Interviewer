@@ -33,5 +33,6 @@
     "height": 820,
     "min_width": 100,
     "min_height": 80
-  }
+},
+  "chromium-args" : "--touch-devices=10 --touch-events=enabled --enable-pinch"
 }

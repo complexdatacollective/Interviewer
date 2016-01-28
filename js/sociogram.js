@@ -52,7 +52,7 @@ module.exports = function Sociogram() {
 			concentricCircleColor: '#ffffff',
 			concentricCircleNumber: 4,
 			concentricCircleSkew: false,
-			showMe: true
+			showMe: false,
 		},
 		dataOrigin: {
 			'Position': {
@@ -1519,7 +1519,7 @@ module.exports = function Sociogram() {
 				var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 				var currentRadius = totalHeight/2 * ratio;
 				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
-				if (i === settings.options.concentricCircleNumber-1) {
+				if (i === settings.options.concentricCircleNumber-1 && settings.options.concentricCircleColor > 1) {
 					currentRadius += 50;
 				}
 				previousSkew = skew;

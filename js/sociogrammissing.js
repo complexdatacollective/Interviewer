@@ -53,9 +53,9 @@ module.exports = function SociogramMissing() {
 			defaultLabelColor: 'black',
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',
-			concentricCircleNumber: 4,
+			concentricCircleNumber: 1,
 			concentricCircleSkew: false,
-			showMe: true
+			showMe: false
 		}
 	};
 
@@ -409,7 +409,7 @@ module.exports = function SociogramMissing() {
 
 		}
 
-		nodeGroup.on('dbltap dblclick', function() {
+		nodeGroup.on('tap click', function() {
 
 			selectedNodes = [];
 			// var kineticNodes = sociogramMissing.getKineticNodes();
@@ -601,7 +601,7 @@ module.exports = function SociogramMissing() {
 			var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 			var currentRadius = totalHeight/2 * ratio;
 			currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
-			if (i === settings.options.concentricCircleNumber-1) {
+			if (i === settings.options.concentricCircleNumber-1 && settings.options.concentricCircleColor > 1) {
 				currentRadius += 50;
 			}
 			previousSkew = skew;

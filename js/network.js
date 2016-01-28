@@ -364,6 +364,35 @@ module.exports = function Network() {
 
     };
 
+    network.deduplicate = function() {
+        var newNodes = [];
+        var ids = [];
+        $.each(nodes, function(index, value) {
+            if (ids.indexOf(value.id) === -1) {
+                ids.push(value.id);
+                newNodes.push(value);
+            } else {
+                console.log('rejected');
+            }
+        });
+
+        nodes = newNodes;
+
+        var newEdges = [];
+        ids = [];
+        $.each(edges, function(index, value) {
+            if (ids.indexOf(value.id) === -1) {
+                ids.push(value.id);
+                newEdges.push(value);
+            } else {
+                console.log('rejected');
+            }
+        });
+
+        edges = newEdges;
+        window.netCanvas.Modules.session.saveData();
+    };
+
     network.getEdge = function(id) {
         if (id === undefined) { return false; }
         for (var i = 0;i<edges.length; i++) {

@@ -133,6 +133,10 @@ module.exports = function OrdinalBin() {
                     }, 0);
 
                     $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
+                        appendTo: 'body',
+                        scroll: false,
+                        stack: '.draggable',
+                        refreshPositions: true,
                         start: function() {
                             console.log($(this).css('top'));
                             if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
@@ -203,7 +207,12 @@ module.exports = function OrdinalBin() {
 
         });
         $('.draggable').draggable({ cursor: 'pointer', revert: 'invalid',
+            appendTo: 'body',
+            scroll: false,
+            stack: '.draggable',
+            refreshPositions: true,
             start: function() {
+
                 $(this).css({position:'relative'});
 
                 if (taskComprehended === false) {

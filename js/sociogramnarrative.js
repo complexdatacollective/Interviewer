@@ -53,7 +53,7 @@ module.exports = function sociogramNarrative() {
 			concentricCircleColor: '#ffffff',
 			concentricCircleNumber: 4,
 			concentricCircleSkew: false,
-			showMe: true
+			showMe: false
 		},
 		dataOrigin: {
 			'Position': {
@@ -459,7 +459,7 @@ module.exports = function sociogramNarrative() {
 				var skew = i > 0 ? (ratio * 5) * (totalHeight/50) : 0;
 				var currentRadius = totalHeight/2 * ratio;
 				currentRadius = settings.options.concentricCircleSkew? currentRadius + skew + previousSkew : currentRadius;
-				if (i === settings.options.concentricCircleNumber-1) {
+				if (i === settings.options.concentricCircleNumber-1 && settings.options.concentricCircleColor > 1) {
 					currentRadius += 50;
 				}
 				previousSkew = skew;
@@ -782,54 +782,54 @@ module.exports = function sociogramNarrative() {
 			nodeLayer.draw();
 		}
 
-		// Node sizing
-		if (typeof settings.size !== 'undefined' && typeof settings.size === 'object') {
-			var high = 0;
-			var low = 0;
-			// Iterate over nodes
-			$.each(nodes, function(index, node) {
-				if (node.type !== 'Ego') {
-					var nodeTotal = 0;
-
-					$.each(settings.size, function(sizeIndex, sizeValue) {
-						if (typeof node[sizeValue] !== 'undefined' && typeof node[sizeValue] === 'number') {
-							console.log('updating nodeTotal with '+node[sizeValue]);
-							nodeTotal += node[sizeValue];
-						}
-					});
-
-					if (typeof nodeTotal !== 'number') {
-						nodeTotal = 0;
-					}
-
-					nodeTotal = nodeTotal > 0 ? nodeTotal : 0;
-
-					high = nodeTotal > high ? nodeTotal : high;
-					low = nodeTotal < low ? nodeTotal : low;
-
-
-
-					// set size of the node as proporton of range
-					var sociogramNode = sociogramNarrative.getNodeByID(node.id);
-
-					// make low 0.85 of default
-					// make high 1.5 of default
-					// console.log('nodeTotal '+nodeTotal);
-					var range = high;
-					// console.log('range '+range);
-					var nodeProportion = (nodeTotal/range);
-					nodeProportion = nodeProportion || 0;
-					// console.log('node proportion '+nodeProportion);
-					var nodeRatio = 0.80 + (nodeProportion * 0.50);
-					// console.log('noderatio '+nodeRatio);
-					var ratio = nodeRatio * settings.options.defaultNodeSize;
-					// console.log(ratio);
-					sociogramNode.children[1].setAttr('radius', ratio);
-				}
-			});
-
-			nodeLayer.draw();
-		}
+		// // Node sizing
+		// if (typeof settings.size !== 'undefined' && typeof settings.size === 'object') {
+		// 	var high = 0;
+		// 	var low = 0;
+		// 	// Iterate over nodes
+		// 	$.each(nodes, function(index, node) {
+		// 		if (node.type !== 'Ego') {
+		// 			var nodeTotal = 0;
+		//
+		// 			$.each(settings.size, function(sizeIndex, sizeValue) {
+		// 				if (typeof node[sizeValue] !== 'undefined' && typeof node[sizeValue] === 'number') {
+		// 					console.log('updating nodeTotal with '+node[sizeValue]);
+		// 					nodeTotal += node[sizeValue];
+		// 				}
+		// 			});
+		//
+		// 			if (typeof nodeTotal !== 'number') {
+		// 				nodeTotal = 0;
+		// 			}
+		//
+		// 			nodeTotal = nodeTotal > 0 ? nodeTotal : 0;
+		//
+		// 			high = nodeTotal > high ? nodeTotal : high;
+		// 			low = nodeTotal < low ? nodeTotal : low;
+		//
+		//
+		//
+		// 			// set size of the node as proporton of range
+		// 			var sociogramNode = sociogramNarrative.getNodeByID(node.id);
+		//
+		// 			// make low 0.85 of default
+		// 			// make high 1.5 of default
+		// 			// console.log('nodeTotal '+nodeTotal);
+		// 			var range = high;
+		// 			// console.log('range '+range);
+		// 			var nodeProportion = (nodeTotal/range);
+		// 			nodeProportion = nodeProportion || 0;
+		// 			// console.log('node proportion '+nodeProportion);
+		// 			var nodeRatio = 0.80 + (nodeProportion * 0.50);
+		// 			// console.log('noderatio '+nodeRatio);
+		// 			var ratio = nodeRatio * settings.options.defaultNodeSize;
+		// 			// console.log(ratio);
+		// 			sociogramNode.children[1].setAttr('radius', ratio);
+		// 		}
+		// 	});
+		//
+		// 	nodeLayer.draw();
+		// }
 
 	};
 

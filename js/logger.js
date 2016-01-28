@@ -1,5 +1,5 @@
 /* exported Logger */
-/* global window, note */
+/* global window, $, note */
 
 var Logger = function Logger() {
     'use strict';
@@ -24,9 +24,11 @@ var Logger = function Logger() {
     logger.addToLog = function(e) {
         if (!e) { return false; }
 
+        var eventClone = $.extend({}, e.eventObject);
+
         var data = {
             'eventType': e.eventType,
-            'targetObject':e.eventObject,
+            'targetObject':eventClone,
             'eventTime': new Date()
         };
 
