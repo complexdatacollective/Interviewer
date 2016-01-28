@@ -84,7 +84,7 @@ module.exports = function OrdinalBin() {
         // One of these for each bin. One bin for each variable value.
         $.each(ordinalBin.options.variable.values, function(index, value){
 
-            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="ord-active-node-list"></div></div>');
+            var newBin = $('<div class="ord-node-bin size-'+binNumber+' d'+index+' '+ordinalBin.options.special+'" data-index="'+index+'"><h1>'+value.label+'</h1><div class="ord-active-node-list"></div></div>');
             newBin.data('index', index);
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',

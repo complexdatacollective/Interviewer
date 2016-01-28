@@ -173,8 +173,7 @@ module.exports = function sociogramNarrative() {
 		// event
 		var log = new window.CustomEvent('log', {'detail':{'eventType': 'changePreset', 'eventObject':this.Value}});
 		window.dispatchEvent(log);
-		var unsavedChanges = new window.Event('unsavedChanges');
-		window.dispatchEvent();
+		var unsavedChanges = new window.Event('unsavedChanges')
 		window.dispatchEvent(unsavedChanges);
 
 		$.each(settings.presets, function(presetIndex, presetValue) {
@@ -351,8 +350,7 @@ module.exports = function sociogramNarrative() {
 		// event
 		var log = new window.CustomEvent('log', {'detail':{'eventType': 'toggleHulls', 'eventObject':{hullsShow: hullsShown}}});
 		window.dispatchEvent(log);
-		var unsavedChanges = new window.Event('unsavedChanges');
-		window.dispatchEvent();
+		var unsavedChanges = new window.Event('unsavedChanges')
 		window.dispatchEvent(unsavedChanges);
 
 		$('label[for="context-checkbox-show"]').addClass('show');
@@ -366,8 +364,7 @@ module.exports = function sociogramNarrative() {
 		// event
 		var log = new window.CustomEvent('log', {'detail':{'eventType': 'resetNodes', 'eventObject':{}}});
 		window.dispatchEvent(log);
-		var unsavedChanges = new window.Event('unsavedChanges');
-		window.dispatchEvent();
+		var unsavedChanges = new window.Event('unsavedChanges')
 		window.dispatchEvent(unsavedChanges);
 
 		// Reset select
@@ -406,18 +403,6 @@ module.exports = function sociogramNarrative() {
 						<select class="selectpicker" title="Preset..." id="key-panel-preset-select" data-width="100%"></select>
 					</div>
 					<div class="">
-						<div class="panel-heading" role="tab" id="headingOne">
-							<h5>
-								<a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								Links
-								<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
-							</h5>
-						</div>
-						<div id="collapseOne" class="links-panel panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-
-						</div>
-					</div>
-					<div class="">
 						<div class="panel-heading" role="tab" id="headingTwo">
 							<h5>
 								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -426,6 +411,18 @@ module.exports = function sociogramNarrative() {
 							</h5>
 						</div>
 						<div id="collapseTwo" class="nodes-panel panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+
+						</div>
+					</div>
+					<div class="">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h5>
+								<a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								Links
+								<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i></a>
+							</h5>
+						</div>
+						<div id="collapseOne" class="links-panel panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 
 						</div>
 					</div>
@@ -1372,7 +1369,6 @@ module.exports = function sociogramNarrative() {
 			var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeTap', 'eventObject':currentNode}});
 			window.dispatchEvent(log);
 			var unsavedChanges = new window.Event('unsavedChanges');
-			window.dispatchEvent();
 			window.dispatchEvent(unsavedChanges);
 
 			// var tween = new Konva.Tween({
@@ -1662,7 +1658,6 @@ module.exports = function sociogramNarrative() {
 			var log = new window.CustomEvent('log', {'detail':{'eventType': 'annotation', 'eventObject':target.points}});
 			window.dispatchEvent(log);
 			var unsavedChanges = new window.Event('unsavedChanges');
-			window.dispatchEvent();
 			window.dispatchEvent(unsavedChanges);
 
 			stage.off('mouseup touchend', function(){killAnnotation(target);});

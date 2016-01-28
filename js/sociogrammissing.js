@@ -284,7 +284,7 @@ module.exports = function SociogramMissing() {
 			}
 
 			if (sociogramMissing.nodeAlreadyAsked(node.id)) {
-				currentNode.children[1].opacity(0.3);
+				currentNode.children[1].opacity(0.2);
 			}
 		});
 

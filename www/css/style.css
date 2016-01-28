@@ -11689,7 +11689,7 @@ input.show-contexts-checkbox[type=checkbox]:checked + label:before {
   opacity: 1;
 }
 .current-node-list .node-list-item.selected {
-  border: 5px solid #FFDD36;
+  border: 6px solid #FFDD36;
 }
 .card {
   padding-left: 1em;
@@ -12124,6 +12124,54 @@ fieldset[disabled] .btn-modal-danger.focus {
   background: #000000;
 }
 .d7 {
+  background: #000000;
+}
+.d0.professional {
+  background: #1ECD97;
+}
+.d1.professional {
+  background: #17a176;
+}
+.d2.professional {
+  background: #117455;
+}
+.d3.professional {
+  background: #0a4835;
+}
+.d4.professional {
+  background: #041b14;
+}
+.d5.professional {
+  background: #000000;
+}
+.d6.professional {
+  background: #000000;
+}
+.d7.professional {
+  background: #000000;
+}
+.d0.negative {
+  background: #e85657;
+}
+.d1.negative {
+  background: #e2292a;
+}
+.d2.negative {
+  background: #be1a1b;
+}
+.d3.negative {
+  background: #911415;
+}
+.d4.negative {
+  background: #640e0e;
+}
+.d5.negative {
+  background: #370808;
+}
+.d6.negative {
+  background: #0b0101;
+}
+.d7.negative {
   background: #000000;
 }
 .c0 {
