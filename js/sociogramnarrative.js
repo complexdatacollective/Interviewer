@@ -170,6 +170,13 @@ module.exports = function sociogramNarrative() {
 	function presetSelectHandler() {
 		var name = this.value;
 
+		// event
+		var log = new window.CustomEvent('log', {'detail':{'eventType': 'changePreset', 'eventObject':this.Value}});
+		window.dispatchEvent(log);
+		var unsavedChanges = new window.Event('unsavedChanges');
+		window.dispatchEvent();
+		window.dispatchEvent(unsavedChanges);
+
 		$.each(settings.presets, function(presetIndex, presetValue) {
 			if (presetValue.name === name) {
 				settings.edges = presetValue.edges;
@@ -340,6 +347,14 @@ module.exports = function sociogramNarrative() {
 
 			hullsShown = false;
 		}
+
+		// event
+		var log = new window.CustomEvent('log', {'detail':{'eventType': 'toggleHulls', 'eventObject':{hullsShow: hullsShown}}});
+		window.dispatchEvent(log);
+		var unsavedChanges = new window.Event('unsavedChanges');
+		window.dispatchEvent();
+		window.dispatchEvent(unsavedChanges);
+
 		$('label[for="context-checkbox-show"]').addClass('show');
 		setTimeout(function() {
 			$('label[for="context-checkbox-show"]').removeClass('show');
@@ -348,6 +363,12 @@ module.exports = function sociogramNarrative() {
 	};
 
 	sociogramNarrative.resetNodeState = function() {
+		// event
+		var log = new window.CustomEvent('log', {'detail':{'eventType': 'resetNodes', 'eventObject':{}}});
+		window.dispatchEvent(log);
+		var unsavedChanges = new window.Event('unsavedChanges');
+		window.dispatchEvent();
+		window.dispatchEvent(unsavedChanges);
 
 		// Reset select
 		var kineticNodes = sociogramNarrative.getKineticNodes();
@@ -1347,6 +1368,13 @@ module.exports = function sociogramNarrative() {
 
 			var currentNode = this; // Store the context
 
+			// event
+			var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeTap', 'eventObject':currentNode}});
+			window.dispatchEvent(log);
+			var unsavedChanges = new window.Event('unsavedChanges');
+			window.dispatchEvent();
+			window.dispatchEvent(unsavedChanges);
+
 			// var tween = new Konva.Tween({
 			// 	node: currentNode
 			// }).play();
@@ -1634,8 +1662,9 @@ module.exports = function sociogramNarrative() {
 			var log = new window.CustomEvent('log', {'detail':{'eventType': 'annotation', 'eventObject':target.points}});
 			window.dispatchEvent(log);
 			var unsavedChanges = new window.Event('unsavedChanges');
-
+			window.dispatchEvent();
 			window.dispatchEvent(unsavedChanges);
+
 			stage.off('mouseup touchend', function(){killAnnotation(target);});
 			stage.off('mousemove touchmove', function(){drawAnnotation(target);});
 			target.onMouseUp();
