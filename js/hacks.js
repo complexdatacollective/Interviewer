@@ -16,7 +16,7 @@ var Hacks = function Hacks() {
             {
                 event: 'keyup',
                 targetEl: window.document,
-                subTarget: '#name',
+                subTarget: '.new-node-form #name',
                 handler: hacks.nicknameGenerator
             },
             {
@@ -27,6 +27,16 @@ var Hacks = function Hacks() {
                         return false;
                     }
                 }
+            },
+            {
+                event: 'MSHoldVisual',
+                targetEl: window.document,
+                handler: function(e) { e.preventDefault(); }
+            },
+            {
+                event: 'contextmenu',
+                targetEl: window.document,
+                handler: function(e) { e.preventDefault(); }
             }
         ];
         window.tools.Events.register(moduleEvents, event);
@@ -85,7 +95,7 @@ var Hacks = function Hacks() {
     }
 
     hacks.nicknameGenerator = function(e) {
-        console.log('nickname');
+        // console.log('nickname');
         // If key is NOT the enter key
         if (e.keyCode !== 13) {
             if($('#name').val().length > 0) {
@@ -120,10 +130,10 @@ var Hacks = function Hacks() {
     };
 
     hacks.handleKeyPress = function(e) {
-        note.info('hacks.handleKeyPress');
+        // note.info('hacks.handleKeyPress');
         note.trace(e.keyCode);
         if (!isEditable($(':focus'))) {
-            console.log('preventDefault');
+            // console.log('preventDefault');
             e.preventDefault();
         }
 

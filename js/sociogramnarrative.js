@@ -849,7 +849,7 @@ module.exports = function sociogramNarrative() {
 			value.children[1].setAttr('shadowBlur', 2);
 		});
 
-		console.log(annotations);
+		// console.log(annotations);
 		$.each(annotations, function(index, value) {
 			value.tween.finish();
 			value.tween.destroy();
@@ -1003,10 +1003,10 @@ module.exports = function sociogramNarrative() {
 			// We need this check because on load all hull shapes might not be defined yet.
 			var hullPoints = newHull.getHull();
 			if (hullPoints.length === 1 && typeof hullPoints[0] === 'undefined') {
-				console.log('catching');
+				// console.log('catching');
 				hullPoints = [];
 			}
-			console.log(hullPoints);
+			// console.log(hullPoints);
 			if (typeof hullShapes[pointHulls[i]] !== 'undefined') {
 				var tween = new Konva.Tween({
 					node: hullShapes[pointHulls[i]],
@@ -1630,9 +1630,17 @@ module.exports = function sociogramNarrative() {
 
 
 		function killAnnotation(target) {
+			// event
+			var log = new window.CustomEvent('log', {'detail':{'eventType': 'annotation', 'eventObject':target.points}});
+			window.dispatchEvent(log);
+			var unsavedChanges = new window.Event('unsavedChanges');
+
+			window.dispatchEvent(unsavedChanges);
 			stage.off('mouseup touchend', function(){killAnnotation(target);});
 			stage.off('mousemove touchmove', function(){drawAnnotation(target);});
 			target.onMouseUp();
+
+
 		}
 
 		function drawAnnotation(target) {

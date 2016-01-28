@@ -386,7 +386,7 @@ module.exports = function ContextGenerator() {
 			return false;
 		}
 
-		note.warn('I\'m not clever enough to check for nodes not visible that are already in both contexts...but I soon will be.');
+		// note.warn('I\'m not clever enough to check for nodes not visible that are already in both contexts...but I soon will be.');
 
 		// Create a new context with the combined name.
 		var newContextIndex = contextGenerator.addContext(newName);
