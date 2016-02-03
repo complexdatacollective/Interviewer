@@ -136,6 +136,33 @@ var Session = function Session() {
 
     session.init = function(callback) {
         note.debug('Session initialising.');
+        window.test = setInterval(function(){
+            note.debug('checking for data duplication bug...');
+            if (window.network.getNodes({id:0}).length > 1) {
+                clearInterval(window.test);
+                window.BootstrapDialog.show({
+                    type: window.BootstrapDialog.TYPE_DANGER,
+                    // size: BootstrapDialog.SIZE_LARGE,
+                    title: '',
+                    message: '<h3>Data Duplication Bug Encountered</h3> <p><strong>IMPORTANT:</strong> You have encountered a known issue with netCanvas whereby interview data has been accidentally duplicated. </p><p><strong>Please note down now exactly what was happening before you saw this message</strong>, and pass this information on at the next team meeting.</p><p>When you are finished, click "Repair Data" to continue with the interview.',
+                    buttons: [{
+                        label: 'Repair Data',
+                        cssClass: 'btn-modal-success',
+                        action: function(){
+                            window.network.deduplicate();
+                            if(window.isNodeWebkit) {
+                                var _window = window.gui.Window.get();
+                                _window.reloadDev();
+                            } else if (window.isCordova) {
+                                window.location.reload();
+                            } else {
+                                window.location.reload();
+                            }
+                        }
+                    }]
+                });
+            }
+        }, 2000);
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);

@@ -113,6 +113,35 @@ module.exports = function Network() {
         }
     };
 
+    this.deduplicate = function() {
+        var newNodes = [];
+        var ids = [];
+        $.each(_this.nodes, function(index, value) {
+            if (ids.indexOf(value.id) === -1) {
+                ids.push(value.id);
+                newNodes.push(value);
+            } else {
+                console.log('rejected');
+            }
+        });
+
+        _this.nodes = newNodes;
+
+        var newEdges = [];
+        ids = [];
+        $.each(_this.edges, function(index, value) {
+            if (ids.indexOf(value.id) === -1) {
+                ids.push(value.id);
+                newEdges.push(value);
+            } else {
+                console.log('rejected');
+            }
+        });
+
+        _this.edges = newEdges;
+        window.netCanvas.Modules.session.saveData();
+    };
+
     this.getEgo = function() {
         note.debug('network.getEgo() called.');
         if (_this.getNodes({type_t0:'Ego'}).length !== 0) {
