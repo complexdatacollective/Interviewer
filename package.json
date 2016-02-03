@@ -19,6 +19,7 @@
     "html5-fs": "0.0.1",
     "moment": "^2.10.3",
     "nedb": "git+https://github.com/jthrilly/nedb.git",
+    "nw": "^0.12.3",
     "requirejs": "^2.1.18",
     "xmlhttprequest": "^1.7.0"
   },

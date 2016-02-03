@@ -111,6 +111,49 @@ module.exports = function MultiBin() {
 
 	};
 
+
+	var nodeClickHandler = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		var el = $(this);
+		var id = $(this).parent().parent().data('index');
+
+		// has the node been clicked while in the bucket or while in a bin?
+		if ($(this).parent().hasClass('active-node-list')) {
+			// it has been clicked while in a bin.
+			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
+			var properties = {};
+			// make the values null when a node has been taken out of a bin
+			properties[multiBin.options.variable.label] = '';
+
+			// dont forget followups
+			if(typeof multiBin.options.followup !== 'undefined') {
+				$.each(multiBin.options.followup.questions, function(index, value) {
+					properties[value.variable] = undefined;
+				});
+			}
+			window.network.updateEdge(edgeID,properties);
+
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
+
+		}
+
+	};
+
 	var nodeBinClickHandler = function() {
 		if (open === false) {
 
@@ -151,48 +194,6 @@ module.exports = function MultiBin() {
 
 				}
 		} else {
-		}
-
-	};
-
-	var nodeClickHandler = function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		e.stopImmediatePropagation();
-
-		var el = $(this);
-		var id = $(this).parent().parent().data('index');
-
-		// has the node been clicked while in the bucket or while in a bin?
-		if ($(this).parent().hasClass('active-node-list')) {
-			// it has been clicked while in a bin.
-			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
-			var properties = {};
-			// make the values null when a node has been taken out of a bin
-			properties[multiBin.options.variable.label] = '';
-
-			// dont forget followups
-			if(typeof multiBin.options.followup !== 'undefined') {
-				$.each(multiBin.options.followup.questions, function(index, value) {
-					properties[value.variable] = undefined;
-				});
-			}
-			window.network.updateEdge(edgeID,properties);
-
-			$(this).css({'top':0, 'left' :0});
-			$(this).appendTo('.node-bucket');
-			$(this).css('display', '');
-			var noun = 'people';
-			if ($('.c'+id).children('.active-node-list').children().length === 1) {
-				noun = 'person';
-			}
-			if ($('.c'+id).children('.active-node-list').children().length === 0) {
-				$('.c'+id).children('p').html('(Empty)');
-			} else {
-				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
-			}
-
-
 		}
 
 	};

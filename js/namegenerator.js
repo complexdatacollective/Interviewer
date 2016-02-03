@@ -146,6 +146,9 @@ module.exports = function Namegenerator() {
     };
 
     var submitFormHandler = function(e) {
+        note.info('submitFormHandler()');
+        note.trace(e);
+
         e.preventDefault();
 
         var newEdgeProperties = {};
@@ -182,12 +185,14 @@ module.exports = function Namegenerator() {
         var edgeProperties = {};
 
         if (editing === false) {
-            // We are submitting a new node
+            note.info('// We are submitting a new node');
             window.tools.extend(nodeProperties, newNodeProperties);
             var newNode = window.network.addNode(nodeProperties);
             var id;
 
+            console.log('iterating edgetypes');
             $.each(namegenerator.options.edgeTypes, function(index,value) {
+                console.log(value);
                 var currentEdgeProperties = {};
                 var currentEdge = value;
                 $.each(namegenerator.options.variables, function(index, value) {
@@ -213,9 +218,9 @@ module.exports = function Namegenerator() {
                 id = window.network.addEdge(edgeProperties);
             });
 
-            // Add role edges
+            note.info('// Add role edges');
 
-            // Iterate through selected items and create a new role edge for each.
+            note.info('// Iterate through selected items and create a new role edge for each.');
             $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
@@ -227,14 +232,14 @@ module.exports = function Namegenerator() {
                 window.network.addEdge(edgeProperties);
             });
 
-            // Main edge
+            note.info('// Main edge');
             var edge = window.network.getEdges({to:newNode, type:'Dyad'})[0];
             namegenerator.addToList(edge);
             alterCount++;
             alterCounter.update(alterCount);
 
         } else {
-            // We are updating a node
+            note.info('// We are updating a node');
 
             var color = function() {
                 var el = $('div[data-index='+editing+']');
@@ -585,7 +590,7 @@ module.exports = function Namegenerator() {
                         // get the data we need
                         var dropped = ui.draggable;
                         var droppedNode = dropped.data('id');
-                        var droppedNodeEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
+                        var dyadEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
 
                         // update name generator property of dyad edge
 
@@ -595,16 +600,47 @@ module.exports = function Namegenerator() {
                             if (value.label === 'ng_t0') { ngStep = value.value; }
                         });
 
-                        droppedNodeEdge.ng_t0 = ngStep;
+                        dyadEdge.ng_t0 = ngStep;
 
                         // Add the dropped node to the list, creating a card for it
-                        namegenerator.addToList(droppedNodeEdge);
+                        namegenerator.addToList(dyadEdge);
 
                         // create a node and edge in the current network
                         var oldNode = window.previousNetwork.getNode(droppedNode);
-                        droppedNodeEdge.elicited_previously = true;
+                        dyadEdge.elicited_previously = true;
                         window.network.addNode(oldNode, false, true);  // (properties, ego, force);
-                        window.network.addEdge(droppedNodeEdge);
+                        window.network.addEdge(dyadEdge);
+
+                        console.log('Adding other custom edges for this interface.');
+                        $.each(namegenerator.options.edgeTypes, function(edgeTypeIndex,edgeType) {
+                            if (edgeType !== 'Dyad') {
+                                var currentEdgeProperties = {};
+                                $.each(namegenerator.options.variables, function(index, value) {
+                                    if (value.target === 'edge' && value.edge === edgeType) {
+                                        if (value.private === true) {
+                                            currentEdgeProperties[value.variable] =  value.value;
+                                        } else {
+                                            if(value.type === 'relationship' || value.type === 'subrelationship') {
+                                                currentEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
+                                            } else {
+                                                currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
+                                            }
+                                        }
+                                    }
+                                });
+                                var edgeProperties = {
+                                    from: window.network.getEgo().id,
+                                    to: droppedNode,
+                                    type:edgeType
+                                };
+
+                                window.tools.extend(edgeProperties,currentEdgeProperties);
+                                window.network.addEdge(edgeProperties);
+                            }
+
+                        });
+
+
                         $('.inner-card').last().click();
 
                         setTimeout(function() {

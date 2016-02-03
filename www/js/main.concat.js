@@ -759,6 +759,54 @@ module.exports = function GeoInterface() {
 
   	// Private functions
 
+    function highlightFeature(e) {
+        var layer = e.target;
+        leaflet.fitBounds(e.target.getBounds(), {maxZoom:14});
+
+        layer.setStyle({
+            fillOpacity: 0.8,
+          fillColor: colors[1]
+        });
+
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
+            layer.bringToFront();
+        }
+
+        mapNodeClicked = layer.feature.properties.name;
+    }
+
+    function selectFeature(e) {
+        var layer = e;
+        leaflet.fitBounds(e.getBounds(), {maxZoom:14});
+
+        layer.setStyle({
+            fillOpacity: 0.8,
+          fillColor: colors[1]
+        });
+
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
+            layer.bringToFront();
+        }
+    }
+
+    function resetHighlight(e) {
+        $('.map-node-location').html('');
+        mapNodeClicked = false;
+        geojson.resetStyle(e.target);
+    }
+
+    function resetAllHighlights() {
+        $('.map-node-location').html('');
+        mapNodeClicked = false;
+        $.each(geojson._layers, function(index,value) {
+            geojson.resetStyle(value);
+        });
+    }
+
+    function resetPosition() {
+        leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+    }
+
 	function toggleFeature(e) {
         if (taskComprehended === false) {
             var eventProperties = {
@@ -814,6 +862,12 @@ module.exports = function GeoInterface() {
 
 	}
 
+    function onEachFeature(feature, layer) {
+        layer.on({
+            click: toggleFeature
+        });
+    }
+
   	function highlightCurrent() {
 
       if (edges[currentPersonIndex][variable] !== undefined) {
@@ -838,61 +892,6 @@ module.exports = function GeoInterface() {
   			resetPosition();
   		}
 
-  	}
-
-
-  	function highlightFeature(e) {
-        var layer = e.target;
-        leaflet.fitBounds(e.target.getBounds(), {maxZoom:14});
-
-        layer.setStyle({
-        	fillOpacity: 0.8,
-          fillColor: colors[1]
-        });
-
-        if (!window.L.Browser.ie && !window.L.Browser.opera) {
-        	layer.bringToFront();
-        }
-
-        mapNodeClicked = layer.feature.properties.name;
-    }
-
-  	function selectFeature(e) {
-        var layer = e;
-        leaflet.fitBounds(e.getBounds(), {maxZoom:14});
-
-        layer.setStyle({
-        	fillOpacity: 0.8,
-          fillColor: colors[1]
-        });
-
-        if (!window.L.Browser.ie && !window.L.Browser.opera) {
-        	layer.bringToFront();
-        }
-    }
-
-  	function resetHighlight(e) {
-  		$('.map-node-location').html('');
-  		mapNodeClicked = false;
-  		geojson.resetStyle(e.target);
-  	}
-
-  	function resetAllHighlights() {
-  		$('.map-node-location').html('');
-  		mapNodeClicked = false;
-		$.each(geojson._layers, function(index,value) {
-			geojson.resetStyle(value);
-		});
-  	}
-
-  	function onEachFeature(feature, layer) {
-  		layer.on({
-  			click: toggleFeature
-  		});
-  	}
-
-  	function resetPosition() {
-  		leaflet.setView([41.798395426119534,-87.839671372338884], 11);
   	}
 
     function setHomeless() {
@@ -1290,6 +1289,49 @@ module.exports = function MultiBin() {
 
 	};
 
+
+	var nodeClickHandler = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		var el = $(this);
+		var id = $(this).parent().parent().data('index');
+
+		// has the node been clicked while in the bucket or while in a bin?
+		if ($(this).parent().hasClass('active-node-list')) {
+			// it has been clicked while in a bin.
+			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
+			var properties = {};
+			// make the values null when a node has been taken out of a bin
+			properties[multiBin.options.variable.label] = '';
+
+			// dont forget followups
+			if(typeof multiBin.options.followup !== 'undefined') {
+				$.each(multiBin.options.followup.questions, function(index, value) {
+					properties[value.variable] = undefined;
+				});
+			}
+			window.network.updateEdge(edgeID,properties);
+
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
+
+		}
+
+	};
+
 	var nodeBinClickHandler = function() {
 		if (open === false) {
 
@@ -1330,48 +1372,6 @@ module.exports = function MultiBin() {
 
 				}
 		} else {
-		}
-
-	};
-
-	var nodeClickHandler = function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		e.stopImmediatePropagation();
-
-		var el = $(this);
-		var id = $(this).parent().parent().data('index');
-
-		// has the node been clicked while in the bucket or while in a bin?
-		if ($(this).parent().hasClass('active-node-list')) {
-			// it has been clicked while in a bin.
-			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
-			var properties = {};
-			// make the values null when a node has been taken out of a bin
-			properties[multiBin.options.variable.label] = '';
-
-			// dont forget followups
-			if(typeof multiBin.options.followup !== 'undefined') {
-				$.each(multiBin.options.followup.questions, function(index, value) {
-					properties[value.variable] = undefined;
-				});
-			}
-			window.network.updateEdge(edgeID,properties);
-
-			$(this).css({'top':0, 'left' :0});
-			$(this).appendTo('.node-bucket');
-			$(this).css('display', '');
-			var noun = 'people';
-			if ($('.c'+id).children('.active-node-list').children().length === 1) {
-				noun = 'person';
-			}
-			if ($('.c'+id).children('.active-node-list').children().length === 0) {
-				$('.c'+id).children('p').html('(Empty)');
-			} else {
-				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
-			}
-
-
 		}
 
 	};
@@ -1761,6 +1761,9 @@ module.exports = function Namegenerator() {
     };
 
     var submitFormHandler = function(e) {
+        note.info('submitFormHandler()');
+        note.trace(e);
+
         e.preventDefault();
 
         var newEdgeProperties = {};
@@ -1797,12 +1800,14 @@ module.exports = function Namegenerator() {
         var edgeProperties = {};
 
         if (editing === false) {
-            // We are submitting a new node
+            note.info('// We are submitting a new node');
             window.tools.extend(nodeProperties, newNodeProperties);
             var newNode = window.network.addNode(nodeProperties);
             var id;
 
+            console.log('iterating edgetypes');
             $.each(namegenerator.options.edgeTypes, function(index,value) {
+                console.log(value);
                 var currentEdgeProperties = {};
                 var currentEdge = value;
                 $.each(namegenerator.options.variables, function(index, value) {
@@ -1828,9 +1833,9 @@ module.exports = function Namegenerator() {
                 id = window.network.addEdge(edgeProperties);
             });
 
-            // Add role edges
+            note.info('// Add role edges');
 
-            // Iterate through selected items and create a new role edge for each.
+            note.info('// Iterate through selected items and create a new role edge for each.');
             $.each($(relationshipPanel).find('.relationship.selected'), function() {
                 edgeProperties = {
                     type: 'Role',
@@ -1842,14 +1847,14 @@ module.exports = function Namegenerator() {
                 window.network.addEdge(edgeProperties);
             });
 
-            // Main edge
+            note.info('// Main edge');
             var edge = window.network.getEdges({to:newNode, type:'Dyad'})[0];
             namegenerator.addToList(edge);
             alterCount++;
             alterCounter.update(alterCount);
 
         } else {
-            // We are updating a node
+            note.info('// We are updating a node');
 
             var color = function() {
                 var el = $('div[data-index='+editing+']');
@@ -2200,7 +2205,7 @@ module.exports = function Namegenerator() {
                         // get the data we need
                         var dropped = ui.draggable;
                         var droppedNode = dropped.data('id');
-                        var droppedNodeEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
+                        var dyadEdge = window.previousNetwork.getEdges({type: 'Dyad', from: window.previousNetwork.getEgo().id, to: droppedNode})[0];
 
                         // update name generator property of dyad edge
 
@@ -2210,16 +2215,47 @@ module.exports = function Namegenerator() {
                             if (value.label === 'ng_t0') { ngStep = value.value; }
                         });
 
-                        droppedNodeEdge.ng_t0 = ngStep;
+                        dyadEdge.ng_t0 = ngStep;
 
                         // Add the dropped node to the list, creating a card for it
-                        namegenerator.addToList(droppedNodeEdge);
+                        namegenerator.addToList(dyadEdge);
 
                         // create a node and edge in the current network
                         var oldNode = window.previousNetwork.getNode(droppedNode);
-                        droppedNodeEdge.elicited_previously = true;
+                        dyadEdge.elicited_previously = true;
                         window.network.addNode(oldNode, false, true);  // (properties, ego, force);
-                        window.network.addEdge(droppedNodeEdge);
+                        window.network.addEdge(dyadEdge);
+
+                        console.log('Adding other custom edges for this interface.');
+                        $.each(namegenerator.options.edgeTypes, function(edgeTypeIndex,edgeType) {
+                            if (edgeType !== 'Dyad') {
+                                var currentEdgeProperties = {};
+                                $.each(namegenerator.options.variables, function(index, value) {
+                                    if (value.target === 'edge' && value.edge === edgeType) {
+                                        if (value.private === true) {
+                                            currentEdgeProperties[value.variable] =  value.value;
+                                        } else {
+                                            if(value.type === 'relationship' || value.type === 'subrelationship') {
+                                                currentEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
+                                            } else {
+                                                currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
+                                            }
+                                        }
+                                    }
+                                });
+                                var edgeProperties = {
+                                    from: window.network.getEgo().id,
+                                    to: droppedNode,
+                                    type:edgeType
+                                };
+
+                                window.tools.extend(edgeProperties,currentEdgeProperties);
+                                window.network.addEdge(edgeProperties);
+                            }
+
+                        });
+
+
                         $('.inner-card').last().click();
 
                         setTimeout(function() {

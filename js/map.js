@@ -21,6 +21,54 @@ module.exports = function GeoInterface() {
 
   	// Private functions
 
+    function highlightFeature(e) {
+        var layer = e.target;
+        leaflet.fitBounds(e.target.getBounds(), {maxZoom:14});
+
+        layer.setStyle({
+            fillOpacity: 0.8,
+          fillColor: colors[1]
+        });
+
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
+            layer.bringToFront();
+        }
+
+        mapNodeClicked = layer.feature.properties.name;
+    }
+
+    function selectFeature(e) {
+        var layer = e;
+        leaflet.fitBounds(e.getBounds(), {maxZoom:14});
+
+        layer.setStyle({
+            fillOpacity: 0.8,
+          fillColor: colors[1]
+        });
+
+        if (!window.L.Browser.ie && !window.L.Browser.opera) {
+            layer.bringToFront();
+        }
+    }
+
+    function resetHighlight(e) {
+        $('.map-node-location').html('');
+        mapNodeClicked = false;
+        geojson.resetStyle(e.target);
+    }
+
+    function resetAllHighlights() {
+        $('.map-node-location').html('');
+        mapNodeClicked = false;
+        $.each(geojson._layers, function(index,value) {
+            geojson.resetStyle(value);
+        });
+    }
+
+    function resetPosition() {
+        leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+    }
+
 	function toggleFeature(e) {
         if (taskComprehended === false) {
             var eventProperties = {
@@ -76,6 +124,12 @@ module.exports = function GeoInterface() {
 
 	}
 
+    function onEachFeature(feature, layer) {
+        layer.on({
+            click: toggleFeature
+        });
+    }
+
   	function highlightCurrent() {
 
       if (edges[currentPersonIndex][variable] !== undefined) {
@@ -100,61 +154,6 @@ module.exports = function GeoInterface() {
   			resetPosition();
   		}
 
-  	}
-
-
-  	function highlightFeature(e) {
-        var layer = e.target;
-        leaflet.fitBounds(e.target.getBounds(), {maxZoom:14});
-
-        layer.setStyle({
-        	fillOpacity: 0.8,
-          fillColor: colors[1]
-        });
-
-        if (!window.L.Browser.ie && !window.L.Browser.opera) {
-        	layer.bringToFront();
-        }
-
-        mapNodeClicked = layer.feature.properties.name;
-    }
-
-  	function selectFeature(e) {
-        var layer = e;
-        leaflet.fitBounds(e.getBounds(), {maxZoom:14});
-
-        layer.setStyle({
-        	fillOpacity: 0.8,
-          fillColor: colors[1]
-        });
-
-        if (!window.L.Browser.ie && !window.L.Browser.opera) {
-        	layer.bringToFront();
-        }
-    }
-
-  	function resetHighlight(e) {
-  		$('.map-node-location').html('');
-  		mapNodeClicked = false;
-  		geojson.resetStyle(e.target);
-  	}
-
-  	function resetAllHighlights() {
-  		$('.map-node-location').html('');
-  		mapNodeClicked = false;
-		$.each(geojson._layers, function(index,value) {
-			geojson.resetStyle(value);
-		});
-  	}
-
-  	function onEachFeature(feature, layer) {
-  		layer.on({
-  			click: toggleFeature
-  		});
-  	}
-
-  	function resetPosition() {
-  		leaflet.setView([41.798395426119534,-87.839671372338884], 11);
   	}
 
     function setHomeless() {
