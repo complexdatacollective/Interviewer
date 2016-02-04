@@ -3757,6 +3757,13 @@ var Session = function Session() {
     session.saveData = function() {
         session.sessionData.nodes = window.network.getNodes();
         session.sessionData.edges = window.network.getEdges();
+
+        // handle previous network
+        if (typeof window.previousNetwork !== 'undefined') {
+            session.sessionData.previousNetwork.nodes = window.previousNetwork.getNodes();
+            session.sessionData.previousNetwork.edges = window.previousNetwork.getEdges();
+        }
+
         if(!window.dataStore.initialised()) {
             var unsavedChanges = new window.Event('unsavedChanges');
             window.dispatchEvent(unsavedChanges);
