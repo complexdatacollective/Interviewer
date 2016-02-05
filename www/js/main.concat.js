@@ -3517,13 +3517,13 @@ var Session = function Session() {
     };
 
     session.previousHandler = function() {
-        console.log(currentStage);
-        if (currentStage === 2) {
+        var visitNumber = window.network.getEgo().visit_number;
+        if (currentStage === 2 && visitNumber > 1) {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
                 // size: BootstrapDialog.SIZE_LARGE,
                 title: '',
-                message: '<h3>WARNING!</h3> <p>Going backwards from this step will take you to the load data screen. This will require you to reset the session, thereby deleting all current data.</p><h4>Continue?</h4>',
+                message: '<h3>WARNING!</h3> <p>Going backwards from this step will take you to the initial screen. Changing the RADAR ID or visit number on this screen may require you to reset the session, thereby deleting all current data.</p><h4>Continue?</h4>',
                 buttons: [{
                     label: 'Continue',
                     cssClass: 'btn-modal-success',
