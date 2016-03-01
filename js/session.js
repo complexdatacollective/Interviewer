@@ -65,7 +65,7 @@ var Session = function Session() {
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
         $.getScript( 'protocols/'+window.netCanvas.studyProtocol+'/protocol.js', function() {
-
+            window.protocolPath = 'protocols/'+window.netCanvas.studyProtocol+'/';
             // protocol.js files declare a protocol variable, which is what we use here.
             // It is implicitly loaded as part of the getScript callback
             var study = protocol;

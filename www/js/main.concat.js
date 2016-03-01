@@ -691,6 +691,7 @@ $(document).ready(function() {
     window.netCanvas.Modules = {};
     window.netCanvas.Modules.Network = require('./network.js');
     window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
+    window.netCanvas.Modules.VenueInterface = require('./venueinterface.js');
     window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
     window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
     window.netCanvas.Modules.IOInterface = require('./iointerface.js');
@@ -736,7 +737,7 @@ $(document).ready(function() {
     });
 
 });
-;/* global $, window */
+;/* global $, window, note */
 /* exported GeoInterface */
 
 /*
@@ -749,9 +750,27 @@ module.exports = function GeoInterface() {
     var log;
     var taskComprehended = false;
  	var geoInterface = {};
+    geoInterface.options = {
+        network: window.network || new window.netcanvas.Module.Network(),
+        targetEl: $('.map-node-container'),
+        mode: 'edge',
+        criteria: {
+            type:'Sex',
+            from: window.network.getNodes({type_t0:'Ego'})[0].id
+        },
+        geojson: '',
+        prompt: 'Where does %alter% live?',
+        variable: {
+
+            label:'res_chicago_location_t0',
+            other_values: [
+                {label: 'I live outside Chicago', value: 'outside_chicago'},
+                {label: 'I am currently homeless', value: 'homeless'}
+            ]
+        }
+    };
  	var leaflet;
  	var edges;
- 	var variable = 'res_chicago_location_p_t0';
  	var currentPersonIndex = 0;
  	var geojson;
  	var mapNodeClicked = false;
@@ -807,7 +826,8 @@ module.exports = function GeoInterface() {
         leaflet.setView([41.798395426119534,-87.839671372338884], 11);
     }
 
-	function toggleFeature(e) {
+
+    function toggleFeature(e) {
         if (taskComprehended === false) {
             var eventProperties = {
                 zoomLevel: leaflet.getZoom(),
@@ -825,42 +845,67 @@ module.exports = function GeoInterface() {
         };
         log = new window.CustomEvent('log', {'detail':{'eventType': 'mapMarkerPlaced', 'eventObject':mapEventProperties}});
         window.dispatchEvent(log);
-		var layer = e.target;
-		var properties;
+        var layer = e.target;
+        var properties, targetID;
 
-		// is there a map node already selected?
-		if (mapNodeClicked === false) {
-	 		// no map node selected, so highlight this one and mark a map node as having been selected.
-	  		highlightFeature(e);
-	  		// updateInfoBox('You selected: <strong>'+layer.feature.properties.name+'</strong>. Click the "next" button to place the next person.');
+        // is there a map node already selected?
+        if (mapNodeClicked === false) {
+            // no map node selected, so highlight this one and mark a map node as having been selected.
+            highlightFeature(e);
+            // updateInfoBox('You se{lected: <strong>'+layer.feature.properties.name+'</strong>. Click the "next" button to place the next person.');
 
-	  		// Update edge with this info
-	  		properties = {};
-	  		properties[variable] = layer.feature.properties.name;
-	  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
-	  		$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
-		} else {
-	  	// Map node already selected. Have we clicked the same one again?
-	  		if (layer.feature.properties.name === mapNodeClicked) {
-	    		// Same map node clicked. Reset the styles and mark no node as being selected
-	      		resetHighlight(e);
-	      		mapNodeClicked = false;
-		  		properties = {};
-		  		properties[variable] = undefined;
-		  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
+            // Update edge with this info
+            properties = {};
+            properties[geoInterface.options.variable.value] = layer.feature.properties.name;
 
-	  		} else {
-          resetAllHighlights();
-          highlightFeature(e);
-          properties = {};
-          properties[variable] = layer.feature.properties.name;
-          window.network.updateEdge(edges[currentPersonIndex].id, properties);
-		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
-	  		}
 
-		}
+            if (geoInterface.options.mode === 'node') {
+                targetID = geoInterface.options.network.getEgo().id;
+                window.network.updateNode(targetID, properties);
+            } else if (geoInterface.options.mode === 'edge') {
+                targetID = edges[currentPersonIndex].id;
+                window.network.updateEdge(targetID, properties);
+            }
 
-	}
+            $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
+        } else {
+            // Map node already selected. Have we clicked the same one again?
+            if (layer.feature.properties.name === mapNodeClicked) {
+                // Same map node clicked. Reset the styles and mark no node as being selected
+                resetHighlight(e);
+                mapNodeClicked = false;
+                properties = {};
+                properties[geoInterface.options.variable.value] = undefined;
+
+                if (geoInterface.options.mode === 'node') {
+                    targetID = geoInterface.options.network.getEgo().id;
+                    window.network.updateNode(targetID, properties);
+                } else if (geoInterface.options.mode === 'edge') {
+                    targetID = edges[currentPersonIndex].id;
+                    window.network.updateEdge(targetID, properties);
+                }
+
+            } else {
+                resetAllHighlights();
+                highlightFeature(e);
+                properties = {};
+                properties[geoInterface.options.variable.value] = layer.feature.properties.name;
+
+                if (geoInterface.options.mode === 'node') {
+                    targetID = geoInterface.options.network.getEgo().id;
+                    window.network.updateNode(targetID, properties);
+                } else if (geoInterface.options.mode === 'edge') {
+                    targetID = edges[currentPersonIndex].id;
+                    window.network.updateEdge(targetID, properties);
+                }
+
+
+                // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
+            }
+
+        }
+
+    }
 
     function onEachFeature(feature, layer) {
         layer.on({
@@ -869,20 +914,19 @@ module.exports = function GeoInterface() {
     }
 
   	function highlightCurrent() {
+      console.log(edges);
+      console.log(currentPersonIndex);
+      if (typeof edges[currentPersonIndex] !== 'undefined' && edges[currentPersonIndex][geoInterface.options.variable.value] !== undefined) {
+        mapNodeClicked = edges[currentPersonIndex][geoInterface.options.variable.value];
 
-      if (edges[currentPersonIndex][variable] !== undefined) {
-        mapNodeClicked = edges[currentPersonIndex][variable];
-        if (edges[currentPersonIndex][variable] === 'Homeless' || edges[currentPersonIndex][variable] === 'Jail') {
+        if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.map(function(obj){ return obj.value; }).indexOf(edges[currentPersonIndex][geoInterface.options.variable.value]) !== -1) {
           resetPosition();
-          var text = 'Homeless';
-          if (edges[currentPersonIndex][variable] === 'Jail') {
-            text = 'in Jail';
-          }
+          var text = edges[currentPersonIndex][geoInterface.options.variable.value];
           $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+text);
         } else {
           $.each(geojson._layers, function(index,value) {
-            if (value.feature.properties.name === edges[currentPersonIndex][variable]) {
-              $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][variable]);
+            if (value.feature.properties.name === edges[currentPersonIndex][geoInterface.options.variable.value]) {
+              $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+edges[currentPersonIndex][geoInterface.options.variable.value]);
               selectFeature(value);
             }
           });
@@ -894,21 +938,34 @@ module.exports = function GeoInterface() {
 
   	}
 
-    function setHomeless() {
-        resetAllHighlights();
-        var properties = {};
-        properties[variable] = 'Homeless';
-        window.network.updateEdge(edges[currentPersonIndex].id, properties);
-        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
+    function safePrompt() {
+        var name;
+
+        if (geoInterface.options.mode === 'node') {
+            name = 'you';
+        } else if (geoInterface.options.mode === 'edge') {
+            name = typeof edges[currentPersonIndex] !== 'undefined' ? edges[currentPersonIndex].nname_t0 : 'Person';
+        }
+
+        return geoInterface.options.prompt.replace('%alter%', name);
     }
 
-    function setJail() {
+    geoInterface.setOtherOption = function() {
+        var option = $(this).data('value');
+        console.log(option);
         resetAllHighlights();
-        var properties = {};
-        properties[variable] = 'Jail';
-        window.network.updateEdge(edges[currentPersonIndex].id, properties);
-        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
-    }
+        var properties = {}, targetID;
+        properties[geoInterface.options.variable.value] = option;
+        if (geoInterface.options.mode === 'node') {
+            targetID = geoInterface.options.network.getEgo().id;
+            window.network.updateNode(targetID, properties);
+        } else if (geoInterface.options.mode === 'edge') {
+            targetID = edges[currentPersonIndex].id;
+            window.network.updateEdge(targetID, properties);
+        }
+
+        $('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+option);
+    };
 
     var stageChangeHandler = function() {
         geoInterface.destroy();
@@ -922,23 +979,21 @@ module.exports = function GeoInterface() {
   			resetAllHighlights();
 	  		currentPersonIndex++;
 	        $('.current-id').html(currentPersonIndex+1);
-	        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[currentPersonIndex].nname_t0+'</strong> lives.');
+
+	        $('.map-node-status').html(safePrompt());
 
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
-        if (currentPersonIndex === edges.length-1) {
-          $('.map-forwards').hide();
-        } else {
-          $('.map-forwards').show();
-        }
-        if (currentPersonIndex === 0) {
-          $('.map-back').hide();
-        } else {
-          $('.map-back').show();
-        }
+
+            geoInterface.updateNavigation();
   		}
 
+
   	};
+
+    geoInterface.getLeaflet = function() {
+        return leaflet;
+    };
 
   	geoInterface.previousPerson = function() {
 	  	if (currentPersonIndex > 0) {
@@ -946,24 +1001,16 @@ module.exports = function GeoInterface() {
 	  		resetAllHighlights();
 	  		currentPersonIndex--;
 	        $('.current-id').html(currentPersonIndex+1);
-	        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[currentPersonIndex].nname_t0+'</strong> lives.');
+	        $('.map-node-status').html(safePrompt());
 
   			// if variable already set, highlight it and zoom to it.
   			highlightCurrent();
-        if (currentPersonIndex === edges.length-1) {
-          $('.map-forwards').hide();
-        } else {
-          $('.map-forwards').show();
-        }
-        if (currentPersonIndex === 0) {
-          $('.map-back').hide();
-        } else {
-          $('.map-back').show();
-        }
+            geoInterface.updateNavigation();
 	    }
   	};
 
-  	geoInterface.init = function() {
+  	geoInterface.init = function(options) {
+        window.tools.extend(geoInterface.options, options);
 
   		// Initialize the map, point it at the #map element and center it on Chicago
         leaflet = window.L.map('map', {
@@ -983,7 +1030,7 @@ module.exports = function GeoInterface() {
 
         $.ajax({
           	dataType: 'json',
-          	url: 'data/census2010.json',
+          	url: geoInterface.options.geojson,
           	success: function(data) {
             	geojson = window.L.geoJson(data, {
                 	onEachFeature: onEachFeature,
@@ -993,29 +1040,66 @@ module.exports = function GeoInterface() {
             	}).addTo(leaflet);
 
 		        // Load initial node
-		        edges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
+                if (geoInterface.options.mode === 'edge') {
+                    edges = geoInterface.options.network.getEdges(geoInterface.options.criteria);
+                } else if (geoInterface.options.mode === 'node') {
+                    edges = geoInterface.options.network.getNodes(geoInterface.options.criteria);
+                }
+
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
-		        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[0].nname_t0+'</strong> lives.');
+
+                if (edges.length > 0) {
+                    $('.map-node-status').html(safePrompt());
+                }
+
+
+
 
             	// Highlight initial value, if set
             	highlightCurrent();
-              $('.map-back').hide();
-              if (currentPersonIndex === edges.length-1) {
-                $('.map-forwards').hide();
-              } else {
-                $('.map-forwards').show();
-              }
+
+                geoInterface.updateNavigation();
+
           	}
         });
+
+        geoInterface.drawUIComponents();
 
         // Events
         window.addEventListener('changeStageStart', stageChangeHandler, false);
         $('.map-back').on('click', geoInterface.previousPerson);
         $('.map-forwards').on('click', geoInterface.nextPerson);
-        $('.homeless').on('click', setHomeless);
-        $('.jail').on('click', setJail);
+        $('.other-option').on('click', geoInterface.setOtherOption);
 
   	};
+
+    geoInterface.updateNavigation = function() {
+        $('.map-back').hide();
+        if (currentPersonIndex === edges.length-1) {
+            $('.map-forwards').hide();
+        } else {
+            $('.map-forwards').show();
+        }
+
+        if (edges.length === 1) {
+            $('.map-forwards, .map-back, .map-counter').hide();
+        }
+    };
+
+    geoInterface.drawUIComponents = function() {
+        note.debug('geoInterface.drawUIComponents()');
+        geoInterface.options.targetEl.append('<div class="container map-node-container"><div class="row" style="width:100%"><div class="col-sm-4 text-left"><div class="map-node-navigation"><span class="btn btn-primary btn-block map-back"><span class="glyphicon glyphicon-arrow-left"></span></span></div></div><div class="col-sm-4 text-center"><p class="lead map-counter"></p></div><div class="col-sm-4 text-right"><div class="map-node-navigation"><span class="btn btn-primary btn-block map-forwards"><span class="glyphicon glyphicon-arrow-right"></span></span></div></div></div><div class="row form-group"><div class="col-sm-12 text-center"><p class="lead map-node-status"></p><p class="lead map-node-location"></p></div></div><div class="row"></div>');
+        $('.map-node-status').html(safePrompt());
+
+        if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.length > 0) {
+            console.log('YOO');
+            $('.map-node-container').append('<div class="col-sm-12 form-group other-options"></div>');
+            $.each(geoInterface.options.variable.other_options, function(otherIndex, otherValue) {
+                console.log(otherValue);
+                $('.other-options').append('<button class="btn '+otherValue.btnClass+' btn-block other-option" data-value="'+otherValue.value+'">'+otherValue.label+'</button>');
+            });
+        }
+    };
 
   	geoInterface.destroy = function() {
     	// Used to unbind events
@@ -1023,8 +1107,7 @@ module.exports = function GeoInterface() {
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
     	$('.map-back').off('click', geoInterface.previousPerson);
         $('.map-forwards').off('click', geoInterface.nextPerson);
-        $('.homeless').on('click', setHomeless);
-        $('.jail').on('click', setJail);
+        $('.other-option').on('click', geoInterface.setOtherOption);
   	};
 
   	return geoInterface;
@@ -3451,7 +3534,7 @@ var Session = function Session() {
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
         $.getScript( 'protocols/'+window.netCanvas.studyProtocol+'/protocol.js', function() {
-
+            window.protocolPath = 'protocols/'+window.netCanvas.studyProtocol+'/';
             // protocol.js files declare a protocol variable, which is what we use here.
             // It is implicitly loaded as part of the getScript callback
             var study = protocol;
@@ -4955,4 +5038,215 @@ exports.modifyColor = function(hex, lum) {
 
     return rgb;
 
+};
+;/* global $, window, note, omnivore, document */
+/* exported VenueInterface */
+
+/*
+ Map module.
+*/
+
+module.exports = function VenueInterface() {
+    'use strict';
+  	// map globals
+    var test, centroid, filterCircle;
+ 	var venueInterface = {};
+    var RADIUS = 1609;
+    venueInterface.options = {
+        targetEl: $('#map'),
+        network: window.network || new window.netcanvas.Module.Network(),
+        points: window.protocolPath+'data/hiv-services.csv',
+        geojson: window.protocolPath+'data/census2010.json',
+        prompt: 'These are the service providers within 1 mile of where you live. Please tap on all of the ones you\'ve used in the last 6 months.',
+        dataDestination: {
+            node: {
+                type_t0: 'Venue',
+                venue_name: '%venuename%'
+            },
+            edge: {
+                type: 'HIVservice',
+                from: window.network.getEgo().id,
+                to: '%destinationNode%'
+            }
+        },
+        egoLocation: 'res_chicago_location_t0'
+    };
+ 	var leaflet;
+ 	var geojson;
+    var colors = ['#67c2d4','#1ECD97','#B16EFF','#FA920D','#e85657','#20B0CA','#FF2592','#153AFF','#8708FF'];
+
+  	// Private functions
+
+
+ //  	function resetPosition() {
+ //  		leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+ //  	}
+    //
+    // function getCentroid(arr) {
+    //     console.log(arr);
+    //     var twoTimesSignedArea = 0;
+    //     var cxTimes6SignedArea = 0;
+    //     var cyTimes6SignedArea = 0;
+    //
+    //     var length = arr.length;
+    //
+    //     var x = function (i) { return arr[i % length][0]; };
+    //     var y = function (i) { return arr[i % length][1]; };
+    //
+    //     for (var i = 0; i < arr.length; i++) {
+    //         var twoSA = x(i)*y(i+1) - x(i+1)*y(i);
+    //         twoTimesSignedArea += twoSA;
+    //         cxTimes6SignedArea += (x(i) + x(i+1)) * twoSA;
+    //         cyTimes6SignedArea += (y(i) + y(i+1)) * twoSA;
+    //     }
+    //     var sixSignedArea = 3 * twoTimesSignedArea;
+    //     return [ cxTimes6SignedArea / sixSignedArea, cyTimes6SignedArea / sixSignedArea];
+    // }
+
+    var stageChangeHandler = function() {
+        venueInterface.destroy();
+    };
+
+  	// Public methods
+
+    venueInterface.getLeaflet = function() {
+        return leaflet;
+    };
+
+  	venueInterface.init = function(options) {
+        window.tools.extend(venueInterface.options, options);
+
+        window.L.Icon.Default.imagePath = 'img/';
+
+        // Provide your access token
+        window.L.mapbox.accessToken = 'pk.eyJ1IjoianRocmlsbHkiLCJhIjoiY2lnYjFvMnBmMWpxbnRmbHl2dXp2ZDBnbiJ9.YnZpoiaXloVbxhHobhtbvQ';
+
+
+        // Hack for multiple popups
+        window.L.Map = window.L.Map.extend({
+            openPopup: function(popup) {
+                //        this.closePopup();  // just comment this
+                this._popup = popup;
+
+                return this.addLayer(popup).fire('popupopen', {
+                    popup: this._popup
+                });
+            },
+            closePopup: function(e) {
+                console.log(e);
+            }
+        }); /***  end of hack ***/
+
+  		// Initialize the map, point it at the #map element and center it on Chicago
+        leaflet = window.L.map('map', {
+            maxBounds: [[41.4985986599114, -88.498240224063451],[42.1070175291862,-87.070984247165939]],
+            zoomControl: false,
+            minZoom: 0,
+            maxZoom: 20
+        });
+
+        window.L.tileLayer('http://{s}.{base}.maps.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.transit/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+            subdomains: '1234',
+            mapID: 'newest',
+            app_id: 'FxdAZ7O0Wh568CHyJWKV',
+            app_code: 'FuQ7aPiHQcR8BSnXBCCmuQ',
+            base: 'base',
+            minZoom: 0,
+            maxZoom: 20
+        }).addTo(leaflet);
+
+        venueInterface.drawUIComponents();
+        $.ajax({
+            dataType: 'json',
+            url: venueInterface.options.geojson,
+            success: function(data) {
+
+                var egoLocation = venueInterface.options.network.getEgo()[venueInterface.options.egoLocation];
+                geojson = window.L.geoJson(data, {
+                    onEachFeature: function(feature, layer) {
+                        // Load initial node
+
+                        if (feature.properties.name === egoLocation) {
+                            console.log('found it');
+                            centroid = layer.getBounds().getCenter();
+
+                            filterCircle = window.L.circle(window.L.latLng(centroid), RADIUS, {
+                                opacity: 1,
+                                weight: 1,
+                                fillOpacity: 0.2
+                            }).addTo(leaflet);
+                            leaflet.fitBounds(filterCircle.getBounds());
+                            venueInterface.doTheRest();
+
+                        }
+                    },
+                    style: function () {
+                        return {weight:1,fillOpacity:0,strokeWidth:0.2, color:colors[1]};
+                    }
+                });
+
+            }
+        });
+
+        // Events
+        window.addEventListener('changeStageStart', stageChangeHandler, false);
+        $(document).on('click', '.service-popup', function() {
+            console.log($(this).data('feature'));
+            $(this).parent().parent().parent().toggleClass('selected');
+        });
+        $('.map-back').on('click', venueInterface.previousPerson);
+        $('.map-forwards').on('click', venueInterface.nextPerson);
+        $('.other-option').on('click', venueInterface.setOtherOption);
+
+  	};
+
+    venueInterface.doTheRest = function() {
+        console.log('doing the rest');
+        var points = omnivore.csv(venueInterface.options.points, null, window.L.mapbox.featureLayer()).addTo(leaflet);
+
+        leaflet.on('layeradd', function(e) {
+            // console.log(e);
+            if (e.layer.feature) {
+                // console.log('there');
+                test = e.layer.feature.properties;
+                // console.log(test);
+                var popup = window.L.popup().setContent('<div class="service-popup" data-feature="'+e.layer.feature.properties['Abbreviated Name']+'">'+e.layer.feature.properties['Abbreviated Name']+'</div>');
+                e.layer.bindPopup(popup).openPopup();
+            }
+        });
+
+        points.setFilter(function(feature) {
+                // var popup = window.L.popup().setContent('<div class="service-popup" data-feature="'+feature.properties['Abbreviated Name']+'">'+feature.properties['Abbreviated Name']+'</div>');
+                // layer.bindPopup(popup).openPopup();
+                // // layer.feature.properties
+            return filterCircle.getLatLng().distanceTo(window.L.latLng(
+                    feature.geometry.coordinates[1],
+                    feature.geometry.coordinates[0])) < RADIUS;
+        });
+
+
+
+
+    };
+
+    venueInterface.getTest = function() {
+        return test;
+    };
+
+    venueInterface.drawUIComponents = function() {
+        note.debug('venueInterface.drawUIComponents()');
+        venueInterface.options.targetEl.append('<div class="container map-node-container"><div class="row form-group"><div class="col-sm-12 text-center"><h4 class="prompt" style="color:white"></h4></div></div>');
+        $('.prompt').html(venueInterface.options.prompt);
+    };
+
+  	venueInterface.destroy = function() {
+    	// Used to unbind events
+        leaflet.remove();
+        window.removeEventListener('changeStageStart', stageChangeHandler, false);
+    	$('.map-back').off('click', venueInterface.previousPerson);
+        $('.map-forwards').off('click', venueInterface.nextPerson);
+        $('.other-option').on('click', venueInterface.setOtherOption);
+  	};
+
+  	return venueInterface;
 };
