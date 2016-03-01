@@ -2,6 +2,37 @@ LASTEST NOT RELEASED
 ------------------------------
 NONE
 
+V1.34.9
+------------------------------
+* Fixed #221 *
+
+V1.34.8
+------------------------------
+* Set 'realized' status to false when closing a 'autodestroy' dialog. *
+* Merged #136 *
+* Refs #210 *
+* Merged #219 *
+
+V1.34.7
+------------------------------
+* Refs #176 *
+* Refs #109, Add methods getDialog(), setDialog() and addDialog() to BootstrapDialog. *
+* Refs #201 *
+* Refs #200 *
+
+V1.34.6
+------------------------------
+* Refs #159 *
+* Refs #160*
+* Refs #179, removed local assets for example page, and used files hosted on CDN instead. *
+
+V1.34.5
+------------------------------
+* Merged #137, Add missing less and remove stray css file in src folder *
+* Tabindex is a customizable option now. *
+* Refs #142 *
+* Refs #145 *
+
 V1.34.4
 ------------------------------
 * Updated required Bootstrap version. *

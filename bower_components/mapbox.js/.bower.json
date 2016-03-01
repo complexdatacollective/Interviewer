@@ -33,6 +33,5 @@
   },
   "_source": "git://github.com/mapbox/mapbox.js-bower.git",
   "_target": "^2.3.0",
-  "_originalSource": "mapbox.js",
-  "_direct": true
+  "_originalSource": "mapbox.js"
 }

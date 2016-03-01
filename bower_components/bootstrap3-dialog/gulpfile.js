@@ -10,21 +10,24 @@ var gulp = require("gulp"),
   notify = require("gulp-notify"),
   clean = require("gulp-clean"),
   rename = require("gulp-rename"),
+  concat = require("gulp-concat"),
   uglify = require("gulp-uglify");
 
+var less_src = [
+  "node_modules/bootstrap/less/variables.less", 
+  "node_modules/bootstrap/less/mixins/*.less",
+  "src/less/bootstrap-dialog.less"
+];
 
 gulp.task("less", function() {
-  gulp.src("src/less/bootstrap-dialog.less")
-    .pipe(gulp.dest("dist/less"))
-    .pipe(less({
-      paths: [path.join(__dirname, "less", "includes")]
-    }))
+  gulp.src(less_src)
+    .pipe(concat("bootstrap-dialog.less"))
+    .pipe(less())
     .pipe(gulp.dest("dist/css"))
-    .pipe(gulp.dest("examples/assets/bootstrap-dialog/css"))
+    .pipe(gulp.dest("src/css"))
     .pipe(rename("bootstrap-dialog.min.css"))
     .pipe(minifyCSS())
-    .pipe(gulp.dest("dist/css"))
-    .pipe(gulp.dest("examples/assets/bootstrap-dialog/css"));
+    .pipe(gulp.dest("dist/css"));
 });
 
 gulp.task("lint", function() {
@@ -36,11 +39,9 @@ gulp.task("lint", function() {
 gulp.task("dist", ["clean", "less"], function() {
   gulp.src(["src/js/bootstrap-dialog.js"])
     .pipe(gulp.dest("dist/js"))
-    .pipe(gulp.dest("examples/assets/bootstrap-dialog/js"))
     .pipe(rename("bootstrap-dialog.min.js"))
     .pipe(uglify())
     .pipe(gulp.dest("dist/js"))
-    .pipe(gulp.dest("examples/assets/bootstrap-dialog/js"))
     .pipe(notify({
       message: "Build task completed."
     }));
