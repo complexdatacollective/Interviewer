@@ -1,5 +1,5 @@
 /*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert, note */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -175,6 +175,40 @@ exports.notify = function(text, level){
 
 exports.randomBetween = function(min,max) {
     return Math.random() * (max - min) + min;
+};
+
+//
+exports.Events = {
+    register: function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+
+			if (eventsList[i].targetEl && eventsList[i].handler && eventsList[i].event) {
+				if (typeof eventsList[i].subTarget !== 'undefined') {
+					// console.log('$('+eventsList[i].targetEl+').on('+eventsList[i].event+', '+eventsList[i].subTarget+', '+eventsList[i].handler+')');
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+	            } else {
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+	            }
+			} else {
+				note.warn('An event was misspecified, and has been ignored.');
+				note.debug(eventsList[i]);
+			}
+
+
+
+        }
+
+    },
+    unbind: function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            if (typeof eventsArray[i].subTarget !== 'undefined') {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].subTarget, eventsArray[i].handler);
+            } else {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            }
+        }
+    }
 };
 
 

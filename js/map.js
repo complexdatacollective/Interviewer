@@ -172,6 +172,12 @@ module.exports = function GeoInterface() {
         layer.on({
             click: toggleFeature
         });
+
+        window.addEventListener('changeStageStart', function() {
+            layer.off({
+                click: toggleFeature
+            });
+        }, false);
     }
 
   	function highlightCurrent() {

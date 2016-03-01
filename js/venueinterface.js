@@ -1,4 +1,4 @@
-/* global $, window, note, omnivore, document */
+/* global $, window, note, omnivore */
 /* exported VenueInterface */
 
 /*
@@ -33,6 +33,7 @@ module.exports = function VenueInterface() {
  	var leaflet;
  	var geojson;
     var colors = ['#67c2d4','#1ECD97','#B16EFF','#FA920D','#e85657','#20B0CA','#FF2592','#153AFF','#8708FF'];
+    var moduleEvents = [];
 
   	// Private functions
 
@@ -148,16 +149,27 @@ module.exports = function VenueInterface() {
         });
 
         // Events
-        window.addEventListener('changeStageStart', stageChangeHandler, false);
-        $(document).on('click', '.service-popup', function() {
-            console.log($(this).data('feature'));
-            $(this).parent().parent().parent().toggleClass('selected');
-        });
-        $('.map-back').on('click', venueInterface.previousPerson);
-        $('.map-forwards').on('click', venueInterface.nextPerson);
-        $('.other-option').on('click', venueInterface.setOtherOption);
+        var event = [
+            {
+                event: 'changeStageStart',
+                handler: stageChangeHandler,
+                targetEl:  window
+            },
+            {
+                event: 'click',
+                handler: venueInterface.clickPopup,
+                targetEl:  window.document,
+                subTarget: '.service-popup'
+            }
+        ];
+        window.tools.Events.register(moduleEvents, event);
 
   	};
+
+    venueInterface.clickPopup = function() {
+        console.log($(this).data('feature'));
+        $(this).parent().parent().parent().toggleClass('selected');
+    };
 
     venueInterface.doTheRest = function() {
         console.log('doing the rest');
@@ -200,11 +212,9 @@ module.exports = function VenueInterface() {
 
   	venueInterface.destroy = function() {
     	// Used to unbind events
+        window.tools.Events.unbind(moduleEvents);
+
         leaflet.remove();
-        window.removeEventListener('changeStageStart', stageChangeHandler, false);
-    	$('.map-back').off('click', venueInterface.previousPerson);
-        $('.map-forwards').off('click', venueInterface.nextPerson);
-        $('.other-option').on('click', venueInterface.setOtherOption);
   	};
 
   	return venueInterface;

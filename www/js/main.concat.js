@@ -911,6 +911,12 @@ module.exports = function GeoInterface() {
         layer.on({
             click: toggleFeature
         });
+
+        window.addEventListener('changeStageStart', function() {
+            layer.off({
+                click: toggleFeature
+            });
+        }, false);
     }
 
   	function highlightCurrent() {
@@ -4818,7 +4824,7 @@ module.exports = function Sociogram() {
 
 };
 ;/*jshint unused:false*/
-/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert */
+/*global Set, window, $, localStorage, Storage, debugLevel, deepEquals, Notification, alert, note */
 /*jshint bitwise: false*/
 'use strict';
 // Storage prototypes
@@ -4996,6 +5002,40 @@ exports.randomBetween = function(min,max) {
     return Math.random() * (max - min) + min;
 };
 
+//
+exports.Events = {
+    register: function(eventsArray, eventsList) {
+        for (var i = 0; i < eventsList.length; i++) {
+            eventsArray.push(eventsList[i]);
+
+			if (eventsList[i].targetEl && eventsList[i].handler && eventsList[i].event) {
+				if (typeof eventsList[i].subTarget !== 'undefined') {
+					// console.log('$('+eventsList[i].targetEl+').on('+eventsList[i].event+', '+eventsList[i].subTarget+', '+eventsList[i].handler+')');
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].subTarget, eventsList[i].handler);
+	            } else {
+	                $(eventsList[i].targetEl).on(eventsList[i].event, eventsList[i].handler);
+	            }
+			} else {
+				note.warn('An event was misspecified, and has been ignored.');
+				note.debug(eventsList[i]);
+			}
+
+
+
+        }
+
+    },
+    unbind: function(eventsArray) {
+        for (var i = 0; i < eventsArray.length; i++) {
+            if (typeof eventsArray[i].subTarget !== 'undefined') {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].subTarget, eventsArray[i].handler);
+            } else {
+                $(eventsArray[i].targetEl).off(eventsArray[i].event, eventsArray[i].handler);
+            }
+        }
+    }
+};
+
 
 exports.hex = function (x){
     return ('0' + parseInt(x).toString(16)).slice(-2);
@@ -5039,7 +5079,7 @@ exports.modifyColor = function(hex, lum) {
     return rgb;
 
 };
-;/* global $, window, note, omnivore, document */
+;/* global $, window, note, omnivore */
 /* exported VenueInterface */
 
 /*
@@ -5074,6 +5114,7 @@ module.exports = function VenueInterface() {
  	var leaflet;
  	var geojson;
     var colors = ['#67c2d4','#1ECD97','#B16EFF','#FA920D','#e85657','#20B0CA','#FF2592','#153AFF','#8708FF'];
+    var moduleEvents = [];
 
   	// Private functions
 
@@ -5189,16 +5230,27 @@ module.exports = function VenueInterface() {
         });
 
         // Events
-        window.addEventListener('changeStageStart', stageChangeHandler, false);
-        $(document).on('click', '.service-popup', function() {
-            console.log($(this).data('feature'));
-            $(this).parent().parent().parent().toggleClass('selected');
-        });
-        $('.map-back').on('click', venueInterface.previousPerson);
-        $('.map-forwards').on('click', venueInterface.nextPerson);
-        $('.other-option').on('click', venueInterface.setOtherOption);
+        var event = [
+            {
+                event: 'changeStageStart',
+                handler: stageChangeHandler,
+                targetEl:  window
+            },
+            {
+                event: 'click',
+                handler: venueInterface.clickPopup,
+                targetEl:  window.document,
+                subTarget: '.service-popup'
+            }
+        ];
+        window.tools.Events.register(moduleEvents, event);
 
   	};
+
+    venueInterface.clickPopup = function() {
+        console.log($(this).data('feature'));
+        $(this).parent().parent().parent().toggleClass('selected');
+    };
 
     venueInterface.doTheRest = function() {
         console.log('doing the rest');
@@ -5241,11 +5293,9 @@ module.exports = function VenueInterface() {
 
   	venueInterface.destroy = function() {
     	// Used to unbind events
+        window.tools.Events.unbind(moduleEvents);
+
         leaflet.remove();
-        window.removeEventListener('changeStageStart', stageChangeHandler, false);
-    	$('.map-back').off('click', venueInterface.previousPerson);
-        $('.map-forwards').off('click', venueInterface.nextPerson);
-        $('.other-option').on('click', venueInterface.setOtherOption);
   	};
 
   	return venueInterface;
