@@ -31,7 +31,7 @@ module.exports = function GeoInterface() {
         }
     };
  	var leaflet;
- 	var edges;
+ 	var edges = [];
  	var currentPersonIndex = 0;
  	var geojson;
  	var mapNodeClicked = false;
@@ -341,7 +341,13 @@ module.exports = function GeoInterface() {
   	};
 
     geoInterface.updateNavigation = function() {
-        $('.map-back').hide();
+
+        if (currentPersonIndex === 0) {
+            $('.map-back').hide();
+        } else {
+            $('.map-back').show();
+        }
+
         if (currentPersonIndex === edges.length-1) {
             $('.map-forwards').hide();
         } else {
