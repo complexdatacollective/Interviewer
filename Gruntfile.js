@@ -99,14 +99,14 @@ module.exports = function (grunt) {
                 files: ['js/*.js'],
                 tasks: ['jshint','concat:js','browserify:dist'],
                 options: {
-                    livereload: true,
+                    livereload: false,
                 }
             },
             css: {
                 files: ['less/*.less'],
                 tasks: ['less:style','postcss:dist'],
                 options: {
-                    livereload: true,
+                    livereload: false,
                 }
             }
         },

@@ -1,11 +1,4 @@
-platforms/
-bower_components/
-tmp/
-dist/
-build/
-buildTmp/
 .DS_Store
-www/npm-debug.log
 npm-debug.log
 *.zip
 *.app
