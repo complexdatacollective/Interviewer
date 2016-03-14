@@ -9,8 +9,6 @@
 
 module.exports = function Network() {
     'use strict';
-    var nodes = [];
-    var edges = [];
     var network = {};
     var namesList = ['Joshua', 'Bernie', 'Michelle', 'Gregory', 'Patrick', 'Barney', 'Jonathon','Myles','Alethia','Tammera','Veola','Meredith','Renee','Grisel','Celestina','Fausto','Eliana','Raymundo','Lyle','Carry','Kittie','Melonie','Elke','Mattie','Kieth','Lourie','Marcie','Trinity','Librada','Lloyd','Pearlie','Velvet','Stephan','Hildegard','Winfred','Tempie','Maybelle','Melynda','Tiera','Lisbeth','Kiera','Gaye','Edra','Karissa','Manda','Ethelene','Michelle','Pamella','Jospeh','Tonette','Maren','Aundrea','Madelene','Epifania','Olive'];
 
@@ -22,6 +20,10 @@ module.exports = function Network() {
     * @param {boolean} [ego=false] Whether or not the node being added is an Ego.
     * @param {boolean} [force=false] Override reserved IDs.
     */
+
+    network.nodes = [];
+    network.edges = [];
+
     network.addNode = function(properties, ego, force) {
 
         var reserved_ids;
@@ -72,7 +74,7 @@ module.exports = function Network() {
         };
         window.tools.extend(nodeProperties, properties);
 
-        nodes.push(nodeProperties);
+        network.nodes.push(nodeProperties);
         reserved_ids.push(newNodeID);
 
         var log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeCreate', 'eventObject':nodeProperties}});
@@ -85,6 +87,14 @@ module.exports = function Network() {
         return nodeProperties.id;
     };
 
+    network.init = function(loadNodes, loadEdges) {
+
+        network.nodes = typeof loadNodes !== 'undefined' ? loadNodes : [];
+        network.edges = typeof loadEdges !== 'undefined' ? loadEdges : [];
+
+        return true;
+    };
+
     network.loadNetwork = function(data, overwrite) {
         if (!data || !data.nodes || !data.edges) {
             note.error('Error loading network. Data format incorrect.');
@@ -95,11 +105,11 @@ module.exports = function Network() {
             }
 
             if (overwrite) {
-                nodes = data.nodes;
+                network.nodes = data.nodes;
                 network.dges = data.edges;
             } else {
-                nodes = nodes.concat(data.nodes);
-                edges = edges.concat(data.edges);
+                network.nodes = network.nodes.concat(data.nodes);
+                network.edges = network.edges.concat(data.edges);
             }
 
             return true;
@@ -107,8 +117,8 @@ module.exports = function Network() {
     };
 
     network.resetNetwork = function() {
-        nodes = [];
-        edges = [];
+        network.nodes = [];
+        network.edges = [];
     };
 
     network.createEgo = function(properties) {
@@ -198,7 +208,7 @@ module.exports = function Network() {
                 edgeProperties.id = newEdgeID;
             }
 
-            edges.push(edgeProperties);
+            network.edges.push(edgeProperties);
             var log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeCreate', 'eventObject':edgeProperties}});
             window.dispatchEvent(log);
             var edgeAddedEvent = new window.CustomEvent('edgeAdded',{'detail':edgeProperties});
@@ -233,7 +243,7 @@ module.exports = function Network() {
             // we've got an array of object edges
             for (var i = 0; i < edge.length; i++) {
                 // localEdges.remove(edge[i]);
-                counter = window.tools.removeFromObject(edge[i], edges);
+                counter = window.tools.removeFromObject(edge[i], network.edges);
                 log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge[i]}});
                 edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge[i]});
                 window.dispatchEvent(log);
@@ -241,7 +251,7 @@ module.exports = function Network() {
             }
         } else {
             // we've got a single edge, which is an object {}
-            counter = window.tools.removeFromObject(edge, edges);
+            counter = window.tools.removeFromObject(edge, network.edges);
 
             log = new window.CustomEvent('log', {'detail':{'eventType': 'edgeRemove', 'eventObject':edge}});
             edgeRemovedEvent = new window.CustomEvent('edgeRemoved',{'detail':edge});
@@ -272,13 +282,13 @@ module.exports = function Network() {
 
         var nodeRemovedEvent, log;
 
-        for (var i = 0; i<nodes.length; i++) {
-            if (nodes[i].id === id) {
-                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':nodes[i]}});
+        for (var i = 0; i < network.nodes.length; i++) {
+            if (network.nodes[i].id === id) {
+                log = new window.CustomEvent('log', {'detail':{'eventType': 'nodeRemove', 'eventObject':network.nodes[i]}});
                 window.dispatchEvent(log);
-                nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':nodes[i]});
+                nodeRemovedEvent = new window.CustomEvent('nodeRemoved',{'detail':network.nodes[i]});
                 window.dispatchEvent(nodeRemovedEvent);
-                window.tools.removeFromObject(nodes[i],nodes);
+                window.tools.removeFromObject(network.nodes[i],network.nodes);
                 return true;
             }
         }
@@ -357,8 +367,8 @@ module.exports = function Network() {
         id = parseInt(id);
 
         if (id === undefined) { return false; }
-        for (var i = 0;i<nodes.length; i++) {
-            if (nodes[i].id === id) {return nodes[i]; }
+        for (var i = 0;i<network.nodes.length; i++) {
+            if (network.nodes[i].id === id) {return network.nodes[i]; }
         }
         return false;
 
@@ -367,7 +377,7 @@ module.exports = function Network() {
     network.deduplicate = function() {
         var newNodes = [];
         var ids = [];
-        $.each(nodes, function(index, value) {
+        $.each(network.nodes, function(index, value) {
             if (ids.indexOf(value.id) === -1) {
                 ids.push(value.id);
                 newNodes.push(value);
@@ -376,11 +386,11 @@ module.exports = function Network() {
             }
         });
 
-        nodes = newNodes;
+        network.nodes = newNodes;
 
         var newEdges = [];
         ids = [];
-        $.each(edges, function(index, value) {
+        $.each(network.edges, function(index, value) {
             if (ids.indexOf(value.id) === -1) {
                 ids.push(value.id);
                 newEdges.push(value);
@@ -389,14 +399,14 @@ module.exports = function Network() {
             }
         });
 
-        edges = newEdges;
+        network.edges = newEdges;
         window.netCanvas.Modules.session.saveData();
     };
 
     network.getEdge = function(id) {
         if (id === undefined) { return false; }
-        for (var i = 0;i<edges.length; i++) {
-            if (edges[i].id === id) {return edges[i]; }
+        for (var i = 0;i < network.edges.length; i++) {
+            if (network.edges[i].id === id) {return network.edges[i]; }
         }
         return false;
     };
@@ -469,9 +479,9 @@ module.exports = function Network() {
     network.getNodes = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = network.filterObject(nodes,criteria);
+            results = network.filterObject(network.nodes,criteria);
         } else {
-            results = nodes;
+            results = network.nodes;
         }
 
         if (filter) {
@@ -484,9 +494,9 @@ module.exports = function Network() {
     network.getEdges = function(criteria, filter) {
         var results;
         if (typeof criteria !== 'undefined' && Object.keys(criteria).length !== 0) {
-            results = network.filterObject(edges,criteria);
+            results = network.filterObject(network.edges,criteria);
         } else {
-            results = edges;
+            results = network.edges;
         }
 
         if (filter) {
@@ -531,16 +541,16 @@ module.exports = function Network() {
     };
 
     network.returnAllNodes = function() {
-        return nodes;
+        return network.nodes;
     };
 
     network.returnAllEdges = function() {
-        return edges;
+        return network.edges;
     };
 
     network.clearGraph = function() {
-        edges = [];
-        nodes = [];
+        network.edges = [];
+        network.nodes = [];
     };
 
     network.createRandomGraph = function(nodeCount,edgeProbability) {
@@ -561,10 +571,10 @@ module.exports = function Network() {
         }
 
         note.debug('Adding edges.');
-        $.each(nodes, function (index) {
+        $.each(network.nodes, function (index) {
             if (window.tools.randomBetween(0, 1) < edgeProbability) {
-                var randomFriend = Math.round(window.tools.randomBetween(0,nodes.length-1));
-                network.addEdge({from:nodes[index].id,to:nodes[randomFriend].id});
+                var randomFriend = Math.round(window.tools.randomBetween(0,network.nodes.length-1));
+                network.addEdge({from:network.nodes[index].id,to:network.nodes[randomFriend].id});
 
             }
         });

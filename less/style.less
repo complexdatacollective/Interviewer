@@ -638,6 +638,38 @@ button.btn-checkbox {
 	display:flex !important;
 }
 
+.drag-overlay {
+	position: absolute;
+	z-index: 20;
+	top: 2vh;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex !important;
+	filter: blur(10px);
+	background: rgba(0,0,0,0.7);
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	transition: all 1s ease;
+}
+
+.drag-overlay-hover-box {
+	padding:50px;
+	border: 5px dashed @brand-success;
+	border-radius: @border-radius-large;
+}
+
+.drag-overlay.show {
+	// display:flex !important;
+	opacity: 1;
+	top:0;
+}
+
+.drag-overlay.show .drag-overlay-hover-box {
+
+}
+
 .ord-node-bin {
 	display: inline-flex;
 	flex-direction: column;

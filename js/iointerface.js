@@ -6,7 +6,6 @@ var IOInterface = function IOInterface() {
     var Datastore = require('nedb');
     var path = require('path');
     var db;
-    var id;
     var ioInterface = {};
     var initialised = false;
 
@@ -21,16 +20,18 @@ var IOInterface = function IOInterface() {
             dbLocation = path.join(nodeRequire('nw.gui').App.dataPath, window.netCanvas.Modules.session.name+'.db');
         }
 
-        if (!callback) {
-            return false;
-        }
-        // After init, first priority is to tro to load previous session for this protocol.
-        // We might not be able to, because of space constraints.
+        // After init, first priority is to to to load previous session for this protocol.
         // Whatever happens, the result of this should call the callback function passing the session id as the only parameter
         note.info('ioInterface initialising.');
         note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');
 
         db = new Datastore({ filename: dbLocation, autoload: true });
+
+        callback();
+
+    };
+
+    ioInterface.getLastSession = function(callback) {
         db.find({}).sort({'sessionParameters.date': 1 }).exec(function (err, docs) {
             if (err) {
                 return false;
@@ -39,28 +40,42 @@ var IOInterface = function IOInterface() {
             if (docs.length !== undefined && docs.length > 0) {
                 note.debug('ioInterface finished initialising.');
                 initialised = true;
-                callback(docs[0]._id);
-
+                callback(docs[0]);
                 return true;
             } else {
-                var sessionDate = new Date();
-                db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
-                    if(err) {
-                        note.error(err);
-                        return false;
-                    }
-
-                    // Two documents were inserted in the database
-                    // newDocs is an array with these documents, augmented with their _id
-                    id = newDoc[0]._id;
-
+                ioInterface.newSession(function(newDoc) {
                     initialised = true;
-                    callback(newDoc[0]._id);
                     note.debug('ioInterface finished initialising.');
+                    callback(newDoc);
                     return true;
                 });
             }
 
+        });
+    };
+
+    ioInterface.newSession = function(callback) {
+        var sessionDate = new Date();
+        db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
+            if(err) {
+                note.error(err);
+                return false;
+            }
+
+            note.debug('ioInterface added a new session with id '+newDoc[0]._id);
+
+            callback(newDoc[0]);
+            return true;
+        });
+    };
+
+    ioInterface.getSessions = function(callback) {
+        db.find({}, function (err, docs) {
+            if (err) {
+                // handle error
+                return false;
+            }
+            callback(docs);
         });
 
     };
@@ -131,7 +146,7 @@ var IOInterface = function IOInterface() {
         });
     };
 
-    ioInterface.load = function(callback, id) {
+    ioInterface.load = function(id, callback) {
         note.info('ioInterface loading data.');
         db.find({'_id': id}, function (err, docs) {
             if (err) {

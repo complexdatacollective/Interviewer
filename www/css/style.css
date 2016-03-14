@@ -12659,6 +12659,41 @@ fieldset[disabled] .btn-modal-danger.focus {
   display: -ms-flexbox !important;
   display: flex !important;
 }
+.drag-overlay {
+  position: absolute;
+  z-index: 20;
+  top: 2vh;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-filter: blur(10px);
+          filter: blur(10px);
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  opacity: 0;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+.drag-overlay-hover-box {
+  padding: 50px;
+  border: 5px dashed #1ECD97;
+  border-radius: 12px;
+}
+.drag-overlay.show {
+  opacity: 1;
+  top: 0;
+}
 .ord-node-bin {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;

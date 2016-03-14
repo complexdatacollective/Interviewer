@@ -1,4 +1,4 @@
-/* global document, window, $, protocol, nodeRequire, note */
+/* global document, window, $, protocol, nodeRequire, note, alert */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -61,11 +61,14 @@ var Session = function Session() {
         }
     };
 
-    session.loadProtocol = function() {
+
+    session.loadProtocol = function(protocolName, callback) {
+
+        session.protocolName = protocolName;
 
         // Require the session protocol file.
         // var studyPath = path.normalize('../protocols/'+window.studyProtocol+'/protocol.js');
-        $.getScript( 'protocols/'+window.netCanvas.studyProtocol+'/protocol.js', function() {
+        $.getScript( 'protocols/'+protocolName+'/protocol.js', function() {
 
             // protocol.js files declare a protocol variable, which is what we use here.
             // It is implicitly loaded as part of the getScript callback
@@ -77,7 +80,7 @@ var Session = function Session() {
             session.stages = study.stages;
 
             // insert the stylesheet
-            $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');
+            $('head').append('<link rel="stylesheet" href="protocols/'+protocolName+'/css/style.css" type="text/css" />');
 
             // copy the skip functions
             if (typeof study.skipFunctions !== 'undefined') {
@@ -91,35 +94,14 @@ var Session = function Session() {
                 note.error('Study protocol must have key "name" under sessionParameters.');
             }
 
-            // Check for an in-progress session
-            window.dataStore.init(function(sessionid) {
-                session.id = sessionid;
-                window.dataStore.load(function(data) {
-
-                    session.updateSessionData(data, function() {
-                        // Only load the network into the model if there is a network to load
-                        if(session.sessionData.nodes && session.sessionData.edges) {
-                            window.network.loadNetwork({nodes:session.sessionData.nodes,edges:session.sessionData.edges});
-                        }
-
-                        if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
-                            session.goToStage(session.sessionData.sessionParameters.stage);
-                        } else {
-                            session.goToStage(0);
-                        }
-                    });
-
-                    // create the sessionGlobals
-                    if (typeof study.globals !=='undefined') {
-                        session.globals = study.globals;
-                        // iterate through and execute;
-                        $.each(session.globals, function(index, value) {
-                            value();
-                        });
-                    }
-
-                }, session.id);
-            });
+            // create the sessionGlobals
+            if (typeof study.globals !=='undefined') {
+                session.globals = study.globals;
+                // iterate through and execute;
+                $.each(session.globals, function(index, value) {
+                    value();
+                });
+            }
 
             // Initialise the menu system – other modules depend on it being there.
             var stagesMenuOptions = {
@@ -144,6 +126,7 @@ var Session = function Session() {
             });
 
             window.stagesMenu = new window.netCanvas.Modules.Menu(stagesMenuOptions);
+            callback();
 
         }).fail(function( jqxhr, textStatus, error ) {
             var err = textStatus + ', ' + error;
@@ -161,9 +144,62 @@ var Session = function Session() {
         session.prevStage();
     }
 
-    session.init = function(callback) {
+    session.loadSessionData = function(id, callback) {
+        // Check for an in-progress session and load it.
+
+        window.dataStore.init(function() {
+
+
+            // if the session id is null, we load the last session or create a new session as needed
+            if (id === null) {
+                window.dataStore.getLastSession(function(data) {
+
+                    session.id = data._id;
+                    session.sessionData = data;
+
+                    // Build a new network
+                    window.network = new window.netCanvas.Modules.Network();
+
+                    // Only load the network into the model if there is a network to load
+                    if(session.sessionData.nodes && session.sessionData.edges) {
+
+
+                        window.test = setInterval(function(){ console.log('checking...'); if (window.network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
+
+                        window.network.init(session.sessionData.nodes,session.sessionData.edges);
+                    } else {
+                        window.network.init();
+                    }
+
+                    callback();
+
+                });
+            } else {
+                // if the session id is not null, we load that session id.
+                window.dataStore.load(id, function(data) {
+
+                    session.id = data._id;
+                    session.sessionData = data;
+                    // Only load the network into the model if there is a network to load
+                    if(session.sessionData.nodes && session.sessionData.edges) {
+
+                        // Build a new network
+                        window.network = new window.netCanvas.Modules.Network();
+                        window.test = setInterval(function(){ console.log('checking...'); if (window.network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
+
+                        window.network.init(session.sessionData.nodes,session.sessionData.edges);
+                    }
+
+                    callback();
+
+                });
+            }
+
+        });
+    };
+
+    session.init = function(properties) {
         note.info('Session initialising.');
-        window.test = setInterval(function(){ console.log('checking...'); if (network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
 
         // Navigation arrows.
         $('.arrow-next').on('click', sessionNextHandler);
@@ -183,9 +219,6 @@ var Session = function Session() {
             saveFile(this.value);
         });
 
-        // Build a new network
-        window.network = new window.netCanvas.Modules.Network();
-
         window.addEventListener('unsavedChanges', function () {
             session.saveManager();
         }, false);
@@ -197,6 +230,7 @@ var Session = function Session() {
         };
 
         window.sessionMenu = new window.netCanvas.Modules.Menu(sessionMenuOptions);
+        window.sessionMenu.addItem('New Session', 'fa-plus', clickDownloadInput);
         window.sessionMenu.addItem('Reset this Session', 'fa-undo', function() {
             window.BootstrapDialog.show({
                 type: window.BootstrapDialog.TYPE_DANGER,
@@ -245,9 +279,20 @@ var Session = function Session() {
 
         window.sessionMenu.addItem('Quit Network Canvas', 'fa-sign-out', function() { window.close(); });
 
-        if(callback) {
-            callback();
-        }
+
+        // Attempt to load the protocol passed as a session property
+        session.loadProtocol(properties.protocol, function() {
+
+            // If sucessful load the session data.
+            session.loadSessionData(properties.sessionID, function() {
+                if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+                    session.goToStage(session.sessionData.sessionParameters.stage);
+                } else {
+                    session.goToStage(0);
+                }
+            });
+        });
+
 
     };
 
@@ -310,8 +355,6 @@ var Session = function Session() {
     };
 
     session.saveData = function() {
-        session.sessionData.nodes = window.network.getNodes();
-        session.sessionData.edges = window.network.getEdges();
         if(!window.dataStore.initialised()) {
             var unsavedChanges = new window.Event('unsavedChanges');
             window.dispatchEvent(unsavedChanges);
@@ -363,7 +406,7 @@ var Session = function Session() {
 
         // Transition the content
         var newStage = stage;
-        var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
+        var stagePath ='./protocols/'+session.protocolName+'/stages/'+session.stages[stage].page;
         stagePath += '?_=' + (new Date()).getTime();
         content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
             content.load( stagePath, function() {

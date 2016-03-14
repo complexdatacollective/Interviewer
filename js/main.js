@@ -13,7 +13,6 @@ $(document).ready(function() {
     window.isCordova = !!window.cordova;
     window.isNodeWebkit = false;
     window.netCanvas.devMode = false;
-    window.netCanvas.studyProtocol = 'dphil-protocol';
 
     //Is this Node.js?
     if(window.isNode) {
@@ -165,17 +164,6 @@ $(document).ready(function() {
         note.info('netCanvas running on '+parser.getBrowser().name+' '+parser.getBrowser().major+' on '+parser.getOS().name+' '+parser.getOS().version);
     }
 
-    var protocolExists = function(protocol, callback) {
-        var response = false;
-        var availableProtocols = ['RADAR', 'default', 'dphil-protocol'];
-
-        if (availableProtocols.indexOf(protocol) !== -1) {
-            response = true;
-        }
-
-        callback(response);
-    };
-
     // Require tools
     window.tools = require('./tools');
 
@@ -206,29 +194,33 @@ $(document).ready(function() {
     // Set up a new session
     window.netCanvas.Modules.session = require('./session.js');
 
+    var sessionParameters = {
+        sessionID: null,
+        protocol: 'dphil-protocol'
+    };
 
     // study protocol
     if (args && typeof args.protocol !== 'undefined') {
-        window.netCanvas.studyProtocol = args.protocol;
+        sessionParameters.protocol = args.protocol;
     }
 
-    // to do: expand this function to validate a proposed session, not just check that it exists.
-    protocolExists(window.netCanvas.studyProtocol, function(exists){
-        if (!exists) {
-            note.warn('WARNING: Specified study protocol was not found. Using default.');
-            window.netCanvas.studyProtocol = 'default';
-        }
-        // Initialise session now.
-        window.netCanvas.Modules.session.init(function() {
-            window.netCanvas.Modules.session.loadProtocol();
-        });
-        window.logger.init();
-        if ('addEventListener' in document) {
-            document.addEventListener('DOMContentLoaded', function() {
-                FastClick.attach(document.body);
-            }, false);
-        }
+    if (args && typeof args.session !== 'undefined') {
+        sessionParameters.sessionID = args.session;
+    }
 
-    });
+    // Initialise session now.
+    // If theres a session ID, pass it.
+    // It there isnt (default) the session will attempt to load the most recent session
+    window.netCanvas.Modules.session.init(sessionParameters);
+
+    // Initialiser logger
+    window.logger.init();
+
+    // Initialise fastclick
+    if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+            FastClick.attach(document.body);
+        }, false);
+    }
 
 });
