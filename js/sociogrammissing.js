@@ -46,6 +46,7 @@ module.exports = function SociogramMissing() {
 
 	// Default settings
 	var settings = {
+		network: window.netCanvas.Modules.session.getPrimaryNetwork(),
 		options: {
 			defaultNodeSize: 27,
 			defaultNodeColor: 'white',

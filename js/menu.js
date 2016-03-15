@@ -72,7 +72,7 @@ module.exports = function Menu(options) {
     };
 
     menu.init = function(options) {
-        note.info('Menu initialising.');
+        note.info('Menu called "'+options.name+'" initialising...');
         window.tools.extend(menu.options,options);
 
         var newMenu = {};

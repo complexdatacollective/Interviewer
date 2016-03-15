@@ -21,7 +21,6 @@ var Session = function Session() {
   }
 
   function clickDownloadInput() {
-    console.log('clickdownloadinput');
     $('#save').prop('nwsaveas', session.returnSessionID()+'_'+Math.floor(Date.now() / 1000)+'.json');
     $('#save').trigger('click');
     session.downloadData();
@@ -145,64 +144,41 @@ var Session = function Session() {
   }
 
   session.loadSessionData = function(id, callback) {
-    note.debug('session.loadSessionData(): loading session with id '+id);
-    // Check for an in-progress session and load it.
+    note.debug('session.loadSessionData()');
 
-      note.debug('session.loadSessionData');
+    var process = function(data) {
+      session.id = data._id;
+      session.sessionData.sessionParameters = data.sessionParameters;
 
+      // Build a new network
+      session.sessionData.network = new window.netCanvas.Modules.Network();
 
-      // if the session id is null, we load the last session or create a new session as needed
-      if (id === null) {
-        note.debug('session.loadSessionData: ID is null');
-        window.dataStore.getLastSession(function(data) {
-
-          console.log('network data is:');
-          console.log(data.network.nodes);
-          session.id = data._id;
-          session.sessionData.sessionParameters = data.sessionParameters;
-
-          // Build a new network
-          session.sessionData.network = new window.netCanvas.Modules.Network();
-
-          // Only load the network into the model if there is a network to load
-          if(data.network.nodes && data.network.edges) {
-            alert('yes');
-            // window.test = setInterval(function(){ console.log('checking...'); if (session.sessionData.network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
-
-            session.sessionData.network.loadNetwork({nodes:data.network.nodes, edges:data.network.edges}, true);
-          } else {
-            alert('no');
-            session.sessionData.network.init();
-          }
-
-          if (callback) {
-            callback();
-          }
-
-
-        });
+      // Only load the network into the model if there is a network to load
+      if(data.network && data.network.nodes && data.network.edges) {
+        session.sessionData.network.loadNetwork({nodes:data.network.nodes, edges:data.network.edges}, true);
       } else {
-        // if the session id is not null, we load that session id.
-        window.dataStore.load(id, function(data) {
-
-          session.id = data._id;
-          session.sessionData = data;
-          // Only load the network into the model if there is a network to load
-          if(session.sessionData.nodes && session.sessionData.edges) {
-
-            // Build a new network
-            session.sessionData.network = new window.netCanvas.Modules.Network();
-            window.test = setInterval(function(){ console.log('checking...'); if (session.sessionData.network.getNodes({id:0}).length > 1) { alert('Duplication has occured.'); } }, 1000);
-
-            session.sessionData.network.init(session.sessionData.nodes,session.sessionData.edges);
-          }
-
-          if (callback) {
-            callback();
-          }
-
-        });
+        session.sessionData.network.init();
       }
+
+      if (callback) {
+        callback();
+      }
+    }
+
+    // if the session id is null, we load the last session or create a new session as needed
+    if (id === null) {
+      note.trace('session.loadSessionData: ID is null');
+      window.dataStore.getLastSession(function(data) {
+        process(data);
+      });
+    } else {
+      note.trace('session.loadSessionData: ID is '+id);
+      // if the session id is not null, we load that session id.
+      window.dataStore.load(id, function(data) {
+        process(data);
+      });
+    }
+
 
   };
 
@@ -320,7 +296,6 @@ var Session = function Session() {
   };
 
   session.downloadData = function() {
-    console.log('downloadData()');
     var filename = session.returnSessionID()+'.json';
     var text = JSON.stringify(session.sessionData, undefined, 2); // indentation level = 2;
     var pom = document.createElement('a');
@@ -349,10 +324,8 @@ var Session = function Session() {
   };
 
   session.updateSessionData = function(data, callback) {
-    note.debug('Updating user data.');
-    note.debug('Using the following to update:');
-    note.debug(data);
-
+    note.debug('session.updateSessionData()');
+    note.trace(data);
 
     // Here, we used to simply use our extend method on session.sessionData with the new data.
     // This failed for arrays.
@@ -375,6 +348,7 @@ var Session = function Session() {
 
   session.saveData = function() {
     if(!window.dataStore.initialised()) {
+      note.warn('session.saveData() tried to save before dataStore was initialised. Waiting.');
       var unsavedChanges = new window.Event('unsavedChanges');
       window.dispatchEvent(unsavedChanges);
     } else {

@@ -26,12 +26,13 @@ var IOInterface = function IOInterface() {
         note.debug('Using '+window.netCanvas.Modules.session.name+' as database name.');
 
         db = new Datastore({ filename: dbLocation, autoload: true });
-
+        initialised = true;
         callback();
 
     };
 
     ioInterface.getLastSession = function(callback) {
+      note.debug('ioInterface.getLastSession()');
         db.find({}).exec(function (err, docs) {
             if (err) {
                 return false;
@@ -40,13 +41,13 @@ var IOInterface = function IOInterface() {
             note.trace(docs);
             if (docs.length !== undefined && docs.length > 0) {
                 initialised = true;
-                note.debug('ioInterface.getLastSession(): returning the last session.');
+                note.trace('ioInterface.getLastSession(): previous session found. Returning.');
                 callback(docs[0]);
                 return true;
             } else {
                 ioInterface.newSession(function(newDoc) {
                     initialised = true;
-                    note.debug('ioInterface.getLastSession(): returning a new session.');
+                    note.trace('ioInterface.getLastSession(): returning a new session.');
                     callback(newDoc);
                     return true;
                 });
@@ -94,8 +95,8 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.save = function(sessionData, id) {
+      note.debug('ioInterface.save(): '+id);
         delete sessionData._id;
-        note.info('IOInterface saving.');
         note.debug(sessionData);
 
         db.update({_id: id }, sessionData, {}, function (err) {

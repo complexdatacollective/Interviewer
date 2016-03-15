@@ -26,6 +26,11 @@ $(document).ready(function() {
         }
     }
 
+    //Don't include cordova library when not in mobile environment
+    if(window.isCordova) {
+      $('head').append('<script src="cordova.js"></script>');
+    }
+
     // Arguments
     /** build an object (argument: value) for command line arguments independant of platform **/
     window.getArguments = function() {
