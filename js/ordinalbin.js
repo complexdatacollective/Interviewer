@@ -37,14 +37,14 @@ module.exports = function OrdinalBin() {
         };
 
         window.tools.extend(criteria, ordinalBin.options.criteria);
-        var edge = window.network.getEdges(criteria)[0];
+        var edge = netCanvas.Modules.session.getPrimaryNetwork().getEdges(criteria)[0];
 
         var followupProperties = {};
 
         followupProperties[ordinalBin.options.followup.variable] = followupVal;
 
         window.tools.extend(edge, followupProperties);
-        window.network.updateEdge(edge.id, edge);
+        netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edge.id, edge);
         $('.followup').hide();
     };
 
@@ -108,7 +108,7 @@ module.exports = function OrdinalBin() {
                     // Followup question
 
                     // Add the attribute
-                    window.network.updateNode($(dropped).data('node-id'),properties);
+                    netCanvas.Modules.session.getPrimaryNetwork().updateNode($(dropped).data('node-id'),properties);
 
                     $.each($('.ord-node-bin'), function(oindex) {
                         var length = $('.d'+oindex).children('.ord-active-node-list').children().length;
@@ -177,7 +177,7 @@ module.exports = function OrdinalBin() {
         });
 
         // get all nodes, ignoring ego
-        var nodes = window.network.getNodes(ordinalBin.options.criteria, function (results) {
+        var nodes = netCanvas.Modules.session.getPrimaryNetwork().getNodes(ordinalBin.options.criteria, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {

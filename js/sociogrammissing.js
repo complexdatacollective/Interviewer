@@ -80,7 +80,7 @@ module.exports = function SociogramMissing() {
 
 
 
-		var nodes = window.network.getNodes({}, function (results) {
+		var nodes = netCanvas.Modules.session.getPrimaryNetwork().getNodes({}, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {
@@ -240,7 +240,7 @@ module.exports = function SociogramMissing() {
 
 	sociogramMissing.nodeAlreadyAsked = function(id) {
 		// console.log('nodeAlreadyAsked '+id);
-		var node = window.network.getNode(id);
+		var node = netCanvas.Modules.session.getPrimaryNetwork().getNode(id);
 		// console.log(node.label);
 		var nodeNg = node.namegenerator;
 		// console.log(nodeNg);
@@ -264,7 +264,7 @@ module.exports = function SociogramMissing() {
 		* Updates visible attributes based on current prompt
 		*/
 
-		var selectNodes = window.network.getNodes({}, function (results) {
+		var selectNodes = netCanvas.Modules.session.getPrimaryNetwork().getNodes({}, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {
@@ -442,7 +442,7 @@ module.exports = function SociogramMissing() {
 				currentNode.children[1].stroke(colors.selected);
 			} else {
 				// remove static variables, if present
-				var node = window.network.getNode(currentNode.attrs.id);
+				var node = netCanvas.Modules.session.getPrimaryNetwork().getNode(currentNode.attrs.id);
 				node[settings.prompts[currentPrompt].variable] = 0;
 				currentNode.children[1].stroke(settings.options.defaultNodeColor);
 			}

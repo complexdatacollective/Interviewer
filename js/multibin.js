@@ -40,7 +40,7 @@ module.exports = function MultiBin() {
 		};
 
 		window.tools.extend(criteria, multiBin.options.criteria);
-		var edge = window.network.getEdges(criteria)[0];
+		var edge = netCanvas.Modules.session.getPrimaryNetwork().getEdges(criteria)[0];
 
 		// Create an empty object for storing the new properties in
 		var followupProperties = {};
@@ -53,7 +53,7 @@ module.exports = function MultiBin() {
 
 		// Update the edge
 		window.tools.extend(edge, followupProperties);
-		window.network.updateEdge(edge.id, edge);
+		netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edge.id, edge);
 
 		// Clean up
 		$.each(multiBin.options.followup.questions, function(index) {
@@ -165,7 +165,7 @@ module.exports = function MultiBin() {
 		// has the node been clicked while in the bucket or while in a bin?
 		if ($(this).parent().hasClass('active-node-list')) {
 			// it has been clicked while in a bin.
-			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
+			var edgeID = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBin.options.edgeType})[0].id;
 			var properties = {};
 			// make the values null when a node has been taken out of a bin
 			properties[multiBin.options.variable.label] = '';
@@ -176,7 +176,7 @@ module.exports = function MultiBin() {
 					properties[value.variable] = undefined;
 				});
 			}
-			window.network.updateEdge(edgeID,properties);
+			netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edgeID,properties);
 
 			$(this).css({'top':0, 'left' :0});
 			$(this).appendTo('.node-bucket');
@@ -285,7 +285,7 @@ module.exports = function MultiBin() {
 		}
 
 		// get all edges
-		var edges = window.network.getEdges(multiBin.options.criteria, multiBin.options.filter);
+		var edges = netCanvas.Modules.session.getPrimaryNetwork().getEdges(multiBin.options.criteria, multiBin.options.filter);
 		// var newLine = false;
 		// One of these for each bin. One bin for each variable value.
 		$.each(multiBin.options.variable.values, function(index, value){
@@ -318,7 +318,7 @@ module.exports = function MultiBin() {
 					};
 
 					window.tools.extend(criteria, multiBin.options.criteria);
-					var edge = window.network.getEdges(criteria)[0];
+					var edge = netCanvas.Modules.session.getPrimaryNetwork().getEdges(criteria)[0];
 
 					// Create an empty object for storing the new properties in
 					var followupProperties = {};
@@ -330,7 +330,7 @@ module.exports = function MultiBin() {
 
 					// Update the edge
 					window.tools.extend(edge, followupProperties);
-					window.network.updateEdge(edge.id, edge);
+					netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edge.id, edge);
 
 					// Clean up
 					$.each(multiBin.options.followup.questions, function(index) {
@@ -343,8 +343,8 @@ module.exports = function MultiBin() {
 				var properties = {};
 				properties[multiBin.options.variable.label] = multiBin.options.variable.values[index];
 				// Add the attribute
-				var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
-				window.network.updateEdge(edgeID,properties);
+				var edgeID = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBin.options.edgeType})[0].id;
+				netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edgeID,properties);
 
 				var noun = 'people';
 				if ($('.c'+index+' .active-node-list').children().length === 1) {
@@ -393,7 +393,7 @@ module.exports = function MultiBin() {
 	$.each(edges, function(index,value) {
 
 		// We need the dyad edge so we know the nname for other types of edges
-		var dyadEdge = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
+		var dyadEdge = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, type:'Dyad', to:value.to})[0];
 		if (value[multiBin.options.variable.label] !== undefined && value[multiBin.options.variable.label] !== '') {
 			index = multiBin.options.variable.values.indexOf(value[multiBin.options.variable.label]);
 			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.nname_t0+'</div>');

@@ -96,6 +96,8 @@ module.exports = function Network() {
     };
 
     network.loadNetwork = function(data, overwrite) {
+      note.debug('network.loadNetwork()');
+      console.log(data);
         if (!data || !data.nodes || !data.edges) {
             note.error('Error loading network. Data format incorrect.');
             return false;
@@ -105,11 +107,19 @@ module.exports = function Network() {
             }
 
             if (overwrite) {
+              console.log('overwriting');
                 network.nodes = data.nodes;
-                network.dges = data.edges;
+                network.edges = data.edges;
+                console.log(network.nodes);
+                console.log(network.edges);
+                
             } else {
+              console.log('not overwriting');
                 network.nodes = network.nodes.concat(data.nodes);
                 network.edges = network.edges.concat(data.edges);
+                console.log(network.nodes);
+                console.log(network.edges);
+
             }
 
             return true;

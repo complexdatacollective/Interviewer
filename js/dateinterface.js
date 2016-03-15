@@ -25,12 +25,12 @@ module.exports = function DateInterface() {
         dateInterface.options.targetEl.append('<div class="date-container"></div>');
 
         // get edges according to criteria
-        edges = window.network.getEdges(dateInterface.options.criteria);
+        edges = netCanvas.Modules.session.getPrimaryNetwork().getEdges(dateInterface.options.criteria);
         var counter = 0;
         var row = 0;
         $.each(edges, function(index,value) {
 
-            var dyadEdge = window.network.getEdges({type:'Dyad', from:window.network.getNodes({type_t0:'Ego'})[0].id, to:value.to})[0];
+            var dyadEdge = netCanvas.Modules.session.getPrimaryNetwork().getEdges({type:'Dyad', from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to:value.to})[0];
 
             var markup =
             '<div class="date-picker-item overlay">'+
@@ -122,7 +122,7 @@ module.exports = function DateInterface() {
 
                 }
 
-                window.network.updateEdge(value.id, properties);
+                netCanvas.Modules.session.getPrimaryNetwork().updateEdge(value.id, properties);
 
                 if (window.moment($('#datetimepicker'+first).data('DateTimePicker').date()).isAfter($('#datetimepicker'+second).data('DateTimePicker').date())) {
                     $current.parent().parent().parent().children('.logic-error').fadeIn();

@@ -21,6 +21,7 @@ module.exports = function ContextGenerator() {
 		targetEl: $('.container'),
 		egoData: 'contexts',
 		nodeDestination: 'contexts',
+		network: netCanvas.Modules.session.getPrimaryNetwork(),
 		createNodes: true,
 		prompts: [
 			'Prompt 1',
@@ -128,7 +129,7 @@ module.exports = function ContextGenerator() {
 					// Update ego
 					var properties = {};
 					properties[contextGenerator.options.nodeDestination] = contexts;
-					window.network.updateNode(window.network.getEgo().id, properties);
+					contextGenerator.options.network.updateNode(contextGenerator.options.network.getEgo().id, properties);
 					contextGenerator.addContext(data.name);
 					newContextForm.reset();
 					newContextForm.hide();
@@ -215,11 +216,11 @@ module.exports = function ContextGenerator() {
 		});
 
 		// Add existing data, if present
-		if (typeof window.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
+		if (typeof contextGenerator.options.network.getEgo()[contextGenerator.options.egoData] === 'undefined') {
 			note.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
 			var properties = {};
 			properties[contextGenerator.options.egoData] = [];
-			window.network.updateNode(window.network.getEgo().id, properties);
+			contextGenerator.options.network.updateNode(contextGenerator.options.network.getEgo().id, properties);
 		} else {
 			contextGenerator.addExistingContexts();
 		}
@@ -232,7 +233,7 @@ module.exports = function ContextGenerator() {
 		// if (typeof node.contexts !== 'object') {
 		// 	var contextArray = [];
 		// 	contextArray.push(node.contexts);
-		// 	var updateNode = window.network.getNode(node.id);
+		// 	var updateNode = contextGenerator.options.network.getNode(node.id);
 		// 	updateNode.contexts = contextArray;
 		// 	window.netCanvas.Modules.session.saveData();
 		// }
@@ -259,14 +260,14 @@ module.exports = function ContextGenerator() {
 	contextGenerator.addExistingContexts = function() {
 		note.info('contextGenerator.addExistingContexts()');
 		// First, we create a super array of all unique items across all variable arrays.
-		var egoData = window.network.getEgo()[contextGenerator.options.egoData];
+		var egoData = contextGenerator.options.network.getEgo()[contextGenerator.options.egoData];
 
 		$.each(egoData, function(index, value) {
 			contextGenerator.addContext(value);
 		});
 
 		// Add any nodes to the contexts (filter to ignore ego)
-		var nodes = window.network.getNodes({}, function (results) {
+		var nodes = contextGenerator.options.network.getNodes({}, function (results) {
 			var filteredResults = [];
 			$.each(results, function(index,value) {
 				if (value.type !== 'Ego') {
@@ -456,7 +457,7 @@ module.exports = function ContextGenerator() {
 		if (contexts.remove(name) !== 0) {
 			var properties = {};
 			properties[contextGenerator.options.egoData] = contexts;
-			window.network.updateNode(window.network.getEgo().id, properties);
+			contextGenerator.options.network.updateNode(contextGenerator.options.network.getEgo().id, properties);
 
 			// Remove nodes
 			var childNodes = $('div[data-index="'+index+'"]').children('.node-circle-container');
@@ -499,7 +500,7 @@ module.exports = function ContextGenerator() {
 			throw new Error('No id provided to contextGenerator.deleteNode().');
 		}
 
-		if (window.network.removeNode(id)) {
+		if (contextGenerator.options.network.removeNode(id)) {
 			$('div[data-id="'+id+'"]').remove();
 			note.info('Deleted node with id '+id);
 			return true;
@@ -514,7 +515,7 @@ module.exports = function ContextGenerator() {
 		var properties = {};
 		properties[contextGenerator.options.nodeDestination] = [];
 		properties[contextGenerator.options.nodeDestination].push(contexts[targetContext]);
-		window.network.updateNode(node, properties, function() {
+		contextGenerator.options.network.updateNode(node, properties, function() {
 			var target = $('div[data-index="'+targetContext+'"]');
 			var element = $('div[data-id="'+node+'"]').parent();
 			$(element).appendTo(target);

@@ -53,17 +53,17 @@ var RoleRevisit = function RoleRevisit() {
         editing = index;
 
         // Update role count
-        var roleCount = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
+        var roleCount = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
         $('div[data-index="'+index+'"]').children().children('.role-count').html(roleCount+' roles selected.');
 
         // Mark the existing roles as selected
-        var roleEdges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
+        var roleEdges = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'});
         $.each(roleEdges, function(index, value) {
              $('.rel-'+value.reltype_main_t0).find('div[data-sub-relationship="'+value.reltype_sub_t0+'"]').addClass('selected').data('selected', true);
         });
 
         // Once the box is opened, delete all the Role edges. Simpler than adding removal logic.
-        window.network.removeEdges(window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}));
+        netCanvas.Modules.session.getPrimaryNetwork().removeEdges(netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}));
         roleRevisit.openNodeBox();
 
     };
@@ -74,17 +74,17 @@ var RoleRevisit = function RoleRevisit() {
         $.each($('.relationship.selected'), function() {
              var edgeProperties = {
                 type: 'Role',
-                from:window.network.getNodes({type_t0:'Ego'})[0].id,
+                from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id,
                 to: editing,
                 reltype_main_t0: $(this).parent('.relationship-type').data('main-relationship'),
                 reltype_sub_t0: $(this).data('sub-relationship')
               };
-            window.network.addEdge(edgeProperties);
+            netCanvas.Modules.session.getPrimaryNetwork().addEdge(edgeProperties);
         });
 
         // Deselect all relationships
         $('.relationship').removeClass('selected');
-        var roleCount = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
+        var roleCount = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to: editing, type:'Role'}).length;
         $('div[data-index="'+editing+'"]').children().children('.role-count').html(roleCount+' roles selected.');
         roleRevisit.closeNodeBox();
     };
@@ -115,7 +115,7 @@ var RoleRevisit = function RoleRevisit() {
         list.append('<li class="'+properties.fname_t0+'"><strong>First Name</strong>: '+properties.fname_t0+'</li>');
         list.append('<li class="'+properties.lname_t0+'"><strong>Last Name</strong>: '+properties.lname_t0+'</li>');
 
-        var roles = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'});
+        var roles = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, to: properties.to, type:'Role'});
         var roleString = '';
         $.each(roles, function(index, value) {
             roleString += ' '+value.reltype_sub_t0+',';

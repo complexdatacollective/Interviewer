@@ -16,6 +16,7 @@
   },
   "license": "GPL-3.0",
   "dependencies": {
+    "grunt-notify": "^0.4.5",
     "nedb": "latest",
     "nw": "^0.12.3",
     "requirejs": "latest",

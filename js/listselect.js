@@ -28,7 +28,7 @@ module.exports = function ListSelect() {
                     properties[value.value] = undefined;
                 }
             });
-            window.network.updateNode(window.network.getNodes({type_t0:'Ego'})[0].id, properties);
+            netCanvas.Modules.session.getPrimaryNetwork().updateNode(netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, properties);
 
         } else {
             $(this).data('selected', true);
@@ -43,7 +43,7 @@ module.exports = function ListSelect() {
 
             });
 
-            window.network.updateNode(window.network.getNodes({type_t0:'Ego'})[0].id, properties);
+            netCanvas.Modules.session.getPrimaryNetwork().updateNode(netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, properties);
 
         }
 
@@ -81,7 +81,7 @@ module.exports = function ListSelect() {
             };
 
             properties[value.value] = 1;
-            if (window.network.getNodes(properties).length>0) {
+            if (netCanvas.Modules.session.getPrimaryNetwork().getNodes(properties).length>0) {
                 el.find('.inner').data('selected', true);
                 el.find('.inner').css({'border':'2px solid red','background':'#E8C0C0'});
             }

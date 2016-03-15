@@ -51,7 +51,7 @@ module.exports = function GeoInterface() {
 	  		// Update edge with this info
 	  		properties = {};
 	  		properties[variable] = layer.feature.properties.name;
-	  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
+	  		netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edges[currentPersonIndex].id, properties);
 	  		$('.map-node-location').html('<strong>Currently marked as:</strong> <br>'+layer.feature.properties.name);
 		} else {
 	  	// Map node already selected. Have we clicked the same one again?
@@ -61,14 +61,14 @@ module.exports = function GeoInterface() {
 	      		mapNodeClicked = false;
 		  		properties = {};
 		  		properties[variable] = undefined;
-		  		window.network.updateEdge(edges[currentPersonIndex].id, properties);
+		  		netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edges[currentPersonIndex].id, properties);
 
 	  		} else {
           resetAllHighlights();
           highlightFeature(e);
           properties = {};
           properties[variable] = layer.feature.properties.name;
-          window.network.updateEdge(edges[currentPersonIndex].id, properties);
+          netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edges[currentPersonIndex].id, properties);
 		    // TODO: Different node clicked. Reset the style and then mark the new one as clicked.
 	  		}
 
@@ -161,7 +161,7 @@ module.exports = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = 'Homeless';
-        window.network.updateEdge(edges[currentPersonIndex].id, properties);
+        netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>Homeless');
     }
 
@@ -169,7 +169,7 @@ module.exports = function GeoInterface() {
         resetAllHighlights();
         var properties = {};
         properties[variable] = 'Jail';
-        window.network.updateEdge(edges[currentPersonIndex].id, properties);
+        netCanvas.Modules.session.getPrimaryNetwork().updateEdge(edges[currentPersonIndex].id, properties);
         $('.map-node-location').html('<strong>Currently marked as:</strong> <br>in Jail');
     }
 
@@ -256,7 +256,7 @@ module.exports = function GeoInterface() {
             	}).addTo(leaflet);
 
 		        // Load initial node
-		        edges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
+		        edges = netCanvas.Modules.session.getPrimaryNetwork().getEdges({from:netCanvas.Modules.session.getPrimaryNetwork().getNodes({type_t0:'Ego'})[0].id, type:'Dyad', res_cat_p_t0: 'Chicago'});
 		        $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 		        $('.map-node-status').html('Tap on the map to indicate the general area where <strong>'+edges[0].nname_t0+'</strong> lives.');
 

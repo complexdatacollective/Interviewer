@@ -7,7 +7,7 @@ module.exports = function NameGenerator() {
     var options = {
         targetEl: $('.container'),
     	panels: ['current'],
-    	network: window.network,
+    	network: netCanvas.Modules.session.getPrimaryNetwork(),
     	form: window.forms.newNodeForm,
     	data: {
     		origin: 'node', // edge or node.

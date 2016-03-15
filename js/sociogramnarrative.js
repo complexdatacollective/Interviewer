@@ -299,14 +299,14 @@ module.exports = function sociogramNarrative() {
 		var communityNodes;
 
 		// community data is coming from ego
-		if (typeof window.network.getEgo().contexts === 'undefined') {
+		if (typeof netCanvas.Modules.session.getPrimaryNetwork().getEgo().contexts === 'undefined') {
 			console.warn('Ego didn\'t have the community variable you specified, so it was created as a blank array.');
 			var communityProperties = {};
 			communityProperties.contexts= [];
-			window.network.updateNode(window.network.getEgo().id, communityProperties);
+			netCanvas.Modules.session.getPrimaryNetwork().updateNode(netCanvas.Modules.session.getPrimaryNetwork().getEgo().id, communityProperties);
 		}
 
-		var egoHulls = window.network.getEgo().contexts;
+		var egoHulls = netCanvas.Modules.session.getPrimaryNetwork().getEgo().contexts;
 		$.each(egoHulls, function(hullIndex, hullValue) {
 			sociogramNarrative.addHull(hullValue);
 		});
@@ -911,14 +911,14 @@ module.exports = function sociogramNarrative() {
 				// If ego doesn't have the variable set, create it
 
 				var properties;
-				if (typeof window.network.getEgo()[settings.dataOrigin.Community.egoVariable] === 'undefined') {
+				if (typeof netCanvas.Modules.session.getPrimaryNetwork().getEgo()[settings.dataOrigin.Community.egoVariable] === 'undefined') {
 					properties = {};
 					properties[settings.dataOrigin.Community.egoVariable] = [];
-					window.network.updateNode(window.network.getEgo().id, properties);
+					netCanvas.Modules.session.getPrimaryNetwork().updateNode(netCanvas.Modules.session.getPrimaryNetwork().getEgo().id, properties);
 				}
 
 				// get existing data
-				var egoContexts = window.network.getEgo()[settings.dataOrigin.Community.egoVariable];
+				var egoContexts = netCanvas.Modules.session.getPrimaryNetwork().getEgo()[settings.dataOrigin.Community.egoVariable];
 				if (egoContexts.indexOf(thisHull.label) === -1) {
 					// Update ego
 					egoContexts.push(thisHull.label);
@@ -974,7 +974,7 @@ module.exports = function sociogramNarrative() {
 			note.warn('Node did not have the data destinateion community attribute. A blank array was created.');
 			properties = {};
 			properties.contexts = [];
-			window.network.updateNode(point.attrs.id, properties);
+			netCanvas.Modules.session.getPrimaryNetwork().updateNode(point.attrs.id, properties);
 		}
 		// Only store if the node doesn't already have the hull present
 		if (point.attrs.contexts.indexOf(hullLabel) === -1) {
@@ -1339,7 +1339,7 @@ module.exports = function sociogramNarrative() {
 					currentNode.children[1].stroke(colors.selected);
 				} else {
 					// remove static variables, if present
-					var node = window.network.getNode(currentNode.attrs.id);
+					var node = netCanvas.Modules.session.getPrimaryNetwork().getNode(currentNode.attrs.id);
 					node[settings.prompts[currentPrompt].showSelected.variable] = 0;
 					currentNode.children[1].stroke(settings.options.defaultNodeColor);
 				}

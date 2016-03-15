@@ -32,20 +32,21 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.getLastSession = function(callback) {
-        db.find({}).sort({'sessionParameters.date': 1 }).exec(function (err, docs) {
+        db.find({}).exec(function (err, docs) {
             if (err) {
                 return false;
                 // handle error
             }
+            note.trace(docs);
             if (docs.length !== undefined && docs.length > 0) {
-                note.debug('ioInterface finished initialising.');
                 initialised = true;
+                note.debug('ioInterface.getLastSession(): returning the last session.');
                 callback(docs[0]);
                 return true;
             } else {
                 ioInterface.newSession(function(newDoc) {
                     initialised = true;
-                    note.debug('ioInterface finished initialising.');
+                    note.debug('ioInterface.getLastSession(): returning a new session.');
                     callback(newDoc);
                     return true;
                 });
@@ -93,7 +94,7 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.save = function(sessionData, id) {
-        delete window.netCanvas.Modules.session.sessionData._id;
+        delete sessionData._id;
         note.info('IOInterface saving.');
         note.debug(sessionData);
 
@@ -134,9 +135,12 @@ var IOInterface = function IOInterface() {
         });
     };
 
-    ioInterface.deleteDocument = function(callback) {
-        note.info('ioInterface deleting document.');
-        db.remove({ _id: window.netCanvas.Modules.session.id }, {}, function (err) {
+    ioInterface.deleteDocument = function(id, callback) {
+      if(!id) {
+        return false;
+      }
+        note.info('ioInterface deleting document with id '+id);
+        db.remove({ _id: id }, {}, function (err) {
             if (err) {
                 note.error(err);
                 return false;
