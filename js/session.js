@@ -159,7 +159,7 @@ var Session = function Session() {
       } else {
         session.sessionData.network.init();
       }
-
+      note.trace('session.loadSessionData(): Loading complete.');
       if (callback) {
         callback();
       }
@@ -187,7 +187,13 @@ var Session = function Session() {
     // Pass null id so that new session is created
     dataStore.newSession(function(newDoc) {
       note.debug('session.newSession(): Session created with id '+newDoc._id);
-      session.loadSessionData(newDoc._id);
+      session.loadSessionData(newDoc._id, function() {
+        if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+          session.goToStage(session.sessionData.sessionParameters.stage);
+        } else {
+          session.goToStage(0);
+        }
+      });
     });
 
   };

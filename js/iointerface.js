@@ -33,12 +33,12 @@ var IOInterface = function IOInterface() {
 
     ioInterface.getLastSession = function(callback) {
       note.debug('ioInterface.getLastSession()');
-        db.find({}).exec(function (err, docs) {
+        db.find({}).sort({date:-1}).exec(function (err, docs) {
             if (err) {
                 return false;
                 // handle error
             }
-            note.trace(docs);
+            note.trace(docs[0]);
             if (docs.length !== undefined && docs.length > 0) {
                 initialised = true;
                 note.trace('ioInterface.getLastSession(): previous session found. Returning.');
@@ -58,7 +58,7 @@ var IOInterface = function IOInterface() {
 
     ioInterface.newSession = function(callback) {
         var sessionDate = new Date();
-        db.insert([{'sessionParameters':{'date':sessionDate}}], function (err, newDoc) {
+        db.insert([{'date': sessionDate, 'sessionParameters':{}}], function (err, newDoc) {
             if(err) {
                 note.error(err);
                 return false;
@@ -72,7 +72,7 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.getSessions = function(callback) {
-        db.find({}, function (err, docs) {
+        db.find({}).sort({date:-1}).exec(function (err, docs) {
             if (err) {
                 // handle error
                 return false;
@@ -97,8 +97,8 @@ var IOInterface = function IOInterface() {
     ioInterface.save = function(sessionData, id) {
       note.debug('ioInterface.save(): '+id);
         delete sessionData._id;
+        sessionData.date = new Date();
         note.debug(sessionData);
-
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
@@ -109,7 +109,8 @@ var IOInterface = function IOInterface() {
     };
 
     ioInterface.update = function(key, sessionData,id) {
-        note.debug('IOInterface being asked to update data store.');
+        note.debug('ioInterface.update()');
+        sessionData.date = new Date();
         db.update({_id: id }, sessionData, {}, function (err) {
             if (err) {
                 return false;
