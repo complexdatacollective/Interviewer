@@ -1,4 +1,4 @@
-/* global document, window, $, protocol, nodeRequire, note, alert */
+/* global document, window, $, protocol, nodeRequire, note, alert, FileReader */
 /* exported Session, eventLog */
 var Session = function Session() {
   'use strict';
@@ -160,10 +160,16 @@ var Session = function Session() {
         session.sessionData.network.init();
       }
 
+      if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
+        session.goToStage(session.sessionData.sessionParameters.stage);
+      } else {
+        session.goToStage(0);
+      }
+
       if (callback) {
         callback();
       }
-    }
+  };
 
     // if the session id is null, we load the last session or create a new session as needed
     if (id === null) {
@@ -185,7 +191,7 @@ var Session = function Session() {
   session.newSession = function() {
     note.debug('session.newSession(): creating new session...');
     // Pass null id so that new session is created
-    dataStore.newSession(function(newDoc) {
+    window.dataStore.newSession(function(newDoc) {
       note.debug('session.newSession(): Session created with id '+newDoc._id);
       session.loadSessionData(newDoc._id);
     });
@@ -201,6 +207,7 @@ var Session = function Session() {
     $('.arrow-prev').on('click', sessionPreviousHandler);
 
     //bind to the custom state change event to handle spinner interactions
+
     window.addEventListener('changeStageStart', function () {
       $('.loader').transition({opacity:1});
     }, false);
@@ -279,13 +286,44 @@ var Session = function Session() {
     session.loadProtocol(properties.protocol, function() {
         // If sucessful load the session data.
       window.dataStore.init(function() {
-        session.loadSessionData(properties.sessionID, function() {
-          if (typeof session.sessionData.sessionParameters.stage !== 'undefined') {
-            session.goToStage(session.sessionData.sessionParameters.stage);
-          } else {
-            session.goToStage(0);
-          }
+        session.loadSessionData(properties.sessionID);
+
+        $('html').on('dragover', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).addClass('dragging');
         });
+
+        $('html').on('dragleave', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).removeClass('dragging');
+        });
+
+        $('html').on('drop', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            console.log(event);
+
+            var file = event.originalEvent.dataTransfer.files[0],
+                reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    // console.log(e.target.result);
+                    console.log(typeof e.target.result);
+                    var json = JSON.parse(e.target.result);
+                    console.log(json);
+                    alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(json));
+                    window.dataStore.insertFile(json, session.loadSessionData);
+                } catch (ex) {
+                    console.log('ex when trying to parse json = ' + ex);
+                }
+            };
+            reader.readAsText(file);
+
+            return false;
+        });
+
       });
     });
 
