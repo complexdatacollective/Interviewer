@@ -315,14 +315,28 @@ var Session = function Session() {
                 reader = new FileReader();
             reader.onload = function (e) {
                 try {
-                    // console.log(e.target.result);
-                    console.log(typeof e.target.result);
                     var json = JSON.parse(e.target.result);
-                    console.log(json);
-                    alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(json));
+                    // Check for obsolete file format
+                    if (!json.network) {
+                        json.network = {};
+                    }
+                    
+                    if (json.nodes || json.edges) {
+                        note.warn('Obsolete file format detected. Updating.');
+                        if (json.nodes) {
+                            json.network.nodes = json.nodes;
+                            delete json.nodes;
+                        }
+
+                        if (json.edges) {
+                            json.network.edges = json.edges;
+                            delete json.edges;
+                        }
+
+                    }
                     window.dataStore.insertFile(json, session.loadSessionData);
                 } catch (ex) {
-                    console.log('ex when trying to parse json = ' + ex);
+                    note.error('ex when trying to parse json = ' + ex);
                 }
             };
             reader.readAsText(file);
@@ -352,7 +366,7 @@ var Session = function Session() {
     note.info('Resetting session.');
     session.id = 0;
     session.currentStage = 0;
-    session.sessionData = [];
+    session.sessionData = {};
 
     if (window.isNodeWebkit) {
       window.gui.Window.get().reloadDev();
