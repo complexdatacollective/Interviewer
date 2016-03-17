@@ -71,6 +71,16 @@ var IOInterface = function IOInterface() {
         });
     };
 
+    ioInterface.insertFile = function(file, callback) {
+
+        ioInterface.newSession(function(doc) {
+            ioInterface.save(file, doc._id, function() {
+                callback(doc._id);
+            });
+        });
+
+    };
+
     ioInterface.getSessions = function(callback) {
         db.find({}).sort({date:-1}).exec(function (err, docs) {
             if (err) {
@@ -94,7 +104,7 @@ var IOInterface = function IOInterface() {
         }
     };
 
-    ioInterface.save = function(sessionData, id) {
+    ioInterface.save = function(sessionData, id, callback) {
       note.debug('ioInterface.save(): '+id);
         delete sessionData._id;
         sessionData.date = new Date();
@@ -103,21 +113,11 @@ var IOInterface = function IOInterface() {
             if (err) {
                 return false;
             }
-            note.debug('Saving complete.');
-        });
 
-    };
-
-    ioInterface.update = function(key, sessionData,id) {
-        note.debug('ioInterface.update()');
-        sessionData.date = new Date();
-        db.update({_id: id }, sessionData, {}, function (err) {
-            if (err) {
-                return false;
+            if(callback) {
+                callback();
             }
-            note.debug('Updating complete.');
         });
-
     };
 
     ioInterface.reset = function(callback) {
