@@ -10,6 +10,7 @@ Import Bootstrap LESS and Site Specific LESS
 @import 'less/loader.less';
 @import 'bower_components/bs-datetimepicker/src/less/bootstrap-datetimepicker.less';
 @import (inline) 'bower_components/leaflet/dist/leaflet.css';
+@import (inline) 'bower_components/jquery-ui/themes/base/jquery-ui.min.css';
 @import 'bower_components/components-font-awesome/less/font-awesome.less';
 @import 'bower_components/bootstrap3-dialog/src/less/bootstrap-dialog.less';
 @import (inline) 'bower_components/lato/css/lato.css';
@@ -1185,6 +1186,42 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     height:100%;
     background: black;
     position:absolute;
+}
+
+// Venue Generator
+
+.newVenueBox {
+    position:absolute;
+    top:15vh;
+    left:30vw;
+    right: 30vw;
+    padding:4vmin;
+    min-height: 580px;
+    max-height:75vmin;
+    border-radius:12px;
+    background:#eee;
+    transform: translateY(-100vh);
+    opacity: 0;
+    z-index:22;
+    transition: all 0.5s ease-in-out;
+}
+
+.newVenueBox > * {
+    transition: all 0.3s ease-in-out;
+}
+
+
+.newVenueBox.content-hidden > * {
+    opacity:0;
+}
+
+@media (max-width: 1024px) {
+    .newVenueBox {
+        top:10vmin;
+        left:20vw;
+        right: 20vw;
+        height:auto;
+    }
 }
 
 // Name Generator
