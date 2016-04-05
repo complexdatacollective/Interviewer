@@ -234,15 +234,13 @@ module.exports = function VenueGenerator() {
             });
 
             $('div[data-index='+editing+']').append(list);
-            venueCount = window.network.getNodes({type_t0: 'Alter'}).length;
+            venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
             venueCounter.update(venueCount);
             editing = false;
 
         }
 
-
         venueGenerator.closeNodeBox();
-
 
     };
 
@@ -330,7 +328,6 @@ module.exports = function VenueGenerator() {
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
         $('.newVenueBox').remove();
 
-
     };
 
     venueGenerator.init = function(options) {
@@ -339,7 +336,7 @@ module.exports = function VenueGenerator() {
         // create elements
         var button = $('<span class="fa fa-4x fa-map-pin add-button"></span>');
         venueGenerator.options.targetEl.append(button);
-        var venueCountBox = $('<div class="venue-count-box"></div>');
+        var venueCountBox = $('<div class="alter-count-box"></div>');
         venueGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
@@ -354,28 +351,29 @@ module.exports = function VenueGenerator() {
 
                 switch(value.type) {
                     case 'text':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                      formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'autocomplete':
-                    formItem = $('<div class="form-group ui-widget '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                      formItem = $('<div class="form-group ui-widget '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
                     break;
 
                     case 'dropdown':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
-                    break;
-
-                    case 'number':
-                    formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'"></div></div>');
+                      formItem = $('<div class="form-group '+value.variable+'"><label class="sr-only" for="'+value.variable+'">'+value.label+'</label><select class="selectpicker"><option>Mustard</option><option>Ketchup</option><option>Relish</option></select></div></div>');
                     break;
 
                     case 'scale':
-                    formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
+                      formItem = $('<input type="hidden" class="form-control '+value.variable+'" id="'+value.variable+'" name="'+value.variable+'" placeholder="'+value.label+'">');
                     break;
 
                 }
 
                 $('.newVenueBox .form .fields').append(formItem);
+
+                $('.selectpicker').selectpicker({
+                  style: 'btn-info',
+                  size: 4
+                });
 
                 $('#venuename_t0').autocomplete({
                   source: [
@@ -435,7 +433,7 @@ module.exports = function VenueGenerator() {
         $(window.document).on('submit', '#ngForm', submitFormHandler);
 
         // Set node count box
-        var el = document.querySelector('.venue-count-box');
+        var el = document.querySelector('.alter-count-box');
 
         venueCounter = new Odometer({
           el: el,
