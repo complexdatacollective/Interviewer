@@ -53,7 +53,7 @@ module.exports = function VenueGenerator() {
         var index = $(this).data('index');
 
         // Get the dyad edge for this node
-        var edge = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id, to: index, type:'Venue'})[0];
+        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'Venue'})[0];
 
         // Set the value of editing to the node id of the current person
         editing = index;
@@ -61,11 +61,14 @@ module.exports = function VenueGenerator() {
         // Populate the form with this nodes data.
         $.each(venueGenerator.options.variables, function(index, value) {
             if(value.private === false) {
-                if (value.type === 'relationship') {
-                    $('select[name="'+value.variable+'"]').val(edge[value.variable]);
-                }else {
+                if (value.type === 'dropdown') {
+                    $('.selectpicker').selectpicker('val', edge[value.variable]);
+                } else if (value.type === 'scale') {
+                    $('input:radio[name="'+value.variable+'"][value="'+edge[value.variable]+'"]').prop('checked', true).trigger('change');
+                } else {
                     $('#'+value.variable).val(edge[value.variable]);
                 }
+
                 $('.delete-button').show();
 
                 if (edge.elicited_previously === true) {
@@ -87,9 +90,37 @@ module.exports = function VenueGenerator() {
 
     var submitFormHandler = function(e) {
         note.info('submitFormHandler()');
-        note.trace(e);
 
         e.preventDefault();
+
+        var data = $(this).serializeArray();
+        console.log(data);
+          var cleanData = {};
+          for (var i = 0; i < data.length; i++) {
+
+            // To handle checkboxes, we check if the key already exists first. If it
+            // does, we append new values to an array. This keeps compatibility with
+            // single form fields, but might need revising.
+
+            // Handle checkbox values
+            if (data[i].value === 'on') { data[i].value = 1; }
+
+            // This code takes the serialised output and puts it in the structured required to store within noded/edges.
+            if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] !== 'object') {
+              // if it isn't an object, its a string. Create an empty array and store by itself.
+              cleanData[data[i].name] = [cleanData[data[i].name]];
+              cleanData[data[i].name].push(data[i].value);
+            } else if (typeof cleanData[data[i].name] !== 'undefined' && typeof cleanData[data[i].name] === 'object'){
+              // Its already an object, so append our new item
+              cleanData[data[i].name].push(data[i].value);
+            } else {
+              // This is for regular text fields. Simple store the key value pair.
+              cleanData[data[i].name] = data[i].value;
+            }
+
+          }
+
+         console.log(cleanData);
 
         var newEdgeProperties = {};
         var newNodeProperties = {};
@@ -98,112 +129,65 @@ module.exports = function VenueGenerator() {
 
             if(value.target === 'edge') {
                 if (value.private === true) {
-                    newEdgeProperties[value.variable] =  value.value;
+                    newEdgeProperties[value.variable] = value.value;
                 } else {
-                    newEdgeProperties[value.variable] =  $('#'+value.variable).val();
+                    newEdgeProperties[value.variable] = cleanData[value.variable];
                 }
 
             } else if (value.target === 'node') {
                 if (value.private === true) {
-                    newNodeProperties[value.variable] =  value.value;
+                    newNodeProperties[value.variable] = value.value;
                 } else {
-                    newNodeProperties[value.variable] =  $('#'+value.variable).val();
+                    newNodeProperties[value.variable] = cleanData[value.variable];
                 }
             }
         });
 
-        var nodeProperties = {};
-        var edgeProperties = {};
-
         if (editing === false) {
             note.info('// We are submitting a new node');
-            window.tools.extend(nodeProperties, newNodeProperties);
-            var newNode = window.network.addNode(nodeProperties);
-            var id;
+            var newNode = window.network.addNode(newNodeProperties);
 
-            console.log('iterating edgetypes');
-            $.each(venueGenerator.options.edgeTypes, function(index,value) {
-                console.log(value);
-                var currentEdgeProperties = {};
-                var currentEdge = value;
-                $.each(venueGenerator.options.variables, function(index, value) {
-                    if (value.target === 'edge' && value.edge === currentEdge) {
-                        if (value.private === true) {
-                            currentEdgeProperties[value.variable] =  value.value;
-                        } else {
-                                currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
-                        }
-                    }
-                });
-                edgeProperties = {
-                    from: window.network.getNodes({type_t0:'Ego'})[0].id,
-                    to: newNode,
-                    type:currentEdge
-                };
+            var edgeProperties = {
+                from: window.network.getEgo().id,
+                to: newNode,
+                type:venueGenerator.options.edgeTypes[0]
+            };
 
-                window.tools.extend(edgeProperties,currentEdgeProperties);
-                id = window.network.addEdge(edgeProperties);
-                venueGenerator.addToList(edgeProperties);
-                venueCount++;
-                venueCounter.update(venueCount);
-            });
+            window.tools.extend(edgeProperties,newEdgeProperties);
+            window.network.addEdge(edgeProperties);
+            venueGenerator.addToList(edgeProperties);
+            venueCount++;
+            venueCounter.update(venueCount);
 
         } else {
             note.info('// We are updating a node');
-            //
-            // var color = function() {
-            //     var el = $('div[data-index='+editing+']');
-            //     var current = el.css('background-color');
-            //     el.stop().transition({background:'#1ECD97'}, 400, 'ease');
-            //     setTimeout(function(){
-            //         el.stop().transition({ background: current}, 800, 'ease');
-            //     }, 700);
-            // };
-            //
-            // var nodeID = editing;
-            // $.each(venueGenerator.options.edgeTypes, function(index,value) {
-            //     var currentEdge = value;
-            //     var currentEdgeProperties = {};
-            //     $.each(venueGenerator.options.variables, function(index, value) {
-            //         if (value.target === 'edge' && value.edge === currentEdge) {
-            //             if (value.private === true) {
-            //                 currentEdgeProperties[value.variable] =  value.value;
-            //             } else {
-            //                 if(value.type === 'relationship' || value.type === 'subrelationship') {
-            //                     currentEdgeProperties[value.variable] =  $('select[name="'+value.variable+'"]').val();
-            //                 } else {
-            //                     currentEdgeProperties[value.variable] =  $('#'+value.variable).val();
-            //                 }
-            //             }
-            //         }
-            //     });
-            //
-            //     var edges = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:editing,type:value});
-            //     $.each(edges, function(index,value) {
-            //         window.network.updateEdge(value.id,currentEdgeProperties, color);
-            //     });
-            // });
-            //
-            // window.network.updateNode(nodeID, newNodeProperties);
-            // var properties = window.tools.extend(newEdgeProperties,newNodeProperties);
-            //
-            // // update relationship roles
-            //
-            // $('div[data-index='+editing+']').html('');
-            // $('div[data-index='+editing+']').append('<h4>'+properties.nname_t0+'</h4>');
-            // var list = $('<ul></ul>');
-            //
-            // $.each(venueGenerator.options.variables, function(index, value) {
-            //     if (value.private === false && properties[value.variable] !== undefined && properties[value.variable] !== '') {
-            //         list.append('<li class="'+properties[value.variable]+'"><strong>'+value.label+'</strong>: '+properties[value.variable]+'</li>');
-            //     }
-            //
-            // });
-            //
-            // $('div[data-index='+editing+']').append(list);
-            // venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
-            // venueCounter.update(venueCount);
-            // editing = false;
+
+            var color = function() {
+                var el = $('div[data-index='+editing+']');
+                var current = el.css('background-color');
+                el.stop().transition({background:'#1ECD97'}, 400, 'ease');
+                setTimeout(function(){
+                    el.stop().transition({ background: current}, 800, 'ease');
+                }, 700);
+            };
+
+            var nodeID = editing;
+
+            var edges = window.network.getEdges({from:window.network.getEgo().id,to:nodeID,type:venueGenerator.options.edgeTypes[0]});
+            $.each(edges, function(index,value) {
+                window.network.updateEdge(value.id,newEdgeProperties, color);
+            });
+
+            window.network.updateNode(nodeID, newNodeProperties);
+
+            // update relationship roles
+
+            $('div[data-index='+editing+']').html('');
+            $('div[data-index='+editing+']').append('<h4>'+newNodeProperties.nname_t0+'</h4>');
+
+            venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+            venueCounter.update(venueCount);
+            editing = false;
 
         }
 
@@ -341,7 +325,7 @@ module.exports = function VenueGenerator() {
                     formItem = $('<div class="form-group '+value.variable+'"><label for="'+value.variable+'">'+value.label+'</label><br /></div>');
 
                     $.each(value.options, function(optionIndex, optionValue) {
-                        $('<div class="btn-group big-check" data-toggle="buttons"><label class="btn"><input type="radio" name="'+value.variable+'" data-value="'+optionValue.value+'"><i class="fa fa-circle-o fa-3x"></i><i class="fa fa-check-circle-o fa-3x"></i> <span class="check-number">'+optionValue.label+'</span></label></div>').appendTo(formItem);
+                        $('<div class="btn-group big-check" data-toggle="buttons"><label class="btn"><input type="radio" name="'+value.variable+'" value="'+optionValue.value+'"><i class="fa fa-circle-o fa-3x"></i><i class="fa fa-check-circle-o fa-3x"></i> <span class="check-number">'+optionValue.label+'</span></label></div>').appendTo(formItem);
                     });
 
                     break;
