@@ -132,8 +132,6 @@ exports.deepEquals = function(a, x) {
     return true;
 };
 
-
-
 exports.isInNestedObject = function(targetArray, objectKey, objectKeyValue) {
     // This function is for checking for keys in arrays of objects.
     for (var i = 0; i<targetArray.length; i++){
@@ -195,8 +193,6 @@ exports.Events = {
 				note.debug(eventsList[i]);
 			}
 
-
-
         }
 
     },
@@ -210,7 +206,6 @@ exports.Events = {
         }
     }
 };
-
 
 exports.hex = function (x){
     return ('0' + parseInt(x).toString(16)).slice(-2);

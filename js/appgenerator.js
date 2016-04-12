@@ -1,10 +1,10 @@
 /* global $, window, Odometer, document, note  */
 /* exported VenueGenerator */
-module.exports = function VenueGenerator() {
+module.exports = function AppGenerator() {
     'use strict';
     //global vars
-    var venueGenerator = {};
-    venueGenerator.options = {
+    var appGenerator = {};
+    appGenerator.options = {
         nodeType:'Venue',
         edgeType:'Venue',
         targetEl: $('.container'),
@@ -25,14 +25,14 @@ module.exports = function VenueGenerator() {
         if (e.keyCode === 13) {
             e.preventDefault();
             if (nodeBoxOpen === false) {
-                venueGenerator.openNodeBox();
+                appGenerator.openNodeBox();
             } else if (nodeBoxOpen === true) {
                 $('.submit-1').click();
             }
         }
 
         if (e.keyCode === 27) {
-            venueGenerator.closeNodeBox();
+            appGenerator.closeNodeBox();
         }
 
         // Prevent accidental backspace navigation
@@ -43,7 +43,7 @@ module.exports = function VenueGenerator() {
     };
 
     var stageChangeHandler = function() {
-        venueGenerator.destroy();
+        appGenerator.destroy();
     };
 
     var cardClickHandler = function() {
@@ -59,7 +59,7 @@ module.exports = function VenueGenerator() {
         editing = index;
 
         // Populate the form with this nodes data.
-        $.each(venueGenerator.options.variables, function(index, value) {
+        $.each(appGenerator.options.variables, function(index, value) {
             if(value.private === false) {
                 if (value.type === 'dropdown') {
                     $('.selectpicker').selectpicker('val', edge[value.variable]);
@@ -76,7 +76,7 @@ module.exports = function VenueGenerator() {
                 } else {
                     $('input#age_p_t0').prop( 'disabled', false);
                 }
-                venueGenerator.openNodeBox();
+                appGenerator.openNodeBox();
             }
 
         });
@@ -85,7 +85,7 @@ module.exports = function VenueGenerator() {
 
     var cancelBtnHandler = function() {
         $('.delete-button').hide();
-        venueGenerator.closeNodeBox();
+        appGenerator.closeNodeBox();
     };
 
     var submitFormHandler = function(e) {
@@ -125,7 +125,7 @@ module.exports = function VenueGenerator() {
         var newEdgeProperties = {};
         var newNodeProperties = {};
         $('.delete-button').hide();
-        $.each(venueGenerator.options.variables, function(index,value) {
+        $.each(appGenerator.options.variables, function(index,value) {
 
             if(value.target === 'edge') {
                 if (value.private === true) {
@@ -150,12 +150,12 @@ module.exports = function VenueGenerator() {
             var edgeProperties = {
                 from: window.network.getEgo().id,
                 to: newNode,
-                type:venueGenerator.options.edgeTypes[0]
+                type:appGenerator.options.edgeTypes[0]
             };
 
             window.tools.extend(edgeProperties,newEdgeProperties);
             window.network.addEdge(edgeProperties);
-            venueGenerator.addToList(edgeProperties);
+            appGenerator.addToList(edgeProperties);
             venueCount++;
             venueCounter.update(venueCount);
 
@@ -173,7 +173,7 @@ module.exports = function VenueGenerator() {
 
             var nodeID = editing;
 
-            var edges = window.network.getEdges({from:window.network.getEgo().id,to:nodeID,type:venueGenerator.options.edgeTypes[0]});
+            var edges = window.network.getEdges({from:window.network.getEgo().id,to:nodeID,type:appGenerator.options.edgeTypes[0]});
             $.each(edges, function(index,value) {
                 window.network.updateEdge(value.id,newEdgeProperties, color);
             });
@@ -191,11 +191,11 @@ module.exports = function VenueGenerator() {
 
         }
 
-        venueGenerator.closeNodeBox();
+        appGenerator.closeNodeBox();
 
     };
 
-    venueGenerator.generateTestVenues = function(number) {
+    appGenerator.generateTestVenues = function(number) {
 
         if (!number) {
             note.error('You must specify the number of test venues you want to create. Cancelling!');
@@ -206,12 +206,12 @@ module.exports = function VenueGenerator() {
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
-            setTimeout(venueGenerator.generateVenue, timer);
+            setTimeout(appGenerator.generateVenue, timer);
         }
 
     };
 
-    venueGenerator.generateVenue = function() {
+    appGenerator.generateVenue = function() {
         // We must simulate every interaction to ensure that any errors are caught.
         $('.add-button').click();
         setTimeout(function() {
@@ -241,7 +241,7 @@ module.exports = function VenueGenerator() {
         }, 2000);
     };
 
-    venueGenerator.openNodeBox = function() {
+    appGenerator.openNodeBox = function() {
         $('.newVenueBox').height($('.newVenueBox').height());
         $('.newVenueBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
@@ -255,7 +255,7 @@ module.exports = function VenueGenerator() {
         nodeBoxOpen = true;
     };
 
-    venueGenerator.closeNodeBox = function() {
+    appGenerator.closeNodeBox = function() {
         $('input#age_p_t0').prop( 'disabled', false);
         $('.black-overlay').removeClass('show');
         $('.newVenueBox').removeClass('open');
@@ -267,13 +267,13 @@ module.exports = function VenueGenerator() {
         editing = false;
     };
 
-    venueGenerator.destroy = function() {
-        note.debug('Destroying venueGenerator.');
+    appGenerator.destroy = function() {
+        note.debug('Destroying appGenerator.');
         // Event listeners
         $(window.document).off('keydown', keyPressHandler);
         $(window.document).off('click', '.cancel', cancelBtnHandler);
-        $(window.document).off('click', '.add-button', venueGenerator.openNodeBox);
-        $(window.document).off('click', '.delete-button', venueGenerator.removeFromList);
+        $(window.document).off('click', '.add-button', appGenerator.openNodeBox);
+        $(window.document).off('click', '.delete-button', appGenerator.removeFromList);
         $(window.document).off('click', '.inner-card', cardClickHandler);
         $(window.document).off('submit', '#ngForm', submitFormHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
@@ -281,21 +281,21 @@ module.exports = function VenueGenerator() {
 
     };
 
-    venueGenerator.init = function(options) {
-        window.tools.extend(venueGenerator.options, options);
-        // $.extend(true, venueGenerator.options, options);
+    appGenerator.init = function(options) {
+        window.tools.extend(appGenerator.options, options);
+        // $.extend(true, appGenerator.options, options);
         // create elements
         var button = $('<span class="fa fa-4x fa-map-pin add-button"></span>');
-        venueGenerator.options.targetEl.append(button);
+        appGenerator.options.targetEl.append(button);
         var venueCountBox = $('<div class="alter-count-box"></div>');
-        venueGenerator.options.targetEl.append(venueCountBox);
+        appGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
         var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Venue</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
-        // venueGenerator.options.targetEl.append(newVenueBox);
+        // appGenerator.options.targetEl.append(newVenueBox);
         $('body').append(newVenueBox);
-        $.each(venueGenerator.options.variables, function(index, value) {
+        $.each(appGenerator.options.variables, function(index, value) {
             if(value.private !== true) {
 
                 var formItem;
@@ -379,23 +379,23 @@ module.exports = function VenueGenerator() {
         newNodePanel = $('.newVenueBox').html();
 
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
-        venueGenerator.options.targetEl.append(nodeContainer);
+        appGenerator.options.targetEl.append(nodeContainer);
 
-        var title = $('<h1 class="text-center"></h1>').html(venueGenerator.options.heading);
+        var title = $('<h1 class="text-center"></h1>').html(appGenerator.options.heading);
         $('.question-container').append(title);
-        var subtitle = $('<p class="lead text-center"></p>').html(venueGenerator.options.subheading);
+        var subtitle = $('<p class="lead text-center"></p>').html(appGenerator.options.subheading);
         $('.question-container').append(subtitle);
 
         // create namelist container
         var nameList = $('<div class="node-container nameList"></div>');
-        venueGenerator.options.targetEl.append(nameList);
+        appGenerator.options.targetEl.append(nameList);
 
         // Event listeners
         window.addEventListener('changeStageStart', stageChangeHandler, false);
         $(window.document).on('keydown', keyPressHandler);
         $(window.document).on('click', '.cancel', cancelBtnHandler);
-        $(window.document).on('click', '.add-button', venueGenerator.openNodeBox);
-        $(window.document).on('click', '.delete-button', venueGenerator.removeFromList);
+        $(window.document).on('click', '.add-button', appGenerator.openNodeBox);
+        $(window.document).on('click', '.delete-button', appGenerator.removeFromList);
         $(window.document).on('click', '.inner-card', cardClickHandler);
         $(window.document).on('submit', '#ngForm', submitFormHandler);
 
@@ -410,17 +410,17 @@ module.exports = function VenueGenerator() {
         });
 
         // add existing nodes
-        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:venueGenerator.options.variables[0].value}), function(index,value) {
-            venueGenerator.addToList(value);
+        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:appGenerator.options.variables[0].value}), function(index,value) {
+            appGenerator.addToList(value);
         });
 
         // Handle side panels
-        if (venueGenerator.options.panels.length > 0) {
+        if (appGenerator.options.panels.length > 0) {
             // Side container
             var sideContainer = $('<div class="side-container"></div>');
 
             // Current side panel shows alters already elicited
-            if (venueGenerator.options.panels.indexOf('current') !== -1) {
+            if (appGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
                 sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
                 $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
@@ -430,13 +430,13 @@ module.exports = function VenueGenerator() {
                 });
             }
 
-            venueGenerator.options.targetEl.append(sideContainer);
+            appGenerator.options.targetEl.append(sideContainer);
 
         } // end if panels
     };
 
-    venueGenerator.addToList = function(properties) {
-        note.debug('venueGenerator.addToList');
+    appGenerator.addToList = function(properties) {
+        note.debug('appGenerator.addToList');
         note.trace(properties);
         // var index = $(this).data('index');
         var card;
@@ -446,7 +446,7 @@ module.exports = function VenueGenerator() {
 
     };
 
-    venueGenerator.removeFromList = function() {
+    appGenerator.removeFromList = function() {
         $('.delete-button').hide();
 
         var nodeID = editing;
@@ -463,8 +463,8 @@ module.exports = function VenueGenerator() {
         var venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
         venueCounter.update(venueCount);
 
-        venueGenerator.closeNodeBox();
+        appGenerator.closeNodeBox();
     };
 
-    return venueGenerator;
+    return appGenerator;
 };
