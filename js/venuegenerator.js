@@ -183,7 +183,7 @@ module.exports = function VenueGenerator() {
             // update relationship roles
 
             $('div[data-index='+editing+']').html('');
-            $('div[data-index='+editing+']').append('<h4>'+newNodeProperties.nname_t0+'</h4>');
+            $('div[data-index='+editing+']').append('<h4>'+newEdgeProperties.venue_name_t0+'</h4>');
 
             venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
             venueCounter.update(venueCount);
@@ -416,21 +416,21 @@ module.exports = function VenueGenerator() {
 
         // Handle side panels
         if (venueGenerator.options.panels.length > 0) {
-
             // Side container
             var sideContainer = $('<div class="side-container"></div>');
 
             // Current side panel shows alters already elicited
             if (venueGenerator.options.panels.indexOf('current') !== -1) {
-
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>People you already listed:</h4></div>'));
-                $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id}), function(index,value) {
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
+                $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
 
-                    var el = $('<div class="node-list-item">'+value.nname_t0+'</div>');
+                    var el = $('<div class="node-list-item">'+value.venue_name_t0+'</div>');
                     sideContainer.children('.current-node-list').append(el);
                 });
             }
+
+            venueGenerator.options.targetEl.append(sideContainer);
 
         } // end if panels
     };
