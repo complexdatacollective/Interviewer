@@ -38,6 +38,12 @@ html, body {
     z-index:999;
 }
 
+
+// override bootstrap select width
+.bootstrap-select:not([class*=col-]):not([.input-group-btn]) {
+  width:auto;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;

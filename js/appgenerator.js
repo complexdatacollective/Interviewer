@@ -1,12 +1,12 @@
 /* global $, window, Odometer, document, note  */
-/* exported VenueGenerator */
+/* exported AppGenerator */
 module.exports = function AppGenerator() {
     'use strict';
     //global vars
     var appGenerator = {};
     appGenerator.options = {
-        nodeType:'Venue',
-        edgeType:'Venue',
+        nodeType:'App',
+        edgeType:'App',
         targetEl: $('.container'),
         variables: [],
         heading: 'This is a default heading',
@@ -19,7 +19,7 @@ module.exports = function AppGenerator() {
     var newNodePanel;
     var venueCounter;
 
-    var venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+    var venueCount = window.network.getNodes({type_t0: 'App'}).length;
 
     var keyPressHandler = function(e) {
         if (e.keyCode === 13) {
@@ -53,7 +53,7 @@ module.exports = function AppGenerator() {
         var index = $(this).data('index');
 
         // Get the dyad edge for this node
-        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'Venue'})[0];
+        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'App'})[0];
 
         // Set the value of editing to the node id of the current person
         editing = index;
@@ -183,9 +183,9 @@ module.exports = function AppGenerator() {
             // update relationship roles
 
             $('div[data-index='+editing+']').html('');
-            $('div[data-index='+editing+']').append('<h4>'+newEdgeProperties.venue_name_t0+'</h4>');
+            $('div[data-index='+editing+']').append('<h4>'+newEdgeProperties.app_name_t0+'</h4>');
 
-            venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+            venueCount = window.network.getNodes({type_t0: 'App'}).length;
             venueCounter.update(venueCount);
             editing = false;
 
@@ -195,10 +195,10 @@ module.exports = function AppGenerator() {
 
     };
 
-    appGenerator.generateTestVenues = function(number) {
+    appGenerator.generateTestApps = function(number) {
 
         if (!number) {
-            note.error('You must specify the number of test venues you want to create. Cancelling!');
+            note.error('You must specify the number of test apps you want to create. Cancelling!');
             return false;
         }
 
@@ -206,12 +206,12 @@ module.exports = function AppGenerator() {
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
-            setTimeout(appGenerator.generateVenue, timer);
+            setTimeout(appGenerator.generateApp, timer);
         }
 
     };
 
-    appGenerator.generateVenue = function() {
+    appGenerator.generateApp = function() {
         // We must simulate every interaction to ensure that any errors are caught.
         $('.add-button').click();
         setTimeout(function() {
@@ -242,8 +242,8 @@ module.exports = function AppGenerator() {
     };
 
     appGenerator.openNodeBox = function() {
-        $('.newVenueBox').height($('.newVenueBox').height());
-        $('.newVenueBox').addClass('open');
+        $('.newNodeBox').height($('.newNodeBox').height());
+        $('.newNodeBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
         setTimeout(function() {
             $('.black-overlay').addClass('show');
@@ -258,7 +258,7 @@ module.exports = function AppGenerator() {
     appGenerator.closeNodeBox = function() {
         $('input#age_p_t0').prop( 'disabled', false);
         $('.black-overlay').removeClass('show');
-        $('.newVenueBox').removeClass('open');
+        $('.newNodeBox').removeClass('open');
         setTimeout(function() { // for some reason this doenst work without an empty setTimeout
             $('.black-overlay').css({'display':'none'});
         }, 300);
@@ -277,7 +277,7 @@ module.exports = function AppGenerator() {
         $(window.document).off('click', '.inner-card', cardClickHandler);
         $(window.document).off('submit', '#ngForm', submitFormHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
-        $('.newVenueBox').remove();
+        $('.newNodeBox').remove();
 
     };
 
@@ -291,10 +291,10 @@ module.exports = function AppGenerator() {
         appGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
-        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Venue</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a App</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
-        // appGenerator.options.targetEl.append(newVenueBox);
-        $('body').append(newVenueBox);
+        // appGenerator.options.targetEl.append(newNodeBox);
+        $('body').append(newNodeBox);
         $.each(appGenerator.options.variables, function(index, value) {
             if(value.private !== true) {
 
@@ -332,7 +332,7 @@ module.exports = function AppGenerator() {
 
                 }
 
-                $('.newVenueBox .form .fields').append(formItem);
+                $('.newNodeBox .form .fields').append(formItem);
                 if (value.required === true) {
                     $('#'+value.variable).prop('required', true);
                 }
@@ -342,30 +342,51 @@ module.exports = function AppGenerator() {
                     size: 4
                 });
 
-                $('#venue_name_t0').autocomplete({
+                $('#app_name_t0').autocomplete({
                     source: [
-                        'ActionScript',
-                        'AppleScript',
-                        'Asp',
-                        'BASIC',
-                        'C',
-                        'C++',
-                        'Clojure',
-                        'COBOL',
-                        'ColdFusion',
-                        'Erlang',
-                        'Fortran',
-                        'Groovy',
-                        'Haskell',
-                        'Java',
-                        'JavaScript',
-                        'Lisp',
-                        'Perl',
-                        'PHP',
-                        'Python',
-                        'Ruby',
-                        'Scala',
-                        'Scheme'
+                      'Adam4Adam',
+                      'Backpage',
+                      'BarebackRT',
+                      'BGCLive',
+                      'Craigslist',
+                      'Facebook',
+                      'Grindr',
+                      'Growlr',
+                      'Hornet',
+                      'Instagram',
+                      'Interactive Male',
+                      'Jack\'d',
+                      'Kik',
+                      'Manhunt.net',
+                      'MeetMe',
+                      'MiuMeet',
+                      'Myspace',
+                      'OkCupid',
+                      'Omegle',
+                      'PHHHOTO',
+                      'PlentyOfFish',
+                      'Recon',
+                      'Scruff',
+                      'Skout',
+                      'Snapchat',
+                      'Tagged',
+                      'Tinder',
+                      'Tumblr',
+                      'Twitter',
+                      'UrbanCliq',
+                      'Vine',
+                      'Yahoo',
+                      'Yik Yak',
+                      'Badoo',
+                      'Bumble',
+                      'YouTube',
+                      'Lavendr',
+                      'Oovoo',
+                      'PartyLine',
+                      'Peach',
+                      'Pounced',
+                      'Surge',
+                      'SoulSwipe'
                     ]
                 });
 
@@ -374,9 +395,9 @@ module.exports = function AppGenerator() {
         });
 
         var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
-        $('.newVenueBox .form .fields').append(buttons);
+        $('.newNodeBox .form .fields').append(buttons);
 
-        newNodePanel = $('.newVenueBox').html();
+        newNodePanel = $('.newNodeBox').html();
 
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         appGenerator.options.targetEl.append(nodeContainer);
@@ -410,7 +431,7 @@ module.exports = function AppGenerator() {
         });
 
         // add existing nodes
-        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:appGenerator.options.variables[0].value}), function(index,value) {
+        $.each(window.network.getEdges({type: 'App', from: window.network.getNodes({type_t0:'Ego'})[0].id, ag_t0:appGenerator.options.variables[0].value}), function(index,value) {
             appGenerator.addToList(value);
         });
 
@@ -422,10 +443,10 @@ module.exports = function AppGenerator() {
             // Current side panel shows alters already elicited
             if (appGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
-                $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Apps you already named:</h4></div>'));
+                $.each(window.network.getEdges({type: 'App', from: window.network.getEgo().id}), function(index,value) {
 
-                    var el = $('<div class="node-list-item">'+value.venue_name_t0+'</div>');
+                    var el = $('<div class="node-list-item">'+value.app_name_t0+'</div>');
                     sideContainer.children('.current-node-list').append(el);
                 });
             }
@@ -441,7 +462,7 @@ module.exports = function AppGenerator() {
         // var index = $(this).data('index');
         var card;
 
-        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.venue_name_t0+'</h4></div></div>');
+        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.app_name_t0+'</h4></div></div>');
         $('.nameList').append(card);
 
     };
@@ -460,7 +481,7 @@ module.exports = function AppGenerator() {
         }, 700);
 
         editing = false;
-        var venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+        var venueCount = window.network.getNodes({type_t0: 'App'}).length;
         venueCounter.update(venueCount);
 
         appGenerator.closeNodeBox();

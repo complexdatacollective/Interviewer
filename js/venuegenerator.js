@@ -344,28 +344,114 @@ module.exports = function VenueGenerator() {
 
                 $('#venue_name_t0').autocomplete({
                     source: [
-                        'ActionScript',
-                        'AppleScript',
-                        'Asp',
-                        'BASIC',
-                        'C',
-                        'C++',
-                        'Clojure',
-                        'COBOL',
-                        'ColdFusion',
-                        'Erlang',
-                        'Fortran',
-                        'Groovy',
-                        'Haskell',
-                        'Java',
-                        'JavaScript',
-                        'Lisp',
-                        'Perl',
-                        'PHP',
-                        'Python',
-                        'Ruby',
-                        'Scala',
-                        'Scheme'
+                      'After School Matters',
+                      'Atmosphere',
+                      'Bar Louie',
+                      'Baton Show Lounge',
+                      'Berlin Nightclub',
+                      'Big Chicks',
+                      'Bijou Theatre',
+                      'Bobby Love\'s',
+                      'Bonsai Bar & Lounge',
+                      'Broadway Youth Center',
+                      'Center on Halsted',
+                      'Charlie\'s Chicago',
+                      'Chicago GSA Prom',
+                      'Chicago Pride Fest',
+                      'Chicago Pride Parade',
+                      'Chicago Queer Prom',
+                      'Circuit Night Club',
+                      'Club Escape',
+                      'Club Krave',
+                      'CORE Center',
+                      'Crew Bar & Grill ',
+                      'D.S. Tequila Company',
+                      'Davenport\'s Piano Bar Cabaret',
+                      'Detention Night Club ',
+                      'Dolphin Nightclub',
+                      'Downtown Bar and Lounge',
+                      'E.M. Lounge',
+                      'El Rescate',
+                      'Elixir Lounge (Andersonville)',
+                      'Elixir Lounge (Lakeview)',
+                      'Emporium Arcade Bar (Wicker Park)',
+                      'Emporium Arcade Bar (Logan Square)',
+                      'Estelle\'s',
+                      'Farraguts on Clark',
+                      'Gallery 37',
+                      'Galleria Domain 2',
+                      'Granville Anvil',
+                      'Halsted\'s Bar and Grill',
+                      'Headquarters Beercade (Lakeview)',
+                      'Headquarters Beercade (River North)',
+                      'Hydrate ',
+                      'Innexile',
+                      'Jackhammer',
+                      'Jeffery Pub',
+                      'Joie De Vine',
+                      'King Spa Sauna',
+                      'Kit Kat Lounge & Supper Club',
+                      'La Cueva',
+                      'Little Jim\'s Tavern',
+                      'M7 Lounge',
+                      'Manhandler Saloon',
+                      'Manhole',
+                      'Man\'s Country Chicago',
+                      'Manuevers Bar',
+                      'Maria\'s Packaged Goods & Community Bar',
+                      'Marty\'s Martini Bar',
+                      'Mary\'s Attic',
+                      'Minibar Ultra Lounge & Café',
+                      'Northalsted Market Days',
+                      'PartylineChicago',
+                      'Progress Bar ',
+                      'Puerto Rican Cultural Center',
+                      'Punch House ',
+                      'R Public House',
+                      'Red Diamonds Strip Club',
+                      'Replay Beer & Bourbon (Lakeview)',
+                      'Replay Beer & Bourbon (Andersonville)',
+                      'Rio Chicago',
+                      'Roscoe\'s',
+                      'Scarlet Bar',
+                      'Scot\'s',
+                      'Second Story Bar',
+                      'SEVEN Nightclub & Lounge',
+                      'Sidetrack',
+                      'Simone\'s Bar',
+                      'Smart Bar',
+                      'Sound-Bar',
+                      'Spin Nightclub',
+                      'Spyners Pub',
+                      'Steamworks Chicago',
+                      'Taverna 750',
+                      'The Call',
+                      'The Cell Block ',
+                      'The Closet',
+                      'The Crib',
+                      'The Den Cocktail Bar',
+                      'The Dragon Lady Lounge ',
+                      'The Generator ',
+                      'The Glenwood',
+                      'The Holiday Club',
+                      'The Lucky Horseshoe Lounge',
+                      'The North End',
+                      'Phoenix Bar & Nightclub',
+                      'The Shrine',
+                      'The SoFo Tap',
+                      'Te\'Jay\'s Adult Books',
+                      'Touche',
+                      'Town Hall Pub',
+                      'University of Chicago Pub',
+                      'Vertigo Sky Lounge ',
+                      'Vida/SIDA',
+                      'Volkan Nightclub',
+                      'Wang\'s',
+                      'Wicker Park Tavern',
+                      'Youth Empowerment Performance Project',
+                      'FKA',
+                      'Paradise Sauna',
+                      'Hollywood Beach',
                     ]
                 });
 
@@ -410,7 +496,10 @@ module.exports = function VenueGenerator() {
         });
 
         // add existing nodes
-        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:venueGenerator.options.variables[0].value}), function(index,value) {
+        var edges = window.network.getEdges({type: 'Venue', from: window.network.getEgo().id, vg_t0:venueGenerator.options.variables[0].value});
+        console.log(edges);
+        $.each(edges, function(index,value) {
+
             venueGenerator.addToList(value);
         });
 
@@ -423,6 +512,7 @@ module.exports = function VenueGenerator() {
             if (venueGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
                 sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
+                $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
 
                     var el = $('<div class="node-list-item">'+value.venue_name_t0+'</div>');
@@ -436,6 +526,7 @@ module.exports = function VenueGenerator() {
     };
 
     venueGenerator.addToList = function(properties) {
+      console.log('ahoy');
         note.debug('venueGenerator.addToList');
         note.trace(properties);
         // var index = $(this).data('index');

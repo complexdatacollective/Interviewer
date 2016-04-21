@@ -168,6 +168,8 @@ $(document).ready(function() {
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.ListSelectVenue = require('./listselect_venue.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
+    window.netCanvas.Modules.MultiBinVenue = require('./multibin_venue.js');
+    window.netCanvas.Modules.MultiBinApp = require('./multibin_app.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
 
     // Initialise the menu system – other modules depend on it being there.

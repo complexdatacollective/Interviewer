@@ -1,12 +1,12 @@
 /* global $, window, Odometer, document, note  */
-/* exported VenueGenerator */
+/* exported AppGenerator */
 module.exports = function AppGenerator() {
     'use strict';
     //global vars
     var appGenerator = {};
     appGenerator.options = {
-        nodeType:'Venue',
-        edgeType:'Venue',
+        nodeType:'App',
+        edgeType:'App',
         targetEl: $('.container'),
         variables: [],
         heading: 'This is a default heading',
@@ -19,7 +19,7 @@ module.exports = function AppGenerator() {
     var newNodePanel;
     var venueCounter;
 
-    var venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+    var venueCount = window.network.getNodes({type_t0: 'App'}).length;
 
     var keyPressHandler = function(e) {
         if (e.keyCode === 13) {
@@ -53,7 +53,7 @@ module.exports = function AppGenerator() {
         var index = $(this).data('index');
 
         // Get the dyad edge for this node
-        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'Venue'})[0];
+        var edge = window.network.getEdges({from:window.network.getEgo().id, to: index, type:'App'})[0];
 
         // Set the value of editing to the node id of the current person
         editing = index;
@@ -183,9 +183,9 @@ module.exports = function AppGenerator() {
             // update relationship roles
 
             $('div[data-index='+editing+']').html('');
-            $('div[data-index='+editing+']').append('<h4>'+newEdgeProperties.venue_name_t0+'</h4>');
+            $('div[data-index='+editing+']').append('<h4>'+newEdgeProperties.app_name_t0+'</h4>');
 
-            venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+            venueCount = window.network.getNodes({type_t0: 'App'}).length;
             venueCounter.update(venueCount);
             editing = false;
 
@@ -195,10 +195,10 @@ module.exports = function AppGenerator() {
 
     };
 
-    appGenerator.generateTestVenues = function(number) {
+    appGenerator.generateTestApps = function(number) {
 
         if (!number) {
-            note.error('You must specify the number of test venues you want to create. Cancelling!');
+            note.error('You must specify the number of test apps you want to create. Cancelling!');
             return false;
         }
 
@@ -206,12 +206,12 @@ module.exports = function AppGenerator() {
 
         for (var i = 0; i < number; i++) {
             var timer = eachTime*i;
-            setTimeout(appGenerator.generateVenue, timer);
+            setTimeout(appGenerator.generateApp, timer);
         }
 
     };
 
-    appGenerator.generateVenue = function() {
+    appGenerator.generateApp = function() {
         // We must simulate every interaction to ensure that any errors are caught.
         $('.add-button').click();
         setTimeout(function() {
@@ -242,8 +242,8 @@ module.exports = function AppGenerator() {
     };
 
     appGenerator.openNodeBox = function() {
-        $('.newVenueBox').height($('.newVenueBox').height());
-        $('.newVenueBox').addClass('open');
+        $('.newNodeBox').height($('.newNodeBox').height());
+        $('.newNodeBox').addClass('open');
         $('.black-overlay').css({'display':'block'});
         setTimeout(function() {
             $('.black-overlay').addClass('show');
@@ -258,7 +258,7 @@ module.exports = function AppGenerator() {
     appGenerator.closeNodeBox = function() {
         $('input#age_p_t0').prop( 'disabled', false);
         $('.black-overlay').removeClass('show');
-        $('.newVenueBox').removeClass('open');
+        $('.newNodeBox').removeClass('open');
         setTimeout(function() { // for some reason this doenst work without an empty setTimeout
             $('.black-overlay').css({'display':'none'});
         }, 300);
@@ -277,7 +277,7 @@ module.exports = function AppGenerator() {
         $(window.document).off('click', '.inner-card', cardClickHandler);
         $(window.document).off('submit', '#ngForm', submitFormHandler);
         window.removeEventListener('changeStageStart', stageChangeHandler, false);
-        $('.newVenueBox').remove();
+        $('.newNodeBox').remove();
 
     };
 
@@ -291,10 +291,10 @@ module.exports = function AppGenerator() {
         appGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
-        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Venue</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a App</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
-        // appGenerator.options.targetEl.append(newVenueBox);
-        $('body').append(newVenueBox);
+        // appGenerator.options.targetEl.append(newNodeBox);
+        $('body').append(newNodeBox);
         $.each(appGenerator.options.variables, function(index, value) {
             if(value.private !== true) {
 
@@ -332,7 +332,7 @@ module.exports = function AppGenerator() {
 
                 }
 
-                $('.newVenueBox .form .fields').append(formItem);
+                $('.newNodeBox .form .fields').append(formItem);
                 if (value.required === true) {
                     $('#'+value.variable).prop('required', true);
                 }
@@ -342,30 +342,51 @@ module.exports = function AppGenerator() {
                     size: 4
                 });
 
-                $('#venue_name_t0').autocomplete({
+                $('#app_name_t0').autocomplete({
                     source: [
-                        'ActionScript',
-                        'AppleScript',
-                        'Asp',
-                        'BASIC',
-                        'C',
-                        'C++',
-                        'Clojure',
-                        'COBOL',
-                        'ColdFusion',
-                        'Erlang',
-                        'Fortran',
-                        'Groovy',
-                        'Haskell',
-                        'Java',
-                        'JavaScript',
-                        'Lisp',
-                        'Perl',
-                        'PHP',
-                        'Python',
-                        'Ruby',
-                        'Scala',
-                        'Scheme'
+                      'Adam4Adam',
+                      'Backpage',
+                      'BarebackRT',
+                      'BGCLive',
+                      'Craigslist',
+                      'Facebook',
+                      'Grindr',
+                      'Growlr',
+                      'Hornet',
+                      'Instagram',
+                      'Interactive Male',
+                      'Jack\'d',
+                      'Kik',
+                      'Manhunt.net',
+                      'MeetMe',
+                      'MiuMeet',
+                      'Myspace',
+                      'OkCupid',
+                      'Omegle',
+                      'PHHHOTO',
+                      'PlentyOfFish',
+                      'Recon',
+                      'Scruff',
+                      'Skout',
+                      'Snapchat',
+                      'Tagged',
+                      'Tinder',
+                      'Tumblr',
+                      'Twitter',
+                      'UrbanCliq',
+                      'Vine',
+                      'Yahoo',
+                      'Yik Yak',
+                      'Badoo',
+                      'Bumble',
+                      'YouTube',
+                      'Lavendr',
+                      'Oovoo',
+                      'PartyLine',
+                      'Peach',
+                      'Pounced',
+                      'Surge',
+                      'SoulSwipe'
                     ]
                 });
 
@@ -374,9 +395,9 @@ module.exports = function AppGenerator() {
         });
 
         var buttons = $('<div class="row"><div class="col-sm-4"><button type="submit" class="btn btn-success btn-block submit-1"><span class="glyphicon glyphicon-plus-sign"></span> Add</button></div><div class="col-sm-4"><button type="button" class="btn btn-danger btn-block delete-button"><span class="glyphicon glyphicon-trash"></span> Delete</button></div><div class="col-sm-4"><span class="btn btn-warning btn-block cancel">Cancel</span></div></div>');
-        $('.newVenueBox .form .fields').append(buttons);
+        $('.newNodeBox .form .fields').append(buttons);
 
-        newNodePanel = $('.newVenueBox').html();
+        newNodePanel = $('.newNodeBox').html();
 
         var nodeContainer = $('<div class="question-container"></div><div class="node-container-bottom-bg"></div>');
         appGenerator.options.targetEl.append(nodeContainer);
@@ -410,7 +431,7 @@ module.exports = function AppGenerator() {
         });
 
         // add existing nodes
-        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:appGenerator.options.variables[0].value}), function(index,value) {
+        $.each(window.network.getEdges({type: 'App', from: window.network.getNodes({type_t0:'Ego'})[0].id, ag_t0:appGenerator.options.variables[0].value}), function(index,value) {
             appGenerator.addToList(value);
         });
 
@@ -422,10 +443,10 @@ module.exports = function AppGenerator() {
             // Current side panel shows alters already elicited
             if (appGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
-                $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Apps you already named:</h4></div>'));
+                $.each(window.network.getEdges({type: 'App', from: window.network.getEgo().id}), function(index,value) {
 
-                    var el = $('<div class="node-list-item">'+value.venue_name_t0+'</div>');
+                    var el = $('<div class="node-list-item">'+value.app_name_t0+'</div>');
                     sideContainer.children('.current-node-list').append(el);
                 });
             }
@@ -441,7 +462,7 @@ module.exports = function AppGenerator() {
         // var index = $(this).data('index');
         var card;
 
-        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.venue_name_t0+'</h4></div></div>');
+        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.app_name_t0+'</h4></div></div>');
         $('.nameList').append(card);
 
     };
@@ -460,7 +481,7 @@ module.exports = function AppGenerator() {
         }, 700);
 
         editing = false;
-        var venueCount = window.network.getNodes({type_t0: 'Venue'}).length;
+        var venueCount = window.network.getNodes({type_t0: 'App'}).length;
         venueCounter.update(venueCount);
 
         appGenerator.closeNodeBox();
@@ -1263,6 +1284,8 @@ $(document).ready(function() {
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.ListSelectVenue = require('./listselect_venue.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
+    window.netCanvas.Modules.MultiBinVenue = require('./multibin_venue.js');
+    window.netCanvas.Modules.MultiBinApp = require('./multibin_app.js');
     window.netCanvas.Modules.Sociogram = require('./sociogram.js');
 
     // Initialise the menu system – other modules depend on it being there.
@@ -2878,6 +2901,880 @@ module.exports = function MultiBin() {
 
 };
 return multiBin;
+};
+;/* global $, window */
+/* exported MultiBinApp */
+module.exports = function MultiBinApp() {
+	'use strict';
+	//global vars
+	var log;
+	var taskComprehended = false;
+	var animating = false;
+	var open = false;
+	var multiBinApp = {}, followup;
+	multiBinApp.options = {
+		targetEl: $('.container'),
+		edgeType: 'Venue',
+		variable: {
+			label:'multibin_variable',
+			values: [
+				'Variable 1',
+			]
+		},
+		criteria: {},
+		filter: undefined,
+		heading: 'Default Heading',
+		subheading: 'Default Subheading.'
+	};
+
+	var stageChangeHandler = function() {
+		multiBinApp.destroy();
+	};
+
+	var followupHandler = function(e) {
+		e.preventDefault();
+		// Handle the followup data
+
+		// First, retrieve the relevant values
+
+		var nodeid = followup;
+
+		// Next, get the edge we will be storing on
+		var criteria = {
+			to:nodeid
+		};
+
+		window.tools.extend(criteria, multiBinApp.options.criteria);
+		var edge = window.network.getEdges(criteria)[0];
+
+		// Create an empty object for storing the new properties in
+		var followupProperties = {};
+
+		// Assign a new property according to the variable name(s)
+		$.each(multiBinApp.options.followup.questions, function(index) {
+			var followupVal = $('#'+multiBinApp.options.followup.questions[index].variable).val();
+			followupProperties[multiBinApp.options.followup.questions[index].variable] = followupVal;
+		});
+
+		// Update the edge
+		window.tools.extend(edge, followupProperties);
+		window.network.updateEdge(edge.id, edge);
+
+		// Clean up
+		$.each(multiBinApp.options.followup.questions, function(index) {
+			$('#'+multiBinApp.options.followup.questions[index].variable).val('');
+		});
+
+		$('.followup').hide();
+		$('.black-overlay').hide();
+	};
+
+	var followupCancelHandler = function() {
+
+		// Clean up
+		$('#'+multiBinApp.options.followup.variable).val('');
+		$('.followup').hide();
+		$('.black-overlay').hide();
+	};
+
+	var backgroundClickHandler = function(e) {
+		e.stopPropagation();
+		if(open === true) {
+			if ($('.node-bin-active').length > 0) {
+					animating = true;
+					setTimeout(function() {
+						$('.node-bin-container').children().css({opacity:1});
+						$('.node-question-container').fadeIn();
+					}, 300);
+
+					var current = $('.node-bin-active');
+					$(current).removeClass('node-bin-active');
+					$(current).addClass('node-bin-static');
+					$(current).children('h1, p').show();
+					$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
+						if (taskComprehended === false) {
+							var eventProperties = {
+								stage: window.netCanvas.Modules.session.currentStage(),
+								timestamp: new Date()
+							};
+							log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+							window.dispatchEvent(log);
+							taskComprehended = true;
+						}
+					}});
+
+					setTimeout(function() {
+						open = false;
+						animating = false;
+					}, 500);
+
+			}
+		} else {
+		}
+
+
+	};
+
+
+	var nodeClickHandler = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		var el = $(this);
+		var id = $(this).parent().parent().data('index');
+
+		// has the node been clicked while in the bucket or while in a bin?
+		if ($(this).parent().hasClass('active-node-list')) {
+			// it has been clicked while in a bin.
+			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBinApp.options.edgeType})[0].id;
+			var properties = {};
+			// make the values null when a node has been taken out of a bin
+			properties[multiBinApp.options.variable.label] = '';
+
+			// dont forget followups
+			if(typeof multiBinApp.options.followup !== 'undefined') {
+				$.each(multiBinApp.options.followup.questions, function(index, value) {
+					properties[value.variable] = undefined;
+				});
+			}
+			window.network.updateEdge(edgeID,properties);
+
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
+
+		}
+
+	};
+
+	var nodeBinClickHandler = function() {
+		if (open === false) {
+
+				if(!$(this).hasClass('node-bin-active')) {
+					animating = true;
+					open = true;
+					$('.node-bin-container').children().not(this).css({opacity:0});
+					$('.node-question-container').hide();
+					var position = $(this).offset();
+					var nodeBinDetails = $(this);
+					nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+					setTimeout(function() {
+						nodeBinDetails.offset(position);
+						nodeBinDetails.addClass('node-bin-active');
+
+						nodeBinDetails.removeClass('node-bin-static');
+						nodeBinDetails.children('h1, p').hide();
+
+						// $('.content').append(nodeBinDetails);
+
+						nodeBinDetails.addClass('node-bin-active');
+						setTimeout(function(){
+							var timer = 0;
+							$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+								timer = timer + (index*10);
+								setTimeout(function(){
+									$(value).on('click', nodeClickHandler);
+									$(value).addClass('shown');
+								},timer);
+							});
+						},300);
+						open = true;
+					}, 500);
+
+					setTimeout(function() {
+						animating = false;
+					}, 500);
+
+				}
+		} else {
+		}
+
+	};
+
+	multiBinApp.destroy = function() {
+		// Event Listeners
+		window.tools.notify('Destroying multiBinApp.',0);
+		window.removeEventListener('changeStageStart', stageChangeHandler, false);
+		$('.node-bin-static').off('click', nodeBinClickHandler);
+		$('.node-bucket-item').off('click', nodeClickHandler);
+		$('.content').off('click', backgroundClickHandler);
+		$('.followup-submit').off('click', followupHandler);
+		$('.followup-cancel').off('click', followupCancelHandler);
+		$('.followup').remove();
+
+	};
+
+	multiBinApp.init = function(options) {
+		window.tools.extend(multiBinApp.options, options);
+
+		multiBinApp.options.targetEl.append('<div class="node-question-container"></div>');
+
+		// Add header and subheader
+		$('.node-question-container').append('<h1>'+multiBinApp.options.heading+'</h1>');
+
+		// Add node bucket
+		$('.node-question-container').append('<div class="node-bucket"></div>');
+
+		// Create the followup dialog, if it exists
+		if(typeof multiBinApp.options.followup !== 'undefined') {
+			$('body').append('<div class="followup overlay"><form class="followup-form"></form></div>');
+
+			if(typeof multiBinApp.options.followup.linked !== 'undefined' && multiBinApp.options.followup.linked === true) {
+				var first = true;
+
+				$.each(multiBinApp.options.followup.questions, function(index, value) {
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
+
+					if (first) {
+						$('#'+value.variable).change(function() {
+							if ($('#'+multiBinApp.options.followup.questions[(index+1)].variable).val() > $('#'+value.variable).val()) {
+								$('#'+multiBinApp.options.followup.questions[(index+1)].variable).val($('#'+value.variable).val());
+							}
+							$('#'+multiBinApp.options.followup.questions[(index+1)].variable).attr('max', $('#'+value.variable).val());
+
+						});
+					}
+
+
+					first = !first;
+				});
+			} else {
+				$.each(multiBinApp.options.followup.questions, function(index, value) {
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
+				});
+			}
+
+			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
+
+			// Add cancel button if required
+			if (typeof multiBinApp.options.followup.cancel !== 'undefined') {
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBinApp.options.followup.cancel+'</button></div>');
+			}
+
+		}
+
+		// bin container
+        multiBinApp.options.targetEl.append('<div class="node-bin-container"></div>');
+
+
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBinApp.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
+
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
+		}
+
+		// get all edges
+		var edges = window.network.getEdges(multiBinApp.options.criteria, multiBinApp.options.filter);
+		// var newLine = false;
+		// One of these for each bin. One bin for each variable value.
+		$.each(multiBinApp.options.variable.values, function(index, value){
+
+			// if (index+1>number && newLine === false) {
+			// 	multiBinApp.options.targetEl.append('<br>');
+			// 	newLine = true;
+			// }
+			var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+			newBin.data('index', index);
+			$('.node-bin-container').append(newBin);
+			$('.c'+index).droppable({ accept: '.draggable',
+			drop: function(event, ui) {
+				var dropped = ui.draggable;
+				var droppedOn = $(this);
+                $(dropped).css({'top':0, 'left' :0});
+				// Check if the node has been dropped into a bin that triggers the followup
+				if(typeof multiBinApp.options.followup !== 'undefined' && multiBinApp.options.followup.trigger.indexOf(multiBinApp.options.variable.values[index]) >=0 ) {
+					$('.followup').show();
+					$('.black-overlay').show();
+					$('#'+multiBinApp.options.followup.questions[0].variable).focus();
+					followup = $(dropped).data('node-id');
+				} else if (typeof multiBinApp.options.followup !== 'undefined') {
+					// Here we need to remove any previously set value for the followup variable, if it exists.
+					var nodeid = $(dropped).data('node-id');
+
+					// Next, get the edge we will be storing on
+					var criteria = {
+						to:nodeid
+					};
+
+					window.tools.extend(criteria, multiBinApp.options.criteria);
+					var edge = window.network.getEdges(criteria)[0];
+
+					// Create an empty object for storing the new properties in
+					var followupProperties = {};
+
+					// Assign a new property according to the variable name(s)
+					$.each(multiBinApp.options.followup.questions, function(index) {
+						followupProperties[multiBinApp.options.followup.questions[index].variable] = undefined;
+					});
+
+					// Update the edge
+					window.tools.extend(edge, followupProperties);
+					window.network.updateEdge(edge.id, edge);
+
+					// Clean up
+					$.each(multiBinApp.options.followup.questions, function(index) {
+						$('#'+multiBinApp.options.followup.questions[index].variable).val('');
+					});
+
+				}
+
+				$(dropped).appendTo(droppedOn.children('.active-node-list'));
+				var properties = {};
+				properties[multiBinApp.options.variable.label] = multiBinApp.options.variable.values[index];
+				// Add the attribute
+				var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBinApp.options.edgeType})[0].id;
+				window.network.updateEdge(edgeID,properties);
+
+				var noun = 'people';
+				if ($('.c'+index+' .active-node-list').children().length === 1) {
+					noun = 'person';
+				}
+				$('.c'+index+' p').html($('.c'+index+' .active-node-list').children().length+' '+noun+'.');
+
+				var el = $('.c'+index);
+				// var origBg = el.css('background-color');
+				setTimeout(function() {
+					el.addClass('dropped');
+				},0);
+
+				setTimeout(function(){
+					el.removeClass('dropped');
+					el.removeClass('yellow');
+				}, 1000);
+			},
+			over: function() {
+				$(this).addClass('yellow');
+
+			},
+			out: function() {
+				$(this).removeClass('yellow');
+			}
+		});
+
+	});
+
+	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
+	// $('.node-bin').css({width:itemSize,height:itemSize});
+
+	// $('.node-bin h1').css({marginTop: itemSize/3});
+
+	$.each($('.node-bin'), function(index, value) {
+		var oldPos = $(value).offset();
+		$(value).data('oldPos', oldPos);
+		$(value).css(oldPos);
+
+	});
+
+	$('.node-bin').css({position:'absolute'});
+
+	// Add edges to bucket or to bins if they already have variable value.
+	$.each(edges, function(index,value) {
+
+		// We need the dyad edge so we know the nname for other types of edges
+		var dyadEdge = window.network.getEdges({from:window.network.getEgo().id, type:multiBinApp.options.edgeType, to:value.to})[0];
+		if (value[multiBinApp.options.variable.label] !== undefined && value[multiBinApp.options.variable.label] !== '') {
+			index = multiBinApp.options.variable.values.indexOf(value[multiBinApp.options.variable.label]);
+			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.app_name_t0+'</div>');
+			var noun = 'people';
+			if ($('.c'+index).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+index).children('.active-node-list').children().length === 0) {
+				$('.c'+index).children('p').html('(Empty)');
+			} else {
+				$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
+			}
+		} else {
+			$('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.app_name_t0+'</div>');
+		}
+
+	});
+	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
+		if (taskComprehended === false) {
+			var eventProperties = {
+				stage: window.netCanvas.Modules.session.currentStage(),
+				timestamp: new Date()
+			};
+			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+			window.dispatchEvent(log);
+			taskComprehended = true;
+		}
+	}});
+
+	// Event Listeners
+	window.addEventListener('changeStageStart', stageChangeHandler, false);
+	$('.node-bin-static').on('click', nodeBinClickHandler);
+	$('.content').on('click', backgroundClickHandler);
+	$('.followup-form').on('submit', followupHandler);
+	$('.followup-cancel').on('click', followupCancelHandler);
+
+};
+return multiBinApp;
+};
+;/* global $, window */
+/* exported MultiBinVenue */
+module.exports = function MultiBinVenue() {
+	'use strict';
+	//global vars
+	var log;
+	var taskComprehended = false;
+	var animating = false;
+	var open = false;
+	var multiBinVenue = {}, followup;
+	multiBinVenue.options = {
+		targetEl: $('.container'),
+		edgeType: 'Venue',
+		variable: {
+			label:'multibin_variable',
+			values: [
+				'Variable 1',
+			]
+		},
+		criteria: {},
+		filter: undefined,
+		heading: 'Default Heading',
+		subheading: 'Default Subheading.'
+	};
+
+	var stageChangeHandler = function() {
+		multiBinVenue.destroy();
+	};
+
+	var followupHandler = function(e) {
+		e.preventDefault();
+		// Handle the followup data
+
+		// First, retrieve the relevant values
+
+		var nodeid = followup;
+
+		// Next, get the edge we will be storing on
+		var criteria = {
+			to:nodeid
+		};
+
+		window.tools.extend(criteria, multiBinVenue.options.criteria);
+		var edge = window.network.getEdges(criteria)[0];
+
+		// Create an empty object for storing the new properties in
+		var followupProperties = {};
+
+		// Assign a new property according to the variable name(s)
+		$.each(multiBinVenue.options.followup.questions, function(index) {
+			var followupVal = $('#'+multiBinVenue.options.followup.questions[index].variable).val();
+			followupProperties[multiBinVenue.options.followup.questions[index].variable] = followupVal;
+		});
+
+		// Update the edge
+		window.tools.extend(edge, followupProperties);
+		window.network.updateEdge(edge.id, edge);
+
+		// Clean up
+		$.each(multiBinVenue.options.followup.questions, function(index) {
+			$('#'+multiBinVenue.options.followup.questions[index].variable).val('');
+		});
+
+		$('.followup').hide();
+		$('.black-overlay').hide();
+	};
+
+	var followupCancelHandler = function() {
+
+		// Clean up
+		$('#'+multiBinVenue.options.followup.variable).val('');
+		$('.followup').hide();
+		$('.black-overlay').hide();
+	};
+
+	var backgroundClickHandler = function(e) {
+		e.stopPropagation();
+		if(open === true) {
+			if ($('.node-bin-active').length > 0) {
+					animating = true;
+					setTimeout(function() {
+						$('.node-bin-container').children().css({opacity:1});
+						$('.node-question-container').fadeIn();
+					}, 300);
+
+					var current = $('.node-bin-active');
+					$(current).removeClass('node-bin-active');
+					$(current).addClass('node-bin-static');
+					$(current).children('h1, p').show();
+					$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false, start: function(){
+						if (taskComprehended === false) {
+							var eventProperties = {
+								stage: window.netCanvas.Modules.session.currentStage(),
+								timestamp: new Date()
+							};
+							log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+							window.dispatchEvent(log);
+							taskComprehended = true;
+						}
+					}});
+
+					setTimeout(function() {
+						open = false;
+						animating = false;
+					}, 500);
+
+			}
+		} else {
+		}
+
+
+	};
+
+
+	var nodeClickHandler = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		var el = $(this);
+		var id = $(this).parent().parent().data('index');
+
+		// has the node been clicked while in the bucket or while in a bin?
+		if ($(this).parent().hasClass('active-node-list')) {
+			// it has been clicked while in a bin.
+			var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:el.data('node-id'), type:multiBinVenue.options.edgeType})[0].id;
+			var properties = {};
+			// make the values null when a node has been taken out of a bin
+			properties[multiBinVenue.options.variable.label] = '';
+
+			// dont forget followups
+			if(typeof multiBinVenue.options.followup !== 'undefined') {
+				$.each(multiBinVenue.options.followup.questions, function(index, value) {
+					properties[value.variable] = undefined;
+				});
+			}
+			window.network.updateEdge(edgeID,properties);
+
+			$(this).css({'top':0, 'left' :0});
+			$(this).appendTo('.node-bucket');
+			$(this).css('display', '');
+			var noun = 'people';
+			if ($('.c'+id).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+id).children('.active-node-list').children().length === 0) {
+				$('.c'+id).children('p').html('(Empty)');
+			} else {
+				$('.c'+id).children('p').html($('.c'+id).children('.active-node-list').children().length+' '+noun+'.');
+			}
+
+
+		}
+
+	};
+
+	var nodeBinClickHandler = function() {
+		if (open === false) {
+
+				if(!$(this).hasClass('node-bin-active')) {
+					animating = true;
+					open = true;
+					$('.node-bin-container').children().not(this).css({opacity:0});
+					$('.node-question-container').hide();
+					var position = $(this).offset();
+					var nodeBinDetails = $(this);
+					nodeBinDetails.children('.active-node-list').children('.node-bucket-item').removeClass('shown');
+					setTimeout(function() {
+						nodeBinDetails.offset(position);
+						nodeBinDetails.addClass('node-bin-active');
+
+						nodeBinDetails.removeClass('node-bin-static');
+						nodeBinDetails.children('h1, p').hide();
+
+						// $('.content').append(nodeBinDetails);
+
+						nodeBinDetails.addClass('node-bin-active');
+						setTimeout(function(){
+							var timer = 0;
+							$.each(nodeBinDetails.children('.active-node-list').children(), function(index,value) {
+								timer = timer + (index*10);
+								setTimeout(function(){
+									$(value).on('click', nodeClickHandler);
+									$(value).addClass('shown');
+								},timer);
+							});
+						},300);
+						open = true;
+					}, 500);
+
+					setTimeout(function() {
+						animating = false;
+					}, 500);
+
+				}
+		} else {
+		}
+
+	};
+
+	multiBinVenue.destroy = function() {
+		// Event Listeners
+		window.tools.notify('Destroying multiBinVenue.',0);
+		window.removeEventListener('changeStageStart', stageChangeHandler, false);
+		$('.node-bin-static').off('click', nodeBinClickHandler);
+		$('.node-bucket-item').off('click', nodeClickHandler);
+		$('.content').off('click', backgroundClickHandler);
+		$('.followup-submit').off('click', followupHandler);
+		$('.followup-cancel').off('click', followupCancelHandler);
+		$('.followup').remove();
+
+	};
+
+	multiBinVenue.init = function(options) {
+		window.tools.extend(multiBinVenue.options, options);
+
+		multiBinVenue.options.targetEl.append('<div class="node-question-container"></div>');
+
+		// Add header and subheader
+		$('.node-question-container').append('<h1>'+multiBinVenue.options.heading+'</h1>');
+
+		// Add node bucket
+		$('.node-question-container').append('<div class="node-bucket"></div>');
+
+		// Create the followup dialog, if it exists
+		if(typeof multiBinVenue.options.followup !== 'undefined') {
+			$('body').append('<div class="followup overlay"><form class="followup-form"></form></div>');
+
+			if(typeof multiBinVenue.options.followup.linked !== 'undefined' && multiBinVenue.options.followup.linked === true) {
+				var first = true;
+
+				$.each(multiBinVenue.options.followup.questions, function(index, value) {
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
+
+					if (first) {
+						$('#'+value.variable).change(function() {
+							if ($('#'+multiBinVenue.options.followup.questions[(index+1)].variable).val() > $('#'+value.variable).val()) {
+								$('#'+multiBinVenue.options.followup.questions[(index+1)].variable).val($('#'+value.variable).val());
+							}
+							$('#'+multiBinVenue.options.followup.questions[(index+1)].variable).attr('max', $('#'+value.variable).val());
+
+						});
+					}
+
+
+					first = !first;
+				});
+			} else {
+				$.each(multiBinVenue.options.followup.questions, function(index, value) {
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
+				});
+			}
+
+			$('.followup').children('form').append('<div class="row form-group"><button type="submit" class="btn btn-primary btn-block followup-submit">Continue</button></div>');
+
+			// Add cancel button if required
+			if (typeof multiBinVenue.options.followup.cancel !== 'undefined') {
+				$('.overlay').children().last('.form-group').append('<div class="row form-group"><button class="btn btn-warning btn-block followup-cancel">'+multiBinVenue.options.followup.cancel+'</button></div>');
+			}
+
+		}
+
+		// bin container
+        multiBinVenue.options.targetEl.append('<div class="node-bin-container"></div>');
+
+
+		var containerWidth = $('.node-bin-container').outerWidth();
+		var containerHeight = $('.node-bin-container').outerHeight();
+		var number = multiBinVenue.options.variable.values.length;
+		var rowThresh = number > 4 ? Math.floor(number*0.66) : 4;
+		var itemSize = 0;
+		var rows = Math.ceil(number/rowThresh);
+
+		if (containerWidth >= containerHeight) {
+			itemSize = number >= rowThresh ? containerWidth/rowThresh : containerWidth/number;
+
+			while(itemSize > (containerHeight/rows)) {
+				itemSize = itemSize*0.99;
+			}
+
+		} else {
+			itemSize = number >= rowThresh ? containerHeight/rowThresh : containerHeight/number;
+
+			while(itemSize > containerWidth) {
+				itemSize = itemSize*0.99;
+			}
+		}
+
+		// get all edges
+		var edges = window.network.getEdges(multiBinVenue.options.criteria, multiBinVenue.options.filter);
+		// var newLine = false;
+		// One of these for each bin. One bin for each variable value.
+		$.each(multiBinVenue.options.variable.values, function(index, value){
+
+			// if (index+1>number && newLine === false) {
+			// 	multiBinVenue.options.targetEl.append('<br>');
+			// 	newLine = true;
+			// }
+			var newBin = $('<div class="node-bin node-bin-static c'+index+'" data-index="'+index+'"><h1>'+value+'</h1><p class="lead">(Empty)</p><div class="active-node-list"></div></div>');
+			newBin.data('index', index);
+			$('.node-bin-container').append(newBin);
+			$('.c'+index).droppable({ accept: '.draggable',
+			drop: function(event, ui) {
+				var dropped = ui.draggable;
+				var droppedOn = $(this);
+                $(dropped).css({'top':0, 'left' :0});
+				// Check if the node has been dropped into a bin that triggers the followup
+				if(typeof multiBinVenue.options.followup !== 'undefined' && multiBinVenue.options.followup.trigger.indexOf(multiBinVenue.options.variable.values[index]) >=0 ) {
+					$('.followup').show();
+					$('.black-overlay').show();
+					$('#'+multiBinVenue.options.followup.questions[0].variable).focus();
+					followup = $(dropped).data('node-id');
+				} else if (typeof multiBinVenue.options.followup !== 'undefined') {
+					// Here we need to remove any previously set value for the followup variable, if it exists.
+					var nodeid = $(dropped).data('node-id');
+
+					// Next, get the edge we will be storing on
+					var criteria = {
+						to:nodeid
+					};
+
+					window.tools.extend(criteria, multiBinVenue.options.criteria);
+					var edge = window.network.getEdges(criteria)[0];
+
+					// Create an empty object for storing the new properties in
+					var followupProperties = {};
+
+					// Assign a new property according to the variable name(s)
+					$.each(multiBinVenue.options.followup.questions, function(index) {
+						followupProperties[multiBinVenue.options.followup.questions[index].variable] = undefined;
+					});
+
+					// Update the edge
+					window.tools.extend(edge, followupProperties);
+					window.network.updateEdge(edge.id, edge);
+
+					// Clean up
+					$.each(multiBinVenue.options.followup.questions, function(index) {
+						$('#'+multiBinVenue.options.followup.questions[index].variable).val('');
+					});
+
+				}
+
+				$(dropped).appendTo(droppedOn.children('.active-node-list'));
+				var properties = {};
+				properties[multiBinVenue.options.variable.label] = multiBinVenue.options.variable.values[index];
+				// Add the attribute
+				var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBinVenue.options.edgeType})[0].id;
+				window.network.updateEdge(edgeID,properties);
+
+				var noun = 'people';
+				if ($('.c'+index+' .active-node-list').children().length === 1) {
+					noun = 'person';
+				}
+				$('.c'+index+' p').html($('.c'+index+' .active-node-list').children().length+' '+noun+'.');
+
+				var el = $('.c'+index);
+				// var origBg = el.css('background-color');
+				setTimeout(function() {
+					el.addClass('dropped');
+				},0);
+
+				setTimeout(function(){
+					el.removeClass('dropped');
+					el.removeClass('yellow');
+				}, 1000);
+			},
+			over: function() {
+				$(this).addClass('yellow');
+
+			},
+			out: function() {
+				$(this).removeClass('yellow');
+			}
+		});
+
+	});
+
+	// $('.node-bin').css({width:itemSize*0.60-20,height:itemSize*0.60-20});
+	$('.node-bin').css({width:itemSize,height:itemSize});
+	// $('.node-bin').css({width:itemSize,height:itemSize});
+
+	// $('.node-bin h1').css({marginTop: itemSize/3});
+
+	$.each($('.node-bin'), function(index, value) {
+		var oldPos = $(value).offset();
+		$(value).data('oldPos', oldPos);
+		$(value).css(oldPos);
+
+	});
+
+	$('.node-bin').css({position:'absolute'});
+
+	// Add edges to bucket or to bins if they already have variable value.
+	$.each(edges, function(index,value) {
+
+		// We need the dyad edge so we know the nname for other types of edges
+		var dyadEdge = window.network.getEdges({from:window.network.getEgo().id, type:multiBinVenue.options.edgeType, to:value.to})[0];
+		if (value[multiBinVenue.options.variable.label] !== undefined && value[multiBinVenue.options.variable.label] !== '') {
+			index = multiBinVenue.options.variable.values.indexOf(value[multiBinVenue.options.variable.label]);
+			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.venue_name_t0+'</div>');
+			var noun = 'people';
+			if ($('.c'+index).children('.active-node-list').children().length === 1) {
+				noun = 'person';
+			}
+			if ($('.c'+index).children('.active-node-list').children().length === 0) {
+				$('.c'+index).children('p').html('(Empty)');
+			} else {
+				$('.c'+index).children('p').html($('.c'+index).children('.active-node-list').children().length+' '+noun+'.');
+			}
+		} else {
+			$('.node-bucket').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.venue_name_t0+'</div>');
+		}
+
+	});
+	$('.draggable').draggable({ cursor: 'pointer', revert: 'invalid', disabled: false , start: function(){
+		if (taskComprehended === false) {
+			var eventProperties = {
+				stage: window.netCanvas.Modules.session.currentStage(),
+				timestamp: new Date()
+			};
+			log = new window.CustomEvent('log', {'detail':{'eventType': 'taskComprehended', 'eventObject':eventProperties}});
+			window.dispatchEvent(log);
+			taskComprehended = true;
+		}
+	}});
+
+	// Event Listeners
+	window.addEventListener('changeStageStart', stageChangeHandler, false);
+	$('.node-bin-static').on('click', nodeBinClickHandler);
+	$('.content').on('click', backgroundClickHandler);
+	$('.followup-form').on('submit', followupHandler);
+	$('.followup-cancel').on('click', followupCancelHandler);
+
+};
+return multiBinVenue;
 };
 ;/* global $, window, Odometer, document, note  */
 /* exported Namegenerator */
@@ -6825,28 +7722,114 @@ module.exports = function VenueGenerator() {
 
                 $('#venue_name_t0').autocomplete({
                     source: [
-                        'ActionScript',
-                        'AppleScript',
-                        'Asp',
-                        'BASIC',
-                        'C',
-                        'C++',
-                        'Clojure',
-                        'COBOL',
-                        'ColdFusion',
-                        'Erlang',
-                        'Fortran',
-                        'Groovy',
-                        'Haskell',
-                        'Java',
-                        'JavaScript',
-                        'Lisp',
-                        'Perl',
-                        'PHP',
-                        'Python',
-                        'Ruby',
-                        'Scala',
-                        'Scheme'
+                      'After School Matters',
+                      'Atmosphere',
+                      'Bar Louie',
+                      'Baton Show Lounge',
+                      'Berlin Nightclub',
+                      'Big Chicks',
+                      'Bijou Theatre',
+                      'Bobby Love\'s',
+                      'Bonsai Bar & Lounge',
+                      'Broadway Youth Center',
+                      'Center on Halsted',
+                      'Charlie\'s Chicago',
+                      'Chicago GSA Prom',
+                      'Chicago Pride Fest',
+                      'Chicago Pride Parade',
+                      'Chicago Queer Prom',
+                      'Circuit Night Club',
+                      'Club Escape',
+                      'Club Krave',
+                      'CORE Center',
+                      'Crew Bar & Grill ',
+                      'D.S. Tequila Company',
+                      'Davenport\'s Piano Bar Cabaret',
+                      'Detention Night Club ',
+                      'Dolphin Nightclub',
+                      'Downtown Bar and Lounge',
+                      'E.M. Lounge',
+                      'El Rescate',
+                      'Elixir Lounge (Andersonville)',
+                      'Elixir Lounge (Lakeview)',
+                      'Emporium Arcade Bar (Wicker Park)',
+                      'Emporium Arcade Bar (Logan Square)',
+                      'Estelle\'s',
+                      'Farraguts on Clark',
+                      'Gallery 37',
+                      'Galleria Domain 2',
+                      'Granville Anvil',
+                      'Halsted\'s Bar and Grill',
+                      'Headquarters Beercade (Lakeview)',
+                      'Headquarters Beercade (River North)',
+                      'Hydrate ',
+                      'Innexile',
+                      'Jackhammer',
+                      'Jeffery Pub',
+                      'Joie De Vine',
+                      'King Spa Sauna',
+                      'Kit Kat Lounge & Supper Club',
+                      'La Cueva',
+                      'Little Jim\'s Tavern',
+                      'M7 Lounge',
+                      'Manhandler Saloon',
+                      'Manhole',
+                      'Man\'s Country Chicago',
+                      'Manuevers Bar',
+                      'Maria\'s Packaged Goods & Community Bar',
+                      'Marty\'s Martini Bar',
+                      'Mary\'s Attic',
+                      'Minibar Ultra Lounge & Café',
+                      'Northalsted Market Days',
+                      'PartylineChicago',
+                      'Progress Bar ',
+                      'Puerto Rican Cultural Center',
+                      'Punch House ',
+                      'R Public House',
+                      'Red Diamonds Strip Club',
+                      'Replay Beer & Bourbon (Lakeview)',
+                      'Replay Beer & Bourbon (Andersonville)',
+                      'Rio Chicago',
+                      'Roscoe\'s',
+                      'Scarlet Bar',
+                      'Scot\'s',
+                      'Second Story Bar',
+                      'SEVEN Nightclub & Lounge',
+                      'Sidetrack',
+                      'Simone\'s Bar',
+                      'Smart Bar',
+                      'Sound-Bar',
+                      'Spin Nightclub',
+                      'Spyners Pub',
+                      'Steamworks Chicago',
+                      'Taverna 750',
+                      'The Call',
+                      'The Cell Block ',
+                      'The Closet',
+                      'The Crib',
+                      'The Den Cocktail Bar',
+                      'The Dragon Lady Lounge ',
+                      'The Generator ',
+                      'The Glenwood',
+                      'The Holiday Club',
+                      'The Lucky Horseshoe Lounge',
+                      'The North End',
+                      'Phoenix Bar & Nightclub',
+                      'The Shrine',
+                      'The SoFo Tap',
+                      'Te\'Jay\'s Adult Books',
+                      'Touche',
+                      'Town Hall Pub',
+                      'University of Chicago Pub',
+                      'Vertigo Sky Lounge ',
+                      'Vida/SIDA',
+                      'Volkan Nightclub',
+                      'Wang\'s',
+                      'Wicker Park Tavern',
+                      'Youth Empowerment Performance Project',
+                      'FKA',
+                      'Paradise Sauna',
+                      'Hollywood Beach',
                     ]
                 });
 
@@ -6891,7 +7874,10 @@ module.exports = function VenueGenerator() {
         });
 
         // add existing nodes
-        $.each(window.network.getEdges({type: 'Venue', from: window.network.getNodes({type_t0:'Ego'})[0].id, vg_t0:venueGenerator.options.variables[0].value}), function(index,value) {
+        var edges = window.network.getEdges({type: 'Venue', from: window.network.getEgo().id, vg_t0:venueGenerator.options.variables[0].value});
+        console.log(edges);
+        $.each(edges, function(index,value) {
+
             venueGenerator.addToList(value);
         });
 
@@ -6904,6 +7890,7 @@ module.exports = function VenueGenerator() {
             if (venueGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
                 sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
+                $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
 
                     var el = $('<div class="node-list-item">'+value.venue_name_t0+'</div>');
@@ -6917,6 +7904,7 @@ module.exports = function VenueGenerator() {
     };
 
     venueGenerator.addToList = function(properties) {
+      console.log('ahoy');
         note.debug('venueGenerator.addToList');
         note.trace(properties);
         // var index = $(this).data('index');
