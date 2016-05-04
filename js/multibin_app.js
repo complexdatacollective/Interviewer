@@ -230,18 +230,7 @@ module.exports = function MultiBinApp() {
 				var first = true;
 
 				$.each(multiBinApp.options.followup.questions, function(index, value) {
-					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="number" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
-
-					if (first) {
-						$('#'+value.variable).change(function() {
-							if ($('#'+multiBinApp.options.followup.questions[(index+1)].variable).val() > $('#'+value.variable).val()) {
-								$('#'+multiBinApp.options.followup.questions[(index+1)].variable).val($('#'+value.variable).val());
-							}
-							$('#'+multiBinApp.options.followup.questions[(index+1)].variable).attr('max', $('#'+value.variable).val());
-
-						});
-					}
-
+					$('.followup').children('form').append('<h2>'+value.prompt+'</h2><div class="row form-group"><input type="text" class="form-control '+value.variable+'" id="'+value.variable+'" name="followup" required></div>');
 
 					first = !first;
 				});
