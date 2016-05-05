@@ -339,6 +339,7 @@ var Session = function Session() {
     };
 
     session.saveManager = function() {
+        note.trace('session.saveManager()');
         clearTimeout(saveTimer);
         saveTimer = setTimeout(session.saveData, 3000);
     };

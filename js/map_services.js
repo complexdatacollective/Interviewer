@@ -8,7 +8,7 @@
 module.exports = function VenueInterface() {
     'use strict';
   	// map globals
-    var test, centroid, filterCircle;
+    var centroid, filterCircle;
  	  var venueInterface = {};
     var RADIUS = 1609;
     venueInterface.options = {
@@ -66,8 +66,8 @@ module.exports = function VenueInterface() {
                     popup: this._popup
                 });
             },
-            closePopup: function(e) {
-                console.log(e);
+            closePopup: function() {
+                return false;
             }
         }); /***  end of hack ***/
 
@@ -140,22 +140,27 @@ module.exports = function VenueInterface() {
 
   	};
 
+    venueInterface.selectMarker = function(name) {
+        console.log('venueInterface.selectMarker(): '+name);
+        var feature = $('body').find('[data-feature="' + name + '"]');
+        $(feature).parent().parent().parent().toggleClass('selected');
+    };
+
     venueInterface.clickPopup = function(e,clicked) {
       // if clicked is present we have clicked a marker rather than its popup.
       if(!clicked) {
+          //clicked popup
         clicked = $(this).find('.service-popup').data('feature');
-        $(this).parent().toggleClass('selected');
-      } else {
-        var feature = $('body').find('[data-feature="' + clicked + '"]');
-        $(feature).parent().parent().parent().toggleClass('selected');
       }
+      venueInterface.selectMarker(clicked);
 
-      // Create or remove edge and node as appropriate
-
+      // Toggle visited property of HIVService edge
 
       // First, get the HIVService node, so we can get its ID
       console.log(clicked);
       var serviceNodeID = window.network.getNodes({name: clicked})[0].id;
+
+      console.log(serviceNodeID);
 
       var properties = {
         from: window.network.getEgo().id,
@@ -163,11 +168,20 @@ module.exports = function VenueInterface() {
         type:'HIVService'
       };
 
-      var serviceEdge = window.network.getEdges(properties);
 
-      // serviceEdge.visited !== serviceEdge.visited;
+      // Get the HIVService edge
+      var serviceEdge = window.network.getEdges(properties)[0];
+      console.log(serviceEdge);
+      console.log('was '+serviceEdge.visited);
 
-      window.network.updateNode(serviceEdge.id,serviceEdge);
+      serviceEdge.visited = !serviceEdge.visited;
+
+      console.log('now '+serviceEdge.visited);
+
+      var id = serviceEdge.id;
+      console.log('yoyoyo: '+id);
+
+      window.network.updateEdge(id,serviceEdge);
 
     };
 
@@ -175,11 +189,7 @@ module.exports = function VenueInterface() {
         var points = omnivore.csv(venueInterface.options.points, null, window.L.mapbox.featureLayer()).addTo(leaflet);
 
         leaflet.on('layeradd', function(e) {
-            // console.log(e);
             if (e.layer.feature) {
-                // console.log('there');
-                // test = e.layer.feature.properties;
-                // console.log(test);
                 var popup = window.L.popup({closeButton:false}).setContent('<div class="service-popup" data-feature="'+e.layer.feature.properties['Abbreviated Name']+'">'+e.layer.feature.properties['Abbreviated Name']+'</div>');
                 e.layer.bindPopup(popup).openPopup();
                 e.layer.on('click', function(event) {
@@ -206,35 +216,46 @@ module.exports = function VenueInterface() {
             // First, check if the proposed node already exists
             // TODO: This requires that if ego location changes, all nodes of type HIVService are deleted.
 
-
-
             var nodeProperties = {
               type_t0: 'HIVService',
               name: l.feature.properties['Abbreviated Name']
             };
 
-            if (window.network.getNodes(nodeProperties).length === 0) {
-              var serviceNodeID = window.network.addNode(nodeProperties);
-              console.log('created');
-              var edgeProperties = {
-                from: window.network.getEgo().id,
-                to: serviceNodeID,
-                type:'HIVService',
-                visited: false
-              };
+            var serviceNodeID = null;
 
-              window.network.addEdge(edgeProperties);
+            if (window.network.getNodes(nodeProperties).length === 0) {
+              serviceNodeID = window.network.addNode(nodeProperties);
+              note.debug('created HIVSservice node for '+nodeProperties.name);
             } else {
-              console.log('not created');
+              serviceNodeID = window.network.getNodes(nodeProperties)[0].id;
+            }
+
+            // Now check if we also need to create an edge
+            var edgeProperties = {
+              from: window.network.getEgo().id,
+              to: serviceNodeID,
+              type:'HIVService'
+            };
+
+            if (window.network.getEdges(edgeProperties).length === 0) {
+                console.log('not here');
+                edgeProperties.visited = false;
+                window.network.addEdge(edgeProperties);
+            } else {
+                console.log('here');
+                // The edge already exists, so we need to check the value of 'visited' to see if it should be selected.
+                var edge = window.network.getEdges(edgeProperties)[0];
+                console.log('edge');
+                console.log(edge);
+                var visited = edge.visited;
+                if(visited) {
+                    venueInterface.selectMarker(l.feature.properties['Abbreviated Name']);
+                }
             }
 
           });
 
         });
-    };
-
-    venueInterface.getTest = function() {
-        return test;
     };
 
     venueInterface.drawUIComponents = function() {

@@ -302,6 +302,10 @@ module.exports = function Network() {
     network.updateEdge = function(id, properties, callback) {
         note.debug('network.updateEdge() called.');
         if(network.getEdge(id) === false || properties === undefined) {
+            note.debug('network.updateEdge(): returning false. Either the edge ID was not found, or no properties were supplied to update.');
+            note.trace('id: '+id);
+            note.trace('Properties:');
+            note.trace(properties);
             return false;
         }
         var edge = network.getEdge(id);
@@ -316,6 +320,7 @@ module.exports = function Network() {
         window.dispatchEvent(unsavedChanges);
         if(callback) {
             callback();
+            return true;
         }
 
     };
