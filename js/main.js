@@ -156,6 +156,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.Network = require('./network.js');
     window.netCanvas.Modules.NameGenerator = require('./namegenerator.js');
     window.netCanvas.Modules.VenueGenerator = require('./venuegenerator.js');
+    window.netCanvas.Modules.ServiceGenerator = require('./servicegenerator.js');
     window.netCanvas.Modules.AppGenerator = require('./appgenerator.js');
     window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
     window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
