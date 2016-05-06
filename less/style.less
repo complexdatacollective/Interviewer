@@ -682,24 +682,29 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     text-align: center;
 }
 
-.service-list-container .item {
-    width:60%;
-    display:inline-block;
-    padding:8px;
-}
 
-.service-list-container .item .inner {
+.service-list-container .item {
     cursor: pointer; cursor: hand;
     border-radius: 10px;
     background:#eee;
     border:2px solid #eee;
     color:black;
     transition: all 1s ease;
+    width:60%;
+    display: inline-block;
+    margin-bottom:20px;
 }
 
-.service-list-container .item .inner.selected {
+.service-list-container .item.selected {
     background: lighten(@brand-success, 10%);
     border-color: @brand-success;
+}
+
+.service-list-container .item .inner {
+
+}
+
+.service-list-container .item.selected {
     color: white !important;
 }
 
@@ -719,10 +724,59 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     padding: 0;
 }
 
-.well label input[type=radio]~i.fa.fa-circle-o {
+.well label input[type=radio]~i.fa.fa-circle-o, .well .check-number {
     color: white;
+    font-weight:normal;
 }
 
+.well label input[type=radio]:checked~i.fa.fa-check-circle-o {
+    color: #00FFF7;
+}
+
+.check label{
+ left:40px;
+ position:relative;
+ margin-bottom:20px;
+ font-size: @font-size-base;
+}
+
+
+input.faChkRnd, input.faChkSqr {
+  visibility: hidden;
+}
+
+input.faChkRnd:checked:after, input.faChkRnd:after,
+input.faChkSqr:checked:after, input.faChkSqr:after {
+  visibility: visible;
+  font-family: FontAwesome;
+  font-size:2em;
+  height: 1em;
+  width: 1em;
+  position: relative;
+  top: -12px;
+  background-color:transparent;
+  display: inline-block;
+}
+
+input.faChkRnd:checked:after {
+  content: '\f058';
+}
+
+input.faChkRnd:after {
+  content: '\f10c';
+}
+
+input.faChkSqr:checked:after {
+  content: '\f14a';
+}
+
+input.faChkSqr:after {
+  content: '\f096';
+}
+
+.check-row {
+    padding-left:40px;
+}
 
 // name gen mod
 .venue-list-container {
