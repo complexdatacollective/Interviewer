@@ -169,6 +169,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.RoleRevisit = require('./rolerevisit.js');
     window.netCanvas.Modules.ListSelect = require('./listselect.js');
     window.netCanvas.Modules.ListSelectVenue = require('./listselect_venue.js');
+    window.netCanvas.Modules.ListSelectServices = require('./listselect_services.js');
     window.netCanvas.Modules.MultiBin = require('./multibin.js');
     window.netCanvas.Modules.MultiBinVenue = require('./multibin_venue.js');
     window.netCanvas.Modules.MultiBinApp = require('./multibin_app.js');
