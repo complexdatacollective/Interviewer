@@ -694,14 +694,34 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     background:#eee;
     border:2px solid #eee;
     color:black;
+    transition: all 1s ease;
+}
+
+.service-list-container .item .inner.selected {
+    background: lighten(@brand-success, 10%);
+    border-color: @brand-success;
+    color: white !important;
 }
 
 .service-list-container .item h3 {
-    display:inline;
     margin:0;
+    padding: 10px;
 }
 
+.well {
+    margin-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+}
 
+.well .btn-group.big-check {
+    padding: 0;
+}
+
+.well label input[type=radio]~i.fa.fa-circle-o {
+    color: white;
+}
 
 
 // name gen mod
