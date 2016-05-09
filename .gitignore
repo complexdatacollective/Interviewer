@@ -2,5 +2,6 @@
 npm-debug.log
 *.zip
 *.app
+dist/
 www/protocols/*
 !www/protocols/default
