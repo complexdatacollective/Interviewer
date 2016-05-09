@@ -100,7 +100,6 @@ module.exports = function ServiceGenerator() {
         e.preventDefault();
 
         var data = $(this).serializeArray();
-        console.log(data);
           var cleanData = {};
           for (var i = 0; i < data.length; i++) {
 
@@ -126,7 +125,6 @@ module.exports = function ServiceGenerator() {
 
           }
 
-         console.log(cleanData);
 
         var newEdgeProperties = {};
         var newNodeProperties = {};
@@ -458,7 +456,6 @@ module.exports = function ServiceGenerator() {
 
         // add existing nodes
         var edges = window.network.getEdges({type: 'HIVService', from: window.network.getEgo().id, sg_t0:serviceGenerator.options.variables[0].value});
-        console.log(edges);
         $.each(edges, function(index,value) {
 
             serviceGenerator.addToList(value);

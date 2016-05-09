@@ -985,17 +985,15 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-        console.log('item click');
-        // console.log(e);
-        //   console.log('item click handler');
+
+
         var nodeid = $(this).data('nodeid');
-        // console.log('nodeid: '+nodeid);
+
 
         $(this).find('.select-icon').toggleClass('fa-circle-o fa-check-circle-o');
 
         if ($(this).parent().hasClass('selected')) {
             $(this).parent().removeClass('selected');
-            console.log($($('[data-nodeid='+nodeid+']').parent()[0]).children('.collapse'));
             // uncheck boxes
             $('[data-parent='+nodeid+']').each(function(){ $(this).prop('checked', false); });
 
@@ -1073,23 +1071,20 @@ module.exports = function ListSelect() {
         $(window.document).on('click', '.inner', itemClickHandler);
         $('[name="'+listSelect.options.variable.label+'"]').change(function() {
             // if ($(this).is(':checked')) {
-                // console.log(e);
-                // console.log(this);
-                // console.log($(this).data('value'));
+
+
+
                 var el = $(this).parent().parent();
                 var id = $(this).parent().parent().parent().parent().parent().find('.inner').data('edgeid');
-                console.log(id);
-                console.log(window.network.getEdge(id));
-                // console.log($(el).find('input:checked'));
 
-                // console.log(allAttributes);
+
+
                 var properties = {};
                 properties[listSelect.options.variable.label] = $(el).find('input:checked').map(function(){
                     return $(this).data('value');
                 }).get();
 
-                // console.log(id);
-                console.log(properties);
+
                 window.network.updateEdge(id, properties);
             // }
 
@@ -1113,10 +1108,10 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-        //   console.log('item click handler');
+      
         var properties = {};
         var nodeid = $(this).data('nodeid');
-        // console.log('nodeid: '+nodeid);
+      
 
         if ($(this).data('selected') === true) {
             $(this).data('selected', false);
@@ -1134,7 +1129,6 @@ module.exports = function ListSelect() {
             properties[listSelect.options.variable] = 1;
         }
 
-        console.log(properties);
         window.network.updateEdge(nodeid, properties);
 
     };
@@ -1639,8 +1633,6 @@ module.exports = function GeoInterface() {
   }
 
   function highlightCurrent() {
-    console.log(edges);
-    console.log(currentPersonIndex);
     if (typeof edges[currentPersonIndex] !== 'undefined' && edges[currentPersonIndex][geoInterface.options.variable.value] !== undefined) {
       mapNodeClicked = edges[currentPersonIndex][geoInterface.options.variable.value];
 
@@ -1676,7 +1668,6 @@ module.exports = function GeoInterface() {
 
   geoInterface.setOtherOption = function() {
     var option = $(this).data('value');
-    console.log(option);
     resetAllHighlights();
     var properties = {}, targetID;
     properties[geoInterface.options.variable.value] = option;
@@ -1764,11 +1755,18 @@ module.exports = function GeoInterface() {
         }).addTo(leaflet);
 
         // Load initial node
-        if (geoInterface.options.mode === 'edge') {
-          edges = geoInterface.options.network.getEdges(geoInterface.options.criteria);
-        } else if (geoInterface.options.mode === 'node') {
-          edges = geoInterface.options.network.getNodes(geoInterface.options.criteria);
-        }
+        edges = geoInterface.options.network.getEdges(geoInterface.options.criteria, function (results) {
+          // Only show house parties or somewhere else
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.venue_type_t0 === 'House Party' || value.venue_type_t0 === 'Somewhere Else') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
 
         $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 
@@ -1822,10 +1820,8 @@ module.exports = function GeoInterface() {
     $('.map-node-status').html(safePrompt());
 
     if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.length > 0) {
-      console.log('YOO');
       $('.map-node-container').append('<div class="col-sm-12 form-group other-options"></div>');
       $.each(geoInterface.options.variable.other_options, function(otherIndex, otherValue) {
-        console.log(otherValue);
         $('.other-options').append('<button class="btn '+otherValue.btnClass+' btn-block other-option" data-value="'+otherValue.value+'">'+otherValue.label+'</button>');
       });
     }
@@ -2025,8 +2021,6 @@ module.exports = function GeoInterface() {
     }
 
   	function highlightCurrent() {
-      console.log(edges);
-      console.log(currentPersonIndex);
       if (typeof edges[currentPersonIndex] !== 'undefined' && edges[currentPersonIndex][geoInterface.options.variable.value] !== undefined) {
         mapNodeClicked = edges[currentPersonIndex][geoInterface.options.variable.value];
 
@@ -2063,7 +2057,6 @@ module.exports = function GeoInterface() {
 
     geoInterface.setOtherOption = function() {
         var option = $(this).data('value');
-        console.log(option);
         resetAllHighlights();
         var properties = {}, targetID;
         properties[geoInterface.options.variable.value] = option;
@@ -2209,10 +2202,8 @@ module.exports = function GeoInterface() {
         $('.map-node-status').html(safePrompt());
 
         if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.length > 0) {
-            console.log('YOO');
             $('.map-node-container').append('<div class="col-sm-12 form-group other-options"></div>');
             $.each(geoInterface.options.variable.other_options, function(otherIndex, otherValue) {
-                console.log(otherValue);
                 $('.other-options').append('<button class="btn '+otherValue.btnClass+' btn-block other-option" data-value="'+otherValue.value+'">'+otherValue.label+'</button>');
             });
         }
@@ -2332,7 +2323,6 @@ module.exports = function VenueInterface() {
                         // Load initial node
 
                         if (feature.properties.name === egoLocation) {
-                            console.log('found it');
                             centroid = layer.getBounds().getCenter();
 
                             filterCircle = window.L.circle(window.L.latLng(centroid), RADIUS, {
@@ -2372,7 +2362,6 @@ module.exports = function VenueInterface() {
   	};
 
     venueInterface.selectMarker = function(name) {
-        console.log('venueInterface.selectMarker(): '+name);
         var feature = $('body').find('[data-feature="' + name + '"]');
         $(feature).parent().parent().parent().toggleClass('selected');
     };
@@ -2388,10 +2377,8 @@ module.exports = function VenueInterface() {
       // Toggle visited property of HIVService edge
 
       // First, get the HIVService node, so we can get its ID
-      console.log(clicked);
       var serviceNodeID = window.network.getNodes({name: clicked})[0].id;
 
-      console.log(serviceNodeID);
 
       var properties = {
         from: window.network.getEgo().id,
@@ -2402,15 +2389,11 @@ module.exports = function VenueInterface() {
 
       // Get the HIVService edge
       var serviceEdge = window.network.getEdges(properties)[0];
-      console.log(serviceEdge);
-      console.log('was '+serviceEdge.visited);
 
       serviceEdge.visited = !serviceEdge.visited;
 
-      console.log('now '+serviceEdge.visited);
 
       var id = serviceEdge.id;
-      console.log('yoyoyo: '+id);
 
       window.network.updateEdge(id,serviceEdge);
 
@@ -2469,15 +2452,11 @@ module.exports = function VenueInterface() {
             };
 
             if (window.network.getEdges(edgeProperties).length === 0) {
-                console.log('not here');
                 edgeProperties.visited = false;
                 window.network.addEdge(edgeProperties);
             } else {
-                console.log('here');
                 // The edge already exists, so we need to check the value of 'visited' to see if it should be selected.
                 var edge = window.network.getEdges(edgeProperties)[0];
-                console.log('edge');
-                console.log(edge);
                 var visited = edge.visited;
                 if(visited) {
                     venueInterface.selectMarker(l.feature.properties['Abbreviated Name']);
@@ -6020,7 +5999,6 @@ module.exports = function OrdinalBin() {
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
-                    console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
 
@@ -6028,8 +6006,6 @@ module.exports = function OrdinalBin() {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
-                    console.log(droppedOn.children('.ord-active-node-list'));
-                    console.log(dropped);
                     dropped.css({position:'inherit'});
                     droppedOn.children('.ord-active-node-list').append(dropped);
 
@@ -6123,12 +6099,12 @@ module.exports = function OrdinalBin() {
             scroll: false,
             helper: 'clone',
             start: function() {
-                // console.log($(this).css('top'));
+              
                 // if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
-                //     console.log('has class');
+              
                 //     $(this).css({position:'absolute'});
                 // } else {
-                //     console.log('not');
+              
                 //     $(this).css({position:'relative'});
                 // }
 
@@ -6246,7 +6222,6 @@ module.exports = function OrdinalBin() {
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
-                    console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
 
@@ -6254,8 +6229,6 @@ module.exports = function OrdinalBin() {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
-                    console.log(droppedOn.children('.ord-active-node-list'));
-                    console.log(dropped);
                     dropped.css({position:'inherit'});
                     droppedOn.children('.ord-active-node-list').append(dropped);
 
@@ -6352,12 +6325,12 @@ module.exports = function OrdinalBin() {
             scroll: false,
             helper: 'clone',
             start: function() {
-                // console.log($(this).css('top'));
+              
                 // if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
-                //     console.log('has class');
+              
                 //     $(this).css({position:'absolute'});
                 // } else {
-                //     console.log('not');
+              
                 //     $(this).css({position:'relative'});
                 // }
 
@@ -6707,7 +6680,6 @@ module.exports = function ServiceGenerator() {
         e.preventDefault();
 
         var data = $(this).serializeArray();
-        console.log(data);
           var cleanData = {};
           for (var i = 0; i < data.length; i++) {
 
@@ -6733,7 +6705,6 @@ module.exports = function ServiceGenerator() {
 
           }
 
-         console.log(cleanData);
 
         var newEdgeProperties = {};
         var newNodeProperties = {};
@@ -7065,7 +7036,6 @@ module.exports = function ServiceGenerator() {
 
         // add existing nodes
         var edges = window.network.getEdges({type: 'HIVService', from: window.network.getEgo().id, sg_t0:serviceGenerator.options.variables[0].value});
-        console.log(edges);
         $.each(edges, function(index,value) {
 
             serviceGenerator.addToList(value);
@@ -8826,7 +8796,6 @@ module.exports = function VenueGenerator() {
         e.preventDefault();
 
         var data = $(this).serializeArray();
-        console.log(data);
           var cleanData = {};
           for (var i = 0; i < data.length; i++) {
 
@@ -8852,7 +8821,6 @@ module.exports = function VenueGenerator() {
 
           }
 
-         console.log(cleanData);
 
         var newEdgeProperties = {};
         var newNodeProperties = {};
@@ -8925,52 +8893,6 @@ module.exports = function VenueGenerator() {
 
         venueGenerator.closeNodeBox();
 
-    };
-
-    venueGenerator.generateTestVenues = function(number) {
-
-        if (!number) {
-            note.error('You must specify the number of test venues you want to create. Cancelling!');
-            return false;
-        }
-
-        var eachTime = 4000;
-
-        for (var i = 0; i < number; i++) {
-            var timer = eachTime*i;
-            setTimeout(venueGenerator.generateVenue, timer);
-        }
-
-    };
-
-    venueGenerator.generateVenue = function() {
-        // We must simulate every interaction to ensure that any errors are caught.
-        $('.add-button').click();
-        setTimeout(function() {
-            $('#ngForm').submit();
-        }, 3000);
-
-        var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
-        if ($('#lname_t0').val().length > 0 ) {
-            lname +='.';
-        }
-        $('#nname_t0').val(lname);
-        $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
-
-        setTimeout(function() {
-            $('.relationship-button').click();
-        }, 500);
-        setTimeout(function() {
-
-            var roleNumber = Math.floor(window.tools.randomBetween(1,3));
-
-            for (var j = 0; j < roleNumber; j++) {
-                $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
-
-            }
-
-            $('.relationship-close-button').click();
-        }, 2000);
     };
 
     venueGenerator.openNodeBox = function() {
@@ -9229,7 +9151,6 @@ module.exports = function VenueGenerator() {
 
         // add existing nodes
         var edges = window.network.getEdges({type: 'Venue', from: window.network.getEgo().id, vg_t0:venueGenerator.options.variables[0].value});
-        console.log(edges);
         $.each(edges, function(index,value) {
 
             venueGenerator.addToList(value);
@@ -9258,7 +9179,6 @@ module.exports = function VenueGenerator() {
     };
 
     venueGenerator.addToList = function(properties) {
-      console.log('ahoy');
         note.debug('venueGenerator.addToList');
         note.trace(properties);
         // var index = $(this).data('index');

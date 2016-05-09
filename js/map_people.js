@@ -181,8 +181,6 @@ module.exports = function GeoInterface() {
     }
 
   	function highlightCurrent() {
-      console.log(edges);
-      console.log(currentPersonIndex);
       if (typeof edges[currentPersonIndex] !== 'undefined' && edges[currentPersonIndex][geoInterface.options.variable.value] !== undefined) {
         mapNodeClicked = edges[currentPersonIndex][geoInterface.options.variable.value];
 
@@ -219,7 +217,6 @@ module.exports = function GeoInterface() {
 
     geoInterface.setOtherOption = function() {
         var option = $(this).data('value');
-        console.log(option);
         resetAllHighlights();
         var properties = {}, targetID;
         properties[geoInterface.options.variable.value] = option;
@@ -365,10 +362,8 @@ module.exports = function GeoInterface() {
         $('.map-node-status').html(safePrompt());
 
         if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.length > 0) {
-            console.log('YOO');
             $('.map-node-container').append('<div class="col-sm-12 form-group other-options"></div>');
             $.each(geoInterface.options.variable.other_options, function(otherIndex, otherValue) {
-                console.log(otherValue);
                 $('.other-options').append('<button class="btn '+otherValue.btnClass+' btn-block other-option" data-value="'+otherValue.value+'">'+otherValue.label+'</button>');
             });
         }

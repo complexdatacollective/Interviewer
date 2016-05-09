@@ -94,7 +94,6 @@ module.exports = function VenueGenerator() {
         e.preventDefault();
 
         var data = $(this).serializeArray();
-        console.log(data);
           var cleanData = {};
           for (var i = 0; i < data.length; i++) {
 
@@ -120,7 +119,6 @@ module.exports = function VenueGenerator() {
 
           }
 
-         console.log(cleanData);
 
         var newEdgeProperties = {};
         var newNodeProperties = {};
@@ -193,52 +191,6 @@ module.exports = function VenueGenerator() {
 
         venueGenerator.closeNodeBox();
 
-    };
-
-    venueGenerator.generateTestVenues = function(number) {
-
-        if (!number) {
-            note.error('You must specify the number of test venues you want to create. Cancelling!');
-            return false;
-        }
-
-        var eachTime = 4000;
-
-        for (var i = 0; i < number; i++) {
-            var timer = eachTime*i;
-            setTimeout(venueGenerator.generateVenue, timer);
-        }
-
-    };
-
-    venueGenerator.generateVenue = function() {
-        // We must simulate every interaction to ensure that any errors are caught.
-        $('.add-button').click();
-        setTimeout(function() {
-            $('#ngForm').submit();
-        }, 3000);
-
-        var lname = $('#fname_t0').val()+' '+$('#lname_t0').val().charAt(0);
-        if ($('#lname_t0').val().length > 0 ) {
-            lname +='.';
-        }
-        $('#nname_t0').val(lname);
-        $('#age_p_t0').val(Math.floor(window.tools.randomBetween(18,90)));
-
-        setTimeout(function() {
-            $('.relationship-button').click();
-        }, 500);
-        setTimeout(function() {
-
-            var roleNumber = Math.floor(window.tools.randomBetween(1,3));
-
-            for (var j = 0; j < roleNumber; j++) {
-                $($('.relationship')[Math.floor(window.tools.randomBetween(0,$('.relationship').length))]).addClass('selected');
-
-            }
-
-            $('.relationship-close-button').click();
-        }, 2000);
     };
 
     venueGenerator.openNodeBox = function() {
@@ -497,7 +449,6 @@ module.exports = function VenueGenerator() {
 
         // add existing nodes
         var edges = window.network.getEdges({type: 'Venue', from: window.network.getEgo().id, vg_t0:venueGenerator.options.variables[0].value});
-        console.log(edges);
         $.each(edges, function(index,value) {
 
             venueGenerator.addToList(value);
@@ -526,7 +477,6 @@ module.exports = function VenueGenerator() {
     };
 
     venueGenerator.addToList = function(properties) {
-      console.log('ahoy');
         note.debug('venueGenerator.addToList');
         note.trace(properties);
         // var index = $(this).data('index');

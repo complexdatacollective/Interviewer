@@ -181,8 +181,6 @@ module.exports = function GeoInterface() {
   }
 
   function highlightCurrent() {
-    console.log(edges);
-    console.log(currentPersonIndex);
     if (typeof edges[currentPersonIndex] !== 'undefined' && edges[currentPersonIndex][geoInterface.options.variable.value] !== undefined) {
       mapNodeClicked = edges[currentPersonIndex][geoInterface.options.variable.value];
 
@@ -218,7 +216,6 @@ module.exports = function GeoInterface() {
 
   geoInterface.setOtherOption = function() {
     var option = $(this).data('value');
-    console.log(option);
     resetAllHighlights();
     var properties = {}, targetID;
     properties[geoInterface.options.variable.value] = option;
@@ -306,11 +303,18 @@ module.exports = function GeoInterface() {
         }).addTo(leaflet);
 
         // Load initial node
-        if (geoInterface.options.mode === 'edge') {
-          edges = geoInterface.options.network.getEdges(geoInterface.options.criteria);
-        } else if (geoInterface.options.mode === 'node') {
-          edges = geoInterface.options.network.getNodes(geoInterface.options.criteria);
-        }
+        edges = geoInterface.options.network.getEdges(geoInterface.options.criteria, function (results) {
+          // Only show house parties or somewhere else
+            var filteredResults = [];
+            $.each(results, function(index,value) {
+                if (value.venue_type_t0 === 'House Party' || value.venue_type_t0 === 'Somewhere Else') {
+                    filteredResults.push(value);
+                }
+            });
+
+            return filteredResults;
+        });
+
 
         $('.map-counter').html('<span class="current-id">1</span>/'+edges.length);
 
@@ -364,10 +368,8 @@ module.exports = function GeoInterface() {
     $('.map-node-status').html(safePrompt());
 
     if (geoInterface.options.variable.other_options && geoInterface.options.variable.other_options.length > 0) {
-      console.log('YOO');
       $('.map-node-container').append('<div class="col-sm-12 form-group other-options"></div>');
       $.each(geoInterface.options.variable.other_options, function(otherIndex, otherValue) {
-        console.log(otherValue);
         $('.other-options').append('<button class="btn '+otherValue.btnClass+' btn-block other-option" data-value="'+otherValue.value+'">'+otherValue.label+'</button>');
       });
     }

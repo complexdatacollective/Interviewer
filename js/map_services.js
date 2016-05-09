@@ -101,7 +101,6 @@ module.exports = function VenueInterface() {
                         // Load initial node
 
                         if (feature.properties.name === egoLocation) {
-                            console.log('found it');
                             centroid = layer.getBounds().getCenter();
 
                             filterCircle = window.L.circle(window.L.latLng(centroid), RADIUS, {
@@ -141,7 +140,6 @@ module.exports = function VenueInterface() {
   	};
 
     venueInterface.selectMarker = function(name) {
-        console.log('venueInterface.selectMarker(): '+name);
         var feature = $('body').find('[data-feature="' + name + '"]');
         $(feature).parent().parent().parent().toggleClass('selected');
     };
@@ -157,10 +155,8 @@ module.exports = function VenueInterface() {
       // Toggle visited property of HIVService edge
 
       // First, get the HIVService node, so we can get its ID
-      console.log(clicked);
       var serviceNodeID = window.network.getNodes({name: clicked})[0].id;
 
-      console.log(serviceNodeID);
 
       var properties = {
         from: window.network.getEgo().id,
@@ -171,15 +167,11 @@ module.exports = function VenueInterface() {
 
       // Get the HIVService edge
       var serviceEdge = window.network.getEdges(properties)[0];
-      console.log(serviceEdge);
-      console.log('was '+serviceEdge.visited);
 
       serviceEdge.visited = !serviceEdge.visited;
 
-      console.log('now '+serviceEdge.visited);
 
       var id = serviceEdge.id;
-      console.log('yoyoyo: '+id);
 
       window.network.updateEdge(id,serviceEdge);
 
@@ -238,15 +230,11 @@ module.exports = function VenueInterface() {
             };
 
             if (window.network.getEdges(edgeProperties).length === 0) {
-                console.log('not here');
                 edgeProperties.visited = false;
                 window.network.addEdge(edgeProperties);
             } else {
-                console.log('here');
                 // The edge already exists, so we need to check the value of 'visited' to see if it should be selected.
                 var edge = window.network.getEdges(edgeProperties)[0];
-                console.log('edge');
-                console.log(edge);
                 var visited = edge.visited;
                 if(visited) {
                     venueInterface.selectMarker(l.feature.properties['Abbreviated Name']);

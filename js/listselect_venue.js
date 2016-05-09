@@ -9,10 +9,10 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-        //   console.log('item click handler');
+      
         var properties = {};
         var nodeid = $(this).data('nodeid');
-        // console.log('nodeid: '+nodeid);
+      
 
         if ($(this).data('selected') === true) {
             $(this).data('selected', false);
@@ -30,7 +30,6 @@ module.exports = function ListSelect() {
             properties[listSelect.options.variable] = 1;
         }
 
-        console.log(properties);
         window.network.updateEdge(nodeid, properties);
 
     };

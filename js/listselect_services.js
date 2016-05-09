@@ -9,17 +9,15 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-        console.log('item click');
-        // console.log(e);
-        //   console.log('item click handler');
+
+
         var nodeid = $(this).data('nodeid');
-        // console.log('nodeid: '+nodeid);
+
 
         $(this).find('.select-icon').toggleClass('fa-circle-o fa-check-circle-o');
 
         if ($(this).parent().hasClass('selected')) {
             $(this).parent().removeClass('selected');
-            console.log($($('[data-nodeid='+nodeid+']').parent()[0]).children('.collapse'));
             // uncheck boxes
             $('[data-parent='+nodeid+']').each(function(){ $(this).prop('checked', false); });
 
@@ -97,23 +95,20 @@ module.exports = function ListSelect() {
         $(window.document).on('click', '.inner', itemClickHandler);
         $('[name="'+listSelect.options.variable.label+'"]').change(function() {
             // if ($(this).is(':checked')) {
-                // console.log(e);
-                // console.log(this);
-                // console.log($(this).data('value'));
+
+
+
                 var el = $(this).parent().parent();
                 var id = $(this).parent().parent().parent().parent().parent().find('.inner').data('edgeid');
-                console.log(id);
-                console.log(window.network.getEdge(id));
-                // console.log($(el).find('input:checked'));
 
-                // console.log(allAttributes);
+
+
                 var properties = {};
                 properties[listSelect.options.variable.label] = $(el).find('input:checked').map(function(){
                     return $(this).data('value');
                 }).get();
 
-                // console.log(id);
-                console.log(properties);
+
                 window.network.updateEdge(id, properties);
             // }
 

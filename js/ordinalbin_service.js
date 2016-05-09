@@ -89,7 +89,6 @@ module.exports = function OrdinalBin() {
             $('.ord-bin-container').append(newBin);
             $('.d'+index).droppable({ accept: '.draggable',
                 drop: function(event, ui) {
-                    console.log('dropped');
                     var dropped = ui.draggable;
                     var droppedOn = $(this);
 
@@ -97,8 +96,6 @@ module.exports = function OrdinalBin() {
                         $('.followup').show();
                         followup = $(dropped).data('node-id');
                     }
-                    console.log(droppedOn.children('.ord-active-node-list'));
-                    console.log(dropped);
                     dropped.css({position:'inherit'});
                     droppedOn.children('.ord-active-node-list').append(dropped);
 
@@ -192,12 +189,12 @@ module.exports = function OrdinalBin() {
             scroll: false,
             helper: 'clone',
             start: function() {
-                // console.log($(this).css('top'));
+              
                 // if ($(this).css('top') !== 'auto' && $(this).css('top') !== '0px') {
-                //     console.log('has class');
+              
                 //     $(this).css({position:'absolute'});
                 // } else {
-                //     console.log('not');
+              
                 //     $(this).css({position:'relative'});
                 // }
 
