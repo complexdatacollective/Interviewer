@@ -1949,6 +1949,13 @@ module.exports = function GeoInterface() {
         var layer = e.target;
         var properties, targetID;
 
+        // remove HIV service nodes if present.
+       var service =window.network.getNodes({type_t0: 'HIVService'});
+
+       $.each(service, function(index, value) {
+           window.network.removeNode(value.id);
+       });
+
         // is there a map node already selected?
         if (mapNodeClicked === false) {
             // no map node selected, so highlight this one and mark a map node as having been selected.
@@ -2429,8 +2436,11 @@ module.exports = function VenueInterface() {
         }).on('ready', function() { // huge bullshittery. Event driven IO and no callback.
           // the layer has been fully loaded now, and you can
           // call .getTileJSON and investigate its properties
-
+          console.log('READY');
+          var nodeCount = 0;
           this.eachLayer(function(l) {
+              console.log('each layer');
+              nodeCount++;
             // Store the filtered points as nodes of type HIVservice
 
             // First, check if the proposed node already exists
@@ -2469,9 +2479,19 @@ module.exports = function VenueInterface() {
                 }
             }
 
+
+
           });
 
+          // if we didnt pick up any nodes, skip this stage
+          if (nodeCount < 1) {
+              console.log('No HIV service providers close to ego. Skipping stage.');
+              window.netCanvas.Modules.session.nextStage();
+          }
+
         });
+
+
     };
 
     venueInterface.drawUIComponents = function() {

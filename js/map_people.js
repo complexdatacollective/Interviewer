@@ -109,6 +109,13 @@ module.exports = function GeoInterface() {
         var layer = e.target;
         var properties, targetID;
 
+        // remove HIV service nodes if present.
+       var service =window.network.getNodes({type_t0: 'HIVService'});
+
+       $.each(service, function(index, value) {
+           window.network.removeNode(value.id);
+       });
+
         // is there a map node already selected?
         if (mapNodeClicked === false) {
             // no map node selected, so highlight this one and mark a map node as having been selected.
