@@ -637,6 +637,23 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     transition: all 0.3s ease-in-out;
 }
 
+.venue.inner-card {
+    height:190px;
+    margin-bottom:1.5em;
+    background: @brand-info;
+    border:10px solid darken(@brand-info, 5%);
+    border-radius: 10px;
+    text-align: center;
+    display:inline-flex;    // align-items: center;
+    justify-content: center;
+    flex-direction:column;
+    width:100%;
+    word-wrap: break-word;
+    cursor: pointer; cursor: hand;
+    transition: all 0.3s ease-in-out;
+}
+
+
 .inner-card.delete {
     background:@brand-danger;
     border-color:@brand-danger;
