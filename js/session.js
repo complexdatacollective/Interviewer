@@ -1,4 +1,4 @@
-/* global document, window, $, protocol, nodeRequire, note, CryptoJS */
+/* global document, window, $, protocol, nodeRequire, note */
 /* exported Session, eventLog */
 var Session = function Session() {
     'use strict';
@@ -308,6 +308,7 @@ var Session = function Session() {
             var gui = nodeRequire('nw.gui');
             var saltedKey = session.getSaltedKey();
             var text = JSON.stringify(data, undefined, 2); // indentation level = 2;
+            var CryptoJS = nodeRequire('crypto-js');
             var encrypted = CryptoJS.AES.encrypt(text, saltedKey);
             var path = nodeRequire('path');
             var fileName = Math.floor(Date.now() / 1000).toString();
