@@ -84,7 +84,7 @@ module.exports = function GeoInterface() {
   }
 
   function resetPosition() {
-    leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+    // leaflet.setView([41.798395426119534,-87.839671372338884], 11);
   }
 
 

@@ -1536,7 +1536,7 @@ module.exports = function GeoInterface() {
   }
 
   function resetPosition() {
-    leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+    // leaflet.setView([41.798395426119534,-87.839671372338884], 11);
   }
 
 
@@ -1916,6 +1916,7 @@ module.exports = function GeoInterface() {
     }
 
     function resetAllHighlights() {
+        note.debug('resetAllHighlights()');
         $('.map-node-location').html('');
         mapNodeClicked = false;
         $.each(geojson._layers, function(index,value) {
@@ -1924,7 +1925,8 @@ module.exports = function GeoInterface() {
     }
 
     function resetPosition() {
-        leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+        note.debug('resetPosition()');
+        // leaflet.setView([41.798395426119534,-87.839671372338884], 11);
     }
 
 
@@ -2085,7 +2087,7 @@ module.exports = function GeoInterface() {
   	// Public methods
 
   	geoInterface.nextPerson = function() {
-
+        note.debug('geoInterface.setLevel()');
   		if (currentPersonIndex < edges.length-1) {
   			resetAllHighlights();
 	  		currentPersonIndex++;

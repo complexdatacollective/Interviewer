@@ -58,10 +58,7 @@ module.exports = function (grunt) {
         bower_concat: {
             all: {
                 dest: '<%= config.app %>/js/_bower.js',
-                cssDest: '<%= config.app %>/css/_bower.css',
-                mainFiles: {
-                    'cryptojslib': 'rollups/aes.js'
-                }
+                cssDest: '<%= config.app %>/css/_bower.css'
                 // exclude: ['components-font-awesome','lato', 'moment']
             }
         },
