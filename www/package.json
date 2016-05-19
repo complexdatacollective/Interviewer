@@ -21,7 +21,7 @@
     "xmlhttprequest": "^1.7.0"
   },
   "devDependencies": {},
-  "main": "index.html",
+  "main": "app://netCanvas/index.html",
   "scripts": {
     "start": "nodewebkit"
   },
