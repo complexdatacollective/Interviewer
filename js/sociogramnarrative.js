@@ -45,9 +45,9 @@ module.exports = function sociogramNarrative() {
 		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 	    panels: ['details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
-			defaultNodeSize: 27,
+			defaultNodeSize: 33,
 			defaultNodeColor: 'white',
-			defaultNodeStrokeWidth: 7,
+			defaultNodeStrokeWidth: 4,
 			defaultLabelColor: 'black',
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',

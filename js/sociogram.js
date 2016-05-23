@@ -44,9 +44,9 @@ module.exports = function Sociogram() {
 		modes:['Position'], //edge - create edges, position - lay out, select - node attributes
 		panels: ['details'], // Mode - switch between modes, Details - long press shows node details
 		options: {
-			defaultNodeSize: 27,
+			defaultNodeSize: 33,
 			defaultNodeColor: 'white',
-			defaultNodeStrokeWidth: 7,
+			defaultNodeStrokeWidth: 4,
 			defaultLabelColor: 'black',
 			defaultEdgeColor: colors.edge,
 			concentricCircleColor: '#ffffff',
@@ -136,7 +136,7 @@ module.exports = function Sociogram() {
 			$('.sociogram-title').append('<div class="swiper-container"><div class="swiper-wrapper"></div><div class="swiper-pagination"></div></div>');
 
 			for (var i = 0; i < settings.prompts.length; i++) {
-				$('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[i].prompt+'</h4></div>');
+				$('.swiper-wrapper').append('<div class="swiper-slide"><h5>'+settings.prompts[i].prompt+'</h5></div>');
 			}
 
 			promptSwiper = new Swiper ('.swiper-container', {

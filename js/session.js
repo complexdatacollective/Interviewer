@@ -293,56 +293,57 @@ var Session = function Session() {
         // If sucessful load the session data.
       window.dataStore.init(function() {
         session.loadSessionData(properties.sessionID);
-
-        $('html').on('dragover', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(this).addClass('dragging');
-        });
-
-        $('html').on('dragleave', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(this).removeClass('dragging');
-        });
-
-        $('html').on('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            console.log(event);
-
-            var file = event.originalEvent.dataTransfer.files[0],
-                reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    var json = JSON.parse(e.target.result);
-                    // Check for obsolete file format
-                    if (!json.network) {
-                        json.network = {};
-                    }
-                    
-                    if (json.nodes || json.edges) {
-                        note.warn('Obsolete file format detected. Updating.');
-                        if (json.nodes) {
-                            json.network.nodes = json.nodes;
-                            delete json.nodes;
-                        }
-
-                        if (json.edges) {
-                            json.network.edges = json.edges;
-                            delete json.edges;
-                        }
-
-                    }
-                    window.dataStore.insertFile(json, session.loadSessionData);
-                } catch (ex) {
-                    note.error('ex when trying to parse json = ' + ex);
-                }
-            };
-            reader.readAsText(file);
-
-            return false;
-        });
+        // Temporarily disabled as causes issues with ordbin interface. Drop event triggered
+        //
+        // $('html').on('dragover', function(event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     $(this).addClass('dragging');
+        // });
+        //
+        // $('html').on('dragleave', function(event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     $(this).removeClass('dragging');
+        // });
+        //
+        // $('html').on('drop', function(event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     console.log(event);
+        //
+        //     var file = event.originalEvent.dataTransfer.files[0],
+        //         reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         try {
+        //             var json = JSON.parse(e.target.result);
+        //             // Check for obsolete file format
+        //             if (!json.network) {
+        //                 json.network = {};
+        //             }
+        //
+        //             if (json.nodes || json.edges) {
+        //                 note.warn('Obsolete file format detected. Updating.');
+        //                 if (json.nodes) {
+        //                     json.network.nodes = json.nodes;
+        //                     delete json.nodes;
+        //                 }
+        //
+        //                 if (json.edges) {
+        //                     json.network.edges = json.edges;
+        //                     delete json.edges;
+        //                 }
+        //
+        //             }
+        //             window.dataStore.insertFile(json, session.loadSessionData);
+        //         } catch (ex) {
+        //             note.error('ex when trying to parse json = ' + ex);
+        //         }
+        //     };
+        //     reader.readAsText(file);
+        //
+        //     return false;
+        // });
 
       });
     });

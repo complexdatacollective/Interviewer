@@ -48,7 +48,7 @@ module.exports = function SociogramMissing() {
 	var settings = {
 		network: window.netCanvas.Modules.session.getPrimaryNetwork(),
 		options: {
-			defaultNodeSize: 27,
+			defaultNodeSize: 33,
 			defaultNodeColor: 'white',
 			defaultNodeStrokeWidth: 4,
 			defaultLabelColor: 'black',
@@ -131,7 +131,7 @@ module.exports = function SociogramMissing() {
 		var missingMap = sociogramMissing.generateMissingMap();
         for (var i = 0; i < settings.prompts.length; i++) {
 			if (missingMap[settings.prompts[i].variable].length > 0) {
-				$('.swiper-wrapper').append('<div class="swiper-slide"><h4>'+settings.prompts[i].prompt+'</h4></div>');
+				$('.swiper-wrapper').append('<div class="swiper-slide"><h5>'+settings.prompts[i].prompt+'</h5></div>');
 			} else {
 				note.info('Skipping prompt '+i+' because no missing nodes.');
 			}
