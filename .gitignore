@@ -8,5 +8,6 @@ npm-debug.log
 *.app
 www/protocols/*
 www/protocols/**/
+/dist/*
 !www/protocols/default
 *.pbxproj
