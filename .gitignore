@@ -3,5 +3,8 @@ npm-debug.log
 *.zip
 *.app
 dist/
+build/
+buildTmp/
+buildTmp/*
 www/protocols/*
 !www/protocols/default
