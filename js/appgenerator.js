@@ -462,7 +462,7 @@ module.exports = function AppGenerator() {
         // var index = $(this).data('index');
         var card;
 
-        card = $('<div class="card"><div class="inner-card" data-index="'+properties.to+'"><h4>'+properties.app_name_t0+'</h4></div></div>');
+        card = $('<div class="card"><div class="app inner-card" data-index="'+properties.to+'"><h4>'+properties.app_name_t0+'</h4></div></div>');
         $('.nameList').append(card);
 
     };

@@ -161,6 +161,7 @@ $(document).ready(function() {
     window.netCanvas.Modules.DateInterface = require('./dateinterface.js');
     window.netCanvas.Modules.OrdBin = require('./ordinalbin.js');
     window.netCanvas.Modules.OrdBinVenue = require('./ordinalbin_venue.js');
+    window.netCanvas.Modules.OrdBinApp = require('./ordinalbin_app.js');
     window.netCanvas.Modules.OrdBinService = require('./ordinalbin_service.js');
     window.netCanvas.Modules.IOInterface = require('./iointerface.js');
     window.netCanvas.Modules.MapPeople = require('./map_people.js');
