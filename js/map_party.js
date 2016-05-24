@@ -291,6 +291,8 @@ module.exports = function GeoInterface() {
       maxZoom: 20
     }).addTo(leaflet);
 
+            leaflet.setView([41.798395426119534,-87.839671372338884], 11);
+
     $.ajax({
       dataType: 'json',
       url: geoInterface.options.geojson,
