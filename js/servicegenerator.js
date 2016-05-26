@@ -250,7 +250,7 @@ module.exports = function ServiceGenerator() {
         serviceGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
-        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a HIV Service</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Service Provider</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // serviceGenerator.options.targetEl.append(newVenueBox);
         $('body').append(newVenueBox);
@@ -434,7 +434,7 @@ module.exports = function ServiceGenerator() {
             // Current side panel shows alters already elicited
             if (serviceGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>HIV Services you already mentioned visiting:</h4></div>'));
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Service providers you already mentioned visiting:</h4></div>'));
                 $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'HIVService', from: window.network.getEgo().id, visited: true}), function(index,value) {
                     if (!value.sg_t0) {
