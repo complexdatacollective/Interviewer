@@ -291,7 +291,7 @@ module.exports = function AppGenerator() {
         appGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
-        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a App</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newNodeBox = $('<div class="newNodeBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding an App/Website</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // appGenerator.options.targetEl.append(newNodeBox);
         $('body').append(newNodeBox);
