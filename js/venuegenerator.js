@@ -243,7 +243,7 @@ module.exports = function VenueGenerator() {
         venueGenerator.options.targetEl.append(venueCountBox);
 
         // create node box
-        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Venue</h2></div><div class="col-sm-12 fields"></div></form></div>');
+        var newVenueBox = $('<div class="newVenueBox overlay"><form role="form" id="ngForm" class="form"><div class="col-sm-12"><h2 style="margin-top:0;margin-bottom:30px;"><span class="fa fa-map-pin"></span> Adding a Place/Event</h2></div><div class="col-sm-12 fields"></div></form></div>');
 
         // venueGenerator.options.targetEl.append(newVenueBox);
         $('body').append(newVenueBox);
@@ -462,7 +462,7 @@ module.exports = function VenueGenerator() {
             // Current side panel shows alters already elicited
             if (venueGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Places/Events you already named:</h4></div>'));
                 $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
 
