@@ -16,7 +16,7 @@ module.exports = function VenueInterface() {
         network: window.network || new window.netcanvas.Module.Network(),
         points: window.protocolPath+'data/hiv-services.csv',
         geojson: window.protocolPath+'data/census2010.json',
-        prompt: 'These are the service providers within 1 mile of where you live. Please tap on all of the ones you\'ve used in the last 6 months.',
+        prompt: 'These are the sexual health service providers within 1 mile of where you live. Please tap on all of the ones you\'ve used in the last 6 months.',
         dataDestination: {
             node: {
                 type_t0: 'Venue',
@@ -228,7 +228,7 @@ module.exports = function VenueInterface() {
 
             if (window.network.getNodes(nodeProperties).length === 0) {
               serviceNodeID = window.network.addNode(nodeProperties);
-              note.debug('created HIVSservice node for '+nodeProperties.name);
+              note.debug('created HIVService node for '+nodeProperties.name);
             } else {
               serviceNodeID = window.network.getNodes(nodeProperties)[0].id;
             }
@@ -258,7 +258,7 @@ module.exports = function VenueInterface() {
 
           // if we didnt pick up any nodes, skip this stage
           if (nodeCount < 1) {
-              console.log('No HIV service providers close to ego. Skipping stage.');
+              console.log('No service providers close to ego. Skipping stage.');
               window.netCanvas.Modules.session.nextStage();
           }
 
