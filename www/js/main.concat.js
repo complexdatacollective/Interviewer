@@ -344,12 +344,13 @@ module.exports = function AppGenerator() {
 
                 $('#app_name_t0').autocomplete({
                     source: [
-                      'Adam4Adam',
+                      'Adam4Adam (A4A)',
                       'Backpage',
-                      'BarebackRT',
-                      'BGCLive',
+                      'BarebackRT (BBRT)',
+                      'BGCLive (Black Gay Chat)',
                       'Craigslist',
                       'Facebook',
+                      'Fetlife',
                       'Grindr',
                       'Growlr',
                       'Hornet',
@@ -360,11 +361,11 @@ module.exports = function AppGenerator() {
                       'Manhunt.net',
                       'MeetMe',
                       'MiuMeet',
-                      'Myspace',
-                      'OkCupid',
+                      'MySpace',
+                      'OkCupid (OkC)',
                       'Omegle',
                       'PHHHOTO',
-                      'PlentyOfFish',
+                      'PlentyOfFish (POF)',
                       'Recon',
                       'Scruff',
                       'Skout',
@@ -386,6 +387,21 @@ module.exports = function AppGenerator() {
                       'Peach',
                       'Pounced',
                       'Surge',
+                      'Blendr',
+                      'Tingle',
+                      'Pure',
+                      'Down',
+                      '3ndr',
+                      'Coffee Meets Bagel (CMB)',
+                      'Whiplr',
+                      'Her',
+                      'Happn',
+                      'BoyAhoy',
+                      'Zoosk',
+                      'BeNaughty',
+                      'Match.com',
+                      'GuySpy',
+                      'Daddyhunt',
                       'SoulSwipe'
                     ]
                 });
@@ -1108,10 +1124,10 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-      
+
         var properties = {};
         var nodeid = $(this).data('nodeid');
-      
+
 
         if ($(this).data('selected') === true) {
             $(this).data('selected', false);
@@ -1166,7 +1182,7 @@ module.exports = function ListSelect() {
         });
 
         $.each(edges, function(index,value) {
-            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.id+'"><h3>'+value.venue_name_t0+'</h3></div></div>');
+            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.id+'"><h4>'+value.venue_name_t0+'</h4></div></div>');
 
             if (value[listSelect.options.variable] === 1) {
                 el.find('.inner').data('selected', true);
@@ -2252,7 +2268,7 @@ module.exports = function VenueInterface() {
         network: window.network || new window.netcanvas.Module.Network(),
         points: window.protocolPath+'data/hiv-services.csv',
         geojson: window.protocolPath+'data/census2010.json',
-        prompt: 'These are the service providers within 1 mile of where you live. Please tap on all of the ones you\'ve used in the last 6 months.',
+        prompt: 'These are the sexual health service providers within 1 mile of where you live. Please tap on all of the ones you\'ve used in the last 6 months.',
         dataDestination: {
             node: {
                 type_t0: 'Venue',
@@ -2464,7 +2480,7 @@ module.exports = function VenueInterface() {
 
             if (window.network.getNodes(nodeProperties).length === 0) {
               serviceNodeID = window.network.addNode(nodeProperties);
-              note.debug('created HIVSservice node for '+nodeProperties.name);
+              note.debug('created HIVService node for '+nodeProperties.name);
             } else {
               serviceNodeID = window.network.getNodes(nodeProperties)[0].id;
             }
@@ -2494,7 +2510,7 @@ module.exports = function VenueInterface() {
 
           // if we didnt pick up any nodes, skip this stage
           if (nodeCount < 1) {
-              console.log('No HIV service providers close to ego. Skipping stage.');
+              console.log('No service providers close to ego. Skipping stage.');
               window.netCanvas.Modules.session.nextStage();
           }
 
@@ -7275,7 +7291,7 @@ module.exports = function ServiceGenerator() {
             // Current side panel shows alters already elicited
             if (serviceGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>HIV Services you already mentioned visiting:</h4></div>'));
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Service providers you already mentioned visiting:</h4></div>'));
                 $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'HIVService', from: window.network.getEgo().id, visited: true}), function(index,value) {
                     if (!value.sg_t0) {
@@ -9225,47 +9241,61 @@ module.exports = function VenueGenerator() {
 
                 $('#venue_name_t0').autocomplete({
                     source: [
-                      'After School Matters',
+                      '9705 Club',
+                      'After School Matters (ASM)',
                       'Atmosphere',
+                      '@tmosphere',
+                      'Baby Atlas',
                       'Bar Louie',
                       'Baton Show Lounge',
+                      'Beauty Bar',
                       'Berlin Nightclub',
                       'Big Chicks',
-                      'Bijou Theatre',
                       'Bobby Love\'s',
-                      'Bonsai Bar & Lounge',
-                      'Broadway Youth Center',
-                      'Center on Halsted',
+                      'Brando\'s Speakeasy',
+                      'Broadway Youth Center (BYC)',
+                      'Center on Halsted (COH)',
                       'Charlie\'s Chicago',
                       'Chicago GSA Prom',
                       'Chicago Pride Fest',
                       'Chicago Pride Parade',
                       'Chicago Queer Prom',
-                      'Circuit Night Club',
                       'Club Escape',
+                      'Xscape',
                       'Club Krave',
+                      'Club Nu',
                       'CORE Center',
-                      'Crew Bar & Grill ',
+                      'Crew Bar & Grill',
+                      'Cuvee',
                       'D.S. Tequila Company',
+                      'DS Tequila Company',
+                      'Danny\'s Tavern',
                       'Davenport\'s Piano Bar Cabaret',
-                      'Detention Night Club ',
-                      'Dolphin Nightclub',
-                      'Downtown Bar and Lounge',
+                      'Debonair Social Club',
+                      'Detention Night Club',
+                      'Drop',
+                      'El Morro Lounge',
                       'E.M. Lounge',
+                      'EM Lounge',
                       'El Rescate',
                       'Elixir Lounge (Andersonville)',
                       'Elixir Lounge (Lakeview)',
                       'Emporium Arcade Bar (Wicker Park)',
                       'Emporium Arcade Bar (Logan Square)',
+                      'Empty Bottle',
                       'Estelle\'s',
+                      'evilOlive',
                       'Farraguts on Clark',
+                      'FKA (Formerly Known As)',
                       'Gallery 37',
-                      'Galleria Domain 2',
+                      'Galleria Domain 2 (GD2)',
                       'Granville Anvil',
-                      'Halsted\'s Bar and Grill',
+                      'Green Mill Cocktail Lounge',
+                      'Hangge-Uppe',
                       'Headquarters Beercade (Lakeview)',
                       'Headquarters Beercade (River North)',
-                      'Hydrate ',
+                      'Hollywood Beach',
+                      'Hydrate',
                       'Innexile',
                       'Jackhammer',
                       'Jeffery Pub',
@@ -9273,8 +9303,9 @@ module.exports = function VenueGenerator() {
                       'King Spa Sauna',
                       'Kit Kat Lounge & Supper Club',
                       'La Cueva',
+                      'Late Bar',
                       'Little Jim\'s Tavern',
-                      'M7 Lounge',
+                      'M7 Lounge (Rehab)',
                       'Manhandler Saloon',
                       'Manhole',
                       'Man\'s Country Chicago',
@@ -9282,12 +9313,19 @@ module.exports = function VenueGenerator() {
                       'Maria\'s Packaged Goods & Community Bar',
                       'Marty\'s Martini Bar',
                       'Mary\'s Attic',
+                      'Matilda',
+                      'Max Bar & Bamboo Lounge',
                       'Minibar Ultra Lounge & Café',
+                      'Nacional 27',
                       'Northalsted Market Days',
-                      'PartylineChicago',
-                      'Progress Bar ',
-                      'Puerto Rican Cultural Center',
-                      'Punch House ',
+                      'Paradise Sauna',
+                      'Parliament',
+                      'Phoenix Bar & Nightclub',
+                      'Primary Night Club',
+                      'Progress Bar',
+                      'Public House',
+                      'Puerto Rican Cultural Center (PRCC)',
+                      'Punch House',
                       'R Public House',
                       'Red Diamonds Strip Club',
                       'Replay Beer & Bourbon (Lakeview)',
@@ -9297,42 +9335,42 @@ module.exports = function VenueGenerator() {
                       'Scarlet Bar',
                       'Scot\'s',
                       'Second Story Bar',
-                      'SEVEN Nightclub & Lounge',
+                      'SEVEN Nightclub & Lounge (VII)',
                       'Sidetrack',
                       'Simone\'s Bar',
                       'Smart Bar',
                       'Sound-Bar',
-                      'Spin Nightclub',
+                      'Spy Bar',
                       'Spyners Pub',
                       'Steamworks Chicago',
+                      'Stereo Nightclub',
+                      'Studio Paris',
                       'Taverna 750',
+                      'Te\'Jay\'s Adult Books (TJ\'s)',
+                      'The Aviary',
                       'The Call',
-                      'The Cell Block ',
+                      'The Cell Block',
                       'The Closet',
                       'The Crib',
                       'The Den Cocktail Bar',
-                      'The Dragon Lady Lounge ',
-                      'The Generator ',
+                      'The Dragon Lady Lounge',
+                      'The Generator',
                       'The Glenwood',
                       'The Holiday Club',
                       'The Lucky Horseshoe Lounge',
+                      'The Mid',
                       'The North End',
-                      'Phoenix Bar & Nightclub',
-                      'The Shrine',
                       'The SoFo Tap',
-                      'Te\'Jay\'s Adult Books',
+                      'The Tavern (Wicker Park)',
+                      'The Underground',
                       'Touche',
                       'Town Hall Pub',
-                      'University of Chicago Pub',
-                      'Vertigo Sky Lounge ',
+                      'Underground Wonder Bar',
+                      'Vertigo Sky Lounge',
                       'Vida/SIDA',
-                      'Volkan Nightclub',
+                      'El Volkan Nightclub',
                       'Wang\'s',
-                      'Wicker Park Tavern',
-                      'Youth Empowerment Performance Project',
-                      'FKA',
-                      'Paradise Sauna',
-                      'Hollywood Beach',
+                      'Youth Empowerment Performance Project (YEPP)'
                     ]
                 });
 
@@ -9391,7 +9429,7 @@ module.exports = function VenueGenerator() {
             // Current side panel shows alters already elicited
             if (venueGenerator.options.panels.indexOf('current') !== -1) {
                 // add custom node list
-                sideContainer.append($('<div class="current-node-list node-lists"><h4>Venues you already named:</h4></div>'));
+                sideContainer.append($('<div class="current-node-list node-lists"><h4>Places/Events you already named:</h4></div>'));
                 $('.nameList').addClass('alt');
                 $.each(window.network.getEdges({type: 'Venue', from: window.network.getEgo().id}), function(index,value) {
 

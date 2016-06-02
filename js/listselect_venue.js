@@ -9,10 +9,10 @@ module.exports = function ListSelect() {
     };
 
     var itemClickHandler = function() {
-      
+
         var properties = {};
         var nodeid = $(this).data('nodeid');
-      
+
 
         if ($(this).data('selected') === true) {
             $(this).data('selected', false);
@@ -67,7 +67,7 @@ module.exports = function ListSelect() {
         });
 
         $.each(edges, function(index,value) {
-            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.id+'"><h3>'+value.venue_name_t0+'</h3></div></div>');
+            var el = $('<div class="item"><div class="inner" data-nodeid="'+value.id+'"><h4>'+value.venue_name_t0+'</h4></div></div>');
 
             if (value[listSelect.options.variable] === 1) {
                 el.find('.inner').data('selected', true);
