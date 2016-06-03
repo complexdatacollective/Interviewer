@@ -9,10 +9,17 @@ var combineSourceMap = require('combine-source-map');
 
 function getRelativeRequirePath(fullPath, fromPath) {
   var relpath = path.relative(path.dirname(fromPath), fullPath);
-  if (relpath[0] !== "." && relpath[0] !== "/") {
+  // If fullPath is in the same directory as fromPath, relpath will
+  // result in something like "index.js". require() needs "./" prepended
+  // to these paths.
+  if (path.dirname(relpath) === '.') {
     relpath = "./" + relpath;
   }
-  return relpath.replace(/\\/g, '/');
+  // On Windows: Convert path separators to what require() expects
+  if (path.sep === '\\') {
+    relpath = relpath.replace(/\\/g, '/');
+  }
+  return relpath;
 }
 
 var defaultVars = {

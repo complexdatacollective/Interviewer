@@ -2,7 +2,7 @@
  * grunt-contrib-less
  * http://gruntjs.com/
  *
- * Copyright (c) 2015 Tyler Kellen, contributors
+ * Copyright (c) 2016 Tyler Kellen, contributors
  * Licensed under the MIT license.
  */
 
@@ -168,7 +168,7 @@ module.exports = function(grunt) {
   };
 
   var parseVariableOptions = function(options) {
-    var pairs = _.pairs(options);
+    var pairs = _.toPairs(options);
     var output = '';
     pairs.forEach(function(pair) {
       output += '@' + pair[0] + ':' + pair[1] + ';';

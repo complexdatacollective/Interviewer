@@ -15,7 +15,11 @@ var EXTEND = require('whet.extend');
 module.exports = function(config) {
 
     var defaults;
-    config = config || {};
+    config = typeof config == 'object' && config || {};
+
+    if (config.plugins && !Array.isArray(config.plugins)) {
+        return { error: 'Error: Invalid plugins list. Provided \'plugins\' in config should be an array.' };
+    }
 
     if (config.full) {
         defaults = config;

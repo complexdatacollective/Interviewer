@@ -51,7 +51,7 @@
   "directories": {},
   "dist": {
     "shasum": "6219a85616520491f35788bdbf1447a99c7e6b0e",
-    "tarball": "http://registry.npmjs.org/strip-bom/-/strip-bom-2.0.0.tgz"
+    "tarball": "https://registry.npmjs.org/strip-bom/-/strip-bom-2.0.0.tgz"
   },
   "engines": {
     "node": ">=0.10.0"

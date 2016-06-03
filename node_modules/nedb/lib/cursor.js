@@ -11,7 +11,7 @@ var model = require('./model')
  * Create a new cursor for this collection
  * @param {Datastore} db - The datastore this cursor is bound to
  * @param {Query} query - The query this cursor will operate on
- * @param {Function} execDn - Handler to be executed after cursor has found the results and before the callback passed to find/findOne/update/remove
+ * @param {Function} execFn - Handler to be executed after cursor has found the results and before the callback passed to find/findOne/update/remove
  */
 function Cursor (db, query, execFn) {
   this.db = db;
@@ -83,7 +83,19 @@ Cursor.prototype.project = function (candidates) {
 
   // Do the actual projection
   candidates.forEach(function (candidate) {
-    var toPush = action === 1 ? _.pick(candidate, keys) : _.omit(candidate, keys);
+    var toPush;
+    if (action === 1) {   // pick-type projection
+      toPush = { $set: {} };
+      keys.forEach(function (k) {
+        toPush.$set[k] = model.getDotValue(candidate, k);
+        if (toPush.$set[k] === undefined) { delete toPush.$set[k]; }
+      });
+      toPush = model.modify({}, toPush);
+    } else {   // omit-type projection
+      toPush = { $unset: {} };
+      keys.forEach(function (k) { toPush.$unset[k] = true });
+      toPush = model.modify(candidate, toPush);
+    }
     if (keepId) {
       toPush._id = candidate._id;
     } else {
