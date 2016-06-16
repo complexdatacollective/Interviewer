@@ -139,9 +139,9 @@ module.exports = function MultiBinVenue() {
 			$(this).css({'top':0, 'left' :0});
 			$(this).appendTo('.node-bucket');
 			$(this).css('display', '');
-			var noun = 'people';
+			var noun = 'places';
 			if ($('.c'+id).children('.active-node-list').children().length === 1) {
-				noun = 'person';
+				noun = 'place';
 			}
 			if ($('.c'+id).children('.active-node-list').children().length === 0) {
 				$('.c'+id).children('p').html('(Empty)');
@@ -348,9 +348,9 @@ module.exports = function MultiBinVenue() {
 				var edgeID = window.network.getEdges({from:window.network.getNodes({type_t0:'Ego'})[0].id,to:$(dropped).data('node-id'), type:multiBinVenue.options.edgeType})[0].id;
 				window.network.updateEdge(edgeID,properties);
 
-				var noun = 'people';
+				var noun = 'places';
 				if ($('.c'+index+' .active-node-list').children().length === 1) {
-					noun = 'person';
+					noun = 'place';
 				}
 				$('.c'+index+' p').html($('.c'+index+' .active-node-list').children().length+' '+noun+'.');
 
@@ -399,9 +399,9 @@ module.exports = function MultiBinVenue() {
 		if (value[multiBinVenue.options.variable.label] !== undefined && value[multiBinVenue.options.variable.label] !== '') {
 			index = multiBinVenue.options.variable.values.indexOf(value[multiBinVenue.options.variable.label]);
 			$('.c'+index).children('.active-node-list').append('<div class="node-bucket-item draggable" data-node-id="'+value.to+'">'+dyadEdge.venue_name_t0+'</div>');
-			var noun = 'people';
+			var noun = 'places';
 			if ($('.c'+index).children('.active-node-list').children().length === 1) {
-				noun = 'person';
+				noun = 'place';
 			}
 			if ($('.c'+index).children('.active-node-list').children().length === 0) {
 				$('.c'+index).children('p').html('(Empty)');
