@@ -266,7 +266,7 @@ module.exports = function SociogramMissing() {
 		* Updates visible attributes based on current prompt
 		*/
 
-		var selectNodes = netCanvas.Modules.session.getPrimaryNetwork().getNodes({}, function (results) {
+		var selectNodes = window.netCanvas.Modules.session.getPrimaryNetwork().getNodes({}, function (results) {
             var filteredResults = [];
             $.each(results, function(index,value) {
                 if (value.type !== 'Ego') {
