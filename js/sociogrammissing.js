@@ -229,6 +229,7 @@ module.exports = function SociogramMissing() {
 		$.each(kineticNodes, function(nodeIndex, nodeValue) {
 			nodeValue.children[1].stroke(settings.options.defaultNodeColor);
 			nodeValue.children[1].opacity(1);
+			nodeValue.children[2].opacity(1);
 		});
 
 		nodeLayer.batchDraw();
@@ -285,7 +286,8 @@ module.exports = function SociogramMissing() {
 			}
 
 			if (sociogramMissing.nodeAlreadyAsked(node.id)) {
-				currentNode.children[1].opacity(0.2);
+				currentNode.children[1].opacity(0);
+				currentNode.children[2].opacity(0);
 			}
 		});
 

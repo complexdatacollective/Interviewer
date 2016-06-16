@@ -81,7 +81,7 @@ module.exports = function FormBuilder(formName) {
 
     setTimeout(function() {
       $('#'+$(html).attr('id')+' :input:visible:enabled:first').focus();
-    }, 800);
+    }, 500);
 
   };
 
@@ -92,12 +92,12 @@ module.exports = function FormBuilder(formName) {
     setTimeout(function() {
       $(thisForm).trigger('reset');
       formBuilder.removeTemporaryFields();
-    }, 500);
+    }, 250);
 
     setTimeout(function() {
       $('.black-overlay').removeClass('show');
       targetEl.css('display','none');
-    }, 800);
+    }, 300);
 
 
 
@@ -403,7 +403,7 @@ module.exports = function FormBuilder(formName) {
       note.trace('...exists');
       return true;
     } else if ($('#'+thisForm.id).find('[data-component="'+id+'"]').length > 0) {
-      note.trac('...exists as a checkbox.');
+      note.trace('...exists as a checkbox.');
       return true;
     } else {
       note.trace('...not found');

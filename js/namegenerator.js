@@ -223,7 +223,7 @@ module.exports = function NameGenerator() {
             setTimeout(function() {
                 $('.card, .node-list-item').remove();
                 nameGenerator.addData();
-            }, 1000);
+            }, 500);
     };
 
     nameGenerator.getNodes = function(criteria) {
@@ -512,6 +512,7 @@ module.exports = function NameGenerator() {
         card.children('.inner-card').find('h4').html(properties.label);
 
         var list = card.children('.inner-card').find('ul');
+        list.empty();
         list.append('<li>'+properties.name+'</li>');
 
         if (callback) {

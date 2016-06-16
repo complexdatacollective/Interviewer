@@ -38,7 +38,7 @@
 .circle-responsive {
     float:left;
     transform: scale(1);
-    transition: width 0.2s ease, transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+    transition: width 0.2s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
     border: 13px outset @brand-primary;
     border-radius: 50%;
     width:15vmin;
@@ -315,7 +315,7 @@
 .contexthull-bin-footer {
     height:15vh;
     line-height:19vh;
-    transition: all 1s ease;
+    transition: all 1s ease-in-out;
     transform: translateY(15vh);
     position:absolute;
     bottom:0;
@@ -323,7 +323,7 @@
 }
 
 .contexthull-bin {
-    transition: all 0.5s ease;
+    transition: all 0.5s ease-in-out;
     // padding:40px;
 }
 
@@ -348,13 +348,14 @@
 }
 
 .new-context-form {
-    width:40vmin;
+    width:55vmin;
+    text-align: center;
     padding: @padding-base-horizontal;
     border-radius: @border-radius-base;
     background: @modal-base;
     color: @modal-text;
-    transition: all 0.5s ease;
-    transform: translateY(100vh);
+    transition: all 0.25s ease-in-out;
+    transform: translateY(70vh);
     z-index:99;
     display:none;
 }
@@ -370,7 +371,7 @@
     border-radius: @border-radius-base;
     background: @modal-base;
     color: @modal-text;
-    transition: all 0.5s ease;
+    transition: all 0.25s ease-in-out;
     transform: translateY(100vh);
     z-index:99;
     display:none;

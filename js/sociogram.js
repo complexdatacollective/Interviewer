@@ -955,7 +955,7 @@ module.exports = function Sociogram() {
 			window.wedge.setAbsolutePosition(this.getAbsolutePosition());
 
 			window.wedge.anim = new Konva.Animation(function(frame) {
-				var duration = 350;
+				var duration = 750;
 				if (frame.time >= duration) { // point of selection
 					window.wedge.setAngle(360);
 					currentNode.fire('longPress');
@@ -970,7 +970,7 @@ module.exports = function Sociogram() {
 			longPressTimer = setTimeout(function() {
 				touchNotTap = true;
 				window.wedge.anim.start();
-			}, 350);
+			}, 500);
 
 		});
 
