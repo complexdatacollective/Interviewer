@@ -441,11 +441,15 @@ var Session = function Session() {
         // Transition the content
         var newStage = stage;
         var stagePath ='./protocols/'+window.netCanvas.studyProtocol+'/stages/'+session.stages[stage].page;
-        content.transition({opacity: '0'},400,'easeInSine').promise().done( function(){
-            content.load( stagePath, function() {
-                content.transition({ opacity: '1'},400,'easeInSine');
+        content.addClass('stageHidden');
+        setTimeout(function(){
+            content.load(stagePath, function() {
+                setTimeout(function() {
+                    content.removeClass('stageHidden');
+                }, 200);
+
             });
-        });
+        }, 200);
 
         var oldStage = currentStage;
         currentStage = newStage;

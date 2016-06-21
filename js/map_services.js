@@ -48,6 +48,7 @@ module.exports = function VenueInterface() {
     };
 
   	venueInterface.init = function(options) {
+        $('#content').addClass('stageHidden');
         window.tools.extend(venueInterface.options, options);
 
         window.L.Icon.Default.imagePath = 'img/';
@@ -171,6 +172,8 @@ module.exports = function VenueInterface() {
       var serviceEdge = window.network.getEdges(properties)[0];
 
       serviceEdge.visited = !serviceEdge.visited;
+
+      // Incase the participant goes back to this screen and changes the value after answering questions on the following screen.
       serviceEdge.reason_not_visited = undefined;
       serviceEdge.provider_awareness = undefined;
 
@@ -261,6 +264,9 @@ module.exports = function VenueInterface() {
           if (nodeCount < 1) {
               console.log('No service providers close to ego. Skipping stage.');
               window.netCanvas.Modules.session.nextStage();
+          } else {
+              // else, show the map
+             $('#content').removeClass('stageHidden');
           }
 
         });
