@@ -74,6 +74,7 @@ var Session = function Session() {
             session.updateSessionData({sessionParameters:study.sessionParameters});
             // copy the stages
             session.stages = study.stages;
+            session.protocolData = study.data;
 
             // insert the stylesheet
             $('head').append('<link rel="stylesheet" href="protocols/'+window.netCanvas.studyProtocol+'/css/style.css" type="text/css" />');

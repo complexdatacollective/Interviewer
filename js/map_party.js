@@ -306,10 +306,13 @@ module.exports = function GeoInterface() {
 
         // Load initial node
         edges = geoInterface.options.network.getEdges(geoInterface.options.criteria, function (results) {
-          // Only show house parties or somewhere else
+          // Previously only showedhouse parties or somewhere else
+          // Now, any venue that doesnt exactly match one of the autocomplete venues.
+
+
             var filteredResults = [];
             $.each(results, function(index,value) {
-                if (value.venue_type_t0 === 'House Party' || value.venue_type_t0 === 'Somewhere Else') {
+                if (value.venue_type_t0 === 'House Party' || value.venue_type_t0 === 'Somewhere Else' || window.netCanvas.Modules.session.protocolData.autocompleteVenues.indexOf(value.venue_name_t0) === -1) {
                     filteredResults.push(value);
                 }
             });
