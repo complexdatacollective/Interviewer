@@ -143,8 +143,9 @@ module.exports = function VenueInterface() {
   	};
 
     venueInterface.selectMarker = function(name) {
+        $('.leaflet-popup').removeClass('top');
         var feature = $('body').find('[data-feature="' + name + '"]');
-        $(feature).parent().parent().parent().toggleClass('selected');
+        $(feature).parent().parent().parent().toggleClass('selected top');
     };
 
     venueInterface.clickPopup = function(e,clicked) {
@@ -197,6 +198,7 @@ module.exports = function VenueInterface() {
                 var popup = window.L.popup({closeButton:false}).setContent('<div class="service-popup" data-feature="'+e.layer.feature.properties['Abbreviated Name']+'">'+e.layer.feature.properties['Abbreviated Name']+'</div>');
                 e.layer.bindPopup(popup).openPopup();
                 e.layer.on('click', function(event) {
+                    console.log(e.layer);
                   venueInterface.clickPopup(event, e.layer.feature.properties['Abbreviated Name']);
                 });
             }

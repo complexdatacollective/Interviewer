@@ -112,9 +112,12 @@ module.exports = function GeoInterface() {
         var properties, targetID;
 
         // remove HIV service nodes if present.
-       var service =window.network.getNodes({type_t0: 'HIVService'});
+       var service = window.network.getNodes({type_t0: 'HIVService'});
+       console.log('HIVService nodes');
+       console.log(service);
 
        $.each(service, function(index, value) {
+           console.log('removing');
            window.network.removeNode(value.id);
        });
 
@@ -244,8 +247,6 @@ module.exports = function GeoInterface() {
         geoInterface.destroy();
     };
 
-  	// Public methods
-
   	geoInterface.nextPerson = function() {
         note.debug('geoInterface.setLevel()');
   		if (currentPersonIndex < edges.length-1) {
@@ -326,9 +327,6 @@ module.exports = function GeoInterface() {
                 if (edges.length > 0) {
                     $('.map-node-status').html(safePrompt());
                 }
-
-
-
 
             	// Highlight initial value, if set
             	highlightCurrent();

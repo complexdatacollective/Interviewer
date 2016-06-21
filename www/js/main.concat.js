@@ -1974,9 +1974,12 @@ module.exports = function GeoInterface() {
         var properties, targetID;
 
         // remove HIV service nodes if present.
-       var service =window.network.getNodes({type_t0: 'HIVService'});
+       var service = window.network.getNodes({type_t0: 'HIVService'});
+       console.log('HIVService nodes');
+       console.log(service);
 
        $.each(service, function(index, value) {
+           console.log('removing');
            window.network.removeNode(value.id);
        });
 
@@ -2106,8 +2109,6 @@ module.exports = function GeoInterface() {
         geoInterface.destroy();
     };
 
-  	// Public methods
-
   	geoInterface.nextPerson = function() {
         note.debug('geoInterface.setLevel()');
   		if (currentPersonIndex < edges.length-1) {
@@ -2188,9 +2189,6 @@ module.exports = function GeoInterface() {
                 if (edges.length > 0) {
                     $('.map-node-status').html(safePrompt());
                 }
-
-
-
 
             	// Highlight initial value, if set
             	highlightCurrent();
@@ -2398,8 +2396,9 @@ module.exports = function VenueInterface() {
   	};
 
     venueInterface.selectMarker = function(name) {
+        $('.leaflet-popup').removeClass('top');
         var feature = $('body').find('[data-feature="' + name + '"]');
-        $(feature).parent().parent().parent().toggleClass('selected');
+        $(feature).parent().parent().parent().toggleClass('selected top');
     };
 
     venueInterface.clickPopup = function(e,clicked) {
@@ -2452,6 +2451,7 @@ module.exports = function VenueInterface() {
                 var popup = window.L.popup({closeButton:false}).setContent('<div class="service-popup" data-feature="'+e.layer.feature.properties['Abbreviated Name']+'">'+e.layer.feature.properties['Abbreviated Name']+'</div>');
                 e.layer.bindPopup(popup).openPopup();
                 e.layer.on('click', function(event) {
+                    console.log(e.layer);
                   venueInterface.clickPopup(event, e.layer.feature.properties['Abbreviated Name']);
                 });
             }
