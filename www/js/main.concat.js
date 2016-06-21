@@ -1973,15 +1973,16 @@ module.exports = function GeoInterface() {
         var layer = e.target;
         var properties, targetID;
 
-        // remove HIV service nodes if present.
-       var service = window.network.getNodes({type_t0: 'HIVService'});
-       console.log('HIVService nodes');
-       console.log(service);
+        // remove HIV service nodes  and edges if present.
+       var serviceNodes = window.network.getNodes({type_t0: 'HIVService'});
 
-       $.each(service, function(index, value) {
+       $.each(serviceNodes, function(index, value) {
            console.log('removing');
            window.network.removeNode(value.id);
        });
+
+       var serviceEdges = window.network.getEdges({type: 'HIVService'});
+       window.network.removeEdges(serviceEdges);
 
         // is there a map node already selected?
         if (mapNodeClicked === false) {
@@ -2090,6 +2091,17 @@ module.exports = function GeoInterface() {
     }
 
     geoInterface.setOtherOption = function() {
+        // remove HIV service nodes  and edges if present.
+       var serviceNodes = window.network.getNodes({type_t0: 'HIVService'});
+
+       $.each(serviceNodes, function(index, value) {
+           console.log('removing');
+           window.network.removeNode(value.id);
+       });
+
+       var serviceEdges = window.network.getEdges({type: 'HIVService'});
+       window.network.removeEdges(serviceEdges);
+       
         var option = $(this).data('value');
         resetAllHighlights();
         var properties = {}, targetID;
