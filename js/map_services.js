@@ -171,7 +171,8 @@ module.exports = function VenueInterface() {
       var serviceEdge = window.network.getEdges(properties)[0];
 
       serviceEdge.visited = !serviceEdge.visited;
-
+      serviceEdge.reason_not_visited = undefined;
+      serviceEdge.provider_awareness = undefined;
 
       var id = serviceEdge.id;
 
