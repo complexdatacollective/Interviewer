@@ -1,0 +1,42 @@
+{
+  "name": "list.js",
+  "version": "1.2.0",
+  "description": "The perfect library for adding search, sort, filters and flexibility to tables, lists and various HTML elements. Built to be invisible and work on existing HTML",
+  "keywords": [
+    "list",
+    "search",
+    "sort",
+    "table",
+    "dom",
+    "html",
+    "ui"
+  ],
+  "author": "Jonny Strömberg <jonny.stromberg@gmail.com>",
+  "repository": "git://github.com/javve/list.js.git",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "expect.js": "^0.3.1",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.12.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha": "^0.4.15",
+    "grunt-shell": "^1.1.2",
+    "jquery": "^1.12.0"
+  },
+  "main": "index",
+  "engines": {
+    "node": ">= 0.10.21"
+  },
+  "npmName": "list.js",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
+}

@@ -2556,7 +2556,7 @@ module.exports = function VenueInterface() {
 
   	return venueInterface;
 };
-;/* global $, window, note */
+;/* global $, window, note, List */
 /* exported Menu */
 var Menu = function Menu(options) {
     'use strict';
@@ -2648,7 +2648,7 @@ var Menu = function Menu(options) {
         $(newMenu.button).addClass('shown');
 
         var menuClass = name+'-menu';
-        newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content"><h2>'+name+'</h2><ul></ul></div></div>');
+        newMenu.menu = $('<div class="menu '+menuClass+'"><div class="menu-content content-'+name+'" id="'+name+'"><h2>'+name+'</h2> <div class="input-group margin-bottom-sm"><span class="input-group-addon"><i class="fa fa-search"></i></span><input class="form-control menu-filter search" type="text" placeholder="Filter"></div><ul class="list"><li><span class="name">Template</span></li></ul></div></div>');
         newMenu.closeBtn = $('<span class="icon icon-close"><i class="fa fa-times fa-2x"></i></span>');
         $(newMenu.menu).append(newMenu.closeBtn);
         $('.menu-container').append(newMenu.menu);
@@ -2663,6 +2663,12 @@ var Menu = function Menu(options) {
             menu.toggle(newMenu);
         });
 
+        var options = {
+            valueNames: ['name']
+        };
+
+        newMenu.filterMenu = new List(name, options);
+
         menus.push(newMenu);
 
         return newMenu;
@@ -2675,12 +2681,17 @@ var Menu = function Menu(options) {
     };
 
     menu.addItem = function(targetMenu,item,icon,callback) {
+        console.log('adding '+item);
         var listIcon = 'fa-file-text';
         if (icon) {
             listIcon = icon;
         }
-        var menuItem = $('<li><span class="fa '+listIcon+' menu-icon"></span> '+item+'</li>');
+        var menuItem = $('<li><span class="fa '+listIcon+' menu-icon"></span> <span class="name">'+item+'</span></li>');
         targetMenu.menu.find('ul').append(menuItem);
+        console.log(targetMenu.filterMenu);
+        var filterItem = { name: item};
+        console.log(filterItem);
+        targetMenu.filterMenu.add( filterItem );
         menuItem.on('click', function() {
             menu.closeMenu(targetMenu);
             setTimeout(function() {
