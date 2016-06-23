@@ -301,6 +301,7 @@ module.exports = function MultiBin() {
 			$('.node-bin-container').append(newBin);
 			$('.c'+index).droppable({ accept: '.draggable',
 			drop: function(event, ui) {
+				$(this).removeClass('yellow');
 				var dropped = ui.draggable;
 				var droppedOn = $(this);
                 $(dropped).css({'top':0, 'left' :0});

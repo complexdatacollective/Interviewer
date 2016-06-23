@@ -740,7 +740,7 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 
 .service-list-container .item.selected {
-    background: lighten(@brand-success, 10%);
+    background: @brand-success;
     border-color: @brand-success;
 }
 
@@ -766,6 +766,18 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     background: transparent;
     box-shadow: none;
     border: 0;
+}
+
+.btn-select {
+    background: white;
+    color: black;
+}
+
+@select-color: rgb(255, 223, 0);
+
+.btn-select.selected {
+    background: @select-color;
+    color:black;
 }
 
 .well .btn-group.big-check {
