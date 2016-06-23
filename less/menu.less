@@ -63,7 +63,7 @@
 	z-index:9999999;
 	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 	transition: transform 0.35s ease-in-out;
-	font-size: 20px;
+	font-size: 17px;
 }
 
 
@@ -251,19 +251,26 @@
 input.menu-filter {
     border-radius: 25px;
     padding: 7px 14px;
-    background-color: transparent;
+    background-color: white;
     border: solid 1px rgba(0, 0, 0, 0.15);
     width: 100%;
     box-sizing: border-box;
-    color: #fff;
+    color: black;
+	height:3pc;
     margin-bottom: 5px;
 }
 
 .menu .input-group-addon {
 	border-radius: 25px;
+	padding: 16px 30px;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
 	background: rgba(0,0,0,0.15);
+}
+
+.menu .form-control:focus {
+	box-shadow: none;
+	border:0;
 }
 
 .shown {
