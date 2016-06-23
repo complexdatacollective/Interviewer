@@ -1,0 +1,38 @@
+{
+  "name": "list.js",
+  "main": "dist/list.js",
+  "homepage": "http://listjs.com",
+  "authors": [
+    "Jonny Strömberg <jonny.stromberg@gmail.com>"
+  ],
+  "description": "The perfect library for adding search, sort, filters and flexibility to tables, lists and various HTML elements. Built to be invisible and work on existing HTML",
+  "keywords": [
+    "list",
+    "search",
+    "sort",
+    "table",
+    "dom",
+    "html",
+    "ui"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "version": "1.2.0",
+  "_release": "1.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.0",
+    "commit": "cff85dee85cb24c2618533d28201981ee8a10690"
+  },
+  "_source": "https://github.com/javve/list.js.git",
+  "_target": "^1.2.0",
+  "_originalSource": "list.js",
+  "_direct": true
+}

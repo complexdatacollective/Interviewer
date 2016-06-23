@@ -42,12 +42,12 @@
 .content {
 	width: 100%;
 	position: absolute;
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+	transition: transform 0.35s ease-in-out;
 }
 
 .pushed.content {
-	transition-duration: 0.5s;
-	transition: transform all 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+	transition-duration: 0.35s;
+	transition: transform all 0.35s ease-in-out;
 	transform: translateX(20vmin) scale(0.5);
 	box-shadow: 31px 25px 170px black;
 }
@@ -62,11 +62,13 @@
 	padding:2vmin;
 	z-index:9999999;
 	transition-timing-function: cubic-bezier(0.7,0,0.3,1);
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+	transition: transform 0.35s ease-in-out;
+	font-size: 17px;
 }
 
+
 .menu.open {
-	transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+	transition: transform 0.35s ease-in-out;
 	transform: translateX(36vw);
 }
 
@@ -231,7 +233,44 @@
 	z-index:12;
 	border-radius: 50%;
 	cursor:pointer;
+}
 
+.sort {
+    font-size: 12px;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+    border-radius: 25px;
+    border: none;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin: 2px 0;
+}
+
+input.menu-filter {
+    border-radius: 25px;
+    padding: 7px 14px;
+    background-color: white;
+    border: solid 1px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+	height:3pc;
+    margin-bottom: 5px;
+}
+
+.menu .input-group-addon {
+	border-radius: 25px;
+	padding: 16px 30px;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	background: rgba(0,0,0,0.15);
+}
+
+.menu .form-control:focus {
+	box-shadow: none;
+	border:0;
 }
 
 .shown {
