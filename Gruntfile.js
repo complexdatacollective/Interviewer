@@ -10,12 +10,13 @@ module.exports = function (grunt) {
     // configurable paths
     var config = {
         app: 'www',
-        dist: 'build',
-        distMac32: 'build/macOS',
-        distMac64: 'build/macOS',
-        distLinux32: 'build/Linux32',
-        distLinux64: 'build/Linux64',
-        distWin: 'build/Win',
+        dist: 'dist',
+        tmp: 'dist/temp',
+        distMac32: 'dist/macOS',
+        distMac64: 'dist/macOS',
+        distLinux32: 'dist/Linux32',
+        distLinux64: 'dist/Linux64',
+        distWin: 'dist/Win',
         resources: 'resources'
     };
 
@@ -397,11 +398,11 @@ module.exports = function (grunt) {
         var done = this.async();
         var concat = require('concat-files');
         concat([
-            'buildTmp/nw.exe',
-            'buildTmp/app.nw'
-        ], 'buildTmp/netCanvas.exe', function () {
+            'dist/temp/nw.exe',
+            'dist/temp/app.nw'
+        ], 'dist/temp/netCanvas.exe', function () {
             var fs = require('fs');
-            fs.unlink('buildTmp/app.nw', function (error, stdout, stderr) {
+            fs.unlink('dist/temp/app.nw', function (error, stdout, stderr) {
                 if (stdout) {
                     grunt.log.write(stdout);
                 }
@@ -412,7 +413,7 @@ module.exports = function (grunt) {
                     grunt.log.error(error);
                     done(false);
                 } else {
-                    fs.unlink('buildTmp/nw.exe', function (error, stdout, stderr) {
+                    fs.unlink('dist/temp/nw.exe', function (error, stdout, stderr) {
                         var result = true;
                         if (stdout) {
                             grunt.log.write(stdout);
@@ -432,18 +433,16 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('createPlistFile', 'set node webkit and app relevant information to a new plist file', function() {
-        var metadata = grunt.file.readJSON('.yo-rc.json');
         var resourcesPath = config.resources;
         var nwExecuteable = 'nwjs';
-        if (metadata.nodeWebkitVersion.indexOf('v0.8.') === 0 || metadata.nodeWebkitVersion.indexOf('v0.9.') === 0 || metadata.nodeWebkitVersion.indexOf('v0.10.') === 0 || metadata.nodeWebkitVersion.indexOf('v0.11.') === 0) {
-            nwExecuteable = 'node-webkit';
-        }
+
         var infoPlistTmp = grunt.file.read(resourcesPath + '/mac/Info.plist.tmp', {
             encoding: 'UTF8'
         });
         var infoPlist = grunt.template.process(infoPlistTmp, {
             data: {
-                nwExecutableName: nwExecuteable
+                nwExecutableName: nwExecuteable,
+                version: '5'
             }
         });
         grunt.file.write(resourcesPath + '/mac/Info.plist', infoPlist, {
