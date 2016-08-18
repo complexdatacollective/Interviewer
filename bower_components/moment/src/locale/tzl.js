@@ -1,5 +1,5 @@
 //! moment.js locale configuration
-//! locale : talossan (tzl)
+//! locale : Talossan [tzl]
 //! author : Robin van der Vliet : https://github.com/robin0van0der0v with the help of Iustì Canun
 
 
@@ -20,6 +20,10 @@ export default moment.defineLocale('tzl', {
         LL : 'D. MMMM [dallas] YYYY',
         LLL : 'D. MMMM [dallas] YYYY HH.mm',
         LLLL : 'dddd, [li] D. MMMM [dallas] YYYY HH.mm'
+    },
+    meridiemParse: /d\'o|d\'a/i,
+    isPM : function (input) {
+        return 'd\'o' === input.toLowerCase();
     },
     meridiem : function (hours, minutes, isLower) {
         if (hours > 11) {

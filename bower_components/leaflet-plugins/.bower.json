@@ -49,7 +49,7 @@
     "tag": "1.2.1",
     "commit": "4aef4dfd3c0a54ef98edb35f81313d2726220ac8"
   },
-  "_source": "git://github.com/shramov/leaflet-plugins.git",
+  "_source": "https://github.com/shramov/leaflet-plugins.git",
   "_target": "~1.2.1",
   "_originalSource": "leaflet-plugins"
 }

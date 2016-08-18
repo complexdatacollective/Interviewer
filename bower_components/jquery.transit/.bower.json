@@ -21,7 +21,7 @@
     "tag": "v0.9.12",
     "commit": "209c4831155479a3446e08e2c39d6eb275893b34"
   },
-  "_source": "git://github.com/rstacruz/jquery.transit.git",
+  "_source": "https://github.com/rstacruz/jquery.transit.git",
   "_target": "~0.9.12",
   "_originalSource": "jquery.transit"
 }

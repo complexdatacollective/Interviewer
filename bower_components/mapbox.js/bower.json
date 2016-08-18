@@ -5,7 +5,7 @@
     "mapbox.js",
     "images/*"
   ],
-  "version": "2.3.0",
+  "version": "2.4.0",
   "homepage": "https://github.com/mapbox/mapbox.js",
   "authors": ["Mapbox"],
   "description": "Mapbox Javascript API",
