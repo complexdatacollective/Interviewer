@@ -43,12 +43,12 @@ var RoleRevisit = function RoleRevisit() {
         roleRevisit.destroy();
     };
 
-    var cardClickHandler = function(e) {
-        console.log('card click');
-        console.log(e);
+    var cardClickHandler = function() {
+        // console.log('card click');
+        // console.log(e);
 
         var index = $(this).data('index');
-        console.log(index);
+        // console.log(index);
         // Set the value of editing to the node id of the current person
         editing = index;
 

@@ -78,6 +78,9 @@ module.exports = function Sociogram() {
 		// Get all nodes that match the criteria
 		var criteriaEdges = sociogram.settings.network.getEdges(sociogram.settings.criteria, sociogram.settings.filter);
 
+		// Sort these into reverse order
+		criteriaEdges.reverse();
+
 		// Iterate over them
 		for (var i = 0; i < criteriaEdges.length; i++) {
 			var dyadEdge = sociogram.settings.network.getEdges({from:criteriaEdges[i].from, to:criteriaEdges[i].to, type:'Dyad'})[0];
@@ -500,6 +503,7 @@ module.exports = function Sociogram() {
 
 			// Add them to an event object for the logger.
 			var eventObject = {
+				nodeTarget: this.attrs.id,
 				from: from,
 				to: to,
 			};
