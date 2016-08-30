@@ -7197,6 +7197,7 @@ module.exports = function ServiceGenerator() {
                 });
 
                 $('#name').autocomplete({
+                    /*jshint -W109 */
                     source: [
                         "About My Health",
                         "Access - Anixter",
@@ -7453,6 +7454,7 @@ module.exports = function ServiceGenerator() {
                         "Winfield Moody Health Center",
                         "Woodlawn Health Center"
                     ]
+                    /*jshint +W109 */
                 });
 
             }
