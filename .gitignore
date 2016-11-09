@@ -3,6 +3,7 @@ tmp/
 buildTmp/
 .DS_Store
 www/npm-debug.log
+node_modules/
 npm-debug.log
 *.zip
 *.app
