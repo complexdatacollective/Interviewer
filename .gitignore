@@ -1,15 +1,7 @@
-platforms/
-tmp/
-buildTmp/
 .DS_Store
-www/npm-debug.log
 node_modules/
+bower_components/
 npm-debug.log
 *.zip
-*.app
-www/protocols/*
-www/protocols/**/
-/dist/*
-!www/protocols/default
 *.pbxproj
 Icon^M^M
