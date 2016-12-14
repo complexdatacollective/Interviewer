@@ -1,6 +1,6 @@
 {
   "name": "NetworkCanvas",
-  "version": "4.0",
+  "version": "4.0.0",
   "description": "A cross platform personal network capture tool.",
   "keywords": [],
   "homepage": "https://networkcanvas.com",
@@ -10,13 +10,21 @@
     "email": "joshmelville@gmail.com",
     "url": "https://github.com/jthrilly"
   },
+  "main": "src/main.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/codaco/NetworkCanvas.git"
   },
-  "license": "GPL-3.0",
-  "dependencies": {
+  "scripts": {
+    "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
+  "license": "GPL-3.0",
+  "dependencies": {},
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   }
 }
