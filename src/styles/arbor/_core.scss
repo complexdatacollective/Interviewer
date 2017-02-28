@@ -1,0 +1,107 @@
+// Core SCSS Framework
+// =============================================================================
+
+@import "core/bem";
+@import "core/breakpoints";
+@import "core/functions";
+@import "core/grid";
+@import "core/path";
+@import "core/reset";
+@import "core/spacing";
+@import "core/swatch";
+@import "core/type";
+
+
+// Default Settings
+// =============================================================================
+$arbor-container-max-width: 990px !default;
+$arbor-output-classes: true !default;
+
+// Default Breakpoints
+// =============================================================================
+@include breakpoint-set(medium, 736px);
+@include breakpoint-set(large, 1024px);
+
+// Default Breakpoint Show and Hide
+// =============================================================================
+@include breakpoint-classes(hide) {
+  display: none;
+}
+
+@include breakpoint-classes(show--flex) {
+  display: flex;
+}
+
+// Default Color Swatches
+// =============================================================================
+// All colors are pulled from Maestro and are approved. Do your best to use these colors and
+// only these colors.
+
+// Blues
+@include swatch-set('network-blue', #00A1E5);
+@include swatch-set('network-blue--light', #33D4FF);
+@include swatch-set('network-blue--dark', #002266);
+@include swatch-set('network-teal', #006EB2);
+
+// Grays
+@include swatch-set('ink', #3A3A3A); // Standard body text
+@include swatch-set('stone', #4C4C4C); // Secondary text and links
+@include swatch-set('stone--light', #A0A0A0); // Secondary links hover
+@include swatch-set('stone--dark', #536170); // Secondary links down
+@include swatch-set('stone--forty', #C1C7CD); // Strokes around secondary buttons and forms
+@include swatch-set('stone--sixteen', #E6E8EB); // Strokes around all other strokes
+@include swatch-set('chalk', #F7F9FA); // Neutral background
+@include swatch-set('background-white', #FFFFFF); // Content container
+
+// Others
+@include swatch-set('cherry', #E8857D); // Warning text
+@include swatch-set('lychee', #DD3B38);
+@include swatch-set('kiwi', #0D8424); // Success text
+@include swatch-set('lime', #DD3B38);
+@include swatch-set('plum', #A08BCB);
+@include swatch-set('guava', #D31C92);
+@include swatch-set('mint', #00755F);
+@include swatch-set('black', #000000);
+
+// Default Headline Typography Sizes
+// =============================================================================
+@include type-set(arial, base, (font-family: 'Arial, "Open Sans", sans-serif', font-size: 16px, line-height: 1.65, font-weight: 300));
+
+@include type-set(title-1, base, (width: 100%, font-size: 39px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-1, medium, (font-size: 49px));
+
+@include type-set(title-2, base, (width: 100%, font-size: 32px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-2, medium, (font-size: 34px));
+
+@include type-set(title-3, base, (width: 100%, font-size: 24px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-3, medium, (font-size: 26px));
+
+@include type-set(title-4, base, (width: 100%, font-size: 16px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+
+@include type-set(title-5, base, (width: 100%, font-size: 14px, line-height: 1.65, font-weight: 300, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+
+// Default Copy Typography Sizes
+// =============================================================================
+@include type-set(copy-large, base, (font-size: 20px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
+@include type-set(copy-standard, base, (font-size: 16px, line-height: 1.65, font-weight: 300, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
+@include type-set(copy-small, base, (font-size: 14px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
+@include type-set(copy-mini, base, (font-size: 13px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
+
+@include type-set(first, base, (margin-top: 0));
+
+// sometimes flexbox stretches child containers out that are "last" in a column, margin-top auto fixes the alignment.
+@include type-set(last, base, (margin-top: auto));
+@include type-set(center, base, (text-align: center));
+
+// Default Spacing Sizes
+// =============================================================================
+@include spacing-set(none, 0);
+@include spacing-set(micro, 10px);
+@include spacing-set(small, 20px);
+@include spacing-set(medium, 30px);
+@include spacing-set(large, 50px);
+@include spacing-set(jumbo, 100px);
+
+// Default Path Settings
+// =============================================================================
+@include path-set('images', '/img');

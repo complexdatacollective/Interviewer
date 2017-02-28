@@ -1,0 +1,23 @@
+// Static Path Manager
+// =============================================================================
+
+$-arbor-paths: () !default;
+
+@function path($base-name, $file) {
+    @if map-has-key($-arbor-paths, $base-name) {
+        $base-path: map-get($-arbor-paths, $base-name);
+        @return '#{$base-path}/#{$file}';
+    } @else {
+        @warn "No path named #{$base-name} found.";
+        @return '#{$base}/#{$file}';
+    }
+}
+@function path-url($base-name, $filename) {
+    $asset-path: path($base-name, $filename);
+    @return url(#{$asset-path});
+}
+
+@mixin path-set($asset-path, $value) {
+  $-arbor-paths: map-merge($-arbor-paths, ($asset-path: $value)) !global;
+}
+

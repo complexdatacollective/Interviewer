@@ -1,0 +1,183 @@
+// Buttons
+// =============================================================================
+@import "../arbor/core";
+
+@include type-set(button--small, base, (font-size: 13px, line-height: 13px, font-weight: 400));
+@include type-set(button--medium, base, (font-size: 16px, line-height: 16px, font-weight: 400));
+@include type-set(button--big, base, (font-size: 20px, line-height: 20px, font-weight: 400));
+
+// Default Colors
+// =============================================================================
+$arbor-button-base-bg: swatch('stone--sixteen') !default;
+$arbor-button-base-hover: swatch('chalk') !default;
+
+$arbor-button-primary-bg: swatch('network-blue') !default;
+$arbor-button-primary-border: swatch('network-blue') !default;
+$arbor-button-primary-font-color: swatch('background-white') !default;
+$arbor-button-primary-hover-bg: swatch(network-blue--light) !default;
+$arbor-button-primary-hover-border: swatch(network-blue--light) !default;
+
+$arbor-button-secondary-font-color: swatch('network-blue') !default;
+$arbor-button-secondary-border: swatch('stone--forty') !default;
+$arbor-button-secondary-hover-border: swatch('network-blue') !default;
+$arbor-button-secondary-hover-font-color: swatch('network-blue') !default;
+
+$arbor-button-text-only-color: swatch('network-blue') !default;
+
+// Arbor Button
+// =============================================================================
+
+@mixin arbor-button (
+    $button-class: 'button'
+) {
+    .#{$button-class} {
+        // Base styles
+        font-family: inherit;
+        text-align: center;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        // Size and width
+        &.#{$button-class} { // Additional layer of specificity
+            &--small {
+                @include type('button--small');
+                padding: 5px 18px;
+
+                &--wide {
+                    padding: 5px 32px;
+                }
+            }
+
+            &--medium {
+                @include type('button--medium');
+                padding: 6px 18px;
+
+                &--wide {
+                    padding: 6px 50px;
+                }
+
+                &--extra-wide {
+                    width: 350px;
+                }
+            }
+
+            &--big {
+                @include type('button--big');
+                padding: 7px 32px;
+
+                &--wide {
+                    padding: 7px 60px;
+                }
+
+                &--extra-wide {
+                    width: 350px;
+                }
+            }
+
+            // Importance
+            &--primary {
+                background-color: $arbor-button-primary-bg;
+                border: 1px solid $arbor-button-primary-border;
+                color: $arbor-button-primary-font-color;
+
+                &:hover {
+                    background-color: $arbor-button-primary-hover-bg;
+                    border-color: $arbor-button-primary-hover-border;
+                }
+
+                &--disabled {
+                    opacity: 0.4;
+                    pointer-events: none;
+
+                    &:hover {
+                        background-color: $arbor-button-primary-bg;
+                        border-color: $arbor-button-primary-border;
+                    }
+                }
+            }
+
+            &--secondary {
+                background-color: transparent;
+                border: 1px solid $arbor-button-secondary-border;
+                color: $arbor-button-secondary-font-color;
+
+                &:hover {
+                    color: $arbor-button-secondary-hover-font-color;
+                    border-color: $arbor-button-secondary-hover-border;
+                }
+
+                &--disabled {
+                    opacity: 0.4;
+                    pointer-events: none;
+
+                    &:hover {
+                        color: $arbor-button-secondary-font-color;
+                        border-color: $arbor-button-secondary-border;
+                    }
+                }
+            }
+
+            &--toggle {
+                border-radius: 10px;
+                background-color: $arbor-button-primary-font-color;
+                border: 1px solid $arbor-button-primary-border;
+                color: $arbor-button-primary-border;
+
+                &:hover {
+                    background-color: $arbor-button-primary-hover-bg;
+                    border-color: $arbor-button-primary-hover-border;
+                    color: $arbor-button-primary-font-color;
+                }
+
+                &--disabled {
+                    opacity: 0.4;
+                    pointer-events: none;
+
+                    &:hover {
+                        background-color: $arbor-button-primary-bg;
+                        border-color: $arbor-button-primary-border;
+                    }
+                }
+
+                &--active {
+                    color: $arbor-button-primary-font-color;
+                    background-color: $arbor-button-primary-bg;
+                    border-color: $arbor-button-primary-border;
+                }
+            }
+
+            &--text-only {
+                padding: 8px 0;
+                border: none;
+                background-color: transparent;
+                color: $arbor-button-text-only-color;
+            }
+
+            &--landing {
+                border: 2px solid $arbor-button-primary-font-color;
+                padding: .5em 2em;
+                color: $arbor-button-primary-font-color;
+                text-transform: uppercase;
+                transition: color .15s linear, border .15s linear;
+                background: transparent;
+
+                &:hover {
+                    text-decoration: none;
+                    color: $arbor-button-secondary-font-color;
+                    border-color: $arbor-button-secondary-font-color;
+                }
+            }
+
+            &--submit {
+                @include add-tb-margin('small');
+            }
+        }
+    }
+}
+
+@if $arbor-output-classes {
+    @include arbor-button;
+}

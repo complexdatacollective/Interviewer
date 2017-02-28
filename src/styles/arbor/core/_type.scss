@@ -1,0 +1,35 @@
+// Typography setter, mixins and classes based on breakpoints
+// =============================================================================
+
+$-arbor-type: () !default;
+
+@mixin type-set($type-name, $breakpoint-name, $type-properties) {
+  $type-group: map-get($-arbor-type, $type-name) or ();
+  $type-group: map-merge($type-group, ($breakpoint-name: $type-properties));
+  $-arbor-type: map-merge($-arbor-type, ($type-name: $type-group)) !global;
+}
+
+@mixin type($type-name, $type-property: null) {
+    @if map-has-key($-arbor-type, $type-name) {
+      $type-group: map-get($-arbor-type, $type-name);
+      @each $breakpoint-name, $type-properties in $type-group {
+        @include breakpoint($breakpoint-name) {
+          @each $property, $value in $type-properties {
+            @if not $type-property or $type-property == $property {
+                #{$property}: #{$value};
+            }
+          }
+        }
+      }
+    } @else {
+        @warn "No #{$type-name} found in #{$-arbor-type}.";
+    }
+}
+
+@mixin arbor-type($prefix: 'type--') {
+  @each $type-name, $type-group in $-arbor-type {
+    .#{$prefix}#{$type-name} {
+      @include type($type-name);
+    }
+  }
+}

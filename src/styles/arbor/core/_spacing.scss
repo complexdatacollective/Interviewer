@@ -1,0 +1,36 @@
+// Spacing (margin and padding), setter and mixins for mobile-first layouts
+// =============================================================================
+
+$-arbor-spacing: () !default;
+
+@mixin spacing-set($spacing-name, $value) {
+  $-arbor-spacing: map-merge($-arbor-spacing, ($spacing-name: $value)) !global;
+}
+
+@function spacing-get-value($spacing-name) {
+  @if map-has-key($-arbor-spacing, $spacing-name) {
+      @return map-get($-arbor-spacing, $spacing-name);
+  } @else {
+      @warn "No spacing of #{$spacing-name} found.";
+  }
+}
+
+// add top and bottom margin to a specified container
+@mixin add-tb-margin($spacing-name) {
+  margin: spacing-get-value($spacing-name) 0;
+}
+
+// add all-around margin
+@mixin add-margin($spacing-name) {
+  margin: spacing-get-value($spacing-name);
+}
+
+// add top and bottom padding to a specified container
+@mixin add-tb-padding($spacing-name) {
+  padding: spacing-get-value($spacing-name) 0;
+}
+
+// add all-around padding
+@mixin add-padding($spacing-name) {
+  padding: spacing-get-value($spacing-name);
+}

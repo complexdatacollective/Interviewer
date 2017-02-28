@@ -1,0 +1,254 @@
+// Grid
+// Flex Rows, Columns, and Items
+// =============================================================================
+// mixin for a flex-container that's able to be nested in other flex elements
+// can specify whether or not it will be contained by a max-width.
+// by default, it will not take on
+// contained behavior (centered with a max-width)
+@mixin arbor-container($contain: false, $width: 100%, $max-width: $arbor-container-max-width) {
+  display: flex;
+  flex-flow: row wrap;
+  width: $width;
+  height: auto;
+  @if $contain {
+    max-width: $max-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// the basic building blocks that are housed by containers
+// the default behavior is that they will stack on top of each other
+// unless a specified width is given via the modifier classes
+// as they'll be forced to take up 100% of the container's width
+// the --fluid modifier makes it so that the items will split up
+// the space of a container equally, displayed inline
+// the --shrink modifier makes it so that the item will only
+// take up the space its content dictates
+@mixin arbor-item-base {
+  display: flex;
+  // set flex to wrap so that we can nest containers in items
+  flex-wrap: wrap;
+  // min width makes it so that the item is forced to take the
+  // percentage we're specifying
+  min-width: 0;
+}
+
+@mixin arbor-item($columns: 24, $total-columns: 24, $shrink: null) {
+  @include arbor-item-base;
+  @if $shrink {
+    flex: 0 auto;
+  } @else {
+    @include arbor-item-percent(percentage($columns / $total-columns));
+  }
+}
+
+@mixin arbor-item-margin($offset: 0, $columns: 24, $direction: left) {
+  margin-#{$direction}: percentage($offset / $columns);
+}
+
+@mixin arbor-item-fluid {
+  @include arbor-item-base;
+  flex: 1;
+}
+
+@mixin arbor-item-percent($pct: 100%) {
+  flex: 0 0 $pct;
+  @if is-number($pct) and unit($pct) == '%' {
+      max-width: $pct;
+  }
+}
+
+@mixin flex-stack {
+  display: flex;
+  flex-flow: column;
+}
+
+@mixin flex-inline {
+  display: flex;
+  flex-flow: row;
+}
+
+// Flex Modifiers: Horizontal & Vertical Alignments, Order
+// =============================================================================
+$flex-align-x: (center: center, left: flex-start, right: flex-end, bookend: space-between, spaced: space-around) !default;
+$flex-align-y: (middle: center, top: flex-start, bottom: flex-end, stretch: stretch, baseline: baseline) !default;
+$flex-align-self: (auto: auto, stretch: stretch, center: center, middle: center, top: flex-start, start: flex-start, bottom: flex-end, end: flex-end, baseline: baseline) !default;
+@mixin flex-align($x: null, $y: null, $self: null, $flow: 'row') {
+  @if $x {
+    @if map-has-key($flex-align-x, $x) {
+      $x: map-get($flex-align-x, $x);
+    } @else {
+      @warn 'flex-align(): #{$x} is not a valid value for horizontal alignment. Use bookend, center, left, right, or spaced.'
+    }
+  }
+  @if $y {
+    @if map-has-key($flex-align-y, $y) {
+      $y: map-get($flex-align-y, $y);
+    } @else {
+      @warn 'flex-align(): #{$y} is not a valid value for vertical alignment. Use baseline, bottom, middle, stretch, or top.'
+    }
+  }
+  @if $self {
+    @if map-has-key($flex-align-self, $self) {
+      $self: map-get($flex-align-self, $self);
+    } @else {
+      @warn 'flex-align(): #{$self} is not a valid value for self alignment. Use auto, baseline, bottom, center, end, middle, start, stretch, or top.'
+    }
+  }
+  @if $flow=='column' {
+    justify-content: $y;
+    align-items: $x;
+    align-content: $y;
+  }
+  @else {
+    justify-content: $x;
+    align-items: $y;
+    align-content: $y;
+  }
+  align-self: $self;
+}
+
+$flex-align-stack: (
+  left: flex-start,
+  right: flex-end,
+  center: center,
+  middle: center,
+  top: flex-start,
+  bottom: flex-end,
+  bookend: space-between,
+  spaced: space-around
+) !default;
+
+@mixin flex-align-stack($align-name: null) {
+  $align-prop: null;
+  @if map-has-key($flex-align-stack, $align-name) {
+    $align-prop: map-get($flex-align-stack, $align-name);
+  }
+  @if $align-name  == 'left' {
+    align-items: $align-prop;
+  }
+  @else if $align-name == 'right' {
+    align-items: $align-prop;
+  }
+  @else if $align-name == 'center' {
+    align-items: $align-prop;
+  }
+  @else {
+    justify-content: $align-prop;
+  }
+}
+
+// vertical align, horizontal align
+@mixin vcjc {
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-order($order: 0) {
+  order: $order;
+}
+
+// Arbor Grid
+// =============================================================================
+// Allows for separate class names, uses the previously defined alignment maps to create the alignments
+@mixin arbor-grid ($grid-class: 'grid', $section-class: 'section', $container-class: 'container', $item-class: 'item', $columns: 24, $container-max-width: $arbor-container-max-width, $container-width: percentage(1), $alignments: ('x', 'y', 'self')) {
+  .#{$grid-class} {
+    &__#{$section-class} {
+      height: auto;
+      width: 100%;
+    }
+    &__#{$container-class} {
+      @include arbor-container(
+            $contain: true,
+            $width: $container-width,
+            $max-width: $container-max-width
+      );
+      & & {
+        @include arbor-container;
+      }
+    }
+    @each $space-name, $val in $-arbor-spacing {
+      &--p-#{$space-name} {
+        padding: $val 0;
+      }
+    }
+    &__#{$item-class} {
+      @include arbor-item;
+    } @each $breakpoint-name, $min-width in $-arbor-breakpoints {
+      @include breakpoint($breakpoint-name) {
+        $breakpoint-class: "--#{$breakpoint-name}";
+        @if _breakpoint-is-zero($breakpoint-name) {
+          $breakpoint-class: null;
+        }
+        // vertical center, justify center
+        &#{$breakpoint-class}--vcjc {
+          @include vcjc;
+        }
+        // x align, assuming row flow
+        @each $align-name,
+        $alignment in $flex-align-x {
+          &#{$breakpoint-class}--x-#{$align-name} {
+            @include flex-align($x: $align-name);
+          }
+        }
+        // y align, self align
+        @each $align-name, $alignment in $flex-align-y {
+          &#{$breakpoint-class}--y-#{$align-name} {
+            @include flex-align($y: $align-name);
+          }
+          &#{$breakpoint-class}--self-#{$align-name} {
+            @include flex-align($self: $align-name);
+          }
+        }
+        // grid sizes for column
+        &__#{$item-class}#{$breakpoint-class} {
+          @for $i from 1 through $columns {
+            $percent: percentage($i / $columns);
+            $reduced: _reduceFraction($i, $columns);
+            $fraction: #{nth($reduced, 1)}-#{nth($reduced, 2)};
+
+            // TODO (abraham): Clean redundant selectors
+            &--#{$fraction},
+            &--#{$i}-#{$columns} {
+              @include arbor-item-percent($pct: $percent);
+            }
+            &--margin-left--#{$fraction},
+            &--margin-left--#{$i}-#{$columns} {
+              @include arbor-item-margin($i, $columns, 'left');
+            }
+            &--margin-right--#{$fraction},
+            &--margin-right--#{$i}-#{$columns} {
+              @include arbor-item-margin($i, $columns, 'right');
+            }
+          }
+          &--expand {
+            @include arbor-item;
+          }
+          &--shrink {
+            @include arbor-item($shrink: true);
+          }
+          &--fluid {
+            @include arbor-item-fluid;
+          }
+          // stack shortcut (flex-flow column)
+          &--stack {
+            @include flex-stack;
+            @each $align-name,
+            $alignment in $flex-align-stack {
+              &--#{$align-name} {
+                @include flex-align-stack($align-name: $align-name);
+              }
+            }
+          }
+          @for $i from 1 through $columns {
+            // Column source ordering
+            &--order-#{$i} {
+              @include flex-order($i);
+            }
+          }
+        }
+      }
+    }
+  }
+}

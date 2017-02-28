@@ -1,0 +1,21 @@
+// Color setter and mixins
+// =============================================================================
+$-arbor-swatch: () !default;
+$-arbor-swatch-alpha: (0.1, 0.15, 0.3, 0.6, 0.8, 1) !default;
+
+@mixin swatch-set($swatch-name, $swatch-value) {
+  $-arbor-swatch: map-merge($-arbor-swatch, ($swatch-name: $swatch-value)) !global;
+}
+
+@function swatch($swatch-name, $alpha: 1) {
+  $color: #FFFFFF;
+  @if index($-arbor-swatch-alpha, $alpha)==null {
+    @warn "Swatch: Only use #{$-arbor-swatch-alpha} for alpha values.";
+  }
+  @if map-has-key($-arbor-swatch, $swatch-name) {
+    $color: map-get($-arbor-swatch, $swatch-name);
+    @return rgba($color, $alpha);
+  } @else {
+    @return $color;
+  }
+}

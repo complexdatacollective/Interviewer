@@ -1,0 +1,12 @@
+@function _greatestCommonDenom($numerator, $denominator) {
+  @if $denominator == 0 {
+    @return $numerator;
+  } @else {
+    @return _greatestCommonDenom($denominator, $numerator%$denominator);
+  }
+}
+
+@function _reduceFraction($numerator, $denominator) {
+  $gcd: _greatestCommonDenom($numerator, $denominator);
+  @return $numerator / $gcd, $denominator / $gcd;
+}
