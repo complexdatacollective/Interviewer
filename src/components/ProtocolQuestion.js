@@ -13,7 +13,9 @@ class ProtocolQuestion extends Component {
     } = this.props.question;
 
     if (this.props.protocolForm && this.props.protocolForm.values) {
-      console.log('form', 'form value declaration');
+      const { ...rest } = this.props.protocolForm.values;
+      console.log(...rest);
+      console.log('form', ...rest);
       // console.log('skip', eval(skip));
     }
 

@@ -38,7 +38,9 @@ NameGeneratorForm.propTypes = {
 }
 
 NameGeneratorForm = reduxForm({
-  form: 'protocolForm'
+  form: 'protocolForm',
+  destroyOnUnmount: false,        // <------ preserve form data
+  forceUnregisterOnUnmount: true  // <------ unregister fields on unmount
 })(NameGeneratorForm);
 
 export default NameGeneratorForm;
