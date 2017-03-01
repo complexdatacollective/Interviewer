@@ -8,6 +8,7 @@ export default class Network {
       "name": "My first interview protocol",
       "version": "1.2.3",
       "required": "1.2.4",
+      "exportPath": "some/path/here.json";
       "stages": [
         {
           "type": "namegenerator",
