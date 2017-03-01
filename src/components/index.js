@@ -1,1 +1,1 @@
-// stub for future components
+export { default as ProtocolQuestion } from './ProtocolQuestion';

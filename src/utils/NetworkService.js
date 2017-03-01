@@ -13,25 +13,51 @@ export default class Network {
           "type": "namegenerator",
           "title": "Name Generator One",
           "params": {
-            "prompt": "Who are your best friends?"
+            "questions": [
+              {
+                "label": "Who are your best friends?",
+                "name": "bestFriends",
+                "multiple": "true",
+                "skip": {}
+              }
+            ]
           },
-          "skipFunc": {}
+          "skip": {}
         },
         {
           "type": "namegenerator",
           "title": "Name Generator Two",
           "params": {
-            "prompt": "Who did you go to school with?"
+            "questions": [
+              {
+                "label": "Who did you go to school with?",
+                "name": "school",
+                "multiple": "true",
+                "skip": {}
+              },
+              {
+                "label": "Who was your best friend at school?",
+                "name": "bestFriendsSchool",
+                "multiple": "true",
+                "skip": "${!bestFriends}"
+              }
+            ]
           },
-          "skipFunc": {}
+          "skip": {}
         },
         {
           "type": "sociogram",
           "title": "Fun Sociogram",
           "params": {
-            "prompt": "Put people somewhere within these circles"
+            "questions": [
+              {
+                "label": "Are you having fun?",
+                "name": "fun",
+                "skip": {}
+              }
+            ]
           },
-          "skipFunc": {}
+          "skip": {}
         }
       ]
     }

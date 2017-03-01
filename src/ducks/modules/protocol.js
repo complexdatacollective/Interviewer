@@ -8,7 +8,7 @@ const SET_PROTOCOL = 'SET_PROTOCOL';
 const UNSET_PROTOCOL = 'UNSET_PROTOCOL';
 
 const initialState = {
-  protocol: {
+  protocolConfig: {
     'name': '',
     'version': '',
     'required': '',
@@ -23,8 +23,8 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         protocolLoaded: true,
-        protocol: {
-          ...state.protocol,
+        protocolConfig: {
+          ...state.protocolConfig,
           ...action.protocol
         }
       }
