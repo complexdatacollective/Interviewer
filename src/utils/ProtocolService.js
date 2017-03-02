@@ -1,6 +1,5 @@
-export default class Network {
+export default class ProtocolService {
   constructor() {
-    this.network = {};
   }
 
   getSampleProtocol() {
