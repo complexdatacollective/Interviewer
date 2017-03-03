@@ -1,5 +1,22 @@
 export default class ProtocolService {
   constructor() {
+    this.protocol = {}
+  }
+
+  evaluateSkipLogic(cond, formObject) {
+    if (typeof formObject !== 'object') {
+      return;
+    }
+    // skip: ${bestFriends}.length > 5
+    const sanitized = cond.replace(/\$\{([\s]*[^;\s]+[\s]*)\}/g, (stringGroup, match) => {
+      // if form has a value for bestFriends, we get `bestFriendsValue`.length > 5
+      // else false as a hard boolean
+      const replaceStr = formObject[match] ? formObject[match] : false;
+      return `\`${replaceStr}\``;
+    })
+    // re-add the other operations
+    .replace(`/(\$\{(?!${formObject}\.)[^}]+\})/g`, '');
+    return sanitized;
   }
 
   getSampleProtocol() {
@@ -32,7 +49,7 @@ export default class ProtocolService {
                 "label": "Who did you go to school with?",
                 "name": "school",
                 "multiple": "true",
-                "skip": "${bestFriends} > 5"
+                "skip": "${bestFriends}.length > 5"
               },
               {
                 "label": "Who was your best friend at school?",
