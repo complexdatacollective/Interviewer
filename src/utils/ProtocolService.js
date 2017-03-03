@@ -8,12 +8,11 @@ export default class ProtocolService {
       return;
     }
     const sanitized = cond.replace(/\$\{([\s]*[^;\s]+[\s]*)\}/g, (stringGroup, match) => {
-      console.log(`\$\{${formVarStr}.${match.trim()}\}`);
       return  `\$\{${formVarStr}.${match.trim()}\}`;
     })
     // re-add the other operations
     .replace(`/(\$\{(?!${formVarStr}\.)[^}]+\})/g`, '');
-    console.log(sanitized);
+    console.log('san', `\`${sanitized}\``)
     return `\`${sanitized}\``;
   }
 
