@@ -6,4 +6,6 @@ npm-debug.log
 *.zip
 *.pbxproj
 Icon^M^M
-www/static/
+release-builds/
+build/
+www/
