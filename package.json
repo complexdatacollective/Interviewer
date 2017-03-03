@@ -2,6 +2,7 @@
   "name": "network-canvas",
   "version": "4.0.0",
   "productName": "Network Canvas",
+  "description": "A touch-optimised framework for capturing personal network data.",
   "private": true,
   "engines": {
     "node": "6.9.1",
@@ -17,7 +18,8 @@
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=public/icons/native/app.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=public/icons/native/app.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\"",
     "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=public/icons/native/NC-Round@2x.png --prune=true --out=release-builds",
-    "package-cordova": "cordova build ios"
+    "package-cordova": "cordova build ios",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/Network\\ Canvas-darwin-x64/Network\\ Canvas.app Network\\ Canvas --out=release-builds --overwrite --icon=public/icons/native/app.icns"
   },
   "repository": {
     "type": "git"
@@ -25,7 +27,9 @@
   "devDependencies": {
     "custom-react-scripts": "0.0.21",
     "electron": "^1.4.15",
+    "electron-installer-dmg": "^0.2.0",
     "electron-packager": "^8.5.2",
+    "electron-winstaller": "^2.5.2",
     "icon-gen": "^1.0.7"
   },
   "dependencies": {
