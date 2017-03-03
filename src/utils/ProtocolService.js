@@ -7,11 +7,11 @@ export default class ProtocolService {
     if (typeof formVarStr !== 'string') {
       return;
     }
-    const sanitized = cond.replace(/\$\{([\s]*[^;\s]+[\s]*)\}/g, (stringGroup, match) => {
-      return  `\$\{${formVarStr}.${match.trim()}\}`;
+    const sanitized = cond.replace(/\{\{([\s]*[^;\s]+[\s]*)\}\}/g, (stringGroup, match) => {
+      return  `$\{${formVarStr}.${match.trim()}}`;
     })
     // re-add the other operations
-    .replace(`/(\$\{(?!${formVarStr}\.)[^}]+\})/g`, '');
+    .replace(`/($\{(?!${formVarStr}.)[^}]+})/g`, '');
     console.log('san', `\`${sanitized}\``)
     return `\`${sanitized}\``;
   }
@@ -46,13 +46,13 @@ export default class ProtocolService {
                 "label": "Who did you go to school with?",
                 "name": "school",
                 "multiple": "true",
-                "skip": "${bestFriends}.length > 5"
+                "skip": "{{bestFriends}}.length > 5"
               },
               {
                 "label": "Who was your best friend at school?",
                 "name": "bestFriendsSchool",
                 "multiple": "true",
-                "skip": "!${bestFriends}"
+                "skip": "!{{bestFriends}}"
               }
             ]
           },

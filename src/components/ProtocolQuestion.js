@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { NameGeneratorForm } from '../containers/Forms';
@@ -18,14 +17,14 @@ class ProtocolQuestion extends Component {
       // TODO - skip logic using templating strings
       if (skip) {
         const evalStr = protocolService.evaluateSkipLogic(skip, `this.props.protocolForm.values`);
+        // eslint-disable-next-line
         console.log(eval(evalStr));
+        // eslint-disable-next-line
         if (eval(evalStr)) {
           console.log('eval true', evalStr);
           return null;
         }
       }
-
-
     }
 
     return (
