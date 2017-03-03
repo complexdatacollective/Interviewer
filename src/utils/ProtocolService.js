@@ -3,20 +3,18 @@ export default class ProtocolService {
     this.protocol = {}
   }
 
-  evaluateSkipLogic(cond, formObject) {
-    if (typeof formObject !== 'object') {
+  evaluateSkipLogic(cond, formVarStr) {
+    if (typeof formVarStr !== 'string') {
       return;
     }
-    // skip: ${bestFriends}.length > 5
     const sanitized = cond.replace(/\$\{([\s]*[^;\s]+[\s]*)\}/g, (stringGroup, match) => {
-      // if form has a value for bestFriends, we get `bestFriendsValue`.length > 5
-      // else false as a hard boolean
-      const replaceStr = formObject[match] ? formObject[match] : false;
-      return `\`${replaceStr}\``;
+      console.log(`\$\{${formVarStr}.${match.trim()}\}`);
+      return  `\$\{${formVarStr}.${match.trim()}\}`;
     })
     // re-add the other operations
-    .replace(`/(\$\{(?!${formObject}\.)[^}]+\})/g`, '');
-    return sanitized;
+    .replace(`/(\$\{(?!${formVarStr}\.)[^}]+\})/g`, '');
+    console.log(sanitized);
+    return `\`${sanitized}\``;
   }
 
   getSampleProtocol() {

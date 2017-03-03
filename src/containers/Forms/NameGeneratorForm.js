@@ -1,13 +1,48 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 
-import { Input, Form } from 'semantic-ui-react';
+import { Input, Form, Card, Button, Icon } from 'semantic-ui-react';
 
 class NameGeneratorForm extends Component {
-  textField = ({ input, label, meta: { touched, error }}) => {
+  renderTextField = ({ input, label, meta: { touched, error }}) => {
     return (
       <Input label={label} {...input} />
     );
+  }
+
+  fieldNames = ({ fields }) => {
+    const { renderTextField } = this;
+    return (
+      <div className='grid__item'>
+        <ul className='names__list'>
+          {fields.map((name, index) =>
+            <li key={index}>
+              <Card className='names__card'>
+                <Card.Header className='names__card-header'>
+                  <Icon
+                    link
+                    color='red'
+                    name='close'
+                    onClick={() => fields.remove(index)}/>
+                </Card.Header>
+                <Card.Content>
+                  <Field
+                    name={`${name}.fName`}
+                    component={renderTextField} />
+                </Card.Content>
+              </Card>
+            </li>
+          )}
+        </ul>
+        <Button
+          type='button'
+          className='button--add'
+          content='Add a name'
+          icon='add circle'
+          labelPosition='left'
+          onClick={() => fields.push({})} />
+      </div>
+    )
   }
 
   render() {
@@ -16,14 +51,15 @@ class NameGeneratorForm extends Component {
         fieldName,
         handleSubmit,
         submitButton
-      },
-      textField
+      }
     } = this;
 
     return (
       <Form onSubmit={handleSubmit}>
         <Form.Field>
-          <Field name={fieldName} component={textField} />
+          <FieldArray
+            name={fieldName}
+            component={this.fieldNames.bind(this)} />
         </Form.Field>
         {submitButton}
       </Form>

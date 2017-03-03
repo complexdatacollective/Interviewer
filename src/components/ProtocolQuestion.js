@@ -17,7 +17,8 @@ class ProtocolQuestion extends Component {
     if (this.props.protocolForm && this.props.protocolForm.values) {
       // TODO - skip logic using templating strings
       if (skip) {
-        const evalStr = protocolService.evaluateSkipLogic(skip, this.props.protocolForm.values);
+        const evalStr = protocolService.evaluateSkipLogic(skip, `this.props.protocolForm.values`);
+
         if (eval(evalStr)) {
           return null;
         }
