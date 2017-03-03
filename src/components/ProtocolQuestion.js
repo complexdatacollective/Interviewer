@@ -13,41 +13,18 @@ class ProtocolQuestion extends Component {
     } = this.props.question;
 
     if (this.props.protocolForm && this.props.protocolForm.values) {
-      // for (let key in this.props.protocolForm.values) {
-      //   // parse the key
-      //   console.log('skip', eval(skip));
-      // }
+      // TODO - skip logic using templating strings
+      if (skip) {
+        // match the variable name in the parenthesis
+        const regEx = /\$\{([\s]*[^;\s\{]+[\s]*)\}/g;
+        const match = regEx.exec(skip);
 
-      var generateTemplateString = (function(){
-          var cache = {};
+        if (match !== null) {
+          console.log(match[1]);
+          console.log(this.props.protocolForm.values[match[1]]);
+        }
+      }
 
-          function generateTemplate(template){
-
-          var fn = cache[template];
-
-          if (!fn){
-
-          // Replace ${expressions} (etc) with ${map.expressions}.
-
-          var sanitized = template
-              .replace(/\$\{([\s]*[^;\s\{]+[\s]*)\}/g, function(_, match){
-                  return `\$\{map.${match.trim()}\}`;
-                  })
-              // Afterwards, replace anything that's not ${map.expressions}' (etc) with a blank string.
-              .replace(/(\$\{(?!map\.)[^}]+\})/g, '');
-
-          fn = Function('map', `return \`${sanitized}\``);
-
-          }
-
-          return fn;
-      };
-
-      return generateTemplate;
-      })();
-
-      var kingMaker = generateTemplateString(eval(skip));
-      console.log(kingMaker(this.props.protocolForm.values));
 
     }
 

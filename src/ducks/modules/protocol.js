@@ -1,7 +1,7 @@
 import { persistor } from '../store';
-import NetworkService from '../../utils/NetworkService'
+import ProtocolService from '../../utils/ProtocolService'
 
-const networkService = new NetworkService();
+const protocolService = new ProtocolService();
 
 const REQUEST_PROTOCOL = 'REQUEST_PROTOCOL';
 const SET_PROTOCOL = 'SET_PROTOCOL';
@@ -56,7 +56,7 @@ function unsetProtocol() {
 function loadProtocol() {
   return dispatch => {
     dispatch(requestProtocol());
-    dispatch(setProtocol(networkService.getSampleProtocol()))
+    dispatch(setProtocol(protocolService.getSampleProtocol()))
   }
 }
 

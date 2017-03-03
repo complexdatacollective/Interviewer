@@ -18,11 +18,10 @@ export default class ProtocolService {
                 "label": "Who are your best friends?",
                 "name": "bestFriends",
                 "multiple": "true",
-                "skip": {}
+                "skip": ""
               }
             ]
           },
-          "skip": {}
         },
         {
           "type": "namegenerator",
@@ -33,17 +32,16 @@ export default class ProtocolService {
                 "label": "Who did you go to school with?",
                 "name": "school",
                 "multiple": "true",
-                "skip": {}
+                "skip": "${bestFriends} > 5"
               },
               {
                 "label": "Who was your best friend at school?",
                 "name": "bestFriendsSchool",
                 "multiple": "true",
-                "skip": "!`${bestFriends}`"
+                "skip": "!${bestFriends}"
               }
             ]
           },
-          "skip": {}
         },
         {
           "type": "sociogram",
@@ -53,11 +51,10 @@ export default class ProtocolService {
               {
                 "label": "Are you having fun?",
                 "name": "fun",
-                "skip": {}
+                "skip": ""
               }
             ]
           },
-          "skip": {}
         }
       ]
     }
