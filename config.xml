@@ -5,7 +5,7 @@
         A touch-optimised framework for capturing personal network data.
     </description>
     <author email="developers@coda.co" href="http://coda.co">
-        Apache Cordova Team
+        Complex Data Collective
     </author>
     <content src="index.html" />
     <access origin="*" />
