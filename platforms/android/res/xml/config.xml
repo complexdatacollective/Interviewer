@@ -6,22 +6,22 @@
     </feature>
     <name>NetworkCanvas</name>
     <description>
-        A touch-optimised framework for capturing personal network data.
-    </description>
+    A touch-optimised framework for capturing personal network data.
+  </description>
     <author email="developers@coda.co" href="http://coda.co">
-        Complex Data Collective
-    </author>
+    Complex Data Collective
+  </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="market:*" />
-    <icon density="ldpi" src="www/icons/android/NC-Flatldpi.png" />
-    <icon density="mdpi" src="www/icons/android/NC-Flatmdpi.png" />
-    <icon density="hdpi" src="www/icons/android/NC-Flathdpi.png" />
-    <icon density="xhdpi" src="www/icons/android/NC-Flatxhdpi.png" />
-    <icon density="xxhdpi" src="www/icons/android/NC-Flatxxhdpi.png" />
-    <icon density="xxxhdpi" src="www/icons/android/NC-Flatxxxhdpi.png" />
+    <icon density="ldpi" src="www/icons/android/NC-Round-ldpi.png" />
+    <icon density="mdpi" src="www/icons/android/NC-Round-mdpi.png" />
+    <icon density="hdpi" src="www/icons/android/NC-Round-hdpi.png" />
+    <icon density="xhdpi" src="www/icons/android/NC-Round-xhdpi.png" />
+    <icon density="xxhdpi" src="www/icons/android/NC-Round-xxhdpi.png" />
+    <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
     <preference name="xwalkVersion" value="23+" />

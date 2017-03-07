@@ -14,7 +14,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "generate-icons": "icon-gen -i assets/icons/round/NC-Round.svg -o assets/icons/round -m ico,icns -r -n ico=round,icns=round && icon-gen -i assets/icons/square/NC-Square.svg -o assets/icons/square -m ico,icns -r -n ico=square,icns=square",
+    "generate-icons": "node icons.js",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/round/round.icns --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\" --ignore=platforms --ignore=hooks --ignore=assets --ignore=www --ignore=build --ignore=plugins",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/round/round.ico --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\" --ignore=platforms --ignore=platforms --ignore=hooks --ignore=assets --ignore=www --ignore=build --ignore=plugins",
     "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/round/NC-Round@2x.png --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\" --ignore=platforms --ignore=hooks --ignore=assets --ignore=www --ignore=build --ignore=plugins",

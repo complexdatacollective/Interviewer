@@ -1,7 +1,109 @@
-const fs = require("pn/fs"); // https://www.npmjs.com/package/pn
-const svg2png = require("svg2png");
+#!/usr/bin/env node
 
-fs.readFile("source.svg")
-    .then(svg2png)
-    .then(buffer => fs.writeFile("dest.png", buffer))
-    .catch(e => console.error(e));
+const fs = require("fs");
+const svg2png = require("svg2png");
+const path = require('path');
+const icongen = require('icon-gen');
+
+function list(val) {
+  return val.split(',');
+}
+
+let jobs = [
+  {
+    type:'svg2png',
+    inputFile: 'assets/icons/round/NC-Round.svg',
+    outputPath: 'www/icons/android/',
+    sizes: [36,48,72,96,144,192],
+    fileName: 'NC-Round-',
+    append: ['ldpi','mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']
+  },
+  {
+    type:'svg2png',
+    inputFile: 'assets/icons/square/NC-Square.svg',
+    outputPath: 'www/icons/ios/',
+    sizes: [76,152,40,80,72,144,50,100,167],
+    fileName: 'NC-Square-',
+    append: 'size'
+
+  },
+  {
+    type:'icongen',
+    inputFile: 'assets/icons/round/NC-Round.svg',
+    outputPath: 'assets/icons/round',
+    options: {
+      modes: ['ico', 'icns'], //all
+      names: {
+        ico: 'round',
+        icns: 'ios'
+      },
+      report: true,
+    }
+  },
+  {
+    type:'icongen',
+    inputFile: 'assets/icons/square/NC-Square.svg',
+    outputPath: 'assets/icons/square',
+    options: {
+      modes: ['ico', 'icns'], //all
+      names: {
+        ico: 'round',
+        icns: 'ios'
+      },
+      report: true,
+    }
+  }
+];
+
+parseJobs(jobs);
+
+function parseJobs(jobs) {
+  for (let job of jobs) {
+    if (job.type === "icongen") {
+      icongen ( job.inputFile, job.outputPath, job.options )
+        .then( (results)=> {
+          console.log(results);
+        })
+        .catch( (err)=> {
+          console.log(err);
+      })
+    } else if (job.type === "svg2png") {
+        generate(job);
+    }
+  }
+
+}
+
+function generate(job) {
+  const buffer = fs.readFileSync(job.inputFile);
+  for (let size of job.sizes) {
+
+    if (!buffer) {
+      new Error('Faild to write the image, ' + job.size + 'x' + job.size);
+      return;
+    }
+
+    let dest = job.fileName;
+
+    if (job.append === 'size') {
+      dest = dest + size
+    } else if (job.append.length) {
+      dest = dest + job.append[job.sizes.indexOf(size)];
+    }
+
+    dest = dest + '.png';
+
+    dest = path.join(job.outputPath + dest);
+
+    svg2png(buffer, { width: size, height: size }).then(output => {
+      fs.writeFile(dest, output, function (err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
+    });
+
+
+  }
+}
