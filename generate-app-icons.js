@@ -5,13 +5,9 @@ const svg2png = require("svg2png");
 const path = require('path');
 const icongen = require('icon-gen');
 
-function list(val) {
-  return val.split(',');
-}
-
 let jobs = [
   {
-    type:'svg2png',
+    type:'cordova',
     inputFile: 'assets/icons/round/NC-Round.svg',
     outputPath: 'www/icons/android/',
     sizes: [36,48,72,96,144,192],
@@ -19,7 +15,7 @@ let jobs = [
     append: ['ldpi','mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']
   },
   {
-    type:'svg2png',
+    type:'cordova',
     inputFile: 'assets/icons/square/NC-Square.svg',
     outputPath: 'www/icons/ios/',
     sizes: [76,152,40,80,72,144,50,100,167],
@@ -28,27 +24,14 @@ let jobs = [
 
   },
   {
-    type:'icongen',
+    type:'electron',
     inputFile: 'assets/icons/round/NC-Round.svg',
     outputPath: 'assets/icons/round',
     options: {
       modes: ['ico', 'icns'], //all
       names: {
         ico: 'round',
-        icns: 'ios'
-      },
-      report: true,
-    }
-  },
-  {
-    type:'icongen',
-    inputFile: 'assets/icons/square/NC-Square.svg',
-    outputPath: 'assets/icons/square',
-    options: {
-      modes: ['ico', 'icns'], //all
-      names: {
-        ico: 'round',
-        icns: 'ios'
+        icns: 'round'
       },
       report: true,
     }
@@ -59,22 +42,26 @@ parseJobs(jobs);
 
 function parseJobs(jobs) {
   for (let job of jobs) {
-    if (job.type === "icongen") {
-      icongen ( job.inputFile, job.outputPath, job.options )
-        .then( (results)=> {
-          console.log(results);
-        })
-        .catch( (err)=> {
-          console.log(err);
-      })
-    } else if (job.type === "svg2png") {
-        generate(job);
+    if (job.type === "cordova") {
+      gewnerateCordovaIcons(job);
+    } else if (job.type === "electron") {
+      generateNativeIcons(job);
     }
   }
 
 }
 
-function generate(job) {
+function gewnerateCordovaIcons(job) {
+  icongen ( job.inputFile, job.outputPath, job.options )
+  .then( (results)=> {
+    console.log(results);
+  })
+  .catch( (err)=> {
+    console.log(err);
+  })
+}
+
+function generateNativeIcons(job) {
   const buffer = fs.readFileSync(job.inputFile);
   for (let size of job.sizes) {
 
@@ -103,7 +90,5 @@ function generate(job) {
         }
       });
     });
-
-
   }
 }
