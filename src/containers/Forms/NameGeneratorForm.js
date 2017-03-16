@@ -13,7 +13,7 @@ class NameGeneratorForm extends Component {
   fieldNames = ({ fields }) => {
     const { renderTextField } = this;
     return (
-      <div className='grid__item'>
+      <div>
         <ul className='names__list'>
           {fields.map((name, index) =>
             <li key={index}>
