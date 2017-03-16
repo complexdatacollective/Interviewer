@@ -13,19 +13,19 @@ class ProtocolQuestion extends Component {
       skip
     } = this.props.question;
 
-    if (this.props.protocolForm && this.props.protocolForm.values) {
-      // TODO - skip logic using templating strings
-      if (skip) {
-        const evalStr = protocolService.evaluateSkipLogic(skip, `this.props.protocolForm.values`);
-        // eslint-disable-next-line
-        console.log(eval(evalStr));
-        // eslint-disable-next-line
-        if (eval(evalStr)) {
-          console.log('eval true', evalStr);
-          return null;
-        }
-      }
-    }
+    // TODO - skip logic using templating strings
+    // if (this.props.protocolForm && this.props.protocolForm.values) {
+    //   if (skip) {
+    //     const evalStr = protocolService.evaluateSkipLogic(skip, `this.props.protocolForm.values`);
+    //     // eslint-disable-next-line
+    //     console.log(eval(evalStr));
+    //     // eslint-disable-next-line
+    //     if (eval(evalStr)) {
+    //       console.log('eval true', evalStr);
+    //       return null;
+    //     }
+    //   }
+    // }
 
     return (
       <div className='grid__container'>
