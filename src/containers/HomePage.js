@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -33,6 +34,9 @@ class HomePage extends Component {
         <div className='grid__item grid--p-small'>
           <h1 className='type--home-title title--center'>
             Welcome {participant.userProfile && participant.userProfile.name}
+          </h1>
+          <h1 className='type--home-title title--center'>
+            <Link to='protocol'>Access sample protocol</Link>
           </h1>
           <h3 className='type--title-3'>Here are your nodes</h3>
           <Grid columns={2}>
