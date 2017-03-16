@@ -1,5 +1,5 @@
 export default class Network {
-    constructor() {
-        this.network = {};
-    }
+  constructor() {
+    this.network = {};
+  }
 }
