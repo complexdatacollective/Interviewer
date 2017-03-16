@@ -42,16 +42,16 @@ parseJobs(jobs);
 
 function parseJobs(jobs) {
   for (let job of jobs) {
-    if (job.type === "cordova") {
-      gewnerateCordovaIcons(job);
-    } else if (job.type === "electron") {
-      generateNativeIcons(job);
+    if (job.type === "electron") {
+      generateElectronIcons(job);
+    } else if (job.type === "cordova") {
+      generateCordovaIcons(job);
     }
   }
 
 }
 
-function gewnerateCordovaIcons(job) {
+function generateElectronIcons(job) {
   icongen ( job.inputFile, job.outputPath, job.options )
   .then( (results)=> {
     console.log(results);
@@ -61,7 +61,7 @@ function gewnerateCordovaIcons(job) {
   })
 }
 
-function generateNativeIcons(job) {
+function generateCordovaIcons(job) {
   const buffer = fs.readFileSync(job.inputFile);
   for (let size of job.sizes) {
 
