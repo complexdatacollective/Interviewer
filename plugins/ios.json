@@ -7,10 +7,10 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
         "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "org.codaco.networkCanvas"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "org.codaco.networkCanvas"
         },
         "cordova-plugin-wkwebview-engine": {

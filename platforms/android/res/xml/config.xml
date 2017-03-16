@@ -1,25 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.codaco.networkCanvas" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.codaco.networkCanvas" version="4.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <name>HelloCordova</name>
+    <name>NetworkCanvas</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
+    A touch-optimised framework for capturing personal network data.
+  </description>
+    <author email="developers@coda.co" href="http://coda.co">
+    Complex Data Collective
+  </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
+    <icon density="ldpi" src="www/icons/android/NC-Round-ldpi.png" />
+    <icon density="mdpi" src="www/icons/android/NC-Round-mdpi.png" />
+    <icon density="hdpi" src="www/icons/android/NC-Round-hdpi.png" />
+    <icon density="xhdpi" src="www/icons/android/NC-Round-xhdpi.png" />
+    <icon density="xxhdpi" src="www/icons/android/NC-Round-xxhdpi.png" />
+    <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
     <preference name="xwalkVersion" value="23+" />
@@ -28,4 +30,8 @@
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="android-minSdkVersion" value="16" />
+    <preference name="Orientation" value="landscape" />
+    <preference name="target-device" value="tablet" />
+    <preference name="SuppressesLongPressGesture" value="true" />
+    <preference name="Suppresses3DTouchGesture" value="true" />
 </widget>

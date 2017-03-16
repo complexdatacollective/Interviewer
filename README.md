@@ -1,8 +1,10 @@
-# Network Canvas React
+# Network Canvas
 Technologies used:
 ES6 (via Babel)
 React
 Redux
+Electron
+Cordova
 SCSS
 Jest (Testing suite)
 React Scripts
@@ -18,8 +20,15 @@ This repository assumes that `npm` is installed. If you don't have it installed,
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
 |`build`|Compiles assets and prepares app for production in the /build directory.|
-|`test`|Runs testing suite|
-|`eject`|Ejects settings within React Scripts library|
+|`test`|Runs testing suite.|
+|`eject`|Ejects settings within React Scripts library.|
+|`electron`|Runs the current code in electron, for testing.|
+|`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
+|`package-mac`|Uses electron-packager to package an OSX release.|
+|`package-win`|Uses electron-packager to package a Windows release.|
+|`package-linux`|Uses electron-packager to package a Linux release.|
+|`package-cordova`|Builds Android and iOS cordova projects|
+|`create-installer-mac`|Creates a DMG based installer for OSX.|
 
 
 ## Application Structure
