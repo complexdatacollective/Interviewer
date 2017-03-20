@@ -12,7 +12,7 @@ injectTapEventPlugin();
 function startApp() {
     ReactDOM.render(
         <Provider store={store}>
-            <AppRouter />
+          <AppRouter />
         </Provider>,
       document.getElementById('root')
     );

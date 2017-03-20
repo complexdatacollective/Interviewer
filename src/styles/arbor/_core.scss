@@ -67,25 +67,25 @@ $arbor-output-classes: true !default;
 // =============================================================================
 @include type-set(arial, base, (font-family: 'Arial, "Open Sans", sans-serif', font-size: 16px, line-height: 1.65, font-weight: 300));
 
-@include type-set(title-1, base, (width: 100%, font-size: 39px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-1, base, (width: 100%, font-size: 39px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 @include type-set(title-1, medium, (font-size: 49px));
 
-@include type-set(title-2, base, (width: 100%, font-size: 32px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-2, base, (width: 100%, font-size: 32px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 @include type-set(title-2, medium, (font-size: 34px));
 
-@include type-set(title-3, base, (width: 100%, font-size: 24px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-3, base, (width: 100%, font-size: 24px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 @include type-set(title-3, medium, (font-size: 26px));
 
-@include type-set(title-4, base, (width: 100%, font-size: 16px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-4, base, (width: 100%, font-size: 16px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 
-@include type-set(title-5, base, (width: 100%, font-size: 14px, line-height: 1.65, font-weight: 300, margin: 2em 0 0, padding: 0, color: swatch('background-white')));
+@include type-set(title-5, base, (width: 100%, font-size: 14px, line-height: 1.65, font-weight: 300, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 
 // Default Copy Typography Sizes
 // =============================================================================
-@include type-set(copy-large, base, (font-size: 20px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
-@include type-set(copy-standard, base, (font-size: 16px, line-height: 1.65, font-weight: 300, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
-@include type-set(copy-small, base, (font-size: 14px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
-@include type-set(copy-mini, base, (font-size: 13px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('chalk')));
+@include type-set(copy-large, base, (font-size: 20px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('stone')));
+@include type-set(copy-standard, base, (font-size: 16px, line-height: 1.65, font-weight: 300, margin: 1.5em 0 3px, padding: 0, color: swatch('stone')));
+@include type-set(copy-small, base, (font-size: 14px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('stone')));
+@include type-set(copy-mini, base, (font-size: 13px, line-height: 1.65, font-weight: 400, margin: 1.5em 0 3px, padding: 0, color: swatch('stone')));
 
 @include type-set(first, base, (margin-top: 0));
 
