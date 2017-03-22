@@ -38,7 +38,7 @@ $arbor-output-classes: true !default;
 // only these colors.
 
 // Blues
-@include swatch-set('network-blue', #00A1E5);
+@include swatch-set('network-blue', #ff0000);
 @include swatch-set('network-blue--light', #33D4FF);
 @include swatch-set('network-blue--dark', #002266);
 @include swatch-set('network-teal', #006EB2);
@@ -65,7 +65,7 @@ $arbor-output-classes: true !default;
 
 // Default Headline Typography Sizes
 // =============================================================================
-@include type-set(arial, base, (font-family: 'Arial, "Open Sans", sans-serif', font-size: 16px, line-height: 1.65, font-weight: 300));
+@include type-set(arial, base, (font-family: 'Quicksand, "Open Sans", sans-serif', font-size: 16px, line-height: 1.65, font-weight: 300));
 
 @include type-set(title-1, base, (width: 100%, font-size: 39px, line-height: 1.45, font-weight: 100, margin: 2em 0 0, padding: 0, color: swatch('ink')));
 @include type-set(title-1, medium, (font-size: 49px));

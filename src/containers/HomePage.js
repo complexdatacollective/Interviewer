@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import FaPlus from '../../node_modules/react-icons/fa/plus'
 import { actionCreators as networkActions } from '../ducks/modules/network';
 
 import { NodeForm } from './Forms';
@@ -33,7 +33,7 @@ class HomePage extends Component {
       <div className='grid__container'>
         <div className='grid__item grid--p-small'>
           <h1 className='type--home-title title--center'>
-            Welcome {participant.userProfile && participant.userProfile.name}
+            Welcome {participant.userProfile && participant.userProfile.name} <FaPlus />
           </h1>
           <h1 className='type--home-title title--center'>
             <Link to='protocol'>Access sample protocol</Link>

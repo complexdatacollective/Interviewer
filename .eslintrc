@@ -5,9 +5,14 @@
         "es6": true,
         "node": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
+        ecmaVersion: 7,
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "spread": true,
+            "experimentalObjectRestSpread": true,
+            "object-shorthand": ["error", "always"]
         },
         "sourceType": "module"
     },
