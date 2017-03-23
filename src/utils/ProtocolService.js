@@ -1,8 +1,8 @@
 /**
  * Validates protocol data.
  *
- * @export
- * @class ProtocolService
+ * @extends Component
+ * @module ProtocolService
  */
 export default class ProtocolService {
   constructor() {
@@ -16,7 +16,6 @@ export default class ProtocolService {
    * @param {string} formVarStr - Form variable string
    * @returns {string} Sanitized string
    *
-   * @memberOf ProtocolService
    */
   evaluateSkipLogic(cond, formVarStr) {
     if (typeof formVarStr !== 'string') {

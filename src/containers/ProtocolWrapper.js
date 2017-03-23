@@ -7,7 +7,17 @@ import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { ProtocolStage } from '../containers';
 import { Button } from 'semantic-ui-react';
 
+/**
+ * Wraps protocols
+ *
+ * @extends Component
+ */
 class ProtocolWrapper extends Component {
+  /**
+   * Creates an instance of ProtocolWrapper.
+   * @param {any} props
+   *
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +25,9 @@ class ProtocolWrapper extends Component {
     }
   }
 
+  /**
+   * Called when the component is about to be mounted to the DOM
+   */
   componentWillMount() {
     if (!this.props.protocol.protocolLoaded) {
       this.props.loadProtocol()

@@ -32,7 +32,8 @@
     "electron-packager": "^8.5.2",
     "electron-winstaller": "^2.5.2",
     "icon-gen": "^1.0.7",
-    "jsdoc": "^3.4.3"
+    "jsdoc": "^3.4.3",
+    "jsdoc-babel": "^0.3.0"
   },
   "dependencies": {
     "@mars/heroku-js-runtime-env": "^3.0.0",
