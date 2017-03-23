@@ -12,6 +12,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build && cp -r ./build/* ./www",
     "test": "react-scripts test --env=jsdom",
+    "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "generate-icons": "node generate-app-icons.js",
@@ -30,7 +31,9 @@
     "electron-installer-dmg": "^0.2.0",
     "electron-packager": "^8.5.2",
     "electron-winstaller": "^2.5.2",
-    "icon-gen": "^1.0.7"
+    "icon-gen": "^1.0.7",
+    "jsdoc": "^3.4.3",
+    "jsdoc-babel": "^0.3.0"
   },
   "dependencies": {
     "@mars/heroku-js-runtime-env": "^3.0.0",
