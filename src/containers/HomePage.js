@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import { actionCreators as networkActions } from '../ducks/modules/network';
 
 import { NodeForm } from './Forms';
