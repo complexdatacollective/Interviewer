@@ -1,57 +1,16 @@
-$arbor-output-classes: false;
+@import "base/_all.scss";
+@import "components/_all.scss";
 
-@import "arbor/arbor";
-@import "components/logo";
-@import "components/button";
-
-// Imports and settings
-// =============================================================================
-@include type-set(
-    'home-title', base,
-    (
-        font-size: 3rem,
-        line-height: 1.65,
-        font-weight: 400,
-        padding: 0,
-        // color: swatch('background-white'),
-        text-align: center,
-        width: 100%
-    )
-);
-@include type-set(
-    'profile-subtitle', base,
-    (
-        font-size: 14px,
-        line-height: 1.65,
-        font-weight: 400,
-        padding: 0,
-        // color: swatch('cherry'),
-        margin: 0
-    )
-);
-@include type-set('network-blue', base, (color: swatch('network-blue')));
-
-@include arbor-reset;
-@include arbor-type;
-@include arbor-grid($container-width: percentage(5/6));
 
 #root {
-
-    // Override semantic-ui styles
-    // =============================
-    @include arbor-button;
-
-    // Container level styles
-    // =============================
-    & html, body, .app__container {
-        min-height: 100vh;
-        margin: 0;
-    }
-
-    // background: path-url('images', 'network-canvas-bg.png') no-repeat center center fixed;
-    background-size: cover;
-    height: 100%;
-
     @import "containers/home";
     @import "containers/nameGenerator";
+}
+
+
+html, body {
+  font-family: "Quicksand", cursive;
+  margin:0;
+  padding:0;
+  height:100%;
 }

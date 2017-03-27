@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import { actionCreators as networkActions } from '../ducks/modules/network';
 
 import { NodeForm } from './Forms';
-import { Button, Icon, Grid, Card } from 'semantic-ui-react'
+import { Button, Icon, Grid, Card, Container } from 'semantic-ui-react';
+
+import { Node } from '../components';
 
 class HomePage extends Component {
   handleNodeSubmit = () => {
@@ -29,7 +31,7 @@ class HomePage extends Component {
     const { handleNodeSubmit } = this;
 
     return (
-      <div className='grid__container'>
+      <Container>
         <div className='grid__item grid--p-small'>
           <h1 className='type--home-title title--center'>
             Welcome {participant.userProfile && participant.userProfile.name}
@@ -43,6 +45,7 @@ class HomePage extends Component {
               {network.nodes.map((node, idx) => {
                 return (
                   <Grid.Column key={idx}>
+                  <Node name={node.fName}/>
                     <Card className='node__card'>
                       <Card.Header>
                         <Icon
@@ -64,7 +67,7 @@ class HomePage extends Component {
         <NodeForm
           onSubmit={handleNodeSubmit}
           submitButton={this.renderSubmitButton()} />
-      </div>
+      </Container>
     );
   }
 }
