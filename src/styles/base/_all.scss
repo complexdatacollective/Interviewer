@@ -1,3 +1,16 @@
 @import '../../node_modules/normalize-scss/sass/normalize.scss';
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 @import '_colors';
 @import '_typography';
+@import '_animation';
+@import '_spacing';
