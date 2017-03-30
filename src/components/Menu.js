@@ -84,7 +84,7 @@ const MenuFactory = React.createClass({
               </button>
             </div>
             <header>
-              <h1>Stages</h1>
+              <h1 className="bm-menu-title">Stages</h1>
             </header>
             <nav className="bm-item-list">
               {React.Children.map(this.props.children, (item, index) => {

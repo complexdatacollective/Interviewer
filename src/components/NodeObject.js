@@ -4,12 +4,13 @@ import React, { Component } from 'react';
 class Node extends Component {
   render() {
     const {
-      name
+      fName,
+      lName
     } = this.props;
 
     return (
       <div className='node-object'>
-        <h3>test - {name}</h3>
+        <h3>{fName} {lName}</h3>
       </div>
     );
   }

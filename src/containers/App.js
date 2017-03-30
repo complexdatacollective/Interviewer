@@ -16,9 +16,7 @@ export default class App extends Component {
     return (
       <div id='outer-container'>
           <Menu>
-            <Link to='protocol'>Access sample protocol</Link>
-            <Link to='protocol'>Access sample protocol</Link>
-            <Link to='protocol'>Access sample protocol</Link>
+            <Link to='/'>Home Page</Link>
             <Link to='protocol'>Access sample protocol</Link>
           </Menu>
           <div id='page-wrap' className="">

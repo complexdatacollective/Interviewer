@@ -35,16 +35,26 @@
   fill: map-get($roles, menu);
 }
 
+//Menu header
+.bm-menu-title {
+  padding:$padding-base-vertical $spacer-4;
+  color: map-get($roles, menu-headings);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
 /* Wrapper for item list */
 .bm-item-list {
 
   a {
     display: block;
-    padding:$padding-base-vertical $padding-base-horizontal;
+    padding:$padding-base-vertical $spacer-4;
     text-transform: uppercase;
+    letter-spacing: 2px;
     text-decoration: none;
     color: $charcoal;
     font-weight: 500;
+    font-size: 0.75rem;
     border-top: 1px solid $divider;
     &:hover {
       background: #00ba96;
@@ -66,9 +76,15 @@
   transform: none;
   transition: all $animation-standard-duration $animation-default-easing;
   height:100%;
-  width:22vw;
-  transform: translate3d(-100%, 0, 0);
 
+  transform: translate3d(-100%, 0, 0);
+  @include gridle_state( tablet) {
+    width:30vw;
+  }
+
+  @include gridle_state( desktop) {
+    width:22vw;
+  }
 }
 
 .bm-menu-wrap.isOpen {
@@ -85,9 +101,15 @@
 }
 
 #page-wrap.isOpen {
-  transform: translate3d(17vw, 0, -40vw);
+
   transform-origin: 100%;
-  transform-style: preserve-3d,
+  transform-style: preserve-3d;
+  @include gridle_state( tablet) {
+    transform: translate3d(23.5vw, 0, -66vw);
+  }
+  @include gridle_state( desktop) {
+    transform: translate3d(17vw, 0, -40vw);
+  }
 }
 
 #root {

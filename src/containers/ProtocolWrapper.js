@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 
 import { ProtocolStage } from '../containers';
-import { Button } from 'semantic-ui-react';
 
 class ProtocolWrapper extends Component {
   constructor(props) {
@@ -42,14 +41,14 @@ class ProtocolWrapper extends Component {
       protocol: { protocolConfig }
     } = this.props;
     return (
-      <div className='grid__container'>
-        <div className='grid__item grid--p-small'>
-          <h1 className='type--home-title title--center'>
+      <div className='container'>
+        <div className='col'>
+          <h4 className=''>
             Welcome {participant.userProfile && participant.userProfile.name}
-          </h1>
-          <p className='type--copy-small'>{protocolConfig.name} {protocolConfig.version}</p>
+          </h4>
+          <p className='small'>{protocolConfig.name} {protocolConfig.version}</p>
         </div>
-        <div className='grid__item grid--p-small'>
+        <div className='col'>
           {
             protocolConfig.stages &&
             protocolConfig.stages.map((stage, idx) =>
@@ -57,21 +56,21 @@ class ProtocolWrapper extends Component {
             )
           }
         </div>
-        <div className='grid__item grid--x-bookend'>
-          <Button
+        <div className='col'>
+          <button
             content='Go back'
             icon='left arrow'
             labelPosition='left'
             onClick={this.previousStep}
-          />
-          <Button
+          >Go back</button>
+          <button
             type='button'
             className='button--primary'
             content='Next'
             icon='right arrow'
             labelPosition='right'
             onClick={this.nextStep}
-          />
+          > Next </button>
         </div>
       </div>
     );

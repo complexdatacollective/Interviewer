@@ -3,10 +3,7 @@ import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as networkActions } from '../ducks/modules/network';
-
 import { NodeForm } from './Forms';
-import { Button, Icon, Grid, Card, Container } from 'semantic-ui-react';
-
 import { Node } from '../components';
 
 class HomePage extends Component {
@@ -18,7 +15,7 @@ class HomePage extends Component {
 
   renderSubmitButton() {
     return (
-      <Button primary type='submit'>Add Node</Button>
+      <button className="primary" type='submit'>Add Node</button>
     )
   }
 
@@ -31,43 +28,25 @@ class HomePage extends Component {
     const { handleNodeSubmit } = this;
 
     return (
-      <Container>
-        <div className='grid__item grid--p-small'>
-          <h1 className='type--home-title title--center'>
+        <div className="container">
+          <h1 >
             Welcome {participant.userProfile && participant.userProfile.name}
           </h1>
-          <h1 className='type--home-title title--center'>
+          <h3 >
             <Link to='protocol'>Access sample protocol</Link>
-          </h1>
-          <h3 className='type--title-3'>Here are your nodes</h3>
-          <Grid columns={2}>
-            <Grid.Row>
-              {network.nodes.map((node, idx) => {
-                return (
-                  <Grid.Column key={idx}>
-                  <Node name={node.fName}/>
-                    <Card className='node__card'>
-                      <Card.Header>
-                        <Icon
-                          name='cancel'
-                          color='red'
-                          link
-                          onClick={() => removeNode(idx)} />
-                      </Card.Header>
-                      <Card.Content>
-                        {node.fName && node.fName} {node.lName && node.lName}
-                      </Card.Content>
-                    </Card>
-                  </Grid.Column>
-                );
-              })}
-            </Grid.Row>
-          </Grid>
+          </h3>
+          <div className="col">
+            {network.nodes.map((node, idx) => {
+              return (
+                <Node key={idx} fName={node.fName} lName={node.lName} onClick={() => removeNode(idx)}/>
+              );
+            })}
+          </div>
+          <NodeForm
+            onSubmit={handleNodeSubmit}
+            submitButton={this.renderSubmitButton()} />
         </div>
-        <NodeForm
-          onSubmit={handleNodeSubmit}
-          submitButton={this.renderSubmitButton()} />
-      </Container>
+
     );
   }
 }
