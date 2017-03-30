@@ -5,10 +5,8 @@ import network from './network';
 import page from './page';
 import participant from './participant';
 import protocol from './protocol';
-import burgerMenu from './menuReducer';
 
 export default combineReducers({
-    burgerMenu,
     form: formReducer,
     network,
     page,
