@@ -5,13 +5,13 @@ import { NameGeneratorForm } from '../containers/Forms';
 import ProtocolService from '../utils/ProtocolService';
 
 const protocolService = new ProtocolService();
-class ProtocolQuestion extends Component {
+class ProtocolPrompt extends Component {
   render() {
     const {
-      label,
+      title,
       name,
       skip
-    } = this.props.question;
+    } = this.props.prompt;
 
     // TODO - skip logic using templating strings
     // if (this.props.protocolForm && this.props.protocolForm.values) {
@@ -30,7 +30,7 @@ class ProtocolQuestion extends Component {
     return (
       <div className='grid__container'>
         <div className='grid__item grid--p-small'>
-          {label}
+          {title}
         </div>
         <div className='grid__item grid--p-small'>
           <NameGeneratorForm
@@ -41,8 +41,8 @@ class ProtocolQuestion extends Component {
   }
 }
 
-ProtocolQuestion.propTypes = {
-  question: React.PropTypes.object
+ProtocolPrompt.propTypes = {
+  prompt: React.PropTypes.object
 }
 
 function mapStateToProps(state) {
@@ -55,4 +55,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(ProtocolQuestion);
+export default connect(mapStateToProps)(ProtocolPrompt);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { ProtocolQuestion } from '../components';
+import { ProtocolPrompt } from '../components';
 class ProtocolStage extends Component {
   render() {
     const {
@@ -16,8 +16,8 @@ class ProtocolStage extends Component {
         <div className='col'>
           {
             params.prompts &&
-            params.prompts.map((question, idx) =>
-              <ProtocolQuestion key={idx} question={question} />
+            params.prompts.map((prompt, idx) =>
+              <ProtocolPrompt key={idx} prompt={prompt} />
             )
           }
         </div>
