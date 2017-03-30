@@ -10,6 +10,7 @@ class ProtocolPrompt extends Component {
     const {
       title,
       name,
+      form,
       skip
     } = this.props.prompt;
 
@@ -34,7 +35,7 @@ class ProtocolPrompt extends Component {
         </div>
         <div className='grid__item grid--p-small'>
           <NameGeneratorForm
-            fieldName={name} />
+            protocolForm={form} />
         </div>
       </div>
     );

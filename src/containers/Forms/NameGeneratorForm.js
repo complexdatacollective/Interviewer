@@ -2,29 +2,40 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 
 class NameGeneratorForm extends Component {
-  renderTextField = ({ input, label, meta: { touched, error }}) => {
+  renderTextField = ({ input, label, placeholder, required, meta: { touched, error }}) => {
     return (
-      <input label={label} {...input} />
+      <input
+        label={label}
+        placeholder={placeholder}
+        required={required}
+        {...input} />
     );
   }
 
   fieldNames = ({ fields }) => {
     const { renderTextField } = this;
+
     return (
       <div>
         <ul className='names__list'>
-          {fields.map((name, index) =>
+          {fields.map((person, index) =>
             <li key={index}>
-              <Field
-                name={`${name}.fName`}
-                component={renderTextField} />
+              {this.props.protocolForm.fields.map((item, idx) =>
+                <Field
+                  name={`${person}.${item.name}`}
+                  type={item.type}
+                  label={item.label}
+                  placeholder={item.placeholder}
+                  required={item.required}
+                  component={renderTextField} />
+              )}
             </li>
           )}
         </ul>
         <button
           type='button'
           onClick={() => fields.push({})}>
-          Add a name
+          {this.props.protocolForm.title}
         </button>
       </div>
     )
@@ -33,16 +44,16 @@ class NameGeneratorForm extends Component {
   render() {
     const {
       props: {
-        fieldName,
+        protocolForm,
         handleSubmit,
         submitButton
       }
     } = this;
-
+    console.log(protocolForm)
     return (
       <form onSubmit={handleSubmit}>
         <FieldArray
-          name={fieldName}
+          name={this.props.protocolForm.formName}
           component={this.fieldNames.bind(this)} />
         {submitButton}
       </form>
@@ -51,9 +62,7 @@ class NameGeneratorForm extends Component {
 }
 
 NameGeneratorForm.propTypes = {
-  fieldName: React.PropTypes.string,
-  fieldLabel: React.PropTypes.string,
-  multiple: React.PropTypes.bool
+  protocolForm: React.PropTypes.object
 }
 
 NameGeneratorForm = reduxForm({

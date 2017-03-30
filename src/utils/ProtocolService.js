@@ -32,15 +32,18 @@ export default class ProtocolService {
                 title: 'Within the past 6 months, who have you felt close to?',
                 form: {
                   title: 'Add a person you know',
+                  formName: 'closeFriends',
                   fields: [
                     {
-                      title: 'Name',
+                      label: 'Name',
+                      name: 'name',
                       type: 'text',
                       placeholder: 'Name',
                       required: true
                     },
                     {
-                      title: 'Nickname',
+                      label: 'Nickname',
+                      name: 'nickname',
                       type: 'text',
                       placeholder: 'Nickname',
                       required: true

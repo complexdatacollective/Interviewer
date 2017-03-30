@@ -17,7 +17,9 @@ class ProtocolStage extends Component {
           {
             params.prompts &&
             params.prompts.map((prompt, idx) =>
-              <ProtocolPrompt key={idx} prompt={prompt} />
+              <ProtocolPrompt
+                key={idx}
+                prompt={prompt} />
             )
           }
         </div>
