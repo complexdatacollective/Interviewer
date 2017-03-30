@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 
 class NameGeneratorForm extends Component {
-  renderTextField = ({ input, label, placeholder, required, meta: { touched, error }}) => {
+  renderTextField = ({ input, label, placeholder, required }) => {
     return (
       <input
         label={label}
         placeholder={placeholder}
         required={required}
-        {...input} />
+      />
     );
   }
 
@@ -22,12 +22,14 @@ class NameGeneratorForm extends Component {
             <li key={index}>
               {this.props.protocolForm.fields.map((item, idx) =>
                 <Field
+                  key={idx}
                   name={`${person}.${item.name}`}
                   type={item.type}
                   label={item.label}
                   placeholder={item.placeholder}
                   required={item.required}
-                  component={renderTextField} />
+                  component={renderTextField}
+                />
               )}
             </li>
           )}
@@ -49,12 +51,13 @@ class NameGeneratorForm extends Component {
         submitButton
       }
     } = this;
-    console.log(protocolForm)
+
     return (
       <form onSubmit={handleSubmit}>
         <FieldArray
-          name={this.props.protocolForm.formName}
-          component={this.fieldNames.bind(this)} />
+          name={protocolForm.formName}
+          component={this.fieldNames.bind(this)}
+        />
         {submitButton}
       </form>
     )
