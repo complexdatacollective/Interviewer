@@ -25,34 +25,30 @@ export default class ProtocolService {
       "stages": [
         {
           "type": "namegenerator",
-          "title": "Name Generator One",
+          "title": "Name Generator Title",
           "params": {
-            "questions": [
+            "prompts": [
               {
-                "label": "Who are your best friends?",
-                "name": "bestFriends",
-                "multiple": "true",
-                "skip": ""
-              }
-            ]
-          },
-        },
-        {
-          "type": "namegenerator",
-          "title": "Name Generator Two",
-          "params": {
-            "questions": [
-              {
-                "label": "Who did you go to school with?",
-                "name": "school",
-                "multiple": "true",
-                "skip": "{{bestFriends}}.length > 5"
+                title: 'Within the past 6 months, who have you felt close to?',
+                variables: [
+                  {
+                    label: 'special_category',
+                    value: 46
+                  },
+                  {
+                    label: 'close_friend',
+                    value: true
+                  }
+                ]
               },
               {
-                "label": "Who was your best friend at school?",
-                "name": "bestFriendsSchool",
-                "multiple": "true",
-                "skip": "!{{bestFriends}}"
+                title: "Within the past 6 months, what's the best thing you've seen ever?",
+                variables: [
+                  {
+                    label: 'fun_times',
+                    value: true
+                  }
+                ]
               }
             ]
           },

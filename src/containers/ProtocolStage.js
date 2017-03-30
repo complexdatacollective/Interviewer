@@ -15,8 +15,8 @@ class ProtocolStage extends Component {
         </div>
         <div className='col'>
           {
-            params.questions &&
-            params.questions.map((question, idx) =>
+            params.prompts &&
+            params.prompts.map((question, idx) =>
               <ProtocolQuestion key={idx} question={question} />
             )
           }

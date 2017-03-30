@@ -58,17 +58,10 @@ class ProtocolWrapper extends Component {
         </div>
         <div className='col'>
           <button
-            content='Go back'
-            icon='left arrow'
-            labelPosition='left'
             onClick={this.previousStep}
           >Go back</button>
           <button
             type='button'
-            className='button--primary'
-            content='Next'
-            icon='right arrow'
-            labelPosition='right'
             onClick={this.nextStep}
           > Next </button>
         </div>
