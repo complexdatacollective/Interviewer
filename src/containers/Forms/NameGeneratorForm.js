@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 
-import { Input, Form, Card, Button, Icon } from 'semantic-ui-react';
-
 class NameGeneratorForm extends Component {
   renderTextField = ({ input, label, meta: { touched, error }}) => {
     return (
-      <Input label={label} {...input} />
+      <input label={label} {...input} />
     );
   }
 
@@ -17,30 +15,17 @@ class NameGeneratorForm extends Component {
         <ul className='names__list'>
           {fields.map((name, index) =>
             <li key={index}>
-              <Card className='names__card'>
-                <Card.Header className='names__card-header'>
-                  <Icon
-                    link
-                    color='red'
-                    name='close'
-                    onClick={() => fields.remove(index)}/>
-                </Card.Header>
-                <Card.Content>
-                  <Field
-                    name={`${name}.fName`}
-                    component={renderTextField} />
-                </Card.Content>
-              </Card>
+              <Field
+                name={`${name}.fName`}
+                component={renderTextField} />
             </li>
           )}
         </ul>
-        <Button
+        <button
           type='button'
-          className='button--add'
-          content='Add a name'
-          icon='add circle'
-          labelPosition='left'
-          onClick={() => fields.push({})} />
+          onClick={() => fields.push({})}>
+          Add a name
+        </button>
       </div>
     )
   }
@@ -55,14 +40,12 @@ class NameGeneratorForm extends Component {
     } = this;
 
     return (
-      <Form onSubmit={handleSubmit}>
-        <Form.Field>
-          <FieldArray
-            name={fieldName}
-            component={this.fieldNames.bind(this)} />
-        </Form.Field>
+      <form onSubmit={handleSubmit}>
+        <FieldArray
+          name={fieldName}
+          component={this.fieldNames.bind(this)} />
         {submitButton}
-      </Form>
+      </form>
     )
   }
 }

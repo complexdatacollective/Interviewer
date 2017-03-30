@@ -30,7 +30,24 @@ export default class ProtocolService {
             "prompts": [
               {
                 title: 'Within the past 6 months, who have you felt close to?',
-                variables: [
+                form: {
+                  title: 'Add a person you know',
+                  fields: [
+                    {
+                      title: 'Name',
+                      type: 'text',
+                      placeholder: 'Name',
+                      required: true
+                    },
+                    {
+                      title: 'Nickname',
+                      type: 'text',
+                      placeholder: 'Nickname',
+                      required: true
+                    }
+                  ]
+                },
+                nodeAttributes: [
                   {
                     label: 'special_category',
                     value: 46
@@ -40,10 +57,18 @@ export default class ProtocolService {
                     value: true
                   }
                 ]
-              },
+              }
+            ]
+          },
+        },
+        {
+          "type": "namegenerator",
+          "title": "Name Generator Title",
+          "params": {
+            "prompts": [
               {
                 title: "Within the past 6 months, what's the best thing you've seen ever?",
-                variables: [
+                nodeAttributes: [
                   {
                     label: 'fun_times',
                     value: true
