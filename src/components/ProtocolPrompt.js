@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import { actionCreators as networkActions } from '../ducks/modules/network';
 import { NameGeneratorForm } from '../containers/Forms';
 import ProtocolService from '../utils/ProtocolService';
 
 const protocolService = new ProtocolService();
 class ProtocolPrompt extends Component {
+  submitProtocolForm() {
+    const {
+      addNode,
+      form
+    } = this.props;
+
+    if (form.protocolForm.values) {
+      addNode(form.protocolForm.values);
+    }
+  }
+
   render() {
     const {
       title,
@@ -35,7 +48,9 @@ class ProtocolPrompt extends Component {
         </div>
         <div className='grid__item grid--p-small'>
           <NameGeneratorForm
-            protocolForm={form} />
+            protocolForm={form}
+            handleSubmit={this.submitProtocolForm}
+          />
         </div>
       </div>
     );
@@ -56,4 +71,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(ProtocolPrompt);
+function mapDispatchToProps(dispatch) {
+  return {
+    addNode: bindActionCreators(networkActions.addNode, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProtocolPrompt);

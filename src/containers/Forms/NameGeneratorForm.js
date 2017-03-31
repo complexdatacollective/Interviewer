@@ -4,11 +4,14 @@ import { reduxForm, Field, FieldArray } from 'redux-form';
 class NameGeneratorForm extends Component {
   renderTextField = ({ input, label, placeholder, required }) => {
     return (
-      <input
-        label={label}
-        placeholder={placeholder}
-        required={required}
-      />
+      <div>
+        <label>{label}</label>
+        <input
+          type="text"
+          placeholder={placeholder}
+          {...input}
+        />
+      </div>
     );
   }
 
@@ -24,10 +27,8 @@ class NameGeneratorForm extends Component {
                 <Field
                   key={idx}
                   name={`${person}.${item.name}`}
-                  type={item.type}
                   label={item.label}
                   placeholder={item.placeholder}
-                  required={item.required}
                   component={renderTextField}
                 />
               )}
