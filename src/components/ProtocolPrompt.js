@@ -11,9 +11,10 @@ class ProtocolPrompt extends Component {
   submitProtocolForm() {
     const {
       addNode,
-      form
+      form,
+      prompt
     } = this.props;
-
+    console.log(prompt.nodeAttributes);
     if (form.protocolForm.values) {
       addNode(form.protocolForm.values);
     }
@@ -46,12 +47,15 @@ class ProtocolPrompt extends Component {
         <div className='grid__item grid--p-small'>
           {title}
         </div>
-        <div className='grid__item grid--p-small'>
-          <NameGeneratorForm
-            protocolForm={form}
-            handleSubmit={this.submitProtocolForm}
-          />
-        </div>
+        {
+          form &&
+          <div className='grid__item grid--p-small'>
+            <NameGeneratorForm
+              protocolForm={form}
+              handleSubmit={this.submitProtocolForm}
+            />
+          </div>
+        }
       </div>
     );
   }

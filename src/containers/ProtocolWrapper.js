@@ -20,19 +20,19 @@ class ProtocolWrapper extends Component {
     }
   }
 
-  nextStep = (e) => {
+  nextStage = (e) => {
     e.preventDefault();
     const maxStep = this.props.protocol.protocolConfig.stages.length - 1;
-    const nextStep = this.state.currentStageIndex + 1 < maxStep ?
+    const nextStage = this.state.currentStageIndex + 1 < maxStep ?
       this.state.currentStageIndex + 1 : maxStep;
-    this.setState({ currentStageIndex: nextStep })
+    this.setState({ currentStageIndex: nextStage })
   }
 
-  previousStep = (e) => {
+  previousStage = (e) => {
     e.preventDefault();
-    const previousStep = this.state.currentStageIndex - 1 > -1 ?
+    const previousStage = this.state.currentStageIndex - 1 > -1 ?
       this.state.currentStageIndex - 1 : 0;
-    this.setState({ currentStageIndex: previousStep });
+    this.setState({ currentStageIndex: previousStage });
   }
 
   render() {
@@ -58,11 +58,11 @@ class ProtocolWrapper extends Component {
         </div>
         <div className='col'>
           <button
-            onClick={this.previousStep}
+            onClick={this.previousStage}
           >Go back</button>
           <button
             type='button'
-            onClick={this.nextStep}
+            onClick={this.nextStage}
           > Next </button>
         </div>
       </div>

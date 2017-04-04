@@ -60,6 +60,15 @@ export default class ProtocolService {
                     value: true
                   }
                 ]
+              },
+              {
+                title: "Within the past 6 months, who has been supportive?",
+                nodeAttributes: [
+                  {
+                    label: 'support_friend',
+                    value: true
+                  }
+                ]
               }
             ]
           },
