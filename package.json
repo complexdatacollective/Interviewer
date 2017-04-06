@@ -75,6 +75,7 @@
     "@mars/heroku-js-runtime-env": "^3.0.0",
     "babel-jest": "^18.0.0",
     "classnames": "^2.2.5",
+    "gridle": "^2.0.48",
     "history": "^4.5.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -89,8 +90,7 @@
     "redux-logger": "^2.7.4",
     "redux-persist": "^4.3.1",
     "redux-thunk": "^2.1.0",
-    "semantic-ui-css": "^2.2.4",
-    "semantic-ui-react": "^0.64.8"
+    "sass-svg": "^1.0.1"
   },
   "homepage": ".",
   "main": "src/electron-starter.js",

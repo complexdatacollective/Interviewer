@@ -1,0 +1,135 @@
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 36px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: $platinum;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: map-get($roles, menu);
+  height:100%;
+  color: $charcoal;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: map-get($roles, menu);
+}
+
+//Menu header
+.bm-menu-title {
+  padding:$padding-base-vertical $spacer-4;
+  color: map-get($roles, menu-headings);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+
+  a {
+    display: block;
+    padding:$padding-base-vertical $spacer-4;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: $charcoal;
+    font-weight: 500;
+    font-size: 0.75rem;
+    border-top: 1px solid $divider;
+    &:hover {
+      background: #00ba96;
+      color: white;
+    }
+  }
+}
+
+
+#outer-container {
+  height:100%;
+  perspective: 1500px;
+}
+
+.bm-menu-wrap {
+  position: fixed;
+  left: 0;
+  z-index: 2;
+  transform: none;
+  transition: all $animation-standard-duration $animation-default-easing;
+  height:100%;
+
+  transform: translate3d(-100%, 0, 0);
+  @include gridle_state( tablet) {
+    width:30vw;
+  }
+
+  @include gridle_state( desktop) {
+    width:22vw;
+  }
+}
+
+.bm-menu-wrap.isOpen {
+  transform: translate3d(0%, 0, 0);
+}
+
+#page-wrap {
+  height: 100%;
+  box-sizing: border-box;
+  background: $navy-taupe;
+  overflow: scroll;
+  padding: 6rem;
+  transition: all $animation-standard-duration $animation-default-easing;
+}
+
+#page-wrap.isOpen {
+
+  transform-origin: 100%;
+  transform-style: preserve-3d;
+  @include gridle_state( tablet) {
+    transform: translate3d(23.5vw, 0, -66vw);
+  }
+  @include gridle_state( desktop) {
+    transform: translate3d(17vw, 0, -40vw);
+  }
+}
+
+#root {
+  height:100%;
+  background: $light-sea-green;
+  color:white;
+}
+
+.cross-icon {
+  // position: absolute;
+  // top:15px;
+  // right:15px;
+}
+
+.burger-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 8;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
-require('semantic-ui-css/semantic.min.css');
+import { Menu } from '../components';
+import { Link } from 'react-router';
 require('../styles/main.scss');
 
 export default class App extends Component {
@@ -12,9 +12,16 @@ export default class App extends Component {
         networkService: this.props.route.networkService
       })
     }
+
     return (
-      <div className='app__container'>
-        {children}
+      <div id='outer-container'>
+          <Menu>
+            <Link to='/'>Home Page</Link>
+            <Link to='protocol'>Access sample protocol</Link>
+          </Menu>
+          <div id='page-wrap' className="">
+            {children}
+          </div>
       </div>
     );
   }

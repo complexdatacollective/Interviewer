@@ -1,8 +1,0 @@
-// Arbor.scss
-@import "core";
-
-@if $arbor-output-classes {
-    @include arbor-reset;
-    @include arbor-type;
-    @include arbor-grid;
-}

@@ -1,0 +1,30 @@
+@import '~gridle/sass/grid-flex.scss';
+
+// setting up the grid
+@include gridle_setup( (
+    context : 12,
+    gutter-width : 20px,
+) );
+
+// make the use of media queries really easy
+@include gridle_register_state( tablet , (
+    query : "only screen (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1)"
+) );
+
+@include gridle_register_state ( desktop , (
+    min-width : 1367px
+) );
+
+// even with full custom queries :
+@include gridle_register_state ( landscape, (
+    query : "(orientation : landscape)"
+) );
+
+// generate classes :
+@include gridle_generate_classes ( );
+
+// manage container width :
+.container {
+    max-width : 960px;
+    margin: 0 auto;
+  }

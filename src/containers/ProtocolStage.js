@@ -9,11 +9,11 @@ class ProtocolStage extends Component {
       params
     } = this.props.stage;
     return (
-      <div className='grid__container'>
-        <div className='grid__item grid--p-small'>
-          Stage Title: {title}
+      <div className='container'>
+        <div className='col'>
+          <h1>{title}</h1>
         </div>
-        <div className='grid__item grid--p-small'>
+        <div className='col'>
           {
             params.questions &&
             params.questions.map((question, idx) =>

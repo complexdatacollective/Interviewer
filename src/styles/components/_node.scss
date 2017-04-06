@@ -1,0 +1,16 @@
+.node-object{
+  background: map-get($roles, node);
+  display: inline-block;
+  margin: 1rem;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin:0
+  }
+}
