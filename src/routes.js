@@ -17,8 +17,8 @@ const networkService = new NetworkService();
 
 export const Routes = (
   <Route path='/' component={App} networkService={networkService}>
-    <IndexRedirect to='home' />
-    <IndexRoute component={HomePage} />
+    <IndexRedirect to='protocolman' />
+    <IndexRoute component={ProtocolManager} />
     <Route path='home' component={HomePage} />
     <Route path='protocolman' component={ProtocolManager} />
   </Route>
