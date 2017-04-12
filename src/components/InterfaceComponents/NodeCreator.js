@@ -4,7 +4,7 @@ import { required } from '../../utils/Validations';
 
 import { Input, Form } from 'semantic-ui-react';
 
-class ParticipantForm extends Component {
+class NodeCreator extends Component {
   textField = ({ input, label, meta: { touched, error }}) => {
     return (
       <Input label={label} {...input} />
@@ -34,8 +34,8 @@ class ParticipantForm extends Component {
   }
 }
 
-ParticipantForm = reduxForm({
+NodeCreator = reduxForm({
   form: 'node'
-})(ParticipantForm);
+})(NodeCreator);
 
-export default ParticipantForm;
+export default NodeCreator;
