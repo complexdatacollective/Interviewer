@@ -1,4 +1,4 @@
-export { default as ProtocolQuestion } from './ProtocolQuestion';
+export { default as ProtocolPrompt } from './ProtocolPrompt';
 
 // Interface components
 export { default as Node } from './NodeObject';

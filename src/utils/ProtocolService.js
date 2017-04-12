@@ -25,34 +25,67 @@ export default class ProtocolService {
       "stages": [
         {
           "type": "namegenerator",
-          "title": "Name Generator One",
+          "title": "Name Generator Title",
           "params": {
-            "questions": [
+            "prompts": [
               {
-                "label": "Who are your best friends?",
-                "name": "bestFriends",
-                "multiple": "true",
-                "skip": ""
+                title: 'Within the past 6 months, who have you felt close to?',
+                form: {
+                  title: 'Add a person you know',
+                  formName: 'closeFriends',
+                  fields: [
+                    {
+                      label: 'Name',
+                      name: 'name',
+                      type: 'text',
+                      placeholder: 'Name',
+                      required: true
+                    },
+                    {
+                      label: 'Nickname',
+                      name: 'nickname',
+                      type: 'text',
+                      placeholder: 'Nickname',
+                      required: true
+                    }
+                  ]
+                },
+                nodeAttributes: [
+                  {
+                    label: 'special_category',
+                    value: 46
+                  },
+                  {
+                    label: 'close_friend',
+                    value: true
+                  }
+                ]
+              },
+              {
+                title: "Within the past 6 months, who has been supportive?",
+                nodeAttributes: [
+                  {
+                    label: 'support_friend',
+                    value: true
+                  }
+                ]
               }
             ]
           },
         },
         {
           "type": "namegenerator",
-          "title": "Name Generator Two",
+          "title": "Name Generator Title",
           "params": {
-            "questions": [
+            "prompts": [
               {
-                "label": "Who did you go to school with?",
-                "name": "school",
-                "multiple": "true",
-                "skip": "{{bestFriends}}.length > 5"
-              },
-              {
-                "label": "Who was your best friend at school?",
-                "name": "bestFriendsSchool",
-                "multiple": "true",
-                "skip": "!{{bestFriends}}"
+                title: "Within the past 6 months, what's the best thing you've seen ever?",
+                nodeAttributes: [
+                  {
+                    label: 'fun_times',
+                    value: true
+                  }
+                ]
               }
             ]
           },

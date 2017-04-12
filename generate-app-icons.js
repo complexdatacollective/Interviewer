@@ -8,16 +8,16 @@ const icongen = require('icon-gen');
 let jobs = [
   {
     type:'cordova',
-    inputFile: 'assets/icons/round/NC-Round.svg',
-    outputPath: 'www/icons/android/',
+    inputFile: './assets/icons/round/NC-Round.svg',
+    outputPath: './public/icons/android/',
     sizes: [36,48,72,96,144,192],
     fileName: 'NC-Round-',
     append: ['ldpi','mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']
   },
   {
     type:'cordova',
-    inputFile: 'assets/icons/square/NC-Square.svg',
-    outputPath: 'www/icons/ios/',
+    inputFile: './assets/icons/square/NC-Square.svg',
+    outputPath: './public/icons/ios/',
     sizes: [76,152,40,80,72,144,50,100,167],
     fileName: 'NC-Square-',
     append: 'size'
@@ -61,6 +61,24 @@ function generateElectronIcons(job) {
   })
 }
 
+const createDir = (dir) => {
+  // This will create a dir given a path such as './folder/subfolder'
+  const splitPath = dir.split('/');
+  splitPath.reduce((path, subPath) => {
+    let currentPath;
+    if(subPath != '.'){
+      currentPath = path + '/' + subPath;
+      if (!fs.existsSync(currentPath)){
+        fs.mkdirSync(currentPath);
+      }
+    }
+    else{
+      currentPath = subPath;
+    }
+    return currentPath
+  }, '')
+}
+
 function generateCordovaIcons(job) {
   const buffer = fs.readFileSync(job.inputFile);
   for (let size of job.sizes) {
@@ -83,6 +101,7 @@ function generateCordovaIcons(job) {
     dest = path.join(job.outputPath + dest);
 
     svg2png(buffer, { width: size, height: size }).then(output => {
+      createDir(job.outputPath);
       fs.writeFile(dest, output, function (err) {
         if (err) {
           console.log(err);
