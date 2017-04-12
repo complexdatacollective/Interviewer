@@ -10,7 +10,7 @@ import NetworkService from './utils/NetworkService'
 import {
   App,
   HomePage,
-  ProtocolWrapper
+  Protocol
 } from './containers';
 
 const networkService = new NetworkService();
@@ -20,7 +20,7 @@ export const Routes = (
     <IndexRedirect to='home' />
     <IndexRoute component={HomePage} />
     <Route path='home' component={HomePage} />
-    <Route path='protocol' component={ProtocolWrapper} />
+    <Route path='protocol' component={Protocol} />
   </Route>
 );
 

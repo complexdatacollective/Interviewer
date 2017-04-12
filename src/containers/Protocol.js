@@ -6,7 +6,7 @@ import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 
 import { ProtocolStage } from '../containers';
 
-class ProtocolWrapper extends Component {
+class Protocol extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,7 +70,7 @@ class ProtocolWrapper extends Component {
   }
 }
 
-ProtocolWrapper.propTypes = {
+Protocol.propTypes = {
   loadProtocol: React.PropTypes.func,
   participant: React.PropTypes.object,
   protocol: React.PropTypes.object
@@ -89,4 +89,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProtocolWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(Protocol);
