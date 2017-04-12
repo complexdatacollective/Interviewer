@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 
-import { ProtocolStage } from '../containers';
+import { Stage } from '../containers';
 
+/**
+  * Load protocol data, and render a stage
+  */
 class Protocol extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +55,7 @@ class Protocol extends Component {
           {
             protocolConfig.stages &&
             protocolConfig.stages.map((stage, idx) =>
-              this.state.currentStageIndex === idx && <ProtocolStage key={idx} stage={stage} />
+              this.state.currentStageIndex === idx && <Stage key={idx} stage={stage} />
             )
           }
         </div>

@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { ProtocolPrompt } from '../components';
-class ProtocolStage extends Component {
+
+
+/**
+  * Render a protocol interface based on protocol info and index
+  */
+class Stage extends Component {
   render() {
     const {
       title,
@@ -28,7 +33,7 @@ class ProtocolStage extends Component {
   }
 }
 
-ProtocolStage.propTypes = {
+Stage.propTypes = {
   stage: React.PropTypes.object
 }
 
@@ -41,4 +46,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(ProtocolStage);
+export default connect(mapStateToProps)(Stage);
