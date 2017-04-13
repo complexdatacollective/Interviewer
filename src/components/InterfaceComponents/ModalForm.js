@@ -4,7 +4,7 @@ import { required } from '../../utils/Validations';
 
 import { Input, Form } from 'semantic-ui-react';
 
-class NodeCreator extends Component {
+class ModalForm extends Component {
   textField = ({ input, label }) => {
     return (
       <Input label={label} {...input} />
@@ -15,27 +15,29 @@ class NodeCreator extends Component {
     const {
       props: {
         handleSubmit,
-        submitButton
+        submitButton,
+        fields
       },
       textField
     } = this;
 
+    console.log('modal', this.props);
+
     return (
-      <Form onSubmit={handleSubmit}>
-        <Form.Field>
-          <Field name='fName' component={textField} label='First name' validate={[required]}/>
-        </Form.Field>
-        <Form.Field>
-          <Field name='lName' component={textField} label='Last name' validate={[required]}/>
-        </Form.Field>
+      <Form onSubmit={ handleSubmit }>
+        { fields.map((field) => {
+          return (
+            <Form.Field>
+              <Field name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
+            </Form.Field>
+          );
+        }) }
         {submitButton}
       </Form>
     )
   }
 }
 
-NodeCreator = reduxForm({
-  form: 'node'
-})(NodeCreator);
+ModalForm = reduxForm()(ModalForm);
 
-export default NodeCreator;
+export default ModalForm;

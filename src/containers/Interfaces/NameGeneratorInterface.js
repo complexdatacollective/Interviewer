@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Prompt, NodeList } from '../../components/InterfaceComponents';
+import { Prompt, NodeList, ModalForm } from '../../components/InterfaceComponents';
 import { connect } from 'react-redux';
 
 
@@ -21,14 +21,18 @@ class NameGeneratorInterface extends Component {
     } = this.props;
 
     const {
-      prompts
+      prompts,
+      form
     } = this.props.config.params;
+
+    console.log('namegen', form);
 
     return (
       <div>
         <h3>Name Generator Interface</h3>
         <Prompt prompts={ prompts } currentIndex={ this.state.currentPromptIndex } />
         <NodeList network={ network } />
+        <ModalForm { ...form } form={ form.formName } />
       </div>
     )
   }
