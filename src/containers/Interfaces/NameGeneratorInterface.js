@@ -17,15 +17,14 @@ class NameGeneratorInterface extends Component {
 
   render() {
     const {
-      network
+      network,
+      config: {
+        params: {
+          prompts,
+          form
+        }
+      }
     } = this.props;
-
-    const {
-      prompts,
-      form
-    } = this.props.config.params;
-
-    console.log('namegen', form);
 
     return (
       <div>

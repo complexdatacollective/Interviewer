@@ -21,8 +21,6 @@ class ModalForm extends Component {
       textField
     } = this;
 
-    console.log('modal', this.props);
-
     return (
       <Form onSubmit={ handleSubmit }>
         { fields.map((field) => {
