@@ -15,7 +15,6 @@ class ModalForm extends Component {
     const {
       props: {
         handleSubmit,
-        submitButton,
         fields
       },
       textField
@@ -23,19 +22,20 @@ class ModalForm extends Component {
 
     return (
       <Form onSubmit={ handleSubmit }>
-        { fields.map((field) => {
+        { fields.map((field, index) => {
           return (
-            <Form.Field>
-              <Field name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
-            </Form.Field>
+            <Field key={ index } name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
           );
         }) }
-        {submitButton}
+        <button type="submit">Submit</button>
       </Form>
     )
   }
 }
 
-ModalForm = reduxForm()(ModalForm);
+ModalForm = reduxForm({
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true
+})(ModalForm);
 
 export default ModalForm;
