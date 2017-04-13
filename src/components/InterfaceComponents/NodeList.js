@@ -7,8 +7,6 @@ class NodeList extends Component {
       network
     } = this.props;
 
-    console.log(network);
-
     return (
       <div className='nodelist'>
       { network.nodes.map((node, index) => {
