@@ -19,7 +19,7 @@ class Stage extends Component {
 
     return (
       <div className='container'>
-        <CurrentInterface />
+        <CurrentInterface config={this.props.protocol.protocolConfig.stages[0]} />
       </div>
     );
   }
