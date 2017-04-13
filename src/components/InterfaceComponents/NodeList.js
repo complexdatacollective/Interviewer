@@ -4,13 +4,14 @@ import Node from './Node';
 class NodeList extends Component {
   render() {
     const {
-      network
+      network,
+      label
     } = this.props;
 
     return (
       <div className='nodelist'>
       { network.nodes.map((node, index) => {
-        return <Node key={ index } { ...node } />;
+        return <Node key={ index } label={ label(node) } />;
       }) }
       </div>
     );

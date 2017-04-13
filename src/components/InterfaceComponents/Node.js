@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 
 class Node extends Component {
   render() {
+    const {
+      label
+    } = this.props;
+
     return (
       <div className='node'>
-        <h3>{this.props.fName} {this.props.lName}</h3>
+        <h3>{ label }</h3>
       </div>
     );
   }

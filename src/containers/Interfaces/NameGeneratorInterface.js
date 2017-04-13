@@ -6,6 +6,10 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 import { Prompt, NodeList, ModalForm } from '../../components/InterfaceComponents';
 
+const nodeLabel = function(node) {
+  return `${node.name} "${node.nickname}"`;
+};
+
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
@@ -42,7 +46,7 @@ class NameGeneratorInterface extends Component {
       <div>
         <h3>Name Generator Interface</h3>
         <Prompt prompts={ prompts } currentIndex={ this.state.currentPromptIndex } />
-        <NodeList network={ network } />
+        <NodeList network={ network } label={ nodeLabel }/>
         <ModalForm { ...form } form={ form.formName } onSubmit={ this.handleModalFormSubmit.bind(this) }/>
       </div>
     )
