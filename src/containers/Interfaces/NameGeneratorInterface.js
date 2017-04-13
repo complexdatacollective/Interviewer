@@ -21,14 +21,20 @@ class NameGeneratorInterface extends Component {
     }
   }
 
-  handleModalFormSubmit(fields) {
+  handleModalFormSubmit(node) {
     const {
       addNode
     } = this.props;
 
-    if (fields) {
-      addNode(fields);  // TODO: pass current prompt attributes
+    if (node) {
+      const attributes = this.currentPrompt().nodeAttributes;
+      addNode({ ...node, attributes });
     }
+  }
+
+  currentPrompt() {
+    const prompts = this.props.config.params.prompts;
+    return prompts[ this.state.currentPromptIndex ];
   }
 
   render() {
@@ -42,18 +48,20 @@ class NameGeneratorInterface extends Component {
       }
     } = this.props;
 
+    console.log(this.props);
+
     return (
       <div>
         <h3>Name Generator Interface</h3>
         <Prompt prompts={ prompts } currentIndex={ this.state.currentPromptIndex } />
-        <NodeList network={ network } label={ nodeLabel }/>
+        <NodeList network={ network } label={ nodeLabel } />
         <ModalForm { ...form } form={ form.formName } onSubmit={ this.handleModalFormSubmit.bind(this) }/>
       </div>
     )
   }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     network: state.network
   }

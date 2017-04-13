@@ -11,7 +11,7 @@ class NodeList extends Component {
     return (
       <div className='nodelist'>
       { network.nodes.map((node, index) => {
-        return <Node key={ index } label={ label(node) } />;
+        return <Node key={ index } label={ label(node) } { ...node } />;
       }) }
       </div>
     );
