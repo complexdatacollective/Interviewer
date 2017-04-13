@@ -14,10 +14,6 @@ class Stage extends Component {
   }
 
   render() {
-    const {
-      protocol
-    } = this.props.protocol.protocolConfig;
-
     // TODO: Load dynamically based on protocol using some kind of service?
     const CurrentInterface = NameGeneratorInterface;
 

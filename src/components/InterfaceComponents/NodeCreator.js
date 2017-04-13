@@ -5,7 +5,7 @@ import { required } from '../../utils/Validations';
 import { Input, Form } from 'semantic-ui-react';
 
 class NodeCreator extends Component {
-  textField = ({ input, label, meta: { touched, error }}) => {
+  textField = ({ input, label }) => {
     return (
       <Input label={label} {...input} />
     );

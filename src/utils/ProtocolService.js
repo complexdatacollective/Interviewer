@@ -30,26 +30,6 @@ export default class ProtocolService {
             "prompts": [
               {
                 title: 'Within the past 6 months, who have you felt close to?',
-                form: {
-                  title: 'Add a person you know',
-                  formName: 'closeFriends',
-                  fields: [
-                    {
-                      label: 'Name',
-                      name: 'name',
-                      type: 'text',
-                      placeholder: 'Name',
-                      required: true
-                    },
-                    {
-                      label: 'Nickname',
-                      name: 'nickname',
-                      type: 'text',
-                      placeholder: 'Nickname',
-                      required: true
-                    }
-                  ]
-                },
                 nodeAttributes: [
                   {
                     label: 'special_category',
@@ -70,7 +50,27 @@ export default class ProtocolService {
                   }
                 ]
               }
-            ]
+            ],
+            form: {
+              title: 'Add a person you know',
+              formName: 'closeFriends',
+              fields: [
+                {
+                  label: 'Name',
+                  name: 'name',
+                  type: 'text',
+                  placeholder: 'Name',
+                  required: true
+                },
+                {
+                  label: 'Nickname',
+                  name: 'nickname',
+                  type: 'text',
+                  placeholder: 'Nickname',
+                  required: true
+                }
+              ]
+            },
           },
         },
         {

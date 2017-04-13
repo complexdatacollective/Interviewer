@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Prompt, NodeList, NodeCreator } from '../../components/InterfaceComponents';
+import { NodeList } from '../../components/InterfaceComponents';
 import { connect } from 'react-redux';
 
 /**

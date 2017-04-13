@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Node from './Node';
 
 class NodeList extends Component {
   render() {
@@ -6,11 +7,13 @@ class NodeList extends Component {
       network
     } = this.props;
 
+    console.log(network);
+
     return (
       <div className='nodelist'>
-        { network.nodes.map(node => {
-          return <Node firstName={ node.firstName } lastName={ node.lastName } />;
-        }) }
+      { network.nodes.map((node, index) => {
+        return <Node key={ index } { ...node } />;
+      }) }
       </div>
     );
   }
