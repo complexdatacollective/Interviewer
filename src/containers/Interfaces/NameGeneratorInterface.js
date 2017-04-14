@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-import { Prompt, NodeList, ModalForm } from '../../components/InterfaceComponents';
+import { StagePrompt } from '../Elements';
+import { NodeList, ModalForm } from '../../components/Elements';
 
 const nodeLabel = function(node) {
   return `${node.name} "${node.nickname}"`;
@@ -14,46 +15,27 @@ const nodeLabel = function(node) {
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGeneratorInterface extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentPromptIndex: 0
-    }
-  }
-
   handleModalFormSubmit(node) {
     const {
-      addNode
+      addNode,
+      promptAttributes
     } = this.props;
 
     if (node) {
-      const attributes = this.currentPrompt().nodeAttributes;
-      addNode({ ...node, attributes });
+      addNode({ ...node, promptAttributes });
     }
-  }
-
-  currentPrompt() {
-    const prompts = this.props.config.params.prompts;
-    return prompts[ this.state.currentPromptIndex ];
   }
 
   render() {
     const {
       network,
-      config: {
-        params: {
-          prompts,
-          form
-        }
-      }
+      form
     } = this.props;
-
-    console.log(this.props);
 
     return (
       <div>
         <h3>Name Generator Interface</h3>
-        <Prompt prompts={ prompts } currentIndex={ this.state.currentPromptIndex } />
+        <StagePrompt />
         <NodeList network={ network } label={ nodeLabel } />
         <ModalForm { ...form } form={ form.formName } onSubmit={ this.handleModalFormSubmit.bind(this) }/>
       </div>
@@ -62,8 +44,16 @@ class NameGeneratorInterface extends Component {
 }
 
 function mapStateToProps(state) {
+  const currentStage = state.protocol.protocolConfig.stages[0];
+  const promptAttributes = currentStage.params.prompts[state.stage.promptIndex].nodeAttributes;
+  const form = currentStage.params.form;
+
   return {
-    network: state.network
+    network: state.network,
+    stage: state.stage,
+    protocol: state.protocol,
+    promptAttributes,
+    form
   }
 }
 

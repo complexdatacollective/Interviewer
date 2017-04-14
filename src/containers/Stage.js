@@ -6,20 +6,13 @@ import { NameGeneratorInterface } from './Interfaces';
   * Render a protocol interface based on protocol info and index
   */
 class Stage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentStage: null
-    }
-  }
-
   render() {
     // TODO: Load dynamically based on protocol using some kind of service?
     const CurrentInterface = NameGeneratorInterface;
 
     return (
       <div className='container'>
-        <CurrentInterface config={this.props.protocol.protocolConfig.stages[0]} />
+        <CurrentInterface />
       </div>
     );
   }

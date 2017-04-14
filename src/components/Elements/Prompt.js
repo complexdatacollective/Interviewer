@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import Touch from 'react-hammerjs';
 
 class Prompt extends Component {
-  constructor(props) {
-     super(props);
-
-     this.handleTap = this.handleTap.bind(this);
-     this.handleSwipe = this.handleSwipe.bind(this);
-   }
-
   currentPrompt() {
     const {
       prompts,
@@ -18,29 +11,24 @@ class Prompt extends Component {
     return prompts[currentIndex];
   }
 
-  handleSwipe(event) {
-    if(event.direction === 2) {
-      this.next();
-    }
-  }
-
-  handleTap() {
-    this.next();
-  }
-
-  next() {
-    alert('next');
-  }
-
   render() {
+    console.log('prompt', this.props);
+
     const {
       title
     } = this.currentPrompt();
 
+    const {
+      handleTap,
+      handleSwipe
+    } = this.props;
+
     return (
-      <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
+      <div>
+      <Touch onTap={ handleTap } onSwipe={ handleSwipe } >
         <div className='prompt'>Current prompt: { title }</div>
       </Touch>
+      </div>
     );
   }
 }
