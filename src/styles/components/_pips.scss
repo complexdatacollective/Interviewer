@@ -1,22 +1,27 @@
 .pips {
   &__pips {
-    height: 10px;
-    width: 100vw;
-    position: relative;
+    height: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__pip {
-    display: inline-block;
-    float: left;
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-    line-height: 10px;
-    background-color: blue;
+    width: 15px;
+    height: 15px;
+    margin-left: 15px;
+    border-radius: 15px;
+    line-height: 15px;
+    background-color: $rich-black;
     transition: background-color 250ms ease-in;
 
+    &:first-child {
+      margin-left: 0;
+    }
+
     &--active {
-      background-color: red;
+      background-color: $cerulean-blue;
     }
   }
 }

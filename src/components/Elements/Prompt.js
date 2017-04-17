@@ -24,7 +24,7 @@ class Prompt extends Component {
 
               return (
                 <div key={ index } className={ promptClasses(index, currentIndex) }>
-                  { prompt.title }
+                  <h3>{ prompt.title }</h3>
                 </div>
               );
             }) }

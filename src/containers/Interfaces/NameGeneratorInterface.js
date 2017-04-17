@@ -33,8 +33,7 @@ class NameGeneratorInterface extends Component {
     } = this.props;
 
     return (
-      <div>
-        <h3>Name Generator Interface</h3>
+      <div className='interface'>
         <StagePrompt />
         <NodeList network={ network } label={ nodeLabel } />
         <ModalForm { ...form } form={ form.formName } onSubmit={ this.handleModalFormSubmit.bind(this) }/>

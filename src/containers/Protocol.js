@@ -18,8 +18,7 @@ class Protocol extends Component {
 
   render() {
     return (
-      <div className='container'>
-        <h1>Example protocol</h1>
+      <div className='protocol'>
         <Stage />
       </div>
     );
