@@ -1,34 +1,35 @@
 import React, { Component } from 'react';
 import Touch from 'react-hammerjs';
 
+const promptClasses = (index, currentIndex) => {
+  return currentIndex === index ? 'prompt__prompt prompt__prompt--active' : 'prompt__prompt';
+}
+
 class Prompt extends Component {
-  currentPrompt() {
+  render() {
+
     const {
       prompts,
-      currentIndex
-    } = this.props;
-
-    return prompts[currentIndex];
-  }
-
-  render() {
-    console.log('prompt', this.props);
-
-    const {
-      title
-    } = this.currentPrompt();
-
-    const {
+      currentIndex,
       handleTap,
       handleSwipe
     } = this.props;
 
     return (
-      <div>
       <Touch onTap={ handleTap } onSwipe={ handleSwipe } >
-        <div className='prompt'>Current prompt: { title }</div>
+        <div className='prompt'>
+          <div className='prompt__prompts'>
+            { prompts.map((prompt, index) => {
+
+              return (
+                <div className={ promptClasses(index, currentIndex) }>
+                  { prompt.title }
+                </div>
+              );
+            }) }
+          </div>
+        </div>
       </Touch>
-      </div>
     );
   }
 }

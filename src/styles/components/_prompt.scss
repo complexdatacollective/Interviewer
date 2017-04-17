@@ -1,0 +1,26 @@
+.prompt {
+  &__prompts {
+    height: 90px;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__prompt {
+    box-sizing: border-box;
+    padding: 30px 0;
+    height: 100%;
+    line-height: 30px;
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    top: 30px;
+    opacity: 0;
+    transition: top 250ms ease-out, opacity 250ms ease-in;
+
+    &--active {
+      top: 0;
+      opacity: 1;
+    }
+  }
+}
