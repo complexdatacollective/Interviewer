@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { required } from '../../utils/Validations';
 
-import { Input, Form } from 'semantic-ui-react';
+import { Input, Form as SemanticForm } from 'semantic-ui-react';
 
-class ModalForm extends Component {
+class Form extends Component {
   textField = ({ input, label }) => {
     return (
       <Input label={label} {...input} />
@@ -21,21 +21,21 @@ class ModalForm extends Component {
     } = this;
 
     return (
-      <Form onSubmit={ handleSubmit }>
+      <SemanticForm onSubmit={ handleSubmit }>
         { fields.map((field, index) => {
           return (
             <Field key={ index } name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
           );
         }) }
         <button type="submit">Submit</button>
-      </Form>
+      </SemanticForm>
     )
   }
 }
 
-ModalForm = reduxForm({
+Form = reduxForm({
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
-})(ModalForm);
+})(Form);
 
-export default ModalForm;
+export default Form;

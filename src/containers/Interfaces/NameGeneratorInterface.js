@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-import { StagePrompt } from '../Elements';
-import { NodeList, ModalForm } from '../../components/Elements';
+import { StagePrompt } from '../../containers/Elements';
+import { NodeList, Modal, Form } from '../../components/Elements';
 
 const nodeLabel = function(node) {
   return `${node.nickname}`;
@@ -15,7 +15,19 @@ const nodeLabel = function(node) {
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGeneratorInterface extends Component {
-  handleModalFormSubmit(node) {
+  constructor(props) {
+    super(props);
+
+    this.state = { isOpen: false };
+  }
+
+  toggleModal = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
+  handleFormSubmit(node) {
     const {
       addNode,
       promptAttributes
@@ -36,7 +48,14 @@ class NameGeneratorInterface extends Component {
       <div className='interface'>
         <StagePrompt />
         <NodeList network={ network } label={ nodeLabel } />
-        <ModalForm { ...form } form={ form.formName } onSubmit={ this.handleModalFormSubmit.bind(this) }/>
+        <button onClick={this.toggleModal}>
+          Add a person
+        </button>
+
+        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+          <h4>Add a person</h4>
+          <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit.bind(this) }/>
+        </Modal>
       </div>
     )
   }
