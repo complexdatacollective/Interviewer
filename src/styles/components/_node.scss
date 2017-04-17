@@ -1,4 +1,4 @@
-.node-object{
+.node {
   background: map-get($roles, node);
   display: inline-block;
   margin: 1rem;
@@ -8,9 +8,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  h3 {
-    font-size: 1rem;
-    font-weight: bold;
-    margin:0
+
+  em {
+    display: block;
+    font-size: 0.5em;
   }
 }

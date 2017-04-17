@@ -8,7 +8,7 @@ import { StagePrompt } from '../Elements';
 import { NodeList, ModalForm } from '../../components/Elements';
 
 const nodeLabel = function(node) {
-  return `${node.name} "${node.nickname}"`;
+  return `${node.nickname}`;
 };
 
 /**

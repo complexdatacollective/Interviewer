@@ -9,7 +9,7 @@ class NodeList extends Component {
     } = this.props;
 
     return (
-      <div className='nodelist'>
+      <div className='node-list'>
       { network.nodes.map((node, index) => {
         return <Node key={ index } label={ label(node) } { ...node } />;
       }) }
