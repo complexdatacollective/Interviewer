@@ -1,0 +1,22 @@
+.pips {
+  &__pips {
+    height: 10px;
+    width: 100vw;
+    position: relative;
+  }
+
+  &__pip {
+    display: inline-block;
+    float: left;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    line-height: 10px;
+    background-color: blue;
+    transition: background-color 250ms ease-in;
+
+    &--active {
+      background-color: red;
+    }
+  }
+}

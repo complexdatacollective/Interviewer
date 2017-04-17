@@ -1,26 +1,34 @@
 .prompt {
   &__prompts {
-    height: 90px;
+    box-sizing: border-box;
+    padding: 30px 0;
+    height: 30px;
     width: 100vw;
     position: relative;
     overflow: hidden;
   }
 
   &__prompt {
-    box-sizing: border-box;
-    padding: 30px 0;
-    height: 100%;
+    height: 30px;
     line-height: 30px;
     width: 100vw;
     position: absolute;
-    left: 0;
-    top: 30px;
+    left: 100vw;
     opacity: 0;
-    transition: top 250ms ease-out, opacity 250ms ease-in;
+    transition: left 500ms ease-out, opacity 500ms ease-in;
 
     &--active {
-      top: 0;
+      left: 0;
       opacity: 1;
     }
+  }
+
+  &__pips {
+    box-sizing: border-box;
+    padding: 0;
+    height: 10px;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
   }
 }

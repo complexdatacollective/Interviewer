@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Touch from 'react-hammerjs';
+import Pips from './Pips';
 
 const promptClasses = (index, currentIndex) => {
   return currentIndex === index ? 'prompt__prompt prompt__prompt--active' : 'prompt__prompt';
@@ -22,11 +23,15 @@ class Prompt extends Component {
             { prompts.map((prompt, index) => {
 
               return (
-                <div className={ promptClasses(index, currentIndex) }>
+                <div key={ index } className={ promptClasses(index, currentIndex) }>
                   { prompt.title }
                 </div>
               );
             }) }
+          </div>
+
+          <div className='prompt__pips'>
+            <Pips count={ prompts.length } currentIndex={ currentIndex } />
           </div>
         </div>
       </Touch>
