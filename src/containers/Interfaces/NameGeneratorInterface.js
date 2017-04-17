@@ -27,7 +27,7 @@ class NameGeneratorInterface extends Component {
     });
   }
 
-  handleFormSubmit(node) {
+  handleFormSubmit(node, _, form) {
     const {
       addNode,
       promptAttributes
@@ -35,6 +35,8 @@ class NameGeneratorInterface extends Component {
 
     if (node) {
       addNode({ ...node, promptAttributes });
+      form.reset();  // Is this the "react/redux way"?
+      this.toggleModal();
     }
   }
 
@@ -71,7 +73,8 @@ function mapStateToProps(state) {
     stage: state.stage,
     protocol: state.protocol,
     promptAttributes,
-    form
+    form,
+    forms: state.form
   }
 }
 
