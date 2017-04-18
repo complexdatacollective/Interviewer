@@ -32,12 +32,15 @@ class Stage extends Component {
     const {
       handleNext,
       handlePrevious,
+      props: {
+        stage
+      }
     } = this;
 
     return (
       <div className='container'>
         <button onClick={handlePrevious}>Back</button>
-        <CurrentInterface />
+        <CurrentInterface config={ stage }/>
         <button onClick={handleNext}>Next</button>
       </div>
     );
@@ -45,8 +48,10 @@ class Stage extends Component {
 }
 
 function mapStateToProps(state) {
+  const stage = state.protocol.protocolConfig.stages[state.session.stageIndex];
+
   return {
-    protocol: state.protocol
+    stage
   }
 }
 

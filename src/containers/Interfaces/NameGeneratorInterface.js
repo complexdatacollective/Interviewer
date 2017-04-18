@@ -43,12 +43,17 @@ class NameGeneratorInterface extends Component {
   render() {
     const {
       network,
-      form
+      config: {
+        params: {
+          form,
+          prompts
+        }
+      }
     } = this.props;
 
     return (
       <div className='interface'>
-        <StagePrompt />
+        <StagePrompt prompts={ prompts } />
         <NodeList network={ network } label={ nodeLabel } />
         <button onClick={this.toggleModal}>
           { form.title }
@@ -63,16 +68,13 @@ class NameGeneratorInterface extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const currentStage = state.protocol.protocolConfig.stages[state.session.stageIndex];
-  const promptAttributes = currentStage.params.prompts[state.session.promptIndex].nodeAttributes;
-  const form = currentStage.params.form;
+function mapStateToProps(state, ownProps) {
+  const promptAttributes = ownProps.config.params.prompts[state.session.promptIndex].nodeAttributes;
 
   return {
     network: state.network,
     protocol: state.protocol,
-    promptAttributes,
-    form
+    promptAttributes
   }
 }
 
