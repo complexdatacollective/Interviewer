@@ -1,0 +1,14 @@
+{
+  "source": {
+    "includePattern": ".+\\.js$"
+  },
+  "plugins": ["node_modules/jsdoc-babel"],
+  "babel": {
+    "plugins": [
+      "transform-class-properties",
+      "transform-react-jsx",
+      "transform-object-rest-spread"
+    ],
+    "babelrc": false
+  }
+}

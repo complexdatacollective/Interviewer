@@ -21,7 +21,7 @@ This repository assumes that `npm` is installed. If you don't have it installed,
 |`start`|Serves your app at `localhost:3000`.|
 |`build`|Compiles assets and prepares app for production in the /build directory.|
 |`test`|Runs testing suite.|
-|`eject`|Ejects settings within React Scripts library.|
+|`build-docs`|Builds HTML API docs into the docs-build directory.|
 |`electron`|Runs the current code in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
 |`package-mac`|Uses electron-packager to package an OSX release.|

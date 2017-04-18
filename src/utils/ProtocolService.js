@@ -1,8 +1,22 @@
+/**
+ * Validates protocol data.
+ *
+ * @extends Component
+ * @module ProtocolService
+ */
 export default class ProtocolService {
   constructor() {
     this.protocol = {}
   }
 
+  /**
+   * Evaluates skip logic
+   *
+   * @param {string} cond - Condition
+   * @param {string} formVarStr - Form variable string
+   * @returns {string} Sanitized string
+   *
+   */
   evaluateSkipLogic(cond, formVarStr) {
     if (typeof formVarStr !== 'string') {
       return;
