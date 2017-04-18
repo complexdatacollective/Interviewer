@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
-
-import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
 import { Prompt, Pips } from '../../components/Elements';
 
@@ -16,13 +12,20 @@ class Prompts extends Component {
   }
 
   handleSwipe(event) {
-    if(event.direction === 2) {
-      this.props.nextPrompt();
+    switch(event.direction) {
+      case 2:
+      case 3:
+        this.props.handleNext();
+        break;
+      case 1:
+      case 4:
+        this.props.handlePrevious();
+        break;
     }
   }
 
   handleTap() {
-    this.props.nextPrompt();
+    this.props.handleNext();
   }
 
   render() {
@@ -49,16 +52,4 @@ class Prompts extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    promptIndex: state.session.promptIndex
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    nextPrompt: bindActionCreators(sessionActions.nextPrompt, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Prompts);
+export default Prompts;

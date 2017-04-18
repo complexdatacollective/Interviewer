@@ -49,6 +49,15 @@ export default class ProtocolService {
                     value: true
                   }
                 ]
+              },
+              {
+                title: "Within the past 2 weeks, who has visited",
+                nodeAttributes: [
+                  {
+                    label: 'travel_friend',
+                    value: true
+                  }
+                ]
               }
             ],
             form: {

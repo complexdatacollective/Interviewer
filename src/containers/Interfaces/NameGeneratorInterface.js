@@ -11,6 +11,10 @@ const nodeLabel = function(node) {
   return `${node.nickname}`;
 };
 
+const rotateIndex = (max, next) => {
+  return (next + max) % max;
+}
+
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
@@ -18,7 +22,30 @@ class NameGeneratorInterface extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isOpen: false };
+    this.state = {
+      isOpen: false,
+      promptIndex: 0,
+    };
+
+    this.nextPrompt = this.nextPrompt.bind(this);
+    this.previousPrompt = this.previousPrompt.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
+
+  nextPrompt() {
+    this.setState({
+      promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex + 1)
+    });
+  }
+
+  previousPrompt() {
+    this.setState({
+      promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex - 1)
+    });
+  }
+
+  promptAttributes() {
+    return this.props.prompts[this.state.promptIndex].nodeAttributes;
   }
 
   toggleModal = () => {
@@ -28,13 +55,8 @@ class NameGeneratorInterface extends Component {
   }
 
   handleFormSubmit(node, _, form) {
-    const {
-      addNode,
-      promptAttributes
-    } = this.props;
-
     if (node) {
-      addNode({ ...node, promptAttributes });
+      this.props.addNode({ ...node, attributes: this.promptAttributes() });
       form.reset();  // Is this the "react/redux way"?
       this.toggleModal();
     }
@@ -43,25 +65,23 @@ class NameGeneratorInterface extends Component {
   render() {
     const {
       network,
-      config: {
-        params: {
-          form,
-          prompts
-        }
-      }
+      prompts,
+      form,
     } = this.props;
 
     return (
       <div className='interface'>
-        <Prompts prompts={ prompts } />
+        <Prompts prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
+
         <NodeList network={ network } label={ nodeLabel } />
+
         <button onClick={this.toggleModal}>
           { form.title }
         </button>
 
         <Modal show={this.state.isOpen} onClose={this.toggleModal}>
           <h4>{ form.title }</h4>
-          <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit.bind(this) }/>
+          <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit }/>
         </Modal>
       </div>
     )
@@ -69,12 +89,11 @@ class NameGeneratorInterface extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const promptAttributes = ownProps.config.params.prompts[state.session.promptIndex].nodeAttributes;
-
   return {
     network: state.network,
     protocol: state.protocol,
-    promptAttributes
+    prompts: ownProps.config.params.prompts,
+    form: ownProps.config.params.form,
   }
 }
 
