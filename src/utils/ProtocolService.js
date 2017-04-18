@@ -41,6 +41,16 @@ export default class ProtocolService {
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
+            "panels": [
+              {
+                "title": "Exiting nodes",
+                "filter": 'existing',
+              },
+              {
+                "title": "Custom nodes",
+                "filter": 'previous',
+              },
+            ],
             "prompts": [
               {
                 title: 'Within the past 6 months, who have you felt close to?',
@@ -124,19 +134,12 @@ export default class ProtocolService {
                 }
               ]
             },
-          },
-        },
-        {
-          "type": "sociogram",
-          "title": "Fun Sociogram",
-          "params": {
-            "questions": [
+            "panels": [
               {
-                "label": "Are you having fun?",
-                "name": "fun",
-                "skip": ""
-              }
-            ]
+                "title": "Exiting nodes",
+                "filter": 'existing',
+              },
+            ],
           },
         }
       ]

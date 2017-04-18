@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
 import Node from './Node';
+import Touch from 'react-hammerjs';
 
 class NodeList extends Component {
   render() {
     const {
-      network,
-      label
+      nodes,
+      label,
+      handleDrag,
+      handleTap,
     } = this.props;
 
     return (
       <div className='node-list'>
-      { network.nodes.map((node, index) => {
-        return <Node key={ index } label={ label(node) } { ...node } />;
+      { nodes.map((node, index) => {
+        return (
+          <Touch onPan={handleDrag} onTap={handleTap} onClick={handleTap} key={ index }>
+            <Node label={ label(node) } { ...node } />
+          </Touch>
+        );
       }) }
       </div>
     );
   }
 }
+
+NodeList.defaultProps = {
+  handleDrag: () => {},  // noop
+  handleTap: () => {},  // noop
+};
 
 export default NodeList;

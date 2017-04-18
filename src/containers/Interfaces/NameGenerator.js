@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-import { PromptSwiper } from '../../containers/Elements';
+import { PromptSwiper, Panels } from '../../containers/Elements';
 import { NodeList, Modal, Form } from '../../components/Elements';
 
 const nodeLabel = function(node) {
@@ -48,6 +48,14 @@ class NameGeneratorInterface extends Component {
     return this.props.prompts[this.state.promptIndex].nodeAttributes;
   }
 
+  handlePanelDrag = (node) => {
+    console.log('panel drag', node);
+  }
+
+  handlePanelSelect = (node) => {
+    console.log('panel select', node);
+  }
+
   toggleModal = () => {
     this.setState({
       isOpen: !this.state.isOpen
@@ -64,25 +72,32 @@ class NameGeneratorInterface extends Component {
 
   render() {
     const {
-      network,
+      network: {
+        nodes
+      },
       prompts,
       form,
+      panels
     } = this.props;
 
     return (
       <div className='interface'>
-        <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
+        <div className='interface__aside'>
+          <Panels panels={ panels } nodes={ nodes } handleSelect={ this.handlePanelSelect } handleDrag={ this.handlePanelDrag }/>
+        </div>
+        <div className='interface__primary'>
+          <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
 
-        <NodeList network={ network } label={ nodeLabel } />
+          <NodeList nodes={ nodes } label={ nodeLabel } />
+          <button onClick={this.toggleModal}>
+            Add a person
+          </button>
 
-        <button onClick={this.toggleModal}>
-          { form.title }
-        </button>
-
-        <Modal show={this.state.isOpen} onClose={this.toggleModal}>
-          <h4>{ form.title }</h4>
-          <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit }/>
-        </Modal>
+          <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+            <h4>{ form.title }</h4>
+            <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit }/>
+          </Modal>
+        </div>
       </div>
     )
   }
@@ -94,6 +109,7 @@ function mapStateToProps(state, ownProps) {
     protocol: state.protocol,
     prompts: ownProps.config.params.prompts,
     form: ownProps.config.params.form,
+    panels: ownProps.config.params.panels,
   }
 }
 
