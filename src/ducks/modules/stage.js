@@ -1,13 +1,18 @@
+import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
+
 const NEXT_PROMPT = 'NEXT_PROMPT';
 const PREVIOUS_PROMPT = 'PREVIOUS_PROMPT';
+const NEXT_STAGE = 'NEXT_STAGE';
+const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
 
 const initialState = {
   promptIndex: 0,
-  promptCount: 2
+  promptCount: 0,
+  stageIndex: 0,
+  stageCount: 0
 };
 
 const rotateIndex = (index, max) => {
-  console.log(index, max)
   if(index < 0) {
     return max + index % max - 1;
   } else {
@@ -17,6 +22,15 @@ const rotateIndex = (index, max) => {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case protocolActionTypes.SET_PROTOCOL:
+      const stageCount = action.protocol.stages.length;
+      const promptCount = action.protocol.stages[0].params.prompts.length;
+
+      return {
+        ...initialState,
+        promptCount: promptCount,
+        stageCount: stageCount,
+      }
     case NEXT_PROMPT:
       return {
         ...state,
@@ -27,6 +41,18 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         promptIndex: rotateIndex(state.promptIndex - 1, state.promptCount)
       }
+      case NEXT_STAGE:
+        return {
+          ...state,
+          promptIndex: 0,
+          stageIndex: rotateIndex(state.stageIndex + 1, state.stageCount)
+        }
+      case PREVIOUS_STAGE:
+        return {
+          ...state,
+          promptIndex: 0,
+          stageIndex: rotateIndex(state.stageIndex - 1, state.stageCount)
+        }
     default:
       return state;
   }
@@ -44,17 +70,33 @@ function previousPrompt() {
   }
 }
 
+function nextStage() {
+  return {
+    type: NEXT_STAGE
+  }
+}
+
+function previousStage() {
+  return {
+    type: PREVIOUS_STAGE
+  }
+}
+
 const actionCreators = {
   nextPrompt,
-  previousPrompt
+  previousPrompt,
+  nextStage,
+  previousStage,
 };
 
 const actionTypes = {
-  nextPrompt,
-  previousPrompt,
+  NEXT_PROMPT,
+  PREVIOUS_PROMPT,
+  NEXT_STAGE,
+  PREVIOUS_STAGE,
 };
 
 export {
   actionCreators,
-  actionTypes
+  actionTypes,
 };

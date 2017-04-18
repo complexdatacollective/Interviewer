@@ -37,7 +37,7 @@ class StagePrompt extends Component {
 }
 
 function mapStateToProps(state) {
-  const currentStage = state.protocol.protocolConfig.stages[0];
+  const currentStage = state.protocol.protocolConfig.stages[state.stage.stageIndex];
 
   return {
     prompts: currentStage.params.prompts,

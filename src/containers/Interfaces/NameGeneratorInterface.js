@@ -64,7 +64,7 @@ class NameGeneratorInterface extends Component {
 }
 
 function mapStateToProps(state) {
-  const currentStage = state.protocol.protocolConfig.stages[0];
+  const currentStage = state.protocol.protocolConfig.stages[state.stage.stageIndex];
   const promptAttributes = currentStage.params.prompts[state.stage.promptIndex].nodeAttributes;
   const form = currentStage.params.form;
 

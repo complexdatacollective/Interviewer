@@ -87,7 +87,20 @@ export default class ProtocolService {
                   }
                 ]
               }
-            ]
+            ],
+            form: {
+              title: 'Add a person you know',
+              formName: 'bestThings',
+              fields: [
+                {
+                  label: 'Thing',
+                  name: 'thing',
+                  type: 'text',
+                  placeholder: 'Name',
+                  required: true
+                }
+              ]
+            },
           },
         },
         {
