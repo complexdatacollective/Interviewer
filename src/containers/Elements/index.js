@@ -1,1 +1,1 @@
-export { default as StagePrompt } from './StagePrompt';
+export { default as Prompts } from './Prompts';

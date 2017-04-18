@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-import { StagePrompt } from '../../containers/Elements';
+import { Prompts } from '../../containers/Elements';
 import { NodeList, Modal, Form } from '../../components/Elements';
 
 const nodeLabel = function(node) {
@@ -53,7 +53,7 @@ class NameGeneratorInterface extends Component {
 
     return (
       <div className='interface'>
-        <StagePrompt prompts={ prompts } />
+        <Prompts prompts={ prompts } />
         <NodeList network={ network } label={ nodeLabel } />
         <button onClick={this.toggleModal}>
           { form.title }

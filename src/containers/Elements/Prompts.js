@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Touch from 'react-hammerjs';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
-import { Prompt } from '../../components/Elements';
+import { Prompt, Pips } from '../../components/Elements';
 
-class StagePrompt extends Component {
+class Prompts extends Component {
   constructor(props) {
     super(props);
 
@@ -31,7 +32,19 @@ class StagePrompt extends Component {
     } = this.props;
 
     return (
-      <Prompt prompts={ prompts } currentIndex={ promptIndex } handleTap={ this.handleTap } handleSwipe={ this.handleSwipe } />
+      <Touch onTap={ this.handleTap } onSwipe={ this.handleSwipe } >
+        <div className='prompts'>
+          <div className='prompts__prompts'>
+            { prompts.map((prompt, index) => {
+              return <Prompt key={ index } prompt={ prompt } isActive={ promptIndex == index } />;
+            }) }
+          </div>
+
+          <div className='prompts__pips'>
+            <Pips count={ prompts.length } currentIndex={ promptIndex } />
+          </div>
+        </div>
+      </Touch>
     );
   }
 }
@@ -48,4 +61,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StagePrompt);
+export default connect(mapStateToProps, mapDispatchToProps)(Prompts);
