@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { actionCreators as sessionActions } from '../ducks/modules/session';
 
 import { NameGeneratorInterface } from './Interfaces';
 
@@ -52,8 +52,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    next: bindActionCreators(stageActions.nextStage, dispatch),
-    previous: bindActionCreators(stageActions.previousStage, dispatch),
+    next: bindActionCreators(sessionActions.nextStage, dispatch),
+    previous: bindActionCreators(sessionActions.previousStage, dispatch),
   }
 }
 

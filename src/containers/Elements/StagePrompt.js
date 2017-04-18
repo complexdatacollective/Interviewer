@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actionCreators as stageActions } from '../../ducks/modules/stage';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
 import { Prompt } from '../../components/Elements';
 
@@ -37,17 +37,17 @@ class StagePrompt extends Component {
 }
 
 function mapStateToProps(state) {
-  const currentStage = state.protocol.protocolConfig.stages[state.stage.stageIndex];
+  const currentStage = state.protocol.protocolConfig.stages[state.session.stageIndex];
 
   return {
     prompts: currentStage.params.prompts,
-    promptIndex: state.stage.promptIndex
+    promptIndex: state.session.promptIndex
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    nextPrompt: bindActionCreators(stageActions.nextPrompt, dispatch)
+    nextPrompt: bindActionCreators(sessionActions.nextPrompt, dispatch)
   }
 }
 
