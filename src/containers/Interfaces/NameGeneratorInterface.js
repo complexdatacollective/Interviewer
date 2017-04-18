@@ -51,11 +51,11 @@ class NameGeneratorInterface extends Component {
         <StagePrompt />
         <NodeList network={ network } label={ nodeLabel } />
         <button onClick={this.toggleModal}>
-          Add a person
+          { form.title }
         </button>
 
         <Modal show={this.state.isOpen} onClose={this.toggleModal}>
-          <h4>Add a person</h4>
+          <h4>{ form.title }</h4>
           <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit.bind(this) }/>
         </Modal>
       </div>

@@ -89,7 +89,7 @@ export default class ProtocolService {
               }
             ],
             form: {
-              title: 'Add a person you know',
+              title: "Add a thing you've seen",
               formName: 'bestThings',
               fields: [
                 {
