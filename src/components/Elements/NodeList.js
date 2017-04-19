@@ -11,15 +11,17 @@ class NodeList extends Component {
       handleTap,
     } = this.props;
 
+// <Touch onPan={handleDrag} onTap={handleTap} onClick={handleTap}>
+
     return (
       <div className='node-list'>
-      { nodes.map((node, index) => {
-        return (
-          <Touch onPan={handleDrag} onTap={handleTap} onClick={handleTap} key={ index }>
-            <Node label={ label(node) } { ...node } />
-          </Touch>
-        );
-      }) }
+        { nodes.map((node, index) => {
+          return (
+            <div className='node-list__node' key={ index }>
+              <Node label={ label(node) } { ...node } />
+            </div>
+          );
+        }) }
       </div>
     );
   }

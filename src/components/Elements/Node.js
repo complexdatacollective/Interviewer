@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Draggable from 'react-draggable';
 
 class Node extends Component {
   render() {
@@ -7,9 +8,14 @@ class Node extends Component {
     } = this.props;
 
     return (
-      <div className='node'>
-        <h3>{ label }</h3>
-      </div>
+      <Draggable
+      defaultPosition={{x: 0, y: 0}}
+      position={null}
+      zIndex={100}>
+        <div className='node'>
+          <h3>{ label }</h3>
+        </div>
+      </Draggable>
     );
   }
 }
