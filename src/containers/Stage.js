@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 
-import { NameGeneratorInterface } from './Interfaces';
+import { NameGenerator } from './Interfaces';
 
 /**
   * Render a protocol interface based on protocol info and index
@@ -27,7 +27,7 @@ class Stage extends Component {
 
   render() {
     // TODO: Load dynamically based on protocol using some kind of service?
-    const CurrentInterface = NameGeneratorInterface;
+    const CurrentInterface = NameGenerator;
 
     const {
       handleNext,

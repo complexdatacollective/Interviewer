@@ -1,1 +1,1 @@
-export { default as NameGeneratorInterface } from './NameGeneratorInterface';
+export { default as NameGenerator } from './NameGenerator';
