@@ -5,9 +5,12 @@
   height: 10rem;
   width: 10rem;
   border-radius: 50%;
+  cursor: default;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  -webkit-user-select: none;
+  user-select: none;
 
   em {
     display: block;

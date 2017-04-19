@@ -4,8 +4,18 @@ import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
 const providerPresets = {
-  'existing': { },
-  'previous': { },
+  'existing': {
+    type: 'existing',
+    title: 'People from your existing lists',
+    source: 'existing',
+    selectable: true,
+  },
+  'previous': {
+    type: 'previous',
+    title: 'People from your previous visit',
+    source: 'previous',
+    draggable: true,
+  },
 }
 
 const getProviderConfig = (provider) => {
@@ -25,7 +35,7 @@ class NodeProviderPanels extends Component {
 
       return (
         <Panel title={ panel.title } key={ index }>
-          <NodeProvider config={ providerConfig } />
+          <NodeProvider { ...providerConfig } />
         </Panel>
       );
     });

@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
 
 class Node extends Component {
   render() {
     const {
-      label
+      label,
+      className,
+      ...other,
     } = this.props;
 
     return (
-      <Draggable
-      defaultPosition={{x: 0, y: 0}}
-      position={null}
-      zIndex={100}>
-        <div className='node'>
-          <h3>{ label }</h3>
-        </div>
-      </Draggable>
+      <div className={ 'node ' + className } { ...other } >
+        <h3>{ label }</h3>
+      </div>
     );
   }
 }
+
+Node.defaultProps = {
+  label: 'Node',
+  className: '',
+};
 
 export default Node;

@@ -5,11 +5,7 @@ import { connect } from 'react-redux';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
-import { NodeList, Modal, Form } from '../../components/Elements';
-
-const nodeLabel = function(node) {
-  return `${node.nickname}`;
-};
+import { NodeList, Node, Modal, Form } from '../../components/Elements';
 
 const rotateIndex = (max, next) => {
   return (next + max) % max;
@@ -88,7 +84,12 @@ class NameGeneratorInterface extends Component {
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
 
-          <NodeList nodes={ nodes } label={ nodeLabel } />
+          <NodeList>
+            { nodes.map((node, index) => {
+              const label = `${node.nickname}`;
+              return <Node key={ index } label={ label } />;
+            }) }
+          </NodeList>
 
           <button onClick={this.toggleModal}>
             Add a person

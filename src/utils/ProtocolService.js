@@ -42,14 +42,8 @@ export default class ProtocolService {
           "title": "Name Generator Title",
           "params": {
             "panels": [
-              {
-                "title": "Exiting nodes",
-                "filter": 'existing',
-              },
-              {
-                "title": "Custom nodes",
-                "filter": 'previous',
-              },
+              'existing',
+              'previous',
             ],
             "prompts": [
               {
