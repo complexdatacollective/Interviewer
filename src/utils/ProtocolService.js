@@ -63,6 +63,15 @@ export default class ProtocolService {
                     value: true
                   }
                 ]
+              },
+              {
+                title: "Within the past 2 weeks, who has visited",
+                nodeAttributes: [
+                  {
+                    label: 'travel_friend',
+                    value: true
+                  }
+                ]
               }
             ],
             form: {
@@ -101,7 +110,20 @@ export default class ProtocolService {
                   }
                 ]
               }
-            ]
+            ],
+            form: {
+              title: "Add a thing you've seen",
+              formName: 'bestThings',
+              fields: [
+                {
+                  label: 'Thing',
+                  name: 'thing',
+                  type: 'text',
+                  placeholder: 'Name',
+                  required: true
+                }
+              ]
+            },
           },
         },
         {

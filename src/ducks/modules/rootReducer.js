@@ -5,7 +5,7 @@ import network from './network';
 import page from './page';
 import participant from './participant';
 import protocol from './protocol';
-import stage from './stage';
+import session from './session';
 
 export default combineReducers({
     form: formReducer,
@@ -13,5 +13,5 @@ export default combineReducers({
     page,
     participant,
     protocol,
-    stage,
+    session,
 })
