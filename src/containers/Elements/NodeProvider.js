@@ -9,26 +9,50 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { NodeList, Node } from '../../components/Elements';
 
 class NodeProvider extends Component {
-  handleSelect = (node) => {
-    console.log('handle Select', node);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      nodes: []
+    };
   }
 
-  handleStop = (node, event) => {
-    console.log('handle stop', node, event);
+  componentWillReceiveProps(nextProps) {
+    const initalNodeState = { position: {x: 0, y: 0}, isSelected: false };
+
+    this.setState({
+      nodes: nextProps.network.nodes.map(() => { return { ...initalNodeState } })
+    });
+  }
+
+  handleSelect = (node, index) => {
+    const nodes = this.state.nodes;
+    nodes[index].isSelected = !nodes[index].isSelected;
+
+    this.setState({ nodes: nodes });
+  }
+
+  handleStop = (node, index, event, draggableData) => {
+    // const nodes = this.state.nodes;
+    // nodes[index].position = { x: draggableData.x, y: draggableData.y };
+    // this.setState({ nodes: nodes });
+    alert("you moved it, for now we're ignoring that");
   }
 
   draggableNode = (node, index) => {
+    const nodeState = this.state.nodes[index];
     return (
-      <Draggable key={ index } onStop={ (event) => this.handleStop(node, event) }>
+      <Draggable key={ index } position={ nodeState.position } onStop={ (event, draggableData) => this.handleStop(node, index, event, draggableData) }>
         <Node />
       </Draggable>
     );
   }
 
   selectableNode = (node, index) => {
+    const nodeState = this.state.nodes[index];
     return (
-      <Touch key={ index } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(node) }>
-        <Node />
+      <Touch key={ index } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(node, index) }>
+        <Node isSelected={ nodeState.isSelected } />
       </Touch>
     );
   }
@@ -60,7 +84,6 @@ class NodeProvider extends Component {
 
     return (
       <div class='node-provider'>
-        Draggable Provider
         <NodeList>
           { nodes }
         </NodeList>

@@ -5,11 +5,12 @@ class Node extends Component {
     const {
       label,
       className,
+      isSelected,
       ...other,
     } = this.props;
 
     return (
-      <div className={ 'node ' + className } { ...other } >
+      <div className={ 'node ' + (isSelected ? ' node--is-selected ' : '') + className } { ...other } >
         <h3>{ label }</h3>
       </div>
     );

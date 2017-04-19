@@ -16,4 +16,8 @@
     display: block;
     font-size: 0.5em;
   }
+
+  &--is-selected {
+    border: 3px solid $mustard;
+  }
 }

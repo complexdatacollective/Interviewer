@@ -34,7 +34,7 @@ class NodeProviderPanels extends Component {
       const providerConfig = getProviderConfig(panel);
 
       return (
-        <Panel title={ panel.title } key={ index }>
+        <Panel title={ providerConfig.title } key={ index }>
           <NodeProvider { ...providerConfig } />
         </Panel>
       );
