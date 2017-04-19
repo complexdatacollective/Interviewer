@@ -1,1 +1,1 @@
-export { default as Prompts } from './Prompts';
+export { default as PromptSwiper } from './PromptSwiper';

@@ -3,7 +3,7 @@ import Touch from 'react-hammerjs';
 
 import { Prompt, Pips } from '../../components/Elements';
 
-class Prompts extends Component {
+class PromptSwiper extends Component {
   constructor(props) {
     super(props);
 
@@ -52,4 +52,4 @@ class Prompts extends Component {
   }
 }
 
-export default Prompts;
+export default PromptSwiper;
