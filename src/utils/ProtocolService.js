@@ -41,6 +41,7 @@ export default class ProtocolService {
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
+            "nodeType": 'person',
             "panels": [
               'existing',
               'previous',
@@ -48,34 +49,22 @@ export default class ProtocolService {
             "prompts": [
               {
                 title: 'Within the past 6 months, who have you felt close to?',
-                nodeAttributes: [
-                  {
-                    label: 'special_category',
-                    value: 46
-                  },
-                  {
-                    label: 'close_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  special_category: 46,
+                  close_friend: true,
+                }
               },
               {
                 title: "Within the past 6 months, who has been supportive?",
-                nodeAttributes: [
-                  {
-                    label: 'support_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  support_friend: true,
+                }
               },
               {
                 title: "Within the past 2 weeks, who has visited",
-                nodeAttributes: [
-                  {
-                    label: 'travel_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  travel_friend: true,
+                }
               }
             ],
             form: {
@@ -104,15 +93,13 @@ export default class ProtocolService {
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
+            "nodeType": 'things',
             "prompts": [
               {
                 title: "Within the past 6 months, what's the best thing you've seen ever?",
-                nodeAttributes: [
-                  {
-                    label: 'fun_times',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  fun_times: true
+                }
               }
             ],
             form: {
@@ -129,10 +116,8 @@ export default class ProtocolService {
               ]
             },
             "panels": [
-              {
-                "title": "Exiting nodes",
-                "filter": 'existing',
-              },
+              'existing',
+              'previous',
             ],
           },
         }

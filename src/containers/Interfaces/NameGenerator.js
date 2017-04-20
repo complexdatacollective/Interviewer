@@ -11,6 +11,14 @@ const rotateIndex = (max, next) => {
   return (next + max) % max;
 }
 
+const includes = (a, b) => {
+  return Object.keys(b).map((key) => {
+    return a[key] === b[key];
+  }).reduce((sum, x) => {
+    return sum && x;
+  }, true);
+}
+
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
@@ -40,16 +48,19 @@ class NameGeneratorInterface extends Component {
     });
   }
 
-  promptAttributes() {
+  currentPromptAttributes() {
     return this.props.prompts[this.state.promptIndex].nodeAttributes;
   }
 
-  handlePanelDrag = (node) => {
-    console.log('panel drag', node);
+  currentNodeAttributes() {
+    return { type: this.props.nodeType, ...this.currentPromptAttributes() };
   }
 
-  handlePanelSelect = (node) => {
-    console.log('panel select', node);
+  currentNodes() {
+    const nodes = this.props.network.nodes;
+    return nodes.filter((node) => {
+      return includes(node, this.currentNodeAttributes());
+    });
   }
 
   toggleModal = () => {
@@ -60,7 +71,7 @@ class NameGeneratorInterface extends Component {
 
   handleFormSubmit(node, _, form) {
     if (node) {
-      this.props.addNode({ ...node, attributes: this.promptAttributes() });
+      this.props.addNode({ ...node, ...this.currentNodeAttributes() });
       form.reset();  // Is this the "react/redux way"?
       this.toggleModal();
     }
@@ -68,9 +79,6 @@ class NameGeneratorInterface extends Component {
 
   render() {
     const {
-      network: {
-        nodes
-      },
       prompts,
       form,
       panels
@@ -85,7 +93,7 @@ class NameGeneratorInterface extends Component {
           <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
 
           <NodeList>
-            { nodes.map((node, index) => {
+            { this.currentNodes().map((node, index) => {
               const label = `${node.nickname}`;
               return <Node key={ index } label={ label } />;
             }) }
@@ -112,6 +120,7 @@ function mapStateToProps(state, ownProps) {
     prompts: ownProps.config.params.prompts,
     form: ownProps.config.params.form,
     panels: ownProps.config.params.panels,
+    nodeType: ownProps.config.params.nodeType,
   }
 }
 
