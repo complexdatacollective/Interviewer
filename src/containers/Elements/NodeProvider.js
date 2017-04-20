@@ -8,6 +8,8 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 import { NodeList, Node } from '../../components/Elements';
 
+const initalNodeState = { position: {x: 0, y: 0}, isSelected: false };
+
 class NodeProvider extends Component {
   constructor(props) {
     super(props);
@@ -18,8 +20,6 @@ class NodeProvider extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const initalNodeState = { position: {x: 0, y: 0}, isSelected: false };
-
     this.setState({
       nodes: nextProps.network.nodes.map(() => { return { ...initalNodeState } })
     });
@@ -40,7 +40,7 @@ class NodeProvider extends Component {
   }
 
   draggableNode = (node, index) => {
-    const nodeState = this.state.nodes[index];
+    const nodeState = this.state.nodes[index] || initalNodeState;
     return (
       <Draggable key={ index } position={ nodeState.position } onStop={ (event, draggableData) => this.handleStop(node, index, event, draggableData) }>
         <Node />
@@ -49,7 +49,7 @@ class NodeProvider extends Component {
   }
 
   selectableNode = (node, index) => {
-    const nodeState = this.state.nodes[index];
+    const nodeState = this.state.nodes[index] || initalNodeState;
     return (
       <Touch key={ index } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(node, index) }>
         <Node isSelected={ nodeState.isSelected } />
