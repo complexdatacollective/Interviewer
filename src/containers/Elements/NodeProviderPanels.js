@@ -24,6 +24,7 @@ const getProviderConfig = (provider) => {
   return provider;
 }
 
+/** Figures out the panel config, and renders the relevant components with that config **/
 class NodeProviderPanels extends Component {
   render() {
     const {
@@ -35,7 +36,7 @@ class NodeProviderPanels extends Component {
 
       return (
         <Panel title={ providerConfig.title } key={ index }>
-          <NodeProvider { ...providerConfig } />
+          <NodeProvider { ...providerConfig }/>
         </Panel>
       );
     });

@@ -30,37 +30,14 @@ class NameGeneratorInterface extends Component {
       isOpen: false,
       promptIndex: 0,
     };
-
-    this.nextPrompt = this.nextPrompt.bind(this);
-    this.previousPrompt = this.previousPrompt.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
-  nextPrompt() {
-    this.setState({
-      promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex + 1)
-    });
+  nextPrompt = () => {
+    this.setState({ promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex + 1) });
   }
 
-  previousPrompt() {
-    this.setState({
-      promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex - 1)
-    });
-  }
-
-  currentPromptAttributes() {
-    return this.props.prompts[this.state.promptIndex].nodeAttributes;
-  }
-
-  currentNodeAttributes() {
-    return { type: this.props.nodeType, ...this.currentPromptAttributes() };
-  }
-
-  currentNodes() {
-    const nodes = this.props.network.nodes;
-    return nodes.filter((node) => {
-      return includes(node, this.currentNodeAttributes());
-    });
+  previousPrompt = () => {
+    this.setState({ promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex - 1) });
   }
 
   toggleModal = () => {
@@ -69,12 +46,34 @@ class NameGeneratorInterface extends Component {
     });
   }
 
-  handleFormSubmit(node, _, form) {
+  handleAddNode = (node, _, form) => {
     if (node) {
-      this.props.addNode({ ...node, ...this.currentNodeAttributes() });
+      this.props.addNode({ ...node, ...this.activeNodeAttributes() });
       form.reset();  // Is this the "react/redux way"?
       this.toggleModal();
     }
+  }
+
+  activeNodeAttributes() {
+    const {
+      prompts,
+      nodeType,
+    } = this.props;
+
+    const promptAttributes = prompts[this.state.promptIndex].nodeAttributes;
+    return { type: nodeType, ...promptAttributes };
+  }
+
+  activeNodes() {
+    const {
+      network: {
+        nodes
+      }
+    } = this.props;
+
+    return nodes.filter((node) => {
+      return includes(node, this.activeNodeAttributes());
+    });
   }
 
   render() {
@@ -87,25 +86,25 @@ class NameGeneratorInterface extends Component {
     return (
       <div className='interface'>
         <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } />
+          <NodeProviderPanels config={ panels } activeNodeAttributes={ this.activeNodeAttributes() } />
         </div>
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
 
           <NodeList>
-            { this.currentNodes().map((node, index) => {
+            { this.activeNodes().map((node, index) => {
               const label = `${node.nickname}`;
               return <Node key={ index } label={ label } />;
             }) }
           </NodeList>
 
-          <button onClick={this.toggleModal}>
+          <button onClick={ this.toggleModal }>
             Add a person
           </button>
 
-          <Modal show={this.state.isOpen} onClose={this.toggleModal}>
+          <Modal show={ this.state.isOpen } onClose={ this.toggleModal }>
             <h4>{ form.title }</h4>
-            <Form { ...form } form={ form.formName } onSubmit={ this.handleFormSubmit }/>
+            <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
           </Modal>
         </div>
       </div>
