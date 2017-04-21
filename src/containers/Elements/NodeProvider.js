@@ -15,31 +15,46 @@ class NodeProvider extends Component {
     super(props);
   }
 
-  handleSelect = (nodeId) => {
+  handleSelect = (node) => {
     // do something with node
-    this.handleAction(nodeId);
+    this.handleAction(node);
   }
 
-  handleStop = (nodeId) => {
+  handleStop = (nodeId, node) => {
     // do something with node
-    this.handleAction(nodeId);
+    this.handleAction(node);
   }
 
-  handleAction(nodeId) {
-    console.log(`interacted with ${nodeId}`);
+  handleAction(node) {
+    const {
+      source,
+      activeNodeAttributes,
+      updateNode,
+    } = this.props;
+
+    const updatedNode = { ...node, ...activeNodeAttributes };
+
+    console.log('updateNode', source, node, updatedNode);
+
+    switch(source) {
+      case 'existing':
+        updateNode(updatedNode);
+    }
   }
 
-  draggableNode = (node, nodeId) => {
+  draggableNode = (node, index) => {
     return (
-      <Draggable key={ nodeId } position={ { x: 0, y: 0 } } onStop={ () => this.handleStop(nodeId) }>
-        <Node { ...node } label={ `${node.nickname}` } />
+      <Draggable key={ index } position={ { x: 0, y: 0 } } onStop={ () => this.handleStop(node) }>
+        <div>
+          <Node { ...node } label={ `${node.nickname}` } />
+        </div>
       </Draggable>
     );
   }
 
-  selectableNode = (node, nodeId) => {
+  selectableNode = (node, index) => {
     return (
-      <Touch key={ nodeId } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(nodeId) }>
+      <Touch key={ index } onTap={ () => this.handleSelect(node) } >
         <Node { ...node } label={ `${node.nickname}` } />
       </Touch>
     );
@@ -54,9 +69,9 @@ class NodeProvider extends Component {
     const mapNodes = (nodes, interaction) => {
       switch(interaction) {
         case 'selectable':
-          return nodes.map(this.draggableNode);
-        case 'draggable':
           return nodes.map(this.selectableNode);
+        case 'draggable':
+          return nodes.map(this.draggableNode);
         default:
           return nodes.map((node, index) => {
             <Node key={ index } {...node } />
@@ -81,13 +96,13 @@ function mapStateToProps(state, ownProps) {
 
   return {
     network: diff(state.network, nodeIncludesAttributes(state.network, ownProps.activeNodeAttributes)),
-    interaction
+    interaction,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch)
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch)
   }
 }
 

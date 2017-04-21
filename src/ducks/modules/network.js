@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const ADD_NODE = 'ADD_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -12,17 +14,25 @@ const initialState = {
   edges: []
 };
 
+function nextId(nodes) {
+  if(nodes.length == 0) { return 1; }
+  return _.map(nodes, 'id').reduce((memo, id) => { return memo > id ? memo : id }) + 1;
+}
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE:
+      const id = nextId(state.nodes);
+      const node = { ...action.node, id }
       return {
         // rest parameters - ...state contains array of the rest of values of state (above)
         ...state,
-        nodes: [...state.nodes, action.node]
+        nodes: [...state.nodes, node]
       }
     case UPDATE_NODE:
       const nodes = [ ...state.nodes ];
-      nodes[action.id] = action.node;
+      const nodeIndex = _.findIndex(state.nodes, ['id', action.node.id]);
+      nodes[nodeIndex] = action.node;
       return {
         ...state,
         nodes: [...nodes ]
@@ -44,10 +54,9 @@ function addNode(node) {
   }
 }
 
-function updateNode(id, node) {
+function updateNode(node) {
   return {
     type: UPDATE_NODE,
-    id,
     node,
   }
 }

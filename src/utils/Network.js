@@ -1,9 +1,7 @@
 import _ from 'lodash';
 
 const nodeIncludesAttributes = (network, attributes) => {
-  const nodes = network.nodes.filter((node) => {
-    return _.isMatch(node, attributes);
-  });
+  const nodes = _.filter(network.nodes, attributes);
 
   return {
     nodes

@@ -3,14 +3,11 @@ import React, { Component } from 'react';
 class Node extends Component {
   render() {
     const {
-      label,
-      className,
-      isSelected,
-      ...other,
+      label
     } = this.props;
 
     return (
-      <div className={ 'node ' + (isSelected ? ' node--is-selected ' : '') + className } { ...other } >
+      <div className='node' >
         <h3>{ label }</h3>
       </div>
     );
@@ -19,7 +16,6 @@ class Node extends Component {
 
 Node.defaultProps = {
   label: 'Node',
-  className: '',
 };
 
 export default Node;
