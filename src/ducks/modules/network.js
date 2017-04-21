@@ -1,5 +1,6 @@
 const ADD_NODE = 'ADD_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
+const UPDATE_NODE = 'UPDATE_NODE';
 const ADD_EDGE = 'ADD_EDGE';
 const REMOVE_EDGE = 'REMOVE_EDGE';
 const SET_EGO = 'SET_EGO';
@@ -19,6 +20,13 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         nodes: [...state.nodes, action.node]
       }
+    case UPDATE_NODE:
+      const nodes = [ ...state.nodes ];
+      nodes[action.id] = action.node;
+      return {
+        ...state,
+        nodes: [...nodes ]
+      }
     case REMOVE_NODE:
       return {
         ...state,
@@ -36,6 +44,14 @@ function addNode(node) {
   }
 }
 
+function updateNode(id, node) {
+  return {
+    type: UPDATE_NODE,
+    id,
+    node,
+  }
+}
+
 function removeNode(index) {
   return {
     type: REMOVE_NODE,
@@ -45,11 +61,13 @@ function removeNode(index) {
 
 const actionCreators = {
   addNode,
+  updateNode,
   removeNode
 };
 
 const actionTypes = {
   ADD_NODE,
+  UPDATE_NODE,
   REMOVE_NODE,
   ADD_EDGE,
   REMOVE_EDGE,
