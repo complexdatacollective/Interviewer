@@ -7,16 +7,10 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
 import { NodeList, Node, Modal, Form } from '../../components/Elements';
 
+import { nodeIncludesAttributes } from '../../utils/Network';
+
 const rotateIndex = (max, next) => {
   return (next + max) % max;
-}
-
-const includes = (a, b) => {
-  return Object.keys(b).map((key) => {
-    return a[key] === b[key];
-  }).reduce((sum, x) => {
-    return sum && x;
-  }, true);
 }
 
 /**
@@ -66,14 +60,10 @@ class NameGeneratorInterface extends Component {
 
   activeNodes() {
     const {
-      network: {
-        nodes
-      }
+      network
     } = this.props;
 
-    return nodes.filter((node) => {
-      return includes(node, this.activeNodeAttributes());
-    });
+    return nodeIncludesAttributes(network, this.activeNodeAttributes()).nodes;
   }
 
   render() {

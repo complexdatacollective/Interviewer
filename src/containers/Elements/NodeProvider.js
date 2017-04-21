@@ -8,58 +8,40 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 import { NodeList, Node } from '../../components/Elements';
 
-const initalNodeState = { position: {x: 0, y: 0}, isSelected: false };
+import { diff, nodeIncludesAttributes } from '../../utils/Network';
 
 class NodeProvider extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      nodes: []
-    };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      nodes: nextProps.network.nodes.map(() => { return { ...initalNodeState } })
-    });
+  handleSelect = (nodeId) => {
+    // do something with node
+    this.handleAction(nodeId);
   }
 
-  handleSelect = (node, index) => {
-    const nodes = this.state.nodes;
-    nodes[index].isSelected = !nodes[index].isSelected;
-
-    this.setState({ nodes: nodes });
+  handleStop = (nodeId) => {
+    // do something with node
+    this.handleAction(nodeId);
   }
 
-  handleStop = (node, index, event, draggableData) => {
-    // const nodes = this.state.nodes;
-    // nodes[index].position = { x: draggableData.x, y: draggableData.y };
-    // this.setState({ nodes: nodes });
-    alert("you moved it, for now we're ignoring that");
+  handleAction(nodeId) {
+    console.log(`interacted with ${nodeId}`);
   }
 
-  draggableNode = (node, index) => {
-    const nodeState = this.state.nodes[index] || initalNodeState;
+  draggableNode = (node, nodeId) => {
     return (
-      <Draggable key={ index } position={ nodeState.position } onStop={ (event, draggableData) => this.handleStop(node, index, event, draggableData) }>
-        <Node />
+      <Draggable key={ nodeId } position={ { x: 0, y: 0 } } onStop={ () => this.handleStop(nodeId) }>
+        <Node { ...node } label={ `${node.nickname}` } />
       </Draggable>
     );
   }
 
-  selectableNode = (node, index) => {
-    const nodeState = this.state.nodes[index] || initalNodeState;
+  selectableNode = (node, nodeId) => {
     return (
-      <Touch key={ index } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(node, index) }>
-        <Node isSelected={ nodeState.isSelected } />
+      <Touch key={ nodeId } onTap={ () => this.handleSelect(node) } onClick={ () => this.handleSelect(nodeId) }>
+        <Node { ...node } label={ `${node.nickname}` } />
       </Touch>
-    );
-  }
-
-  regularNode = (node, index) => {
-    return (
-      <Node key={ index } />
     );
   }
 
@@ -76,7 +58,9 @@ class NodeProvider extends Component {
         case 'draggable':
           return nodes.map(this.selectableNode);
         default:
-          return nodes.map(this.regularNode);
+          return nodes.map((node, index) => {
+            <Node key={ index } {...node } />
+          });
       }
     }
 
@@ -96,7 +80,7 @@ function mapStateToProps(state, ownProps) {
   let interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
 
   return {
-    network: state.network,
+    network: diff(state.network, nodeIncludesAttributes(state.network, ownProps.activeNodeAttributes)),
     interaction
   }
 }

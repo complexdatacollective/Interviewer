@@ -36,7 +36,7 @@ class NodeProviderPanels extends Component {
 
       return (
         <Panel title={ providerConfig.title } key={ index }>
-          <NodeProvider { ...providerConfig }/>
+          <NodeProvider { ...providerConfig } activeNodeAttributes={ this.props.activeNodeAttributes } />
         </Panel>
       );
     });
