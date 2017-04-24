@@ -1,4 +1,3 @@
-import { persistor } from '../store';
 import ProtocolService from '../../utils/ProtocolService'
 
 const protocolService = new ProtocolService();
@@ -17,23 +16,25 @@ const initialState = {
   protocolLoaded: false
 };
 
-export default function reducer(state = initialState, action = {}) {
-  switch (action.type) {
-    case SET_PROTOCOL:
-      return {
-        ...state,
-        protocolLoaded: true,
-        protocolConfig: {
-          ...state.protocolConfig,
-          ...action.protocol
+export default function(persistor) {
+  return function reducer(state = initialState, action = {}) {
+    switch (action.type) {
+      case SET_PROTOCOL:
+        return {
+          ...state,
+          protocolLoaded: true,
+          protocolConfig: {
+            ...state.protocolConfig,
+            ...action.protocol
+          }
         }
-      }
-    case UNSET_PROTOCOL:
-      persistor.purge(['protocol']);
-      return initialState;
-    default:
-      return state;
-  }
+      case UNSET_PROTOCOL:
+        persistor.purge(['protocol']);
+        return initialState;
+      default:
+        return state;
+    }
+  };
 };
 
 function requestProtocol() {

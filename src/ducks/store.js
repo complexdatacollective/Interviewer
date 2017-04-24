@@ -6,7 +6,7 @@ import logger from './middleware/logger';
 import rootReducer from './modules/rootReducer';
 
 export const store = createStore(
-    rootReducer,
+    rootReducer(persistor),
     undefined,
     compose(
         autoRehydrate(),

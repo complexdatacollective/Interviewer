@@ -7,11 +7,13 @@ import participant from './participant';
 import protocol from './protocol';
 import session from './session';
 
-export default combineReducers({
-    form: formReducer,
-    network,
-    page,
-    participant,
-    protocol,
-    session,
-})
+export default function(persistor) {
+  return combineReducers({
+      form: formReducer,
+      network,
+      page,
+      participant,
+      protocol: protocol(persistor),
+      session,
+  })
+};
