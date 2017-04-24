@@ -39,7 +39,7 @@ class PromptSwiper extends Component {
         <div className='prompts'>
           <div className='prompts__prompts'>
             { prompts.map((prompt, index) => {
-              return <Prompt key={ index } prompt={ prompt } isActive={ promptIndex == index } />;
+              return <Prompt key={ index } label={ prompt.title } isActive={ promptIndex == index } />;
             }) }
           </div>
 
