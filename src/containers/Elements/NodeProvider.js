@@ -34,8 +34,6 @@ class NodeProvider extends Component {
 
     const updatedNode = { ...node, ...activeNodeAttributes };
 
-    console.log('updateNode', source, node, updatedNode);
-
     switch(source) {
       case 'existing':
         updateNode(updatedNode);
