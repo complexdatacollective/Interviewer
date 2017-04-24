@@ -10,7 +10,7 @@ class Pips extends Component {
 
     let pips = [];
 
-    for(let index = 0; index < count; index++) {
+    for (let index = 0; index < count; index++) {
       const classes = (currentIndex === index ? 'pips__pip pips__pip--active' : 'pips__pip');
       pips.push(<div key={ index } className={ classes }></div>);
     };

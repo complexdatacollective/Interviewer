@@ -25,6 +25,7 @@
         "no-unused-vars": "warn",
         "constructor-super": "warn",
         "react/jsx-uses-react": 2,
-        "react/jsx-uses-vars": "warn"
+        "react/jsx-uses-vars": "warn",
+        "keyword-spacing": "warn",
     }
 }
