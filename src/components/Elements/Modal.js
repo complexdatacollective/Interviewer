@@ -9,7 +9,7 @@ class Modal extends Component {
       onClose
     } = this.props;
 
-    if(!show) {
+    if (!show) {
       return null;
     }
 

@@ -8,7 +8,7 @@ describe('Modal component', () => {
   describe('show is false', () => {
     it('renders nothing', () => {
       const component = shallow(
-        <Modal show={ false }>
+        <Modal show={ false } onClose={ () => {} }>
           foo
         </Modal>
       );
@@ -20,12 +20,32 @@ describe('Modal component', () => {
   describe('show is true', () => {
     it('renders with content', () => {
       const component = shallow(
-        <Modal show={ true }>
+        <Modal show={ true } onClose={ () => {} }>
           <span>foo</span>
         </Modal>
       );
 
       expect(component.contains(<span>foo</span>)).toBe(true);
+    });
+
+    it('calls onClose when close event is triggered', () => {
+      const onClose = jest.fn();
+      const component = shallow(<Modal show={ true } onClose={ onClose } ></Modal>);
+
+      expect(onClose.mock.calls.length).toBe(0);
+
+      // Click on close button
+      component.find('button').simulate('click');
+      expect(onClose.mock.calls.length).toBe(1);
+
+      // Click on background
+      component.find('.modal').simulate('click');
+      expect(onClose.mock.calls.length).toBe(2);
+
+      // Clicks to window shouldn't trigger it
+      component.find('.modal__window').simulate('click', { stopPropagation: () => {} } );
+      expect(onClose.mock.calls.length).toBe(2);
+
     });
 
   });
