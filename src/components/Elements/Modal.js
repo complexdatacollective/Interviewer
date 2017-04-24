@@ -14,11 +14,11 @@ class Modal extends Component {
     }
 
     return (
-      <div className="modal" onClick={onClose}>
+      <div className="modal" onClick={ onClose }>
         <div className="modal__window" onClick={ (e) => e.stopPropagation() }>
-          {children}
+          { children }
 
-          <button onClick={onClose}>
+          <button onClick={ onClose }>
             Cancel
           </button>
         </div>
