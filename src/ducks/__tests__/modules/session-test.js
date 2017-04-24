@@ -3,7 +3,7 @@
 import reducer, {actionCreators, actionTypes} from '../../modules/session';
 import { actionTypes as protocolActionTypes } from '../../modules/protocol';
 
-describe('session module', () => {
+describe('session reducer', () => {
   it('should return the initial state', () => {
     expect(
       reducer(undefined, {})
@@ -93,3 +93,21 @@ describe('session module', () => {
 
 
 });
+
+describe('session actions', () => {
+  it('should create a next stage action', () => {
+    const expectedAction = {
+      type: actionTypes.NEXT_STAGE
+    }
+
+    expect(actionCreators.nextStage()).toEqual(expectedAction)
+  })
+
+  it('should create a previous stage action', () => {
+    const expectedAction = {
+      type: actionTypes.PREVIOUS_STAGE
+    }
+
+    expect(actionCreators.previousStage()).toEqual(expectedAction)
+  })
+})
