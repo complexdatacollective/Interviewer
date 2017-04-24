@@ -80,7 +80,6 @@
   },
   "dependencies": {
     "@mars/heroku-js-runtime-env": "^3.0.0",
-    "babel-jest": "^18.0.0",
     "classnames": "^2.2.5",
     "gridle": "^2.0.48",
     "history": "^4.5.1",
