@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import Touch from 'react-hammerjs';
+import _ from 'lodash';
 
 import { Node } from '../../components/Elements';
 
@@ -17,9 +18,11 @@ class InteractiveNodeList extends Component {
   }
 
   selectableNode = (node, index) => {
+    const isActive = _.isMatch(node, this.props.activeNodeAttributes);
+
     return (
       <Touch key={ index } onTap={ () => this.props.handleSelectNode(node) } >
-        <Node { ...node } label={ `${node.nickname}` } />
+        <Node { ...node } label={ `${node.nickname}` } isActive={ isActive } />
       </Touch>
     );
   }

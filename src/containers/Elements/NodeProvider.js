@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 import { InteractiveNodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
-  handleSelectNode = () => {
-    console.log('do nothing 1');
-  }
-
-  handleDragNode = () => {
-    console.log('do nothing 2');
+  handleSelectNode = (node) => {
+    if (_.isMatch(node, this.props.activeNodeAttributes)) {
+      this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activeNodeAttributes)));
+    } else {
+      this.props.updateNode({ ...node, ...this.props.activeNodeAttributes });
+    }
   }
 
   network = () => {
@@ -27,10 +28,11 @@ class NodeProvider extends Component {
   render() {
     const {
       interaction,
+      activeNodeAttributes,
     } = this.props;
 
     return (
-      <InteractiveNodeList interaction={ interaction } network={ this.network() } handleDragNode={ this.handleDragNode } handleSelectNode={ this.handleSelectNode } />
+      <InteractiveNodeList interaction={ interaction } network={ this.network() } activeNodeAttributes={ activeNodeAttributes } handleDragNode={ () => {} } handleSelectNode={ this.handleSelectNode } />
     );
   }
 }
@@ -38,15 +40,23 @@ class NodeProvider extends Component {
 function mapStateToProps(state, ownProps) {
   const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
 
+  const {
+    type,
+    stageId,
+    ...activeNodeAttributes,
+  } = ownProps.newNodeAttributes;
+
   return {
     network: state.network,
     interaction,
+    activeNodeAttributes,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch)
+    addNode: bindActionCreators(networkActions.addNode, dispatch),
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
   }
 }
 

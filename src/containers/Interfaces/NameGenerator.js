@@ -52,10 +52,12 @@ class NameGeneratorInterface extends Component {
     const {
       prompts,
       nodeType,
+      stageId
     } = this.props;
 
     const promptAttributes = prompts[this.state.promptIndex].nodeAttributes;
-    return { type: nodeType, ...promptAttributes };
+
+    return { type: nodeType, stageId, ...promptAttributes };
   }
 
   activeNetwork() {
@@ -78,7 +80,7 @@ class NameGeneratorInterface extends Component {
     return (
       <div className='interface'>
         <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } filter={ providerFilter } />
+          <NodeProviderPanels config={ panels } filter={ providerFilter } newNodeAttributes={ this.activeNodeAttributes() } />
         </div>
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
@@ -112,6 +114,7 @@ function mapStateToProps(state, ownProps) {
     form: ownProps.config.params.form,
     panels: ownProps.config.params.panels,
     nodeType: ownProps.config.params.nodeType,
+    stageId: ownProps.config.id,
   }
 }
 

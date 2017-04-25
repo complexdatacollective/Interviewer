@@ -38,6 +38,7 @@ export default class ProtocolService {
       "exportPath": "some/path/here.json",
       "stages": [
         {
+          "id": "namegen1",
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
@@ -90,27 +91,35 @@ export default class ProtocolService {
           },
         },
         {
+          "id": "namegen2",
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
-            "nodeType": 'things',
+            "nodeType": 'person',
             "prompts": [
               {
-                title: "Within the past 6 months, what's the best thing you've seen ever?",
+                title: "Within the past 6 months, what's the best person you've seen ever?",
                 nodeAttributes: {
                   fun_times: true
                 }
               }
             ],
             form: {
-              title: "Add a thing you've seen",
-              formName: 'bestThings',
+              title: "Add a person you've seen",
+              formName: 'bestPeople',
               fields: [
                 {
-                  label: 'Thing',
-                  name: 'thing',
+                  label: 'Name',
+                  name: 'name',
                   type: 'text',
                   placeholder: 'Name',
+                  required: true
+                },
+                {
+                  label: 'Nickname',
+                  name: 'nickname',
+                  type: 'text',
+                  placeholder: 'Nickname',
                   required: true
                 }
               ]
