@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Draggable from 'react-draggable';
 import Touch from 'react-hammerjs';
 
-import { NodeList, Node } from '../../components/Elements';
+import { Node } from '../../components/Elements';
 
 class InteractiveNodeList extends Component {
 
@@ -31,7 +31,7 @@ class InteractiveNodeList extends Component {
     } = this.props;
 
     const mapNodes = (nodes, interaction) => {
-      switch(interaction) {
+      switch (interaction) {
         case 'selectable':
           return nodes.map(this.selectableNode);
         case 'draggable':
@@ -46,10 +46,8 @@ class InteractiveNodeList extends Component {
     let nodes = mapNodes(network.nodes, interaction);
 
     return (
-      <div class='node-provider'>
-        <NodeList>
-          { nodes }
-        </NodeList>
+      <div class='node-list node-list--interactive'>
+        { nodes }
       </div>
     );
   }

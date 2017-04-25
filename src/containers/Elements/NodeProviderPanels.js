@@ -22,8 +22,8 @@ const providerPresets = {
 }
 
 const getProviderConfig = (provider) => {
-  if(!provider) { return () => { return true; } }  // TODO: rehydrate looses methods, this puts a placehoder back in
-  if(providerPresets.hasOwnProperty(provider)) { return providerPresets[provider]; }
+  if (!provider) { return () => { return true; } }  // TODO: rehydrate looses methods, this puts a placehoder back in
+  if (providerPresets.hasOwnProperty(provider)) { return providerPresets[provider]; }
   return provider;
 }
 

@@ -12,7 +12,7 @@ class PromptSwiper extends Component {
   }
 
   handleSwipe(event) {
-    switch(event.direction) {
+    switch (event.direction) {
       case 2:
       case 3:
         this.props.handleNext();
