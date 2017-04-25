@@ -15,7 +15,7 @@ const initialState = {
 };
 
 function nextId(nodes) {
-  if(nodes.length == 0) { return 1; }
+  if (nodes.length == 0) { return 1; }
   return _.map(nodes, 'id').reduce((memo, id) => { return memo > id ? memo : id }) + 1;
 }
 
@@ -40,7 +40,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: state.nodes.filter((node, index) => index !== action.index)
+        nodes: _.reject(state.nodes, (node) => node.id === action.id)
       }
     default:
       return state;
