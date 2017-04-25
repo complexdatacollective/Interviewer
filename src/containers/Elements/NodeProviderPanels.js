@@ -3,18 +3,21 @@ import React, { Component } from 'react';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
+
 const providerPresets = {
   'existing': {
     type: 'existing',
     title: 'People from your existing lists',
     source: 'existing',
     selectable: true,
+    filter: (network) => { return network; },
   },
   'previous': {
     type: 'previous',
     title: 'People from your previous visit',
     source: 'previous',
     draggable: true,
+    filter: (network) => { return network; },
   },
 }
 
@@ -29,14 +32,17 @@ class NodeProviderPanels extends Component {
   render() {
     const {
       config,
+      filter,
     } = this.props;
 
     const panels = config.map((panel, index) => {
       const providerConfig = getProviderConfig(panel);
 
+      const providerFilter = (network) => { return providerConfig.filter(filter(network)) };
+
       return (
         <Panel title={ providerConfig.title } key={ index }>
-          <NodeProvider { ...providerConfig } activeNodeAttributes={ this.props.activeNodeAttributes } />
+          <NodeProvider { ...providerConfig } filter={ providerFilter } />
         </Panel>
       );
     });
@@ -48,4 +54,5 @@ class NodeProviderPanels extends Component {
     );
   }
 }
+
 export default NodeProviderPanels;

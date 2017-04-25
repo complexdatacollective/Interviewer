@@ -7,7 +7,7 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
 import { NodeList, Node, Modal, Form } from '../../components/Elements';
 
-import { nodeIncludesAttributes } from '../../utils/Network';
+import { diff, nodeIncludesAttributes } from '../../utils/Network';
 
 const rotateIndex = (max, next) => {
   return (next + max) % max;
@@ -58,12 +58,12 @@ class NameGeneratorInterface extends Component {
     return { type: nodeType, ...promptAttributes };
   }
 
-  activeNodes() {
+  activeNetwork() {
     const {
       network
     } = this.props;
 
-    return nodeIncludesAttributes(network, this.activeNodeAttributes()).nodes;
+    return nodeIncludesAttributes(network, this.activeNodeAttributes());
   }
 
   render() {
@@ -73,16 +73,18 @@ class NameGeneratorInterface extends Component {
       panels
     } = this.props;
 
+    const providerFilter = (network) => { return diff(network, this.activeNetwork()); }
+
     return (
       <div className='interface'>
         <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } activeNodeAttributes={ this.activeNodeAttributes() } />
+          <NodeProviderPanels config={ panels } filter={ providerFilter } />
         </div>
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
 
           <NodeList>
-            { this.activeNodes().map((node, index) => {
+            { this.activeNetwork().nodes.map((node, index) => {
               const label = `${node.nickname}`;
               return <Node key={ index } label={ label } />;
             }) }

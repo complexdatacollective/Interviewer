@@ -27,5 +27,6 @@
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": "warn",
         "keyword-spacing": "warn",
+        "object-curly-spacing": ["warn", "always"],
     }
 }
