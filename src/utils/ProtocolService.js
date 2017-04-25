@@ -38,9 +38,11 @@ export default class ProtocolService {
       "exportPath": "some/path/here.json",
       "stages": [
         {
+          "id": "namegen1",
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
+            "nodeType": 'person',
             "panels": [
               'existing',
               'previous',
@@ -48,34 +50,22 @@ export default class ProtocolService {
             "prompts": [
               {
                 title: 'Within the past 6 months, who have you felt close to?',
-                nodeAttributes: [
-                  {
-                    label: 'special_category',
-                    value: 46
-                  },
-                  {
-                    label: 'close_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  special_category: 46,
+                  close_friend: true,
+                }
               },
               {
                 title: "Within the past 6 months, who has been supportive?",
-                nodeAttributes: [
-                  {
-                    label: 'support_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  support_friend: true,
+                }
               },
               {
                 title: "Within the past 2 weeks, who has visited",
-                nodeAttributes: [
-                  {
-                    label: 'travel_friend',
-                    value: true
-                  }
-                ]
+                nodeAttributes: {
+                  travel_friend: true,
+                }
               }
             ],
             form: {
@@ -101,38 +91,42 @@ export default class ProtocolService {
           },
         },
         {
+          "id": "namegen2",
           "type": "namegenerator",
           "title": "Name Generator Title",
           "params": {
+            "nodeType": 'person',
             "prompts": [
               {
-                title: "Within the past 6 months, what's the best thing you've seen ever?",
-                nodeAttributes: [
-                  {
-                    label: 'fun_times',
-                    value: true
-                  }
-                ]
+                title: "Within the past 6 months, what's the best person you've seen ever?",
+                nodeAttributes: {
+                  fun_times: true
+                }
               }
             ],
             form: {
-              title: "Add a thing you've seen",
-              formName: 'bestThings',
+              title: "Add a person you've seen",
+              formName: 'bestPeople',
               fields: [
                 {
-                  label: 'Thing',
-                  name: 'thing',
+                  label: 'Name',
+                  name: 'name',
                   type: 'text',
                   placeholder: 'Name',
+                  required: true
+                },
+                {
+                  label: 'Nickname',
+                  name: 'nickname',
+                  type: 'text',
+                  placeholder: 'Nickname',
                   required: true
                 }
               ]
             },
             "panels": [
-              {
-                "title": "Exiting nodes",
-                "filter": 'existing',
-              },
+              'existing',
+              'previous',
             ],
           },
         }

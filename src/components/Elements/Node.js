@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 class Node extends Component {
   render() {
     const {
       label,
-      className,
-      isSelected,
-      ...other,
+      isActive,
     } = this.props;
 
+    const classes = classNames('node', { 'node--is-active': isActive });
+
     return (
-      <div className={ 'node ' + (isSelected ? ' node--is-selected ' : '') + className } { ...other } >
+      <div className={ classes } >
         <h3>{ label }</h3>
       </div>
     );
@@ -19,7 +20,6 @@ class Node extends Component {
 
 Node.defaultProps = {
   label: 'Node',
-  className: '',
 };
 
 export default Node;

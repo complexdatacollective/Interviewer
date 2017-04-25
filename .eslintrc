@@ -22,10 +22,11 @@
         "no-this-before-super": "warn",
         "no-undef": "warn",
         "no-unreachable": "warn",
-        "no-unused-vars": "warn",
+        "no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
         "constructor-super": "warn",
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": "warn",
         "keyword-spacing": "warn",
+        "object-curly-spacing": ["warn", "always"],
     }
 }

@@ -83,6 +83,7 @@
     "classnames": "^2.2.5",
     "gridle": "^2.0.48",
     "history": "^4.5.1",
+    "lodash": "^4.17.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-draggable": "^2.2.3",

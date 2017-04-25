@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-import reducer, {actionCreators, actionTypes} from '../../modules/network';
+import reducer, { actionCreators, actionTypes } from '../../modules/network';
 
-const initialState = {
+const mockState = {
   ego: {},
   nodes: [],
   edges: [],
@@ -12,20 +12,26 @@ describe('network reducer', () => {
   it('should return the initial state', () => {
     expect(
       reducer(undefined, {})
-    ).toEqual(initialState)
+    ).toEqual(mockState)
   });
 
   it('should handle ADD_NODE', () => {
     expect(
-      reducer(initialState, {
+      reducer({
+        ...mockState,
+        nodes: [
+          { id: 1, name: 'baz' }
+        ],
+      }, {
         type: actionTypes.ADD_NODE,
         node: { name: 'foo' },
       })
     ).toEqual(
       {
-        ...initialState,
+        ...mockState,
         nodes: [
-          { name: 'foo' },
+          { id: 1, name: 'baz' },
+          { id: 2, name: 'foo' },
         ],
       }
     )
@@ -35,20 +41,22 @@ describe('network reducer', () => {
   it('should handle REMOVE_NODE', () => {
     expect(
       reducer({
-        ...initialState,
+        ...mockState,
         nodes: [
-          { name: 'foo', },
-          { name: 'bar', },
+          { id: 1, name: 'foo' },
+          { id: 2, name: 'bar' },
+          { id: 3, name: 'baz' },
         ],
       }, {
         type: actionTypes.REMOVE_NODE,
-        index: 0,
+        id: 2,
       })
     ).toEqual(
       {
-        ...initialState,
+        ...mockState,
         nodes: [
-          { name: 'bar' },
+          { id: 1, name: 'foo' },
+          { id: 3, name: 'baz' },
         ],
       }
     )

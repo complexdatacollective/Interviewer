@@ -11,13 +11,14 @@
   justify-content: center;
   -webkit-user-select: none;
   user-select: none;
+  text-align: center;
 
   em {
     display: block;
     font-size: 0.5em;
   }
 
-  &--is-selected {
+  &--is-active {
     border: 3px solid $mustard;
   }
 }

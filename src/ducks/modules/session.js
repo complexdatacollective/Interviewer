@@ -5,7 +5,7 @@ const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
 
 const initialState = {
   stageIndex: 0,
-  stageCount: 0
+  stageCount: 0,
 };
 
 const rotateIndex = (max, next) => {
@@ -16,7 +16,6 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case protocolActionTypes.SET_PROTOCOL:
       const stageCount = action.protocol.stages.length;
-
       return {
         ...initialState,
         stageCount: stageCount,
