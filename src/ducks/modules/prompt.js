@@ -24,12 +24,12 @@ export default function reducer(state = initialState, action = {}, stage) {
       }
     case NEXT_PROMPT:
       return {
-        ...initialState,
+        ...state,
         index: rotateIndex(state.count, state.index + 1)
       }
     case PREVIOUS_PROMPT:
       return {
-        ...initialState,
+        ...state,
         index: rotateIndex(state.count, state.index - 1)
       }
     default:
