@@ -46,10 +46,10 @@ export const activeNetwork = createSelector(
   }
 )
 
-export const otherStagesNetwork = createSelector(
+export const existingNetwork = createSelector(
   activeStageAttributes,
   network,
-  (network) => {
-    return diff(network, nodeIncludesAttributes(network, activeStageAttributes))
+  (activeStageAttributes, network) => {
+    return diff(network, nodeIncludesAttributes(network, activeStageAttributes));
   }
 )
