@@ -56,7 +56,7 @@ class PromptSwiper extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     promptIndex: state.session.prompt.index,
   }
