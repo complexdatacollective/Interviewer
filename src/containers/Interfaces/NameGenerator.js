@@ -50,7 +50,7 @@ class NameGeneratorInterface extends Component {
     return (
       <div className='interface'>
         <div className='interface__aside'>
-          
+          <NodeProviderPanels config={ panels } />
         </div>
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } />

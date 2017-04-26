@@ -4,35 +4,28 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { activePromptAttributes, inactiveNetwork } from '../../selectors/network';
 
 import { InteractiveNodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
-    if (_.isMatch(node, this.props.activeNodeAttributes)) {
-      this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activeNodeAttributes)));
+    if (_.isMatch(node, this.props.activePromptAttributes)) {
+      this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)));
     } else {
-      this.props.updateNode({ ...node, ...this.props.activeNodeAttributes });
+      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
     }
-  }
-
-  network = () => {
-    const {
-      filter,
-      network,
-    } = this.props;
-
-    return filter(network);
   }
 
   render() {
     const {
       interaction,
-      activeNodeAttributes,
+      activePromptAttributes,
+      network,
     } = this.props;
 
     return (
-      <InteractiveNodeList interaction={ interaction } network={ this.network() } activeNodeAttributes={ activeNodeAttributes } handleDragNode={ () => {} } handleSelectNode={ this.handleSelectNode } />
+      <InteractiveNodeList interaction={ interaction } network={ network } activeNodeAttributes={ activePromptAttributes } handleDragNode={ () => {} } handleSelectNode={ this.handleSelectNode } />
     );
   }
 }
@@ -40,16 +33,10 @@ class NodeProvider extends Component {
 function mapStateToProps(state, ownProps) {
   const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
 
-  const {
-    type,
-    stageId,
-    ...activeNodeAttributes,
-  } = ownProps.newNodeAttributes;
-
   return {
-    network: state.network,
+    network: ownProps.filter(inactiveNetwork(state)),
     interaction,
-    activeNodeAttributes,
+    activePromptAttributes: activePromptAttributes(state),
   }
 }
 
@@ -60,4 +47,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default  connect(mapStateToProps, mapDispatchToProps)(NodeProvider);
+export default connect(mapStateToProps, mapDispatchToProps)(NodeProvider);
