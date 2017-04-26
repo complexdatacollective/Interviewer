@@ -16,7 +16,10 @@ function createWindow() {
     mainWindow = new BrowserWindow({width: 800, height: 600, center: true, title: 'Network Canvas'});
     mainWindow.maximize();
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL(url.format({
+      pathname:path.join(__dirname,'index.html'),
+      protocol:'file:'
+    }));
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools({mode:'detach'});

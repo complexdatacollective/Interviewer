@@ -1,0 +1,13 @@
+{
+  "name": "network-canvas",
+  "version": "4.0.0",
+  "productName": "Network Canvas",
+  "description": "A touch-optimised framework for capturing personal network data.",
+  "private": true,
+  "engines": {
+    "node": "6.9.1",
+    "npm": "3.10.7"
+  },
+  "homepage": ".",
+  "main": "electron-starter.js"
+}
