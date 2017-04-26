@@ -17,7 +17,7 @@ export default function reducer(state = initialState, action = {}) {
     case protocolActionTypes.SET_PROTOCOL:
       return {
         ...initialState,
-        count: action.protocol.stages.length
+        count: action.protocol.stages.length,
       }
     case NEXT_STAGE:
       return {

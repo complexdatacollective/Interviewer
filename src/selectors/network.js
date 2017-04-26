@@ -23,11 +23,18 @@ export const activePromptAttributes = createSelector(
   (prompt) => prompt.nodeAttributes
 )
 
-export const activeNodeAttributes = createSelector(
+export const activeStageAttributes = createSelector(
   stage,
+  (stage) => {
+    return { type: stage.params.nodeType, stageId: stage.id };
+  }
+)
+
+export const activeNodeAttributes = createSelector(
+  activeStageAttributes,
   activePromptAttributes,
-  (stage, activePromptAttributes) => {
-    return { type: stage.params.nodeType, stageId: stage.id, ...activePromptAttributes };
+  (activeStageAttributes, activePromptAttributes) => {
+    return { ...activeStageAttributes, ...activePromptAttributes };
   }
 )
 
@@ -39,10 +46,10 @@ export const activeNetwork = createSelector(
   }
 )
 
-export const inactiveNetwork = createSelector(
+export const otherStagesNetwork = createSelector(
+  activeStageAttributes,
   network,
-  activeNetwork,
-  (network, activeNetwork) => {
-    return diff(network, activeNetwork)
+  (network) => {
+    return diff(network, nodeIncludesAttributes(network, activeStageAttributes))
   }
 )

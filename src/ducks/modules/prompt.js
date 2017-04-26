@@ -6,31 +6,35 @@ const PREVIOUS_PROMPT = 'PREVIOUS_PROMPT';
 
 const initialState = {
   index: 0,
-  count: 0,
+  counts: [],
 };
 
 const rotateIndex = (max, next) => {
   return (next + max) % max;
 }
 
-export default function reducer(state = initialState, action = {}, stage) {
+export default function reducer(state = initialState, action = {}, stageState) {
   switch (action.type) {
     case protocolActionTypes.SET_PROTOCOL:
+      return {
+        ...initialState,
+        counts: action.protocol.stages.map((stage) => stage.params.prompts.length),
+      }
     case stageActionTypes.NEXT_STAGE:
     case stageActionTypes.PREVIOUS_STAGE:
       return {
-        ...initialState,
-        count: action.protocol.stages[stage.index].params.prompts.length,
+        ...state,
+        index: 0,
       }
     case NEXT_PROMPT:
       return {
         ...state,
-        index: rotateIndex(state.count, state.index + 1)
+        index: rotateIndex(state.counts[stageState.index], state.index + 1)
       }
     case PREVIOUS_PROMPT:
       return {
         ...state,
-        index: rotateIndex(state.count, state.index - 1)
+        index: rotateIndex(state.counts[stageState.index], state.index - 1)
       }
     default:
       return state;

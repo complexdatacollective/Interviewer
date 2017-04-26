@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { activePromptAttributes, inactiveNetwork } from '../../selectors/network';
+import { activePromptAttributes, otherStagesNetwork } from '../../selectors/network';
 
 import { InteractiveNodeList } from '../../components/Elements';
 
@@ -34,7 +34,7 @@ function mapStateToProps(state, ownProps) {
   const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
 
   return {
-    network: ownProps.filter(inactiveNetwork(state)),
+    network: ownProps.filter(otherStagesNetwork(state)),
     interaction,
     activePromptAttributes: activePromptAttributes(state),
   }
