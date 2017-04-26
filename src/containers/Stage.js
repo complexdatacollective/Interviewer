@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { actionCreators as sessionActions } from '../ducks/modules/session';
+import { actionCreators as stageActions } from '../ducks/modules/stage';
 
 import { NameGenerator } from './Interfaces';
 
@@ -48,7 +48,8 @@ class Stage extends Component {
 }
 
 function mapStateToProps(state) {
-  const stage = state.protocol.protocolConfig.stages[state.session.stageIndex];
+  // TODO: http://redux.js.org/docs/recipes/ComputingDerivedData.html
+  const stage = state.protocol.protocolConfig.stages[state.session.stage.index];
 
   return {
     stage
@@ -57,8 +58,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    next: bindActionCreators(sessionActions.nextStage, dispatch),
-    previous: bindActionCreators(sessionActions.previousStage, dispatch),
+    next: bindActionCreators(stageActions.next, dispatch),
+    previous: bindActionCreators(stageActions.previous, dispatch),
   }
 }
 

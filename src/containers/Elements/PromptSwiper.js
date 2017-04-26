@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
+
+import { actionCreators as promptActions } from '../../ducks/modules/prompt';
 
 import { Prompt, Pips } from '../../components/Elements';
 
@@ -15,17 +19,17 @@ class PromptSwiper extends Component {
     switch (event.direction) {
       case 2:
       case 3:
-        this.props.handleNext();
+        this.props.next();
         break;
       case 1:
       case 4:
-        this.props.handlePrevious();
+        this.props.previous();
         break;
     }
   }
 
   handleTap() {
-    this.props.handleNext();
+    this.props.next();
   }
 
   render() {
@@ -52,4 +56,17 @@ class PromptSwiper extends Component {
   }
 }
 
-export default PromptSwiper;
+function mapStateToProps(state, ownProps) {
+  return {
+    promptIndex: state.session.prompt.index,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    next: bindActionCreators(promptActions.next, dispatch),
+    previous: bindActionCreators(promptActions.previous, dispatch),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PromptSwiper);

@@ -22,16 +22,7 @@ class NameGeneratorInterface extends Component {
 
     this.state = {
       isOpen: false,
-      promptIndex: 0,
     };
-  }
-
-  nextPrompt = () => {
-    this.setState({ promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex + 1) });
-  }
-
-  previousPrompt = () => {
-    this.setState({ promptIndex: rotateIndex(this.props.prompts.length, this.state.promptIndex - 1) });
   }
 
   toggleModal = () => {
@@ -50,12 +41,13 @@ class NameGeneratorInterface extends Component {
 
   activeNodeAttributes() {
     const {
-      prompts,
       nodeType,
-      stageId
+      stageId,
+      prompts,
+      promptIndex,
     } = this.props;
 
-    const promptAttributes = prompts[this.state.promptIndex].nodeAttributes;
+    const promptAttributes = prompts[promptIndex].nodeAttributes;
 
     return { type: nodeType, stageId, ...promptAttributes };
   }
@@ -83,7 +75,7 @@ class NameGeneratorInterface extends Component {
           <NodeProviderPanels config={ panels } filter={ providerFilter } newNodeAttributes={ this.activeNodeAttributes() } />
         </div>
         <div className='interface__primary'>
-          <PromptSwiper prompts={ prompts } promptIndex={ this.state.promptIndex } handleNext={ this.nextPrompt } handlePrevious={ this.previousPrompt } />
+          <PromptSwiper prompts={ prompts } />
 
           <NodeList>
             { this.activeNetwork().nodes.map((node, index) => {
@@ -115,12 +107,13 @@ function mapStateToProps(state, ownProps) {
     panels: ownProps.config.params.panels,
     nodeType: ownProps.config.params.nodeType,
     stageId: ownProps.config.id,
+    promptIndex: state.session.prompt.index,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch)
+    addNode: bindActionCreators(networkActions.addNode, dispatch),
   }
 }
 
