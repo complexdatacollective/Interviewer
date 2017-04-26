@@ -6,7 +6,7 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { activeNodeAttributes, activeNetwork } from '../../selectors/network';
 
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
-import { NodeList, Node, Modal, Form } from '../../components/Elements';
+import { NodeList, Modal, Form } from '../../components/Elements';
 
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
@@ -55,12 +55,7 @@ class NameGeneratorInterface extends Component {
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } />
 
-          <NodeList>
-            { activeNetwork.nodes.map((node, index) => {
-              const label = `${node.nickname}`;
-              return <Node key={ index } label={ label } />;
-            }) }
-          </NodeList>
+          <NodeList network={ activeNetwork } />
 
           <button onClick={ this.toggleModal }>
             Add a person
