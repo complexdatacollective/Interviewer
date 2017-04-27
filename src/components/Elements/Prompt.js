@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Prompt extends Component {
   render() {
@@ -17,8 +18,8 @@ class Prompt extends Component {
 }
 
 Prompt.propTypes = {
-  label: React.PropTypes.string,
-  isActive: React.PropTypes.bool,
+  label: PropTypes.string,
+  isActive: PropTypes.bool,
 };
 
 Prompt.defaultProps = {
