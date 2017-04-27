@@ -1,16 +1,20 @@
 /* eslint-env jest */
 
-import reducer, { actionCreators, actionTypes } from '../../modules/stage';
+import reducer, { actionCreators, actionTypes } from '../../modules/prompt';
 import { actionTypes as protocolActionTypes } from '../../modules/protocol';
+
+const stage = {
+
+};
 
 describe('session reducer', () => {
   it('should return the initial state', () => {
     expect(
-      reducer(undefined, {})
+      reducer(undefined, {}, stage)
     ).toEqual(
       {
         index: 0,
-        count: 0,
+        counts: [],
       }
     )
   });
@@ -20,73 +24,85 @@ describe('session reducer', () => {
       reducer([], {
         type: protocolActionTypes.SET_PROTOCOL,
         protocol: {
-          stages: Array(3),
+          stages: [
+            { params: { prompts: Array(3) } },
+            { params: { prompts: Array(1) } },
+            { params: { prompts: Array(2) } },
+          ],
         }
       })
     ).toEqual(
       {
         index: 0,
-        count: 3,
+        counts: [3, 1, 2],
       }
     )
   });
 
-  it('should handle NEXT_STAGE', () => {
+  it('should handle NEXT_PROMPT', () => {
     expect(
       reducer({
         index: 0,
-        count: 3,
+        counts: [3, 1, 2],
       }, {
-        type: actionTypes.NEXT_STAGE
+        type: actionTypes.NEXT_PROMPT
+      }, {
+        index: 2
       })
     ).toEqual(
       {
         index: 1,
-        count: 3,
+        counts: [3, 1, 2],
       }
     )
 
     expect(
       reducer({
-        index: 2,
-        count: 3,
+        index: 1,
+        counts: [3, 1, 2],
       }, {
-        type: actionTypes.NEXT_STAGE
+        type: actionTypes.NEXT_PROMPT
+      }, {
+        index: 2
       })
     ).toEqual(
       {
         index: 0,
-        count: 3,
+        counts: [3, 1, 2],
       }
     )
   });
 
-  it('should handle PREVIOUS_STAGE', () => {
+  it('should handle PREVIOUS_PROMPT', () => {
     expect(
       reducer({
-        index: 2,
-        count: 3,
+        index: 1,
+        counts: [3, 1, 2],
       }, {
-        type: actionTypes.PREVIOUS_STAGE
+        type: actionTypes.PREVIOUS_PROMPT
+      }, {
+        index: 2
       })
     ).toEqual(
       {
-        index: 1,
-        count: 3,
+        index: 0,
+        counts: [3, 1, 2],
       }
     )
 
     expect(
       reducer({
         index: 0,
-        count: 3,
+        counts: [3, 1, 2],
       }, {
-        type: actionTypes.PREVIOUS_STAGE
+        type: actionTypes.PREVIOUS_PROMPT
+      }, {
+        index: 2
       })
     ).toEqual(
       {
-        index: 2,
-        count: 3,
+        index: 1,
+        counts: [3, 1, 2],
       }
     )
   });
@@ -97,7 +113,7 @@ describe('session reducer', () => {
 describe('session actions', () => {
   it('should create a next stage action', () => {
     const expectedAction = {
-      type: actionTypes.NEXT_STAGE
+      type: actionTypes.NEXT_PROMPT
     }
 
     expect(actionCreators.next()).toEqual(expectedAction)
@@ -105,7 +121,7 @@ describe('session actions', () => {
 
   it('should create a previous stage action', () => {
     const expectedAction = {
-      type: actionTypes.PREVIOUS_STAGE
+      type: actionTypes.PREVIOUS_PROMPT
     }
 
     expect(actionCreators.previous()).toEqual(expectedAction)
