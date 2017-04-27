@@ -11,7 +11,7 @@ import { NodeList, Modal, Form } from '../../components/Elements';
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
-class NameGeneratorInterface extends Component {
+class NameGenerator extends Component {
   constructor(props) {
     super(props);
 
@@ -89,4 +89,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NameGeneratorInterface);
+export default connect(mapStateToProps, mapDispatchToProps)(NameGenerator);
