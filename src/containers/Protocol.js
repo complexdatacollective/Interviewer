@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import Stage from './Stage';
+import Zones from './Zones';
 
 /**
   * Load protocol data, and render a stage
@@ -20,6 +21,7 @@ class Protocol extends Component {
     return (
       <div className='protocol'>
         <Stage />
+        <Zones />
       </div>
     );
   }
