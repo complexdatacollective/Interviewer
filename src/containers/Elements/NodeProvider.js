@@ -18,6 +18,10 @@ class NodeProvider extends Component {
     }
   }
 
+  handleDropNode = (node, hits) => {
+    console.log('dropped', node, hits);
+  }
+
   render() {
     const {
       interaction,
@@ -29,11 +33,10 @@ class NodeProvider extends Component {
       case 'selectable':
         return <SelectableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
       case 'draggable':
-        return <DraggableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleDragNode={ () => {} } />;
+        return <DraggableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } />;
       default:
         return <NodeList network={ network } />;
     }
-
   }
 }
 
