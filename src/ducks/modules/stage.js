@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/constants'
 import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
 
 const NEXT_STAGE = 'NEXT_STAGE';
@@ -18,6 +19,12 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         count: action.protocol.stages.length,
+      }
+    case REHYDRATE:
+      const protocol = action.payload.protocol.protocolConfig;
+      return {
+        ...initialState,
+        count: protocol.stages.length,
       }
     case NEXT_STAGE:
       return {

@@ -15,7 +15,10 @@ const stage = createSelector(
 const prompt = createSelector(
   promptIndex,
   stage,
-  (promptIndex, stage) => stage.params.prompts[promptIndex]
+  (promptIndex, stage) => {
+    console.log('PROMPT', promptIndex, stage)
+    return stage.params.prompts[promptIndex];
+  }
 )
 
 export const activePromptAttributes = createSelector(
