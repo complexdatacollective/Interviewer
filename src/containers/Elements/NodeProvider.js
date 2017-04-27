@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { activePromptAttributes, existingNetwork } from '../../selectors/network';
+import { activePromptAttributes } from '../../selectors/session';
+import { existingNetwork } from '../../selectors/network';
 
 import { InteractiveNodeList } from '../../components/Elements';
 

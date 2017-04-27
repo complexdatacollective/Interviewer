@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { activeNodeAttributes, activeNetwork } from '../../selectors/network';
+import { activeNodeAttributes } from '../../selectors/session';
+import { activeNetwork } from '../../selectors/network';
 
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
 import { NodeList, Modal, Form } from '../../components/Elements';

@@ -1,45 +1,8 @@
 import { createSelector } from 'reselect'
 import { diff, nodeIncludesAttributes } from '../utils/Network';
+import { activeNodeAttributes, activeStageAttributes } from './session';
 
-const stageIndex = state => state.session.stage.index;
-const promptIndex = state => state.session.prompt.index;
-const protocol = state => state.protocol.protocolConfig;
 const network = state => state.network;
-
-const stage = createSelector(
-  stageIndex,
-  protocol,
-  (stageIndex, protocol) => protocol.stages[stageIndex]
-)
-
-const prompt = createSelector(
-  promptIndex,
-  stage,
-  (promptIndex, stage) => {
-    console.log('PROMPT', promptIndex, stage)
-    return stage.params.prompts[promptIndex];
-  }
-)
-
-export const activePromptAttributes = createSelector(
-  prompt,
-  (prompt) => prompt.nodeAttributes
-)
-
-export const activeStageAttributes = createSelector(
-  stage,
-  (stage) => {
-    return { type: stage.params.nodeType, stageId: stage.id };
-  }
-)
-
-export const activeNodeAttributes = createSelector(
-  activeStageAttributes,
-  activePromptAttributes,
-  (activeStageAttributes, activePromptAttributes) => {
-    return { ...activeStageAttributes, ...activePromptAttributes };
-  }
-)
 
 export const activeNetwork = createSelector(
   network,
@@ -50,9 +13,9 @@ export const activeNetwork = createSelector(
 )
 
 export const existingNetwork = createSelector(
-  activeStageAttributes,
   network,
-  (activeStageAttributes, network) => {
-    return diff(network, nodeIncludesAttributes(network, activeStageAttributes));
+  activeStageAttributes,
+  (network, activeStageAttributes) => {
+    return nodeIncludesAttributes(diff(network, nodeIncludesAttributes(network, { stageId: activeStageAttributes.stageId })), { type: activeStageAttributes.type });
   }
 )
