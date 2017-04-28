@@ -1,38 +1,19 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import Draggable from 'react-draggable';
 import Touch from 'react-hammerjs';
-import _, { filter } from 'lodash';
+import _ from 'lodash';
 
 import { Node } from '../../components/Elements';
-
-import { actionCreators as droppableActions } from '../../ducks/modules/droppable';
+import Draggable from '../../containers/Elements/Draggable';
 
 class InteractiveNodeList extends Component {
 
-  dropped = (event) => {
-    const wrap = document.getElementById('page-wrap');
-    const y = event.y + wrap.scrollTop;
-    const x = event.x;
-    this.props.updateZone({
-      name: 'preview',
-      width: 100,
-      height: 100,
-      top: y,
-      left: x,
-    })
-
-    // const hits = filter(this.props.zones, (zone) => {
-    //   return x > zone.left && x < zone.left + zone.width && y > zone.top && y < zone.top + zone.height
-    // });
-    //
-    // console.log(this.props.zones, {x, y});
+  handleDropped = (hits) => {
+    console.log('dropped', hits);
   }
 
   draggableNode = (node, index) => {
     return (
-      <Draggable key={ index } position={ { x: 0, y: 0 } } onStop={ this.dropped } >
+      <Draggable key={ index } onDropped={ (hits) => { this.handleDropped(node, hits) } } >
         <div>
           <Node { ...node } label={ `${node.nickname}` } />
         </div>
@@ -79,16 +60,4 @@ class InteractiveNodeList extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    zones: state.droppable.zones,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateZone: bindActionCreators(droppableActions.updateZone, dispatch)
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InteractiveNodeList);
+export default InteractiveNodeList;

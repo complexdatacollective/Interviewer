@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import ReactDraggable from 'react-draggable';
 import ReactDOM from 'react-dom';
-import { throttle } from 'lodash';
+import { filter } from 'lodash';
 
 import { actionCreators as droppableActions } from '../../ducks/modules/droppable';
+
 
 /**
 https://gist.github.com/rgrove/5463265
@@ -62,52 +64,47 @@ function getAbsoluteBoundingRect(el) {
     };
 }
 
-class Droppable extends Component {
-  constructor(props) {
-    super(props);
+class Draggable extends Component {
 
-    this.updateZone = throttle(this.updateZone, 1000/60);  // 60fps max
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateZone);
-  }
-
-  componentDidMount() {
-    this.updateZone();
-    window.addEventListener('resize', this.updateZone);
-  }
-
-  componentDidUpdate() {
-    this.updateZone();
-  }
-
-  updateZone = () => {
+  onStop = (event) => {
     const element = ReactDOM.findDOMNode(this);
     const boundingClientRect = getAbsoluteBoundingRect(element); //element.getBoundingClientRect();
 
+    const dropped = {
+      top: event.offsetY + boundingClientRect.top,
+      left: event.offsetX + boundingClientRect.left,
+    };
+
     this.props.updateZone({
-      name: this.props.name,
-      width: boundingClientRect.width,
-      height: boundingClientRect.height,
-      top: boundingClientRect.top,
-      left: boundingClientRect.left,
-      bottom: boundingClientRect.bottom,
-      right: boundingClientRect.right,
+      name: 'preview',
+      width: 100,
+      height: 100,
+      ...dropped
+    })
+
+    const hits = filter(this.props.zones, (zone) => {
+      return dropped.left > zone.left && dropped.left < zone.left + zone.width && dropped.top > zone.top && dropped.top < zone.top + zone.height
     });
+
+    if (hits.length > 0) {
+      this.props.onDropped(hits);
+    }
+
   }
 
   render() {
     return (
-      <div className='droppable'>
+      <ReactDraggable position={ { x: 0, y: 0 } } onStop={ this.onStop } >
         { this.props.children }
-      </div>
+      </ReactDraggable>
     );
   }
 }
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    zones: state.droppable.zones,
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -116,4 +113,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Droppable);
+export default connect(mapStateToProps, mapDispatchToProps)(Draggable);
