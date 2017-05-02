@@ -66,13 +66,42 @@ function getAbsoluteBoundingRect(el) {
 
 class Draggable extends Component {
 
-  onStop = (event) => {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      startPosition: {
+        y: 0,
+        x: 0,
+      }
+    };
+  }
+
+  getPosition = () => {
     const element = ReactDOM.findDOMNode(this);
-    const boundingClientRect = getAbsoluteBoundingRect(element); //element.getBoundingClientRect();
+    const boundingClientRect = getAbsoluteBoundingRect(element);
+
+    return {
+      y: boundingClientRect.top,
+      x: boundingClientRect.left,
+    }
+  }
+
+  onStart = () => {
+    const startPosition = this.getPosition();
+
+    this.setState({
+      startPosition
+    });
+
+  }
+
+  onStop = (event, draggableData) => {
+    const { startPosition } = this.state;
 
     const dropped = {
-      top: event.offsetY + boundingClientRect.top,
-      left: event.offsetX + boundingClientRect.left,
+      top: draggableData.y + startPosition.y,
+      left: draggableData.x + startPosition.x,
     };
 
     this.props.updateZone({
@@ -94,7 +123,7 @@ class Draggable extends Component {
 
   render() {
     return (
-      <ReactDraggable position={ { x: 0, y: 0 } } onStop={ this.onStop } >
+      <ReactDraggable position={ { x: 0, y: 0 } } onStart={ this.onStart } onStop={ this.onStop } >
         { this.props.children }
       </ReactDraggable>
     );
