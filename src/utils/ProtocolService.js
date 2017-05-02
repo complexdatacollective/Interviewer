@@ -36,6 +36,46 @@ export default class ProtocolService {
       "version": "1.2.3",
       "required": "1.2.4",
       "exportPath": "some/path/here.json",
+      "data": {
+        "previous": {
+          nodes: [
+            {
+              type: "person",
+              name: "Fred",
+              nickname: "Foo",
+            },
+            {
+              type: "person",
+              name: "Bob",
+              nickname: "Bar",
+            },
+            {
+              type: "person",
+              name: "Barry",
+              nickname: "Baz",
+            }
+          ],
+        },
+        "foodNetwork": {
+          nodes: [
+            {
+              type: "food",
+              subType: "vegetable",
+              name: "tomato",
+            },
+            {
+              type: "food",
+              subType: "fruit",
+              name: "lime",
+            },
+            {
+              type: "food",
+              subType: "fruit",
+              name: "bluefruit",
+            }
+          ],
+        }
+      },
       "stages": [
         {
           "id": "namegen1",

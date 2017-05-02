@@ -6,8 +6,9 @@ import _ from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { activePromptAttributes } from '../../selectors/session';
 import { existingNetwork } from '../../selectors/network';
+import { data } from '../../selectors/data';
 
-import { InteractiveNodeList } from '../../components/Elements';
+import { NodeList, SelectableNodeList, DraggableNodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
@@ -25,17 +26,30 @@ class NodeProvider extends Component {
       network,
     } = this.props;
 
-    return (
-      <InteractiveNodeList interaction={ interaction } network={ network } activeNodeAttributes={ activePromptAttributes } handleDragNode={ () => {} } handleSelectNode={ this.handleSelectNode } />
-    );
+    switch (interaction) {
+      case 'selectable':
+        return <SelectableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
+      case 'draggable':
+        return <DraggableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleDragNode={ () => {} } />;
+      default:
+        return <NodeList network={ network } />;
+    }
+
   }
 }
 
 function mapStateToProps(state, ownProps) {
   const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
+  let network = { nodes: [] };
+
+  if (ownProps.source === 'existing') {
+    network = existingNetwork(state)
+  } else {
+    network = data(state)[ownProps.source] || {};
+  }
 
   return {
-    network: ownProps.filter(existingNetwork(state)),
+    network: ownProps.filter(network),
     interaction,
     activePromptAttributes: activePromptAttributes(state),
   }

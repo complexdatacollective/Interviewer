@@ -21,6 +21,7 @@ export default function reducer(state = initialState, action = {}) {
         count: action.protocol.stages.length,
       }
     case REHYDRATE:
+      if (!action.payload.protocol) { return { ...state }; }
       const protocol = action.payload.protocol.protocolConfig;
       return {
         ...initialState,
