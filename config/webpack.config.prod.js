@@ -112,13 +112,17 @@ module.exports = {
           /\.scss$/,
           /\.css$/,
           /\.json$/,
-          /\.svg$/
+          /\.(eot|svg|ttf|woff|woff2)$/
         ],
         loader: 'url',
         query: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]'
         }
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file?publicPath=../../&name=static/fonts/[name].[ext]'
       },
       // Process JS with Babel.
       {
@@ -156,14 +160,6 @@ module.exports = {
       {
         test: /\.json$/,
         loader: 'json'
-      },
-      // "file" loader for svg
-      {
-        test: /\.svg$/,
-        loader: 'file',
-        query: {
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
       }
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "url" loader exclusion list.
