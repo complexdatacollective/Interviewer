@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
-
 const providerPresets = {
   'existing': {
     type: 'existing',
@@ -30,19 +29,12 @@ const getProviderConfig = (provider) => {
 /** Figures out the panel config, and renders the relevant components with that config **/
 class NodeProviderPanels extends Component {
   render() {
-    const {
-      config,
-      filter,
-    } = this.props;
-
-    const panels = config.map((panel, index) => {
+    const panels = this.props.config.map((panel, index) => {
       const providerConfig = getProviderConfig(panel);
-
-      const providerFilter = (network) => { return providerConfig.filter(filter(network)) };
 
       return (
         <Panel title={ providerConfig.title } key={ index }>
-          <NodeProvider { ...providerConfig } filter={ providerFilter } newNodeAttributes={ this.props.newNodeAttributes } />
+          <NodeProvider { ...providerConfig } />
         </Panel>
       );
     });

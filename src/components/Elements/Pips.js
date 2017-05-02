@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Pips extends Component {
   render() {
@@ -26,8 +27,8 @@ class Pips extends Component {
 }
 
 Pips.propTypes = {
-  count: React.PropTypes.number,
-  currentIndex: React.PropTypes.number,
+  count: PropTypes.number,
+  currentIndex: PropTypes.number,
 };
 
 export default Pips;

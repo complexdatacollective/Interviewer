@@ -12,6 +12,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && cp -r ./build/* ./www",
     "test": "node scripts/test.js --env=jsdom",
+    "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron .",
     "generate-icons": "node generate-app-icons.js",
@@ -61,7 +62,6 @@
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.3",
     "icon-gen": "^1.0.7",
-    "jest-enzyme": "2.1.2",
     "jsdoc": "^3.4.3",
     "jsdoc-babel": "^0.3.0",
     "json-loader": "0.5.4",
@@ -84,6 +84,7 @@
     "gridle": "^2.0.48",
     "history": "^4.5.1",
     "lodash": "^4.17.4",
+    "prop-types": "^15.5.8",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-draggable": "^2.2.3",
@@ -99,12 +100,12 @@
     "redux-logger": "^2.7.4",
     "redux-persist": "^4.3.1",
     "redux-thunk": "^2.1.0",
+    "reselect": "^3.0.0",
     "sass-svg": "^1.0.1"
   },
   "homepage": ".",
   "main": "src/electron-starter.js",
   "jest": {
-    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],

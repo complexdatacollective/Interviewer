@@ -8,16 +8,14 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="node-list">
-    <span>
-        foo
-    </span>
+    <Node
+        label="undefined" />
 </div>,
   "nodes": Array [
     <div
       className="node-list">
-      <span>
-            foo
-      </span>
+      <Node
+            label="undefined" />
 </div>,
   ],
   "options": Object {},
@@ -26,11 +24,16 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <NodeList>
-        <span>
-                foo
-        </span>
-</NodeList>,
+      "_currentElement": <NodeList
+        network={
+                Object {
+                        "nodes": Array [
+                          Object {
+                            "name": "test",
+                          },
+                        ],
+                      }
+        } />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -38,9 +41,13 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "children": <span>
-            foo
-</span>,
+          "network": Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          },
         },
         "refs": Object {},
         "state": null,
@@ -64,16 +71,14 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="node-list">
-          <span>
-                    foo
-          </span>
+          <Node
+                    label="undefined" />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node-list">
-          <span>
-                    foo
-          </span>
+          <Node
+                    label="undefined" />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -86,10 +91,15 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <NodeList>
-    <span>
-        foo
-    </span>
-</NodeList>,
+  "unrendered": <NodeList
+    network={
+        Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          }
+    } />,
 }
 `;
