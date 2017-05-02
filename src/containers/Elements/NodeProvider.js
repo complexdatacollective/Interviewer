@@ -18,6 +18,10 @@ class NodeProvider extends Component {
     }
   }
 
+  handleDropNode = (argv) => {
+    console.log('dropped', argv);
+  }
+
   render() {
     const {
       interaction,
@@ -26,7 +30,7 @@ class NodeProvider extends Component {
     } = this.props;
 
     return (
-      <InteractiveNodeList interaction={ interaction } network={ network } activeNodeAttributes={ activePromptAttributes } handleDragNode={ () => {} } handleSelectNode={ this.handleSelectNode } />
+      <InteractiveNodeList interaction={ interaction } network={ network } activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } handleSelectNode={ this.handleSelectNode } />
     );
   }
 }

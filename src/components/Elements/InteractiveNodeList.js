@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
 import Touch from 'react-hammerjs';
 import _ from 'lodash';
 
 import { Node } from '../../components/Elements';
+import Draggable from '../../containers/Elements/Draggable';
 
 class InteractiveNodeList extends Component {
 
+  handleDropped = (hits) => {
+    console.log('dropped', hits);
+  }
+
   draggableNode = (node, index) => {
     return (
-      <Draggable key={ index } position={ { x: 0, y: 0 } } onStop={ () => this.props.handleDragNode(node) }>
+      <Draggable key={ index } onDropped={ (hits) => { this.handleDropped(node, hits) } } >
         <div>
           <Node { ...node } label={ `${node.nickname}` } />
         </div>
