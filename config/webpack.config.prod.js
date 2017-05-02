@@ -112,13 +112,18 @@ module.exports = {
           /\.scss$/,
           /\.css$/,
           /\.json$/,
-          /\.svg$/
+          /\.svg$/,
+          /\.(eot|svg|ttf|woff|woff2)$/
         ],
         loader: 'url',
         query: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]'
         }
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file?publicPath=../../&name=[name].[ext]'
       },
       // Process JS with Babel.
       {

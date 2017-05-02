@@ -44,6 +44,4 @@
   <plugin name="cordova-plugin-wkwebview-engine" spec="~1.1.1" />
   <preference name="Orientation" value="landscape" />
   <preference name="target-device" value="tablet" />
-  <preference name="SuppressesLongPressGesture" value="true" />
-  <preference name="Suppresses3DTouchGesture" value="true" />
 </widget>
