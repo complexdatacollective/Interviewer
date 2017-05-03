@@ -3,20 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { DraggableCore } from 'react-draggable';
 import ReactDOM from 'react-dom';
-import { filter } from 'lodash';
+import { filter, throttle } from 'lodash';
 
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 import { actionCreators as droppableActions } from '../../ducks/modules/droppable';
-
-const getPosition = (element) => {
-  const boundingClientRect = getAbsoluteBoundingRect(element);
-
-  return {
-    y: Math.floor(boundingClientRect.top),
-    x: Math.floor(boundingClientRect.left),
-  }
-}
 
 const getSize = (element) => {
   const boundingClientRect = getAbsoluteBoundingRect(element);
@@ -24,6 +15,48 @@ const getSize = (element) => {
   return {
     width: Math.floor(boundingClientRect.width),
     height: Math.floor(boundingClientRect.height),
+  }
+}
+
+class DraggablePreview {
+  constructor(node) {
+    this.position = throttle(this.position, 1000/60);
+
+    this.node = document.createElement('div');
+    this.node.setAttribute('class', 'draggable-preview');
+    this.node.appendChild(node.cloneNode(true));
+
+    this.parent().appendChild(this.node);
+  }
+
+  parent() {
+    return document.getElementById('page-wrap');
+  }
+
+  size() {
+    if (!this.node) { return { width: 0, height: 0 }; }
+    if (!this._size) { this._size = getSize(this.node); }
+    return this._size;
+  }
+
+  center() {
+    if (!this._center) {
+      this._center = {
+        x: Math.floor(this.size().width / 2),
+        y: Math.floor(this.size().height / 2),
+      }
+    }
+    return this._center;
+  }
+
+  position(x, y) {
+    x = x - this.center().x;
+    y = y - this.center().y;
+    this.node.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`);
+  }
+
+  cleanup() {
+    this.parent().removeChild(this.node);
   }
 }
 
@@ -39,43 +72,38 @@ class Draggable extends Component {
     };
   }
 
-  element = () => {
-    return ReactDOM.findDOMNode(this).firstChild;
+  componentWillUnmount() {
+    if (this.state.preview.preview) { this.state.preview.preview.cleanup(); }
   }
 
   onStart = (_, draggableData) => {
-    const startPosition = getPosition(this.element());
-    const size = getSize(this.element());
-    const previewElement = this.element().cloneNode(true);
-    document.getElementById('page-wrap').appendChild(previewElement);
+    const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
+
+    this.props.updateZone({
+      name: 'preview',
+      width: 0,
+      height: 0,
+      y: 0,
+      x: 0,
+    })
 
     this.setState({
       preview: {
-        startPosition,
-        size,
         visible: true,
-        element: previewElement,
+        preview: draggablePreview,
       }
     }, () => {
-      this.positionPreview(draggableData.x, draggableData.y);
+      this.state.preview.preview.position(draggableData.x, draggableData.y);
     });
-
-    console.log(size);
-  }
-
-  positionPreview = (x, y) => {
-    if (!this.state.preview.element) { return; }
-    x = x - Math.floor(this.state.preview.size.width / 2);
-    y = y - Math.floor(this.state.preview.size.height / 2);
-    this.state.preview.element.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`);
   }
 
   onDrag = (event, draggableData) => {
-    this.positionPreview(draggableData.x, draggableData.y);
+    if (!this.state.preview.preview) { return; }
+    this.state.preview.preview.position(draggableData.x, draggableData.y);
   }
 
   onStop = (event, draggableData) => {
-    document.getElementById('page-wrap').removeChild(this.state.preview.element);
+    if (this.state.preview.preview) { this.state.preview.preview.cleanup(); }
 
     this.setState({
       preview: {
@@ -83,26 +111,21 @@ class Draggable extends Component {
       }
     });
 
-    const dropped = {
-      y: draggableData.y,
-      x: draggableData.x,
-    };
-
-    this.props.updateZone({
-      name: 'preview',
-      width: 16,
-      height: 16,
-      y: dropped.y - 8,
-      x: dropped.x - 8,
-    })
-
     const hits = filter(this.props.zones, (zone) => {
-      return dropped.x > zone.x && dropped.x < zone.x + zone.width && dropped.y > zone.y && dropped.y < zone.y + zone.height
+      return draggableData.x > zone.x && draggableData.x < zone.x + zone.width && draggableData.y > zone.y && draggableData.y < zone.y + zone.height
     });
 
     if (hits.length > 0) {
       this.props.onDropped(hits);
     }
+
+    this.props.updateZone({
+      name: 'preview',
+      width: 16,
+      height: 16,
+      y: draggableData.y - 8,
+      x: draggableData.x - 8,
+    })
 
   }
 

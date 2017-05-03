@@ -12,7 +12,7 @@ class Zones extends Component {
             top: zone.y,
             left: zone.x,
             position: 'absolute',
-            background: 'rgba(0, 255, 50, 0.5)',
+            background: (zone.name === 'preview' ? 'rgba(255, 0, 50, 0.5)' : 'rgba(0, 255, 50, 0.5)'),
           };
           return (<div key={ index } style={ styles }></div>);
         }) }

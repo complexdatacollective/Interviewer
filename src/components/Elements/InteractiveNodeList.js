@@ -7,8 +7,8 @@ import Draggable from '../../containers/Elements/Draggable';
 
 class InteractiveNodeList extends Component {
 
-  handleDropped = (hits) => {
-    console.log('dropped', hits);
+  handleDropped = (node, hits) => {
+    console.log('dropped', node, hits);
   }
 
   draggableNode = (node, index) => {
