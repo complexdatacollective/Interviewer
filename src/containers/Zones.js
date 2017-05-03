@@ -15,7 +15,7 @@ class Zones extends Component {
             background: 'rgba(0, 255, 50, 0.5)',
           };
           return (<div key={ index } style={ styles }></div>);
-        }) };
+        }) }
       </div>
     );
   }

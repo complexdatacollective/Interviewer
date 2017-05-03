@@ -1,67 +1,30 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ReactDraggable from 'react-draggable';
+import { DraggableCore } from 'react-draggable';
 import ReactDOM from 'react-dom';
 import { filter } from 'lodash';
 
+import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
+
 import { actionCreators as droppableActions } from '../../ducks/modules/droppable';
 
+const getPosition = (element) => {
+  const boundingClientRect = getAbsoluteBoundingRect(element);
 
-/**
-https://gist.github.com/rgrove/5463265
+  return {
+    y: Math.floor(boundingClientRect.top),
+    x: Math.floor(boundingClientRect.left),
+  }
+}
 
-Returns a bounding rect for _el_ with absolute coordinates corrected for
-scroll positions.
+const getSize = (element) => {
+  const boundingClientRect = getAbsoluteBoundingRect(element);
 
-The native `getBoundingClientRect()` returns coordinates for an element's
-visual position relative to the top left of the viewport, so if the element
-is part of a scrollable region that has been scrolled, its coordinates will
-be different than if the region hadn't been scrolled.
-
-This method corrects for scroll offsets all the way up the node tree, so the
-returned bounding rect will represent an absolute position on a virtual
-canvas, regardless of scrolling.
-
-@method getAbsoluteBoundingRect
-@param {HTMLElement} el HTML element.
-@return {Object} Absolute bounding rect for _el_.
-**/
-
-function getAbsoluteBoundingRect(el) {
-    var doc  = document,
-        win  = window,
-        body = doc.body,
-
-        // pageXOffset and pageYOffset work everywhere except IE <9.
-        offsetX = win.pageXOffset !== undefined ? win.pageXOffset :
-            (doc.documentElement || body.parentNode || body).scrollLeft,
-        offsetY = win.pageYOffset !== undefined ? win.pageYOffset :
-            (doc.documentElement || body.parentNode || body).scrollTop,
-
-        rect = el.getBoundingClientRect();
-
-    if (el !== body) {
-        var parent = el.parentNode;
-
-        // The element's rect will be affected by the scroll positions of
-        // *all* of its scrollable parents, not just the window, so we have
-        // to walk up the tree and collect every scroll offset. Good times.
-        while (parent !== body) {
-            offsetX += parent.scrollLeft;
-            offsetY += parent.scrollTop;
-            parent   = parent.parentNode;
-        }
-    }
-
-    return {
-        bottom: rect.bottom + offsetY,
-        height: rect.height,
-        left  : rect.left + offsetX,
-        right : rect.right + offsetX,
-        top   : rect.top + offsetY,
-        width : rect.width
-    };
+  return {
+    width: Math.floor(boundingClientRect.width),
+    height: Math.floor(boundingClientRect.height),
+  }
 }
 
 class Draggable extends Component {
@@ -70,46 +33,59 @@ class Draggable extends Component {
     super(props);
 
     this.state = {
-      startPosition: {
-        y: 0,
-        x: 0,
-      }
+      preview: {
+        visible: false,
+      },
     };
   }
 
-  getPosition = () => {
-    const element = ReactDOM.findDOMNode(this).firstChild;
-    const boundingClientRect = getAbsoluteBoundingRect(element);
-
-    return {
-      y: boundingClientRect.top + boundingClientRect.height * 0.5,
-      x: boundingClientRect.left + boundingClientRect.width * 0.5,
-    }
+  element = () => {
+    return ReactDOM.findDOMNode(this).firstChild;
   }
 
-  onStart = () => {
-    const startPosition = this.getPosition();
+  onStart = (_, draggableData) => {
+    const startPosition = getPosition(this.element());
+    const size = getSize(this.element());
+    const previewElement = this.element().cloneNode(true);
+    document.getElementById('page-wrap').appendChild(previewElement);
 
     this.setState({
-      startPosition
+      preview: {
+        startPosition,
+        size,
+        visible: true,
+        element: previewElement,
+      }
+    }, () => {
+      this.positionPreview(draggableData.x, draggableData.y);
     });
 
-    this.props.updateZone({
-      name: 'preview',
-      width: 16,
-      height: 16,
-      y: startPosition.y - 8,
-      x: startPosition.x - 8,
-    })
+    console.log(size);
+  }
 
+  positionPreview = (x, y) => {
+    if (!this.state.preview.element) { return; }
+    x = x - Math.floor(this.state.preview.size.width / 2);
+    y = y - Math.floor(this.state.preview.size.height / 2);
+    this.state.preview.element.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`);
+  }
+
+  onDrag = (event, draggableData) => {
+    this.positionPreview(draggableData.x, draggableData.y);
   }
 
   onStop = (event, draggableData) => {
-    const { startPosition } = this.state;
+    document.getElementById('page-wrap').removeChild(this.state.preview.element);
+
+    this.setState({
+      preview: {
+        visible: false,
+      }
+    });
 
     const dropped = {
-      y: draggableData.y + startPosition.y,
-      x: draggableData.x + startPosition.x,
+      y: draggableData.y,
+      x: draggableData.x,
     };
 
     this.props.updateZone({
@@ -131,10 +107,14 @@ class Draggable extends Component {
   }
 
   render() {
+    const opacity = this.state.preview.visible ? { opacity: 0 } : { opacity: 1 };
+
     return (
-      <ReactDraggable position={ { x: 0, y: 0 } } onStart={ this.onStart } onStop={ this.onStop } >
-        { this.props.children }
-      </ReactDraggable>
+      <DraggableCore position={ { x: 0, y: 0 } } onStart={ this.onStart } onStop={ this.onStop } onDrag={ this.onDrag }>
+        <div style={ opacity }>
+          { this.props.children }
+        </div>
+      </DraggableCore>
     );
   }
 }
