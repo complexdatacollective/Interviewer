@@ -90,10 +90,8 @@ class Droppable extends Component {
       name: this.props.name,
       width: boundingClientRect.width,
       height: boundingClientRect.height,
-      top: boundingClientRect.top,
-      left: boundingClientRect.left,
-      bottom: boundingClientRect.bottom,
-      right: boundingClientRect.right,
+      y: boundingClientRect.top,
+      x: boundingClientRect.left,
     });
   }
 

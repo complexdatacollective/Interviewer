@@ -9,8 +9,8 @@ class Zones extends Component {
           const styles = {
             width: zone.width,
             height: zone.height,
-            top: zone.top,
-            left: zone.left,
+            top: zone.y,
+            left: zone.x,
             position: 'absolute',
             background: 'rgba(0, 255, 50, 0.5)',
           };

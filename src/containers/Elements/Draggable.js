@@ -78,12 +78,12 @@ class Draggable extends Component {
   }
 
   getPosition = () => {
-    const element = ReactDOM.findDOMNode(this);
+    const element = ReactDOM.findDOMNode(this).firstChild;
     const boundingClientRect = getAbsoluteBoundingRect(element);
 
     return {
-      y: boundingClientRect.top,
-      x: boundingClientRect.left,
+      y: boundingClientRect.top + boundingClientRect.height * 0.5,
+      x: boundingClientRect.left + boundingClientRect.width * 0.5,
     }
   }
 
@@ -94,25 +94,34 @@ class Draggable extends Component {
       startPosition
     });
 
+    this.props.updateZone({
+      name: 'preview',
+      width: 16,
+      height: 16,
+      y: startPosition.y - 8,
+      x: startPosition.x - 8,
+    })
+
   }
 
   onStop = (event, draggableData) => {
     const { startPosition } = this.state;
 
     const dropped = {
-      top: draggableData.y + startPosition.y,
-      left: draggableData.x + startPosition.x,
+      y: draggableData.y + startPosition.y,
+      x: draggableData.x + startPosition.x,
     };
 
     this.props.updateZone({
       name: 'preview',
-      width: 100,
-      height: 100,
-      ...dropped
+      width: 16,
+      height: 16,
+      y: dropped.y - 8,
+      x: dropped.x - 8,
     })
 
     const hits = filter(this.props.zones, (zone) => {
-      return dropped.left > zone.left && dropped.left < zone.left + zone.width && dropped.top > zone.top && dropped.top < zone.top + zone.height
+      return dropped.x > zone.x && dropped.x < zone.x + zone.width && dropped.y > zone.y && dropped.y < zone.y + zone.height
     });
 
     if (hits.length > 0) {
