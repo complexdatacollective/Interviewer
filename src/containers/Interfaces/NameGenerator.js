@@ -42,9 +42,13 @@ class NameGenerator extends Component {
 
   render() {
     const {
-      prompts,
-      form,
-      panels,
+      config: {
+        params: {
+          form,
+          prompts,
+          panels,
+        },
+      },
       activeNetwork,
     } = this.props;
 
@@ -72,13 +76,10 @@ class NameGenerator extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     network: state.network,
     protocol: state.protocol,
-    prompts: ownProps.config.params.prompts,
-    form: ownProps.config.params.form,
-    panels: ownProps.config.params.panels,
     activeNodeAttributes: activeNodeAttributes(state),
     activeNetwork: activeNetwork(state),
   }

@@ -5,8 +5,7 @@ import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { activePromptAttributes } from '../../selectors/session';
-import { existingNetwork } from '../../selectors/network';
-import { data } from '../../selectors/data';
+import { filteredDataSource } from '../../selectors/dataSource';
 
 import { NodeList, SelectableNodeList, DraggableNodeList } from '../../components/Elements';
 
@@ -40,16 +39,9 @@ class NodeProvider extends Component {
 
 function mapStateToProps(state, ownProps) {
   const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
-  let network = { nodes: [] };
-
-  if (ownProps.source === 'existing') {
-    network = existingNetwork(state)
-  } else {
-    network = data(state)[ownProps.source] || {};
-  }
 
   return {
-    network: ownProps.filter(network),
+    network: filteredDataSource(state, ownProps),
     interaction,
     activePromptAttributes: activePromptAttributes(state),
   }
