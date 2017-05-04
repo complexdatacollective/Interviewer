@@ -40,16 +40,19 @@ export default class ProtocolService {
         "previous": {
           nodes: [
             {
+              id: "previous_1",
               type: "person",
               name: "Fred",
               nickname: "Foo",
             },
             {
+              id: "previous_2",
               type: "person",
               name: "Bob",
               nickname: "Bar",
             },
             {
+              id: "previous_3",
               type: "person",
               name: "Barry",
               nickname: "Baz",

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { activeNodeAttributes } from '../../selectors/session';
-import { activeNetwork } from '../../selectors/network';
+import { activePromptNetwork } from '../../selectors/network';
 
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
 import { NodeList, Modal, Form } from '../../components/Elements';
@@ -49,7 +49,7 @@ class NameGenerator extends Component {
           panels,
         },
       },
-      activeNetwork,
+      activePromptNetwork,
     } = this.props;
 
     return (
@@ -60,7 +60,7 @@ class NameGenerator extends Component {
         <div className='interface__primary'>
           <PromptSwiper prompts={ prompts } />
 
-          <NodeList network={ activeNetwork } />
+          <NodeList network={ activePromptNetwork } />
 
           <button onClick={ this.toggleModal }>
             Add a person
@@ -81,7 +81,7 @@ function mapStateToProps(state) {
     network: state.network,
     protocol: state.protocol,
     activeNodeAttributes: activeNodeAttributes(state),
-    activeNetwork: activeNetwork(state),
+    activePromptNetwork: activePromptNetwork(state),
   }
 }
 
