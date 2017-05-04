@@ -13,7 +13,7 @@ class DraggableNodeList extends Component {
       <div class='node-list node-list--draggable'>
         { network.nodes.map((node, index) => {
           return (
-            <Draggable key={ index } position={ { x: 0, y: 0 } } onDropped={ (hits) => handleDropNode(node, hits) }>
+            <Draggable key={ index } position={ { x: 0, y: 0 } } onDropped={ (hits) => handleDropNode(hits, node) }>
               <div>
                 <Node { ...node } label={ `${node.nickname}` } />
               </div>
