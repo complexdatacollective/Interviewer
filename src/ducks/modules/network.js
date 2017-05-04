@@ -16,17 +16,15 @@ const initialState = {
 };
 
 function nextId(nodes) {
-  if (nodes.length == 0) { return 1; }
-  return _.map(nodes, 'id').reduce((memo, id) => { return memo > id ? memo : id }) + 1;
+  return `${Date.now()}_${nodes.length + 1}`;
 }
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE:
       const id = nextId(state.nodes);
-      const node = { ...action.node, id }
+      const node = { id, ...action.node }  // Provided id can override nextId
       return {
-        // rest parameters - ...state contains array of the rest of values of state (above)
         ...state,
         nodes: [...state.nodes, node]
       }
