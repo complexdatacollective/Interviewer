@@ -58,7 +58,6 @@ class NameGenerator extends Component {
           </button>
 
           <Modal name={ MODAL_NEW_NODE } >
-            <h4>{ form.title }</h4>
             <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
           </Modal>
         </div>
