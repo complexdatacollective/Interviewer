@@ -1,2 +1,6 @@
 .panel {
+  background-color: theme(tex-muted);
+  padding: 40px;
+  flex: 1;
+  overflow-y: scroll;
 }

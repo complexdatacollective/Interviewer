@@ -1,17 +1,31 @@
 .interface {
 
-  &__row {
+  height: 100vh;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    flex: 0 200px;
+  }
+
+  &__content {
+    flex: 1 auto;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    height: 100%;
   }
 
   &__primary {
     flex: 1 auto;
+    height: 100%;
   }
 
   &__aside {
-    flex: 0 300px;
+    flex: 0 500px;
+    height: 100%;
   }
 
 }

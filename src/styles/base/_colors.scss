@@ -40,6 +40,10 @@ $roles: (
   'menu-headings': $charcoal
 );
 
+@function theme($role) {
+  @return map-get($roles, $role)
+}
+
 // Collections
 $nodes: (
     default: (
