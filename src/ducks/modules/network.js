@@ -15,23 +15,28 @@ const initialState = {
   edges: []
 };
 
-function nextId(nodes) {
+function nextUid(nodes) {
   return `${Date.now()}_${nodes.length + 1}`;
+}
+
+function nextId(nodes) {
+  return _.sortBy(nodes, ['id']).last + 1;
 }
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE:
       const id = nextId(state.nodes);
-      const node = { id, ...action.node }  // Provided id can override nextId
+      const uid = nextUid(state.nodes);
+      const node = { uid, ...action.node, id }  // Provided uid can override generated one, but not id
       return {
         ...state,
         nodes: [...state.nodes, node]
       }
     case UPDATE_NODE:
       const nodes = [ ...state.nodes ];
-      const nodeIndex = _.findIndex(state.nodes, ['id', action.node.id]);
-      nodes[nodeIndex] = action.node;
+      const nodeIndex = _.findIndex(state.nodes, ['uid', action.node.uid]);
+      nodes[nodeIndex] = { ...action.node, id: nodes[nodeIndex].id };  // id can't be altered
       return {
         ...state,
         nodes: [...nodes ]
@@ -39,7 +44,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: _.reject(state.nodes, (node) => node.id === action.id)
+        nodes: _.reject(state.nodes, (node) => node.uid === action.uid)
       }
     case SET_ACTIVE_NODE_ATTRIBUTES:
       return {
@@ -65,10 +70,10 @@ function updateNode(node) {
   }
 }
 
-function removeNode(index) {
+function removeNode(uid) {
   return {
     type: REMOVE_NODE,
-    index
+    uid
   }
 }
 

@@ -10,7 +10,7 @@ const nodeIncludesAttributes = (network, attributes) => {
 }
 
 const difference = (source, target) => {
-  const nodes = differenceBy(source.nodes, target.nodes, 'id');
+  const nodes = differenceBy(source.nodes, target.nodes, 'uid');
 
   return {
     ...source,  // TODO: filter edge etc.
