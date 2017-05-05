@@ -45,21 +45,24 @@ class NameGenerator extends Component {
 
     return (
       <div className='interface'>
-        <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } />
-        </div>
-        <div className='interface__primary'>
+        <div className='interface__row'>
           <PromptSwiper prompts={ prompts } />
+        </div>
+        <div className='interface__row'>
+          <div className='interface__aside'>
+            <NodeProviderPanels config={ panels } />
+          </div>
+          <div className='interface__primary'>
+            <NodeList network={ activePromptNetwork } />
 
-          <NodeList network={ activePromptNetwork } />
+            <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+              Add a person
+            </button>
 
-          <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
-            Add a person
-          </button>
-
-          <Modal name={ MODAL_NEW_NODE } >
-            <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
-          </Modal>
+            <Modal name={ MODAL_NEW_NODE } >
+              <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+            </Modal>
+          </div>
         </div>
       </div>
     )

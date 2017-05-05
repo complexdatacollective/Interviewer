@@ -1,0 +1,13 @@
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__interface {
+    flex: 1 auto;
+  }
+
+  &__back, &__next {
+    flex: 0 50px;
+  }
+}
