@@ -3,40 +3,30 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { activeNodeAttributes } from '../../selectors/session';
 import { activePromptNetwork } from '../../selectors/network';
 
-import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
-import { NodeList, Modal, Form } from '../../components/Elements';
+import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
+import { NodeList, Form } from '../../components/Elements';
+
+const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGenerator extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-    };
-  }
-
-  toggleModal = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
   handleAddNode = (node, _, form) => {
     const {
       addNode,
       activeNodeAttributes,
+      closeModal,
     } = this.props;
 
     if (node) {
       addNode({ ...node, ...activeNodeAttributes });
       form.reset();  // Is this the "react/redux way"?
-      this.toggleModal();
+      closeModal(MODAL_NEW_NODE);
     }
   }
 
@@ -49,6 +39,7 @@ class NameGenerator extends Component {
           panels,
         },
       },
+      openModal,
       activePromptNetwork,
     } = this.props;
 
@@ -62,11 +53,11 @@ class NameGenerator extends Component {
 
           <NodeList network={ activePromptNetwork } />
 
-          <button onClick={ this.toggleModal }>
+          <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
 
-          <Modal show={ this.state.isOpen } onClose={ this.toggleModal }>
+          <Modal name={ MODAL_NEW_NODE } >
             <h4>{ form.title }</h4>
             <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
           </Modal>
@@ -88,6 +79,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   }
 }
 

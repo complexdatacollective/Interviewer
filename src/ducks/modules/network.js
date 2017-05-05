@@ -20,6 +20,7 @@ function nextUid(nodes) {
 }
 
 function nextId(nodes) {
+  if (nodes.length === 0) { return 1; }
   return maxBy(nodes, 'id').id + 1;
 }
 
