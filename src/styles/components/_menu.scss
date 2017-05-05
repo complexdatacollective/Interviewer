@@ -56,6 +56,9 @@
     font-weight: 500;
     font-size: 0.75rem;
     border-top: 1px solid $divider;
+    &.bm-item-active {
+      background: $light-sea-green;
+    }
     &:hover {
       background: #00ba96;
       color: white;

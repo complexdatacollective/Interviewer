@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Menu } from '../components';
-import { Link } from 'react-router';
+import { StageMenu } from '.';
 require('../styles/main.scss');
 
 export default class App extends Component {
@@ -15,10 +14,7 @@ export default class App extends Component {
 
     return (
       <div id='outer-container'>
-          <Menu>
-            <Link to='/'>Home Page</Link>
-            <Link to='protocol'>Access sample protocol</Link>
-          </Menu>
+          <StageMenu />
           <div id='page-wrap' className="">
             {children}
           </div>

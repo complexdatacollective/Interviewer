@@ -3,6 +3,7 @@ import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol
 
 const NEXT_STAGE = 'NEXT_STAGE';
 const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
+const SET_STAGE = 'SET_STAGE';
 
 const initialState = {
   index: 0,
@@ -37,6 +38,11 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         index: rotateIndex(state.count, state.index - 1)
       }
+    case SET_STAGE:
+      return {
+        ...state,
+        index: action.index
+      }
     default:
       return state;
   }
@@ -54,14 +60,23 @@ function previous() {
   }
 }
 
+function setStage(index) {
+  return {
+    type: 'SET_STAGE',
+    index
+  }
+}
+
 const actionCreators = {
   next,
   previous,
+  setStage,
 };
 
 const actionTypes = {
   NEXT_STAGE,
   PREVIOUS_STAGE,
+  SET_STAGE,
 };
 
 export {
