@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { maxBy, reject, findIndex } from 'lodash';
 
 const SET_ACTIVE_NODE_ATTRIBUTES = 'SET_ACTIVE_NODE_ATTRIBUTES';
 const ADD_NODE = 'ADD_NODE';
@@ -20,7 +20,7 @@ function nextUid(nodes) {
 }
 
 function nextId(nodes) {
-  return _.sortBy(nodes, ['id']).last + 1;
+  return maxBy(nodes, 'id').id + 1;
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -35,7 +35,7 @@ export default function reducer(state = initialState, action = {}) {
       }
     case UPDATE_NODE:
       const nodes = [ ...state.nodes ];
-      const nodeIndex = _.findIndex(state.nodes, ['uid', action.node.uid]);
+      const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
       nodes[nodeIndex] = { ...action.node, id: nodes[nodeIndex].id };  // id can't be altered
       return {
         ...state,
@@ -44,7 +44,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: _.reject(state.nodes, (node) => node.uid === action.uid)
+        nodes: reject(state.nodes, (node) => node.uid === action.uid)
       }
     case SET_ACTIVE_NODE_ATTRIBUTES:
       return {

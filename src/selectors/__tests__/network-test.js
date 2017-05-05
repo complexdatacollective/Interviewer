@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { activeNetwork, existingNetwork } from '../network';
+import { activePromptNetwork, restOfNetwork } from '../network';
 
 describe('network selector', () => {
 
@@ -9,35 +9,39 @@ describe('network selector', () => {
     stageId: 'foo',
   }
 
-  const activeNodeAttributes = {
+  const activePromptAttributes = {
     foo_bar: true,
+  };
+
+  const activeNodeAttributes = {
+    ...activePromptAttributes,
     ...activeStageAttributes
   };
 
   const network = {
     nodes: [
-      { id: 1, stageId: 'foo', type: 'person', foo_bar: true },
-      { id: 2, stageId: 'foo', type: 'person', foo_bar: true },
-      { id: 3, stageId: 'bar', type: 'person', foo_bar: true },
-      { id: 4, stageId: 'bar', type: 'object', foo_bar: true },
-      { id: 5, stageId: 'bar', type: 'person' },
+      { uid: 1, stageId: 'foo', type: 'person', foo_bar: true },
+      { uid: 2, stageId: 'foo', type: 'person', foo_bar: true },
+      { uid: 3, stageId: 'bar', type: 'person', foo_bar: true },
+      { uid: 4, stageId: 'bar', type: 'object', foo_bar: true },
+      { uid: 5, stageId: 'bar', type: 'person' },
     ]
   };
 
-  it('activeNetwork returns the network filtered by activeNodeAttributes', () => {
-    expect(activeNetwork.resultFunc(network, activeNodeAttributes)).toEqual({
+  it('activePromptNetwork returns the network filtered by activeNodeAttributes', () => {
+    expect(activePromptNetwork.resultFunc(network, activeNodeAttributes)).toEqual({
       nodes: [
-        { id: 1, stageId: 'foo', type: 'person', foo_bar: true },
-        { id: 2, stageId: 'foo', type: 'person', foo_bar: true },
+        { uid: 1, stageId: 'foo', type: 'person', foo_bar: true },
+        { uid: 2, stageId: 'foo', type: 'person', foo_bar: true },
       ],
     });
   });
 
-  it('existingNetwork returns the network excluding those matching activeStageAttributes and of other node types', () => {
-    expect(existingNetwork.resultFunc(network, activeStageAttributes)).toEqual({
+  it('restOfNetwork returns the network excluding those matching stage attribute and of other node types', () => {
+    expect(restOfNetwork.resultFunc(network, activeStageAttributes)).toEqual({
       nodes: [
-        { id: 3, stageId: 'bar', type: 'person', foo_bar: true },
-        { id: 5, stageId: 'bar', type: 'person' },
+        { uid: 3, stageId: 'bar', type: 'person', foo_bar: true },
+        { uid: 5, stageId: 'bar', type: 'person' },
       ],
     });
   });
