@@ -14,7 +14,7 @@ class StageMenu extends Component {
       stages
     } = this.props;
     const links = stages.map((stage, index) =>
-      <Link to='protocol' key={stage.id} onClick={() => this.props.onStageClick(index)} activeClassName='bm-item-active'>{stage.title}</Link>);
+      <Link to={'/protocol/'+stage.id} key={stage.id} onClick={() => this.props.onStageClick(index)} activeClassName='bm-item-active'>{stage.title}</Link>);
 
     return (
       <Menu>

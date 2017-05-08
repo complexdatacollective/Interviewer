@@ -12,22 +12,23 @@ class Protocol extends Component {
 
   componentWillMount() {
     if (!this.props.protocol.protocolLoaded) {
-      this.props.loadProtocol()
+      this.props.loadProtocol();
     }
   }
 
   render() {
     return (
       <div className='protocol'>
-        <Stage />
+        <Stage id={this.props.stageId} />
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    protocol: state.protocol
+    protocol: state.protocol,
+    stageId: ownProps.params.id
   }
 }
 

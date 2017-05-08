@@ -47,9 +47,10 @@ class Stage extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   // TODO: http://redux.js.org/docs/recipes/ComputingDerivedData.html
-  const stage = state.protocol.protocolConfig.stages[state.session.stage.index];
+  const stage = state.protocol.protocolConfig.stages.find(stage => stage.id === ownProps.id)
+    || state.protocol.protocolConfig.stages[state.session.stage.index];
 
   return {
     stage
