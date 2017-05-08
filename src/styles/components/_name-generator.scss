@@ -22,6 +22,7 @@
   &__nodes {
     flex: 3 1 auto;
     height: 100%;
+    position: relative;
 
     .node {
       width: 175px;
