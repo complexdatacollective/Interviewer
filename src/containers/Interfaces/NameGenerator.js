@@ -7,7 +7,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { activeNodeAttributes } from '../../selectors/session';
 import { activePromptNetwork } from '../../selectors/network';
 
-import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
+import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
 import { NodeList, Form } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
@@ -55,9 +55,9 @@ class NameGenerator extends Component {
             </div>
           </div>
           <div className='name-generator__nodes'>
-            <div style={{ position: 'relative', width: '100%', height: '100%', 'overflow-y': 'scroll' }}>
+            <Scrollable>
               <NodeList network={ activePromptNetwork } />
-            </div>
+            </Scrollable>
           </div>
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person

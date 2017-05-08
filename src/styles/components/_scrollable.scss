@@ -1,0 +1,47 @@
+@function fade-to($fade-to: theme('background'), $direction: 0deg) {
+   @return linear-gradient($direction, $fade-to 0%, transparentize($fade-to, 1) 100%)
+}
+
+.scrollable {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  &::before , &::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    height: 10%;
+
+    transition: opacity 300ms ease;
+  }
+
+  &::before {
+    top: 0;
+    opacity: 0;
+    background-image: fade-to(theme('background'), 180deg);
+  }
+
+  &::after {
+    bottom: 0;
+    background-image: fade-to(theme('background'));
+  }
+
+  &__window {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  &.scrollable--is-scrolling {
+    &::before, &::after {
+      opacity: 1;
+    }
+  }
+}

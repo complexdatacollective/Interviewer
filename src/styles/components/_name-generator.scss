@@ -20,9 +20,13 @@
   }
 
   &__nodes {
-    @include fade-out;
     flex: 3 1 auto;
     height: 100%;
+
+    .node {
+      width: 175px;
+      height: 175px;
+    }
   }
 
   &__panels {

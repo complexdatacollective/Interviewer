@@ -1,5 +1,4 @@
 .panel {
-  @include fade-out(theme('light-background'));
   margin: 30px 0 0 0;
   background-color: theme('light-background');
   flex: 1;
@@ -23,11 +22,5 @@
 
   &__content {
     flex: 1 auto;
-    overflow-y: scroll;
-
-    .node {
-      width: 100px;
-      height: 100px;
-    }
   }
 }

@@ -2,9 +2,9 @@
   background: map-get($roles, node);
   display: inline-block;
   margin: 1rem;
-  height: 10rem;
-  width: 10rem;
-  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
   cursor: default;
   display: inline-flex;
   align-items: center;
@@ -12,6 +12,7 @@
   -webkit-user-select: none;
   user-select: none;
   text-align: center;
+  transition: width 300ms ease, height 300ms ease;
 
   em {
     display: block;
