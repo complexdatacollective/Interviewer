@@ -1,7 +1,7 @@
 .stage {
   display: flex;
   justify-content: center;
-   align-items: center;
+  align-items: center;
 
   &__interface {
     flex: 1 auto;
@@ -9,11 +9,18 @@
 
   &__control {
     flex: 0 0 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &-button {
-      background: transparent;
-      border: none;
-      color: $white;
+      @include svg-button('/images/arrow-back.svg');
+      width: 35px;
+      height: 100px;
+
+      &--next {
+        @include svg-button('/images/arrow-next.svg');
+      }
     }
   }
 }

@@ -55,19 +55,15 @@ class NameGenerator extends Component {
             </div>
           </div>
           <div className='name-generator__nodes'>
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-              <NodeList network={ activePromptNetwork } />
-
-              <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
-                Add a person
-              </button>
-
-              <Modal name={ MODAL_NEW_NODE } >
-                <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
-              </Modal>
-            </div>
+            <NodeList network={ activePromptNetwork } />
           </div>
-        </div>
+          <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+            Add a person
+          </button>
+        </div>  
+        <Modal name={ MODAL_NEW_NODE } >
+          <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+        </Modal>
       </div>
     )
   }
