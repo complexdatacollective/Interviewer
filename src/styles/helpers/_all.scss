@@ -6,4 +6,9 @@
   overflow: hidden;
   border: 0;
   cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
 }
