@@ -14,7 +14,7 @@
     "test": "node scripts/test.js --env=jsdom",
     "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
-    "electron": "electron .",
+    "electron": "electron ./build",
     "generate-icons": "node generate-app-icons.js",
     "package-mac": "electron-packager build/ --overwrite --platform=darwin --arch=x64 --icon=assets/icons/round/round.icns --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\"",
     "package-win": "electron-packager build/ --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/round/round.ico --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\"",
@@ -81,6 +81,7 @@
   "dependencies": {
     "@mars/heroku-js-runtime-env": "^3.0.0",
     "classnames": "^2.2.5",
+    "electron-simple-updater": "^1.2.0",
     "gridle": "^2.0.48",
     "history": "^4.5.1",
     "lodash": "^4.17.4",
