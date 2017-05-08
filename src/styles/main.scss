@@ -2,11 +2,9 @@
 @import "base/_all.scss";
 @import "components/_all.scss";
 
-
 #root {
     @import "containers/home";
 }
-
 
 html, body {
   margin:0;
