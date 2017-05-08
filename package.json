@@ -85,6 +85,7 @@
     "@mars/heroku-js-runtime-env": "^3.0.0",
     "axios": "^0.16.1",
     "classnames": "^2.2.5",
+    "electron-simple-updater": "^1.2.0",
     "create-react-class": "^15.5.3",
     "gridle": "^2.0.48",
     "history": "^4.5.1",
