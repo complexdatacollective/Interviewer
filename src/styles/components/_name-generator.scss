@@ -1,16 +1,16 @@
-.interface {
+.name-generator {
 
   height: 100vh;
-  padding: 20px;
+  padding: 20px 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 
-  &__header {
-    flex: 0 200px;
+  &__prompt {
+    flex: 0 0 200px;
   }
 
-  &__content {
+  &__main {
     flex: 1 auto;
     display: flex;
     justify-content: center;
@@ -18,14 +18,15 @@
     height: 100%;
   }
 
-  &__primary {
-    flex: 1 auto;
+  &__nodes {
+    flex: 3 1 auto;
     height: 100%;
   }
 
-  &__aside {
-    flex: 0 500px;
+  &__panels {
+    flex: 0 0 400px;
     height: 100%;
+    margin-right: 50px;
   }
 
 }

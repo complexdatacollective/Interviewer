@@ -1,13 +1,19 @@
 .stage {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+   align-items: center;
 
   &__interface {
     flex: 1 auto;
   }
 
-  &__back, &__next {
-    flex: 0 50px;
+  &__control {
+    flex: 0 0 100px;
+
+    &-button {
+      background: transparent;
+      border: none;
+      color: $white;
+    }
   }
 }

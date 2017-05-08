@@ -10,8 +10,10 @@ class Panel extends Component {
 
     return (
       <div className='panel'>
-        <h5>{ title }</h5>
-        { children }
+        <div className='panel__heading'><h5>{ title }</h5></div>
+        <div className='panel__content'>
+          { children }
+        </div>
       </div>
     );
   }

@@ -44,28 +44,28 @@ class NameGenerator extends Component {
     } = this.props;
 
     return (
-      <div className='interface'>
-        <div className='interface__header'>
+      <div className='name-generator'>
+        <div className='name-generator__prompt'>
           <PromptSwiper prompts={ prompts } />
         </div>
-        <div className='interface__content'>
-          <div className='interface__aside'>
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <NodeProviderPanels config={ panels } />
+        <div className='name-generator__main'>
+          <div className='name-generator__panels'>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <NodeProviderPanels config={ panels } />
+            </div>
           </div>
-          </div>
-          <div className='interface__primary'>
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <NodeList network={ activePromptNetwork } />
+          <div className='name-generator__nodes'>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <NodeList network={ activePromptNetwork } />
 
-            <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
-              Add a person
-            </button>
+              <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+                Add a person
+              </button>
 
-            <Modal name={ MODAL_NEW_NODE } >
-              <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
-            </Modal>
-          </div>
+              <Modal name={ MODAL_NEW_NODE } >
+                <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+              </Modal>
+            </div>
           </div>
         </div>
       </div>
