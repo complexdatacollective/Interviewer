@@ -73,8 +73,6 @@ class NameGenerator extends Component {
 
 function mapStateToProps(state) {
   return {
-    network: state.network,
-    protocol: state.protocol,
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
   }
