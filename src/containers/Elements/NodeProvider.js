@@ -19,7 +19,14 @@ class NodeProvider extends Component {
   }
 
   handleDropNode = (hits, node) => {
-    this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+    hits.map((hit) => {
+      switch (hit.name) {
+        case 'MAIN_NODE_LIST':
+          return this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+        case 'NODE_BIN':
+          return console.log('bin it');
+      }
+    });
   }
 
   render() {
@@ -31,9 +38,9 @@ class NodeProvider extends Component {
 
     switch (interaction) {
       case 'selectable':
-        return <SelectableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
+        return <SelectableNodeList network={ network } dropType='NODE' activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
       case 'draggable':
-        return <DraggableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } />;
+        return <DraggableNodeList network={ network } dropType='NODE' activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } />;
       default:
         return <NodeList network={ network } />;
     }

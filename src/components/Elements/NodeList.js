@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Node } from '../Elements';
-import Droppable from '../../containers/Elements/Droppable';
+import droppable from '../../behaviors/droppable';
 
 class NodeList extends Component {
   render() {
@@ -11,16 +11,14 @@ class NodeList extends Component {
     } = this.props;
 
     return (
-      <Droppable name="nodelist">
-        <div className='node-list'>
-          { nodes.map((node, index) => {
-            const label = `${node.nickname}`;
-            return <Node key={ index } label={ label } />;
-          }) }
-        </div>
-      </Droppable>
+      <div className='node-list'>
+        { nodes.map((node, index) => {
+          const label = `${node.nickname}`;
+          return <Node key={ index } label={ label } />;
+        }) }
+      </div>
     );
   }
 }
 
-export default NodeList;
+export default droppable(NodeList);

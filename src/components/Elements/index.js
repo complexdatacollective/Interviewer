@@ -8,3 +8,4 @@ export { default as SelectableNodeList } from './SelectableNodeList';
 export { default as DraggableNodeList } from './DraggableNodeList';
 export { default as Panels } from './Panels';
 export { default as Panel } from './Panel';
+export { default as NodeBin } from './NodeBin';

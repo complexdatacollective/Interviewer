@@ -51,6 +51,7 @@ export default function draggable(WrappedComponent) {
             this.state.preview.position(coords);
           });
         }
+        return;
       }
 
       this.state.preview.position(getCoords(event, draggableData));
@@ -70,7 +71,8 @@ export default function draggable(WrappedComponent) {
       } = getCoords(event, draggableData);
 
       const hits = filter(this.props.zones, (zone) => {
-        return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height
+        if (zone.acceptsType !== this.props.dropType) { return false; }
+        return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
       });
 
       if (hits.length > 0) {

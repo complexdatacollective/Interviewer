@@ -8,7 +8,7 @@ import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
 
 import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
-import { NodeList, Form } from '../../components/Elements';
+import { NodeList, Form, NodeBin } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
@@ -56,13 +56,14 @@ class NameGenerator extends Component {
           </div>
           <div className='name-generator__nodes'>
             <Scrollable>
-              <NodeList network={ activeOriginNetwork } />
+              <NodeList dropName='MAIN_NODE_LIST' acceptsType='NODE' network={ activeOriginNetwork } />
             </Scrollable>
           </div>
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
         </div>
+        <NodeBin dropName='NODE_BIN' acceptsType='NODE' />
         <Modal name={ MODAL_NEW_NODE } >
           <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
         </Modal>

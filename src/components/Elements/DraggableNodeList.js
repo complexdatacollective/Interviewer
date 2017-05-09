@@ -9,13 +9,14 @@ class DraggableNodeList extends Component {
     const {
       network,
       handleDropNode,
+      dropType,
     } = this.props;
 
     return (
       <div className='node-list node-list--draggable'>
         { network.nodes.map((node, index) => {
           return (
-            <DraggableNode key={ index } onDropped={ (hits) => handleDropNode(hits, node) } label={ `${node.nickname}` } { ...node } />
+            <DraggableNode key={ index } dropType={ dropType } onDropped={ (hits) => handleDropNode(hits, node) } label={ `${node.nickname}` } { ...node } />
           );
         }) }
       </div>
