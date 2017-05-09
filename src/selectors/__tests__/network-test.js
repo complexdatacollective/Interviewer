@@ -1,47 +1,66 @@
 /* eslint-env jest */
 
-import { activePromptNetwork, restOfNetwork } from '../network';
+import { activePromptNetwork, activeOriginNetwork, restOfNetwork } from '../network';
 
 describe('network selector', () => {
 
   const activeStageAttributes = {
     type: 'person',
-    stageId: 'foo',
   }
 
   const activePromptAttributes = {
     foo_bar: true,
   };
 
-  const activeNodeAttributes = {
-    ...activePromptAttributes,
-    ...activeStageAttributes
+  const activeOriginAttributes = {
+    stageId: 'foo',
+    promptId: 'baz',
+  };
+
+  const mockActiveOriginNetwork = {
+    nodes: [
+      { uid: 1, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+      { uid: 2, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+    ],
   };
 
   const network = {
     nodes: [
-      { uid: 1, stageId: 'foo', type: 'person', foo_bar: true },
-      { uid: 2, stageId: 'foo', type: 'person', foo_bar: true },
-      { uid: 3, stageId: 'bar', type: 'person', foo_bar: true },
-      { uid: 4, stageId: 'bar', type: 'object', foo_bar: true },
-      { uid: 5, stageId: 'bar', type: 'person' },
+      { uid: 1, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+      { uid: 2, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+      { uid: 3, stageId: 'bar', promptId: 'buzz', type: 'person', foo_bar: true },
+      { uid: 4, stageId: 'bar', promptId: 'buzz', type: 'object', foo_bar: true },
+      { uid: 5, stageId: 'bar', promptId: 'buzz', type: 'person' },
+      { uid: 6, stageId: 'foo', promptId: 'fizz', type: 'person', foo_bar: true },
     ]
   };
 
   it('activePromptNetwork returns the network filtered by activeNodeAttributes', () => {
-    expect(activePromptNetwork.resultFunc(network, activeNodeAttributes)).toEqual({
+    expect(activePromptNetwork.resultFunc(network, activeStageAttributes, activePromptAttributes)).toEqual({
       nodes: [
-        { uid: 1, stageId: 'foo', type: 'person', foo_bar: true },
-        { uid: 2, stageId: 'foo', type: 'person', foo_bar: true },
+        { uid: 1, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+        { uid: 2, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+        { uid: 3, stageId: 'bar', promptId: 'buzz', type: 'person', foo_bar: true },
+        { uid: 6, stageId: 'foo', promptId: 'fizz', type: 'person', foo_bar: true },
+      ],
+    });
+  });
+
+  it('activeOriginNetwork returns the network filtered by activeNodeAttributes', () => {
+    expect(activeOriginNetwork.resultFunc(network, activeOriginAttributes)).toEqual({
+      nodes: [
+        { uid: 1, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
+        { uid: 2, stageId: 'foo', promptId: 'baz', type: 'person', foo_bar: true },
       ],
     });
   });
 
   it('restOfNetwork returns the network excluding those matching stage attribute and of other node types', () => {
-    expect(restOfNetwork.resultFunc(network, activeStageAttributes)).toEqual({
+    expect(restOfNetwork.resultFunc(network, mockActiveOriginNetwork, activeStageAttributes)).toEqual({
       nodes: [
-        { uid: 3, stageId: 'bar', type: 'person', foo_bar: true },
-        { uid: 5, stageId: 'bar', type: 'person' },
+        { uid: 3, stageId: 'bar', promptId: 'buzz', type: 'person', foo_bar: true },
+        { uid: 5, stageId: 'bar', promptId: 'buzz', type: 'person' },
+        { uid: 6, stageId: 'foo', promptId: 'fizz', type: 'person', foo_bar: true },
       ],
     });
   });
