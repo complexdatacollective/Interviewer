@@ -10,7 +10,7 @@ class DraggableNodeList extends Component {
     } = this.props;
 
     return (
-      <div class='node-list node-list--draggable'>
+      <div className='node-list node-list--draggable'>
         { network.nodes.map((node, index) => {
           return (
             <Draggable key={ index } position={ { x: 0, y: 0 } } onDropped={ (hits) => handleDropNode(hits, node) }>

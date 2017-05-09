@@ -1,0 +1,14 @@
+@mixin svg-button($svg-path) {
+  background: transparent;
+  background-image: url($svg-path);
+  background-repeat: no-repeat;
+  text-indent: -1000px;
+  overflow: hidden;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}

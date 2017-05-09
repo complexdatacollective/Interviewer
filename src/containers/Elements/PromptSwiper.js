@@ -41,14 +41,14 @@ class PromptSwiper extends Component {
     return (
       <Touch onTap={ this.handleTap } onSwipe={ this.handleSwipe } >
         <div className='prompts'>
+          <div className='prompts__pips'>
+            <Pips count={ prompts.length } currentIndex={ promptIndex } />
+          </div>
+
           <div className='prompts__prompts'>
             { prompts.map((prompt, index) => {
               return <Prompt key={ index } label={ prompt.title } isActive={ promptIndex == index } />;
             }) }
-          </div>
-
-          <div className='prompts__pips'>
-            <Pips count={ prompts.length } currentIndex={ promptIndex } />
           </div>
         </div>
       </Touch>

@@ -14,7 +14,7 @@ class SelectableNodeList extends Component {
     } = this.props;
 
     return (
-      <div class='node-list node-list--selectable'>
+      <div className='node-list node-list--selectable'>
         { network.nodes.map((node, index) => {
           const isActive = _.isMatch(node, activeNodeAttributes);
 

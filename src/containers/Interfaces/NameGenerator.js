@@ -7,7 +7,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { activeNodeAttributes } from '../../selectors/session';
 import { activePromptNetwork } from '../../selectors/network';
 
-import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
+import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
 import { NodeList, Form } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
@@ -44,23 +44,28 @@ class NameGenerator extends Component {
     } = this.props;
 
     return (
-      <div className='interface'>
-        <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } />
-        </div>
-        <div className='interface__primary'>
+      <div className='name-generator'>
+        <div className='name-generator__prompt'>
           <PromptSwiper prompts={ prompts } />
-
-          <NodeList network={ activePromptNetwork } />
-
-          <button onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+        </div>
+        <div className='name-generator__main'>
+          <div className='name-generator__panels'>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <NodeProviderPanels config={ panels } />
+            </div>
+          </div>
+          <div className='name-generator__nodes'>
+            <Scrollable>
+              <NodeList network={ activePromptNetwork } />
+            </Scrollable>
+          </div>
+          <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
-
-          <Modal name={ MODAL_NEW_NODE } >
-            <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
-          </Modal>
         </div>
+        <Modal name={ MODAL_NEW_NODE } >
+          <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+        </Modal>
       </div>
     )
   }
