@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import Draggable from '../../containers/Elements/Draggable';
+import draggable from '../../behaviors/draggable';
 import { Node } from '../../components/Elements';
+
+const DraggableNode = draggable(Node);
 
 class DraggableNodeList extends Component {
   render() {
@@ -13,11 +15,7 @@ class DraggableNodeList extends Component {
       <div className='node-list node-list--draggable'>
         { network.nodes.map((node, index) => {
           return (
-            <Draggable key={ index } position={ { x: 0, y: 0 } } onDropped={ (hits) => handleDropNode(hits, node) }>
-              <div>
-                <Node { ...node } label={ `${node.nickname}` } />
-              </div>
-            </Draggable>
+            <DraggableNode key={ index } onDropped={ (hits) => handleDropNode(hits, node) } label={ `${node.nickname}` } { ...node } />
           );
         }) }
       </div>

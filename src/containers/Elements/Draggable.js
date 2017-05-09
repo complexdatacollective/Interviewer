@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { filter } from 'lodash';
 import DraggablePreview from '../../utils/DraggablePreview';
 
-function getCoords(event, draggableData) {
+function getCoords(event) {
   return {
     x: event.clientX,
     y: event.clientY,
