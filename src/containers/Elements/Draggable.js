@@ -5,6 +5,13 @@ import ReactDOM from 'react-dom';
 import { filter } from 'lodash';
 import DraggablePreview from '../../utils/DraggablePreview';
 
+function getCoords(event, draggableData) {
+  return {
+    x: event.clientX,
+    y: event.clientY,
+  };
+}
+
 class Draggable extends Component {
 
   constructor(props) {
@@ -21,8 +28,10 @@ class Draggable extends Component {
     if (this.state.preview.preview) { this.state.preview.preview.cleanup(); }
   }
 
-  onStart = (_, draggableData) => {
+  onStart = (event, draggableData) => {
     const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
+
+    const coords = getCoords(event, draggableData);
 
     this.setState({
       preview: {
@@ -30,13 +39,13 @@ class Draggable extends Component {
         preview: draggablePreview,
       }
     }, () => {
-      this.state.preview.preview.position(draggableData.x, draggableData.y);
+      this.state.preview.preview.position(coords);
     });
   }
 
   onDrag = (event, draggableData) => {
     if (!this.state.preview.preview) { return; }
-    this.state.preview.preview.position(draggableData.x, draggableData.y);
+    this.state.preview.preview.position(getCoords(event, draggableData));
   }
 
   onStop = (event, draggableData) => {
@@ -48,8 +57,13 @@ class Draggable extends Component {
       }
     });
 
+    const {
+      x,
+      y,
+    } = getCoords(event, draggableData);
+
     const hits = filter(this.props.zones, (zone) => {
-      return draggableData.x > zone.x && draggableData.x < zone.x + zone.width && draggableData.y > zone.y && draggableData.y < zone.y + zone.height
+      return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height
     });
 
     if (hits.length > 0) {
