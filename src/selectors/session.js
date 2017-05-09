@@ -24,14 +24,23 @@ export const activePromptAttributes = createSelector(
 export const activeStageAttributes = createSelector(
   stage,
   (stage) => {
-    return { type: stage.params.nodeType, stageId: stage.id };
+    return { type: stage.params.nodeType };
   }
 )
 
-export const activeNodeAttributes = createSelector(
-  activeStageAttributes,
+export const activeOriginAttributes = createSelector(
+  prompt,
+  stage,
+  (prompt, stage) => {
+    return { stageId: stage.id, promptId: prompt.id };
+  }
+)
+
+export const newNodeAttributes = createSelector(
   activePromptAttributes,
-  (activeStageAttributes, activePromptAttributes) => {
-    return { ...activeStageAttributes, ...activePromptAttributes };
+  activeStageAttributes,
+  activeOriginAttributes,
+  (activePromptAttributes, activeStageAttributes, activeOriginAttributes) => {
+    return { ...activePromptAttributes, ...activeStageAttributes, ...activeOriginAttributes };
   }
 )

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { activeNodeAttributes } from '../../selectors/session';
-import { activePromptNetwork } from '../../selectors/network';
+import { newNodeAttributes } from '../../selectors/session';
+import { activeOriginNetwork } from '../../selectors/network';
 
 import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
 import { NodeList, Form } from '../../components/Elements';
@@ -19,12 +19,12 @@ class NameGenerator extends Component {
   handleAddNode = (node, _, form) => {
     const {
       addNode,
-      activeNodeAttributes,
+      newNodeAttributes,
       closeModal,
     } = this.props;
 
     if (node) {
-      addNode({ ...node, ...activeNodeAttributes });
+      addNode({ ...node, ...newNodeAttributes });
       form.reset();  // Is this the "react/redux way"?
       closeModal(MODAL_NEW_NODE);
     }
@@ -40,7 +40,7 @@ class NameGenerator extends Component {
         },
       },
       openModal,
-      activePromptNetwork,
+      activeOriginNetwork,
     } = this.props;
 
     return (
@@ -56,7 +56,7 @@ class NameGenerator extends Component {
           </div>
           <div className='name-generator__nodes'>
             <Scrollable>
-              <NodeList network={ activePromptNetwork } />
+              <NodeList network={ activeOriginNetwork } />
             </Scrollable>
           </div>
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
@@ -75,8 +75,8 @@ function mapStateToProps(state) {
   return {
     network: state.network,
     protocol: state.protocol,
-    activeNodeAttributes: activeNodeAttributes(state),
-    activePromptNetwork: activePromptNetwork(state),
+    newNodeAttributes: newNodeAttributes(state),
+    activeOriginNetwork: activeOriginNetwork(state),
   }
 }
 
