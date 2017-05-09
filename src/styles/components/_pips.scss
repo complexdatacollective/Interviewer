@@ -16,7 +16,7 @@
     border-radius: $pip-size;
     line-height: $pip-size;
     background-color: transparent;
-    border: 1px solid theme('light-background');
+    border: 1px solid palette('light-background');
     transition: background-color 250ms ease-in;
 
     &:first-child {
@@ -24,7 +24,7 @@
     }
 
     &--active {
-      background-color: theme('light-background');
+      background-color: palette('light-background');
     }
   }
 }

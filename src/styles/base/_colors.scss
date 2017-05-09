@@ -40,10 +40,6 @@ $roles: (
   'menu-headings': $charcoal
 );
 
-@function theme($role) {
-  @return map-get($roles, $role)
-}
-
 // Collections
 $nodes: (
     default: (
@@ -62,6 +58,12 @@ $edges: (
 @function node-palette($palette: 'default', $tone: 'base') {
     @return map-get(map-get($nodes, $palette), $tone);
 }
+
+
+@function palette($role) {
+  @return map-get($roles, $role)
+}
+
 
 a {
     color: node-palette(default);

@@ -15,7 +15,7 @@
   transition: width 300ms ease, height 300ms ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 0 0 transparentize(theme('dark-background'), 0.2);
+  box-shadow: 0 4px 0 0 transparentize(palette('dark-background'), 0.2);
 
   &::after {
     content: '';

@@ -1,4 +1,4 @@
-@function fade-to($fade-to: theme('background'), $direction: 0deg) {
+@function fade-to($fade-to: palette('background'), $direction: 0deg) {
    @return linear-gradient($direction, $fade-to 0%, transparentize($fade-to, 1) 100%)
 }
 
@@ -15,7 +15,7 @@
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-    &::-webkit-scrollbar { 
+    &::-webkit-scrollbar {
       display: none;
     }
     -webkit-mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%)
