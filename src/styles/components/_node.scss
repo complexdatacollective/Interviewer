@@ -9,7 +9,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  -webkit-user-select: none;
   user-select: none;
   text-align: center;
   transition: width 300ms ease, height 300ms ease;
@@ -41,10 +40,10 @@
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    font-size: calc()
+    font-size: 1.5em;
   }
 
   &--is-active {
-    border: 3px solid $mustard;
+    border: 3px solid palette('selected');
   }
 }
