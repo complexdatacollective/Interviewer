@@ -28,6 +28,7 @@
   background: map-get($roles, menu);
   height:100%;
   color: $charcoal;
+  overflow-y: auto;
 }
 
 /* Morph shape necessary with bubble or elastic */
@@ -41,6 +42,15 @@
   color: map-get($roles, menu-headings);
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.bm-search {
+  input {
+    padding: .3rem;
+    width: 100%;
+  }
+
+  padding: 1rem;
 }
 
 /* Wrapper for item list */
