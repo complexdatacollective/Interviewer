@@ -18,4 +18,4 @@ export const store = createStore(
 );
 
 // eslint-disable-next-line
-export const persistor = persistStore(store, { blacklist: ['form']});
+export const persistor = persistStore(store, { blacklist: ['form', 'session', 'modal']});
