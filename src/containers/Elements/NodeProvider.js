@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { activeNodeAttributes, activePromptAttributes } from '../../selectors/session';
+import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
 import { filteredDataSource } from '../../selectors/dataSource';
 
 import { NodeList, SelectableNodeList, DraggableNodeList } from '../../components/Elements';
@@ -19,7 +19,7 @@ class NodeProvider extends Component {
   }
 
   handleDropNode = (hits, node) => {
-    this.props.addNode({ ...this.props.activeNodeAttributes, ...node });
+    this.props.addNode({ ...this.props.newNodeAttributes, ...node });
   }
 
   render() {
@@ -46,7 +46,7 @@ function mapStateToProps(state, ownProps) {
   return {
     network: filteredDataSource(state, ownProps),
     interaction,
-    activeNodeAttributes: activeNodeAttributes(state),
+    newNodeAttributes: newNodeAttributes(state),
     activePromptAttributes: activePromptAttributes(state),
   }
 }

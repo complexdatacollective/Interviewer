@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect'
 import { difference, nodeIncludesAttributes } from '../utils/Network';
-import { activeNodeAttributes, activeStageAttributes } from './session';
+import { activePromptAttributes, activeStageAttributes, activeOriginAttributes } from './session';
 
 const network = state => state.network;
 
-// Filter the network according to current stage AND prompt
+// Filter the network according to current stage
 export const activeStageNetwork = createSelector(
   network,
   activeStageAttributes,
@@ -13,22 +13,33 @@ export const activeStageNetwork = createSelector(
   }
 )
 
-// Filter the network according to current stage AND prompt
+// Filter the network according to current prompt (AND stage)
 export const activePromptNetwork = createSelector(
   network,
-  activeNodeAttributes,
-  (network, activeNodeAttributes) => {
-    return nodeIncludesAttributes(network, activeNodeAttributes);
+  activeStageAttributes,
+  activePromptAttributes,
+  (network, activeStageAttributes, activeNodeAttributes) => {
+    return nodeIncludesAttributes(network, { ...activeStageAttributes, ...activeNodeAttributes });
+  }
+)
+
+// Filter the network according to current promptId (AND stageId)
+export const activeOriginNetwork = createSelector(
+  network,
+  activeOriginAttributes,
+  (network, activeOriginAttributes) => {
+    return nodeIncludesAttributes(network, activeOriginAttributes);
   }
 )
 
 // Filter the network:
-// - Node is not from current stage
+// - Node is not from origin
 // - Node is the same type as current stage
 export const restOfNetwork = createSelector(
   network,
+  activeOriginNetwork,
   activeStageAttributes,
-  (network, activeStageAttributes) => {
-    return nodeIncludesAttributes(difference(network, nodeIncludesAttributes(network, { stageId: activeStageAttributes.stageId })), { type: activeStageAttributes.type });
+  (network, activeOriginNetwork, activeStageAttributes) => {
+    return nodeIncludesAttributes(difference(network, activeOriginNetwork), { type: activeStageAttributes.type });
   }
 )
