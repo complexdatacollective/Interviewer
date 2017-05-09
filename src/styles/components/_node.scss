@@ -1,5 +1,5 @@
 .node {
-  background: map-get($roles, node);
+  background: node-palette('default');
   display: inline-block;
   margin: 1rem;
   width: 100px;
@@ -13,10 +13,34 @@
   user-select: none;
   text-align: center;
   transition: width 300ms ease, height 300ms ease;
+  position: relative;
+  overflow: hidden;
 
-  em {
-    display: block;
-    font-size: 0.5em;
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    width: 141%;
+    height: 50%;
+    transform: rotate(-45deg);
+    transform-origin: 0 0;
+    background-color: node-palette('default', 'dark');
+  }
+
+  &__label {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    font-size: 1.5em;
   }
 
   &--is-active {
