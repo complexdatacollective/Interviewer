@@ -80,7 +80,7 @@ export default function draggable(WrappedComponent) {
     }
 
     render() {
-      const opacity = this.state.preview !== null ? { opacity: 0 } : { opacity: 1 };
+      const opacity = this.state.preview !== null ? { opacity: 0 } : { opacity: 1, transition: 'opacity 300ms ease' };
 
       return (
         <DraggableCore onStart={ this.onStart } onStop={ this.onStop } onDrag={ this.onDrag }>
