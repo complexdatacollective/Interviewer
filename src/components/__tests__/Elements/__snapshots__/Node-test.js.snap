@@ -8,16 +8,18 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="node">
-    <h3>
+    <div
+        className="node__label">
         foo
-    </h3>
+    </div>
 </div>,
   "nodes": Array [
     <div
       className="node">
-      <h3>
+      <div
+            className="node__label">
             foo
-      </h3>
+      </div>
 </div>,
   ],
   "options": Object {},
@@ -59,16 +61,18 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="node">
-          <h3>
+          <div
+                    className="node__label">
                     foo
-          </h3>
+          </div>
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node">
-          <h3>
+          <div
+                    className="node__label">
                     foo
-          </h3>
+          </div>
 </div>,
       },
       "_renderedNodeType": 0,
