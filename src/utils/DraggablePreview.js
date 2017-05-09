@@ -16,6 +16,7 @@ export default class DraggablePreview {
 
     this.node = document.createElement('div');
     this.node.setAttribute('class', 'draggable-preview');
+    this.node.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(-1000px, -1000px);`);
     this.node.appendChild(node.cloneNode(true));
 
     this.parent().appendChild(this.node);
@@ -41,9 +42,9 @@ export default class DraggablePreview {
     return this._center;
   }
 
-  position(x, y) {
-    x = x - this.center().x;
-    y = y - this.center().y;
+  position(coords) {
+    const x = coords.x - this.center().x;
+    const y = coords.y - this.center().y;
     this.node.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`);
   }
 
