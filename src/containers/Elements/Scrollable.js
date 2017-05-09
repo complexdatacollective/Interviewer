@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import { throttle } from 'lodash';
 
 class Scrollable extends Component {
 
@@ -8,6 +9,7 @@ class Scrollable extends Component {
     super();
 
     this.state = { isScrolling: false };
+    this.updateScrollState = throttle(this.updateScrollState, 1000/24);  // 24 FPS
   }
 
   componentWillUnmount() {
