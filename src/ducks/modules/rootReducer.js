@@ -6,6 +6,7 @@ import page from './page';
 import participant from './participant';
 import protocol from './protocol';
 import session from './session';
+import draggable from './draggable';
 import droppable from './droppable';
 import modals from './modals';
 
@@ -17,6 +18,7 @@ export default function(persistor) {
       participant,
       protocol: protocol(persistor),
       session,
+      draggable,
       droppable,
       modals,
   })

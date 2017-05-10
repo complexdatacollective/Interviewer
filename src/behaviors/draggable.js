@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { DraggableCore } from 'react-draggable';
 import ReactDOM from 'react-dom';
 import { filter } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
+import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 
 function getCoords(event) {
   if (event instanceof TouchEvent) {
@@ -61,6 +63,7 @@ export default function draggable(WrappedComponent) {
     }
 
     onStart = (event, draggableData) => {
+      this.props.dragStart();
       this.setState({
         start: {
           x: draggableData.x,
@@ -82,6 +85,8 @@ export default function draggable(WrappedComponent) {
 
     onStop = (event, draggableData) => {
       this.destroyPreview();
+
+      this.props.dragStop();
 
       this.setState({
         preview: null,
@@ -114,5 +119,12 @@ export default function draggable(WrappedComponent) {
     }
   }
 
-  return connect(mapStateToProps)(Draggable);
+  function mapDispatchToProps(dispatch) {
+    return {
+      dragStart: bindActionCreators(draggableActions.dragStart, dispatch),
+      dragStop: bindActionCreators(draggableActions.dragStop, dispatch)
+    }
+  }
+
+  return connect(mapStateToProps, mapDispatchToProps)(Draggable);
 }

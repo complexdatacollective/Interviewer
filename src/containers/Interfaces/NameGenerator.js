@@ -52,6 +52,12 @@ class NameGenerator extends Component {
       activeOriginNetwork,
     } = this.props;
 
+    const nodeBin = (
+      <div className='name-generator__node-bin'>
+        <DropZone droppableName='NODE_BIN' acceptsDraggableType='EXISTING_NODE' />
+      </div>
+    );
+
     return (
       <div className='name-generator'>
         <div className='name-generator__prompt'>
@@ -69,9 +75,7 @@ class NameGenerator extends Component {
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
-          <div className='name-generator__node-bin'>
-            <DropZone droppableName='NODE_BIN' acceptsDraggableType='EXISTING_NODE' />
-          </div>
+          { this.props.isDragging ? nodeBin : '' }
         </div>
 
         <Modal name={ MODAL_NEW_NODE } >
@@ -86,6 +90,7 @@ function mapStateToProps(state) {
   return {
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
+    isDragging: state.draggable.isDragging,
   }
 }
 

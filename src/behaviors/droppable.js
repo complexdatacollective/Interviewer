@@ -3,9 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { throttle } from 'lodash';
-
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
-
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
 export default function droppable(WrappedComponent) {
