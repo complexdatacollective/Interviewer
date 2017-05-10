@@ -72,15 +72,17 @@ class NameGenerator extends Component {
           <div className='name-generator__nodes'>
             <NodeList network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } droppableName='MAIN_NODE_LIST' acceptsDraggableType='NEW_NODE' draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode } />
           </div>
-          <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
-            Add a person
-          </button>
-          { this.props.isDragging ? nodeBin : '' }
         </div>
 
         <Modal name={ MODAL_NEW_NODE } >
           <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
         </Modal>
+
+        <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+          Add a person
+        </button>
+
+        { this.props.isDragging ? nodeBin : '' }
       </div>
     )
   }
