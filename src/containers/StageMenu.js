@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { Menu } from '../components';
-import { MenuItem } from '../components/Elements';
 
 class StageMenu extends Component {
   constructor(props) {
@@ -16,7 +15,6 @@ class StageMenu extends Component {
     };
 
     this.onInputChange = this.onInputChange.bind(this);
-    this.menuItemClick = this.menuItemClick.bind(this);
   }
 
   onInputChange(event) {
@@ -26,26 +24,31 @@ class StageMenu extends Component {
     });
   }
 
-  menuItemClick(index) {
-    this.props.onStageClick(index);
-    console.log("toggle menu");
-  }
-
   render() {
     let stages = this.props.stages;
     if (this.state.searchTerm) {
       stages = this.state.matchingStages;
     }
 
-    const links = stages.map((stage, index) =>
-      <MenuItem to={'/protocol/'+stage.id} key={stage.id} onClick={() => this.menuItemClick(index)} title={stage.title} />);
+    const items = stages.map((stage, index) =>
+      {
+        return {
+          to: '/protocol/'+stage.id,
+          id: stage.id,
+          title: stage.title,
+          onClick: () => this.props.onStageClick(index)
+        };
+      }
+    );
+
+    const search = (
+      <div className='bm-search'>
+        <input type='search' placeholder='Filter' onKeyUp={this.onInputChange}/>
+      </div>
+    );
 
     return (
-      <Menu>
-        <div className='bm-search'>
-          <input type='search' placeholder='Filter' onKeyUp={this.onInputChange}/>
-        </div>
-        {links}
+      <Menu items={items} searchField={search}>
       </Menu>
     );
   }

@@ -1,22 +1,20 @@
-'use strict';
+import React, { Component } from 'react';
 
-import React from 'react';
+import { MenuItem } from './Elements';
 
-const MenuFactory = React.createClass({
-  propTypes: {
-    id: React.PropTypes.string,
-    isOpen: React.PropTypes.bool,
-  },
+class MenuFactory extends Component {
+  constructor(props) {
+    super(props);
+    const initialIsOpenProp = props && typeof props.isOpen !== 'undefined';
 
-  toggleMenu() {
-    console.log('toggleMenu ', this.state);
+    this.state = {
+      isOpen: initialIsOpenProp ? this.props.isOpen : false
+    };
 
-    const newState = { isOpen: !this.state.isOpen };
-
-    console.log(newState);
-
-    this.setState(newState);
-  },
+    this.toggleMenu = this.toggleMenu.bind(this);
+    this.listenForClose = this.listenForClose.bind(this);
+    this.menuItemClick = this.menuItemClick.bind(this);
+  }
 
   // Sets or unsets styles on DOM elements outside the menu component.
   // This is necessary for correct page interaction with some of the menus.
@@ -29,28 +27,14 @@ const MenuFactory = React.createClass({
 
     console.log(wrapper.className);
     wrapper.className = nextState.isOpen ? 'isOpen' : '';
-
-  },
-
-  listenForClose(e) {
-    e = e || window.event;
-
-    if (this.state.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
-      this.toggleMenu();
-    }
-  },
-
-  getInitialState() {
-    const initialIsOpenProp = this.props && typeof this.props.isOpen !== 'undefined';
-    return { isOpen: initialIsOpenProp ? this.props.isOpen : false };
-  },
+  }
 
   componentWillMount() {
     // Allow initial open state to be set by props.
     if (this.props.isOpen) {
       this.toggleMenu();
     }
-  },
+  }
 
   componentDidMount() {
     window.onkeydown = this.listenForClose;
@@ -59,19 +43,45 @@ const MenuFactory = React.createClass({
     if (this.props.isOpen) {
       this.toggleMenu();
     }
-  },
+  }
 
   componentWillUnmount() {
     window.onkeydown = null;
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.isOpen !== 'undefined' && nextProps.isOpen !== this.state.isOpen) {
       this.toggleMenu();
     }
-  },
+  }
+
+  toggleMenu() {
+    console.log('toggleMenu ', this.state.isOpen);
+
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
+
+  listenForClose(e) {
+    e = e || window.event;
+
+    if (this.state.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
+      this.toggleMenu();
+    }
+  }
+
+  menuItemClick(itemClick) {
+    itemClick();
+    this.toggleMenu();
+  }
 
   render() {
+    let items = this.props.items.map((item) =>
+      <MenuItem key={item.id} to={item.to} onClick={() => this.menuItemClick(item.onClick)} title={item.title} />
+      );
+
     return (
       <div>
         <div className="bm-overlay" onClick={this.toggleMenu} />
@@ -86,15 +96,9 @@ const MenuFactory = React.createClass({
             <header>
               <h1 className="bm-menu-title">Stages</h1>
             </header>
+            {this.props.searchField}
             <nav className="bm-item-list">
-              {React.Children.map(this.props.children, (item, index) => {
-                if (item) {
-                  const extraProps = {
-                    key: index
-                  };
-                  return React.cloneElement(item, extraProps);
-                }
-              })}
+              {items}
             </nav>
           </div>
         </div>
@@ -107,7 +111,6 @@ const MenuFactory = React.createClass({
       </div>
     );
   } // end render
-}); //end return
-
+} //end class
 
 export default MenuFactory;
