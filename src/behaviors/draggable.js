@@ -6,10 +6,18 @@ import { filter } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 
 function getCoords(event) {
-  return {
-    x: event.clientX,
-    y: event.clientY,
-  };
+  if (event instanceof TouchEvent) {
+    const touch = event.touches.item(0);
+    return {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+  } else {
+    return {
+      x: event.clientX,
+      y: event.clientY,
+    };
+  }
 }
 
 function moveDistance(start, draggableData) {
@@ -42,7 +50,7 @@ export default function draggable(WrappedComponent) {
 
     onDrag = (event, draggableData) => {
       if (!this.state.preview) {
-        if (moveDistance(this.state.start, draggableData) > 5) {
+        if (moveDistance(this.state.start, draggableData) > 3) {
           const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
           const coords = getCoords(event, draggableData);
           this.setState({
@@ -78,7 +86,6 @@ export default function draggable(WrappedComponent) {
       if (hits.length > 0) {
         this.props.onDropped(hits);
       }
-
     }
 
     render() {
