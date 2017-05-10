@@ -8,6 +8,9 @@
     "node": "6.9.1",
     "npm": "3.10.7"
   },
+   "updater": {
+    "url": "https://raw.githubusercontent.com/codaco/network-canvas/feature/app-auto-updater/public/updates.json"
+  },
   "homepage": ".",
   "main": "electron-starter.js"
 }
