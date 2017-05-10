@@ -11,7 +11,6 @@ import { NodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
-    console.log('foooo', node);
     if (_.isMatch(node, this.props.activePromptAttributes)) {
       this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)));
     } else {
@@ -25,7 +24,7 @@ class NodeProvider extends Component {
         case 'MAIN_NODE_LIST':
           return this.props.addNode({ ...this.props.newNodeAttributes, ...node });
         case 'NODE_BIN':
-          return console.log('bin it');
+          return this.props.removeNode(node.uid);
       }
     });
   }
@@ -38,14 +37,13 @@ class NodeProvider extends Component {
     } = this.props;
 
     const label = (node) => `${node.nickname}`;
+    const isActive = (node) => isMatch(node, activePromptAttributes);
 
     switch (interaction) {
       case 'selectable':
-        return <NodeList network={ network } label={ label } dropType='NODE' isActive={ (node) => isMatch(node, activePromptAttributes) } handleSelectNode={ this.handleSelectNode } />;
-      case 'draggable':
-        return <NodeList network={ network } label={ label } dropType='NODE' handleDropNode={ this.handleDropNode } />;
+        return <NodeList network={ network } label={ label } dropType='NODE' handleDropNode={ this.handleDropNode } handleSelectNode={ this.handleSelectNode } isActive={ isActive } />;
       default:
-        return <NodeList network={ network } label={ label } />;
+        return <NodeList network={ network } label={ label } dropType='NODE' handleDropNode={ this.handleDropNode } />;
     }
   }
 }
@@ -65,6 +63,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   }
 }
 

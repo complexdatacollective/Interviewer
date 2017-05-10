@@ -28,8 +28,8 @@ class NodeList extends Component {
 
 NodeList.defaultProps = {
   isActive: () => {},
-  handleSelectNode: () => { console.log('not set select') },
-  handleDropNode: () => { console.log('not set drop')  },
+  handleSelectNode: () => {},
+  handleDropNode: () => {},
   dropType: '',
 };
 

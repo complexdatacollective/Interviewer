@@ -84,7 +84,7 @@ export default function draggable(WrappedComponent) {
       });
 
       if (hits.length > 0) {
-        this.props.onDropped(hits);
+        this.props.onDrop(hits);
       }
     }
 

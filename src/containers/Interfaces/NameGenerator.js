@@ -30,6 +30,15 @@ class NameGenerator extends Component {
     }
   }
 
+  handleDropNode = (hits, node) => {
+    hits.map((hit) => {
+      switch (hit.name) {
+        case 'NODE_BIN':
+          return this.props.removeNode(node.uid);
+      }
+    });
+  }
+
   render() {
     const {
       config: {
@@ -55,7 +64,7 @@ class NameGenerator extends Component {
             </div>
           </div>
           <div className='name-generator__nodes'>
-            <NodeList dropName='MAIN_NODE_LIST' acceptsType='NODE' network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } />
+            <NodeList network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } dropName='MAIN_NODE_LIST' acceptsType='NODE' dropType='NODE' handleDropNode={ this.handleDropNode } />
           </div>
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
@@ -83,6 +92,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
   }
