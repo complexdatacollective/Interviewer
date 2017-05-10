@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import _, { isMatch } from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
 import { filteredDataSource } from '../../selectors/dataSource';
 
-import { NodeList, SelectableNodeList, DraggableNodeList } from '../../components/Elements';
+import { NodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
+    console.log('foooo', node);
     if (_.isMatch(node, this.props.activePromptAttributes)) {
       this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)));
     } else {
@@ -36,13 +37,15 @@ class NodeProvider extends Component {
       network,
     } = this.props;
 
+    const label = (node) => `${node.nickname}`;
+
     switch (interaction) {
       case 'selectable':
-        return <SelectableNodeList network={ network } dropType='NODE' activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
+        return <NodeList network={ network } label={ label } dropType='NODE' isActive={ (node) => isMatch(node, activePromptAttributes) } handleSelectNode={ this.handleSelectNode } />;
       case 'draggable':
-        return <DraggableNodeList network={ network } dropType='NODE' activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } />;
+        return <NodeList network={ network } label={ label } dropType='NODE' handleDropNode={ this.handleDropNode } />;
       default:
-        return <NodeList network={ network } />;
+        return <NodeList network={ network } label={ label } />;
     }
   }
 }

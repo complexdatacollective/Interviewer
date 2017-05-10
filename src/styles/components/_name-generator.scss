@@ -46,4 +46,17 @@
     z-index: 1000;
   }
 
+  &__node-bin {
+    background: transparent;
+    background-image: url('/images/node-bin.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    z-index: 1000;
+  }
+
 }

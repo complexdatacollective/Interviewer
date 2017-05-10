@@ -27,7 +27,7 @@ export default function droppable(WrappedComponent) {
     }
 
     componentDidUpdate() {
-      this.updateZone();
+      // this.updateZone();
     }
 
     updateZone = () => {
