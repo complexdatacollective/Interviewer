@@ -16,11 +16,9 @@ ShallowWrapper {
     </div>
     <div
         className="panel__content">
-        <Scrollable>
-            <span>
-                bar
-            </span>
-        </Scrollable>
+        <span>
+            bar
+        </span>
     </div>
 </div>,
   "nodes": Array [
@@ -34,11 +32,9 @@ ShallowWrapper {
       </div>
       <div
             className="panel__content">
-            <Scrollable>
-                  <span>
-                        bar
-                  </span>
-            </Scrollable>
+            <span>
+                  bar
+            </span>
       </div>
 </div>,
   ],
@@ -96,11 +92,9 @@ ShallowWrapper {
           </div>
           <div
                     className="panel__content">
-                    <Scrollable>
-                              <span>
-                                        bar
-                              </span>
-                    </Scrollable>
+                    <span>
+                              bar
+                    </span>
           </div>
 </div>,
         "_debugID": 2,
@@ -114,11 +108,9 @@ ShallowWrapper {
           </div>
           <div
                     className="panel__content">
-                    <Scrollable>
-                              <span>
-                                        bar
-                              </span>
-                    </Scrollable>
+                    <span>
+                              bar
+                    </span>
           </div>
 </div>,
       },
