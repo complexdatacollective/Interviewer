@@ -74,7 +74,7 @@ export default function draggable(WrappedComponent) {
 
     onDrag = (event, draggableData) => {
       if (!this.state.preview) {
-        if (moveDistance(this.state.start, draggableData) > 3) {
+        if (moveDistance(this.state.start, draggableData) > 4) {
           this.createPreview(event, draggableData)
         }
         return;
