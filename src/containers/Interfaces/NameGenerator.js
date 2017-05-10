@@ -64,13 +64,13 @@ class NameGenerator extends Component {
             </div>
           </div>
           <div className='name-generator__nodes'>
-            <NodeList network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } dropName='MAIN_NODE_LIST' acceptsType='NODE' dropType='NODE' handleDropNode={ this.handleDropNode } />
+            <NodeList network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } droppableName='MAIN_NODE_LIST' acceptsDraggableType='NEW_NODE' draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode } />
           </div>
           <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
           <div className='name-generator__node-bin'>
-            <DropZone dropName='NODE_BIN' acceptsType='NODE' />
+            <DropZone droppableName='NODE_BIN' acceptsDraggableType='EXISTING_NODE' />
           </div>
         </div>
 

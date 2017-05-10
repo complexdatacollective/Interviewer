@@ -13,13 +13,13 @@ class NodeList extends Component {
       activeNodeAttributes,
       handleSelectNode,
       handleDropNode,
-      dropType,
+      draggableType,
     } = this.props;
 
     return (
       <div className='node-list'>
         { network.nodes.map((node, index) => {
-          return <EnhancedNode key={ index } label={ label(node) } isActive={ isActive(node) } activeNodeAttributes={ activeNodeAttributes } onSelect={ () => handleSelectNode(node) } onDrop={ (hits) => handleDropNode(hits, node) } dropType={ dropType }  { ...node } />;
+          return <EnhancedNode key={ index } label={ label(node) } isActive={ isActive(node) } activeNodeAttributes={ activeNodeAttributes } onSelected={ () => handleSelectNode(node) } onDropped={ (hits) => handleDropNode(hits, node) } draggableType={ draggableType } { ...node } />;
         }) }
       </div>
     );
@@ -30,7 +30,7 @@ NodeList.defaultProps = {
   isActive: () => {},
   handleSelectNode: () => {},
   handleDropNode: () => {},
-  dropType: '',
+  draggableType: '',
 };
 
 

@@ -14,7 +14,7 @@ export default function droppable(WrappedComponent) {
     constructor(props) {
       super(props);
 
-      this.updateZone = throttle(this.updateZone, 1000/60);  // 60fps max
+      this.updateZone = throttle(this.updateZone, 1000/24);  // 24fps max
     }
 
     componentWillUnmount() {
@@ -27,16 +27,18 @@ export default function droppable(WrappedComponent) {
     }
 
     componentDidUpdate() {
-      // this.updateZone();
+      this.updateZone();
     }
 
     updateZone = () => {
+      if (!this.props.droppableName) { return; }
+
       const element = ReactDOM.findDOMNode(this);
       const boundingClientRect = getAbsoluteBoundingRect(element); //element.getBoundingClientRect();
 
       this.props.updateZone({
-        name: this.props.dropName,
-        acceptsType: this.props.acceptsType,
+        name: this.props.droppableName,
+        acceptsDraggableType: this.props.acceptsDraggableType,
         width: boundingClientRect.width,
         height: boundingClientRect.height,
         y: boundingClientRect.top,
@@ -59,6 +61,10 @@ export default function droppable(WrappedComponent) {
       updateZone: bindActionCreators(droppableActions.updateZone, dispatch)
     }
   }
+
+  Droppable.defaultProps = {
+    acceptsDraggableType: null,
+  };
 
   return connect(mapStateToProps, mapDispatchToProps)(Droppable);
 }

@@ -6,7 +6,7 @@ export default function selectable(WrappedComponent) {
 
     render() {
       return (
-        <Touch onTap={ this.props.onSelect }>
+        <Touch onTap={ this.props.onSelected }>
           <WrappedComponent { ...this.props } />
         </Touch>
       );

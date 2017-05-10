@@ -36,7 +36,28 @@ export default function draggable(WrappedComponent) {
     }
 
     componentWillUnmount() {
+      this.destroyPreview();
+    }
+
+    createPreview = (event, draggableData) => {
+      const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
+      const coords = getCoords(event, draggableData);
+      this.setState({
+        preview: draggablePreview,
+      }, () => {
+        this.state.preview.position(coords);
+      });
+    }
+
+    destroyPreview = () => {
       if (this.state.preview) { this.state.preview.cleanup(); }
+    }
+
+    getHits = ({ x, y }) => {
+      return filter(this.props.zones, (zone) => {
+        if (zone.acceptsDraggableType !== this.props.draggableType) { return false; }
+        return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
+      });
     }
 
     onStart = (event, draggableData) => {
@@ -51,13 +72,7 @@ export default function draggable(WrappedComponent) {
     onDrag = (event, draggableData) => {
       if (!this.state.preview) {
         if (moveDistance(this.state.start, draggableData) > 3) {
-          const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
-          const coords = getCoords(event, draggableData);
-          this.setState({
-            preview: draggablePreview,
-          }, () => {
-            this.state.preview.position(coords);
-          });
+          this.createPreview(event, draggableData)
         }
         return;
       }
@@ -66,25 +81,18 @@ export default function draggable(WrappedComponent) {
     }
 
     onStop = (event, draggableData) => {
-      if (this.state.preview) { this.state.preview.cleanup(); }
+      this.destroyPreview();
 
       this.setState({
         preview: null,
         start: {},
       });
 
-      const {
-        x,
-        y,
-      } = getCoords(event, draggableData);
-
-      const hits = filter(this.props.zones, (zone) => {
-        if (zone.acceptsType !== this.props.dropType) { return false; }
-        return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
-      });
+      const hits = this.getHits(getCoords(event, draggableData));
+      console.log('stop', hits);
 
       if (hits.length > 0) {
-        this.props.onDrop(hits);
+        this.props.onDropped(hits);
       }
     }
 
