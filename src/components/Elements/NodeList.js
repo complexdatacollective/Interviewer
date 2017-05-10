@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Node } from '../Elements';
-import droppable from '../../behaviors/droppable';
+import { scrollable, droppable } from '../../behaviors';
 
 class NodeList extends Component {
   render() {
@@ -21,4 +21,4 @@ class NodeList extends Component {
   }
 }
 
-export default droppable(NodeList);
+export default droppable(scrollable(NodeList));

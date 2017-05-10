@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
-import selectable from '../../behaviors/selectable';
-import draggable from '../../behaviors/draggable';
+import { draggable, selectable, scrollable } from '../../behaviors';
 import { Node } from '../../components/Elements';
 
 const SelectableNode = draggable(selectable(Node));
@@ -34,4 +33,4 @@ class SelectableNodeList extends Component {
   }
 }
 
-export default SelectableNodeList;
+export default scrollable(SelectableNodeList);

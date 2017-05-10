@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import draggable from '../../behaviors/draggable';
+import { draggable, scrollable } from '../../behaviors';
 import { Node } from '../../components/Elements';
 
 const DraggableNode = draggable(Node);
@@ -24,4 +24,4 @@ class DraggableNodeList extends Component {
   }
 }
 
-export default DraggableNodeList;
+export default scrollable(DraggableNodeList);
