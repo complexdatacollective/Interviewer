@@ -3,40 +3,30 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { activeNodeAttributes } from '../../selectors/session';
-import { activeNetwork } from '../../selectors/network';
+import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import { newNodeAttributes } from '../../selectors/session';
+import { activeOriginNetwork } from '../../selectors/network';
 
-import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
-import { NodeList, Modal, Form } from '../../components/Elements';
+import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
+import { NodeList, Form } from '../../components/Elements';
+
+const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGenerator extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-    };
-  }
-
-  toggleModal = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
   handleAddNode = (node, _, form) => {
     const {
       addNode,
-      activeNodeAttributes,
+      newNodeAttributes,
+      closeModal,
     } = this.props;
 
     if (node) {
-      addNode({ ...node, ...activeNodeAttributes });
+      addNode({ ...node, ...newNodeAttributes });
       form.reset();  // Is this the "react/redux way"?
-      this.toggleModal();
+      closeModal(MODAL_NEW_NODE);
     }
   }
 
@@ -49,28 +39,33 @@ class NameGenerator extends Component {
           panels,
         },
       },
-      activeNetwork,
+      openModal,
+      activeOriginNetwork,
     } = this.props;
 
     return (
-      <div className='interface'>
-        <div className='interface__aside'>
-          <NodeProviderPanels config={ panels } />
-        </div>
-        <div className='interface__primary'>
+      <div className='name-generator'>
+        <div className='name-generator__prompt'>
           <PromptSwiper prompts={ prompts } />
-
-          <NodeList network={ activeNetwork } />
-
-          <button onClick={ this.toggleModal }>
+        </div>
+        <div className='name-generator__main'>
+          <div className='name-generator__panels'>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <NodeProviderPanels config={ panels } />
+            </div>
+          </div>
+          <div className='name-generator__nodes'>
+            <Scrollable>
+              <NodeList network={ activeOriginNetwork } />
+            </Scrollable>
+          </div>
+          <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
             Add a person
           </button>
-
-          <Modal show={ this.state.isOpen } onClose={ this.toggleModal }>
-            <h4>{ form.title }</h4>
-            <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
-          </Modal>
         </div>
+        <Modal name={ MODAL_NEW_NODE } >
+          <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+        </Modal>
       </div>
     )
   }
@@ -78,16 +73,16 @@ class NameGenerator extends Component {
 
 function mapStateToProps(state) {
   return {
-    network: state.network,
-    protocol: state.protocol,
-    activeNodeAttributes: activeNodeAttributes(state),
-    activeNetwork: activeNetwork(state),
+    newNodeAttributes: newNodeAttributes(state),
+    activeOriginNetwork: activeOriginNetwork(state),
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   }
 }
 

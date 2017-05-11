@@ -8,18 +8,34 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="panel">
-    <h5 />
-    <span>
-        foo
-    </span>
+    <div
+        className="panel__heading">
+        <h5 />
+    </div>
+    <div
+        className="panel__content">
+        <Scrollable>
+            <span>
+                foo
+            </span>
+        </Scrollable>
+    </div>
 </div>,
   "nodes": Array [
     <div
       className="panel">
-      <h5 />
-      <span>
-            foo
-      </span>
+      <div
+            className="panel__heading">
+            <h5 />
+      </div>
+      <div
+            className="panel__content">
+            <Scrollable>
+                  <span>
+                        foo
+                  </span>
+            </Scrollable>
+      </div>
 </div>,
   ],
   "options": Object {},
@@ -66,18 +82,34 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="panel">
-          <h5 />
-          <span>
-                    foo
-          </span>
+          <div
+                    className="panel__heading">
+                    <h5 />
+          </div>
+          <div
+                    className="panel__content">
+                    <Scrollable>
+                              <span>
+                                        foo
+                              </span>
+                    </Scrollable>
+          </div>
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="panel">
-          <h5 />
-          <span>
-                    foo
-          </span>
+          <div
+                    className="panel__heading">
+                    <h5 />
+          </div>
+          <div
+                    className="panel__content">
+                    <Scrollable>
+                              <span>
+                                        foo
+                              </span>
+                    </Scrollable>
+          </div>
 </div>,
       },
       "_renderedNodeType": 0,

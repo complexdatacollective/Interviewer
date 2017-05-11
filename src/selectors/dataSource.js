@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 
-import { existingNetwork } from './network'
+import { join, difference } from '../utils/Network'
+import { restOfNetwork, activeStageNetwork } from './network'
 
 const data = state => state.protocol.protocolConfig.data;
 
@@ -17,13 +18,14 @@ const fromSource = createSelector(
 export const dataSource = createSelector(
   source,
   fromSource,
-  existingNetwork,
-  (source, fromSource, existingNetwork) => {
+  restOfNetwork,
+  activeStageNetwork,
+  (source, fromSource, restOfNetwork, activeStageNetwork) => {
     switch (source) {
       case 'existing':
-        return existingNetwork;
+        return restOfNetwork;  // that aren't on this stage, but have the same type
       default:
-        return fromSource;
+        return difference(fromSource, join(restOfNetwork, activeStageNetwork));  // that aren't on this screen.
     }
   }
 );
@@ -32,6 +34,6 @@ export const filteredDataSource = createSelector(
   dataSource,
   filter,
   (dataSource, filter) => {
-    return filter(dataSource)
+    return filter(dataSource);
   }
 );

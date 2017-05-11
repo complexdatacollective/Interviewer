@@ -1,29 +1,39 @@
-import _ from 'lodash';
+import { filter, differenceBy } from 'lodash';
 
 const nodeIncludesAttributes = (network, attributes) => {
-  const nodes = _.filter(network.nodes, attributes);
+  const nodes = filter(network.nodes, attributes);
 
   return {
+    ...network,  // TODO: filter edge etc.
     nodes
   }
 }
 
-const diff = (source, target) => {
-  const nodes = _.reject(source.nodes, (nodeA) => {
-    return _.findIndex(target.nodes, (nodeB) => { return _.isEqual(nodeA, nodeB); }) !== -1;
-  });
+const difference = (source, target) => {
+  const nodes = differenceBy(source.nodes, target.nodes, 'uid');
 
   return {
+    ...source,  // TODO: filter edge etc.
     nodes
+  }
+}
+
+const join = (networkA, networkB) => {
+  return {
+    ...networkA,  // TODO: combine edge etc.
+    edges: [ ...networkA.edges, ...networkB.edges ],
+    nodes: [ ...networkA.nodes, ...networkB.nodes ],
   }
 }
 
 export {
   nodeIncludesAttributes,
-  diff,
+  difference,
+  join,
 };
 
 export default {
   nodeIncludesAttributes,
-  diff,
+  difference,
+  join,
 };

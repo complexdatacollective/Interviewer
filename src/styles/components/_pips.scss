@@ -1,6 +1,8 @@
 .pips {
+  $pip-size: 10px;
+
   &__pips {
-    height: 15px;
+    height: $pip-size;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -8,12 +10,13 @@
   }
 
   &__pip {
-    width: 15px;
-    height: 15px;
-    margin-left: 15px;
-    border-radius: 15px;
-    line-height: 15px;
-    background-color: $rich-black;
+    width: $pip-size;
+    height: $pip-size;
+    margin-left: 5px;
+    border-radius: $pip-size;
+    line-height: $pip-size;
+    background-color: transparent;
+    border: 1px solid palette('light-background');
     transition: background-color 250ms ease-in;
 
     &:first-child {
@@ -21,7 +24,7 @@
     }
 
     &--active {
-      background-color: $cerulean-blue;
+      background-color: palette('light-background');
     }
   }
 }

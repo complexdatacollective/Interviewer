@@ -38,10 +38,16 @@ class Stage extends Component {
     } = this;
 
     return (
-      <div className='container'>
-        <button onClick={handlePrevious}>Back</button>
-        <CurrentInterface config={ stage }/>
-        <button onClick={handleNext}>Next</button>
+      <div className="stage">
+        <div className="stage__control">
+          <button className="stage__control-button stage__control-button--back" onClick={handlePrevious}>Back</button>
+        </div>
+        <div className="stage__interface">
+          <CurrentInterface config={ stage }/>
+        </div>
+        <div className="stage__control">
+          <button className="stage__control-button stage__control-button--next" onClick={handleNext}>Next</button>
+        </div>
       </div>
     );
   }

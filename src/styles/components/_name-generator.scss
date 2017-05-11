@@ -1,0 +1,49 @@
+.name-generator {
+
+  height: 100vh;
+  padding: 20px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    flex: 0 0 200px;
+  }
+
+  &__main {
+    flex: 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+  }
+
+  &__nodes {
+    flex: 3 1 auto;
+    height: 100%;
+    position: relative;
+
+    .node {
+      width: 175px;
+      height: 175px;
+    }
+  }
+
+  &__panels {
+    flex: 0 0 400px;
+    height: 100%;
+    margin-right: 50px;
+  }
+
+  &__add-person {
+    @include svg-button('/images/add-a-person.svg');
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    width: 150px;
+    height: 120px;
+    z-index: 1000;
+  }
+
+}

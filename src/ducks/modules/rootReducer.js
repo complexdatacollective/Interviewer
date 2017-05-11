@@ -6,6 +6,8 @@ import page from './page';
 import participant from './participant';
 import protocol from './protocol';
 import session from './session';
+import droppable from './droppable';
+import modals from './modals';
 
 export default function(persistor) {
   return combineReducers({
@@ -15,5 +17,7 @@ export default function(persistor) {
       participant,
       protocol: protocol(persistor),
       session,
+      droppable,
+      modals,
   })
 };

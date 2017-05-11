@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
+import Draggable from '../../containers/Elements/Draggable';
 import { Node } from '../../components/Elements';
 
 class DraggableNodeList extends Component {
   render() {
     const {
       network,
-      handleDragNode,
+      handleDropNode,
     } = this.props;
 
     return (
-      <div class='node-list node-list--draggable'>
+      <div className='node-list node-list--draggable'>
         { network.nodes.map((node, index) => {
           return (
-            <Draggable key={ index } position={ { x: 0, y: 0 } } onStop={ () => handleDragNode(node) }>
+            <Draggable key={ index } position={ { x: 0, y: 0 } } onDropped={ (hits) => handleDropNode(hits, node) }>
               <div>
                 <Node { ...node } label={ `${node.nickname}` } />
               </div>

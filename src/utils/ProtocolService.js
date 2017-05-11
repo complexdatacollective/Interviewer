@@ -40,16 +40,19 @@ export default class ProtocolService {
         "previous": {
           nodes: [
             {
+              uid: "previous_1",
               type: "person",
               name: "Fred",
               nickname: "Foo",
             },
             {
+              uid: "previous_2",
               type: "person",
               name: "Bob",
               nickname: "Bar",
             },
             {
+              uid: "previous_3",
               type: "person",
               name: "Barry",
               nickname: "Baz",
@@ -89,6 +92,7 @@ export default class ProtocolService {
             ],
             "prompts": [
               {
+                id: '6cl',
                 title: 'Within the past 6 months, who have you felt close to?',
                 nodeAttributes: {
                   special_category: 46,
@@ -96,12 +100,14 @@ export default class ProtocolService {
                 }
               },
               {
+                id: '6su',
                 title: "Within the past 6 months, who has been supportive?",
                 nodeAttributes: {
                   support_friend: true,
                 }
               },
               {
+                id: '2we',
                 title: "Within the past 2 weeks, who has visited",
                 nodeAttributes: {
                   travel_friend: true,
@@ -138,6 +144,7 @@ export default class ProtocolService {
             "nodeType": 'person',
             "prompts": [
               {
+                id: '5be',
                 title: "Within the past 6 months, what's the best person you've seen ever?",
                 nodeAttributes: {
                   fun_times: true

@@ -12,7 +12,7 @@ class Node extends Component {
 
     return (
       <div className={ classes } >
-        <h3>{ label }</h3>
+        <div className="node__label">{ label }</div>
       </div>
     );
   }

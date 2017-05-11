@@ -6,17 +6,23 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div
-    className="node-list">
-    <Node
-        label="undefined" />
-</div>,
-  "nodes": Array [
+  "node": <Connect(Droppable)
+    name="nodelist">
     <div
-      className="node-list">
-      <Node
+        className="node-list">
+        <Node
             label="undefined" />
-</div>,
+    </div>
+</Connect(Droppable)>,
+  "nodes": Array [
+    <Connect(Droppable)
+      name="nodelist">
+      <div
+            className="node-list">
+            <Node
+                  label="undefined" />
+      </div>
+</Connect(Droppable)>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -69,19 +75,25 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <div
-          className="node-list">
-          <Node
-                    label="undefined" />
-</div>,
+        "_currentElement": <Connect(Droppable)
+          name="nodelist">
+          <div
+                    className="node-list">
+                    <Node
+                              label="undefined" />
+          </div>
+</Connect(Droppable)>,
         "_debugID": 2,
-        "_renderedOutput": <div
-          className="node-list">
-          <Node
-                    label="undefined" />
-</div>,
+        "_renderedOutput": <Connect(Droppable)
+          name="nodelist">
+          <div
+                    className="node-list">
+                    <Node
+                              label="undefined" />
+          </div>
+</Connect(Droppable)>,
       },
-      "_renderedNodeType": 0,
+      "_renderedNodeType": 1,
       "_rootNodeID": 0,
       "_topLevelWrapper": null,
       "_updateBatchNumber": null,

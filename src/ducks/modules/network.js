@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { maxBy, reject, findIndex } from 'lodash';
 
 const SET_ACTIVE_NODE_ATTRIBUTES = 'SET_ACTIVE_NODE_ATTRIBUTES';
 const ADD_NODE = 'ADD_NODE';
@@ -15,25 +15,29 @@ const initialState = {
   edges: []
 };
 
+function nextUid(nodes) {
+  return `${Date.now()}_${nodes.length + 1}`;
+}
+
 function nextId(nodes) {
-  if (nodes.length == 0) { return 1; }
-  return _.map(nodes, 'id').reduce((memo, id) => { return memo > id ? memo : id }) + 1;
+  if (nodes.length === 0) { return 1; }
+  return maxBy(nodes, 'id').id + 1;
 }
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE:
       const id = nextId(state.nodes);
-      const node = { ...action.node, id }
+      const uid = nextUid(state.nodes);
+      const node = { uid, ...action.node, id }  // Provided uid can override generated one, but not id
       return {
-        // rest parameters - ...state contains array of the rest of values of state (above)
         ...state,
         nodes: [...state.nodes, node]
       }
     case UPDATE_NODE:
       const nodes = [ ...state.nodes ];
-      const nodeIndex = _.findIndex(state.nodes, ['id', action.node.id]);
-      nodes[nodeIndex] = action.node;
+      const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
+      nodes[nodeIndex] = { ...action.node, id: nodes[nodeIndex].id };  // id can't be altered
       return {
         ...state,
         nodes: [...nodes ]
@@ -41,7 +45,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: _.reject(state.nodes, (node) => node.id === action.id)
+        nodes: reject(state.nodes, (node) => node.uid === action.uid)
       }
     case SET_ACTIVE_NODE_ATTRIBUTES:
       return {
@@ -67,10 +71,10 @@ function updateNode(node) {
   }
 }
 
-function removeNode(index) {
+function removeNode(uid) {
   return {
     type: REMOVE_NODE,
-    index
+    uid
   }
 }
 
