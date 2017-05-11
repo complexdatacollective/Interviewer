@@ -3,6 +3,7 @@ const DRAG_STOP = 'DRAG_STOP';
 
 const initialState = {
   isDragging: false,
+  draggableType: '',
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -11,26 +12,29 @@ export default function reducer(state = initialState, action = {}) {
         return {
           ...state,
           isDragging: true,
+          draggableType: action.draggableType,
         }
         case DRAG_STOP:
           return {
             ...state,
             isDragging: false,
+            draggableType: '',
           }
     default:
       return state;
   }
 };
 
-function dragStart() {
+function dragStart(draggableType) {
   return {
     type: DRAG_START,
+    draggableType
   }
 };
 
 function dragStop() {
   return {
-    type: DRAG_STOP,
+    type: DRAG_STOP
   }
 };
 

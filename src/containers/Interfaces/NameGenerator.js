@@ -82,7 +82,7 @@ class NameGenerator extends Component {
           Add a person
         </button>
 
-        { this.props.isDragging ? nodeBin : '' }
+        { this.props.isDraggingDeletable ? nodeBin : '' }
       </div>
     )
   }
@@ -92,7 +92,7 @@ function mapStateToProps(state) {
   return {
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
-    isDragging: state.draggable.isDragging,
+    isDraggingDeletable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
   }
 }
 

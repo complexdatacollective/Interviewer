@@ -44,6 +44,7 @@ export default function draggable(WrappedComponent) {
     createPreview = (event, draggableData) => {
       const draggablePreview = new DraggablePreview(ReactDOM.findDOMNode(this).firstChild);
       const coords = getCoords(event, draggableData);
+
       this.setState({
         preview: draggablePreview,
       }, () => {
@@ -63,7 +64,7 @@ export default function draggable(WrappedComponent) {
     }
 
     onStart = (event, draggableData) => {
-      this.props.dragStart();
+      this.props.dragStart(this.props.draggableType);
       this.setState({
         start: {
           x: draggableData.x,
