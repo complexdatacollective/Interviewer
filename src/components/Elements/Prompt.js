@@ -11,7 +11,7 @@ class Prompt extends Component {
 
     return (
       <div className={ isActive ? 'prompts__prompt prompts__prompt--active' : 'prompts__prompt' }>
-        <h3>{ label }</h3>
+        <h1>{ label }</h1>
       </div>
     );
   }
