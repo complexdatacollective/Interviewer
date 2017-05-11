@@ -37,7 +37,7 @@ class Modal extends Component {
 
   render() {
     return (
-      <ModalComponent show={ this.props.isOpen } onClose={ this.toggleModal }>
+      <ModalComponent show={ this.props.isOpen } onClose={ this.toggleModal } title={ this.props.title } >
         { this.props.children }
       </ModalComponent>
     );

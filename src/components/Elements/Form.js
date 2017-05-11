@@ -22,7 +22,6 @@ class Form extends Component {
 
     return (
       <SemanticForm onSubmit={ handleSubmit }>
-        <h4>{ this.props.title }</h4>
         { fields.map((field, index) => {
           return (
             <Field key={ index } name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
