@@ -30,6 +30,7 @@ export default function reducer(state = initialState, action = {}, stageState) {
       }
     case stageActionTypes.NEXT_STAGE:
     case stageActionTypes.PREVIOUS_STAGE:
+    case stageActionTypes.SET_STAGE:
       return {
         ...state,
         index: 0,
