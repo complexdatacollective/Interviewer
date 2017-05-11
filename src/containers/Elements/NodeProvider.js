@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import _, { isMatch } from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
 import { filteredDataSource } from '../../selectors/dataSource';
 
-import { NodeList, SelectableNodeList, DraggableNodeList } from '../../components/Elements';
+import { NodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
@@ -19,7 +19,14 @@ class NodeProvider extends Component {
   }
 
   handleDropNode = (hits, node) => {
-    this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+    hits.map((hit) => {
+      switch (hit.name) {
+        case 'MAIN_NODE_LIST':
+          return this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+        case 'NODE_BIN':
+          return this.props.removeNode(node.uid);
+      }
+    });
   }
 
   render() {
@@ -29,13 +36,21 @@ class NodeProvider extends Component {
       network,
     } = this.props;
 
+    const label = (node) => `${node.nickname}`;
+    const isActive = (node) => isMatch(node, activePromptAttributes);
+
     switch (interaction) {
       case 'selectable':
-        return <SelectableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleSelectNode={ this.handleSelectNode } />;
-      case 'draggable':
-        return <DraggableNodeList network={ network } activeNodeAttributes={ activePromptAttributes } handleDropNode={ this.handleDropNode } />;
+        return (
+          <NodeList network={ network } label={ label }
+            draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode }
+            handleSelectNode={ this.handleSelectNode } isActive={ isActive } />
+        );
       default:
-        return <NodeList network={ network } />;
+        return (
+          <NodeList network={ network } label={ label } draggableType='NEW_NODE'
+            handleDropNode={ this.handleDropNode } />
+        );
     }
   }
 }
@@ -55,6 +70,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   }
 }
 

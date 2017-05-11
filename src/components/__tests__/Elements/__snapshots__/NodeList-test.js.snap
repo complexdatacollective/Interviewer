@@ -6,23 +6,49 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <Connect(Droppable)
-    name="nodelist">
-    <div
-        className="node-list">
-        <Node
-            label="undefined" />
-    </div>
-</Connect(Droppable)>,
+  "node": <Droppable
+    acceptsDraggableType={null}
+    network={
+        Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          }
+    }
+    store={
+        Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          }
+    }
+    updateZone={[Function]} />,
   "nodes": Array [
-    <Connect(Droppable)
-      name="nodelist">
-      <div
-            className="node-list">
-            <Node
-                  label="undefined" />
-      </div>
-</Connect(Droppable)>,
+    <Droppable
+      acceptsDraggableType={null}
+      network={
+            Object {
+                  "nodes": Array [
+                    Object {
+                      "name": "test",
+                    },
+                  ],
+                }
+      }
+      store={
+            Object {
+                  "dispatch": [Function],
+                  "getState": [Function],
+                  "replaceReducer": [Function],
+                  "subscribe": [Function],
+                  Symbol(observable): [Function],
+                }
+      }
+      updateZone={[Function]} />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -30,7 +56,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <NodeList
+      "_currentElement": <Connect(Droppable)
         network={
                 Object {
                         "nodes": Array [
@@ -39,13 +65,51 @@ ShallowWrapper {
                           },
                         ],
                       }
+        }
+        store={
+                Object {
+                        "dispatch": [Function],
+                        "getState": [Function],
+                        "replaceReducer": [Function],
+                        "subscribe": [Function],
+                        Symbol(observable): [Function],
+                      }
         } />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": NodeList {
+      "_instance": Connect {
         "_reactInternalInstance": [Circular],
-        "context": Object {},
+        "context": Object {
+          "store": undefined,
+        },
+        "dispatchProps": Object {
+          "updateZone": [Function],
+        },
+        "doDispatchPropsDependOnOwnProps": false,
+        "doStatePropsDependOnOwnProps": true,
+        "finalMapDispatchToProps": [Function],
+        "finalMapStateToProps": [Function],
+        "hasStoreStateChanged": false,
+        "haveOwnPropsChanged": false,
+        "haveStatePropsBeenPrecalculated": false,
+        "mergedProps": Object {
+          "network": Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          },
+          "store": Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          },
+          "updateZone": [Function],
+        },
         "props": Object {
           "network": Object {
             "nodes": Array [
@@ -54,9 +118,48 @@ ShallowWrapper {
               },
             ],
           },
+          "store": Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          },
         },
         "refs": Object {},
-        "state": null,
+        "renderedElement": <Droppable
+          acceptsDraggableType={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
+        "state": Object {
+          "storeState": undefined,
+        },
+        "stateProps": Object {},
+        "statePropsPrecalculationError": null,
+        "store": Object {
+          "dispatch": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+          Symbol(observable): [Function],
+        },
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -67,6 +170,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
+        "version": 6,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -75,23 +179,49 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <Connect(Droppable)
-          name="nodelist">
-          <div
-                    className="node-list">
-                    <Node
-                              label="undefined" />
-          </div>
-</Connect(Droppable)>,
+        "_currentElement": <Droppable
+          acceptsDraggableType={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
         "_debugID": 2,
-        "_renderedOutput": <Connect(Droppable)
-          name="nodelist">
-          <div
-                    className="node-list">
-                    <Node
-                              label="undefined" />
-          </div>
-</Connect(Droppable)>,
+        "_renderedOutput": <Droppable
+          acceptsDraggableType={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -103,7 +233,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <NodeList
+  "unrendered": <Connect(Droppable)
     network={
         Object {
             "nodes": Array [
@@ -111,6 +241,15 @@ ShallowWrapper {
                 "name": "test",
               },
             ],
+          }
+    }
+    store={
+        Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
           }
     } />,
 }

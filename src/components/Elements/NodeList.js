@@ -1,26 +1,41 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Node } from '../Elements';
-import Droppable from '../../containers/Elements/Droppable';
+import { scrollable, droppable, draggable, selectable } from '../../behaviors';
 
-class NodeList extends Component {
-  render() {
-    const {
-      network: {
-        nodes
-      }
-    } = this.props;
+const EnhancedNode = draggable(selectable(Node));
 
-    return (
-      <Droppable name="nodelist">
-        <div className='node-list'>
-          { nodes.map((node, index) => {
-            const label = `${node.nickname}`;
-            return <Node key={ index } label={ label } />;
-          }) }
-        </div>
-      </Droppable>
-    );
-  }
+const NodeList = (props) => {
+  const {
+    network,
+    label,
+    isActive,
+    activeNodeAttributes,
+    handleSelectNode,
+    handleDropNode,
+    draggableType,
+  } = props;
+
+  return (
+    <div className='node-list'>
+      { network.nodes.map((node, index) => {
+        return (
+          <EnhancedNode key={ index } label={ label(node) }
+            isActive={ isActive(node) }
+            activeNodeAttributes={ activeNodeAttributes }
+            onSelected={ () => handleSelectNode(node) }
+            onDropped={ (hits) => handleDropNode(hits, node) }
+            draggableType={ draggableType } { ...node } />
+        );
+      }) }
+    </div>
+  );
 }
 
-export default NodeList;
+NodeList.defaultProps = {
+  isActive: () => {},
+  handleSelectNode: () => {},
+  handleDropNode: () => {},
+  draggableType: '',
+};
+
+export default droppable(scrollable(NodeList));
