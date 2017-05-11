@@ -29,5 +29,6 @@
         "react/jsx-uses-vars": "warn",
         "keyword-spacing": "warn",
         "object-curly-spacing": ["warn", "always"],
+        "react/jsx-filename-extension": "warn",
     }
 }
