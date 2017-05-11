@@ -63,8 +63,21 @@ export default function draggable(WrappedComponent) {
       });
     }
 
-    onStart = (event, draggableData) => {
+    startDrag = (event, draggableData) => {
+      this.createPreview(event, draggableData)
       this.props.dragStart(this.props.draggableType);
+    }
+
+    updateDrag = (event, draggableData) => {
+      this.state.preview.position(getCoords(event, draggableData));
+    }
+
+    endDrag = () => {
+      this.destroyPreview();
+      this.props.dragStop();
+    }
+
+    onStart = (event, draggableData) => {
       this.setState({
         start: {
           x: draggableData.x,
@@ -74,20 +87,18 @@ export default function draggable(WrappedComponent) {
     }
 
     onDrag = (event, draggableData) => {
-      if (!this.state.preview) {
+      if (!this.state.preview) {  // TODO: better way to keep track of drag start?
         if (moveDistance(this.state.start, draggableData) > 4) {
-          this.createPreview(event, draggableData)
+          this.startDrag(event, draggableData);
         }
         return;
       }
 
-      this.state.preview.position(getCoords(event, draggableData));
+      this.updateDrag(event, draggableData);
     }
 
     onStop = (event, draggableData) => {
-      this.destroyPreview();
-
-      this.props.dragStop();
+      this.endDrag();
 
       this.setState({
         preview: null,
