@@ -9,7 +9,7 @@ import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 
 function getCoords(event) {
   if (event instanceof TouchEvent) {
-    const touch = event.touches.item(0);
+    const touch = event.changedTouches.item(0);
     return {
       x: touch.clientX,
       y: touch.clientY,
