@@ -41,9 +41,16 @@ class NodeProvider extends Component {
 
     switch (interaction) {
       case 'selectable':
-        return <NodeList network={ network } label={ label } draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode } handleSelectNode={ this.handleSelectNode } isActive={ isActive } />;
+        return (
+          <NodeList network={ network } label={ label }
+            draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode }
+            handleSelectNode={ this.handleSelectNode } isActive={ isActive } />
+        );
       default:
-        return <NodeList network={ network } label={ label } draggableType='NEW_NODE' handleDropNode={ this.handleDropNode } />;
+        return (
+          <NodeList network={ network } label={ label } draggableType='NEW_NODE'
+            handleDropNode={ this.handleDropNode } />
+        );
     }
   }
 }

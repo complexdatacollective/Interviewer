@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import droppable from '../../behaviors/droppable';
 
-class DropZone extends Component {
-  render() {
-    return (
-      <div className='drop-zone' ></div>
-    );
-  }
-}
+const DropZone = () => <div className='drop-zone' ></div>;
 
 export default droppable(DropZone);
