@@ -10,7 +10,6 @@ const NodeList = (props) => {
     network,
     label,
     isActive,
-    activeNodeAttributes,
     handleSelectNode,
     handleDropNode,
     draggableType,

@@ -55,7 +55,9 @@
     "eslint-config-react-app": "^0.6.2",
     "eslint-loader": "1.6.0",
     "eslint-plugin-flowtype": "2.21.0",
+    "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
+    "eslint-plugin-react": "^7.0.0",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.10.0",
     "fs-extra": "0.30.0",
@@ -78,7 +80,6 @@
     "whatwg-fetch": "2.0.2"
   },
   "dependencies": {
-    "semantic-ui-react": "^0.67.2",
     "@mars/heroku-js-runtime-env": "^3.0.0",
     "classnames": "^2.2.5",
     "gridle": "^2.0.48",
@@ -101,7 +102,8 @@
     "redux-persist": "^4.3.1",
     "redux-thunk": "^2.1.0",
     "reselect": "^3.0.0",
-    "sass-svg": "^1.0.1"
+    "sass-svg": "^1.0.1",
+    "semantic-ui-react": "^0.67.2"
   },
   "homepage": ".",
   "main": "src/electron-starter.js",

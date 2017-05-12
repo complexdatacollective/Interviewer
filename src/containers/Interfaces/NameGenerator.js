@@ -89,7 +89,7 @@ class NameGenerator extends Component {
           Add a person
         </button>
 
-        {this.props.isDraggableDeletable ? nodeBin : ''}
+        {this.props.isDraggableDeleteable ? nodeBin : ''}
       </div>
     );
   }
