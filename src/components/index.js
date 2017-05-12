@@ -1,5 +1,3 @@
-import Menu from './Menu';
+/* eslint-disable import/prefer-default-export */
 
-export default {
-  Menu,
-};
+export { default as Menu } from './Menu';
