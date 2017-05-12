@@ -70,7 +70,6 @@
     "promise": "7.1.1",
     "react-addons-test-utils": "^15.5.1",
     "react-dev-utils": "^0.5.2",
-    "semantic-ui-react": "^0.67.2",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
@@ -79,6 +78,7 @@
     "whatwg-fetch": "2.0.2"
   },
   "dependencies": {
+    "semantic-ui-react": "^0.67.2",
     "@mars/heroku-js-runtime-env": "^3.0.0",
     "classnames": "^2.2.5",
     "gridle": "^2.0.48",

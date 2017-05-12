@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { required } from '../../utils/Validations';
