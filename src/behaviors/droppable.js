@@ -1,4 +1,7 @@
+/* eslint-disable react/no-find-dom-node */
+
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -30,7 +33,9 @@ export default function droppable(WrappedComponent) {
     updateZone = () => {
       if (!this.props.droppableName) { return; }
 
-      const boundingClientRect = getAbsoluteBoundingRect(this.node);
+      const node = ReactDOM.findDOMNode(this);
+
+      const boundingClientRect = getAbsoluteBoundingRect(node);
 
       this.props.updateZone({
         name: this.props.droppableName,
@@ -44,9 +49,10 @@ export default function droppable(WrappedComponent) {
 
     render() {
       return (
-        <div ref={(node) => { this.node = node; }}>
-          <WrappedComponent {...this.props} />
-        </div>
+        <WrappedComponent
+          ref={(node) => { this.node = node; }}
+          {...this.props}
+        />
       );
     }
   }
