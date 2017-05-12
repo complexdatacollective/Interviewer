@@ -20,6 +20,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         count: action.protocol.stages.length,
+        index: action.stageIndex
       }
     case REHYDRATE:
       if (!action.payload.protocol) { return { ...state }; }

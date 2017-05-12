@@ -12,7 +12,7 @@ class Protocol extends Component {
 
   componentWillMount() {
     if (!this.props.protocol.protocolLoaded) {
-      this.props.loadProtocol();
+      this.props.loadProtocol(this.props.stageId);
     }
   }
 

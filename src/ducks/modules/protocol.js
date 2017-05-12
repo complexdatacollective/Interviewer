@@ -41,10 +41,13 @@ function requestProtocol() {
   return { type: REQUEST_PROTOCOL }
 }
 
-function setProtocol(protocol) {
+function setProtocol(protocol, stageId) {
+  let stageIndex = protocol.stages.findIndex((stage) => stage.id === stageId);
+  if (stageIndex < 0) stageIndex = 0;
   return {
     type: SET_PROTOCOL,
-    protocol
+    protocol,
+    stageIndex
   }
 }
 
@@ -54,10 +57,10 @@ function unsetProtocol() {
   }
 }
 
-function loadProtocol() {
+function loadProtocol(stageId) {
   return dispatch => {
     dispatch(requestProtocol());
-    dispatch(setProtocol(protocolService.getSampleProtocol()))
+    dispatch(setProtocol(protocolService.getSampleProtocol(), stageId))
   }
 }
 
