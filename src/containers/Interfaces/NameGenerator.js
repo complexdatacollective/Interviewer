@@ -103,7 +103,7 @@ NameGenerator.propTypes = {
   closeModal: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.any.isRequired,
   activeOriginNetwork: PropTypes.any.isRequired,
-  isDraggableDeletable: PropTypes.bool.isRequired,
+  isDraggableDeleteable: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

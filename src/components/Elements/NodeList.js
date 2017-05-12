@@ -23,7 +23,6 @@ const NodeList = (props) => {
           <EnhancedNode
             key={index} label={label(node)}
             isActive={isActive(node)}
-            activeNodeAttributes={activeNodeAttributes}
             onSelected={() => handleSelectNode(node)}
             onDropped={hits => handleDropNode(hits, node)}
             draggableType={draggableType}
@@ -37,7 +36,6 @@ const NodeList = (props) => {
 
 NodeList.propTypes = {
   network: PropTypes.any.isRequired,
-  activeNodeAttributes: PropTypes.any.isRequired,
   handleSelectNode: PropTypes.func,
   handleDropNode: PropTypes.func,
   label: PropTypes.func,
