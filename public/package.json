@@ -1,5 +1,6 @@
 {
   "name": "network-canvas",
+  "author": "Codaco",
   "version": "4.0.0",
   "productName": "Network Canvas",
   "description": "A touch-optimised framework for capturing personal network data.",
@@ -8,7 +9,10 @@
     "node": "6.9.1",
     "npm": "3.10.7"
   },
-   "updater": {
+  "dependencies": {
+    "electron-simple-updater": "^1.2.0"
+    },
+  "updater": {
     "url": "https://raw.githubusercontent.com/codaco/network-canvas/feature/app-auto-updater/public/updates.json"
   },
   "homepage": ".",
