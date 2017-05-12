@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Validates protocol data.
  *

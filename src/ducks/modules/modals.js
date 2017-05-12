@@ -9,7 +9,10 @@ const initialState = [];
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case REGISTER_MODAL:
-      return [ ...state.filter(modal => modal.name !== action.name), { name: action.name, open: false }];
+      return [
+        ...state.filter(modal => modal.name !== action.name),
+        { name: action.name, open: false },
+      ];
     case UNREGISTER_MODAL:
       return state.filter(modal => modal.name !== action.name);
     case TOGGLE_MODAL:
@@ -39,41 +42,41 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
-};
+}
 
 function toggleModal(name) {
   return {
     type: TOGGLE_MODAL,
-    name
-  }
+    name,
+  };
 }
 
 function openModal(name) {
   return {
     type: OPEN_MODAL,
-    name
-  }
+    name,
+  };
 }
 
 function closeModal(name) {
   return {
     type: CLOSE_MODAL,
-    name
-  }
+    name,
+  };
 }
 
 function registerModal(name) {
   return {
     type: REGISTER_MODAL,
-    name
-  }
+    name,
+  };
 }
 
 function unregisterModal(name) {
   return {
     type: UNREGISTER_MODAL,
-    name
-  }
+    name,
+  };
 }
 
 const actionCreators = {
@@ -94,5 +97,5 @@ const actionTypes = {
 
 export {
   actionCreators,
-  actionTypes
+  actionTypes,
 };
