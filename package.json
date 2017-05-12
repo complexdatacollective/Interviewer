@@ -18,16 +18,19 @@
     "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron ./app",
-    "dist": "build -mwl",
+    "build-mac": "build -m",
     "generate-icons": "node generate-app-icons.js",
     "package-cordova": "cordova build ios && cordova build android"
   },
   "author": "Codaco",
   "build": {
     "appId": "Complex Data Collective",
+    "directories": {
+      "output": "release-builds"
+    },
     "mac": {
       "category": "public.app-category.developer-tools"
-    }
+    },
   },
   "repository": {
     "type": "git"
