@@ -43,7 +43,11 @@ export default function droppable(WrappedComponent) {
     }
 
     render() {
-      return <WrappedComponent {...this.props} ref={(node) => { this.node = node; }} />;
+      return (
+        <div ref={(node) => { this.node = node; }}>
+          <WrappedComponent {...this.props} />
+        </div>
+      );
     }
   }
 
