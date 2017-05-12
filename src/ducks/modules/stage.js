@@ -1,8 +1,6 @@
 import { REHYDRATE } from 'redux-persist/constants'
 import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
 
-const NEXT_STAGE = 'NEXT_STAGE';
-const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
 const SET_STAGE = 'SET_STAGE';
 
 const initialState = {
@@ -10,8 +8,10 @@ const initialState = {
   count: 0,
 };
 
-const rotateIndex = (max, next) => {
-  return (next + max) % max;
+const getStageIndex = (stages, stageId) => {
+  let stageIndex = stages.findIndex((stage) => stage.id === stageId);
+  if (stageIndex < 0) stageIndex = 0;
+  return stageIndex;
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -20,7 +20,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         count: action.protocol.stages.length,
-        index: action.stageIndex
+        index: getStageIndex(action.protocol.stages, action.stageId)
       }
     case REHYDRATE:
       if (!action.payload.protocol) { return { ...state }; }
@@ -29,54 +29,29 @@ export default function reducer(state = initialState, action = {}) {
         ...initialState,
         count: protocol.stages.length,
       }
-    case NEXT_STAGE:
-      return {
-        ...state,
-        index: rotateIndex(state.count, state.index + 1)
-      }
-    case PREVIOUS_STAGE:
-      return {
-        ...state,
-        index: rotateIndex(state.count, state.index - 1)
-      }
     case SET_STAGE:
       return {
         ...state,
-        index: action.index
+        index: getStageIndex(action.stages, action.id)
       }
     default:
       return state;
   }
 };
 
-function next() {
-  return {
-    type: NEXT_STAGE
-  }
-}
-
-function previous() {
-  return {
-    type: PREVIOUS_STAGE
-  }
-}
-
-function setStage(index) {
+function setStage(stages, id) {
   return {
     type: 'SET_STAGE',
-    index
+    stages,
+    id
   }
 }
 
 const actionCreators = {
-  next,
-  previous,
   setStage,
 };
 
 const actionTypes = {
-  NEXT_STAGE,
-  PREVIOUS_STAGE,
   SET_STAGE,
 };
 

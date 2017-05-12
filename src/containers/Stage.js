@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { getStages } from '../selectors/session';
 
 import { NameGenerator } from './Interfaces';
 
@@ -12,61 +14,62 @@ import { NameGenerator } from './Interfaces';
 class Stage extends Component {
   constructor(props) {
     super(props);
-
-    this.handleNext = this.handleNext.bind(this);
-    this.handlePrevious = this.handlePrevious.bind(this);
-  }
-
-  handleNext() {
-    this.props.next();
-  }
-
-  handlePrevious() {
-    this.props.previous();
   }
 
   render() {
     // TODO: Load dynamically based on protocol using some kind of service?
     const CurrentInterface = NameGenerator;
 
-    const {
-      handleNext,
-      handlePrevious,
-      props: {
-        stage
-      }
-    } = this;
-
     return (
       <div className="stage">
         <div className="stage__control">
-          <button className="stage__control-button stage__control-button--back" onClick={handlePrevious}>Back</button>
+          <Link
+            to={'/protocol/' + this.props.prevLink}
+            className="stage__control-button stage__control-button--back"
+            onClick={() => this.props.onStageClick(this.props.stages, this.props.prevLink)}
+          >
+            Back
+          </Link>
         </div>
         <div className="stage__interface">
-          <CurrentInterface config={ stage }/>
+          <CurrentInterface config={ this.props.stage }/>
         </div>
         <div className="stage__control">
-          <button className="stage__control-button stage__control-button--next" onClick={handleNext}>Next</button>
+          <Link
+            to={'/protocol/' + this.props.nextLink}
+            className="stage__control-button stage__control-button--next"
+            onClick={() => this.props.onStageClick(this.props.stages, this.props.nextLink)}
+          >
+            Next
+          </Link>
         </div>
       </div>
     );
   }
 }
 
+const rotateIndex = (max, next) => {
+  return (next + max) % max;
+}
+
 function mapStateToProps(state, ownProps) {
-  // TODO: http://redux.js.org/docs/recipes/ComputingDerivedData.html
-  const stage = state.protocol.protocolConfig.stages.find(stage => stage.id === ownProps.id)
-    || state.protocol.protocolConfig.stages[state.session.stage.index];
+  const stages = getStages(state);
+  const stage = stages.find(stage => stage.id === ownProps.id) || stages[0];
+  const stageIndex = stages.indexOf(stage);
+  const prevLink = stages[rotateIndex(stages.length, stageIndex - 1)].id;
+  const nextLink = stages[rotateIndex(stages.length, stageIndex + 1)].id;
 
   return {
-    stage
+    stages,
+    stage,
+    prevLink,
+    nextLink
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    next: bindActionCreators(stageActions.next, dispatch),
-    previous: bindActionCreators(stageActions.previous, dispatch),
+    onStageClick: bindActionCreators(stageActions.setStage, dispatch),
   }
 }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { getStages } from '../selectors/session';
 import { Menu } from '../components';
 
 class StageMenu extends Component {
@@ -20,7 +21,8 @@ class StageMenu extends Component {
   onInputChange(event) {
     this.setState({
       searchTerm: event.target.value,
-      matchingStages: this.props.stages.filter((stage) => stage.title.toLowerCase().includes(event.target.value.toLowerCase()))
+      matchingStages: this.props.stages.filter(
+        (stage) => stage.title.toLowerCase().includes(event.target.value.toLowerCase()))
     });
   }
 
@@ -30,14 +32,14 @@ class StageMenu extends Component {
       stages = this.state.matchingStages;
     }
 
-    const items = stages.map((stage, index) =>
+    const items = stages.map((stage) =>
       {
         return {
           to: '/protocol/'+stage.id,
           id: stage.id,
           title: stage.title,
           imageType: stage.type,
-          onClick: () => this.props.onStageClick(index)
+          onClick: () => this.props.onStageClick(this.props.stages, stage.id)
         };
       }
     );
@@ -56,7 +58,7 @@ class StageMenu extends Component {
 }
 
 function mapStateToProps(state) {
-  const stages = state.protocol.protocolConfig.stages;
+  const stages = getStages(state);
 
   return {
     stages

@@ -42,12 +42,10 @@ function requestProtocol() {
 }
 
 function setProtocol(protocol, stageId) {
-  let stageIndex = protocol.stages.findIndex((stage) => stage.id === stageId);
-  if (stageIndex < 0) stageIndex = 0;
   return {
     type: SET_PROTOCOL,
     protocol,
-    stageIndex
+    stageId
   }
 }
 

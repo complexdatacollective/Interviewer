@@ -16,6 +16,11 @@ const prompt = createSelector(
   (promptIndex, stage) =>  stage.params.prompts[promptIndex]
 )
 
+export const getStages = createSelector(
+  protocol,
+  (protocol) => protocol.stages
+)
+
 export const activePromptAttributes = createSelector(
   prompt,
   (prompt) => prompt.nodeAttributes
