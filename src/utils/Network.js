@@ -5,26 +5,25 @@ const nodeIncludesAttributes = (network, attributes) => {
 
   return {
     ...network,  // TODO: filter edge etc.
-    nodes
-  }
-}
+    nodes,
+  };
+};
 
 const difference = (source, target) => {
   const nodes = differenceBy(source.nodes, target.nodes, 'uid');
 
   return {
     ...source,  // TODO: filter edge etc.
-    nodes
-  }
-}
+    nodes,
+  };
+};
 
-const join = (networkA, networkB) => {
-  return {
-    ...networkA,  // TODO: combine edge etc.
-    edges: [ ...networkA.edges, ...networkB.edges ],
-    nodes: [ ...networkA.nodes, ...networkB.nodes ],
-  }
-}
+// TODO: combine edge etc.
+const join = (networkA, networkB) => ({
+  ...networkA,
+  edges: [...networkA.edges, ...networkB.edges],
+  nodes: [...networkA.nodes, ...networkB.nodes],
+});
 
 export {
   nodeIncludesAttributes,
