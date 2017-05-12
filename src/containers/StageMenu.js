@@ -36,6 +36,7 @@ class StageMenu extends Component {
           to: '/protocol/'+stage.id,
           id: stage.id,
           title: stage.title,
+          imageType: stage.type,
           onClick: () => this.props.onStageClick(index)
         };
       }

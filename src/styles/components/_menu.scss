@@ -57,7 +57,8 @@
 .bm-item-list {
 
   a {
-    display: block;
+    align-items: center;
+    display: flex;
     padding:$padding-base-vertical $spacer-4;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -68,6 +69,11 @@
     border-top: 1px solid $divider;
     &.bm-item-active {
       background: $light-sea-green;
+    }
+    img {
+      height: 2rem;
+      padding-right: .5rem;
+      width: 2rem;
     }
     &:hover {
       background: #00ba96;

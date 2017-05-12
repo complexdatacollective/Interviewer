@@ -79,7 +79,12 @@ class MenuFactory extends Component {
 
   render() {
     let items = this.props.items.map((item) =>
-      <MenuItem key={item.id} to={item.to} onClick={() => this.menuItemClick(item.onClick)} title={item.title} />
+      <MenuItem
+        key={item.id}
+        to={item.to}
+        onClick={() => this.menuItemClick(item.onClick)}
+        title={item.title}
+        imageType={item.imageType}/>
       );
 
     return (
