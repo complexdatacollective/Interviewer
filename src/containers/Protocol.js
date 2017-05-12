@@ -27,7 +27,7 @@ class Protocol extends Component {
 }
 
 Protocol.propTypes = {
-  protocolLoaded: PropTypes.boolean.isRequired,
+  protocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
 };
 

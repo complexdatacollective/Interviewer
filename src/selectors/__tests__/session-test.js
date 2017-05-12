@@ -3,7 +3,6 @@
 import { activePromptAttributes, activeStageAttributes, activeOriginAttributes, newNodeAttributes } from '../session';
 
 describe('session selectors', () => {
-
   const prompt = {
     id: 'baz',
     nodeAttributes: {
@@ -31,8 +30,8 @@ describe('session selectors', () => {
   };
 
   const state = {
-    protocol: protocol,
-    session: session,
+    protocol,
+    session,
   };
 
   it('activePromptAttributes returns the active prompt attributes from state', () => {
@@ -62,5 +61,4 @@ describe('session selectors', () => {
       promptId: 'baz',
     });
   });
-
 });

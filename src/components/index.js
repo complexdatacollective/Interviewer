@@ -1,2 +1,5 @@
-// Chrome components
-export { default as Menu } from './Menu';
+import Menu from './Menu';
+
+export default {
+  Menu,
+};

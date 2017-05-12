@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _, { isMatch } from 'lodash';
+import PropTypes from 'prop-types';
+import { isMatch, omit } from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
@@ -11,20 +12,25 @@ import { NodeList } from '../../components/Elements';
 
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
-    if (_.isMatch(node, this.props.activePromptAttributes)) {
-      this.props.updateNode(_.omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)));
+    if (isMatch(node, this.props.activePromptAttributes)) {
+      this.props.updateNode(
+        omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)),
+      );
     } else {
       this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
     }
   }
 
   handleDropNode = (hits, node) => {
-    hits.map((hit) => {
+    hits.forEach((hit) => {
       switch (hit.name) {
         case 'MAIN_NODE_LIST':
-          return this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+          this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+          break;
         case 'NODE_BIN':
-          return this.props.removeNode(node.uid);
+          this.props.removeNode(node.uid);
+          break;
+        default:
       }
     });
   }
@@ -32,38 +38,51 @@ class NodeProvider extends Component {
   render() {
     const {
       interaction,
-      activePromptAttributes,
       network,
     } = this.props;
 
-    const label = (node) => `${node.nickname}`;
-    const isActive = (node) => isMatch(node, activePromptAttributes);
+    const label = node => `${node.nickname}`;
+    const isActive = node => isMatch(node, this.props.activePromptAttributes);
 
     switch (interaction) {
       case 'selectable':
         return (
-          <NodeList network={ network } label={ label }
-            draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode }
-            handleSelectNode={ this.handleSelectNode } isActive={ isActive } />
+          <NodeList
+            network={network} label={label}
+            draggableType="EXISTING_NODE" handleDropNode={this.handleDropNode}
+            handleSelectNode={this.handleSelectNode} isActive={isActive}
+          />
         );
       default:
         return (
-          <NodeList network={ network } label={ label } draggableType='NEW_NODE'
-            handleDropNode={ this.handleDropNode } />
+          <NodeList
+            network={network} label={label} draggableType="NEW_NODE"
+            handleDropNode={this.handleDropNode}
+          />
         );
     }
   }
 }
 
+NodeProvider.propTypes = {
+  activePromptAttributes: PropTypes.object.isRequired,
+  newNodeAttributes: PropTypes.object.isRequired,
+  network: PropTypes.object.isRequired,
+  interaction: PropTypes.string.isRequired,
+  addNode: PropTypes.func.isRequired,
+  removeNode: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
+};
+
 function mapStateToProps(state, ownProps) {
-  const interaction = ownProps.selectable && 'selectable' || ownProps.draggable && 'draggable' || 'none';
+  const interaction = (ownProps.selectable && 'selectable') || (ownProps.draggable && 'draggable') || 'none';
 
   return {
     network: filteredDataSource(state, ownProps),
     interaction,
     newNodeAttributes: newNodeAttributes(state),
     activePromptAttributes: activePromptAttributes(state),
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -71,7 +90,7 @@ function mapDispatchToProps(dispatch) {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NodeProvider);

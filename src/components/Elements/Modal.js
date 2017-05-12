@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,7 +8,7 @@ class Modal extends Component {
     const {
       show,
       children,
-      onClose
+      onClose,
     } = this.props;
 
     if (!show) {
@@ -15,11 +16,11 @@ class Modal extends Component {
     }
 
     return (
-      <div className="modal" onClick={ onClose }>
-        <div className="modal__window" onClick={ (e) => e.stopPropagation() }>
-          { children }
+      <div className="modal" onClick={onClose}>
+        <div className="modal__window" onClick={e => e.stopPropagation()}>
+          {children}
 
-          <button onClick={ onClose }>
+          <button onClick={onClose}>
             Cancel
           </button>
         </div>
@@ -31,7 +32,12 @@ class Modal extends Component {
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   show: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.any,
+};
+
+Modal.defaultProps = {
+  show: false,
+  children: null,
 };
 
 export default Modal;

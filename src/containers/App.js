@@ -28,8 +28,12 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   route: PropTypes.any.isRequired,
+};
+
+App.defaultProps = {
+  children: null,
 };
 
 export default App;

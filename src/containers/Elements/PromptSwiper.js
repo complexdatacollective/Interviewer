@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
-
+import PropTypes from 'prop-types';
 import { actionCreators as promptActions } from '../../ducks/modules/prompt';
-
 import { Prompt, Pips } from '../../components/Elements';
 
 class PromptSwiper extends Component {
@@ -25,6 +24,7 @@ class PromptSwiper extends Component {
       case 4:
         this.props.previous();
         break;
+      default:
     }
   }
 
@@ -35,20 +35,22 @@ class PromptSwiper extends Component {
   render() {
     const {
       promptIndex,
-      prompts
+      prompts,
     } = this.props;
 
+    const promptsRender = prompts.map((prompt, index) =>
+      <Prompt key={index} label={prompt.title} isActive={promptIndex === index} />,
+    );
+
     return (
-      <Touch onTap={ this.handleTap } onSwipe={ this.handleSwipe } >
-        <div className='prompts'>
-          <div className='prompts__pips'>
-            <Pips count={ prompts.length } currentIndex={ promptIndex } />
+      <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
+        <div className="prompts">
+          <div className="prompts__pips">
+            <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
 
-          <div className='prompts__prompts'>
-            { prompts.map((prompt, index) => {
-              return <Prompt key={ index } label={ prompt.title } isActive={ promptIndex == index } />;
-            }) }
+          <div className="prompts__prompts">
+            {promptsRender}
           </div>
         </div>
       </Touch>
@@ -56,17 +58,24 @@ class PromptSwiper extends Component {
   }
 }
 
+PromptSwiper.propTypes = {
+  next: PropTypes.func.isRequired,
+  previous: PropTypes.func.isRequired,
+  prompts: PropTypes.any.isRequired,
+  promptIndex: PropTypes.number.isRequired,
+};
+
 function mapStateToProps(state) {
   return {
     promptIndex: state.session.prompt.index,
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     next: bindActionCreators(promptActions.next, dispatch),
     previous: bindActionCreators(promptActions.previous, dispatch),
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PromptSwiper);

@@ -1,1 +1,5 @@
-export { default as NameGenerator } from './NameGenerator';
+import NameGenerator from './NameGenerator';
+
+export default {
+  NameGenerator,
+};
