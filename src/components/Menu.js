@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import { MenuItem } from './Elements';
 
+/**
+  * Renders a menu, updating styles on DOM elements outside of this.
+  */
 class MenuFactory extends Component {
   constructor(props) {
     super(props);

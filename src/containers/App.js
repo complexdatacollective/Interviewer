@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StageMenu } from '.';
 require('../styles/main.scss');
 
+/**
+  * Main app container.
+  */
 export default class App extends Component {
   render() {
     let children = null;

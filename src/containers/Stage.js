@@ -9,7 +9,7 @@ import { getStages } from '../selectors/session';
 import { NameGenerator } from './Interfaces';
 
 /**
-  * Render a protocol interface based on protocol info and index
+  * Render a protocol interface based on protocol info and id
   */
 class Stage extends Component {
   constructor(props) {

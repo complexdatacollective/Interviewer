@@ -6,6 +6,9 @@ import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { getStages } from '../selectors/session';
 import { Menu } from '../components';
 
+/**
+  * Renders a Menu using stages to construct items in the menu
+  */
 class StageMenu extends Component {
   constructor(props) {
     super(props);
