@@ -20,8 +20,9 @@ describe('session reducer', () => {
       reducer([], {
         type: protocolActionTypes.SET_PROTOCOL,
         protocol: {
-          stages: Array(3),
-        }
+          stages: [{id: "a"}, {id: "b"}, {id: "c"}],
+        },
+        stageId: ""
       })
     ).toEqual(
       {
@@ -29,15 +30,14 @@ describe('session reducer', () => {
         count: 3,
       }
     )
-  });
 
-  it('should handle NEXT_STAGE', () => {
     expect(
-      reducer({
-        index: 0,
-        count: 3,
-      }, {
-        type: actionTypes.NEXT_STAGE
+      reducer([], {
+        type: protocolActionTypes.SET_PROTOCOL,
+        protocol: {
+          stages: [{id: "a"}, {id: "b"}, {id: "c"}],
+        },
+        stageId: "b"
       })
     ).toEqual(
       {
@@ -45,13 +45,17 @@ describe('session reducer', () => {
         count: 3,
       }
     )
+  });
 
+  it('should handle SET_STAGE', () => {
     expect(
       reducer({
-        index: 2,
+        index: 0,
         count: 3,
       }, {
-        type: actionTypes.NEXT_STAGE
+        type: actionTypes.SET_STAGE,
+        stages: [{id: "a"}, {id: "b"}, {id: "c"}],
+        id: "d"
       })
     ).toEqual(
       {
@@ -59,29 +63,15 @@ describe('session reducer', () => {
         count: 3,
       }
     )
-  });
 
-  it('should handle PREVIOUS_STAGE', () => {
     expect(
       reducer({
-        index: 2,
-        count: 3,
-      }, {
-        type: actionTypes.PREVIOUS_STAGE
-      })
-    ).toEqual(
-      {
         index: 1,
         count: 3,
-      }
-    )
-
-    expect(
-      reducer({
-        index: 0,
-        count: 3,
       }, {
-        type: actionTypes.PREVIOUS_STAGE
+        type: actionTypes.SET_STAGE,
+        stages: [{id: "a"}, {id: "b"}, {id: "c"}],
+        id: "c"
       })
     ).toEqual(
       {
@@ -90,24 +80,14 @@ describe('session reducer', () => {
       }
     )
   });
-
-
-});
+})
 
 describe('session actions', () => {
-  it('should create a next stage action', () => {
+  it('should create a set stage action', () => {
     const expectedAction = {
-      type: actionTypes.NEXT_STAGE
+      type: actionTypes.SET_STAGE
     }
 
-    expect(actionCreators.next()).toEqual(expectedAction)
-  })
-
-  it('should create a previous stage action', () => {
-    const expectedAction = {
-      type: actionTypes.PREVIOUS_STAGE
-    }
-
-    expect(actionCreators.previous()).toEqual(expectedAction)
-  })
+    expect(actionCreators.setStage()).toEqual(expectedAction)
+  });
 })
