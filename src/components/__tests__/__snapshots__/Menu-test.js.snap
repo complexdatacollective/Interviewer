@@ -1,0 +1,52 @@
+exports[`Menu component renders menu with list 1`] = `
+<div>
+  <div
+    className="bm-overlay"
+    onClick={[Function]} />
+  <div
+    className="bm-menu-wrap"
+    id={undefined}>
+    <div
+      className="bm-menu">
+      <div
+        className="cross-icon">
+        <button
+          className="ui large button"
+          onClick={[Function]}>
+          <i
+            className="download icon" />
+          Cross
+        </button>
+      </div>
+      <header>
+        <h1
+          className="bm-menu-title">
+          Stages
+        </h1>
+      </header>
+      <nav
+        className="bm-item-list">
+        <a
+          onClick={[Function]}
+          style={Object {}} />
+        <a
+          onClick={[Function]}
+          style={Object {}} />
+        <a
+          onClick={[Function]}
+          style={Object {}} />
+      </nav>
+    </div>
+  </div>
+  <div
+    className="burger-icon">
+    <button
+      className="ui large button"
+      onClick={[Function]}>
+      <i
+        className="download icon" />
+      Burger
+    </button>
+  </div>
+</div>
+`;
