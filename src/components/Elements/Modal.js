@@ -3,12 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Modal = (props) => {
-
   const {
     show,
     children,
     title,
-    onClose
+    onClose,
   } = props;
 
   if (!show) {
@@ -16,17 +15,17 @@ const Modal = (props) => {
   }
 
   return (
-    <div className="modal" onClick={ onClose }>
-      <div className="modal__window" onClick={ (e) => e.stopPropagation() }>
+    <div className="modal" onClick={onClose}>
+      <div className="modal__window" onClick={e => e.stopPropagation()}>
         <div className="modal__layout">
           <div className="modal__layout-title">
-            <h1>{ title }</h1>
+            <h1>{title}</h1>
           </div>
           <div className="modal__layout-content">
-            { children }
+            {children}
           </div>
         </div>
-        <button className="modal__close" onClick={ onClose }>
+        <button className="modal__close" onClick={onClose}>
           Cancel
         </button>
       </div>
@@ -36,6 +35,7 @@ const Modal = (props) => {
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
   show: PropTypes.bool,
   children: PropTypes.any,
 };

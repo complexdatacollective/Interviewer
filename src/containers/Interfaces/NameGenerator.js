@@ -82,8 +82,8 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        <Modal name={ MODAL_NEW_NODE } title={ form.title } >
-          <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
+        <Modal name={MODAL_NEW_NODE} title={form.title} >
+          <Form {...form} form={form.formName} onSubmit={this.handleAddNode} />
         </Modal>
 
         <button className="name-generator__add-person" onClick={() => openModal(MODAL_NEW_NODE)}>

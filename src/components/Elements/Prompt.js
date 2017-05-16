@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 const Prompt = (props) => {
   const {
     label,
-    isActive
+    isActive,
   } = props;
 
   return (
-    <div className={ isActive ? 'prompts__prompt prompts__prompt--active' : 'prompts__prompt' }>
-      <h1>{ label }</h1>
+    <div className={isActive ? 'prompts__prompt prompts__prompt--active' : 'prompts__prompt'}>
+      <h1>{label}</h1>
     </div>
   );
-}
+};
 
 Prompt.propTypes = {
   label: PropTypes.string,

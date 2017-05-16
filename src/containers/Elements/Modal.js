@@ -37,8 +37,8 @@ class Modal extends Component {
 
   render() {
     return (
-      <ModalComponent show={ this.props.isOpen } onClose={ this.toggleModal } title={ this.props.title } >
-        { this.props.children }
+      <ModalComponent show={this.props.isOpen} onClose={this.toggleModal} title={this.props.title} >
+        {this.props.children}
       </ModalComponent>
     );
   }
@@ -49,6 +49,7 @@ Modal.propTypes = {
   unregisterModal: PropTypes.func.isRequired,
   toggleModal: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   isOpen: PropTypes.bool,
   children: PropTypes.any,
 };
