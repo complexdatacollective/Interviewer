@@ -17,7 +17,8 @@ describe('NodeList component', () => {
   it('renders ok', () => {
     const component = shallow((
       <NodeList
-        network={network} store={createStore(() => {})}
+        network={network}
+        store={createStore(() => {})}
       />
     ));
 

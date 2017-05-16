@@ -20,7 +20,8 @@ const NodeList = (props) => {
       {
         network.nodes.map((node, index) => (
           <EnhancedNode
-            key={index} label={label(node)}
+            key={index}
+            label={label(node)}
             isActive={isActive(node)}
             onSelected={() => handleSelectNode(node)}
             onDropped={hits => handleDropNode(hits, node)}

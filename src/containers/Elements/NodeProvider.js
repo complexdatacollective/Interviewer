@@ -48,7 +48,8 @@ class NodeProvider extends Component {
       case 'selectable':
         return (
           <NodeList
-            network={network} label={label}
+            network={network}
+            label={label}
             draggableType="EXISTING_NODE"
             handleDropNode={this.handleDropNode}
             handleSelectNode={this.handleSelectNode}

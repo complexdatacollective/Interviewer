@@ -1,33 +1,30 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-class Modal extends Component {
+const Modal = (props) => {
+  const {
+    show,
+    children,
+    onClose,
+  } = props;
 
-  render() {
-    const {
-      show,
-      children,
-      onClose,
-    } = this.props;
-
-    if (!show) {
-      return null;
-    }
-
-    return (
-      <div className="modal" onClick={onClose}>
-        <div className="modal__window" onClick={e => e.stopPropagation()}>
-          {children}
-
-          <button onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    );
+  if (!show) {
+    return null;
   }
-}
+
+  return (
+    <div className="modal" onClick={onClose}>
+      <div className="modal__window" onClick={e => e.stopPropagation()}>
+        {children}
+
+        <button onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,

@@ -73,7 +73,8 @@ class NameGenerator extends Component {
           <div className="name-generator__nodes">
             <NodeList
               network={this.props.activeOriginNetwork}
-              label={label} droppableName="MAIN_NODE_LIST"
+              label={label}
+              droppableName="MAIN_NODE_LIST"
               acceptsDraggableType="NEW_NODE"
               draggableType="EXISTING_NODE"
               handleDropNode={this.handleDropNode}
