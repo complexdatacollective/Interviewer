@@ -1,4 +1,4 @@
-import { REHYDRATE } from 'redux-persist/constants'
+import { REHYDRATE } from 'redux-persist/constants';
 import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
 
 const NEXT_STAGE = 'NEXT_STAGE';
@@ -9,8 +9,8 @@ const initialState = {
   count: 0,
 };
 
-const rotateIndex = (max, next) => {
-  return (next + max) % max;
+function rotateIndex(max, nextIndex) {
+  return (nextIndex + max) % max;
 }
 
 export default function reducer(state = initialState, action = {}) {
@@ -19,39 +19,40 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         count: action.protocol.stages.length,
-      }
-    case REHYDRATE:
+      };
+    case REHYDRATE: {
       if (!action.payload.protocol) { return { ...state }; }
       const protocol = action.payload.protocol.protocolConfig;
       return {
         ...initialState,
         count: protocol.stages.length,
-      }
+      };
+    }
     case NEXT_STAGE:
       return {
         ...state,
-        index: rotateIndex(state.count, state.index + 1)
-      }
+        index: rotateIndex(state.count, state.index + 1),
+      };
     case PREVIOUS_STAGE:
       return {
         ...state,
-        index: rotateIndex(state.count, state.index - 1)
-      }
+        index: rotateIndex(state.count, state.index - 1),
+      };
     default:
       return state;
   }
-};
+}
 
 function next() {
   return {
-    type: NEXT_STAGE
-  }
+    type: NEXT_STAGE,
+  };
 }
 
 function previous() {
   return {
-    type: PREVIOUS_STAGE
-  }
+    type: PREVIOUS_STAGE,
+  };
 }
 
 const actionCreators = {

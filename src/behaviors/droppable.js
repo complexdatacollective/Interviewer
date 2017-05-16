@@ -1,22 +1,20 @@
+/* eslint-disable react/no-find-dom-node */
+
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import ReactDOM from 'react-dom';
 import { throttle } from 'lodash';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
 export default function droppable(WrappedComponent) {
-
   class Droppable extends Component {
     constructor(props) {
       super(props);
 
-      this.updateZone = throttle(this.updateZone, 1000/24);  // 24fps max
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener('resize', this.updateZone);
+      this.updateZone = throttle(this.updateZone, 1000 / 24);  // 24fps max
     }
 
     componentDidMount() {
@@ -28,11 +26,16 @@ export default function droppable(WrappedComponent) {
       this.updateZone();
     }
 
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.updateZone);
+    }
+
     updateZone = () => {
       if (!this.props.droppableName) { return; }
 
-      const element = ReactDOM.findDOMNode(this);
-      const boundingClientRect = getAbsoluteBoundingRect(element); //element.getBoundingClientRect();
+      const node = ReactDOM.findDOMNode(this);
+
+      const boundingClientRect = getAbsoluteBoundingRect(node);
 
       this.props.updateZone({
         name: this.props.droppableName,
@@ -41,14 +44,29 @@ export default function droppable(WrappedComponent) {
         height: boundingClientRect.height,
         y: boundingClientRect.top,
         x: boundingClientRect.left,
-        x: boundingClientRect.left,
       });
     }
 
     render() {
-      return <WrappedComponent { ...this.props } />;
+      return (
+        <WrappedComponent
+          ref={(node) => { this.node = node; }}
+          {...this.props}
+        />
+      );
     }
   }
+
+  Droppable.propTypes = {
+    updateZone: PropTypes.func.isRequired,
+    droppableName: PropTypes.string,
+    acceptsDraggableType: PropTypes.string,
+  };
+
+  Droppable.defaultProps = {
+    droppableName: null,
+    acceptsDraggableType: null,
+  };
 
   function mapStateToProps() {
     return {};
@@ -56,13 +74,10 @@ export default function droppable(WrappedComponent) {
 
   function mapDispatchToProps(dispatch) {
     return {
-      updateZone: bindActionCreators(droppableActions.updateZone, dispatch)
-    }
+      updateZone: bindActionCreators(droppableActions.updateZone, dispatch),
+    };
   }
 
-  Droppable.defaultProps = {
-    acceptsDraggableType: null,
-  };
 
   return connect(mapStateToProps, mapDispatchToProps)(Droppable);
 }

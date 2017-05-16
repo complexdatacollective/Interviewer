@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import TextInput from '../../components/Form/TextInput';

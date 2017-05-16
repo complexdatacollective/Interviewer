@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-class Node extends Component {
-  render() {
-    const {
-      label,
-      isActive,
-    } = this.props;
+const Node = (props) => {
+  const {
+    label,
+    isActive,
+  } = props;
 
-    const classes = classNames('node', { 'node--is-active': isActive });
+  const classes = classNames('node', { 'node--is-active': isActive });
 
-    return (
-      <div className={ classes } >
-        <div className="node__label">{ label }</div>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes} >
+      <div className="node__label">{label}</div>
+    </div>
+  );
+};
+
+Node.propTypes = {
+  label: PropTypes.string,
+  isActive: PropTypes.bool,
+};
 
 Node.defaultProps = {
   label: 'Node',
+  isActive: false,
 };
 
 export default Node;

@@ -1,5 +1,5 @@
 const initialState = {
-  submittingData: false
+  submittingData: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -7,4 +7,4 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
-};
+}

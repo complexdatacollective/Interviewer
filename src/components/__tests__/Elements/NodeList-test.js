@@ -8,18 +8,20 @@ import NodeList from '../../Elements/NodeList';
 const network = {
   nodes: [
     {
-      name: 'test'
-    }
-  ]
-}
+      name: 'test',
+    },
+  ],
+};
 
 describe('NodeList component', () => {
   it('renders ok', () => {
-    const component = shallow(
-      <NodeList network={ network } store={ createStore(() => {}) } />
-    );
+    const component = shallow((
+      <NodeList
+        network={network}
+        store={createStore(() => {})}
+      />
+    ));
 
     expect(component).toMatchSnapshot();
   });
-
 });

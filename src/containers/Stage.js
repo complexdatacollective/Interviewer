@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -33,8 +34,8 @@ class Stage extends Component {
       handleNext,
       handlePrevious,
       props: {
-        stage
-      }
+        stage,
+      },
     } = this;
 
     return (
@@ -43,7 +44,7 @@ class Stage extends Component {
           <button className="stage__control-button stage__control-button--back" onClick={handlePrevious}>Back</button>
         </div>
         <div className="stage__interface">
-          <CurrentInterface config={ stage }/>
+          <CurrentInterface config={stage} />
         </div>
         <div className="stage__control">
           <button className="stage__control-button stage__control-button--next" onClick={handleNext}>Next</button>
@@ -53,20 +54,26 @@ class Stage extends Component {
   }
 }
 
+Stage.propTypes = {
+  previous: PropTypes.func.isRequired,
+  next: PropTypes.func.isRequired,
+  stage: PropTypes.object.isRequired,
+};
+
 function mapStateToProps(state) {
   // TODO: http://redux.js.org/docs/recipes/ComputingDerivedData.html
   const stage = state.protocol.protocolConfig.stages[state.session.stage.index];
 
   return {
-    stage
-  }
+    stage,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     next: bindActionCreators(stageActions.next, dispatch),
     previous: bindActionCreators(stageActions.previous, dispatch),
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stage);

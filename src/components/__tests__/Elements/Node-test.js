@@ -6,11 +6,8 @@ import Node from '../../Elements/Node';
 
 describe('Node component', () => {
   it('renders ok', () => {
-    const component = shallow(
-      <Node label="foo" />
-    );
+    const component = shallow(<Node label="foo" />);
 
     expect(component).toMatchSnapshot();
   });
-
 });

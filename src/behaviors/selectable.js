@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Touch from 'react-hammerjs';
 
 export default function selectable(WrappedComponent) {
-  return class Selectable extends Component {
+  const Selectable = props => (
+    <Touch onTap={props.onSelected}>
+      <WrappedComponent {...props} />
+    </Touch>
+  );
 
-    render() {
-      return (
-        <Touch onTap={ this.props.onSelected }>
-          <WrappedComponent { ...this.props } />
-        </Touch>
-      );
-    }
+  Selectable.propTypes = {
+    onSelected: PropTypes.func,
+  };
 
-  }
-};
+  Selectable.defaultProps = {
+    onSelected: () => {},
+  };
+
+  return Selectable;
+}
