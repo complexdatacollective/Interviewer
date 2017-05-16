@@ -19,7 +19,7 @@
     },
     "plugins": ["react"],
     "rules": {
-      "react/jsx-filename-extension": "off",
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "react/forbid-prop-types": "off",
       "react/no-array-index-key": "off",
     }
