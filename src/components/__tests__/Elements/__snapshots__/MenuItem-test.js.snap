@@ -1,0 +1,17 @@
+exports[`MenuItem component renders menu item with no image 1`] = `
+<a
+  onClick={[Function]}
+  style={Object {}}>
+  title
+</a>
+`;
+
+exports[`MenuItem component renders menu item with title 1`] = `
+<a
+  onClick={[Function]}
+  style={Object {}}>
+  <img
+    src="/images/type.svg" />
+  title
+</a>
+`;
