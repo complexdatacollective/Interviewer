@@ -1,35 +1,23 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { required } from '../../utils/Validations';
-
-import { Input, Form as SemanticForm } from 'semantic-ui-react';
+import { reduxForm } from 'redux-form';
+import TextInput from '../../components/Form/TextInput';
 
 class Form extends Component {
-  textField = ({ input, label }) => {
-    return (
-      <Input label={label} {...input} />
-    );
-  }
-
   render() {
     const {
       props: {
         handleSubmit,
         fields
-      },
-      textField
+      }
     } = this;
 
     return (
-      <SemanticForm onSubmit={ handleSubmit }>
-        <h4>{ this.props.title }</h4>
+      <form onSubmit={ handleSubmit }>
         { fields.map((field, index) => {
-          return (
-            <Field key={ index } name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
-          );
+          return <TextInput key={ index } { ...field } />;
         }) }
         <button type="submit">Submit</button>
-      </SemanticForm>
+      </form>
     )
   }
 }

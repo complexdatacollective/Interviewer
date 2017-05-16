@@ -7,6 +7,7 @@ class Modal extends Component {
     const {
       show,
       children,
+      title,
       onClose
     } = this.props;
 
@@ -17,9 +18,15 @@ class Modal extends Component {
     return (
       <div className="modal" onClick={ onClose }>
         <div className="modal__window" onClick={ (e) => e.stopPropagation() }>
-          { children }
-
-          <button onClick={ onClose }>
+          <div className="modal__layout">
+            <div className="modal__layout-title">
+              <h1>{ title }</h1>
+            </div>
+            <div className="modal__layout-content">
+              { children }
+            </div>
+          </div>
+          <button className="modal__close" onClick={ onClose }>
             Cancel
           </button>
         </div>
