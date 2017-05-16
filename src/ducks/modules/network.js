@@ -1,6 +1,5 @@
 import { maxBy, reject, findIndex } from 'lodash';
 
-const SET_ACTIVE_NODE_ATTRIBUTES = 'SET_ACTIVE_NODE_ATTRIBUTES';
 const ADD_NODE = 'ADD_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -46,11 +45,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         nodes: reject(state.nodes, (node) => node.uid === action.uid)
-      }
-    case SET_ACTIVE_NODE_ATTRIBUTES:
-      return {
-        ...state,
-        activeNodeAttributes: action.attributes,
       }
     default:
       return state;

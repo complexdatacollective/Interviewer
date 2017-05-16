@@ -7,8 +7,8 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
 
-import { PromptSwiper, NodeProviderPanels, Modal, Scrollable } from '../../containers/Elements';
-import { NodeList, Form } from '../../components/Elements';
+import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
+import { NodeList, Form, DropZone } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
@@ -30,6 +30,15 @@ class NameGenerator extends Component {
     }
   }
 
+  handleDropNode = (hits, node) => {
+    hits.map((hit) => {
+      switch (hit.name) {
+        case 'NODE_BIN':
+          return this.props.removeNode(node.uid);
+      }
+    });
+  }
+
   render() {
     const {
       config: {
@@ -43,6 +52,12 @@ class NameGenerator extends Component {
       activeOriginNetwork,
     } = this.props;
 
+    const nodeBin = (
+      <div className='name-generator__node-bin'>
+        <DropZone droppableName='NODE_BIN' acceptsDraggableType='EXISTING_NODE' />
+      </div>
+    );
+
     return (
       <div className='name-generator'>
         <div className='name-generator__prompt'>
@@ -55,17 +70,19 @@ class NameGenerator extends Component {
             </div>
           </div>
           <div className='name-generator__nodes'>
-            <Scrollable>
-              <NodeList network={ activeOriginNetwork } />
-            </Scrollable>
+            <NodeList network={ activeOriginNetwork } label={ (node) => `${node.nickname}` } droppableName='MAIN_NODE_LIST' acceptsDraggableType='NEW_NODE' draggableType='EXISTING_NODE' handleDropNode={ this.handleDropNode } />
           </div>
-          <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
-            Add a person
-          </button>
         </div>
+
         <Modal name={ MODAL_NEW_NODE } >
           <Form { ...form } form={ form.formName } onSubmit={ this.handleAddNode }/>
         </Modal>
+
+        <button className='name-generator__add-person' onClick={ () => { openModal(MODAL_NEW_NODE) } }>
+          Add a person
+        </button>
+
+        { this.props.isDraggingDeletable ? nodeBin : '' }
       </div>
     )
   }
@@ -75,12 +92,14 @@ function mapStateToProps(state) {
   return {
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
+    isDraggingDeletable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
   }

@@ -1,7 +1,7 @@
 .name-generator {
 
   height: 100vh;
-  padding: 20px 0;
+  padding: 20px 0 80px 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -39,10 +39,23 @@
   &__add-person {
     @include svg-button('/images/add-a-person.svg');
     position: absolute;
-    bottom: 20px;
-    right: 0;
-    width: 150px;
+    bottom: 35px;
+    right: 35px;
+    width: 140px;
     height: 120px;
+    z-index: 1000;
+  }
+
+  &__node-bin {
+    background: transparent;
+    background-image: url('/images/node-bin.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    bottom: 35px;
+    left: 35px;
+    width: 60px;
+    height: 80px;
     z-index: 1000;
   }
 
