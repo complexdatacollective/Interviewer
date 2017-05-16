@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -11,50 +12,50 @@ import { NameGenerator } from './Interfaces';
 /**
   * Render a protocol interface based on protocol info and id
   */
-class Stage extends Component {
-  constructor(props) {
-    super(props);
-  }
+function Stage(props) {
+  // TODO: Load dynamically based on protocol using some kind of service?
+  const CurrentInterface = NameGenerator;
 
-  render() {
-    // TODO: Load dynamically based on protocol using some kind of service?
-    const CurrentInterface = NameGenerator;
-
-    return (
-      <div className="stage">
-        <div className="stage__control">
-          <Link
-            to={'/protocol/' + this.props.prevLink}
-            className="stage__control-button stage__control-button--back"
-            onClick={() => this.props.onStageClick(this.props.stages, this.props.prevLink)}
-          >
-            Back
-          </Link>
-        </div>
-        <div className="stage__interface">
-          <CurrentInterface config={ this.props.stage }/>
-        </div>
-        <div className="stage__control">
-          <Link
-            to={'/protocol/' + this.props.nextLink}
-            className="stage__control-button stage__control-button--next"
-            onClick={() => this.props.onStageClick(this.props.stages, this.props.nextLink)}
-          >
-            Next
-          </Link>
-        </div>
+  return (
+    <div className="stage">
+      <div className="stage__control">
+        <Link
+          to={`/protocol/${props.prevLink}`}
+          className="stage__control-button stage__control-button--back"
+          onClick={() => props.onStageClick(props.stages, props.prevLink)}
+        >
+          Back
+        </Link>
       </div>
-    );
-  }
+      <div className="stage__interface">
+        <CurrentInterface config={props.stage} />
+      </div>
+      <div className="stage__control">
+        <Link
+          to={`/protocol/${props.nextLink}`}
+          className="stage__control-button stage__control-button--next"
+          onClick={() => props.onStageClick(props.stages, props.nextLink)}
+        >
+          Next
+        </Link>
+      </div>
+    </div>
+  );
 }
 
-const rotateIndex = (max, next) => {
-  return (next + max) % max;
-}
+const rotateIndex = (max, next) => (next + max) % max;
+
+Stage.propTypes = {
+  stage: PropTypes.object.isRequired,
+  onStageClick: PropTypes.func.isRequired,
+  stages: PropTypes.array.isRequired,
+  prevLink: PropTypes.string.isRequired,
+  nextLink: PropTypes.string.isRequired,
+};
 
 function mapStateToProps(state, ownProps) {
   const stages = getStages(state);
-  const stage = stages.find(stage => stage.id === ownProps.id) || stages[0];
+  const stage = stages.find(currentStage => currentStage.id === ownProps.id) || stages[0];
   const stageIndex = stages.indexOf(stage);
   const prevLink = stages[rotateIndex(stages.length, stageIndex - 1)].id;
   const nextLink = stages[rotateIndex(stages.length, stageIndex + 1)].id;
@@ -63,14 +64,14 @@ function mapStateToProps(state, ownProps) {
     stages,
     stage,
     prevLink,
-    nextLink
-  }
+    nextLink,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onStageClick: bindActionCreators(stageActions.setStage, dispatch),
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stage);

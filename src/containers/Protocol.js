@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -11,31 +12,41 @@ import Stage from './Stage';
 class Protocol extends Component {
 
   componentWillMount() {
-    if (!this.props.protocol.protocolLoaded) {
+    if (!this.props.protocolLoaded) {
       this.props.loadProtocol(this.props.stageId);
     }
   }
 
   render() {
     return (
-      <div className='protocol'>
+      <div className="protocol">
         <Stage id={this.props.stageId} />
       </div>
     );
   }
 }
 
+Protocol.propTypes = {
+  protocolLoaded: PropTypes.bool.isRequired,
+  loadProtocol: PropTypes.func.isRequired,
+  stageId: PropTypes.string,
+};
+
+Protocol.defaultProps = {
+  stageId: '',
+};
+
 function mapStateToProps(state, ownProps) {
   return {
-    protocol: state.protocol,
-    stageId: ownProps.params.id
-  }
+    protocolLoaded: state.protocol.protocolLoaded,
+    stageId: ownProps.params.id,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch)
-  }
+    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Protocol);

@@ -10,16 +10,14 @@ import draggable from './draggable';
 import droppable from './droppable';
 import modals from './modals';
 
-export default function(persistor) {
-  return combineReducers({
-      form: formReducer,
-      network,
-      page,
-      participant,
-      protocol: protocol(persistor),
-      session,
-      draggable,
-      droppable,
-      modals,
-  })
-};
+export default combineReducers({
+  form: formReducer,
+  network,
+  page,
+  participant,
+  protocol,
+  session,
+  draggable,
+  droppable,
+  modals,
+});

@@ -7,12 +7,9 @@ import Panel from '../../Elements/Panel';
 describe('Panel component', () => {
   it('renders ok', () => {
     const component = shallow(
-      <Panel title="foo">
-        <span>bar</span>
-      </Panel>
+      <Panel title="foo"><span>bar</span></Panel>,
     );
 
     expect(component).toMatchSnapshot();
   });
-
 });

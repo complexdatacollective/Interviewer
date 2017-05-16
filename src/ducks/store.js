@@ -6,16 +6,15 @@ import logger from './middleware/logger';
 import rootReducer from './modules/rootReducer';
 
 export const store = createStore(
-    rootReducer(persistor),
+    rootReducer,
     undefined,
     compose(
         autoRehydrate(),
         applyMiddleware(thunk, logger),
         typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
           ? window.devToolsExtension()
-          : f => f
-    )
+          : f => f,
+    ),
 );
 
-// eslint-disable-next-line
-export const persistor = persistStore(store, { blacklist: ['form', 'droppable', 'session', 'modals', 'protocol']});
+export const persistor = persistStore(store, { blacklist: ['form', 'droppable', 'session', 'modals', 'protocol'] });

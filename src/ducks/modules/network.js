@@ -11,7 +11,7 @@ const UNSET_EGO = 'UNSET_EGO';
 const initialState = {
   ego: {},
   nodes: [],
-  edges: []
+  edges: [],
 };
 
 function nextUid(nodes) {
@@ -25,57 +25,60 @@ function nextId(nodes) {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_NODE:
+    case ADD_NODE: {
       const id = nextId(state.nodes);
       const uid = nextUid(state.nodes);
-      const node = { uid, ...action.node, id }  // Provided uid can override generated one, but not id
+      // Provided uid can override generated one, but not id
+      const node = { uid, ...action.node, id };
       return {
         ...state,
-        nodes: [...state.nodes, node]
-      }
-    case UPDATE_NODE:
-      const nodes = [ ...state.nodes ];
+        nodes: [...state.nodes, node],
+      };
+    }
+    case UPDATE_NODE: {
+      const nodes = [...state.nodes];
       const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
       nodes[nodeIndex] = { ...action.node, id: nodes[nodeIndex].id };  // id can't be altered
       return {
         ...state,
-        nodes: [...nodes ]
-      }
+        nodes: [...nodes],
+      };
+    }
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: reject(state.nodes, (node) => node.uid === action.uid)
-      }
+        nodes: reject(state.nodes, node => node.uid === action.uid),
+      };
     default:
       return state;
   }
-};
+}
 
 function addNode(node) {
   return {
     type: ADD_NODE,
-    node
-  }
+    node,
+  };
 }
 
 function updateNode(node) {
   return {
     type: UPDATE_NODE,
     node,
-  }
+  };
 }
 
 function removeNode(uid) {
   return {
     type: REMOVE_NODE,
-    uid
-  }
+    uid,
+  };
 }
 
 const actionCreators = {
   addNode,
   updateNode,
-  removeNode
+  removeNode,
 };
 
 const actionTypes = {
@@ -85,10 +88,10 @@ const actionTypes = {
   ADD_EDGE,
   REMOVE_EDGE,
   SET_EGO,
-  UNSET_EGO
+  UNSET_EGO,
 };
 
 export {
   actionCreators,
-  actionTypes
+  actionTypes,
 };

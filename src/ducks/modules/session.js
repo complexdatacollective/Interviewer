@@ -10,7 +10,7 @@ export default function reducer(state = initialState, action = {}) {
   const stage = stageReducer(state.stage, action);
 
   return {
-    stage: stage,
+    stage,
     prompt: promptReducer(state.prompt, action, stage),
-  }
-};
+  };
+}

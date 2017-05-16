@@ -28,13 +28,19 @@ exports[`Menu component renders menu with list 1`] = `
         className="bm-item-list">
         <a
           onClick={[Function]}
-          style={Object {}} />
+          style={Object {}}>
+          
+        </a>
         <a
           onClick={[Function]}
-          style={Object {}} />
+          style={Object {}}>
+          
+        </a>
         <a
           onClick={[Function]}
-          style={Object {}} />
+          style={Object {}}>
+          
+        </a>
       </nav>
     </div>
   </div>

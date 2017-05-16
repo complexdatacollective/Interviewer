@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -15,7 +16,7 @@ class StageMenu extends Component {
 
     this.state = {
       searchTerm: '',
-      matchingStages: this.props.stages
+      matchingStages: this.props.stages,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -25,7 +26,7 @@ class StageMenu extends Component {
     this.setState({
       searchTerm: event.target.value,
       matchingStages: this.props.stages.filter(
-        (stage) => stage.title.toLowerCase().includes(event.target.value.toLowerCase()))
+        stage => stage.title.toLowerCase().includes(event.target.value.toLowerCase())),
     });
   }
 
@@ -35,43 +36,42 @@ class StageMenu extends Component {
       stages = this.state.matchingStages;
     }
 
-    const items = stages.map((stage) =>
-      {
-        return {
-          to: '/protocol/'+stage.id,
-          id: stage.id,
-          title: stage.title,
-          imageType: stage.type,
-          onClick: () => this.props.onStageClick(this.props.stages, stage.id)
-        };
-      }
-    );
+    const items = stages.map(stage =>
+      ({
+        to: `/protocol/${stage.id}`,
+        id: stage.id,
+        title: stage.title,
+        imageType: stage.type,
+        onClick: () => this.props.onStageClick(this.props.stages, stage.id),
+      }));
 
     const search = (
-      <div className='bm-search'>
-        <input type='search' placeholder='Filter' onKeyUp={this.onInputChange}/>
+      <div className="bm-search">
+        <input type="search" placeholder="Filter" onKeyUp={this.onInputChange} />
       </div>
     );
 
     return (
-      <Menu items={items} searchField={search}>
-      </Menu>
+      <Menu items={items} searchField={search} />
     );
   }
 }
+
+StageMenu.propTypes = {
+  stages: PropTypes.array.isRequired,
+  onStageClick: PropTypes.func.isRequired,
+};
 
 function mapStateToProps(state) {
   const stages = getStages(state);
 
   return {
-    stages
-  }
+    stages,
+  };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onStageClick: bindActionCreators(stageActions.setStage, dispatch),
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  onStageClick: bindActionCreators(stageActions.setStage, dispatch),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(StageMenu);

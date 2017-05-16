@@ -1,4 +1,4 @@
-import { REHYDRATE } from 'redux-persist/constants'
+import { REHYDRATE } from 'redux-persist/constants';
 import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
 import { actionTypes as stageActionTypes } from '../../ducks/modules/stage';
 
@@ -10,54 +10,53 @@ const initialState = {
   counts: [],
 };
 
-const rotateIndex = (max, next) => {
-  return (next + max) % max;
-}
+const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 
 export default function reducer(state = initialState, action = {}, stageState) {
   switch (action.type) {
     case protocolActionTypes.SET_PROTOCOL:
       return {
         ...initialState,
-        counts: action.protocol.stages.map((stage) => stage.params.prompts.length),
-      }
-    case REHYDRATE:
+        counts: action.protocol.stages.map(stage => stage.params.prompts.length),
+      };
+    case REHYDRATE: {
       if (!action.payload.protocol) { return { ...state }; }
       const protocol = action.payload.protocol.protocolConfig;
       return {
         ...initialState,
-        counts: protocol.stages.map((stage) => stage.params.prompts.length),
-      }
-      case stageActionTypes.SET_STAGE:
+        counts: protocol.stages.map(stage => stage.params.prompts.length),
+      };
+    }
+    case stageActionTypes.SET_STAGE:
       return {
         ...state,
         index: 0,
-      }
+      };
     case NEXT_PROMPT:
       return {
         ...state,
-        index: rotateIndex(state.counts[stageState.index], state.index + 1)
-      }
+        index: rotateIndex(state.counts[stageState.index], state.index + 1),
+      };
     case PREVIOUS_PROMPT:
       return {
         ...state,
-        index: rotateIndex(state.counts[stageState.index], state.index - 1)
-      }
+        index: rotateIndex(state.counts[stageState.index], state.index - 1),
+      };
     default:
       return state;
   }
-};
+}
 
 function next() {
   return {
-    type: NEXT_PROMPT
-  }
+    type: NEXT_PROMPT,
+  };
 }
 
 function previous() {
   return {
-    type: PREVIOUS_PROMPT
-  }
+    type: PREVIOUS_PROMPT,
+  };
 }
 
 const actionCreators = {

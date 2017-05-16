@@ -7,7 +7,7 @@ const PATCH_PARTICIPANT = 'PATCH_PARTICIPANT';
 const initialState = {
   userProfile: {},
   userProfileComplete: false,
-  errorMessage: ''
+  errorMessage: '',
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -16,9 +16,9 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         userProfile: {
-          ...action.params
-        }
-      }
+          ...action.params,
+        },
+      };
     case DESTROY_PARTICIPANT:
       persistor.purge(['participant']);
       return state;
@@ -27,48 +27,48 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         userProfile: {
           ...state.userProfile,
-          ...action.userProfile
-        }
-      }
+          ...action.userProfile,
+        },
+      };
     default:
       return state;
   }
-};
+}
 
 function createParticipant(params) {
   return {
     type: CREATE_PARTICIPANT,
-    params
-  }
+    params,
+  };
 }
 
 function patchParticipantProfile(userProfile) {
   return {
     type: PATCH_PARTICIPANT,
-    userProfile
-  }
+    userProfile,
+  };
 }
 
 function destroyParticipant() {
   return {
-    type: DESTROY_PARTICIPANT
-  }
+    type: DESTROY_PARTICIPANT,
+  };
 }
 
 
 const actionCreators = {
   createParticipant,
   destroyParticipant,
-  patchParticipantProfile
+  patchParticipantProfile,
 };
 
 const actionTypes = {
   CREATE_PARTICIPANT,
   DESTROY_PARTICIPANT,
-  PATCH_PARTICIPANT
+  PATCH_PARTICIPANT,
 };
 
 export {
   actionCreators,
-  actionTypes
+  actionTypes,
 };

@@ -2,6 +2,7 @@ exports[`MenuItem component renders menu item with no image 1`] = `
 <a
   onClick={[Function]}
   style={Object {}}>
+  
   title
 </a>
 `;
@@ -11,7 +12,8 @@ exports[`MenuItem component renders menu item with title 1`] = `
   onClick={[Function]}
   style={Object {}}>
   <img
-    src="/images/type.svg" />
+    alt="type"
+    src="/images/{props.imageType}.svg" />
   title
 </a>
 `;

@@ -4,31 +4,25 @@ import {
     Route,
     Router,
     IndexRoute,
-    IndexRedirect
+    IndexRedirect,
 } from 'react-router';
-import NetworkService from './utils/NetworkService'
+import NetworkService from './utils/NetworkService';
 import {
   App,
   HomePage,
-  Protocol
+  Protocol,
 } from './containers';
 
 const networkService = new NetworkService();
 
 export const Routes = (
-  <Route path='/' component={App} base='/' networkService={networkService}>
-    <IndexRedirect to='home' />
+  <Route path="/" component={App} base="/" networkService={networkService}>
+    <IndexRedirect to="home" />
     <IndexRoute component={HomePage} />
-    <Route path='home' component={HomePage} />
-    <Route path='protocol' component={Protocol} />
-    <Route path='protocol/:id' component={Protocol} />
+    <Route path="home" component={HomePage} />
+    <Route path="protocol" component={Protocol} />
+    <Route path="protocol/:id" component={Protocol} />
   </Route>
 );
 
-export default class AppRouter extends React.Component {
-  render() {
-    return (
-      <Router routes={Routes} history={browserHistory} />
-    )
-  }
-}
+export default () => <Router routes={Routes} history={browserHistory} />;

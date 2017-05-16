@@ -26,17 +26,19 @@ ShallowWrapper {
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 0,
+      "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Node
+        isActive={false}
         label="foo" />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": Node {
+      "_instance": StatelessComponent {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "isActive": false,
           "label": "foo",
         },
         "refs": Object {},
@@ -86,6 +88,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Node
+    isActive={false}
     label="foo" />,
 }
 `;
