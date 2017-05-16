@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { getStages } from '../selectors/session';
+import { stages } from '../selectors/session';
 
 import { NameGenerator } from './Interfaces';
 
@@ -20,9 +20,9 @@ function Stage(props) {
     <div className="stage">
       <div className="stage__control">
         <Link
-          to={`/protocol/${props.prevLink}`}
+          to={`/protocol/${props.previousLink}`}
           className="stage__control-button stage__control-button--back"
-          onClick={() => props.onStageClick(props.stages, props.prevLink)}
+          onClick={() => props.onStageClick(props.currentStages, props.previousLink)}
         >
           Back
         </Link>
@@ -34,7 +34,7 @@ function Stage(props) {
         <Link
           to={`/protocol/${props.nextLink}`}
           className="stage__control-button stage__control-button--next"
-          onClick={() => props.onStageClick(props.stages, props.nextLink)}
+          onClick={() => props.onStageClick(props.currentStages, props.nextLink)}
         >
           Next
         </Link>
@@ -48,22 +48,23 @@ const rotateIndex = (max, next) => (next + max) % max;
 Stage.propTypes = {
   stage: PropTypes.object.isRequired,
   onStageClick: PropTypes.func.isRequired,
-  stages: PropTypes.array.isRequired,
-  prevLink: PropTypes.string.isRequired,
+  currentStages: PropTypes.array.isRequired,
+  previousLink: PropTypes.string.isRequired,
   nextLink: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  const stages = getStages(state);
-  const stage = stages.find(currentStage => currentStage.id === ownProps.id) || stages[0];
-  const stageIndex = stages.indexOf(stage);
-  const prevLink = stages[rotateIndex(stages.length, stageIndex - 1)].id;
-  const nextLink = stages[rotateIndex(stages.length, stageIndex + 1)].id;
+  const currentStages = stages(state);
+  const stage = currentStages.find(currentStage => currentStage.id === ownProps.id)
+    || currentStages[0];
+  const stageIndex = currentStages.indexOf(stage);
+  const previousLink = currentStages[rotateIndex(currentStages.length, stageIndex - 1)].id;
+  const nextLink = currentStages[rotateIndex(currentStages.length, stageIndex + 1)].id;
 
   return {
-    stages,
+    currentStages,
     stage,
-    prevLink,
+    previousLink,
     nextLink,
   };
 }

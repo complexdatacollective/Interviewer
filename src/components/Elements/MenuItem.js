@@ -7,8 +7,8 @@ import { Link } from 'react-router';
   */
 function MenuItem(props) {
   return (
-    <Link to={props.to} onClick={props.onClick} activeClassName="bm-item-active">
-      {props.imageType && <img src={'/images/{props.imageType}.svg'} alt="type" />}
+    <Link to={props.to} onClick={props.onClick} className="menu__menuitem" activeClassName="menu__menuitem--active">
+      {props.imageType && <img src={`/images/${props.imageType}.svg`} alt="type" />}
       {props.title}
     </Link>
   );

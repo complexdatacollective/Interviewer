@@ -5,21 +5,21 @@ const stageIndex = state => state.session.stage.index;
 const promptIndex = state => state.session.prompt.index;
 const protocol = state => state.protocol.protocolConfig;
 
+export const stages = createSelector(
+  protocol,
+  protocol => protocol.stages,
+);
+
 const stage = createSelector(
   stageIndex,
-  protocol,
-  (stageIndex, protocol) => protocol.stages[stageIndex],
+  stages,
+  (stageIndex, stages) => stages[stageIndex],
 );
 
 const prompt = createSelector(
   promptIndex,
   stage,
   (promptIndex, stage) => stage.params.prompts[promptIndex],
-);
-
-export const getStages = createSelector(
-  protocol,
-  protocol => protocol.stages,
 );
 
 export const activePromptAttributes = createSelector(

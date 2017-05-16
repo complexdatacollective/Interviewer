@@ -14,10 +14,6 @@ class MenuFactory extends Component {
     this.state = {
       isOpen: initialIsOpenProp ? this.props.isOpen : false
     };
-
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.listenForClose = this.listenForClose.bind(this);
-    this.menuItemClick = this.menuItemClick.bind(this);
   }
 
   // Sets or unsets styles on DOM elements outside the menu component.
@@ -59,7 +55,7 @@ class MenuFactory extends Component {
     }
   }
 
-  toggleMenu() {
+  toggleMenu = () => {
     console.log('toggleMenu ', this.state.isOpen);
 
     this.setState({
@@ -68,7 +64,7 @@ class MenuFactory extends Component {
   }
 
 
-  listenForClose(e) {
+  listenForClose = (e) => {
     e = e || window.event;
 
     if (this.state.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
@@ -76,7 +72,7 @@ class MenuFactory extends Component {
     }
   }
 
-  menuItemClick(itemClick) {
+  menuItemClick = (itemClick) => {
     itemClick();
     this.toggleMenu();
   }

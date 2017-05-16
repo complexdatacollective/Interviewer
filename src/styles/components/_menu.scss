@@ -44,7 +44,7 @@
   font-weight: 500;
 }
 
-.bm-search {
+.menu__search {
   input {
     padding: .3rem;
     width: 100%;
@@ -54,9 +54,9 @@
 }
 
 /* Wrapper for item list */
-.bm-item-list {
+.menu {
 
-  a {
+  &__menuitem {
     align-items: center;
     display: flex;
     padding:$padding-base-vertical $spacer-4;
@@ -67,7 +67,7 @@
     font-weight: 500;
     font-size: 0.75rem;
     border-top: 1px solid $divider;
-    &.bm-item-active {
+    &--active {
       background: $light-sea-green;
     }
     img {
@@ -78,6 +78,7 @@
     &:hover {
       background: #00ba96;
       color: white;
+      text-decoration: none;
     }
   }
 }

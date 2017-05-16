@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { getStages } from '../selectors/session';
+import { stages } from '../selectors/session';
 import { Menu } from '../components';
 
 /**
@@ -16,7 +16,7 @@ class StageMenu extends Component {
 
     this.state = {
       searchTerm: '',
-      matchingStages: this.props.stages,
+      matchingStages: this.props.currentStages,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -25,28 +25,28 @@ class StageMenu extends Component {
   onInputChange(event) {
     this.setState({
       searchTerm: event.target.value,
-      matchingStages: this.props.stages.filter(
+      matchingStages: this.props.currentStages.filter(
         stage => stage.title.toLowerCase().includes(event.target.value.toLowerCase())),
     });
   }
 
   render() {
-    let stages = this.props.stages;
+    let filteredStages = this.props.currentStages;
     if (this.state.searchTerm) {
-      stages = this.state.matchingStages;
+      filteredStages = this.state.matchingStages;
     }
 
-    const items = stages.map(stage =>
+    const items = filteredStages.map(stage =>
       ({
         to: `/protocol/${stage.id}`,
         id: stage.id,
         title: stage.title,
         imageType: stage.type,
-        onClick: () => this.props.onStageClick(this.props.stages, stage.id),
+        onClick: () => this.props.onStageClick(this.props.currentStages, stage.id),
       }));
 
     const search = (
-      <div className="bm-search">
+      <div className="menu__search">
         <input type="search" placeholder="Filter" onKeyUp={this.onInputChange} />
       </div>
     );
@@ -58,15 +58,15 @@ class StageMenu extends Component {
 }
 
 StageMenu.propTypes = {
-  stages: PropTypes.array.isRequired,
+  currentStages: PropTypes.array.isRequired,
   onStageClick: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  const stages = getStages(state);
+  const currentStages = stages(state);
 
   return {
-    stages,
+    currentStages,
   };
 }
 
