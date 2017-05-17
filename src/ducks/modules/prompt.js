@@ -17,11 +17,11 @@ export default function reducer(state = initialState, action = {}, stageState) {
     case protocolActionTypes.SET_PROTOCOL:
       return {
         ...initialState,
-        counts: action.protocol.stages.map(stage => stage.params.prompts.length),
+        counts: action.protocol.config.stages.map(stage => stage.params.prompts.length),
       };
     case REHYDRATE: {
       if (!action.payload.protocol) { return { ...state }; }
-      const protocol = action.payload.protocol.protocolConfig;
+      const protocol = action.payload.protocol.config;
       return {
         ...initialState,
         counts: protocol.stages.map(stage => stage.params.prompts.length),

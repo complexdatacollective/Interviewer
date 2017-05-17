@@ -1,27 +1,48 @@
+/* eslint-disable */
+
 import React from 'react';
 import {
-    browserHistory,
-    Route,
-    Router,
-    IndexRoute,
-    IndexRedirect,
-} from 'react-router';
-import NetworkService from './utils/NetworkService';
+  HashRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
-  App,
   HomePage,
   Protocol,
+  Setup,
 } from './containers';
 
-const networkService = new NetworkService();
+function mapStateToProps(state) {
+  return {
+    protocolLoaded: state.protocol.loaded,
+  };
+}
 
-export const Routes = (
-  <Route path="/" component={App} base="/" networkService={networkService}>
-    <IndexRedirect to="home" />
-    <IndexRoute component={HomePage} />
-    <Route path="home" component={HomePage} />
-    <Route path="protocol" component={Protocol} />
-  </Route>
+const SetupRequiredRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (
+      rest.protocolLoaded ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: '/setup' }} />
+      )
+    )}
+  />
 );
 
-export default () => <Router routes={Routes} history={browserHistory} />;
+SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
+
+
+export default () => (
+  <Router>
+    <Switch>
+      <SetupRequiredRoute path="/protocol" component={Protocol} />
+      <SetupRequiredRoute exact path="/" component={HomePage} />
+      <Route path="/setup" component={Setup} />
+      <Redirect to={{ pathname: '/setup' }} />
+    </Switch>
+  </Router>
+);

@@ -37,7 +37,7 @@
   }
 
   &__add-person {
-    @include svg-button('/images/add-a-person.svg');
+    @include svg-button('../images/add-a-person.svg');
     position: absolute;
     bottom: 35px;
     right: 35px;
@@ -48,7 +48,7 @@
 
   &__node-bin {
     background: transparent;
-    background-image: url('/images/node-bin.svg');
+    background-image: url('../images/node-bin.svg');
     background-repeat: no-repeat;
     background-size: contain;
     position: absolute;

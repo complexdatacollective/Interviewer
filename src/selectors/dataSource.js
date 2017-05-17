@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { join, difference } from '../utils/Network';
 import { restOfNetwork, activeStageNetwork } from './network';
 
-const data = state => state.protocol.protocolConfig.data;
+const data = state => state.protocol.config.data;
 
 const source = (_, props) => props.source;
 

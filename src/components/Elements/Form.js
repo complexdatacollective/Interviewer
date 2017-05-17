@@ -18,6 +18,7 @@ class Form extends Component {
         { fields.map((field, index) => {
           return <TextInput key={ index } { ...field } />;
         }) }
+        <br />
         <button type="submit">Submit</button>
       </form>
     )

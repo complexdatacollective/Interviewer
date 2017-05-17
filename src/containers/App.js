@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { menuIsOpen } from '../selectors/session';
 import { StageMenu } from '.';
 
@@ -11,29 +10,18 @@ require('../styles/main.scss');
   * Main app container.
   * @param props {object} - children
   */
-const App = (props) => {
-  let children = null;
-  if (props.children) {
-    children = React.cloneElement(props.children, {
-      authService: props.route.authService,
-      networkService: props.route.networkService,
-    });
-  }
-
-  return (
-    <div id="outer-container">
-      <StageMenu />
-      <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
-        { children }
-      </div>
+const App = props => (
+  <div id="outer-container">
+    <StageMenu />
+    <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
+      { props.children }
     </div>
-  );
-};
+  </div>
+);
 
 App.propTypes = {
   children: PropTypes.any,
   isMenuOpen: PropTypes.bool,
-  route: PropTypes.any.isRequired,
 };
 
 App.defaultProps = {

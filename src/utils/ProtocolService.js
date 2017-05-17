@@ -1,4 +1,3 @@
-/* eslint-disable */
 /**
  * Validates protocol data.
  *
@@ -7,7 +6,7 @@
  */
 export default class ProtocolService {
   constructor() {
-    this.protocol = {}
+    this.protocol = {};
   }
 
   /**
