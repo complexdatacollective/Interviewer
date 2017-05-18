@@ -13,11 +13,15 @@ export default function scrollable(WrappedComponent) {
     }
 
     componentDidMount() {
-      this.node.addEventListener('scroll', this.updateScrollState);
+      if (this.node) {
+        this.node.addEventListener('scroll', this.updateScrollState);
+      }
     }
 
     componentWillUnmount() {
-      this.node.removeEventListener('scroll', this.updateScrollState);
+      if (this.node) {
+        this.node.removeEventListener('scroll', this.updateScrollState);
+      }
     }
 
     updateScrollState = () => {

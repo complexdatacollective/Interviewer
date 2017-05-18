@@ -4,9 +4,9 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import Menu from '../Menu';
 
-const items = [{},
-          {},
-          {}];
+const items = [{ id: 'a', title: 'a title', to: 'a-to' },
+          { id: 'b', title: 'b title', to: 'b-to' },
+          { id: 'c', title: 'c title', to: 'c-to' }];
 
 describe('Menu component', () => {
   it('renders menu with list', () => {

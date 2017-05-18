@@ -1,7 +1,29 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 
+import { scrollable } from '../behaviors';
 import { MenuItem } from './Elements';
+
+function MenuInternal(props) {
+  return (
+    <div>
+      <div className="cross-icon">
+        <button onClick={props.toggleMenu} className="ui large button">
+          <i className="download icon"></i>
+          Cross
+        </button>
+      </div>
+      <header>
+        <h1 className="bm-menu-title">Stages</h1>
+      </header>
+      {props.searchField}
+      <nav className="bm-item-list">
+        {props.items}
+      </nav>
+    </div>
+  );
+}
+const ScrollableMenu = scrollable(MenuInternal);
 
 /**
   * Renders a menu, updating styles on DOM elements outside of this.
@@ -92,27 +114,15 @@ class MenuFactory extends Component {
         <div className="bm-overlay" onClick={this.toggleMenu} />
         <div id={this.props.id} className={this.state.isOpen ? 'bm-menu-wrap isOpen' : 'bm-menu-wrap'}>
           <div className="bm-menu">
-            <div className="cross-icon">
-              <button onClick={this.toggleMenu} className="ui large button">
-                <i className="download icon"></i>
-                Cross
-              </button>
-            </div>
-            <header>
-              <h1 className="bm-menu-title">Stages</h1>
-            </header>
-            {this.props.searchField}
-            <nav className="bm-item-list">
-              {items}
-            </nav>
+            <ScrollableMenu toggleMenu={this.toggleMenu} searchField={this.props.searchField} items={items} />
           </div>
         </div>
-        <div className="burger-icon">
+        {!this.state.isOpen && <div className="burger-icon">
           <button onClick={this.toggleMenu} className="ui large button">
             <i className="download icon"></i>
             Burger
           </button>
-        </div>
+        </div>}
       </div>
     );
   } // end render
