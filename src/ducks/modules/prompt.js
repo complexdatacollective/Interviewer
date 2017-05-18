@@ -27,6 +27,8 @@ export default function reducer(state = initialState, action = {}, stageState) {
         counts: protocol.stages.map(stage => stage.params.prompts.length),
       };
     }
+    case stageActionTypes.NEXT_STAGE:
+    case stageActionTypes.PREVIOUS_STAGE:
     case stageActionTypes.SET_STAGE:
       return {
         ...state,

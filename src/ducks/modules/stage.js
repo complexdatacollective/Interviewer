@@ -1,12 +1,16 @@
 import { REHYDRATE } from 'redux-persist/constants';
 import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
 
+const NEXT_STAGE = 'NEXT_STAGE';
+const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
 const SET_STAGE = 'SET_STAGE';
 
 const initialState = {
   index: 0,
   count: 0,
 };
+
+const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 
 const getStageIndex = (stages, stageId) => {
   let stageIndex = stages.findIndex(stage => stage.id === stageId);
@@ -20,7 +24,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         count: action.protocol.stages.length,
-        index: getStageIndex(action.protocol.stages, action.stageId),
       };
     case REHYDRATE: {
       if (!action.payload.protocol) { return { ...state }; }
@@ -30,6 +33,16 @@ export default function reducer(state = initialState, action = {}) {
         count: protocol.stages.length,
       };
     }
+    case NEXT_STAGE:
+      return {
+        ...state,
+        index: rotateIndex(state.count, state.index + 1),
+      };
+    case PREVIOUS_STAGE:
+      return {
+        ...state,
+        index: rotateIndex(state.count, state.index - 1),
+      };
     case SET_STAGE:
       return {
         ...state,
@@ -38,6 +51,18 @@ export default function reducer(state = initialState, action = {}) {
     default:
       return state;
   }
+}
+
+function next() {
+  return {
+    type: NEXT_STAGE,
+  };
+}
+
+function previous() {
+  return {
+    type: PREVIOUS_STAGE,
+  };
 }
 
 function setStage(stages, id) {
@@ -49,10 +74,14 @@ function setStage(stages, id) {
 }
 
 const actionCreators = {
+  next,
+  previous,
   setStage,
 };
 
 const actionTypes = {
+  NEXT_STAGE,
+  PREVIOUS_STAGE,
   SET_STAGE,
 };
 

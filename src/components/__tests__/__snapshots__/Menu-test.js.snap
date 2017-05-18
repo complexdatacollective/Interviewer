@@ -34,21 +34,21 @@ exports[`Menu component renders menu with list 1`] = `
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
-                style={Object {}}>
+                tabIndex={0}>
                 
                 a title
               </a>
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
-                style={Object {}}>
+                tabIndex={0}>
                 
                 b title
               </a>
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
-                style={Object {}}>
+                tabIndex={0}>
                 
                 c title
               </a>

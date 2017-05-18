@@ -10,7 +10,7 @@ export const stages = createSelector(
   protocol => protocol.stages,
 );
 
-const stage = createSelector(
+export const stage = createSelector(
   stageIndex,
   stages,
   (stageIndex, stages) => stages[stageIndex],

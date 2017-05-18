@@ -39,11 +39,10 @@ function requestProtocol() {
   return { type: REQUEST_PROTOCOL };
 }
 
-function setProtocol(protocol, stageId) {
+function setProtocol(protocol) {
   return {
     type: SET_PROTOCOL,
     protocol,
-    stageId,
   };
 }
 
@@ -53,10 +52,10 @@ function unsetProtocol() {
   };
 }
 
-function loadProtocol(stageId) {
+function loadProtocol() {
   return (dispatch) => {
     dispatch(requestProtocol());
-    dispatch(setProtocol(protocolService.getSampleProtocol(), stageId));
+    dispatch(setProtocol(protocolService.getSampleProtocol()));
   };
 }
 

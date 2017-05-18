@@ -106,8 +106,10 @@ class MenuFactory extends Component {
         to={item.to}
         onClick={() => this.menuItemClick(item.onClick)}
         title={item.title}
-        imageType={item.imageType}/>
-      );
+        isActive={item.isActive}
+        imageType={item.imageType}
+      />
+    );
 
     return (
       <div>

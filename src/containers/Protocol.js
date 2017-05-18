@@ -13,14 +13,14 @@ class Protocol extends Component {
 
   componentWillMount() {
     if (!this.props.protocolLoaded) {
-      this.props.loadProtocol(this.props.stageId);
+      this.props.loadProtocol();
     }
   }
 
   render() {
     return (
       <div className="protocol">
-        <Stage id={this.props.stageId} />
+        <Stage />
       </div>
     );
   }
@@ -29,17 +29,11 @@ class Protocol extends Component {
 Protocol.propTypes = {
   protocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
-  stageId: PropTypes.string,
 };
 
-Protocol.defaultProps = {
-  stageId: '',
-};
-
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     protocolLoaded: state.protocol.protocolLoaded,
-    stageId: ownProps.params.id,
   };
 }
 

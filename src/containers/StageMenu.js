@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { stages } from '../selectors/session';
+import { stages, stage } from '../selectors/session';
 import { Menu } from '../components';
 
 /**
@@ -26,7 +26,8 @@ class StageMenu extends Component {
     this.setState({
       searchTerm: event.target.value,
       matchingStages: this.props.currentStages.filter(
-        stage => stage.title.toLowerCase().includes(event.target.value.toLowerCase())),
+        currentStage =>
+          currentStage.title.toLowerCase().includes(event.target.value.toLowerCase())),
     });
   }
 
@@ -36,13 +37,13 @@ class StageMenu extends Component {
       filteredStages = this.state.matchingStages;
     }
 
-    const items = filteredStages.map(stage =>
+    const items = filteredStages.map(filteredStage =>
       ({
-        to: `/protocol/${stage.id}`,
-        id: stage.id,
-        title: stage.title,
-        imageType: stage.type,
-        onClick: () => this.props.onStageClick(this.props.currentStages, stage.id),
+        id: filteredStage.id,
+        title: filteredStage.title,
+        imageType: filteredStage.type,
+        isActive: this.props.currentStage === filteredStage,
+        onClick: () => this.props.onStageClick(this.props.currentStages, filteredStage.id),
       }));
 
     const search = (
@@ -59,14 +60,17 @@ class StageMenu extends Component {
 
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
+  currentStage: PropTypes.string.isRequired,
   onStageClick: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   const currentStages = stages(state);
+  const currentStage = stage(state);
 
   return {
     currentStages,
+    currentStage,
   };
 }
 

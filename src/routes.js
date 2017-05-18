@@ -21,7 +21,6 @@ export const Routes = (
     <IndexRoute component={HomePage} />
     <Route path="home" component={HomePage} />
     <Route path="protocol" component={Protocol} />
-    <Route path="protocol/:id" component={Protocol} />
   </Route>
 );
 
