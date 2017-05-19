@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import { StageMenu } from '.';
 
 require('../styles/main.scss');
@@ -7,6 +9,9 @@ require('../styles/main.scss');
 /**
   * Main app container.
   */
+
+const menuIsOpen = state => state.menu.menuIsOpen;
+
 
 const App = (props) => {
   let children = null;
@@ -20,7 +25,7 @@ const App = (props) => {
   return (
     <div id="outer-container">
       <StageMenu />
-      <div id="page-wrap" className="">
+      <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
         { children }
       </div>
     </div>
@@ -29,11 +34,19 @@ const App = (props) => {
 
 App.propTypes = {
   children: PropTypes.any,
+  isMenuOpen: PropTypes.bool,
   route: PropTypes.any.isRequired,
 };
 
 App.defaultProps = {
   children: null,
+  isMenuOpen: false,
 };
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    isMenuOpen: menuIsOpen(state),
+  };
+}
+
+export default connect(mapStateToProps)(App);

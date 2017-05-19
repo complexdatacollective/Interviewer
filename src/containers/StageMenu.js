@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { stages, stage } from '../selectors/session';
 import { Menu } from '../components';
+
+const menuIsOpen = state => state.menu.menuIsOpen;
 
 /**
   * Renders a Menu using stages to construct items in the menu
@@ -53,7 +56,12 @@ class StageMenu extends Component {
     );
 
     return (
-      <Menu items={items} searchField={search} />
+      <Menu
+        isOpen={this.props.isOpen}
+        items={items}
+        searchField={search}
+        toggleMenu={this.props.toggleMenu}
+      />
     );
   }
 }
@@ -61,11 +69,14 @@ class StageMenu extends Component {
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   currentStage: PropTypes.object,
+  isOpen: PropTypes.bool,
   onStageClick: PropTypes.func.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 StageMenu.defaultProps = {
   currentStage: null,
+  isOpen: false,
 };
 
 function mapStateToProps(state) {
@@ -73,6 +84,7 @@ function mapStateToProps(state) {
   const currentStage = stage(state);
 
   return {
+    isOpen: menuIsOpen(state),
     currentStages,
     currentStage,
   };
@@ -80,6 +92,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   onStageClick: bindActionCreators(stageActions.setStage, dispatch),
+  toggleMenu: bindActionCreators(menuActions.toggleMenu, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StageMenu);

@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { scrollable } from '../behaviors';
 import { MenuItem } from './Elements';
@@ -29,74 +30,25 @@ const ScrollableMenu = scrollable(MenuInternal);
   * Renders a menu, updating styles on DOM elements outside of this.
   */
 class MenuFactory extends Component {
-  constructor(props) {
-    super(props);
-    const initialIsOpenProp = props && typeof props.isOpen !== 'undefined';
-
-    this.state = {
-      isOpen: initialIsOpenProp ? this.props.isOpen : false
-    };
-  }
-
-  // Sets or unsets styles on DOM elements outside the menu component.
-  // This is necessary for correct page interaction with some of the menus.
-  // Throws and returns if the required external elements don't exist,
-  // which means any external page animations won't be applied.
-  componentWillUpdate(nextProps,nextState) {
-    console.log('handleExternalWrapper');
-
-    const wrapper = document.getElementById('page-wrap');
-
-    console.log(wrapper.className);
-    wrapper.className = nextState.isOpen ? 'isOpen' : '';
-  }
-
-  componentWillMount() {
-    // Allow initial open state to be set by props.
-    if (this.props.isOpen) {
-      this.toggleMenu();
-    }
-  }
-
   componentDidMount() {
     window.onkeydown = this.listenForClose;
-
-    // Allow initial open state to be set by props for animations with wrapper elements.
-    if (this.props.isOpen) {
-      this.toggleMenu();
-    }
   }
 
   componentWillUnmount() {
     window.onkeydown = null;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (typeof nextProps.isOpen !== 'undefined' && nextProps.isOpen !== this.state.isOpen) {
-      this.toggleMenu();
-    }
-  }
-
-  toggleMenu = () => {
-    console.log('toggleMenu ', this.state.isOpen);
-
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
-
   listenForClose = (e) => {
     e = e || window.event;
 
-    if (this.state.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
-      this.toggleMenu();
+    if (this.props.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
+      this.props.toggleMenu();
     }
   }
 
   menuItemClick = (itemClick) => {
     itemClick();
-    this.toggleMenu();
+    this.props.toggleMenu();
   }
 
   render() {
@@ -113,14 +65,14 @@ class MenuFactory extends Component {
 
     return (
       <div>
-        <div className="bm-overlay" onClick={this.toggleMenu} />
-        <div id={this.props.id} className={this.state.isOpen ? 'bm-menu-wrap isOpen' : 'bm-menu-wrap'}>
+        <div className="bm-overlay" onClick={this.props.toggleMenu} />
+        <div className={this.props.isOpen ? 'bm-menu-wrap isOpen' : 'bm-menu-wrap'}>
           <div className="bm-menu">
-            <ScrollableMenu toggleMenu={this.toggleMenu} searchField={this.props.searchField} items={items} />
+            <ScrollableMenu toggleMenu={this.props.toggleMenu} searchField={this.props.searchField} items={items} />
           </div>
         </div>
-        {!this.state.isOpen && <div className="burger-icon">
-          <button onClick={this.toggleMenu} className="ui large button">
+        {!this.props.isOpen && <div className="burger-icon">
+          <button onClick={this.props.toggleMenu} className="ui large button">
             <i className="download icon"></i>
             Burger
           </button>
@@ -129,5 +81,17 @@ class MenuFactory extends Component {
     );
   } // end render
 } //end class
+
+MenuFactory.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  items: PropTypes.array,
+  toggleMenu: PropTypes.func.isRequired,
+  searchField: PropTypes.object
+};
+
+MenuFactory.defaultProps = {
+  items: [],
+  searchField: null,
+}
 
 export default MenuFactory;
