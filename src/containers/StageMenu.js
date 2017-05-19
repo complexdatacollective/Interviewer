@@ -60,8 +60,12 @@ class StageMenu extends Component {
 
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
-  currentStage: PropTypes.string.isRequired,
+  currentStage: PropTypes.object,
   onStageClick: PropTypes.func.isRequired,
+};
+
+StageMenu.defaultProps = {
+  currentStage: null,
 };
 
 function mapStateToProps(state) {
