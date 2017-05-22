@@ -7,11 +7,28 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
-const updater = require('electron-simple-updater');
+// const updater = require('electron-simple-updater');
 
-updater.init({
-  checkUpdateOnStart: true,
-  autoDownload: true
+// updater.init({
+//   checkUpdateOnStart: true,
+//   autoDownload: true
+// });
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+console.log("LOG");
+
+autoUpdater.on('update-downloaded', (ev, info) => {
+  setTimeout(function() {
+    autoUpdater.quitAndInstall();  
+  }, 2500)
+});
+
+app.on('ready', function()  {
+  autoUpdater.checkForUpdates();
 });
 
 // Keep a global reference of the window object, if you don't, the window will
