@@ -10,11 +10,9 @@
     "npm": "3.10.7"
   },
   "dependencies": {
-    "electron-simple-updater": "^1.2.0"
+    "electron-updater": "^1.4.2",
+    "electron-log": "^1.3.0"
     },
-  "updater": {
-    "url": "https://raw.githubusercontent.com/codaco/network-canvas/feature/app-auto-updater/public/updates.json"
-  },
   "homepage": ".",
   "main": "electron-starter.js"
 }
