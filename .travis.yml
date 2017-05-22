@@ -5,5 +5,9 @@ env:
   - TASK=test
   - TASK=build
 script:
+=======
   - yarn run $TASK
   - yarn run $TASK
+  - npm run build-app
+  - npm run build-mac
+  - npm run build-linux
