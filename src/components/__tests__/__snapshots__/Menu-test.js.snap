@@ -1,19 +1,17 @@
 exports[`Menu component renders menu with list 1`] = `
-<div>
+<div
+  className="menu">
   <div
-    className="bm-overlay"
-    onClick={[Function]} />
-  <div
-    className="bm-menu-wrap">
+    className="menu__wrap">
     <div
-      className="bm-menu">
+      className="menu__content">
       <div
         className="scrollable">
         <div
           className="scrollable__window">
           <div>
             <div
-              className="cross-icon">
+              className="menu__cross">
               <button
                 className="ui large button"
                 onClick={[Function]}>
@@ -24,12 +22,11 @@ exports[`Menu component renders menu with list 1`] = `
             </div>
             <header>
               <h1
-                className="bm-menu-title">
+                className="menu__title">
                 Stages
               </h1>
             </header>
-            <nav
-              className="bm-item-list">
+            <nav>
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
@@ -61,7 +58,7 @@ exports[`Menu component renders menu with list 1`] = `
     </div>
   </div>
   <div
-    className="burger-icon">
+    className="menu__burger">
     <button
       className="ui large button"
       onClick={[Function]}>

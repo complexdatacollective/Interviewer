@@ -24,23 +24,18 @@
 }
 
 /* General sidebar styles */
-.bm-menu {
+.menu__content {
   background: map-get($roles, menu);
   height:100%;
   color: $charcoal;
 }
 
-/* Morph shape necessary with bubble or elastic */
-.bm-morph-shape {
-  fill: map-get($roles, menu);
-}
-
-//Menu header
-.bm-menu-title {
+/* Menu header */
+.menu__title {
   padding:$padding-base-vertical $spacer-4;
   color: map-get($roles, menu-headings);
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 700;
+  line-height: 2.5rem;
 }
 
 .menu__search {
@@ -53,32 +48,28 @@
 }
 
 /* Wrapper for item list */
-.menu {
-
-  &__menuitem {
-    align-items: center;
-    display: flex;
-    padding:$padding-base-vertical $spacer-4;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.menu__menuitem {
+  align-items: center;
+  border-top: 1px solid $divider;
+  color: $charcoal;
+  display: flex;
+  font-weight: 500;
+  letter-spacing: 3px;
+  padding:$padding-base-vertical $spacer-4;
+  text-decoration: none;
+  text-transform: uppercase;
+  &--active {
+    background-color: $light-sea-green;
+  }
+  img {
+    height: 2rem;
+    padding-right: .5rem;
+    width: 2rem;
+  }
+  &:hover {
+    background: #00ba96;
+    color: white;
     text-decoration: none;
-    color: $charcoal;
-    font-weight: 500;
-    font-size: 0.75rem;
-    border-top: 1px solid $divider;
-    &--active {
-      background: $light-sea-green;
-    }
-    img {
-      height: 2rem;
-      padding-right: .5rem;
-      width: 2rem;
-    }
-    &:hover {
-      background: #00ba96;
-      color: white;
-      text-decoration: none;
-    }
   }
 }
 
@@ -88,7 +79,7 @@
   perspective: 1500px;
 }
 
-.bm-menu-wrap {
+.menu__wrap {
   position: fixed;
   left: 0;
   z-index: 2;
@@ -106,7 +97,7 @@
   }
 }
 
-.bm-menu-wrap.isOpen {
+.menu__wrap--isOpen {
   transform: translate3d(0%, 0, 0);
 }
 
@@ -137,13 +128,11 @@
   color:white;
 }
 
-.cross-icon {
-  // position: absolute;
-  // top:15px;
-  // right:15px;
+.menu__cross {
+  float: right;
 }
 
-.burger-icon {
+.menu__burger {
   position: absolute;
   left: 0;
   top: 0;

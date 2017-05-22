@@ -8,17 +8,17 @@ import { MenuItem } from './Elements';
 function MenuInternal(props) {
   return (
     <div>
-      <div className="cross-icon">
+      <div className="menu__cross">
         <button onClick={props.toggleMenu} className="ui large button">
           <i className="download icon"></i>
           Cross
         </button>
       </div>
       <header>
-        <h1 className="bm-menu-title">Stages</h1>
+        <h1 className="menu__title">Stages</h1>
       </header>
       {props.searchField}
-      <nav className="bm-item-list">
+      <nav>
         {props.items}
       </nav>
     </div>
@@ -64,14 +64,13 @@ class MenuFactory extends Component {
     );
 
     return (
-      <div>
-        <div className="bm-overlay" onClick={this.props.toggleMenu} />
-        <div className={this.props.isOpen ? 'bm-menu-wrap isOpen' : 'bm-menu-wrap'}>
-          <div className="bm-menu">
+      <div className="menu">
+        <div className={this.props.isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
+          <div className="menu__content">
             <ScrollableMenu toggleMenu={this.props.toggleMenu} searchField={this.props.searchField} items={items} />
           </div>
         </div>
-        {!this.props.isOpen && <div className="burger-icon">
+        {!this.props.isOpen && <div className="menu__burger">
           <button onClick={this.props.toggleMenu} className="ui large button">
             <i className="download icon"></i>
             Burger
