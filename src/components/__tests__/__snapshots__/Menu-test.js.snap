@@ -2,7 +2,7 @@ exports[`Menu component renders menu with list 1`] = `
 <div>
   <div
     className="bm-overlay"
-    onClick={undefined} />
+    onClick={[Function]} />
   <div
     className="bm-menu-wrap">
     <div
@@ -16,7 +16,7 @@ exports[`Menu component renders menu with list 1`] = `
               className="cross-icon">
               <button
                 className="ui large button"
-                onClick={undefined}>
+                onClick={[Function]}>
                 <i
                   className="download icon" />
                 Cross
@@ -33,6 +33,7 @@ exports[`Menu component renders menu with list 1`] = `
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
+                role="menuitem"
                 tabIndex={0}>
                 
                 a title
@@ -40,6 +41,7 @@ exports[`Menu component renders menu with list 1`] = `
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
+                role="menuitem"
                 tabIndex={0}>
                 
                 b title
@@ -47,6 +49,7 @@ exports[`Menu component renders menu with list 1`] = `
               <a
                 className="menu__menuitem"
                 onClick={[Function]}
+                role="menuitem"
                 tabIndex={0}>
                 
                 c title
@@ -61,7 +64,7 @@ exports[`Menu component renders menu with list 1`] = `
     className="burger-icon">
     <button
       className="ui large button"
-      onClick={undefined}>
+      onClick={[Function]}>
       <i
         className="download icon" />
       Burger

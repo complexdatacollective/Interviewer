@@ -11,7 +11,7 @@ function MenuItem(props) {
     'menu__menuitem--active': props.isActive,
   });
   return (
-    <a onClick={props.onClick} className={itemClasses} tabIndex={0} >
+    <a onClick={props.onClick} className={itemClasses} tabIndex={0} role="menuitem" >
       {props.imageType && <img src={`/images/${props.imageType}.svg`} alt="type" />}
       {props.title}
     </a>

@@ -11,7 +11,7 @@ const items = [{ id: 'a', title: 'a title', to: 'a-to' },
 describe('Menu component', () => {
   it('renders menu with list', () => {
     const component = renderer.create(
-      <Menu items={items} />,
+      <Menu items={items} isOpen={false} toggleMenu={() => {}} />,
     );
     const tree = component.toJSON();
 
