@@ -1,8 +1,0 @@
-{
-  "darwin-x64-prod": {
-    "readme": "Test Release",
-    "update": "https://github.com/codaco/network-canvas/release-builds/mac/Network Canvas.app",
-    "install": "https://github.com/codaco/network-canvas/release-builds/Network Canvas-4.0.1.dmg",
-    "version": "4.0.1"
-  }
-}
