@@ -8,9 +8,13 @@
 		<data>
 		ZMGnzdFES5ZaBf9fTJ7nJkGEQMc=
 		</data>
+		<key>Resources/app-update.yml</key>
+		<data>
+		sAP09rFPgSW/iZOLFQRQ9dOO7mI=
+		</data>
 		<key>Resources/app.asar</key>
 		<data>
-		iU4vaVrd1EE5dWxDb1+PFmZy8ww=
+		tDb5nFIw2rK37zwEnKPa97+q84M=
 		</data>
 		<key>Resources/electron.asar</key>
 		<data>
@@ -23,7 +27,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			1MSlWlE53LX3zwIHYgpNwEcf3M0=
+			SNp2QoUgZrgMDJhV52PsB/qDgxI=
 			</data>
 			<key>requirement</key>
 			<string>identifier "com.github.electron.framework" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "85EZ69PQHJ"</string>
@@ -77,7 +81,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			aW9jpazcWv7tqhIWKuyUPh8rybg=
+			ke3+GwGh2MF55e9EFmYt30jlcq0=
 			</data>
 			<key>requirement</key>
 			<string>identifier "com.github.Squirrel" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "85EZ69PQHJ"</string>
@@ -93,15 +97,26 @@
 			K9uKo7fR4iu9nSTLRhfmgiI1z3bBYbfAqUEGA6UenjY=
 			</data>
 		</dict>
+		<key>Resources/app-update.yml</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			sAP09rFPgSW/iZOLFQRQ9dOO7mI=
+			</data>
+			<key>hash2</key>
+			<data>
+			DU3Ge6cQZUyyN7z/ytMYl6zZ3ubo+U6gp1PXEzk31tc=
+			</data>
+		</dict>
 		<key>Resources/app.asar</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			iU4vaVrd1EE5dWxDb1+PFmZy8ww=
+			tDb5nFIw2rK37zwEnKPa97+q84M=
 			</data>
 			<key>hash2</key>
 			<data>
-			pYWELi7FE9n4MWF8FMpR0MzYIxwUN5iDSIuzFsaJV1U=
+			zL6IewYCJG5WYA5nhkjW60Q8xoQjLyhGvukUsB4pDFM=
 			</data>
 		</dict>
 		<key>Resources/electron.asar</key>
