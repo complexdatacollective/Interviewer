@@ -6,13 +6,13 @@ import { StageMenu } from '.';
 
 require('../styles/main.scss');
 
-/**
-  * Main app container.
-  */
 
 const menuIsOpen = state => state.menu.menuIsOpen;
 
-
+/**
+  * Main app container.
+  * @param props {object} - children
+  */
 const App = (props) => {
   let children = null;
   if (props.children) {

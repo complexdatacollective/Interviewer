@@ -12,8 +12,12 @@ const menuIsOpen = state => state.menu.menuIsOpen;
 
 /**
   * Renders a Menu using stages to construct items in the menu
+  * @extends Component
   */
 class StageMenu extends Component {
+  /**
+    * adds search term and list of matching stages to local state
+    */
   constructor(props) {
     super(props);
 
@@ -25,6 +29,10 @@ class StageMenu extends Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
+  /**
+    * updates search term and matching stages when input changes
+    * @param event {event}
+    */
   onInputChange(event) {
     this.setState({
       searchTerm: event.target.value,

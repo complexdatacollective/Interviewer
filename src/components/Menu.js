@@ -5,6 +5,12 @@ import PropTypes from 'prop-types';
 import { scrollable } from '../behaviors';
 import { MenuItem } from './Elements';
 
+/**
+  * Renders the internal content of a menu
+  * @param props {object}
+  * props: searchField, items, toggleMenu
+  * @return div
+  */
 function MenuInternal(props) {
   return (
     <div>
@@ -24,16 +30,26 @@ function MenuInternal(props) {
     </div>
   );
 }
+/**
+  * Wrapper for menu content to allow scrolling
+  */
 const ScrollableMenu = scrollable(MenuInternal);
 
 /**
   * Renders a menu, updating styles on DOM elements outside of this.
+  * @extends Component
   */
 class MenuFactory extends Component {
+  /**
+    * adds listener for key events to close Menu
+    */
   componentDidMount() {
     window.onkeydown = this.listenForClose;
   }
 
+  /**
+    * adds listener for key events to close Menu
+    */
   componentWillUnmount() {
     window.onkeydown = null;
   }
@@ -46,6 +62,7 @@ class MenuFactory extends Component {
     }
   }
 
+  // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
     itemClick();
     this.props.toggleMenu();

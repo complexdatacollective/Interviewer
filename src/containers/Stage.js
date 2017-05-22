@@ -10,12 +10,15 @@ import { NameGenerator } from './Interfaces';
 
 /**
   * Render a protocol interface based on protocol info and id
+  * @extends Component
   */
 class Stage extends Component {
+  // change the stage to the next
   handleNext = () => {
     this.props.next();
   }
 
+  // change the stage to the previous
   handlePrevious = () => {
     this.props.previous();
   }
