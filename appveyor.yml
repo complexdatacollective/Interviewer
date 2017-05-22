@@ -1,12 +1,11 @@
-language: node_js
-node_js:
-  - "6.9"
-
 platform:
   - x64
 
 cache:
   - node_modules
+
+init:
+  - git config --global core.autocrlf input
 
 install:
   - ps: Install-Product node 7 x64
