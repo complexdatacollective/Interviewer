@@ -16,5 +16,3 @@ build_script:
   - npm test
   - yarn run build-app
   - yarn run build-win
-
-test: off
