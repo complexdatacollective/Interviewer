@@ -18,7 +18,10 @@
     "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron ./app",
+    "build-packages": "build -mwl",
+    "build-win": "build -w",
     "build-mac": "build -m",
+    "build-linux": "build -l",
     "generate-icons": "node generate-app-icons.js",
     "package-cordova": "cordova build ios && cordova build android"
   },
@@ -31,9 +34,19 @@
     "mac": {
       "category": "public.app-category.developer-tools"
     },
+    "win": {
+      "target": "nsis",
+      "icon": "./build/icon.ico"
+    },
+    "publish": [{
+             "provider": "github",
+             "owner": "codaco",
+             "repo": "network-canvas"
+         }]
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "git+https://github.com/codaco/Network-Canvas.git" 
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
