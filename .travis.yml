@@ -5,10 +5,8 @@ node_js:
   - yarn run $TASK
 =======
 cache:
-  directories: [
-      "node_modules",
-      "app/node_modules",
-    ]
+  directories: 
+      "node_modules"
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
@@ -17,9 +15,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -L https://github.com/github/git-lfs/releases/download/v1.2.0/git-lfs-linux-amd64-1.2.0.tar.gz | tar -xz; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then git-lfs-1.2.0/git-lfs pull; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
-
-install: 
-  - npm install electron-builder@next
 
 script:
   - npm test
