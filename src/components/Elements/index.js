@@ -3,6 +3,7 @@ export { default as Prompt } from './Prompt';
 export { default as Node } from './Node';
 export { default as Form } from './Form';
 export { default as FormEditNode } from './FormEditNode';
+export { default as NodeForm } from './NodeForm';
 export { default as Modal } from './Modal';
 export { default as NodeList } from './NodeList';
 export { default as Panels } from './Panels';

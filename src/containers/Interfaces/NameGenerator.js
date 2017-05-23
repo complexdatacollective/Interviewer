@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -12,7 +10,7 @@ import {
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
 import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
-import { NodeList, Form, NodeBin, FormEditNode } from '../../components/Elements';
+import { NodeList, Form, NodeBin, NodeForm } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
@@ -29,7 +27,7 @@ class NameGenerator extends Component {
     };
   }
 
-  handleAddNode = (node, _, form) => {
+  handleAddNode = (node) => {
     const {
       addNode,
       closeModal,
@@ -41,7 +39,7 @@ class NameGenerator extends Component {
     }
   }
 
-  handleEditNode = (node, _, form) => {
+  handleEditNode = (node) => {
     const {
       updateNode,
       closeModal,
@@ -108,7 +106,12 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        <FormEditNode node={this.state.nodeToEdit} form={form} handleEditNode={this.handleEditNode} />
+        <NodeForm
+          node={this.state.nodeToEdit}
+          modalName={modals.EDIT_NODE}
+          form={form}
+          handleSubmit={this.handleEditNode}
+        />
 
         <Modal name={MODAL_NEW_NODE} title={form.title} >
           <Form {...form} form={form.formName} onSubmit={this.handleAddNode} />
