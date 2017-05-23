@@ -43,7 +43,9 @@ class StageMenu extends Component {
   }
 
   render() {
-    let filteredStages = this.props.currentStages;
+    const { currentStages, currentStage, isOpen, onStageClick, toggleMenu } = this.props;
+
+    let filteredStages = currentStages;
     if (this.state.searchTerm) {
       filteredStages = this.state.matchingStages;
     }
@@ -53,8 +55,8 @@ class StageMenu extends Component {
         id: filteredStage.id,
         title: filteredStage.title,
         imageType: filteredStage.type,
-        isActive: this.props.currentStage === filteredStage,
-        onClick: () => this.props.onStageClick(this.props.currentStages, filteredStage.id),
+        isActive: currentStage === filteredStage,
+        onClick: () => onStageClick(currentStages, filteredStage.id),
       }));
 
     const search = (
@@ -65,10 +67,10 @@ class StageMenu extends Component {
 
     return (
       <Menu
-        isOpen={this.props.isOpen}
+        isOpen={isOpen}
         items={items}
         searchField={search}
-        toggleMenu={this.props.toggleMenu}
+        toggleMenu={toggleMenu}
       />
     );
   }

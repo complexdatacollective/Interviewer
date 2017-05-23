@@ -10,20 +10,22 @@ import { scrollable } from '../behaviors';
   * @return div
   */
 function MenuContent(props) {
+  const { items, searchField, toggleMenu } = props;
+
   return (
     <div>
       <div className="menu__cross">
-        <button onClick={props.toggleMenu} className="ui large button">
-          <i className="download icon"></i>
+        <button onClick={toggleMenu} className="ui large button">
+          <i className="download icon" />
           Cross
         </button>
       </div>
       <header>
         <h1 className="menu__title">Stages</h1>
       </header>
-      {props.searchField}
+      {searchField}
       <nav>
-        {props.items}
+        {items}
       </nav>
     </div>
   );

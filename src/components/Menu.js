@@ -38,7 +38,9 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const items = this.props.items.map(item =>
+    const { isOpen, items, toggleMenu, searchField } = this.props;
+
+    const menuItems = items.map(item =>
       (<MenuItem
         key={item.id}
         to={item.to}
@@ -51,17 +53,17 @@ class MenuFactory extends Component {
 
     return (
       <div className="menu">
-        <div className={this.props.isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
+        <div className={isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
           <div className="menu__content">
             <MenuContent
-              toggleMenu={this.props.toggleMenu}
-              searchField={this.props.searchField}
-              items={items}
+              toggleMenu={toggleMenu}
+              searchField={searchField}
+              items={menuItems}
             />
           </div>
         </div>
-        {!this.props.isOpen && <div className="menu__burger">
-          <button onClick={this.props.toggleMenu} className="ui large button">
+        {!isOpen && <div className="menu__burger">
+          <button onClick={toggleMenu} className="ui large button">
             <i className="download icon" />
             Burger
           </button>
