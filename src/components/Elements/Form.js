@@ -25,7 +25,7 @@ class Form extends Component {
 }
 
 Form = reduxForm({
-  destroyOnUnmount: false,
+  destroyOnUnmount: true,
   forceUnregisterOnUnmount: true
 })(Form);
 

@@ -3,32 +3,47 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import {
+  actionCreators as modalActions,
+  modalNames as modals,
+} from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
-import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
-import { NodeList, Form, DropZone } from '../../components/Elements';
-
-const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
+import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
+import { NodeList, NodeBin, NodeForm } from '../../components/Elements';
 
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGenerator extends Component {
-  handleAddNode = (node, _, form) => {
-    const {
-      addNode,
-      closeModal,
-    } = this.props;
 
-    if (node) {
-      addNode({ ...node, ...this.props.newNodeAttributes });
-      form.reset();  // Is this the "react/redux way"?
-      closeModal(MODAL_NEW_NODE);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedNode: null,
+    };
+  }
+
+  onSubmitNewNode = (formData) => {
+    if (formData) {
+      this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
     }
   }
 
-  handleDropNode = (hits, node) => {
+  onSubmitEditNode = (formData) => {
+    if (formData) {
+      this.props.updateNode({ ...this.state.selectedNode, ...formData });
+    }
+  }
+
+  onSelectNode = (node) => {
+    this.setState({ selectedNode: node }, () => {
+      this.props.openModal(modals.EDIT_NODE);
+    });
+  }
+
+  onDropNode = (hits, node) => {
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'NODE_BIN':
@@ -51,12 +66,6 @@ class NameGenerator extends Component {
       openModal,
     } = this.props;
 
-    const nodeBin = (
-      <div className="name-generator__node-bin">
-        <DropZone droppableName="NODE_BIN" acceptsDraggableType="EXISTING_NODE" />
-      </div>
-    );
-
     const label = node => `${node.nickname}`;
 
     return (
@@ -77,20 +86,30 @@ class NameGenerator extends Component {
               droppableName="MAIN_NODE_LIST"
               acceptsDraggableType="NEW_NODE"
               draggableType="EXISTING_NODE"
-              handleDropNode={this.handleDropNode}
+              handleDropNode={this.onDropNode}
+              handleSelectNode={this.onSelectNode}
             />
           </div>
         </div>
 
-        <Modal name={MODAL_NEW_NODE} title={form.title} >
-          <Form {...form} form={form.formName} onSubmit={this.handleAddNode} />
-        </Modal>
+        <NodeForm
+          node={this.state.selectedNode}
+          modalName={modals.EDIT_NODE}
+          form={form}
+          handleSubmit={this.onSubmitEditNode}
+        />
 
-        <button className="name-generator__add-person" onClick={() => openModal(MODAL_NEW_NODE)}>
+        <NodeForm
+          modalName={modals.ADD_NODE}
+          form={form}
+          handleSubmit={this.onSubmitNewNode}
+        />
+
+        <button className="name-generator__add-person" onClick={() => openModal(modals.ADD_NODE)}>
           Add a person
         </button>
 
-        {this.props.isDraggableDeleteable ? nodeBin : ''}
+        <NodeBin />
       </div>
     );
   }
@@ -99,25 +118,24 @@ class NameGenerator extends Component {
 NameGenerator.propTypes = {
   config: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
-  removeNode: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.any.isRequired,
   activeOriginNetwork: PropTypes.any.isRequired,
-  isDraggableDeleteable: PropTypes.bool.isRequired,
+  removeNode: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
-    isDraggableDeleteable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
