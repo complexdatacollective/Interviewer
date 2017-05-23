@@ -21,7 +21,7 @@ class NameGenerator extends Component {
     super(props);
 
     this.state = {
-      nodeToEdit: null,
+      selectedNode: null,
     };
   }
 
@@ -33,12 +33,12 @@ class NameGenerator extends Component {
 
   onSubmitEditNode = (formData) => {
     if (formData) {
-      this.props.updateNode({ ...this.state.nodeToEdit, ...formData });
+      this.props.updateNode({ ...this.state.selectedNode, ...formData });
     }
   }
 
   onSelectNode = (node) => {
-    this.setState({ nodeToEdit: node }, () => {
+    this.setState({ selectedNode: node }, () => {
       this.props.openModal(modals.EDIT_NODE);
     });
   }
@@ -93,7 +93,7 @@ class NameGenerator extends Component {
         </div>
 
         <NodeForm
-          node={this.state.nodeToEdit}
+          node={this.state.selectedNode}
           modalName={modals.EDIT_NODE}
           form={form}
           handleSubmit={this.onSubmitEditNode}
