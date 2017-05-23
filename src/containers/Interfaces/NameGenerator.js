@@ -7,7 +7,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
 import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
-import { NodeList, Form, DropZone } from '../../components/Elements';
+import { NodeList, Form, NodeBin } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
@@ -51,12 +51,6 @@ class NameGenerator extends Component {
       openModal,
     } = this.props;
 
-    const nodeBin = (
-      <div className="name-generator__node-bin">
-        <DropZone droppableName="NODE_BIN" acceptsDraggableType="EXISTING_NODE" />
-      </div>
-    );
-
     const label = node => `${node.nickname}`;
 
     return (
@@ -90,7 +84,7 @@ class NameGenerator extends Component {
           Add a person
         </button>
 
-        {this.props.isDraggableDeleteable ? nodeBin : ''}
+        <NodeBin />
       </div>
     );
   }
@@ -99,19 +93,17 @@ class NameGenerator extends Component {
 NameGenerator.propTypes = {
   config: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
-  removeNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.any.isRequired,
   activeOriginNetwork: PropTypes.any.isRequired,
-  isDraggableDeleteable: PropTypes.bool.isRequired,
+  removeNode: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     newNodeAttributes: newNodeAttributes(state),
     activeOriginNetwork: activeOriginNetwork(state),
-    isDraggableDeleteable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
   };
 }
 

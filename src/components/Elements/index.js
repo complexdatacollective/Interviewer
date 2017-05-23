@@ -7,3 +7,4 @@ export { default as NodeList } from './NodeList';
 export { default as Panels } from './Panels';
 export { default as Panel } from './Panel';
 export { default as DropZone } from './DropZone';
+export { default as NodeBin } from './NodeBin';
