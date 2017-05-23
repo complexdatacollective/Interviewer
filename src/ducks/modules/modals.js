@@ -97,6 +97,7 @@ const actionTypes = {
 
 const modalNames = {
   EDIT_NODE: 'EDIT_NODE',
+  ADD_NODE: 'ADD_NODE',
 };
 
 export {

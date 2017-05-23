@@ -9,10 +9,8 @@ import {
 } from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
-import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
-import { NodeList, Form, NodeBin, NodeForm } from '../../components/Elements';
-
-const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
+import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
+import { NodeList, NodeBin, NodeForm } from '../../components/Elements';
 
 /**
   * This would/could be specified in the protocol, and draws upon ready made components
@@ -27,37 +25,25 @@ class NameGenerator extends Component {
     };
   }
 
-  handleAddNode = (node) => {
-    const {
-      addNode,
-      closeModal,
-    } = this.props;
-
-    if (node) {
-      addNode({ ...node, ...this.props.newNodeAttributes });
-      closeModal(MODAL_NEW_NODE);
+  onSubmitNewNode = (formData) => {
+    if (formData) {
+      this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
     }
   }
 
-  handleEditNode = (node) => {
-    const {
-      updateNode,
-      closeModal,
-    } = this.props;
-
-    if (node) {
-      updateNode({ ...this.state.nodeToEdit, ...node });
-      closeModal(modals.EDIT_NODE);
+  onSubmitEditNode = (formData) => {
+    if (formData) {
+      this.props.updateNode({ ...this.state.nodeToEdit, ...formData });
     }
   }
 
-  handleSelectNode = (node) => {
+  onSelectNode = (node) => {
     this.setState({ nodeToEdit: node }, () => {
       this.props.openModal(modals.EDIT_NODE);
     });
   }
 
-  handleDropNode = (hits, node) => {
+  onDropNode = (hits, node) => {
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'NODE_BIN':
@@ -100,8 +86,8 @@ class NameGenerator extends Component {
               droppableName="MAIN_NODE_LIST"
               acceptsDraggableType="NEW_NODE"
               draggableType="EXISTING_NODE"
-              handleDropNode={this.handleDropNode}
-              handleSelectNode={this.handleSelectNode}
+              handleDropNode={this.onDropNode}
+              handleSelectNode={this.onSelectNode}
             />
           </div>
         </div>
@@ -110,14 +96,16 @@ class NameGenerator extends Component {
           node={this.state.nodeToEdit}
           modalName={modals.EDIT_NODE}
           form={form}
-          handleSubmit={this.handleEditNode}
+          handleSubmit={this.onSubmitEditNode}
         />
 
-        <Modal name={MODAL_NEW_NODE} title={form.title} >
-          <Form {...form} form={form.formName} onSubmit={this.handleAddNode} />
-        </Modal>
+        <NodeForm
+          modalName={modals.ADD_NODE}
+          form={form}
+          handleSubmit={this.onSubmitNewNode}
+        />
 
-        <button className="name-generator__add-person" onClick={() => openModal(MODAL_NEW_NODE)}>
+        <button className="name-generator__add-person" onClick={() => openModal(modals.ADD_NODE)}>
           Add a person
         </button>
 
@@ -132,7 +120,6 @@ NameGenerator.propTypes = {
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.any.isRequired,
   activeOriginNetwork: PropTypes.any.isRequired,
   removeNode: PropTypes.func.isRequired,
