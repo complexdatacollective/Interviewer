@@ -8,7 +8,7 @@ import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 
 function getCoords(event) {
-  if (event instanceof TouchEvent) {
+  if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
     const touch = event.changedTouches.item(0);
     return {
       x: touch.clientX,

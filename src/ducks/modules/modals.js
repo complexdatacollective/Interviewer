@@ -95,7 +95,13 @@ const actionTypes = {
   UNREGISTER_MODAL,
 };
 
+const modalNames = {
+  EDIT_NODE: 'EDIT_NODE',
+  ADD_NODE: 'ADD_NODE',
+};
+
 export {
   actionCreators,
   actionTypes,
+  modalNames,
 };
