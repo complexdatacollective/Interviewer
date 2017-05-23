@@ -1,13 +1,18 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import {
+  actionCreators as modalActions,
+  modalNames as modals,
+} from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
 import { PromptSwiper, NodeProviderPanels, Modal } from '../../containers/Elements';
-import { NodeList, Form, NodeBin } from '../../components/Elements';
+import { NodeList, Form, NodeBin, FormEditNode } from '../../components/Elements';
 
 const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
 
@@ -15,6 +20,15 @@ const MODAL_NEW_NODE = 'MODAL_NEW_NODE';
   * This would/could be specified in the protocol, and draws upon ready made components
   */
 class NameGenerator extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      nodeToEdit: null,
+    };
+  }
+
   handleAddNode = (node, _, form) => {
     const {
       addNode,
@@ -23,9 +37,26 @@ class NameGenerator extends Component {
 
     if (node) {
       addNode({ ...node, ...this.props.newNodeAttributes });
-      form.reset();  // Is this the "react/redux way"?
       closeModal(MODAL_NEW_NODE);
     }
+  }
+
+  handleEditNode = (node, _, form) => {
+    const {
+      updateNode,
+      closeModal,
+    } = this.props;
+
+    if (node) {
+      updateNode({ ...this.state.nodeToEdit, ...node });
+      closeModal(modals.EDIT_NODE);
+    }
+  }
+
+  handleSelectNode = (node) => {
+    this.setState({ nodeToEdit: node }, () => {
+      this.props.openModal(modals.EDIT_NODE);
+    });
   }
 
   handleDropNode = (hits, node) => {
@@ -72,9 +103,12 @@ class NameGenerator extends Component {
               acceptsDraggableType="NEW_NODE"
               draggableType="EXISTING_NODE"
               handleDropNode={this.handleDropNode}
+              handleSelectNode={this.handleSelectNode}
             />
           </div>
         </div>
+
+        <FormEditNode node={this.state.nodeToEdit} form={form} handleEditNode={this.handleEditNode} />
 
         <Modal name={MODAL_NEW_NODE} title={form.title} >
           <Form {...form} form={form.formName} onSubmit={this.handleAddNode} />
@@ -93,6 +127,7 @@ class NameGenerator extends Component {
 NameGenerator.propTypes = {
   config: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.any.isRequired,
@@ -110,6 +145,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
