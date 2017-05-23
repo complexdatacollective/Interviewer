@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { menuIsOpen } from '../selectors/session';
 import { StageMenu } from '.';
 
 require('../styles/main.scss');
-
-
-const menuIsOpen = state => state.menu.menuIsOpen;
 
 /**
   * Main app container.

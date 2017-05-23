@@ -5,10 +5,8 @@ import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { stages, stage } from '../selectors/session';
+import { stages, stage, filteredStages, menuIsOpen, searchTerm } from '../selectors/session';
 import { Menu } from '../components';
-
-const menuIsOpen = state => state.menu.menuIsOpen;
 
 /**
   * Renders a Menu using stages to construct items in the menu
@@ -16,41 +14,19 @@ const menuIsOpen = state => state.menu.menuIsOpen;
   */
 class StageMenu extends Component {
   /**
-    * adds search term and list of matching stages to local state
-    */
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      searchTerm: '',
-      matchingStages: this.props.currentStages,
-    };
-
-    this.onInputChange = this.onInputChange.bind(this);
-  }
-
-  /**
     * updates search term and matching stages when input changes
     * @param event {event}
     */
-  onInputChange(event) {
-    this.setState({
-      searchTerm: event.target.value,
-      matchingStages: this.props.currentStages.filter(
-        currentStage =>
-          currentStage.title.toLowerCase().includes(event.target.value.toLowerCase())),
-    });
+  onInputChange = (event) => {
+    this.props.updateSearch(event.target.value);
   }
 
   render() {
-    const { currentStages, currentStage, isOpen, onStageClick, toggleMenu } = this.props;
+    const {
+      currentStages, currentStage, filteredList, isOpen, onStageClick, toggleMenu,
+    } = this.props;
 
-    let filteredStages = currentStages;
-    if (this.state.searchTerm) {
-      filteredStages = this.state.matchingStages;
-    }
-
-    const items = filteredStages.map(filteredStage =>
+    const items = filteredList.map(filteredStage =>
       ({
         id: filteredStage.id,
         title: filteredStage.title,
@@ -79,30 +55,38 @@ class StageMenu extends Component {
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   currentStage: PropTypes.object,
+  filteredList: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onStageClick: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  updateSearch: PropTypes.func,
 };
 
 StageMenu.defaultProps = {
   currentStage: null,
   isOpen: false,
+  searchTerm: '',
+  updateSearch: () => {},
 };
 
 function mapStateToProps(state) {
   const currentStages = stages(state);
   const currentStage = stage(state);
+  const filteredList = filteredStages(state);
 
   return {
     isOpen: menuIsOpen(state),
     currentStages,
     currentStage,
+    filteredList,
+    searchTerm: searchTerm(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   onStageClick: bindActionCreators(stageActions.setStage, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleMenu, dispatch),
+  updateSearch: bindActionCreators(menuActions.updateSearch, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StageMenu);
