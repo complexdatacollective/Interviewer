@@ -38,7 +38,6 @@ const api = {
   elements,
 };
 
-// TODO: What if protocol isn't a valid protocol?
 export default protocol => (
   new Function(
     'environment',
