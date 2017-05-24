@@ -60,8 +60,6 @@ function mapDispatchToProps(dispatch) {
 
 MyAmazingInterface = environment.connect(mapStateToProps, mapDispatchToProps)(MyAmazingInterface);
 
-console.log('I was run 5');
-
 return {
   config: {
     "name": "My first interview protocol",
