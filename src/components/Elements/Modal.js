@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 /**
   * Renders a modal window.
-  * @extends Component
   */
 const Modal = (props) => {
   const {

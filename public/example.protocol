@@ -52,7 +52,7 @@ return {
     "stages": [
       {
         "id": "namegen1",
-        "type": "namegenerator",
+        "type": "name-generator",
         "title": "Name Generator Title",
         "params": {
           "nodeType": 'person',
