@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+/**
+  * Homepage screen
+  * @param props {object} - children
+  */
 const HomePage = (props) => {
   const {
     participant,

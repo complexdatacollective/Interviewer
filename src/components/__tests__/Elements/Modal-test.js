@@ -8,7 +8,7 @@ describe('Modal component', () => {
   describe('show is false', () => {
     it('renders nothing', () => {
       const component = shallow((
-        <Modal show={false} onClose={() => {}}>
+        <Modal title="foo" show={false} onClose={() => {}}>
           foo
         </Modal>
       ));
@@ -20,7 +20,7 @@ describe('Modal component', () => {
   describe('show is true', () => {
     it('renders with content', () => {
       const component = shallow((
-        <Modal show onClose={() => {}}>
+        <Modal title="foo" show onClose={() => {}}>
           <span>foo</span>
         </Modal>
       ));
@@ -30,7 +30,7 @@ describe('Modal component', () => {
 
     it('calls onClose when close event is triggered', () => {
       const onClose = jest.fn();
-      const component = shallow(<Modal show onClose={onClose} />);
+      const component = shallow(<Modal title="foo" show onClose={onClose} />);
 
       expect(onClose.mock.calls.length).toBe(0);
 

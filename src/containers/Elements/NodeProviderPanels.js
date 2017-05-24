@@ -29,7 +29,9 @@ const getProviderConfig = (provider) => {
   return provider;
 };
 
-/** Figures out the panel config, and renders the relevant components with that config **/
+/**
+  * Configures and renders `NodeProvider`s into panels according to the protocol config
+  */
 const NodeProviderPanels = (props) => {
   const panels = props.config.map((panel, index) => {
     const providerConfig = getProviderConfig(panel);

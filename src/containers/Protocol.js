@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import Stage from './Stage';
 
 /**
-  * Load protocol data, and render a stage
-  * @extends Component
+  * Check protocol is loaded, and render the stage
   */
 const Protocol = (props) => {
   if (!props.protocolLoaded) { return null; }

@@ -10,6 +10,10 @@ import { filteredDataSource } from '../../selectors/dataSource';
 
 import { NodeList } from '../../components/Elements';
 
+/**
+  * Renders an interactive list of nodes for addition to the network.
+  * @extends Component
+  */
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
     if (isMatch(node, this.props.activePromptAttributes)) {

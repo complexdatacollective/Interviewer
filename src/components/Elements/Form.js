@@ -4,6 +4,10 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import TextInput from '../../components/Form/TextInput';
 
+/**
+  * Renders a redux form that contains fields according to a `fields` config.
+  * @extends Component
+  */
 class Form extends Component {
   render() {
     const {

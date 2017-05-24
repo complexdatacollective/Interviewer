@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+  * Renders a set of pips indicating the current `Prompt`.
+  */
 const Pips = (props) => {
   const {
     count,

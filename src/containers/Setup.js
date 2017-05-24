@@ -25,16 +25,20 @@ const initialValues = {
   protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/advanced.protocol',
 };
 
+/**
+  * Setup screen
+  * @extends Component
+  */
 class Setup extends Component {
-  handleLoadProtocol = (fields, _, form) => {
+  handleLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
-      form.reset();
     }
   }
 
   render() {
     if(this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }}/>); }
+
     return (
       <div className="setup">
         <h1>Get set up</h1>

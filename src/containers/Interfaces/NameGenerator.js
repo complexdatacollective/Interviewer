@@ -12,8 +12,12 @@ import { activeOriginNetwork } from '../../selectors/network';
 import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
 import { NodeList, NodeBin, NodeForm } from '../../components/Elements';
 
+// Render method for the node labels
+const label = node => `${node.nickname}`;
+
 /**
-  * This would/could be specified in the protocol, and draws upon ready made components
+  * Name Generator Interface
+  * @extends Component
   */
 class NameGenerator extends Component {
 
@@ -25,24 +29,42 @@ class NameGenerator extends Component {
     };
   }
 
+  /**
+   * New node submit handler
+   * @param {object} formData - key/value object containing node fields
+   */
   onSubmitNewNode = (formData) => {
     if (formData) {
       this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
     }
   }
 
+  /**
+   * Edit node submit handler
+   * @param {object} formData - key/value object containing node fields
+   */
   onSubmitEditNode = (formData) => {
     if (formData) {
       this.props.updateNode({ ...this.state.selectedNode, ...formData });
     }
   }
 
+  /**
+   * Click node handler
+   * Triggers the edit node form
+   * @param {object} node - key/value object containing node object from the network store
+   */
   onSelectNode = (node) => {
     this.setState({ selectedNode: node }, () => {
       this.props.openModal(modals.EDIT_NODE);
     });
   }
 
+  /**
+   * Drop node handler
+   * Deletes node from network when dropped on bin
+   * @param {object} node - key/value object containing node object from the network store
+   */
   onDropNode = (hits, node) => {
     hits.forEach((hit) => {
       switch (hit.name) {
@@ -56,17 +78,14 @@ class NameGenerator extends Component {
 
   render() {
     const {
-      config: {
-        params: {
-          form,
-          prompts,
-          panels,
-        },
-      },
       openModal,
     } = this.props;
 
-    const label = node => `${node.nickname}`;
+    const {
+      form,
+      prompts,
+      panels,
+    } = this.props.config.params;
 
     return (
       <div className="name-generator">

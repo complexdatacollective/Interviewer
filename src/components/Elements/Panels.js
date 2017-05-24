@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+  * Renders a pane container.
+  */
 const Panels = props => (
   <div className="panels">
     { props.children }

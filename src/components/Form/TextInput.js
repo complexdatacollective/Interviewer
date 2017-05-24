@@ -5,6 +5,10 @@ import { Field } from 'redux-form';
 import classnames from 'classnames';
 import { required } from '../../utils/Validations';
 
+/**
+  * Renders a redux form text input field in the style of our app.
+  * @extends Component
+  */
 class TextInput extends Component {
 
   textField = field => (
