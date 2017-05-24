@@ -1,23 +1,19 @@
 exports[`MenuItem component renders menu item with no image 1`] = `
 <a
-  className="menu__menuitem"
+  className="menu__menuitem menu__menuitem--"
   onClick={[Function]}
   role="menuitem"
   tabIndex={0}>
-  
   title
 </a>
 `;
 
 exports[`MenuItem component renders menu item with title 1`] = `
 <a
-  className="menu__menuitem"
+  className="menu__menuitem menu__menuitem--"
   onClick={[Function]}
   role="menuitem"
   tabIndex={0}>
-  <img
-    alt="type"
-    src="/images/type.svg" />
   title
 </a>
 `;

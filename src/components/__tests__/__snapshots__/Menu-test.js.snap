@@ -28,27 +28,24 @@ exports[`Menu component renders menu with list 1`] = `
             </header>
             <nav>
               <a
-                className="menu__menuitem"
+                className="menu__menuitem menu__menuitem--"
                 onClick={[Function]}
                 role="menuitem"
                 tabIndex={0}>
-                
                 a title
               </a>
               <a
-                className="menu__menuitem"
+                className="menu__menuitem menu__menuitem--"
                 onClick={[Function]}
                 role="menuitem"
                 tabIndex={0}>
-                
                 b title
               </a>
               <a
-                className="menu__menuitem"
+                className="menu__menuitem menu__menuitem--"
                 onClick={[Function]}
                 role="menuitem"
                 tabIndex={0}>
-                
                 c title
               </a>
             </nav>
