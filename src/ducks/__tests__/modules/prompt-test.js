@@ -2,6 +2,7 @@
 
 import reducer, { actionCreators, actionTypes } from '../../modules/prompt';
 import { actionTypes as protocolActionTypes } from '../../modules/protocol';
+import { actionTypes as stageActionTypes } from '../../modules/stage';
 
 const stage = {
 
@@ -102,6 +103,22 @@ describe('session reducer', () => {
     ).toEqual(
       {
         index: 1,
+        counts: [3, 1, 2],
+      },
+    );
+  });
+
+  it('should handle SET_STAGE', () => {
+    expect(
+      reducer({
+        index: 2,
+        counts: [3, 1, 2],
+      }, {
+        type: stageActionTypes.SET_STAGE,
+      }),
+    ).toEqual(
+      {
+        index: 0,
         counts: [3, 1, 2],
       },
     );

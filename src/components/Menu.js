@@ -1,113 +1,88 @@
-/* eslint-disable */
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import React from 'react';
+import { MenuContent } from '.';
+import { MenuItem } from './Elements';
 
-const MenuFactory = React.createClass({
-  propTypes: {
-    id: React.PropTypes.string,
-    isOpen: React.PropTypes.bool,
-  },
-
-  toggleMenu() {
-    console.log('toggleMenu ', this.state);
-
-    const newState = { isOpen: !this.state.isOpen };
-
-    console.log(newState);
-
-    this.setState(newState);
-  },
-
-  // Sets or unsets styles on DOM elements outside the menu component.
-  // This is necessary for correct page interaction with some of the menus.
-  // Throws and returns if the required external elements don't exist,
-  // which means any external page animations won't be applied.
-  componentWillUpdate(nextProps,nextState) {
-    console.log('handleExternalWrapper');
-
-    const wrapper = document.getElementById('page-wrap');
-
-    console.log(wrapper.className);
-    wrapper.className = nextState.isOpen ? 'isOpen' : '';
-
-  },
-
-  listenForClose(e) {
-    e = e || window.event;
-
-    if (this.state.isOpen && (e.key === 'Escape' || e.keyCode === 27)) {
-      this.toggleMenu();
-    }
-  },
-
-  getInitialState() {
-    const initialIsOpenProp = this.props && typeof this.props.isOpen !== 'undefined';
-    return { isOpen: initialIsOpenProp ? this.props.isOpen : false };
-  },
-
-  componentWillMount() {
-    // Allow initial open state to be set by props.
-    if (this.props.isOpen) {
-      this.toggleMenu();
-    }
-  },
-
+/**
+  * Renders a menu, updating styles on DOM elements outside of this.
+  * @extends Component
+  */
+class MenuFactory extends Component {
+  /**
+    * adds listener for key events to close Menu
+    */
   componentDidMount() {
     window.onkeydown = this.listenForClose;
+  }
 
-    // Allow initial open state to be set by props for animations with wrapper elements.
-    if (this.props.isOpen) {
-      this.toggleMenu();
-    }
-  },
-
+  /**
+    * adds listener for key events to close Menu
+    */
   componentWillUnmount() {
     window.onkeydown = null;
-  },
+  }
 
-  componentWillReceiveProps(nextProps) {
-    if (typeof nextProps.isOpen !== 'undefined' && nextProps.isOpen !== this.state.isOpen) {
-      this.toggleMenu();
+  listenForClose = (e) => {
+    const event = e || window.event;
+
+    if (this.props.isOpen && (event.key === 'Escape' || event.keyCode === 27)) {
+      this.props.toggleMenu();
     }
-  },
+  }
+
+  // intercepts click events; calls callback and toggles Menu open state
+  menuItemClick = (itemClick) => {
+    itemClick();
+    this.props.toggleMenu();
+  }
 
   render() {
+    const { isOpen, items, toggleMenu, searchField } = this.props;
+
+    const menuItems = items.map(item =>
+      (<MenuItem
+        key={item.id}
+        to={item.to}
+        onClick={() => this.menuItemClick(item.onClick)}
+        title={item.title}
+        isActive={item.isActive}
+        imageType={item.imageType}
+      />),
+    );
+
     return (
-      <div>
-        <div className="bm-overlay" onClick={this.toggleMenu} />
-        <div id={this.props.id} className={this.state.isOpen ? 'bm-menu-wrap isOpen' : 'bm-menu-wrap'}>
-          <div className="bm-menu">
-            <div className="cross-icon">
-              <button onClick={this.toggleMenu} className="ui large button">
-                <i className="download icon"></i>
-                Cross
-              </button>
-            </div>
-            <header>
-              <h1 className="bm-menu-title">Stages</h1>
-            </header>
-            <nav className="bm-item-list">
-              {React.Children.map(this.props.children, (item, index) => {
-                if (item) {
-                  const extraProps = {
-                    key: index
-                  };
-                  return React.cloneElement(item, extraProps);
-                }
-              })}
-            </nav>
+      <div className="menu">
+        <div className={isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
+          <div className="menu__content">
+            <MenuContent
+              toggleMenu={toggleMenu}
+              searchField={searchField}
+              items={menuItems}
+            />
           </div>
         </div>
-        <div className="burger-icon">
-          <button onClick={this.toggleMenu} className="ui large button">
-            <i className="download icon"></i>
+        {!isOpen && <div className="menu__burger">
+          <button onClick={toggleMenu} className="ui large button">
+            <i className="download icon" />
             Burger
           </button>
-        </div>
+        </div>}
       </div>
     );
   } // end render
-}); //end return
+} // end class
 
+MenuFactory.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  items: PropTypes.array,
+  toggleMenu: PropTypes.func.isRequired,
+  searchField: PropTypes.object,
+};
+
+MenuFactory.defaultProps = {
+  items: [],
+  searchField: null,
+};
 
 export default MenuFactory;

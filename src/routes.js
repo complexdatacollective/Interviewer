@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    hashHistory,
+    browserHistory,
     Route,
     Router,
     IndexRoute,
@@ -16,7 +16,7 @@ import {
 const networkService = new NetworkService();
 
 export const Routes = (
-  <Route path="/" component={App} networkService={networkService}>
+  <Route path="/" component={App} base="/" networkService={networkService}>
     <IndexRedirect to="home" />
     <IndexRoute component={HomePage} />
     <Route path="home" component={HomePage} />
@@ -24,4 +24,4 @@ export const Routes = (
   </Route>
 );
 
-export default () => <Router routes={Routes} history={hashHistory} />;
+export default () => <Router routes={Routes} history={browserHistory} />;

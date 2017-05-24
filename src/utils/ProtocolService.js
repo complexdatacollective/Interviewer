@@ -84,7 +84,7 @@ export default class ProtocolService {
         {
           "id": "namegen1",
           "type": "namegenerator",
-          "title": "Name Generator Title",
+          "title": "Name Generator Title 1",
           "params": {
             "nodeType": 'person',
             "panels": [
@@ -140,7 +140,7 @@ export default class ProtocolService {
         {
           "id": "namegen2",
           "type": "namegenerator",
-          "title": "Name Generator Title",
+          "title": "Name Generator Title 2",
           "params": {
             "nodeType": 'person',
             "prompts": [

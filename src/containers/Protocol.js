@@ -8,9 +8,13 @@ import Stage from './Stage';
 
 /**
   * Load protocol data, and render a stage
+  * @extends Component
   */
 class Protocol extends Component {
 
+  /**
+    * loads protocol when mounting
+    */
   componentWillMount() {
     if (!this.props.protocolLoaded) {
       this.props.loadProtocol();

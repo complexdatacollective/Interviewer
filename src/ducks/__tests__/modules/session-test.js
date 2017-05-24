@@ -20,7 +20,7 @@ describe('session reducer', () => {
       reducer([], {
         type: protocolActionTypes.SET_PROTOCOL,
         protocol: {
-          stages: Array(3),
+          stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         },
       }),
     ).toEqual(
@@ -90,6 +90,40 @@ describe('session reducer', () => {
       },
     );
   });
+
+  it('should handle SET_STAGE', () => {
+    expect(
+      reducer({
+        index: 0,
+        count: 3,
+      }, {
+        type: actionTypes.SET_STAGE,
+        stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+        id: 'd',
+      }),
+    ).toEqual(
+      {
+        index: 0,
+        count: 3,
+      },
+    );
+
+    expect(
+      reducer({
+        index: 1,
+        count: 3,
+      }, {
+        type: actionTypes.SET_STAGE,
+        stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+        id: 'c',
+      }),
+    ).toEqual(
+      {
+        index: 2,
+        count: 3,
+      },
+    );
+  });
 });
 
 describe('session actions', () => {
@@ -107,5 +141,13 @@ describe('session actions', () => {
     };
 
     expect(actionCreators.previous()).toEqual(expectedAction);
+  });
+
+  it('should create a set stage action', () => {
+    const expectedAction = {
+      type: actionTypes.SET_STAGE,
+    };
+
+    expect(actionCreators.setStage()).toEqual(expectedAction);
   });
 });

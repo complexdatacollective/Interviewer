@@ -9,6 +9,7 @@ import session from './session';
 import draggable from './draggable';
 import droppable from './droppable';
 import modals from './modals';
+import menu from './menu';
 
 export default combineReducers({
   form: formReducer,
@@ -20,4 +21,5 @@ export default combineReducers({
   draggable,
   droppable,
   modals,
+  menu,
 });

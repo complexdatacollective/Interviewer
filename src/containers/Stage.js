@@ -4,25 +4,22 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { stage } from '../selectors/session';
 
 import { NameGenerator } from './Interfaces';
 
 /**
-  * Render a protocol interface based on protocol info and index
+  * Render a protocol interface based on protocol info and id
+  * @extends Component
   */
 class Stage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleNext = this.handleNext.bind(this);
-    this.handlePrevious = this.handlePrevious.bind(this);
-  }
-
-  handleNext() {
+  // change the stage to the next
+  handleNext = () => {
     this.props.next();
   }
 
-  handlePrevious() {
+  // change the stage to the previous
+  handlePrevious = () => {
     this.props.previous();
   }
 
@@ -30,24 +27,26 @@ class Stage extends Component {
     // TODO: Load dynamically based on protocol using some kind of service?
     const CurrentInterface = NameGenerator;
 
-    const {
-      handleNext,
-      handlePrevious,
-      props: {
-        stage,
-      },
-    } = this;
-
     return (
       <div className="stage">
         <div className="stage__control">
-          <button className="stage__control-button stage__control-button--back" onClick={handlePrevious}>Back</button>
+          <button
+            className="stage__control-button stage__control-button--back"
+            onClick={this.handleNext}
+          >
+            Back
+          </button>
         </div>
         <div className="stage__interface">
-          <CurrentInterface config={stage} />
+          <CurrentInterface config={this.props.currentStage} />
         </div>
         <div className="stage__control">
-          <button className="stage__control-button stage__control-button--next" onClick={handleNext}>Next</button>
+          <button
+            className="stage__control-button stage__control-button--next"
+            onClick={this.handlePrevious}
+          >
+            Next
+          </button>
         </div>
       </div>
     );
@@ -55,17 +54,16 @@ class Stage extends Component {
 }
 
 Stage.propTypes = {
-  previous: PropTypes.func.isRequired,
+  currentStage: PropTypes.object.isRequired,
   next: PropTypes.func.isRequired,
-  stage: PropTypes.object.isRequired,
+  previous: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  // TODO: http://redux.js.org/docs/recipes/ComputingDerivedData.html
-  const stage = state.protocol.protocolConfig.stages[state.session.stage.index];
+  const currentStage = stage(state);
 
   return {
-    stage,
+    currentStage,
   };
 }
 
@@ -73,6 +71,7 @@ function mapDispatchToProps(dispatch) {
   return {
     next: bindActionCreators(stageActions.next, dispatch),
     previous: bindActionCreators(stageActions.previous, dispatch),
+    onStageClick: bindActionCreators(stageActions.setStage, dispatch),
   };
 }
 

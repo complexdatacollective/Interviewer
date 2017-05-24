@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import { Menu } from '../components';
+import { connect } from 'react-redux';
+
+import { menuIsOpen } from '../selectors/session';
+import { StageMenu } from '.';
 
 require('../styles/main.scss');
 
+/**
+  * Main app container.
+  * @param props {object} - children
+  */
 const App = (props) => {
   let children = null;
   if (props.children) {
@@ -16,11 +22,8 @@ const App = (props) => {
 
   return (
     <div id="outer-container">
-      <Menu>
-        <Link to="/">Home Page</Link>
-        <Link to="protocol">Access sample protocol</Link>
-      </Menu>
-      <div id="page-wrap" className="">
+      <StageMenu />
+      <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
         { children }
       </div>
     </div>
@@ -29,11 +32,19 @@ const App = (props) => {
 
 App.propTypes = {
   children: PropTypes.any,
+  isMenuOpen: PropTypes.bool,
   route: PropTypes.any.isRequired,
 };
 
 App.defaultProps = {
   children: null,
+  isMenuOpen: false,
 };
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    isMenuOpen: menuIsOpen(state),
+  };
+}
+
+export default connect(mapStateToProps)(App);
