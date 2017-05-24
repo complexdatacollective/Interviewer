@@ -1,0 +1,81 @@
+// sass-lint:disable-all
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 36px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: $platinum;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+
+#outer-container {
+  height:100%;
+  perspective: 1500px;
+}
+
+.menu__wrap {
+  position: fixed;
+  left: 0;
+  z-index: 2;
+  transform: none;
+  transition: all $animation-standard-duration $animation-default-easing;
+  height:100%;
+
+  transform: translate3d(-100%, 0, 0);
+  @include gridle_state( tablet) {
+    width:30vw;
+  }
+
+  @include gridle_state( desktop) {
+    width:22vw;
+  }
+}
+
+.menu__wrap--isOpen {
+  transform: translate3d(0%, 0, 0);
+}
+
+#page-wrap {
+  height: 100%;
+  box-sizing: border-box;
+  background: $navy-taupe;
+  overflow: scroll;
+  transition: all $animation-standard-duration $animation-default-easing;
+  position: relative;
+}
+
+#page-wrap.isOpen {
+
+  transform-origin: 100%;
+  transform-style: preserve-3d;
+  @include gridle_state( tablet) {
+    transform: translate3d(23.5vw, 0, -66vw);
+  }
+  @include gridle_state( desktop) {
+    transform: translate3d(17vw, 0, -40vw);
+  }
+}
+
+#root {
+  height:100%;
+  background: $light-sea-green;
+  color:white;
+}
