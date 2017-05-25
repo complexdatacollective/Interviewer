@@ -110,7 +110,8 @@
     "reselect": "^3.0.0",
     "rxjs": "^5.4.0",
     "sass-svg": "^1.0.1",
-    "semantic-ui-react": "^0.67.2"
+    "semantic-ui-react": "^0.67.2",
+    "upgrade": "^1.1.0"
   },
   "homepage": ".",
   "main": "src/electron-starter.js",
