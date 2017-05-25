@@ -11,7 +11,7 @@ import { NameGenerator } from './Interfaces';
 function loadInterface(options) {
   if (Object.hasOwnProperty.call(options, 'custom')) { return options.custom; }
   switch (options) {
-    case 'namegenerator':
+    case 'name-generator':
       return NameGenerator;
     default:
       return null;
@@ -24,17 +24,16 @@ function loadInterface(options) {
   */
 class Stage extends Component {
   // change the stage to the next
-  handleNext = () => {
+  onClickNext = () => {
     this.props.next();
   }
 
   // change the stage to the previous
-  handlePrevious = () => {
+  onClickBack = () => {
     this.props.previous();
   }
 
   render() {
-    // TODO: Load dynamically based on protocol using some kind of service?
     const CurrentInterface = loadInterface(this.props.currentStage.type);
 
     return (
@@ -42,7 +41,7 @@ class Stage extends Component {
         <div className="stage__control">
           <button
             className="stage__control-button stage__control-button--back"
-            onClick={this.handleNext}
+            onClick={this.onClickBack}
           >
             Back
           </button>
@@ -53,7 +52,7 @@ class Stage extends Component {
         <div className="stage__control">
           <button
             className="stage__control-button stage__control-button--next"
-            onClick={this.handlePrevious}
+            onClick={this.onClickNext}
           >
             Next
           </button>
@@ -81,7 +80,6 @@ function mapDispatchToProps(dispatch) {
   return {
     next: bindActionCreators(stageActions.next, dispatch),
     previous: bindActionCreators(stageActions.previous, dispatch),
-    onStageClick: bindActionCreators(stageActions.setStage, dispatch),
   };
 }
 
