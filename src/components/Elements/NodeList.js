@@ -5,6 +5,9 @@ import { scrollable, droppable, draggable, selectable } from '../../behaviors';
 
 const EnhancedNode = draggable(selectable(Node));
 
+/**
+  * Renders a list of Node.
+  */
 const NodeList = (props) => {
   const {
     network,

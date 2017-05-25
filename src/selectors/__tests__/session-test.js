@@ -19,7 +19,7 @@ describe('session selectors', () => {
   };
 
   const protocol = {
-    protocolConfig: {
+    config: {
       stages: [stage],
     },
   };

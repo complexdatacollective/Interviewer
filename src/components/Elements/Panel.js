@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+  * Renders a side panel, with a title and `props.children`.
+  */
 const Panel = (props) => {
   const {
     title,

@@ -23,6 +23,10 @@ const modalIsOpen = createSelector(
   modal => (modal ? modal.open : false),
 );
 
+/**
+  * A modal window which can be toggled open an closed.
+  * @extends Component
+  */
 class Modal extends Component {
 
   componentWillMount() {

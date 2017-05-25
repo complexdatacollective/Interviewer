@@ -6,15 +6,18 @@ import classNames from 'classnames';
   * Renders a menu item using router links. Image is optional.
   */
 function MenuItem(props) {
-  const { onClick, imageType, title, isActive } = props;
+  const { onClick, interfaceType, title, isActive } = props;
 
-  const itemClasses = classNames({
-    menu__menuitem: true,
-    'menu__menuitem--active': isActive,
-  });
+  const itemClasses = classNames(
+    'menu__menuitem',
+    `menu__menuitem--${interfaceType}`,
+    {
+      'menu__menuitem--active': isActive,
+    },
+  );
+
   return (
-    <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem" >
-      {imageType && <img src={`/images/${imageType}.svg`} alt="type" />}
+    <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
       {title}
     </a>
   );
@@ -22,13 +25,13 @@ function MenuItem(props) {
 
 MenuItem.propTypes = {
   onClick: PropTypes.func.isRequired,
-  imageType: PropTypes.string,
+  interfaceType: PropTypes.string,
   title: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
 };
 
 MenuItem.defaultProps = {
-  imageType: '',
+  interfaceType: '',
   isActive: false,
 };
 

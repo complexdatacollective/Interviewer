@@ -25,11 +25,13 @@ describe('session reducer', () => {
       reducer([], {
         type: protocolActionTypes.SET_PROTOCOL,
         protocol: {
-          stages: [
-            { params: { prompts: Array(3) } },
-            { params: { prompts: Array(1) } },
-            { params: { prompts: Array(2) } },
-          ],
+          config: {
+            stages: [
+              { params: { prompts: Array(3) } },
+              { params: { prompts: Array(1) } },
+              { params: { prompts: Array(2) } },
+            ],
+          },
         },
       }),
     ).toEqual(

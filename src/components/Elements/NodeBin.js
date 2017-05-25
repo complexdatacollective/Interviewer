@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DropZone } from '../../components/Elements';
 
+/**
+  * Renders a droppable NodeBin which accepts `EXISTING_NODE`.
+  */
 const NodeBin = (props) => {
   if (!props.isDraggableDeleteable) { return null; }
 

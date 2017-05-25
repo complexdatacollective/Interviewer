@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+  * Renders a single prompt.
+  */
 const Prompt = (props) => {
   const {
     label,

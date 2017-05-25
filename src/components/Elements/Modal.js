@@ -2,6 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+  * Renders a modal window.
+  */
 const Modal = (props) => {
   const {
     show,

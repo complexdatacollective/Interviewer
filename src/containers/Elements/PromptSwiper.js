@@ -6,6 +6,10 @@ import PropTypes from 'prop-types';
 import { actionCreators as promptActions } from '../../ducks/modules/prompt';
 import { Prompt, Pips } from '../../components/Elements';
 
+/**
+  * Displays a control to swipe through prompts
+  * @extends Component
+  */
 class PromptSwiper extends Component {
   constructor(props) {
     super(props);

@@ -14,12 +14,12 @@
     align-items: center;
 
     &-button {
-      @include svg-button('/images/arrow-back.svg');
+      @include svg-button('../images/arrow-back.svg');
       width: 35px;
       height: 100px;
 
       &--next {
-        @include svg-button('/images/arrow-next.svg');
+        @include svg-button('../images/arrow-next.svg');
       }
     }
   }

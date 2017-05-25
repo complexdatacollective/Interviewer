@@ -7,6 +7,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
 
 import { store } from './ducks/store';
+import App from './containers/App';
 import AppRouter from './routes';
 
 injectTapEventPlugin();
@@ -14,7 +15,9 @@ injectTapEventPlugin();
 function startApp() {
   ReactDOM.render(
     <Provider store={store}>
-      <AppRouter />
+      <App>
+        <AppRouter />
+      </App>
     </Provider>,
     document.getElementById('root'),
   );

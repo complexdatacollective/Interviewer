@@ -3,7 +3,7 @@
 $network-canvas-coral: #e2215b;
 $mustard: #f2b700;
 $light-sea-green: #00c9a2;
-$white: #ffffff;
+$white: #fff;
 $slate-blue: #6b72ec;
 $navy-taupe: #2d2955;
 $cyber-grape: #3a3a75;
@@ -42,32 +42,32 @@ $roles: (
 
 // Collections
 $nodes: (
-    default: (
-        base:   map-get($roles, node),
-        dark:   darken(map-get($roles, node), 5%)
-    )
+  default: (
+    base:   map-get($roles, node),
+    dark:   darken(map-get($roles, node), 5%)
+  )
 );
 
 $edges: (
-    default: (
-        base:   map-get($roles, edge),
-        dark:   darken(map-get($roles, edge), 5%)
-    )
+  default: (
+    base:   map-get($roles, edge),
+    dark:   darken(map-get($roles, edge), 5%)
+  )
 );
 
 @function node-palette($palette: 'default', $tone: 'base') {
-    @return map-get(map-get($nodes, $palette), $tone);
+  @return map-get(map-get($nodes, $palette), $tone);
 }
 
 
 @function palette($role) {
-  @return map-get($roles, $role)
+  @return map-get($roles, $role);
 }
 
-
 a {
-    color: node-palette(default);
-    &:hover {
-        color: node-palette(default, dark);
-    }
+  color: node-palette(default);
+
+  &:hover {
+    color: node-palette(default, dark);
+  }
 }

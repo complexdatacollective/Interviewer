@@ -8,6 +8,16 @@ import { stage } from '../selectors/session';
 
 import { NameGenerator } from './Interfaces';
 
+function loadInterface(options) {
+  if (Object.hasOwnProperty.call(options, 'custom')) { return options.custom; }
+  switch (options) {
+    case 'namegenerator':
+      return NameGenerator;
+    default:
+      return null;
+  }
+}
+
 /**
   * Render a protocol interface based on protocol info and id
   * @extends Component
@@ -25,7 +35,7 @@ class Stage extends Component {
 
   render() {
     // TODO: Load dynamically based on protocol using some kind of service?
-    const CurrentInterface = NameGenerator;
+    const CurrentInterface = loadInterface(this.props.currentStage.type);
 
     return (
       <div className="stage">

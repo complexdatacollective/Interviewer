@@ -1,50 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import Stage from './Stage';
 
 /**
-  * Load protocol data, and render a stage
-  * @extends Component
+  * Check protocol is loaded, and render the stage
   */
-class Protocol extends Component {
+const Protocol = (props) => {
+  if (!props.protocolLoaded) { return null; }
 
-  /**
-    * loads protocol when mounting
-    */
-  componentWillMount() {
-    if (!this.props.protocolLoaded) {
-      this.props.loadProtocol();
-    }
-  }
-
-  render() {
-    return (
-      <div className="protocol">
-        <Stage />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="protocol">
+      <Stage />
+    </div>
+  );
+};
 
 Protocol.propTypes = {
   protocolLoaded: PropTypes.bool.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    protocolLoaded: state.protocol.protocolLoaded,
+    protocolLoaded: state.protocol.loaded,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Protocol);
+export default connect(mapStateToProps)(Protocol);

@@ -1,144 +1,91 @@
-/* Position and sizing of burger button */
-.bm-burger-button {
-  position: fixed;
-  width: 36px;
-  height: 30px;
-  left: 36px;
-  top: 36px;
-}
+$interface-types: (
+  'name-generator',
+  'custom'
+);
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: $platinum;
-}
-
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
-}
-
-/* Color/shape of close button cross */
-.bm-cross {
-  background: #bdc3c7;
-}
-
-/* General sidebar styles */
-.menu__content {
-  background: map-get($roles, menu);
-  height:100%;
-  color: $charcoal;
-}
-
-/* Menu header */
-.menu__title {
-  padding:$padding-base-vertical $spacer-4;
-  color: map-get($roles, menu-headings);
-  font-weight: 700;
-  line-height: 2.5rem;
-}
-
-.menu__search {
-  input {
-    padding: .3rem;
-    width: 100%;
+.menu {
+  // General sidebar styles
+  &__content {
+    background: map-get($roles, menu);
+    height: 100%;
+    color: $charcoal;
   }
 
-  padding: 1rem;
-}
+  // Menu header
+  &__title {
+    padding: $padding-base-vertical $spacer-4;
+    color: map-get($roles, menu-headings);
+    font-weight: 700;
+    line-height: 2.5rem;
+  }
 
-/* Wrapper for item list */
-.menu__menuitem {
-  align-items: center;
-  border-top: 1px solid $divider;
-  color: $charcoal;
-  display: flex;
-  font-weight: 500;
-  letter-spacing: 3px;
-  padding:$padding-base-vertical $spacer-4;
-  text-decoration: none;
-  text-transform: uppercase;
-  &--active {
-    background-color: $light-sea-green;
+  &__search {
+    padding: 1rem;
+
+    input {
+      padding: .3rem;
+      width: 100%;
+    }
   }
-  img {
-    height: 2rem;
-    padding-right: .5rem;
-    width: 2rem;
-  }
-  &:hover {
-    background: #00ba96;
-    color: white;
+
+  // Wrapper for item list
+  &__menuitem {
+    align-items: center;
+    border-top: 1px solid $divider;
+    color: $charcoal;
+    display: flex;
+    font-weight: 500;
+    letter-spacing: 3px;
+    padding: 15px 25px 15px 80px;
     text-decoration: none;
+    text-transform: uppercase;
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: 25px 50%;
+    cursor: pointer;
+
+    &--active,
+    &:hover {
+      color: $white;
+      text-decoration: none;
+    }
+
+    &--active {
+      background-color: $light-sea-green;
+    }
+
+    &:hover {
+      background-color: darken($light-sea-green, 5%); // #00ba96;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    @each $interface-type in $interface-types {
+      &--#{$interface-type} {
+        background-image: url('../images/menu/#{$interface-type}.svg');
+
+        &.menu__menuitem--active,
+        &:hover {
+          background-image: url('../images/menu/#{$interface-type}--active.svg');
+        }
+      }
+    }
   }
-}
 
-
-#outer-container {
-  height:100%;
-  perspective: 1500px;
-}
-
-.menu__wrap {
-  position: fixed;
-  left: 0;
-  z-index: 2;
-  transform: none;
-  transition: all $animation-standard-duration $animation-default-easing;
-  height:100%;
-
-  transform: translate3d(-100%, 0, 0);
-  @include gridle_state( tablet) {
-    width:30vw;
+  &__cross {
+    float: right;
   }
 
-  @include gridle_state( desktop) {
-    width:22vw;
+  &__burger {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 8;
+    z-index: 1;
   }
-}
-
-.menu__wrap--isOpen {
-  transform: translate3d(0%, 0, 0);
-}
-
-#page-wrap {
-  height: 100%;
-  box-sizing: border-box;
-  background: $navy-taupe;
-  overflow: scroll;
-  transition: all $animation-standard-duration $animation-default-easing;
-  position: relative;
-}
-
-#page-wrap.isOpen {
-
-  transform-origin: 100%;
-  transform-style: preserve-3d;
-  @include gridle_state( tablet) {
-    transform: translate3d(23.5vw, 0, -66vw);
-  }
-  @include gridle_state( desktop) {
-    transform: translate3d(17vw, 0, -40vw);
-  }
-}
-
-#root {
-  height:100%;
-  background: $light-sea-green;
-  color:white;
-}
-
-.menu__cross {
-  float: right;
-}
-
-.menu__burger {
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-size: 8;
-  z-index: 1;
 }

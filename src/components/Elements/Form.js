@@ -1,32 +1,27 @@
-/* eslint-disable */
-
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import TextInput from '../../components/Form/TextInput';
 
-class Form extends Component {
-  render() {
-    const {
-      props: {
-        handleSubmit,
-        fields
-      }
-    } = this;
+/**
+  * Renders a redux form that contains fields according to a `fields` config.
+  */
+const Form = props => (
+  <form onSubmit={props.handleSubmit}>
+    { props.fields.map((field, index) => (
+      <TextInput key={index} {...field} />
+    )) }
+    <br />
+    <button type="submit">Submit</button>
+  </form>
+);
 
-    return (
-      <form onSubmit={ handleSubmit }>
-        { fields.map((field, index) => {
-          return <TextInput key={ index } { ...field } />;
-        }) }
-        <button type="submit">Submit</button>
-      </form>
-    )
-  }
-}
+Form.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
+};
 
-Form = reduxForm({
+export default reduxForm({
   destroyOnUnmount: true,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
 })(Form);
-
-export default Form;

@@ -20,7 +20,8 @@ const initialValues = createSelector(
 );
 
 /**
-  * Modal Node Form
+  * Modal Node Form, than can handle new/editing of nodes
+  * @extends Component
   */
 class NodeForm extends Component {
 
