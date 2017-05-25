@@ -47,7 +47,7 @@ class Stage extends Component {
           </button>
         </div>
         <div className="stage__interface">
-          <CurrentInterface config={this.props.currentStage} />
+          { CurrentInterface && <CurrentInterface config={this.props.currentStage} /> }
         </div>
         <div className="stage__control">
           <button
