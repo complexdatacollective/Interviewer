@@ -89,6 +89,7 @@
     "gridle": "^2.0.48",
     "history": "^4.5.1",
     "lodash": "^4.17.4",
+    "network-canvas-ui": "git+https://git@github.com/codaco/Network-Canvas-UI.git",
     "prop-types": "^15.5.8",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -109,7 +110,8 @@
     "reselect": "^3.0.0",
     "rxjs": "^5.4.0",
     "sass-svg": "^1.0.1",
-    "semantic-ui-react": "^0.67.2"
+    "semantic-ui-react": "^0.67.2",
+    "upgrade": "^1.1.0"
   },
   "homepage": ".",
   "main": "src/electron-starter.js",
