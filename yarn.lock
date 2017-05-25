@@ -4947,6 +4947,10 @@ nested-error-stacks@^1.0.1:
   dependencies:
     inherits "~2.0.1"
 
+"network-canvas-ui@git+https://git@github.com/codaco/Network-Canvas-UI.git":
+  version "1.0.5"
+  resolved "git+https://git@github.com/codaco/Network-Canvas-UI.git#069ee3f7a6dd79e842e8f7c958e1a0c6e9d7bd6c"
+
 no-case@^2.2.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.1.tgz#7aeba1c73a52184265554b7dc03baf720df80081"
