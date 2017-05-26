@@ -9,10 +9,10 @@ export const minLength = min =>
     (value && value.length < min ? `Must be ${min} characters or more` : undefined);
 export const minValue = min =>
   value =>
-    (value && value < min ? `Must be at least ${min} characters` : undefined);
+    (value && value < min ? `Must be at least ${min}` : undefined);
 export const maxValue = max =>
   value =>
-    (value && value > max ? `Must be less than ${max} characters` : undefined);
+    (value && value > max ? `Must be less than ${max}` : undefined);
 
 export default {
   required,
