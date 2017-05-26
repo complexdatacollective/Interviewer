@@ -36,12 +36,12 @@ const fields = [
   {
     label: 'Choose some options',
     name: 'chosen_options',
-    type: 'options',
+    type: 'checkbox',
     options: ['foo', 'bar', 'baz', 'buzz', 'fizz', 'pop'],
     validation: {
       required: true,
-      minOptions: 2,
-      maxOptions: 3,
+      minSelected: 2,
+      maxSelected: 3,
     },
   },
 ];

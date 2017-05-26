@@ -13,6 +13,12 @@ export const minValue = min =>
 export const maxValue = max =>
   value =>
     (value && value > max ? `Must be less than ${max}` : undefined);
+export const minSelected = min =>
+  value =>
+    (value && value.length < min ? `Must choose at least ${min}` : undefined);
+export const maxSelected = max =>
+  value =>
+    (value && value.length > max ? `Must choose at least ${max}` : undefined);
 
 export default {
   required,
@@ -20,4 +26,6 @@ export default {
   maxLength,
   minValue,
   maxValue,
+  minSelected,
+  maxSelected,
 };
