@@ -6,14 +6,22 @@ const fields = [
     name: 'name',
     type: 'text',
     placeholder: 'Name',
-    required: true,
+    validation: {
+      required: true,
+      minLength: 2,
+      minLength: 8,
+    },
   },
   {
     label: 'Nickname',
     name: 'nickname',
     type: 'nickname',
     placeholder: 'Nickname',
-    required: true,
+    validation: {
+      required: true,
+      minLength: 2,
+      maxLength: 8,
+    },
   },
   {
     label: 'Age',
@@ -21,8 +29,8 @@ const fields = [
     type: 'number',
     validation: {
       required: true,
-      min: 0,
-      max: 200,
+      minValue: 0,
+      maxValue: 200,
     },
   },
   {
@@ -32,8 +40,8 @@ const fields = [
     options: ['foo', 'bar', 'baz', 'buzz', 'fizz', 'pop'],
     validation: {
       required: true,
-      min: 2,
-      max: 3,
+      minOptions: 2,
+      maxOptions: 3,
     },
   },
 ];
@@ -59,7 +67,7 @@ return {
           ],
           form: {
             title: 'Answer some questions',
-            formName: 'quiz1',
+            name: 'quiz1',
             fields: fields,
           },
         },

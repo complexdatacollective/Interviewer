@@ -42,7 +42,7 @@ class NodeForm extends Component {
         <Form
           {...form}
           initialValues={initialValues}
-          form={form.formName}
+          form={form.name}
           onSubmit={this.onSubmit}
         />
       </Modal>

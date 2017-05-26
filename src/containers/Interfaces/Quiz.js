@@ -41,8 +41,9 @@ class Quiz extends Component {
         </Modal>
 
         <Form
+          form={form.name}
           fields={form.fields}
-          handleSubmit={this.onSubmit}
+          onSubmit={this.onSubmit}
         />
 
         <br />
