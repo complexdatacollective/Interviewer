@@ -1,5 +1,6 @@
 .modal {
   position: absolute;
+  z-index: 2000;
   top: 0;
   left: 0;
   width: 100%;
@@ -7,14 +8,54 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize($rich-black, 0.25);
+  background-color: transparentize(palette('background'), 0.1);
 
   &__window {
-    width: 500px;
-    height: 400px;
-    background: $dark-platinum;
-    color: $rich-black;
-    padding: 30px;
-    border-radius: 15px;
+    width: 750px;
+    background: palette('light-background');
+    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), 0.25);
+    position: relative;
+  }
+
+  &__layout {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    margin: 0 50px 50px;
+
+    &-content {
+      flex: 1 auto;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+
+    &-title {
+      flex: 0 165px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 65px 0 0;
+    }
+  }
+
+  &__close {
+    background: transparent;
+    background-image: url('../images/close.svg');
+    background-repeat: no-repeat;
+    background-size: 15px;
+    background-position: 0 50%;
+    padding-left: 25px;
+    text-transform: uppercase;
+    border: 0;
+    position: absolute;
+    right: 35px;
+    top: 35px;
+    color: palette('text');
+    cusor: pointer;
+
+    &:focus {
+      outline: none;
+    }
   }
 }

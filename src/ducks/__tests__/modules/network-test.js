@@ -11,31 +11,28 @@ const mockState = {
 describe('network reducer', () => {
   it('should return the initial state', () => {
     expect(
-      reducer(undefined, {})
-    ).toEqual(mockState)
+      reducer(undefined, {}),
+    ).toEqual(mockState);
   });
 
   it('should handle ADD_NODE', () => {
-    expect(
-      reducer({
-        ...mockState,
-        nodes: [
-          { id: 1, name: 'baz' }
-        ],
-      }, {
-        type: actionTypes.ADD_NODE,
-        node: { name: 'foo' },
-      })
-    ).toEqual(
-      {
-        ...mockState,
-        nodes: [
-          { id: 1, name: 'baz' },
-          { id: 2, name: 'foo' },
-        ],
-      }
-    )
+    const newState = reducer({
+      ...mockState,
+      nodes: [
+        { id: 1, name: 'baz' },
+      ],
+    }, {
+      type: actionTypes.ADD_NODE,
+      node: { name: 'foo' },
+    });
 
+    expect(newState.nodes.length).toBe(2);
+    expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
+
+    const newNode = newState.nodes[1];
+    expect(newNode.id).toEqual(2);
+    expect(newNode.name).toEqual('foo');
+    expect(newNode.uid).toMatch(/[0-9]+_[0-9]+/);
   });
 
   it('should handle REMOVE_NODE', () => {
@@ -43,26 +40,24 @@ describe('network reducer', () => {
       reducer({
         ...mockState,
         nodes: [
-          { id: 1, name: 'foo' },
-          { id: 2, name: 'bar' },
-          { id: 3, name: 'baz' },
+          { uid: 1, name: 'foo' },
+          { uid: 2, name: 'bar' },
+          { uid: 3, name: 'baz' },
         ],
       }, {
         type: actionTypes.REMOVE_NODE,
-        id: 2,
-      })
+        uid: 2,
+      }),
     ).toEqual(
       {
         ...mockState,
         nodes: [
-          { id: 1, name: 'foo' },
-          { id: 3, name: 'baz' },
+          { uid: 1, name: 'foo' },
+          { uid: 3, name: 'baz' },
         ],
-      }
-    )
+      },
+    );
   });
-
-
 });
 
 describe('session actions', () => {
@@ -70,17 +65,17 @@ describe('session actions', () => {
     const expectedAction = {
       type: actionTypes.ADD_NODE,
       node: { name: 'foo' },
-    }
+    };
 
-    expect(actionCreators.addNode({ name: 'foo' })).toEqual(expectedAction)
-  })
+    expect(actionCreators.addNode({ name: 'foo' })).toEqual(expectedAction);
+  });
 
   it('should create a REMOVE_NODE action', () => {
     const expectedAction = {
       type: actionTypes.REMOVE_NODE,
-      index: 2,
-    }
+      uid: 2,
+    };
 
-    expect(actionCreators.removeNode(2)).toEqual(expectedAction)
-  })
-})
+    expect(actionCreators.removeNode(2)).toEqual(expectedAction);
+  });
+});

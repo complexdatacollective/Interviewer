@@ -1,50 +1,57 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
 const providerPresets = {
-  'existing': {
+  existing: {
     type: 'existing',
     title: 'People from your existing lists',
     source: 'existing',
     selectable: true,
-    filter: (network) => { return network; },
+    filter: network => network,
   },
-  'previous': {
+  previous: {
     type: 'previous',
     title: 'People from your previous visit',
     source: 'previous',
     draggable: true,
-    filter: (network) => { return network; },
+    filter: network => network,
   },
-}
+};
 
 const getProviderConfig = (provider) => {
-  if (!provider) { return () => { return true; } }  // TODO: rehydrate looses methods, this puts a placehoder back in
-  if (providerPresets.hasOwnProperty(provider)) { return providerPresets[provider]; }
+  // TODO: rehydrate looses methods, this puts a placehoder back in
+  if (!provider) { return () => true; }
+  if (Object.prototype.hasOwnProperty.call(providerPresets, provider)) {
+    return providerPresets[provider];
+  }
   return provider;
-}
+};
 
-/** Figures out the panel config, and renders the relevant components with that config **/
-class NodeProviderPanels extends Component {
-  render() {
-    const panels = this.props.config.map((panel, index) => {
-      const providerConfig = getProviderConfig(panel);
-
-      return (
-        <Panel title={ providerConfig.title } key={ index }>
-          <NodeProvider { ...providerConfig } />
-        </Panel>
-      );
-    });
+/**
+  * Configures and renders `NodeProvider`s into panels according to the protocol config
+  */
+const NodeProviderPanels = (props) => {
+  const panels = props.config.map((panel, index) => {
+    const providerConfig = getProviderConfig(panel);
 
     return (
-      <Panels>
-        { panels }
-      </Panels>
+      <Panel title={providerConfig.title} key={index}>
+        <NodeProvider {...providerConfig} />
+      </Panel>
     );
-  }
-}
+  });
+
+  return (
+    <Panels>
+      {panels}
+    </Panels>
+  );
+};
+
+NodeProviderPanels.propTypes = {
+  config: PropTypes.any.isRequired,
+};
 
 export default NodeProviderPanels;

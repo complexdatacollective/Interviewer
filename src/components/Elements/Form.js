@@ -1,41 +1,27 @@
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { required } from '../../utils/Validations';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { reduxForm } from 'redux-form';
+import TextInput from '../../components/Form/TextInput';
 
-import { Input, Form as SemanticForm } from 'semantic-ui-react';
+/**
+  * Renders a redux form that contains fields according to a `fields` config.
+  */
+const Form = props => (
+  <form onSubmit={props.handleSubmit}>
+    { props.fields.map((field, index) => (
+      <TextInput key={index} {...field} />
+    )) }
+    <br />
+    <button type="submit">Submit</button>
+  </form>
+);
 
-class Form extends Component {
-  textField = ({ input, label }) => {
-    return (
-      <Input label={label} {...input} />
-    );
-  }
+Form.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
+};
 
-  render() {
-    const {
-      props: {
-        handleSubmit,
-        fields
-      },
-      textField
-    } = this;
-
-    return (
-      <SemanticForm onSubmit={ handleSubmit }>
-        { fields.map((field, index) => {
-          return (
-            <Field key={ index } name={ field.name } component={ textField } label={ field.label } validate={[ required ]}/>
-          );
-        }) }
-        <button type="submit">Submit</button>
-      </SemanticForm>
-    )
-  }
-}
-
-Form = reduxForm({
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+export default reduxForm({
+  destroyOnUnmount: true,
+  forceUnregisterOnUnmount: true,
 })(Form);
-
-export default Form;

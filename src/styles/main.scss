@@ -1,11 +1,9 @@
-@import "base/_all.scss";
+@import '~network-canvas-ui/styles/all';
 @import "components/_all.scss";
-
 
 #root {
     @import "containers/home";
 }
-
 
 html, body {
   margin:0;

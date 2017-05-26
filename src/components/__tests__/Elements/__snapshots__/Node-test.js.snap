@@ -8,33 +8,37 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="node">
-    <h3>
+    <div
+        className="node__label">
         foo
-    </h3>
+    </div>
 </div>,
   "nodes": Array [
     <div
       className="node">
-      <h3>
+      <div
+            className="node__label">
             foo
-      </h3>
+      </div>
 </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 0,
+      "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Node
+        isActive={false}
         label="foo" />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": Node {
+      "_instance": StatelessComponent {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "isActive": false,
           "label": "foo",
         },
         "refs": Object {},
@@ -59,16 +63,18 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="node">
-          <h3>
+          <div
+                    className="node__label">
                     foo
-          </h3>
+          </div>
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node">
-          <h3>
+          <div
+                    className="node__label">
                     foo
-          </h3>
+          </div>
 </div>,
       },
       "_renderedNodeType": 0,
@@ -82,6 +88,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Node
+    isActive={false}
     label="foo" />,
 }
 `;

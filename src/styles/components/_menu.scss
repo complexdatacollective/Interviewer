@@ -1,136 +1,91 @@
-/* Position and sizing of burger button */
-.bm-burger-button {
-  position: fixed;
-  width: 36px;
-  height: 30px;
-  left: 36px;
-  top: 36px;
-}
+$interface-types: (
+  'name-generator',
+  'custom'
+);
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: $platinum;
-}
-
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
-}
-
-/* Color/shape of close button cross */
-.bm-cross {
-  background: #bdc3c7;
-}
-
-/* General sidebar styles */
-.bm-menu {
-  background: map-get($roles, menu);
-  height:100%;
-  color: $charcoal;
-}
-
-/* Morph shape necessary with bubble or elastic */
-.bm-morph-shape {
-  fill: map-get($roles, menu);
-}
-
-//Menu header
-.bm-menu-title {
-  padding:$padding-base-vertical $spacer-4;
-  color: map-get($roles, menu-headings);
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-/* Wrapper for item list */
-.bm-item-list {
-
-  a {
-    display: block;
-    padding:$padding-base-vertical $spacer-4;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-decoration: none;
+.menu {
+  // General sidebar styles
+  &__content {
+    background: map-get($roles, menu);
+    height: 100%;
     color: $charcoal;
-    font-weight: 500;
-    font-size: 0.75rem;
-    border-top: 1px solid $divider;
-    &:hover {
-      background: #00ba96;
-      color: white;
+  }
+
+  // Menu header
+  &__title {
+    padding: $padding-base-vertical $spacer-4;
+    color: map-get($roles, menu-headings);
+    font-weight: 700;
+    line-height: 2.5rem;
+  }
+
+  &__search {
+    padding: 1rem;
+
+    input {
+      padding: .3rem;
+      width: 100%;
     }
   }
-}
 
+  // Wrapper for item list
+  &__menuitem {
+    align-items: center;
+    border-top: 1px solid $divider;
+    color: $charcoal;
+    display: flex;
+    font-weight: 500;
+    letter-spacing: 3px;
+    padding: 15px 25px 15px 80px;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: 25px 50%;
+    cursor: pointer;
 
-#outer-container {
-  height:100%;
-  perspective: 1500px;
-}
+    &--active,
+    &:hover {
+      color: $white;
+      text-decoration: none;
+    }
 
-.bm-menu-wrap {
-  position: fixed;
-  left: 0;
-  z-index: 2;
-  transform: none;
-  transition: all $animation-standard-duration $animation-default-easing;
-  height:100%;
+    &--active {
+      background-color: $light-sea-green;
+    }
 
-  transform: translate3d(-100%, 0, 0);
-  @include gridle_state( tablet) {
-    width:30vw;
+    &:hover {
+      background-color: darken($light-sea-green, 5%); // #00ba96;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    @each $interface-type in $interface-types {
+      &--#{$interface-type} {
+        background-image: url('../images/menu/#{$interface-type}.svg');
+
+        &.menu__menuitem--active,
+        &:hover {
+          background-image: url('../images/menu/#{$interface-type}--active.svg');
+        }
+      }
+    }
   }
 
-  @include gridle_state( desktop) {
-    width:22vw;
+  &__cross {
+    float: right;
   }
-}
 
-.bm-menu-wrap.isOpen {
-  transform: translate3d(0%, 0, 0);
-}
-
-#page-wrap {
-  height: 100%;
-  box-sizing: border-box;
-  background: $navy-taupe;
-  overflow: scroll;
-  padding: 6rem;
-  transition: all $animation-standard-duration $animation-default-easing;
-  position: relative;
-}
-
-#page-wrap.isOpen {
-
-  transform-origin: 100%;
-  transform-style: preserve-3d;
-  @include gridle_state( tablet) {
-    transform: translate3d(23.5vw, 0, -66vw);
+  &__burger {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 8;
+    z-index: 1;
   }
-  @include gridle_state( desktop) {
-    transform: translate3d(17vw, 0, -40vw);
-  }
-}
-
-#root {
-  height:100%;
-  background: $light-sea-green;
-  color:white;
-}
-
-.cross-icon {
-  // position: absolute;
-  // top:15px;
-  // right:15px;
-}
-
-.burger-icon {
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-size: 8;
 }

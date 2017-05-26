@@ -1,9 +1,9 @@
-import { createSelector } from 'reselect'
+/* eslint-disable no-shadow */
+import { createSelector } from 'reselect';
+import { join, difference } from '../utils/Network';
+import { restOfNetwork, activeStageNetwork } from './network';
 
-import { join, difference } from '../utils/Network'
-import { restOfNetwork, activeStageNetwork } from './network'
-
-const data = state => state.protocol.protocolConfig.data;
+const data = state => state.protocol.config.data;
 
 const source = (_, props) => props.source;
 
@@ -12,8 +12,8 @@ const filter = (_, props) => props.filter;
 const fromSource = createSelector(
   data,
   source,
-  (data, source) => data[source]
-)
+  (data, source) => data[source],
+);
 
 export const dataSource = createSelector(
   source,
@@ -23,17 +23,20 @@ export const dataSource = createSelector(
   (source, fromSource, restOfNetwork, activeStageNetwork) => {
     switch (source) {
       case 'existing':
-        return restOfNetwork;  // that aren't on this stage, but have the same type
+        // that aren't on this stage, but have the same type
+        return restOfNetwork;
       default:
-        return difference(fromSource, join(restOfNetwork, activeStageNetwork));  // that aren't on this screen.
+        // that aren't on this screen.
+        return difference(
+          fromSource,
+          join(restOfNetwork, activeStageNetwork),
+        );
     }
-  }
+  },
 );
 
 export const filteredDataSource = createSelector(
   dataSource,
   filter,
-  (dataSource, filter) => {
-    return filter(dataSource);
-  }
+  (dataSource, filter) => filter(dataSource),
 );

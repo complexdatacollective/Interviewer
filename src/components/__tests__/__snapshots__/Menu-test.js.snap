@@ -1,0 +1,68 @@
+exports[`Menu component renders menu with list 1`] = `
+<div
+  className="menu">
+  <div
+    className="menu__wrap">
+    <div
+      className="menu__content">
+      <div
+        className="scrollable">
+        <div
+          className="scrollable__window">
+          <div>
+            <div
+              className="menu__cross">
+              <button
+                className="ui large button"
+                onClick={[Function]}>
+                <i
+                  className="download icon" />
+                Cross
+              </button>
+            </div>
+            <header>
+              <h1
+                className="menu__title">
+                Stages
+              </h1>
+            </header>
+            <nav>
+              <a
+                className="menu__menuitem menu__menuitem--"
+                onClick={[Function]}
+                role="menuitem"
+                tabIndex={0}>
+                a title
+              </a>
+              <a
+                className="menu__menuitem menu__menuitem--"
+                onClick={[Function]}
+                role="menuitem"
+                tabIndex={0}>
+                b title
+              </a>
+              <a
+                className="menu__menuitem menu__menuitem--"
+                onClick={[Function]}
+                role="menuitem"
+                tabIndex={0}>
+                c title
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="menu__burger">
+    <button
+      className="ui large button"
+      onClick={[Function]}>
+      <i
+        className="download icon" />
+      Burger
+    </button>
+  </div>
+</div>
+`;

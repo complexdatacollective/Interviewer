@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
-import { activePromptAttributes, activeStageAttributes, activeNodeAttributes } from '../session';
+import { activePromptAttributes, activeStageAttributes, activeOriginAttributes, newNodeAttributes } from '../session';
 
 describe('session selectors', () => {
-
   const prompt = {
+    id: 'baz',
     nodeAttributes: {
       foo_bar: true,
     },
@@ -19,7 +19,7 @@ describe('session selectors', () => {
   };
 
   const protocol = {
-    protocolConfig: {
+    config: {
       stages: [stage],
     },
   };
@@ -30,8 +30,8 @@ describe('session selectors', () => {
   };
 
   const state = {
-    protocol: protocol,
-    session: session,
+    protocol,
+    session,
   };
 
   it('activePromptAttributes returns the active prompt attributes from state', () => {
@@ -42,17 +42,23 @@ describe('session selectors', () => {
 
   it('activeStageAttributes returns the active stage attributes from state', () => {
     expect(activeStageAttributes(state)).toEqual({
-      stageId: 'foo',
       type: 'person',
     });
   });
 
-  it('activeNodeAttributes returns the active node attributes from state', () => {
-    expect(activeNodeAttributes(state)).toEqual({
+  it('activeOriginAttributes returns the active origin attributes from state', () => {
+    expect(activeOriginAttributes(state)).toEqual({
+      stageId: 'foo',
+      promptId: 'baz',
+    });
+  });
+
+  it('newNodeAttributes returns the active origin attributes from state', () => {
+    expect(newNodeAttributes(state)).toEqual({
       foo_bar: true,
-      stageId: 'foo',
       type: 'person',
+      stageId: 'foo',
+      promptId: 'baz',
     });
   });
-
 });

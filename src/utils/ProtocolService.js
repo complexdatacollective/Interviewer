@@ -6,7 +6,7 @@
  */
 export default class ProtocolService {
   constructor() {
-    this.protocol = {}
+    this.protocol = {};
   }
 
   /**
@@ -40,19 +40,19 @@ export default class ProtocolService {
         "previous": {
           nodes: [
             {
-              id: "previous_1",
+              uid: "previous_1",
               type: "person",
               name: "Fred",
               nickname: "Foo",
             },
             {
-              id: "previous_2",
+              uid: "previous_2",
               type: "person",
               name: "Bob",
               nickname: "Bar",
             },
             {
-              id: "previous_3",
+              uid: "previous_3",
               type: "person",
               name: "Barry",
               nickname: "Baz",
@@ -83,7 +83,7 @@ export default class ProtocolService {
         {
           "id": "namegen1",
           "type": "namegenerator",
-          "title": "Name Generator Title",
+          "title": "Name Generator Title 1",
           "params": {
             "nodeType": 'person',
             "panels": [
@@ -92,6 +92,7 @@ export default class ProtocolService {
             ],
             "prompts": [
               {
+                id: '6cl',
                 title: 'Within the past 6 months, who have you felt close to?',
                 nodeAttributes: {
                   special_category: 46,
@@ -99,12 +100,14 @@ export default class ProtocolService {
                 }
               },
               {
+                id: '6su',
                 title: "Within the past 6 months, who has been supportive?",
                 nodeAttributes: {
                   support_friend: true,
                 }
               },
               {
+                id: '2we',
                 title: "Within the past 2 weeks, who has visited",
                 nodeAttributes: {
                   travel_friend: true,
@@ -136,11 +139,12 @@ export default class ProtocolService {
         {
           "id": "namegen2",
           "type": "namegenerator",
-          "title": "Name Generator Title",
+          "title": "Name Generator Title 2",
           "params": {
             "nodeType": 'person',
             "prompts": [
               {
+                id: '5be',
                 title: "Within the past 6 months, what's the best person you've seen ever?",
                 nodeAttributes: {
                   fun_times: true

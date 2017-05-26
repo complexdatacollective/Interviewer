@@ -1,28 +1,38 @@
-import React, { Component } from 'react';
-import { Menu } from '../components';
-import { Link } from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { menuIsOpen } from '../selectors/session';
+import { StageMenu } from '.';
+
 require('../styles/main.scss');
 
-export default class App extends Component {
-  render() {
-    let children = null;
-    if (this.props.children) {
-      children = React.cloneElement(this.props.children, {
-        authService: this.props.route.authService,
-        networkService: this.props.route.networkService
-      })
-    }
+/**
+  * Main app container.
+  * @param props {object} - children
+  */
+const App = props => (
+  <div id="outer-container">
+    <StageMenu />
+    <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
+      { props.children }
+    </div>
+  </div>
+);
 
-    return (
-      <div id='outer-container'>
-          <Menu>
-            <Link to='/'>Home Page</Link>
-            <Link to='protocol'>Access sample protocol</Link>
-          </Menu>
-          <div id='page-wrap' className="">
-            {children}
-          </div>
-      </div>
-    );
-  }
+App.propTypes = {
+  children: PropTypes.any,
+  isMenuOpen: PropTypes.bool,
+};
+
+App.defaultProps = {
+  children: null,
+  isMenuOpen: false,
+};
+
+function mapStateToProps(state) {
+  return {
+    isMenuOpen: menuIsOpen(state),
+  };
 }
+
+export default connect(mapStateToProps)(App);

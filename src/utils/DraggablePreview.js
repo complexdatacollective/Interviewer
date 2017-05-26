@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { throttle } from 'lodash';
 import getAbsoluteBoundingRect from './getAbsoluteBoundingRect';
 
@@ -7,22 +8,24 @@ const getSize = (element) => {
   return {
     width: Math.floor(boundingClientRect.width),
     height: Math.floor(boundingClientRect.height),
-  }
-}
+  };
+};
+
+const styles = (x, y) =>
+  `display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
+
+const parent = () => document.getElementById('page-wrap');
 
 export default class DraggablePreview {
   constructor(node) {
-    this.position = throttle(this.position, 1000/60);
+    this.position = throttle(this.position, 1000 / 60);
 
     this.node = document.createElement('div');
     this.node.setAttribute('class', 'draggable-preview');
+    this.node.setAttribute('style', styles(-1000, -1000));
     this.node.appendChild(node.cloneNode(true));
 
-    this.parent().appendChild(this.node);
-  }
-
-  parent() {
-    return document.getElementById('page-wrap');
+    parent().appendChild(this.node);
   }
 
   size() {
@@ -36,18 +39,18 @@ export default class DraggablePreview {
       this._center = {
         x: Math.floor(this.size().width / 2),
         y: Math.floor(this.size().height / 2),
-      }
+      };
     }
     return this._center;
   }
 
-  position(x, y) {
-    x = x - this.center().x;
-    y = y - this.center().y;
-    this.node.setAttribute('style', `position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`);
+  position(coords) {
+    const x = coords.x - this.center().x;
+    const y = coords.y - this.center().y;
+    this.node.setAttribute('style', styles(x, y));
   }
 
   cleanup() {
-    this.parent().removeChild(this.node);
+    parent().removeChild(this.node);
   }
 }
