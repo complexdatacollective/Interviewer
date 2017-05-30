@@ -1,51 +1,39 @@
-/* eslint-disable */
+/* eslint-disable react/prop-types */
 
 import React, { Component } from 'react';
-import { map, reduce, tap, join, filter} from 'lodash';
-
-// <div>
-  // <input type="number" placeholder={field.label} {...field.input} />
+import { map, sortBy, without } from 'lodash';
 
 class Checkbox extends Component {
-  constructor(props) {
-    super();
-
-    this.state = reduce(
-      props.options,
-      (memo, option) => tap(
-        memo,
-        (memo) => { memo[option] = false; }
-      ),
-      {},
-    );
-  }
 
   onClickOption = (option) => {
-    this.setState(
-      {[option]: !this.state[option]},
-      () => { this.props.input.onChange(this.value()) }
-    );
-  }
+    const { value, onChange } = this.props.input;
 
-  value() {
-    return filter(
-        map(
-          this.state,
-          (value, key) => (value ? key : null),
-        ),
-        value => !!value,
-      );
+    if (value.indexOf(option) === -1) {
+      onChange(sortBy([...value, option]));
+    } else {
+      onChange(without(value, option));
+    }
   }
 
   render() {
-    const { options, meta, input: { name, value, onChange } } = this.props;
+    const { options, meta, input: { name, value } } = this.props;
 
     return (
       <div>
         {map(options, option => (
-          <div key={option}><label><input type="checkbox" name={name} value={option} checked={this.state[option]} onClick={() => { this.onClickOption(option) }} /> {option}</label></div>
+          <div key={option}>
+            <label htmlFor={`${name}_${option}`}>
+              <input
+                type="checkbox"
+                id={`${name}_${option}`}
+                name={name}
+                value={option}
+                checked={value.indexOf(option) !== -1}
+                onClick={() => { this.onClickOption(option); }}
+              /> {option}
+            </label>
+          </div>
         ))}
-        <span>The current value is {value.length}.</span>
         {meta.invalid &&
           <div>{meta.error}</div>}
       </div>
