@@ -35,9 +35,20 @@ const fields = [
   },
   {
     label: 'Choose some options',
-    name: 'chosen_options',
+    name: 'chosen_options_toggle',
     type: 'checkbox_toggle',
     options: ['foo', 'bar', 'baz', 'buzz', 'fizz'],
+    validation: {
+      required: true,
+      minSelected: 2,
+      maxSelected: 3,
+    },
+  },
+  {
+    label: 'Choose some options',
+    name: 'chosen_options_group',
+    type: 'checkbox_group',
+    options: ['yarn', 'npm', 'pip', 'gem'],
     validation: {
       required: true,
       minSelected: 2,

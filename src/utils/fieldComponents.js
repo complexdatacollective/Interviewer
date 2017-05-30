@@ -1,8 +1,26 @@
 /* eslint-disable react/prop-types,react/no-multi-comp */
 
 import React, { Component } from 'react';
-import { fromPairs, map, sortBy, without } from 'lodash';
+import { fromPairs, map, reduce, sortBy, without } from 'lodash';
 
+const CheckboxList = ({ name, options, onClickOption }) => (
+  <div>
+    {map(options, (value, option) => (
+      <div key={option}>
+        <label htmlFor={`${name}_${option}`}>
+          <input
+            type="checkbox"
+            id={`${name}_${option}`}
+            name={name}
+            value={option}
+            checked={value}
+            onClick={() => { onClickOption(option); }}
+          /> {option}
+        </label>
+      </div>
+    ))}
+  </div>
+);
 
 class CheckboxToggle extends Component {
   onClickOption = (clickedOption) => {
@@ -16,24 +34,11 @@ class CheckboxToggle extends Component {
   }
 
   render() {
-    const { options, meta, input: { name, value } } = this.props;
+    const { meta, input: { name, value } } = this.props;
 
     return (
       <div>
-        {map(options, option => (
-          <div key={option}>
-            <label htmlFor={`${name}_${option}`}>
-              <input
-                type="checkbox"
-                id={`${name}_${option}`}
-                name={name}
-                value={option}
-                checked={value[option]}
-                onClick={() => { this.onClickOption(option); }}
-              /> {option}
-            </label>
-          </div>
-        ))}
+        <CheckboxList name={name} options={value} onClickOption={this.onClickOption} />
         {meta.invalid &&
           <div>{meta.error}</div>}
       </div>
@@ -56,22 +61,15 @@ class CheckboxGroup extends Component {
   render() {
     const { options, meta, input: { name, value } } = this.props;
 
+    const checks = reduce(
+      options,
+      (memo, option) => ({ ...memo, [option]: value.indexOf(option) !== -1 }),
+      {},
+    );
+
     return (
       <div>
-        {map(options, option => (
-          <div key={option}>
-            <label htmlFor={`${name}_${option}`}>
-              <input
-                type="checkbox"
-                id={`${name}_${option}`}
-                name={name}
-                value={option}
-                checked={value.indexOf(option) !== -1}
-                onClick={() => { this.onClickOption(option); }}
-              /> {option}
-            </label>
-          </div>
-        ))}
+        <CheckboxList name={name} options={checks} onClickOption={this.onClickOption} />
         {meta.invalid &&
           <div>{meta.error}</div>}
       </div>
@@ -95,6 +93,6 @@ export default {
         <div>{field.meta.error}</div>}
     </div>
   ),
-  checkbox: CheckboxToggle,
+  checkbox_toggle: CheckboxToggle,
   checkbox_group: CheckboxGroup,
 };
