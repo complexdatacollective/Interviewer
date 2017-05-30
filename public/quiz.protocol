@@ -37,7 +37,7 @@ const fields = [
     label: 'Choose some options',
     name: 'chosen_options',
     type: 'checkbox',
-    options: ['foo', 'bar', 'baz', 'buzz', 'fizz', 'pop'],
+    options: ['foo', 'bar', 'baz', 'buzz', 'fizz'],
     validation: {
       required: true,
       minSelected: 2,

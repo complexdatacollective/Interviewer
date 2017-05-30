@@ -1,23 +1,51 @@
 /* eslint-disable */
 
 import React, { Component } from 'react';
-import { map } from 'lodash';
+import { map, reduce, tap, join, filter} from 'lodash';
 
 // <div>
   // <input type="number" placeholder={field.label} {...field.input} />
 
 class Checkbox extends Component {
+  constructor(props) {
+    super();
+
+    this.state = reduce(
+      props.options,
+      (memo, option) => tap(
+        memo,
+        (memo) => { memo[option] = false; }
+      ),
+      {},
+    );
+  }
+
+  onClickOption = (option) => {
+    this.setState(
+      {[option]: !this.state[option]},
+      () => { this.props.input.onChange(this.value()) }
+    );
+  }
+
+  value() {
+    return filter(
+        map(
+          this.state,
+          (value, key) => (value ? key : null),
+        ),
+        value => !!value,
+      );
+  }
+
   render() {
     const { options, meta, input: { name, value, onChange } } = this.props;
-    console.log(this.props);
+
     return (
       <div>
         {map(options, option => (
-          <div><input type="checkbox" name={name} value={option}/> {option}</div>
+          <div key={option}><label><input type="checkbox" name={name} value={option} checked={this.state[option]} onClick={() => { this.onClickOption(option) }} /> {option}</label></div>
         ))}
-        <span>The current value is {value}.</span>
-        <button type="button" onClick={() => onChange(value + 1)}>Inc</button>
-        <button type="button" onClick={() => onChange(value - 1)}>Dec</button>
+        <span>The current value is {value.length}.</span>
         {meta.invalid &&
           <div>{meta.error}</div>}
       </div>

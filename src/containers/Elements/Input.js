@@ -27,8 +27,6 @@ const Field = ({ label, name, type, validation, ...rest }) => {
   return <ReduxFormField {...rest} name={name} label={label} component={component} validate={validate}/>;
 };
 
-
-
 Field.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
