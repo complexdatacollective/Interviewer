@@ -1,9 +1,47 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types,react/no-multi-comp */
 
 import React, { Component } from 'react';
-import { map, sortBy, without } from 'lodash';
+import { fromPairs, map, sortBy, without } from 'lodash';
 
-class Checkbox extends Component {
+
+class CheckboxToggle extends Component {
+  onClickOption = (clickedOption) => {
+    const { value, onChange } = this.props.input;
+
+    onChange({
+      ...fromPairs(map(this.props.options, option => [option, false])),
+      ...(value || {}),
+      ...{ [clickedOption]: !value[clickedOption] },
+    });
+  }
+
+  render() {
+    const { options, meta, input: { name, value } } = this.props;
+
+    return (
+      <div>
+        {map(options, option => (
+          <div key={option}>
+            <label htmlFor={`${name}_${option}`}>
+              <input
+                type="checkbox"
+                id={`${name}_${option}`}
+                name={name}
+                value={option}
+                checked={value[option]}
+                onClick={() => { this.onClickOption(option); }}
+              /> {option}
+            </label>
+          </div>
+        ))}
+        {meta.invalid &&
+          <div>{meta.error}</div>}
+      </div>
+    );
+  }
+}
+
+class CheckboxGroup extends Component {
 
   onClickOption = (option) => {
     const { value, onChange } = this.props.input;
@@ -57,5 +95,6 @@ export default {
         <div>{field.meta.error}</div>}
     </div>
   ),
-  checkbox: Checkbox,
+  checkbox: CheckboxToggle,
+  checkbox_group: CheckboxGroup,
 };
