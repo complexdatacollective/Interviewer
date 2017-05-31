@@ -10,18 +10,7 @@ const UNSET_EGO = 'UNSET_EGO';
 
 const initialState = {
   ego: {},
-  nodes: [
-    {
-      uid: 'foo',
-      id: 1,
-      name: 'foo',
-    },
-    {
-      uid: 'bar',
-      id: 2,
-      name: 'bar',
-    },
-  ],
+  nodes: [],
   edges: [],
 };
 
