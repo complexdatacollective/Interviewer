@@ -1,6 +1,7 @@
 /* eslint-disable */
 /* eslint-disable jsx-a11y/label-has-for */
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
@@ -10,7 +11,7 @@ import components from '../../utils/fieldComponents';
 const withNetworkData = (WrappedComponent, selector) => {
   class WithNetworkData extends Component {
     render() {
-      return <WrappedComponent options={this.state.options} {...this.props} />;
+      return <WrappedComponent options={this.props.options} {...this.props} />;
     }
   }
 

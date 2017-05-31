@@ -45,6 +45,19 @@ const fields = [
     },
   },
   {
+    label: 'Pick something from the network?',
+    name: 'network_picker',
+    type: 'CheckboxList',
+    selector: (state) => (
+      state.network.nodes.map((node) => (node.name))
+    ),
+    validation: {
+      required: true,
+      minSelected: 1,
+      maxSelected: 3,
+    },
+  },
+  {
     label: 'Which package managers have you used?',
     name: 'used_package_managers',
     type: 'CheckboxGroup',

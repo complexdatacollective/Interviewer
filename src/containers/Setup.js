@@ -37,7 +37,7 @@ class Setup extends Component {
   }
 
   componentWillMount = () => {
-    this.props.loadProtocol('http://localhost:3000/quiz.protocol');
+    this.props.loadProtocol('http://localhost:3000/quiz.protocol.js');
   }
 
   render() {
