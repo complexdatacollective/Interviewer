@@ -4,7 +4,7 @@ const fields = [
   {
     label: 'Name',
     name: 'name',
-    type: 'text',
+    type: 'Alphanumeric',
     placeholder: 'Name',
     validation: {
       required: true,
@@ -15,7 +15,7 @@ const fields = [
   {
     label: 'Nickname',
     name: 'nickname',
-    type: 'nickname',
+    type: 'Alphanumeric',
     placeholder: 'Nickname',
     validation: {
       required: true,
@@ -26,7 +26,7 @@ const fields = [
   {
     label: 'Age',
     name: 'age',
-    type: 'number',
+    type: 'Numeric',
     validation: {
       required: true,
       minValue: 0,
@@ -34,25 +34,42 @@ const fields = [
     },
   },
   {
-    label: 'Choose some options',
-    name: 'chosen_options_toggle',
-    type: 'checkbox_toggle',
-    options: ['foo', 'bar', 'baz', 'buzz', 'fizz'],
+    label: 'Which are your favourite package managers?',
+    name: 'favourite_package_manager',
+    type: 'CheckboxList',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
       required: true,
-      minSelected: 2,
+      minSelected: 1,
       maxSelected: 3,
     },
   },
   {
-    label: 'Choose some options',
-    name: 'chosen_options_group',
-    type: 'checkbox_group',
-    options: ['yarn', 'npm', 'pip', 'gem'],
+    label: 'Which package managers have you used?',
+    name: 'used_package_managers',
+    type: 'CheckboxGroup',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
       required: true,
-      minSelected: 2,
-      maxSelected: 3,
+    },
+  },
+  {
+    label: 'Pick one.',
+    name: 'pick_opne',
+    type: 'RadioGroup',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    validation: {
+      required: true,
+    },
+  },
+  {
+    label: 'Which package managers have you contributed to?',
+    name: 'contributed_package_managers',
+    type: 'ToggleGroup',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    colors: ['red', 'green', 'blue', 'yellow', 'pink'],
+    validation: {
+      required: true,
     },
   },
 ];

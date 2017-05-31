@@ -7,8 +7,9 @@ import { map, toPairs } from 'lodash';
 import validations from '../../utils/validations';
 import components from '../../utils/fieldComponents';
 
-const getComponent = type =>
-  (Object.hasOwnProperty.call(components, type) ? components[type] : () => (<div>Field type not defined</div>));
+const getComponent = type => (
+  Object.hasOwnProperty.call(components, type) ? components[type] : () => (<div>Field type not defined</div>)
+);
 
 const getValidation = validation =>
   map(
@@ -24,6 +25,7 @@ const getValidation = validation =>
 const Field = ({ label, name, type, validation, ...rest }) => {
   const validate = getValidation(validation);
   const component = getComponent(type);
+  console.log('FIELD', label, name, type, component);
   return <ReduxFormField {...rest} name={name} label={label} component={component} validate={validate}/>;
 };
 

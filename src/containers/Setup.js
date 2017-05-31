@@ -14,7 +14,7 @@ const formConfig = {
     {
       label: 'Protocol URL',
       name: 'protocol_url',
-      type: 'text',
+      type: 'Alphanumeric',
       placeholder: 'Protocol URL',
       required: true,
     },

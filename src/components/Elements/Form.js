@@ -6,9 +6,9 @@ import Field from '../../containers/Elements/Input';
 
 const typeInitalValue = (field) => {
   switch (field.type) {
-    case 'checkbox_toggle':
-      return fromPairs(map(field.options, option => [option, false]));
     case 'checkbox_group':
+      return fromPairs(map(field.options, option => [option, false]));
+    case 'checkbox_list':
       return [];
     default:
       return '';
