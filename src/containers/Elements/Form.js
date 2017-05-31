@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { fromPairs, map } from 'lodash';
-import Field from '../../containers/Elements/Input';
+import { Field } from './';
 
 const typeInitalValue = (field) => {
   switch (field.type) {

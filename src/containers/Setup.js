@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../components/Elements';
+import { Form } from '../containers/Elements';
 
 const formConfig = {
   formName: 'setup',

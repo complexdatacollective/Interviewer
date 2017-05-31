@@ -1,13 +1,10 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   actionCreators as modalActions,
 } from '../../ducks/modules/modals';
-import { Form } from '../../components/Elements';
-import { Modal } from '../../containers/Elements';
+import { Form } from '../../containers/Elements';
 
 const QUIZ_MODAL = 'QUIZ_MODAL';
 
@@ -24,9 +21,6 @@ class Quiz extends Component {
   }
 
   render() {
-    const {
-      openModal,
-    } = this.props;
 
     const {
       form,
@@ -36,21 +30,11 @@ class Quiz extends Component {
       <div className="form-interface">
         <h1>Quiz</h1>
 
-        <Modal name={QUIZ_MODAL} title="QUIZ">
-          hi
-        </Modal>
-
         <Form
           form={form.name}
           fields={form.fields}
           onSubmit={this.onSubmit}
         />
-
-        <br />
-
-        <button onClick={() => openModal(QUIZ_MODAL)}>
-          Answer Quiz
-        </button>
       </div>
     );
   }
@@ -58,14 +42,6 @@ class Quiz extends Component {
 
 Quiz.propTypes = {
   config: PropTypes.object.isRequired,
-  openModal: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(Quiz);
+export default Quiz;

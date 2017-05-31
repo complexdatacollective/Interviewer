@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 import { map, pick } from 'lodash';
 import { createSelector } from 'reselect';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { Modal } from '../../containers/Elements';
-import { Form } from '../../components/Elements';
+import { Modal, Form } from '../../containers/Elements';
 
 const fieldNames = (_, props) => map(props.form.fields, 'name');
 const node = (_, props) => props.node;

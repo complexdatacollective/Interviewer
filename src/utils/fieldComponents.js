@@ -45,5 +45,5 @@ export default {
   CheckboxGroup,
   CheckboxList,
   ToggleGroup,
-  RadioGroup,
+  RadioGroup
 };
