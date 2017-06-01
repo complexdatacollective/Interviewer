@@ -46,7 +46,7 @@ const fields = [
     label: 'Pick something from the network? (with selector)',
     name: 'network_picker',
     type: 'CheckboxGroup',
-    selector: (state) => (
+    optionsSelector: (state) => (
       state.network.nodes.map((node) => (node.name))
     ),
     validation: {
