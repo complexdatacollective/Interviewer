@@ -1,4 +1,4 @@
-exports[`NodeList component renders ok 1`] = `
+exports[`DropZone component renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -8,15 +8,7 @@ ShallowWrapper {
   "length": 1,
   "node": <Droppable
     acceptsDraggableType={null}
-    network={
-        Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          }
-    }
+    label="foo"
     store={
         Object {
             "dispatch": [Function],
@@ -30,15 +22,7 @@ ShallowWrapper {
   "nodes": Array [
     <Droppable
       acceptsDraggableType={null}
-      network={
-            Object {
-                  "nodes": Array [
-                    Object {
-                      "name": "test",
-                    },
-                  ],
-                }
-      }
+      label="foo"
       store={
             Object {
                   "dispatch": [Function],
@@ -57,15 +41,7 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <Connect(Droppable)
-        network={
-                Object {
-                        "nodes": Array [
-                          Object {
-                            "name": "test",
-                          },
-                        ],
-                      }
-        }
+        label="foo"
         store={
                 Object {
                         "dispatch": [Function],
@@ -94,13 +70,7 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          },
+          "label": "foo",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -111,13 +81,7 @@ ShallowWrapper {
           "updateZone": [Function],
         },
         "props": Object {
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          },
+          "label": "foo",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -129,15 +93,7 @@ ShallowWrapper {
         "refs": Object {},
         "renderedElement": <Droppable
           acceptsDraggableType={null}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
+          label="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -170,7 +126,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 3,
+        "version": 0,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -181,15 +137,7 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <Droppable
           acceptsDraggableType={null}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
+          label="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -203,15 +151,7 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <Droppable
           acceptsDraggableType={null}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
+          label="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -234,15 +174,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Connect(Droppable)
-    network={
-        Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          }
-    }
+    label="foo"
     store={
         Object {
             "dispatch": [Function],
