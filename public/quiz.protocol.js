@@ -34,55 +34,48 @@ const fields = [
     },
   },
   {
-    label: 'Which are your favourite package managers?',
+    label: 'Which are your favourite package managers? (checkbox list)',
     name: 'favourite_package_manager',
-    type: 'CheckboxList',
+    type: 'CheckboxGroup',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
-      required: true,
       minSelected: 1,
-      maxSelected: 3,
     },
   },
   {
-    label: 'Pick something from the network?',
+    label: 'Pick something from the network? (with selector)',
     name: 'network_picker',
-    type: 'CheckboxList',
+    type: 'CheckboxGroup',
     selector: (state) => (
       state.network.nodes.map((node) => (node.name))
     ),
     validation: {
-      required: true,
-      minSelected: 1,
-      maxSelected: 3,
     },
   },
   {
-    label: 'Which package managers have you used?',
+    label: 'Which package managers have you used? (no validations)',
     name: 'used_package_managers',
     type: 'CheckboxGroup',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
-      required: true,
+
     },
   },
   {
-    label: 'Pick one.',
+    label: 'Pick one. (radio group)',
     name: 'pick_opne',
     type: 'RadioGroup',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
-      required: true,
     },
   },
   {
-    label: 'Which package managers have you contributed to?',
+    label: 'Which package managers have you contributed to? (toggle group)',
     name: 'contributed_package_managers',
     type: 'ToggleGroup',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     colors: ['red', 'green', 'blue', 'yellow', 'pink'],
     validation: {
-      required: true,
     },
   },
 ];

@@ -1,10 +1,13 @@
 import { keys, pickBy } from 'lodash';
 
 const coerceArray = (value) => {
+  if (value instanceof Object) {
+    return keys(pickBy(value));
+  }
   if (value instanceof Array) {
     return value;
   }
-  return keys(pickBy(value));
+  return [];
 };
 
 export const required = () =>
@@ -25,11 +28,11 @@ export const maxValue = max =>
 
 export const minSelected = min =>
   value =>
-    (value && coerceArray(value).length < min ? `Must choose ${min} or more` : undefined);
+    (!value || coerceArray(value).length < min ? `Must choose ${min} or more` : undefined);
 
 export const maxSelected = max =>
   value =>
-    (value && coerceArray(value).length > max ? `Must choose ${max} or less` : undefined);
+    (!value || coerceArray(value).length > max ? `Must choose ${max} or less` : undefined);
 
 export default {
   required,

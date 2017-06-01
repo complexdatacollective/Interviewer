@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { fromPairs, map } from 'lodash';
 
+// TODO: Seems like this knowledge should be part of the field component?
 const typeInitalValue = (field) => {
   switch (field.type) {
-    case 'checkbox_group':
+    case 'CheckboxGroup':
+    case 'ToggleGroup':
       return fromPairs(map(field.options, option => [option, false]));
-    case 'checkbox_list':
-      return [];
     default:
       return '';
   }

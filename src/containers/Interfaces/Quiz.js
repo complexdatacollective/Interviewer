@@ -6,8 +6,6 @@ import {
 } from '../../ducks/modules/modals';
 import { Form } from '../../containers/Elements';
 
-const QUIZ_MODAL = 'QUIZ_MODAL';
-
 /**
   * Quiz Interface
   * @extends Component
@@ -16,7 +14,10 @@ class Quiz extends Component {
 
   onSubmit = (formData) => {
     if (formData) {
+      alert('success');
       console.log(formData);
+    } else {
+      alert('fail');
     }
   }
 

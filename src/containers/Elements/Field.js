@@ -1,32 +1,17 @@
-/* eslint-disable */
 /* eslint-disable jsx-a11y/label-has-for */
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import validations from '../../utils/Validations';
 import components from '../../utils/fieldComponents';
-
-const withNetworkData = (WrappedComponent, selector) => {
-  class WithNetworkData extends Component {
-    render() {
-      return <WrappedComponent options={this.props.options} {...this.props} />;
-    }
-  }
-
-  function mapStateToProps(state) {
-    return {
-      options: selector(state),
-    };
-  }
-
-  return connect(mapStateToProps)(WithNetworkData)
-};
+import { withOptionsFromSelector } from '../../behaviors';
 
 
 const getComponent = type => (
-  Object.hasOwnProperty.call(components, type) ? components[type] : () => (<div>Field type not defined</div>)
+  Object.hasOwnProperty.call(components, type) ?
+  components[type] :
+  () => (<div>Field type not defined</div>)
 );
 
 const getValidation = validation =>
@@ -43,19 +28,29 @@ const getValidation = validation =>
 const Field = ({ label, name, type, validation, selector, ...rest }) => {
   const validate = getValidation(validation);
   let component = getComponent(type);
-  if (selector) { component = withNetworkData(component, selector); }
-  return <ReduxFormField {...rest} name={name} label={label} component={component} validate={validate}/>;
+  if (selector) { component = withOptionsFromSelector(component, selector); }
+  return (
+    <ReduxFormField
+      name={name}
+      label={label}
+      component={component}
+      validate={validate}
+      {...rest}
+    />
+  );
 };
 
 Field.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  selector: PropTypes.func,
   validation: PropTypes.object,
 };
 
 Field.defaultProps = {
   validation: {},
+  selector: null,
 };
 
 export default Field;
