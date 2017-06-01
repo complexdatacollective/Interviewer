@@ -59,12 +59,11 @@ export default function droppable(WrappedComponent) {
 
   Droppable.propTypes = {
     updateZone: PropTypes.func.isRequired,
-    droppableName: PropTypes.string,
+    droppableName: PropTypes.string.isRequired,
     acceptsDraggableType: PropTypes.string,
   };
 
   Droppable.defaultProps = {
-    droppableName: null,
     acceptsDraggableType: null,
   };
 

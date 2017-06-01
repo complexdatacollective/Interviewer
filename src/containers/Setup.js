@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../components/Elements';
+import { Form } from '../containers/Elements';
 
 const formConfig = {
   formName: 'setup',
@@ -14,7 +14,7 @@ const formConfig = {
     {
       label: 'Protocol URL',
       name: 'protocol_url',
-      type: 'text',
+      type: 'Alphanumeric',
       placeholder: 'Protocol URL',
       required: true,
     },
@@ -34,6 +34,10 @@ class Setup extends Component {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
     }
+  }
+
+  componentWillMount = () => {
+    this.props.loadProtocol('http://localhost:3000/quiz.protocol.js');
   }
 
   render() {

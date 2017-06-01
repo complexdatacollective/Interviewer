@@ -47,7 +47,7 @@ NodeList.propTypes = {
 };
 
 NodeList.defaultProps = {
-  label: () => {},
+  label: () => (''),
   isActive: () => false,
   handleSelectNode: () => {},
   handleDropNode: () => {},

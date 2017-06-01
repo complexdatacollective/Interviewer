@@ -8,7 +8,6 @@ ShallowWrapper {
   "length": 1,
   "node": <Droppable
     acceptsDraggableType={null}
-    droppableName={null}
     network={
         Object {
             "nodes": Array [
@@ -31,7 +30,6 @@ ShallowWrapper {
   "nodes": Array [
     <Droppable
       acceptsDraggableType={null}
-      droppableName={null}
       network={
             Object {
                   "nodes": Array [
@@ -131,7 +129,6 @@ ShallowWrapper {
         "refs": Object {},
         "renderedElement": <Droppable
           acceptsDraggableType={null}
-          droppableName={null}
           network={
                     Object {
                               "nodes": Array [
@@ -173,7 +170,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 11,
+        "version": 3,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -184,7 +181,6 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <Droppable
           acceptsDraggableType={null}
-          droppableName={null}
           network={
                     Object {
                               "nodes": Array [
@@ -207,7 +203,6 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <Droppable
           acceptsDraggableType={null}
-          droppableName={null}
           network={
                     Object {
                               "nodes": Array [
