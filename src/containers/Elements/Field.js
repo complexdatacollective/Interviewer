@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
-import validations from '../../utils/validations';
+import validations from '../../utils/Validations';
 import components from '../../utils/fieldComponents';
 
 const withNetworkData = (WrappedComponent, selector) => {
