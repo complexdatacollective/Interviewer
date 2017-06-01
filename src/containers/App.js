@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { menuIsOpen } from '../selectors/session';
-import { StageMenu } from '.';
+import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
+import { SessionMenu, StageMenu } from '.';
 
 require('../styles/main.scss');
 
@@ -12,7 +12,10 @@ require('../styles/main.scss');
   */
 const App = props => (
   <div id="outer-container">
-    <StageMenu />
+    <div className="menu-container">
+      <SessionMenu />
+      <StageMenu />
+    </div>
     <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
       { props.children }
     </div>
@@ -31,7 +34,7 @@ App.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    isMenuOpen: menuIsOpen(state),
+    isMenuOpen: sessionMenuIsOpen(state) || stageMenuIsOpen(state),
   };
 }
 

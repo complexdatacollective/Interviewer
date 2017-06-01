@@ -3,6 +3,12 @@ $interface-types: (
   'custom'
 );
 
+.menu-container {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
 .menu {
   // General sidebar styles
   &__content {
@@ -79,13 +85,6 @@ $interface-types: (
   }
 
   &__burger {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 8;
-    z-index: 1;
+    padding-bottom: 0.5em;
   }
 }

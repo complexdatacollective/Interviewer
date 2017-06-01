@@ -10,7 +10,7 @@ import { scrollable } from '../behaviors';
   * @return div
   */
 function MenuContent(props) {
-  const { items, searchField, toggleMenu } = props;
+  const { items, searchField, title, toggleMenu } = props;
 
   return (
     <div>
@@ -21,7 +21,7 @@ function MenuContent(props) {
         </button>
       </div>
       <header>
-        <h1 className="menu__title">Stages</h1>
+        <h1 className="menu__title">{title}</h1>
       </header>
       {searchField}
       <nav>
@@ -34,6 +34,7 @@ function MenuContent(props) {
 MenuContent.propTypes = {
   items: PropTypes.array,
   searchField: PropTypes.object,
+  title: PropTypes.string.isRequired,
   toggleMenu: PropTypes.func.isRequired,
 };
 

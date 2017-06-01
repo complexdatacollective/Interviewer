@@ -1,23 +1,31 @@
-const TOGGLE_MENU = 'TOGGLE_MENU';
-const UPDATE_SEARCH = 'UPDATE_SEARCH';
+const TOGGLE_SESSION_MENU = 'TOGGLE_SESSION_MENU';
+const TOGGLE_STAGE_MENU = 'TOGGLE_STAGE_MENU';
+const UPDATE_STAGE_SEARCH = 'UPDATE_STAGE_SEARCH';
 
 const initialState = {
-  menuIsOpen: false,
-  searchTerm: '',
+  sessionMenuIsOpen: false,
+  stageMenuIsOpen: false,
+  stageSearchTerm: '',
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case TOGGLE_MENU: {
+    case TOGGLE_SESSION_MENU: {
       return {
         ...state,
-        menuIsOpen: !state.menuIsOpen,
+        sessionMenuIsOpen: !state.sessionMenuIsOpen,
       };
     }
-    case UPDATE_SEARCH: {
+    case TOGGLE_STAGE_MENU: {
       return {
         ...state,
-        searchTerm: action.searchTerm,
+        stageMenuIsOpen: !state.stageMenuIsOpen,
+      };
+    }
+    case UPDATE_STAGE_SEARCH: {
+      return {
+        ...state,
+        stageSearchTerm: action.searchTerm,
       };
     }
     default:
@@ -25,27 +33,35 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function toggleMenu() {
+function toggleSessionMenu() {
   return {
-    type: TOGGLE_MENU,
+    type: TOGGLE_SESSION_MENU,
   };
 }
 
-function updateSearch(searchTerm) {
+function toggleStageMenu() {
   return {
-    type: UPDATE_SEARCH,
+    type: TOGGLE_STAGE_MENU,
+  };
+}
+
+function updateStageSearch(searchTerm) {
+  return {
+    type: UPDATE_STAGE_SEARCH,
     searchTerm,
   };
 }
 
 const actionCreators = {
-  toggleMenu,
-  updateSearch,
+  toggleSessionMenu,
+  toggleStageMenu,
+  updateStageSearch,
 };
 
 const actionTypes = {
-  TOGGLE_MENU,
-  UPDATE_SEARCH,
+  TOGGLE_SESSION_MENU,
+  TOGGLE_STAGE_MENU,
+  UPDATE_STAGE_SEARCH,
 };
 
 export {

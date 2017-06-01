@@ -38,7 +38,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { isOpen, items, toggleMenu, searchField } = this.props;
+    const { isOpen, items, searchField, title, toggleMenu } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -56,9 +56,10 @@ class MenuFactory extends Component {
         <div className={isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
           <div className="menu__content">
             <MenuContent
-              toggleMenu={toggleMenu}
-              searchField={searchField}
               items={menuItems}
+              searchField={searchField}
+              title={title}
+              toggleMenu={toggleMenu}
             />
           </div>
         </div>
@@ -76,6 +77,7 @@ class MenuFactory extends Component {
 MenuFactory.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array,
+  title: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   searchField: PropTypes.object,
 };
@@ -83,6 +85,7 @@ MenuFactory.propTypes = {
 MenuFactory.defaultProps = {
   items: [],
   searchField: null,
+  title: 'Options',
 };
 
 export default MenuFactory;

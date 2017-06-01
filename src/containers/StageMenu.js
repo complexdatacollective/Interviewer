@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { stages, stage, filteredStages, menuIsOpen, searchTerm } from '../selectors/session';
+import { stages, stage, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
 import { Menu } from '../components';
 
 /**
@@ -46,6 +46,7 @@ class StageMenu extends Component {
         isOpen={isOpen}
         items={items}
         searchField={search}
+        title="Stages"
         toggleMenu={toggleMenu}
       />
     );
@@ -75,18 +76,18 @@ function mapStateToProps(state) {
   const filteredList = filteredStages(state);
 
   return {
-    isOpen: menuIsOpen(state),
+    isOpen: stageMenuIsOpen(state),
     currentStages,
     currentStage,
     filteredList,
-    searchTerm: searchTerm(state),
+    searchTerm: stageSearchTerm(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   onStageClick: bindActionCreators(stageActions.setStage, dispatch),
-  toggleMenu: bindActionCreators(menuActions.toggleMenu, dispatch),
-  updateSearch: bindActionCreators(menuActions.updateSearch, dispatch),
+  toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
+  updateSearch: bindActionCreators(menuActions.updateStageSearch, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StageMenu);
