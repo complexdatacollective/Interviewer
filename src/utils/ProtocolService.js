@@ -82,7 +82,7 @@ export default class ProtocolService {
       "stages": [
         {
           "id": "namegen1",
-          "type": "namegenerator",
+          "type": "name-generator",
           "title": "Name Generator Title 1",
           "params": {
             "nodeType": 'person',
@@ -138,7 +138,7 @@ export default class ProtocolService {
         },
         {
           "id": "namegen2",
-          "type": "namegenerator",
+          "type": "name-generator",
           "title": "Name Generator Title 2",
           "params": {
             "nodeType": 'person',

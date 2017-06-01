@@ -18,24 +18,26 @@ var MyAmazingInterface = environment.createReactClass({
   render: function() {
      var label = function (node) { return node.nickname; }
      var form = this.props.config.params.form;
+     var index = 0;
 
-     return createElement('div', { className: "name-generator" },
+     return createElement('div', { key: index++, className: "name-generator" },
       [
-        createElement('div', { className: "name-generator__main" },
-          createElement('div', { className: "name-generator__nodes" },
+        createElement('div', { key:index++, className: "name-generator__main" },
+          createElement('div', { key: index++, className: "name-generator__nodes" },
             [
-              createElement('h1', null, 'My Amazing Interface'),
+              createElement('h1', { key: index++ }, 'My Amazing Interface'),
               createElement(api.elements.NodeList, {
+                key: index++,
                 network: this.props.activeOriginNetwork,
                 label: label
               })
             ]
           )
         ),
-        createElement(api.elements.Modal, { name: MODAL_NEW_NODE, title: form.title },
-          createElement(api.elements.Form, Object.assign({ form: form.formName, onSubmit: this.handleAddNode }, form))
+        createElement(api.elements.Modal, { key:index++, name: MODAL_NEW_NODE, title: form.title },
+          createElement(api.elements.Form, Object.assign({ key: index++, form: form.formName, onSubmit: this.handleAddNode }, form))
         ),
-        createElement('button', { className: "name-generator__add-person", onClick: function() { this.props.openModal(MODAL_NEW_NODE); }.bind(this) },
+        createElement('button', { key: index++, className: "name-generator__add-person", onClick: function() { this.props.openModal(MODAL_NEW_NODE); }.bind(this) },
           'Add a person'
         )
       ]
@@ -115,7 +117,7 @@ return {
         "type": {
           "custom": MyAmazingInterface,
         },
-        "title": "Name Generator Title",
+        "title": "Name Generator Title 1",
         "params": {
           "nodeType": 'person',
           "panels": [
@@ -170,8 +172,8 @@ return {
       },
       {
         "id": "namegen2",
-        "type": "namegenerator",
-        "title": "Name Generator Title",
+        "type": "name-generator",
+        "title": "Name Generator Title 2",
         "params": {
           "nodeType": 'person',
           "prompts": [
