@@ -23,7 +23,7 @@ class StageMenu extends Component {
 
   render() {
     const {
-      currentStages, currentStage, filteredList, isOpen, onStageClick, toggleMenu,
+      currentStages, currentStage, filteredList, hideButton, isOpen, onStageClick, toggleMenu,
     } = this.props;
 
     const items = filteredList.map(filteredStage =>
@@ -43,6 +43,7 @@ class StageMenu extends Component {
 
     return (
       <Menu
+        hideButton={hideButton}
         isOpen={isOpen}
         items={items}
         searchField={search}
@@ -57,6 +58,7 @@ StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   currentStage: PropTypes.object,
   filteredList: PropTypes.array.isRequired,
+  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   onStageClick: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
@@ -65,6 +67,7 @@ StageMenu.propTypes = {
 
 StageMenu.defaultProps = {
   currentStage: null,
+  hideButton: false,
   isOpen: false,
   searchTerm: '',
   updateSearch: () => {},

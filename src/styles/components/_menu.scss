@@ -3,10 +3,10 @@ $interface-types: (
   'custom'
 );
 
-.menu-container {
-  position: absolute;
-  top: 0;
-  z-index: 1;
+@-webkit-keyframes menu-button-move {
+    0%   {    transform: translate3d(0, -250%, 0) };
+    25%  {    transform: translate3d(0, -250%, 0) };
+    100% {    transform: translate3d(0, 0, 0) };
 }
 
 .menu {
@@ -85,6 +85,18 @@ $interface-types: (
   }
 
   &__burger {
-    padding-bottom: 0.5em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    animation-name: menu-button-move;
+    animation-delay: 0s;
+    animation-duration: 1.5s;
+  }
+
+  ~ .menu {
+    .menu__burger {
+      margin-top: 40px;
+    }
   }
 }

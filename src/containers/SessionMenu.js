@@ -18,13 +18,12 @@ class SessionMenu extends Component {
   }
 
   onReset = () => {
-    // eslint-disable-next-line
-    console.log('reset');
+    this.props.resetState();
   }
 
   render() {
     const {
-      isOpen, toggleMenu,
+      hideButton, isOpen, toggleMenu,
     } = this.props;
 
     const items = [
@@ -34,6 +33,7 @@ class SessionMenu extends Component {
 
     return (
       <Menu
+        hideButton={hideButton}
         isOpen={isOpen}
         items={items}
         title="Session"
@@ -44,11 +44,14 @@ class SessionMenu extends Component {
 }
 
 SessionMenu.propTypes = {
+  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
+  resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
+  hideButton: false,
   isOpen: false,
 };
 
@@ -59,6 +62,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
+  resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
 });
 

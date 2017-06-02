@@ -1,3 +1,4 @@
+const RESET_STATE = 'RESET_STATE';
 const TOGGLE_SESSION_MENU = 'TOGGLE_SESSION_MENU';
 const TOGGLE_STAGE_MENU = 'TOGGLE_STAGE_MENU';
 const UPDATE_STAGE_SEARCH = 'UPDATE_STAGE_SEARCH';
@@ -33,6 +34,12 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+function resetState() {
+  return {
+    type: RESET_STATE,
+  };
+}
+
 function toggleSessionMenu() {
   return {
     type: TOGGLE_SESSION_MENU,
@@ -53,12 +60,14 @@ function updateStageSearch(searchTerm) {
 }
 
 const actionCreators = {
+  resetState,
   toggleSessionMenu,
   toggleStageMenu,
   updateStageSearch,
 };
 
 const actionTypes = {
+  RESET_STATE,
   TOGGLE_SESSION_MENU,
   TOGGLE_STAGE_MENU,
   UPDATE_STAGE_SEARCH,

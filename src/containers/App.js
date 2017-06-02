@@ -12,10 +12,8 @@ require('../styles/main.scss');
   */
 const App = props => (
   <div id="outer-container">
-    <div className="menu-container">
-      <SessionMenu />
-      <StageMenu />
-    </div>
+    <SessionMenu hideButton={props.isMenuOpen} />
+    <StageMenu hideButton={props.isMenuOpen} />
     <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
       { props.children }
     </div>

@@ -38,7 +38,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { isOpen, items, searchField, title, toggleMenu } = this.props;
+    const { hideButton, isOpen, items, searchField, title, toggleMenu } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -63,7 +63,7 @@ class MenuFactory extends Component {
             />
           </div>
         </div>
-        {!isOpen && <div className="menu__burger">
+        {!hideButton && <div className="menu__burger">
           <button onClick={toggleMenu} className="ui large button">
             <i className="download icon" />
             Burger
@@ -75,6 +75,7 @@ class MenuFactory extends Component {
 } // end class
 
 MenuFactory.propTypes = {
+  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array,
   title: PropTypes.string,
@@ -83,6 +84,7 @@ MenuFactory.propTypes = {
 };
 
 MenuFactory.defaultProps = {
+  hideButton: false,
   items: [],
   searchField: null,
   title: 'Options',
