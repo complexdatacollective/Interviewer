@@ -13,17 +13,17 @@ import { Field } from '../../containers/Elements';
 class Form extends Component {
 
   handleFieldBlur = () => {
-    if(!this.props.autoSuggest) { return; }
+    if(!this.props.autoPopulate) { return; }
 
     const {
       meta: {
         fields,
         values,
       },
-      change,
+      autofill,
     } = this.props;
 
-    this.props.autoSuggest(fields, values, change);
+    this.props.autoPopulate(fields, values, autofill);
   }
 
   render() {

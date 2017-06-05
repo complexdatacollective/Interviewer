@@ -103,9 +103,9 @@ return {
             title: 'Answer some questions',
             name: 'quiz1',
             fields: fields,
-            autoSuggest: (fields, values, change) => {
+            autoPopulate: (fields, values, populate) => {
               if(!fields['nickname'] || !fields['nickname'].touched) {
-                change('nickname', values['name'].split(' ')[0]);
+                populate('nickname', values['name'].split(' ')[0]);
               }
             },
           },
