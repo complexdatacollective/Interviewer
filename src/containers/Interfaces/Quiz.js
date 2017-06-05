@@ -33,7 +33,7 @@ class Quiz extends Component {
 
         <Form
           form={form.name}
-          fields={form.fields}
+          { ...form }
           onSubmit={this.onSubmit}
         />
       </div>

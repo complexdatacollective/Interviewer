@@ -10,7 +10,7 @@ const fields = [
       required: true,
       minLength: 2,
       minLength: 8,
-    },
+    }
   },
   {
     label: 'Nickname',
@@ -103,6 +103,11 @@ return {
             title: 'Answer some questions',
             name: 'quiz1',
             fields: fields,
+            autoSuggest: (fields, values, change) => {
+              if(!fields['nickname'] || !fields['nickname'].touched) {
+                change('nickname', values['name'].split(' ')[0]);
+              }
+            },
           },
         },
       },
