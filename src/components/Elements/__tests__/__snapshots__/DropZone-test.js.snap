@@ -8,7 +8,7 @@ ShallowWrapper {
   "length": 1,
   "node": <Droppable
     acceptsDraggableType={null}
-    label="foo"
+    droppableName="foo"
     store={
         Object {
             "dispatch": [Function],
@@ -22,7 +22,7 @@ ShallowWrapper {
   "nodes": Array [
     <Droppable
       acceptsDraggableType={null}
-      label="foo"
+      droppableName="foo"
       store={
             Object {
                   "dispatch": [Function],
@@ -41,7 +41,7 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <Connect(Droppable)
-        label="foo"
+        droppableName="foo"
         store={
                 Object {
                         "dispatch": [Function],
@@ -70,7 +70,7 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "label": "foo",
+          "droppableName": "foo",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -81,7 +81,7 @@ ShallowWrapper {
           "updateZone": [Function],
         },
         "props": Object {
-          "label": "foo",
+          "droppableName": "foo",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -93,7 +93,7 @@ ShallowWrapper {
         "refs": Object {},
         "renderedElement": <Droppable
           acceptsDraggableType={null}
-          label="foo"
+          droppableName="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -137,7 +137,7 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <Droppable
           acceptsDraggableType={null}
-          label="foo"
+          droppableName="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -151,7 +151,7 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <Droppable
           acceptsDraggableType={null}
-          label="foo"
+          droppableName="foo"
           store={
                     Object {
                               "dispatch": [Function],
@@ -174,7 +174,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Connect(Droppable)
-    label="foo"
+    droppableName="foo"
     store={
         Object {
             "dispatch": [Function],

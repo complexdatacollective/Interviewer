@@ -7,7 +7,7 @@ import DropZone from '../../Elements/DropZone';
 
 describe('DropZone component', () => {
   it('renders ok', () => {
-    const component = shallow(<DropZone label="foo" store={createStore(() => {})} />);
+    const component = shallow(<DropZone droppableName="foo" store={createStore(() => {})} />);
 
     expect(component).toMatchSnapshot();
   });
