@@ -1,9 +1,9 @@
 language: node_js
 node_js:
   - "6.9"
-cache:
-  directories:
-    - node_modules
+env:
+  - TASK=test
+  - TASK=build
 script:
-  - npm test
-  - npm run build
+  - yarn run $TASK
+  - yarn run $TASK

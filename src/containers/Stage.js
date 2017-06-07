@@ -6,13 +6,15 @@ import { connect } from 'react-redux';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { stage } from '../selectors/session';
 
-import { NameGenerator } from './Interfaces';
+import { NameGenerator, Quiz } from './Interfaces';
 
 function loadInterface(options) {
   if (Object.hasOwnProperty.call(options, 'custom')) { return options.custom; }
   switch (options) {
     case 'name-generator':
       return NameGenerator;
+    case 'quiz':
+      return Quiz;
     default:
       return null;
   }
