@@ -3,35 +3,24 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
-const setup = (props) => {
-  const mockProps = {
-    form: 'form1',
-    fields: [],
-    ...props,
-  };
-
-  const component = mount((
-    <Provider store={createStore(() => {})} >
-      <Form {...mockProps} />
-    </Provider>
-  ));
-
-  return {
-    component,
-    fields: component.find(Field),
-  };
-};
+const props = testProps => ({
+  form: 'form1',
+  fields: [],
+  ...testProps,
+});
 
 describe('<Form />', () => {
-  // it('should render', () => {
-  //   const subject = setup();
-  //
-  //   expect(subject.component).toMatchSnapshot();
-  // });
+  it('should render', () => {
+    const subject = shallow((
+      <Form {...props()} store={createStore(() => {})} />
+    ));
+
+    expect(subject).toMatchSnapshot();
+  });
 
   it('renders an array of <Field />', () => {
     const fields = [
@@ -51,9 +40,13 @@ describe('<Form />', () => {
       },
     ];
 
-    const subject = setup({ fields });
+    const subject = mount((
+      <Provider store={createStore(() => {})} >
+        <Form {...props({ fields })} />
+      </Provider>
+    ));
 
-    expect(subject.fields.length).toBe(2);
+    expect(subject.find(Field).length).toBe(2);
   });
   it('Calls autoPopulate on Field blur');
 });
