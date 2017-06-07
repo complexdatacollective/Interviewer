@@ -2,6 +2,8 @@ import React from 'react';
 import { map, zip } from 'lodash';
 import CheckboxGroup from './CheckboxGroup';
 
+const isChecked = (value, option) => (value ? !!value[option] : false);
+
 /**
   * A togglable list that sets thes field value to a key/value object of boolean properties
   */
@@ -26,7 +28,7 @@ class ToggleGroup extends CheckboxGroup {
                   id={`${name}_${option}`}
                   name={name}
                   value={option}
-                  checked={value[option]}
+                  checked={isChecked(value, option)}
                   onClick={() => { this.onClickOption(option); }}
                 /> {option}
               </label>

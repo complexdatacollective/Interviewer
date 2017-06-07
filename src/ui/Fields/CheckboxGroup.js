@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fromPairs, map } from 'lodash';
 
+const isChecked = (value, option) => (value ? !!value[option] : false);
+
 /**
   * A checkbox list that sets thes field value to a key/value object of boolean properties
   */
@@ -12,7 +14,7 @@ class CheckboxGroup extends Component {
     onChange({
       ...fromPairs(map(this.props.options, option => [option, false])),
       ...(value || {}),
-      ...{ [clickedOption]: !value[clickedOption] },
+      ...{ [clickedOption]: !value[clickedOption] || true },
     });
   }
 
@@ -30,7 +32,7 @@ class CheckboxGroup extends Component {
                 id={`${name}_${option}`}
                 name={name}
                 value={option}
-                checked={!!value[option]}
+                checked={isChecked(value, option)}
                 onChange={() => { this.onClickOption(option); }}
               /> {option}
             </label>
