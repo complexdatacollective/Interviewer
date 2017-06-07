@@ -9,6 +9,22 @@ import { Field } from '../../containers/Elements';
 
 /**
   * Renders a redux form that contains fields according to a `fields` config.
+  *
+  * @param {array} fields Contains an array of field definitions see Field for detailed format of definitions:
+  * {
+  *   label: 'Name',
+  *   name: 'name',
+  *   type: 'Alphanumeric',
+  *   placeholder: 'Name',
+  *   validation: {
+  *     required: true,
+  *   }
+  * }
+  * @param {func} handleSubmit(data) Recieves data as jsonfrom a sucessful form submission
+  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
+  * based on field value changes. Called on change with current field values and meta,
+  * and a callback to allow the setting of otherfields
+  *
   */
 class Form extends Component {
 
