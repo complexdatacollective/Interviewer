@@ -36,10 +36,6 @@ class Setup extends Component {
     }
   }
 
-  componentWillMount = () => {
-    this.props.loadProtocol('http://localhost:3000/quiz.protocol.js');
-  }
-
   render() {
     if(this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }}/>); }
 
