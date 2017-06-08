@@ -10,3 +10,9 @@ html, body {
   padding:0;
   height:100%;
 }
+
+.app {
+  &__content {
+    @include sidemenu-visible;
+  }
+}
