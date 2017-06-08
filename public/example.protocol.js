@@ -1,5 +1,30 @@
 /* eslint-disable */
 
+const fields = [
+  {
+    label: 'Name',
+    name: 'name',
+    type: 'Alphanumeric',
+    placeholder: 'Name',
+    validation: {
+      required: true,
+      minLength: 2,
+      minLength: 8,
+    }
+  },
+  {
+    label: 'Nickname',
+    name: 'nickname',
+    type: 'Alphanumeric',
+    placeholder: 'Nickname',
+    validation: {
+      required: true,
+      minLength: 2,
+      maxLength: 8,
+    },
+  },
+];
+
 return {
   config: {
     "name": "My first interview protocol",
@@ -52,7 +77,7 @@ return {
     "stages": [
       {
         "id": "namegen1",
-        "type": "name-generator",
+        "type": "NameGenerator",
         "title": "Name Generator Title",
         "params": {
           "nodeType": 'person',
@@ -85,30 +110,20 @@ return {
             },
           ],
           form: {
-            title: 'Add a person you know',
-            formName: 'closeFriends',
-            fields: [
-              {
-                label: 'Name',
-                name: 'name',
-                type: 'text',
-                placeholder: 'Name',
-                required: true,
-              },
-              {
-                label: 'Nickname',
-                name: 'nickname',
-                type: 'text',
-                placeholder: 'Nickname',
-                required: true,
-              },
-            ],
+            title: 'Answer some questions',
+            name: 'quiz1',
+            fields: fields,
+            autoPopulate: (fields, values, populate) => {
+              if(!fields['nickname'] || !fields['nickname'].touched) {
+                populate('nickname', values['name'].split(' ')[0]);
+              }
+            },
           },
         },
       },
       {
         "id": "namegen2",
-        "type": "namegenerator",
+        "type": "NameGenerator",
         "title": "Name Generator Title",
         "params": {
           "nodeType": 'person',
@@ -122,24 +137,14 @@ return {
             },
           ],
           form: {
-            title: "Add a person you've seen",
-            formName: 'bestPeople',
-            fields: [
-              {
-                label: 'Name',
-                name: 'name',
-                type: 'text',
-                placeholder: 'Name',
-                required: true,
-              },
-              {
-                label: 'Nickname',
-                name: 'nickname',
-                type: 'text',
-                placeholder: 'Nickname',
-                required: true,
-              },
-            ],
+            title: 'Answer some questions',
+            name: 'quiz2',
+            fields: fields,
+            autoPopulate: (fields, values, populate) => {
+              if(!fields['nickname'] || !fields['nickname'].touched) {
+                populate('nickname', values['name'].split(' ')[0]);
+              }
+            },
           },
           "panels": [
             'existing',

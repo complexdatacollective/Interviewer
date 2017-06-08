@@ -36,6 +36,11 @@ class Setup extends Component {
     }
   }
 
+  // TODO: For debugging, should be removed when we find a smarter way to do this.
+  componentWillMount = () => {
+    this.props.loadProtocol('http://localhost:3000/example.protocol.js');
+  }
+
   render() {
     if(this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }}/>); }
 
