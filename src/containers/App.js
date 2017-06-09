@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import cx from 'classnames';
+
 import { menuIsOpen } from '../selectors/session';
 import { StageMenu } from '.';
 
@@ -13,7 +15,13 @@ require('../styles/main.scss');
 const App = props => (
   <div id="outer-container">
     <StageMenu />
-    <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
+    <div
+      id="page-wrap"
+      className={cx({
+        app__content: true,
+        'app__content--pushed': props.isMenuOpen,
+      })}
+    >
       { props.children }
     </div>
   </div>

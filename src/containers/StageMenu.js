@@ -43,6 +43,7 @@ class StageMenu extends Component {
 
     return (
       <Menu
+        heading="Stages"
         isOpen={isOpen}
         items={items}
         searchField={search}

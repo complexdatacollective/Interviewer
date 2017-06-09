@@ -1,4 +1,4 @@
-@import '~network-canvas-ui/styles/all';
+@import '~network-canvas-ui/styles/all.scss';
 @import "components/_all.scss";
 
 #root {
@@ -9,4 +9,10 @@ html, body {
   margin:0;
   padding:0;
   height:100%;
+}
+
+.app {
+  &__content {
+    @include sidemenu-visible;
+  }
 }
