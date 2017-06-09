@@ -45,7 +45,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codaco/Network-Canvas.git" 
+    "url": "git+https://github.com/codaco/Network-Canvas.git"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
@@ -111,7 +111,7 @@
     "gridle": "^2.0.48",
     "history": "^4.5.1",
     "lodash": "^4.17.4",
-    "network-canvas-ui": "https://github.com/codaco/Network-Canvas-UI.git#3f63b45909584ccdc9959de840033ef89dbb3887",
+    "network-canvas-ui": "https://github.com/codaco/Network-Canvas-UI.git",
     "prop-types": "^15.5.8",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
