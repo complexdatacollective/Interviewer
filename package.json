@@ -24,14 +24,14 @@
     "generate-icons": "node generate-app-icons.js",
     "package-cordova": "cordova build ios && cordova build android"
   },
-  "author": "Codaco",
+  "author": "Complex Data Collective",
   "build": {
-    "appId": "Complex Data Collective",
+    "appId": "NetworkCanvas",
     "directories": {
       "output": "release-builds"
     },
     "mac": {
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.utilities"
     },
     "win": {
       "target": "nsis",
