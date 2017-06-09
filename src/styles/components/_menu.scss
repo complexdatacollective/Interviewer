@@ -6,7 +6,7 @@ $interface-types: (
 .menu {
   // General sidebar styles
   &__content {
-    background: map-get($roles, menu);
+    background: palette(menu);
     height: 100%;
     color: $charcoal;
   }
@@ -14,7 +14,7 @@ $interface-types: (
   // Menu header
   &__title {
     padding: $padding-base-vertical $spacer-4;
-    color: map-get($roles, menu-headings);
+    color: palette(menu-headings);
     font-weight: 700;
     line-height: 2.5rem;
   }
@@ -55,7 +55,7 @@ $interface-types: (
     }
 
     &:hover {
-      background-color: darken($light-sea-green, 5%); // #00ba96;
+      background-color: darken(#00ba96, 5%);
     }
 
     &:focus {
