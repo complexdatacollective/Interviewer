@@ -1,4 +1,4 @@
-exports[`NodeList component renders ok 1`] = `
+exports[`<Form /> should render 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -6,16 +6,14 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <Droppable
-    acceptsDraggableType={null}
-    droppableName={null}
-    network={
+  "node": <AutoInitialisedForm
+    dispatch={[Function]}
+    fields={Array []}
+    form="form1"
+    meta={
         Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
+            "fields": undefined,
+            "values": undefined,
           }
     }
     store={
@@ -26,19 +24,16 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           }
-    }
-    updateZone={[Function]} />,
+    } />,
   "nodes": Array [
-    <Droppable
-      acceptsDraggableType={null}
-      droppableName={null}
-      network={
+    <AutoInitialisedForm
+      dispatch={[Function]}
+      fields={Array []}
+      form="form1"
+      meta={
             Object {
-                  "nodes": Array [
-                    Object {
-                      "name": "test",
-                    },
-                  ],
+                  "fields": undefined,
+                  "values": undefined,
                 }
       }
       store={
@@ -49,8 +44,7 @@ ShallowWrapper {
                   "subscribe": [Function],
                   Symbol(observable): [Function],
                 }
-      }
-      updateZone={[Function]} />,
+      } />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -58,16 +52,9 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(Droppable)
-        network={
-                Object {
-                        "nodes": Array [
-                          Object {
-                            "name": "test",
-                          },
-                        ],
-                      }
-        }
+      "_currentElement": <Connect(AutoInitialisedForm)
+        fields={Array []}
+        form="form1"
         store={
                 Object {
                         "dispatch": [Function],
@@ -86,7 +73,7 @@ ShallowWrapper {
           "store": undefined,
         },
         "dispatchProps": Object {
-          "updateZone": [Function],
+          "dispatch": [Function],
         },
         "doDispatchPropsDependOnOwnProps": false,
         "doStatePropsDependOnOwnProps": true,
@@ -96,12 +83,12 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
+          "dispatch": [Function],
+          "fields": Array [],
+          "form": "form1",
+          "meta": Object {
+            "fields": undefined,
+            "values": undefined,
           },
           "store": Object {
             "dispatch": [Function],
@@ -110,16 +97,10 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           },
-          "updateZone": [Function],
         },
         "props": Object {
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          },
+          "fields": Array [],
+          "form": "form1",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -129,16 +110,14 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "renderedElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          network={
+        "renderedElement": <AutoInitialisedForm
+          dispatch={[Function]}
+          fields={Array []}
+          form="form1"
+          meta={
                     Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
+                              "fields": undefined,
+                              "values": undefined,
                             }
           }
           store={
@@ -149,12 +128,16 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          }
-          updateZone={[Function]} />,
+          } />,
         "state": Object {
           "storeState": undefined,
         },
-        "stateProps": Object {},
+        "stateProps": Object {
+          "meta": Object {
+            "fields": undefined,
+            "values": undefined,
+          },
+        },
         "statePropsPrecalculationError": null,
         "store": Object {
           "dispatch": [Function],
@@ -182,16 +165,14 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          network={
+        "_currentElement": <AutoInitialisedForm
+          dispatch={[Function]}
+          fields={Array []}
+          form="form1"
+          meta={
                     Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
+                              "fields": undefined,
+                              "values": undefined,
                             }
           }
           store={
@@ -202,19 +183,16 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          }
-          updateZone={[Function]} />,
+          } />,
         "_debugID": 2,
-        "_renderedOutput": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          network={
+        "_renderedOutput": <AutoInitialisedForm
+          dispatch={[Function]}
+          fields={Array []}
+          form="form1"
+          meta={
                     Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
+                              "fields": undefined,
+                              "values": undefined,
                             }
           }
           store={
@@ -225,8 +203,7 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          }
-          updateZone={[Function]} />,
+          } />,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -238,16 +215,9 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(Droppable)
-    network={
-        Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          }
-    }
+  "unrendered": <Connect(AutoInitialisedForm)
+    fields={Array []}
+    form="form1"
     store={
         Object {
             "dispatch": [Function],

@@ -64,8 +64,8 @@ export default function droppable(WrappedComponent) {
   };
 
   Droppable.defaultProps = {
-    droppableName: null,
     acceptsDraggableType: null,
+    droppableName: null,
   };
 
   function mapStateToProps() {

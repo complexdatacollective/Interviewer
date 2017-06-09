@@ -9,8 +9,8 @@ import {
 } from '../../ducks/modules/modals';
 import { newNodeAttributes } from '../../selectors/session';
 import { activeOriginNetwork } from '../../selectors/network';
-import { PromptSwiper, NodeProviderPanels } from '../../containers/Elements';
-import { NodeList, NodeBin, NodeForm } from '../../components/Elements';
+import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
+import { NodeList, NodeBin } from '../../components/Elements';
 
 // Render method for the node labels
 const label = node => `${node.nickname}`;
