@@ -46,7 +46,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codaco/Network-Canvas.git" 
+    "url": "git+https://github.com/codaco/Network-Canvas.git"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
