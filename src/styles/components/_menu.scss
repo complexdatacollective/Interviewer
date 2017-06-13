@@ -9,8 +9,41 @@ $interface-types: (
     100% {    transform: translate3d(0, 0, 0) };
 }
 
+#page-wrap {
+  transition: all $animation-standard-duration $animation-default-easing;
+  &.isOpen {
+    transform-origin: 100%;
+    transform-style: preserve-3d;
+    @include breakpoint(medium) {
+      transform: translate3d(23.5vw, 0, -66vw);
+    }
+    @include breakpoint(large) {
+      transform: translate3d(17vw, 0, -40vw);
+    }
+  }
+}
+
 .menu {
-  // General sidebar styles
+  &__wrap {
+    // General sidebar styles
+    position: fixed;
+    left: 0;
+    z-index: 2;
+    transform: none;
+    transition: all $animation-standard-duration $animation-default-easing;
+    height:100%;
+    transform: translate3d(-100%, 0, 0);
+    &--isOpen {
+      transform: translate3d(0%, 0, 0);
+    }
+    @include breakpoint(medium) {
+      width:30vw;
+    }
+
+    @include breakpoint(large) {
+      width:22vw;
+    }
+  }
   &__content {
     background: palette(menu);
     height: 100%;

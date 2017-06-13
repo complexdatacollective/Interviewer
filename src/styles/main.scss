@@ -3,12 +3,28 @@
 
 #root {
     @import "containers/home";
+    background: $light-sea-green;
+}
+
+#outer-container {
+  height: 100vh;
+  width: 100vw;
+  perspective: 1500px;
+}
+
+#page-wrap {
+  height: 100vh;
+  width:100vw;
+  box-sizing: border-box;
+  background: $navy-taupe;
+  overflow: hidden;
 }
 
 html, body {
   margin:0;
   padding:0;
-  height:100%;
+  height:100vw;
+  overflow: hidden;
 }
 
 .app {
