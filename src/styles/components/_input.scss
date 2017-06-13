@@ -5,7 +5,7 @@ $component-name: 'input';
   margin: 20px 0 0;
 
   &__field {
-    @include text(h2);
+    @include typography('title-2');
     font-weight: bold;
     background-color: transparent;
     border: 0;
@@ -29,7 +29,7 @@ $component-name: 'input';
   }
 
   &__label {
-    @include text(h5);
+    @include typography('title-5');
     margin-top: 20px;
     opacity: 0;
     transition: opacity 300ms ease;

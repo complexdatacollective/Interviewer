@@ -2,21 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import loadInterface from '../utils/loadInterface';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { stage } from '../selectors/session';
-
-import { NameGenerator } from './Interfaces';
-
-function loadInterface(options) {
-  if (Object.hasOwnProperty.call(options, 'custom')) { return options.custom; }
-  switch (options) {
-    case 'name-generator':
-      return NameGenerator;
-    default:
-      return null;
-  }
-}
 
 /**
   * Render a protocol interface based on protocol info and id
