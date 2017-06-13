@@ -13,8 +13,15 @@ import { Menu } from '../components';
   */
 class SessionMenu extends Component {
   onQuit = () => {
-    // eslint-disable-next-line
-    console.log('quit');
+    if (navigator.app) {
+      // cordova
+      navigator.app.exitApp();
+    } else if (navigator.device) {
+      navigator.device.exitApp();
+    } else {
+      // note: this will only close windows opened by the app, not a new tab the user opened
+      window.close();
+    }
   }
 
   onReset = () => {
