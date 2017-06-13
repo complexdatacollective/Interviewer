@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// import { MenuContent } from '.';
-import { SideMenu } from 'network-canvas-ui';
+import { MenuContent } from '.';
 import { MenuItem } from './Elements';
 
 /**
@@ -82,7 +81,6 @@ MenuFactory.propTypes = {
   title: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   searchField: PropTypes.object,
-  heading: PropTypes.string,
 };
 
 MenuFactory.defaultProps = {

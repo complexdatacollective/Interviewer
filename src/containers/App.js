@@ -1,15 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
-=======
-import cx from 'classnames';
-
-import { menuIsOpen } from '../selectors/session';
-import { StageMenu } from '.';
->>>>>>> master
 
 require('../styles/main.scss');
 
