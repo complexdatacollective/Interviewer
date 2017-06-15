@@ -17,7 +17,7 @@ class MenuFactory extends Component {
   }
 
   /**
-    * adds listener for key events to close Menu
+    * removes listener for key events and click events to close Menu
     */
   componentWillUnmount() {
     window.onkeydown = null;
@@ -31,6 +31,35 @@ class MenuFactory extends Component {
     }
   }
 
+  outsideClick = (e) => {
+    // check whether the element clicked upon is in your component - if not,
+    // then call the toggle logic
+    if (this.domNode.contains(e.target)) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    if (this.props.isOpen) {
+      this.menuClick();
+    }
+  }
+
+  menuClick = () => {
+    if (!this.props.isOpen) {
+      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
+        document.addEventListener(
+          type, this.outsideClick, { capture: true, passive: false });
+      });
+    } else {
+      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
+        document.removeEventListener(
+          type, this.outsideClick, { capture: true, passive: false });
+      });
+    }
+
+    this.props.toggleMenu();
+  }
+
   // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
     itemClick();
@@ -38,7 +67,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { hideButton, isOpen, items, searchField, title, toggleMenu } = this.props;
+    const { hideButton, isOpen, items, searchField, title } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -52,19 +81,19 @@ class MenuFactory extends Component {
     );
 
     return (
-      <div className="menu">
+      <div className="menu" ref={(node) => { this.domNode = node; }}>
         <div className={isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
           <div className="menu__content">
             <MenuContent
               items={menuItems}
               searchField={searchField}
               title={title}
-              toggleMenu={toggleMenu}
+              toggleMenu={this.menuClick}
             />
           </div>
         </div>
         {!hideButton && <div className="menu__burger">
-          <button onClick={toggleMenu} className="ui large button">
+          <button onClick={this.menuClick} className="ui large button">
             <i className="download icon" />
             Burger
           </button>
