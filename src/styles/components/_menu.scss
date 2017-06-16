@@ -75,7 +75,7 @@ $interface-types: (
     display: flex;
     font-weight: 500;
     letter-spacing: 3px;
-    padding: 15px 25px 15px 80px;
+    padding: 15px 25px 15px 20px;
     text-decoration: none;
     text-transform: uppercase;
     background-size: 35px;
@@ -101,6 +101,10 @@ $interface-types: (
       outline: 0;
     }
 
+    svg {
+      padding-right: 10px;
+    }
+
     @each $interface-type in $interface-types {
       &--#{$interface-type} {
         background-image: url('../images/menu/#{$interface-type}.svg');
@@ -119,8 +123,8 @@ $interface-types: (
 
   &__burger {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 20px;
+    left: 20px;
     z-index: 1;
     animation-name: menu-button-move;
     animation-delay: 0s;
@@ -129,7 +133,7 @@ $interface-types: (
 
   ~ .menu {
     .menu__burger {
-      margin-top: 40px;
+      margin-top: 60px;
     }
   }
 }

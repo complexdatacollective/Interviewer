@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'network-canvas-ui';
 
 import { scrollable } from '../behaviors';
 
@@ -14,11 +15,8 @@ function MenuContent(props) {
 
   return (
     <div>
-      <div className="menu__cross">
-        <button onClick={toggleMenu} className="ui large button">
-          <i className="download icon" />
-          Cross
-        </button>
+      <div className="menu__cross" onClick={toggleMenu} tabIndex={0} role="menu">
+        <Icon name="close" />
       </div>
       <header>
         <h1 className="menu__title">{title}</h1>

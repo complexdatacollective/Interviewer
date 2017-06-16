@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'network-canvas-ui';
 
 import { MenuContent } from '.';
 import { MenuItem } from './Elements';
@@ -67,7 +68,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { hideButton, isOpen, items, searchField, title } = this.props;
+    const { hideButton, icon, isOpen, items, searchField, title } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -92,11 +93,8 @@ class MenuFactory extends Component {
             />
           </div>
         </div>
-        {!hideButton && <div className="menu__burger">
-          <button onClick={this.menuClick} className="ui large button">
-            <i className="download icon" />
-            Burger
-          </button>
+        {!hideButton && <div className="menu__burger" onClick={this.menuClick} tabIndex={0} role="menu">
+          <Icon name={icon} size="small" />
         </div>}
       </div>
     );
@@ -105,6 +103,7 @@ class MenuFactory extends Component {
 
 MenuFactory.propTypes = {
   hideButton: PropTypes.bool,
+  icon: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array,
   title: PropTypes.string,
@@ -114,6 +113,7 @@ MenuFactory.propTypes = {
 
 MenuFactory.defaultProps = {
   hideButton: false,
+  icon: 'menu',
   items: [],
   searchField: null,
   title: 'Options',

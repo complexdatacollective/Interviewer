@@ -34,13 +34,14 @@ class SessionMenu extends Component {
     } = this.props;
 
     const items = [
-      { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'quit', isActive: false, onClick: this.onQuit },
-      { id: 'reset', title: 'Reset Session', interfaceType: 'reset', isActive: false, onClick: this.onReset },
+      { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
+      { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', isActive: false, onClick: this.onReset },
     ];
 
     return (
       <Menu
         hideButton={hideButton}
+        icon="menu"
         isOpen={isOpen}
         items={items}
         title="Session"

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Icon } from 'network-canvas-ui';
 
 /**
   * Renders a menu item using router links. Image is optional.
@@ -18,6 +19,7 @@ function MenuItem(props) {
 
   return (
     <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
+      <Icon name={interfaceType} />
       {title}
     </a>
   );
