@@ -11,7 +11,6 @@ function MenuItem(props) {
 
   const itemClasses = classNames(
     'menu__menuitem',
-    `menu__menuitem--${interfaceType}`,
     {
       'menu__menuitem--active': isActive,
     },

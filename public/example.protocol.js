@@ -78,7 +78,8 @@ return {
       {
         "id": "namegen1",
         "type": "NameGenerator",
-        "title": "Name Generator Title",
+        "image": "menu-ng",
+        "title": "Name Generator Title 1",
         "params": {
           "nodeType": 'person',
           "panels": [
@@ -124,7 +125,8 @@ return {
       {
         "id": "namegen2",
         "type": "NameGenerator",
-        "title": "Name Generator Title",
+        "image": "menu-ng",
+        "title": "Name Generator Title 2",
         "params": {
           "nodeType": 'person',
           "prompts": [

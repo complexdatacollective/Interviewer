@@ -34,10 +34,11 @@ class SessionMenu extends Component {
     } = this.props;
 
     const items = [
-      { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', isActive: false, onClick: this.onReset },
+      { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
     ];
 
+    // TODO icon should be "settings", but the icon isn't in the ui yet
     return (
       <Menu
         hideButton={hideButton}

@@ -94,7 +94,7 @@ class MenuFactory extends Component {
           </div>
         </div>
         {!hideButton && <div className="menu__burger" onClick={this.menuClick} tabIndex={0} role="menu">
-          <Icon name={icon} size="small" />
+          <Icon name={icon} />
         </div>}
       </div>
     );
