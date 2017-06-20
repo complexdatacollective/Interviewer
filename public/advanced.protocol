@@ -172,8 +172,9 @@ return {
       },
       {
         "id": "namegen2",
-        "type": "name-generator",
+        "type": "NameGenerator",
         "title": "Name Generator Title 2",
+        "icon": "menu-ng",
         "params": {
           "nodeType": 'person',
           "prompts": [

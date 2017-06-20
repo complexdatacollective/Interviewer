@@ -38,11 +38,10 @@ class SessionMenu extends Component {
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
     ];
 
-    // TODO icon should be "settings", but the icon isn't in the ui yet
     return (
       <Menu
         hideButton={hideButton}
-        icon="menu"
+        icon="settings"
         isOpen={isOpen}
         items={items}
         title="Session"
