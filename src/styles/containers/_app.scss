@@ -1,17 +1,17 @@
 // container for menus and content
 .app {
   height: 100vh;
-  width: 100vw;
   perspective: 1500px;
+  width: 100vw;
 
   // page wrap for content
   &__content {
-    box-sizing: border-box;
     background: $navy-taupe;
+    box-sizing: border-box;
     height: 100vh;
     overflow: hidden;
     transition: all $animation-standard-duration $animation-default-easing;
-    width:100vw;
+    width: 100vw;
 
     // content being pushed e.g. by menu
     &--pushed {
