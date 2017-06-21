@@ -1,6 +1,5 @@
 .node {
   background: node-palette('default');
-  display: inline-block;
   margin: 1rem;
   width: 100px;
   height: 100px;
@@ -14,7 +13,7 @@
   transition: width 300ms ease, height 300ms ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 0 0 transparentize(palette('dark-background'), 0.2);
+  box-shadow: 0 4px 0 0 transparentize(palette('dark-background'), .2);
 
   &::after {
     content: '';

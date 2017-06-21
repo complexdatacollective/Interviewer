@@ -8,12 +8,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize(palette('background'), 0.1);
+  background-color: transparentize(palette('background'), .1);
 
   &__window {
     width: 750px;
     background: palette('light-background');
-    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), 0.25);
+    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
     position: relative;
   }
 
@@ -52,7 +52,7 @@
     right: 35px;
     top: 35px;
     color: palette('text');
-    cusor: pointer;
+    cursor: pointer;
 
     &:focus {
       outline: none;

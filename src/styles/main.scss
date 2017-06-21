@@ -1,15 +1,18 @@
+// sass-lint:disable clean-import-paths
 @import '~network-canvas-ui/src/styles/all.scss';
-@import "containers/_app.scss";
-@import "components/_all.scss";
+@import 'containers/_app.scss';
+@import 'components/_all.scss';
 
+// sass-lint:disable no-ids
 #root {
-    @import "containers/home";
-    background: $light-sea-green;
+  @import 'containers/home';
+  background: $light-sea-green;
 }
 
-html, body {
-  margin:0;
-  padding:0;
-  height:100vw;
+html,
+body {
+  height: 100vw;
+  margin: 0;
   overflow: hidden;
+  padding: 0;
 }
