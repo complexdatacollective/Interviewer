@@ -6,7 +6,7 @@
 // sass-lint:disable no-ids
 #root {
   @import 'containers/home';
-  background: $light-sea-green;
+  background: palette('primary');
 }
 
 html,

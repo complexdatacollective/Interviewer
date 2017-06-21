@@ -83,7 +83,7 @@ class MenuFactory extends Component {
 
     return (
       <div className="menu" ref={(node) => { this.domNode = node; }}>
-        <div className={isOpen ? 'menu__wrap menu__wrap--isOpen' : 'menu__wrap'}>
+        <div className={isOpen ? 'menu__wrap menu__wrap--open' : 'menu__wrap'}>
           <div className="menu__content">
             <MenuContent
               items={menuItems}

@@ -6,7 +6,7 @@
 
   // page wrap for content
   &__content {
-    background: $navy-taupe;
+    background: palette('background');
     box-sizing: border-box;
     height: 100vh;
     overflow: hidden;

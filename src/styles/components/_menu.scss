@@ -1,43 +1,43 @@
-@-webkit-keyframes menu-button-move {
-    0%   {    transform: translate3d(0, -250%, 0) };
-    25%  {    transform: translate3d(0, -250%, 0) };
-    100% {    transform: translate3d(0, 0, 0) };
+@keyframes menu-button-move {
+  0%    { transform: translate3d(0, -250%, 0); }
+  25%   { transform: translate3d(0, -250%, 0); }
+  100%  { transform: translate3d(0, 0, 0); }
 }
 
 .menu {
   &__wrap {
     // General sidebar styles
-    position: fixed;
+    height: 100%;
     left: 0;
-    z-index: 2;
-    transform: none;
-    transition: all $animation-standard-duration $animation-default-easing;
-    height:100%;
+    position: fixed;
     transform: translate3d(-100%, 0, 0);
-    &--isOpen {
+    transition: all $animation-standard-duration $animation-default-easing;
+    z-index: 2;
+
+    &--open {
       transform: translate3d(0%, 0, 0);
     }
     @include breakpoint(medium) {
-      width:30vw;
+      width: 30vw;
     }
 
     @include breakpoint(large) {
-      width:22vw;
+      width: 22vw;
     }
   }
 
   &__content {
-    background: palette(menu);
+    background: palette('menu');
+    color: palette('menu-headings');
     height: 100%;
-    color: $charcoal;
   }
 
   // Menu header
   &__title {
-    padding: $padding-base-vertical $spacer-4;
-    color: palette(menu-headings);
+    color: palette('menu-headings');
     font-weight: 700;
     line-height: 2.5rem;
+    padding: $padding-base-vertical $spacer-4;
   }
 
   &__search {
@@ -52,38 +52,38 @@
   // Wrapper for item list
   &__menuitem {
     align-items: center;
-    border-top: 1px solid $divider;
-    color: $charcoal;
+    background-position: 25px 50%;
+    background-repeat: no-repeat;
+    background-size: 35px;
+    border-top: 1px solid palette('divider');
+    color: palette('menu-headings');
+    cursor: pointer;
     display: flex;
     font-weight: 500;
     letter-spacing: 3px;
     padding: 15px 25px 15px 20px;
     text-decoration: none;
     text-transform: uppercase;
-    background-size: 35px;
-    background-repeat: no-repeat;
-    background-position: 25px 50%;
-    cursor: pointer;
 
     &--active,
     &:hover {
-      color: $white;
+      color: palette('menu');
       text-decoration: none;
     }
 
     &--active {
-      background-color: $light-sea-green;
+      background-color: palette('primary');
     }
 
     &:hover {
-      background-color: darken(#00ba96, 5%);
+      background-color: darken(palette('primary'), 5%);
     }
 
     &:focus {
       outline: 0;
     }
 
-    svg {
+    .icon {
       padding-right: 10px;
     }
   }
@@ -94,14 +94,14 @@
   }
 
   &__burger {
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1;
-    animation-name: menu-button-move;
     animation-delay: 0s;
     animation-duration: 1.5s;
+    animation-name: menu-button-move;
+    cursor: pointer;
+    left: 20px;
+    position: absolute;
+    top: 20px;
+    z-index: 1;
   }
 
   ~ .menu {
