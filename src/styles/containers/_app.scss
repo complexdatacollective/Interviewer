@@ -1,0 +1,30 @@
+// container for menus and content
+.app {
+  height: 100vh;
+  width: 100vw;
+  perspective: 1500px;
+
+  // page wrap for content
+  &__content {
+    box-sizing: border-box;
+    background: $navy-taupe;
+    height: 100vh;
+    overflow: hidden;
+    transition: all $animation-standard-duration $animation-default-easing;
+    width:100vw;
+
+    // content being pushed e.g. by menu
+    &--pushed {
+      transform-origin: 100%;
+      transform-style: preserve-3d;
+
+      @include breakpoint(medium) {
+        transform: translate3d(23.5vw, 0, -66vw);
+      }
+
+      @include breakpoint(large) {
+        transform: translate3d(17vw, 0, -40vw);
+      }
+    }
+  }
+}

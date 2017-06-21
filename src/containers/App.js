@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import cx from 'classnames';
+
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
 
@@ -11,10 +13,16 @@ require('../styles/main.scss');
   * @param props {object} - children
   */
 const App = props => (
-  <div id="outer-container">
+  <div className="app">
     <SessionMenu hideButton={props.isMenuOpen} />
     <StageMenu hideButton={props.isMenuOpen} />
-    <div id="page-wrap" className={props.isMenuOpen ? 'isOpen' : ''}>
+    <div
+      id="page-wrap"
+      className={cx({
+        app__content: true,
+        'app__content--pushed': props.isMenuOpen,
+      })}
+    >
       { props.children }
     </div>
   </div>
