@@ -44,8 +44,18 @@
     padding: 1rem;
 
     input {
+      border-radius: .5rem;
+      outline: none;
       padding: .3rem;
       width: 100%;
+
+      &:focus {
+        border-width: 3px;
+      }
+
+      &:not(:focus) {
+        margin: 1px;
+      }
     }
   }
 

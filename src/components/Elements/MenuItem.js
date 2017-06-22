@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
 /**
-  * Renders a menu item using router links. Image is optional.
+  * Renders a menu item. Image is based on interfaceType.
   */
 class MenuItem extends Component {
   constructor(props) {
