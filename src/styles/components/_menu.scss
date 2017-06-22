@@ -91,6 +91,7 @@
   &__cross {
     cursor: pointer;
     float: right;
+    padding: 10px;
   }
 
   &__burger {
@@ -102,6 +103,13 @@
     position: absolute;
     top: 20px;
     z-index: 1;
+
+    .icon {
+      &[name='settings'] {
+        height: 50px;
+        width: 50px;
+      }
+    }
   }
 
   ~ .menu {
