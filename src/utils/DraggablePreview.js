@@ -23,7 +23,12 @@ export default class DraggablePreview {
     this.node = document.createElement('div');
     this.node.setAttribute('class', 'draggable-preview');
     this.node.setAttribute('style', styles(-1000, -1000));
-    this.node.appendChild(node.cloneNode(true));
+
+    const animationLayer = document.createElement('div');
+    animationLayer.setAttribute('class', 'draggable-preview__animation');
+    animationLayer.appendChild(node.cloneNode(true));
+
+    this.node.appendChild(animationLayer);
 
     parent().appendChild(this.node);
   }

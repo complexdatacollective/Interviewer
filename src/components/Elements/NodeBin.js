@@ -1,18 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { DropZone } from '../../components/Elements';
 
 /**
   * Renders a droppable NodeBin which accepts `EXISTING_NODE`.
   */
-const NodeBin = (props) => {
-  if (!props.isDraggableDeleteable) { return null; }
+const NodeBin = ({ isDraggableDeleteable }) => {
+  const classNames = cx(
+    'node-bin',
+    { 'node-bin--active': isDraggableDeleteable },
+  );
 
   return (
-    <div className="name-generator__node-bin">
-      <DropZone droppableName="NODE_BIN" acceptsDraggableType="EXISTING_NODE" />
-    </div>
+    <DropZone droppableName="NODE_BIN" acceptsDraggableType="EXISTING_NODE">
+      <div className={classNames} />
+    </DropZone>
   );
 };
 

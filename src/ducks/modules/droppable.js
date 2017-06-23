@@ -1,9 +1,12 @@
 import { reject } from 'lodash';
+import { actionTypes as draggableActions } from './draggable';
 
 const UPDATE_ZONE = 'UPDATE_ZONE';
+const UPDATE_ACTIVE_ZONES = 'UPDATE_ACTIVE_ZONES';
 
 const initialState = {
   zones: [],
+  activeZones: [],
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -15,6 +18,17 @@ export default function reducer(state = initialState, action = {}) {
         zones,
       };
     }
+    case UPDATE_ACTIVE_ZONES: {
+      return {
+        ...state,
+        activeZones: action.zones,
+      };
+    }
+    case draggableActions.DRAG_STOP:
+      return {
+        ...state,
+        activeZones: [],
+      };
     default:
       return state;
   }
@@ -27,12 +41,21 @@ function updateZone(zone) {
   };
 }
 
+function updateActiveZones(zones) {
+  return {
+    type: UPDATE_ACTIVE_ZONES,
+    zones,
+  };
+}
+
 const actionCreators = {
   updateZone,
+  updateActiveZones,
 };
 
 const actionTypes = {
   UPDATE_ZONE,
+  UPDATE_ACTIVE_ZONES,
 };
 
 export {

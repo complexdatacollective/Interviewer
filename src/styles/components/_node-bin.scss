@@ -1,0 +1,16 @@
+.node-bin {
+  @include transition-properties((opacity transform), $animation-default-easing, $animation-fast-duration);
+  background: transparent;
+  background-image: url('../images/node-bin.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 60px;
+  height: 80px;
+  transform: translate3d(0, 200px, 0);
+  opacity: 0;
+
+  &--active {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}

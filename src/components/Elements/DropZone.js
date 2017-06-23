@@ -1,10 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import droppable from '../../behaviors/droppable';
+import { droppable } from '../../behaviours';
 
 /**
   * Renders a container onto which a `draggable` can be dropped.
   */
-const DropZone = () => <div className="drop-zone" />;
+const DropZone = ({ children }) => (
+  <div className="drop-zone">
+    { children }
+  </div>
+);
+
+DropZone.propTypes = {
+  children: PropTypes.any,
+};
+
+DropZone.defaultProps = {
+  children: null,
+};
 
 export default droppable(DropZone);

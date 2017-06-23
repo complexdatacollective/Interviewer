@@ -1,6 +1,9 @@
-// sass-lint:disable clearn-import-paths
+// sass-lint:disable clean-import-paths
 @import '~network-canvas-ui/src/styles/all.scss';
-@import 'components/_all.scss';
+@import 'ui/all';  // TODO: Migrate to UI
+@import 'utils/all';
+@import 'helpers/all';
+@import 'components/all';
 
 // sass-lint:disable no-ids
 #root {
