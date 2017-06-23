@@ -31,9 +31,9 @@
   }
 
   &__panels {
-    flex: 0 0 400px;
+    flex: 0 0 auto;
     height: 100%;
-    margin-right: 50px;
+    display: flex;
   }
 
   &__add-person {

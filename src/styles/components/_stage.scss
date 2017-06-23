@@ -2,9 +2,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: palette('background');
 
   &__interface {
     flex: 1 auto;
+    height: 100vh;
   }
 
   &__control {
@@ -20,6 +27,18 @@
 
       &--next {
         @include svg-button('../images/arrow-next.svg');
+      }
+    }
+  }
+
+  &--transition {
+    @include group-transition-with-delay(fade, $animation-slow-duration, $animation-slow-duration)
+
+    @include group-transition-leave {
+      .node-list,
+      .panels {
+        opacity: 0;
+        transition: unset !important;
       }
     }
   }

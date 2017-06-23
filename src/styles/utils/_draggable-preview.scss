@@ -1,0 +1,5 @@
+.draggable-preview {
+  &__animation {
+    @include animation(zoom);
+  }
+}

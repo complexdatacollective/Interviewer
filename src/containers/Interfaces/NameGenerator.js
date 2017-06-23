@@ -94,9 +94,7 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator__main">
           <div className="name-generator__panels">
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-              <NodeProviderPanels config={panels} />
-            </div>
+            <NodeProviderPanels config={panels} />
           </div>
           <div className="name-generator__nodes">
             <NodeList

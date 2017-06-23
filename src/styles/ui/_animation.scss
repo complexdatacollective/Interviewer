@@ -1,0 +1,158 @@
+// sass-lint:disable no-transition-all
+
+@keyframes zoom {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@mixin animation($keyframes) {
+  animation-name: $keyframes;
+  animation-delay: 0ms;
+  animation-duration: $animation-fast-duration;
+  animation-timing-function:  $animation-default-easing;
+  animation-iteration-count: 1;
+}
+
+$transition-presets: (
+  zoom: (
+    start: (transform: scale(0, 0), opacity: 0),
+    end: (transform: scale(1, 1), opacity: 1)
+  ),
+  fade: (
+    start: (opacity: 0),
+    end: (opacity: 1)
+  ),
+  flex: (
+    start: (flex-grow: 0),
+    end: (flex-grow: 1)
+  )
+);
+
+@mixin transition-properties($properties, $easing, $duration) {
+  $transitions: ();
+  @each $value in $properties {
+    $transitions: append($transitions, $value $duration $easing, comma);
+  }
+  transition: $transitions;
+}
+
+@mixin transition-properties-with-delay($properties, $easing, $duration, $delay: 0s) {
+  $transitions: ();
+  @each $value in $properties {
+    $transitions: append($transitions, $value $duration $easing $delay, comma);
+  }
+  transition: $transitions;
+}
+
+@mixin group-transition-enter {
+  &-enter {
+    @content;
+  }
+}
+
+@mixin group-transition-appear {
+  &-appear {
+    @content;
+  }
+}
+
+@mixin group-transition-leave {
+  &-leave {
+    @content;
+  }
+}
+
+@mixin group-transition($transition-name, $duration: $animation-standard-duration) {
+  $transition: map-get($transition-presets, $transition-name);
+  $properties: map-keys(map-get($transition, 'start'));
+
+  &-appear,
+  &-enter {
+    @each $key, $value in map-get($transition, 'start') {
+      #{$key}: $value;
+    }
+
+
+    &-active {
+
+      @include transition-properties($properties, $animation-default-easing, $duration);
+      @each $key, $value in map-get($transition, 'end') {
+        #{$key}: $value;
+      }
+    }
+  }
+
+  &-leave {
+    @each $key, $value in map-get($transition, 'end') {
+      #{$key}: $value;
+    }
+
+
+    &-active {
+      @include transition-properties($properties, $animation-default-easing, $duration);
+      @each $key, $value in map-get($transition, 'start') {
+        #{$key}: $value;
+      }
+    }
+  }
+}
+
+@mixin group-transition-with-delay($transition-name, $duration, $delay) {
+  $transition: map-get($transition-presets, $transition-name);
+  $properties: map-keys(map-get($transition, 'start'));
+
+  &-appear {
+    @each $key, $value in map-get($transition, 'start') {
+      #{$key}: $value;
+    }
+
+    &-active {
+      @include transition-properties-with-delay($properties, $animation-default-easing, $duration, $delay);
+      @each $key, $value in map-get($transition, 'end') {
+        #{$key}: $value;
+      }
+    }
+  }
+
+  &-enter {
+    @each $key, $value in map-get($transition, 'start') {
+      #{$key}: $value;
+    }
+
+    &-active {
+      @include transition-properties-with-delay($properties, $animation-default-easing, $duration, $delay);
+      @each $key, $value in map-get($transition, 'end') {
+        #{$key}: $value;
+      }
+    }
+  }
+
+  &-leave {
+    @each $key, $value in map-get($transition, 'end') {
+      #{$key}: $value;
+    }
+
+    &-active {
+      @include transition-properties($properties, $animation-default-easing, $duration);
+      @each $key, $value in map-get($transition, 'start') {
+        #{$key}: $value;
+      }
+    }
+  }
+}
+
+.fade {
+  @include group-transition(fade, 500ms);
+
+  &-appear,
+  &-enter {
+    display: block;
+  }
+}

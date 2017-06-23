@@ -51,6 +51,7 @@ export default function droppable(WrappedComponent) {
       return (
         <WrappedComponent
           ref={(node) => { this.node = node; }}
+          hover={this.props.hover}
           {...this.props}
         />
       );
@@ -61,15 +62,19 @@ export default function droppable(WrappedComponent) {
     updateZone: PropTypes.func.isRequired,
     droppableName: PropTypes.string,
     acceptsDraggableType: PropTypes.string,
+    hover: PropTypes.bool,
   };
 
   Droppable.defaultProps = {
     acceptsDraggableType: null,
     droppableName: null,
+    hover: false,
   };
 
-  function mapStateToProps() {
-    return {};
+  function mapStateToProps(state, ownProps) {
+    return {
+      hover: (ownProps.name in state.droppable.activeZones),
+    };
   }
 
   function mapDispatchToProps(dispatch) {

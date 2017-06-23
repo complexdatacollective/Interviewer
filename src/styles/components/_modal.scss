@@ -1,4 +1,6 @@
-.modal {
+$component-name: modal;
+
+.#{$component-name} {
   position: absolute;
   z-index: 2000;
   top: 0;
@@ -56,6 +58,36 @@
 
     &:focus {
       outline: none;
+    }
+  }
+
+  &--transition {
+    @include group-transition(fade, $animation-standard-duration);
+
+    @include group-transition-enter {
+      .#{$component-name}__window {
+        transform: translate(0, -100vh);
+      }
+
+      &-active {
+        .#{$component-name}__window {
+          transition: transform $animation-default-easing $animation-fast-duration;
+          transform: translate(0, 0);
+        }
+      }
+    }
+
+    @include group-transition-leave {
+      .#{$component-name}__window {
+        transform: translate(0, 0);
+      }
+
+      &-active {
+        .#{$component-name}__window {
+          transition: transform $animation-default-easing $animation-fast-duration;
+          transform: translate(0, -100vh);
+        }
+      }
     }
   }
 }
