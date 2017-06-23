@@ -36,17 +36,10 @@ class StaggeredTransitionGroup extends Component {
       ),
     ];
 
-    if (diff.length > 0) {
-      this.setState({
-        newItems: itemIndexes(diff),
-        firstRender: false,
-      });
-    } else {
-      this.setState({
-        newItems: itemIndexes([]),
-        firstRender: false,
-      });
-    }
+    this.setState({
+      newItems: itemIndexes(diff),
+      firstRender: false,
+    });
   }
 
   isNew(key) {
