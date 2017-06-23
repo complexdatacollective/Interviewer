@@ -23,7 +23,14 @@ class StageMenu extends Component {
 
   render() {
     const {
-      currentStages, currentStage, filteredList, hideButton, isOpen, onStageClick, toggleMenu,
+      currentStages,
+      currentStage,
+      filteredList,
+      hideButton,
+      isOpen,
+      onStageClick,
+      searchValue,
+      toggleMenu,
     } = this.props;
 
     const items = filteredList.map(filteredStage =>
@@ -37,7 +44,7 @@ class StageMenu extends Component {
 
     const search = (
       <div className="menu__search">
-        <input type="search" placeholder="Filter" onKeyUp={this.onInputChange} />
+        <input type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
       </div>
     );
 
@@ -61,6 +68,7 @@ StageMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   onStageClick: PropTypes.func.isRequired,
+  searchValue: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   updateSearch: PropTypes.func,
 };
@@ -69,7 +77,7 @@ StageMenu.defaultProps = {
   currentStage: null,
   hideButton: false,
   isOpen: false,
-  searchTerm: '',
+  searchValue: '',
   updateSearch: () => {},
 };
 
@@ -83,7 +91,7 @@ function mapStateToProps(state) {
     currentStages,
     currentStage,
     filteredList,
-    searchTerm: stageSearchTerm(state),
+    searchValue: stageSearchTerm(state),
   };
 }
 
