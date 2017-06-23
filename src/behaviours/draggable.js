@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { DraggableCore } from 'react-draggable';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { filter } from 'lodash';
+import uidGenerator from '../utils/uidGenerator';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
@@ -27,14 +28,6 @@ function getCoords(event) {
 
 function moveDistance(start, draggableData) {
   return Math.sqrt((draggableData.x - start.x) ** 2, (draggableData.y - start.y) ** 2);
-}
-
-function* uidGenerator() {
-  let i = 1;
-  for (;;) {
-    yield i;
-    i += 1;
-  }
 }
 
 const key = uidGenerator();

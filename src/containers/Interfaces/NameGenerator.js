@@ -126,7 +126,9 @@ class NameGenerator extends Component {
           Add a person
         </button>
 
-        <NodeBin />
+        <div className="name-generator__node-bin">
+          <NodeBin />
+        </div>
       </div>
     );
   }
