@@ -45,6 +45,7 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Panel
+        minimise={false}
         title="foo">
         <span>
                 bar
@@ -60,6 +61,7 @@ ShallowWrapper {
           "children": <span>
             bar
 </span>,
+          "minimise": false,
           "title": "foo",
         },
         "refs": Object {},
@@ -125,6 +127,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Panel
+    minimise={false}
     title="foo">
     <span>
         bar
