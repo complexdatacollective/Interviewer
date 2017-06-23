@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
@@ -37,6 +38,8 @@ export default function droppable(WrappedComponent) {
 
       const boundingClientRect = getAbsoluteBoundingRect(node);
 
+      console.log(node, boundingClientRect);
+
       this.props.updateZone({
         name: this.props.droppableName,
         acceptsDraggableType: this.props.acceptsDraggableType,
@@ -73,7 +76,7 @@ export default function droppable(WrappedComponent) {
 
   function mapStateToProps(state, ownProps) {
     return {
-      hover: (ownProps.name in state.droppable.activeZones),
+      hover: state.droppable.activeZones.includes(ownProps.droppableName),
     };
   }
 

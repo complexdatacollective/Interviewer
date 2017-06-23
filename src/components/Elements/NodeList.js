@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Node } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable, draggable, selectable } from '../../behaviours';
@@ -22,11 +23,17 @@ class NodeList extends Component {
       handleSelectNode,
       handleDropNode,
       draggableType,
+      hover,
     } = this.props;
+
+    const classNames = cx(
+      'node-list',
+      { 'node-list--hover': hover },
+    );
 
     return (
       <StaggeredTransitionGroup
-        className="node-list"
+        className={classNames}
         component="div"
         delay={styles.animation.duration.fast * 0.5}
         duration={styles.animation.duration.fast}
@@ -34,6 +41,9 @@ class NodeList extends Component {
         transitionName="node-list--transition"
         transitionLeave={false}
       >
+        { hover &&
+          <Node placeholder />
+        }
         {
           nodes.map(node => (
             <span key={node.uid}>
@@ -60,6 +70,7 @@ NodeList.propTypes = {
   label: PropTypes.func,
   selected: PropTypes.func,
   draggableType: PropTypes.string,
+  hover: PropTypes.bool,
 };
 
 NodeList.defaultProps = {
@@ -68,6 +79,7 @@ NodeList.defaultProps = {
   handleSelectNode: () => {},
   handleDropNode: () => {},
   draggableType: '',
+  hover: false,
 };
 
-export default droppable(scrollable(NodeList));
+export default scrollable(droppable(NodeList));

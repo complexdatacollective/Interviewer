@@ -76,7 +76,7 @@ class StaggeredTransitionGroup extends Component {
   }
 
   render() {
-    const { transitionName, className } = this.props;
+    const { transitionName, className, component } = this.props;
 
     const sortByNew = children => sortBy(
         children,
@@ -105,6 +105,7 @@ class StaggeredTransitionGroup extends Component {
         transitionAppearTimeout={this.totalTime()}
         transitionEnterTimeout={this.totalTime()}
         transitionLeave={false}
+        component={component}
       >
         {children}
       </CSSTransitionGroup>
@@ -120,6 +121,7 @@ StaggeredTransitionGroup.propTypes = Object.assign({}, CSSTransitionGroup.propTy
   delay: PropTypes.number,
   start: PropTypes.number,
   className: PropTypes.string,
+  component: PropTypes.any,
 });
 
 StaggeredTransitionGroup.defaultProps = {
