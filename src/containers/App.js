@@ -13,7 +13,11 @@ require('../styles/main.scss');
   * @param props {object} - children
   */
 const App = props => (
-  <div className="app">
+  <div className={cx({
+    app: true,
+    'app--session': props.isSessionMenu,
+  })}
+  >
     <SessionMenu hideButton={props.isMenuOpen} />
     <StageMenu hideButton={props.isMenuOpen} />
     <div
@@ -31,16 +35,19 @@ const App = props => (
 App.propTypes = {
   children: PropTypes.any,
   isMenuOpen: PropTypes.bool,
+  isSessionMenu: PropTypes.bool,
 };
 
 App.defaultProps = {
   children: null,
   isMenuOpen: false,
+  isSessionMenu: false,
 };
 
 function mapStateToProps(state) {
   return {
     isMenuOpen: sessionMenuIsOpen(state) || stageMenuIsOpen(state),
+    isSessionMenu: sessionMenuIsOpen(state),
   };
 }
 

@@ -83,10 +83,18 @@
 
     &--active {
       background-color: palette('primary');
+
+      &.menu__menuitem--settings {
+        background-color: palette('settings');
+      }
     }
 
     &:hover {
       background-color: darken(palette('primary'), 5%);
+
+      &.menu__menuitem--settings {
+        background-color: darken(palette('settings'), 5%);
+      }
     }
 
     &:focus {

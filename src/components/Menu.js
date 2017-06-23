@@ -78,6 +78,7 @@ class MenuFactory extends Component {
         title={item.title}
         isActive={item.isActive}
         interfaceType={item.interfaceType}
+        menuType={item.menuType}
       />),
     );
 

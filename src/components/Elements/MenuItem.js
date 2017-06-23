@@ -24,13 +24,14 @@ class MenuItem extends Component {
   }
 
   render() {
-    const { onClick, interfaceType, title, isActive } = this.props;
+    const { onClick, interfaceType, isActive, menuType, title } = this.props;
 
     const itemClasses = classNames(
       'menu__menuitem',
       {
         'menu__menuitem--active': isActive,
       },
+      `menu__menuitem--${menuType}`,
     );
 
     return (
@@ -42,7 +43,7 @@ class MenuItem extends Component {
         onMouseOver={this.mouseOver}
         onMouseOut={this.mouseOut}
       >
-        <Icon name={interfaceType} color={this.state.hover || isActive ? '' : 'primary'} />
+        <Icon name={interfaceType} color={this.state.hover || isActive ? '' : menuType} />
         {title}
       </a>
     );
@@ -52,13 +53,15 @@ class MenuItem extends Component {
 MenuItem.propTypes = {
   onClick: PropTypes.func.isRequired,
   interfaceType: PropTypes.string,
-  title: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
+  menuType: PropTypes.string,
+  title: PropTypes.string.isRequired,
 };
 
 MenuItem.defaultProps = {
   interfaceType: '',
   isActive: false,
+  menuType: 'primary',
 };
 
 export default MenuItem;

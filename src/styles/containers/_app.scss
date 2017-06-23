@@ -1,8 +1,15 @@
 // container for menus and content
 .app {
+  background: palette('primary');
   height: 100vh;
   perspective: 1500px;
+  transition: $animation-slow-duration $animation-default-easing;
   width: 100vw;
+
+  &--session {
+    background: palette('settings');
+    transition: none;
+  }
 
   // page wrap for content
   &__content {
@@ -10,7 +17,7 @@
     box-sizing: border-box;
     height: 100vh;
     overflow: hidden;
-    transition: all $animation-standard-duration $animation-default-easing;
+    transition: $animation-standard-duration $animation-default-easing;
     width: 100vw;
 
     // content being pushed e.g. by menu
