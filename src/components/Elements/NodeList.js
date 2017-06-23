@@ -42,7 +42,7 @@ class NodeList extends Component {
         transitionLeave={false}
       >
         { hover &&
-          <Node placeholder />
+          <Node key="placeholder" placeholder />
         }
         {
           nodes.map(node => (

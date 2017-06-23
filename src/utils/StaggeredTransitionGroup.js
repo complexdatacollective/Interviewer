@@ -53,12 +53,13 @@ class StaggeredTransitionGroup extends Component {
   }
 
   totalTime() {
-    const { delay, duration, start, children } = this.props;
+    const { delay, duration, start } = this.props;
+    const { newItems } = this.state;
 
     return duration
       ? (
         (this.state.firstRender && start)
-        + (React.Children.count(children) * delay)
+        + (Object.keys(newItems).length * delay)
         + duration
       )
       : 0;
