@@ -76,6 +76,14 @@
     text-decoration: none;
     text-transform: uppercase;
 
+    &--settings:not(:hover):not(.menu__menuitem--active) .icon {
+      @include color-icon('slate-blue');
+    }
+
+    &--primary:not(:hover):not(.menu__menuitem--active) .icon {
+      @include color-icon('sea-green');
+    }
+
     &--active,
     &:hover {
       color: palette('menu');
