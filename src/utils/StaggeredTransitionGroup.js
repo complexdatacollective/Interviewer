@@ -126,7 +126,6 @@ StaggeredTransitionGroup.defaultProps = {
   delay: 100,
   duration: 0,
   start: 0,
-  once: true,
 };
 
 export default StaggeredTransitionGroup;
