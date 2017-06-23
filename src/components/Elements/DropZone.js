@@ -1,6 +1,6 @@
 import React from 'react';
 
-import droppable from '../../behaviours/droppable';
+import { droppable } from '../../behaviours';
 
 /**
   * Renders a container onto which a `draggable` can be dropped.

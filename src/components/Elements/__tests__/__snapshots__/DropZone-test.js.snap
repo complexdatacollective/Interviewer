@@ -9,6 +9,7 @@ ShallowWrapper {
   "node": <Droppable
     acceptsDraggableType={null}
     droppableName="foo"
+    hover={false}
     store={
         Object {
             "dispatch": [Function],
@@ -23,6 +24,7 @@ ShallowWrapper {
     <Droppable
       acceptsDraggableType={null}
       droppableName="foo"
+      hover={false}
       store={
             Object {
                   "dispatch": [Function],
@@ -71,6 +73,7 @@ ShallowWrapper {
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
           "droppableName": "foo",
+          "hover": false,
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -94,6 +97,7 @@ ShallowWrapper {
         "renderedElement": <Droppable
           acceptsDraggableType={null}
           droppableName="foo"
+          hover={false}
           store={
                     Object {
                               "dispatch": [Function],
@@ -105,9 +109,15 @@ ShallowWrapper {
           }
           updateZone={[Function]} />,
         "state": Object {
-          "storeState": undefined,
+          "storeState": Object {
+            "droppable": Object {
+              "activeZones": Array [],
+            },
+          },
         },
-        "stateProps": Object {},
+        "stateProps": Object {
+          "hover": false,
+        },
         "statePropsPrecalculationError": null,
         "store": Object {
           "dispatch": [Function],
@@ -138,6 +148,7 @@ ShallowWrapper {
         "_currentElement": <Droppable
           acceptsDraggableType={null}
           droppableName="foo"
+          hover={false}
           store={
                     Object {
                               "dispatch": [Function],
@@ -152,6 +163,7 @@ ShallowWrapper {
         "_renderedOutput": <Droppable
           acceptsDraggableType={null}
           droppableName="foo"
+          hover={false}
           store={
                     Object {
                               "dispatch": [Function],
