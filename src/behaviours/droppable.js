@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
@@ -37,8 +36,6 @@ export default function droppable(WrappedComponent) {
       const node = ReactDOM.findDOMNode(this);
 
       const boundingClientRect = getAbsoluteBoundingRect(node);
-
-      console.log(node, boundingClientRect);
 
       this.props.updateZone({
         name: this.props.droppableName,

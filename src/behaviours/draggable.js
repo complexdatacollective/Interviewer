@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -74,7 +73,7 @@ export default function draggable(WrappedComponent) {
       }
 
       const hits = this.getHits(getCoords(event, draggableData));
-      this.props.updateActiveZones(hits.map((hit) => hit.name));
+      this.props.updateActiveZones(hits.map(hit => hit.name));
 
       this.updateDrag(event, draggableData);
     }
@@ -160,6 +159,7 @@ export default function draggable(WrappedComponent) {
     dragStart: PropTypes.func.isRequired,
     dragStop: PropTypes.func.isRequired,
     onDropped: PropTypes.func.isRequired,
+    updateActiveZones: PropTypes.func.isRequired,
   };
 
   Draggable.defaultProps = {
