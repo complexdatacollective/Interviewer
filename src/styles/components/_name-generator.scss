@@ -22,7 +22,7 @@
   &__nodes {
     flex: 3 1 auto;
     height: 100%;
-    position: relative;
+    display: flex;
 
     .node {
       width: 175px;
@@ -31,9 +31,9 @@
   }
 
   &__panels {
-    flex: 0 0 400px;
+    flex: 0 0 auto;
     height: 100%;
-    margin-right: 50px;
+    display: flex;
   }
 
   &__add-person {
@@ -47,15 +47,9 @@
   }
 
   &__node-bin {
-    background: transparent;
-    background-image: url('../images/node-bin.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
     position: absolute;
     bottom: 35px;
     left: 35px;
-    width: 60px;
-    height: 80px;
     z-index: 1000;
   }
 

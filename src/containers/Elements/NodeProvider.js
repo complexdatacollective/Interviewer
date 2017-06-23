@@ -6,7 +6,6 @@ import { isMatch, omit } from 'lodash';
 
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
-import { filteredDataSource } from '../../selectors/dataSource';
 
 import { NodeList } from '../../components/Elements';
 
@@ -46,7 +45,7 @@ class NodeProvider extends Component {
     } = this.props;
 
     const label = node => `${node.nickname}`;
-    const isActive = node => isMatch(node, this.props.activePromptAttributes);
+    const selected = node => isMatch(node, this.props.activePromptAttributes);
 
     switch (interaction) {
       case 'selectable':
@@ -57,7 +56,7 @@ class NodeProvider extends Component {
             draggableType="EXISTING_NODE"
             handleDropNode={this.handleDropNode}
             handleSelectNode={this.handleSelectNode}
-            isActive={isActive}
+            selected={selected}
           />
         );
       default:
@@ -87,7 +86,6 @@ function mapStateToProps(state, ownProps) {
   const interaction = (ownProps.selectable && 'selectable') || (ownProps.draggable && 'draggable') || 'none';
 
   return {
-    network: filteredDataSource(state, ownProps),
     interaction,
     newNodeAttributes: newNodeAttributes(state),
     activePromptAttributes: activePromptAttributes(state),

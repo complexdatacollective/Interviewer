@@ -5,7 +5,7 @@ import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import validations from '../../utils/Validations';
 import components from '../../utils/fieldComponents';
-import { withOptionsFromSelector } from '../../behaviors';
+import { withOptionsFromSelector } from '../../behaviours';
 
 /**
   * Returns the named field compontent, if no matching one is found it returns an empty one.

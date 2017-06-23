@@ -1,39 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Node } from '../Elements';
-import { scrollable, droppable, draggable, selectable } from '../../behaviors';
+import cx from 'classnames';
+import { Node } from 'network-canvas-ui';
+import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
+import { scrollable, droppable, draggable, selectable } from '../../behaviours';
+import styles from '../../ui/styles';
 
 const EnhancedNode = draggable(selectable(Node));
 
 /**
   * Renders a list of Node.
   */
-const NodeList = (props) => {
-  const {
-    network,
-    label,
-    isActive,
-    handleSelectNode,
-    handleDropNode,
-    draggableType,
-  } = props;
+const NodeList = ({
+  network: { nodes },
+  label,
+  selected,
+  handleSelectNode,
+  handleDropNode,
+  draggableType,
+  hover,
+}) => {
+  const classNames = cx(
+    'node-list',
+    { 'node-list--hover': hover },
+  );
 
   return (
-    <div className="node-list">
+    <StaggeredTransitionGroup
+      className={classNames}
+      component="div"
+      delay={styles.animation.duration.fast * 0.5}
+      duration={styles.animation.duration.fast}
+      start={styles.animation.duration.slow * 2}
+      transitionName="node-list--transition"
+      transitionLeave={false}
+    >
+      { hover &&
+        <Node key="placeholder" placeholder />
+      }
       {
-        network.nodes.map((node, index) => (
-          <EnhancedNode
-            key={index}
-            label={label(node)}
-            isActive={isActive(node)}
-            onSelected={() => handleSelectNode(node)}
-            onDropped={hits => handleDropNode(hits, node)}
-            draggableType={draggableType}
-            {...node}
-          />
+        nodes.map(node => (
+          <span key={node.uid}>
+            <EnhancedNode
+              label={label(node)}
+              selected={selected(node)}
+              onSelected={() => handleSelectNode(node)}
+              onDropped={hits => handleDropNode(hits, node)}
+              draggableType={draggableType}
+              {...node}
+            />
+          </span>
         ))
       }
-    </div>
+    </StaggeredTransitionGroup>
   );
 };
 
@@ -42,16 +61,18 @@ NodeList.propTypes = {
   handleSelectNode: PropTypes.func,
   handleDropNode: PropTypes.func,
   label: PropTypes.func,
-  isActive: PropTypes.func,
+  selected: PropTypes.func,
   draggableType: PropTypes.string,
+  hover: PropTypes.bool,
 };
 
 NodeList.defaultProps = {
   label: () => (''),
-  isActive: () => false,
+  selected: () => false,
   handleSelectNode: () => {},
   handleDropNode: () => {},
   draggableType: '',
+  hover: false,
 };
 
-export default droppable(scrollable(NodeList));
+export default scrollable(droppable(NodeList));

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'network-canvas-ui';
 
-import { scrollable } from '../behaviors';
+import { scrollable } from '../behaviours';
 
 /**
   * Renders the internal content of a menu
