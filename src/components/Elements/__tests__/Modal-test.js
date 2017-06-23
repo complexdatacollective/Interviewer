@@ -13,7 +13,7 @@ describe('Modal component', () => {
         </Modal>
       ));
 
-      expect(component.get(0)).toBe(null);
+      expect(component.find({ key: 'modal' }).length).toBe(0);
     });
   });
 
