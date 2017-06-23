@@ -1,15 +1,14 @@
 .panels {
-  @include transition-properties((opacity flex-basis width margin-right), $animation-default-easing, $animation-standard-duration)
+  @include transition-properties((opacity max-width margin-right), $animation-default-easing, $animation-standard-duration)
   display: flex;
   flex-direction: column;
-  flex: 0 0 400px;
-  margin-right: 50px;
   opacity: 1;
+  margin-right: 50px;
+  max-width: 1000px;
 
   &--minimise {
     margin-right: 0;
-    width: 0;
-    flex-basis: 0;
+    max-width: 0;
     opacity: 0;
   }
 }

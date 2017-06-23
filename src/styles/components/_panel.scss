@@ -28,8 +28,8 @@
 
   &__content {
     flex: 1 auto;
-    position: relative;
     overflow: hidden;
+    display: flex;
   }
 
   .node {
