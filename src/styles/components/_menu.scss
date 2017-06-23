@@ -29,6 +29,7 @@
   &__content {
     background: palette('menu');
     color: palette('menu-headings');
+    display: flex;
     height: 100%;
   }
 
