@@ -28,18 +28,27 @@ class StaggeredTransitionGroup extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const diff = [
+    const nextChildren = React.Children.toArray(nextProps.children);
+
+    const newChildren = [
       ...differenceBy(
-        React.Children.toArray(nextProps.children),
+        nextChildren,
         React.Children.toArray(this.props.children),
         'key',
       ),
     ];
 
-    this.setState({
-      newItems: itemIndexes(diff),
-      firstRender: false,
-    });
+    if (newChildren.length === 0) {
+      this.setState({
+        newItems: itemIndexes(nextChildren),
+        firstRender: true,
+      });
+    } else {
+      this.setState({
+        newItems: itemIndexes(newChildren),
+        firstRender: false,
+      });
+    }
   }
 
   isNew(key) {

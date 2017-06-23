@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100px;
+  min-height: 100%;
 
   &--transition {
     @include group-transition(fade, $animation-fast-duration);

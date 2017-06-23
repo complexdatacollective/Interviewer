@@ -33,7 +33,7 @@ class Stage extends Component {
         transitionEnterTimeout={styles.animation.duration.slow * 2}
         transitionLeaveTimeout={styles.animation.duration.slow}
         transitionAppear
-        transitionAppearTimeout={styles.animation.duration.slow}
+        transitionAppearTimeout={styles.animation.duration.slow * 2}
       >
         <div className="stage" key={currentStage.id}>
           <div className="stage__control">
