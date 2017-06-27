@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Node } from 'network-canvas-ui';
+import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable, draggable, selectable } from '../../behaviours';
-import styles from '../../ui/styles';
 
 const EnhancedNode = draggable(selectable(Node));
 
@@ -29,9 +28,9 @@ const NodeList = ({
     <StaggeredTransitionGroup
       className={classNames}
       component="div"
-      delay={styles.animation.duration.fast * 0.5}
-      duration={styles.animation.duration.fast}
-      start={styles.animation.duration.slow * 2}
+      delay={animation.duration.fast * 0.5}
+      duration={animation.duration.fast}
+      start={animation.duration.slow * 2}
       transitionName="node-list--transition"
       transitionLeave={false}
     >

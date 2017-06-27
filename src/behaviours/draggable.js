@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { DraggableCore } from 'react-draggable';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { filter } from 'lodash';
+import { animation } from 'network-canvas-ui';
 import uidGenerator from '../utils/uidGenerator';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
-import styles from '../ui/styles';
 
 function getCoords(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -131,9 +131,9 @@ export default function draggable(WrappedComponent) {
           <CSSTransitionGroup
             transitionName="draggable--transition"
             transitionAppear
-            transitionAppearTimeout={styles.animation.duration.fast}
-            transitionEnterTimeout={styles.animation.duration.fast}
-            transitionLeaveTimeout={styles.animation.duration.fast}
+            transitionAppearTimeout={animation.duration.fast}
+            transitionEnterTimeout={animation.duration.fast}
+            transitionLeaveTimeout={animation.duration.fast}
           >
             { !this.isActive() &&
               <div ref={(node) => { this.node = node; }} key={this.state.key}>
