@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'network-canvas-ui';
 
-// import { MenuContent } from '.';
-import { SideMenu } from 'network-canvas-ui';
+import { MenuContent } from '.';
 import { MenuItem } from './Elements';
 
 /**
@@ -18,7 +18,7 @@ class MenuFactory extends Component {
   }
 
   /**
-    * adds listener for key events to close Menu
+    * removes listener for key events and click events to close Menu
     */
   componentWillUnmount() {
     window.onkeydown = null;
@@ -32,6 +32,35 @@ class MenuFactory extends Component {
     }
   }
 
+  outsideClick = (e) => {
+    // check whether the element clicked upon is in your component - if not,
+    // then call the toggle logic
+    if (this.domNode.contains(e.target)) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    if (this.props.isOpen) {
+      this.menuClick();
+    }
+  }
+
+  menuClick = () => {
+    if (!this.props.isOpen) {
+      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
+        document.addEventListener(
+          type, this.outsideClick, { capture: true, passive: false });
+      });
+    } else {
+      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
+        document.removeEventListener(
+          type, this.outsideClick, { capture: true, passive: false });
+      });
+    }
+
+    this.props.toggleMenu();
+  }
+
   // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
     itemClick();
@@ -39,7 +68,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { isOpen, items, toggleMenu, searchField, heading } = this.props;
+    const { hideButton, icon, isOpen, items, searchField, title } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -49,23 +78,24 @@ class MenuFactory extends Component {
         title={item.title}
         isActive={item.isActive}
         interfaceType={item.interfaceType}
+        menuType={item.menuType}
       />),
     );
 
     return (
-      <div className="menu">
-        <SideMenu
-          heading={heading}
-          content={searchField}
-          menuItems={menuItems}
-          visible={isOpen}
-          onClose={toggleMenu}
-        />
-        {!isOpen && <div className="menu__burger">
-          <button onClick={toggleMenu} className="ui large button">
-            <i className="download icon" />
-            Burger
-          </button>
+      <div className="menu" ref={(node) => { this.domNode = node; }}>
+        <div className={isOpen ? 'menu__wrap menu__wrap--open' : 'menu__wrap'}>
+          <div className="menu__content">
+            <MenuContent
+              items={menuItems}
+              searchField={searchField}
+              title={title}
+              toggleMenu={this.menuClick}
+            />
+          </div>
+        </div>
+        {!hideButton && <div className="menu__burger" onClick={this.menuClick} tabIndex={0} role="menu">
+          <Icon name={icon} />
         </div>}
       </div>
     );
@@ -73,17 +103,21 @@ class MenuFactory extends Component {
 } // end class
 
 MenuFactory.propTypes = {
+  hideButton: PropTypes.bool,
+  icon: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array,
+  title: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   searchField: PropTypes.object,
-  heading: PropTypes.string,
 };
 
 MenuFactory.defaultProps = {
+  hideButton: false,
+  icon: 'menu',
   items: [],
   searchField: null,
-  heading: '',
+  title: 'Options',
 };
 
 export default MenuFactory;

@@ -4,6 +4,7 @@
 @import 'utils/all';
 @import 'helpers/all';
 @import 'components/all';
+@import 'containers/app';
 
 // sass-lint:disable no-ids
 #root {
@@ -12,13 +13,8 @@
 
 html,
 body {
+  height: 100vw;
   margin: 0;
+  overflow: hidden;
   padding: 0;
-  height: 100%;
-}
-
-.app {
-  &__content {
-    @include sidemenu-visible;
-  }
 }

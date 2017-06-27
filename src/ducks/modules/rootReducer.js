@@ -11,7 +11,7 @@ import droppable from './droppable';
 import modals from './modals';
 import menu from './menu';
 
-export default combineReducers({
+const appReducer = combineReducers({
   form: formReducer,
   network,
   page,
@@ -23,3 +23,15 @@ export default combineReducers({
   modals,
   menu,
 });
+
+const rootReducer = (state, action) => {
+  let currentState = state;
+
+  if (action.type === 'RESET_STATE') {
+    currentState = undefined;
+  }
+
+  return appReducer(currentState, action);
+};
+
+export default rootReducer;

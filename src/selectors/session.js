@@ -5,8 +5,9 @@ const stageIndex = state => state.session.stage.index;
 const promptIndex = state => state.session.prompt.index;
 const protocol = state => state.protocol.config;
 
-export const menuIsOpen = state => state.menu.menuIsOpen;
-export const searchTerm = state => state.menu.searchTerm;
+export const sessionMenuIsOpen = state => state.menu.sessionMenuIsOpen;
+export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;
+export const stageSearchTerm = state => state.menu.stageSearchTerm;
 
 export const stages = createSelector(
   protocol,
@@ -20,10 +21,10 @@ export const stage = createSelector(
 );
 
 export const filteredStages = createSelector(
-  searchTerm,
+  stageSearchTerm,
   stages,
-  (searchTerm, stages) =>
-    stages.filter(stage => stage.title.toLowerCase().includes(searchTerm.toLowerCase())),
+  (stageSearchTerm, stages) =>
+    stages.filter(stage => stage.title.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );
 
 const prompt = createSelector(

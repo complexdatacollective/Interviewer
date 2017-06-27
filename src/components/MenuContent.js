@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from 'network-canvas-ui';
 
 import { scrollable } from '../behaviours';
 
@@ -10,18 +11,15 @@ import { scrollable } from '../behaviours';
   * @return div
   */
 function MenuContent(props) {
-  const { items, searchField, toggleMenu } = props;
+  const { items, searchField, title, toggleMenu } = props;
 
   return (
     <div>
-      <div className="menu__cross">
-        <button onClick={toggleMenu} className="ui large button">
-          <i className="download icon" />
-          Cross
-        </button>
+      <div className="menu__cross" onClick={toggleMenu} tabIndex={0} role="menu">
+        <Icon name="close" />
       </div>
       <header>
-        <h1 className="menu__title">Stages</h1>
+        <h1 className="menu__title">{title}</h1>
       </header>
       {searchField}
       <nav>
@@ -34,6 +32,7 @@ function MenuContent(props) {
 MenuContent.propTypes = {
   items: PropTypes.array,
   searchField: PropTypes.object,
+  title: PropTypes.string.isRequired,
   toggleMenu: PropTypes.func.isRequired,
 };
 

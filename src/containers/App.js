@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import { menuIsOpen } from '../selectors/session';
-import { StageMenu } from '.';
+import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
+import { SessionMenu, StageMenu } from '.';
 
 require('../styles/main.scss');
 
@@ -13,8 +13,13 @@ require('../styles/main.scss');
   * @param props {object} - children
   */
 const App = props => (
-  <div id="outer-container">
-    <StageMenu />
+  <div className={cx({
+    app: true,
+    'app--session': props.isSessionMenu,
+  })}
+  >
+    <SessionMenu hideButton={props.isMenuOpen} />
+    <StageMenu hideButton={props.isMenuOpen} />
     <div
       id="page-wrap"
       className={cx({
@@ -30,16 +35,19 @@ const App = props => (
 App.propTypes = {
   children: PropTypes.any,
   isMenuOpen: PropTypes.bool,
+  isSessionMenu: PropTypes.bool,
 };
 
 App.defaultProps = {
   children: null,
   isMenuOpen: false,
+  isSessionMenu: false,
 };
 
 function mapStateToProps(state) {
   return {
-    isMenuOpen: menuIsOpen(state),
+    isMenuOpen: sessionMenuIsOpen(state) || stageMenuIsOpen(state),
+    isSessionMenu: sessionMenuIsOpen(state),
   };
 }
 

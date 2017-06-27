@@ -1,0 +1,37 @@
+// container for menus and content
+.app {
+  background: palette('primary');
+  height: 100vh;
+  perspective: 1500px;
+  transition: $animation-slow-duration $animation-default-easing;
+  width: 100vw;
+
+  &--session {
+    background: palette('settings');
+    transition: none;
+  }
+
+  // page wrap for content
+  &__content {
+    background: palette('background');
+    box-sizing: border-box;
+    height: 100vh;
+    overflow: hidden;
+    transition: $animation-standard-duration $animation-default-easing;
+    width: 100vw;
+
+    // content being pushed e.g. by menu
+    &--pushed {
+      transform-origin: 100%;
+      transform-style: preserve-3d;
+
+      @include breakpoint(medium) {
+        transform: translate3d(23.5vw, 0, -66vw);
+      }
+
+      @include breakpoint(large) {
+        transform: translate3d(17vw, 0, -40vw);
+      }
+    }
+  }
+}
