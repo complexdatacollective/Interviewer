@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { CSSTransitionGroup } from 'react-transition-group';
+import { animation } from 'network-canvas-ui';
 import loadInterface from '../utils/loadInterface';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { stage } from '../selectors/session';
-import styles from '../ui/styles';
 
 /**
   * Render a protocol interface based on protocol info and id
@@ -30,10 +30,10 @@ class Stage extends Component {
     return (
       <CSSTransitionGroup
         transitionName="stage--transition"
-        transitionEnterTimeout={styles.animation.duration.slow * 2}
-        transitionLeaveTimeout={styles.animation.duration.slow}
+        transitionEnterTimeout={animation.duration.slow * 2}
+        transitionLeaveTimeout={animation.duration.slow}
         transitionAppear
-        transitionAppearTimeout={styles.animation.duration.slow * 2}
+        transitionAppearTimeout={animation.duration.slow * 2}
       >
         <div className="stage" key={currentStage.id}>
           <div className="stage__control">

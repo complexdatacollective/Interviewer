@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
+import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
-import styles from '../../ui/styles';
 
 /**
   * Renders a modal window.
@@ -19,8 +19,8 @@ const Modal = (props) => {
   return (
     <CSSTransitionGroup
      transitionName="modal--transition"
-     transitionEnterTimeout={styles.animation.duration.standard}
-     transitionLeaveTimeout={styles.animation.duration.standard}
+     transitionEnterTimeout={animation.duration.standard}
+     transitionLeaveTimeout={animation.duration.standard}
     >
       { show &&
         <div key="modal" className="modal" onClick={onClose}>
