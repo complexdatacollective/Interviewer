@@ -33,7 +33,7 @@ const RadioGroup = ({ options, label, meta, input: { name, value, onChange } }) 
 RadioGroup.propTypes = {
   options: PropTypes.array.isRequired,
   label: PropTypes.string.isRequired,
-  meta: PropTypes.string.isRequired,
+  meta: PropTypes.object.isRequired,
   input: PropTypes.object.isRequired,
 };
 
