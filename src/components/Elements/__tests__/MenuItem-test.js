@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { shallow } from 'enzyme';
 import MenuItem from '../../Elements/MenuItem';
 
 const toLink = 'linkyLink';
@@ -11,20 +11,18 @@ const title = 'title';
 
 describe('MenuItem component', () => {
   it('renders menu item with title', () => {
-    const component = renderer.create(
+    const component = shallow(
       <MenuItem to={toLink} onClick={onClick} imageType={imageType} title={title} />,
     );
-    const tree = component.toJSON();
 
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 
   it('renders menu item with no image', () => {
-    const component = renderer.create(
+    const component = shallow(
       <MenuItem to={toLink} onClick={onClick} title={title} />,
     );
-    const tree = component.toJSON();
 
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { shallow } from 'enzyme';
 import Menu from '../Menu';
 
 const items = [{ id: 'a', title: 'a title', to: 'a-to' },
@@ -10,12 +10,11 @@ const items = [{ id: 'a', title: 'a title', to: 'a-to' },
 
 describe('Menu component', () => {
   it('renders menu with list', () => {
-    const component = renderer.create(
+    const component = shallow(
       <Menu items={items} isOpen={false} toggleMenu={() => {}} />,
     );
-    const tree = component.toJSON();
 
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 
   // TODO flush out tests, but the Menu is calling document.getElementById instead of using refs

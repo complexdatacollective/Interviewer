@@ -1,68 +1,321 @@
 exports[`Menu component renders menu with list 1`] = `
-<div
-  className="menu">
-  <div
-    className="menu__wrap">
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <div
+    className="menu">
     <div
-      className="menu__content">
-      <div
-        className="scrollable">
+        className="menu__wrap">
         <div
-          className="scrollable__window">
-          <div>
-            <div
-              className="menu__cross">
-              <button
-                className="ui large button"
-                onClick={[Function]}>
-                <i
-                  className="download icon" />
-                Cross
-              </button>
-            </div>
-            <header>
-              <h1
-                className="menu__title">
-                Stages
-              </h1>
-            </header>
-            <nav>
-              <a
-                className="menu__menuitem menu__menuitem--"
-                onClick={[Function]}
-                role="menuitem"
-                tabIndex={0}>
-                a title
-              </a>
-              <a
-                className="menu__menuitem menu__menuitem--"
-                onClick={[Function]}
-                role="menuitem"
-                tabIndex={0}>
-                b title
-              </a>
-              <a
-                className="menu__menuitem menu__menuitem--"
-                onClick={[Function]}
-                role="menuitem"
-                tabIndex={0}>
-                c title
-              </a>
-            </nav>
-          </div>
+            className="menu__content">
+            <Scrollable
+                items={
+                    Array [
+                        <MenuItem
+                          interfaceType=""
+                          isActive={false}
+                          menuType="primary"
+                          onClick={[Function]}
+                          title="a title"
+                          to="a-to" />,
+                        <MenuItem
+                          interfaceType=""
+                          isActive={false}
+                          menuType="primary"
+                          onClick={[Function]}
+                          title="b title"
+                          to="b-to" />,
+                        <MenuItem
+                          interfaceType=""
+                          isActive={false}
+                          menuType="primary"
+                          onClick={[Function]}
+                          title="c title"
+                          to="c-to" />,
+                      ]
+                }
+                searchField={null}
+                title="Options"
+                toggleMenu={[Function]} />
         </div>
-      </div>
     </div>
-  </div>
-  <div
-    className="menu__burger">
-    <button
-      className="ui large button"
-      onClick={[Function]}>
-      <i
-        className="download icon" />
-      Burger
-    </button>
-  </div>
-</div>
+    <div
+        className="menu__burger"
+        onClick={[Function]}
+        role="menu"
+        tabIndex={0}>
+        <Icon
+            name="menu" />
+    </div>
+</div>,
+  "nodes": Array [
+    <div
+      className="menu">
+      <div
+            className="menu__wrap">
+            <div
+                  className="menu__content">
+                  <Scrollable
+                        items={
+                              Array [
+                                    <MenuItem
+                                      interfaceType=""
+                                      isActive={false}
+                                      menuType="primary"
+                                      onClick={[Function]}
+                                      title="a title"
+                                      to="a-to" />,
+                                    <MenuItem
+                                      interfaceType=""
+                                      isActive={false}
+                                      menuType="primary"
+                                      onClick={[Function]}
+                                      title="b title"
+                                      to="b-to" />,
+                                    <MenuItem
+                                      interfaceType=""
+                                      isActive={false}
+                                      menuType="primary"
+                                      onClick={[Function]}
+                                      title="c title"
+                                      to="c-to" />,
+                                  ]
+                        }
+                        searchField={null}
+                        title="Options"
+                        toggleMenu={[Function]} />
+            </div>
+      </div>
+      <div
+            className="menu__burger"
+            onClick={[Function]}
+            role="menu"
+            tabIndex={0}>
+            <Icon
+                  name="menu" />
+      </div>
+</div>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 0,
+      "_context": Object {},
+      "_currentElement": <MenuFactory
+        hideButton={false}
+        icon="menu"
+        isOpen={false}
+        items={
+                Array [
+                        Object {
+                          "id": "a",
+                          "title": "a title",
+                          "to": "a-to",
+                        },
+                        Object {
+                          "id": "b",
+                          "title": "b title",
+                          "to": "b-to",
+                        },
+                        Object {
+                          "id": "c",
+                          "title": "c title",
+                          "to": "c-to",
+                        },
+                      ]
+        }
+        searchField={null}
+        title="Options"
+        toggleMenu={[Function]} />,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": MenuFactory {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "listenForClose": [Function],
+        "menuClick": [Function],
+        "menuItemClick": [Function],
+        "outsideClick": [Function],
+        "props": Object {
+          "hideButton": false,
+          "icon": "menu",
+          "isOpen": false,
+          "items": Array [
+            Object {
+              "id": "a",
+              "title": "a title",
+              "to": "a-to",
+            },
+            Object {
+              "id": "b",
+              "title": "b title",
+              "to": "b-to",
+            },
+            Object {
+              "id": "c",
+              "title": "c title",
+              "to": "c-to",
+            },
+          ],
+          "searchField": null,
+          "title": "Options",
+          "toggleMenu": [Function],
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <div
+          className="menu">
+          <div
+                    className="menu__wrap">
+                    <div
+                              className="menu__content">
+                              <Scrollable
+                                        items={
+                                                  Array [
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="a title"
+                                                              to="a-to" />,
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="b title"
+                                                              to="b-to" />,
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="c title"
+                                                              to="c-to" />,
+                                                          ]
+                                        }
+                                        searchField={null}
+                                        title="Options"
+                                        toggleMenu={[Function]} />
+                    </div>
+          </div>
+          <div
+                    className="menu__burger"
+                    onClick={[Function]}
+                    role="menu"
+                    tabIndex={0}>
+                    <Icon
+                              name="menu" />
+          </div>
+</div>,
+        "_debugID": 2,
+        "_renderedOutput": <div
+          className="menu">
+          <div
+                    className="menu__wrap">
+                    <div
+                              className="menu__content">
+                              <Scrollable
+                                        items={
+                                                  Array [
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="a title"
+                                                              to="a-to" />,
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="b title"
+                                                              to="b-to" />,
+                                                            <MenuItem
+                                                              interfaceType=""
+                                                              isActive={false}
+                                                              menuType="primary"
+                                                              onClick={[Function]}
+                                                              title="c title"
+                                                              to="c-to" />,
+                                                          ]
+                                        }
+                                        searchField={null}
+                                        title="Options"
+                                        toggleMenu={[Function]} />
+                    </div>
+          </div>
+          <div
+                    className="menu__burger"
+                    onClick={[Function]}
+                    role="menu"
+                    tabIndex={0}>
+                    <Icon
+                              name="menu" />
+          </div>
+</div>,
+      },
+      "_renderedNodeType": 0,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <MenuFactory
+    hideButton={false}
+    icon="menu"
+    isOpen={false}
+    items={
+        Array [
+            Object {
+              "id": "a",
+              "title": "a title",
+              "to": "a-to",
+            },
+            Object {
+              "id": "b",
+              "title": "b title",
+              "to": "b-to",
+            },
+            Object {
+              "id": "c",
+              "title": "c title",
+              "to": "c-to",
+            },
+          ]
+    }
+    searchField={null}
+    title="Options"
+    toggleMenu={[Function]} />,
+}
 `;
