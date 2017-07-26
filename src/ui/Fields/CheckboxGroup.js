@@ -10,11 +10,12 @@ const isChecked = (value, option) => (value ? !!value[option] : false);
 class CheckboxGroup extends Component {
   onClickOption = (clickedOption) => {
     const { input: { value, onChange } } = this.props;
+    const nextValue = value[clickedOption] ? !value[clickedOption] : true;
 
     onChange({
       ...fromPairs(map(this.props.options, option => [option, false])),
       ...(value || {}),
-      ...{ [clickedOption]: !value[clickedOption] || true },
+      ...{ [clickedOption]: nextValue },
     });
   }
 
