@@ -32,7 +32,7 @@
       "output": "release-builds"
     },
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.education"
     },
     "win": {
       "target": "nsis",

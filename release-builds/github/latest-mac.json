@@ -1,13 +1,5 @@
 {
   "version": "4.0.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "releaseDate": "2017-06-09T09:52:06.537Z",
-=======
-  "releaseDate": "2017-05-17T17:07:50.894Z",
->>>>>>> release-builds
-=======
-  "releaseDate": "2017-05-22T07:50:44.150Z",
->>>>>>> release-builds
+  "releaseDate": "2017-07-28T12:23:38.123Z",
   "url": "https://github.com/codaco/network-canvas/releases/download/v4.0.0/network-canvas-4.0.0-mac.zip"
 }
