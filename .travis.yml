@@ -11,7 +11,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git lfs pull; fi
 script:
+  - yarn run build
   - yarn run $TASK
 env:
-  - TASK=test
-  - TASK=dist
+  - TASK=dist:mac
+  - TASK=dist:linux
+  - TASK=dist:win

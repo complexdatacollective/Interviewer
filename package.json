@@ -11,7 +11,11 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "dist": "electron-builder -ml",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder -m",
+    "dist:linux": "electron-builder -l",
+    "dist:win": "electron-builder -w",
+    "dist:all": "electron-builder -mlw",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "lint": "eslint src",
