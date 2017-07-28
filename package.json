@@ -3,6 +3,7 @@
   "version": "4.0.0",
   "productName": "Network Canvas",
   "description": "A touch-optimised framework for capturing personal network data.",
+  "author": "Complex Data Collective",
   "private": true,
   "engines": {
     "node": "6.9.1",
@@ -46,6 +47,7 @@
     "detect-port": "1.1.0",
     "dotenv": "2.0.0",
     "electron": "^1.4.15",
+    "electron-builder": "^17.5.0",
     "electron-installer-dmg": "^0.2.0",
     "electron-packager": "^8.5.2",
     "electron-winstaller": "^2.5.2",
@@ -116,6 +118,24 @@
   },
   "homepage": ".",
   "main": "src/electron-starter.js",
+  "build": {
+    "appId": "NetworkCanvas",
+    "directories": {
+      "output": "release-builds"
+    },
+    "mac": {
+      "category": "public.app-category.education"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./build/icon.ico"
+    },
+    "publish": [{
+             "provider": "github",
+             "owner": "codaco",
+             "repo": "network-canvas"
+         }]
+  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
