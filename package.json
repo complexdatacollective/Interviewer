@@ -125,15 +125,14 @@
   "build": {
     "appId": "NetworkCanvas",
     "directories": {
-      "buildResources": "www",
+      "buildResources": "build-resources",
       "output": "release-builds"
     },
     "mac": {
       "category": "public.app-category.education"
     },
     "win": {
-      "target": "nsis",
-      "icon": "./www/icon.ico"
+      "target": "nsis"
     },
     "publish": [
       {
