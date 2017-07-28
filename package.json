@@ -10,19 +10,17 @@
     "npm": "3.10.7"
   },
   "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js && cp -r ./build/* ./www",
+    "build": "node scripts/build.js",
     "lint": "eslint src",
     "test": "node scripts/test.js --env=jsdom",
     "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
-    "electron": "electron ./build",
+    "electron": "electron ./www",
     "generate-icons": "node generate-app-icons.js",
-    "package-mac": "electron-packager build/ --overwrite --platform=darwin --arch=x64 --icon=assets/icons/round/round.icns --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\"",
-    "package-win": "electron-packager build/ --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/round/round.ico --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\"",
-    "package-linux": "electron-packager build/ --overwrite --platform=linux --arch=x64 --icon=assets/icons/round/NC-Round@2x.png --prune=true --out=release-builds --version-string.CompanyName=\"Complex Data Collective\" --version-string.FileDescription=CE --version-string.ProductName=\"Network Canvas\" --version-string.ProductVersion=\"4.0.0\"",
-    "package-cordova": "cordova build ios && cordova build android",
-    "create-installer-mac": "electron-installer-dmg ./release-builds/Network\\ Canvas-darwin-x64/Network\\ Canvas.app Network\\ Canvas --out=release-builds --overwrite --icon=assets/icons/square/square.icns"
+    "package-cordova": "cordova build ios && cordova build android"
   },
   "repository": {
     "type": "git"
@@ -46,8 +44,8 @@
     "custom-react-scripts": "0.0.21",
     "detect-port": "1.1.0",
     "dotenv": "2.0.0",
-    "electron": "^1.4.15",
-    "electron-builder": "^17.5.0",
+    "electron": "^1.6.11",
+    "electron-builder": "^19.6.3",
     "electron-installer-dmg": "^0.2.0",
     "electron-packager": "^8.5.2",
     "electron-winstaller": "^2.5.2",
@@ -117,7 +115,7 @@
     "upgrade": "^1.1.0"
   },
   "homepage": ".",
-  "main": "src/electron-starter.js",
+  "main": "www/electron-starter.js",
   "build": {
     "appId": "NetworkCanvas",
     "directories": {
@@ -128,13 +126,15 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "./build/icon.ico"
+      "icon": "./www/icon.ico"
     },
-    "publish": [{
-             "provider": "github",
-             "owner": "codaco",
-             "repo": "network-canvas"
-         }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "codaco",
+        "repo": "network-canvas"
+      }
+    ]
   },
   "jest": {
     "collectCoverageFrom": [
@@ -144,7 +144,7 @@
       "<rootDir>/config/polyfills.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
+      "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
