@@ -1,9 +1,17 @@
+os:
+  - osx
 language: node_js
 node_js:
   - "6.9"
-env:
-  - TASK=test
-  - TASK=build
+cache:
+  directories:
+      "node_modules"
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git lfs pull; fi
 script:
   - yarn run $TASK
-  - yarn run $TASK
+env:
+  - TASK=test
+  - TASK=dist
