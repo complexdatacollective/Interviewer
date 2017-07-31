@@ -8,7 +8,9 @@ cache:
   directories:
       "node_modules"
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip wine; fi
+  - if [[ "$TASK" == "dist:win" ]]; then brew install wine winetricks; fi
+  - if [[ "$TASK" == "dist:win" ]]; then winetricks install mono; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git lfs pull; fi
 script:
   - yarn run build
