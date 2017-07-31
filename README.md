@@ -1,30 +1,15 @@
-# Network Canvas Server
+# Network Canvas
+Technologies used:
+ES6 (via Babel)
+React
+Redux
+Electron
+Cordova
+SCSS
+Jest (Testing suite)
+React Scripts
 
-A data collection server for the Network Canvas app.
-
-# Getting started
-
-## Background
-
-This application runs on Electron and consists of two parts, which correlate to Electron's main/rendering processes:
-
-1. The UI, which contains the tray menu: `/#/tray`, and the configuration/export screens.
-1. The Server, which receives data and adds it to a store.
-
-### 1. The UI
-
-The UI is a React app which runs in Electron's BrowserWindow().
-
-The tray and main windows are separate instances, but run different paths on the same react app.
-
-It is possible to test the UI by running `npm run start`, and viewing the various paths in your browser.
-
-### 2. The server
-
-The actual HTTP/Sockets server runs in a fork managed by the main process.
-
-The main process itself acts a go-between for the UI and the server process.
-
+# Operation
 ## Installation
 This repository assumes that `npm` is installed. If you don't have it installed, here are [installation instructions](https://docs.npmjs.com/getting-started/installing-node).
 
@@ -39,27 +24,27 @@ This repository assumes that `npm` is installed. If you don't have it installed,
 |`build-docs`|Builds HTML API docs into the docs-build directory.|
 |`electron`|Runs the current code in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
+|`package-mac`|Uses electron-packager to package an OSX release.|
+|`package-win`|Uses electron-packager to package a Windows release.|
+|`package-linux`|Uses electron-packager to package a Linux release.|
+|`package-cordova`|Builds Android and iOS cordova projects|
+|`create-installer-mac`|Creates a DMG based installer for OSX.|
 
-## Running
-
-To run the UI:
-
-```sh
-npm run start
-```
-
-To run the whole app (including server):
-
-```sh
-$ npm run build
-$ npm run electron
-```
 
 ## Application Structure
 
 ```
 .
+├── build                    # Prod assets
 ├── config                   # Project and build configurations (webpack, env config)
-├── public                   # Static public assets & main process source (inc. server)
-├── src                      # UI application source code
+├── public                   # Static public assets
+│   └── index.html           # Static entry point
+├── src                      # Application source code
+│   ├── index.js             # Application bootstrap and rendering
+│   ├── routes.js            # App Route Definitions
+│   ├── components           # Contains directories for components
+│   ├── containers           # Contains directories for containers for native and base classes
+│   ├── reducers             # Reducers for data stores
+│   ├── ducks                # Middleware, modules (ducks-style with actions, reducers, and action creators), and store
+│   └── utils                # Helpers and utils
 ```
