@@ -3,19 +3,21 @@ os:
 language: node_js
 node_js:
   - "6.9"
-cache:
-  yarn: true
-  directories:
-      "node_modules"
+cache: yarn
 before_install:
-  - if [[ "$TASK" == "dist:win" ]]; then brew install wine winetricks; fi
-  - if [[ "$TASK" == "dist:win" ]]; then winetricks install mono; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git lfs pull; fi
-script:
-  - yarn run build
-  - yarn run $TASK
-env:
-  - TASK=dist:mac
-  - TASK=dist:linux
-  - TASK=dist:win
+  - if [[ $TRAVIS_OS_NAME == osx ]] && [[ $DIST == true ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
+  - if [[ $TRAVIS_OS_NAME == osx ]] && [[ $DIST == true ]]; then git lfs pull; fi
+jobs:
+  include:
+    - stage: test
+      script: yarn run test
+    - stage: dist
+      env: DIST=true
+      script:
+        - yarn run build
+        - yarn run dist:mac
+    - stage: dist
+      env: DIST=true
+      script:
+        - yarn run build
+        - yarn run dist:linux
