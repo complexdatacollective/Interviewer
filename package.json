@@ -1,8 +1,8 @@
 {
   "name": "network-canvas",
-  "version": "4.0.0",
+  "version": "5",
   "productName": "Network Canvas",
-  "description": "A touch-optimised framework for capturing personal network data.",
+  "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
@@ -123,7 +123,7 @@
   "homepage": ".",
   "main": "www/electron-starter.js",
   "build": {
-    "appId": "NetworkCanvas",
+    "appId": "Network-Canvas",
     "directories": {
       "buildResources": "build-resources",
       "output": "release-builds"
@@ -132,7 +132,8 @@
       "category": "public.app-category.education"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "certificateSubjectName": "Complex Data Collective"
     },
     "publish": [
       {
