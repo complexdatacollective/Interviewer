@@ -4,9 +4,6 @@ language: node_js
 node_js:
   - "6.9"
 cache: yarn
-before_install:
-  - if [[ $TRAVIS_OS_NAME == osx ]] && [[ $DIST == true ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-tar dpkg libicns graphicsmagick git-lfs lzip; fi
-  - if [[ $TRAVIS_OS_NAME == osx ]] && [[ $DIST == true ]]; then git lfs pull; fi
 jobs:
   include:
     - stage: test
