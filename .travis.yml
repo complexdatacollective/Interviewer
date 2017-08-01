@@ -11,13 +11,5 @@ jobs:
   include:
     - stage: test
       script: yarn run test
-    - stage: dist
-      env: DIST=true
-      script:
-        - yarn run build
-        - yarn run dist:mac
-    - stage: dist
-      env: DIST=true
-      script:
-        - yarn run build
-        - yarn run dist:linux
+    - stage: build
+      script: yarn run build
