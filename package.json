@@ -12,7 +12,7 @@
   "scripts": {
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "dist:mac": "electron-builder -ml --publish=always",
+    "dist:mac": "electron-builder -m --publish=always",
     "dist:win": "electron-builder -w --publish=always",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
