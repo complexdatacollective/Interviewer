@@ -6,10 +6,33 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div
-    className="scrollable">
-    <Connect(Droppable)
-        network={
+  "node": <Droppable
+    acceptsDraggableType={null}
+    droppableName={null}
+    network={
+        Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          }
+    }
+    store={
+        Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          }
+    }
+    updateZone={[Function]} />,
+  "nodes": Array [
+    <Droppable
+      acceptsDraggableType={null}
+      droppableName={null}
+      network={
             Object {
                 "nodes": Array [
                   Object {
@@ -100,7 +123,44 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
+<<<<<<< HEAD
         "state": null,
+=======
+        "renderedElement": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
+        "state": Object {
+          "storeState": undefined,
+        },
+        "stateProps": Object {},
+        "statePropsPrecalculationError": null,
+        "store": Object {
+          "dispatch": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+          Symbol(observable): [Function],
+        },
+>>>>>>> update snapshots
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -119,6 +179,7 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
+<<<<<<< HEAD
         "_currentElement": <div
           className="scrollable">
           <Connect(Droppable)
@@ -164,6 +225,53 @@ ShallowWrapper {
                                       }
                     } />
 </div>,
+=======
+        "_currentElement": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
+        "_debugID": 2,
+        "_renderedOutput": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
+>>>>>>> update snapshots
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,

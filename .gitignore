@@ -3,11 +3,11 @@
 /bower_components
 /platforms
 /coverage
-/build
-/release-builds
+/app
 /www
 /.idea
 /docs-build
+/release-builds
 
 npm-debug.log*
 yarn-debug.log*
