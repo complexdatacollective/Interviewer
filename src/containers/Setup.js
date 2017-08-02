@@ -10,8 +10,14 @@ import { isElectron } from '../utils/Environment';
 
 // Initialise auto update if we are in electron
 if (isElectron()) {
-  // const updater = window.require('./updater')
-  // updater.checkForUpdates();
+  // update through IPC goes here
+  const {ipcRenderer} = window.require('electron')
+  ipcRenderer.send('updateHandler', 'checkForUpdates')
+
+  ipcRenderer.on('updateHandler', (event, arg) => {
+    console.log(arg);
+  })
+
 }
 
 const formConfig = {

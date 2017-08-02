@@ -8,7 +8,14 @@ const checkForUpdates = require('./updater');
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+const { ipcMain } = require('electron')
 
+ipcMain.on('updateHandler', (event, arg) => {
+  checkForUpdates();
+  console.log(arg);
+  console.log('Checking for updates...');
+  event.sender.send('updateHandler', 'Checked for updates')
+})
 
 log.info('App starting...');
 
@@ -25,9 +32,6 @@ function createWindow() {
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
   }));
-
-  // updater
-checkForUpdates();
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools({ mode: 'detach' });
