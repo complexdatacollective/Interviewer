@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { store } from './ducks/store';
 import App from './containers/App';
 import AppRouter from './routes';
+import { isCordova } from './utils/Environment';
 
 injectTapEventPlugin();
 
@@ -22,10 +23,8 @@ function startApp() {
     document.getElementById('root'),
   );
 }
-if (window.cordova) {
-  console.log('cordova');
+if (isCordova()) {
   document.addEventListener('deviceready', startApp, false);
 } else {
-  console.log('not cordova');
   startApp();
 }

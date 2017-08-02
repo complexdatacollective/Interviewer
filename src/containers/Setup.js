@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
@@ -7,6 +6,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/Elements';
+import { isElectron } from '../utils/Environment';
+
+// Initialise auto update if we are in electron
+if (isElectron()) {
+  // const updater = window.require('./updater')
+  // updater.checkForUpdates();
+}
 
 const formConfig = {
   formName: 'setup',
@@ -22,7 +28,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/advanced.protocol',
+  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
 };
 
 /**
@@ -38,7 +44,7 @@ class Setup extends Component {
 
   // TODO: For debugging, should be removed when we find a smarter way to do this.
   componentWillMount = () => {
-    this.props.loadProtocol('http://localhost:3000/example.protocol.js');
+    this.props.loadProtocol('example.protocol.js');
   }
 
   render() {
