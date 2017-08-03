@@ -1,4 +1,5 @@
 const electron = require('electron');
+const { ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -8,14 +9,13 @@ const checkForUpdates = require('./updater');
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-const { ipcMain } = require('electron')
 
-ipcMain.on('updateHandler', (event, arg) => {
+ipcMain.on('CHECK_FOR_UPDATE', (event, arg) => {
   checkForUpdates();
-  console.log(arg);
-  console.log('Checking for updates...');
-  event.sender.send('updateHandler', 'Checked for updates')
-})
+  log.info(arg);
+  log.info('Checking for updates...');
+  event.sender.send('UP_TO_DATE', 'Checked for updates');
+});
 
 log.info('App starting...');
 
@@ -30,7 +30,7 @@ function createWindow() {
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
+    protocol: 'file:'
   }));
 
   // Open the DevTools.

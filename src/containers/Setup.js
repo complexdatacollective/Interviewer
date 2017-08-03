@@ -12,9 +12,13 @@ import { isElectron } from '../utils/Environment';
 if (isElectron()) {
   // update through IPC goes here
   const {ipcRenderer} = window.require('electron')
-  ipcRenderer.send('updateHandler', 'checkForUpdates')
+  ipcRenderer.send('CHECK_FOR_UPDATE');
 
-  ipcRenderer.on('updateHandler', (event, arg) => {
+  ipcRenderer.on('UPDATE_FOUND', (event, arg) => {
+    console.log(arg);
+  });
+
+  ipcRenderer.on('UP_TO_DATE', (event, arg) => {
     console.log(arg);
   })
 

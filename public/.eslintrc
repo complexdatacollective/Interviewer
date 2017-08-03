@@ -1,0 +1,16 @@
+{
+    "rules": {
+      "no-console": "off",
+      "comma-dangle": [
+        "error", {
+          "arrays": "never",
+          "objects": "never",
+          "imports": "never",
+          "exports": "never",
+          "functions": "ignore"
+        }
+      ],
+      "import/no-extraneous-dependencies": ["error", {"packageDir": './'}],
+      "import/no-unresolved": [2, { ignore: ['^[\.]'] }]
+    }
+}
