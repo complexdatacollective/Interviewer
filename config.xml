@@ -38,4 +38,5 @@
     <preference name="Orientation" value="landscape" />
     <preference name="target-device" value="tablet" />
     <engine name="ios" spec="git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim" />
+    <engine name="android" spec="~6.2.3" />
 </widget>
