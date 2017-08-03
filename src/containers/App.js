@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { remote } from 'electron';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
 import { isElectron } from '../utils/Environment';
@@ -11,7 +10,7 @@ require('../styles/main.scss');
 
 const getVersion = () => {
   if (isElectron()) {
-    // const app = remote.app;  // eslint-disable-line global-require
+    const remote = require('electron').remote;  // eslint-disable-line global-require
     const version = remote.app.getVersion();
     console.log('VERSION', version);
     return version;
