@@ -34,12 +34,12 @@ class App extends Component {
     this.state = {
       version: '0.0.0',
     };
+  }
 
-    setTimeout(() => {
-      this.setState({
-        version: getVersion(),
-      });
-    }, 1000);
+  componentWillMount() {
+    this.setState({
+      version: getVersion(),
+    });
   }
 
   render() {
