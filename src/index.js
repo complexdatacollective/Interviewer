@@ -30,7 +30,7 @@ const checkForUpdate = () => {
   }
 };
 
-function startApp() {
+const startApp = () => {
   ReactDOM.render(
     <Provider store={store}>
       <App>
@@ -41,7 +41,7 @@ function startApp() {
   );
 
   checkForUpdate();
-}
+};
 
 if (isCordova()) {
   document.addEventListener('deviceready', startApp, false);

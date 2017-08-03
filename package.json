@@ -21,7 +21,9 @@
         "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
         "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
         "electron": "electron ./www",
-        "generate-icons": "node generate-apwp-icons.js"
+        "generate-icons": "node generate-apwp-icons.js",
+        "generate-icons": "node generate-app-icons.js",
+        "dist:cordova": "cordova build ios && cordova build android"
     },
     "repository": {
         "type": "git"
@@ -85,6 +87,7 @@
     "dependencies": {
         "@mars/heroku-js-runtime-env": "^3.0.0",
         "axios": "^0.16.1",
+        "change-case": "^3.0.1",
         "classnames": "^2.2.5",
         "cordova-ios": "git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim",
         "create-react-class": "^15.5.3",
