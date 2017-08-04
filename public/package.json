@@ -1,13 +1,21 @@
 {
   "name": "network-canvas",
-  "version": "4.0.0",
+  "version": "4.0.0-alpha.1",
   "productName": "Network Canvas",
-  "description": "A touch-optimised framework for capturing personal network data.",
+  "description": "Simplifying complex network data collection.",
+  "author": "Complex Data Collective",
   "private": true,
   "engines": {
     "node": "6.9.1",
     "npm": "3.10.7"
   },
   "homepage": ".",
-  "main": "electron-starter.js"
+  "main": "electron-starter.js",
+  "devDependencies": {
+    "electron": "^1.6.11"
+  },
+  "dependencies": {
+    "electron-log": "^2.2.7",
+    "electron-updater": "^2.7.2"
+  }
 }

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
@@ -22,7 +20,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/advanced.protocol',
+  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
 };
 
 /**
@@ -30,19 +28,20 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
+  // TODO: For debugging, should be removed when we find a smarter way to do this.
+  componentWillMount = () => {
+    this.props.loadProtocol('example.protocol.js');
+  }
+
   handleLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
     }
   }
 
-  // TODO: For debugging, should be removed when we find a smarter way to do this.
-  componentWillMount = () => {
-    this.props.loadProtocol('http://localhost:3000/example.protocol.js');
-  }
 
   render() {
-    if(this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }}/>); }
+    if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
 
     return (
       <div className="setup">

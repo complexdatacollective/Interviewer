@@ -1,9 +1,12 @@
+os:
+  - osx
 language: node_js
 node_js:
   - "6.9"
-env:
-  - TASK=test
-  - TASK=build
-script:
-  - yarn run $TASK
-  - yarn run $TASK
+cache: yarn
+jobs:
+  include:
+    - stage: test
+      script: yarn run test
+    - stage: build
+      script: yarn run build

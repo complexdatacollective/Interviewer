@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -9,10 +7,12 @@ import { Provider } from 'react-redux';
 import { store } from './ducks/store';
 import App from './containers/App';
 import AppRouter from './routes';
+import { isCordova } from './utils/Environment';
+import updater from './utils/updater';
 
 injectTapEventPlugin();
 
-function startApp() {
+const startApp = () => {
   ReactDOM.render(
     <Provider store={store}>
       <App>
@@ -21,11 +21,12 @@ function startApp() {
     </Provider>,
     document.getElementById('root'),
   );
-}
-if (window.cordova) {
-  console.log('cordova');
+
+  updater.checkForUpdate();
+};
+
+if (isCordova()) {
   document.addEventListener('deviceready', startApp, false);
 } else {
-  console.log('not cordova');
   startApp();
 }
