@@ -7,6 +7,7 @@
 /www
 /.idea
 /docs-build
+/plugins
 
 npm-debug.log*
 yarn-debug.log*

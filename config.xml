@@ -39,4 +39,5 @@
     <preference name="target-device" value="tablet" />
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
 </widget>

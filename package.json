@@ -90,6 +90,7 @@
         "classnames": "^2.2.5",
         "cordova-android": "^6.2.3",
         "cordova-ios": "git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim",
+        "cordova-plugin-app-version": "^0.1.9",
         "create-react-class": "^15.5.3",
         "electron-log": "^2.2.7",
         "electron-updater": "^2.7.2",
@@ -180,6 +181,9 @@
         "platforms": [
             "android",
             "ios"
-        ]
+        ],
+        "plugins": {
+            "cordova-plugin-app-version": {}
+        }
     }
 }

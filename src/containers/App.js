@@ -4,22 +4,9 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
-import { isElectron } from '../utils/Environment';
+import getVersion from '../utils/getVersion';
 
 require('../styles/main.scss');
-
-const getVersion = () => {
-  if (isElectron()) {
-    const remote = require('electron').remote;  // eslint-disable-line global-require
-    const version = remote.app.getVersion();
-    console.log('VERSION', version);
-    return version;
-  }
-
-  // TODO: Cordova?
-
-  return '0.0.0';
-};
 
 /**
   * Main app container.
@@ -36,8 +23,10 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      version: getVersion(),
+    getVersion().then((version) => {
+      this.setState({
+        version,
+      });
     });
   }
 
