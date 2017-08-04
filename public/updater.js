@@ -17,7 +17,7 @@ const log = require('electron-log');
 autoUpdater.autoDownload = false;
 
 autoUpdater.on('error', (event, error) => {
-  const errorMessage = error ? (error.stack || error).toString() : `Unknown error ${event.toString()}`;
+  const errorMessage = error ? (error.stack || error).toString() : event.toString();
 
   log.error(errorMessage);
 
