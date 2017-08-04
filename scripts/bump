@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+CONFIG='config.xml'
+
+if [ $# -eq 0 ]; then
+  echo 'Specify bump type or exact version'
+  npm version --help
+  exit 1
+fi
+
+if NEW_VERSION=$(npm --no-git-tag-version version $1 2> /dev/null); then
+
+  (cd public && npm version $NEW_VERSION)
+
+  if [ -e $CONFIG ]; then
+      # sed to replace version in config.xml
+      sed -i '' "s/\(widget.*version=\"\)\([^\"]*\)\"/\1${NEW_VERSION:1}\"/" $CONFIG
+  else
+      echo 'Could not find config.xml'
+      exit 1
+  fi
+
+else
+
+  echo 'Something went wrong with the intial bump'
+  exit 1
+
+fi
