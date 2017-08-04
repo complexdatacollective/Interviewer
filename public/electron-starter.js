@@ -3,7 +3,7 @@ const { ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
-const checkForUpdates = require('./updater');
+const checkForUpdates = require('./components/updater');
 
 // Module to control application life.
 const app = electron.app;
