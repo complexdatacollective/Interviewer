@@ -1,4 +1,5 @@
-# Network Canvas
+# Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas)
+
 Technologies used:
 ES6 (via Babel)
 React
