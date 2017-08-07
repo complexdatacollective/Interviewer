@@ -2311,6 +2311,10 @@ cordova-common@^2.0.1:
     xcode "^0.9.0"
     xml-escape "^1.1.0"
 
+cordova-plugin-app-version@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-app-version/-/cordova-plugin-app-version-0.1.9.tgz#9db0607863337a710489302e5f50a904f1449bdb"
+
 cordova-registry-mapper@^1.1.8:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/cordova-registry-mapper/-/cordova-registry-mapper-1.1.15.tgz#e244b9185b8175473bff6079324905115f83dc7c"
