@@ -5,7 +5,8 @@
   opacity: 1;
   margin-right: 50px;
   width: 375px;
-  transform: scale3d(1, 1, 1);
+  transform: translateZ(0);
+  will-change: transform;
 
   &--minimise {
     margin-right: 0;
