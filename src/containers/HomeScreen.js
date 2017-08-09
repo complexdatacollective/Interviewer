@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
   * Homepage screen
   * @param props {object} - children
   */
-const HomePage = (props) => {
+const HomeScreen = (props) => {
   const {
     participant,
   } = props;
@@ -24,7 +24,7 @@ const HomePage = (props) => {
   );
 };
 
-HomePage.propTypes = {
+HomeScreen.propTypes = {
   participant: PropTypes.object.isRequired,
 };
 
@@ -36,4 +36,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(HomePage);
+export default connect(mapStateToProps)(HomeScreen);
