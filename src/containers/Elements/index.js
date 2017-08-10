@@ -8,4 +8,5 @@ export { default as Field } from './Field';
 export { default as Sociogram } from './Sociogram';
 export { default as EdgeLayout } from './EdgeLayout';
 export { default as NodeLayout } from './NodeLayout';
+export { default as NodeBucket } from './NodeBucket';
 export { default as SociogramBackground } from './SociogramBackground';

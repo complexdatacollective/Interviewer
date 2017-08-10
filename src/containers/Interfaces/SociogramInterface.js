@@ -5,6 +5,7 @@ import {
   SociogramBackground,
   NodeLayout,
   EdgeLayout,
+  NodeBucket,
 } from '../Elements';
 
 /**
@@ -17,6 +18,7 @@ const SociogramInterface = () => (
       <SociogramBackground />
       <NodeLayout />
       <EdgeLayout />
+      <NodeBucket />
     </Sociogram>
   </div>
 );
