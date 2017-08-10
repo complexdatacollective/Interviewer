@@ -3,10 +3,14 @@ os:
 language: node_js
 node_js:
   - "6.9"
-cache: yarn
+cache:
+  directories:
+    - node_modules # NPM packages
+install:
+  - npm install
 jobs:
   include:
     - stage: test
-      script: yarn run test
+      script: npm run test
     - stage: build
-      script: yarn run build
+      script: npm run build
