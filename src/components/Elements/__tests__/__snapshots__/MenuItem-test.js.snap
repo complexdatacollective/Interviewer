@@ -12,7 +12,11 @@ ShallowWrapper {
     role="menuitem"
     tabIndex={0}>
     <Icon
-        name="" />
+        className=""
+        color=""
+        name=""
+        size=""
+        style={Object {}} />
     title
 </a>,
   "nodes": Array [
@@ -22,7 +26,11 @@ ShallowWrapper {
       role="menuitem"
       tabIndex={0}>
       <Icon
-            name="" />
+            className=""
+            color=""
+            name=""
+            size=""
+            style={Object {}} />
       title
 </a>,
   ],
@@ -79,7 +87,11 @@ ShallowWrapper {
           role="menuitem"
           tabIndex={0}>
           <Icon
-                    name="" />
+                    className=""
+                    color=""
+                    name=""
+                    size=""
+                    style={Object {}} />
           title
 </a>,
         "_debugID": 4,
@@ -89,7 +101,11 @@ ShallowWrapper {
           role="menuitem"
           tabIndex={0}>
           <Icon
-                    name="" />
+                    className=""
+                    color=""
+                    name=""
+                    size=""
+                    style={Object {}} />
           title
 </a>,
       },
@@ -127,7 +143,11 @@ ShallowWrapper {
     role="menuitem"
     tabIndex={0}>
     <Icon
-        name="" />
+        className=""
+        color=""
+        name=""
+        size=""
+        style={Object {}} />
     title
 </a>,
   "nodes": Array [
@@ -137,7 +157,11 @@ ShallowWrapper {
       role="menuitem"
       tabIndex={0}>
       <Icon
-            name="" />
+            className=""
+            color=""
+            name=""
+            size=""
+            style={Object {}} />
       title
 </a>,
   ],
@@ -196,7 +220,11 @@ ShallowWrapper {
           role="menuitem"
           tabIndex={0}>
           <Icon
-                    name="" />
+                    className=""
+                    color=""
+                    name=""
+                    size=""
+                    style={Object {}} />
           title
 </a>,
         "_debugID": 2,
@@ -206,7 +234,11 @@ ShallowWrapper {
           role="menuitem"
           tabIndex={0}>
           <Icon
-                    name="" />
+                    className=""
+                    color=""
+                    name=""
+                    size=""
+                    style={Object {}} />
           title
 </a>,
       },

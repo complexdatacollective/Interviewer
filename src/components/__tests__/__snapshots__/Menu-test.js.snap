@@ -49,7 +49,11 @@ ShallowWrapper {
         role="menu"
         tabIndex={0}>
         <Icon
-            name="menu" />
+            className=""
+            color=""
+            name="menu"
+            size=""
+            style={Object {}} />
     </div>
 </div>,
   "nodes": Array [
@@ -96,7 +100,11 @@ ShallowWrapper {
             role="menu"
             tabIndex={0}>
             <Icon
-                  name="menu" />
+                  className=""
+                  color=""
+                  name="menu"
+                  size=""
+                  style={Object {}} />
       </div>
 </div>,
   ],
@@ -230,7 +238,11 @@ ShallowWrapper {
                     role="menu"
                     tabIndex={0}>
                     <Icon
-                              name="menu" />
+                              className=""
+                              color=""
+                              name="menu"
+                              size=""
+                              style={Object {}} />
           </div>
 </div>,
         "_debugID": 2,
@@ -277,7 +289,11 @@ ShallowWrapper {
                     role="menu"
                     tabIndex={0}>
                     <Icon
-                              name="menu" />
+                              className=""
+                              color=""
+                              name="menu"
+                              size=""
+                              style={Object {}} />
           </div>
 </div>,
       },
