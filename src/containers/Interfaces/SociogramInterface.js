@@ -18,7 +18,6 @@ import {
   */
 const SociogramInterface = () => (
   <div className="sociogram-interface">
-    Hello world
     <SociogramGraph>
       <SociogramBackground />
       <SociogramNodes />
