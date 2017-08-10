@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import { CSSTransitionGroup } from 'react-transition-group';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -89,18 +91,18 @@ class StaggeredTransitionGroup extends Component {
     const { transitionName, className, component } = this.props;
 
     const sortByNew = children => sortBy(
-        children,
-        child => (this.isNew(child.key) ? 1 : 0),
-      );
+      children,
+      child => (this.isNew(child.key) ? 1 : 0),
+    );
 
     const withStyles = children => map(
       children,
-        child =>
-          React.cloneElement(
-            child,
-            { style: this.childStyle(child) },
-          ),
-      );
+      child =>
+        React.cloneElement(
+          child,
+          { style: this.childStyle(child) },
+        ),
+    );
 
     const children = flow([
       withStyles,
@@ -123,16 +125,20 @@ class StaggeredTransitionGroup extends Component {
   }
 }
 
-StaggeredTransitionGroup.propTypes = Object.assign({}, CSSTransitionGroup.propTypes, {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-  delay: PropTypes.number,
-  start: PropTypes.number,
-  className: PropTypes.string,
-  component: PropTypes.any,
-});
+StaggeredTransitionGroup.propTypes = Object.assign(
+  {},
+  CSSTransitionGroup.propTypes,
+  {
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node,
+    ]).isRequired,
+    delay: PropTypes.number,
+    start: PropTypes.number,
+    className: PropTypes.string,
+    component: PropTypes.any,
+  },
+);
 
 StaggeredTransitionGroup.defaultProps = {
   delay: 100,
