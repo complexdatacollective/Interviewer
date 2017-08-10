@@ -9,9 +9,9 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
-  HomePage,
-  Protocol,
-  Setup,
+  HomeScreen,
+  ProtocolScreen,
+  SetupScreen,
 } from './containers';
 
 function mapStateToProps(state) {
@@ -39,9 +39,9 @@ SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 export default () => (
   <Router>
     <Switch>
-      <SetupRequiredRoute path="/protocol" component={Protocol} />
-      <SetupRequiredRoute exact path="/" component={HomePage} />
-      <Route path="/setup" component={Setup} />
+      <SetupRequiredRoute path="/protocol" component={ProtocolScreen} />
+      <SetupRequiredRoute exact path="/" component={HomeScreen} />
+      <Route path="/setup" component={SetupScreen} />
       <Redirect to={{ pathname: '/setup' }} />
     </Switch>
   </Router>
