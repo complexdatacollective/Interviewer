@@ -5,8 +5,7 @@ $font-path: '~network-canvas-ui/public/fonts';
 @import 'utils/all';
 @import 'helpers/all';
 @import 'components/all';
-@import 'containers/app';
-@import 'containers/setupScreen';
+@import 'containers/all';
 
 // sass-lint:disable no-ids
 #root {

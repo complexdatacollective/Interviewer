@@ -152,6 +152,32 @@ export default {
           ],
         },
       },
+      {
+        "id": "sociogram",
+        "type": "Sociogram",
+        "icon": "menu-sociogram",
+        "title": "Sociogram",
+        "params": {
+          "nodeType": 'person',
+          "prompts": [
+            {
+              id: '6cl2',
+              title: 'Within the past 6 months, who have you felt close to?',
+              nodeAttributes: {
+                special_category: 46,
+                close_friend: true,
+              },
+            },
+            {
+              id: '6su2',
+              title: "Within the past 6 months, who has been supportive?",
+              nodeAttributes: {
+                support_friend: true,
+              },
+            },
+          ],
+        },
+      },
     ],
   },
 };
