@@ -24,6 +24,7 @@ class ToggleGroup extends CheckboxGroup {
         <div>
           {map(optionsWithColor, ([option, color]) => (
             <ContextInput
+              key={option}
               name={name}
               label={option}
               color={color}

@@ -29,6 +29,7 @@ class CheckboxGroup extends Component {
         <div>{label}</div>
         {map(options, option => (
           <ContextInput
+            key={option}
             name={name}
             label={option}
             onCheck={() => this.onClickOption(option)}
