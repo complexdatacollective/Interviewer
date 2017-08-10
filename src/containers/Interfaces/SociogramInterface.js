@@ -1,15 +1,10 @@
-/* eslint-disable */
-
-
-
-
 import React from 'react';
 
 import {
-  SociogramGraph,
+  Sociogram,
   SociogramBackground,
-  SociogramNodes,
-  SociogramEdges,
+  NodeLayout,
+  EdgeLayout,
 } from '../Elements';
 
 /**
@@ -18,11 +13,11 @@ import {
   */
 const SociogramInterface = () => (
   <div className="sociogram-interface">
-    <SociogramGraph>
+    <Sociogram>
       <SociogramBackground />
-      <SociogramNodes />
-      <SociogramEdges />
-    </SociogramGraph>
+      <NodeLayout />
+      <EdgeLayout />
+    </Sociogram>
   </div>
 );
 
