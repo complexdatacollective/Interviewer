@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import {
   HomeScreen,
-  Protocol,
+  ProtocolScreen,
   SetupScreen,
 } from './containers';
 
@@ -39,7 +39,7 @@ SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 export default () => (
   <Router>
     <Switch>
-      <SetupRequiredRoute path="/protocol" component={Protocol} />
+      <SetupRequiredRoute path="/protocol" component={ProtocolScreen} />
       <SetupRequiredRoute exact path="/" component={HomeScreen} />
       <Route path="/setup" component={SetupScreen} />
       <Redirect to={{ pathname: '/setup' }} />
