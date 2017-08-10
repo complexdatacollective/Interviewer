@@ -5,3 +5,7 @@ export { default as Dialog } from './Dialog';
 export { default as Form } from './Form';
 export { default as NodeForm } from './NodeForm';
 export { default as Field } from './Field';
+export { default as SociogramGraph } from './SociogramGraph';
+export { default as SociogramEdges } from './SociogramEdges';
+export { default as SociogramBackground } from './SociogramBackground';
+export { default as SociogramNodes } from './SociogramNodes';

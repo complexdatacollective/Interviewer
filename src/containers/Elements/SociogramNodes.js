@@ -1,7 +1,7 @@
-// import React from 'react';
+import React from 'react';
 
-const SociogramNodes = () => {
-
-};
+const SociogramNodes = () => (
+  <div className="sociogram-nodes" />
+);
 
 export default SociogramNodes;

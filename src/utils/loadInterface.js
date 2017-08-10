@@ -1,15 +1,19 @@
 import React from 'react';
-import { NameGenerator, Quiz, Sociogram } from '../containers/Interfaces';
+import {
+  NameGeneratorInterface,
+  QuizInterface,
+  SociogramInterface,
+} from '../containers/Interfaces';
 
 export default function loadInterface(options) {
   if (Object.hasOwnProperty.call(options, 'custom')) { return options.custom; }
   switch (options) {
     case 'NameGenerator':
-      return NameGenerator;
+      return NameGeneratorInterface;
     case 'Sociogram':
-      return Sociogram;
+      return SociogramInterface;
     case 'Quiz':
-      return Quiz;
+      return QuizInterface;
     default:
       return () => (<div>No &quot;{options}&quot; interface found.</div>);
   }

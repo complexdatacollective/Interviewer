@@ -1,7 +1,7 @@
-// import React from 'react';
+import React from 'react';
 
-const SociogramBackground = () => {
-
-};
+const SociogramBackground = () => (
+  <div className="sociogram-background" />
+);
 
 export default SociogramBackground;

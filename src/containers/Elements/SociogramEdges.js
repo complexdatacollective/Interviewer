@@ -1,7 +1,7 @@
-// import React from 'react';
+import React from 'react';
 
-const SociogramEdges = () => {
-
-};
+const SociogramEdges = () => (
+  <div className="sociogram-edges" />
+);
 
 export default SociogramEdges;

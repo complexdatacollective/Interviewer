@@ -1,7 +1,7 @@
-// import React from 'react';
+import React from 'react';
 
-const SociogramGraph = () => {
-
-};
+const SociogramGraph = () => (
+  <div className="sociogram-graph" />
+);
 
 export default SociogramGraph;
