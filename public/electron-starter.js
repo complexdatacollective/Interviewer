@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { ipcMain } = require('electron');
+const { ipcMain, globalShortcut } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -32,9 +32,6 @@ function createWindow() {
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:'
   }));
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

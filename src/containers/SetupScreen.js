@@ -28,17 +28,15 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  // TODO: For debugging, should be removed when we find a smarter way to do this.
-  componentWillMount = () => {
-    this.props.loadProtocol('example.protocol.js');
-  }
-
-  handleLoadProtocol = (fields) => {
+  onClickLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
     }
   }
 
+  onClickLoadDemoProtocol = () => {
+    this.props.loadDemoProtocol();
+  }
 
   render() {
     if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
@@ -49,10 +47,12 @@ class Setup extends Component {
         <p>Choose a protocol below.</p>
         <Form
           form={formConfig.formName}
-          onSubmit={this.handleLoadProtocol}
+          onSubmit={this.onClickLoadProtocol}
           initialValues={initialValues}
           {...formConfig}
         />
+        <hr />
+        <button onClick={this.onClickLoadDemoProtocol}>Load demo protocol</button>
       </div>
     );
   }
@@ -61,6 +61,7 @@ class Setup extends Component {
 Setup.propTypes = {
   protocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
+  loadDemoProtocol: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -72,6 +73,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+    loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
   };
 }
 
