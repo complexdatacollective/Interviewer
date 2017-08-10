@@ -123,7 +123,8 @@ class StaggeredTransitionGroup extends Component {
   }
 }
 
-StaggeredTransitionGroup.propTypes = Object.assign({}, CSSTransitionGroup.propTypes, {
+StaggeredTransitionGroup.propTypes = {
+  ...CSSTransitionGroup.propTypes,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -132,12 +133,14 @@ StaggeredTransitionGroup.propTypes = Object.assign({}, CSSTransitionGroup.propTy
   start: PropTypes.number,
   className: PropTypes.string,
   component: PropTypes.any,
-});
+};
 
 StaggeredTransitionGroup.defaultProps = {
   delay: 100,
   duration: 0,
   start: 0,
+  className: '',
+  component: null,
 };
 
 export default StaggeredTransitionGroup;

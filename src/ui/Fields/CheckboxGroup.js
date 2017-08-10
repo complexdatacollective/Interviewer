@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fromPairs, map } from 'lodash';
 
+import { ContextInput } from 'network-canvas-ui';
+
 const isChecked = (value, option) => (value ? !!value[option] : false);
 
 /**
@@ -26,18 +28,12 @@ class CheckboxGroup extends Component {
       <div>
         <div>{label}</div>
         {map(options, option => (
-          <div key={option}>
-            <label htmlFor={`${name}_${option}`}>
-              <input
-                type="checkbox"
-                id={`${name}_${option}`}
-                name={name}
-                value={option}
-                checked={isChecked(value, option)}
-                onChange={() => { this.onClickOption(option); }}
-              /> {option}
-            </label>
-          </div>
+          <ContextInput
+            name={name}
+            label={option}
+            onCheck={() => this.onClickOption(option)}
+            checked={isChecked(value, option)}
+          />
         ))}
         {meta.invalid &&
           <div>{meta.error}</div>}

@@ -1,5 +1,7 @@
 import React from 'react';
 import { map, zip } from 'lodash';
+import { ContextInput } from 'network-canvas-ui';
+
 import CheckboxGroup from './CheckboxGroup';
 
 const isChecked = (value, option) => (value ? !!value[option] : false);
@@ -21,18 +23,13 @@ class ToggleGroup extends CheckboxGroup {
 
         <div>
           {map(optionsWithColor, ([option, color]) => (
-            <div key={option}>
-              <label htmlFor={`${name}_${option}`} className={`toggle-group__item toggle-group__item--palette-${color}`} >
-                <input
-                  type="checkbox"
-                  id={`${name}_${option}`}
-                  name={name}
-                  value={option}
-                  checked={isChecked(value, option)}
-                  onClick={() => { this.onClickOption(option); }}
-                /> {option}
-              </label>
-            </div>
+            <ContextInput
+              name={name}
+              label={option}
+              color={color}
+              onCheck={() => this.onClickOption(option)}
+              checked={isChecked(value, option)}
+            />
           ))}
         </div>
         {meta.invalid &&
