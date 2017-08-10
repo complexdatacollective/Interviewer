@@ -11,7 +11,7 @@ const Alphanumeric = field => (
       placeholder={field.label}
       name={field.input.name}
       errorText={
-        field.meta.invalid &&
+        field.meta.invalid && field.meta.dirty &&
         <div>{field.meta.error}</div>
       }
       {...field.input}
