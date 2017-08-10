@@ -4,46 +4,46 @@ $component-name: 'input';
   display: block;
   margin: 20px 0 0;
 
-  &__field {
-    @include typography('title-2');
-    font-weight: bold;
-    background-color: transparent;
-    border: 0;
-    border-bottom: 2px solid transparentize(palette('selected'), .3);
-    color: palette('text');
-    height: 60px;
-    width: 100%;
+  // &__field {
+  //   @include typography('title-2');
+  //   font-weight: bold;
+  //   background-color: transparent;
+  //   border: 0;
+  //   border-bottom: 2px solid transparentize(palette('selected'), .3);
+  //   color: palette('text');
+  //   height: 60px;
+  //   width: 100%;
 
-    &::placeholder {
-      color: transparentize(palette('text'), .3);
-    }
+  //   &::placeholder {
+  //     color: transparentize(palette('text'), .3);
+  //   }
 
-    &:focus {
-      border-bottom: 2px solid palette('selected');
-      outline: 0;
+  //   &:focus {
+  //     border-bottom: 2px solid palette('selected');
+  //     outline: 0;
 
-      &::placeholder {
-        color: transparent;
-      }
-    }
-  }
+  //     &::placeholder {
+  //       color: transparent;
+  //     }
+  //   }
+  // }
 
-  &__label {
-    @include typography('title-5');
-    margin-top: 20px;
-    opacity: 0;
-    transition: opacity 300ms ease;
-  }
+  // &__label {
+  //   @include typography('title-5');
+  //   margin-top: 20px;
+  //   opacity: 0;
+  //   transition: opacity 300ms ease;
+  // }
 
-  &__error {
-    display: none;
-  }
+  // &__error {
+  //   display: none;
+  // }
 
-  &--active {
-    .#{$component-name} {
-      &__label {
-        opacity: 1;
-      }
-    }
-  }
+  // &--active {
+  //   .#{$component-name} {
+  //     &__label {
+  //       opacity: 1;
+  //     }
+  //   }
+  // }
 }
