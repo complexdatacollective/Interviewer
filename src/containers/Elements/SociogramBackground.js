@@ -32,8 +32,8 @@ const SociogramBackground = ({ n, skewed }) => {
   return (
     <div className="sociogram-background">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        {radii.map(radius => (
-          <circle cx="50" cy="50" r={radius} className="sociogram-background__range" />
+        {radii.map((radius, index) => (
+          <circle key={index} cx="50" cy="50" r={radius} className="sociogram-background__range" />
         ))}
       </svg>
     </div>
@@ -41,8 +41,8 @@ const SociogramBackground = ({ n, skewed }) => {
 };
 
 SociogramBackground.propTypes = {
-  n: PropTypes.integer,
-  skewed: PropTypes.boolean,
+  n: PropTypes.number,
+  skewed: PropTypes.bool,
 };
 
 SociogramBackground.defaultProps = {
