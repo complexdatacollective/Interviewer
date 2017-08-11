@@ -22,8 +22,8 @@ const SociogramInterface = ({ config: { params: { prompts } } }) => (
       <div className="sociogram-interface__container">
         <Sociogram>
           <SociogramBackground />
-          <NodeLayout />
           <EdgeLayout />
+          <NodeLayout />
           <NodeBucket />
         </Sociogram>
       </div>
