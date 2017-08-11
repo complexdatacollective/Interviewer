@@ -82,7 +82,7 @@ export default function draggable(WrappedComponent) {
       const hits = this.getHits(getCoords(event, draggableData));
 
       if (hits.length > 0) {
-        this.props.onDropped(hits);
+        this.props.onDropped(hits, getCoords(event, draggableData));
       }
     }
 

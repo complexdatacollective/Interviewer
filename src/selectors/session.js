@@ -38,6 +38,11 @@ export const activePromptAttributes = createSelector(
   prompt => prompt.nodeAttributes,
 );
 
+export const activePromptLayout = createSelector(
+  prompt,
+  prompt => prompt.layout,
+);
+
 export const activeStageAttributes = createSelector(
   stage,
   stage => ({ type: stage.params.nodeType }),

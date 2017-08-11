@@ -1,9 +1,11 @@
-/* eslint-disable no-shadow */
+/* eslint-disable */ // no-shadow */
 import { createSelector } from 'reselect';
+import { filter } from 'lodash';
 import { difference, nodeIncludesAttributes } from '../utils/Network';
-import { activePromptAttributes, activeStageAttributes, activeOriginAttributes } from './session';
+import { activePromptAttributes, activePromptLayout, activeStageAttributes, activeOriginAttributes } from './session';
 
 const network = state => state.network;
+const nodes = state => state.network.nodes;
 
 // Filter the network according to current stage
 export const activeStageNetwork = createSelector(
@@ -25,12 +27,50 @@ export const activePromptNetwork = createSelector(
     ),
 );
 
+// Filter the network according to current prompt layout (AND stage)
+export const activeLayoutNetwork = createSelector(
+  network,
+  activeStageAttributes,
+  activePromptLayout,
+  (network, activeStageAttributes, activePromptLayout) =>
+    nodeIncludesAttributes(
+      network,
+      { ...activeStageAttributes, activePromptLayout },
+    ),
+);
+
 // Filter the network according to current promptId (AND stageId)
 export const activeOriginNetwork = createSelector(
   network,
   activeOriginAttributes,
   (network, activeOriginAttributes) =>
     nodeIncludesAttributes(network, activeOriginAttributes),
+);
+
+// Filter the network:
+// - Node is not from this layout prompt
+// - Node is the same type as current stage
+export const unplacedNodes = createSelector(
+  nodes,
+  activePromptLayout,
+  activeStageAttributes,
+  (nodes, activePromptLayout, activeStageAttributes) => {
+    const nodeHasLayout = (node) => (
+      !(
+        Object.prototype.hasOwnProperty.call(node, 'layouts') &&
+        Object.prototype.hasOwnProperty.call(node.layouts, activePromptLayout)
+      )
+    );
+
+    const lnodes = filter(
+      filter(nodes, nodeHasLayout),
+      ['type', activeStageAttributes.type],
+    );
+
+    console.log('UNPLACED', nodes, activePromptLayout, filter(nodes, nodeHasLayout), lnodes);
+
+    return lnodes;
+  }
 );
 
 // Filter the network:

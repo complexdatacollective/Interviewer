@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { first, isMatch, omit } from 'lodash';
+import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { activePromptAttributes } from '../../selectors/session';
-import { restOfNetwork } from '../../selectors/network';
+import { activePromptLayout } from '../../selectors/session';
+import { unplacedNodes } from '../../selectors/network';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const EnhancedNode = draggable(Node);
-const label = node => node.name;
+const label = node => node.nickname;
 
 const draggableType = 'NODE_BUCKET';
 
 class NodeBucket extends Component {
-  handleDropNode = (hits, node) => {
-    const { promptAttributes, updateNode } = this.props;
+  handleDropNode = (hits, coords, node) => {
+    const { promptLayout, updateNode } = this.props;
+    const layouts = { ...node.layouts, [promptLayout]: coords };
 
-    console.log(hits, node);
-
-    if (isMatch(node, promptAttributes)) {
-      updateNode(
-        omit(node, Object.getOwnPropertyNames(promptAttributes)),
-      );
-    } else {
-      updateNode({ ...node, ...promptAttributes });
-    }
+    updateNode({ ...node, layouts });
   };
 
   render() {
@@ -39,7 +32,7 @@ class NodeBucket extends Component {
         { node &&
           <EnhancedNode
             label={label(node)}
-            onDropped={hits => this.handleDropNode(hits, node)}
+            onDropped={(hits, coords) => this.handleDropNode(hits, coords, node)}
             draggableType={draggableType}
             {...node}
           />
@@ -52,7 +45,7 @@ class NodeBucket extends Component {
 NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
-  promptAttributes: PropTypes.object.isRequired,
+  promptLayout: PropTypes.string.isRequired,
 };
 
 NodeBucket.defaultProps = {
@@ -61,8 +54,8 @@ NodeBucket.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    node: first(restOfNetwork(state).nodes),  // TODO: configurable ordering
-    promptAttributes: activePromptAttributes(state),
+    node: first(unplacedNodes(state)),  // TODO: configurable ordering
+    promptLayout: activePromptLayout(state),
   };
 }
 

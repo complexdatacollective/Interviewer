@@ -85,17 +85,12 @@ export default {
             {
               id: '6cl2',
               title: 'Within the past 6 months, who have you felt close to?',
-              nodeAttributes: {
-                special_category: 46,
-                close_friend: true,
-              },
+              layout: 'closeness',
             },
             {
               id: '6su2',
               title: "Within the past 6 months, who has been supportive?",
-              nodeAttributes: {
-                support_friend: true,
-              },
+              layout: 'supportive',
             },
           ],
         },
