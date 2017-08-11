@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { activePromptLayout } from '../../selectors/session';
-import { unplacedNodes } from '../../selectors/network';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
@@ -52,9 +51,9 @@ NodeBucket.defaultProps = {
   node: null,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    node: first(unplacedNodes(state)),  // TODO: configurable ordering
+    node: first(ownProps.nodes),  // TODO: configurable ordering
     promptLayout: activePromptLayout(state),
   };
 }

@@ -62,14 +62,10 @@ export const unplacedNodes = createSelector(
       )
     );
 
-    const lnodes = filter(
+    return filter(
       filter(nodes, nodeHasLayout),
       ['type', activeStageAttributes.type],
     );
-
-    console.log('UNPLACED', nodes, activePromptLayout, filter(nodes, nodeHasLayout), lnodes);
-
-    return lnodes;
   }
 );
 
