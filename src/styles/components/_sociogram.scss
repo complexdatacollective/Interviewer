@@ -3,4 +3,10 @@
   width: 95vh;
   height: 95vh;
   position: relative;
+
+  .node-bucket {
+    position: absolute;
+    top: 0;
+    right: -100px;
+  }
 }
