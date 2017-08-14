@@ -11,13 +11,16 @@ import {
   NodeBucket,
   PromptSwiper,
 } from '../Elements';
-import { unplacedNodes as getUnplacedNodes } from '../../selectors/network';
+import {
+  unplacedNodes as getUnplacedNodes,
+  placedNodes as getPlacedNodes,
+} from '../../selectors/nodes';
 
 /**
   * Sociogram Interface
   * @extends Component
   */
-const SociogramInterface = ({ prompts, unplacedNodes }) => (
+const SociogramInterface = ({ prompts, unplacedNodes, placedNodes }) => (
   <div className="sociogram-interface">
     <div className="sociogram-interface__prompts">
       <PromptSwiper prompts={prompts} />
@@ -27,22 +30,25 @@ const SociogramInterface = ({ prompts, unplacedNodes }) => (
         <Sociogram>
           <SociogramBackground />
           <EdgeLayout />
-          <NodeLayout />
+          <NodeLayout nodes={placedNodes} />
           <NodeBucket nodes={unplacedNodes} />
         </Sociogram>
       </div>
     </div>
   </div>
 );
+
 SociogramInterface.propTypes = {
   config: PropTypes.object.isRequired,
   prompts: PropTypes.array.isRequired,
+  placedNodes: PropTypes.array.isRequired,
   unplacedNodes: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     unplacedNodes: getUnplacedNodes(state),
+    placedNodes: getPlacedNodes(state),
     prompts: ownProps.config.params.prompts,
   };
 }

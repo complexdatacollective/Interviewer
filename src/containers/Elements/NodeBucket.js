@@ -11,12 +11,18 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
 
-const draggableType = 'NODE_BUCKET';
+const draggableType = 'POSITIONED_NODE';
 
 class NodeBucket extends Component {
   handleDropNode = (hits, coords, node) => {
+    const hit = first(hits);
+    const relativeCoords = {
+      x: (coords.x - hit.x) / hit.width,
+      y: (coords.y - hit.y) / hit.height,
+    };
+
     const { promptLayout, updateNode } = this.props;
-    const layouts = { ...node.layouts, [promptLayout]: coords };
+    const layouts = { ...node.layouts, [promptLayout]: relativeCoords };
 
     updateNode({ ...node, layouts });
   };
