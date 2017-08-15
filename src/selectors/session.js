@@ -27,7 +27,7 @@ export const filteredStages = createSelector(
     stages.filter(stage => stage.title.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );
 
-const prompt = createSelector(
+export const prompt = createSelector(
   promptIndex,
   stage,
   (promptIndex, stage) => stage.params.prompts[promptIndex],

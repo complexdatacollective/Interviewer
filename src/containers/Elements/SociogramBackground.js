@@ -6,7 +6,7 @@ const SociogramBackground = ({ n, skewed, image }) => {
   let background;
 
   if (image) {
-    background = <div className="sociogram-background-image" style={{ backgroundImage: `url(${image})` }} />;
+    background = <div className="sociogram-background__image" style={{ backgroundImage: `url(${image})` }} />;
   } else {
     background = <SociogramRadar n={n} skewed={skewed} />;
   }
