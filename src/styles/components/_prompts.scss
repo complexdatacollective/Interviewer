@@ -30,17 +30,25 @@
 
     &-header {
       font-weight: 200;
-      max-width: 65vw;
-      line-height: 1.5;
-      margin-top: 20px;
+      max-width: 80vw;
+      line-height: 1.3;
+      @include breakpoint('full') {
+          margin-top: 20px;
+          max-width: 65vw;
+          line-height: 1.5;
+      }
+
     }
   }
 
   &__pips {
-    flex: 0 0 60px;
+    flex: 0 0 30px;
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    @include breakpoint('full') {
+      flex: 0 0 45px;
+    }
   }
 }

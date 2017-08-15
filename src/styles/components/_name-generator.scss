@@ -1,7 +1,7 @@
 .name-generator {
 
   height: 100vh;
-  padding: 20px 30px 80px;
+  padding: 20px 30px 20px;
   @include breakpoint('full') {
       padding: 20px 80px 80px;
   }
@@ -10,7 +10,10 @@
   flex-direction: column;
 
   &__prompt {
-    flex: 0 0 250px;
+    flex: 0 0 150px;
+    @include breakpoint('full') {
+        flex: 0 0 200px;
+    }
   }
 
   &__main {
@@ -26,10 +29,13 @@
     flex: 3 1 auto;
     height: 100%;
     display: flex;
-
     .node {
       width: 175px;
       height: 175px;
+      @include breakpoint('full') {
+        width: 175px;
+        height: 175px;
+      }
     }
   }
 
