@@ -19,6 +19,8 @@
     overflow: hidden;
     transition: $animation-standard-duration $animation-default-easing;
     width: 100vw;
+    display: flex;
+    @include vcjc; // vertical center, justify center
 
     // content being pushed e.g. by menu
     &--pushed {

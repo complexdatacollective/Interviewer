@@ -5,6 +5,24 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, TextInput } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { Form } from '../containers/Elements';
+
+const formConfig = {
+  formName: 'setup',
+  fields: [
+    {
+      label: 'Protocol URL',
+      name: 'protocol_url',
+      type: 'Alphanumeric',
+      placeholder: 'Protocol URL',
+      required: true,
+    },
+  ],
+};
+
+const initialValues = {
+  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
+};
 
 /**
   * Setup screen
@@ -26,19 +44,29 @@ class Setup extends Component {
 
     return (
       <div className="setup">
-        <h1>Welcome to Network Canvas</h1>
+        <h1 className="type--title-1">Welcome to Network Canvas</h1>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
           the development of our software.
         </p>
+        <h2 className="type--title-2">Help us to improve</h2>
+        <p>
+          Help us in this way.
+        </p>
+        <Form
+          form={formConfig.formName}
+          onSubmit={this.onClickLoadProtocol}
+          initialValues={initialValues}
+          {...formConfig}
+        />
+        <hr />
+        <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
         <TextInput
           className="input--wurm"
           name="protocolLocation"
           label="Protocol Location"
           value="Josh is sweet"
         />
-        <hr />
-        <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
       </div>
     );
   }

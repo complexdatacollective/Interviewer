@@ -24,6 +24,10 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
+
+    &__header {
+      margin-bottom:0;
+    }
   }
 
   &__content {
@@ -33,9 +37,11 @@
   }
 
   .node {
-    width: 75px;
-    height: 75px;
-    font-size: .5em;
+    width: 100px;
+    height: 100px;
+    font-size: 10px;
+    margin: 13px;
+    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
   }
 
   &--minimise {

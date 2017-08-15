@@ -28,9 +28,9 @@ const NodeList = ({
     <StaggeredTransitionGroup
       className={classNames}
       component="div"
-      delay={animation.duration.fast * 0.5}
-      duration={animation.duration.fast}
-      start={animation.duration.slow * 2}
+      delay={animation.duration.fast * 0.2}
+      duration={animation.duration.slow}
+      start={animation.duration.slow + 3}
       transitionName="node-list--transition"
       transitionLeave={false}
     >

@@ -18,7 +18,7 @@
     opacity: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: top;
     flex-wrap: nowrap;
     transition: left 500ms ease-out, opacity 500ms ease-in;
     text-align: center;
@@ -26,6 +26,13 @@
     &--active {
       opacity: 1;
       left: 0;
+    }
+
+    &__header {
+      font-weight: 200;
+      max-width: 65vw;
+      line-height: 1.5;
+      margin-top: 20px;
     }
   }
 
