@@ -1,4 +1,5 @@
 // sass-lint:disable clean-import-paths
+$font-path: '~network-canvas-ui/public/fonts';
 @import '~network-canvas-ui/src/styles/all.scss';
 @import 'ui/all';  // TODO: Migrate to UI
 @import 'utils/all';
