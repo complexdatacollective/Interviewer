@@ -12,7 +12,7 @@ const Prompt = (props) => {
 
   return (
     <div className={isActive ? 'prompts__prompt prompts__prompt--active' : 'prompts__prompt'}>
-      <h1 className="prompts__prompt__header">{label}</h1>
+      <h1 className="prompts__prompt-header">{label}</h1>
     </div>
   );
 };
