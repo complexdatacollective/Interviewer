@@ -23,7 +23,7 @@ class CheckboxGroup extends Component {
 
   render() {
     const { options, label, meta, input: { name, value } } = this.props;
-
+    console.log(value);
     return (
       <div>
         <div>{label}</div>
