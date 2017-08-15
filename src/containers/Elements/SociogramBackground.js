@@ -1,41 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { range, last, zipWith } from 'lodash';
+import SociogramRadar from './SociogramRadar';
 
-const equalByArea = (outerRadius, n) => {
-  const rsq = outerRadius ** 2;
-  const b = rsq / n;
+const SociogramBackground = ({ n, skewed, image }) => {
+  let background;
 
-  return range(1, n + 1)
-  .reduce((memo) => {
-    const previous = last(memo) || 0;
-    const next = (b + (previous ** 2)) ** 0.5;
-    return [...memo, next];
-  }, [])
-  .reverse();
-};
-
-const equalByIncrement = (outerRadius, n) =>
-  range(1, n + 1)
-  .map(v => (v * outerRadius) / n)
-  .reverse();
-
-// Weight towards a by factor
-const weightedAverage = (a, b, factor = 1) =>
-  zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
-
-const SociogramBackground = ({ n, skewed }) => {
-  const radii = skewed ?
-    weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
-    equalByIncrement(50, n);
+  if (image) {
+    background = <div className="sociogram-background-image" style={{ backgroundImage: `url(${image})` }} />;
+  } else {
+    background = <SociogramRadar n={n} skewed={skewed} />;
+  }
 
   return (
     <div className="sociogram-background">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        {radii.map((radius, index) => (
-          <circle key={index} cx="50" cy="50" r={radius} className="sociogram-background__range" />
-        ))}
-      </svg>
+      { background }
     </div>
   );
 };
@@ -43,11 +21,13 @@ const SociogramBackground = ({ n, skewed }) => {
 SociogramBackground.propTypes = {
   n: PropTypes.number,
   skewed: PropTypes.bool,
+  image: PropTypes.string,
 };
 
 SociogramBackground.defaultProps = {
   n: 4,
   skewed: true,
+  image: null,
 };
 
 export default SociogramBackground;
