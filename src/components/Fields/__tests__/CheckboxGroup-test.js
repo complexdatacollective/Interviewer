@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import CheckboxGroup from '../CheckboxGroup';
+import CheckboxGroup from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {

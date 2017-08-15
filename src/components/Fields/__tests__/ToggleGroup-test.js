@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import ToggleGroup from '../ToggleGroup';
+import ToggleGroup from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {

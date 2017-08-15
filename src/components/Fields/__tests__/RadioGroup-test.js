@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import RadioGroup from '../RadioGroup';
+import RadioGroup from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {

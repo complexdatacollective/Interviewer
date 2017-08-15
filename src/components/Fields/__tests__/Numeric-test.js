@@ -3,11 +3,11 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import Alphanumeric from '../Alphanumeric';
+import Numeric from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {
-    label: 'Alphanumeric',
+    label: 'Numeric',
     meta: {
       invalid: true,
       error: 'an error message',
@@ -16,13 +16,13 @@ const setup = (props) => {
   };
 
   const component = shallow((
-    <Alphanumeric store={createStore(() => {})} {...mockProps} />
+    <Numeric store={createStore(() => {})} {...mockProps} />
   ));
 
   return component;
 };
 
-describe('<Alphanumeric />', () => {
+describe('<Numeric />', () => {
   it('should render', () => {
     const subject = setup();
 
