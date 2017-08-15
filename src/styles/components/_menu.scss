@@ -13,16 +13,14 @@
     transform: translate3d(-100%, 0, 0);
     transition: all $animation-standard-duration $animation-default-easing;
     z-index: 2;
+    width: 370px;
 
     &--open {
       transform: translate3d(0%, 0, 0);
     }
-    @include breakpoint(small) {
-      width: 30vw;
-    }
 
     @include breakpoint(full) {
-      width: 22vw;
+      width: 425px;
     }
   }
 
