@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import validations from '../../utils/Validations';
-import components from '../../utils/fieldComponents';
+import components from '../../components/Inputs/fieldComponents';
 import { withOptionsFromSelector } from '../../behaviours';
 
 /**

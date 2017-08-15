@@ -10,6 +10,7 @@ const setup = (props) => {
     label: 'Toggle group',
     input: { value: null },
     options: ['1', '2', '3'],
+    colors: ['neon-carrot', 'kiwi', 'sea-serpent'],
     meta: {
       invalid: true,
       error: 'an error message',
