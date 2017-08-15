@@ -14,7 +14,7 @@ const label = node => node.nickname;
 const draggableType = 'POSITIONED_NODE';
 
 class NodeBucket extends Component {
-  handleDropNode = (hits, coords, node) => {
+  onDropNode = (hits, coords, node) => {
     const hit = first(hits);
     const relativeCoords = {
       x: (coords.x - hit.x) / hit.width,
@@ -36,7 +36,7 @@ class NodeBucket extends Component {
         { node &&
           <EnhancedNode
             label={label(node)}
-            onDropped={(hits, coords) => this.handleDropNode(hits, coords, node)}
+            onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
             draggableType={draggableType}
             {...node}
           />
