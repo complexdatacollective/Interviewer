@@ -22,9 +22,8 @@ class NodeBucket extends Component {
     };
 
     const { promptLayout, updateNode } = this.props;
-    const layouts = { ...node.layouts, [promptLayout]: relativeCoords };
 
-    updateNode({ ...node, layouts });
+    updateNode({ ...node, [promptLayout]: relativeCoords });
   };
 
   render() {

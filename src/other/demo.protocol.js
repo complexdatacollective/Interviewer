@@ -99,7 +99,7 @@ export default {
             {
               id: '6cl2',
               title: 'Within the past 6 months, who have you felt close to?',
-              layout: 'closeness',
+              layout: 'closenessLayout',
               background: {
                 n: 3,
                 skewed: true,
@@ -111,7 +111,7 @@ export default {
             {
               id: '6su2',
               title: "Within the past 6 months, who has been supportive?",
-              layout: 'supportive',
+              layout: 'supportiveLayout',
               background: {
                 image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/US_map_-_states.png',
               },

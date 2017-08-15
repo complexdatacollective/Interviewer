@@ -11,10 +11,7 @@ export const placedNodes = createSelector(
   activePromptLayout,
   activeStageAttributes,
   (nodes, activePromptLayout, activeStageAttributes) => {
-    const nodeHasLayout = (node) => (
-      Object.prototype.hasOwnProperty.call(node, 'layouts') &&
-      Object.prototype.hasOwnProperty.call(node.layouts, activePromptLayout)
-    );
+    const nodeHasLayout = (node) => Object.prototype.hasOwnProperty.call(node, activePromptLayout);
 
     return filter(
       filter(nodes, nodeHasLayout),
@@ -31,12 +28,7 @@ export const unplacedNodes = createSelector(
   activePromptLayout,
   activeStageAttributes,
   (nodes, activePromptLayout, activeStageAttributes) => {
-    const nodeWithoutLayout = (node) => (
-      !(
-        Object.prototype.hasOwnProperty.call(node, 'layouts') &&
-        Object.prototype.hasOwnProperty.call(node.layouts, activePromptLayout)
-      )
-    );
+    const nodeWithoutLayout = (node) => !Object.prototype.hasOwnProperty.call(node, activePromptLayout);
 
     return filter(
       filter(nodes, nodeWithoutLayout),

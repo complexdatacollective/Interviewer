@@ -59,14 +59,13 @@ class NodeLayout extends Component {
     };
 
     const { promptLayout, updateNode } = this.props;
-    const layouts = { ...node.layouts, [promptLayout]: relativeCoords };
 
-    updateNode({ ...node, layouts });
+    updateNode({ ...node, [promptLayout]: relativeCoords });
   };
 
   render() {
     const { promptLayout, nodes, activePromptLayout } = this.props;
-    console.log(nodes);
+
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType="POSITIONED_NODE">
         <div
@@ -75,10 +74,10 @@ class NodeLayout extends Component {
         >
           { nodes.map((node, key) => {
 
-            if (!Object.prototype.hasOwnProperty.call(node.layouts, promptLayout)) { return; }
+            if (!Object.prototype.hasOwnProperty.call(node, promptLayout)) { return; }
 
-            const x = node.layouts[promptLayout].x * this.state.width;
-            const y = node.layouts[promptLayout].y * this.state.height;
+            const x = node[promptLayout].x * this.state.width;
+            const y = node[promptLayout].y * this.state.height;
 
             return (
               <div key={key} className="node-layout__node" style={{ left: `${x}px`, top: `${y}px` }}>
