@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { first } from 'lodash';
+import { first, sortBy } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { activePromptLayout } from '../../selectors/session';
 import { draggable } from '../../behaviours';
@@ -51,15 +51,24 @@ NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
   promptLayout: PropTypes.string.isRequired,
+  sort: PropTypes.object,
 };
 
 NodeBucket.defaultProps = {
   node: null,
+  sort: null,
 };
+
+function getNextNode(nodes, sort) {
+  let sortedNodes = [...nodes];
+  if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
+  if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
+  return first(sortedNodes);
+}
 
 function mapStateToProps(state, ownProps) {
   return {
-    node: first(ownProps.nodes),  // TODO: configurable ordering
+    node: getNextNode(ownProps.nodes, ownProps.sort),
     promptLayout: activePromptLayout(state),
   };
 }

@@ -1,5 +1,61 @@
 /* eslint-disable */
 
+const data = {
+  "previous": {
+    nodes: [
+      {
+        uid: "previous_1",
+        type: "person",
+        name: "Anita",
+        nickname: "Annie",
+      },
+      {
+        uid: "previous_2",
+        type: "person",
+        name: "Barry",
+        nickname: "Baz",
+      },
+      {
+        uid: "previous_3",
+        type: "person",
+        name: "Carlito",
+        nickname: "Carl",
+      },
+      {
+        uid: "previous_4",
+        type: "person",
+        name: "Dee",
+        nickname: "Dee",
+      },
+      {
+        uid: "previous_5",
+        type: "person",
+        name: "Eugine",
+        nickname: "Eu",
+      },
+    ],
+  },
+  "foodNetwork": {
+    nodes: [
+      {
+        type: "food",
+        subType: "vegetable",
+        name: "tomato",
+      },
+      {
+        type: "food",
+        subType: "fruit",
+        name: "lime",
+      },
+      {
+        type: "food",
+        subType: "fruit",
+        name: "bluefruit",
+      },
+    ],
+  },
+};
+
 const fields = [
   {
     label: 'Name',
@@ -30,49 +86,7 @@ export default {
     "version": "1.2.3",
     "required": "1.2.4",
     "exportPath": "some/path/here.json",
-    "data": {
-      "previous": {
-        nodes: [
-          {
-            uid: "previous_1",
-            type: "person",
-            name: "Fred",
-            nickname: "Foo",
-          },
-          {
-            uid: "previous_2",
-            type: "person",
-            name: "Bob",
-            nickname: "Bar",
-          },
-          {
-            uid: "previous_3",
-            type: "person",
-            name: "Barry",
-            nickname: "Baz",
-          },
-        ],
-      },
-      "foodNetwork": {
-        nodes: [
-          {
-            type: "food",
-            subType: "vegetable",
-            name: "tomato",
-          },
-          {
-            type: "food",
-            subType: "fruit",
-            name: "lime",
-          },
-          {
-            type: "food",
-            subType: "fruit",
-            name: "bluefruit",
-          },
-        ],
-      },
-    },
+    "data": data,
     "stages": [
       {
         "id": "sociogram",
@@ -90,6 +104,9 @@ export default {
                 n: 3,
                 skewed: true,
               },
+              sort: {
+                by: 'nickname',
+              },
             },
             {
               id: '6su2',
@@ -97,6 +114,10 @@ export default {
               layout: 'supportive',
               background: {
                 image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/US_map_-_states.png',
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
               },
             },
           ],

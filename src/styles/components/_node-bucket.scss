@@ -1,4 +1,9 @@
 .node-bucket {
   width: 150px;
   height: 150px;
+  background: teal;
+
+  .node {
+    margin: 0;
+  }
 }

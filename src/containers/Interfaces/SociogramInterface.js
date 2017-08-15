@@ -33,7 +33,7 @@ const SociogramInterface = ({ prompt, prompts, unplacedNodes, placedNodes }) => 
         <SociogramBackground {...prompt.background} />
         <EdgeLayout />
         <NodeLayout nodes={placedNodes} />
-        <NodeBucket nodes={unplacedNodes} />
+        <NodeBucket nodes={unplacedNodes} sort={prompt.sort} />
       </Sociogram>
     </div>
   </div>
