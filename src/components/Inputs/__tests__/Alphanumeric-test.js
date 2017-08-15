@@ -3,11 +3,15 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import Alphanumeric from '../fieldComponents';
+import FieldComponents from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {
     label: 'Alphanumeric',
+    input: {
+      value: null,
+      name: 'alphanumeric_name'
+    },
     meta: {
       invalid: true,
       error: 'an error message',
@@ -16,7 +20,7 @@ const setup = (props) => {
   };
 
   const component = shallow((
-    <Alphanumeric store={createStore(() => {})} {...mockProps} />
+    <FieldComponents.Alphanumeric store={createStore(() => {})} {...mockProps} />
   ));
 
   return component;

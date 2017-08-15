@@ -3,12 +3,15 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import RadioGroup from '../fieldComponents';
+import FieldComponents from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {
     label: 'Radio group',
-    input: { value: null },
+    input: {
+      value: null,
+      name: 'radio_group'
+    },
     options: ['1', '2', '3'],
     meta: {
       invalid: true,
@@ -18,7 +21,7 @@ const setup = (props) => {
   };
 
   const component = shallow((
-    <RadioGroup store={createStore(() => {})} {...mockProps} />
+    <FieldComponents.RadioGroup store={createStore(() => {})} {...mockProps} />
   ));
 
   return component;
@@ -29,5 +32,11 @@ describe('<RadioGroup />', () => {
     const subject = setup();
 
     expect(subject).toMatchSnapshot();
+  });
+
+  it('should render a toggle for each option', () => {
+    const subject = setup();
+
+    expect(subject.find('RadioInput').length).toBe(3);
   });
 });

@@ -3,7 +3,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Field from '../Field';
-import { Alphanumeric } from '../../../ui/Fields';
+import FieldComponents from '../../../components/Inputs/fieldComponents';
 
 const attributes = {
   label: 'Name',
@@ -20,7 +20,7 @@ describe('Containers/Elements/Field', () => {
   it('Loads component from the register', () => {
     const field = shallow(<Field {...attributes} />);
 
-    expect(field.find('Field').prop('component')).toBe(Alphanumeric);
+    expect(field.find('Field').prop('component')).toBe(FieldComponents.Alphanumeric);
   });
 
   it('Loads validations from the register', () => {

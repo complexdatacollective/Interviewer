@@ -3,11 +3,15 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import Numeric from '../fieldComponents';
+import FieldComponents from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {
     label: 'Numeric',
+    input: {
+      value: null,
+      name: 'numeric'
+    },
     meta: {
       invalid: true,
       error: 'an error message',
@@ -16,7 +20,7 @@ const setup = (props) => {
   };
 
   const component = shallow((
-    <Numeric store={createStore(() => {})} {...mockProps} />
+    <FieldComponents.Numeric store={createStore(() => {})} {...mockProps} />
   ));
 
   return component;

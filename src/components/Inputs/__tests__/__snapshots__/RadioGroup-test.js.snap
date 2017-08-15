@@ -11,56 +11,25 @@ ShallowWrapper {
     <div>
         Radio group
     </div>
-    <div>
-        <div>
-            <label
-                className="radio-group__item"
-                htmlFor="undefined_1">
-                <input
-                    checked={false}
-                    id="undefined_1"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="radio"
-                    value="1" />
-                 
-                1
-            </label>
-        </div>
-        <div>
-            <label
-                className="radio-group__item"
-                htmlFor="undefined_2">
-                <input
-                    checked={false}
-                    id="undefined_2"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="radio"
-                    value="2" />
-                 
-                2
-            </label>
-        </div>
-        <div>
-            <label
-                className="radio-group__item"
-                htmlFor="undefined_3">
-                <input
-                    checked={false}
-                    id="undefined_3"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="radio"
-                    value="3" />
-                 
-                3
-            </label>
-        </div>
-    </div>
-    <div>
-        an error message
-    </div>
+    <RadioGroup
+        errorText={
+            <div>
+                an error message
+            </div>
+        }
+        name="radio_group"
+        onRadioClick={undefined}
+        value={null}>
+        <RadioInput
+            label="1"
+            value="1" />
+        <RadioInput
+            label="2"
+            value="2" />
+        <RadioInput
+            label="3"
+            value="3" />
+    </RadioGroup>
 </div>,
   "nodes": Array [
     <div
@@ -68,67 +37,37 @@ ShallowWrapper {
       <div>
             Radio group
       </div>
-      <div>
-            <div>
-                  <label
-                        className="radio-group__item"
-                        htmlFor="undefined_1">
-                        <input
-                              checked={false}
-                              id="undefined_1"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="radio"
-                              value="1" />
-                         
-                        1
-                  </label>
-            </div>
-            <div>
-                  <label
-                        className="radio-group__item"
-                        htmlFor="undefined_2">
-                        <input
-                              checked={false}
-                              id="undefined_2"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="radio"
-                              value="2" />
-                         
-                        2
-                  </label>
-            </div>
-            <div>
-                  <label
-                        className="radio-group__item"
-                        htmlFor="undefined_3">
-                        <input
-                              checked={false}
-                              id="undefined_3"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="radio"
-                              value="3" />
-                         
-                        3
-                  </label>
-            </div>
-      </div>
-      <div>
-            an error message
-      </div>
+      <RadioGroup
+            errorText={
+                  <div>
+                        an error message
+                  </div>
+            }
+            name="radio_group"
+            onRadioClick={undefined}
+            value={null}>
+            <RadioInput
+                  label="1"
+                  value="1" />
+            <RadioInput
+                  label="2"
+                  value="2" />
+            <RadioInput
+                  label="3"
+                  value="3" />
+      </RadioGroup>
 </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
+      "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <RadioGroup
         input={
                 Object {
+                        "name": "radio_group",
                         "value": null,
                       }
         }
@@ -158,11 +97,12 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": RadioGroup {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
           "input": Object {
+            "name": "radio_group",
             "value": null,
           },
           "label": "Radio group",
@@ -208,56 +148,25 @@ ShallowWrapper {
           <div>
                     Radio group
           </div>
-          <div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_1">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_1"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="1" />
-                                         
-                                        1
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_2">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_2"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="2" />
-                                         
-                                        2
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_3">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_3"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="3" />
-                                         
-                                        3
-                              </label>
-                    </div>
-          </div>
-          <div>
-                    an error message
-          </div>
+          <RadioGroup
+                    errorText={
+                              <div>
+                                        an error message
+                              </div>
+                    }
+                    name="radio_group"
+                    onRadioClick={undefined}
+                    value={null}>
+                    <RadioInput
+                              label="1"
+                              value="1" />
+                    <RadioInput
+                              label="2"
+                              value="2" />
+                    <RadioInput
+                              label="3"
+                              value="3" />
+          </RadioGroup>
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
@@ -265,56 +174,25 @@ ShallowWrapper {
           <div>
                     Radio group
           </div>
-          <div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_1">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_1"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="1" />
-                                         
-                                        1
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_2">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_2"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="2" />
-                                         
-                                        2
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="radio-group__item"
-                                        htmlFor="undefined_3">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_3"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="radio"
-                                                  value="3" />
-                                         
-                                        3
-                              </label>
-                    </div>
-          </div>
-          <div>
-                    an error message
-          </div>
+          <RadioGroup
+                    errorText={
+                              <div>
+                                        an error message
+                              </div>
+                    }
+                    name="radio_group"
+                    onRadioClick={undefined}
+                    value={null}>
+                    <RadioInput
+                              label="1"
+                              value="1" />
+                    <RadioInput
+                              label="2"
+                              value="2" />
+                    <RadioInput
+                              label="3"
+                              value="3" />
+          </RadioGroup>
 </div>,
       },
       "_renderedNodeType": 0,
@@ -330,6 +208,7 @@ ShallowWrapper {
   "unrendered": <RadioGroup
     input={
         Object {
+            "name": "radio_group",
             "value": null,
           }
     }

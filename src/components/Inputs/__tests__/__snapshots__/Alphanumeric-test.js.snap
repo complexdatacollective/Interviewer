@@ -6,31 +6,97 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div>
+  "node": <div
+    className="input__container">
     <input
-        placeholder="Alphanumeric"
+        className="input"
+        input={
+            Object {
+                "name": "alphanumeric_name",
+                "value": null,
+              }
+        }
+        meta={
+            Object {
+                "error": "an error message",
+                "invalid": true,
+              }
+        }
+        name={undefined}
+        onBlur={[Function]}
+        onChange={undefined}
+        onFocus={[Function]}
+        placeholder={null}
+        store={
+            Object {
+                "dispatch": [Function],
+                "getState": [Function],
+                "replaceReducer": [Function],
+                "subscribe": [Function],
+                Symbol(observable): [Function],
+              }
+        }
         type="text" />
-    <div>
-        an error message
-    </div>
+    <InputLabel
+        active={false}
+        className="input__label"
+        errorText={undefined}
+        label="Alphanumeric"
+        name={undefined} />
 </div>,
   "nodes": Array [
-    <div>
+    <div
+      className="input__container">
       <input
-            placeholder="Alphanumeric"
+            className="input"
+            input={
+                  Object {
+                        "name": "alphanumeric_name",
+                        "value": null,
+                      }
+            }
+            meta={
+                  Object {
+                        "error": "an error message",
+                        "invalid": true,
+                      }
+            }
+            name={undefined}
+            onBlur={[Function]}
+            onChange={undefined}
+            onFocus={[Function]}
+            placeholder={null}
+            store={
+                  Object {
+                        "dispatch": [Function],
+                        "getState": [Function],
+                        "replaceReducer": [Function],
+                        "subscribe": [Function],
+                        Symbol(observable): [Function],
+                      }
+            }
             type="text" />
-      <div>
-            an error message
-      </div>
+      <InputLabel
+            active={false}
+            className="input__label"
+            errorText={undefined}
+            label="Alphanumeric"
+            name={undefined} />
 </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
+      "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Alphanumeric
+      "_currentElement": <TextInput
+        input={
+                Object {
+                        "name": "alphanumeric_name",
+                        "value": null,
+                      }
+        }
         label="Alphanumeric"
         meta={
                 Object {
@@ -50,10 +116,16 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": TextInput {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "handleBlur": [Function],
+        "handleFocus": [Function],
         "props": Object {
+          "input": Object {
+            "name": "alphanumeric_name",
+            "value": null,
+          },
           "label": "Alphanumeric",
           "meta": Object {
             "error": "an error message",
@@ -68,7 +140,10 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "state": null,
+        "state": Object {
+          "hasValue": false,
+          "isFocused": false,
+        },
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -87,22 +162,82 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <div>
+        "_currentElement": <div
+          className="input__container">
           <input
-                    placeholder="Alphanumeric"
+                    className="input"
+                    input={
+                              Object {
+                                        "name": "alphanumeric_name",
+                                        "value": null,
+                                      }
+                    }
+                    meta={
+                              Object {
+                                        "error": "an error message",
+                                        "invalid": true,
+                                      }
+                    }
+                    name={undefined}
+                    onBlur={[Function]}
+                    onChange={undefined}
+                    onFocus={[Function]}
+                    placeholder={null}
+                    store={
+                              Object {
+                                        "dispatch": [Function],
+                                        "getState": [Function],
+                                        "replaceReducer": [Function],
+                                        "subscribe": [Function],
+                                        Symbol(observable): [Function],
+                                      }
+                    }
                     type="text" />
-          <div>
-                    an error message
-          </div>
+          <InputLabel
+                    active={false}
+                    className="input__label"
+                    errorText={undefined}
+                    label="Alphanumeric"
+                    name={undefined} />
 </div>,
         "_debugID": 2,
-        "_renderedOutput": <div>
+        "_renderedOutput": <div
+          className="input__container">
           <input
-                    placeholder="Alphanumeric"
+                    className="input"
+                    input={
+                              Object {
+                                        "name": "alphanumeric_name",
+                                        "value": null,
+                                      }
+                    }
+                    meta={
+                              Object {
+                                        "error": "an error message",
+                                        "invalid": true,
+                                      }
+                    }
+                    name={undefined}
+                    onBlur={[Function]}
+                    onChange={undefined}
+                    onFocus={[Function]}
+                    placeholder={null}
+                    store={
+                              Object {
+                                        "dispatch": [Function],
+                                        "getState": [Function],
+                                        "replaceReducer": [Function],
+                                        "subscribe": [Function],
+                                        Symbol(observable): [Function],
+                                      }
+                    }
                     type="text" />
-          <div>
-                    an error message
-          </div>
+          <InputLabel
+                    active={false}
+                    className="input__label"
+                    errorText={undefined}
+                    label="Alphanumeric"
+                    name={undefined} />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -115,7 +250,13 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Alphanumeric
+  "unrendered": <TextInput
+    input={
+        Object {
+            "name": "alphanumeric_name",
+            "value": null,
+          }
+    }
     label="Alphanumeric"
     meta={
         Object {

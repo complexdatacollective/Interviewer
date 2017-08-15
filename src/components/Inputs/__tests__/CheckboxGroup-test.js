@@ -3,12 +3,15 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import CheckboxGroup from '../fieldComponents';
+import FieldComponents from '../fieldComponents';
 
 const setup = (props) => {
   const mockProps = {
     label: 'Checkbox group',
-    input: { value: null },
+    input: {
+      value: null,
+      name: 'checkbox_name'
+    },
     options: ['1', '2', '3'],
     meta: {
       invalid: true,
@@ -17,9 +20,9 @@ const setup = (props) => {
     ...props,
   };
 
-  const component = shallow((
-    <CheckboxGroup store={createStore(() => {})} {...mockProps} />
-  ));
+  const component = shallow(
+    <FieldComponents.CheckboxGroup store={createStore(() => {})} {...mockProps} />
+  );
 
   return component;
 };
@@ -29,5 +32,11 @@ describe('<CheckboxGroup />', () => {
     const subject = setup();
 
     expect(subject).toMatchSnapshot();
+  });
+
+  it('should render a toggle for each option', () => {
+    const subject = setup();
+
+    expect(subject.find('Checkbox').length).toBe(3);
   });
 });

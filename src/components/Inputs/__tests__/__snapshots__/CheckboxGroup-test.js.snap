@@ -10,48 +10,21 @@ ShallowWrapper {
     <div>
         Checkbox group
     </div>
-    <div>
-        <label
-            htmlFor="undefined_1">
-            <input
-                checked={false}
-                id="undefined_1"
-                name={undefined}
-                onChange={[Function]}
-                type="checkbox"
-                value="1" />
-             
-            1
-        </label>
-    </div>
-    <div>
-        <label
-            htmlFor="undefined_2">
-            <input
-                checked={false}
-                id="undefined_2"
-                name={undefined}
-                onChange={[Function]}
-                type="checkbox"
-                value="2" />
-             
-            2
-        </label>
-    </div>
-    <div>
-        <label
-            htmlFor="undefined_3">
-            <input
-                checked={false}
-                id="undefined_3"
-                name={undefined}
-                onChange={[Function]}
-                type="checkbox"
-                value="3" />
-             
-            3
-        </label>
-    </div>
+    <Checkbox
+        checked={false}
+        label="1"
+        name="checkbox_name"
+        onCheck={[Function]} />
+    <Checkbox
+        checked={false}
+        label="2"
+        name="checkbox_name"
+        onCheck={[Function]} />
+    <Checkbox
+        checked={false}
+        label="3"
+        name="checkbox_name"
+        onCheck={[Function]} />
     <div>
         an error message
     </div>
@@ -61,48 +34,21 @@ ShallowWrapper {
       <div>
             Checkbox group
       </div>
-      <div>
-            <label
-                  htmlFor="undefined_1">
-                  <input
-                        checked={false}
-                        id="undefined_1"
-                        name={undefined}
-                        onChange={[Function]}
-                        type="checkbox"
-                        value="1" />
-                   
-                  1
-            </label>
-      </div>
-      <div>
-            <label
-                  htmlFor="undefined_2">
-                  <input
-                        checked={false}
-                        id="undefined_2"
-                        name={undefined}
-                        onChange={[Function]}
-                        type="checkbox"
-                        value="2" />
-                   
-                  2
-            </label>
-      </div>
-      <div>
-            <label
-                  htmlFor="undefined_3">
-                  <input
-                        checked={false}
-                        id="undefined_3"
-                        name={undefined}
-                        onChange={[Function]}
-                        type="checkbox"
-                        value="3" />
-                   
-                  3
-            </label>
-      </div>
+      <Checkbox
+            checked={false}
+            label="1"
+            name="checkbox_name"
+            onCheck={[Function]} />
+      <Checkbox
+            checked={false}
+            label="2"
+            name="checkbox_name"
+            onCheck={[Function]} />
+      <Checkbox
+            checked={false}
+            label="3"
+            name="checkbox_name"
+            onCheck={[Function]} />
       <div>
             an error message
       </div>
@@ -117,6 +63,7 @@ ShallowWrapper {
       "_currentElement": <CheckboxGroup
         input={
                 Object {
+                        "name": "checkbox_name",
                         "value": null,
                       }
         }
@@ -152,6 +99,7 @@ ShallowWrapper {
         "onClickOption": [Function],
         "props": Object {
           "input": Object {
+            "name": "checkbox_name",
             "value": null,
           },
           "label": "Checkbox group",
@@ -196,48 +144,21 @@ ShallowWrapper {
           <div>
                     Checkbox group
           </div>
-          <div>
-                    <label
-                              htmlFor="undefined_1">
-                              <input
-                                        checked={false}
-                                        id="undefined_1"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="1" />
-                               
-                              1
-                    </label>
-          </div>
-          <div>
-                    <label
-                              htmlFor="undefined_2">
-                              <input
-                                        checked={false}
-                                        id="undefined_2"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="2" />
-                               
-                              2
-                    </label>
-          </div>
-          <div>
-                    <label
-                              htmlFor="undefined_3">
-                              <input
-                                        checked={false}
-                                        id="undefined_3"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="3" />
-                               
-                              3
-                    </label>
-          </div>
+          <Checkbox
+                    checked={false}
+                    label="1"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
+          <Checkbox
+                    checked={false}
+                    label="2"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
+          <Checkbox
+                    checked={false}
+                    label="3"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
           <div>
                     an error message
           </div>
@@ -247,48 +168,21 @@ ShallowWrapper {
           <div>
                     Checkbox group
           </div>
-          <div>
-                    <label
-                              htmlFor="undefined_1">
-                              <input
-                                        checked={false}
-                                        id="undefined_1"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="1" />
-                               
-                              1
-                    </label>
-          </div>
-          <div>
-                    <label
-                              htmlFor="undefined_2">
-                              <input
-                                        checked={false}
-                                        id="undefined_2"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="2" />
-                               
-                              2
-                    </label>
-          </div>
-          <div>
-                    <label
-                              htmlFor="undefined_3">
-                              <input
-                                        checked={false}
-                                        id="undefined_3"
-                                        name={undefined}
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                        value="3" />
-                               
-                              3
-                    </label>
-          </div>
+          <Checkbox
+                    checked={false}
+                    label="1"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
+          <Checkbox
+                    checked={false}
+                    label="2"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
+          <Checkbox
+                    checked={false}
+                    label="3"
+                    name="checkbox_name"
+                    onCheck={[Function]} />
           <div>
                     an error message
           </div>
@@ -307,6 +201,7 @@ ShallowWrapper {
   "unrendered": <CheckboxGroup
     input={
         Object {
+            "name": "checkbox_name",
             "value": null,
           }
     }

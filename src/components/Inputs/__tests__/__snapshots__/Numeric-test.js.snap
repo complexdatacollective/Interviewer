@@ -6,31 +6,37 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div>
-    <input
-        placeholder="Numeric"
-        type="number" />
-    <div>
-        an error message
-    </div>
-</div>,
+  "node": <TextInput
+    errorText={undefined}
+    isNumericOnly={true}
+    label="Numeric"
+    name="numeric"
+    onKeyDown={[Function]}
+    placeholder="Numeric"
+    value={null} />,
   "nodes": Array [
-    <div>
-      <input
-            placeholder="Numeric"
-            type="number" />
-      <div>
-            an error message
-      </div>
-</div>,
+    <TextInput
+      errorText={undefined}
+      isNumericOnly={true}
+      label="Numeric"
+      name="numeric"
+      onKeyDown={[Function]}
+      placeholder="Numeric"
+      value={null} />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
+      "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <Numeric
+        input={
+                Object {
+                        "name": "numeric",
+                        "value": null,
+                      }
+        }
         label="Numeric"
         meta={
                 Object {
@@ -50,10 +56,15 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": Numeric {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "handleKeyDown": [Function],
         "props": Object {
+          "input": Object {
+            "name": "numeric",
+            "value": null,
+          },
           "label": "Numeric",
           "meta": Object {
             "error": "an error message",
@@ -87,25 +98,25 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <div>
-          <input
-                    placeholder="Numeric"
-                    type="number" />
-          <div>
-                    an error message
-          </div>
-</div>,
+        "_currentElement": <TextInput
+          errorText={undefined}
+          isNumericOnly={true}
+          label="Numeric"
+          name="numeric"
+          onKeyDown={[Function]}
+          placeholder="Numeric"
+          value={null} />,
         "_debugID": 2,
-        "_renderedOutput": <div>
-          <input
-                    placeholder="Numeric"
-                    type="number" />
-          <div>
-                    an error message
-          </div>
-</div>,
+        "_renderedOutput": <TextInput
+          errorText={undefined}
+          isNumericOnly={true}
+          label="Numeric"
+          name="numeric"
+          onKeyDown={[Function]}
+          placeholder="Numeric"
+          value={null} />,
       },
-      "_renderedNodeType": 0,
+      "_renderedNodeType": 1,
       "_rootNodeID": 0,
       "_topLevelWrapper": null,
       "_updateBatchNumber": null,
@@ -116,6 +127,12 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Numeric
+    input={
+        Object {
+            "name": "numeric",
+            "value": null,
+          }
+    }
     label="Numeric"
     meta={
         Object {

@@ -11,51 +11,24 @@ ShallowWrapper {
         Toggle group
     </div>
     <div>
-        <div>
-            <label
-                className="toggle-group__item toggle-group__item--palette-0"
-                htmlFor="undefined_1">
-                <input
-                    checked={false}
-                    id="undefined_1"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="checkbox"
-                    value="1" />
-                 
-                1
-            </label>
-        </div>
-        <div>
-            <label
-                className="toggle-group__item toggle-group__item--palette-1"
-                htmlFor="undefined_2">
-                <input
-                    checked={false}
-                    id="undefined_2"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="checkbox"
-                    value="2" />
-                 
-                2
-            </label>
-        </div>
-        <div>
-            <label
-                className="toggle-group__item toggle-group__item--palette-2"
-                htmlFor="undefined_3">
-                <input
-                    checked={false}
-                    id="undefined_3"
-                    name={undefined}
-                    onClick={[Function]}
-                    type="checkbox"
-                    value="3" />
-                 
-                3
-            </label>
-        </div>
+        <ContextInput
+            checked={false}
+            color="neon-carrot"
+            label="1"
+            name="toggle_group"
+            onCheck={[Function]} />
+        <ContextInput
+            checked={false}
+            color="kiwi"
+            label="2"
+            name="toggle_group"
+            onCheck={[Function]} />
+        <ContextInput
+            checked={false}
+            color="sea-serpent"
+            label="3"
+            name="toggle_group"
+            onCheck={[Function]} />
     </div>
     <div>
         an error message
@@ -67,51 +40,24 @@ ShallowWrapper {
             Toggle group
       </div>
       <div>
-            <div>
-                  <label
-                        className="toggle-group__item toggle-group__item--palette-0"
-                        htmlFor="undefined_1">
-                        <input
-                              checked={false}
-                              id="undefined_1"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="checkbox"
-                              value="1" />
-                         
-                        1
-                  </label>
-            </div>
-            <div>
-                  <label
-                        className="toggle-group__item toggle-group__item--palette-1"
-                        htmlFor="undefined_2">
-                        <input
-                              checked={false}
-                              id="undefined_2"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="checkbox"
-                              value="2" />
-                         
-                        2
-                  </label>
-            </div>
-            <div>
-                  <label
-                        className="toggle-group__item toggle-group__item--palette-2"
-                        htmlFor="undefined_3">
-                        <input
-                              checked={false}
-                              id="undefined_3"
-                              name={undefined}
-                              onClick={[Function]}
-                              type="checkbox"
-                              value="3" />
-                         
-                        3
-                  </label>
-            </div>
+            <ContextInput
+                  checked={false}
+                  color="neon-carrot"
+                  label="1"
+                  name="toggle_group"
+                  onCheck={[Function]} />
+            <ContextInput
+                  checked={false}
+                  color="kiwi"
+                  label="2"
+                  name="toggle_group"
+                  onCheck={[Function]} />
+            <ContextInput
+                  checked={false}
+                  color="sea-serpent"
+                  label="3"
+                  name="toggle_group"
+                  onCheck={[Function]} />
       </div>
       <div>
             an error message
@@ -125,8 +71,16 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <ToggleGroup
+        colors={
+                Array [
+                        "neon-carrot",
+                        "kiwi",
+                        "sea-serpent",
+                      ]
+        }
         input={
                 Object {
+                        "name": "toggle_group",
                         "value": null,
                       }
         }
@@ -161,7 +115,13 @@ ShallowWrapper {
         "context": Object {},
         "onClickOption": [Function],
         "props": Object {
+          "colors": Array [
+            "neon-carrot",
+            "kiwi",
+            "sea-serpent",
+          ],
           "input": Object {
+            "name": "toggle_group",
             "value": null,
           },
           "label": "Toggle group",
@@ -207,51 +167,24 @@ ShallowWrapper {
                     Toggle group
           </div>
           <div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-0"
-                                        htmlFor="undefined_1">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_1"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="1" />
-                                         
-                                        1
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-1"
-                                        htmlFor="undefined_2">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_2"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="2" />
-                                         
-                                        2
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-2"
-                                        htmlFor="undefined_3">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_3"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="3" />
-                                         
-                                        3
-                              </label>
-                    </div>
+                    <ContextInput
+                              checked={false}
+                              color="neon-carrot"
+                              label="1"
+                              name="toggle_group"
+                              onCheck={[Function]} />
+                    <ContextInput
+                              checked={false}
+                              color="kiwi"
+                              label="2"
+                              name="toggle_group"
+                              onCheck={[Function]} />
+                    <ContextInput
+                              checked={false}
+                              color="sea-serpent"
+                              label="3"
+                              name="toggle_group"
+                              onCheck={[Function]} />
           </div>
           <div>
                     an error message
@@ -263,51 +196,24 @@ ShallowWrapper {
                     Toggle group
           </div>
           <div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-0"
-                                        htmlFor="undefined_1">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_1"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="1" />
-                                         
-                                        1
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-1"
-                                        htmlFor="undefined_2">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_2"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="2" />
-                                         
-                                        2
-                              </label>
-                    </div>
-                    <div>
-                              <label
-                                        className="toggle-group__item toggle-group__item--palette-2"
-                                        htmlFor="undefined_3">
-                                        <input
-                                                  checked={false}
-                                                  id="undefined_3"
-                                                  name={undefined}
-                                                  onClick={[Function]}
-                                                  type="checkbox"
-                                                  value="3" />
-                                         
-                                        3
-                              </label>
-                    </div>
+                    <ContextInput
+                              checked={false}
+                              color="neon-carrot"
+                              label="1"
+                              name="toggle_group"
+                              onCheck={[Function]} />
+                    <ContextInput
+                              checked={false}
+                              color="kiwi"
+                              label="2"
+                              name="toggle_group"
+                              onCheck={[Function]} />
+                    <ContextInput
+                              checked={false}
+                              color="sea-serpent"
+                              label="3"
+                              name="toggle_group"
+                              onCheck={[Function]} />
           </div>
           <div>
                     an error message
@@ -325,8 +231,16 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <ToggleGroup
+    colors={
+        Array [
+            "neon-carrot",
+            "kiwi",
+            "sea-serpent",
+          ]
+    }
     input={
         Object {
+            "name": "toggle_group",
             "value": null,
           }
     }
