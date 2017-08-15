@@ -26,12 +26,9 @@
     &--pushed {
       transform-origin: 100%;
       transform-style: preserve-3d;
+      transform: translate3d(23.5vw, 0, -66vw);
 
-      @include breakpoint(medium) {
-        transform: translate3d(23.5vw, 0, -66vw);
-      }
-
-      @include breakpoint(large) {
+      @include breakpoint(full) {
         transform: translate3d(17vw, 0, -40vw);
       }
     }

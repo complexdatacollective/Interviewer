@@ -17,11 +17,11 @@
     &--open {
       transform: translate3d(0%, 0, 0);
     }
-    @include breakpoint(medium) {
+    @include breakpoint(small) {
       width: 30vw;
     }
 
-    @include breakpoint(large) {
+    @include breakpoint(full) {
       width: 22vw;
     }
   }
