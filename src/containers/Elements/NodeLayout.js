@@ -1,15 +1,12 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { throttle, first } from 'lodash';
+import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
-import { draggable } from '../../behaviours';
+import { draggable, withBounds } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { activePromptLayout } from '../../selectors/session';
+import { activePromptLayout as getPromptLayout } from '../../selectors/session';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const EnhancedNode = draggable(Node);
@@ -18,39 +15,6 @@ const label = node => node.nickname;
 const draggableType = 'POSITIONED_NODE';
 
 class NodeLayout extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      width: 0,
-      height: 0,
-      y: 0,
-      x: 0,
-    };
-
-    this.trackSize = throttle(this.trackSize, 1000 / 16);  // 24fps max
-  }
-
-  componentDidMount() {
-    this.trackSize();
-    window.addEventListener('resize', this.trackSize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.trackSize);
-  }
-
-  trackSize = () => {
-    const boundingClientRect = getAbsoluteBoundingRect(this.node);
-
-    this.setState({
-      width: boundingClientRect.width,
-      height: boundingClientRect.height,
-      y: boundingClientRect.top,
-      x: boundingClientRect.left,
-    });
-  }
-
   handleDropNode = (hits, coords, node) => {
     const hit = first(hits);
     const relativeCoords = {
@@ -64,20 +28,16 @@ class NodeLayout extends Component {
   };
 
   render() {
-    const { promptLayout, nodes, activePromptLayout } = this.props;
+    const { promptLayout, nodes, width, height } = this.props;
 
     return (
-      <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType="POSITIONED_NODE">
-        <div
-          className="node-layout"
-          ref={(node) => { this.node = node; }}
-        >
+      <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
+        <div className="node-layout">
           { nodes.map((node, key) => {
+            if (!Object.prototype.hasOwnProperty.call(node, promptLayout)) { return null; }
 
-            if (!Object.prototype.hasOwnProperty.call(node, promptLayout)) { return; }
-
-            const x = node[promptLayout].x * this.state.width;
-            const y = node[promptLayout].y * this.state.height;
+            const x = node[promptLayout].x * width;
+            const y = node[promptLayout].y * height;
 
             return (
               <div key={key} className="node-layout__node" style={{ left: `${x}px`, top: `${y}px` }}>
@@ -99,6 +59,9 @@ class NodeLayout extends Component {
 NodeLayout.propTypes = {
   nodes: PropTypes.array,
   updateNode: PropTypes.func.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  promptLayout: PropTypes.string.isRequired,
 };
 
 NodeLayout.defaultProps = {
@@ -107,7 +70,7 @@ NodeLayout.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    promptLayout: activePromptLayout(state),
+    promptLayout: getPromptLayout(state),
   };
 }
 
@@ -117,4 +80,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeLayout);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withBounds,
+)(NodeLayout);
