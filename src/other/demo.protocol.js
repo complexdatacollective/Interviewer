@@ -97,7 +97,7 @@ export default {
           "nodeType": 'person',
           "prompts": [
             {
-              id: '6cl2',
+              id: '67cl1',
               title: 'Within the past 6 months, who have you felt close to?',
               layout: 'closenessLayout',
               background: {
@@ -109,7 +109,41 @@ export default {
               },
             },
             {
-              id: '6su2',
+              id: '67su2',
+              title: "Within the past 6 months, who has been supportive?",
+              layout: 'closenessLayout',
+              edgeAttributes: {
+                supports: true,
+              },
+              canDrag: false,
+              background: {
+                n: 3,
+                skewed: true,
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
+              },
+            },
+            {
+              id: '67su3',
+              title: "Within the past 6 months, who has been supportive?",
+              layout: 'closenessLayout',
+              nodeAttributes: {
+                travel_friend: true,
+              },
+              canDrag: false,
+              background: {
+                n: 3,
+                skewed: true,
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
+              },
+            },
+            {
+              id: '67su4',
               title: "Within the past 6 months, who has been supportive?",
               layout: 'supportiveLayout',
               background: {

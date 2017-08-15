@@ -126,6 +126,14 @@ export default function draggable(WrappedComponent) {
     }
 
     render() {
+      if (!this.props.canDrag) {
+        return (
+          <div ref={(node) => { this.node = node; }}>
+            <WrappedComponent {...this.props} />
+          </div>
+        );
+      }
+
       const opacity = this.isActive() ? { opacity: 0, width: 0, height: 0 } : { opacity: 1, transition: 'all 300ms ease' };
 
       return (
@@ -145,9 +153,11 @@ export default function draggable(WrappedComponent) {
     dragStop: PropTypes.func.isRequired,
     onDropped: PropTypes.func.isRequired,
     updateActiveZones: PropTypes.func.isRequired,
+    canDrag: PropTypes.bool,
   };
 
   Draggable.defaultProps = {
+    canDrag: true,
   };
 
   function mapStateToProps(state) {
