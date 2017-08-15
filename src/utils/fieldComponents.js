@@ -6,6 +6,7 @@ import { fromPairs, map, zip } from 'lodash';
 import {
   TextInput as Alphanumeric,
   ContextInput,
+  Checkbox,
   RadioGroup as NCRadioGroup,
   RadioInput
 } from 'network-canvas-ui';
@@ -69,7 +70,7 @@ class CheckboxGroup extends Component {
       <div>
         <div>{label}</div>
         {map(options, option => (
-          <ContextInput
+          <Checkbox
             key={option}
             name={name}
             label={option}
