@@ -29,14 +29,12 @@ const SociogramInterface = ({ prompt, prompts, unplacedNodes, placedNodes }) => 
       <PromptSwiper prompts={prompts} />
     </div>
     <div className="sociogram-interface__sociogram">
-      <div className="sociogram-interface__container">
-        <Sociogram>
-          <SociogramBackground {...prompt.background} />
-          <EdgeLayout />
-          <NodeLayout nodes={placedNodes} />
-          <NodeBucket nodes={unplacedNodes} />
-        </Sociogram>
-      </div>
+      <Sociogram>
+        <SociogramBackground {...prompt.background} />
+        <EdgeLayout />
+        <NodeLayout nodes={placedNodes} />
+        <NodeBucket nodes={unplacedNodes} />
+      </Sociogram>
     </div>
   </div>
 );
