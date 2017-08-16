@@ -3,10 +3,16 @@
   display: flex;
   flex-direction: column;
   opacity: 1;
-  margin-right: 50px;
-  width: 375px;
+  margin-right: 0;
+  width: 30vw;
+  max-width:435px;
   transform: translateZ(0);
   will-change: transform;
+
+  @include breakpoint('full') {
+    width:435px;
+    margin-right: 30px;
+  }
 
   &--minimise {
     margin-right: 0;

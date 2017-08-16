@@ -1,13 +1,19 @@
 .name-generator {
 
   height: 100vh;
-  padding: 20px 0 80px;
+  padding: 20px 30px 20px;
+  @include breakpoint('full') {
+      padding: 20px 80px 80px;
+  }
   overflow: hidden;
   display: flex;
   flex-direction: column;
 
   &__prompt {
-    flex: 0 0 200px;
+    flex: 0 0 12vw;
+    @include breakpoint('full') {
+        flex: 0 0 200px;
+    }
   }
 
   &__main {
@@ -23,16 +29,20 @@
     flex: 3 1 auto;
     height: 100%;
     display: flex;
-
     .node {
       width: 175px;
       height: 175px;
+      @include breakpoint('full') {
+        width: 175px;
+        height: 175px;
+      }
     }
   }
 
   &__panels {
     flex: 0 0 auto;
     height: 100%;
+    max-height: 80vh; // Fix for Safari abs. positioned flex box child bug.
     display: flex;
   }
 

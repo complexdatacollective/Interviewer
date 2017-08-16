@@ -12,7 +12,7 @@ const Panel = ({ title, children, minimise }) => {
   );
   return (
     <div className={panelClasses}>
-      <div className="panel__heading"><h3>{title}</h3></div>
+      <div className="panel__heading"><h3 className="panel__heading-header">{title}</h3></div>
       <div className="panel__content">
         {children}
       </div>
