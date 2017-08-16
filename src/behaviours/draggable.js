@@ -68,6 +68,10 @@ export default function draggable(WrappedComponent) {
       const hits = this.getHits(getCoords(event, draggableData));
       this.props.updateActiveZones(hits.map(hit => hit.name));
 
+      if (hits.length > 0) {
+        this.props.onDrag(hits, getCoords(event, draggableData));
+      }
+
       this.updateDrag(event, draggableData);
     }
 
@@ -151,13 +155,16 @@ export default function draggable(WrappedComponent) {
     draggableType: PropTypes.string.isRequired,
     dragStart: PropTypes.func.isRequired,
     dragStop: PropTypes.func.isRequired,
-    onDropped: PropTypes.func.isRequired,
+    onDropped: PropTypes.func,
+    onDrag: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
     canDrag: PropTypes.bool,
   };
 
   Draggable.defaultProps = {
     canDrag: true,
+    onDropped: () => {},
+    onDrag: () => {},
   };
 
   function mapStateToProps(state) {

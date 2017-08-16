@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { find } from 'lodash';
 
 const getCoords = (nodes, edge) => {
-  console.log(edge);
   const from = find(nodes, ['id', edge.from]);
   const to = find(nodes, ['id', edge.to]);
 
-  if (!from || !to) { return { error: true }; }
+  if (!from || !to) { return { from: null, to: null }; }
 
   return {
     from: from.closenessLayout,
@@ -20,8 +19,8 @@ const EdgeLayout = ({ nodes, edges }) => (
     <svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <rect x="0" y="0" width="0.1" height="0.1" />
       { edges.map((edge, key) => {
-        const { from, to, error } = getCoords(nodes, edge);
-        if (error) { return null; }
+        const { from, to } = getCoords(nodes, edge);
+        if (!from || !to) { return null; }
         return <line key={key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} />;
       }) }
     </svg>

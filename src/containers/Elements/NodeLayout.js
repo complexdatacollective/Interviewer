@@ -23,15 +23,13 @@ class NodeLayout extends Component {
       connectFrom: null,
     };
   }
-  onDropNode = (hits, coords, node) => {
-    const { prompt, updateNode } = this.props;
-    const hit = first(hits);
-    const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
-    };
 
-    updateNode({ ...node, [prompt.layout]: relativeCoords });
+  onDropNode = (hits, coords, node) => {
+    this.updateNodeLayout(hits, coords, node);
+  };
+
+  onDragNode = (hits, coords, node) => {
+    this.updateNodeLayout(hits, coords, node);
   };
 
   onSelectNode = (node) => {
@@ -45,6 +43,17 @@ class NodeLayout extends Component {
       default:
     }
   };
+
+  updateNodeLayout = (hits, coords, node) => {
+    const { prompt, updateNode } = this.props;
+    const hit = first(hits);
+    const relativeCoords = {
+      x: (coords.x - hit.x) / hit.width,
+      y: (coords.y - hit.y) / hit.height,
+    };
+
+    updateNode({ ...node, [prompt.layout]: relativeCoords });
+  }
 
   connectNode(node) {
     const nodeId = node.id;
@@ -98,6 +107,7 @@ class NodeLayout extends Component {
                   label={label(node)}
                   draggableType={draggableType}
                   onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
+                  onDrag={(hits, coords) => this.onDragNode(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
                   selected={this.isSelected(node)}
                   canDrag={canDrag}
