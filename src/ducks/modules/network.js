@@ -1,8 +1,9 @@
-import { maxBy, reject, findIndex } from 'lodash';
+import { maxBy, reject, findIndex, isMatch, omit } from 'lodash';
 
 const ADD_NODE = 'ADD_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
+const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 const ADD_EDGE = 'ADD_EDGE';
 const REMOVE_EDGE = 'REMOVE_EDGE';
 const SET_EGO = 'SET_EGO';
@@ -14,10 +15,13 @@ const initialState = {
   edges: [],
 };
 
+// We use these internally to uniquely identify nodes accross previous data / network data
 function nextUid(nodes) {
   return `${Date.now()}_${nodes.length + 1}`;
 }
 
+// We use these internally to uniquely identify nodes accross network data only
+// (previous data is immutable)
 function nextId(nodes) {
   if (nodes.length === 0) { return 1; }
   return maxBy(nodes, 'id').id + 1;
@@ -35,19 +39,53 @@ export default function reducer(state = initialState, action = {}) {
         nodes: [...state.nodes, node],
       };
     }
+    case TOGGLE_NODE_ATTRIBUTES: {
+      const nodes = [...state.nodes];
+      const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
+      let node = { ...state.nodes[nodeIndex] };
+
+      if (isMatch(node, action.attributes)) {
+        node = omit(node, Object.getOwnPropertyNames(action.attributes));
+      } else {
+        node = { ...node, ...action.attributes };
+      }
+
+      nodes[nodeIndex] = {
+        ...node,
+        id: nodes[nodeIndex].id,   // ids can't be altered
+        uid: nodes[nodeIndex].uid, // uids can't be altered
+      };
+
+      return {
+        ...state,
+        nodes,
+      };
+    }
     case UPDATE_NODE: {
       const nodes = [...state.nodes];
       const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
-      nodes[nodeIndex] = { ...action.node, id: nodes[nodeIndex].id };  // id can't be altered
+
+      nodes[nodeIndex] = {
+        ...action.node,
+        id: nodes[nodeIndex].id,   // ids can't be altered
+        uid: nodes[nodeIndex].uid, // uids can't be altered
+      };
+
       return {
         ...state,
-        nodes: [...nodes],
+        nodes,
       };
     }
     case REMOVE_NODE:
+      // TODO: Shouldn't this use node.id?
       return {
         ...state,
         nodes: reject(state.nodes, node => node.uid === action.uid),
+      };
+    case ADD_EDGE:
+      return {
+        ...state,
+        edges: [...state.edges, action.edge],
       };
     default:
       return state;
@@ -68,6 +106,14 @@ function updateNode(node) {
   };
 }
 
+function toggleNodeAttributes(node, attributes) {
+  return {
+    type: TOGGLE_NODE_ATTRIBUTES,
+    node,
+    attributes,
+  };
+}
+
 function removeNode(uid) {
   return {
     type: REMOVE_NODE,
@@ -75,15 +121,26 @@ function removeNode(uid) {
   };
 }
 
+
+function addEdge(edge) {
+  return {
+    type: ADD_EDGE,
+    edge,
+  };
+}
+
 const actionCreators = {
   addNode,
   updateNode,
   removeNode,
+  addEdge,
+  toggleNodeAttributes,
 };
 
 const actionTypes = {
   ADD_NODE,
   UPDATE_NODE,
+  TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
   ADD_EDGE,
   REMOVE_EDGE,

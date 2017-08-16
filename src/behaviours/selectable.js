@@ -4,7 +4,6 @@ import Touch from 'react-hammerjs';
 
 export default function selectable(WrappedComponent) {
   const Selectable = (props) => {
-    console.log(props.canSelect);
     if (!props.canSelect) { return <WrappedComponent {...props} />; }
     return (
       <Touch onTap={props.onSelected}>

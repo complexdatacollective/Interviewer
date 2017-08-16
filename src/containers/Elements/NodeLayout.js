@@ -16,6 +16,13 @@ const draggableType = 'POSITIONED_NODE';
 const EnhancedNode = draggable(selectable(Node));
 
 class NodeLayout extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      connectFrom: null,
+    };
+  }
   onDropNode = (hits, coords, node) => {
     const { prompt, updateNode } = this.props;
     const hit = first(hits);
@@ -28,8 +35,42 @@ class NodeLayout extends Component {
   };
 
   onSelectNode = (node) => {
-    console.log('SELECTED', node);
+    if (!this.props.prompt.selectAction) { return; }
+
+    switch (this.props.prompt.selectAction) {
+      case 'EDGE':
+        this.connectNode(node); break;
+      case 'ATTRIBUTES':
+        this.toggleNodeAttributes(node); break;
+      default:
+    }
   };
+
+  connectNode(node) {
+    const nodeId = node.id;
+    const edgeType = this.props.prompt.edgeType;
+    const connectFrom = this.state.connectFrom;
+
+
+    if (!connectFrom) {
+      this.setState({ connectFrom: nodeId });
+      return;
+    }
+
+    if (connectFrom !== nodeId) {
+      this.props.addEdge({
+        from: connectFrom,
+        to: nodeId,
+        type: edgeType,
+      });
+    }
+
+    this.setState({ connectFrom: null });
+  }
+
+  toggleNodeAttributes(node) {
+    this.props.toggleNodeAttributes(node, this.props.prompt.nodeAttributes);
+  }
 
   render() {
     const { prompt, nodes, width, height } = this.props;
@@ -69,6 +110,8 @@ class NodeLayout extends Component {
 NodeLayout.propTypes = {
   nodes: PropTypes.array,
   updateNode: PropTypes.func.isRequired,
+  addEdge: PropTypes.func.isRequired,
+  toggleNodeAttributes: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   prompt: PropTypes.object.isRequired,
@@ -87,6 +130,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
+    addEdge: bindActionCreators(networkActions.addEdge, dispatch),
   };
 }
 

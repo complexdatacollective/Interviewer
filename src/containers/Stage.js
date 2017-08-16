@@ -46,7 +46,7 @@ class Stage extends Component {
           </div>
           <div className="stage__interface">
             { CurrentInterface &&
-              <CurrentInterface config={currentStage} />
+              <CurrentInterface config={currentStage} key={currentStage.id} />
             }
           </div>
           <div className="stage__control">

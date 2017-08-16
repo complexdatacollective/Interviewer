@@ -100,6 +100,7 @@ export default {
               id: '67cl1',
               title: 'Within the past 6 months, who have you felt close to?',
               layout: 'closenessLayout',
+              canSelect: false,
               background: {
                 n: 3,
                 skewed: true,
@@ -112,10 +113,9 @@ export default {
               id: '67su2',
               title: "Within the past 6 months, who has been supportive?",
               layout: 'closenessLayout',
-              edgeAttributes: {
-                supports: true,
-              },
+              edgeType: 'supports',
               canDrag: false,
+              selectAction: 'EDGE',
               background: {
                 n: 3,
                 skewed: true,
@@ -133,6 +133,7 @@ export default {
                 travel_friend: true,
               },
               canDrag: false,
+              selectAction: 'ATTRIBUTES',
               background: {
                 n: 3,
                 skewed: true,
