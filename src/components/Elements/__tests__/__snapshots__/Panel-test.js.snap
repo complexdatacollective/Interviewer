@@ -11,7 +11,7 @@ ShallowWrapper {
     <div
         className="panel__heading">
         <h3
-            className="panel__heading__header">
+            className="panel__heading-header">
             foo
         </h3>
     </div>
@@ -28,7 +28,7 @@ ShallowWrapper {
       <div
             className="panel__heading">
             <h3
-                  className="panel__heading__header">
+                  className="panel__heading-header">
                   foo
             </h3>
       </div>
@@ -91,7 +91,7 @@ ShallowWrapper {
           <div
                     className="panel__heading">
                     <h3
-                              className="panel__heading__header">
+                              className="panel__heading-header">
                               foo
                     </h3>
           </div>
@@ -108,7 +108,7 @@ ShallowWrapper {
           <div
                     className="panel__heading">
                     <h3
-                              className="panel__heading__header">
+                              className="panel__heading-header">
                               foo
                     </h3>
           </div>
