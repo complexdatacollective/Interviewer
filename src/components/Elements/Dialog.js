@@ -1,58 +1,52 @@
-/* eslint-disable */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
-import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
+import { Button } from 'network-canvas-ui';
 
 /**
   * Renders a dialog box.
   */
 const Dialog = (props) => {
   const {
-    show,
-    children,
     title,
-    onClose,
+    content,
+    showCancelButton,
+    onDialogCancel,
+    onDialogConfirm,
   } = props;
 
+  let cancelButton = null;
+  if (showCancelButton) {
+    cancelButton = <Button onClick={onDialogCancel} content="Cancel" />;
+  }
+
   return (
-    <CSSTransitionGroup
-     transitionName="dialog--transition"
-     transitionEnterTimeout={animation.duration.standard}
-     transitionLeaveTimeout={animation.duration.standard}
-    >
-      { show &&
-        <div key="dialog" className="dialog" onClick={onClose}>
-          <div className="dialog__window" onClick={e => e.stopPropagation()}>
-            <div className="dialog__layout">
-              <div className="dialog__layout-title">
-                <h1>{title}</h1>
-              </div>
-              <div className="dialog__layout-content">
-                {children}
-              </div>
-            </div>
-            <button className="dialog__close" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      }
-    </CSSTransitionGroup>
+    <div className="dialog">
+      <h1>{ title }</h1>
+      <p>
+        { content }
+      </p>
+      <footer>
+        { cancelButton }
+        <Button onClick={onDialogConfirm} content="Confirm" />
+      </footer>
+    </div>
   );
 };
 
 Dialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  show: PropTypes.bool,
-  children: PropTypes.any,
+  title: PropTypes.string,
+  content: PropTypes.string,
+  showCancelButton: PropTypes.bool,
+  onDialogCancel: PropTypes.func,
+  onDialogConfirm: PropTypes.func,
 };
 
 Dialog.defaultProps = {
-  show: false,
-  children: null,
+  title: 'This is my dialog title',
+  content: 'This is my dialog.',
+  showCancelButton: true,
+  onDialogCancel: {},
+  onDialogConfirm: {},
 };
 
 export default Dialog;

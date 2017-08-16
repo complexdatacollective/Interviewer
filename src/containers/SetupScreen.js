@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Button, TextInput } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/Elements';
+import { Dialog } from '../components/Elements';
 
 const formConfig = {
   formName: 'setup',
@@ -39,6 +40,18 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
+  onClickShowDialog = () => {
+    this.props.loadDemoProtocol();
+  }
+
+  onDialogConfirm = () => {
+    alert('dialog confirmed');
+  }
+
+  onDialogCancel = () => {
+    alert('dialog cancelled');
+  }
+
   render() {
     if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
 
@@ -66,6 +79,17 @@ class Setup extends Component {
           name="protocolLocation"
           label="Protocol Location"
           value="Josh is sweet"
+        />
+        <hr />
+        <Button onClick={this.onClickLoadDemoProtocol} content="Trigger dialog" />
+        <Dialog
+          isOpen="false"
+          title="This is my dialog"
+          content="This is my content message"
+          tyoe="warning"
+          showCancelButton
+          onDialogConfirm={this.onDialogConfirm}
+          onDialogCancel={this.onDialogCancel}
         />
       </div>
     );
