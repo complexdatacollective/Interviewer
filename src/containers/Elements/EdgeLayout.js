@@ -17,11 +17,10 @@ const getCoords = (nodes, edge) => {
 const EdgeLayout = ({ nodes, edges }) => (
   <div className="edge-layout">
     <svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <rect x="0" y="0" width="0.1" height="0.1" />
-      { edges.map((edge, key) => {
+      { edges.map((edge) => {
         const { from, to } = getCoords(nodes, edge);
         if (!from || !to) { return null; }
-        return <line key={key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} />;
+        return <line key={`${edge.from}_${edge.to}`} x1={from.x} y1={from.y} x2={to.x} y2={to.y} />;
       }) }
     </svg>
   </div>

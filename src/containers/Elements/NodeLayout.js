@@ -82,8 +82,14 @@ class NodeLayout extends Component {
   }
 
   isSelected(node) {
-    if (!this.props.prompt.nodeAttributes) { return false; }
-    return isMatch(node, this.props.prompt.nodeAttributes);
+    switch (this.props.prompt.selectAction) {
+      case 'EDGE':
+        return (node.id === this.state.connectFrom);
+      case 'ATTRIBUTES':
+        return isMatch(node, this.props.prompt.nodeAttributes);
+      default:
+        return false;
+    }
   }
 
   render() {
