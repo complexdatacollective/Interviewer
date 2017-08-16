@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { first } from 'lodash';
+import { first, isMatch } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
@@ -72,6 +72,11 @@ class NodeLayout extends Component {
     this.props.toggleNodeAttributes(node, this.props.prompt.nodeAttributes);
   }
 
+  isSelected(node) {
+    if (!this.props.prompt.nodeAttributes) { return false; }
+    return isMatch(node, this.props.prompt.nodeAttributes);
+  }
+
   render() {
     const { prompt, nodes, width, height } = this.props;
 
@@ -94,6 +99,7 @@ class NodeLayout extends Component {
                   draggableType={draggableType}
                   onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
+                  selected={this.isSelected(node)}
                   canDrag={canDrag}
                   canSelect={canSelect}
                   {...node}
