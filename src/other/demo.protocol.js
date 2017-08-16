@@ -100,6 +100,7 @@ export default {
               id: '67cl1',
               title: 'Within the past 6 months, who have you felt close to?',
               layout: 'closenessLayout',
+              edgeType: 'supports',
               canSelect: false,
               background: {
                 n: 3,
@@ -150,6 +151,8 @@ export default {
               background: {
                 image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/US_map_-_states.png',
               },
+              edgeType: 'awesome',
+              selectAction: 'EDGE',
               sort: {
                 by: 'nickname',
                 order: 'DESC',

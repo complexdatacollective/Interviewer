@@ -83,6 +83,7 @@ export default function reducer(state = initialState, action = {}) {
         nodes: reject(state.nodes, node => node.uid === action.uid),
       };
     case ADD_EDGE:
+      if (findIndex(state.edges, action.edge) !== -1) { return state; }
       return {
         ...state,
         edges: [...state.edges, action.edge],

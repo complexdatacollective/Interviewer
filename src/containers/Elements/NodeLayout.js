@@ -6,7 +6,7 @@ import { first, isMatch } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { prompt as getPrompt } from '../../selectors/session';
+import { activePrompt } from '../../selectors/session';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const label = node => node.nickname;
@@ -23,14 +23,6 @@ class NodeLayout extends Component {
       connectFrom: null,
     };
   }
-
-  onDropNode = (hits, coords, node) => {
-    this.updateNodeLayout(hits, coords, node);
-  };
-
-  onDragNode = (hits, coords, node) => {
-    this.updateNodeLayout(hits, coords, node);
-  };
 
   onSelectNode = (node) => {
     if (!this.props.prompt.selectAction) { return; }
@@ -112,8 +104,8 @@ class NodeLayout extends Component {
                 <EnhancedNode
                   label={label(node)}
                   draggableType={draggableType}
-                  onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
-                  onDrag={(hits, coords) => this.onDragNode(hits, coords, node)}
+                  onDropped={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
+                  onDrag={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
                   selected={this.isSelected(node)}
                   canDrag={canDrag}
@@ -145,7 +137,7 @@ NodeLayout.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    prompt: getPrompt(state),
+    prompt: activePrompt(state),
   };
 }
 

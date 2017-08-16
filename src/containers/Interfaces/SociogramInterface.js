@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unused-prop-types */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,18 +10,18 @@ import {
   PromptSwiper,
 } from '../Elements';
 import {
-  unplacedNodes as getUnplacedNodes,
-  placedNodes as getPlacedNodes,
+  getUnplacedNodes,
+  getPlacedNodes,
 } from '../../selectors/nodes';
 import {
-  prompt as getPrompt,
+  activePrompt,
 } from '../../selectors/session';
 
 /**
   * Sociogram Interface
   * @extends Component
   */
-const SociogramInterface = ({ prompt, prompts, unplacedNodes, placedNodes, edges }) => (
+const SociogramInterface = ({ prompt, prompts, unplacedNodes, placedNodes }) => (
   <div className="sociogram-interface">
     <div className="sociogram-interface__prompts">
       <PromptSwiper prompts={prompts} />
@@ -31,7 +29,7 @@ const SociogramInterface = ({ prompt, prompts, unplacedNodes, placedNodes, edges
     <div className="sociogram-interface__sociogram">
       <Sociogram>
         <SociogramBackground {...prompt.background} />
-        <EdgeLayout nodes={placedNodes} edges={edges} />
+        { prompt.edgeType && <EdgeLayout /> }
         <NodeLayout nodes={placedNodes} />
         <NodeBucket nodes={unplacedNodes} sort={prompt.sort} />
       </Sociogram>
@@ -45,15 +43,13 @@ SociogramInterface.propTypes = {
   prompt: PropTypes.object.isRequired,
   placedNodes: PropTypes.array.isRequired,
   unplacedNodes: PropTypes.array.isRequired,
-  edges: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     unplacedNodes: getUnplacedNodes(state),
     placedNodes: getPlacedNodes(state),
-    edges: state.network.edges,
-    prompt: getPrompt(state),
+    prompt: activePrompt(state),
     prompts: ownProps.config.params.prompts,
   };
 }

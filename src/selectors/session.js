@@ -27,19 +27,19 @@ export const filteredStages = createSelector(
     stages.filter(stage => stage.title.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );
 
-export const prompt = createSelector(
+export const activePrompt = createSelector(
   promptIndex,
   stage,
   (promptIndex, stage) => stage.params.prompts[promptIndex],
 );
 
 export const activePromptAttributes = createSelector(
-  prompt,
+  activePrompt,
   prompt => prompt.nodeAttributes,
 );
 
 export const activePromptLayout = createSelector(
-  prompt,
+  activePrompt,
   prompt => prompt.layout,
 );
 
@@ -49,7 +49,7 @@ export const activeStageAttributes = createSelector(
 );
 
 export const activeOriginAttributes = createSelector(
-  prompt,
+  activePrompt,
   stage,
   (prompt, stage) => ({ stageId: stage.id, promptId: prompt.id }),
 );
