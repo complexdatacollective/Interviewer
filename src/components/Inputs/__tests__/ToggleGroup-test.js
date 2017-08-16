@@ -4,7 +4,6 @@ import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
 
-import { ContextInput } from 'network-canvas-ui';
 import FieldComponents from '../fieldComponents';
 
 const setup = (props) => {
@@ -12,7 +11,7 @@ const setup = (props) => {
     label: 'Toggle group',
     input: {
       value: null,
-      name: 'toggle_group'
+      name: 'toggle_group',
     },
     options: ['1', '2', '3'],
     colors: ['neon-carrot', 'kiwi', 'sea-serpent'],

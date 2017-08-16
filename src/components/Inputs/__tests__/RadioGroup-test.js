@@ -10,7 +10,7 @@ const setup = (props) => {
     label: 'Radio group',
     input: {
       value: null,
-      name: 'radio_group'
+      name: 'radio_group',
     },
     options: ['1', '2', '3'],
     meta: {

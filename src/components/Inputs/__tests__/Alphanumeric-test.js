@@ -10,7 +10,7 @@ const setup = (props) => {
     label: 'Alphanumeric',
     input: {
       value: null,
-      name: 'alphanumeric_name'
+      name: 'alphanumeric_name',
     },
     meta: {
       invalid: true,

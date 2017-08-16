@@ -10,7 +10,7 @@ const setup = (props) => {
     label: 'Checkbox group',
     input: {
       value: null,
-      name: 'checkbox_name'
+      name: 'checkbox_name',
     },
     options: ['1', '2', '3'],
     meta: {
@@ -20,9 +20,12 @@ const setup = (props) => {
     ...props,
   };
 
-  const component = shallow(
-    <FieldComponents.CheckboxGroup store={createStore(() => {})} {...mockProps} />
-  );
+  const component = shallow((
+    <FieldComponents.CheckboxGroup
+      store={createStore(() => {})}
+      {...mockProps}
+    />
+  ));
 
   return component;
 };
