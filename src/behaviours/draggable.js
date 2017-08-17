@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -101,7 +99,7 @@ export default function draggable(WrappedComponent) {
     }
 
     createPreview = (event, draggableData) => {
-      const draggablePreview = new DraggablePreview(this.node);
+      const draggablePreview = new DraggablePreview(this.node, this.props.animate);
       const coords = getCoords(event, draggableData);
 
       this.setState({
@@ -159,10 +157,12 @@ export default function draggable(WrappedComponent) {
     onDrag: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
     canDrag: PropTypes.bool,
+    animate: PropTypes.bool,
   };
 
   Draggable.defaultProps = {
     canDrag: true,
+    animate: true,
     onDropped: () => {},
     onDrag: () => {},
   };

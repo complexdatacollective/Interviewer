@@ -110,6 +110,7 @@ class NodeLayout extends Component {
                   selected={this.isSelected(node)}
                   canDrag={canDrag}
                   canSelect={canSelect}
+                  animate={false}
                   {...node}
                 />
               </div>
