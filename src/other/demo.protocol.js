@@ -149,7 +149,7 @@ export default {
               title: "Within the past 6 months, who has been supportive?",
               layout: 'supportiveLayout',
               background: {
-                image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/US_map_-_states.png',
+                image: 'map.svg',
               },
               edgeType: 'awesome',
               selectAction: 'EDGE',
