@@ -5,6 +5,7 @@ const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
 const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 const ADD_EDGE = 'ADD_EDGE';
+const TOGGLE_EDGE = 'TOGGLE_EDGE';
 const REMOVE_EDGE = 'REMOVE_EDGE';
 const SET_EGO = 'SET_EGO';
 const UNSET_EGO = 'UNSET_EGO';
@@ -88,6 +89,17 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         edges: [...state.edges, action.edge],
       };
+    case TOGGLE_EDGE:
+      if (findIndex(state.edges, action.edge) !== -1) {
+        return {
+          ...state,
+          edges: reject(state.edges, action.edge),
+        };
+      }
+      return {
+        ...state,
+        edges: [...state.edges, action.edge],
+      };
     default:
       return state;
   }
@@ -122,10 +134,16 @@ function removeNode(uid) {
   };
 }
 
-
 function addEdge(edge) {
   return {
     type: ADD_EDGE,
+    edge,
+  };
+}
+
+function toggleEdge(edge) {
+  return {
+    type: TOGGLE_EDGE,
     edge,
   };
 }
@@ -135,6 +153,7 @@ const actionCreators = {
   updateNode,
   removeNode,
   addEdge,
+  toggleEdge,
   toggleNodeAttributes,
 };
 
@@ -144,6 +163,7 @@ const actionTypes = {
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
   ADD_EDGE,
+  TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,
   UNSET_EGO,

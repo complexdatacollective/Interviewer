@@ -7,7 +7,7 @@ import { NodeLayout } from '../../Elements/NodeLayout';
 const mockProps = {
   nodes: [],
   updateNode: () => {},
-  addEdge: () => {},
+  toggleEdge: () => {},
   toggleNodeAttributes: () => {},
   width: 123,
   height: 456,

@@ -59,7 +59,7 @@ export class NodeLayout extends Component {
     }
 
     if (connectFrom !== nodeId) {
-      this.props.addEdge({
+      this.props.toggleEdge({
         from: connectFrom,
         to: nodeId,
         type: edgeType,
@@ -125,7 +125,7 @@ export class NodeLayout extends Component {
 NodeLayout.propTypes = {
   nodes: PropTypes.array,
   updateNode: PropTypes.func.isRequired,
-  addEdge: PropTypes.func.isRequired,
+  toggleEdge: PropTypes.func.isRequired,
   toggleNodeAttributes: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
@@ -146,7 +146,7 @@ function mapDispatchToProps(dispatch) {
   return {
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
-    addEdge: bindActionCreators(networkActions.addEdge, dispatch),
+    toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
   };
 }
 
