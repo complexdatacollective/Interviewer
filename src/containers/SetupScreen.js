@@ -84,13 +84,14 @@ class Setup extends Component {
         <Button onClick={this.onClickLoadDemoProtocol} content="Trigger dialog" />
         <Dialog
           isOpen="false"
-          title="This is my dialog"
-          content="This is my content message"
-          tyoe="warning"
+          title="An update is available"
+          type="info"
           showCancelButton
-          onDialogConfirm={this.onDialogConfirm}
-          onDialogCancel={this.onDialogCancel}
-        />
+          onConfirm={this.onDialogConfirm}
+          onCancel={this.onDialogCancel}
+        >
+          <p>There is an update available for this software. Would you like to download it now?</p>
+        </Dialog>
       </div>
     );
   }

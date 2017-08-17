@@ -10,11 +10,11 @@ $component-name: modal;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize(palette('background'), .1);
+  background-color: transparentize(palette('modal-overlay'), .1);
 
   &__window {
     width: 750px;
-    background: palette('light-background');
+    background: palette('modal-main-panel');
     box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
     position: relative;
   }

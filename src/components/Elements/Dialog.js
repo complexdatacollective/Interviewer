@@ -1,6 +1,10 @@
+/* eslint-disable */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'network-canvas-ui';
+import { Button, Icon, animation } from 'network-canvas-ui';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 /**
   * Renders a dialog box.
@@ -8,45 +12,64 @@ import { Button } from 'network-canvas-ui';
 const Dialog = (props) => {
   const {
     title,
-    content,
+    children,
+    show,
     showCancelButton,
-    onDialogCancel,
-    onDialogConfirm,
+    onCancel,
+    onConfirm,
+    type,
   } = props;
 
   let cancelButton = null;
   if (showCancelButton) {
-    cancelButton = <Button onClick={onDialogCancel} content="Cancel" />;
+    cancelButton = <Button color="navy-taupe" onClick={onCancel} icon={<Icon name="close" />} > Cancel</Button>;
   }
 
   return (
-    <div className="dialog">
-      <h1>{ title }</h1>
-      <p>
-        { content }
-      </p>
-      <footer>
-        { cancelButton }
-        <Button onClick={onDialogConfirm} content="Confirm" />
-      </footer>
-    </div>
+    <CSSTransitionGroup
+      transitionName="dialog--transition"
+      transitionEnterTimeout={animation.duration.standard}
+      transitionLeaveTimeout={animation.duration.standard}
+    >
+      { show &&
+        <div key="dialog" className="dialog" onClick={onCancel}>
+          <div className="dialog__window" onClick={e => e.stopPropagation()}>
+            <div className="dialog__layout">
+              <div className="dialog__layout-icon">
+                <Icon name="info" />
+              </div>
+              <div className="dialog__layout-content">
+                <h2 className="dialog__layout-title">{title}</h2>
+                {children}
+              </div>
+            </div>
+            <footer className="dialog__footer">
+              { cancelButton }
+              <Button onClick={onConfirm} content="Confirm" />
+            </footer>
+          </div>
+        </div>
+      }
+    </CSSTransitionGroup>
   );
 };
 
 Dialog.propTypes = {
   title: PropTypes.string,
-  content: PropTypes.string,
+  children: PropTypes.any,
+  show: PropTypes.bool,
   showCancelButton: PropTypes.bool,
-  onDialogCancel: PropTypes.func,
-  onDialogConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
+  onConfirm: PropTypes.func,
 };
 
 Dialog.defaultProps = {
   title: 'This is my dialog title',
-  content: 'This is my dialog.',
+  children: null,
+  show: true,
   showCancelButton: true,
-  onDialogCancel: {},
-  onDialogConfirm: {},
+  onCancel: {},
+  onConfirm: {},
 };
 
 export default Dialog;
