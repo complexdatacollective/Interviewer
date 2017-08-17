@@ -1,11 +1,11 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { DraggableCore } from 'react-draggable';
-import { CSSTransitionGroup } from 'react-transition-group';
 import { filter } from 'lodash';
-import { animation } from 'network-canvas-ui';
 import uidGenerator from '../utils/uidGenerator';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
@@ -126,21 +126,13 @@ export default function draggable(WrappedComponent) {
     }
 
     render() {
+      const opacity = this.isActive() ? { opacity: 0, width: 0, height: 0 } : { opacity: 1, transition: 'all 300ms ease' };
+
       return (
         <DraggableCore onStart={this.onStart} onStop={this.onStop} onDrag={this.onDrag}>
-          <CSSTransitionGroup
-            transitionName="draggable--transition"
-            transitionAppear
-            transitionAppearTimeout={animation.duration.fast}
-            transitionEnterTimeout={animation.duration.fast}
-            transitionLeaveTimeout={animation.duration.fast}
-          >
-            { !this.isActive() &&
-              <div ref={(node) => { this.node = node; }} key={this.state.key}>
-                <WrappedComponent {...this.props} />
-              </div>
-            }
-          </CSSTransitionGroup>
+          <div style={opacity} ref={(node) => { this.node = node; }}>
+            <WrappedComponent {...this.props} />
+          </div>
         </DraggableCore>
       );
     }
