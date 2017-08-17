@@ -51,10 +51,9 @@ function loadProtocol(path) {
   };
 }
 
-function loadDemoProtocol(path) {
+function loadDemoProtocol() {
   return {
     type: LOAD_DEMO_PROTOCOL,
-    path,
   };
 }
 
