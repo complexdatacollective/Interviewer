@@ -15,7 +15,7 @@ const draggableType = 'POSITIONED_NODE';
 
 const EnhancedNode = draggable(selectable(Node));
 
-class NodeLayout extends Component {
+export class NodeLayout extends Component {
   constructor(props) {
     super(props);
 

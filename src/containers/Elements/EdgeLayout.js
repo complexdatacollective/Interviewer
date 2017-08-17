@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { edgeCoordsForPrompt } from '../../selectors/edges';
 
-const EdgeLayout = ({ edgeCoords }) => (
+export const EdgeLayout = ({ edgeCoords }) => (
   <div className="edge-layout">
     <svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       { edgeCoords.map(({ key, from, to }) => {

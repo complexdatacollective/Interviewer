@@ -13,7 +13,7 @@ const label = node => node.nickname;
 
 const draggableType = 'POSITIONED_NODE';
 
-class NodeBucket extends Component {
+export class NodeBucket extends Component {
   onDropNode = (hits, coords, node) => {
     const hit = first(hits);
     const relativeCoords = {
