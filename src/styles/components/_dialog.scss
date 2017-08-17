@@ -10,7 +10,7 @@ $component-name: dialog;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize(palette('modal-overlay'), .1);
+  background-color: transparentize(palette('modal-overlay'), .05);
 
   &__window {
     width: 750px;
@@ -18,6 +18,18 @@ $component-name: dialog;
     box-shadow: 0 0 4px 0 transparentize(color('rich-black'), .5);
     position: relative;
     border-left: 15px solid palette('primary');
+
+    &--info {
+      border-color: palette('info');
+    }
+
+    &--warning {
+      border-color: palette('warning');
+    }
+
+    &--error {
+      border-color: palette('error');
+    }
   }
 
   &__layout {
@@ -27,7 +39,7 @@ $component-name: dialog;
 
     &-content {
       order: 1;
-      flex: 3;
+      flex: 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -42,9 +54,9 @@ $component-name: dialog;
     &-icon {
       order: 1;
       flex: 1;
-      .icon[name='info'] {
-        height: 130px;
-        width: 130px;
+      .icon {
+        height: 170px;
+        width: 170px;
         margin-right:20px;
       }
     }
@@ -52,10 +64,10 @@ $component-name: dialog;
 
   &__footer {
     margin: 25px 40px;
-    text-align: right;
+    text-align: center;
     .button {
-      &:not(last-child) {
-        margin-right: 20px;
+      &:last-child {
+        margin-left: 20px;
       }
     }
   }

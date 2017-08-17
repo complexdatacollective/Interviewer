@@ -30,6 +30,18 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      showModal: false,
+    };
+
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
+  }
+
   onClickLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
@@ -40,17 +52,22 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
-  onClickShowDialog = () => {
-    this.props.loadDemoProtocol();
-  }
-
   onDialogConfirm = () => {
     alert('dialog confirmed');
   }
 
   onDialogCancel = () => {
-    alert('dialog cancelled');
+    close();
   }
+
+  open() {
+    this.setState({ showModal: true });
+  }
+
+  close() {
+    this.setState({ showModal: false });
+  }
+
 
   render() {
     if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
@@ -81,14 +98,14 @@ class Setup extends Component {
           value="Josh is sweet"
         />
         <hr />
-        <Button onClick={this.onClickLoadDemoProtocol} content="Trigger dialog" />
+        <Button onClick={this.open} content="Trigger dialog" />
         <Dialog
-          isOpen="false"
           title="An update is available"
-          type="info"
+          type="error"
+          show={this.state.showModal}
           showCancelButton
           onConfirm={this.onDialogConfirm}
-          onCancel={this.onDialogCancel}
+          onCancel={this.close}
         >
           <p>There is an update available for this software. Would you like to download it now?</p>
         </Dialog>

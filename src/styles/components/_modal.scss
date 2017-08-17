@@ -10,7 +10,7 @@ $component-name: modal;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize(palette('modal-overlay'), .1);
+  background-color: transparentize(palette('modal-overlay'), .05);
 
   &__window {
     width: 750px;

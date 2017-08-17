@@ -3,6 +3,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Button, Icon, animation } from 'network-canvas-ui';
 import { CSSTransitionGroup } from 'react-transition-group';
 
@@ -22,8 +23,10 @@ const Dialog = (props) => {
 
   let cancelButton = null;
   if (showCancelButton) {
-    cancelButton = <Button color="navy-taupe" onClick={onCancel} icon={<Icon name="close" />} > Cancel</Button>;
+    cancelButton = <Button color="navy-taupe" onClick={onCancel}> Cancel</Button>;
   }
+
+  let dialogClasses  = cx('dialog__window dialog__window--' + type);
 
   return (
     <CSSTransitionGroup
@@ -32,11 +35,11 @@ const Dialog = (props) => {
       transitionLeaveTimeout={animation.duration.standard}
     >
       { show &&
-        <div key="dialog" className="dialog" onClick={onCancel}>
-          <div className="dialog__window" onClick={e => e.stopPropagation()}>
+        <div key="dialog" className="dialog">
+          <div className={dialogClasses} onClick={e => e.stopPropagation()}>
             <div className="dialog__layout">
               <div className="dialog__layout-icon">
-                <Icon name="info" />
+                <Icon name={type} />
               </div>
               <div className="dialog__layout-content">
                 <h2 className="dialog__layout-title">{title}</h2>
@@ -45,7 +48,7 @@ const Dialog = (props) => {
             </div>
             <footer className="dialog__footer">
               { cancelButton }
-              <Button onClick={onConfirm} content="Confirm" />
+              <Button onClick={onConfirm} color={type} content="Confirm" />
             </footer>
           </div>
         </div>
@@ -66,7 +69,8 @@ Dialog.propTypes = {
 Dialog.defaultProps = {
   title: 'This is my dialog title',
   children: null,
-  show: true,
+  show: false,
+  type: 'info',
   showCancelButton: true,
   onCancel: {},
   onConfirm: {},
