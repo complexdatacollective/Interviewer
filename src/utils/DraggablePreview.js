@@ -17,7 +17,7 @@ const styles = (x, y) =>
 const parent = () => document.getElementById('page-wrap');
 
 export default class DraggablePreview {
-  constructor(node, animate = true) {
+  constructor(node, animate = false) {
     this.position = throttle(this.position, 1000 / 60);
 
     this.node = document.createElement('div');
