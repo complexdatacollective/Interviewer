@@ -13,9 +13,12 @@
     z-index: 100;
     bottom: 0;
     left: 0;
-    width: 50%;
+    width: 30%;
+    min-width: 320px;
     height: 150px;
-    background: pink;
+    background: palette('light-background');
+    overflow: hidden;
+    padding: 20px;
   }
 
   &__sociogram {
@@ -26,5 +29,19 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+  }
+
+  .prompts__prompt-header {
+    @include typography('title-3');
+  }
+
+  .pips {
+    &__pip {
+      border-color: palette('background');
+
+      &--active {
+        background-color: palette('background');
+      }
+    }
   }
 }

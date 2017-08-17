@@ -31,6 +31,8 @@ class NodeBucket extends Component {
       node,
     } = this.props;
 
+    if (!node) { return null; }
+
     return (
       <div className="node-bucket">
         { node &&
