@@ -26,6 +26,12 @@ const Dialog = (props) => {
     cancelButton = <Button color="navy-taupe" onClick={onCancel}> Cancel</Button>;
   }
 
+  const typeColor = {
+    'info': 'primary',
+    'warning': 'mustard',
+    'error': 'neon-coral',
+  }
+
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
 
   return (
@@ -48,7 +54,7 @@ const Dialog = (props) => {
             </div>
             <footer className="dialog__footer">
               { cancelButton }
-              <Button onClick={onConfirm} color={type} content="Confirm" />
+              <Button onClick={onConfirm} color={typeColor[type]} content="Confirm" />
             </footer>
           </div>
         </div>

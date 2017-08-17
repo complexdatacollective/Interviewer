@@ -101,7 +101,7 @@ class Setup extends Component {
         <Button onClick={this.open} content="Trigger dialog" />
         <Dialog
           title="An update is available"
-          type="error"
+          type="info"
           show={this.state.showModal}
           showCancelButton
           onConfirm={this.onDialogConfirm}
