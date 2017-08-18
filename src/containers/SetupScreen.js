@@ -5,8 +5,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, TextInput } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../containers/Elements';
-import { Dialog } from '../components/Elements';
+import { Form, InfoDialog } from '../containers/Elements';
+
+import {
+  actionCreators as modalActions,
+  modalNames as modals,
+} from '../ducks/modules/modals';
+
 
 const formConfig = {
   formName: 'setup',
@@ -30,18 +35,6 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      showModal: false,
-    };
-
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
-  }
-
   onClickLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
@@ -57,20 +50,15 @@ class Setup extends Component {
   }
 
   onDialogCancel = () => {
-    close();
+    alert('dialog cancelled');
   }
-
-  open() {
-    this.setState({ showModal: true });
-  }
-
-  close() {
-    this.setState({ showModal: false });
-  }
-
 
   render() {
     if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
+
+    const {
+      openModal,
+    } = this.props;
 
     return (
       <div className="setup">
@@ -98,17 +86,18 @@ class Setup extends Component {
           value="Josh is sweet"
         />
         <hr />
-        <Button onClick={this.open} content="Trigger dialog" />
-        <Dialog
-          title="An update is available"
+        <InfoDialog
+          modalName={modals.INFO}
+          title="test"
           type="info"
-          show={this.state.showModal}
-          showCancelButton
           onConfirm={this.onDialogConfirm}
-          onCancel={this.close}
+          onCancel={this.onDialogCancel}
         >
-          <p>There is an update available for this software. Would you like to download it now?</p>
-        </Dialog>
+          <p>Some children</p>
+        </InfoDialog>
+        <Button onClick={() => openModal(modals.INFO)}>
+          Open Info
+        </Button>
       </div>
     );
   }
@@ -118,6 +107,7 @@ Setup.propTypes = {
   protocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   loadDemoProtocol: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -130,6 +120,8 @@ function mapDispatchToProps(dispatch) {
   return {
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
+    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 
