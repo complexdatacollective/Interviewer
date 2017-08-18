@@ -28,6 +28,17 @@ function nextId(nodes) {
   return maxBy(nodes, 'id').id + 1;
 }
 
+function flipEdge(edge) {
+  return { from: edge.to, to: edge.from, type: edge.type };
+}
+
+function edgeExists(edges, edge) {
+  return (
+    findIndex(edges, edge) !== -1 ||
+    findIndex(edges, flipEdge(edge)) !== -1
+  );
+}
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE: {
@@ -84,16 +95,16 @@ export default function reducer(state = initialState, action = {}) {
         nodes: reject(state.nodes, node => node.uid === action.uid),
       };
     case ADD_EDGE:
-      if (findIndex(state.edges, action.edge) !== -1) { return state; }
+      if (edgeExists(state.edges, action.edge)) { return state; }
       return {
         ...state,
         edges: [...state.edges, action.edge],
       };
     case TOGGLE_EDGE:
-      if (findIndex(state.edges, action.edge) !== -1) {
+      if (edgeExists(state.edges, action.edge)) {
         return {
           ...state,
-          edges: reject(state.edges, action.edge),
+          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
         };
       }
       return {
