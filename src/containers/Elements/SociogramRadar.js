@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { range, last, zipWith } from 'lodash';
+import { colorDictionary } from 'network-canvas-ui';
+import color from 'color';
 
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;
@@ -29,10 +31,18 @@ const SociogramRadar = ({ n, skewed }) => {
     weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
     equalByIncrement(50, n);
 
+  const colorRing = color(colorDictionary.ring);
+  const colorBackground = color(colorDictionary.background);
+
+  const ringFill = (ring) => {
+    const mix = (ring + 1) / n;
+    return color(colorBackground).mix(colorRing, mix).hex();
+  };
+
   return (
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="sociogram-radar">
       {radii.map((radius, index) => (
-        <circle key={index} cx="50" cy="50" r={radius} className="sociogram-radar__range" />
+        <circle key={index} cx="50" cy="50" r={radius} className="sociogram-radar__range" fill={ringFill(index)} />
       ))}
     </svg>
   );

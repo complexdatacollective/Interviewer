@@ -118,7 +118,7 @@ export default {
               canDrag: false,
               selectAction: 'EDGE',
               background: {
-                n: 3,
+                n: 5,
                 skewed: true,
               },
               sort: {
@@ -136,7 +136,7 @@ export default {
               canDrag: false,
               selectAction: 'ATTRIBUTES',
               background: {
-                n: 3,
+                n: 7,
                 skewed: true,
               },
               sort: {
