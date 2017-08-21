@@ -161,7 +161,7 @@ export default {
                 layout: 'closenessLayout',
                 edge: {
                   type: 'family',
-                  color: 'edge-alt-1',
+                  color: 'edge-alt-3',
                 },
                 background: {
                   n: 3,
@@ -180,7 +180,7 @@ export default {
                 layout: 'geographicLayout',
                 edge: {
                   type: 'family',
-                  color: 'edge-alt-1',
+                  color: 'edge-alt-3',
                 },
                 background: {
                   image: 'map.svg',
