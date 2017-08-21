@@ -19,7 +19,6 @@ EdgeLayout.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('EGDES', state.network.edges, ownProps, edgeCoords(ownProps.type, ownProps.layout)(state));
   return {
     edges: edgeCoords(ownProps.type, ownProps.layout)(state),
   };

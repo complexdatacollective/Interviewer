@@ -111,35 +111,35 @@ export default {
             {
               id: 'closeness2',
               title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              edge: {
-                type: 'friends',
-              },
               sociogram: {
                 layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
                 background: {
                   n: 5,
                   skewed: true,
                 },
                 select: {
                   action: 'EDGE',
-                }
-              },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
               },
             },
             {
               id: 'closeness3',
               title: "Tap on anyone who has given you advice within the past 6 months.",
-              nodeAttributes: {
-                has_given_advice: true,
-              },
-              edge: {
-                type: 'friends',
-              },
               sociogram: {
                 layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
+                nodeAttributes: {
+                  has_given_advice: true,
+                },
                 background: {
                   n: 7,
                   skewed: false,
@@ -147,22 +147,22 @@ export default {
                 position: false,
                 select: {
                   action: 'ATTRIBUTES',
-                }
-              },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
               },
             },
             {
               id: 'closeness5',
               title: "Connect any two people who are family.",
-              edge: {
-                type: 'family',
-                color: 'edge-alt-1',
-              },
               sociogram: {
                 layout: 'closenessLayout',
+                edge: {
+                  type: 'family',
+                  color: 'edge-alt-1',
+                },
                 background: {
                   n: 3,
                   skewed: true,
@@ -175,21 +175,21 @@ export default {
             },
             {
               id: 'closeness4',
-              title: "Position the nodes amongst the concentric circles. Place people you are geographically closer too towards the middle",
-              filters: {
-                node: (node) => node.nickname.slice(0, 1) < 'c',
-              },
+              title: "Position people on the map",
               sociogram: {
                 layout: 'geographicLayout',
-                edge: 'family',
+                edge: {
+                  type: 'family',
+                  color: 'edge-alt-1',
+                },
                 background: {
                   image: 'map.svg',
                 },
                 position: true,
-              },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
               },
             },
           ],

@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   Sociogram,
-  SociogramBackground,
-  NodeLayout,
-  EdgeLayout,
-  NodeBucket,
   PromptSwiper,
 } from '../Elements';
 import {
@@ -23,34 +19,12 @@ const SociogramInterface = ({ prompt, prompts }) => (
       <PromptSwiper prompts={prompts} />
     </div>
     <div className="sociogram-interface__sociogram">
-      <Sociogram>
-        <SociogramBackground {...prompt.sociogram.background} />
-        {
-          prompt.edge &&
-          <EdgeLayout
-            type={prompt.edge.type}
-            color={prompt.edge.color}
-            layout={prompt.sociogram.layout}
-          />
-        }
-        <NodeLayout
-          edge={prompt.edge}
-          attributes={prompt.nodeAttributes}
-          layout={prompt.sociogram.layout}
-          select={prompt.sociogram.select}
-          position={prompt.sociogram.position}
-        />
-        <NodeBucket
-          layout={prompt.sociogram.layout}
-          sort={prompt.sort}
-        />
-      </Sociogram>
+      <Sociogram {...prompt.sociogram} />
     </div>
   </div>
 );
 
 SociogramInterface.propTypes = {
-  config: PropTypes.object.isRequired,
   prompts: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
 };
