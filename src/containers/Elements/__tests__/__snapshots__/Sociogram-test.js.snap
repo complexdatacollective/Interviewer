@@ -8,12 +8,36 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="sociogram">
-    Foo
+    <SociogramBackground
+        image={null}
+        n={4}
+        skewed={true} />
+    <Connect(Component)
+        attributes={null}
+        edge={null}
+        layout={undefined}
+        position={[Function]}
+        select={null} />
+    <Connect(NodeBucket)
+        layout={undefined}
+        sort={null} />
 </div>,
   "nodes": Array [
     <div
       className="sociogram">
-      Foo
+      <SociogramBackground
+            image={null}
+            n={4}
+            skewed={true} />
+      <Connect(Component)
+            attributes={null}
+            edge={null}
+            layout={undefined}
+            position={[Function]}
+            select={null} />
+      <Connect(NodeBucket)
+            layout={undefined}
+            sort={null} />
 </div>,
   ],
   "options": Object {},
@@ -22,7 +46,12 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 2,
       "_context": Object {},
-      "_currentElement": <Sociogram>
+      "_currentElement": <Sociogram
+        edge={null}
+        nodeAttributes={null}
+        position={[Function]}
+        select={null}
+        sort={null}>
         Foo
 </Sociogram>,
       "_debugID": 1,
@@ -33,6 +62,11 @@ ShallowWrapper {
         "context": Object {},
         "props": Object {
           "children": "Foo",
+          "edge": null,
+          "nodeAttributes": null,
+          "position": [Function],
+          "select": null,
+          "sort": null,
         },
         "refs": Object {},
         "state": null,
@@ -56,12 +90,36 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="sociogram">
-          Foo
+          <SociogramBackground
+                    image={null}
+                    n={4}
+                    skewed={true} />
+          <Connect(Component)
+                    attributes={null}
+                    edge={null}
+                    layout={undefined}
+                    position={[Function]}
+                    select={null} />
+          <Connect(NodeBucket)
+                    layout={undefined}
+                    sort={null} />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="sociogram">
-          Foo
+          <SociogramBackground
+                    image={null}
+                    n={4}
+                    skewed={true} />
+          <Connect(Component)
+                    attributes={null}
+                    edge={null}
+                    layout={undefined}
+                    position={[Function]}
+                    select={null} />
+          <Connect(NodeBucket)
+                    layout={undefined}
+                    sort={null} />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -74,7 +132,12 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Sociogram>
+  "unrendered": <Sociogram
+    edge={null}
+    nodeAttributes={null}
+    position={[Function]}
+    select={null}
+    sort={null}>
     Foo
 </Sociogram>,
 }

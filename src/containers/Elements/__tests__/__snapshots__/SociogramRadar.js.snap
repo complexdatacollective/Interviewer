@@ -14,26 +14,31 @@ ShallowWrapper {
         className="sociogram-radar__range"
         cx="50"
         cy="50"
+        fill="#302C5B"
         r={50} />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
+        fill="#323062"
         r={43.54101966249685} />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
+        fill="#353368"
         r={36.547375096555626} />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
+        fill="#37376F"
         r={28.717082451262844} />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
+        fill="#3A3A75"
         r={19.270509831248425} />
 </svg>,
   "nodes": Array [
@@ -45,26 +50,31 @@ ShallowWrapper {
             className="sociogram-radar__range"
             cx="50"
             cy="50"
+            fill="#302C5B"
             r={50} />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
+            fill="#323062"
             r={43.54101966249685} />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
+            fill="#353368"
             r={36.547375096555626} />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
+            fill="#37376F"
             r={28.717082451262844} />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
+            fill="#3A3A75"
             r={19.270509831248425} />
 </svg>,
   ],
@@ -115,26 +125,31 @@ ShallowWrapper {
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#302C5B"
                     r={50} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#323062"
                     r={43.54101966249685} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#353368"
                     r={36.547375096555626} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#37376F"
                     r={28.717082451262844} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#3A3A75"
                     r={19.270509831248425} />
 </svg>,
         "_debugID": 2,
@@ -146,26 +161,31 @@ ShallowWrapper {
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#302C5B"
                     r={50} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#323062"
                     r={43.54101966249685} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#353368"
                     r={36.547375096555626} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#37376F"
                     r={28.717082451262844} />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
+                    fill="#3A3A75"
                     r={19.270509831248425} />
 </svg>,
       },

@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { EdgeLayout } from '../../Elements/EdgeLayout';
 
 const mockProps = {
-  edgeCoords: [
+  edges: [
     {
       key: 'foo_bar_baz',
       from: {

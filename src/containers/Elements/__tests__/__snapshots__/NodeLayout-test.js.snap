@@ -31,9 +31,13 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <NodeLayout
+        attributes={Object {}}
+        edge={null}
         height={456}
         nodes={Array []}
+        position={false}
         prompt={Object {}}
+        select={null}
         toggleEdge={[Function]}
         toggleNodeAttributes={[Function]}
         updateNode={[Function]}
@@ -46,9 +50,13 @@ ShallowWrapper {
         "context": Object {},
         "onSelectNode": [Function],
         "props": Object {
+          "attributes": Object {},
+          "edge": null,
           "height": 456,
           "nodes": Array [],
+          "position": false,
           "prompt": Object {},
+          "select": null,
           "toggleEdge": [Function],
           "toggleNodeAttributes": [Function],
           "updateNode": [Function],
@@ -106,9 +114,13 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <NodeLayout
+    attributes={Object {}}
+    edge={null}
     height={456}
     nodes={Array []}
+    position={false}
     prompt={Object {}}
+    select={null}
     toggleEdge={[Function]}
     toggleNodeAttributes={[Function]}
     updateNode={[Function]}

@@ -13,6 +13,7 @@ ShallowWrapper {
         viewBox="0 0 1 1"
         xmlns="http://www.w3.org/2000/svg">
         <line
+            stroke="#f2b700"
             x1={100}
             x2={100}
             y1={100}
@@ -27,6 +28,7 @@ ShallowWrapper {
             viewBox="0 0 1 1"
             xmlns="http://www.w3.org/2000/svg">
             <line
+                  stroke="#f2b700"
                   x1={100}
                   x2={100}
                   y1={100}
@@ -41,7 +43,8 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Unknown
-        edgeCoords={
+        color={null}
+        edges={
                 Array [
                         Object {
                           "from": Object {
@@ -63,7 +66,8 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "edgeCoords": Array [
+          "color": null,
+          "edges": Array [
             Object {
               "from": Object {
                 "x": 100,
@@ -104,6 +108,7 @@ ShallowWrapper {
                     viewBox="0 0 1 1"
                     xmlns="http://www.w3.org/2000/svg">
                     <line
+                              stroke="#f2b700"
                               x1={100}
                               x2={100}
                               y1={100}
@@ -118,6 +123,7 @@ ShallowWrapper {
                     viewBox="0 0 1 1"
                     xmlns="http://www.w3.org/2000/svg">
                     <line
+                              stroke="#f2b700"
                               x1={100}
                               x2={100}
                               y1={100}
@@ -136,7 +142,8 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Unknown
-    edgeCoords={
+    color={null}
+    edges={
         Array [
             Object {
               "from": Object {
