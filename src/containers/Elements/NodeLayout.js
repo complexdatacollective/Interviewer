@@ -147,7 +147,6 @@ NodeLayout.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('NODES', getPlacedNodes(ownProps.layout)(state));
   return {
     nodes: getPlacedNodes(ownProps.layout)(state),
     canPosition: ownProps.position === true,

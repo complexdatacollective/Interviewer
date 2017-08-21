@@ -5,7 +5,6 @@ import { colorDictionary } from 'network-canvas-ui';
 import { edgeCoords } from '../../selectors/edges';
 
 export const EdgeLayout = ({ edges, color }) => {
-  console.log('EDGELAYOUT', color, colorDictionary, colorDictionary[color]);
   const strokeColor = color ? colorDictionary[color] : colorDictionary['edge-base'];
 
   return (
