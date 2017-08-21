@@ -4,14 +4,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
+import { network } from '../selectors/network';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { Menu } from '../components';
+import createGraphML from '../utils/ExportData';
 
 /**
   * Renders a Menu using stages to construct items in the menu
   * @extends Component
   */
 class SessionMenu extends Component {
+  onExport = () => {
+    createGraphML(this.props.currentNetwork);
+  };
+
   onQuit = () => {
     if (navigator.app) {
       // cordova
@@ -22,11 +28,11 @@ class SessionMenu extends Component {
       // note: this will only close windows opened by the app, not a new tab the user opened
       window.close();
     }
-  }
+  };
 
   onReset = () => {
     this.props.resetState();
-  }
+  };
 
   render() {
     const {
@@ -36,6 +42,7 @@ class SessionMenu extends Component {
     const menuType = 'settings';
 
     const items = [
+      { id: 'export', menuType, title: 'Download Data', interfaceType: 'menu-download-data', isActive: false, onClick: this.onExport },
       { id: 'reset', menuType, title: 'Reset Session', interfaceType: 'menu-purge-data', isActive: false, onClick: this.onReset },
       { id: 'quit', menuType, title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
     ];
@@ -54,6 +61,7 @@ class SessionMenu extends Component {
 }
 
 SessionMenu.propTypes = {
+  currentNetwork: PropTypes.object.isRequired,
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   resetState: PropTypes.func.isRequired,
@@ -68,6 +76,7 @@ SessionMenu.defaultProps = {
 function mapStateToProps(state) {
   return {
     isOpen: sessionMenuIsOpen(state),
+    currentNetwork: network(state),
   };
 }
 
