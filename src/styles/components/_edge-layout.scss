@@ -16,6 +16,6 @@
   line {
     stroke-width: 5;
     vector-effect: non-scaling-stroke;
-    stroke: transparentize(palette('edge-base'), .4);
+    stroke: palette('edge-base');
   }
 }
