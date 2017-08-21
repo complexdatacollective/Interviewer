@@ -97,11 +97,12 @@ export default {
           "nodeType": 'person',
           "prompts": [
             {
-              id: '67cl1',
-              title: 'Within the past 6 months, who have you felt close to?',
+              id: 'closeness1',
+              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
               layout: 'closenessLayout',
               edgeType: 'supports',
               canSelect: false,
+              canDrag: true,
               background: {
                 n: 3,
                 skewed: true,
@@ -111,11 +112,12 @@ export default {
               },
             },
             {
-              id: '67su2',
-              title: "Within the past 6 months, who has been supportive?",
+              id: 'closeness2',
+              title: "Connect any two people who are friends, or who would spend time together without you being there.",
               layout: 'closenessLayout',
-              edgeType: 'supports',
+              edgeType: 'friends',
               canDrag: false,
+              canSelect: true,
               selectAction: 'EDGE',
               background: {
                 n: 5,
@@ -127,13 +129,14 @@ export default {
               },
             },
             {
-              id: '67su3',
-              title: "Within the past 6 months, who has been supportive?",
+              id: 'closeness3',
+              title: "Tap on anyone who has given you advice within the past 6 months.",
               layout: 'closenessLayout',
               nodeAttributes: {
-                travel_friend: true,
+                has_given_advice: true,
               },
               canDrag: false,
+              canSelect: true,
               selectAction: 'ATTRIBUTES',
               background: {
                 n: 7,
@@ -145,14 +148,30 @@ export default {
               },
             },
             {
-              id: '67su4',
-              title: "Within the past 6 months, who has been supportive?",
-              layout: 'supportiveLayout',
+              id: 'closeness5',
+              title: "Connect any two people who are family.",
+              layout: 'closenessLayout',
+              edgeType: 'family',
+              canDrag: false,
+              canSelect: true,
+              selectAction: 'EDGE',
+              background: {
+                n: 5,
+                skewed: true,
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
+              },
+            },
+            {
+              id: 'closeness4',
+              title: "Position the nodes amongst the concentric circles. Place people you are geographically closer too towards the middle",
+              layout: 'geographicLayout',
+              canDrag: true,
               background: {
                 image: 'map.svg',
               },
-              edgeType: 'awesome',
-              selectAction: 'EDGE',
               sort: {
                 by: 'nickname',
                 order: 'DESC',

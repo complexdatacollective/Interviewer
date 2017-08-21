@@ -6,19 +6,17 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: relative;
 
   &__prompts {
     position: absolute;
     z-index: 100;
     bottom: 0;
-    left: 0;
-    width: 30%;
-    min-width: 320px;
-    height: 150px;
+    left: spacing(large);
+    width: 200px;
+    height: 350px;
     background: palette('light-background');
     overflow: hidden;
-    padding: 20px;
+    padding: spacing(medium);
   }
 
   &__sociogram {
@@ -37,10 +35,10 @@
 
   .pips {
     &__pip {
-      border-color: palette('background');
+      border-color: palette('text');
 
       &--active {
-        background-color: palette('background');
+        background-color: palette('text');
       }
     }
   }

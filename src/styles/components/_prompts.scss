@@ -23,6 +23,11 @@
     flex-wrap: nowrap;
     transition: left 500ms ease-out, opacity 500ms ease-in;
     text-align: center;
+    padding-bottom: 2.5rem;
+
+    @include breakpoint('full') {
+      padding-bottom: 3.5rem;
+    }
 
     &--active {
       opacity: 1;
@@ -33,12 +38,10 @@
       font-weight: 200;
       max-width: 80vw;
       line-height: 1.3;
-      margin-bottom: 2.5rem;
 
       @include breakpoint('full') {
-          margin-bottom: 3.5rem;
-          max-width: 65vw;
-          line-height: 1.5;
+        max-width: 65vw;
+        line-height: 1.5;
       }
 
     }
