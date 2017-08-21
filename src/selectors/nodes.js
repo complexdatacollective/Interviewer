@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { filter } from 'lodash';
-import { activePrompt, activeStageAttributes } from './session';
+import { activeStageAttributes } from './session';
 
 const allNodes = state => state.network.nodes;
 
@@ -14,12 +14,11 @@ export const nodesOfStageType = createSelector(
     ),
 );
 
-// Filter the nodes according to current prompt layout (AND stage)
-export const getPlacedNodes = createSelector(
+// Filter the nodes according to layout (AND stage)
+export const getPlacedNodes = layout => createSelector(
   nodesOfStageType,
-  activePrompt,
-  (nodes, prompt) => {
-    const nodeHasLayout = node => Object.prototype.hasOwnProperty.call(node, prompt.layout);
+  (nodes) => {
+    const nodeHasLayout = node => Object.prototype.hasOwnProperty.call(node, layout);
 
     return filter(nodes, nodeHasLayout);
   },
@@ -28,11 +27,10 @@ export const getPlacedNodes = createSelector(
 // Filter the network:
 // - Node is not from this layout prompt
 // - Node is the same type as current stage
-export const getUnplacedNodes = createSelector(
+export const getUnplacedNodes = layout => createSelector(
   nodesOfStageType,
-  activePrompt,
-  (nodes, prompt) => {
-    const nodeWithoutLayout = node => !Object.prototype.hasOwnProperty.call(node, prompt.layout);
+  (nodes) => {
+    const nodeWithoutLayout = node => !Object.prototype.hasOwnProperty.call(node, layout);
 
     return filter(nodes, nodeWithoutLayout);
   },

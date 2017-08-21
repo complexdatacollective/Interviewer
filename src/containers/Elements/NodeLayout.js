@@ -6,7 +6,7 @@ import { first, isMatch } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { activePrompt } from '../../selectors/session';
+import { getPlacedNodes } from '../../selectors/nodes';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const label = node => node.nickname;
@@ -25,9 +25,11 @@ export class NodeLayout extends Component {
   }
 
   onSelectNode = (node) => {
-    if (!this.props.prompt.selectAction) { return; }
+    const { select } = this.props;
 
-    switch (this.props.prompt.selectAction) {
+    if (!select && !select.action) { return; }
+
+    switch (select.action) {
       case 'EDGE':
         this.connectNode(node); break;
       case 'ATTRIBUTES':
@@ -37,21 +39,20 @@ export class NodeLayout extends Component {
   };
 
   updateNodeLayout = (hits, coords, node) => {
-    const { prompt, updateNode } = this.props;
+    const { layout, updateNode } = this.props;
     const hit = first(hits);
     const relativeCoords = {
       x: (coords.x - hit.x) / hit.width,
       y: (coords.y - hit.y) / hit.height,
     };
 
-    updateNode({ ...node, [prompt.layout]: relativeCoords });
+    updateNode({ ...node, [layout]: relativeCoords });
   }
 
   connectNode(node) {
     const nodeId = node.id;
-    const edgeType = this.props.prompt.edgeType;
+    const edgeType = this.props.edge.type;
     const connectFrom = this.state.connectFrom;
-
 
     if (!connectFrom) {
       this.setState({ connectFrom: nodeId });
@@ -70,34 +71,33 @@ export class NodeLayout extends Component {
   }
 
   toggleNodeAttributes(node) {
-    this.props.toggleNodeAttributes(node, this.props.prompt.nodeAttributes);
+    this.props.toggleNodeAttributes(node, this.props.attributes);
   }
 
   isSelected(node) {
-    switch (this.props.prompt.selectAction) {
+    const { select } = this.props;
+    if (!select) { return null; }
+    switch (select.action) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);
       case 'ATTRIBUTES':
-        return isMatch(node, this.props.prompt.nodeAttributes);
+        return isMatch(node, this.props.attributes);
       default:
         return false;
     }
   }
 
   render() {
-    const { prompt, nodes, width, height } = this.props;
-
-    const canDrag = Object.prototype.hasOwnProperty.call(prompt, 'canDrag') ? prompt.canDrag : true;
-    const canSelect = Object.prototype.hasOwnProperty.call(prompt, 'canSelect') ? prompt.canSelect : true;
+    const { layout, nodes, width, height, canPosition, canSelect } = this.props;
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
         <div className="node-layout">
           { nodes.map((node, key) => {
-            if (!Object.prototype.hasOwnProperty.call(node, prompt.layout)) { return null; }
+            if (!Object.prototype.hasOwnProperty.call(node, layout)) { return null; }
 
-            const x = node[prompt.layout].x * width;
-            const y = node[prompt.layout].y * height;
+            const x = node[layout].x * width;
+            const y = node[layout].y * height;
 
             return (
               <div key={key} className="node-layout__node" style={{ left: `${x}px`, top: `${y}px` }}>
@@ -108,7 +108,7 @@ export class NodeLayout extends Component {
                   onDrag={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
                   selected={this.isSelected(node)}
-                  canDrag={canDrag}
+                  canDrag={canPosition}
                   canSelect={canSelect}
                   animate={false}
                   {...node}
@@ -129,16 +129,29 @@ NodeLayout.propTypes = {
   toggleNodeAttributes: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  prompt: PropTypes.object.isRequired,
+  layout: PropTypes.string.isRequired,
+  edge: PropTypes.object,
+  select: PropTypes.object,
+  position: PropTypes.bool,
+  attributes: PropTypes.object,
+  canPosition: PropTypes.bool.isRequired,
+  canSelect: PropTypes.bool.isRequired,
 };
 
 NodeLayout.defaultProps = {
   nodes: [],
+  attributes: {},
+  edge: null,
+  select: null,
+  position: false,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  console.log('NODES', getPlacedNodes(ownProps.layout)(state));
   return {
-    prompt: activePrompt(state),
+    nodes: getPlacedNodes(ownProps.layout)(state),
+    canPosition: ownProps.position === true,
+    canSelect: !!ownProps.select,
   };
 }
 

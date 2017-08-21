@@ -99,29 +99,30 @@ export default {
             {
               id: 'closeness1',
               title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-              layout: 'closenessLayout',
-              edgeType: 'supports',
-              canSelect: false,
-              canDrag: true,
-              background: {
-                n: 3,
-                skewed: true,
-              },
-              sort: {
-                by: 'nickname',
+              sociogram: {
+                layout: 'closenessLayout',
+                background: {
+                  n: 3,
+                  skewed: true,
+                },
+                position: true,
               },
             },
             {
               id: 'closeness2',
               title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              layout: 'closenessLayout',
-              edgeType: 'friends',
-              canDrag: false,
-              canSelect: true,
-              selectAction: 'EDGE',
-              background: {
-                n: 5,
-                skewed: true,
+              edge: {
+                type: 'friends',
+              },
+              sociogram: {
+                layout: 'closenessLayout',
+                background: {
+                  n: 5,
+                  skewed: true,
+                },
+                select: {
+                  action: 'EDGE',
+                }
               },
               sort: {
                 by: 'nickname',
@@ -131,16 +132,22 @@ export default {
             {
               id: 'closeness3',
               title: "Tap on anyone who has given you advice within the past 6 months.",
-              layout: 'closenessLayout',
               nodeAttributes: {
                 has_given_advice: true,
               },
-              canDrag: false,
-              canSelect: true,
-              selectAction: 'ATTRIBUTES',
-              background: {
-                n: 7,
-                skewed: true,
+              edge: {
+                type: 'friends',
+              },
+              sociogram: {
+                layout: 'closenessLayout',
+                background: {
+                  n: 7,
+                  skewed: false,
+                },
+                position: false,
+                select: {
+                  action: 'ATTRIBUTES',
+                }
               },
               sort: {
                 by: 'nickname',
@@ -150,27 +157,35 @@ export default {
             {
               id: 'closeness5',
               title: "Connect any two people who are family.",
-              layout: 'closenessLayout',
-              edgeType: 'family',
-              canDrag: false,
-              canSelect: true,
-              selectAction: 'EDGE',
-              background: {
-                n: 5,
-                skewed: true,
+              edge: {
+                type: 'family',
+                color: 'edge-alt-1',
               },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
+              sociogram: {
+                layout: 'closenessLayout',
+                background: {
+                  n: 3,
+                  skewed: true,
+                },
+                position: true,
+                select: {
+                  action: 'EDGE',
+                }
               },
             },
             {
               id: 'closeness4',
               title: "Position the nodes amongst the concentric circles. Place people you are geographically closer too towards the middle",
-              layout: 'geographicLayout',
-              canDrag: true,
-              background: {
-                image: 'map.svg',
+              filters: {
+                node: (node) => node.nickname.slice(0, 1) < 'c',
+              },
+              sociogram: {
+                layout: 'geographicLayout',
+                edge: 'family',
+                background: {
+                  image: 'map.svg',
+                },
+                position: true,
               },
               sort: {
                 by: 'nickname',

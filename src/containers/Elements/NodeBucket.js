@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { first, sortBy } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { activePromptLayout } from '../../selectors/session';
+import { getUnplacedNodes } from '../../selectors/nodes';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
@@ -21,9 +21,9 @@ export class NodeBucket extends Component {
       y: (coords.y - hit.y) / hit.height,
     };
 
-    const { promptLayout, updateNode } = this.props;
+    const { layout, updateNode } = this.props;
 
-    updateNode({ ...node, [promptLayout]: relativeCoords });
+    updateNode({ ...node, [layout]: relativeCoords });
   };
 
   render() {
@@ -51,7 +51,7 @@ export class NodeBucket extends Component {
 NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
-  promptLayout: PropTypes.string.isRequired,
+  layout: PropTypes.string.isRequired,
   sort: PropTypes.object,
 };
 
@@ -68,9 +68,9 @@ function getNextNode(nodes, sort) {
 }
 
 function mapStateToProps(state, ownProps) {
+  const nodes = getUnplacedNodes(ownProps.layout)(state);
   return {
-    node: getNextNode(ownProps.nodes, ownProps.sort),
-    promptLayout: activePromptLayout(state),
+    node: getNextNode(nodes, ownProps.sort),
   };
 }
 

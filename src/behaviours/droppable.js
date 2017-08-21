@@ -22,10 +22,6 @@ export default function droppable(WrappedComponent) {
       window.addEventListener('resize', this.updateZone);
     }
 
-    componentDidUpdate() {
-      this.updateZone();
-    }
-
     componentWillUnmount() {
       window.removeEventListener('resize', this.updateZone);
     }
