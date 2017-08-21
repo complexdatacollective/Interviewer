@@ -13,58 +13,33 @@ import { Dialog } from '../../containers/Elements';
   */
 class InfoDialog extends Component {
 
-  onCamcel = () => {
-    this.props.closeModal(this.props.modalName);
-  }
-
-  onConfirm = () => {
-    this.props.closeModal(this.props.modalName);
+  static defaultProps = {
   }
 
   render() {
-    const {
-      modalName,
-      title,
-      children,
-      type,
-      show,
-      onCancel,
-      onConfirm,
-    } = this.props;
-
     return (
-      <Dialog
-        name={modalName}
-        title={title}
-        type={type}
-        show={show}
-        onConfirm={onCancel}
-        onCancel={onConfirm}
-      >
-        {children}
-      </Dialog>
+      <Dialog {...this.props} />
     );
   }
 }
 
 InfoDialog.propTypes = {
-  modalName: PropTypes.string.isRequired,
-  title: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   children: PropTypes.any,
   show: PropTypes.bool,
+  hasCancelButton: PropTypes.bool,
   type: PropTypes.string,
-  showCancelButton: PropTypes.bool,
   closeModal: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
 };
 
 InfoDialog.defaultProps = {
-  title: 'This is my dialog title',
   children: null,
   show: false,
   type: 'info',
-  showCancelButton: true,
+  hasCancelButton: true,
 };
 
 function mapStateToProps() {

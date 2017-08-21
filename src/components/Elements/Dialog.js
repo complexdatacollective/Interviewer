@@ -15,14 +15,14 @@ const Dialog = (props) => {
     title,
     children,
     show,
-    showCancelButton,
+    hasCancelButton,
     onCancel,
     onConfirm,
     type,
   } = props;
 
   let cancelButton = null;
-  if (showCancelButton) {
+  if (hasCancelButton) {
     cancelButton = <Button color="navy-taupe" onClick={onCancel}> Cancel</Button>;
   }
 
@@ -64,22 +64,18 @@ const Dialog = (props) => {
 };
 
 Dialog.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   children: PropTypes.any,
   show: PropTypes.bool,
-  showCancelButton: PropTypes.bool,
-  onCancel: PropTypes.func,
-  onConfirm: PropTypes.func,
+  type: PropTypes.string.isRequired,
+  hasCancelButton: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
 };
 
 Dialog.defaultProps = {
-  title: 'This is my dialog title',
   children: null,
   show: false,
-  type: 'info',
-  showCancelButton: true,
-  onCancel: {},
-  onConfirm: {},
 };
 
 export default Dialog;

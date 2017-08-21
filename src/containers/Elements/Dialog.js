@@ -37,16 +37,36 @@ class Dialog extends Component {
     this.props.unregisterModal(this.props.name);
   }
 
-  toggleModal = () => this.props.toggleModal(this.props.name);
+  confirmModal = () => {
+    this.props.toggleModal(this.props.name);
+    this.props.onConfirm();
+  };
+
+  cancelModal = () => {
+    this.props.toggleModal(this.props.name);
+    this.props.onCancel();
+  };
 
   render() {
+    const {
+      title,
+      children,
+      show,
+      hasCancelButton,
+      type,
+    } = this.props;
+
     return (
       <DialogComponent
-        show={this.props.isOpen}
-        onClose={this.toggleModal}
-        title={this.props.title}
+        show={show}
+        title={title}
+        name={modalName}
+        hasCancelButton={hasCancelButton}
+        type={type}
+        onConfirm={this.confirmModal}
+        onCancel={this.cancelModal}
       >
-        {this.props.children}
+        {children}
       </DialogComponent>
     );
   }
@@ -55,21 +75,26 @@ class Dialog extends Component {
 Dialog.propTypes = {
   registerModal: PropTypes.func.isRequired,
   unregisterModal: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool,
+  hasCancelButton: PropTypes.bool,
+  toggleModal: PropTypes.func.isRequired,
+  show: PropTypes.bool,
   children: PropTypes.any,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
 };
 
 Dialog.defaultProps = {
-  isOpen: false,
+  show: false,
+  hasCancelButton: true,
   children: null,
 };
 
 function mapStateToProps(state, ownProps) {
   return {
-    isOpen: modalIsOpen(state, ownProps),
+    show: modalIsOpen(state, ownProps),
   };
 }
 

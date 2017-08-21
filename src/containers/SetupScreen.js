@@ -46,11 +46,11 @@ class Setup extends Component {
   }
 
   onDialogConfirm = () => {
-    alert('dialog confirmed');
+    console.log('dialog confirmed');
   }
 
   onDialogCancel = () => {
-    alert('dialog cancelled');
+    console.log('dialog cancelled');
   }
 
   render() {
@@ -87,9 +87,10 @@ class Setup extends Component {
         />
         <hr />
         <InfoDialog
-          modalName={modals.INFO}
+          name={modals.INFO}
           title="test"
           type="info"
+          hasCancelButton
           onConfirm={this.onDialogConfirm}
           onCancel={this.onDialogCancel}
         >
