@@ -40,7 +40,7 @@ const Sociogram = ({ nodeAttributes, background, edge, layout, position, select,
 Sociogram.propTypes = {
   background: PropTypes.object.isRequired,
   layout: PropTypes.string.isRequired,
-  nodeAttributes: PropTypes.string,
+  nodeAttributes: PropTypes.object,
   edge: PropTypes.object,
   position: PropTypes.bool,
   select: PropTypes.object,
