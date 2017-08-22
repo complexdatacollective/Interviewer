@@ -16,6 +16,8 @@ const Dialog = (props) => {
     children,
     show,
     hasCancelButton,
+    cancelLabel,
+    confirmLabel,
     onCancel,
     onConfirm,
     type,
@@ -23,7 +25,7 @@ const Dialog = (props) => {
 
   let cancelButton = null;
   if (hasCancelButton) {
-    cancelButton = <Button color="navy-taupe" onClick={onCancel}> Cancel</Button>;
+    cancelButton = <Button color="navy-taupe" onClick={onCancel} content={cancelLabel} />;
   }
 
   const typeColor = {
@@ -54,7 +56,7 @@ const Dialog = (props) => {
             </div>
             <footer className="dialog__footer">
               { cancelButton }
-              <Button onClick={onConfirm} color={typeColor[type]} content="Confirm" />
+              <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />
             </footer>
           </div>
         </div>
@@ -69,6 +71,8 @@ Dialog.propTypes = {
   show: PropTypes.bool,
   type: PropTypes.string.isRequired,
   hasCancelButton: PropTypes.bool.isRequired,
+  confirmLabel: PropTypes.string.isRequired,
+  cancelLabel: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
 };

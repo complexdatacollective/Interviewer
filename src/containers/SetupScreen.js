@@ -92,7 +92,7 @@ class Setup extends Component {
           name={modals.INFO_DIALOG}
           title="Some information for the user"
           type="info"
-          hasCancelButton
+          confirmLabel="Thanks"
           onConfirm={this.onDialogConfirm}
           onCancel={this.onDialogCancel}
         >
@@ -106,7 +106,8 @@ class Setup extends Component {
           name={modals.WARNING_DIALOG}
           title="A warning for the user"
           type="warning"
-          hasCancelButton
+          confirmLabel="Understood"
+          cancelLabel="Take me back"
           onConfirm={this.onDialogConfirm}
           onCancel={this.onDialogCancel}
         >
@@ -120,9 +121,9 @@ class Setup extends Component {
           name={modals.ERROR_DIALOG}
           title="An error message for the user"
           type="error"
-          hasCancelButton
+          hasCancelButton={false}
+          confirmLabel="Uh-oh"
           onConfirm={this.onDialogConfirm}
-          onCancel={this.onDialogCancel}
         >
           <p>An error state to present to the user in this informative prompt.</p>
         </Dialog>
