@@ -16,7 +16,7 @@ import {
 const SociogramInterface = ({ prompt, prompts }) => (
   <div className="sociogram-interface">
     <div className="sociogram-interface__prompts">
-      <PromptSwiper prompts={prompts} />
+      <PromptSwiper prompts={prompts} floating />
     </div>
     <div className="sociogram-interface__sociogram">
       <Sociogram {...prompt.sociogram} />

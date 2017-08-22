@@ -1,4 +1,6 @@
-.prompts {
+$module-name: prompts;
+
+.#{$module-name} {
   width: 100%;
   height: 100%;
   display: flex;
@@ -55,6 +57,31 @@
     text-align: center;
     @include breakpoint('full') {
       flex: 0 0 45px;
+    }
+  }
+}
+
+.#{$module-name}--floating {
+  background: palette('light-background');
+  overflow: hidden;
+  padding: spacing(medium);
+  border-left: 10px solid palette('primary');
+
+  .#{$module-name}__prompt {
+    padding-bottom: 0;
+  }
+
+  .#{$module-name}__prompt-header {
+    @include typography('title-3');
+  }
+
+  .pips {
+    &__pip {
+      border-color: palette('text');
+
+      &--active {
+        background-color: palette('text');
+      }
     }
   }
 }

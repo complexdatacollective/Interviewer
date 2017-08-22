@@ -7,17 +7,6 @@
   align-items: center;
   flex-direction: column;
 
-  &__prompts {
-    position: absolute;
-    z-index: 100;
-    bottom: 0;
-    left: spacing(large);
-    width: 200px;
-    height: 350px;
-    background: palette('light-background');
-    overflow: hidden;
-    padding: spacing(medium);
-  }
 
   &__sociogram {
     flex: 1 1 auto;
@@ -29,17 +18,12 @@
     flex-direction: column;
   }
 
-  .prompts__prompt-header {
-    @include typography('title-3');
-  }
-
-  .pips {
-    &__pip {
-      border-color: palette('text');
-
-      &--active {
-        background-color: palette('text');
-      }
-    }
+  &__prompts {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    left: spacing(large);
+    width: 210px;
+    height: 300px;
   }
 }

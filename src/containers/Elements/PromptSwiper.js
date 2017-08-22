@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { actionCreators as promptActions } from '../../ducks/modules/prompt';
 import { Prompt, Pips } from '../../components/Elements';
 
@@ -46,9 +47,14 @@ class PromptSwiper extends Component {
       <Prompt key={index} label={prompt.title} isActive={promptIndex === index} />,
     );
 
+    const classes = cx(
+      'prompts',
+      { 'prompts--floating': this.props.floating },
+    );
+
     return (
       <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
-        <div className="prompts">
+        <div className={classes}>
           <div className="prompts__pips">
             <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
@@ -67,6 +73,11 @@ PromptSwiper.propTypes = {
   previous: PropTypes.func.isRequired,
   prompts: PropTypes.any.isRequired,
   promptIndex: PropTypes.number.isRequired,
+  floating: PropTypes.bool,
+};
+
+PromptSwiper.defaultProps = {
+  floating: false,
 };
 
 function mapStateToProps(state) {
