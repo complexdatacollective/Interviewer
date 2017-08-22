@@ -15,10 +15,10 @@ export const EdgeLayout = ({ edges, color }) => {
           return (
             <line
               key={key}
-              x1={from.x * 100}
-              y1={from.y * 100}
-              x2={to.x * 100}
-              y2={to.y * 100}
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
               stroke={strokeColor}
             />
           );
