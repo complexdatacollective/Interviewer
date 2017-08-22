@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, TextInput } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form, InfoDialog } from '../containers/Elements';
+import { Form, Dialog } from '../containers/Elements';
 
 import {
   actionCreators as modalActions,
@@ -86,18 +86,46 @@ class Setup extends Component {
           value="Josh is sweet"
         />
         <hr />
-        <InfoDialog
-          name={modals.INFO}
-          title="test"
+        <Dialog
+          name={modals.INFO_DIALOG}
+          title="Some information for the user"
           type="info"
           hasCancelButton
           onConfirm={this.onDialogConfirm}
           onCancel={this.onDialogCancel}
         >
-          <p>Some children</p>
-        </InfoDialog>
-        <Button onClick={() => openModal(modals.INFO)}>
-          Open Info
+          <p>Some information to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.INFO_DIALOG)}>
+          Info
+        </Button>
+
+        <Dialog
+          name={modals.WARNING_DIALOG}
+          title="A warning for the user"
+          type="warning"
+          hasCancelButton
+          onConfirm={this.onDialogConfirm}
+          onCancel={this.onDialogCancel}
+        >
+          <p>A warning to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.WARNING_DIALOG)}>
+          Warning
+        </Button>
+
+        <Dialog
+          name={modals.ERROR_DIALOG}
+          title="An error message for the user"
+          type="error"
+          hasCancelButton
+          onConfirm={this.onDialogConfirm}
+          onCancel={this.onDialogCancel}
+        >
+          <p>An error state to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.ERROR_DIALOG)}>
+          Error
         </Button>
       </div>
     );
