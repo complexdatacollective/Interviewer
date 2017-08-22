@@ -50,7 +50,7 @@ Sociogram.propTypes = {
 Sociogram.defaultProps = {
   nodeAttributes: null,
   edge: null,
-  position: PropTypes.bool,
+  position: false,
   select: null,
   sort: null,
 };

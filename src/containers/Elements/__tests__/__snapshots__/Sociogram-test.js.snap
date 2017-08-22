@@ -15,11 +15,11 @@ ShallowWrapper {
     <Connect(Component)
         attributes={null}
         edge={null}
-        layout={undefined}
-        position={[Function]}
+        layout="foo"
+        position={false}
         select={null} />
     <Connect(NodeBucket)
-        layout={undefined}
+        layout="foo"
         sort={null} />
     <div
         style={
@@ -50,11 +50,11 @@ ShallowWrapper {
       <Connect(Component)
             attributes={null}
             edge={null}
-            layout={undefined}
-            position={[Function]}
+            layout="foo"
+            position={false}
             select={null} />
       <Connect(NodeBucket)
-            layout={undefined}
+            layout="foo"
             sort={null} />
       <div
             style={
@@ -83,13 +83,13 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Sociogram
+        background={Object {}}
         edge={null}
+        layout="foo"
         nodeAttributes={null}
-        position={[Function]}
+        position={false}
         select={null}
-        sort={null}>
-        Foo
-</Sociogram>,
+        sort={null} />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -97,10 +97,11 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "children": "Foo",
+          "background": Object {},
           "edge": null,
+          "layout": "foo",
           "nodeAttributes": null,
-          "position": [Function],
+          "position": false,
           "select": null,
           "sort": null,
         },
@@ -133,11 +134,11 @@ ShallowWrapper {
           <Connect(Component)
                     attributes={null}
                     edge={null}
-                    layout={undefined}
-                    position={[Function]}
+                    layout="foo"
+                    position={false}
                     select={null} />
           <Connect(NodeBucket)
-                    layout={undefined}
+                    layout="foo"
                     sort={null} />
           <div
                     style={
@@ -168,11 +169,11 @@ ShallowWrapper {
           <Connect(Component)
                     attributes={null}
                     edge={null}
-                    layout={undefined}
-                    position={[Function]}
+                    layout="foo"
+                    position={false}
                     select={null} />
           <Connect(NodeBucket)
-                    layout={undefined}
+                    layout="foo"
                     sort={null} />
           <div
                     style={
@@ -205,12 +206,12 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Sociogram
+    background={Object {}}
     edge={null}
+    layout="foo"
     nodeAttributes={null}
-    position={[Function]}
+    position={false}
     select={null}
-    sort={null}>
-    Foo
-</Sociogram>,
+    sort={null} />,
 }
 `;

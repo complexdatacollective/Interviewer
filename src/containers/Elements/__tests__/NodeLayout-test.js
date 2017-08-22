@@ -11,7 +11,7 @@ const mockProps = {
   toggleNodeAttributes: () => {},
   width: 123,
   height: 456,
-  prompt: {},
+  layout: 'foo',
 };
 
 describe('<NodeLayout />', () => {

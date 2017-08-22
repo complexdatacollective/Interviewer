@@ -7,7 +7,7 @@ import { NodeBucket } from '../../Elements/NodeBucket';
 const mockProps = {
   node: {},
   updateNode: () => {},
-  promptLayout: 'foo',
+  layout: 'foo',
   sort: {},
 };
 

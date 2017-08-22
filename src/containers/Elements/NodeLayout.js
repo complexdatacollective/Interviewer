@@ -15,6 +15,9 @@ const draggableType = 'POSITIONED_NODE';
 
 const EnhancedNode = draggable(selectable(Node));
 
+const canPosition = position => position === true;
+const canSelect = select => !!select;
+
 export class NodeLayout extends Component {
   constructor(props) {
     super(props);
@@ -88,7 +91,7 @@ export class NodeLayout extends Component {
   }
 
   render() {
-    const { layout, nodes, width, height, canPosition, canSelect } = this.props;
+    const { layout, nodes, width, height, position, select } = this.props;
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
@@ -108,8 +111,8 @@ export class NodeLayout extends Component {
                   onDrag={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
                   selected={this.isSelected(node)}
-                  canDrag={canPosition}
-                  canSelect={canSelect}
+                  canDrag={canPosition(position)}
+                  canSelect={canSelect(select)}
                   animate={false}
                   {...node}
                 />
@@ -134,8 +137,6 @@ NodeLayout.propTypes = {
   select: PropTypes.object,
   position: PropTypes.bool,
   attributes: PropTypes.object,
-  canPosition: PropTypes.bool.isRequired,
-  canSelect: PropTypes.bool.isRequired,
 };
 
 NodeLayout.defaultProps = {
@@ -149,8 +150,6 @@ NodeLayout.defaultProps = {
 function mapStateToProps(state, ownProps) {
   return {
     nodes: getPlacedNodes(ownProps.layout)(state),
-    canPosition: ownProps.position === true,
-    canSelect: !!ownProps.select,
   };
 }
 

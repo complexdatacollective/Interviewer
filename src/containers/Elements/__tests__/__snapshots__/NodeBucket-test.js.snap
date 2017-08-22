@@ -29,8 +29,8 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <NodeBucket
+        layout="foo"
         node={Object {}}
-        promptLayout="foo"
         sort={Object {}}
         updateNode={[Function]} />,
       "_debugID": 1,
@@ -41,8 +41,8 @@ ShallowWrapper {
         "context": Object {},
         "onDropNode": [Function],
         "props": Object {
+          "layout": "foo",
           "node": Object {},
-          "promptLayout": "foo",
           "sort": Object {},
           "updateNode": [Function],
         },
@@ -93,8 +93,8 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <NodeBucket
+    layout="foo"
     node={Object {}}
-    promptLayout="foo"
     sort={Object {}}
     updateNode={[Function]} />,
 }
