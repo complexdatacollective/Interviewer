@@ -46,10 +46,12 @@ class Setup extends Component {
   }
 
   onDialogConfirm = () => {
+    // eslint-disable-next-line no-console
     console.log('dialog confirmed');
   }
 
   onDialogCancel = () => {
+    // eslint-disable-next-line no-console
     console.log('dialog cancelled');
   }
 
