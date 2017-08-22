@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import {
   PromptSwiper,
 } from '../Elements';
-import {
-  Sociogram,
-} from '../Elements/Sociogram';
+import Sociogram from '../Elements/Sociogram';
 import {
   activePrompt,
 } from '../../selectors/session';
