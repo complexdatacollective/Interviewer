@@ -13,6 +13,7 @@ import {
 
 const isChecked = (value, option) => (value ? !!value[option] : false);
 
+
 class Numeric extends Component {
   handleKeyDown = (e) => {
     if (!(
@@ -136,19 +137,12 @@ class RadioGroup extends Component {
           name={name}
           value={value}
           onRadioClick={onChange}
+          options={options}
           errorText={
             meta.invalid &&
             <div>{meta.error}</div>
           }
-        >
-          {map(options, option => (
-            <RadioInput
-              key={option}
-              label={option}
-              value={option}
-            />
-          ))}
-        </NCRadioGroup>
+        />
       </div>
     );
   }
@@ -162,9 +156,9 @@ RadioGroup.propTypes = {
 };
 
 export default {
-  Alphanumeric,
-  Numeric,
-  CheckboxGroup,
-  ToggleGroup,
+  // Alphanumeric,
+  // Numeric,
+  // CheckboxGroup,
+  // ToggleGroup,
   RadioGroup
 };

@@ -17,6 +17,42 @@ const getComponent = type => (
   () => (<div>Field type not defined</div>)
 );
 
+const InputWrapper = ({
+  input,
+  meta,
+  label,
+  options,
+  children,
+}) => {
+  console.log('input', input);
+  console.log('meta', meta);
+  console.log('options', options);
+
+  // const { options, label, meta, input: { name, value } } = this.props;
+
+  const inputProps = {
+    name: input.name,
+    value: input.value,
+    onRadioClick: input.onChange,
+    label,
+    meta,
+    options,
+  };
+
+  return (
+    <div className="input__container">
+      {children(inputProps)}
+    </div>
+  );
+};
+
+InputWrapper.propTypes = {
+  input: PropTypes.object,
+  meta: PropTypes.object,
+  options: PropTypes.array,
+  label: PropTypes.string,
+  children: PropTypes.node,
+};
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
 * which will always fail.
@@ -40,13 +76,25 @@ const getValidation = validation =>
   */
 const Field = ({ label, name, type, validation, optionsSelector, ...rest }) => {
   const validate = getValidation(validation);
-  let component = getComponent(type);
-  if (optionsSelector) { component = withOptionsFromSelector(component, optionsSelector); }
+  let InputComponent = getComponent(type);
+  console.log(InputComponent);
+  if (optionsSelector) {
+    InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
+  }
+
+  // component={props => (
+  //       <InputWrapper {...props}>
+  //         {wrappedProps =>
+  //           <InputComponent {...wrappedProps} />
+  //         }
+  //       </InputWrapper>
+  //     )}
+
   return (
     <ReduxFormField
       name={name}
       label={label}
-      component={component}
+      component={InputComponent}
       validate={validate}
       {...rest}
     />
