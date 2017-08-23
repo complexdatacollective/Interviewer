@@ -1,3 +1,5 @@
+import { isElectron, isCordova } from './Environment';
+
 const setUpXml = () => {
   const xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"\n' +
@@ -85,7 +87,7 @@ const xmlToString = (xmlData) => {
 };
 
 const saveFile = (data) => {
-  if (window.require) { // electron save dialog
+  if (isElectron()) { // electron save dialog
     const fs = window.require('fs');
     const { dialog } = window.require('electron').remote;
     dialog.showSaveDialog({ filters: [{ name: 'graphml', extensions: ['graphml'] }] }, (filename) => {
@@ -96,30 +98,39 @@ const saveFile = (data) => {
         }
       });
     });
-  } else if (window.LocalFileSystem) { // cordova save to downloads -- TODO finish writing this
-    window.requestFileSystem(window.LocalFileSystem.PERSISTENT, 0, (fileSystem) => {
+  } else if (isCordova()) { // cordova save to downloads
+    window.requestFileSystem(window.LocalFileSystem.TEMPORARY, 5 * 1024 * 1024, (fileSystem) => {
       fileSystem.root.getFile('networkcanvas.graphml', {
         create: true,
         exclusive: false,
       }, (fileEntry) => {
-        const localPath = fileEntry.fullPath;
-        const fileTransfer = new FileTransfer(); // eslint-disable-line no-undef
-        fileTransfer.download(null, localPath, (entry) => {
-          // eslint-disable-next-line
-          console.log("download complete: " + entry.fullPath);
-        }, (error) => {
-          // eslint-disable-next-line
-          console.log('download error: ' + error.code);
-          // eslint-disable-next-line
-          console.log("download error source " + error.source);
-          // eslint-disable-next-line
-          console.log("download error target " + error.target);
-        });
-      }, 'error');
-    }, 'error');
+        fileEntry.createWriter((fileWriter) => {
+          const blob = new Blob([data], { type: 'text/xml' });
+          fileWriter.seek(0);
+          fileWriter.write(blob);
+
+          const options = {
+            message: 'Your network canvas graphml file.', // not supported on some apps
+            subject: 'network canvas export',
+            files: [fileEntry.toURL()],
+            chooserTitle: 'Share file via', // Android only
+          };
+
+          const onSuccess = () => {
+            // On Android apps result.completed mostly returns false even while it's true
+          };
+
+          const onError = (msg) => {
+            alert(`Sharing failed with message: ${msg}`);
+          };
+
+          window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+        }, () => alert('Sorry! We had a problem writing your file!'));
+      }, () => alert('Sorry! We had a problem creating your file.'));
+    }, () => alert('Sorry! We had a problem accessing your file system.'));
   } else { // browser save to downloads
     const filename = 'networkcanvas.graphml';
-    const blob = new Blob([data], { type: 'text/csv' });
+    const blob = new Blob([data], { type: 'text/xml' });
     if (window.navigator.msSaveBlob) { // IE save/open
       window.navigator.msSaveBlob(blob, filename);
     } else { // everything else
