@@ -5,7 +5,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, TextInput } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../containers/Elements';
+import { Form, Dialog } from '../containers/Elements';
+
+import {
+  actionCreators as modalActions,
+  modalNames as modals,
+} from '../ducks/modules/modals';
+
 
 const formConfig = {
   formName: 'setup',
@@ -39,8 +45,22 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
+  onDialogConfirm = () => {
+    // eslint-disable-next-line no-console
+    console.log('dialog confirmed');
+  }
+
+  onDialogCancel = () => {
+    // eslint-disable-next-line no-console
+    console.log('dialog cancelled');
+  }
+
   render() {
     if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
+
+    const {
+      openModal,
+    } = this.props;
 
     return (
       <div className="setup">
@@ -67,6 +87,49 @@ class Setup extends Component {
           label="Protocol Location"
           value="Josh is sweet"
         />
+        <hr />
+        <Dialog
+          name={modals.INFO_DIALOG}
+          title="Some information for the user"
+          type="info"
+          confirmLabel="Thanks"
+          onConfirm={this.onDialogConfirm}
+          onCancel={this.onDialogCancel}
+        >
+          <p>Some information to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.INFO_DIALOG)}>
+          Info
+        </Button>
+
+        <Dialog
+          name={modals.WARNING_DIALOG}
+          title="A warning for the user"
+          type="warning"
+          confirmLabel="Understood"
+          cancelLabel="Take me back"
+          onConfirm={this.onDialogConfirm}
+          onCancel={this.onDialogCancel}
+        >
+          <p>A warning to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.WARNING_DIALOG)}>
+          Warning
+        </Button>
+
+        <Dialog
+          name={modals.ERROR_DIALOG}
+          title="An error message for the user"
+          type="error"
+          hasCancelButton={false}
+          confirmLabel="Uh-oh"
+          onConfirm={this.onDialogConfirm}
+        >
+          <p>An error state to present to the user in this informative prompt.</p>
+        </Dialog>
+        <Button onClick={() => openModal(modals.ERROR_DIALOG)}>
+          Error
+        </Button>
       </div>
     );
   }
@@ -76,6 +139,7 @@ Setup.propTypes = {
   protocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   loadDemoProtocol: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -88,6 +152,8 @@ function mapDispatchToProps(dispatch) {
   return {
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
+    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 
