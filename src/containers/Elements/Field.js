@@ -3,56 +3,96 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
+import {
+  TextInput as Alphanumeric,
+  RadioGroup,
+  ToggleGroup as SwitchGroup,
+} from 'network-canvas-ui';
+
 import validations from '../../utils/Validations';
-import components from '../../components/Inputs/fieldComponents';
+
 import { withOptionsFromSelector } from '../../behaviours';
 
 /**
-  * Returns the named field compontent, if no matching one is found it returns an empty one.
-  * @param {string} type The name of the field component to return.
+  * Returns the named field compontent, if no matching one is found
+  or else it just returns a text input
+  * @param {object} field The properties handed down from the protocol form
   */
-const getComponent = type => (
-  Object.hasOwnProperty.call(components, type) ?
-  components[type] :
-  () => (<div>Field type not defined</div>)
-);
 
-const InputWrapper = ({
-  input,
-  meta,
-  label,
-  options,
-  children,
-}) => {
-  console.log('input', input);
-  console.log('meta', meta);
-  console.log('options', options);
+export const renderInput = (field) => {
+  const {
+    type,
+    input,
+    meta,
+    label,
+    options,
+    optionsSelector,
+  } = field;
+  let InputComponent = Alphanumeric;
 
-  // const { options, label, meta, input: { name, value } } = this.props;
-
-  const inputProps = {
+  let inputProps = {
     name: input.name,
     value: input.value,
-    onRadioClick: input.onChange,
+    errorText: meta.invalid && meta.dirty && meta.error,
     label,
-    meta,
-    options,
   };
 
+  if (type === 'Numeric') {
+    inputProps = {
+      ...inputProps,
+      isNumericOnly: true,
+    };
+  }
+
+  if (type === 'RadioGroup') {
+    InputComponent = RadioGroup;
+    inputProps = {
+      ...inputProps,
+      options,
+      onRadioClick: input.onChange,
+    };
+  }
+
+  if (type === 'CheckboxGroup') {
+    InputComponent = SwitchGroup;
+    inputProps = {
+      ...inputProps,
+      toggleComponent: 'checkbox',
+      options,
+      onOptionClick: (e, checked, optionVal) => input.onChange({
+        ...input.value,
+        [optionVal]: checked,
+      }),
+    };
+  }
+
+  if (type === 'ToggleGroup') {
+    const { colors } = field;
+    InputComponent = SwitchGroup;
+    inputProps = {
+      ...inputProps,
+      toggleComponent: 'context',
+      options,
+      colors,
+      onOptionClick: (e, checked, optionVal) => input.onChange({
+        ...input.value,
+        [optionVal]: checked,
+      }),
+    };
+  }
+
+  if (optionsSelector) {
+    InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
+  }
+
   return (
-    <div className="input__container">
-      {children(inputProps)}
-    </div>
+    <InputComponent
+      {...inputProps}
+      {...input}
+    />
   );
 };
 
-InputWrapper.propTypes = {
-  input: PropTypes.object,
-  meta: PropTypes.object,
-  options: PropTypes.array,
-  label: PropTypes.string,
-  children: PropTypes.node,
-};
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
 * which will always fail.
@@ -76,26 +116,15 @@ const getValidation = validation =>
   */
 const Field = ({ label, name, type, validation, optionsSelector, ...rest }) => {
   const validate = getValidation(validation);
-  let InputComponent = getComponent(type);
-  console.log(InputComponent);
-  if (optionsSelector) {
-    InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
-  }
-
-  // component={props => (
-  //       <InputWrapper {...props}>
-  //         {wrappedProps =>
-  //           <InputComponent {...wrappedProps} />
-  //         }
-  //       </InputWrapper>
-  //     )}
 
   return (
     <ReduxFormField
       name={name}
       label={label}
-      component={InputComponent}
+      component={renderInput}
       validate={validate}
+      optionsSelector={optionsSelector}
+      type={type}
       {...rest}
     />
   );

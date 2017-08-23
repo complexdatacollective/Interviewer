@@ -1,9 +1,13 @@
 /* eslint-env jest */
 
 import React from 'react';
-import { shallow } from 'enzyme';
-import Field from '../Field';
-import FieldComponents from '../../../components/Inputs/fieldComponents';
+import { shallow, render } from 'enzyme';
+import Field, { renderInput } from '../Field';
+import {
+  TextInput as Alphanumeric,
+  RadioGroup,
+  ToggleGroup as SwitchGroup,
+} from 'network-canvas-ui';
 
 const attributes = {
   label: 'Name',
@@ -17,10 +21,10 @@ const validation = {
 };
 
 describe('Containers/Elements/Field', () => {
-  it('Loads component from the register', () => {
+  it('renders the input', () => {
     const field = shallow(<Field {...attributes} />);
 
-    expect(field.find('Field').prop('component')).toBe(FieldComponents.Alphanumeric);
+    expect(field.find('Field').prop('component')).toBe(renderInput);
   });
 
   it('Loads validations from the register', () => {
