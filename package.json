@@ -97,7 +97,7 @@
         "electron-log": "^2.2.7",
         "electron-updater": "^2.7.2",
         "gridle": "^2.0.48",
-        "history": "^4.5.1",
+        "history": "^4.7.2",
         "lodash": "^4.17.4",
         "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
         "prop-types": "^15.5.8",

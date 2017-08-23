@@ -108,7 +108,7 @@ export class NodeLayout extends Component {
                   label={label(node)}
                   draggableType={draggableType}
                   onDropped={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
-                  onDrag={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
+                  onMove={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
                   onSelected={() => this.onSelectNode(node)}
                   selected={this.isSelected(node)}
                   canDrag={canPosition(position)}

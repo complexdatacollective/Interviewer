@@ -100,6 +100,9 @@ export default {
               id: 'closeness1',
               title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
               sociogram: {
+                edge: {
+                  type: 'friends',
+                },
                 layout: 'closenessLayout',
                 background: {
                   n: 3,

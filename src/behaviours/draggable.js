@@ -24,7 +24,7 @@ function getCoords(event) {
   };
 }
 
-function moveDistance(start, draggableData) {
+function getMoveDistance(start, draggableData) {
   return Math.sqrt((draggableData.x - start.x) ** 2, (draggableData.y - start.y) ** 2);
 }
 
@@ -56,8 +56,9 @@ export default function draggable(WrappedComponent) {
     }
 
     onDrag = (event, draggableData) => {
+      const moveDistance = getMoveDistance(this.state.start, draggableData);
       if (!this.state.preview) {  // TODO: better way to keep track of drag start?
-        if (moveDistance(this.state.start, draggableData) > 4) {
+        if (moveDistance > 4) {
           this.startDrag(event, draggableData);
         }
         return;
@@ -67,13 +68,14 @@ export default function draggable(WrappedComponent) {
       this.props.updateActiveZones(hits.map(hit => hit.name));
 
       if (hits.length > 0) {
-        this.props.onDrag(hits, getCoords(event, draggableData));
+        this.props.onMove(hits, getCoords(event, draggableData));
       }
 
       this.updateDrag(event, draggableData);
     }
 
     onStop = (event, draggableData) => {
+      const moveDistance = getMoveDistance(this.state.start, draggableData);
       this.endDrag();
 
       this.setState({
@@ -83,7 +85,7 @@ export default function draggable(WrappedComponent) {
 
       const hits = this.getHits(getCoords(event, draggableData));
 
-      if (hits.length > 0) {
+      if (hits.length > 0 && moveDistance > 4) {
         this.props.onDropped(hits, getCoords(event, draggableData));
       }
     }
@@ -160,7 +162,7 @@ export default function draggable(WrappedComponent) {
     dragStart: PropTypes.func.isRequired,
     dragStop: PropTypes.func.isRequired,
     onDropped: PropTypes.func,
-    onDrag: PropTypes.func,
+    onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
     canDrag: PropTypes.bool,
     animate: PropTypes.bool,
@@ -170,7 +172,7 @@ export default function draggable(WrappedComponent) {
     canDrag: true,
     animate: false,
     onDropped: () => {},
-    onDrag: () => {},
+    onMove: () => {},
   };
 
   function mapStateToProps(state) {
