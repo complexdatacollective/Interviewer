@@ -14,10 +14,10 @@ ShallowWrapper {
         xmlns="http://www.w3.org/2000/svg">
         <line
             stroke="#f2b700"
-            x1={10000}
-            x2={10000}
-            y1={10000}
-            y2={10000} />
+            x1={100}
+            x2={100}
+            y1={100}
+            y2={100} />
     </svg>
 </div>,
   "nodes": Array [
@@ -29,10 +29,10 @@ ShallowWrapper {
             xmlns="http://www.w3.org/2000/svg">
             <line
                   stroke="#f2b700"
-                  x1={10000}
-                  x2={10000}
-                  y1={10000}
-                  y2={10000} />
+                  x1={100}
+                  x2={100}
+                  y1={100}
+                  y2={100} />
       </svg>
 </div>,
   ],
@@ -109,10 +109,10 @@ ShallowWrapper {
                     xmlns="http://www.w3.org/2000/svg">
                     <line
                               stroke="#f2b700"
-                              x1={10000}
-                              x2={10000}
-                              y1={10000}
-                              y2={10000} />
+                              x1={100}
+                              x2={100}
+                              y1={100}
+                              y2={100} />
           </svg>
 </div>,
         "_debugID": 2,
@@ -124,10 +124,10 @@ ShallowWrapper {
                     xmlns="http://www.w3.org/2000/svg">
                     <line
                               stroke="#f2b700"
-                              x1={10000}
-                              x2={10000}
-                              y1={10000}
-                              y2={10000} />
+                              x1={100}
+                              x2={100}
+                              y1={100}
+                              y2={100} />
           </svg>
 </div>,
       },
