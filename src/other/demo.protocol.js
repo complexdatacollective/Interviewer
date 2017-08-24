@@ -26,15 +26,60 @@ const fields = [
   {
     label: 'Age',
     name: 'age',
-    type: 'Numeric',
+    type: 'Alphanumeric',
+    isNumericOnly: true,
     validation: {
       required: true,
       minValue: 0,
       maxValue: 200,
     },
   },
+  {
+    label: 'Which are your favourite package managers? (checkbox list)',
+    name: 'favourite_package_manager',
+    type: 'ToggleGroup',
+    toggleComponent: 'checkbox',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    validation: {
+      minSelected: 1,
+    },
+  },
+  {
+    label: 'Pick something from the network? (with selector)',
+    name: 'network_picker',
+    type: 'ToggleGroup',
+    toggleComponent: 'context',
+    optionsSelector: (state) => (
+      state.network.nodes.map((node) => (node.name))
+    )
+  },
+  {
+    label: 'Which package managers have you used? (no validations)',
+    name: 'used_package_managers',
+    type: 'ToggleGroup',
+    toggleComponent: 'checkbox',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    validation: {
+    },
+  },
+  {
+    label: 'Pick one. (radio group)',
+    name: 'pick_opne',
+    type: 'RadioGroup',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    validation: {
+    },
+  },
+  {
+    label: 'Which package managers have you contributed to? (toggle group)',
+    name: 'contributed_package_managers',
+    type: 'ToggleGroup',
+    options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
+    colors: ['neon-carrot', 'kiwi', 'sea-serpent', 'cerulean-blue', 'paradise-pink'],
+    validation: {
+    },
+  },
 ];
-
 export default {
   config: {
     "name": "My first interview protocol",

@@ -6,7 +6,7 @@ import { map, toPairs } from 'lodash';
 import {
   TextInput as Alphanumeric,
   RadioGroup,
-  ToggleGroup as SwitchGroup,
+  ToggleGroup,
 } from 'network-canvas-ui';
 
 import validations from '../../utils/Validations';
@@ -27,22 +27,18 @@ export const renderInput = (field) => {
     label,
     options,
     optionsSelector,
+    isNumericOnly,
+    toggleComponent,
   } = field;
   let InputComponent = Alphanumeric;
 
   let inputProps = {
     name: input.name,
     value: input.value,
-    errorText: meta.invalid && meta.dirty && meta.error,
+    errorText: meta.invalid && meta.touched && meta.error,
     label,
+    isNumericOnly,
   };
-
-  if (type === 'Numeric') {
-    inputProps = {
-      ...inputProps,
-      isNumericOnly: true,
-    };
-  }
 
   if (type === 'RadioGroup') {
     InputComponent = RadioGroup;
@@ -53,25 +49,12 @@ export const renderInput = (field) => {
     };
   }
 
-  if (type === 'CheckboxGroup') {
-    InputComponent = SwitchGroup;
-    inputProps = {
-      ...inputProps,
-      toggleComponent: 'checkbox',
-      options,
-      onOptionClick: (e, checked, optionVal) => input.onChange({
-        ...input.value,
-        [optionVal]: checked,
-      }),
-    };
-  }
-
   if (type === 'ToggleGroup') {
     const { colors } = field;
-    InputComponent = SwitchGroup;
+    InputComponent = ToggleGroup;
     inputProps = {
       ...inputProps,
-      toggleComponent: 'context',
+      toggleComponent,
       options,
       colors,
       onOptionClick: (e, checked, optionVal) => input.onChange({
@@ -86,10 +69,7 @@ export const renderInput = (field) => {
   }
 
   return (
-    <InputComponent
-      {...inputProps}
-      {...input}
-    />
+    <InputComponent {...inputProps} {...input} />
   );
 };
 
