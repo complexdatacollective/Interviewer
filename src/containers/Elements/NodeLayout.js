@@ -51,6 +51,7 @@ export class NodeLayout extends Component {
 
     // Calculate x/y position as a decimal within the hitbox
     const relativeCoords = {
+      type: 'layout',
       x: (x - hitbox.x) / hitbox.width,
       y: (y - hitbox.y) / hitbox.height,
     };
