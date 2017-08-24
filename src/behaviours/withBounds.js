@@ -1,45 +1,54 @@
-/* eslint-disable react/no-find-dom-node */
+/* eslint-disable */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { throttle } from 'lodash';
+import { throttle, isEqual } from 'lodash';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 
-const maxFramesPerSecond = 10;
+const maxFramesPerSecond = 6;
+
+const initialState = {
+  width: 0,
+  height: 0,
+  y: 0,
+  x: 0,
+};
 
 export default function withBounds(WrappedComponent) {
   return class extends Component {
     constructor() {
       super();
 
-      this.state = {
-        width: 0,
-        height: 0,
-        y: 0,
-        x: 0,
-      };
+      this.state = initialState;
+      this.lastState = initialState;
 
       this.trackSize = throttle(this.trackSize, 1000 / maxFramesPerSecond);
     }
 
     componentDidMount() {
       this.trackSize();
-      window.addEventListener('resize', this.trackSize);
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.trackSize);
+      window.cancelAnimationFrame(this.animationRequestId);
     }
 
     trackSize = () => {
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
-      this.setState({
+      const nextState = {
         width: boundingClientRect.width,
         height: boundingClientRect.height,
         y: boundingClientRect.top,
         x: boundingClientRect.left,
-      });
+      };
+
+      if (!isEqual(this.lastState, nextState)) {
+        this.lastState = nextState;
+        this.setState(nextState);
+      }
+
+      this.animationRequestId = window.requestAnimationFrame(this.trackSize);
     }
 
     render() {
@@ -47,7 +56,7 @@ export default function withBounds(WrappedComponent) {
         <WrappedComponent
           {...this.props}
           {...this.state}
-          ref={(component) => { this.node = findDOMNode(component); }}
+          ref={() => { this.node = findDOMNode(this); }}
         />
       );
     }

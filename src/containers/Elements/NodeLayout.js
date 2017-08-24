@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
@@ -17,6 +19,8 @@ const EnhancedNode = draggable(selectable(Node));
 
 const canPosition = position => position === true;
 const canSelect = select => !!select;
+
+const asPercentage = decimal => `${decimal * 100}%`;
 
 export class NodeLayout extends Component {
   constructor(props) {
@@ -41,12 +45,14 @@ export class NodeLayout extends Component {
     }
   };
 
-  updateNodeLayout = (hits, coords, node) => {
+  updateNodeLayout = (hits, { x, y }, node) => {
     const { layout, updateNode } = this.props;
-    const hit = first(hits);
+    const hitbox = first(hits);
+
+    // Calculate x/y position as a decimal within the hitbox
     const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
+      x: (x - hitbox.x) / hitbox.width,
+      y: (y - hitbox.y) / hitbox.height,
     };
 
     updateNode({ ...node, [layout]: relativeCoords });
@@ -91,7 +97,7 @@ export class NodeLayout extends Component {
   }
 
   render() {
-    const { layout, nodes, width, height, position, select } = this.props;
+    const { layout, nodes, position, select } = this.props;
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
@@ -99,11 +105,19 @@ export class NodeLayout extends Component {
           { nodes.map((node, key) => {
             if (!Object.prototype.hasOwnProperty.call(node, layout)) { return null; }
 
-            const x = node[layout].x * width;
-            const y = node[layout].y * height;
+            const { x, y } = node[layout];
+
+            const styles = {
+              left: asPercentage(x),
+              top: asPercentage(y),
+            };
 
             return (
-              <div key={key} className="node-layout__node" style={{ left: `${x}px`, top: `${y}px` }}>
+              <div
+                key={key}
+                className="node-layout__node"
+                style={styles}
+              >
                 <EnhancedNode
                   label={label(node)}
                   draggableType={draggableType}

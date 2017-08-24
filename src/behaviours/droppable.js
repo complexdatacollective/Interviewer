@@ -1,52 +1,68 @@
 /* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttle } from 'lodash';
+import { throttle, isEqual } from 'lodash';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
+
+const maxFramesPerSecond = 6;
+const initialZoneState = {
+  name: null,
+  acceptsDraggableType: null,
+  width: null,
+  height: null,
+  y: null,
+  x: null,
+};
 
 export default function droppable(WrappedComponent) {
   class Droppable extends Component {
     constructor(props) {
       super(props);
 
-      this.updateZone = throttle(this.updateZone, 1000 / 24);  // 24fps max
+      this.lastZoneState = initialZoneState;
+
+      this.updateZone = throttle(this.updateZone, 1000 / maxFramesPerSecond);
     }
 
     componentDidMount() {
       this.updateZone();
-      window.addEventListener('resize', this.updateZone);
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.updateZone);
+      window.cancelAnimationFrame(this.animationRequestId);
     }
 
     updateZone = () => {
       if (!this.props.droppableName) { return; }
 
-      const node = ReactDOM.findDOMNode(this);
+      const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
-      const boundingClientRect = getAbsoluteBoundingRect(node);
-
-      this.props.updateZone({
+      const nextZoneState = {
         name: this.props.droppableName,
         acceptsDraggableType: this.props.acceptsDraggableType,
         width: boundingClientRect.width,
         height: boundingClientRect.height,
         y: boundingClientRect.top,
         x: boundingClientRect.left,
-      });
+      };
+
+      if (!isEqual(nextZoneState, this.lastZoneState)) {
+        this.lastZoneState = nextZoneState;
+        this.props.updateZone(nextZoneState);
+      }
+
+      this.animationRequestId = window.requestAnimationFrame(this.updateZone);
     }
 
     render() {
       return (
         <WrappedComponent
-          ref={(node) => { this.node = node; }}
+          ref={() => { this.node = findDOMNode(this); }}
           hover={this.props.hover}
           {...this.props}
         />
