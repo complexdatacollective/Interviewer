@@ -21,24 +21,6 @@ ShallowWrapper {
     <Connect(NodeBucket)
         layout="foo"
         sort={null} />
-    <div
-        style={
-            Object {
-                "bottom": "20px",
-                "position": "absolute",
-                "right": 0,
-              }
-        }>
-        <Button
-            color=""
-            content=""
-            icon=""
-            iconPosition="right"
-            onClick={[Function]}
-            size="">
-            Reset Layout
-        </Button>
-    </div>
 </div>,
   "nodes": Array [
     <div
@@ -56,24 +38,6 @@ ShallowWrapper {
       <Connect(NodeBucket)
             layout="foo"
             sort={null} />
-      <div
-            style={
-                  Object {
-                        "bottom": "20px",
-                        "position": "absolute",
-                        "right": 0,
-                      }
-            }>
-            <Button
-                  color=""
-                  content=""
-                  icon=""
-                  iconPosition="right"
-                  onClick={[Function]}
-                  size="">
-                  Reset Layout
-            </Button>
-      </div>
 </div>,
   ],
   "options": Object {},
@@ -140,24 +104,6 @@ ShallowWrapper {
           <Connect(NodeBucket)
                     layout="foo"
                     sort={null} />
-          <div
-                    style={
-                              Object {
-                                        "bottom": "20px",
-                                        "position": "absolute",
-                                        "right": 0,
-                                      }
-                    }>
-                    <Button
-                              color=""
-                              content=""
-                              icon=""
-                              iconPosition="right"
-                              onClick={[Function]}
-                              size="">
-                              Reset Layout
-                    </Button>
-          </div>
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
@@ -175,24 +121,6 @@ ShallowWrapper {
           <Connect(NodeBucket)
                     layout="foo"
                     sort={null} />
-          <div
-                    style={
-                              Object {
-                                        "bottom": "20px",
-                                        "position": "absolute",
-                                        "right": 0,
-                                      }
-                    }>
-                    <Button
-                              color=""
-                              content=""
-                              icon=""
-                              iconPosition="right"
-                              onClick={[Function]}
-                              size="">
-                              Reset Layout
-                    </Button>
-          </div>
 </div>,
       },
       "_renderedNodeType": 0,
