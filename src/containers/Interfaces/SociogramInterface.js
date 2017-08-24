@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Button } from 'network-canvas-ui';
 import {
   PromptSwiper,
 } from '../Elements';
@@ -8,6 +9,17 @@ import Sociogram from '../Elements/Sociogram';
 import {
   activePrompt,
 } from '../../selectors/session';
+import {
+  resetPropertyForAllNodes,
+  resetEdgesOfType,
+} from '../../utils/reset';
+
+const resetInterface = (prompts) => {
+  prompts.forEach((prompt) => {
+    resetPropertyForAllNodes(prompt.sociogram.layout);
+    resetEdgesOfType(prompt.sociogram.edge.type);
+  });
+};
 
 /**
   * Sociogram Interface
@@ -20,6 +32,13 @@ const SociogramInterface = ({ prompt, prompts }) => (
     </div>
     <div className="sociogram-interface__sociogram">
       <Sociogram {...prompt.sociogram} />
+    </div>
+    <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
+      <Button
+        onClick={() => { resetInterface(prompts); }}
+      >
+        Reset interface
+      </Button>
     </div>
   </div>
 );

@@ -111,6 +111,14 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         edges: [...state.edges, action.edge],
       };
+    case REMOVE_EDGE:
+      if (edgeExists(state.edges, action.edge)) {
+        return {
+          ...state,
+          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
+        };
+      }
+      return state;
     default:
       return state;
   }
@@ -159,12 +167,20 @@ function toggleEdge(edge) {
   };
 }
 
+function removeEdge(edge) {
+  return {
+    type: REMOVE_EDGE,
+    edge,
+  };
+}
+
 const actionCreators = {
   addNode,
   updateNode,
   removeNode,
   addEdge,
   toggleEdge,
+  removeEdge,
   toggleNodeAttributes,
 };
 

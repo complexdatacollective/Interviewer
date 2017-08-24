@@ -11,3 +11,14 @@ export const resetPropertyForAllNodes = (property) => {
     store.dispatch(networkActions.updateNode(omit(node, property)));
   });
 };
+
+export const resetEdgesOfType = (edgeType) => {
+  const state = store.getState();
+
+  state.network.edges.forEach((edge) => {
+    console.log(edge.type, edgeType);
+    if (edge.type === edgeType) {
+      store.dispatch(networkActions.removeEdge(edge));
+    }
+  });
+};

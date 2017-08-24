@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'network-canvas-ui';
 import {
   SociogramBackground,
   NodeLayout,
   EdgeLayout,
   NodeBucket,
 } from '../Elements';
-import { resetPropertyForAllNodes } from '../../utils/reset';
 
 const Sociogram = ({ nodeAttributes, background, edge, layout, position, select, sort }) => (
   <div className="sociogram">
@@ -31,9 +29,6 @@ const Sociogram = ({ nodeAttributes, background, edge, layout, position, select,
       layout={layout}
       sort={sort}
     />
-    <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
-      <Button onClick={() => { resetPropertyForAllNodes(layout); }}>Reset Layout</Button>
-    </div>
   </div>
 );
 
