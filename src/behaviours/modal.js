@@ -38,6 +38,7 @@ function modal(WrappedComponent) {
     render() {
       return (
         <WrappedComponent
+          show={this.props.show}
           toggle={this.toggle}
           open={this.close}
           close={this.close}

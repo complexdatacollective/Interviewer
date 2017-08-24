@@ -10,49 +10,47 @@
  *    callback from `updater` for the click property of `Check Updates...` MenuItem.
  */
 
-const { dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const { ipcMain, BrowserWindow } = require('electron');
 const log = require('electron-log');
+
+function sendToRenderer(channel, message) {
+  const arr = BrowserWindow.getAllWindows();
+  for (let i = 0; i < arr.length; i += 1) {
+    const toWindow = arr[i];
+    toWindow.webContents.send(channel, message);
+  }
+}
+
+ipcMain.on('CHECK_FOR_UPDATE', () => {
+  autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('DOWNLOAD_UPDATE', () => {
+  autoUpdater.downloadUpdate();
+});
+
+ipcMain.on('INSTALL_UPDATE', () => {
+  setImmediate(() => autoUpdater.quitAndInstall());
+});
 
 autoUpdater.autoDownload = false;
 
 autoUpdater.on('error', (event, error) => {
   const errorMessage = error ? (error.stack || error).toString() : event.toString();
-
   log.error(errorMessage);
-
-  dialog.showErrorBox('Error:', errorMessage);
+  sendToRenderer('ERROR', errorMessage);
 });
 
 autoUpdater.on('update-available', () => {
-  dialog.showMessageBox({
-    type: 'info',
-    title: 'Found Updates',
-    message: 'Found updates, do you want update now?',
-    buttons: ['Sure', 'No']
-  }, (buttonIndex) => {
-    if (buttonIndex === 0) {
-      autoUpdater.downloadUpdate();
-    }
-  });
+  sendToRenderer('UPDATE_AVAILABLE', 'UPDATE_AVAILABLE');
 });
 
+
 autoUpdater.on('update-not-available', () => {
-  dialog.showMessageBox({
-    title: 'No Updates',
-    message: 'Current version is up-to-date.'
-  });
+  sendToRenderer('UPDATE_NOT_AVAILABLE', 'UPDATE_NOT_AVAILABLE');
 });
 
 autoUpdater.on('update-downloaded', () => {
-  dialog.showMessageBox({
-    title: 'Install Updates',
-    message: 'Updates downloaded, application will be quit for update...'
-  }, () => {
-    setImmediate(() => autoUpdater.quitAndInstall());
-  });
+  sendToRenderer('UPDATE_DOWNLOADED', 'UPDATE_DOWNLOADED');
 });
-
-module.exports = () => {
-  autoUpdater.checkForUpdates();
-};

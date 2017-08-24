@@ -1,22 +1,47 @@
 import { isElectron } from '../utils/Environment';
 
 // Initialise auto update if we are in electron
-const checkForUpdate = () => {
-  if (isElectron()) {
-    // update through IPC goes here
-    const { ipcRenderer } = window.require('electron');
-    ipcRenderer.send('CHECK_FOR_UPDATE');
+const updater = {
+  checkForUpdate() {
+    return new Promise((resolve, reject) => {
+      if (isElectron()) {
+        // update through IPC goes here
+        const { ipcRenderer } = window.require('electron');
+        ipcRenderer.send('CHECK_FOR_UPDATE');
 
-    ipcRenderer.on('UPDATE_FOUND', (event, arg) => {
-      console.log(arg);  // eslint-disable-line no-console
-    });
+        ipcRenderer.on('UPDATE_AVAILABLE', (response) => {
+          resolve(response);
+        });
 
-    ipcRenderer.on('UP_TO_DATE', (event, arg) => {
-      console.log(arg);  // eslint-disable-line no-console
+        ipcRenderer.on('UPDATE_NOT_AVAILABLE', (response) => {
+          reject(response);
+        });
+      }
     });
-  }
+  },
+  downloadUpdate() {
+    return new Promise((resolve, reject) => {
+      if (isElectron()) {
+        const { ipcRenderer } = window.require('electron');
+        ipcRenderer.send('DOWNLOAD_UPDATE');
+
+        ipcRenderer.on('UPDATE_DOWNLOADED', (response) => {
+          resolve(response);
+        });
+
+        ipcRenderer.on('ERROR', (response) => {
+          reject(response);
+        });
+      }
+    });
+  },
+  installUpdate() {
+    if (isElectron()) {
+      // update through IPC goes here
+      const { ipcRenderer } = window.require('electron');
+      ipcRenderer.send('INSTALL_UPDATE');
+    }
+  },
 };
 
-module.exports = {
-  checkForUpdate,
-};
+export default updater;
