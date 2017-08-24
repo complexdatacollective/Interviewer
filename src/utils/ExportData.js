@@ -23,12 +23,13 @@ const setUpXml = () => {
 };
 
 const generateKeys = (graph, graphML, elements, type, excludeList) => {
-// generate keys for edge attributes
+// generate keys for attributes
   const done = [];
   elements.forEach((element) => {
     Object.keys(element).forEach((key) => {
       if (done.indexOf(key) === -1 && !excludeList.includes(key)) {
         const keyElement = document.createElementNS(graphML.namespaceURI, 'key');
+        keyElement.setAttribute('id', key);
         keyElement.setAttribute('attr.name', key);
         switch (typeof element[key]) {
           case 'boolean':
@@ -41,11 +42,26 @@ const generateKeys = (graph, graphML, elements, type, excludeList) => {
               keyElement.setAttribute('attr.type', 'double');
             }
             break;
+          case 'object':
+            // special handling for locations
+            if (element[key].type && element[key].type === 'location') {
+              keyElement.setAttribute('attr.name', `${key}Y`);
+              keyElement.setAttribute('id', `${key}Y`);
+              keyElement.setAttribute('attr.type', 'double');
+              const keyElement2 = document.createElementNS(graphML.namespaceURI, 'key');
+              keyElement2.setAttribute('id', `${key}X`);
+              keyElement2.setAttribute('attr.name', `${key}X`);
+              keyElement2.setAttribute('attr.type', 'double');
+              keyElement2.setAttribute('for', type);
+              graphML.insertBefore(keyElement2, graph);
+            } else {
+              keyElement.setAttribute('attr.type', 'string');
+            }
+            break;
           default:
             keyElement.setAttribute('attr.type', 'string');
         }
         keyElement.setAttribute('for', type);
-        keyElement.setAttribute('id', key);
         graphML.insertBefore(keyElement, graph);
         done.push(key);
       }
@@ -60,17 +76,28 @@ const getDataElement = (uri, key, text) => {
   return data;
 };
 
-const addElements = (graph, uri, dataList, type, extra: false) => {
-  dataList.forEach((dataElement) => {
+const addElements = (graph, uri, dataList, type, excludeList, extra: false) => {
+  dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
-    domElement.setAttribute('id', dataElement.id);
+    if (dataElement.id) {
+      domElement.setAttribute('id', dataElement.id);
+    } else {
+      domElement.setAttribute('id', index);
+    }
     if (extra) domElement.setAttribute('source', dataElement.from);
     if (extra) domElement.setAttribute('target', dataElement.to);
     graph.appendChild(domElement);
 
     Object.keys(dataElement).forEach((key) => {
-      if (key !== 'id') {
-        domElement.appendChild(getDataElement(uri, key, dataElement[key]));
+      if (!excludeList.includes(key)) {
+        if (typeof dataElement[key] !== 'object') {
+          domElement.appendChild(getDataElement(uri, key, dataElement[key]));
+        } else if (dataElement[key].type && dataElement[key].type === 'location') {
+          domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[key].x));
+          domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[key].y));
+        } else {
+          domElement.appendChild(getDataElement(uri, key, JSON.stringify(dataElement[key])));
+        }
       }
     });
   });
@@ -125,7 +152,7 @@ const saveFile = (data) => {
           };
 
           window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-        }, () => alert('Sorry! We had a problem writing your file!'));
+        }, () => alert('Sorry! We had a problem writing your file.'));
       }, () => alert('Sorry! We had a problem creating your file.'));
     }, () => alert('Sorry! We had a problem accessing your file system.'));
   } else { // browser save to downloads
@@ -157,8 +184,8 @@ const createGraphML = (networkData) => {
   generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id']);
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node');
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', true);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id']);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], true);
 
   saveFile(xmlToString(xml));
 };
