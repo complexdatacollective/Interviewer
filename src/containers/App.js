@@ -52,7 +52,10 @@ class App extends Component {
       },
     ).catch(
       // Error checking for updates
-      error => console.log('ERROR LAND ', error));
+      (error) => {
+        console.log('ERROR LAND ', error);
+      },
+    );
   }
 
   render() {
@@ -83,17 +86,17 @@ class App extends Component {
             onConfirm={() => {
               updater.downloadUpdate().then(
                 (response) => {
-                  // Update available.
+                  // Update downloaded
                   console.log('UPDATE DOWNLOAD SUCCESS', response);
                   this.props.openModal(modals.UPDATE_INSTALL_DIALOG);
                 },
                 (failure) => {
-                  // No update available.
+                  // Update didn't download
                   console.log('UPDATE DOWNLOAD FAILURE ', failure);
                   this.props.openModal(modals.UPDATE_ERROR_DIALOG);
                 },
               ).catch(
-                // Error checking for updates
+                // Error downloading update
                 (error) => {
                   console.log('Download update error ', error);
                   this.props.openModal(modals.UPDATE_ERROR_DIALOG);
@@ -145,9 +148,6 @@ class App extends Component {
             <p>
               An error has occured during the update process.
             </p>
-            <textarea>
-              You batty
-            </textarea>
           </Dialog>
           { children }
         </div>

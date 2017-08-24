@@ -27,7 +27,12 @@ ipcMain.on('CHECK_FOR_UPDATE', () => {
 });
 
 ipcMain.on('DOWNLOAD_UPDATE', () => {
-  autoUpdater.downloadUpdate();
+  autoUpdater.downloadUpdate().catch(
+    // Error checking for updates
+    (error) => {
+      const errorMessage = error ? (error.stack || error).toString() : 'unknown error';
+      sendToRenderer('ERROR', errorMessage);
+    });
 });
 
 ipcMain.on('INSTALL_UPDATE', () => {

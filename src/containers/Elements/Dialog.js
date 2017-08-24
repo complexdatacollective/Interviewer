@@ -56,7 +56,7 @@ Dialog.propTypes = {
   cancelLabel: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
   close: PropTypes.func.isRequired,
 };
@@ -67,6 +67,7 @@ Dialog.defaultProps = {
   confirmLabel: 'Okay',
   cancelLabel: 'Cancel',
   children: null,
+  onConfirm: () => {},
   onCancel: () => {},
 };
 
