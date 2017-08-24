@@ -1,13 +1,8 @@
 /* eslint-env jest */
 
 import React from 'react';
-import { shallow, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import Field, { renderInput } from '../Field';
-import {
-  TextInput as Alphanumeric,
-  RadioGroup,
-  ToggleGroup as SwitchGroup,
-} from 'network-canvas-ui';
 
 const attributes = {
   label: 'Name',
@@ -21,6 +16,14 @@ const validation = {
 };
 
 describe('Containers/Elements/Field', () => {
+  it('should render', () => {
+    const subject = shallow((
+      <Field {...attributes} />
+    ));
+
+    expect(subject).toMatchSnapshot();
+  });
+
   it('renders the input', () => {
     const field = shallow(<Field {...attributes} />);
 

@@ -37,7 +37,7 @@ const fields = [
   {
     label: 'Which are your favourite package managers? (checkbox list)',
     name: 'favourite_package_manager',
-    type: 'ToggleGroup',
+    type: 'CheckboxGroup',
     toggleComponent: 'checkbox',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
@@ -47,7 +47,7 @@ const fields = [
   {
     label: 'Pick something from the network? (with selector)',
     name: 'network_picker',
-    type: 'ToggleGroup',
+    type: 'CheckboxGroup',
     toggleComponent: 'context',
     optionsSelector: (state) => (
       state.network.nodes.map((node) => (node.name))
@@ -56,7 +56,7 @@ const fields = [
   {
     label: 'Which package managers have you used? (no validations)',
     name: 'used_package_managers',
-    type: 'ToggleGroup',
+    type: 'CheckboxGroup',
     toggleComponent: 'checkbox',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     validation: {
@@ -73,7 +73,7 @@ const fields = [
   {
     label: 'Which package managers have you contributed to? (toggle group)',
     name: 'contributed_package_managers',
-    type: 'ToggleGroup',
+    type: 'CheckboxGroup',
     options: ['yarn', 'npm', 'pip', 'gem', 'pear'],
     colors: ['neon-carrot', 'kiwi', 'sea-serpent', 'cerulean-blue', 'paradise-pink'],
     validation: {

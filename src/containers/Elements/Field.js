@@ -6,7 +6,7 @@ import { map, toPairs } from 'lodash';
 import {
   TextInput as Alphanumeric,
   RadioGroup,
-  ToggleGroup,
+  ToggleGroup as CheckboxGroup,
 } from 'network-canvas-ui';
 
 import validations from '../../utils/Validations';
@@ -49,9 +49,9 @@ export const renderInput = (field) => {
     };
   }
 
-  if (type === 'ToggleGroup') {
+  if (type === 'CheckboxGroup') {
     const { colors } = field;
-    InputComponent = ToggleGroup;
+    InputComponent = CheckboxGroup;
     inputProps = {
       ...inputProps,
       toggleComponent,
