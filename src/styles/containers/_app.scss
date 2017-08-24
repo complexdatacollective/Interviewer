@@ -19,18 +19,17 @@
     overflow: hidden;
     transition: $animation-standard-duration $animation-default-easing;
     width: 100vw;
+    display: flex;
+    @include vcjc; // vertical center, justify center
 
     // content being pushed e.g. by menu
     &--pushed {
       transform-origin: 100%;
       transform-style: preserve-3d;
+      transform: translate3d(295px, 0, -870px);
 
-      @include breakpoint(medium) {
-        transform: translate3d(23.5vw, 0, -66vw);
-      }
-
-      @include breakpoint(large) {
-        transform: translate3d(17vw, 0, -40vw);
+      @include breakpoint(full) {
+        transform: translate3d(335px, 0, -870px);
       }
     }
   }

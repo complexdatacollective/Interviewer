@@ -134,7 +134,7 @@ export default {
         "id": "namegen1",
         "type": "NameGenerator",
         "icon": "menu-name-generator",
-        "title": "Name Generator Title 1",
+        "title": "Closeness",
         "params": {
           "nodeType": 'person',
           "panels": [
@@ -144,7 +144,7 @@ export default {
           "prompts": [
             {
               id: '6cl',
-              title: 'Within the past 6 months, who have you felt close to?',
+              title: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
               nodeAttributes: {
                 special_category: 46,
                 close_friend: true,

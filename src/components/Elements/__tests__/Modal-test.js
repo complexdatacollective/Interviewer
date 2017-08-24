@@ -1,50 +1,80 @@
 /* eslint-env jest */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { mount } from 'enzyme';
 import Modal from '../../Elements/Modal';
+
+const modalName = 'foo';
+
+const closedState = {
+  modals: [
+    {
+      open: false,
+      name: modalName,
+    },
+  ],
+};
+
+const openState = {
+  modals: [
+    {
+      open: true,
+      name: modalName,
+    },
+  ],
+};
 
 describe('Modal component', () => {
   describe('show is false', () => {
     it('renders nothing', () => {
-      const component = shallow((
-        <Modal title="foo" show={false} onClose={() => {}}>
-          foo
-        </Modal>
+      const component = mount((
+        <Provider store={createStore(() => closedState)}>
+          <Modal title="foo" name={modalName}>
+            foo
+          </Modal>
+        </Provider>
       ));
 
-      expect(component.find({ key: 'modal' }).length).toBe(0);
+      expect(component.find('.modal').length).toBe(0);
     });
   });
 
   describe('show is true', () => {
     it('renders with content', () => {
-      const component = shallow((
-        <Modal title="foo" show onClose={() => {}}>
-          <span>foo</span>
-        </Modal>
+      const component = mount((
+        <Provider store={createStore(() => openState)}>
+          <Modal title="foo" name={modalName}>
+            <span>foo</span>
+          </Modal>
+        </Provider>
       ));
 
       expect(component.contains(<span>foo</span>)).toBe(true);
     });
 
-    it('calls onClose when close event is triggered', () => {
-      const onClose = jest.fn();
-      const component = shallow(<Modal title="foo" show onClose={onClose} />);
+    it('calls close when close button is clicked', () => {
+      const close = jest.fn();
+      const component = mount((
+        <Provider store={createStore(() => openState)}>
+          <Modal title="foo" name={modalName} close={close} />
+        </Provider>
+      ));
 
-      expect(onClose.mock.calls.length).toBe(0);
+      expect(close.mock.calls.length).toBe(0);
 
       // Click on close button
       component.find('button').simulate('click');
-      expect(onClose.mock.calls.length).toBe(1);
+      expect(close.mock.calls.length).toBe(1);
 
       // Click on background
       component.find('.modal').simulate('click');
-      expect(onClose.mock.calls.length).toBe(2);
+      expect(close.mock.calls.length).toBe(2);
 
       // Clicks to window shouldn't trigger it
-      component.find('.modal__window').simulate('click', { stopPropagation: () => {} });
-      expect(onClose.mock.calls.length).toBe(2);
+      component.find('.modal__window').simulate('click');
+      expect(close.mock.calls.length).toBe(2);
     });
   });
 });
