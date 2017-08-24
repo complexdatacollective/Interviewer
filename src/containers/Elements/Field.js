@@ -3,19 +3,75 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
+import {
+  TextInput as Alphanumeric,
+  RadioGroup,
+  ToggleGroup as CheckboxGroup,
+} from 'network-canvas-ui';
+
 import validations from '../../utils/Validations';
-import components from '../../utils/fieldComponents';
+
 import { withOptionsFromSelector } from '../../behaviours';
 
 /**
-  * Returns the named field compontent, if no matching one is found it returns an empty one.
-  * @param {string} type The name of the field component to return.
+  * Returns the named field compontent, if no matching one is found
+  or else it just returns a text input
+  * @param {object} field The properties handed down from the protocol form
   */
-const getComponent = type => (
-  Object.hasOwnProperty.call(components, type) ?
-  components[type] :
-  () => (<div>Field type not defined</div>)
-);
+
+export const renderInput = (field) => {
+  const {
+    type,
+    input,
+    meta,
+    label,
+    options,
+    optionsSelector,
+    isNumericOnly,
+    toggleComponent,
+  } = field;
+  let InputComponent = Alphanumeric;
+
+  let inputProps = {
+    name: input.name,
+    value: input.value,
+    errorText: meta.invalid && meta.touched && meta.error,
+    label,
+    isNumericOnly,
+  };
+
+  if (type === 'RadioGroup') {
+    InputComponent = RadioGroup;
+    inputProps = {
+      ...inputProps,
+      options,
+      onRadioClick: input.onChange,
+    };
+  }
+
+  if (type === 'CheckboxGroup') {
+    const { colors } = field;
+    InputComponent = CheckboxGroup;
+    inputProps = {
+      ...inputProps,
+      toggleComponent,
+      options,
+      colors,
+      onOptionClick: (e, checked, optionVal) => input.onChange({
+        ...input.value,
+        [optionVal]: checked,
+      }),
+    };
+  }
+
+  if (optionsSelector) {
+    InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
+  }
+
+  return (
+    <InputComponent {...inputProps} {...input} />
+  );
+};
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
@@ -40,14 +96,15 @@ const getValidation = validation =>
   */
 const Field = ({ label, name, type, validation, optionsSelector, ...rest }) => {
   const validate = getValidation(validation);
-  let component = getComponent(type);
-  if (optionsSelector) { component = withOptionsFromSelector(component, optionsSelector); }
+
   return (
     <ReduxFormField
       name={name}
       label={label}
-      component={component}
+      component={renderInput}
       validate={validate}
+      optionsSelector={optionsSelector}
+      type={type}
       {...rest}
     />
   );

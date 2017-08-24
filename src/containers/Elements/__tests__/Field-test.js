@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Field from '../Field';
-import { Alphanumeric } from '../../../ui/Fields';
+import Field, { renderInput } from '../Field';
 
 const attributes = {
   label: 'Name',
@@ -17,10 +16,18 @@ const validation = {
 };
 
 describe('Containers/Elements/Field', () => {
-  it('Loads component from the register', () => {
+  it('should render', () => {
+    const subject = shallow((
+      <Field {...attributes} />
+    ));
+
+    expect(subject).toMatchSnapshot();
+  });
+
+  it('renders the input', () => {
     const field = shallow(<Field {...attributes} />);
 
-    expect(field.find('Field').prop('component')).toBe(Alphanumeric);
+    expect(field.find('Field').prop('component')).toBe(renderInput);
   });
 
   it('Loads validations from the register', () => {
