@@ -1,7 +1,6 @@
 @keyframes menu-button-move {
-  0%    { transform: translate3d(0, -250%, 0); }
-  25%   { transform: translate3d(0, -250%, 0); }
-  100%  { transform: translate3d(0, 0, 0); }
+  0%    { transform: translateY(-150px); }
+  100%  { transform: translateY(0); }
 }
 
 .menu {
@@ -13,16 +12,14 @@
     transform: translate3d(-100%, 0, 0);
     transition: all $animation-standard-duration $animation-default-easing;
     z-index: 2;
+    width: 370px;
 
     &--open {
       transform: translate3d(0%, 0, 0);
     }
-    @include breakpoint(medium) {
-      width: 30vw;
-    }
 
-    @include breakpoint(large) {
-      width: 22vw;
+    @include breakpoint(full) {
+      width: 425px;
     }
   }
 
@@ -118,30 +115,44 @@
   &__cross {
     cursor: pointer;
     float: right;
-    padding: 10px;
+    padding: 17px;
+
+    .icon {
+      &[name='close'] {
+        height: 20px;
+        width: 20px;
+      }
+    }
   }
 
   &__burger {
-    animation-delay: 0s;
-    animation-duration: 1.5s;
+    animation-delay: 0;
+    animation-duration: $animation-slow-duration;
     animation-name: menu-button-move;
+    animation-timing-function: $animation-default-easing;
     cursor: pointer;
-    left: 20px;
+    left: 40px;
     position: absolute;
     top: 20px;
     z-index: 1;
 
     .icon {
       &[name='settings'] {
-        height: 50px;
-        width: 50px;
+        height: 55px;
+        width: 55px;
+      }
+    }
+    .icon {
+      &[name='menu'] {
+        height: 40px;
+        width: 40px;
       }
     }
   }
 
   ~ .menu {
     .menu__burger {
-      margin-top: 60px;
+      margin-top: 95px;
     }
   }
 }

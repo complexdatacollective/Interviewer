@@ -156,7 +156,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 12,
+        "version": 13,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,

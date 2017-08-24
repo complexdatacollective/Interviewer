@@ -1,4 +1,4 @@
-$component-name: modal;
+$component-name: dialog;
 
 .#{$component-name} {
   position: absolute;
@@ -15,29 +15,60 @@ $component-name: modal;
   &__window {
     width: 750px;
     background: palette('modal-main-panel');
-    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
+    box-shadow: 0 0 4px 0 transparentize(color('rich-black'), .5);
     position: relative;
+    border-left: 15px solid palette('primary');
+
+    &--info {
+      border-color: palette('info');
+    }
+
+    &--warning {
+      border-color: palette('warning');
+    }
+
+    &--error {
+      border-color: palette('error');
+    }
   }
 
   &__layout {
     display: flex;
-    flex-direction: column;
     max-height: 80vh;
-    margin: 0 50px 50px;
+    margin: 25px 40px;
 
     &-content {
-      flex: 1 auto;
-      overflow-x: hidden;
-      overflow-y: scroll;
+      order: 1;
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     &-title {
-      flex: 0 165px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 65px 0 0;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    &-icon {
+      order: 1;
+      flex: 1;
+      .icon {
+        height: 170px;
+        width: 170px;
+        margin-right:20px;
+      }
+    }
+  }
+
+  &__footer {
+    margin: 25px 40px;
+    text-align: center;
+    .button {
+      &:last-child {
+        margin-left: 20px;
+      }
     }
   }
 

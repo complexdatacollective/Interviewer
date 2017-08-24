@@ -16,7 +16,7 @@ function MenuContent(props) {
   return (
     <div>
       <div className="menu__cross" onClick={toggleMenu} tabIndex={0} role="menu">
-        <Icon name="close" />
+        <Icon name="close" size="40px" />
       </div>
       <header>
         <h1 className="menu__title">{title}</h1>

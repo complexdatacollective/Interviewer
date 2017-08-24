@@ -1,11 +1,11 @@
 .node-list {
-  margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
   min-height: 100%;
+  margin-bottom: 150px;
 
   &--transition {
     @include group-transition(fade, $animation-fast-duration);

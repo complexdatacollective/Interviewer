@@ -6,6 +6,7 @@ $font-path: '~network-canvas-ui/public/fonts';
 @import 'helpers/all';
 @import 'components/all';
 @import 'containers/app';
+@import 'containers/setupScreen';
 
 // sass-lint:disable no-ids
 #root {
@@ -14,7 +15,6 @@ $font-path: '~network-canvas-ui/public/fonts';
 
 html,
 body {
-  height: 100vw;
   margin: 0;
   overflow: hidden;
   padding: 0;
