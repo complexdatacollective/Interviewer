@@ -44,7 +44,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList) => {
             break;
           case 'object':
             // special handling for locations
-            if (element[key].type && element[key].type === 'location') {
+            if (element[key].type && element[key].type === 'layout') {
               keyElement.setAttribute('attr.name', `${key}Y`);
               keyElement.setAttribute('id', `${key}Y`);
               keyElement.setAttribute('attr.type', 'double');
@@ -92,7 +92,7 @@ const addElements = (graph, uri, dataList, type, excludeList, extra: false) => {
       if (!excludeList.includes(key)) {
         if (typeof dataElement[key] !== 'object') {
           domElement.appendChild(getDataElement(uri, key, dataElement[key]));
-        } else if (dataElement[key].type && dataElement[key].type === 'location') {
+        } else if (dataElement[key].type && dataElement[key].type === 'layout') {
           domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[key].x));
           domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[key].y));
         } else {
