@@ -54,7 +54,6 @@ function modal(WrappedComponent) {
     toggleModal: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
-    show: PropTypes.bool,
   };
 
   Modal.defaultProps = {
