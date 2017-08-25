@@ -1,4 +1,4 @@
-/* eslint-disable react/no-find-dom-node */
+/* eslint-disable */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
@@ -34,6 +34,7 @@ export default function droppable(WrappedComponent) {
     }
 
     componentWillUnmount() {
+      this.updateZone.cancel();
       window.cancelAnimationFrame(this.animationRequestId);
     }
 

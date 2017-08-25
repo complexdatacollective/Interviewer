@@ -22,7 +22,7 @@ export default function withBounds(WrappedComponent) {
       this.state = initialState;
       this.lastState = initialState;
 
-      this.trackSize = throttle(this.trackSize, 1000 / maxFramesPerSecond);
+      // this.trackSize = throttle(this.trackSize, 1000 / maxFramesPerSecond);
     }
 
     componentDidMount() {
