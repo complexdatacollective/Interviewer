@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { difference, nodeIncludesAttributes } from '../utils/Network';
 import { activePromptAttributes, activeStageAttributes, activeOriginAttributes } from './session';
 
-export const network = state => state.network;
+const network = state => state.network;
 
 // Filter the network according to current stage
 export const activeStageNetwork = createSelector(

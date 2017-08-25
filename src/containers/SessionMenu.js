@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
-import { network } from '../selectors/network';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
@@ -76,7 +75,7 @@ SessionMenu.defaultProps = {
 function mapStateToProps(state) {
   return {
     isOpen: sessionMenuIsOpen(state),
-    currentNetwork: network(state),
+    currentNetwork: state.network,
   };
 }
 

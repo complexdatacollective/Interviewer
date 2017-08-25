@@ -13,12 +13,7 @@ const setUpXml = () => {
   let xml = '';
   if (window.DOMParser) { // Standard
     xml = (new DOMParser()).parseFromString(xmlDoc, 'text/xml');
-  } else if (window.ActiveXObject) { // old IE
-    xml = new window.ActiveXObject('Microsoft.XMLDOM');
-    xml.async = false;
-    xml.loadXML(xmlDoc);
   }
-
   return xml;
 };
 
@@ -125,7 +120,7 @@ const saveFile = (data) => {
         }
       });
     });
-  } else if (isCordova()) { // cordova save to downloads
+  } else if (isCordova()) { // cordova save temp file and then share
     window.requestFileSystem(window.LocalFileSystem.TEMPORARY, 5 * 1024 * 1024, (fileSystem) => {
       fileSystem.root.getFile('networkcanvas.graphml', {
         create: true,
@@ -156,20 +151,15 @@ const saveFile = (data) => {
       }, () => alert('Sorry! We had a problem creating your file.'));
     }, () => alert('Sorry! We had a problem accessing your file system.'));
   } else { // browser save to downloads
-    const filename = 'networkcanvas.graphml';
     const blob = new Blob([data], { type: 'text/xml' });
-    if (window.navigator.msSaveBlob) { // IE save/open
-      window.navigator.msSaveBlob(blob, filename);
-    } else { // everything else
-      const element = document.createElement('a');
-      element.setAttribute('href', window.URL.createObjectURL(blob));
-      element.setAttribute('download', filename);
-      element.style.display = 'none';
-      document.getElementById('root').appendChild(element);
-      element.click();
-      document.getElementById('root').removeChild(element);
-      window.URL.revokeObjectURL(blob);
-    }
+    const element = document.createElement('a');
+    element.setAttribute('href', window.URL.createObjectURL(blob));
+    element.setAttribute('download', 'networkcanvas.graphml');
+    element.style.display = 'none';
+    document.getElementById('root').appendChild(element);
+    element.click();
+    document.getElementById('root').removeChild(element);
+    window.URL.revokeObjectURL(blob);
   }
 };
 
