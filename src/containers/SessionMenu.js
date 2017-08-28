@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova, isElectron } from '../utils/Environment';
+import { isCordova } from '../utils/Environment';
 import { Menu } from '../components';
 
 /**
