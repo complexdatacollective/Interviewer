@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { throttle } from 'lodash';
 import getAbsoluteBoundingRect from './getAbsoluteBoundingRect';
 
 const getSize = (element) => {
@@ -18,11 +17,12 @@ const parent = () => document.getElementById('page-wrap');
 
 export default class DraggablePreview {
   constructor(node) {
-    this.position = throttle(this.position, 1000 / 60);
-
     this.node = document.createElement('div');
     this.node.setAttribute('class', 'draggable-preview');
-    this.node.setAttribute('style', styles(-1000, -1000));
+    this.x = -1000;
+    this.y = -1000;
+
+    this.update();
 
     const animationLayer = document.createElement('div');
     animationLayer.setAttribute('class', 'draggable-preview__animation');
@@ -49,13 +49,22 @@ export default class DraggablePreview {
     return this._center;
   }
 
+  update = () => {
+    this.render();
+    this.animationFrame = window.requestAnimationFrame(this.update);
+  }
+
+  render() {
+    this.node.setAttribute('style', styles(this.x, this.y));
+  }
+
   position(coords) {
-    const x = coords.x - this.center().x;
-    const y = coords.y - this.center().y;
-    this.node.setAttribute('style', styles(x, y));
+    this.x = coords.x - this.center().x;
+    this.y = coords.y - this.center().y;
   }
 
   cleanup() {
+    window.cancelAnimationFrame(this.animationFrame);
     parent().removeChild(this.node);
   }
 }

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { filter, throttle } from 'lodash';
+import { filter } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
@@ -90,7 +90,6 @@ export default function draggable(WrappedComponent) {
       this.el.removeEventListener('mousedown', this.handleMoveStart);
       window.removeEventListener('mousemove', this.handleMove);
       window.removeEventListener('mouseup', this.handleMoveEnd);
-      this.handleMove.cancel();
     }
 
     determineHits = ({ x, y }) =>
