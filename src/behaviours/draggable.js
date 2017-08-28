@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { filter, throttle } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
@@ -80,8 +80,6 @@ export default function draggable(WrappedComponent) {
       this.el.addEventListener('touchmove', this.handleMove);
       this.el.addEventListener('touchend', this.handleMoveEnd);
       this.el.addEventListener('mousedown', this.handleMoveStart);
-      window.addEventListener('mousemove', this.handleMove);
-      window.addEventListener('mouseup', this.handleMoveEnd);
     }
 
     componentWillUnmount() {
@@ -90,15 +88,26 @@ export default function draggable(WrappedComponent) {
       this.el.removeEventListener('touchmove', this.handleMove);
       this.el.removeEventListener('touchend', this.handleMoveEnd);
       this.el.removeEventListener('mousedown', this.handleMoveStart);
-      window.removeEventListener('mousemove', this.move);
+      window.removeEventListener('mousemove', this.handleMove);
       window.removeEventListener('mouseup', this.handleMoveEnd);
+      this.handleMove.cancel();
     }
 
-    getHits = ({ x, y }) =>
+    determineHits = ({ x, y }) =>
       filter(this.props.zones, (zone) => {
         if (zone.acceptsDraggableType !== this.props.draggableType) { return false; }
         return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
       });
+
+    trackMouse = () => {
+      window.addEventListener('mousemove', this.handleMove);
+      window.addEventListener('mouseup', this.handleMoveEnd);
+    }
+
+    removeMouseTracking = () => {
+      window.removeEventListener('mousemove', this.handleMove);
+      window.removeEventListener('mouseup', this.handleMoveEnd);
+    }
 
     movementFromEvent = (e) => {
       const state = this.state;
@@ -164,7 +173,7 @@ export default function draggable(WrappedComponent) {
 
       // If drag started, actually track stuff
       if (this.state.dragStart) {
-        const hits = this.getHits(movement);
+        const hits = this.determineHits(movement);
         this.props.updateActiveZones(hits.map(hit => hit.name));
 
         if (hits.length > 0) {
@@ -174,8 +183,8 @@ export default function draggable(WrappedComponent) {
     };
 
     handleMoveStart = (e) => {
+      this.trackMouse();
       const { x, y } = getCoords(e);
-      this.cleanupPreview();
       this.setState({
         moveStart: true,
         dragStart: false,
@@ -189,7 +198,6 @@ export default function draggable(WrappedComponent) {
 
     handleMove = (e) => {
       if (this.state.moveStart) {
-        console.log('MOVE', this.node, this.state);
         const movement = this.movementFromEvent(e);
         const { x, y, t } = movement;
         this.movement(e, movement);
@@ -198,18 +206,18 @@ export default function draggable(WrappedComponent) {
     }
 
     handleMoveEnd = (e) => {
+      this.removeMouseTracking();
+      this.cleanupPreview();
+      this.props.dragStop();
       if (this.state.dragStart) {
         const movement = this.movementFromEvent(e);
-        const hits = this.getHits(movement);
+        const hits = this.determineHits(movement);
 
         if (hits.length > 0) {
           this.props.onDropped(hits);
         }
       }
-      console.log('STOP!', this.node, this.state);
-      this.props.dragStop();
       this.setState(initalState);
-      this.cleanupPreview();
     }
 
     render() {
