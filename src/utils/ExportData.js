@@ -108,7 +108,7 @@ const xmlToString = (xmlData) => {
   return xmlString;
 };
 
-const saveFile = (data) => {
+const saveFile = (data, openErrorDialog) => {
   if (isElectron()) { // electron save dialog
     const fs = window.require('fs');
     const { dialog } = window.require('electron').remote;
@@ -165,7 +165,7 @@ const saveFile = (data) => {
         };
         window.plugins.socialsharing.shareWithOptions(options);
       })
-      .catch((err) => { alert(`Sharing failed with message: ${err}`); });
+      .catch(() => { openErrorDialog(); });
   } else { // browser save to downloads
     const blob = new Blob([data], { type: 'text/xml' });
     const element = document.createElement('a');
@@ -179,7 +179,7 @@ const saveFile = (data) => {
   }
 };
 
-const createGraphML = (networkData) => {
+const createGraphML = (networkData, openErrorDialog) => {
   // default graph structure
   const xml = setUpXml();
   const graph = xml.getElementsByTagName('graph')[0];
@@ -193,7 +193,7 @@ const createGraphML = (networkData) => {
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id']);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], true);
 
-  saveFile(xmlToString(xml));
+  saveFile(xmlToString(xml), openErrorDialog);
 };
 
 export default createGraphML;
