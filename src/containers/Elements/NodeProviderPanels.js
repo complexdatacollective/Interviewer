@@ -6,6 +6,7 @@ import { zipWith } from 'lodash';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 import { filteredDataSource } from '../../selectors/dataSource';
+import { colorDictionary } from 'network-canvas-ui';
 
 const providerPresets = {
   existing: {
@@ -57,12 +58,18 @@ const NodeProviderPanels = ({ providers }) => {
     0,
   );
 
-  const panelHighlights = ['#D30FEF','#00C9A2','#0FB2E2','#FF3A8C','#0F70FF','#70BF54','#F7891E'];
+  const provColors = [colorDictionary['sea-green'],
+                      colorDictionary['purple-pizazz'],
+                      colorDictionary['sea-serpent'],
+                      colorDictionary['paradise-pink'],
+                      colorDictionary['cerulean-blue'],
+                      colorDictionary['kiwi'],
+                      colorDictionary['neon-carrot']];
 
   return (
     <Panels minimise={totalNodes === 0}>
       { providers.map((provider,panelNumber) => (
-        <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0} highlight={panelHighlights[panelNumber]}>
+        <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0} highlight={provColors[panelNumber]}>
           <NodeProvider {...provider} />
         </Panel>
       )) }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { colorDictionary } from 'network-canvas-ui';
 
 /**
   * Renders a side panel, with a title and `props.children`.
@@ -31,7 +32,7 @@ Panel.defaultProps = {
   title: '',
   children: null,
   minimise: false,
-  highlight: '#00C9A2',
+  highlight: colorDictionary['sea-green'],
 };
 
 export default Panel;
