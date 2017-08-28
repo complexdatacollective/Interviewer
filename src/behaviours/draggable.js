@@ -143,9 +143,11 @@ export default function draggable(WrappedComponent) {
       this.preview = draggablePreview;
     }
 
-    // TODO: smaller functions
-    movement = (e, movement) => {
-      // Determine move type
+    updatePreview = ({ x, y }) => {
+      this.preview.position({ x, y });
+    }
+
+    detectMoveType = (e, movement) => {
       const moveType = this.state.type || determineMoveType(movement);
 
       if (moveType === 'DRAG') {
@@ -155,11 +157,10 @@ export default function draggable(WrappedComponent) {
       if (!this.state.type) {
         this.setState({ type: moveType });
       }
+    }
 
-      // Detect drag start
-      const totalMoveDistance = moveDistance(moveDelta(this.state.start, movement));
-
-      if (this.state.type === 'DRAG' && !this.preview && totalMoveDistance > 4) {
+    detectDragStart = (movement) => {
+      if (this.state.type === 'DRAG' && !this.preview && movement.distance > 4) {
         this.setState({ dragStart: true }, () => {
           this.props.dragStart(this.props.draggableType);
           this.createPreview();
@@ -167,10 +168,11 @@ export default function draggable(WrappedComponent) {
       }
 
       if (this.preview) {
-        this.preview.position(this.state);
+        this.updatePreview(this.state);
       }
+    }
 
-      // If drag started, actually track stuff
+    componentHandlers = (movement) => {
       if (this.state.dragStart) {
         const hits = this.determineHits(movement);
         this.props.updateActiveZones(hits.map(hit => hit.name));
@@ -179,7 +181,7 @@ export default function draggable(WrappedComponent) {
           this.props.onMove(hits, movement);
         }
       }
-    };
+    }
 
     handleMoveStart = (e) => {
       this.trackMouse();
@@ -199,7 +201,16 @@ export default function draggable(WrappedComponent) {
       if (this.state.moveStart) {
         const movement = this.movementFromEvent(e);
         const { x, y, t } = movement;
-        this.movement(e, movement);
+
+        // Determine move type
+        this.detectMoveType(e, movement);
+
+        // Detect drag start
+        this.detectDragStart(movement);
+
+        // If drag started, actually track stuff
+        this.componentHandlers(movement);
+
         this.setState({ x, y, t });
       }
     }
