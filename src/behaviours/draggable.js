@@ -1,4 +1,4 @@
-
+/* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -59,30 +59,10 @@ function determineMoveType(movement) {
 }
 
 const initalState = {
-  isMoving: false,
-  preview: null,
+  moveStart: false,
+  dragStart: false,
+  type: null,
 };
-
-function movementFromEventState(e, state) {
-  const { x, y } = getCoords(e);
-  const { dy, dx } = moveDelta(state, { x, y });
-  const t = new Date().getTime();
-  const dt = t - state.t;
-  const distance = moveDistance({ dy, dx });
-  const angle = moveAngle({ dy, dx });
-  const axisProximity = axisProximityFromAngle(angle);
-  return {
-    x,
-    y,
-    dy,
-    dx,
-    dt,
-    velocity: distance / dt,
-    distance,
-    axisProximity,
-    angle,
-  };
-}
 
 export default function draggable(WrappedComponent) {
   class Draggable extends Component {
@@ -91,6 +71,7 @@ export default function draggable(WrappedComponent) {
       super(props);
 
       this.state = initalState;
+      this.preview = null;
     }
 
     componentDidMount() {
@@ -104,13 +85,13 @@ export default function draggable(WrappedComponent) {
     }
 
     componentWillUnmount() {
+      this.cleanupPreview();
       this.el.removeEventListener('touchstart', this.handleMoveStart);
       this.el.removeEventListener('touchmove', this.handleMove);
       this.el.removeEventListener('touchend', this.handleMoveEnd);
       this.el.removeEventListener('mousedown', this.handleMoveStart);
       window.removeEventListener('mousemove', this.move);
       window.removeEventListener('mouseup', this.handleMoveEnd);
-      this.cleanupPreview();
     }
 
     getHits = ({ x, y }) =>
@@ -119,38 +100,69 @@ export default function draggable(WrappedComponent) {
         return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
       });
 
+    movementFromEvent = (e) => {
+      const state = this.state;
+      const { x, y } = getCoords(e);
+      const { dy, dx } = moveDelta(state, { x, y });
+      const t = new Date().getTime();
+      const dt = t - state.t;
+      const distance = moveDistance({ dy, dx });
+      const angle = moveAngle({ dy, dx });
+      const axisProximity = axisProximityFromAngle(angle);
+      return {
+        x,
+        y,
+        dy,
+        dx,
+        dt,
+        velocity: distance / dt,
+        distance,
+        axisProximity,
+        angle,
+      };
+    }
+
     cleanupPreview = () => {
-      if (this.state.preview) {
-        this.state.preview.cleanup();
+      if (this.preview) {
+        this.preview.cleanup();
+        this.preview = null;
       }
     }
 
     createPreview = () => {
-      this.cleanupPreview();
       const draggablePreview = new DraggablePreview(this.node);
 
-      this.setState({ preview: draggablePreview });
+      this.preview = draggablePreview;
     }
 
+    // TODO: smaller functions
     movement = (e, movement) => {
+      // Determine move type
       const moveType = this.state.type || determineMoveType(movement);
-      const totalMoveDistance = moveDistance(moveDelta(this.state.start, movement));
 
       if (moveType === 'DRAG') {
         e.preventDefault();
       }
 
-      if (this.state.type === 'DRAG' && !this.state.preview && totalMoveDistance > 4) {
+      if (!this.state.type) {
+        this.setState({ type: moveType });
+      }
+
+      // Detect drag start
+      const totalMoveDistance = moveDistance(moveDelta(this.state.start, movement));
+
+      if (this.state.type === 'DRAG' && !this.preview && totalMoveDistance > 4) {
         this.setState({ dragStart: true }, () => {
           this.props.dragStart(this.props.draggableType);
           this.createPreview();
         });
       }
 
-      if (this.state.preview) {
-        this.state.preview.position(this.state);
+      if (this.preview) {
+        this.preview.position(this.state);
       }
 
+      // If drag started, actually track stuff
       if (this.state.dragStart) {
         const hits = this.getHits(movement);
         this.props.updateActiveZones(hits.map(hit => hit.name));
@@ -159,18 +171,14 @@ export default function draggable(WrappedComponent) {
           this.props.onMove(hits, movement);
         }
       }
-
-      if (!this.state.type) {
-        this.setState({ type: moveType });
-      }
     };
 
     handleMoveStart = (e) => {
       const { x, y } = getCoords(e);
+      this.cleanupPreview();
       this.setState({
         moveStart: true,
         dragStart: false,
-        preview: null,
         type: isTouch(event) ? null : 'DRAG',  // if mouse, assume drag
         start: { x, y },
         t: new Date().getTime(),
@@ -181,7 +189,8 @@ export default function draggable(WrappedComponent) {
 
     handleMove = (e) => {
       if (this.state.moveStart) {
-        const movement = movementFromEventState(e, this.state);
+        console.log('MOVE', this.node, this.state);
+        const movement = this.movementFromEvent(e);
         const { x, y, t } = movement;
         this.movement(e, movement);
         this.setState({ x, y, t });
@@ -190,19 +199,17 @@ export default function draggable(WrappedComponent) {
 
     handleMoveEnd = (e) => {
       if (this.state.dragStart) {
-        const hits = this.getHits(movementFromEventState(e, this.state));
+        const movement = this.movementFromEvent(e);
+        const hits = this.getHits(movement);
 
         if (hits.length > 0) {
           this.props.onDropped(hits);
         }
-
-        this.props.dragStop();
       }
+      console.log('STOP!', this.node, this.state);
+      this.props.dragStop();
+      this.setState(initalState);
       this.cleanupPreview();
-      this.setState({
-        moveStart: false,
-        preview: null,
-      });
     }
 
     render() {
