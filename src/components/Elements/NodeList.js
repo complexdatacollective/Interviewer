@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Node, animation } from 'network-canvas-ui';
+import { animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable, draggable, selectable } from '../../behaviours';
+import Node from './Node';
 
 const EnhancedNode = draggable(selectable(Node));
 
