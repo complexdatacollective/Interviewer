@@ -103,7 +103,7 @@
         "gridle": "^2.0.48",
         "history": "^4.5.1",
         "lodash": "^4.17.4",
-        "network-canvas-ui": "https://github.com/codaco/Network-Canvas-UI.git",
+        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
         "prop-types": "^15.5.8",
         "react": "^15.3.2",
         "react-dom": "^15.3.2",
