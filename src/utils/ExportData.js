@@ -121,35 +121,51 @@ const saveFile = (data) => {
       });
     });
   } else if (isCordova()) { // cordova save temp file and then share
-    window.requestFileSystem(window.LocalFileSystem.TEMPORARY, 5 * 1024 * 1024, (fileSystem) => {
-      fileSystem.root.getFile('networkcanvas.graphml', {
-        create: true,
-        exclusive: false,
-      }, (fileEntry) => {
-        fileEntry.createWriter((fileWriter) => {
-          const blob = new Blob([data], { type: 'text/xml' });
-          fileWriter.seek(0);
-          fileWriter.write(blob);
+    const getFileSystem = () => new Promise((resolve, reject) => {
+      window.requestFileSystem(
+        window.LocalFileSystem.TEMPORARY,
+        5 * 1024 * 1024,
+        fileSystem => resolve(fileSystem),
+        err => reject(err),
+      );
+    });
 
-          const options = {
-            message: 'Your network canvas graphml file.', // not supported on some apps
-            subject: 'network canvas export',
-            files: [fileEntry.toURL()],
-            chooserTitle: 'Share file via', // Android only
-          };
+    const getFile = fileSystem => new Promise((resolve, reject) => {
+      fileSystem.root.getFile('networkcanvas.graphml', { create: true, exclusive: false },
+        fileEntry => resolve(fileEntry),
+        err => reject(err),
+      );
+    });
 
-          const onSuccess = () => {
-            // On Android apps result.completed mostly returns false even while it's true
-          };
+    const createWriter = fileEntry => new Promise((resolve, reject) => {
+      fileEntry.createWriter(
+        fileWriter => resolve({ fileWriter, filename: fileEntry.toURL() }),
+        err => reject(err),
+      );
+    });
 
-          const onError = (msg) => {
-            alert(`Sharing failed with message: ${msg}`);
-          };
+    const writeFile = ({ fileWriter, filename }) => new Promise((resolve, reject) => {
+      const blob = new Blob([data], { type: 'text/xml' });
+      fileWriter.seek(0);
+      fileWriter.onwrite = () => resolve(filename); // eslint-disable-line no-param-reassign
+      fileWriter.onerror = err => reject(err); // eslint-disable-line no-param-reassign
+      fileWriter.write(blob);
+    });
 
-          window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-        }, () => alert('Sorry! We had a problem writing your file.'));
-      }, () => alert('Sorry! We had a problem creating your file.'));
-    }, () => alert('Sorry! We had a problem accessing your file system.'));
+    getFileSystem()
+      .then(getFile)
+      .then(createWriter)
+      .then(writeFile)
+      .then((filename) => {
+        const options = {
+          message: 'Your network canvas graphml file.', // not supported on some apps
+          subject: 'network canvas export',
+          files: [filename],
+          chooserTitle: 'Share file via', // Android only
+        };
+        window.plugins.socialsharing.shareWithOptions(options);
+      })
+      .catch((err) => { alert(`Sharing failed with message: ${err}`); });
   } else { // browser save to downloads
     const blob = new Blob([data], { type: 'text/xml' });
     const element = document.createElement('a');
