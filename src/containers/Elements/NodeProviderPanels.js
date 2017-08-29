@@ -53,12 +53,6 @@ const getProviders = (state, config) => {
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
 
-const panelNumberRemainder = ({panelNumber}) => {
-  if (panelNumber % 5 === 0) {
-    return 0
-  }
-}
-
 const NodeProviderPanels = ({ providers }) => {
   const totalNodes = providers.reduce(
     (sum, provider) => sum + provider.network.nodes.length,
