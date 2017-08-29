@@ -52,6 +52,13 @@ const getProviders = (state, config) => {
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
+
+const panelNumberRemainder = ({panelNumber}) => {
+  if (panelNumber % 5 === 0) {
+    return 0
+  }
+}
+
 const NodeProviderPanels = ({ providers }) => {
   const totalNodes = providers.reduce(
     (sum, provider) => sum + provider.network.nodes.length,
@@ -62,7 +69,7 @@ const NodeProviderPanels = ({ providers }) => {
     <Panels minimise={totalNodes === 0}>
       { providers.map((provider,panelNumber) => (
         <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0}
-          highlight={panelNumber > 0} highlightName={'panel--highlight'+ panelNumber}>
+          highlight={panelNumber > 0} highlightName={'panel--highlight'+ (panelNumber % 5)}>
           <NodeProvider {...provider} />
         </Panel>
       )) }
