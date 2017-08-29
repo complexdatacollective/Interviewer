@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
+import { isCordova } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
@@ -28,11 +29,9 @@ class SessionMenu extends Component {
   };
 
   onQuit = () => {
-    if (navigator.app) {
+    if (isCordova()) {
       // cordova
       navigator.app.exitApp();
-    } else if (navigator.device) {
-      navigator.device.exitApp();
     } else {
       // note: this will only close windows opened by the app, not a new tab the user opened
       window.close();
@@ -45,16 +44,26 @@ class SessionMenu extends Component {
 
   render() {
     const {
-      hideButton, isOpen, toggleMenu,
+      customItems, hideButton, isOpen, toggleMenu,
     } = this.props;
 
     const menuType = 'settings';
 
     const items = [
-      { id: 'export', menuType, title: 'Download Data', interfaceType: 'menu-download-data', isActive: false, onClick: this.onExport },
-      { id: 'reset', menuType, title: 'Reset Session', interfaceType: 'menu-purge-data', isActive: false, onClick: this.onReset },
-      { id: 'quit', menuType, title: 'Quit Network Canvas', interfaceType: 'menu-quit', isActive: false, onClick: this.onQuit },
-    ];
+      { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
+      { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
+      ...customItems,
+      { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
+    ].map((item) => {
+      const temp = item;
+      if (!temp.menuType) {
+        temp.menuType = 'settings';
+      }
+      if (!temp.interfaceType) {
+        temp.interfaceType = 'menu-custom-interface';
+      }
+      return temp;
+    });
 
     return (
       <Menu
@@ -82,6 +91,7 @@ class SessionMenu extends Component {
 
 SessionMenu.propTypes = {
   currentNetwork: PropTypes.object.isRequired,
+  customItems: PropTypes.array.isRequired,
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
@@ -98,6 +108,7 @@ SessionMenu.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    customItems: state.menu.customMenuItems,
     isOpen: sessionMenuIsOpen(state),
     currentNetwork: state.network,
   };
