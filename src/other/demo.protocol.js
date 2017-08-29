@@ -64,8 +64,8 @@ const fields = [
     placeholder: 'Name',
     validation: {
       required: true,
-      minLength: 2,
-      minLength: 8,
+      minLength: 1,
+      maxLength: 8,
     }
   },
   {
@@ -75,7 +75,7 @@ const fields = [
     placeholder: 'Nickname',
     validation: {
       required: true,
-      minLength: 2,
+      minLength: 1,
       maxLength: 8,
     },
   },
