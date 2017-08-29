@@ -27,12 +27,20 @@ class App extends Component {
 
     this.state = {
       version: '0.0.0',
+      updateDialog: {
+        title: 'Update Dialog',
+        type: 'info',
+        content: null,
+        onConfirm: () => {},
+        confirmLabel: 'Continue',
+        hasCancelButton: false,
+      },
     };
   }
 
   componentWillMount() {
     getVersion().then((version) => {
-      this.setState({
+      this.setState(...this.state, {
         version,
       });
     });
@@ -42,18 +50,109 @@ class App extends Component {
     updater.checkForUpdate().then(
       (response) => {
         // Update available.
-        console.log('SUCCESS LAND ', response);
-        this.props.openModal(modals.UPDATE_AVAILABLE);
+        console.log('checkForUpdate() response. ', response);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Update Available',
+            type: 'info',
+            content: 'A new version of Network Canvas is available to download. Would you like to download it now?',
+            onConfirm: () => { this.confirmUpdateDownload(); },
+            confirmLabel: 'Download now',
+            hasCancelButton: true,
+          },
+        });
+        this.props.openModal(modals.UPDATE_DIALOG);
       },
       (failure) => {
+        console.log('checkForUpdate() fail. ', failure);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'No Updates Available',
+            type: 'info',
+            content: 'A new version of Network Canvas is available to download. Would you like to download it now?',
+            onConfirm: () => { this.confirmUpdateDownload(); },
+            confirmLabel: 'Download now',
+            hasCancelButton: true,
+          },
+        });
         // No update available.
-        console.log('FAILURE LAND ', failure);
-        this.props.openModal(modals.NO_UPDATES_DIALOG);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'No Updates Availble',
+            type: 'info',
+            content: 'No updates are available at this time. You are using the latest available version of Network Canvas.',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        });
+        this.props.openModal(modals.UPDATE_DIALOG);
       },
     ).catch(
       // Error checking for updates
       (error) => {
-        console.log('ERROR LAND ', error);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Error Encountered During Update',
+            type: 'error',
+            content: 'An error has occured during the update process.',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        });
+        this.props.openModal(modals.UPDATE_DIALOG);
+        console.log('checkForUpdate() error. ', error);
+      },
+    );
+  }
+
+  confirmUpdateDownload() {
+    updater.downloadUpdate().then(
+      (response) => {
+        console.log('updateAvailableConfirm() response ', response);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Update Ready to Install',
+            type: 'warning',
+            content: 'Your update is ready to install. Network Canvas will now close, and ewill reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
+            onConfirm: () => { updater.installUpdate(); },
+            confirmLabel: 'Install and Restart',
+            hasCancelButton: true,
+          },
+        });
+        // Update downloaded and ready to install
+        this.props.openModal(modals.UPDATE_DIALOG);
+      },
+      (failure) => {
+        console.log('updateAvailableConfirm() failure ', failure);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Error Encountered During Update',
+            type: 'error',
+            content: 'An error has occured during the update process.',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        });
+        this.props.openModal(modals.UPDATE_DIALOG);
+      },
+    ).catch(
+      // Error downloading update
+      (error) => {
+        console.log('updateAvailableConfirm() error ', error);
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Error Encountered During Update',
+            type: 'error',
+            content: 'An error has occured during the update process.',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        });
+        this.props.openModal(modals.UPDATE_DIALOG);
       },
     );
   }
@@ -79,75 +178,14 @@ class App extends Component {
           })}
         >
           <Dialog
-            name={modals.UPDATE_AVAILABLE}
-            title="Update available."
-            type="info"
-            confirmLabel="Download"
-            onConfirm={() => {
-              updater.downloadUpdate().then(
-                (response) => {
-                  // Update downloaded
-                  console.log('UPDATE DOWNLOAD SUCCESS', response);
-                  this.props.openModal(modals.UPDATE_INSTALL_DIALOG);
-                },
-                (failure) => {
-                  // Update didn't download
-                  console.log('UPDATE DOWNLOAD FAILURE ', failure);
-                  this.props.openModal(modals.UPDATE_ERROR_DIALOG);
-                },
-              ).catch(
-                // Error downloading update
-                (error) => {
-                  console.log('Download update error ', error);
-                  this.props.openModal(modals.UPDATE_ERROR_DIALOG);
-                },
-              );
-            }
-            }
+            name={modals.UPDATE_DIALOG}
+            title={this.state.updateDialog.title}
+            type={this.state.updateDialog.type}
+            confirmLabel={this.state.updateDialog.confirmLabel}
+            hasCancelButton={this.state.updateDialog.hasCancelButton}
+            onConfirm={this.state.updateDialog.onConfirm}
           >
-            <p>
-              A new version of Network Canvas is available to download.
-              Would you like to download and install it now?
-            </p>
-            <p>
-              <strong>Please note: </strong>
-              installing the update will require you to restart Network Canvas.
-            </p>
-          </Dialog>
-          <Dialog
-            name={modals.NO_UPDATES_DIALOG}
-            title="No updates available at this time."
-            type="info"
-            confirmLabel="Okay"
-            hasCancelButton={false}
-          >
-            <p>
-              You are using the latest available version of Network Canvas.
-            </p>
-          </Dialog>
-          <Dialog
-            name={modals.UPDATE_INSTALL_DIALOG}
-            title="Update ready to install."
-            type="warning"
-            confirmLabel="Install Now"
-            onConfirm={() => { updater.installUpdate(); }}
-          >
-            <p>
-              Your update is ready to install. Network Canvas will now
-              close, and will reopen once the update is configured. Make sure
-              you have saved any data within the app before continuing.
-            </p>
-          </Dialog>
-          <Dialog
-            name={modals.UPDATE_ERROR_DIALOG}
-            title="Error encountered during update."
-            type="error"
-            confirmLabel="Okay"
-            hasCancelButton={false}
-          >
-            <p>
-              An error has occured during the update process.
-            </p>
+            {this.state.updateDialog.content}
           </Dialog>
           { children }
         </div>
