@@ -9,6 +9,11 @@ const updater = {
         const { ipcRenderer } = window.require('electron');
         ipcRenderer.send('CHECK_FOR_UPDATE');
 
+        // Allow 20 seconds for a response, then fail.
+        setTimeout(() => {
+          reject('TIMEOUT');
+        }, 20000);
+
         ipcRenderer.on('UPDATE_AVAILABLE', (response) => {
           resolve(response);
         });
