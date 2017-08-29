@@ -4,13 +4,18 @@ import cx from 'classnames';
 /**
   * Renders a side panel, with a title and `props.children`.
   */
-const Panel = ({ title, children, minimise, highlight }) => {
+
+const Panel = ({ title, children, minimise, highlight, highlightName }) => {
+  const panelSubClasses = {
+    'panel--minimise': minimise,
+  };
+  panelSubClasses[highlightName] = highlight;
   const panelClasses = cx(
     'panel',
-    { 'panel--minimise': minimise },
+    panelSubClasses,
   );
   return (
-    <div className={panelClasses} style={{ borderColor: highlight }}>
+    <div className={panelClasses}>
       <div className="panel__heading"><h3 className="panel__heading-header">{title}</h3></div>
       <div className="panel__content">
         {children}
@@ -23,14 +28,16 @@ Panel.propTypes = {
   title: PropTypes.string,
   children: PropTypes.any,
   minimise: PropTypes.bool,
-  highlight: PropTypes.string,
+  highlight: PropTypes.bool,
+  highlightName: PropTypes.string,
 };
 
 Panel.defaultProps = {
   title: '',
   children: null,
   minimise: false,
-  highlight: '',
+  highlight: false,
+  highlightName: '',
 };
 
 export default Panel;

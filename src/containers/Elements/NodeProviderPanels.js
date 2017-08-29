@@ -58,18 +58,11 @@ const NodeProviderPanels = ({ providers }) => {
     0,
   );
 
-  const provColors = [colorDictionary['sea-green'],
-                      colorDictionary['purple-pizazz'],
-                      colorDictionary['sea-serpent'],
-                      colorDictionary['paradise-pink'],
-                      colorDictionary['cerulean-blue'],
-                      colorDictionary['kiwi'],
-                      colorDictionary['neon-carrot']];
-
   return (
     <Panels minimise={totalNodes === 0}>
       { providers.map((provider,panelNumber) => (
-        <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0} highlight={provColors[panelNumber]}>
+        <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0}
+          highlight={panelNumber > 0} highlightName={'panel--highlight'+ panelNumber}>
           <NodeProvider {...provider} />
         </Panel>
       )) }
