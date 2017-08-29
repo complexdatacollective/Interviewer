@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { actionCreators as promptActions } from '../../ducks/modules/prompt';
+import { findIndex } from 'lodash';
 import { Prompt, Pips } from '../../components/Elements';
 
 /**
@@ -23,18 +21,18 @@ class PromptSwiper extends Component {
     switch (event.direction) {
       case 2:
       case 3:
-        this.props.next();
+        this.props.forward();
         break;
       case 1:
       case 4:
-        this.props.previous();
+        this.props.backward();
         break;
       default:
     }
   }
 
   handleTap() {
-    this.props.next();
+    this.props.forward();
   }
 
   render() {
@@ -69,8 +67,8 @@ class PromptSwiper extends Component {
 }
 
 PromptSwiper.propTypes = {
-  next: PropTypes.func.isRequired,
-  previous: PropTypes.func.isRequired,
+  forward: PropTypes.func.isRequired,
+  backward: PropTypes.func.isRequired,
   prompts: PropTypes.any.isRequired,
   promptIndex: PropTypes.number.isRequired,
   floating: PropTypes.bool,
@@ -80,17 +78,10 @@ PromptSwiper.defaultProps = {
   floating: false,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    promptIndex: state.session.prompt.index,
+    promptIndex: findIndex(ownProps.prompts, ownProps.prompt),
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    next: bindActionCreators(promptActions.next, dispatch),
-    previous: bindActionCreators(promptActions.previous, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PromptSwiper);
+export default connect(mapStateToProps)(PromptSwiper);

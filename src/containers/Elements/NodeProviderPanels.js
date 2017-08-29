@@ -1,13 +1,14 @@
-/* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { zipWith } from 'lodash';
+import { differenceBy } from 'lodash';
+import { createSelector } from 'reselect';
+import { protocolData } from '../../selectors/protocolData';
+import { networkNodes, otherNetworkNodesWithStageNodeType } from '../../selectors/network';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
-import { filteredDataSource } from '../../selectors/dataSource';
 
-const providerPresets = {
+const panelPresets = {
   existing: {
     type: 'existing',
     title: 'People from your existing lists',
@@ -24,44 +25,52 @@ const providerPresets = {
   },
 };
 
-const getProviderConfig = (provider) => {
+const rehydratePreset = (panelConfig) => {
   // TODO: rehydrate looses methods, this puts a placehoder back in
-  if (!provider) { return () => true; }
-  if (Object.prototype.hasOwnProperty.call(providerPresets, provider)) {
-    return providerPresets[provider];
+  if (!panelConfig) { return () => true; }
+  if (Object.prototype.hasOwnProperty.call(panelPresets, panelConfig)) {
+    return panelPresets[panelConfig];
   }
-  return provider;
+  return panelConfig;
 };
 
-const getProviders = (state, config) => {
-  const providerConfigs = config.map(provider => getProviderConfig(provider));
+const propPanelConfigs = (_, props) => props.config.params.panels;
 
-  const dataSources = providerConfigs.map(
-    providerConfig =>
-      filteredDataSource(state, providerConfig),
-  );
-
-  return zipWith(
-    providerConfigs,
-    dataSources,
-    (a, b) => Object.assign({}, a, { network: b }),
-  );
-};
+const getProviderConfigsWithNodes = createSelector(
+  [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
+  (panelConfigs, nodes, existingNodes, data) => panelConfigs.map(rehydratePreset).map(
+    (providerConfig) => {
+      switch (providerConfig.source) {
+        case 'existing':
+          return { ...providerConfig, nodes: existingNodes };
+        default:
+          return {
+            ...providerConfig,
+            nodes: differenceBy(data[providerConfig.source].nodes, nodes, 'uid'),
+          };
+      }
+    },
+  ),
+);
 
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
-const NodeProviderPanels = ({ providers }) => {
-  const totalNodes = providers.reduce(
-    (sum, provider) => sum + provider.network.nodes.length,
+const NodeProviderPanels = ({ providerConfigsWithNodes, config, prompt }) => {
+  const totalNodes = providerConfigsWithNodes.reduce(
+    (sum, providerConfig) => sum + providerConfig.nodes.length,
     0,
   );
 
   return (
     <Panels minimise={totalNodes === 0}>
-      { providers.map(provider => (
-        <Panel title={provider.title} key={provider.type} minimise={provider.network.nodes.length === 0}>
-          <NodeProvider {...provider} />
+      { providerConfigsWithNodes.map(providerConfig => (
+        <Panel
+          title={providerConfig.title}
+          key={providerConfig.type}
+          minimise={providerConfig.nodes.length === 0}
+        >
+          <NodeProvider {...providerConfig} config={config} prompt={prompt} />
         </Panel>
       )) }
     </Panels>
@@ -69,12 +78,14 @@ const NodeProviderPanels = ({ providers }) => {
 };
 
 NodeProviderPanels.propTypes = {
-  providers: PropTypes.array.isRequired,
+  providerConfigsWithNodes: PropTypes.array.isRequired,
+  config: PropTypes.object.isRequired,
+  prompt: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, props) {
   return {
-    providers: getProviders(state, ownProps.config),
+    providerConfigsWithNodes: getProviderConfigsWithNodes(state, props),
   };
 }
 

@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import {
-  actionCreators as modalActions,
-  modalNames as modals,
-} from '../../ducks/modules/modals';
-import { newNodeAttributes } from '../../selectors/session';
-import { activeOriginNetwork } from '../../selectors/network';
+import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import { networkNodesForPrompt } from '../../selectors/network';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 
+const modals = {
+  ADD_NODE: Symbol('ADD_NODE'),
+  EDIT_NODE: Symbol('EDIT_NODE'),
+};
+
 // Render method for the node labels
 const label = node => `${node.nickname}`;
+
 
 /**
   * Name Generator Interface
@@ -79,26 +82,35 @@ class NameGenerator extends Component {
   render() {
     const {
       openModal,
+      promptForward,
+      promptBackward,
+      prompt,
+      nodesForPrompt,
+      config,
     } = this.props;
 
     const {
       form,
       prompts,
-      panels,
     } = this.props.config.params;
 
     return (
-      <div className="name-generator-interface">
-        <div className="name-generator-interface__prompt">
-          <PromptSwiper prompts={prompts} />
+      <div className="name-generator">
+        <div className="name-generator__prompt">
+          <PromptSwiper
+            forward={promptForward}
+            backward={promptBackward}
+            prompt={prompt}
+            prompts={prompts}
+          />
         </div>
-        <div className="name-generator-interface__main">
-          <div className="name-generator-interface__panels">
-            <NodeProviderPanels config={panels} />
+        <div className="name-generator__main">
+          <div className="name-generator__panels">
+            <NodeProviderPanels config={config} prompt={prompt} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
-              network={this.props.activeOriginNetwork}
+              nodes={nodesForPrompt}
               label={label}
               droppableName="MAIN_NODE_LIST"
               acceptsDraggableType="NEW_NODE"
@@ -135,19 +147,29 @@ class NameGenerator extends Component {
 }
 
 NameGenerator.propTypes = {
+  nodesForPrompt: PropTypes.array.isRequired,
   config: PropTypes.object.isRequired,
+  prompt: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  newNodeAttributes: PropTypes.any.isRequired,
-  activeOriginNetwork: PropTypes.any.isRequired,
   removeNode: PropTypes.func.isRequired,
+  newNodeAttributes: PropTypes.object.isRequired,
+  promptForward: PropTypes.func.isRequired,
+  promptBackward: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const newNodeAttributes = {
+    type: props.config.params.nodeType,
+    stageId: props.config.id,
+    promptId: props.prompt.id,
+    ...props.prompt.nodeAttributes,
+  };
+
   return {
-    newNodeAttributes: newNodeAttributes(state),
-    activeOriginNetwork: activeOriginNetwork(state),
+    newNodeAttributes,
+    nodesForPrompt: networkNodesForPrompt(state, props),
   };
 }
 
@@ -161,4 +183,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NameGenerator);
+export default compose(
+  withPrompt,
+  connect(mapStateToProps, mapDispatchToProps),
+)(NameGenerator);
