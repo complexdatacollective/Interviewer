@@ -6,12 +6,17 @@ import { propPromptIds, propStageNodeType } from './props';
 
 export const networkNodes = state => state.network.nodes;
 
+export const networkNodesOfStageType = createSelector(
+    [networkNodes, propStageNodeType],
+    (nodes, nodeType) => filter(nodes, ['type', nodeType]),
+  );
+
 export const networkNodesForPrompt = createSelector(
     [networkNodes, propPromptIds],
     (nodes, attributes) => filter(nodes, attributes),
   );
 
 export const otherNetworkNodesWithStageNodeType = createSelector(
-    [networkNodes, propStageNodeType, propPromptIds],
-    (nodes, nodeType, promptAttributes) => reject(filter(nodes, ['type', nodeType]), promptAttributes),
+    [networkNodesOfStageType, propPromptIds],
+    (nodes, promptAttributes) => reject(nodes, promptAttributes),
   );

@@ -2,14 +2,22 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { first, sortBy } from 'lodash';
+import { createSelector } from 'reselect';
+import { first, sortBy, reject, has } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { getUnplacedNodes } from '../../selectors/nodes';
+import { networkNodesOfStageType } from '../../selectors/network';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
+
+const propLayout = (_, props) => props.prompt.layout;
+
+const getUnplacedNodes = createSelector(
+  [networkNodesOfStageType, propLayout],
+  (nodes, layout) => reject(nodes, node => has(node, layout)),
+);
 
 const draggableType = 'POSITIONED_NODE';
 
@@ -21,9 +29,7 @@ export class NodeBucket extends Component {
       y: (coords.y - hit.y) / hit.height,
     };
 
-    const { layout, updateNode } = this.props;
-
-    updateNode({ ...node, [layout]: relativeCoords });
+    this.props.updateNode({ ...node, [this.props.prompt.layout]: relativeCoords });
   };
 
   render() {
@@ -51,7 +57,7 @@ export class NodeBucket extends Component {
 NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
-  layout: PropTypes.string.isRequired,
+  prompt: PropTypes.object.isRequired,
 };
 
 NodeBucket.defaultProps = {
@@ -67,7 +73,7 @@ function getNextNode(nodes, sort) {
 }
 
 function mapStateToProps(state, props) {
-  const nodes = getUnplacedNodes(props.layout)(state);
+  const nodes = getUnplacedNodes(state, props);
   return {
     node: getNextNode(nodes, props.sort),
   };

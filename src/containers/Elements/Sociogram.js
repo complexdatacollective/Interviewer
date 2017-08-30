@@ -9,27 +9,12 @@ import {
   NodeBucket,
 } from '../Elements';
 
-const Sociogram = ({ nodeAttributes, background, edge, layout, position, select, sort }) => (
+const Sociogram = ({ config, prompt, nodeAttributes, background, edge, layout, position, select, sort }) => (
   <div className="sociogram">
-    <SociogramBackground {...background} />
-    {
-      edge &&
-      <EdgeLayout
-        type={edge.type}
-        color={edge.color}
-        layout={layout}
-      />
-    }
-    <NodeLayout
-      edge={edge}
-      attributes={nodeAttributes}
-      layout={layout}
-      select={select}
-      position={position}
-    />
+    <SociogramBackground {...prompt.sociogram.background} />
     <NodeBucket
-      layout={layout}
-      sort={sort}
+      config={config}
+      prompt={prompt}
     />
   </div>
 );

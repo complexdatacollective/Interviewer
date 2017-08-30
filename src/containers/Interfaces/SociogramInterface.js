@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'network-canvas-ui';
@@ -25,6 +23,7 @@ const SociogramInterface = ({
   prompt,
   config,
 }) => {
+  console.log(prompt, config);
   return (
     <div className="sociogram-interface">
       <div className="sociogram-interface__prompts">
@@ -37,7 +36,12 @@ const SociogramInterface = ({
         />
       </div>
       <div className="sociogram-interface__sociogram">
-  
+        <Sociogram
+          {...prompt.sociogram}
+          config={config}
+          prompt={prompt}
+          key={prompt.id}
+        />
       </div>
       <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
         <Button
