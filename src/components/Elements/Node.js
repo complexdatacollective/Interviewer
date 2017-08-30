@@ -24,7 +24,7 @@ function scaleTextToFit(parent, child) {
   const fontSize = findFontSize(8);
 
   parent.removeAttribute('style');
-  child.setAttribute('style', `font-size: ${fontSize}px;`);
+  child.setAttribute('style', `font-size: ${fontSize}px; padding: 33%; overflow: hidden;`);
 }
 
 /**
