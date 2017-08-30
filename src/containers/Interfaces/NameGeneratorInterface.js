@@ -95,8 +95,8 @@ class NameGenerator extends Component {
     } = this.props.config.params;
 
     return (
-      <div className="name-generator">
-        <div className="name-generator__prompt">
+      <div className="name-generator-interface">
+        <div className="name-generator-interface__prompt">
           <PromptSwiper
             forward={promptForward}
             backward={promptBackward}
@@ -104,8 +104,8 @@ class NameGenerator extends Component {
             prompts={prompts}
           />
         </div>
-        <div className="name-generator__main">
-          <div className="name-generator__panels">
+        <div className="name-generator-interface__main">
+          <div className="name-generator-interface__panels">
             <NodeProviderPanels config={config} prompt={prompt} />
           </div>
           <div className="name-generator-interface__nodes">
