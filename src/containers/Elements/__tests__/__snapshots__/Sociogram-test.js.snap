@@ -12,15 +12,24 @@ ShallowWrapper {
         image={null}
         n={4}
         skewed={true} />
-    <Connect(ReactComponent)
-        attributes={null}
-        edge={null}
-        layout="foo"
-        position={false}
-        select={null} />
+    <Connect(Component)
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
+        }
+        stage={Object {}} />
     <Connect(NodeBucket)
-        layout="foo"
-        sort={null} />
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
+        }
+        stage={Object {}} />
 </div>,
   "nodes": Array [
     <div
@@ -29,15 +38,24 @@ ShallowWrapper {
             image={null}
             n={4}
             skewed={true} />
-      <Connect(ReactComponent)
-            attributes={null}
-            edge={null}
-            layout="foo"
-            position={false}
-            select={null} />
+      <Connect(Component)
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}} />
       <Connect(NodeBucket)
-            layout="foo"
-            sort={null} />
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}} />
 </div>,
   ],
   "options": Object {},
@@ -47,13 +65,14 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Sociogram
-        background={Object {}}
-        edge={null}
-        layout="foo"
-        nodeAttributes={null}
-        position={false}
-        select={null}
-        sort={null} />,
+        prompt={
+                Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+        }
+        stage={Object {}} />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -61,13 +80,12 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "background": Object {},
-          "edge": null,
-          "layout": "foo",
-          "nodeAttributes": null,
-          "position": false,
-          "select": null,
-          "sort": null,
+          "prompt": Object {
+            "sociogram": Object {
+              "background": Object {},
+            },
+          },
+          "stage": Object {},
         },
         "refs": Object {},
         "state": null,
@@ -95,15 +113,24 @@ ShallowWrapper {
                     image={null}
                     n={4}
                     skewed={true} />
-          <Connect(ReactComponent)
-                    attributes={null}
-                    edge={null}
-                    layout="foo"
-                    position={false}
-                    select={null} />
+          <Connect(Component)
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}} />
           <Connect(NodeBucket)
-                    layout="foo"
-                    sort={null} />
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}} />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
@@ -112,15 +139,24 @@ ShallowWrapper {
                     image={null}
                     n={4}
                     skewed={true} />
-          <Connect(ReactComponent)
-                    attributes={null}
-                    edge={null}
-                    layout="foo"
-                    position={false}
-                    select={null} />
+          <Connect(Component)
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}} />
           <Connect(NodeBucket)
-                    layout="foo"
-                    sort={null} />
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}} />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -134,12 +170,13 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Sociogram
-    background={Object {}}
-    edge={null}
-    layout="foo"
-    nodeAttributes={null}
-    position={false}
-    select={null}
-    sort={null} />,
+    prompt={
+        Object {
+            "sociogram": Object {
+              "background": Object {},
+            },
+          }
+    }
+    stage={Object {}} />,
 }
 `;
