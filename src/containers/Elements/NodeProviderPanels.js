@@ -1,12 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { colorDictionary } from 'network-canvas-ui';
 import { differenceBy } from 'lodash';
 import { createSelector } from 'reselect';
 import { protocolData } from '../../selectors/protocolData';
 import { networkNodes, otherNetworkNodesWithStageNodeType } from '../../selectors/network';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
+
+const colorPresets = [
+  colorDictionary['edge-alt-1'],
+  colorDictionary['edge-alt-2'],
+  colorDictionary['edge-alt-3'],
+  colorDictionary['edge-alt-4'],
+  colorDictionary['edge-alt-5'],
+];
 
 const panelPresets = {
   existing: {
@@ -53,6 +62,12 @@ const getProviderConfigsWithNodes = createSelector(
   ),
 );
 
+const getHighlight = (provider, panelNumber) => {
+  if (provider.highlight) { return provider.highlight; }
+  if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
+  return null;
+};
+
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
@@ -64,11 +79,12 @@ const NodeProviderPanels = ({ providerConfigsWithNodes, config, prompt }) => {
 
   return (
     <Panels minimise={totalNodes === 0}>
-      { providerConfigsWithNodes.map(providerConfig => (
+      { providerConfigsWithNodes.map((providerConfig, panelNumber) => (
         <Panel
           title={providerConfig.title}
           key={providerConfig.type}
           minimise={providerConfig.nodes.length === 0}
+          highlight={getHighlight(providerConfig, panelNumber)}
         >
           <NodeProvider {...providerConfig} config={config} prompt={prompt} />
         </Panel>
