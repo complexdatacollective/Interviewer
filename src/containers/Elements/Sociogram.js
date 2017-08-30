@@ -9,9 +9,13 @@ import {
   NodeBucket,
 } from '../Elements';
 
-const Sociogram = ({ config, prompt, nodeAttributes, background, edge, layout, position, select, sort }) => (
+const Sociogram = ({ config, prompt }) => (
   <div className="sociogram">
     <SociogramBackground {...prompt.sociogram.background} />
+    <NodeLayout
+      config={config}
+      prompt={prompt}
+    />
     <NodeBucket
       config={config}
       prompt={prompt}
@@ -20,21 +24,8 @@ const Sociogram = ({ config, prompt, nodeAttributes, background, edge, layout, p
 );
 
 Sociogram.propTypes = {
-  background: PropTypes.object.isRequired,
-  layout: PropTypes.string.isRequired,
-  nodeAttributes: PropTypes.object,
-  edge: PropTypes.object,
-  position: PropTypes.bool,
-  select: PropTypes.object,
-  sort: PropTypes.object,
-};
-
-Sociogram.defaultProps = {
-  nodeAttributes: null,
-  edge: null,
-  position: false,
-  select: null,
-  sort: null,
+  config: PropTypes.object.isRequired,
+  prompt: PropTypes.object.isRequired,
 };
 
 export default Sociogram;

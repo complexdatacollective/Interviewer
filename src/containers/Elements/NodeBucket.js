@@ -12,11 +12,22 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
 
-const propLayout = (_, props) => props.prompt.layout;
+const propSort = (_, props) => props.prompt.sociogram.sort;
+const propLayout = (_, props) => props.prompt.sociogram.layout;
 
 const getUnplacedNodes = createSelector(
   [networkNodesOfStageType, propLayout],
   (nodes, layout) => reject(nodes, node => has(node, layout)),
+);
+
+const getNextUnplacedNode = createSelector(
+  [getUnplacedNodes, propSort],
+  (nodes, sort) => {
+    let sortedNodes = [...nodes];
+    if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
+    if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
+    return first(sortedNodes);
+  },
 );
 
 const draggableType = 'POSITIONED_NODE';
@@ -29,7 +40,7 @@ export class NodeBucket extends Component {
       y: (coords.y - hit.y) / hit.height,
     };
 
-    this.props.updateNode({ ...node, [this.props.prompt.layout]: relativeCoords });
+    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
   };
 
   render() {
@@ -57,25 +68,17 @@ export class NodeBucket extends Component {
 NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
-  prompt: PropTypes.object.isRequired,
+  layout: PropTypes.string.isRequired,
 };
 
 NodeBucket.defaultProps = {
   node: null,
-  sort: null,
 };
 
-function getNextNode(nodes, sort) {
-  let sortedNodes = [...nodes];
-  if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
-  if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-  return first(sortedNodes);
-}
-
 function mapStateToProps(state, props) {
-  const nodes = getUnplacedNodes(state, props);
   return {
-    node: getNextNode(nodes, props.sort),
+    node: getNextUnplacedNode(state, props),
+    layout: propLayout(state, props),
   };
 }
 

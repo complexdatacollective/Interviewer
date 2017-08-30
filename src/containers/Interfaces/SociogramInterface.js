@@ -37,7 +37,6 @@ const SociogramInterface = ({
       </div>
       <div className="sociogram-interface__sociogram">
         <Sociogram
-          {...prompt.sociogram}
           config={config}
           prompt={prompt}
           key={prompt.id}
