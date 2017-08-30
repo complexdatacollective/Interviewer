@@ -44,7 +44,7 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <Unknown
         color={null}
-        edges={
+        edgeCoords={
                 Array [
                         Object {
                           "from": Object {
@@ -58,7 +58,9 @@ ShallowWrapper {
                           },
                         },
                       ]
-        } />,
+        }
+        prompt={Object {}}
+        stage={Object {}} />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -67,7 +69,7 @@ ShallowWrapper {
         "context": Object {},
         "props": Object {
           "color": null,
-          "edges": Array [
+          "edgeCoords": Array [
             Object {
               "from": Object {
                 "x": 100,
@@ -80,6 +82,8 @@ ShallowWrapper {
               },
             },
           ],
+          "prompt": Object {},
+          "stage": Object {},
         },
         "refs": Object {},
         "state": null,
@@ -143,7 +147,7 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <Unknown
     color={null}
-    edges={
+    edgeCoords={
         Array [
             Object {
               "from": Object {
@@ -157,6 +161,8 @@ ShallowWrapper {
               },
             },
           ]
-    } />,
+    }
+    prompt={Object {}}
+    stage={Object {}} />,
 }
 `;

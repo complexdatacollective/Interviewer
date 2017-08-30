@@ -1,18 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
-import {
-  PromptSwiper,
-} from '../Elements';
+import withPrompt from '../../behaviours/withPrompt';
+import { PromptSwiper } from '../Elements';
 import Sociogram from '../Elements/Sociogram';
-import {
-  activePrompt,
-} from '../../selectors/session';
-import {
-  resetPropertyForAllNodes,
-  resetEdgesOfType,
-} from '../../utils/reset';
+import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
   prompts.forEach((prompt) => {
@@ -25,17 +17,32 @@ const resetInterface = (prompts) => {
   * Sociogram Interface
   * @extends Component
   */
-const SociogramInterface = ({ prompt, prompts }) => (
+const SociogramInterface = ({
+  promptForward,
+  promptBackward,
+  prompt,
+  stage,
+}) => (
   <div className="sociogram-interface">
     <div className="sociogram-interface__prompts">
-      <PromptSwiper prompts={prompts} floating />
+      <PromptSwiper
+        forward={promptForward}
+        backward={promptBackward}
+        prompts={stage.params.prompts}
+        prompt={prompt}
+        floating
+      />
     </div>
     <div className="sociogram-interface__sociogram">
-      <Sociogram {...prompt.sociogram} />
+      <Sociogram
+        stage={stage}
+        prompt={prompt}
+        key={prompt.id}
+      />
     </div>
     <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
       <Button
-        onClick={() => { resetInterface(prompts); }}
+        onClick={() => { resetInterface(stage.params.prompts); }}
       >
         Reset interface
       </Button>
@@ -44,15 +51,10 @@ const SociogramInterface = ({ prompt, prompts }) => (
 );
 
 SociogramInterface.propTypes = {
-  prompts: PropTypes.array.isRequired,
+  stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
+  promptForward: PropTypes.func.isRequired,
+  promptBackward: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    prompt: activePrompt(state),
-    prompts: ownProps.config.params.prompts,
-  };
-}
-
-export default connect(mapStateToProps)(SociogramInterface);
+export default withPrompt(SociogramInterface);

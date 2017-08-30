@@ -4,20 +4,24 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { EdgeLayout } from '../../Elements/EdgeLayout';
 
-const mockProps = {
-  edges: [
-    {
-      key: 'foo_bar_baz',
-      from: {
-        x: 100,
-        y: 100,
-      },
-      to: {
-        x: 100,
-        y: 100,
-      },
+const mockEdgeCoords = [
+  {
+    key: 'foo_bar_baz',
+    from: {
+      x: 100,
+      y: 100,
     },
-  ],
+    to: {
+      x: 100,
+      y: 100,
+    },
+  },
+];
+
+const mockProps = {
+  stage: {},
+  prompt: {},
+  edgeCoords: mockEdgeCoords,
 };
 
 describe('<EdgeLayout />', () => {

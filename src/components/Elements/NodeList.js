@@ -11,7 +11,7 @@ const EnhancedNode = draggable(selectable(Node));
   * Renders a list of Node.
   */
 const NodeList = ({
-  network: { nodes },
+  nodes,
   label,
   selected,
   handleSelectNode,
@@ -56,7 +56,7 @@ const NodeList = ({
 };
 
 NodeList.propTypes = {
-  network: PropTypes.any.isRequired,
+  nodes: PropTypes.array.isRequired,
   handleSelectNode: PropTypes.func,
   handleDropNode: PropTypes.func,
   label: PropTypes.func,
@@ -66,6 +66,7 @@ NodeList.propTypes = {
 };
 
 NodeList.defaultProps = {
+  nodes: [],
   label: () => (''),
   selected: () => false,
   handleSelectNode: () => {},

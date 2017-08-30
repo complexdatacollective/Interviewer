@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -7,47 +9,30 @@ import {
   NodeBucket,
 } from '../Elements';
 
-const Sociogram = ({ nodeAttributes, background, edge, layout, position, select, sort }) => (
+const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
-    <SociogramBackground {...background} />
+    <SociogramBackground {...prompt.sociogram.background} />
     {
-      edge &&
+      prompt.sociogram.edge &&
       <EdgeLayout
-        type={edge.type}
-        color={edge.color}
-        layout={layout}
+        stage={stage}
+        prompt={prompt}
       />
     }
     <NodeLayout
-      edge={edge}
-      attributes={nodeAttributes}
-      layout={layout}
-      select={select}
-      position={position}
+      stage={stage}
+      prompt={prompt}
     />
     <NodeBucket
-      layout={layout}
-      sort={sort}
+      stage={stage}
+      prompt={prompt}
     />
   </div>
 );
 
 Sociogram.propTypes = {
-  background: PropTypes.object.isRequired,
-  layout: PropTypes.string.isRequired,
-  nodeAttributes: PropTypes.object,
-  edge: PropTypes.object,
-  position: PropTypes.bool,
-  select: PropTypes.object,
-  sort: PropTypes.object,
-};
-
-Sociogram.defaultProps = {
-  nodeAttributes: null,
-  edge: null,
-  position: false,
-  select: null,
-  sort: null,
+  stage: PropTypes.object.isRequired,
+  prompt: PropTypes.object.isRequired,
 };
 
 export default Sociogram;

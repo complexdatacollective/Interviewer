@@ -6,8 +6,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as networkActions } from '../ducks/modules/network';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { newNodeAttributes } from '../selectors/session';
-import { activeOriginNetwork } from '../selectors/network';
 import { PromptSwiper, NodeProviderPanels, Modal } from '../containers/Elements';
 import { NodeList, Form, DropZone } from '../components/Elements';
 
@@ -17,8 +15,6 @@ const actions = {
 };
 
 const selectors = {
-  session: { newNodeAttributes },
-  network: { activeOriginNetwork },
 };
 
 const elements = {

@@ -4,16 +4,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { first, isMatch } from 'lodash';
+import { first, isMatch, filter, has } from 'lodash';
+import { createSelector } from 'reselect';
 import { Node } from 'network-canvas-ui';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { getPlacedNodes } from '../../selectors/nodes';
+import { networkNodesOfStageType } from '../../selectors/interface';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const label = node => node.nickname;
 
 const draggableType = 'POSITIONED_NODE';
+
+const propLayout = (_, props) => props.prompt.sociogram.layout;
+
+const getPlacedNodes = createSelector(
+  [networkNodesOfStageType, propLayout],
+  (nodes, layout) => filter(nodes, node => has(node, layout)),
+);
 
 const EnhancedNode = draggable(selectable(Node));
 
@@ -162,9 +170,16 @@ NodeLayout.defaultProps = {
   position: false,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, props) {
+  const sociogram = props.prompt.sociogram;
+
   return {
-    nodes: getPlacedNodes(ownProps.layout)(state),
+    nodes: getPlacedNodes(state, props),
+    layout: sociogram.layout,
+    edge: sociogram.edge,
+    select: sociogram.select,
+    position: sociogram.position,
+    attributes: sociogram.nodeAttributes,
   };
 }
 

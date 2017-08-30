@@ -3,10 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isMatch, omit } from 'lodash';
-
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { newNodeAttributes, activePromptAttributes } from '../../selectors/session';
-
 import { NodeList } from '../../components/Elements';
 
 /**
@@ -41,7 +38,7 @@ class NodeProvider extends Component {
   render() {
     const {
       interaction,
-      network,
+      nodes,
     } = this.props;
 
     const label = node => `${node.nickname}`;
@@ -51,7 +48,7 @@ class NodeProvider extends Component {
       case 'selectable':
         return (
           <NodeList
-            network={network}
+            nodes={nodes}
             label={label}
             draggableType="EXISTING_NODE"
             handleDropNode={this.handleDropNode}
@@ -62,7 +59,7 @@ class NodeProvider extends Component {
       default:
         return (
           <NodeList
-            network={network}
+            nodes={nodes}
             label={label}
             draggableType="NEW_NODE"
             handleDropNode={this.handleDropNode}
@@ -73,22 +70,29 @@ class NodeProvider extends Component {
 }
 
 NodeProvider.propTypes = {
-  activePromptAttributes: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
-  network: PropTypes.object.isRequired,
+  activePromptAttributes: PropTypes.object.isRequired,
+  nodes: PropTypes.array.isRequired,
   interaction: PropTypes.string.isRequired,
   addNode: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
-  const interaction = (ownProps.selectable && 'selectable') || (ownProps.draggable && 'draggable') || 'none';
+function mapStateToProps(state, props) {
+  const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
+
+  const newNodeAttributes = {
+    type: props.stage.params.nodeType,
+    stageId: props.stage.id,
+    promptId: props.prompt.id,
+    ...props.prompt.nodeAttributes,
+  };
 
   return {
+    activePromptAttributes: props.prompt.nodeAttributes,
+    newNodeAttributes,
     interaction,
-    newNodeAttributes: newNodeAttributes(state),
-    activePromptAttributes: activePromptAttributes(state),
   };
 }
 

@@ -5,8 +5,8 @@ import { shallow } from 'enzyme';
 import Sociogram from '../../Elements/Sociogram';
 
 const mockProps = {
-  background: {},
-  layout: 'foo',
+  prompt: { sociogram: { background: {} } },
+  stage: {},
 };
 
 describe('<Sociogram />', () => {
