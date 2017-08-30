@@ -12,6 +12,13 @@ import {
 const Sociogram = ({ config, prompt }) => (
   <div className="sociogram">
     <SociogramBackground {...prompt.sociogram.background} />
+    {
+      prompt.sociogram.edge &&
+      <EdgeLayout
+        config={config}
+        prompt={prompt}
+      />
+    }
     <NodeLayout
       config={config}
       prompt={prompt}
