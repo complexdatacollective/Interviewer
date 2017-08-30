@@ -223,11 +223,14 @@ export default function draggable(WrappedComponent) {
         const movement = this.movementFromEvent(e);
         const hits = this.determineHits(movement);
 
+        this.setState(initalState);
+
         if (hits.length > 0) {
           this.props.onDropped(hits);
         }
+      } else {
+        this.setState(initalState);
       }
-      this.setState(initalState);
     }
 
     render() {
