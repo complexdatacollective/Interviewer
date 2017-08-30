@@ -1,0 +1,17 @@
+.node-bucket {
+  width: 190px;
+  height: 190px;
+  background: radial-gradient(
+    ellipse at center,
+    transparentize(palette('background'), .5)  0%,
+    transparentize(palette('ring'), .5) 100%
+  );
+  border-radius: 150px;
+  padding: 20px;
+
+  .node {
+    margin: 0;
+    width: 150px;
+    height: 150px;
+  }
+}

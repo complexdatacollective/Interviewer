@@ -88,15 +88,15 @@ class NameGenerator extends Component {
     } = this.props.config.params;
 
     return (
-      <div className="name-generator">
-        <div className="name-generator__prompt">
+      <div className="name-generator-interface">
+        <div className="name-generator-interface__prompt">
           <PromptSwiper prompts={prompts} />
         </div>
-        <div className="name-generator__main">
-          <div className="name-generator__panels">
+        <div className="name-generator-interface__main">
+          <div className="name-generator-interface__panels">
             <NodeProviderPanels config={panels} />
           </div>
-          <div className="name-generator__nodes">
+          <div className="name-generator-interface__nodes">
             <NodeList
               network={this.props.activeOriginNetwork}
               label={label}
@@ -122,11 +122,11 @@ class NameGenerator extends Component {
           handleSubmit={this.onSubmitNewNode}
         />
 
-        <button className="name-generator__add-person" onClick={() => openModal(modals.ADD_NODE)}>
+        <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>
           Add a person
         </button>
 
-        <div className="name-generator__node-bin">
+        <div className="name-generator-interface__node-bin">
           <NodeBin />
         </div>
       </div>

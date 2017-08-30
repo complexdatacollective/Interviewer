@@ -28,7 +28,7 @@ class Quiz extends Component {
     } = this.props.config.params;
 
     return (
-      <div className="form-interface">
+      <div className="quiz-interface">
         <h1>Quiz</h1>
 
         <Form

@@ -1,7 +1,8 @@
-/* eslint-disable no-shadow */
+/* eslint-disable */ // no-shadow */
 import { createSelector } from 'reselect';
+import { filter } from 'lodash';
 import { difference, nodeIncludesAttributes } from '../utils/Network';
-import { activePromptAttributes, activeStageAttributes, activeOriginAttributes } from './session';
+import { activePromptAttributes, activePromptLayout, activeStageAttributes, activeOriginAttributes } from './session';
 
 const network = state => state.network;
 

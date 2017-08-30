@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -26,7 +24,7 @@ function getCoords(event) {
   };
 }
 
-function moveDistance(start, draggableData) {
+function getMoveDistance(start, draggableData) {
   return Math.sqrt((draggableData.x - start.x) ** 2, (draggableData.y - start.y) ** 2);
 }
 
@@ -58,8 +56,9 @@ export default function draggable(WrappedComponent) {
     }
 
     onDrag = (event, draggableData) => {
+      const moveDistance = getMoveDistance(this.state.start, draggableData);
       if (!this.state.preview) {  // TODO: better way to keep track of drag start?
-        if (moveDistance(this.state.start, draggableData) > 4) {
+        if (moveDistance > 4) {
           this.startDrag(event, draggableData);
         }
         return;
@@ -68,10 +67,15 @@ export default function draggable(WrappedComponent) {
       const hits = this.getHits(getCoords(event, draggableData));
       this.props.updateActiveZones(hits.map(hit => hit.name));
 
+      if (hits.length > 0) {
+        this.props.onMove(hits, getCoords(event, draggableData));
+      }
+
       this.updateDrag(event, draggableData);
     }
 
     onStop = (event, draggableData) => {
+      const moveDistance = getMoveDistance(this.state.start, draggableData);
       this.endDrag();
 
       this.setState({
@@ -81,8 +85,8 @@ export default function draggable(WrappedComponent) {
 
       const hits = this.getHits(getCoords(event, draggableData));
 
-      if (hits.length > 0) {
-        this.props.onDropped(hits);
+      if (hits.length > 0 && moveDistance > 4) {
+        this.props.onDropped(hits, getCoords(event, draggableData));
       }
     }
 
@@ -97,7 +101,7 @@ export default function draggable(WrappedComponent) {
     }
 
     createPreview = (event, draggableData) => {
-      const draggablePreview = new DraggablePreview(this.node);
+      const draggablePreview = new DraggablePreview(this.node, this.props.animate);
       const coords = getCoords(event, draggableData);
 
       this.setState({
@@ -125,12 +129,26 @@ export default function draggable(WrappedComponent) {
       return this.state.preview !== null;
     }
 
+    styles() {
+      if (!this.props.animate) {
+        return this.isActive() ? { opacity: 0, width: 0, height: 0 } : { opacity: 1 };
+      }
+
+      return this.isActive() ? { opacity: 0, width: 0, height: 0 } : { opacity: 1, transition: 'all 300ms ease' };
+    }
+
     render() {
-      const opacity = this.isActive() ? { opacity: 0, width: 0, height: 0 } : { opacity: 1, transition: 'all 300ms ease' };
+      if (!this.props.canDrag) {
+        return (
+          <div ref={(node) => { this.node = node; }}>
+            <WrappedComponent {...this.props} />
+          </div>
+        );
+      }
 
       return (
         <DraggableCore onStart={this.onStart} onStop={this.onStop} onDrag={this.onDrag}>
-          <div style={opacity} ref={(node) => { this.node = node; }}>
+          <div style={this.styles()} ref={(node) => { this.node = node; }}>
             <WrappedComponent {...this.props} />
           </div>
         </DraggableCore>
@@ -143,11 +161,18 @@ export default function draggable(WrappedComponent) {
     draggableType: PropTypes.string.isRequired,
     dragStart: PropTypes.func.isRequired,
     dragStop: PropTypes.func.isRequired,
-    onDropped: PropTypes.func.isRequired,
+    onDropped: PropTypes.func,
+    onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
+    canDrag: PropTypes.bool,
+    animate: PropTypes.bool,
   };
 
   Draggable.defaultProps = {
+    canDrag: true,
+    animate: false,
+    onDropped: () => {},
+    onMove: () => {},
   };
 
   function mapStateToProps(state) {
