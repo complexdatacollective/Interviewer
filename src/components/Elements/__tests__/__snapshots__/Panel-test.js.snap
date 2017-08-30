@@ -7,12 +7,18 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="panel">
+    className="panel"
+    style={
+        Object {
+            "borderColor": null,
+          }
+    }>
     <div
         className="panel__heading">
         <h3
             className="panel__heading-header">
             foo
+             rstrst 
         </h3>
     </div>
     <div
@@ -24,12 +30,18 @@ ShallowWrapper {
 </div>,
   "nodes": Array [
     <div
-      className="panel">
+      className="panel"
+      style={
+            Object {
+                  "borderColor": null,
+                }
+      }>
       <div
             className="panel__heading">
             <h3
                   className="panel__heading-header">
                   foo
+                   rstrst 
             </h3>
       </div>
       <div
@@ -47,6 +59,7 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Panel
+        highlight={null}
         minimise={false}
         title="foo">
         <span>
@@ -63,6 +76,7 @@ ShallowWrapper {
           "children": <span>
             bar
 </span>,
+          "highlight": null,
           "minimise": false,
           "title": "foo",
         },
@@ -87,12 +101,18 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="panel">
+          className="panel"
+          style={
+                    Object {
+                              "borderColor": null,
+                            }
+          }>
           <div
                     className="panel__heading">
                     <h3
                               className="panel__heading-header">
                               foo
+                               rstrst 
                     </h3>
           </div>
           <div
@@ -104,12 +124,18 @@ ShallowWrapper {
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="panel">
+          className="panel"
+          style={
+                    Object {
+                              "borderColor": null,
+                            }
+          }>
           <div
                     className="panel__heading">
                     <h3
                               className="panel__heading-header">
                               foo
+                               rstrst 
                     </h3>
           </div>
           <div
@@ -131,6 +157,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Panel
+    highlight={null}
     minimise={false}
     title="foo">
     <span>
