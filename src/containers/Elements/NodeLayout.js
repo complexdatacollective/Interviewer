@@ -179,7 +179,7 @@ function mapStateToProps(state, props) {
     edge: sociogram.edge,
     select: sociogram.select,
     position: sociogram.position,
-    attribudes: sociogram.nodeAttributes,
+    attributes: sociogram.nodeAttributes,
   };
 }
 
