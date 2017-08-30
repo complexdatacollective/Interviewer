@@ -93,9 +93,14 @@
         "cordova-android": "^6.2.3",
         "cordova-ios": "git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim",
         "cordova-plugin-app-version": "^0.1.9",
+        "cordova-plugin-compat": "^1.0.0",
+        "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-x-socialsharing": "^5.2.0",
         "create-react-class": "^15.5.3",
         "electron-log": "^2.2.7",
         "electron-updater": "^2.7.2",
+        "es6-promise-plugin": "^4.1.0",
         "gridle": "^2.0.48",
         "history": "^4.7.2",
         "lodash": "^4.17.4",
@@ -185,7 +190,9 @@
             "ios"
         ],
         "plugins": {
-            "cordova-plugin-app-version": {}
+            "cordova-plugin-app-version": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-x-socialsharing": {}
         }
     }
 }

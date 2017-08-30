@@ -65,6 +65,7 @@ const fields = [
     validation: {
       required: true,
       minLength: 2,
+      minLength: 8,
     }
   },
   {
@@ -78,8 +79,18 @@ const fields = [
       maxLength: 8,
     },
   },
+  {
+    label: 'Age',
+    name: 'age',
+    type: 'Alphanumeric',
+    isNumericOnly: true,
+    validation: {
+      required: true,
+      minValue: 0,
+      maxValue: 200,
+    },
+  },
 ];
-
 export default {
   config: {
     "name": "My first interview protocol",
