@@ -9,10 +9,10 @@ const updater = {
         const { ipcRenderer } = window.require('electron');
         ipcRenderer.send('CHECK_FOR_UPDATE');
 
-        // Allow 20 seconds for a response, then fail.
-        setTimeout(() => {
-          reject('TIMEOUT');
-        }, 20000);
+        // // Allow 20 seconds for a response, then fail.
+        // setTimeout(() => {
+        //   reject(new Error('Timeout'));
+        // }, 20000);
 
         ipcRenderer.on('UPDATE_AVAILABLE', (response) => {
           resolve(response);
@@ -20,6 +20,10 @@ const updater = {
 
         ipcRenderer.on('UPDATE_NOT_AVAILABLE', (response) => {
           reject(response);
+        });
+
+        ipcRenderer.on('ERROR', (event, message) => {
+          reject(new Error(message));
         });
       }
     });
@@ -35,7 +39,7 @@ const updater = {
         });
 
         ipcRenderer.on('ERROR', (response) => {
-          reject(response);
+          reject(new Error(response));
         });
       }
     });

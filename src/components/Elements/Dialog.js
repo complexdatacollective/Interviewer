@@ -16,6 +16,7 @@ const Dialog = (props) => {
     children,
     show,
     hasCancelButton,
+    additionalInformation,
     cancelLabel,
     confirmLabel,
     onCancel,
@@ -52,6 +53,7 @@ const Dialog = (props) => {
               <div className="dialog__layout-content">
                 <h2 className="dialog__layout-title">{title}</h2>
                 {children}
+                <textarea>{additionalInformation}</textarea>
               </div>
             </div>
             <footer className="dialog__footer">
@@ -72,6 +74,7 @@ Dialog.propTypes = {
   type: PropTypes.string.isRequired,
   hasCancelButton: PropTypes.bool.isRequired,
   confirmLabel: PropTypes.string.isRequired,
+  additionalInformation: PropTypes.string,
   cancelLabel: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
@@ -79,6 +82,7 @@ Dialog.propTypes = {
 
 Dialog.defaultProps = {
   children: null,
+  additionalInformation: null,
   show: false,
 };
 

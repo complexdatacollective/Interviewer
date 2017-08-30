@@ -30,8 +30,7 @@ ipcMain.on('DOWNLOAD_UPDATE', () => {
   autoUpdater.downloadUpdate().catch(
     // Error checking for updates
     (error) => {
-      const errorMessage = error ? (error.stack || error).toString() : 'unknown error';
-      sendToRenderer('ERROR', errorMessage);
+      sendToRenderer('ERROR', error);
     });
 });
 
@@ -42,9 +41,7 @@ ipcMain.on('INSTALL_UPDATE', () => {
 autoUpdater.autoDownload = false;
 
 autoUpdater.on('error', (event, error) => {
-  const errorMessage = error ? (error.stack || error).toString() : event.toString();
-  log.error(errorMessage);
-  sendToRenderer('ERROR', errorMessage);
+  sendToRenderer('ERROR', error);
 });
 
 autoUpdater.on('update-available', () => {
