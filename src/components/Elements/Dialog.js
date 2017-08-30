@@ -36,6 +36,7 @@ const Dialog = (props) => {
   }
 
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
+  let additionalTextarea = additionalInformation ? <textarea className="dialog__layout-additional-info">{additionalInformation}</textarea> : '';
 
   return (
     <CSSTransitionGroup
@@ -53,7 +54,7 @@ const Dialog = (props) => {
               <div className="dialog__layout-content">
                 <h2 className="dialog__layout-title">{title}</h2>
                 {children}
-                <textarea>{additionalInformation}</textarea>
+                {additionalTextarea}
               </div>
             </div>
             <footer className="dialog__footer">

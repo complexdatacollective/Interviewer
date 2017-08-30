@@ -8,22 +8,27 @@ const updater = {
         // update through IPC goes here
         const { ipcRenderer } = window.require('electron');
         ipcRenderer.send('CHECK_FOR_UPDATE');
+        console.log('CHECK_FOR_UPDATE');
 
         // // Allow 20 seconds for a response, then fail.
         // setTimeout(() => {
         //   reject(new Error('Timeout'));
         // }, 20000);
 
-        ipcRenderer.on('UPDATE_AVAILABLE', (response) => {
+        ipcRenderer.on('UPDATE_AVAILABLE', (event, response) => {
+          console.log('UPDATE_AVAILABLE');
+          console.log(response);
           resolve(response);
         });
 
-        ipcRenderer.on('UPDATE_NOT_AVAILABLE', (response) => {
+        ipcRenderer.on('UPDATE_NOT_AVAILABLE', (event, response) => {
+          console.log('UPDATE_NOT_AVAILABLE');
+          console.log(response);
           reject(response);
         });
 
-        ipcRenderer.on('ERROR', (event, message) => {
-          reject(new Error(message));
+        ipcRenderer.on('ERROR', (event, response) => {
+          reject(new Error(response));
         });
       }
     });
@@ -34,11 +39,11 @@ const updater = {
         const { ipcRenderer } = window.require('electron');
         ipcRenderer.send('DOWNLOAD_UPDATE');
 
-        ipcRenderer.on('UPDATE_DOWNLOADED', (response) => {
+        ipcRenderer.on('UPDATE_DOWNLOADED', (event, response) => {
           resolve(response);
         });
 
-        ipcRenderer.on('ERROR', (response) => {
+        ipcRenderer.on('ERROR', (event, response) => {
           reject(new Error(response));
         });
       }
@@ -46,7 +51,7 @@ const updater = {
   },
   installUpdate() {
     if (isElectron()) {
-      // update through IPC goes here
+      // Install and restart
       const { ipcRenderer } = window.require('electron');
       ipcRenderer.send('INSTALL_UPDATE');
     }

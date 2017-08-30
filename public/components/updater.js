@@ -12,7 +12,6 @@
 
 const { autoUpdater } = require('electron-updater');
 const { ipcMain, BrowserWindow } = require('electron');
-const log = require('electron-log');
 
 function sendToRenderer(channel, message) {
   const arr = BrowserWindow.getAllWindows();
@@ -27,11 +26,7 @@ ipcMain.on('CHECK_FOR_UPDATE', () => {
 });
 
 ipcMain.on('DOWNLOAD_UPDATE', () => {
-  autoUpdater.downloadUpdate().catch(
-    // Error checking for updates
-    (error) => {
-      sendToRenderer('ERROR', error);
-    });
+  autoUpdater.downloadUpdate();
 });
 
 ipcMain.on('INSTALL_UPDATE', () => {
@@ -40,19 +35,19 @@ ipcMain.on('INSTALL_UPDATE', () => {
 
 autoUpdater.autoDownload = false;
 
-autoUpdater.on('error', (event, error) => {
-  sendToRenderer('ERROR', error);
+autoUpdater.on('error', (error) => {
+  sendToRenderer('ERROR', error.message);
 });
 
-autoUpdater.on('update-available', () => {
-  sendToRenderer('UPDATE_AVAILABLE', 'UPDATE_AVAILABLE');
+autoUpdater.on('update-available', (info) => {
+  sendToRenderer('UPDATE_AVAILABLE', info);
 });
 
 
-autoUpdater.on('update-not-available', () => {
-  sendToRenderer('UPDATE_NOT_AVAILABLE', 'UPDATE_NOT_AVAILABLE');
+autoUpdater.on('update-not-available', (info) => {
+  sendToRenderer('UPDATE_NOT_AVAILABLE', info);
 });
 
-autoUpdater.on('update-downloaded', () => {
-  sendToRenderer('UPDATE_DOWNLOADED', 'UPDATE_DOWNLOADED');
+autoUpdater.on('update-downloaded', (info) => {
+  sendToRenderer('UPDATE_DOWNLOADED', info);
 });

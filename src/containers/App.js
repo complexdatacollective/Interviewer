@@ -43,80 +43,94 @@ class App extends Component {
       });
     });
 
-    // Initialise the update checker. Returns a promise that resolves based
-    // on the outcome.
+    // Initialise the update checker. Returns a promise.
     updater.checkForUpdate().then(
       (response) => {
         // Update available.
-        console.log('checkForUpdate() response. ', response);
+        const version = response.version.toString();
+        const releaseNotes = response.releaseNotes.toString();
         this.setState(...this.state, {
           updateDialog: {
-            title: 'Update Available',
+            title: `Version ${version} is Available`,
             type: 'info',
-            content: 'A new version of Network Canvas is available to download. Would you like to download it now?',
-            additionalInformation: '',
+            content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
+            additionalInformation: releaseNotes,
             onConfirm: () => { this.confirmUpdateDownload(); },
             confirmLabel: 'Download now',
             hasCancelButton: true,
           },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
         });
-        this.props.openModal('UPDATE_DIALOG');
       },
       (failure) => {
+        // No update available, or error.
+        if (failure instanceof Error) {
+          throw new Error(failure.message);
+        }
         // No update available.
-        console.log('checkForUpdate() failure. ', failure);
         this.setState(...this.state, {
           updateDialog: {
             title: 'No Updates Availble',
             type: 'info',
             content: 'The update process failed.',
+            additionalInformation: failure,
             onConfirm: () => {},
             confirmLabel: 'Okay',
             hasCancelButton: false,
           },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
         });
-        this.props.openModal('UPDATE_DIALOG');
       },
     ).catch(
-      // Error checking for updates
+      // Error while checking for updates
       (error) => {
-        console.log('checkForUpdate() error. ');
-        console.log(error);
         this.setState(...this.state, {
           updateDialog: {
-            title: 'boom',
+            title: 'An Error Occured',
             type: 'error',
-            content: 'An error has occured during the update process.',
+            content: 'An error has occured while checking for an update. More information to help diagnose the issue can be found below.',
+            additionalInformation: error,
             onConfirm: () => {},
             confirmLabel: 'Okay',
             hasCancelButton: false,
           },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
         });
-        this.props.openModal('UPDATE_DIALOG');
       },
     );
   }
 
+  // User clicked download Button
+  // TODO: implement progress updates/loader
   confirmUpdateDownload() {
+    // Trigger the download. Returns promise.
     updater.downloadUpdate().then(
-      (response) => {
-        console.log('updateAvailableConfirm() response ', response);
+      // Update downloaded
+      () => {
         this.setState(...this.state, {
           updateDialog: {
             title: 'Update Ready to Install',
             type: 'warning',
             additionalInformation: '',
-            content: 'Your update is ready to install. Network Canvas will now close, and ewill reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
+            content: 'Your update is ready to install. Network Canvas will now close, and will reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
             onConfirm: () => { updater.installUpdate(); },
             confirmLabel: 'Install and Restart',
             hasCancelButton: true,
           },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
         });
-        // Update downloaded and ready to install
-        this.props.openModal('UPDATE_DIALOG');
       },
+      // Update failed to download. Either cancelled or errored.
       (failure) => {
-        console.log('updateAvailableConfirm() failure ', failure);
+        // Test for error
+        if (failure instanceof Error) {
+          throw new Error(failure.message);
+        }
+        // Otherwise assumed cancelled.
         this.setState(...this.state, {
           updateDialog: {
             title: 'Error Encountered During Update',
@@ -127,25 +141,28 @@ class App extends Component {
             confirmLabel: 'Okay',
             hasCancelButton: false,
           },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
         });
-        this.props.openModal('UPDATE_DIALOG');
       },
     ).catch(
-      // Error downloading update
+      // Error while downloading update
       (error) => {
-        console.log('updateAvailableConfirm() error ', error);
         this.setState(...this.state, {
           updateDialog: {
-            title: 'Error Encountered During Update',
+            title: 'An Error Occured',
             type: 'error',
-            additionalInformation: '',
-            content: 'An error has occured during the update process.',
+            content: 'An error has occured during the update process. More information to help diagnose the issue can be found below.',
+            additionalInformation: error,
             onConfirm: () => {},
             confirmLabel: 'Okay',
             hasCancelButton: false,
           },
         });
-        this.props.openModal('UPDATE_DIALOG');
+        // This shouldn't be here. But setState is async. How to handle better?
+        setTimeout(() => {
+          this.props.openModal('UPDATE_DIALOG');
+        }, 1000);
       },
     );
   }
