@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Touch from 'react-hammerjs';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
+import cx from 'classnames';
 import { Prompt, Pips } from '../../components/Elements';
 
 /**

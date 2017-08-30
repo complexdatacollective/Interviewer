@@ -52,7 +52,6 @@ NodeBucket.propTypes = {
   node: PropTypes.object,
   updateNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
-  sort: PropTypes.object,
 };
 
 NodeBucket.defaultProps = {
@@ -67,10 +66,10 @@ function getNextNode(nodes, sort) {
   return first(sortedNodes);
 }
 
-function mapStateToProps(state, ownProps) {
-  const nodes = getUnplacedNodes(ownProps.layout)(state);
+function mapStateToProps(state, props) {
+  const nodes = getUnplacedNodes(props.layout)(state);
   return {
-    node: getNextNode(nodes, ownProps.sort),
+    node: getNextNode(nodes, props.sort),
   };
 }
 
