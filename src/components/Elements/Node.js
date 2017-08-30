@@ -5,21 +5,23 @@ import classNames from 'classnames';
 const childOutOfBounds = (parentBounds, childBounds) =>
   childBounds.height > parentBounds.height || childBounds.width > parentBounds.width;
 
-const scaleIncrement = 2;
+const scaleIncrement = 1;
 
 // TODO move padding: 33% into stylesheet
 function scaleTextToFit(parent, child) {
-  const styles = window.getComputedStyle(child, null);
-  let fontSize = parseInt(styles['font-size'], 10) + scaleIncrement;
-  let childBounds = { width: 1000, height: 1000 };
+  let childBounds = { width: 10000, height: 10000 };
   const parentBounds = parent.getBoundingClientRect();
   parent.setAttribute('style', 'position: relative;');
 
-  while (fontSize > 0 && childOutOfBounds(parentBounds, childBounds)) {
-    fontSize -= scaleIncrement;
-    child.setAttribute('style', `position: absolute; height: auto; width: auto; padding: 33%; font-size: ${fontSize}px;`);
+  const findFontSize = (size) => {
+    child.setAttribute('style', `position: absolute; height: auto; width: auto; padding: 33%; font-size: ${size}px;`);
     childBounds = child.getBoundingClientRect();
-  }
+    return !childOutOfBounds(parentBounds, childBounds) ?
+      findFontSize(size + scaleIncrement) :
+      size - scaleIncrement;
+  };
+
+  const fontSize = findFontSize(8);
 
   parent.removeAttribute('style');
   child.setAttribute('style', `font-size: ${fontSize}px;`);
@@ -29,8 +31,14 @@ function scaleTextToFit(parent, child) {
   * Renders a Node.
   */
 class Node extends Component {
-  componentDidUpdate() {
+  componentDidMount() {
     scaleTextToFit(this.node, this.node.querySelectorAll('.node__label')[0]);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.label !== this.props.label) {
+      scaleTextToFit(this.node, this.node.querySelectorAll('.node__label')[0]);
+    }
   }
 
   render() {
