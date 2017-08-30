@@ -15,7 +15,7 @@ const Panel = ({ title, children, minimise, highlight }) => {
 
   return (
     <div className={panelClasses} style={styles}>
-      <div className="panel__heading"><h3 className="panel__heading-header">{title} rstrst </h3></div>
+      <div className="panel__heading"><h3 className="panel__heading-header">{title}</h3></div>
       <div className="panel__content">
         {children}
       </div>
