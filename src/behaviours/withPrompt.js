@@ -13,7 +13,7 @@ export default function withPrompt(WrappedComponent) {
     }
 
     prompts() {
-      return this.props.config.params.prompts;
+      return this.props.stage.params.prompts;
     }
 
     promptsCount() {
@@ -52,7 +52,7 @@ export default function withPrompt(WrappedComponent) {
   }
 
   WithPrompt.propTypes = {
-    config: PropTypes.object.isRequired,
+    stage: PropTypes.object.isRequired,
     promptIndex: PropTypes.number,
   };
 

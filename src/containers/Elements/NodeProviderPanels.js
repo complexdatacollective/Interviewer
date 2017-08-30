@@ -42,7 +42,7 @@ const rehydratePreset = (panelConfig) => {
   return panelConfig;
 };
 
-const propPanelConfigs = (_, props) => props.config.params.panels;
+const propPanelConfigs = (_, props) => props.stage.params.panels;
 
 const getProviderConfigsWithNodes = createSelector(
   [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
@@ -70,7 +70,7 @@ const getHighlight = (provider, panelNumber) => {
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
-const NodeProviderPanels = ({ providerConfigsWithNodes, config, prompt }) => {
+const NodeProviderPanels = ({ providerConfigsWithNodes, stage, prompt }) => {
   const totalNodes = providerConfigsWithNodes.reduce(
     (sum, providerConfig) => sum + providerConfig.nodes.length,
     0,
@@ -85,7 +85,7 @@ const NodeProviderPanels = ({ providerConfigsWithNodes, config, prompt }) => {
           minimise={providerConfig.nodes.length === 0}
           highlight={getHighlight(providerConfig, panelNumber)}
         >
-          <NodeProvider {...providerConfig} config={config} prompt={prompt} />
+          <NodeProvider {...providerConfig} stage={stage} prompt={prompt} />
         </Panel>
       )) }
     </Panels>
@@ -94,7 +94,7 @@ const NodeProviderPanels = ({ providerConfigsWithNodes, config, prompt }) => {
 
 NodeProviderPanels.propTypes = {
   providerConfigsWithNodes: PropTypes.array.isRequired,
-  config: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 

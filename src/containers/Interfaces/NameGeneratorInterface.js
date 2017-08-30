@@ -86,13 +86,13 @@ class NameGenerator extends Component {
       promptBackward,
       prompt,
       nodesForPrompt,
-      config,
+      stage,
     } = this.props;
 
     const {
       form,
       prompts,
-    } = this.props.config.params;
+    } = this.props.stage.params;
 
     return (
       <div className="name-generator-interface">
@@ -106,7 +106,7 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodeProviderPanels config={config} prompt={prompt} />
+            <NodeProviderPanels stage={stage} prompt={prompt} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
@@ -148,7 +148,7 @@ class NameGenerator extends Component {
 
 NameGenerator.propTypes = {
   nodesForPrompt: PropTypes.array.isRequired,
-  config: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
@@ -161,8 +161,8 @@ NameGenerator.propTypes = {
 
 function mapStateToProps(state, props) {
   const newNodeAttributes = {
-    type: props.config.params.nodeType,
-    stageId: props.config.id,
+    type: props.stage.params.nodeType,
+    stageId: props.stage.id,
     promptId: props.prompt.id,
     ...props.prompt.nodeAttributes,
   };

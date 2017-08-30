@@ -21,28 +21,28 @@ const SociogramInterface = ({
   promptForward,
   promptBackward,
   prompt,
-  config,
+  stage,
 }) => (
   <div className="sociogram-interface">
     <div className="sociogram-interface__prompts">
       <PromptSwiper
         forward={promptForward}
         backward={promptBackward}
-        prompts={config.params.prompts}
+        prompts={stage.params.prompts}
         prompt={prompt}
         floating
       />
     </div>
     <div className="sociogram-interface__sociogram">
       <Sociogram
-        config={config}
+        stage={stage}
         prompt={prompt}
         key={prompt.id}
       />
     </div>
     <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
       <Button
-        onClick={() => { resetInterface(config.params.prompts); }}
+        onClick={() => { resetInterface(stage.params.prompts); }}
       >
         Reset interface
       </Button>
@@ -51,7 +51,7 @@ const SociogramInterface = ({
 );
 
 SociogramInterface.propTypes = {
-  config: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,

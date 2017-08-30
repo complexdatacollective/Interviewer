@@ -3,9 +3,15 @@
 import { createSelector } from 'reselect';
 import { filter, reject } from 'lodash';
 
-const propStageId = (_, props) => props.config.id;
+/*
+These selectors assume the following props:
+  stage: which contains the protocol config for the stage
+  prompt: which contains the protocol config for the prompt
+*/
+
+const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
-export const propStageNodeType = (_, props) => props.config.params.nodeType;
+export const propStageNodeType = (_, props) => props.stage.params.nodeType;
 
 export const protocolData = state => state.protocol.config.data;
 export const networkNodes = state => state.network.nodes;

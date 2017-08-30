@@ -83,8 +83,8 @@ function mapStateToProps(state, props) {
   const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
 
   const newNodeAttributes = {
-    type: props.config.params.nodeType,
-    stageId: props.config.id,
+    type: props.stage.params.nodeType,
+    stageId: props.stage.id,
     promptId: props.prompt.id,
     ...props.prompt.nodeAttributes,
   };

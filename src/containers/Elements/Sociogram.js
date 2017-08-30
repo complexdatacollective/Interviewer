@@ -9,29 +9,29 @@ import {
   NodeBucket,
 } from '../Elements';
 
-const Sociogram = ({ config, prompt }) => (
+const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
     <SociogramBackground {...prompt.sociogram.background} />
     {
       prompt.sociogram.edge &&
       <EdgeLayout
-        config={config}
+        stage={stage}
         prompt={prompt}
       />
     }
     <NodeLayout
-      config={config}
+      stage={stage}
       prompt={prompt}
     />
     <NodeBucket
-      config={config}
+      stage={stage}
       prompt={prompt}
     />
   </div>
 );
 
 Sociogram.propTypes = {
-  config: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 
