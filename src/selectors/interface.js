@@ -2,9 +2,18 @@
 
 import { createSelector } from 'reselect';
 import { filter, reject } from 'lodash';
-import { propPromptIds, propStageNodeType } from './props';
 
+const propStageId = (_, props) => props.config.id;
+const propPromptId = (_, props) => props.prompt.id;
+export const propStageNodeType = (_, props) => props.config.params.nodeType;
+
+export const protocolData = state => state.protocol.config.data;
 export const networkNodes = state => state.network.nodes;
+
+export const propPromptIds = createSelector(
+  [propStageId, propPromptId],
+  (stageId, promptId) => ({ stageId, promptId }),
+);
 
 export const networkNodesOfStageType = createSelector(
     [networkNodes, propStageNodeType],

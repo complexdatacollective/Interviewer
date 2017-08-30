@@ -9,7 +9,7 @@ import { createSelector } from 'reselect';
 import { Node } from 'network-canvas-ui';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { networkNodesOfStageType } from '../../selectors/network';
+import { networkNodesOfStageType } from '../../selectors/interface';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const label = node => node.nickname;

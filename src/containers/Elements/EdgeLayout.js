@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { filter, find } from 'lodash';
 import { colorDictionary } from 'network-canvas-ui';
-import { networkNodesOfStageType } from '../../selectors/network';
+import { networkNodesOfStageType } from '../../selectors/interface';
 
 const propSociogramLayout = (_, props) => props.prompt.sociogram.layout;
 const propSociogramEdgeType = (_, props) => props.prompt.sociogram.edge.type;

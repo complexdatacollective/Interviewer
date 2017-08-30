@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { first, sortBy, reject, has } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { networkNodesOfStageType } from '../../selectors/network';
+import { networkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
