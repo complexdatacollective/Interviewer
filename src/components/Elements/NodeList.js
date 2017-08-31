@@ -75,4 +75,4 @@ NodeList.defaultProps = {
   hover: false,
 };
 
-export default scrollable(droppable(NodeList));
+export default droppable(scrollable(NodeList));
