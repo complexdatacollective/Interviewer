@@ -39,8 +39,26 @@ class SessionMenu extends Component {
     };
   }
 
-  componentWillMount() {
-    // Initialise the update checker. Returns a promise.
+  onExport = () => {
+    createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
+  };
+
+  onQuit = () => {
+    if (isCordova()) {
+      // cordova
+      navigator.app.exitApp();
+    } else {
+      // note: this will only close windows opened by the app, not a new tab the user opened
+      window.close();
+    }
+  };
+
+  onReset = () => {
+    this.props.resetState();
+  };
+
+  checkforUpdates = () => {
+    // Initialise the update checker. Returns a promise
     updater.checkForUpdate().then(
       (response) => {
         // Update available.
@@ -100,27 +118,9 @@ class SessionMenu extends Component {
     );
   }
 
-  onExport = () => {
-    createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
-  };
-
-  onQuit = () => {
-    if (isCordova()) {
-      // cordova
-      navigator.app.exitApp();
-    } else {
-      // note: this will only close windows opened by the app, not a new tab the user opened
-      window.close();
-    }
-  };
-
-  onReset = () => {
-    this.props.resetState();
-  };
-
-  // User clicked download Button
-  // TODO: implement progress updates/loader
   confirmUpdateDownload() {
+    // User clicked download Button
+    // TODO: implement progress updates/loader
     // Trigger the download. Returns promise.
     updater.downloadUpdate().then(
       // Update downloaded
@@ -193,6 +193,7 @@ class SessionMenu extends Component {
       { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
+      { id: 'update-check', title: 'Check for Updates', interfaceType: 'menu-custom-interface', onClick: this.checkForUpdates },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
     ].map((item) => {
