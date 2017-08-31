@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { throttle } from 'lodash';
 import getAbsoluteBoundingRect from './getAbsoluteBoundingRect';
 
 const getSize = (element) => {
@@ -17,20 +16,17 @@ const styles = (x, y) =>
 const parent = () => document.getElementById('page-wrap');
 
 export default class DraggablePreview {
-  constructor(node, animate = false) {
-    this.position = throttle(this.position, 1000 / 60);
-
+  constructor(node) {
     this.node = document.createElement('div');
     this.node.setAttribute('class', 'draggable-preview');
-    this.node.setAttribute('style', styles(-1000, -1000));
+    this.x = -1000;
+    this.y = -1000;
 
-    const animationLayer = document.createElement('div');
-    if (animate) {
-      animationLayer.setAttribute('class', 'draggable-preview__animation');
-    }
-    animationLayer.appendChild(node.cloneNode(true));
+    this.update();
 
-    this.node.appendChild(animationLayer);
+    const clone = node.cloneNode(true);
+
+    this.node.appendChild(clone);
 
     parent().appendChild(this.node);
   }
@@ -51,13 +47,22 @@ export default class DraggablePreview {
     return this._center;
   }
 
+  update = () => {
+    this.render();
+    this.animationFrame = window.requestAnimationFrame(this.update);
+  }
+
+  render() {
+    this.node.setAttribute('style', styles(this.x, this.y));
+  }
+
   position(coords) {
-    const x = coords.x - this.center().x;
-    const y = coords.y - this.center().y;
-    this.node.setAttribute('style', styles(x, y));
+    this.x = coords.x - this.center().x;
+    this.y = coords.y - this.center().y;
   }
 
   cleanup() {
+    window.cancelAnimationFrame(this.animationFrame);
     parent().removeChild(this.node);
   }
 }
