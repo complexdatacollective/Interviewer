@@ -1,35 +1,38 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const textOutOfBounds = (parent, child) => {
-  const parentBounds = parent.getBoundingClientRect();
-  const childBounds = child.getBoundingClientRect();
-  return childBounds.height > parentBounds.height || childBounds.width > parentBounds.width;
+const textOutOfBounds = (containerElement, textElement) => {
+  const containerBounds = containerElement.getBoundingClientRect();
+  const textBounds = textElement.getBoundingClientRect();
+  return textBounds.height > containerBounds.height || textBounds.width > containerBounds.width;
 };
 
 const scaleIncrement = 1;
 
 // TODO move padding: 33% into stylesheet
 function scaleTextToFit(element) {
-  element.setAttribute('style', 'position: relative; margin: 33%; ');
+  element.setAttribute('style', 'position: relative; width: 100%; height: 100%;');
+  const text = element.textContent;
+  element.innerHTML = '';
 
-  const text = document.createElement('span');
-  text.append(element.textContent);
-  element.appendChild(text);
+  const textElement = document.createElement('span');
+  textElement.innerHTML = text;
+  element.appendChild(textElement);
 
   const findFontSize = (size) => {
-    text.setAttribute('style', `position: absolute; font-size: ${size}px;`);
+    textElement.setAttribute('style', `position: absolute; font-size: ${size}px;`);
 
-    return !textOutOfBounds(element, text) ?
+    return !textOutOfBounds(element, textElement) ?
       findFontSize(size + scaleIncrement) :
       size - scaleIncrement;
   };
 
   const fontSize = findFontSize(8);
 
-  element.removeChild(text);
-  element.setAttribute('style', `margin: 33%; font-size: ${fontSize}px; overflow: hidden;`);
+  element.innerHTML = text;
+  element.setAttribute('style', `font-size: ${fontSize}px; width: 100%; height: 100%; overflow: hidden;display: flex;justify-content: center;align-items: center;flex-wrap: nowrap;`);
 }
 
 /**
@@ -37,13 +40,17 @@ function scaleTextToFit(element) {
   */
 class Node extends Component {
   componentDidMount() {
-    scaleTextToFit(this.node.querySelectorAll('.node__label')[0]);
+    scaleTextToFit(this.labelTextElement());
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.label !== this.props.label) {
-      scaleTextToFit(this.node.querySelectorAll('.node__label')[0]);
+      scaleTextToFit(this.labelTextElement());
     }
+  }
+
+  labelTextElement() {
+    return this.node.querySelectorAll('.node__label-text')[0];
   }
 
   render() {
@@ -84,7 +91,9 @@ class Node extends Component {
           />
           <circle vectorEffect="non-scaling-stroke" cx="0" cy="0" r="1" className="node__node-trim" />
         </svg>
-        <div className="node__label">{label}</div>
+        <div className="node__label" style={{ padding: '33%' }}>
+          <div className="node__label-text" style={{ width: '100%', height: '100%' }}>{label}</div>
+        </div>
       </div>
     );
   }
