@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, TextInput } from 'network-canvas-ui';
+import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/Elements';
 
@@ -71,11 +71,6 @@ class Setup extends Component {
         />
         <hr />
         <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
-        <TextInput
-          className="input--wurm"
-          name="protocolLocation"
-          label="Protocol Location"
-        />
       </div>
     );
   }

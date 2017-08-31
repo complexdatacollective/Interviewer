@@ -38,13 +38,13 @@ const Dialog = (props) => {
 
   function createMarkup() {
     const safeString = xss(additionalInformation, {
-      whiteList:          {
+      whiteList: {
         h3: [],
         p: [],
         ul: [],
         li: [],
-      },        // empty, means filter out all tags
-      stripIgnoreTag:     true,
+      },
+      stripIgnoreTag: true,
     });
     return {
       __html: safeString
@@ -53,7 +53,7 @@ const Dialog = (props) => {
 
 
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
-  let additionalTextarea = additionalInformation ? <div className="dialog__layout-additional-info" dangerouslySetInnerHTML={createMarkup()} />: '';
+  let additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} />: '';
 
   return (
     <CSSTransitionGroup
@@ -64,15 +64,17 @@ const Dialog = (props) => {
       { show &&
         <div key="dialog" className="dialog">
           <div className={dialogClasses} onClick={e => e.stopPropagation()}>
-            <div className="dialog__layout">
-              <div className="dialog__layout-icon">
+            <div className="dialog__main">
+              <div className="dialog__main-icon">
                 <Icon name={type} />
               </div>
-              <div className="dialog__layout-content">
-                <h2 className="dialog__layout-title">{title}</h2>
+              <div className="dialog__main-content">
+                <h2 className="dialog__main-title">{title}</h2>
                 {children}
-                {additionalTextarea}
               </div>
+            </div>
+            <div className="dialog__additional-content">
+              {additionalTextarea}
             </div>
             <footer className="dialog__footer">
               { cancelButton }

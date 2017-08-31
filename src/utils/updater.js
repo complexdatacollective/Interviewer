@@ -8,22 +8,12 @@ const updater = {
         // update through IPC goes here
         const { ipcRenderer } = window.require('electron');
         ipcRenderer.send('CHECK_FOR_UPDATE');
-        console.log('CHECK_FOR_UPDATE');
-
-        // // Allow 20 seconds for a response, then fail.
-        // setTimeout(() => {
-        //   reject(new Error('Timeout'));
-        // }, 20000);
 
         ipcRenderer.on('UPDATE_AVAILABLE', (event, response) => {
-          console.log('UPDATE_AVAILABLE');
-          console.log(response);
           resolve(response);
         });
 
         ipcRenderer.on('UPDATE_NOT_AVAILABLE', (event, response) => {
-          console.log('UPDATE_NOT_AVAILABLE');
-          console.log(response);
           reject(response);
         });
 
