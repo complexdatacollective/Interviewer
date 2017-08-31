@@ -2,29 +2,34 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const childOutOfBounds = (parentBounds, childBounds) =>
-  childBounds.height > parentBounds.height || childBounds.width > parentBounds.width;
+const textOutOfBounds = (parent, child) => {
+  const parentBounds = parent.getBoundingClientRect();
+  const childBounds = child.getBoundingClientRect();
+  return childBounds.height > parentBounds.height || childBounds.width > parentBounds.width;
+};
 
 const scaleIncrement = 1;
 
 // TODO move padding: 33% into stylesheet
-function scaleTextToFit(parent, child) {
-  let childBounds = { width: 10000, height: 10000 };
-  const parentBounds = parent.getBoundingClientRect();
-  parent.setAttribute('style', 'position: relative;');
+function scaleTextToFit(element) {
+  element.setAttribute('style', 'position: relative;');
+
+  const text = document.createElement('span');
+  text.append(element.textContent);
+  element.appendChild(text);
 
   const findFontSize = (size) => {
-    child.setAttribute('style', `position: absolute; height: auto; width: auto; padding: 33%; font-size: ${size}px;`);
-    childBounds = child.getBoundingClientRect();
-    return !childOutOfBounds(parentBounds, childBounds) ?
+    text.setAttribute('style', `position: absolute; font-size: ${size}px;`);
+
+    return !textOutOfBounds(element, text) ?
       findFontSize(size + scaleIncrement) :
       size - scaleIncrement;
   };
 
   const fontSize = findFontSize(8);
 
-  parent.removeAttribute('style');
-  child.setAttribute('style', `font-size: ${fontSize}px; padding: 33%; overflow: hidden;`);
+  element.removeChild(text);
+  element.setAttribute('style', `font-size: ${fontSize}px; overflow: hidden;`);
 }
 
 /**
