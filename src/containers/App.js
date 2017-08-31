@@ -71,10 +71,10 @@ class App extends Component {
         // No update available.
         this.setState(...this.state, {
           updateDialog: {
-            title: 'No Updates Availble',
+            title: 'No Updates Available',
             type: 'info',
-            content: 'The update process failed.',
-            additionalInformation: failure,
+            content: 'You are using the latest available version of Network Canvas.',
+            additionalInformation: '',
             onConfirm: () => {},
             confirmLabel: 'Okay',
             hasCancelButton: false,
