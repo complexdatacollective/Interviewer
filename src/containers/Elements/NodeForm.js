@@ -54,7 +54,10 @@ NodeForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
-  modalName: PropTypes.string.isRequired,
+  modalName: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.symbol,
+  ]).isRequired,
   form: PropTypes.any.isRequired,
   node: PropTypes.any,
 };

@@ -144,6 +144,8 @@ StaggeredTransitionGroup.defaultProps = {
   delay: 100,
   duration: 0,
   start: 0,
+  className: '',
+  component: null,
 };
 
 export default StaggeredTransitionGroup;

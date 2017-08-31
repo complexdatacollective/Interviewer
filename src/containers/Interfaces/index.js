@@ -1,3 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-export { default as NameGenerator } from './NameGenerator';
-export { default as Quiz } from './Quiz';
+export { default as NameGeneratorInterface } from './NameGeneratorInterface';
+export { default as SociogramInterface } from './SociogramInterface';
+export { default as QuizInterface } from './QuizInterface';

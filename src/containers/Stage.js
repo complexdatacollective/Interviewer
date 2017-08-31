@@ -24,8 +24,8 @@ class Stage extends Component {
   }
 
   render() {
-    const { currentStage } = this.props;
-    const CurrentInterface = loadInterface(currentStage.type);
+    const { activeStageConfig } = this.props;
+    const CurrentInterface = loadInterface(activeStageConfig.type);
 
     return (
       <CSSTransitionGroup
@@ -35,7 +35,7 @@ class Stage extends Component {
         transitionAppear
         transitionAppearTimeout={animation.duration.slow * 2}
       >
-        <div className="stage" key={currentStage.id}>
+        <div className="stage" key={activeStageConfig.id}>
           <div className="stage__control">
             <button
               className="stage__control-button stage__control-button--back"
@@ -46,7 +46,7 @@ class Stage extends Component {
           </div>
           <div className="stage__interface">
             { CurrentInterface &&
-              <CurrentInterface config={currentStage} />
+              <CurrentInterface stage={activeStageConfig} />
             }
           </div>
           <div className="stage__control">
@@ -64,16 +64,16 @@ class Stage extends Component {
 }
 
 Stage.propTypes = {
-  currentStage: PropTypes.object.isRequired,
+  activeStageConfig: PropTypes.object.isRequired,
   next: PropTypes.func.isRequired,
   previous: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  const currentStage = stage(state);
+  const activeStageConfig = stage(state);
 
   return {
-    currentStage,
+    activeStageConfig,
   };
 }
 

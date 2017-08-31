@@ -151,6 +151,7 @@ ShallowWrapper {
         "menuItemClick": [Function],
         "outsideClick": [Function],
         "props": Object {
+          "children": null,
           "hideButton": false,
           "icon": "menu",
           "isOpen": false,

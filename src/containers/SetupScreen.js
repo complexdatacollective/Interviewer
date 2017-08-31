@@ -75,7 +75,6 @@ class Setup extends Component {
           className="input--wurm"
           name="protocolLocation"
           label="Protocol Location"
-          value="Josh is sweet"
         />
       </div>
     );

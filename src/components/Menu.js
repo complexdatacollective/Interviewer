@@ -63,12 +63,12 @@ class MenuFactory extends Component {
 
   // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
+    this.menuClick();
     itemClick();
-    this.props.toggleMenu();
   }
 
   render() {
-    const { hideButton, icon, isOpen, items, searchField, title } = this.props;
+    const { children, hideButton, icon, isOpen, items, searchField, title } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -97,12 +97,14 @@ class MenuFactory extends Component {
         {!hideButton && <div className="menu__burger" onClick={this.menuClick} tabIndex={0} role="menu">
           <Icon name={icon} />
         </div>}
+        { children }
       </div>
     );
   } // end render
 } // end class
 
 MenuFactory.propTypes = {
+  children: PropTypes.any,
   hideButton: PropTypes.bool,
   icon: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
@@ -113,6 +115,7 @@ MenuFactory.propTypes = {
 };
 
 MenuFactory.defaultProps = {
+  children: null,
   hideButton: false,
   icon: 'menu',
   items: [],

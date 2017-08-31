@@ -8,6 +8,9 @@ import { store } from './ducks/store';
 import App from './containers/App';
 import AppRouter from './routes';
 import { isCordova } from './utils/Environment';
+import { populateNodes } from './utils/mockData';
+
+window.populateNodes = populateNodes;
 
 injectTapEventPlugin();
 

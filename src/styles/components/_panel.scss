@@ -26,7 +26,7 @@
     text-align: center;
 
     &-header {
-      margin-bottom:0;
+      margin-bottom: 0;
     }
   }
 
@@ -37,10 +37,9 @@
   }
 
   .node {
-    width: 100px;
-    height: 100px;
-    font-size: 10px;
-    margin: 0.5rem 0.5rem;
+    width: 120px;
+    height: 120px;
+    margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
   }
 

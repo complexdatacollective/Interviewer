@@ -7,7 +7,12 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="panel">
+    className="panel"
+    style={
+        Object {
+            "borderColor": null,
+          }
+    }>
     <div
         className="panel__heading">
         <h3
@@ -22,7 +27,12 @@ ShallowWrapper {
 </div>,
   "nodes": Array [
     <div
-      className="panel">
+      className="panel"
+      style={
+            Object {
+                  "borderColor": null,
+                }
+      }>
       <div
             className="panel__heading">
             <h3
@@ -43,6 +53,7 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <Panel
+        highlight={null}
         minimise={false}
         title="">
         <span>
@@ -59,6 +70,7 @@ ShallowWrapper {
           "children": <span>
             foo
 </span>,
+          "highlight": null,
           "minimise": false,
           "title": "",
         },
@@ -83,7 +95,12 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="panel">
+          className="panel"
+          style={
+                    Object {
+                              "borderColor": null,
+                            }
+          }>
           <div
                     className="panel__heading">
                     <h3
@@ -98,7 +115,12 @@ ShallowWrapper {
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="panel">
+          className="panel"
+          style={
+                    Object {
+                              "borderColor": null,
+                            }
+          }>
           <div
                     className="panel__heading">
                     <h3
@@ -123,6 +145,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Panel
+    highlight={null}
     minimise={false}
     title="">
     <span>
