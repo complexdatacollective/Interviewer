@@ -36,7 +36,7 @@ const Dialog = (props) => {
   }
 
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
-  let additionalTextarea = additionalInformation ? <textarea className="dialog__layout-additional-info">{additionalInformation}</textarea> : '';
+  let additionalTextarea = additionalInformation ? <div className="dialog__layout-additional-info" dangerouslySetInnerHTML={{ __html: additionalInformation }} />: '';
 
   return (
     <CSSTransitionGroup

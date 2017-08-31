@@ -52,9 +52,17 @@ $component-name: dialog;
     }
 
     &-additional-info {
-      height: 300px;
-      padding: 10px;
+      height: 200px;
+      padding: 20px;
       margin-top: 20px;
+      border: 1px solid palette('modal-overlay');
+      background: palette('background');
+      font-size: type('copy-small');
+      overflow-x: scroll;
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        text-transform: uppercase;
+      }
     }
 
     &-icon {

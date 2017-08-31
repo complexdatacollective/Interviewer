@@ -27,8 +27,8 @@ class App extends Component {
       updateDialog: {
         title: 'Update Dialog',
         type: 'info',
-        additionalInformation: '',
-        content: null,
+        additionalInformation: '<h3>What\'s love?</h3><p>This is some text</p>',
+        content: 'Yo yo yo yo yo.',
         onConfirm: () => {},
         confirmLabel: 'Continue',
         hasCancelButton: false,
@@ -191,6 +191,7 @@ class App extends Component {
             name="UPDATE_DIALOG"
             title={this.state.updateDialog.title}
             type={this.state.updateDialog.type}
+            show
             confirmLabel={this.state.updateDialog.confirmLabel}
             hasCancelButton={this.state.updateDialog.hasCancelButton}
             additionalInformation={this.state.updateDialog.additionalInformation}
