@@ -50,7 +50,10 @@ function modal(WrappedComponent) {
   Modal.propTypes = {
     registerModal: PropTypes.func.isRequired,
     unregisterModal: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.symbol,
+    ]).isRequired,
     toggleModal: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
