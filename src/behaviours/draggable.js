@@ -233,10 +233,16 @@ export default function draggable(WrappedComponent) {
       }
     }
 
+    styles() {
+      return this.state.dragStart ? { opacity: 0, width: 0, height: 0 } : { opacity: 1 };
+    }
+
     render() {
       return (
-        <div ref={(node) => { this.node = node; }}>
-          <WrappedComponent {...this.props} />
+        <div style={this.styles()}>
+          <div ref={(node) => { this.node = node; }}>
+            <WrappedComponent {...this.props} />
+          </div>
         </div>
       );
     }
