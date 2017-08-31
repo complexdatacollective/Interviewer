@@ -10,6 +10,11 @@ import { isCordova } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
+import { populateNodes } from '../utils/mockData';
+
+function addMockNodes() {
+  populateNodes(20);
+}
 
 /**
   * Renders a Menu using stages to construct items in the menu
@@ -52,6 +57,7 @@ class SessionMenu extends Component {
     const items = [
       { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
+      { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
     ].map((item) => {
