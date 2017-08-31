@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { reduxForm, actions, getFormValues, getFormMeta } from 'redux-form';
+import { Button } from 'network-canvas-ui';
 import { autoInitialisedForm } from '../../behaviours';
 import { Field } from '../../containers/Elements';
 
@@ -51,7 +52,7 @@ class Form extends Component {
           <Field key={field.name} {...field} onBlur={() => { this.handleFieldBlur() }} />
         )) }
         <br />
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
     );
   }
