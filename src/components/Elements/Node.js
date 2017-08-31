@@ -12,7 +12,7 @@ const scaleIncrement = 1;
 
 // TODO move padding: 33% into stylesheet
 function scaleTextToFit(element) {
-  element.setAttribute('style', 'position: relative;');
+  element.setAttribute('style', 'position: relative; margin: 33%; ');
 
   const text = document.createElement('span');
   text.append(element.textContent);
@@ -29,7 +29,7 @@ function scaleTextToFit(element) {
   const fontSize = findFontSize(8);
 
   element.removeChild(text);
-  element.setAttribute('style', `font-size: ${fontSize}px; overflow: hidden;`);
+  element.setAttribute('style', `margin: 33%; font-size: ${fontSize}px; overflow: hidden;`);
 }
 
 /**
@@ -37,12 +37,12 @@ function scaleTextToFit(element) {
   */
 class Node extends Component {
   componentDidMount() {
-    scaleTextToFit(this.node, this.node.querySelectorAll('.node__label')[0]);
+    scaleTextToFit(this.node.querySelectorAll('.node__label')[0]);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.label !== this.props.label) {
-      scaleTextToFit(this.node, this.node.querySelectorAll('.node__label')[0]);
+      scaleTextToFit(this.node.querySelectorAll('.node__label')[0]);
     }
   }
 
