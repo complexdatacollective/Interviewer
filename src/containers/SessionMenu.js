@@ -11,6 +11,7 @@ import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
 import { populateNodes } from '../utils/mockData';
+import updater from '../utils/updater';
 
 function addMockNodes() {
   populateNodes(20);
@@ -21,12 +22,82 @@ function addMockNodes() {
   * @extends Component
   */
 class SessionMenu extends Component {
-  componentWillMount() {
-    this.props.registerModal('EXPORT_DATA');
+  constructor() {
+    super();
+
+    this.state = {
+      version: '0.0.0',
+      updateDialog: {
+        title: 'Update Dialog',
+        type: 'info',
+        additionalInformation: '',
+        content: 'Yo yo yo yo yo.',
+        onConfirm: () => {},
+        confirmLabel: 'Continue',
+        hasCancelButton: false,
+      },
+    };
   }
 
-  componentWillUnmount() {
-    this.props.unregisterModal('EXPORT_DATA');
+  componentWillMount() {
+    // Initialise the update checker. Returns a promise.
+    updater.checkForUpdate().then(
+      (response) => {
+        // Update available.
+        const version = response.version.toString();
+        const releaseNotes = response.releaseNotes.toString();
+        this.setState(...this.state, {
+          updateDialog: {
+            title: `Version ${version} is Available`,
+            type: 'info',
+            content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
+            additionalInformation: releaseNotes,
+            onConfirm: () => { this.confirmUpdateDownload(); },
+            confirmLabel: 'Download now',
+            hasCancelButton: true,
+          },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
+        });
+      },
+      (failure) => {
+        // No update available, or error.
+        if (failure instanceof Error) {
+          throw new Error(failure.message);
+        }
+        // No update available.
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'No Updates Available',
+            type: 'info',
+            content: 'You are using the latest available version of Network Canvas.',
+            additionalInformation: '',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
+        });
+      },
+    ).catch(
+      // Error while checking for updates
+      (error) => {
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'An Error Occured',
+            type: 'error',
+            content: 'An error has occured while checking for an update. More information to help diagnose the issue can be found below.',
+            additionalInformation: error,
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
+        });
+      },
+    );
   }
 
   onExport = () => {
@@ -46,6 +117,70 @@ class SessionMenu extends Component {
   onReset = () => {
     this.props.resetState();
   };
+
+  // User clicked download Button
+  // TODO: implement progress updates/loader
+  confirmUpdateDownload() {
+    // Trigger the download. Returns promise.
+    updater.downloadUpdate().then(
+      // Update downloaded
+      () => {
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Update Ready to Install',
+            type: 'warning',
+            additionalInformation: '',
+            content: 'Your update is ready to install. Network Canvas will now close, and will reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
+            onConfirm: () => { updater.installUpdate(); },
+            confirmLabel: 'Install and Restart',
+            hasCancelButton: true,
+          },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
+        });
+      },
+      // Update failed to download. Either cancelled or errored.
+      (failure) => {
+        // Test for error
+        if (failure instanceof Error) {
+          throw new Error(failure.message);
+        }
+        // Otherwise assumed cancelled.
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'Error Encountered During Update',
+            type: 'error',
+            additionalInformation: '',
+            content: 'An error has occured during the update process.',
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        }, () => {
+          this.props.openModal('UPDATE_DIALOG');
+        });
+      },
+    ).catch(
+      // Error while downloading update
+      (error) => {
+        this.setState(...this.state, {
+          updateDialog: {
+            title: 'An Error Occured',
+            type: 'error',
+            content: 'An error has occured during the update process. More information to help diagnose the issue can be found below.',
+            additionalInformation: error,
+            onConfirm: () => {},
+            confirmLabel: 'Okay',
+            hasCancelButton: false,
+          },
+        });
+        // This shouldn't be here. But setState is async. How to handle better?
+        setTimeout(() => {
+          this.props.openModal('UPDATE_DIALOG');
+        }, 1000);
+      },
+    );
+  }
 
   render() {
     const {
@@ -85,10 +220,22 @@ class SessionMenu extends Component {
           title="Export Error"
           type="error"
           hasCancelButton={false}
-          confirmLabel="Uh-oh"
+          confirmLabel="Okay"
           onConfirm={() => {}}
         >
           <p>There was a problem exporting your data.</p>
+        </Dialog>
+        <Dialog
+          name="UPDATE_DIALOG"
+          title={this.state.updateDialog.title}
+          type={this.state.updateDialog.type}
+          show
+          confirmLabel={this.state.updateDialog.confirmLabel}
+          hasCancelButton={this.state.updateDialog.hasCancelButton}
+          additionalInformation={this.state.updateDialog.additionalInformation}
+          onConfirm={this.state.updateDialog.onConfirm}
+        >
+          {this.state.updateDialog.content}
         </Dialog>
       </Menu>
     );
@@ -101,10 +248,8 @@ SessionMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
-  registerModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  unregisterModal: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
@@ -122,10 +267,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   openModal: bindActionCreators(modalActions.openModal, dispatch),
-  registerModal: bindActionCreators(modalActions.registerModal, dispatch),
   resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
-  unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SessionMenu);
