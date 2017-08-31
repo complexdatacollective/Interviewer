@@ -121,7 +121,8 @@
         "rxjs": "^5.4.0",
         "sass-svg": "^1.0.1",
         "semantic-ui-react": "^0.67.2",
-        "upgrade": "^1.1.0"
+        "upgrade": "^1.1.0",
+        "xss": "^0.3.3"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",

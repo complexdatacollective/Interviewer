@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon, animation } from 'network-canvas-ui';
 import { CSSTransitionGroup } from 'react-transition-group';
+import xss from 'xss';
 
 /**
   * Renders a dialog box.
@@ -35,8 +36,24 @@ const Dialog = (props) => {
     'error': 'neon-coral',
   }
 
+  function createMarkup() {
+    const safeString = xss(additionalInformation, {
+      whiteList:          {
+        h3: [],
+        p: [],
+        ul: [],
+        li: [],
+      },        // empty, means filter out all tags
+      stripIgnoreTag:     true,
+    });
+    return {
+      __html: safeString
+    };
+  };
+
+
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
-  let additionalTextarea = additionalInformation ? <div className="dialog__layout-additional-info" dangerouslySetInnerHTML={{ __html: additionalInformation }} />: '';
+  let additionalTextarea = additionalInformation ? <div className="dialog__layout-additional-info" dangerouslySetInnerHTML={createMarkup()} />: '';
 
   return (
     <CSSTransitionGroup
