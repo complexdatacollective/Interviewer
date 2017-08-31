@@ -6,6 +6,12 @@
   align-content: flex-start;
   min-height: 100%;
   margin-bottom: 150px;
+  background-color: transparent;
+  transition: background-color ease $animation-fast-duration;
+
+  &--hover {
+    background-color: transparentize(palette('ring'), .5);
+  }
 
   &--transition {
     @include group-transition(fade, $animation-fast-duration);
