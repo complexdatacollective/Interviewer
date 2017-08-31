@@ -12,6 +12,7 @@ import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
 import { populateNodes } from '../utils/mockData';
 import updater from '../utils/updater';
+import getVersion from '../utils/getVersion';
 
 function addMockNodes() {
   populateNodes(20);
@@ -39,6 +40,14 @@ class SessionMenu extends Component {
     };
   }
 
+  componentWillMount() {
+    getVersion().then((version) => {
+      this.setState(...this.state, {
+        version,
+      });
+    });
+  }
+
   onExport = () => {
     createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
   };
@@ -57,7 +66,7 @@ class SessionMenu extends Component {
     this.props.resetState();
   };
 
-  checkforUpdates = () => {
+  checkForUpdates = () => {
     // Initialise the update checker. Returns a promise
     updater.checkForUpdate().then(
       (response) => {
@@ -187,6 +196,8 @@ class SessionMenu extends Component {
       customItems, hideButton, isOpen, toggleMenu,
     } = this.props;
 
+    const { version } = this.state;
+
     const menuType = 'settings';
 
     const items = [
@@ -216,6 +227,7 @@ class SessionMenu extends Component {
         title="Session"
         toggleMenu={toggleMenu}
       >
+        <div style={{ position: 'absolute', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="EXPORT_DATA"
           title="Export Error"
