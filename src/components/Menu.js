@@ -17,6 +17,14 @@ class MenuFactory extends Component {
     window.onkeydown = this.listenForClose;
   }
 
+  componentDidUpdate() {
+    if (this.props.isOpen) {
+      document.addEventListener('click', this.outsideClick);
+    } else {
+      document.removeEventListener('click', this.outsideClick);
+    }
+  }
+
   /**
     * removes listener for key events and click events to close Menu
     */
@@ -32,32 +40,15 @@ class MenuFactory extends Component {
     }
   }
 
-  outsideClick = (e) => {
-    // check whether the element clicked upon is in your component - if not,
-    // then call the toggle logic
-    if (this.domNode.contains(e.target)) {
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-    if (this.props.isOpen) {
-      this.menuClick();
-    }
+  outsideClick = () => {
+    this.props.toggleMenu();
   }
 
-  menuClick = () => {
-    if (!this.props.isOpen) {
-      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
-        document.addEventListener(
-          type, this.outsideClick, { capture: true, passive: false });
-      });
-    } else {
-      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
-        document.removeEventListener(
-          type, this.outsideClick, { capture: true, passive: false });
-      });
+  menuClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
     }
-
     this.props.toggleMenu();
   }
 
