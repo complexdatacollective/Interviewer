@@ -10,7 +10,9 @@ if (isElectron()) {
 
 class Updater {
   constructor() {
-    if (!isElectron()) { return class {}; }
+    if (!isElectron()) {
+      return { on: () => { /* noop */ } };
+    }
     this.events = new EventEmitter();
     ipcRenderer.on('UPDATE_AVAILABLE', (event, response) => this.events.emit('UPDATE_AVAILABLE', response));
     ipcRenderer.on('UPDATE_NOT_AVAILABLE', (event, response) => this.events.emit('UPDATE_NOT_AVAILABLE', response));
