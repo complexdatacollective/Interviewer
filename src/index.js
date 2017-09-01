@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import initReactFastclick from 'react-fastclick';
 
 import { Provider } from 'react-redux';
 
@@ -13,6 +14,7 @@ import { populateNodes } from './utils/mockData';
 window.populateNodes = populateNodes;
 
 injectTapEventPlugin();
+initReactFastclick();
 
 const startApp = () => {
   ReactDOM.render(

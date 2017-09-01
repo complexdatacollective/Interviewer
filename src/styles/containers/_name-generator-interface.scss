@@ -30,11 +30,9 @@
     height: 100%;
     display: flex;
     .node {
-      width: 175px;
-      height: 175px;
+      font-size: 175px;
       @include breakpoint('full') {
-        width: 175px;
-        height: 175px;
+        font-size: 175px;
       }
     }
   }

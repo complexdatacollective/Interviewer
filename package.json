@@ -22,7 +22,9 @@
         "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
         "electron": "electron ./www",
         "generate-icons": "node generate-app-icons.js",
-        "dist:cordova": "cordova build ios && cordova build android",
+        "dist:ios": "npm run build && cordova build ios",
+        "dist:android": "npm run build && cordova build android",
+        "dist:cordova": "npm run build && cordova build ios && cordova build android",
         "bump": "sh scripts/bump"
     },
     "repository": {
@@ -109,6 +111,7 @@
         "react": "^15.3.2",
         "react-dom": "^15.3.2",
         "react-draggable": "^2.2.3",
+        "react-fastclick": "^3.0.2",
         "react-hammerjs": "^0.5.0",
         "react-icons": "^2.2.3",
         "react-redux": "^4.4.5",
