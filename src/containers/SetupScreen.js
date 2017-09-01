@@ -34,10 +34,6 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  componentDidMount() {
-    this.props.loadDemoProtocol();
-  }
-
   onClickLoadProtocol = (fields) => {
     if (fields) {
       this.props.loadProtocol(fields.protocol_url);
