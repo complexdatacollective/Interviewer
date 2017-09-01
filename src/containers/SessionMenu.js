@@ -138,7 +138,7 @@ class SessionMenu extends Component {
     // User clicked download Button
     // TODO: implement progress updates/loader
     // Trigger the download. Returns promise.
-    updater.downloadUpdates();
+    updater.downloadUpdate();
   }
 
   render() {
@@ -154,7 +154,7 @@ class SessionMenu extends Component {
       { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
-      { id: 'update-check', title: 'Check for Updates', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdates },
+      { id: 'update-check', title: 'Check for Update', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdate },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
     ].map((item) => {

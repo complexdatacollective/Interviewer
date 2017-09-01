@@ -22,15 +22,15 @@ class Updater {
     this.events.on(...args);
   }
 
-  checkForUpdates = () => {
+  checkForUpdate = () => {
     ipcRenderer.send('CHECK_FOR_UPDATE');
   }
 
-  downloadUpdates = () => {
+  downloadUpdate = () => {
     ipcRenderer.send('DOWNLOAD_UPDATE');
   }
 
-  installUpdates = () => {
+  installUpdate = () => {
     ipcRenderer.send('INSTALL_UPDATE');
   }
 }
