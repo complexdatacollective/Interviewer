@@ -1,51 +1,38 @@
 import { isElectron } from '../utils/Environment';
 
-// Initialise auto update if we are in electron
-const updater = {
-  checkForUpdate() {
-    return new Promise((resolve, reject) => {
-      if (isElectron()) {
-        // update through IPC goes here
-        const { ipcRenderer } = window.require('electron');
-        ipcRenderer.send('CHECK_FOR_UPDATE');
+let EventEmitter;
+let ipcRenderer;
 
-        ipcRenderer.on('UPDATE_AVAILABLE', (event, response) => {
-          resolve(response);
-        });
+if (isElectron()) {
+  EventEmitter = window.require('events').EventEmitter;
+  ipcRenderer = window.require('electron').ipcRenderer;
+}
 
-        ipcRenderer.on('UPDATE_NOT_AVAILABLE', (event, response) => {
-          reject(response);
-        });
+class Updater {
+  constructor() {
+    if (!isElectron()) { return class {}; }
+    this.events = new EventEmitter();
+    ipcRenderer.on('UPDATE_AVAILABLE', (event, response) => this.events.emit('UPDATE_AVAILABLE', response));
+    ipcRenderer.on('UPDATE_NOT_AVAILABLE', (event, response) => this.events.emit('UPDATE_NOT_AVAILABLE', response));
+    ipcRenderer.on('ERROR', (event, response) => { this.events.emit('ERROR', response); });
+    ipcRenderer.on('UPDATE_DOWNLOADED', (event, response) => this.events.emit('UPDATE_DOWNLOADED', response));
+  }
 
-        ipcRenderer.on('ERROR', (event, response) => {
-          reject(new Error(response));
-        });
-      }
-    });
-  },
-  downloadUpdate() {
-    return new Promise((resolve, reject) => {
-      if (isElectron()) {
-        const { ipcRenderer } = window.require('electron');
-        ipcRenderer.send('DOWNLOAD_UPDATE');
+  on(...args) {
+    this.events.on(...args);
+  }
 
-        ipcRenderer.on('UPDATE_DOWNLOADED', (event, response) => {
-          resolve(response);
-        });
+  checkForUpdates = () => {
+    ipcRenderer.send('CHECK_FOR_UPDATE');
+  }
 
-        ipcRenderer.on('ERROR', (event, response) => {
-          reject(new Error(response));
-        });
-      }
-    });
-  },
-  installUpdate() {
-    if (isElectron()) {
-      // Install and restart
-      const { ipcRenderer } = window.require('electron');
-      ipcRenderer.send('INSTALL_UPDATE');
-    }
-  },
-};
+  downloadUpdates = () => {
+    ipcRenderer.send('DOWNLOAD_UPDATE');
+  }
 
-export default updater;
+  installUpdates = () => {
+    ipcRenderer.send('INSTALL_UPDATE');
+  }
+}
+
+export default Updater;

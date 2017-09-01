@@ -11,8 +11,23 @@ import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
 import { populateNodes } from '../utils/mockData';
-import updater from '../utils/updater';
+import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';
+
+const updater = new Updater();
+
+const initialState = {
+  version: '0.0.0',
+  updateDialog: {
+    title: 'Update Dialog',
+    type: 'info',
+    additionalInformation: '',
+    content: null,
+    onConfirm: () => {},
+    confirmLabel: 'Continue',
+    hasCancelButton: false,
+  },
+};
 
 function addMockNodes() {
   populateNodes(20);
@@ -26,18 +41,71 @@ class SessionMenu extends Component {
   constructor() {
     super();
 
-    this.state = {
-      version: '0.0.0',
-      updateDialog: {
-        title: 'Update Dialog',
-        type: 'info',
-        additionalInformation: '',
-        content: 'Yo yo yo yo yo.',
-        onConfirm: () => {},
-        confirmLabel: 'Continue',
-        hasCancelButton: false,
-      },
-    };
+    this.state = initialState;
+
+    updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
+      this.setState({
+        updateDialog: {
+          title: `Version ${version} is Available`,
+          type: 'info',
+          content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
+          additionalInformation: releaseNotes,
+          onConfirm: () => { this.confirmUpdateDownload(); },
+          confirmLabel: 'Download now',
+          hasCancelButton: true,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('UPDATE_NOT_AVAILABLE', () => {
+      this.setState({
+        updateDialog: {
+          title: 'No Updates Available',
+          type: 'info',
+          content: 'You are using the latest available version of Network Canvas.',
+          additionalInformation: '',
+          onConfirm: () => {},
+          confirmLabel: 'Okay',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('UPDATE_DOWNLOADED', () => {
+      this.setState({
+        updateDialog: {
+          title: 'Update Ready to Install',
+          type: 'warning',
+          additionalInformation: '',
+          content: 'Your update is ready to install. Network Canvas will now close, and will reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
+          onConfirm: () => { updater.installUpdate(); },
+          confirmLabel: 'Install and Restart',
+          hasCancelButton: true,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('ERROR', (error) => {
+      this.setState({
+        updateDialog: {
+          title: 'An Error Occured',
+          type: 'error',
+          content: 'An error has occured while checking for an update. More information to help diagnose the issue can be found below.',
+          additionalInformation: error,
+          onConfirm: () => {},
+          confirmLabel: 'Okay',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
   }
 
   componentWillMount() {
@@ -66,129 +134,11 @@ class SessionMenu extends Component {
     this.props.resetState();
   };
 
-  checkForUpdates = () => {
-    // Initialise the update checker. Returns a promise
-    updater.checkForUpdate().then(
-      (response) => {
-        // Update available.
-        const version = response.version.toString();
-        const releaseNotes = response.releaseNotes.toString();
-        this.setState(...this.state, {
-          updateDialog: {
-            title: `Version ${version} is Available`,
-            type: 'info',
-            content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
-            additionalInformation: releaseNotes,
-            onConfirm: () => { this.confirmUpdateDownload(); },
-            confirmLabel: 'Download now',
-            hasCancelButton: true,
-          },
-        }, () => {
-          this.props.openModal('UPDATE_DIALOG');
-        });
-      },
-      (failure) => {
-        // No update available, or error.
-        if (failure instanceof Error) {
-          throw new Error(failure.message);
-        }
-        // No update available.
-        this.setState(...this.state, {
-          updateDialog: {
-            title: 'No Updates Available',
-            type: 'info',
-            content: 'You are using the latest available version of Network Canvas.',
-            additionalInformation: '',
-            onConfirm: () => {},
-            confirmLabel: 'Okay',
-            hasCancelButton: false,
-          },
-        }, () => {
-          this.props.openModal('UPDATE_DIALOG');
-        });
-      },
-    ).catch(
-      // Error while checking for updates
-      (error) => {
-        this.setState(...this.state, {
-          updateDialog: {
-            title: 'An Error Occured',
-            type: 'error',
-            content: 'An error has occured while checking for an update. More information to help diagnose the issue can be found below.',
-            additionalInformation: error,
-            onConfirm: () => {},
-            confirmLabel: 'Okay',
-            hasCancelButton: false,
-          },
-        }, () => {
-          this.props.openModal('UPDATE_DIALOG');
-        });
-      },
-    );
-  }
-
-  confirmUpdateDownload() {
+  confirmUpdateDownload = () => {
     // User clicked download Button
     // TODO: implement progress updates/loader
     // Trigger the download. Returns promise.
-    updater.downloadUpdate().then(
-      // Update downloaded
-      () => {
-        this.setState(...this.state, {
-          updateDialog: {
-            title: 'Update Ready to Install',
-            type: 'warning',
-            additionalInformation: '',
-            content: 'Your update is ready to install. Network Canvas will now close, and will reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
-            onConfirm: () => { updater.installUpdate(); },
-            confirmLabel: 'Install and Restart',
-            hasCancelButton: true,
-          },
-        }, () => {
-          this.props.openModal('UPDATE_DIALOG');
-        });
-      },
-      // Update failed to download. Either cancelled or errored.
-      (failure) => {
-        // Test for error
-        if (failure instanceof Error) {
-          throw new Error(failure.message);
-        }
-        // Otherwise assumed cancelled.
-        this.setState(...this.state, {
-          updateDialog: {
-            title: 'Error Encountered During Update',
-            type: 'error',
-            additionalInformation: '',
-            content: 'An error has occured during the update process.',
-            onConfirm: () => {},
-            confirmLabel: 'Okay',
-            hasCancelButton: false,
-          },
-        }, () => {
-          this.props.openModal('UPDATE_DIALOG');
-        });
-      },
-    ).catch(
-      // Error while downloading update
-      (error) => {
-        this.setState(...this.state, {
-          updateDialog: {
-            title: 'An Error Occured',
-            type: 'error',
-            content: 'An error has occured during the update process. More information to help diagnose the issue can be found below.',
-            additionalInformation: error,
-            onConfirm: () => {},
-            confirmLabel: 'Okay',
-            hasCancelButton: false,
-          },
-        });
-        // This shouldn't be here. But setState is async. How to handle better?
-        setTimeout(() => {
-          this.props.openModal('UPDATE_DIALOG');
-        }, 1000);
-      },
-    );
+    updater.downloadUpdates();
   }
 
   render() {
@@ -204,7 +154,7 @@ class SessionMenu extends Component {
       { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
-      { id: 'update-check', title: 'Check for Updates', interfaceType: 'menu-custom-interface', onClick: this.checkForUpdates },
+      { id: 'update-check', title: 'Check for Updates', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdates },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
     ].map((item) => {
