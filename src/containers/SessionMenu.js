@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova } from '../utils/Environment';
+import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
@@ -154,10 +154,15 @@ class SessionMenu extends Component {
       { id: 'export', title: 'Download Data', interfaceType: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', title: 'Reset Session', interfaceType: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
-      { id: 'update-check', title: 'Check for Update', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdate },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
-    ].map((item) => {
+    ];
+
+    if (isElectron()) {
+      items.push({ id: 'update-check', title: 'Check for Update', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdate });
+    }
+
+    items.map((item) => {
       const temp = item;
       if (!temp.menuType) {
         temp.menuType = 'settings';
@@ -192,7 +197,6 @@ class SessionMenu extends Component {
           name="UPDATE_DIALOG"
           title={this.state.updateDialog.title}
           type={this.state.updateDialog.type}
-          show
           confirmLabel={this.state.updateDialog.confirmLabel}
           hasCancelButton={this.state.updateDialog.hasCancelButton}
           additionalInformation={this.state.updateDialog.additionalInformation}
