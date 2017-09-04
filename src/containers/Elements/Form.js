@@ -44,13 +44,12 @@ class Form extends Component {
   }
 
   render() {
-    const { fields, handleSubmit, ...rest } = this.props;
+    const { fields, handleSubmit, autoFocus, ...rest } = this.props;
 
     return (
       <form onSubmit={handleSubmit}>
         { fields.map((field, index) => {
-          const isFirst = index === 0;
-          console.log('AUTO', isFirst);
+          const isFirst = autoFocus && index === 0;
           return (
             <Field
               key={field.name}
@@ -70,6 +69,11 @@ class Form extends Component {
 Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  autoFocus: PropTypes.bool,
+};
+
+Form.defaultProps = {
+  autoFocus: false,
 };
 
 function mapStateToProps(state, ownProps) {

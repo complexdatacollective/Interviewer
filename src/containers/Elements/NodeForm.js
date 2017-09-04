@@ -42,6 +42,7 @@ class NodeForm extends Component {
         <Form
           {...form}
           initialValues={initialValues}
+          autoFocus
           form={form.name}
           onSubmit={this.onSubmit}
         />
