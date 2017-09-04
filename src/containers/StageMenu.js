@@ -19,7 +19,9 @@ class StageMenu extends Component {
     */
 
   componentDidUpdate = () => {
-    this.search.blur();
+    if (!this.props.isOpen) {
+      this.search.blur();
+    }
   }
 
   onInputChange = (event) => {
