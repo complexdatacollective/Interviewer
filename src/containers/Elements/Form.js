@@ -48,9 +48,18 @@ class Form extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
-        { fields.map((field, index) => (
-          <Field key={field.name} {...field} onBlur={() => { this.handleFieldBlur() }} />
-        )) }
+        { fields.map((field, index) => {
+          const isFirst = index === 0;
+          console.log('AUTO', isFirst);
+          return (
+            <Field
+              key={field.name}
+              {...field}
+              autoFocus={isFirst}
+              onBlur={() => { this.handleFieldBlur() }}
+            />
+          );
+        }) }
         <br />
         <Button type="submit">Submit</Button>
       </form>
