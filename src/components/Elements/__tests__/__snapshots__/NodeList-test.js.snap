@@ -10,15 +10,6 @@ ShallowWrapper {
     acceptsDraggableType={null}
     droppableName={null}
     hover={false}
-    network={
-        Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          }
-    }
     store={
         Object {
             "dispatch": [Function],
@@ -34,15 +25,6 @@ ShallowWrapper {
       acceptsDraggableType={null}
       droppableName={null}
       hover={false}
-      network={
-            Object {
-                  "nodes": Array [
-                    Object {
-                      "name": "test",
-                    },
-                  ],
-                }
-      }
       store={
             Object {
                   "dispatch": [Function],
@@ -61,15 +43,6 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <Connect(Droppable)
-        network={
-                Object {
-                        "nodes": Array [
-                          Object {
-                            "name": "test",
-                          },
-                        ],
-                      }
-        }
         store={
                 Object {
                         "dispatch": [Function],
@@ -99,13 +72,6 @@ ShallowWrapper {
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
           "hover": false,
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          },
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -116,13 +82,6 @@ ShallowWrapper {
           "updateZone": [Function],
         },
         "props": Object {
-          "network": Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          },
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -136,15 +95,6 @@ ShallowWrapper {
           acceptsDraggableType={null}
           droppableName={null}
           hover={false}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
           store={
                     Object {
                               "dispatch": [Function],
@@ -196,15 +146,6 @@ ShallowWrapper {
           acceptsDraggableType={null}
           droppableName={null}
           hover={false}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
           store={
                     Object {
                               "dispatch": [Function],
@@ -220,15 +161,6 @@ ShallowWrapper {
           acceptsDraggableType={null}
           droppableName={null}
           hover={false}
-          network={
-                    Object {
-                              "nodes": Array [
-                                Object {
-                                  "name": "test",
-                                },
-                              ],
-                            }
-          }
           store={
                     Object {
                               "dispatch": [Function],
@@ -251,15 +183,6 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <Connect(Droppable)
-    network={
-        Object {
-            "nodes": Array [
-              Object {
-                "name": "test",
-              },
-            ],
-          }
-    }
     store={
         Object {
             "dispatch": [Function],

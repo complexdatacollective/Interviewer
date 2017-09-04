@@ -7,19 +7,10 @@ import NodeList from '../../Elements/NodeList';
 
 const mockStore = createStore(() => ({ droppable: { activeZones: [] } }));
 
-const network = {
-  nodes: [
-    {
-      name: 'test',
-    },
-  ],
-};
-
 describe('NodeList component', () => {
   it('renders ok', () => {
     const component = shallow((
       <NodeList
-        network={network}
         store={mockStore}
       />
     ));
