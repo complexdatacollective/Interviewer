@@ -8,30 +8,35 @@ const data = {
         type: "person",
         name: "Anita",
         nickname: "Annie",
+        age: "23",
       },
       {
         uid: "previous_2",
         type: "person",
         name: "Barry",
         nickname: "Baz",
+        age: "23",
       },
       {
         uid: "previous_3",
         type: "person",
         name: "Carlito",
         nickname: "Carl",
+        age: "23",
       },
       {
         uid: "previous_4",
         type: "person",
         name: "Dee",
         nickname: "Dee",
+        age: "23",
       },
       {
         uid: "previous_5",
         type: "person",
         name: "Eugine",
         nickname: "Eu",
+        age: "23",
       },
     ],
   },
@@ -64,8 +69,8 @@ const fields = [
     placeholder: 'Name',
     validation: {
       required: true,
-      minLength: 2,
-      minLength: 8,
+      minLength: 1,
+      maxLength: 24,
     }
   },
   {
@@ -75,7 +80,7 @@ const fields = [
     placeholder: 'Nickname',
     validation: {
       required: true,
-      minLength: 2,
+      minLength: 1,
       maxLength: 8,
     },
   },
@@ -86,129 +91,19 @@ const fields = [
     isNumericOnly: true,
     validation: {
       required: true,
-      minValue: 0,
-      maxValue: 200,
+      minValue: 16,
+      maxValue: 100,
     },
   },
 ];
 export default {
   config: {
-    "name": "My first interview protocol",
-    "version": "1.2.3",
-    "required": "1.2.4",
+    "name": "Demo Protocol",
+    "version": "1.0.0",
+    "required": "1.0.0",
     "exportPath": "some/path/here.json",
     "data": data,
     "stages": [
-      {
-        "id": "sociogram",
-        "type": "Sociogram",
-        "icon": "menu-sociogram",
-        "title": "Sociogram",
-        "params": {
-          "nodeType": 'person',
-          "prompts": [
-            {
-              id: 'closeness1',
-              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-              sociogram: {
-                edge: {
-                  type: 'friends',
-                },
-                layout: 'closenessLayout',
-                background: {
-                  n: 3,
-                  skewed: true,
-                },
-                position: true,
-              },
-            },
-            {
-              id: 'closeness2',
-              title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
-                background: {
-                  n: 5,
-                  skewed: true,
-                },
-                select: {
-                  action: 'EDGE',
-                },
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
-              },
-            },
-            {
-              id: 'closeness3',
-              title: "Tap on anyone who has given you advice within the past 6 months.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
-                nodeAttributes: {
-                  has_given_advice: true,
-                },
-                background: {
-                  n: 7,
-                  skewed: false,
-                },
-                position: false,
-                select: {
-                  action: 'ATTRIBUTES',
-                },
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
-              },
-            },
-            {
-              id: 'closeness5',
-              title: "Connect any two people who are family.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'family',
-                  color: 'edge-alt-3',
-                },
-                background: {
-                  n: 3,
-                  skewed: true,
-                },
-                position: true,
-                select: {
-                  action: 'EDGE',
-                }
-              },
-            },
-            {
-              id: 'closeness4',
-              title: "Position people on the map",
-              sociogram: {
-                layout: 'geographicLayout',
-                edge: {
-                  type: 'family',
-                  color: 'edge-alt-3',
-                },
-                background: {
-                  image: 'map.svg',
-                },
-                position: true,
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
-              },
-            },
-          ],
-        },
-      },
       {
         "id": "namegen1",
         "type": "NameGenerator",
@@ -238,52 +133,131 @@ export default {
             },
             {
               id: '2we',
-              title: "Within the past 2 weeks, who has visited",
+              title: "Within the past 2 weeks, who has provided advice?",
               nodeAttributes: {
-                travel_friend: true,
+                advice_friend: true,
               },
             },
           ],
           form: {
-            title: 'Answer some questions',
-            name: 'quiz1',
+            title: 'Add A Person',
+            name: 'name-generator-form',
             fields: fields,
             autoPopulate: (fields, values, populate) => {
               if(!fields['nickname'] || !fields['nickname'].touched) {
-                populate('nickname', values['name'].split(' ')[0]);
+                populate('nickname', values['name'].split(' ')[0]+' '+values['name'].split(' ')[1][0]);
               }
             },
           },
         },
       },
       {
-        "id": "namegen2",
-        "type": "NameGenerator",
-        "icon": "menu-name-generator",
-        "title": "Name Generator Title 2",
+        "id": "sociogram",
+        "type": "Sociogram",
+        "icon": "menu-sociogram",
+        "title": "Sociogram",
         "params": {
           "nodeType": 'person',
           "prompts": [
             {
-              id: '5be',
-              title: "Within the past 6 months, what's the best person you've seen ever?",
-              nodeAttributes: {
-                fun_times: true,
+              id: 'closeness1',
+              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+              sociogram: {
+                edge: {
+                  type: 'friends',
+                },
+                layout: 'closenessLayout',
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: true,
               },
             },
-          ],
-          form: {
-            title: 'Answer some questions',
-            name: 'quiz2',
-            fields: fields,
-            autoPopulate: (fields, values, populate) => {
-              if(!fields['nickname'] || !fields['nickname'].touched) {
-                populate('nickname', values['name'].split(' ')[0]);
-              }
+            {
+              id: 'closeness2',
+              title: "Connect any two people who are friends, or who would spend time together without you being there.",
+              sociogram: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                select: {
+                  action: 'EDGE',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
+              },
             },
-          },
-          "panels": [
-            'existing',
+            {
+              id: 'closeness3',
+              title: "Tap on anyone who has given you advice within the past 6 months.",
+              sociogram: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
+                nodeAttributes: {
+                  has_given_advice: true,
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: false,
+                select: {
+                  action: 'ATTRIBUTES',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
+              },
+            },
+            {
+              id: 'closeness5',
+              title: "Connect any two people who are work together professionally.",
+              sociogram: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'professional',
+                  color: 'edge-alt-3',
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: true,
+                select: {
+                  action: 'EDGE',
+                }
+              },
+            },
+            {
+              id: 'closeness4',
+              title: "Position people on the map",
+              sociogram: {
+                layout: 'geographicLayout',
+                edge: {
+                  type: 'family',
+                  color: 'edge-alt-3',
+                },
+                background: {
+                  image: 'map.svg',
+                },
+                position: true,
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
+              },
+            },
           ],
         },
       },
