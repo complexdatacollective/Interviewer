@@ -6,9 +6,6 @@ import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
 
-import { actionCreators as modalActions } from '../ducks/modules/modals';
-
-
 require('../styles/main.scss');
 
 /**
@@ -48,13 +45,6 @@ App.defaultProps = {
   isSessionMenu: false,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
-  };
-}
-
 function mapStateToProps(state) {
   return {
     isMenuOpen: sessionMenuIsOpen(state) || stageMenuIsOpen(state),
@@ -62,4 +52,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
