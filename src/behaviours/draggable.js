@@ -76,8 +76,8 @@ export default function draggable(WrappedComponent) {
 
     componentDidMount() {
       this.el = findDOMNode(this.node);
-      this.el.addEventListener('touchstart', this.handleMoveStart, { passive: true });
-      this.el.addEventListener('touchmove', this.handleMove, { passive: true });
+      this.el.addEventListener('touchstart', this.handleMoveStart);
+      this.el.addEventListener('touchmove', this.handleMove);
       this.el.addEventListener('touchend', this.handleMoveEnd);
       this.el.addEventListener('mousedown', this.handleMoveStart);
     }
