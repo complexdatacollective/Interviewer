@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'network-canvas-ui';
-
+import { debounce } from 'lodash';
 import { MenuContent } from '.';
 import { MenuItem } from './Elements';
+
+const closeEvents = [
+  'click',
+  'touchstart',
+];
 
 /**
   * Renders a menu, updating styles on DOM elements outside of this.
   * @extends Component
   */
 class MenuFactory extends Component {
+  constructor(props) {
+    super(props);
+
+    this.outsideClick = debounce(this.outsideClick, 50);
+  }
+
   /**
     * adds listener for key events to close Menu
     */
@@ -17,11 +28,22 @@ class MenuFactory extends Component {
     window.onkeydown = this.listenForClose;
   }
 
+  componentDidUpdate() {
+    closeEvents.forEach((eventName) => {
+      if (this.props.isOpen) {
+        document.addEventListener(eventName, this.outsideClick);
+      } else {
+        document.removeEventListener(eventName, this.outsideClick);
+      }
+    });
+  }
+
   /**
     * removes listener for key events and click events to close Menu
     */
   componentWillUnmount() {
     window.onkeydown = null;
+    this.outsideClick.cancel();
   }
 
   listenForClose = (e) => {
@@ -33,31 +55,16 @@ class MenuFactory extends Component {
   }
 
   outsideClick = (e) => {
-    // check whether the element clicked upon is in your component - if not,
-    // then call the toggle logic
-    if (this.domNode.contains(e.target)) {
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-    if (this.props.isOpen) {
-      this.menuClick();
+    if (!this.domNode.contains(e.target)) {
+      this.props.toggleMenu(e);
     }
   }
 
-  menuClick = () => {
-    if (!this.props.isOpen) {
-      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
-        document.addEventListener(
-          type, this.outsideClick, { capture: true, passive: false });
-      });
-    } else {
-      ['click', 'mousedown', 'mouseup', 'touchstart'].forEach((type) => {
-        document.removeEventListener(
-          type, this.outsideClick, { capture: true, passive: false });
-      });
+  menuClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
     }
-
     this.props.toggleMenu();
   }
 
@@ -90,7 +97,7 @@ class MenuFactory extends Component {
               items={menuItems}
               searchField={searchField}
               title={title}
-              toggleMenu={this.menuClick}
+              toggleMenu={this.props.toggleMenu}
             />
           </div>
         </div>
