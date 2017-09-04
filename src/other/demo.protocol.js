@@ -96,6 +96,17 @@ const fields = [
     },
   },
 ];
+
+let generateNickname = (name) => {
+  if (name) {
+    const nickName = name.split(' ')[0]+' '+name.split(' ')[1][0];
+    return nickName.substring(0,8);
+  } else {
+    return '';
+  }
+
+}
+
 export default {
   config: {
     "name": "Demo Protocol",
@@ -145,7 +156,7 @@ export default {
             fields: fields,
             autoPopulate: (fields, values, populate) => {
               if(!fields['nickname'] || !fields['nickname'].touched) {
-                populate('nickname', values['name'].split(' ')[0]+' '+values['name'].split(' ')[1][0]);
+                populate('nickname', generateNickname(values['name']));
               }
             },
           },
