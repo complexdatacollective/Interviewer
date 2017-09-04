@@ -29,6 +29,7 @@ export const renderInput = (field) => {
     optionsSelector,
     isNumericOnly,
     toggleComponent,
+    autoFocus,
   } = field;
   let InputComponent = Alphanumeric;
 
@@ -37,6 +38,7 @@ export const renderInput = (field) => {
     value: input.value,
     errorText: meta.invalid && meta.touched && meta.error,
     label,
+    autoFocus,
     isNumericOnly,
   };
 

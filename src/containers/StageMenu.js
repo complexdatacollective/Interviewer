@@ -17,6 +17,11 @@ class StageMenu extends Component {
     * updates search term and matching stages when input changes
     * @param event {event}
     */
+
+  componentDidUpdate = () => {
+    this.search.blur();
+  }
+
   onInputChange = (event) => {
     this.props.updateSearch(event.target.value);
   }
@@ -44,7 +49,7 @@ class StageMenu extends Component {
 
     const search = (
       <div className="menu__search">
-        <input type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
+        <input ref={(input) => { this.search = input; }} type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
       </div>
     );
 
