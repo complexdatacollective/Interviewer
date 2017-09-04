@@ -26,6 +26,7 @@ class Dialog extends Component {
       children,
       show,
       hasCancelButton,
+      additionalInformation,
       confirmLabel,
       cancelLabel,
       type,
@@ -41,6 +42,7 @@ class Dialog extends Component {
         type={type}
         onConfirm={this.confirmModal}
         onCancel={this.cancelModal}
+        additionalInformation={additionalInformation}
       >
         {children}
       </DialogComponent>
@@ -54,9 +56,10 @@ Dialog.propTypes = {
   hasCancelButton: PropTypes.bool,
   confirmLabel: PropTypes.string,
   cancelLabel: PropTypes.string,
+  additionalInformation: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
   close: PropTypes.func.isRequired,
 };
@@ -66,7 +69,9 @@ Dialog.defaultProps = {
   hasCancelButton: true,
   confirmLabel: 'Okay',
   cancelLabel: 'Cancel',
+  additionalInformation: null,
   children: null,
+  onConfirm: () => {},
   onCancel: () => {},
 };
 

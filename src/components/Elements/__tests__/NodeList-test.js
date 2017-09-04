@@ -5,20 +5,13 @@ import { createStore } from 'redux';
 import { shallow } from 'enzyme';
 import NodeList from '../../Elements/NodeList';
 
-const network = {
-  nodes: [
-    {
-      name: 'test',
-    },
-  ],
-};
+const mockStore = createStore(() => ({ droppable: { activeZones: [] } }));
 
 describe('NodeList component', () => {
   it('renders ok', () => {
     const component = shallow((
       <NodeList
-        network={network}
-        store={createStore(() => {})}
+        store={mockStore}
       />
     ));
 

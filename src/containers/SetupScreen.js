@@ -64,6 +64,7 @@ class Setup extends Component {
           You can help us by giving feedback on
           our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u>
         </p>
+<<<<<<< HEAD
 
         <br />
         <hr />
@@ -86,6 +87,16 @@ class Setup extends Component {
             />
           </div>
         </div>
+=======
+        <Form
+          form={formConfig.formName}
+          onSubmit={this.onClickLoadProtocol}
+          initialValues={initialValues}
+          {...formConfig}
+        />
+        <hr />
+        <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
+>>>>>>> feature/protocol-error-dialog
       </div>
     );
   }

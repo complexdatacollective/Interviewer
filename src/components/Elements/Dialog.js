@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon, animation } from 'network-canvas-ui';
 import { CSSTransitionGroup } from 'react-transition-group';
+import xss from 'xss';
 
 /**
   * Renders a dialog box.
@@ -16,6 +17,7 @@ const Dialog = (props) => {
     children,
     show,
     hasCancelButton,
+    additionalInformation,
     cancelLabel,
     confirmLabel,
     onCancel,
@@ -34,7 +36,24 @@ const Dialog = (props) => {
     'error': 'neon-coral',
   }
 
+  function createMarkup() {
+    const safeString = xss(additionalInformation, {
+      whiteList: {
+        h3: [],
+        p: [],
+        ul: [],
+        li: [],
+      },
+      stripIgnoreTag: true,
+    });
+    return {
+      __html: safeString
+    };
+  };
+
+
   let dialogClasses  = cx('dialog__window dialog__window--' + type);
+  let additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} />: '';
 
   return (
     <CSSTransitionGroup
@@ -45,14 +64,17 @@ const Dialog = (props) => {
       { show &&
         <div key="dialog" className="dialog">
           <div className={dialogClasses} onClick={e => e.stopPropagation()}>
-            <div className="dialog__layout">
-              <div className="dialog__layout-icon">
+            <div className="dialog__main">
+              <div className="dialog__main-icon">
                 <Icon name={type} />
               </div>
-              <div className="dialog__layout-content">
-                <h2 className="dialog__layout-title">{title}</h2>
+              <div className="dialog__main-content">
+                <h2 className="dialog__main-title">{title}</h2>
                 {children}
               </div>
+            </div>
+            <div className="dialog__additional-content">
+              {additionalTextarea}
             </div>
             <footer className="dialog__footer">
               { cancelButton }
@@ -72,6 +94,7 @@ Dialog.propTypes = {
   type: PropTypes.string.isRequired,
   hasCancelButton: PropTypes.bool.isRequired,
   confirmLabel: PropTypes.string.isRequired,
+  additionalInformation: PropTypes.string,
   cancelLabel: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
@@ -79,6 +102,7 @@ Dialog.propTypes = {
 
 Dialog.defaultProps = {
   children: null,
+  additionalInformation: null,
   show: false,
 };
 

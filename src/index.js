@@ -9,7 +9,6 @@ import { store } from './ducks/store';
 import App from './containers/App';
 import AppRouter from './routes';
 import { isCordova } from './utils/Environment';
-import updater from './utils/updater';
 import { populateNodes } from './utils/mockData';
 
 window.populateNodes = populateNodes;
@@ -26,8 +25,6 @@ const startApp = () => {
     </Provider>,
     document.getElementById('root'),
   );
-
-  updater.checkForUpdate();
 };
 
 if (isCordova()) {

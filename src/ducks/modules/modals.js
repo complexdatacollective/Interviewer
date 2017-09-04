@@ -95,16 +95,7 @@ const actionTypes = {
   UNREGISTER_MODAL,
 };
 
-const modalNames = {
-  EDIT_NODE: 'EDIT_NODE',
-  ADD_NODE: 'ADD_NODE',
-  INFO_DIALOG: 'INFO_DIALOG',
-  WARNING_DIALOG: 'WARNING_DIALOG',
-  ERROR_DIALOG: 'ERROR_DIALOG',
-};
-
 export {
   actionCreators,
   actionTypes,
-  modalNames,
 };

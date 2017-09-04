@@ -32,7 +32,25 @@ $component-name: dialog;
     }
   }
 
-  &__layout {
+  &__additional {
+    &-box {
+      height: 200px;
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid palette('modal-overlay');
+      background: palette('background');
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin: 25px 40px;
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        text-transform: uppercase;
+
+      }
+    }
+  }
+
+  &__main {
     display: flex;
     max-height: 80vh;
     margin: 25px 40px;

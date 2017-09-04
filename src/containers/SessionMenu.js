@@ -6,11 +6,28 @@ import { bindActionCreators } from 'redux';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova } from '../utils/Environment';
+import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from './Elements';
 import { populateNodes } from '../utils/mockData';
+import Updater from '../utils/Updater';
+import getVersion from '../utils/getVersion';
+
+const updater = new Updater();
+
+const initialState = {
+  version: '0.0.0',
+  updateDialog: {
+    title: 'Update Dialog',
+    type: 'info',
+    additionalInformation: '',
+    content: null,
+    onConfirm: () => {},
+    confirmLabel: 'Continue',
+    hasCancelButton: false,
+  },
+};
 
 function addMockNodes() {
   populateNodes(20);
@@ -21,12 +38,82 @@ function addMockNodes() {
   * @extends Component
   */
 class SessionMenu extends Component {
-  componentWillMount() {
-    this.props.registerModal('EXPORT_DATA');
+  constructor() {
+    super();
+
+    this.state = initialState;
+
+    updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
+      this.setState({
+        updateDialog: {
+          title: `Version ${version} is Available`,
+          type: 'info',
+          content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
+          additionalInformation: releaseNotes,
+          onConfirm: () => { this.confirmUpdateDownload(); },
+          confirmLabel: 'Download now',
+          hasCancelButton: true,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('UPDATE_NOT_AVAILABLE', () => {
+      this.setState({
+        updateDialog: {
+          title: 'No Updates Available',
+          type: 'info',
+          content: 'You are using the latest available version of Network Canvas.',
+          additionalInformation: '',
+          onConfirm: () => {},
+          confirmLabel: 'Okay',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('UPDATE_DOWNLOADED', () => {
+      this.setState({
+        updateDialog: {
+          title: 'Update Ready to Install',
+          type: 'warning',
+          additionalInformation: '',
+          content: 'Your update is ready to install. Network Canvas will now close, and will reopen once the update is configured. Make sure you have saved any data within the app before continuing.',
+          onConfirm: () => { updater.installUpdate(); },
+          confirmLabel: 'Install and Restart',
+          hasCancelButton: true,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
+
+    updater.on('ERROR', (error) => {
+      this.setState({
+        updateDialog: {
+          title: 'An Error Occured',
+          type: 'error',
+          content: 'An error has occured while checking for an update. More information to help diagnose the issue can be found below.',
+          additionalInformation: error,
+          onConfirm: () => {},
+          confirmLabel: 'Okay',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('UPDATE_DIALOG');
+      });
+    });
   }
 
-  componentWillUnmount() {
-    this.props.unregisterModal('EXPORT_DATA');
+  componentWillMount() {
+    getVersion().then((version) => {
+      this.setState(...this.state, {
+        version,
+      });
+    });
   }
 
   onExport = () => {
@@ -47,10 +134,19 @@ class SessionMenu extends Component {
     this.props.resetState();
   };
 
+  confirmUpdateDownload = () => {
+    // User clicked download Button
+    // TODO: implement progress updates/loader
+    // Trigger the download. Returns promise.
+    updater.downloadUpdate();
+  }
+
   render() {
     const {
       customItems, hideButton, isOpen, toggleMenu,
     } = this.props;
+
+    const { version } = this.state;
 
     const menuType = 'settings';
 
@@ -60,7 +156,13 @@ class SessionMenu extends Component {
       { id: 'mock-data', title: 'Add mock nodes', interfaceType: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
       { id: 'quit', title: 'Quit Network Canvas', interfaceType: 'menu-quit', onClick: this.onQuit },
-    ].map((item) => {
+    ];
+
+    if (isElectron()) {
+      items.push({ id: 'update-check', title: 'Check for Update', interfaceType: 'menu-custom-interface', onClick: updater.checkForUpdate });
+    }
+
+    items.map((item) => {
       const temp = item;
       if (!temp.menuType) {
         temp.menuType = 'settings';
@@ -80,15 +182,27 @@ class SessionMenu extends Component {
         title="Session"
         toggleMenu={toggleMenu}
       >
+        <div style={{ position: 'absolute', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="EXPORT_DATA"
           title="Export Error"
           type="error"
           hasCancelButton={false}
-          confirmLabel="Uh-oh"
+          confirmLabel="Okay"
           onConfirm={() => {}}
         >
           <p>There was a problem exporting your data.</p>
+        </Dialog>
+        <Dialog
+          name="UPDATE_DIALOG"
+          title={this.state.updateDialog.title}
+          type={this.state.updateDialog.type}
+          confirmLabel={this.state.updateDialog.confirmLabel}
+          hasCancelButton={this.state.updateDialog.hasCancelButton}
+          additionalInformation={this.state.updateDialog.additionalInformation}
+          onConfirm={this.state.updateDialog.onConfirm}
+        >
+          {this.state.updateDialog.content}
         </Dialog>
       </Menu>
     );
@@ -101,10 +215,8 @@ SessionMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
-  registerModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  unregisterModal: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
@@ -122,10 +234,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   openModal: bindActionCreators(modalActions.openModal, dispatch),
-  registerModal: bindActionCreators(modalActions.registerModal, dispatch),
   resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
-  unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SessionMenu);

@@ -7,6 +7,17 @@ $font-path: '~network-canvas-ui/public/fonts';
 @import 'components/all';
 @import 'containers/all';
 
+// Remove touch and focus outlines
+* {
+  outline-style: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  &:focus {
+    outline: none;
+   }
+}
+
 html,
 body {
   margin: 0;
