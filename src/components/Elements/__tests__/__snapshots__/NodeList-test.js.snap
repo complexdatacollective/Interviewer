@@ -6,51 +6,53 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div
-    className="scrollable">
-    <Connect(Droppable)
-        network={
-            Object {
-                "nodes": Array [
-                  Object {
-                    "name": "test",
-                  },
-                ],
-              }
-        }
-        store={
-            Object {
-                "dispatch": [Function],
-                "getState": [Function],
-                "replaceReducer": [Function],
-                "subscribe": [Function],
-                Symbol(observable): [Function],
-              }
-        } />
-</div>,
+  "node": <Droppable
+    acceptsDraggableType={null}
+    droppableName={null}
+    hover={false}
+    network={
+        Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          }
+    }
+    store={
+        Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          }
+    }
+    updateZone={[Function]} />,
   "nodes": Array [
-    <div
-      className="scrollable">
-      <Connect(Droppable)
-            network={
-                  Object {
-                        "nodes": Array [
-                          Object {
-                            "name": "test",
-                          },
-                        ],
-                      }
-            }
-            store={
-                  Object {
-                        "dispatch": [Function],
-                        "getState": [Function],
-                        "replaceReducer": [Function],
-                        "subscribe": [Function],
-                        Symbol(observable): [Function],
-                      }
-            } />
-</div>,
+    <Droppable
+      acceptsDraggableType={null}
+      droppableName={null}
+      hover={false}
+      network={
+            Object {
+                  "nodes": Array [
+                    Object {
+                      "name": "test",
+                    },
+                  ],
+                }
+      }
+      store={
+            Object {
+                  "dispatch": [Function],
+                  "getState": [Function],
+                  "replaceReducer": [Function],
+                  "subscribe": [Function],
+                  Symbol(observable): [Function],
+                }
+      }
+      updateZone={[Function]} />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -58,7 +60,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Scrollable
+      "_currentElement": <Connect(Droppable)
         network={
                 Object {
                         "nodes": Array [
@@ -80,9 +82,39 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": Scrollable {
+      "_instance": Connect {
         "_reactInternalInstance": [Circular],
-        "context": Object {},
+        "context": Object {
+          "store": undefined,
+        },
+        "dispatchProps": Object {
+          "updateZone": [Function],
+        },
+        "doDispatchPropsDependOnOwnProps": false,
+        "doStatePropsDependOnOwnProps": true,
+        "finalMapDispatchToProps": [Function],
+        "finalMapStateToProps": [Function],
+        "hasStoreStateChanged": false,
+        "haveOwnPropsChanged": false,
+        "haveStatePropsBeenPrecalculated": false,
+        "mergedProps": Object {
+          "hover": false,
+          "network": Object {
+            "nodes": Array [
+              Object {
+                "name": "test",
+              },
+            ],
+          },
+          "store": Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          },
+          "updateZone": [Function],
+        },
         "props": Object {
           "network": Object {
             "nodes": Array [
@@ -100,10 +132,47 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
+        "renderedElement": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          hover={false}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
         "state": Object {
-          "isScrolling": false,
+          "storeState": Object {
+            "droppable": Object {
+              "activeZones": Array [],
+            },
+          },
         },
-        "updateScrollState": [Function],
+        "stateProps": Object {
+          "hover": false,
+        },
+        "statePropsPrecalculationError": null,
+        "store": Object {
+          "dispatch": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+          Symbol(observable): [Function],
+        },
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -114,6 +183,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
+        "version": 1,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -122,53 +192,55 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <div
-          className="scrollable">
-          <Connect(Droppable)
-                    network={
-                              Object {
-                                        "nodes": Array [
-                                          Object {
-                                            "name": "test",
-                                          },
-                                        ],
-                                      }
-                    }
-                    store={
-                              Object {
-                                        "dispatch": [Function],
-                                        "getState": [Function],
-                                        "replaceReducer": [Function],
-                                        "subscribe": [Function],
-                                        Symbol(observable): [Function],
-                                      }
-                    } />
-</div>,
+        "_currentElement": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          hover={false}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
         "_debugID": 2,
-        "_renderedOutput": <div
-          className="scrollable">
-          <Connect(Droppable)
-                    network={
-                              Object {
-                                        "nodes": Array [
-                                          Object {
-                                            "name": "test",
-                                          },
-                                        ],
-                                      }
-                    }
-                    store={
-                              Object {
-                                        "dispatch": [Function],
-                                        "getState": [Function],
-                                        "replaceReducer": [Function],
-                                        "subscribe": [Function],
-                                        Symbol(observable): [Function],
-                                      }
-                    } />
-</div>,
+        "_renderedOutput": <Droppable
+          acceptsDraggableType={null}
+          droppableName={null}
+          hover={false}
+          network={
+                    Object {
+                              "nodes": Array [
+                                Object {
+                                  "name": "test",
+                                },
+                              ],
+                            }
+          }
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+          updateZone={[Function]} />,
       },
-      "_renderedNodeType": 0,
+      "_renderedNodeType": 1,
       "_rootNodeID": 0,
       "_topLevelWrapper": null,
       "_updateBatchNumber": null,
@@ -178,7 +250,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Scrollable
+  "unrendered": <Connect(Droppable)
     network={
         Object {
             "nodes": Array [
