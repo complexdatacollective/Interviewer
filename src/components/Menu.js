@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'network-canvas-ui';
-
+import { debounce } from 'lodash';
 import { MenuContent } from '.';
 import { MenuItem } from './Elements';
+
+const closeEvents = [
+  'click',
+  'touchstart',
+];
 
 /**
   * Renders a menu, updating styles on DOM elements outside of this.
   * @extends Component
   */
 class MenuFactory extends Component {
+  constructor(props) {
+    super(props);
+
+    this.outsideClick = debounce(this.outsideClick, 50);
+  }
+
   /**
     * adds listener for key events to close Menu
     */
@@ -18,11 +29,13 @@ class MenuFactory extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.isOpen) {
-      document.addEventListener('click', this.outsideClick);
-    } else {
-      document.removeEventListener('click', this.outsideClick);
-    }
+    closeEvents.forEach((eventName) => {
+      if (this.props.isOpen) {
+        document.addEventListener(eventName, this.outsideClick);
+      } else {
+        document.removeEventListener(eventName, this.outsideClick);
+      }
+    });
   }
 
   /**
@@ -30,6 +43,7 @@ class MenuFactory extends Component {
     */
   componentWillUnmount() {
     window.onkeydown = null;
+    this.outsideClick.cancel();
   }
 
   listenForClose = (e) => {
@@ -40,8 +54,10 @@ class MenuFactory extends Component {
     }
   }
 
-  outsideClick = () => {
-    this.props.toggleMenu();
+  outsideClick = (e) => {
+    if (!this.domNode.contains(e.target)) {
+      this.props.toggleMenu(e);
+    }
   }
 
   menuClick = (e) => {
@@ -81,7 +97,7 @@ class MenuFactory extends Component {
               items={menuItems}
               searchField={searchField}
               title={title}
-              toggleMenu={this.menuClick}
+              toggleMenu={this.props.toggleMenu}
             />
           </div>
         </div>
