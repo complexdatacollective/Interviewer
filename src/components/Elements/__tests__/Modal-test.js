@@ -54,7 +54,9 @@ describe('Modal component', () => {
       expect(component.contains(<span>foo</span>)).toBe(true);
     });
 
-    it('calls close when close button is clicked', () => {
+    it('calls close when close button is clicked', (done) => {
+      jest.useFakeTimers();
+
       const close = jest.fn();
       const component = mount((
         <Provider store={createStore(() => openState)}>
@@ -64,17 +66,23 @@ describe('Modal component', () => {
 
       expect(close.mock.calls.length).toBe(0);
 
-      // Click on close button
-      component.find('button').simulate('click');
-      expect(close.mock.calls.length).toBe(1);
+      setTimeout(() => {
+        // Click on close button
+        component.find('button').simulate('click');
+        expect(close.mock.calls.length).toBe(1);
 
-      // Click on background
-      component.find('.modal').simulate('click');
-      expect(close.mock.calls.length).toBe(2);
+        // Click on background
+        component.find('.modal').simulate('click');
+        expect(close.mock.calls.length).toBe(2);
 
-      // Clicks to window shouldn't trigger it
-      component.find('.modal__window').simulate('click');
-      expect(close.mock.calls.length).toBe(2);
+        // Clicks to window shouldn't trigger it
+        component.find('.modal__window').simulate('click');
+        expect(close.mock.calls.length).toBe(2);
+
+        done();
+      }, 100);
+
+      jest.runAllTimers();
     });
   });
 });

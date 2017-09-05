@@ -14,8 +14,16 @@ class Modal extends Component {
     this.close = () => {};
   }
 
-  // This is a work around for a bubbling touch event (something to do with our redux form)
+  componentDidMount() {
+    this.enableCloseButton();
+  }
+
   componentDidUpdate() {
+    this.enableCloseButton();
+  }
+
+  // This is a work around for a bubbling touch event (something to do with our redux form)
+  enableCloseButton() {
     if (this.props.show) {
       setTimeout(() => {
         this.close = this.props.close;
