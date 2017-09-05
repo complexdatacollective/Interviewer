@@ -37,9 +37,13 @@
   }
 
   .node {
-    font-size: 120px;
+    font-size: 100px;
     margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
+    margin:5px;
+    @include breakpoint('full') {
+      font-size: 120px;
+    }
   }
 
   &--minimise {

@@ -16,15 +16,22 @@
   }
 
   &__control {
-    flex: 0 0 100px;
+    flex: 0 0 80px;
     display: flex;
     justify-content: center;
     align-items: center;
+    @include breakpoint('full') {
+      flex: 0 0 100px;
+    }
 
     &-button {
       @include svg-button('../images/arrow-back.svg');
-      width: 35px;
-      height: 100px;
+      width: 30px;
+      height: 80px;
+      @include breakpoint('full') {
+        width: 45px;
+        height: 90px;
+      }
 
       &--next {
         @include svg-button('../images/arrow-next.svg');
