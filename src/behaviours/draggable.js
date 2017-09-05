@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { throttle, filter } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
+
+const maxReportingPerSecond = 16;
 
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -71,14 +73,23 @@ export default function draggable(WrappedComponent) {
 
       this.state = initalState;
       this.preview = null;
+      this.componentHandlers = throttle(
+        this.componentHandlers,
+        1000 / maxReportingPerSecond,
+      );
     }
 
     componentDidMount() {
+      if (!this.props.canDrag) { return; }
       this.el = findDOMNode(this.node);
       this.el.addEventListener('touchstart', this.handleMoveStart);
       this.el.addEventListener('touchmove', this.handleMove);
       this.el.addEventListener('touchend', this.handleMoveEnd);
       this.el.addEventListener('mousedown', this.handleMoveStart);
+    }
+
+    shouldComponentUpdate(_, newState) {
+      return newState.dragStart !== this.state.dragStart;
     }
 
     componentWillUnmount() {
@@ -98,6 +109,7 @@ export default function draggable(WrappedComponent) {
       });
 
     trackMouse = () => {
+      if (!this.props.canDrag) { return; }
       window.addEventListener('mousemove', this.handleMove);
       window.addEventListener('mouseup', this.handleMoveEnd);
     }
@@ -255,7 +267,7 @@ export default function draggable(WrappedComponent) {
     onDropped: PropTypes.func,
     onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
-    // canDrag: PropTypes.bool,
+    canDrag: PropTypes.bool,
   };
 
   Draggable.defaultProps = {

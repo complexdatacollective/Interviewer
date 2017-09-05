@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { throttle, isEqual } from 'lodash';
+import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
@@ -27,6 +28,7 @@ export default function droppable(WrappedComponent) {
       this.lastZoneState = initialZoneState;
 
       this.updateZone = throttle(this.updateZone, 1000 / maxFramesPerSecond);
+      window.addEventListener('resize', this.updateZone);
     }
 
     componentDidMount() {
@@ -34,8 +36,8 @@ export default function droppable(WrappedComponent) {
     }
 
     componentWillUnmount() {
+      window.removeEventListener('resize', this.updateZone);
       this.updateZone.cancel();
-      window.cancelAnimationFrame(this.animationRequestId);
     }
 
     updateZone = () => {
@@ -56,8 +58,6 @@ export default function droppable(WrappedComponent) {
         this.lastZoneState = nextZoneState;
         this.props.updateZone(nextZoneState);
       }
-
-      this.animationRequestId = window.requestAnimationFrame(this.updateZone);
     }
 
     render() {
@@ -84,9 +84,16 @@ export default function droppable(WrappedComponent) {
     hover: false,
   };
 
-  function mapStateToProps(state, ownProps) {
+  const activeZones = (state) => state.droppable.activeZones;
+  const droppableName = (_, props) => props.droppableName;
+  const isZoneActive = createSelector(
+    [activeZones, droppableName],
+    (zones, name) => zones.includes(name),
+  );
+
+  function mapStateToProps(state, props) {
     return {
-      hover: state.droppable.activeZones.includes(ownProps.droppableName),
+      hover: isZoneActive(state, props),
     };
   }
 
