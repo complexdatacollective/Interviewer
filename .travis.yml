@@ -1,6 +1,7 @@
-os:
-  - osx
 language: node_js
+branches:
+  only:
+    - master
 node_js:
   - "6.9"
 cache:
