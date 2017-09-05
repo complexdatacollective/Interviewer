@@ -86,15 +86,18 @@ export default function droppable(WrappedComponent) {
 
   const activeZones = (state) => state.droppable.activeZones;
   const droppableName = (_, props) => props.droppableName;
-  const isZoneActive = createSelector(
-    [activeZones, droppableName],
-    (zones, name) => zones.includes(name),
-  );
 
-  function mapStateToProps(state, props) {
-    return {
-      hover: isZoneActive(state, props),
-    };
+  function mapStateToProps() {
+    const isZoneActive = createSelector(
+      [activeZones, droppableName],
+      (zones, name) => zones.includes(name),
+    );
+
+    return function(state, props) {
+      return {
+        hover: isZoneActive(state, props),
+      };
+    }
   }
 
   function mapDispatchToProps(dispatch) {
