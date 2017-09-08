@@ -71,6 +71,7 @@ class Setup extends Component {
         <div className="setup__start">
 
           <p>
+            <button id="demo" onClick={this.onClickLoadDemoProtocol} className="button">load demo</button>
             <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
           </p>
 
