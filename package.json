@@ -25,7 +25,8 @@
         "dist:ios": "npm run build && cordova build ios",
         "dist:android": "npm run build && cordova build android",
         "dist:cordova": "npm run build && cordova build ios && cordova build android",
-        "bump": "sh scripts/bump"
+        "bump": "sh scripts/bump",
+        "appium": "appium"
     },
     "repository": {
         "type": "git"
@@ -169,7 +170,8 @@
             "<rootDir>/config/polyfills.js"
         ],
         "testPathIgnorePatterns": [
-            "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]"
+            "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]",
+            "[/\\\\](__helpers__)[/\\\\]"
         ],
         "testEnvironment": "node",
         "testURL": "http://localhost",
