@@ -2,26 +2,16 @@
 /* eslint-disable no-var */
 /* global jasmine */
 
-const { browser, config } = require('../__helpers__/setup');
+const { app, config } = require('../__helpers__/setup');
 const { start } = require('../__helpers__/navigation');
 
-const remote = browser;
+const remote = app;
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 beforeAll((done) => {
-  browser.on('status', (info) => {
-    console.log(info);
-  });
-  browser.on('command', (eventType, command, response) => {
-    console.log(eventType, command, response);
-  });
-  browser.on('http', (meth, path, data) => {
-    console.log(meth, path, data);
-  });
-
   remote
-    .init(config.chrome)
+    .init(config.iOS)
     .nodeify(done);
 });
 

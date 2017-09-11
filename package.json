@@ -26,7 +26,8 @@
         "dist:android": "npm run build && cordova build android",
         "dist:cordova": "npm run build && cordova build ios && cordova build android",
         "bump": "sh scripts/bump",
-        "test:end-to-end": "appium & (sleep 3 && jest --testPathPattern=\"\/end_to_end\/\")"
+        "appium-server": "appium",
+        "test:end-to-end": "jest --testPathPattern=\"/end_to_end/\""
     },
     "repository": {
         "type": "git"
@@ -54,7 +55,7 @@
         "detect-port": "1.1.0",
         "dotenv": "2.0.0",
         "electron": "^1.7.6",
-        "electron-builder": "^19.26.3",
+        "electron-builder": "^19.28.4",
         "electron-installer-dmg": "^0.2.0",
         "electron-packager": "^8.5.2",
         "electron-winstaller": "^2.5.2",
@@ -83,6 +84,7 @@
         "react-addons-test-utils": "^15.5.1",
         "react-dev-utils": "^0.5.2",
         "sass-lint": "^1.10.2",
+        "selenium-standalone": "^6.9.0",
         "selenium-webdriver": "^3.5.0",
         "style-loader": "0.13.1",
         "url-loader": "0.5.7",
@@ -106,8 +108,8 @@
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-x-socialsharing": "^5.2.0",
         "create-react-class": "^15.5.3",
-        "electron-log": "^2.2.7",
-        "electron-updater": "^2.7.2",
+        "electron-log": "^2.2.9",
+        "electron-updater": "^2.9.3",
         "es6-promise-plugin": "^4.1.0",
         "gridle": "^2.0.48",
         "history": "^4.7.2",

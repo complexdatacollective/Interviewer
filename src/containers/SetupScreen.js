@@ -20,10 +20,6 @@ const formConfig = {
   ],
 };
 
-const initialValues = {
-  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
-};
-
 /**
   * Setup screen
   * @extends Component
@@ -71,17 +67,16 @@ class Setup extends Component {
         <div className="setup__start">
 
           <p>
-            <button id="demo" onClick={this.onClickLoadDemoProtocol} className="button">load demo</button>
-            <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
+            <Button id="load-demo-protocol" onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
           </p>
 
           <p>Or load a custom one:</p>
 
           <div className="setup__custom-protocol">
             <Form
+              id="custom-protocol-form"
               form={formConfig.formName}
               onSubmit={this.onClickLoadProtocol}
-              initialValues={initialValues}
               {...formConfig}
             />
           </div>

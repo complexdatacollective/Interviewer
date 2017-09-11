@@ -40,6 +40,7 @@ class Stage extends Component {
             <button
               className="stage__control-button stage__control-button--back"
               onClick={this.onClickBack}
+              id="back-stage"
             >
               Back
             </button>
@@ -53,6 +54,7 @@ class Stage extends Component {
             <button
               className="stage__control-button stage__control-button--next"
               onClick={this.onClickNext}
+              id="next-stage"
             >
               Next
             </button>
