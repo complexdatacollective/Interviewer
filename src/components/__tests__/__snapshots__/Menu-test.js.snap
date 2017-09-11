@@ -9,103 +9,105 @@ ShallowWrapper {
   "node": <div
     className="menu">
     <div
-        className="menu__wrap">
-        <div
-            className="menu__content">
-            <Scrollable
-                items={
-                    Array [
-                        <MenuItem
-                          interfaceType=""
-                          isActive={false}
-                          menuType="primary"
-                          onClick={[Function]}
-                          title="a title"
-                          to="a-to" />,
-                        <MenuItem
-                          interfaceType=""
-                          isActive={false}
-                          menuType="primary"
-                          onClick={[Function]}
-                          title="b title"
-                          to="b-to" />,
-                        <MenuItem
-                          interfaceType=""
-                          isActive={false}
-                          menuType="primary"
-                          onClick={[Function]}
-                          title="c title"
-                          to="c-to" />,
-                      ]
-                }
-                searchField={null}
-                title="Options"
-                toggleMenu={[Function]} />
-        </div>
+        className="menu__wrap menu__content">
+        <Scrollable>
+            <Icon
+                className="menu__cross"
+                color=""
+                name="close"
+                onClick={[Function]}
+                size="40px"
+                style={Object {}} />
+            <header>
+                <h1
+                    className="menu__title">
+                    Options
+                </h1>
+            </header>
+            <nav>
+                <MenuItem
+                    interfaceType=""
+                    isActive={false}
+                    menuType="primary"
+                    onClick={[Function]}
+                    title="a title"
+                    to="a-to" />
+                <MenuItem
+                    interfaceType=""
+                    isActive={false}
+                    menuType="primary"
+                    onClick={[Function]}
+                    title="b title"
+                    to="b-to" />
+                <MenuItem
+                    interfaceType=""
+                    isActive={false}
+                    menuType="primary"
+                    onClick={[Function]}
+                    title="c title"
+                    to="c-to" />
+            </nav>
+        </Scrollable>
     </div>
-    <div
+    <Icon
         className="menu__burger"
+        color=""
+        name="menu"
         onClick={[Function]}
-        role="menu"
-        tabIndex={0}>
-        <Icon
-            className=""
-            color=""
-            name="menu"
-            size=""
-            style={Object {}} />
-    </div>
+        size=""
+        style={Object {}} />
 </div>,
   "nodes": Array [
     <div
       className="menu">
       <div
-            className="menu__wrap">
-            <div
-                  className="menu__content">
-                  <Scrollable
-                        items={
-                              Array [
-                                    <MenuItem
-                                      interfaceType=""
-                                      isActive={false}
-                                      menuType="primary"
-                                      onClick={[Function]}
-                                      title="a title"
-                                      to="a-to" />,
-                                    <MenuItem
-                                      interfaceType=""
-                                      isActive={false}
-                                      menuType="primary"
-                                      onClick={[Function]}
-                                      title="b title"
-                                      to="b-to" />,
-                                    <MenuItem
-                                      interfaceType=""
-                                      isActive={false}
-                                      menuType="primary"
-                                      onClick={[Function]}
-                                      title="c title"
-                                      to="c-to" />,
-                                  ]
-                        }
-                        searchField={null}
-                        title="Options"
-                        toggleMenu={[Function]} />
-            </div>
+            className="menu__wrap menu__content">
+            <Scrollable>
+                  <Icon
+                        className="menu__cross"
+                        color=""
+                        name="close"
+                        onClick={[Function]}
+                        size="40px"
+                        style={Object {}} />
+                  <header>
+                        <h1
+                              className="menu__title">
+                              Options
+                        </h1>
+                  </header>
+                  <nav>
+                        <MenuItem
+                              interfaceType=""
+                              isActive={false}
+                              menuType="primary"
+                              onClick={[Function]}
+                              title="a title"
+                              to="a-to" />
+                        <MenuItem
+                              interfaceType=""
+                              isActive={false}
+                              menuType="primary"
+                              onClick={[Function]}
+                              title="b title"
+                              to="b-to" />
+                        <MenuItem
+                              interfaceType=""
+                              isActive={false}
+                              menuType="primary"
+                              onClick={[Function]}
+                              title="c title"
+                              to="c-to" />
+                  </nav>
+            </Scrollable>
       </div>
-      <div
+      <Icon
             className="menu__burger"
+            color=""
+            name="menu"
             onClick={[Function]}
-            role="menu"
-            tabIndex={0}>
-            <Icon
-                  className=""
-                  color=""
-                  name="menu"
-                  size=""
-                  style={Object {}} />
-      </div>
+            size=""
+            style={Object {}} />
 </div>,
   ],
   "options": Object {},
@@ -151,7 +153,6 @@ ShallowWrapper {
         "menuItemClick": [Function],
         "outsideClick": [Function],
         "props": Object {
-          "children": null,
           "hideButton": false,
           "icon": "menu",
           "isOpen": false,
@@ -199,103 +200,105 @@ ShallowWrapper {
         "_currentElement": <div
           className="menu">
           <div
-                    className="menu__wrap">
-                    <div
-                              className="menu__content">
-                              <Scrollable
-                                        items={
-                                                  Array [
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="a title"
-                                                              to="a-to" />,
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="b title"
-                                                              to="b-to" />,
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="c title"
-                                                              to="c-to" />,
-                                                          ]
-                                        }
-                                        searchField={null}
-                                        title="Options"
-                                        toggleMenu={[Function]} />
-                    </div>
+                    className="menu__wrap menu__content">
+                    <Scrollable>
+                              <Icon
+                                        className="menu__cross"
+                                        color=""
+                                        name="close"
+                                        onClick={[Function]}
+                                        size="40px"
+                                        style={Object {}} />
+                              <header>
+                                        <h1
+                                                  className="menu__title">
+                                                  Options
+                                        </h1>
+                              </header>
+                              <nav>
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="a title"
+                                                  to="a-to" />
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="b title"
+                                                  to="b-to" />
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="c title"
+                                                  to="c-to" />
+                              </nav>
+                    </Scrollable>
           </div>
-          <div
+          <Icon
                     className="menu__burger"
+                    color=""
+                    name="menu"
                     onClick={[Function]}
-                    role="menu"
-                    tabIndex={0}>
-                    <Icon
-                              className=""
-                              color=""
-                              name="menu"
-                              size=""
-                              style={Object {}} />
-          </div>
+                    size=""
+                    style={Object {}} />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="menu">
           <div
-                    className="menu__wrap">
-                    <div
-                              className="menu__content">
-                              <Scrollable
-                                        items={
-                                                  Array [
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="a title"
-                                                              to="a-to" />,
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="b title"
-                                                              to="b-to" />,
-                                                            <MenuItem
-                                                              interfaceType=""
-                                                              isActive={false}
-                                                              menuType="primary"
-                                                              onClick={[Function]}
-                                                              title="c title"
-                                                              to="c-to" />,
-                                                          ]
-                                        }
-                                        searchField={null}
-                                        title="Options"
-                                        toggleMenu={[Function]} />
-                    </div>
+                    className="menu__wrap menu__content">
+                    <Scrollable>
+                              <Icon
+                                        className="menu__cross"
+                                        color=""
+                                        name="close"
+                                        onClick={[Function]}
+                                        size="40px"
+                                        style={Object {}} />
+                              <header>
+                                        <h1
+                                                  className="menu__title">
+                                                  Options
+                                        </h1>
+                              </header>
+                              <nav>
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="a title"
+                                                  to="a-to" />
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="b title"
+                                                  to="b-to" />
+                                        <MenuItem
+                                                  interfaceType=""
+                                                  isActive={false}
+                                                  menuType="primary"
+                                                  onClick={[Function]}
+                                                  title="c title"
+                                                  to="c-to" />
+                              </nav>
+                    </Scrollable>
           </div>
-          <div
+          <Icon
                     className="menu__burger"
+                    color=""
+                    name="menu"
                     onClick={[Function]}
-                    role="menu"
-                    tabIndex={0}>
-                    <Icon
-                              className=""
-                              color=""
-                              name="menu"
-                              size=""
-                              style={Object {}} />
-          </div>
+                    size=""
+                    style={Object {}} />
 </div>,
       },
       "_renderedNodeType": 0,
