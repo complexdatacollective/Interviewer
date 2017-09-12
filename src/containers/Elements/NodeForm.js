@@ -31,7 +31,8 @@ class NodeForm extends Component {
 
   onAddClick = (formData, dispatch, form) => {
     this.props.closeModal(this.props.modalName);
-    this.props.handleAlternate(formData, dispatch, form);
+    this.props.handleSubmit(formData, dispatch, form);
+    this.props.openModal(this.props.modalName);
   }
 
   render() {
@@ -39,6 +40,7 @@ class NodeForm extends Component {
       modalName,
       form,
       initialValues,
+      addAnother,
     } = this.props;
 
     return (
@@ -49,8 +51,8 @@ class NodeForm extends Component {
           autoFocus
           form={form.name}
           onSubmit={this.onSubmit}
-          handleAlternate={this.onAddClick}
-          modalName={modalName}
+          onAddClick={this.onAddClick}
+          addAnother={addAnother}
         />
       </Modal>
     );
@@ -59,8 +61,8 @@ class NodeForm extends Component {
 
 NodeForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  handleAlternate: PropTypes.func,
   closeModal: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   modalName: PropTypes.oneOfType([
     PropTypes.string,
@@ -68,10 +70,11 @@ NodeForm.propTypes = {
   ]).isRequired,
   form: PropTypes.any.isRequired,
   node: PropTypes.any,
+  addAnother: PropTypes.bool,
 };
 
 NodeForm.defaultProps = {
-  handleAlternate: null,
+  addAnother: false,
   node: {},
 };
 
@@ -84,6 +87,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 
