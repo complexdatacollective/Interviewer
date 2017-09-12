@@ -24,25 +24,23 @@ beforeEach((done) => {
 });
 
 describe('Setup screen', () => {
-  it('Load demo protocol', done =>
+  it('Load demo protocol', () =>
     remote
       .elementById('load-demo-protocol')
       .click()
       .sleep(2000) // Wait for transition
       .hasElementByCssSelector('.protocol')
-      .then(hasElement => expect(hasElement).toBe(true))
-      .nodeify(done),
+      .then(hasElement => expect(hasElement).toBe(true)),
   );
 
-  it('Load external protocol', done =>
+  it('Load external protocol', () =>
     remote
       .elementByName('protocol_url')
-      .sendKeys('https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js')
+      .sendKeys('https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/test.protocol.js')
       .elementByCssSelector('.setup__custom-protocol button[type=submit]')
       .click()
       .sleep(2000) // Wait for transition
       .hasElementByCssSelector('.protocol')
-      .then(hasElement => expect(hasElement).toBe(true))
-      .nodeify(done),
+      .then(hasElement => expect(hasElement).toBe(true)),
   );
 });

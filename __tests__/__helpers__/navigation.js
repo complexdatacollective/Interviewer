@@ -1,8 +1,17 @@
+export const times = (func, n) =>
+  () =>
+    new Array(n)
+      .fill(null)
+      .reduce(
+        r => r.then(func),
+        Promise.resolve(),
+      );
+
 export const start = ({ remote }) =>
   remote
     .refresh()
     // Wait for intro screen
-    .sleep(1000);
+    .sleep(2000);
 
 export const loadTestProtocol = ({ remote }) =>
   start({ remote })
@@ -12,6 +21,16 @@ export const loadTestProtocol = ({ remote }) =>
     .click()
     .sleep(2000);
 
-export const goToScreen = ({ remote }, number) =>
-  loadTestProtocol({ remote })
-    .elementById('#next-screen');
+export const goToScreen = ({ remote }, screenNumber) => {
+  const numberOfClicksNeeded = screenNumber - 1;
+
+  const nextStage = () => remote.elementById('next-stage').click().sleep(2000);
+
+  const clicks = times(
+    nextStage,
+    numberOfClicksNeeded,
+  );
+
+  return loadTestProtocol({ remote })
+    .then(() => clicks());
+};

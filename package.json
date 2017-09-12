@@ -27,7 +27,7 @@
         "dist:cordova": "npm run build && cordova build ios && cordova build android",
         "bump": "sh scripts/bump",
         "appium-server": "appium",
-        "test:end-to-end": "jest --testPathPattern=\"/end_to_end/\""
+        "test:end-to-end": "jest --watch --testPathPattern=\"/end_to_end/\""
     },
     "repository": {
         "type": "git"
