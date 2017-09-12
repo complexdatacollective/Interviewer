@@ -1,17 +1,14 @@
 /* eslint-env jest */
 /* eslint-disable no-var */
-/* global jasmine */
 
-const { app, config } = require('../__helpers__/setup');
+require('../__helpers__/environment');
+const { getRemote, initPlatform } = require('../__helpers__/setup');
 const { start } = require('../__helpers__/navigation');
 
-const remote = app;
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+const remote = getRemote(process.env.END_TO_END_REMOTE);
 
 beforeAll((done) => {
-  remote
-    .init(config.iOS)
+  initPlatform(remote, process.env.END_TO_END_PLATFORM)
     .nodeify(done);
 });
 
@@ -26,23 +23,7 @@ beforeEach((done) => {
     .nodeify(done);
 });
 
-describe('Setup screen', () => {
-  it('Load demo protocol', done =>
-    remote
-      .elementById('load-demo-protocol')
-      .click()
-      .sleep(3000) // Wait for transition
-      .hasElementByCssSelector('.protocol')
-      .then(hasElement => expect(hasElement).toBe(true))
-      .nodeify(done),
-  );
-
-  it('Load external protocol', done =>
-    remote
-      .elementByName('protocol_url')
-      .sendKeys('https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js')
-      .elementByCssSelector('.setup__custom-protocol button[type=submit]')
-      .click()
-      .nodeify(done),
-  );
+describe('Name generator screen', () => {
+  // it('Load demo protocol', done =>
+  // );
 });

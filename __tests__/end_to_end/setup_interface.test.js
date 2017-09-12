@@ -1,27 +1,14 @@
 /* eslint-env jest */
 /* eslint-disable no-var */
-/* global jasmine */
 
-const { browser, config } = require('../__helpers__/setup');
+require('../__helpers__/environment');
+const { getRemote, initPlatform } = require('../__helpers__/setup');
 const { start } = require('../__helpers__/navigation');
 
-const remote = browser;
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+const remote = getRemote(process.env.END_TO_END_REMOTE);
 
 beforeAll((done) => {
-  browser.on('status', (info) => {
-    console.log(info);
-  });
-  browser.on('command', (eventType, command, response) => {
-    console.log(eventType, command, response);
-  });
-  browser.on('http', (meth, path, data) => {
-    console.log(meth, path, data);
-  });
-
-  remote
-    .init(config.chrome)
+  initPlatform(remote, process.env.END_TO_END_PLATFORM)
     .nodeify(done);
 });
 
@@ -41,7 +28,7 @@ describe('Setup screen', () => {
     remote
       .elementById('load-demo-protocol')
       .click()
-      .sleep(3000) // Wait for transition
+      .sleep(2000) // Wait for transition
       .hasElementByCssSelector('.protocol')
       .then(hasElement => expect(hasElement).toBe(true))
       .nodeify(done),
@@ -53,6 +40,9 @@ describe('Setup screen', () => {
       .sendKeys('https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js')
       .elementByCssSelector('.setup__custom-protocol button[type=submit]')
       .click()
+      .sleep(2000) // Wait for transition
+      .hasElementByCssSelector('.protocol')
+      .then(hasElement => expect(hasElement).toBe(true))
       .nodeify(done),
   );
 });
