@@ -29,6 +29,11 @@ class NodeForm extends Component {
     this.props.handleSubmit(formData, dispatch, form);
   }
 
+  onAddClick = (formData, dispatch, form) => {
+    this.props.closeModal(this.props.modalName);
+    this.props.handleAlternate(formData, dispatch, form);
+  }
+
   render() {
     const {
       modalName,
@@ -44,6 +49,8 @@ class NodeForm extends Component {
           autoFocus
           form={form.name}
           onSubmit={this.onSubmit}
+          handleAlternate={this.onAddClick}
+          modalName={modalName}
         />
       </Modal>
     );
@@ -52,6 +59,7 @@ class NodeForm extends Component {
 
 NodeForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  handleAlternate: PropTypes.func,
   closeModal: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   modalName: PropTypes.oneOfType([
@@ -63,6 +71,7 @@ NodeForm.propTypes = {
 };
 
 NodeForm.defaultProps = {
+  handleAlternate: null,
   node: {},
 };
 

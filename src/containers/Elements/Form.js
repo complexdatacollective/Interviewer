@@ -44,7 +44,11 @@ class Form extends Component {
   }
 
   render() {
-    const { fields, handleSubmit, autoFocus, ...rest } = this.props;
+    const { fields, handleSubmit, handleAlternate, modalName, autoFocus, ...rest } = this.props;
+  
+    const addAnother = modalName === 'ADD_NODE'
+      ? <Button onClick={handleAlternate}>Add Another</Button>
+      : null
 
     return (
       <form onSubmit={handleSubmit}>
@@ -61,6 +65,7 @@ class Form extends Component {
         }) }
         <br />
         <Button type="submit">Submit</Button>
+        {addAnother}
       </form>
     );
   }
@@ -69,10 +74,12 @@ class Form extends Component {
 Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  handleAlternate: PropTypes.func,
   autoFocus: PropTypes.bool,
 };
 
 Form.defaultProps = {
+  handleAlternate: null,
   autoFocus: false,
 };
 

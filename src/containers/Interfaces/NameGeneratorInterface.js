@@ -10,8 +10,8 @@ import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Ele
 import { NodeList, NodeBin } from '../../components/Elements';
 
 const modals = {
-  ADD_NODE: Symbol('ADD_NODE'),
-  EDIT_NODE: Symbol('EDIT_NODE'),
+  ADD_NODE: 'ADD_NODE',
+  EDIT_NODE: 'EDIT_NODE',
 };
 
 // Render method for the node labels
@@ -32,8 +32,18 @@ class NameGenerator extends Component {
   }
 
   /**
-   * New node submit handler
+   * New node add another handler
    * @param {object} formData - key/value object containing node fields
+   */
+  onAddAnotherNewNode = (formData) => {
+    if (formData) {
+      this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
+      this.props.openModal(modals.ADD_NODE);
+    }
+  }
+
+  /**
+   * New node submit handler
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
@@ -131,6 +141,7 @@ class NameGenerator extends Component {
           modalName={modals.ADD_NODE}
           form={form}
           handleSubmit={this.onSubmitNewNode}
+          handleAlternate={this.onAddAnotherNewNode}
         />
 
         <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>

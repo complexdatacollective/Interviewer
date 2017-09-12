@@ -22,6 +22,14 @@ describe('<Form />', () => {
     expect(subject).toMatchSnapshot();
   });
 
+  it('should render add another button', () => {
+    const subject = shallow((
+      <Form {...props()} modalName="ADD_NODE" store={createStore(() => {})} />
+    ));
+
+    expect(subject).toMatchSnapshot();
+  });
+
   it('renders an array of <Field />', () => {
     const fields = [
       {
