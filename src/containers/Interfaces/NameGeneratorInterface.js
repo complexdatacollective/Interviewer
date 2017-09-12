@@ -134,7 +134,11 @@ class NameGenerator extends Component {
           handleSubmit={this.onSubmitNewNode}
         />
 
-        <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>
+        <button
+          id="open-add-node-modal"
+          className="name-generator-interface__add-person"
+          onClick={() => openModal(modals.ADD_NODE)}
+        >
           Add a person
         </button>
 

@@ -1,3 +1,7 @@
+const wd = require('wd');
+
+const Q = wd.Q;
+
 export const times = (func, n) =>
   () =>
     new Array(n)
@@ -34,3 +38,18 @@ export const goToScreen = ({ remote }, screenNumber) => {
   return loadTestProtocol({ remote })
     .then(() => clicks());
 };
+
+export const dragAndDrop = ({ remote }, from, to) =>
+  Q.all([
+    from(),
+    to(),
+  ]).then(
+    els =>
+      remote
+        .moveTo(els[0])
+        .buttonDown()
+        .sleep(50)
+        .moveTo(els[1])
+        .buttonUp(),
+  );
+
