@@ -58,10 +58,11 @@ Ensure you have the following environment variables:
 export END_TO_END_REMOTE=BROWSER
 export END_TO_END_PLATFORM=SAFARI
 # or
+export END_TO_END_REMOTE=BROWSER
 export END_TO_END_PLATFORM=CHROME
 ```
 
-## Run the tests
+### Run the tests
 
 Run the web-driver server (automation layer for browsers):
 
@@ -75,7 +76,7 @@ Run the dev server:
 $ npm run start
 ```
 
-Run the tests!:
+Run the tests:
 ```sh
 $ npm run test:end-to-end
 ```
