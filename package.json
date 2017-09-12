@@ -27,6 +27,7 @@
         "dist:cordova": "npm run build && cordova build ios && cordova build android",
         "bump": "sh scripts/bump",
         "appium-server": "appium",
+        "selenium-install": "selenium-standalone -- install",
         "selenium-server": "selenium-standalone -- start",
         "test:end-to-end": "jest --watch --testPathPattern=\"/end_to_end/\""
     },
