@@ -29,7 +29,7 @@
         "appium-server": "appium",
         "selenium-install": "selenium-standalone -- install",
         "selenium-server": "selenium-standalone -- start",
-        "test:end-to-end": "jest --watch --testPathPattern=\"/end_to_end/\""
+        "test:end-to-end": "jest --testPathPattern=\"/end_to_end/\""
     },
     "repository": {
         "type": "git"

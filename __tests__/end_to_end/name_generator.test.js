@@ -14,7 +14,7 @@ beforeAll((done) => {
 
 afterAll((done) => {
   remote
-    .sleep(500)
+    .sleep(2000)
     .quit()
     .nodeify(done);
 });
@@ -44,7 +44,6 @@ describe('Name generator screen', () => {
       .sendKeys('99')
       .elementByCssSelector('.modal button[type=submit]')
       .click()
-      .sleep(5000)
       .elementByCssSelector('.name-generator-interface__nodes .node')
       .text()
       .then(text => expect(text).toEqual('Motoko K')),
@@ -60,8 +59,9 @@ describe('Name generator screen', () => {
           () => remote.elementByCssSelector('.name-generator-interface__nodes .node-list'),
         ),
       )
-      .sleep(5000)
-      .elementByCssSelector('.name-generator-interface__nodes .node')
+      .sleep(500)
+      .elementsByCssSelector('.name-generator-interface__nodes .node')
+      .nth(2)
       .text()
       .then(text => expect(text).toEqual('Annie')),
   );

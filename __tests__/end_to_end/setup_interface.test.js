@@ -33,14 +33,6 @@ describe('Setup screen', () => {
       .then(hasElement => expect(hasElement).toBe(true)),
   );
 
-  it('Load external protocol', () =>
-    remote
-      .elementByName('protocol_url')
-      .sendKeys('https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/test.protocol.js')
-      .elementByCssSelector('.setup__custom-protocol button[type=submit]')
-      .click()
-      .sleep(2000) // Wait for transition
-      .hasElementByCssSelector('.protocol')
-      .then(hasElement => expect(hasElement).toBe(true)),
-  );
+  // Tested elsewhere
+  // it('Load external protocol');
 });
