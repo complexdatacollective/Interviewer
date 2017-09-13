@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
@@ -94,7 +92,7 @@ export class NodeLayout extends Component {
 
   isSelected(node) {
     const { select } = this.props;
-    if (!select) { return null; }
+    if (!canSelect(select)) { return null; }
     switch (select.action) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);

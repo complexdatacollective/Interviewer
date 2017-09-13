@@ -1,11 +1,9 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttle, isEqual } from 'lodash';
+import { throttle, isMatch } from 'lodash';
 import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
@@ -54,7 +52,7 @@ export default function droppable(WrappedComponent) {
         x: boundingClientRect.left,
       };
 
-      if (!isEqual(nextZoneState, this.lastZoneState)) {
+      if (!isMatch(nextZoneState, this.lastZoneState)) {
         this.lastZoneState = nextZoneState;
         this.props.updateZone(nextZoneState);
       }
@@ -84,7 +82,7 @@ export default function droppable(WrappedComponent) {
     hover: false,
   };
 
-  const activeZones = (state) => state.droppable.activeZones;
+  const activeZones = state => state.droppable.activeZones;
   const droppableName = (_, props) => props.droppableName;
 
   function mapStateToProps() {
@@ -93,11 +91,11 @@ export default function droppable(WrappedComponent) {
       (zones, name) => zones.includes(name),
     );
 
-    return function(state, props) {
+    return function (state, props) {
       return {
         hover: isZoneActive(state, props),
       };
-    }
+    };
   }
 
   function mapDispatchToProps(dispatch) {
