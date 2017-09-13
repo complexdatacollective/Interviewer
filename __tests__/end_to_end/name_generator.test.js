@@ -15,7 +15,7 @@ beforeAll(() =>
 afterAll(() =>
   remote
     .sleep(2000)
-    .quit()
+    .quit(),
 );
 
 describe('Name generator screen', () => {
