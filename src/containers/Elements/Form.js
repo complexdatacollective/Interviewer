@@ -25,6 +25,8 @@ import { Field } from '../../containers/Elements';
   * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
   * based on field value changes. Called on change with current field values and meta,
   * and a callback to allow the setting of otherfields
+  * @param {func} continuousSubmit() handles continuous submission
+  * @param {bool} addAnother tells whether or not there should be an "Add Another" button
   *
   */
 class Form extends Component {
