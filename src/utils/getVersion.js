@@ -19,4 +19,4 @@ const getVersion = () => {
   return new Promise((resolve) => { resolve('0.0.0'); });
 };
 
-module.exports = getVersion;
+export default getVersion;

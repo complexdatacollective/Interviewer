@@ -189,7 +189,7 @@ export default function draggable(WrappedComponent) {
       this.setState({
         moveStart: true,
         dragStart: false,
-        type: isTouch(event) ? null : 'DRAG',  // if mouse, assume drag
+        type: isTouch(e) ? null : 'DRAG',  // if mouse, assume drag
         start: { x, y },
         t: new Date().getTime(),
         x,
