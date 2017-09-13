@@ -41,15 +41,20 @@ class Form extends Component {
     } = this.props;
 
     this.props.autoPopulate(fields, values, autofill);
-  }
+  };
 
   render() {
-    const { fields, handleSubmit, addAnother, onAddClick, autoFocus, ...rest } = this.props;
+    const {
+      fields,
+      handleSubmit,
+      addAnother,
+      continuousSubmit,
+      autoFocus,
+      ...rest
+    } = this.props;
 
-    console.log(addAnother)
-  
     const addAnotherButton = addAnother
-      ? <Button onClick={onAddClick}>Add Another</Button>
+      ? <Button type="button" onClick={continuousSubmit} accessibityLabel="Submit and add another node">Add Another</Button>
       : null
 
     return (
@@ -66,7 +71,7 @@ class Form extends Component {
           );
         }) }
         <br />
-        <Button type="submit">Submit</Button>
+        <Button accessibityLabel="Submit">Submit</Button>
         {addAnotherButton}
       </form>
     );
@@ -77,10 +82,13 @@ Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   autoFocus: PropTypes.bool,
+  addAnother: PropTypes.bool,
+  continuousSubmit: PropTypes.func,
 };
 
 Form.defaultProps = {
   autoFocus: false,
+  continuousSubmit: null,
 };
 
 function mapStateToProps(state, ownProps) {

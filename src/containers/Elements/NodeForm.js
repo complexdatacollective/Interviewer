@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
 import { map, pick } from 'lodash';
 import { createSelector } from 'reselect';
@@ -27,13 +28,17 @@ class NodeForm extends Component {
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.modalName);
     this.props.handleSubmit(formData, dispatch, form);
-  }
+    if (this.state.typeOfSubmit === 'continuous') {
+      this.props.resetValues(form.name);
+      this.props.openModal(this.props.modalName);
+    }
+  };
 
-  onAddClick = (formData, dispatch, form) => {
-    this.props.closeModal(this.props.modalName);
-    this.props.handleSubmit(formData, dispatch, form);
-    this.props.openModal(this.props.modalName);
-  }
+  continuousSubmit = () => {
+    this.setState({
+      typeOfSubmit: 'continuous',
+    }, this.submit);
+  };
 
   render() {
     const {
@@ -47,12 +52,12 @@ class NodeForm extends Component {
       <Modal name={modalName} title={form.title}>
         <Form
           {...form}
-          initialValues={initialValues}
+          initialValues={!addAnother ? initialValues : null}
           autoFocus
           form={form.name}
           onSubmit={this.onSubmit}
-          onAddClick={this.onAddClick}
           addAnother={addAnother}
+          continuousSubmit={this.continuousSubmit}
         />
       </Modal>
     );
@@ -63,6 +68,7 @@ NodeForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
+  resetValues: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   modalName: PropTypes.oneOfType([
     PropTypes.string,
@@ -88,6 +94,7 @@ function mapDispatchToProps(dispatch) {
   return {
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
+    resetValues: bindActionCreators(reset, dispatch),
   };
 }
 
