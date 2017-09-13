@@ -7,27 +7,21 @@ const { goToScreen, dragAndDrop } = require('../__helpers__/navigation');
 
 const remote = getRemote(process.env.END_TO_END_REMOTE);
 
-beforeAll((done) => {
+beforeAll(() =>
   initPlatform(remote, process.env.END_TO_END_PLATFORM)
-    .nodeify(done);
-});
+    .then(() => goToScreen({ remote }, 1)),
+);
 
-afterAll((done) => {
+afterAll(() =>
   remote
     .sleep(2000)
     .quit()
-    .nodeify(done);
-});
-
-beforeEach((done) => {
-  goToScreen({ remote }, 1)
-    .nodeify(done);
-});
+);
 
 describe('Name generator screen', () => {
   it('Load name generator', () =>
     remote
-      .hasElementByCssSelector('.name-generator-interface')
+      .hasElementByCss('.name-generator-interface')
       .then(hasElement => expect(hasElement).toBe(true)),
   );
 
@@ -41,27 +35,51 @@ describe('Name generator screen', () => {
       .elementByName('nickname')
       .click()
       .elementByName('age')
-      .sendKeys('99')
-      .elementByCssSelector('.modal button[type=submit]')
+      .sendKeys('80')
+      .elementByCss('.modal button[type=submit]')
       .click()
-      .elementByCssSelector('.name-generator-interface__nodes .node')
+      .sleep(1000)
+      .elementByCss('.name-generator-interface__nodes .node')
       .text()
       .then(text => expect(text).toEqual('Motoko K')),
   );
 
-  it('Can drag a from previous nodes node', () =>
+  it('Can edit a node', () =>
     remote
-      .sleep(1)
+      .elementsByCss('.name-generator-interface__nodes .node')
+      .nth(1)
+      .click()
+      .sleep(1000)
+      .elementByName('name')
+      .clear()
+      .sendKeys('Daisuke Aramaki')
+      .elementByName('nickname')
+      .clear()
+      .sendKeys('Aramaki')
+      .elementByName('age')
+      .clear()
+      .sendKeys('99')
+      .elementByCss('.modal button[type=submit]')
+      .click()
+      .sleep(1000)
+      .elementByCss('.name-generator-interface__nodes .node')
+      .text()
+      .then(text => expect(text).toEqual('Aramaki')),
+  );
+
+  it('Can drag a node from previous nodes', () =>
+    remote
+      .elementByCss('.name-generator-interface')
       .then(() =>
         dragAndDrop(
           { remote },
-          () => remote.elementByCssSelector('.panel').elementByCssSelector('.node'),
-          () => remote.elementByCssSelector('.name-generator-interface__nodes .node-list'),
+          () => remote.elementByCss('.panel .node'),
+          () => remote.elementByCss('.name-generator-interface__nodes .node-list'),
         ),
       )
-      .sleep(500)
-      .elementsByCssSelector('.name-generator-interface__nodes .node')
-      .nth(2)
+      .sleep(1000)
+      .elementsByCss('.name-generator-interface__nodes .node')
+      .second()
       .text()
       .then(text => expect(text).toEqual('Annie')),
   );

@@ -48,8 +48,9 @@ export const dragAndDrop = ({ remote }, from, to) =>
       remote
         .moveTo(els[0])
         .buttonDown()
-        .sleep(50)
+        .sleep(100)
         .moveTo(els[1])
-        .buttonUp(),
+        .buttonUp()
+        .sleep(100),
   );
 
