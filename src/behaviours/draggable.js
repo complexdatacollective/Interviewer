@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttle, filter } from 'lodash';
+import { throttle, filter, isMatch } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
@@ -88,18 +88,23 @@ export default function draggable(WrappedComponent) {
       this.el.addEventListener('mousedown', this.handleMoveStart);
     }
 
-    shouldComponentUpdate(_, newState) {
-      return newState.dragStart !== this.state.dragStart;
+    shouldComponentUpdate(newProps, newState) {
+      const propsChanged = !isMatch(this.props, newProps);
+      const dragStateChanged = newState.dragStart !== this.state.dragStart;
+      return dragStateChanged || propsChanged;
     }
 
     componentWillUnmount() {
       this.cleanupPreview();
-      this.el.removeEventListener('touchstart', this.handleMoveStart);
-      this.el.removeEventListener('touchmove', this.handleMove);
-      this.el.removeEventListener('touchend', this.handleMoveEnd);
-      this.el.removeEventListener('mousedown', this.handleMoveStart);
       window.removeEventListener('mousemove', this.handleMove);
       window.removeEventListener('mouseup', this.handleMoveEnd);
+      this.componentHandlers.cancel();
+      if (this.el) {
+        this.el.removeEventListener('touchstart', this.handleMoveStart);
+        this.el.removeEventListener('touchmove', this.handleMove);
+        this.el.removeEventListener('touchend', this.handleMoveEnd);
+        this.el.removeEventListener('mousedown', this.handleMoveStart);
+      }
     }
 
     determineHits = ({ x, y }) =>
