@@ -1,9 +1,9 @@
 /* eslint-env jest */
 /* eslint-disable no-var */
 
-require('../__helpers__/environment');
-const { getRemote, initPlatform } = require('../__helpers__/setup');
-const { start } = require('../__helpers__/navigation');
+require('./__helpers__/environment');
+const { getRemote, initPlatform } = require('./__helpers__/setup');
+const { start } = require('./__helpers__/navigation');
 
 const remote = getRemote(process.env.END_TO_END_REMOTE);
 
