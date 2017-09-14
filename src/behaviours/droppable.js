@@ -1,3 +1,5 @@
+/* eslint-disable react/no-find-dom-node */
+
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
@@ -85,13 +87,13 @@ export default function droppable(WrappedComponent) {
   const activeZones = state => state.droppable.activeZones;
   const droppableName = (_, props) => props.droppableName;
 
-  function mapStateToProps() {
+  function getMapStateToProps() {
     const isZoneActive = createSelector(
       [activeZones, droppableName],
       (zones, name) => zones.includes(name),
     );
 
-    return function (state, props) {
+    return function mapStateToProps(state, props) {
       return {
         hover: isZoneActive(state, props),
       };
@@ -105,5 +107,5 @@ export default function droppable(WrappedComponent) {
   }
 
 
-  return connect(mapStateToProps, mapDispatchToProps)(Droppable);
+  return connect(getMapStateToProps, mapDispatchToProps)(Droppable);
 }
