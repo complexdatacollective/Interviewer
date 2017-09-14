@@ -9,18 +9,18 @@ const equalByArea = (outerRadius, n) => {
   const b = rsq / n;
 
   return range(1, n + 1)
-  .reduce((memo) => {
-    const previous = last(memo) || 0;
-    const next = (b + (previous ** 2)) ** 0.5;
-    return [...memo, next];
-  }, [])
-  .reverse();
+    .reduce((memo) => {
+      const previous = last(memo) || 0;
+      const next = (b + (previous ** 2)) ** 0.5;
+      return [...memo, next];
+    }, [])
+    .reverse();
 };
 
 const equalByIncrement = (outerRadius, n) =>
   range(1, n + 1)
-  .map(v => (v * outerRadius) / n)
-  .reverse();
+    .map(v => (v * outerRadius) / n)
+    .reverse();
 
 // Weight towards a by factor
 const weightedAverage = (a, b, factor = 1) =>

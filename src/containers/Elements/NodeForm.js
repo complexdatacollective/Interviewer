@@ -24,7 +24,6 @@ const initialValues = createSelector(
   * @extends Component
   */
 class NodeForm extends Component {
-
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.modalName);
     this.props.handleSubmit(formData, dispatch, form);

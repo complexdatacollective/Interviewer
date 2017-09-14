@@ -5,8 +5,8 @@ import { filter, reject } from 'lodash';
 
 /*
 These selectors assume the following props:
-  stage: which contains the protocol config for the stage
-  prompt: which contains the protocol config for the prompt
+stage: which contains the protocol config for the stage
+prompt: which contains the protocol config for the prompt
 */
 
 const propStageId = (_, props) => props.stage.id;
@@ -22,16 +22,16 @@ export const propPromptIds = createSelector(
 );
 
 export const networkNodesOfStageType = createSelector(
-    [networkNodes, propStageNodeType],
-    (nodes, nodeType) => filter(nodes, ['type', nodeType]),
-  );
+  [networkNodes, propStageNodeType],
+  (nodes, nodeType) => filter(nodes, ['type', nodeType]),
+);
 
 export const networkNodesForPrompt = createSelector(
-    [networkNodes, propPromptIds],
-    (nodes, attributes) => filter(nodes, attributes),
-  );
+  [networkNodes, propPromptIds],
+  (nodes, attributes) => filter(nodes, attributes),
+);
 
 export const otherNetworkNodesWithStageNodeType = createSelector(
-    [networkNodesOfStageType, propPromptIds],
-    (nodes, promptAttributes) => reject(nodes, promptAttributes),
-  );
+  [networkNodesOfStageType, propPromptIds],
+  (nodes, promptAttributes) => reject(nodes, promptAttributes),
+);

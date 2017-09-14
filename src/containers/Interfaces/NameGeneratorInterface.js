@@ -23,7 +23,6 @@ const label = node => `${node.nickname}`;
   * @extends Component
   */
 class NameGenerator extends Component {
-
   constructor(props) {
     super(props);
 

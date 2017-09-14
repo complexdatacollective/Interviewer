@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
-
     constructor(props) {
       super(props);
 
@@ -48,9 +47,7 @@ export default function withPrompt(WrappedComponent) {
         />
       );
     }
-
   }
-
   WithPrompt.propTypes = {
     stage: PropTypes.object.isRequired,
     promptIndex: PropTypes.number,
