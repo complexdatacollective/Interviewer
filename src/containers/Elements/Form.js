@@ -72,9 +72,10 @@ class Form extends Component {
             />
           );
         }) }
-        <br />
-        <Button accessibityLabel="Submit">Submit</Button>
-        {addAnotherButton}
+        <div className="button__container">
+          <Button accessibityLabel="Submit">Submit</Button>
+          {addAnotherButton}
+        </div>
       </form>
     );
   }
