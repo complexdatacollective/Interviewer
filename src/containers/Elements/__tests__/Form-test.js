@@ -23,11 +23,15 @@ describe('<Form />', () => {
   });
 
   it('should render add another button', () => {
-    const subject = shallow((
-      <Form {...props()} modalName="ADD_NODE" store={createStore(() => {})} />
+    const continuousForm = mount((
+      <Form {...props()} addAnother store={createStore(() => {})} />
+    ));
+    const singularForm = mount((
+      <Form {...props()} store={createStore(() => {})} />
     ));
 
-    expect(subject).toMatchSnapshot();
+    expect(continuousForm.find('button').length).toBe(2)
+    expect(singularForm.find('button').length).toBe(1)
   });
 
   it('renders an array of <Field />', () => {
