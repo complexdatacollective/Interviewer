@@ -9,11 +9,11 @@ import modal from '../../behaviours/modal';
   * Renders a modal window.
   */
 class Modal extends Component {
-  constructor(props) {
+/*  constructor(props) {
     super(props);
     this.close = () => {};
   }
-
+*/
   componentDidMount() {
     this.enableCloseButton();
   }
@@ -24,13 +24,13 @@ class Modal extends Component {
 
   // This is a work around for a bubbling touch event (something to do with our redux form)
   enableCloseButton() {
-    if (this.props.show) {
-      setTimeout(() => {
-        this.close = this.props.close;
-      }, 50);
-    } else {
-      this.close = () => {};
-    }
+//    if (this.props.show) {
+//      setTimeout(() => {
+    this.close = this.props.close;
+//      }, 50);
+//    } else {
+//      this.close = () => {};
+//    }
   }
 
   render() {
@@ -47,7 +47,7 @@ class Modal extends Component {
         transitionLeaveTimeout={animation.duration.standard}
       >
         { show &&
-          <div key="modal" className="modal" onClick={() => { this.close(); }}>
+          <div key="modal" className="modal" onClick={() => { console.log('FIRST TIME AROUND'); this.props.close(); }}>
             <div className="modal__window" onClick={e => e.stopPropagation()}>
               <div className="modal__layout">
                 <div className="modal__layout-title">
@@ -57,7 +57,7 @@ class Modal extends Component {
                   {children}
                 </div>
               </div>
-              <button className="modal__close" onClick={() => { this.close(); }}>
+              <button className="modal__close" onClick={() => { console.log('SECOND TIME AROUND'); this.props.close(); }}>
                 Cancel
               </button>
             </div>

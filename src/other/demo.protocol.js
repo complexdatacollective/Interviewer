@@ -99,7 +99,7 @@ const fields = [
 
 let generateNickname = (name) => {
   if (name) {
-    const nickName = name.split(' ')[0]+' '+name.split(' ')[1][0];
+    const nickName = name.split(' ')[0]+' '+(name.split(' ')[1] && name.split(' ')[1][0]);
     return nickName.substring(0,8);
   } else {
     return '';
