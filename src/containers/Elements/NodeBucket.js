@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { first, sortBy, reject, has } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { networkNodesOfStageType } from '../../selectors/interface';
+import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
@@ -15,20 +15,28 @@ const label = node => node.nickname;
 const propSort = (_, props) => props.prompt.sociogram.sort;
 const propLayout = (_, props) => props.prompt.sociogram.layout;
 
-const getUnplacedNodes = createSelector(
-  [networkNodesOfStageType, propLayout],
-  (nodes, layout) => reject(nodes, node => has(node, layout)),
-);
+const makeGetUnplacedNodes = () => {
+  const networkNodesOfStageType = makeNetworkNodesOfStageType();
 
-const getNextUnplacedNode = createSelector(
-  [getUnplacedNodes, propSort],
-  (nodes, sort) => {
-    let sortedNodes = [...nodes];
-    if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
-    if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-    return first(sortedNodes);
-  },
-);
+  return createSelector(
+    [networkNodesOfStageType, propLayout],
+    (nodes, layout) => reject(nodes, node => has(node, layout)),
+  );
+};
+
+const makeGetNextUnplacedNode = () => {
+  const getUnplacedNodes = makeGetUnplacedNodes();
+
+  return createSelector(
+    [getUnplacedNodes, propSort],
+    (nodes, sort) => {
+      let sortedNodes = [...nodes];
+      if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
+      if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
+      return first(sortedNodes);
+    },
+  );
+};
 
 const draggableType = 'POSITIONED_NODE';
 
@@ -75,10 +83,13 @@ NodeBucket.defaultProps = {
   node: null,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    node: getNextUnplacedNode(state, props),
-    layout: propLayout(state, props),
+function makeMapStateToProps() {
+  const getNextUnplacedNode = makeGetNextUnplacedNode();
+  return function mapStateToProps(state, props) {
+    return {
+      node: getNextUnplacedNode(state, props),
+      layout: propLayout(state, props),
+    };
   };
 }
 
@@ -88,4 +99,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeBucket);
+export default connect(makeMapStateToProps, mapDispatchToProps)(NodeBucket);

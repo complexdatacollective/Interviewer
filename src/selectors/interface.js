@@ -38,7 +38,8 @@ export const propPromptIds = createSelector(
   (stageId, promptId) => ({ stageId, promptId }),
 );
 
-export const networkNodesOfStageType = createSelector(
+export const makeNetworkNodesOfStageType = () =>
+  createSelector(
     [networkNodes, propStageNodeType],
     (nodes, nodeType) => filter(nodes, ['type', nodeType]),
   );
@@ -60,7 +61,11 @@ export const makeNetworkNodesForPrompt = () =>
     (nodes, attributes) => filter(nodes, attributes),
   );
 
-export const otherNetworkNodesWithStageNodeType = createSelector(
+export const makeOtherNetworkNodesWithStageNodeType = () => {
+  const networkNodesOfStageType = makeNetworkNodesOfStageType();
+
+  return createSelector(
     [networkNodesOfStageType, propPromptIds],
     (nodes, promptAttributes) => reject(nodes, promptAttributes),
   );
+};

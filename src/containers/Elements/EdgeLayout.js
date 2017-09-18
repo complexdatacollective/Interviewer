@@ -4,33 +4,39 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { filter, find } from 'lodash';
 import { colorDictionary } from 'network-canvas-ui';
-import { networkNodesOfStageType } from '../../selectors/interface';
+import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 
 const propSociogramLayout = (_, props) => props.prompt.sociogram.layout;
 const propSociogramEdgeType = (_, props) => props.prompt.sociogram.edge.type;
 const networkEdges = state => state.network.edges;
 
-const networkEdgesOfSociogramType = createSelector(
-  [networkEdges, propSociogramEdgeType],
-  (edges, type) => filter(edges, { type }),
-);
+const makeNetworkEdgesOfSociogramType = () =>
+  createSelector(
+    [networkEdges, propSociogramEdgeType],
+    (edges, type) => filter(edges, { type }),
+  );
 
-const edgeCoordsForSociogram = createSelector(
-  [networkNodesOfStageType, networkEdgesOfSociogramType, propSociogramLayout],
-  (nodes, edges, layout) =>
-    edges.map((edge) => {
-      const from = find(nodes, ['id', edge.from]);
-      const to = find(nodes, ['id', edge.to]);
+const makeEdgeCoordsForSociogram = () => {
+  const networkNodesOfStageType = makeNetworkNodesOfStageType();
+  const networkEdgesOfSociogramType = makeNetworkEdgesOfSociogramType();
 
-      if (!from || !to) { return { from: null, to: null }; }
+  return createSelector(
+    [networkNodesOfStageType, networkEdgesOfSociogramType, propSociogramLayout],
+    (nodes, edges, layout) =>
+      edges.map((edge) => {
+        const from = find(nodes, ['id', edge.from]);
+        const to = find(nodes, ['id', edge.to]);
 
-      return {
-        key: `${edge.from}_${edge.type}_${edge.to}`,
-        from: from[layout],
-        to: to[layout],
-      };
-    }),
-);
+        if (!from || !to) { return { from: null, to: null }; }
+
+        return {
+          key: `${edge.from}_${edge.type}_${edge.to}`,
+          from: from[layout],
+          to: to[layout],
+        };
+      }),
+    );
+};
 
 export const EdgeLayout = ({ edgeCoords, color }) => {
   const strokeColor = color ? colorDictionary[color] : colorDictionary['edge-base'];
@@ -65,13 +71,17 @@ EdgeLayout.defaultProps = {
   color: null,
 };
 
-function mapStateToProps(state, props) {
-  const sociogram = props.prompt.sociogram;
+function makeMapStateToProps() {
+  const edgeCoordsForSociogram = makeEdgeCoordsForSociogram();
 
-  return {
-    color: sociogram.edge.color,
-    edgeCoords: edgeCoordsForSociogram(state, props),
+  return function mapStateToProps(state, props) {
+    const sociogram = props.prompt.sociogram;
+
+    return {
+      color: sociogram.edge.color,
+      edgeCoords: edgeCoordsForSociogram(state, props),
+    };
   };
 }
 
-export default connect(mapStateToProps)(EdgeLayout);
+export default connect(makeMapStateToProps)(EdgeLayout);

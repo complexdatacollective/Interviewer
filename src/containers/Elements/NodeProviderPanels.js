@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
 import { differenceBy } from 'lodash';
 import { createSelector } from 'reselect';
-import { protocolData, networkNodes, otherNetworkNodesWithStageNodeType } from '../../selectors/interface';
+import { protocolData, networkNodes, makeOtherNetworkNodesWithStageNodeType } from '../../selectors/interface';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
@@ -44,22 +44,26 @@ const rehydratePreset = (panelConfig) => {
 
 const propPanelConfigs = (_, props) => props.stage.params.panels;
 
-const getProviderConfigsWithNodes = createSelector(
-  [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
-  (panelConfigs, nodes, existingNodes, data) => panelConfigs.map(rehydratePreset).map(
-    (providerConfig) => {
-      switch (providerConfig.source) {
-        case 'existing':
-          return { ...providerConfig, nodes: existingNodes };
-        default:
-          return {
-            ...providerConfig,
-            nodes: differenceBy(data[providerConfig.source].nodes, nodes, 'uid'),
-          };
-      }
-    },
-  ),
-);
+const makeGetProviderConfigsWithNodes = () => {
+  const otherNetworkNodesWithStageNodeType = makeOtherNetworkNodesWithStageNodeType();
+
+  return createSelector(
+    [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
+    (panelConfigs, nodes, existingNodes, data) => panelConfigs.map(rehydratePreset).map(
+      (providerConfig) => {
+        switch (providerConfig.source) {
+          case 'existing':
+            return { ...providerConfig, nodes: existingNodes };
+          default:
+            return {
+              ...providerConfig,
+              nodes: differenceBy(data[providerConfig.source].nodes, nodes, 'uid'),
+            };
+        }
+      },
+    ),
+  );
+};
 
 const getHighlight = (provider, panelNumber) => {
   if (provider.highlight) { return provider.highlight; }
@@ -98,10 +102,14 @@ NodeProviderPanels.propTypes = {
   prompt: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    providerConfigsWithNodes: getProviderConfigsWithNodes(state, props),
+function makeMapStateToProps() {
+  const getProviderConfigsWithNodes = makeGetProviderConfigsWithNodes();
+
+  return function mapStateToProps(state, props) {
+    return {
+      providerConfigsWithNodes: getProviderConfigsWithNodes(state, props),
+    };
   };
 }
 
-export default connect(mapStateToProps)(NodeProviderPanels);
+export default connect(makeMapStateToProps)(NodeProviderPanels);
