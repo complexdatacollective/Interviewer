@@ -82,10 +82,10 @@ export default function draggable(WrappedComponent) {
     componentDidMount() {
       if (!this.props.canDrag) { return; }
       this.el = findDOMNode(this.node);
-      this.el.addEventListener('touchstart', this.handleMoveStart);
+      this.el.addEventListener('touchstart', this.handleMoveStart, { passive: true });
       this.el.addEventListener('touchmove', this.handleMove);
-      this.el.addEventListener('touchend', this.handleMoveEnd);
-      this.el.addEventListener('mousedown', this.handleMoveStart);
+      this.el.addEventListener('touchend', this.handleMoveEnd, { passive: true });
+      this.el.addEventListener('mousedown', this.handleMoveStart, { passive: true });
     }
 
     shouldComponentUpdate(newProps, newState) {
@@ -116,7 +116,7 @@ export default function draggable(WrappedComponent) {
     trackMouse = () => {
       if (!this.props.canDrag) { return; }
       window.addEventListener('mousemove', this.handleMove);
-      window.addEventListener('mouseup', this.handleMoveEnd);
+      window.addEventListener('mouseup', this.handleMoveEnd, { passive: true });
     }
 
     removeMouseTracking = () => {
