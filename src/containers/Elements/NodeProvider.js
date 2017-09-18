@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -5,6 +6,7 @@ import PropTypes from 'prop-types';
 import { isMatch, omit } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { NodeList } from '../../components/Elements';
+import { makeNewNodeAttributes } from '../../selectors/interface';
 
 /**
   * Renders an interactive list of nodes for addition to the network.
@@ -12,13 +14,7 @@ import { NodeList } from '../../components/Elements';
   */
 class NodeProvider extends Component {
   handleSelectNode = (node) => {
-    if (isMatch(node, this.props.activePromptAttributes)) {
-      this.props.updateNode(
-        omit(node, Object.getOwnPropertyNames(this.props.activePromptAttributes)),
-      );
-    } else {
-      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
-    }
+    this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
   }
 
   handleDropNode = (hits, node) => {
@@ -76,32 +72,30 @@ NodeProvider.propTypes = {
   interaction: PropTypes.string.isRequired,
   addNode: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
-  updateNode: PropTypes.func.isRequired,
+  toggleNodeAttributes: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
 
-  const newNodeAttributes = {
-    type: props.stage.params.nodeType,
-    stageId: props.stage.id,
-    promptId: props.prompt.id,
-    ...props.prompt.nodeAttributes,
-  };
+function makeMapStateToProps() {
+  const newNodeAttributes = makeNewNodeAttributes();
 
-  return {
-    activePromptAttributes: props.prompt.nodeAttributes,
-    newNodeAttributes,
-    interaction,
+  return function mapStateToProps(state, props) {
+    const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
+
+    return {
+      activePromptAttributes: props.prompt.nodeAttributes,
+      newNodeAttributes: newNodeAttributes(state, props),
+      interaction,
+    };
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeProvider);
+export default connect(makeMapStateToProps, mapDispatchToProps)(NodeProvider);
