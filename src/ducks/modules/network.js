@@ -1,4 +1,4 @@
-import { maxBy, reject, findIndex, isMatch, omit } from 'lodash';
+import { maxBy, reject, findIndex, isMatch, isEqual, omit } from 'lodash';
 
 const ADD_NODE = 'ADD_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
@@ -77,16 +77,18 @@ export default function reducer(state = initialState, action = {}) {
       const nodes = [...state.nodes];
       const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
 
-      nodes[nodeIndex] = {
+      const updatedNode = {
         ...action.node,
         id: nodes[nodeIndex].id, // ids can't be altered
         uid: nodes[nodeIndex].uid, // uids can't be altered
       };
 
-      return {
-        ...state,
-        nodes,
-      };
+      return isEqual(updatedNode, nodes[nodeIndex]) ?
+        state :
+        ({
+          ...state,
+          nodes,
+        });
     }
     case REMOVE_NODE:
       // TODO: Shouldn't this use node.id?
