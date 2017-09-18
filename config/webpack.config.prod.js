@@ -155,6 +155,12 @@ module.exports = {
             },
           },
           {
+            test: /\.woff2?$|\.woff$|\.ttf$|\.eot$/,
+            use: [{
+              loader: 'file-loader',
+            }],
+          },
+          {
             test: /\.scss$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
@@ -167,6 +173,9 @@ module.exports = {
                         importLoaders: 1,
                         minimize: true,
                         sourceMap: shouldUseSourceMap,
+                        alias: {
+                          '../../../assets/fonts': 'network-canvas-ui/lib/assets/fonts',
+                        },
                       },
                     },
                     {
@@ -191,6 +200,11 @@ module.exports = {
                     },
                     {
                       loader: require.resolve('sass-loader'),
+                      options: {
+                        includePaths: [
+                          path.resolve("./node_modules/network-canvas-ui/lib/styles/"),
+                        ],
+                      },
                     },
                   ],
                 },
