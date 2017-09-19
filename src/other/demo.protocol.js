@@ -99,7 +99,7 @@ const fields = [
 
 let generateNickname = (name) => {
   if (name) {
-    const nickName = name.split(' ')[0]+' '+(name.split(' ')[1] && name.split(' ')[1][0]);
+    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
     return nickName.substring(0,8);
   } else {
     return '';
@@ -155,7 +155,7 @@ export default {
             name: 'name-generator-form',
             fields: fields,
             autoPopulate: (fields, values, populate) => {
-              if(!fields['nickname'] || !fields['nickname'].touched) {
+              if(values && !fields['nickname'] || !fields['nickname'].touched) {
                 populate('nickname', generateNickname(values['name']));
               }
             },

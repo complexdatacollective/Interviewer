@@ -9,6 +9,7 @@ import { filter } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
+import { PreventGhostClick } from '.';
 
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -75,7 +76,7 @@ export default function draggable(WrappedComponent) {
     }
 
     componentDidMount() {
-      PreventGhostClick(findDOMNode(this.node)); // eslint-disable-line no-undef
+      PreventGhostClick(findDOMNode(this.node));
       this.el = findDOMNode(this.node);
       this.el.addEventListener('touchstart', this.handleMoveStart);
       this.el.addEventListener('touchmove', this.handleMove);
