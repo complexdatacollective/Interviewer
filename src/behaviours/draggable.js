@@ -74,6 +74,7 @@ export default function draggable(WrappedComponent) {
     }
 
     componentDidMount() {
+      PreventGhostClick(findDOMNode(this.node)); // eslint-disable-line no-undef
       this.el = findDOMNode(this.node);
       this.el.addEventListener('touchstart', this.handleMoveStart);
       this.el.addEventListener('touchmove', this.handleMove);

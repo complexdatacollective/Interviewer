@@ -10,11 +10,13 @@ import App from './containers/App';
 import AppRouter from './routes';
 import { isCordova } from './utils/Environment';
 import { populateNodes } from './utils/mockData';
+import { PreventGhostClick } from './behaviours';
 
 window.populateNodes = populateNodes;
 
 injectTapEventPlugin();
 initReactFastclick();
+PreventGhostClick();
 
 const startApp = () => {
   ReactDOM.render(
