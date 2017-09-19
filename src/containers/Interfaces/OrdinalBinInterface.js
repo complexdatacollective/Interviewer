@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Button } from 'network-canvas-ui';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper } from '../Elements';
-import OrdinalBin from '../Elements/OrdinalBin';
+import { NodeList } from '../../components/Elements';
+import Bin from '../Elements/OrdinalBin';
 import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
@@ -13,18 +14,22 @@ const resetInterface = (prompts) => {
   });
 };
 
+// Render method for the node labels
+const label = node => `${node.nickname}`;
+
 /**
   * OrdinalBin Interface
   * @extends Component
   */
-const OrdinalBinInterface = ({
+const OrdinalBin = ({
   promptForward,
   promptBackward,
   prompt,
   stage,
+  nodesForPrompt,
 }) => (
-  <div className="ordinalbin-interface">
-    <div className="ordinalbin-interface__prompts">
+  <div className="ordinal-bin-interface">
+    <div className="ordinal-bin-interface__prompts">
       <PromptSwiper
         forward={promptForward}
         backward={promptBackward}
@@ -33,8 +38,19 @@ const OrdinalBinInterface = ({
         floating
       />
     </div>
-    <div className="ordinalbin-interface__ordinalbin">
-      <OrdinalBin
+    <div className="ordinal-bin-interface__nodes">
+      <NodeList
+        nodes={nodesForPrompt}
+        label={label}
+        droppableName="MAIN_NODE_LIST"
+        acceptsDraggableType="NEW_NODE"
+        draggableType="EXISTING_NODE"
+        handleDropNode={this.onDropNode}
+        handleSelectNode={this.onSelectNode}
+      />
+    </div>
+    <div className="ordinal-bin-interface__ordinalbin">
+      <Bin
         stage={stage}
         prompt={prompt}
         key={prompt.id}
@@ -50,11 +66,12 @@ const OrdinalBinInterface = ({
   </div>
 );
 
-OrdinalBinInterface.propTypes = {
+OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
+  nodesForPrompt: PropTypes.array.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
 };
 
-export default withPrompt(OrdinalBinInterface);
+export default withPrompt(OrdinalBin);

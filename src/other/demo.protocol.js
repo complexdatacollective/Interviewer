@@ -272,6 +272,97 @@ export default {
           ],
         },
       },
+      {
+        "id": "ordinalbin",
+        "type": "OrdinalBin",
+        "icon": "menu-sociogram",
+        "title": "OrdinalBin",
+        "params": {
+          "nodeType": 'person',
+          "prompts": [
+            {
+              id: 'closeness1',
+              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+              ordinalbin: {
+                edge: {
+                  type: 'friends',
+                },
+                layout: 'closenessLayout',
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: true,
+              },
+            },
+            {
+              id: 'closeness2',
+              title: "Connect any two people who are friends, or who would spend time together without you being there.",
+              ordinalbin: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                select: {
+                  action: 'EDGE',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
+              },
+            },
+            {
+              id: 'closeness3',
+              title: "Tap on anyone who has given you advice within the past 6 months.",
+              ordinalbin: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'friends',
+                },
+                nodeAttributes: {
+                  has_given_advice: true,
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: false,
+                select: {
+                  action: 'ATTRIBUTES',
+                },
+                sort: {
+                  by: 'nickname',
+                  order: 'DESC',
+                },
+              },
+            },
+            {
+              id: 'closeness5',
+              title: "Connect any two people who are work together professionally.",
+              ordinalbin: {
+                layout: 'closenessLayout',
+                edge: {
+                  type: 'professional',
+                  color: 'edge-alt-3',
+                },
+                background: {
+                  n: 4,
+                  skewed: true,
+                },
+                position: true,
+                select: {
+                  action: 'EDGE',
+                }
+              },
+            },
+          ],
+        },
+      },
     ],
   },
 };

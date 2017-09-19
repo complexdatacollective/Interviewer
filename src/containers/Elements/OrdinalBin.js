@@ -8,7 +8,7 @@ import {
   NodeBucket,
 } from '../Elements';
 
-const OrdinalBin = ({ stage, prompt }) => (
+const Bin = ({ stage, prompt }) => (
   <div className="ordinalbin">
     {
       prompt.ordinalbin.edge &&
@@ -28,9 +28,9 @@ const OrdinalBin = ({ stage, prompt }) => (
   </div>
 );
 
-OrdinalBin.propTypes = {
+Bin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 
-export default OrdinalBin;
+export default Bin;
