@@ -29,11 +29,6 @@ $component-name: modal;
       flex: 1 auto;
       overflow-x: hidden;
       overflow-y: scroll;
-
-      .button__container {
-        display: flex;
-        justify-content: space-around;
-      }
     }
 
     &-title {

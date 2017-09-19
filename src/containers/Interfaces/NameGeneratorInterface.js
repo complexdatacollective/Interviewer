@@ -31,17 +31,6 @@ class NameGenerator extends Component {
     };
   }
 
-  // /**
-  //  * New node add another handler
-  //  * @param {object} formData - key/value object containing node fields
-  //  */
-  // onAddAnotherNewNode = (formData) => {
-  //   if (formData) {
-  //     this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
-  //     this.props.openModal(modals.ADD_NODE);
-  //   }
-  // }
-
   /**
    * New node submit handler
    */

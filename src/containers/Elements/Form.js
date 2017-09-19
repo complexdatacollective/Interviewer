@@ -1,9 +1,8 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { reduxForm, actions, getFormValues, getFormMeta } from 'redux-form';
+import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { Button } from 'network-canvas-ui';
 import { autoInitialisedForm } from '../../behaviours';
 import { Field } from '../../containers/Elements';
@@ -11,7 +10,8 @@ import { Field } from '../../containers/Elements';
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   *
-  * @param {array} fields Contains an array of field definitions see Field for detailed format of definitions:
+  * @param {array} fields Contains an array of field definitions
+  * see Field for detailed format of definitions:
   * {
   *   label: 'Name',
   *   name: 'name',
@@ -32,7 +32,7 @@ import { Field } from '../../containers/Elements';
 class Form extends Component {
 
   handleFieldBlur = () => {
-    if(!this.props.autoPopulate) { return; }
+    if (!this.props.autoPopulate) { return; }
 
     const {
       meta: {
@@ -52,12 +52,11 @@ class Form extends Component {
       addAnother,
       continuousSubmit,
       autoFocus,
-      ...rest
     } = this.props;
 
     const addAnotherButton = addAnother
-      ? <Button type="button" onClick={continuousSubmit} accessibityLabel="Submit and add another node">Add Another</Button>
-      : null
+      ? <Button type="button" color="white" onClick={continuousSubmit} accessibityLabel="Submit and add another node">Submit and New</Button>
+      : null;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -68,22 +67,25 @@ class Form extends Component {
               key={field.name}
               {...field}
               autoFocus={isFirst}
-              onBlur={() => { this.handleFieldBlur() }}
+              onBlur={() => { this.handleFieldBlur(); }}
             />
           );
         }) }
-        <div className="button__container">
-          <Button accessibityLabel="Submit">Submit</Button>
+        <div className="form__button-container">
           {addAnotherButton}
+          <Button accessibityLabel="Submit">Submit</Button>
         </div>
       </form>
     );
   }
-};
+}
 
 Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  autofill: PropTypes.func.isRequired,
+  meta: PropTypes.object.isRequired,
+  autoPopulate: PropTypes.func,
   autoFocus: PropTypes.bool,
   addAnother: PropTypes.bool,
   continuousSubmit: PropTypes.func,
@@ -91,6 +93,8 @@ Form.propTypes = {
 
 Form.defaultProps = {
   autoFocus: false,
+  addAnother: false,
+  autoPopulate: null,
   continuousSubmit: null,
 };
 
@@ -110,4 +114,4 @@ export default compose(
     destroyOnUnmount: true,
     forceUnregisterOnUnmount: true,
   }),
-)(Form)
+)(Form);
