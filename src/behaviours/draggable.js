@@ -234,7 +234,7 @@ export default function draggable(WrappedComponent) {
     handleMoveEnd = (e) => {
       this.removeMouseTracking();
       this.cleanupPreview();
-      this.props.dragStop();
+
       if (this.state.dragStart) {
         const movement = this.movementFromEvent(e);
         const hits = this.determineHits(movement);
@@ -247,6 +247,8 @@ export default function draggable(WrappedComponent) {
       } else {
         this.setState(initalState);
       }
+
+      this.props.dragStop();
     }
 
     styles() {
@@ -254,10 +256,22 @@ export default function draggable(WrappedComponent) {
     }
 
     render() {
+      const {
+        zones,
+        draggableType,
+        dragStart,
+        dragStop,
+        onDropped,
+        onMove,
+        updateActiveZones,
+        canDrag,
+        ...rest
+      } = this.props;
+
       return (
         <div style={this.styles()}>
           <div ref={(node) => { this.node = node; }}>
-            <WrappedComponent {...this.props} />
+            <WrappedComponent {...rest} />
           </div>
         </div>
       );

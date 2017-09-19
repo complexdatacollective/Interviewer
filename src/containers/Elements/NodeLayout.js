@@ -1,36 +1,19 @@
-import React, { Component } from 'react';
+/* eslint-disable */
+
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { first, isMatch, filter, has } from 'lodash';
 import { createSelector } from 'reselect';
 import { Node } from 'network-canvas-ui';
+import LayoutNode from '../LayoutNode';
 import { draggable, withBounds, selectable } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
 import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-const label = node => node.nickname;
-
 const draggableType = 'POSITIONED_NODE';
-
-const propLayout = (_, props) => props.prompt.sociogram.layout;
-
-const makeGetPlacedNodes = () => {
-  const networkNodesOfStageType = makeNetworkNodesOfStageType();
-
-  return createSelector(
-    [networkNodesOfStageType, propLayout],
-    (nodes, layout) => filter(nodes, node => has(node, layout)),
-  );
-};
-
-const EnhancedNode = draggable(selectable(Node));
-
-const canPosition = position => position === true;
-const canSelect = select => !!select;
-
-const asPercentage = decimal => `${decimal * 100}%`;
 
 export class NodeLayout extends Component {
   constructor(props) {
@@ -41,6 +24,15 @@ export class NodeLayout extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.nodes.length !== this.props.nodes.length) { return true; }
+    return false
+  }
+
+  onDropNode = () => {
+    this.forceUpdate();
+  }
+
   onSelectNode = (node) => {
     const { select } = this.props;
 
@@ -48,29 +40,16 @@ export class NodeLayout extends Component {
 
     switch (select.action) {
       case 'EDGE':
-        this.connectNode(node); break;
+        this.connectNode(node.id); break;
       case 'ATTRIBUTES':
-        this.toggleNodeAttributes(node); break;
+        this.toggleNodeAttributes(node.id); break;
       default:
     }
-  };
 
-  updateNodeLayout = (hits, { x, y }, node) => {
-    const { layout, updateNode } = this.props;
-    const hitbox = first(hits);
-
-    // Calculate x/y position as a decimal within the hitbox
-    const relativeCoords = {
-      type: 'layout',
-      x: (x - hitbox.x) / hitbox.width,
-      y: (y - hitbox.y) / hitbox.height,
-    };
-
-    updateNode({ ...node, [layout]: relativeCoords });
+    this.forceUpdate();
   }
 
-  connectNode(node) {
-    const nodeId = node.id;
+  connectNode(nodeId) {
     const edgeType = this.props.edge.type;
     const connectFrom = this.state.connectFrom;
 
@@ -90,13 +69,13 @@ export class NodeLayout extends Component {
     this.setState({ connectFrom: null });
   }
 
-  toggleNodeAttributes(node) {
-    this.props.toggleNodeAttributes(node, this.props.attributes);
+  toggleNodeAttributes(nodeId) {
+    this.props.toggleNodeAttributes({ id: nodeId }, this.props.attributes);
   }
 
   isSelected(node) {
-    const { select } = this.props;
-    if (!canSelect(select)) { return null; }
+    const { select, canSelect } = this.props;
+    if (!canSelect) { return false; }
     switch (select.action) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);
@@ -108,40 +87,32 @@ export class NodeLayout extends Component {
   }
 
   render() {
-    const { layout, nodes, position, select } = this.props;
+    const {
+      layout,
+      nodes,
+      canPosition,
+      canSelect,
+    } = this.props;
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
         <div className="node-layout">
-          { nodes.map((node, key) => {
+          { nodes.map((node) => {
             if (!Object.prototype.hasOwnProperty.call(node, layout)) { return null; }
 
-            const { x, y } = node[layout];
-
-            const styles = {
-              left: asPercentage(x),
-              top: asPercentage(y),
-            };
-
             return (
-              <div
-                key={key}
-                className="node-layout__node"
-                style={styles}
-              >
-                <EnhancedNode
-                  label={label(node)}
-                  draggableType={draggableType}
-                  onDropped={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
-                  onMove={(hits, coords) => this.updateNodeLayout(hits, coords, node)}
-                  onSelected={() => this.onSelectNode(node)}
-                  selected={this.isSelected(node)}
-                  canDrag={canPosition(position)}
-                  canSelect={canSelect(select)}
-                  animate={false}
-                  {...node}
-                />
-              </div>
+              <LayoutNode
+                key={node.uid}
+                layout={layout}
+                node={node}
+                draggableType={draggableType}
+                onSelected={this.onSelectNode}
+                onDropped={this.onDropNode}
+                selected={this.isSelected(node)}
+                canDrag={canPosition}
+                canSelect={canSelect}
+                animate={false}
+              />
             );
           }) }
         </div>
@@ -172,6 +143,17 @@ NodeLayout.defaultProps = {
   position: false,
 };
 
+const propLayout = (_, props) => props.prompt.sociogram.layout;
+
+const makeGetPlacedNodes = () => {
+  const networkNodesOfStageType = makeNetworkNodesOfStageType();
+
+  return createSelector(
+    [networkNodesOfStageType, propLayout],
+    (nodes, layout) => filter(nodes, node => has(node, layout)),
+  );
+};
+
 function makeMapStateToProps() {
   const getPlacedNodes = makeGetPlacedNodes();
 
@@ -185,13 +167,14 @@ function makeMapStateToProps() {
       select: sociogram.select,
       position: sociogram.position,
       attributes: sociogram.nodeAttributes,
+      canPosition: !sociogram.select || !sociogram.select.action,
+      canSelect: !!sociogram.select,
     };
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
   };

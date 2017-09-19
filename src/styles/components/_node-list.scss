@@ -1,4 +1,5 @@
 .node-list {
+  @include gpu;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -6,12 +7,6 @@
   align-content: flex-start;
   min-height: 100%;
   margin-bottom: 50px;
-  backface-visibility: hidden;
-  perspective: 1000;
-  transform: translate3d(0,0,0);
-  transform: translateZ(0);
-  background-color: transparent;
-  transition: background-color ease $animation-fast-duration;
 
   &--hover {
     background-color: transparentize(palette('ring'), .5);

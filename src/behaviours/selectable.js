@@ -1,25 +1,52 @@
-/* eslint-disable react/no-find-dom-node */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Touch from 'react-hammerjs';
-import { findDOMNode } from 'react-dom';
-import PreventGhostClick from '../utils/PreventGhostClick';
+import { debounce } from 'lodash';
 
 export default function selectable(WrappedComponent) {
   class Selectable extends Component {
-    componentDidMount() {
-      if (this.props.canSelect) {
-        PreventGhostClick(findDOMNode(this.node));
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        time: 0,
+      };
+
+      this.onTap = debounce(this.onTap.bind(this), 200);
+    }
+
+    onTap() {
+      this.props.onSelected();
+    }
+
+    onTouchStart = () => {
+      this.setState({ time: new Date().getTime() });
+    }
+
+    onTouchEnd = () => {
+      const time = new Date().getTime();
+
+      if (time - this.state.time < 100) {
+        this.onTap();
       }
     }
 
     render() {
-      if (!this.props.canSelect) { return <WrappedComponent {...this.props} />; }
+      const {
+        canSelect,
+        onSelected,
+        ...rest
+      } = this.props;
+
+      if (!canSelect) { return <WrappedComponent {...rest} />; }
+
       return (
-        <Touch onTap={this.props.onSelected} ref={(node) => { this.node = node; }}>
-          <WrappedComponent {...this.props} />
-        </Touch>
+        <span
+          onClick={this.onTap}
+          onTouchStart={this.onTouchStart}
+          onTouchEnd={this.onTouchEnd}
+        >
+          <WrappedComponent {...rest} />
+        </span>
       );
     }
   }

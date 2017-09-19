@@ -9,6 +9,10 @@ import {
   NodeBucket,
 } from '../Elements';
 
+/*
+
+*/
+
 const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
     <SociogramBackground {...prompt.sociogram.background} />
