@@ -51,6 +51,7 @@ class Form extends Component {
       handleSubmit,
       addAnother,
       continuousSubmit,
+      normalSubmit,
       autoFocus,
     } = this.props;
 
@@ -73,7 +74,7 @@ class Form extends Component {
         }) }
         <div className="form__button-container">
           {addAnotherButton}
-          <Button accessibityLabel="Submit">Submit</Button>
+          <Button onClick={normalSubmit} accessibityLabel="Submit">Submit</Button>
         </div>
       </form>
     );
@@ -89,6 +90,7 @@ Form.propTypes = {
   autoFocus: PropTypes.bool,
   addAnother: PropTypes.bool,
   continuousSubmit: PropTypes.func,
+  normalSubmit: PropTypes.func,
 };
 
 Form.defaultProps = {
@@ -96,6 +98,7 @@ Form.defaultProps = {
   addAnother: false,
   autoPopulate: null,
   continuousSubmit: null,
+  normalSubmit: null,
 };
 
 function mapStateToProps(state, ownProps) {

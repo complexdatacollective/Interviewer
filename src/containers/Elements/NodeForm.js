@@ -29,9 +29,7 @@ class NodeForm extends Component {
     this.props.closeModal(this.props.modalName);
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
-      this.setState({ typeOfSubmit: 'normal' },
-        () => this.props.resetValues(form.name),
-      );
+      this.props.resetValues(form.name);
       this.props.openModal(this.props.modalName);
     }
   };
@@ -39,6 +37,12 @@ class NodeForm extends Component {
   continuousSubmit = () => {
     this.setState({
       typeOfSubmit: 'continuous',
+    }, this.submit);
+  };
+
+  normalSubmit = () => {
+    this.setState({
+      typeOfSubmit: 'normal',
     }, this.submit);
   };
 
@@ -60,6 +64,7 @@ class NodeForm extends Component {
           onSubmit={this.onSubmit}
           addAnother={addAnother}
           continuousSubmit={this.continuousSubmit}
+          normalSubmit={this.normalSubmit}
         />
       </Modal>
     );
