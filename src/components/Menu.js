@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'network-canvas-ui';
 import { debounce } from 'lodash';
-import { MenuContent } from '.';
+import { Scroller } from '.';
 import { MenuItem } from './Elements';
 
 const closeEvents = [
@@ -75,7 +75,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { children, hideButton, icon, isOpen, items, searchField, title } = this.props;
+    const { hideButton, icon, isOpen, items, searchField, title } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -91,27 +91,25 @@ class MenuFactory extends Component {
 
     return (
       <div className="menu" ref={(node) => { this.domNode = node; }}>
-        <div className={isOpen ? 'menu__wrap menu__wrap--open' : 'menu__wrap'}>
-          <div className="menu__content">
-            <MenuContent
-              items={menuItems}
-              searchField={searchField}
-              title={title}
-              toggleMenu={this.props.toggleMenu}
-            />
-          </div>
+        <div className={isOpen ? 'menu__wrap menu__content menu__wrap--open' : 'menu__wrap menu__content'}>
+          <Scroller>
+            <Icon name="close" size="40px" className="menu__cross" onClick={this.menuClick} />
+            <header>
+              <h1 className="menu__title">{title}</h1>
+            </header>
+            {searchField}
+            <nav>
+              {menuItems}
+            </nav>
+          </Scroller>
         </div>
-        {!hideButton && <div className="menu__burger" onClick={this.menuClick} tabIndex={0} role="menu">
-          <Icon name={icon} />
-        </div>}
-        { children }
+        {!hideButton && <Icon name={icon} className="menu__burger" onClick={this.menuClick} />}
       </div>
     );
   } // end render
 } // end class
 
 MenuFactory.propTypes = {
-  children: PropTypes.any,
   hideButton: PropTypes.bool,
   icon: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
@@ -122,7 +120,6 @@ MenuFactory.propTypes = {
 };
 
 MenuFactory.defaultProps = {
-  children: null,
   hideButton: false,
   icon: 'menu',
   items: [],
