@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Panel component renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -12,16 +14,20 @@ ShallowWrapper {
         Object {
             "borderColor": null,
           }
-    }>
+    }
+>
     <div
-        className="panel__heading">
+        className="panel__heading"
+    >
         <h3
-            className="panel__heading-header">
+            className="panel__heading-header"
+        >
             foo
         </h3>
     </div>
     <div
-        className="panel__content">
+        className="panel__content"
+    >
         <span>
             bar
         </span>
@@ -34,16 +40,20 @@ ShallowWrapper {
             Object {
                   "borderColor": null,
                 }
-      }>
+      }
+>
       <div
-            className="panel__heading">
+            className="panel__heading"
+      >
             <h3
-                  className="panel__heading-header">
+                  className="panel__heading-header"
+            >
                   foo
             </h3>
       </div>
       <div
-            className="panel__content">
+            className="panel__content"
+      >
             <span>
                   bar
             </span>
@@ -59,7 +69,8 @@ ShallowWrapper {
       "_currentElement": <Panel
         highlight={null}
         minimise={false}
-        title="foo">
+        title="foo"
+>
         <span>
                 bar
         </span>
@@ -104,16 +115,20 @@ ShallowWrapper {
                     Object {
                               "borderColor": null,
                             }
-          }>
+          }
+>
           <div
-                    className="panel__heading">
+                    className="panel__heading"
+          >
                     <h3
-                              className="panel__heading-header">
+                              className="panel__heading-header"
+                    >
                               foo
                     </h3>
           </div>
           <div
-                    className="panel__content">
+                    className="panel__content"
+          >
                     <span>
                               bar
                     </span>
@@ -126,16 +141,20 @@ ShallowWrapper {
                     Object {
                               "borderColor": null,
                             }
-          }>
+          }
+>
           <div
-                    className="panel__heading">
+                    className="panel__heading"
+          >
                     <h3
-                              className="panel__heading-header">
+                              className="panel__heading-header"
+                    >
                               foo
                     </h3>
           </div>
           <div
-                    className="panel__content">
+                    className="panel__content"
+          >
                     <span>
                               bar
                     </span>
@@ -155,7 +174,8 @@ ShallowWrapper {
   "unrendered": <Panel
     highlight={null}
     minimise={false}
-    title="foo">
+    title="foo"
+>
     <span>
         bar
     </span>

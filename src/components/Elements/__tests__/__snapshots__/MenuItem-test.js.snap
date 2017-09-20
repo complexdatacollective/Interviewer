@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`MenuItem component renders menu item with no image 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -10,13 +12,15 @@ ShallowWrapper {
     className="menu__menuitem menu__menuitem--primary"
     onClick={[Function]}
     role="menuitem"
-    tabIndex={0}>
+    tabIndex={0}
+>
     <Icon
         className=""
         color=""
         name=""
         size=""
-        style={Object {}} />
+        style={Object {}}
+    />
     title
 </a>,
   "nodes": Array [
@@ -24,13 +28,15 @@ ShallowWrapper {
       className="menu__menuitem menu__menuitem--primary"
       onClick={[Function]}
       role="menuitem"
-      tabIndex={0}>
+      tabIndex={0}
+>
       <Icon
             className=""
             color=""
             name=""
             size=""
-            style={Object {}} />
+            style={Object {}}
+      />
       title
 </a>,
   ],
@@ -46,7 +52,8 @@ ShallowWrapper {
         menuType="primary"
         onClick={[Function]}
         title="title"
-        to="linkyLink" />,
+        to="linkyLink"
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -85,13 +92,15 @@ ShallowWrapper {
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
-          tabIndex={0}>
+          tabIndex={0}
+>
           <Icon
                     className=""
                     color=""
                     name=""
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
           title
 </a>,
         "_debugID": 4,
@@ -99,13 +108,15 @@ ShallowWrapper {
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
-          tabIndex={0}>
+          tabIndex={0}
+>
           <Icon
                     className=""
                     color=""
                     name=""
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
           title
 </a>,
       },
@@ -125,7 +136,8 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     title="title"
-    to="linkyLink" />,
+    to="linkyLink"
+/>,
 }
 `;
 
@@ -141,13 +153,15 @@ ShallowWrapper {
     className="menu__menuitem menu__menuitem--primary"
     onClick={[Function]}
     role="menuitem"
-    tabIndex={0}>
+    tabIndex={0}
+>
     <Icon
         className=""
         color=""
         name=""
         size=""
-        style={Object {}} />
+        style={Object {}}
+    />
     title
 </a>,
   "nodes": Array [
@@ -155,13 +169,15 @@ ShallowWrapper {
       className="menu__menuitem menu__menuitem--primary"
       onClick={[Function]}
       role="menuitem"
-      tabIndex={0}>
+      tabIndex={0}
+>
       <Icon
             className=""
             color=""
             name=""
             size=""
-            style={Object {}} />
+            style={Object {}}
+      />
       title
 </a>,
   ],
@@ -178,7 +194,8 @@ ShallowWrapper {
         menuType="primary"
         onClick={[Function]}
         title="title"
-        to="linkyLink" />,
+        to="linkyLink"
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -218,13 +235,15 @@ ShallowWrapper {
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
-          tabIndex={0}>
+          tabIndex={0}
+>
           <Icon
                     className=""
                     color=""
                     name=""
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
           title
 </a>,
         "_debugID": 2,
@@ -232,13 +251,15 @@ ShallowWrapper {
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
-          tabIndex={0}>
+          tabIndex={0}
+>
           <Icon
                     className=""
                     color=""
                     name=""
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
           title
 </a>,
       },
@@ -259,6 +280,7 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     title="title"
-    to="linkyLink" />,
+    to="linkyLink"
+/>,
 }
 `;

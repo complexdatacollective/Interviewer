@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Containers/Elements/Field should render 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -12,7 +14,8 @@ ShallowWrapper {
     name="name"
     optionsSelector={null}
     type="Alphanumeric"
-    validate={Array []} />,
+    validate={Array []}
+/>,
   "nodes": Array [
     <Field
       component={[Function]}
@@ -20,7 +23,8 @@ ShallowWrapper {
       name="name"
       optionsSelector={null}
       type="Alphanumeric"
-      validate={Array []} />,
+      validate={Array []}
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -33,7 +37,8 @@ ShallowWrapper {
         name="name"
         optionsSelector={null}
         type="Alphanumeric"
-        validation={Object {}} />,
+        validation={Object {}}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -73,7 +78,8 @@ ShallowWrapper {
           name="name"
           optionsSelector={null}
           type="Alphanumeric"
-          validate={Array []} />,
+          validate={Array []}
+/>,
         "_debugID": 2,
         "_renderedOutput": <Field
           component={[Function]}
@@ -81,7 +87,8 @@ ShallowWrapper {
           name="name"
           optionsSelector={null}
           type="Alphanumeric"
-          validate={Array []} />,
+          validate={Array []}
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -98,6 +105,7 @@ ShallowWrapper {
     name="name"
     optionsSelector={null}
     type="Alphanumeric"
-    validation={Object {}} />,
+    validation={Object {}}
+/>,
 }
 `;

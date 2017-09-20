@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<SociogramBackground /> renders ok for image 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -7,25 +9,29 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="sociogram-background">
+    className="sociogram-background"
+>
     <div
         className="sociogram-background__image"
         style={
             Object {
                 "backgroundImage": "url(map.png)",
               }
-        } />
+        }
+    />
 </div>,
   "nodes": Array [
     <div
-      className="sociogram-background">
+      className="sociogram-background"
+>
       <div
             className="sociogram-background__image"
             style={
                   Object {
                         "backgroundImage": "url(map.png)",
                       }
-            } />
+            }
+      />
 </div>,
   ],
   "options": Object {},
@@ -37,7 +43,8 @@ ShallowWrapper {
       "_currentElement": <SociogramBackground
         image="map.png"
         n={4}
-        skewed={true} />,
+        skewed={true}
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -70,25 +77,29 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="sociogram-background">
+          className="sociogram-background"
+>
           <div
                     className="sociogram-background__image"
                     style={
                               Object {
                                         "backgroundImage": "url(map.png)",
                                       }
-                    } />
+                    }
+          />
 </div>,
         "_debugID": 4,
         "_renderedOutput": <div
-          className="sociogram-background">
+          className="sociogram-background"
+>
           <div
                     className="sociogram-background__image"
                     style={
                               Object {
                                         "backgroundImage": "url(map.png)",
                                       }
-                    } />
+                    }
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -104,7 +115,8 @@ ShallowWrapper {
   "unrendered": <SociogramBackground
     image="map.png"
     n={4}
-    skewed={true} />,
+    skewed={true}
+/>,
 }
 `;
 
@@ -117,17 +129,21 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="sociogram-background">
+    className="sociogram-background"
+>
     <SociogramRadar
         n={5}
-        skewed={true} />
+        skewed={true}
+    />
 </div>,
   "nodes": Array [
     <div
-      className="sociogram-background">
+      className="sociogram-background"
+>
       <SociogramRadar
             n={5}
-            skewed={true} />
+            skewed={true}
+      />
 </div>,
   ],
   "options": Object {},
@@ -139,7 +155,8 @@ ShallowWrapper {
       "_currentElement": <SociogramBackground
         image={null}
         n={5}
-        skewed={true} />,
+        skewed={true}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -172,17 +189,21 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="sociogram-background">
+          className="sociogram-background"
+>
           <SociogramRadar
                     n={5}
-                    skewed={true} />
+                    skewed={true}
+          />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="sociogram-background">
+          className="sociogram-background"
+>
           <SociogramRadar
                     n={5}
-                    skewed={true} />
+                    skewed={true}
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -198,6 +219,7 @@ ShallowWrapper {
   "unrendered": <SociogramBackground
     image={null}
     n={5}
-    skewed={true} />,
+    skewed={true}
+/>,
 }
 `;

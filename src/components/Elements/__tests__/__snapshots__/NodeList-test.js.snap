@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`NodeList component renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -19,7 +21,8 @@ ShallowWrapper {
             Symbol(observable): [Function],
           }
     }
-    updateZone={[Function]} />,
+    updateZone={[Function]}
+/>,
   "nodes": Array [
     <Droppable
       acceptsDraggableType={null}
@@ -34,7 +37,8 @@ ShallowWrapper {
                   Symbol(observable): [Function],
                 }
       }
-      updateZone={[Function]} />,
+      updateZone={[Function]}
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -51,7 +55,8 @@ ShallowWrapper {
                         "subscribe": [Function],
                         Symbol(observable): [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -104,7 +109,8 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]} />,
+          updateZone={[Function]}
+/>,
         "state": Object {
           "storeState": Object {
             "droppable": Object {
@@ -155,7 +161,8 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]} />,
+          updateZone={[Function]}
+/>,
         "_debugID": 2,
         "_renderedOutput": <Droppable
           acceptsDraggableType={null}
@@ -170,7 +177,8 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]} />,
+          updateZone={[Function]}
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -191,6 +199,7 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           }
-    } />,
+    }
+/>,
 }
 `;

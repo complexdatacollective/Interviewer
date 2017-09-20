@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<SociogramRadar /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -9,73 +11,85 @@ ShallowWrapper {
   "node": <svg
     className="sociogram-radar"
     viewBox="0 0 100 100"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+>
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
         fill="#302C5B"
-        r={50} />
+        r={50}
+    />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
         fill="#323062"
-        r={43.54101966249685} />
+        r={43.54101966249685}
+    />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
         fill="#353368"
-        r={36.547375096555626} />
+        r={36.547375096555626}
+    />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
         fill="#37376F"
-        r={28.717082451262844} />
+        r={28.717082451262844}
+    />
     <circle
         className="sociogram-radar__range"
         cx="50"
         cy="50"
         fill="#3A3A75"
-        r={19.270509831248425} />
+        r={19.270509831248425}
+    />
 </svg>,
   "nodes": Array [
     <svg
       className="sociogram-radar"
       viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+>
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#302C5B"
-            r={50} />
+            r={50}
+      />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#323062"
-            r={43.54101966249685} />
+            r={43.54101966249685}
+      />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#353368"
-            r={36.547375096555626} />
+            r={36.547375096555626}
+      />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#37376F"
-            r={28.717082451262844} />
+            r={28.717082451262844}
+      />
       <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#3A3A75"
-            r={19.270509831248425} />
+            r={19.270509831248425}
+      />
 </svg>,
   ],
   "options": Object {},
@@ -86,7 +100,8 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <SociogramRadar
         n={5}
-        skewed={true} />,
+        skewed={true}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -120,73 +135,85 @@ ShallowWrapper {
         "_currentElement": <svg
           className="sociogram-radar"
           viewBox="0 0 100 100"
-          xmlns="http://www.w3.org/2000/svg">
+          xmlns="http://www.w3.org/2000/svg"
+>
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#302C5B"
-                    r={50} />
+                    r={50}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#323062"
-                    r={43.54101966249685} />
+                    r={43.54101966249685}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#353368"
-                    r={36.547375096555626} />
+                    r={36.547375096555626}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#37376F"
-                    r={28.717082451262844} />
+                    r={28.717082451262844}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#3A3A75"
-                    r={19.270509831248425} />
+                    r={19.270509831248425}
+          />
 </svg>,
         "_debugID": 2,
         "_renderedOutput": <svg
           className="sociogram-radar"
           viewBox="0 0 100 100"
-          xmlns="http://www.w3.org/2000/svg">
+          xmlns="http://www.w3.org/2000/svg"
+>
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#302C5B"
-                    r={50} />
+                    r={50}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#323062"
-                    r={43.54101966249685} />
+                    r={43.54101966249685}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#353368"
-                    r={36.547375096555626} />
+                    r={36.547375096555626}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#37376F"
-                    r={28.717082451262844} />
+                    r={28.717082451262844}
+          />
           <circle
                     className="sociogram-radar__range"
                     cx="50"
                     cy="50"
                     fill="#3A3A75"
-                    r={19.270509831248425} />
+                    r={19.270509831248425}
+          />
 </svg>,
       },
       "_renderedNodeType": 0,
@@ -201,6 +228,7 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <SociogramRadar
     n={5}
-    skewed={true} />,
+    skewed={true}
+/>,
 }
 `;
