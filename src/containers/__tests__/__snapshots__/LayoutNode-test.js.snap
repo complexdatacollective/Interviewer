@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<LayoutNode /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -14,7 +16,8 @@ ShallowWrapper {
             "top": 0,
             "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
           }
-    }>
+    }
+>
     <Connect(Draggable)
         animate={false}
         canDrag={false}
@@ -30,7 +33,8 @@ ShallowWrapper {
         onDropped={[Function]}
         onMove={[Function]}
         onSelected={[Function]}
-        selected={false} />
+        selected={false}
+    />
 </div>,
   "nodes": Array [
     <div
@@ -41,7 +45,8 @@ ShallowWrapper {
                   "top": 0,
                   "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
                 }
-      }>
+      }
+>
       <Connect(Draggable)
             animate={false}
             canDrag={false}
@@ -57,7 +62,8 @@ ShallowWrapper {
             onDropped={[Function]}
             onMove={[Function]}
             onSelected={[Function]}
-            selected={false} />
+            selected={false}
+      />
 </div>,
   ],
   "options": Object {},
@@ -84,7 +90,8 @@ ShallowWrapper {
         onDropped={[Function]}
         onSelected={[Function]}
         selected={false}
-        updateNode={[Function]} />,
+        updateNode={[Function]}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -140,7 +147,8 @@ ShallowWrapper {
                               "top": 0,
                               "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
                             }
-          }>
+          }
+>
           <Connect(Draggable)
                     animate={false}
                     canDrag={false}
@@ -156,7 +164,8 @@ ShallowWrapper {
                     onDropped={[Function]}
                     onMove={[Function]}
                     onSelected={[Function]}
-                    selected={false} />
+                    selected={false}
+          />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
@@ -167,7 +176,8 @@ ShallowWrapper {
                               "top": 0,
                               "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
                             }
-          }>
+          }
+>
           <Connect(Draggable)
                     animate={false}
                     canDrag={false}
@@ -183,7 +193,8 @@ ShallowWrapper {
                     onDropped={[Function]}
                     onMove={[Function]}
                     onSelected={[Function]}
-                    selected={false} />
+                    selected={false}
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -214,6 +225,7 @@ ShallowWrapper {
     onDropped={[Function]}
     onSelected={[Function]}
     selected={false}
-    updateNode={[Function]} />,
+    updateNode={[Function]}
+/>,
 }
 `;
