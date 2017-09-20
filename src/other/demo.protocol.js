@@ -155,7 +155,7 @@ export default {
             name: 'name-generator-form',
             fields: fields,
             autoPopulate: (fields, values, populate) => {
-              if(values && !fields['nickname'] || !fields['nickname'].touched) {
+              if((!fields['nickname'] || !fields['nickname'].touched) && values) {
                 populate('nickname', generateNickname(values['name']));
               }
             },
