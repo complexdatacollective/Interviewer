@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { isMatch, filter, has } from 'lodash';
+import { isMatch, filter, has, omit } from 'lodash';
 import { createSelector } from 'reselect';
 import LayoutNode from '../LayoutNode';
 import { withBounds } from '../../behaviours';
@@ -11,6 +11,12 @@ import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
+
+const propsChangedExcludingNodes = (nextProps, props) =>
+  !isMatch(omit(nextProps, 'nodes'), omit(props, 'nodes'));
+
+const nodesLengthChanged = (nextProps, props) =>
+  nextProps.nodes.length !== props.nodes.length;
 
 class NodeLayout extends Component {
   constructor(props) {
@@ -22,7 +28,8 @@ class NodeLayout extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.nodes.length !== this.props.nodes.length) { return true; }
+    if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
+    if (nodesLengthChanged(nextProps, this.props)) { return true; }
     return false;
   }
 
