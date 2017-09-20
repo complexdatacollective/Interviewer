@@ -39,7 +39,7 @@ export class NodeLayout extends Component {
       case 'EDGE':
         this.connectNode(node.id); break;
       case 'ATTRIBUTES':
-        this.toggleNodeAttributes(node.id); break;
+        this.toggleNodeAttributes(node.uid); break;
       default:
     }
 
@@ -67,7 +67,7 @@ export class NodeLayout extends Component {
   }
 
   toggleNodeAttributes(nodeId) {
-    this.props.toggleNodeAttributes({ id: nodeId }, this.props.attributes);
+    this.props.toggleNodeAttributes({ uid: nodeId }, this.props.attributes);
   }
 
   isSelected(node) {
