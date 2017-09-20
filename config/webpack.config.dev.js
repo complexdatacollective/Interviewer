@@ -154,9 +154,12 @@ module.exports = {
             },
           },
           {
-            test: /\.woff2?$|\.woff$|\.ttf$|\.eot$/,
+            test: /\.woff2?$|\.woff$/,
             use: [{
               loader: 'file-loader',
+              options: {
+                name: 'static/fonts/[name].[ext]',
+              },
             }],
           },
           {
@@ -182,10 +185,8 @@ module.exports = {
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
                       browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
+                        'last 2 Chrome versions',
+                        'last 2 iOS major versions',
                       ],
                       flexbox: 'no-2009',
                     }),
@@ -227,10 +228,8 @@ module.exports = {
                     require('postcss-flexbugs-fixes'),
                     autoprefixer({
                       browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
+                        'last 2 Chrome versions',
+                        'last 2 iOS major versions',
                       ],
                       flexbox: 'no-2009',
                     }),

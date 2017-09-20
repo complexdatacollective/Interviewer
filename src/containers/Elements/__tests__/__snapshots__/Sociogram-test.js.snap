@@ -16,7 +16,7 @@ ShallowWrapper {
         n={4}
         skewed={true}
     />
-    <Connect(Component)
+    <Connect(ReactComponent)
         prompt={
             Object {
                 "sociogram": Object {
@@ -46,7 +46,7 @@ ShallowWrapper {
             n={4}
             skewed={true}
       />
-      <Connect(Component)
+      <Connect(ReactComponent)
             prompt={
                   Object {
                         "sociogram": Object {
@@ -126,7 +126,7 @@ ShallowWrapper {
                     n={4}
                     skewed={true}
           />
-          <Connect(Component)
+          <Connect(ReactComponent)
                     prompt={
                               Object {
                                         "sociogram": Object {
@@ -156,7 +156,7 @@ ShallowWrapper {
                     n={4}
                     skewed={true}
           />
-          <Connect(Component)
+          <Connect(ReactComponent)
                     prompt={
                               Object {
                                         "sociogram": Object {
