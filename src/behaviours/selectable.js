@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
 
 export default function selectable(WrappedComponent) {
   class Selectable extends Component {
@@ -10,11 +9,9 @@ export default function selectable(WrappedComponent) {
       this.state = {
         time: 0,
       };
-
-      this.onTap = debounce(this.onTap.bind(this), 200);
     }
 
-    onTap() {
+    onTap = () => {
       this.props.onSelected();
     }
 
