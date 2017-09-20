@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NodeLayout } from '../../Elements/NodeLayout';
+import { NodeLayoutPure } from '../NodeLayout';
 
 const mockProps = {
   nodes: [],
@@ -16,7 +16,7 @@ const mockProps = {
 
 describe('<NodeLayout />', () => {
   it('renders ok', () => {
-    const component = shallow(<NodeLayout {...mockProps} />);
+    const component = shallow(<NodeLayoutPure {...mockProps} />);
 
     expect(component).toMatchSnapshot();
   });

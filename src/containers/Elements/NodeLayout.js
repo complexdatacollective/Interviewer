@@ -12,7 +12,7 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
 
-export class NodeLayout extends Component {
+class NodeLayout extends Component {
   constructor(props) {
     super(props);
 
@@ -108,6 +108,8 @@ export class NodeLayout extends Component {
                 selected={this.isSelected(node)}
                 canDrag={canPosition}
                 canSelect={canSelect}
+                areaWidth={this.props.width}
+                areaHeight={this.props.height}
                 animate={false}
               />
             );
@@ -128,6 +130,8 @@ NodeLayout.propTypes = {
   attributes: PropTypes.object,
   canPosition: PropTypes.bool,
   canSelect: PropTypes.bool,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 };
 
 NodeLayout.defaultProps = {
@@ -175,6 +179,8 @@ function mapDispatchToProps(dispatch) {
     toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
   };
 }
+
+export { NodeLayout as NodeLayoutPure };
 
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),

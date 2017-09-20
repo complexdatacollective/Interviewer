@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -10,8 +12,6 @@ import { actionCreators as networkActions } from '../ducks/modules/network';
 const label = node => node.nickname;
 
 const EnhancedNode = draggable(selectable(Node));
-
-const asPercentage = decimal => `${decimal * 100}%`;
 
 class LayoutNode extends PureComponent {
   onDropped = (...args) => {
@@ -45,13 +45,16 @@ class LayoutNode extends PureComponent {
       canDrag,
       canSelect,
       layout,
+      areaWidth,
+      areaHeight,
     } = this.props;
 
     const { x, y } = node[layout];
 
     const styles = {
-      left: asPercentage(x),
-      top: asPercentage(y),
+      left: 0,
+      top: 0,
+      transform: `translate(calc(${x * areaWidth}px - 50%), calc(${y * areaHeight}px - 50%))`,
     };
 
     return (
@@ -62,7 +65,6 @@ class LayoutNode extends PureComponent {
         <EnhancedNode
           label={label(node)}
           draggableType={draggableType}
-          // TODO more performant way to do this?
           onDropped={this.onDropped}
           onMove={this.onMove}
           onSelected={this.onSelected}
@@ -101,4 +103,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+export { LayoutNode as LayoutNodePure };
 export default connect(null, mapDispatchToProps)(LayoutNode);
