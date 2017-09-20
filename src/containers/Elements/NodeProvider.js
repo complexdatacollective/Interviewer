@@ -1,9 +1,8 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { isMatch, omit } from 'lodash';
+import { isMatch } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { NodeList } from '../../components/Elements';
 import { makeNewNodeAttributes } from '../../selectors/interface';

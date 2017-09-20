@@ -1,14 +1,11 @@
-/* eslint-disable */
-
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { first, isMatch, filter, has } from 'lodash';
+import { isMatch, filter, has } from 'lodash';
 import { createSelector } from 'reselect';
-import { Node } from 'network-canvas-ui';
 import LayoutNode from '../LayoutNode';
-import { draggable, withBounds, selectable } from '../../behaviours';
+import { withBounds } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
 import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
@@ -26,7 +23,7 @@ export class NodeLayout extends Component {
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.nodes.length !== this.props.nodes.length) { return true; }
-    return false
+    return false;
   }
 
   onDropNode = () => {
@@ -123,16 +120,14 @@ export class NodeLayout extends Component {
 
 NodeLayout.propTypes = {
   nodes: PropTypes.array,
-  updateNode: PropTypes.func.isRequired,
   toggleEdge: PropTypes.func.isRequired,
   toggleNodeAttributes: PropTypes.func.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
   layout: PropTypes.string.isRequired,
   edge: PropTypes.object,
   select: PropTypes.object,
-  position: PropTypes.bool,
   attributes: PropTypes.object,
+  canPosition: PropTypes.bool,
+  canSelect: PropTypes.bool,
 };
 
 NodeLayout.defaultProps = {
@@ -140,7 +135,8 @@ NodeLayout.defaultProps = {
   attributes: {},
   edge: null,
   select: null,
-  position: false,
+  canPosition: false,
+  canSelect: false,
 };
 
 const propLayout = (_, props) => props.prompt.sociogram.layout;

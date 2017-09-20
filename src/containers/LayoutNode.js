@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -14,7 +13,7 @@ const EnhancedNode = draggable(selectable(Node));
 
 const asPercentage = decimal => `${decimal * 100}%`;
 
-export class LayoutNode extends PureComponent {
+class LayoutNode extends PureComponent {
   onDropped = (...args) => {
     this.onMove(...args);
     this.props.onDropped();
@@ -55,8 +54,6 @@ export class LayoutNode extends PureComponent {
       top: asPercentage(y),
     };
 
-    console.log('RENDER LAYOUTNODE');
-
     return (
       <div
         className="node-layout__node"
@@ -79,6 +76,24 @@ export class LayoutNode extends PureComponent {
     );
   }
 }
+
+LayoutNode.propTypes = {
+  onDropped: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
+  onSelected: PropTypes.func.isRequired,
+  layout: PropTypes.string.isRequired,
+  node: PropTypes.object.isRequired,
+  draggableType: PropTypes.string.isRequired,
+  canDrag: PropTypes.bool,
+  canSelect: PropTypes.bool,
+  selected: PropTypes.bool,
+};
+
+LayoutNode.defaultProps = {
+  canDrag: false,
+  canSelect: false,
+  selected: false,
+};
 
 function mapDispatchToProps(dispatch) {
   return {

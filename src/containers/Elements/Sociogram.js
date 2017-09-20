@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -8,10 +6,6 @@ import {
   EdgeLayout,
   NodeBucket,
 } from '../Elements';
-
-/*
-
-*/
 
 const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">

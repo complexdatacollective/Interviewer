@@ -38,11 +38,12 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <NodeLayout
         attributes={Object {}}
+        canPosition={false}
+        canSelect={false}
         edge={null}
         height={456}
         layout="foo"
         nodes={Array []}
-        position={false}
         select={null}
         toggleEdge={[Function]}
         toggleNodeAttributes={[Function]}
@@ -55,14 +56,16 @@ ShallowWrapper {
       "_instance": NodeLayout {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "onDropNode": [Function],
         "onSelectNode": [Function],
         "props": Object {
           "attributes": Object {},
+          "canPosition": false,
+          "canSelect": false,
           "edge": null,
           "height": 456,
           "layout": "foo",
           "nodes": Array [],
-          "position": false,
           "select": null,
           "toggleEdge": [Function],
           "toggleNodeAttributes": [Function],
@@ -73,7 +76,6 @@ ShallowWrapper {
         "state": Object {
           "connectFrom": null,
         },
-        "updateNodeLayout": [Function],
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -126,11 +128,12 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <NodeLayout
     attributes={Object {}}
+    canPosition={false}
+    canSelect={false}
     edge={null}
     height={456}
     layout="foo"
     nodes={Array []}
-    position={false}
     select={null}
     toggleEdge={[Function]}
     toggleNodeAttributes={[Function]}
