@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
+import { findDOMNode, unstable_batchedUpdates } from 'react-dom';  // eslint-disable-line camelcase
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { throttle, filter, isMatch } from 'lodash';
@@ -10,7 +10,7 @@ import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
-const maxReportingPerSecond = 16;
+const maxReportingPerSecond = 60;
 
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -190,12 +190,14 @@ export default function draggable(WrappedComponent) {
 
     componentHandlers = (movement) => {
       if (this.state.dragStart) {
-        const hits = this.determineHits(movement);
-        this.props.updateActiveZones(hits.map(hit => hit.name));
+        unstable_batchedUpdates(() => {
+          const hits = this.determineHits(movement);
+          this.props.updateActiveZones(hits.map(hit => hit.name));
 
-        if (hits.length > 0) {
-          this.props.onMove(hits, movement);
-        }
+          if (hits.length > 0) {
+            this.props.onMove(hits, movement);
+          }
+        });
       }
     }
 
