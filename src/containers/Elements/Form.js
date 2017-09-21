@@ -30,7 +30,6 @@ import { Field } from '../../containers/Elements';
   *
   */
 class Form extends Component {
-
   handleFieldBlur = () => {
     if (!this.props.autoPopulate) { return; }
 
