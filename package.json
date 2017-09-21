@@ -56,6 +56,7 @@
     "electron-installer-dmg": "^0.2.0",
     "electron-log": "^2.2.7",
     "electron-packager": "^8.5.2",
+    "electron-to-chromium": "^1.3.21",
     "electron-updater": "^2.7.2",
     "electron-winstaller": "^2.5.2",
     "enzyme": "^2.8.2",
@@ -80,7 +81,7 @@
     "jsdoc-babel": "^0.3.0",
     "json-loader": "0.5.4",
     "lodash": "^4.17.4",
-    "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git#feature/webpack-3",
+    "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
     "node-sass": "^4.5.3",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -178,14 +179,6 @@
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "cordova": {
     "platforms": [
