@@ -22,6 +22,18 @@ describe('<Form />', () => {
     expect(subject).toMatchSnapshot();
   });
 
+  it('should render add another button', () => {
+    const continuousForm = mount((
+      <Form {...props()} addAnother store={createStore(() => {})} />
+    ));
+    const singularForm = mount((
+      <Form {...props()} store={createStore(() => {})} />
+    ));
+
+    expect(continuousForm.find('button').length).toBe(2)
+    expect(singularForm.find('button').length).toBe(1)
+  });
+
   it('renders an array of <Field />', () => {
     const fields = [
       {

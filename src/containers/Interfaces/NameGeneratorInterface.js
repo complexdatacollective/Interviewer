@@ -33,7 +33,6 @@ class NameGenerator extends Component {
 
   /**
    * New node submit handler
-   * @param {object} formData - key/value object containing node fields
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
@@ -131,6 +130,7 @@ class NameGenerator extends Component {
           modalName={modals.ADD_NODE}
           form={form}
           handleSubmit={this.onSubmitNewNode}
+          addAnother
         />
 
         <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>
