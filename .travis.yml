@@ -3,7 +3,7 @@ branches:
   only:
     - master
 node_js:
-  - "6.9"
+  - "8.5"
 cache:
   directories:
     - node_modules # NPM packages

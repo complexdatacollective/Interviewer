@@ -64,7 +64,7 @@ export default function reducer(state = initialState, action = {}) {
 
       nodes[nodeIndex] = {
         ...node,
-        id: nodes[nodeIndex].id,   // ids can't be altered
+        id: nodes[nodeIndex].id, // ids can't be altered
         uid: nodes[nodeIndex].uid, // uids can't be altered
       };
 
@@ -79,7 +79,7 @@ export default function reducer(state = initialState, action = {}) {
 
       nodes[nodeIndex] = {
         ...action.node,
-        id: nodes[nodeIndex].id,   // ids can't be altered
+        id: nodes[nodeIndex].id, // ids can't be altered
         uid: nodes[nodeIndex].uid, // uids can't be altered
       };
 

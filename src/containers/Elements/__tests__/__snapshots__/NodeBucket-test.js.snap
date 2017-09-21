@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<NodeBucket /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -7,19 +9,23 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="node-bucket">
+    className="node-bucket"
+>
     <Connect(Draggable)
         draggableType="POSITIONED_NODE"
         label={undefined}
-        onDropped={[Function]} />
+        onDropped={[Function]}
+    />
 </div>,
   "nodes": Array [
     <div
-      className="node-bucket">
+      className="node-bucket"
+>
       <Connect(Draggable)
             draggableType="POSITIONED_NODE"
             label={undefined}
-            onDropped={[Function]} />
+            onDropped={[Function]}
+      />
 </div>,
   ],
   "options": Object {},
@@ -32,7 +38,8 @@ ShallowWrapper {
         layout="foo"
         node={Object {}}
         sort={Object {}}
-        updateNode={[Function]} />,
+        updateNode={[Function]}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -67,19 +74,23 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="node-bucket">
+          className="node-bucket"
+>
           <Connect(Draggable)
                     draggableType="POSITIONED_NODE"
                     label={undefined}
-                    onDropped={[Function]} />
+                    onDropped={[Function]}
+          />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="node-bucket">
+          className="node-bucket"
+>
           <Connect(Draggable)
                     draggableType="POSITIONED_NODE"
                     label={undefined}
-                    onDropped={[Function]} />
+                    onDropped={[Function]}
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -96,6 +107,7 @@ ShallowWrapper {
     layout="foo"
     node={Object {}}
     sort={Object {}}
-    updateNode={[Function]} />,
+    updateNode={[Function]}
+/>,
 }
 `;

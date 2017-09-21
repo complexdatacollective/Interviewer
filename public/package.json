@@ -11,9 +11,6 @@
   },
   "homepage": ".",
   "main": "electron-starter.js",
-  "devDependencies": {
-    "electron": "^1.6.11"
-  },
   "dependencies": {
     "electron-log": "^2.2.7",
     "electron-updater": "^2.7.2"

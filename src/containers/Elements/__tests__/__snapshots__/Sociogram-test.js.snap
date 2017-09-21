@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Sociogram /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -7,12 +9,14 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="sociogram">
+    className="sociogram"
+>
     <SociogramBackground
         image={null}
         n={4}
-        skewed={true} />
-    <Connect(Component)
+        skewed={true}
+    />
+    <Connect(ReactComponent)
         prompt={
             Object {
                 "sociogram": Object {
@@ -20,7 +24,8 @@ ShallowWrapper {
                 },
               }
         }
-        stage={Object {}} />
+        stage={Object {}}
+    />
     <Connect(NodeBucket)
         prompt={
             Object {
@@ -29,16 +34,19 @@ ShallowWrapper {
                 },
               }
         }
-        stage={Object {}} />
+        stage={Object {}}
+    />
 </div>,
   "nodes": Array [
     <div
-      className="sociogram">
+      className="sociogram"
+>
       <SociogramBackground
             image={null}
             n={4}
-            skewed={true} />
-      <Connect(Component)
+            skewed={true}
+      />
+      <Connect(ReactComponent)
             prompt={
                   Object {
                         "sociogram": Object {
@@ -46,7 +54,8 @@ ShallowWrapper {
                         },
                       }
             }
-            stage={Object {}} />
+            stage={Object {}}
+      />
       <Connect(NodeBucket)
             prompt={
                   Object {
@@ -55,7 +64,8 @@ ShallowWrapper {
                         },
                       }
             }
-            stage={Object {}} />
+            stage={Object {}}
+      />
 </div>,
   ],
   "options": Object {},
@@ -72,7 +82,8 @@ ShallowWrapper {
                         },
                       }
         }
-        stage={Object {}} />,
+        stage={Object {}}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -108,12 +119,14 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="sociogram">
+          className="sociogram"
+>
           <SociogramBackground
                     image={null}
                     n={4}
-                    skewed={true} />
-          <Connect(Component)
+                    skewed={true}
+          />
+          <Connect(ReactComponent)
                     prompt={
                               Object {
                                         "sociogram": Object {
@@ -121,7 +134,8 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    stage={Object {}} />
+                    stage={Object {}}
+          />
           <Connect(NodeBucket)
                     prompt={
                               Object {
@@ -130,16 +144,19 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    stage={Object {}} />
+                    stage={Object {}}
+          />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="sociogram">
+          className="sociogram"
+>
           <SociogramBackground
                     image={null}
                     n={4}
-                    skewed={true} />
-          <Connect(Component)
+                    skewed={true}
+          />
+          <Connect(ReactComponent)
                     prompt={
                               Object {
                                         "sociogram": Object {
@@ -147,7 +164,8 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    stage={Object {}} />
+                    stage={Object {}}
+          />
           <Connect(NodeBucket)
                     prompt={
                               Object {
@@ -156,7 +174,8 @@ ShallowWrapper {
                                         },
                                       }
                     }
-                    stage={Object {}} />
+                    stage={Object {}}
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -177,6 +196,7 @@ ShallowWrapper {
             },
           }
     }
-    stage={Object {}} />,
+    stage={Object {}}
+/>,
 }
 `;

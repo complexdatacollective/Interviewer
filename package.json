@@ -1,202 +1,194 @@
 {
-    "name": "network-canvas",
-    "version": "4.0.0-alpha.1",
-    "productName": "Network Canvas",
-    "description": "Simplifying complex network data collection.",
-    "author": "Complex Data Collective",
-    "private": true,
-    "engines": {
-        "node": "6.9.1",
-        "npm": "3.10.7"
+  "name": "network-canvas",
+  "version": "4.0.0-alpha.1",
+  "productName": "Network Canvas",
+  "description": "Simplifying complex network data collection.",
+  "author": "Complex Data Collective",
+  "private": true,
+  "engines": {
+    "node": "8.5.0",
+    "npm": "5.3.0"
+  },
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "lint": "eslint src",
+    "test": "node scripts/test.js --env=jsdom",
+    "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
+    "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
+    "electron": "electron ./www",
+    "generate-icons": "node generate-app-icons.js",
+    "dist": "electron-builder",
+    "dist:ios": "npm run build && cordova build ios",
+    "dist:android": "npm run build && cordova build android",
+    "dist:cordova": "npm run build && cordova build ios && cordova build android",
+    "dist:mac": "electron-builder -m --publish=always",
+    "dist:win": "electron-builder -w --publish=always",
+    "bump": "sh scripts/bump"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "devDependencies": {
+    "autoprefixer": "7.1.2",
+    "axios": "^0.16.1",
+    "babel-core": "6.25.0",
+    "babel-eslint": "7.2.3",
+    "babel-jest": "20.0.3",
+    "babel-loader": "7.1.1",
+    "babel-preset-react-app": "^3.0.2",
+    "babel-preset-stage-3": "^6.24.1",
+    "babel-runtime": "6.26.0",
+    "bluebird": "^3.5.0",
+    "case-sensitive-paths-webpack-plugin": "2.1.1",
+    "chalk": "1.1.3",
+    "change-case": "^3.0.1",
+    "classnames": "^2.2.5",
+    "color": "^2.0.0",
+    "connect-history-api-fallback": "1.3.0",
+    "cross-spawn": "4.0.2",
+    "css-loader": "0.28.4",
+    "detect-port": "1.1.0",
+    "dotenv": "4.0.0",
+    "electron": "^1.7.6",
+    "electron-builder": "^19.26.3",
+    "electron-installer-dmg": "^0.2.0",
+    "electron-log": "^2.2.7",
+    "electron-packager": "^8.5.2",
+    "electron-to-chromium": "^1.3.21",
+    "electron-updater": "^2.7.2",
+    "electron-winstaller": "^2.5.2",
+    "enzyme": "^2.8.2",
+    "es6-promise-plugin": "^4.1.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-config-react-app": "^2.0.0",
+    "eslint-loader": "1.9.0",
+    "eslint-plugin-flowtype": "2.35.0",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-react": "^7.3.0",
+    "extract-text-webpack-plugin": "3.0.0",
+    "file-loader": "0.11.2",
+    "fs-extra": "3.0.1",
+    "history": "^4.7.2",
+    "html-webpack-plugin": "^2.30.1",
+    "http-proxy-middleware": "0.17.3",
+    "icon-gen": "^1.0.7",
+    "jest": "20.0.4",
+    "jsdoc": "^3.4.3",
+    "jsdoc-babel": "^0.3.0",
+    "json-loader": "0.5.4",
+    "lodash": "^4.17.4",
+    "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
+    "node-sass": "^4.5.3",
+    "object-assign": "4.1.1",
+    "postcss-flexbugs-fixes": "3.2.0",
+    "postcss-loader": "2.0.6",
+    "promise": "7.1.1",
+    "prop-types": "^15.5.8",
+    "react": "^15.6.1",
+    "react-dev-utils": "^4.0.1",
+    "react-dom": "^15.6.1",
+    "react-draggable": "^2.2.3",
+    "react-fastclick": "^3.0.2",
+    "react-hammerjs": "^0.5.0",
+    "react-icons": "^2.2.3",
+    "react-redux": "^4.4.5",
+    "react-router-dom": "^4.1.1",
+    "react-scripts": "^1.0.13",
+    "react-tap-event-plugin": "^2.0.1",
+    "react-test-renderer": "^15.5.4",
+    "react-transform-hmr": "^1.0.4",
+    "react-transition-group": "^1.1.3",
+    "redux": "^3.6.0",
+    "redux-form": "^6.4.3",
+    "redux-logger": "^2.7.4",
+    "redux-observable": "^0.14.1",
+    "redux-persist": "^4.9.1",
+    "redux-thunk": "^2.1.0",
+    "reselect": "^3.0.0",
+    "rxjs": "^5.4.0",
+    "sass-lint": "^1.10.2",
+    "sass-loader": "^6.0.6",
+    "sass-svg": "^1.0.1",
+    "sockjs-client": "^1.1.4",
+    "style-loader": "0.18.2",
+    "upgrade": "^1.1.0",
+    "url-loader": "0.5.9",
+    "webpack": "3.5.1",
+    "webpack-dev-server": "2.7.1",
+    "webpack-manifest-plugin": "^1.3.1",
+    "whatwg-fetch": "2.0.3",
+    "xss": "^0.3.4"
+  },
+  "dependencies": {
+    "cordova-android": "^6.2.3",
+    "cordova-ios": "^4.5.0",
+    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-compat": "^1.0.0",
+    "cordova-plugin-device": "^1.1.6",
+    "cordova-plugin-file": "^4.3.3",
+    "cordova-plugin-x-socialsharing": "^5.2.0"
+  },
+  "homepage": ".",
+  "main": "www/electron-starter.js",
+  "build": {
+    "extends": null,
+    "appId": "Network-Canvas",
+    "directories": {
+      "buildResources": "build-resources",
+      "output": "release-builds"
     },
-    "scripts": {
-        "pack": "electron-builder --dir",
-        "dist": "electron-builder",
-        "dist:mac": "electron-builder -m --publish=always",
-        "dist:win": "electron-builder -w --publish=always",
-        "start": "node scripts/start.js",
-        "build": "node scripts/build.js",
-        "lint": "eslint src",
-        "test": "node scripts/test.js --env=jsdom",
-        "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
-        "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
-        "electron": "electron ./www",
-        "generate-icons": "node generate-app-icons.js",
-        "dist:ios": "npm run build && cordova build ios",
-        "dist:android": "npm run build && cordova build android",
-        "dist:cordova": "npm run build && cordova build ios && cordova build android",
-        "bump": "sh scripts/bump"
+    "mac": {
+      "category": "public.app-category.education"
     },
-    "repository": {
-        "type": "git"
+    "win": {
+      "target": "nsis",
+      "certificateSubjectName": "Complex Data Collective"
     },
-    "devDependencies": {
-        "autoprefixer": "6.7.2",
-        "babel-core": "6.22.1",
-        "babel-eslint": "7.1.1",
-        "babel-jest": "18.0.0",
-        "babel-loader": "6.2.10",
-        "babel-preset-latest": "^6.24.0",
-        "babel-preset-react": "^6.23.0",
-        "babel-preset-stage-0": "^6.22.0",
-        "babel-runtime": "^6.20.0",
-        "bluebird": "^3.5.0",
-        "case-sensitive-paths-webpack-plugin": "1.1.4",
-        "chalk": "1.1.3",
-        "connect-history-api-fallback": "1.3.0",
-        "cross-spawn": "4.0.2",
-        "css-loader": "0.26.1",
-        "custom-react-scripts": "0.0.21",
-        "detect-port": "1.1.0",
-        "dotenv": "2.0.0",
-        "electron": "^1.7.6",
-        "electron-builder": "^19.26.3",
-        "electron-installer-dmg": "^0.2.0",
-        "electron-packager": "^8.5.2",
-        "electron-winstaller": "^2.5.2",
-        "enzyme": "^2.8.2",
-        "eslint": "^3.18.0",
-        "eslint-config-airbnb": "^15.0.1",
-        "eslint-config-react-app": "^0.6.2",
-        "eslint-loader": "1.6.0",
-        "eslint-plugin-flowtype": "2.21.0",
-        "eslint-plugin-import": "^2.2.0",
-        "eslint-plugin-jsx-a11y": "^5.0.1",
-        "eslint-plugin-react": "^7.3.0",
-        "extract-text-webpack-plugin": "1.0.1",
-        "file-loader": "0.10.0",
-        "fs-extra": "0.30.0",
-        "html-webpack-plugin": "2.24.0",
-        "http-proxy-middleware": "0.17.3",
-        "icon-gen": "^1.0.7",
-        "jsdoc": "^3.4.3",
-        "jsdoc-babel": "^0.3.0",
-        "json-loader": "0.5.4",
-        "node-sass": "^4.5.2",
-        "object-assign": "4.1.1",
-        "postcss-loader": "1.2.2",
-        "promise": "7.1.1",
-        "react-addons-test-utils": "^15.5.1",
-        "react-dev-utils": "^0.5.2",
-        "sass-lint": "^1.10.2",
-        "style-loader": "0.13.1",
-        "url-loader": "0.5.7",
-        "webpack": "1.14.0",
-        "webpack-dev-server": "1.16.2",
-        "webpack-manifest-plugin": "1.1.0",
-        "whatwg-fetch": "2.0.2"
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "codaco",
+        "repo": "network-canvas"
+      }
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "dependencies": {
-        "@mars/heroku-js-runtime-env": "^3.0.0",
-        "axios": "^0.16.1",
-        "change-case": "^3.0.1",
-        "classnames": "^2.2.5",
-        "color": "^2.0.0",
-        "cordova-android": "^6.2.3",
-        "cordova-ios": "git+https://github.com/apache/cordova-ios.git#4.4.0-ios-sim",
-        "cordova-plugin-app-version": "^0.1.9",
-        "cordova-plugin-compat": "^1.0.0",
-        "cordova-plugin-device": "^1.1.6",
-        "cordova-plugin-file": "^4.3.3",
-        "cordova-plugin-x-socialsharing": "^5.2.0",
-        "create-react-class": "^15.5.3",
-        "electron-log": "^2.2.7",
-        "electron-updater": "^2.7.2",
-        "es6-promise-plugin": "^4.1.0",
-        "gridle": "^2.0.48",
-        "history": "^4.7.2",
-        "lodash": "^4.17.4",
-        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
-        "prop-types": "^15.5.8",
-        "react": "^15.3.2",
-        "react-dom": "^15.3.2",
-        "react-draggable": "^2.2.3",
-        "react-fastclick": "^3.0.2",
-        "react-hammerjs": "^0.5.0",
-        "react-icons": "^2.2.3",
-        "react-redux": "^4.4.5",
-        "react-router-dom": "^4.1.1",
-        "react-tap-event-plugin": "^2.0.1",
-        "react-test-renderer": "^15.5.4",
-        "react-transform-hmr": "^1.0.4",
-        "react-transition-group": "^1.1.3",
-        "redux": "^3.6.0",
-        "redux-form": "^6.4.3",
-        "redux-logger": "^2.7.4",
-        "redux-observable": "^0.14.1",
-        "redux-persist": "^4.9.1",
-        "redux-thunk": "^2.1.0",
-        "reselect": "^3.0.0",
-        "rxjs": "^5.4.0",
-        "sass-svg": "^1.0.1",
-        "semantic-ui-react": "^0.67.2",
-        "upgrade": "^1.1.0",
-        "xss": "^0.3.3"
-    },
-    "homepage": ".",
-    "main": "www/electron-starter.js",
-    "build": {
-        "appId": "Network-Canvas",
-        "directories": {
-            "buildResources": "build-resources",
-            "output": "release-builds"
-        },
-        "mac": {
-            "category": "public.app-category.education"
-        },
-        "win": {
-            "target": "nsis",
-            "certificateSubjectName": "Complex Data Collective"
-        },
-        "publish": [
-            {
-                "provider": "github",
-                "owner": "codaco",
-                "repo": "network-canvas"
-            }
-        ]
-    },
-    "jest": {
-        "collectCoverageFrom": [
-            "src/**/*.{js,jsx}"
-        ],
-        "setupFiles": [
-            "<rootDir>/config/polyfills.js"
-        ],
-        "testPathIgnorePatterns": [
-            "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]"
-        ],
-        "testEnvironment": "node",
-        "testURL": "http://localhost",
-        "transform": {
-            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
-            "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-            "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-        },
-        "transformIgnorePatterns": [
-            "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-        ],
-        "moduleNameMapper": {
-            "^react-native$": "react-native-web"
-        }
-    },
-    "babel": {
-        "presets": [
-            "react-app"
-        ]
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "cordova": {
-        "platforms": [
-            "android",
-            "ios"
-        ],
-        "plugins": {
-            "cordova-plugin-app-version": {},
-            "cordova-plugin-file": {},
-            "cordova-plugin-x-socialsharing": {}
-        }
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
     }
+  },
+  "cordova": {
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "plugins": {
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-x-socialsharing": {}
+    }
+  }
 }

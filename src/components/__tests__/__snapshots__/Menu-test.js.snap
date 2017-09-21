@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Menu component renders menu with list 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -7,9 +9,11 @@ ShallowWrapper {
   },
   "length": 1,
   "node": <div
-    className="menu">
+    className="menu"
+>
     <div
-        className="menu__wrap menu__content">
+        className="menu__wrap menu__content"
+    >
         <Scrollable>
             <Icon
                 className="menu__cross"
@@ -17,10 +21,12 @@ ShallowWrapper {
                 name="close"
                 onClick={[Function]}
                 size="40px"
-                style={Object {}} />
+                style={Object {}}
+            />
             <header>
                 <h1
-                    className="menu__title">
+                    className="menu__title"
+                >
                     Options
                 </h1>
             </header>
@@ -31,21 +37,24 @@ ShallowWrapper {
                     menuType="primary"
                     onClick={[Function]}
                     title="a title"
-                    to="a-to" />
+                    to="a-to"
+                />
                 <MenuItem
                     interfaceType=""
                     isActive={false}
                     menuType="primary"
                     onClick={[Function]}
                     title="b title"
-                    to="b-to" />
+                    to="b-to"
+                />
                 <MenuItem
                     interfaceType=""
                     isActive={false}
                     menuType="primary"
                     onClick={[Function]}
                     title="c title"
-                    to="c-to" />
+                    to="c-to"
+                />
             </nav>
         </Scrollable>
     </div>
@@ -55,13 +64,16 @@ ShallowWrapper {
         name="menu"
         onClick={[Function]}
         size=""
-        style={Object {}} />
+        style={Object {}}
+    />
 </div>,
   "nodes": Array [
     <div
-      className="menu">
+      className="menu"
+>
       <div
-            className="menu__wrap menu__content">
+            className="menu__wrap menu__content"
+      >
             <Scrollable>
                   <Icon
                         className="menu__cross"
@@ -69,10 +81,12 @@ ShallowWrapper {
                         name="close"
                         onClick={[Function]}
                         size="40px"
-                        style={Object {}} />
+                        style={Object {}}
+                  />
                   <header>
                         <h1
-                              className="menu__title">
+                              className="menu__title"
+                        >
                               Options
                         </h1>
                   </header>
@@ -83,21 +97,24 @@ ShallowWrapper {
                               menuType="primary"
                               onClick={[Function]}
                               title="a title"
-                              to="a-to" />
+                              to="a-to"
+                        />
                         <MenuItem
                               interfaceType=""
                               isActive={false}
                               menuType="primary"
                               onClick={[Function]}
                               title="b title"
-                              to="b-to" />
+                              to="b-to"
+                        />
                         <MenuItem
                               interfaceType=""
                               isActive={false}
                               menuType="primary"
                               onClick={[Function]}
                               title="c title"
-                              to="c-to" />
+                              to="c-to"
+                        />
                   </nav>
             </Scrollable>
       </div>
@@ -107,7 +124,8 @@ ShallowWrapper {
             name="menu"
             onClick={[Function]}
             size=""
-            style={Object {}} />
+            style={Object {}}
+      />
 </div>,
   ],
   "options": Object {},
@@ -141,7 +159,8 @@ ShallowWrapper {
         }
         searchField={null}
         title="Options"
-        toggleMenu={[Function]} />,
+        toggleMenu={[Function]}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -198,9 +217,11 @@ ShallowWrapper {
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
-          className="menu">
+          className="menu"
+>
           <div
-                    className="menu__wrap menu__content">
+                    className="menu__wrap menu__content"
+          >
                     <Scrollable>
                               <Icon
                                         className="menu__cross"
@@ -208,10 +229,12 @@ ShallowWrapper {
                                         name="close"
                                         onClick={[Function]}
                                         size="40px"
-                                        style={Object {}} />
+                                        style={Object {}}
+                              />
                               <header>
                                         <h1
-                                                  className="menu__title">
+                                                  className="menu__title"
+                                        >
                                                   Options
                                         </h1>
                               </header>
@@ -222,21 +245,24 @@ ShallowWrapper {
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="a title"
-                                                  to="a-to" />
+                                                  to="a-to"
+                                        />
                                         <MenuItem
                                                   interfaceType=""
                                                   isActive={false}
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="b title"
-                                                  to="b-to" />
+                                                  to="b-to"
+                                        />
                                         <MenuItem
                                                   interfaceType=""
                                                   isActive={false}
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="c title"
-                                                  to="c-to" />
+                                                  to="c-to"
+                                        />
                               </nav>
                     </Scrollable>
           </div>
@@ -246,13 +272,16 @@ ShallowWrapper {
                     name="menu"
                     onClick={[Function]}
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
-          className="menu">
+          className="menu"
+>
           <div
-                    className="menu__wrap menu__content">
+                    className="menu__wrap menu__content"
+          >
                     <Scrollable>
                               <Icon
                                         className="menu__cross"
@@ -260,10 +289,12 @@ ShallowWrapper {
                                         name="close"
                                         onClick={[Function]}
                                         size="40px"
-                                        style={Object {}} />
+                                        style={Object {}}
+                              />
                               <header>
                                         <h1
-                                                  className="menu__title">
+                                                  className="menu__title"
+                                        >
                                                   Options
                                         </h1>
                               </header>
@@ -274,21 +305,24 @@ ShallowWrapper {
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="a title"
-                                                  to="a-to" />
+                                                  to="a-to"
+                                        />
                                         <MenuItem
                                                   interfaceType=""
                                                   isActive={false}
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="b title"
-                                                  to="b-to" />
+                                                  to="b-to"
+                                        />
                                         <MenuItem
                                                   interfaceType=""
                                                   isActive={false}
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   title="c title"
-                                                  to="c-to" />
+                                                  to="c-to"
+                                        />
                               </nav>
                     </Scrollable>
           </div>
@@ -298,7 +332,8 @@ ShallowWrapper {
                     name="menu"
                     onClick={[Function]}
                     size=""
-                    style={Object {}} />
+                    style={Object {}}
+          />
 </div>,
       },
       "_renderedNodeType": 0,
@@ -336,6 +371,7 @@ ShallowWrapper {
     }
     searchField={null}
     title="Options"
-    toggleMenu={[Function]} />,
+    toggleMenu={[Function]}
+/>,
 }
 `;

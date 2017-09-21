@@ -9,7 +9,6 @@ import modal from '../../behaviours/modal';
   * @extends Component
   */
 class Dialog extends Component {
-
   confirmModal = () => {
     this.props.close();
     this.props.onConfirm();

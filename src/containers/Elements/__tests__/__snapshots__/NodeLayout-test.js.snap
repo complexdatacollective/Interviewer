@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<NodeLayout /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -8,18 +10,22 @@ ShallowWrapper {
   "length": 1,
   "node": <Connect(Droppable)
     acceptsDraggableType="POSITIONED_NODE"
-    droppableName="NODE_LAYOUT">
+    droppableName="NODE_LAYOUT"
+>
     <div
-        className="node-layout">
+        className="node-layout"
+    >
         
     </div>
 </Connect(Droppable)>,
   "nodes": Array [
     <Connect(Droppable)
       acceptsDraggableType="POSITIONED_NODE"
-      droppableName="NODE_LAYOUT">
+      droppableName="NODE_LAYOUT"
+>
       <div
-            className="node-layout">
+            className="node-layout"
+      >
             
       </div>
 </Connect(Droppable)>,
@@ -41,7 +47,8 @@ ShallowWrapper {
         toggleEdge={[Function]}
         toggleNodeAttributes={[Function]}
         updateNode={[Function]}
-        width={123} />,
+        width={123}
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -87,18 +94,22 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <Connect(Droppable)
           acceptsDraggableType="POSITIONED_NODE"
-          droppableName="NODE_LAYOUT">
+          droppableName="NODE_LAYOUT"
+>
           <div
-                    className="node-layout">
+                    className="node-layout"
+          >
                     
           </div>
 </Connect(Droppable)>,
         "_debugID": 2,
         "_renderedOutput": <Connect(Droppable)
           acceptsDraggableType="POSITIONED_NODE"
-          droppableName="NODE_LAYOUT">
+          droppableName="NODE_LAYOUT"
+>
           <div
-                    className="node-layout">
+                    className="node-layout"
+          >
                     
           </div>
 </Connect(Droppable)>,
@@ -124,6 +135,7 @@ ShallowWrapper {
     toggleEdge={[Function]}
     toggleNodeAttributes={[Function]}
     updateNode={[Function]}
-    width={123} />,
+    width={123}
+/>,
 }
 `;

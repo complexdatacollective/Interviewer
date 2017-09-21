@@ -6,15 +6,15 @@ import epics from './middleware/epics';
 import rootReducer from './modules/rootReducer';
 
 export const store = createStore(
-    rootReducer,
-    undefined,
-    compose(
-        autoRehydrate(),
-        applyMiddleware(thunk, epics, logger),
-        typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
-          ? window.devToolsExtension()
-          : f => f,
-    ),
+  rootReducer,
+  undefined,
+  compose(
+    autoRehydrate(),
+    applyMiddleware(thunk, epics, logger),
+    typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
+      ? window.devToolsExtension()
+      : f => f,
+  ),
 );
 
 export const persistor = persistStore(store, { blacklist: ['form', 'droppable', 'modals', 'session', 'protocol'] });

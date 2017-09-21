@@ -65,12 +65,12 @@ function loadProtocolFailed(error) {
 }
 
 const loadProtocolEpic = action$ =>
-  action$.ofType(LOAD_PROTOCOL)                                     // Filter for load protocol action
-    .switchMap(action =>                                            // Favour subsequent load actions over earlier ones
+  action$.ofType(LOAD_PROTOCOL) // Filter for load protocol action
+    .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
-        .fromPromise(getProtocol(action.path))                      // Get protocol
-        .map(response => setProtocol(runProtocol(response.data)))   // Parse and save
-        .catch(error => Observable.of(loadProtocolFailed(error))),  //  ...or throw an error
+        .fromPromise(getProtocol(action.path)) // Get protocol
+        .map(response => setProtocol(runProtocol(response.data))) // Parse and save
+        .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
 const loadDemoProtocolEpic = action$ =>

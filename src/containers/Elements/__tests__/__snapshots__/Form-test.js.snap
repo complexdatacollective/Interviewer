@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`<Form /> should render 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
@@ -24,7 +26,8 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           }
-    } />,
+    }
+/>,
   "nodes": Array [
     <AutoInitialisedForm
       dispatch={[Function]}
@@ -44,7 +47,8 @@ ShallowWrapper {
                   "subscribe": [Function],
                   Symbol(observable): [Function],
                 }
-      } />,
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -63,7 +67,8 @@ ShallowWrapper {
                         "subscribe": [Function],
                         Symbol(observable): [Function],
                       }
-        } />,
+        }
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -128,7 +133,8 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          } />,
+          }
+/>,
         "state": Object {
           "storeState": undefined,
         },
@@ -183,7 +189,8 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          } />,
+          }
+/>,
         "_debugID": 2,
         "_renderedOutput": <AutoInitialisedForm
           dispatch={[Function]}
@@ -203,7 +210,8 @@ ShallowWrapper {
                               "subscribe": [Function],
                               Symbol(observable): [Function],
                             }
-          } />,
+          }
+/>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -226,6 +234,7 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           }
-    } />,
+    }
+/>,
 }
 `;
