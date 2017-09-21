@@ -283,11 +283,16 @@ export default {
             {
               id: 'closeness1',
               title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-              ordinalbin: {
-                edge: {
-                  type: 'friends',
-                },
-                layout: 'closenessLayout',
+              bins: {
+                name: "DemoBins",
+                titles: [
+                  "Very Often",
+                  "Often",
+                  "Sometimes",
+                  "Rarely",
+                  "Never",
+                  "Prefer not to respond"
+                ],
                 background: {
                   n: 4,
                   skewed: true,
@@ -298,11 +303,16 @@ export default {
             {
               id: 'closeness2',
               title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              ordinalbin: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
+              bins: {
+                name: "DemoBins",
+                titles: [
+                  "Very Often",
+                  "Often",
+                  "Sometimes",
+                  "Rarely",
+                  "Never",
+                  "Prefer not to respond"
+                ],
                 background: {
                   n: 4,
                   skewed: true,
@@ -319,11 +329,16 @@ export default {
             {
               id: 'closeness3',
               title: "Tap on anyone who has given you advice within the past 6 months.",
-              ordinalbin: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
+              bins: {
+                name: "DemoBins",
+                titles: [
+                  "Very Often",
+                  "Often",
+                  "Sometimes",
+                  "Rarely",
+                  "Never",
+                  "Prefer not to respond"
+                ],
                 nodeAttributes: {
                   has_given_advice: true,
                 },
@@ -344,12 +359,16 @@ export default {
             {
               id: 'closeness5',
               title: "Connect any two people who are work together professionally.",
-              ordinalbin: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'professional',
-                  color: 'edge-alt-3',
-                },
+              bins: {
+                name: "DemoBins",
+                titles: [
+                  "Very Often",
+                  "Often",
+                  "Sometimes",
+                  "Rarely",
+                  "Never",
+                  "Prefer not to respond"
+                ],
                 background: {
                   n: 4,
                   skewed: true,

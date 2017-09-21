@@ -1,16 +1,17 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'network-canvas-ui';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper } from '../Elements';
+import { PromptSwiper, OrdinalBins } from '../Elements';
 import { NodeList } from '../../components/Elements';
-import Bin from '../Elements/OrdinalBin';
-import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
+import { networkNodesForPrompt } from '../../selectors/interface';
+import { resetPropertyForAllNodes } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
   prompts.forEach((prompt) => {
     resetPropertyForAllNodes(prompt.ordinalbin.layout);
-    resetEdgesOfType(prompt.ordinalbin.edge.type);
   });
 };
 
@@ -50,7 +51,7 @@ const OrdinalBin = ({
       />
     </div>
     <div className="ordinal-bin-interface__ordinalbin">
-      <Bin
+      <OrdinalBins
         stage={stage}
         prompt={prompt}
         key={prompt.id}
@@ -74,4 +75,13 @@ OrdinalBin.propTypes = {
   promptBackward: PropTypes.func.isRequired,
 };
 
-export default withPrompt(OrdinalBin);
+function mapStateToProps(state, props) {
+  return {
+    nodesForPrompt: networkNodesForPrompt(state, props),
+  };
+}
+
+export default compose(
+  withPrompt,
+  connect(mapStateToProps),
+)(OrdinalBin);
