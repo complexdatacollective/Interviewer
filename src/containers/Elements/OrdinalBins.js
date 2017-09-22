@@ -4,19 +4,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Bin = ({ title, index }) => {
-  <div className={'bin-'+index}></div>
+  return (
+    <div className="ordinal-bin__bin">
+      <div className="ordinal-bin__bin-title">{title}</div>
+      <div className="ordinal-bin__bin-content"></div>
+    </div>
+  )
 }
 
 const OrdinalBins = ({ stage, prompt }) => {
   
   const binTitles = prompt.bins.titles
-  const bins = [];
-  for (let index = 0; index < binTitles.count; index++) {
-    bins.push(<Bin index={index} title={binTitles[index]} />);
-  };
-
+  const bins = binTitles.map(
+    (bin, i) => <Bin title={binTitles[i]} key={i} />
+  );
+  
   return (
-    <div className="ordinalbin">
+    <div className="ordinal-bin">
       {bins}
     </div>
   );

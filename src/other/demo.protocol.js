@@ -283,6 +283,9 @@ export default {
             {
               id: 'closeness1',
               title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+              nodeAttributes: {
+                advice_friend: false,
+              },
               bins: {
                 name: "DemoBins",
                 titles: [
@@ -303,6 +306,9 @@ export default {
             {
               id: 'closeness2',
               title: "Connect any two people who are friends, or who would spend time together without you being there.",
+              nodeAttributes: {
+                advice_friend: false,
+              },
               bins: {
                 name: "DemoBins",
                 titles: [
@@ -329,6 +335,9 @@ export default {
             {
               id: 'closeness3',
               title: "Tap on anyone who has given you advice within the past 6 months.",
+              nodeAttributes: {
+                advice_friend: false,
+              },
               bins: {
                 name: "DemoBins",
                 titles: [
@@ -359,6 +368,9 @@ export default {
             {
               id: 'closeness5',
               title: "Connect any two people who are work together professionally.",
+              nodeAttributes: {
+                advice_friend: false,
+              },
               bins: {
                 name: "DemoBins",
                 titles: [

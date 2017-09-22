@@ -2,18 +2,10 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button } from 'network-canvas-ui';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../Elements';
 import { NodeList } from '../../components/Elements';
 import { networkNodesForPrompt } from '../../selectors/interface';
-import { resetPropertyForAllNodes } from '../../utils/reset';
-
-const resetInterface = (prompts) => {
-  prompts.forEach((prompt) => {
-    resetPropertyForAllNodes(prompt.ordinalbin.layout);
-  });
-};
 
 // Render method for the node labels
 const label = node => `${node.nickname}`;
@@ -30,13 +22,12 @@ const OrdinalBin = ({
   nodesForPrompt,
 }) => (
   <div className="ordinal-bin-interface">
-    <div className="ordinal-bin-interface__prompts">
+    <div className="ordinal-bin-interface__prompt">
       <PromptSwiper
         forward={promptForward}
         backward={promptBackward}
         prompts={stage.params.prompts}
         prompt={prompt}
-        floating
       />
     </div>
     <div className="ordinal-bin-interface__nodes">
@@ -57,13 +48,6 @@ const OrdinalBin = ({
         key={prompt.id}
       />
     </div>
-    <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
-      <Button
-        onClick={() => { resetInterface(stage.params.prompts); }}
-      >
-        Reset interface
-      </Button>
-    </div>
   </div>
 );
 
@@ -76,7 +60,15 @@ OrdinalBin.propTypes = {
 };
 
 function mapStateToProps(state, props) {
+  const newNodeAttributes = {
+    type: props.stage.params.nodeType,
+    stageId: props.stage.id,
+    promptId: props.prompt.id,
+    ...props.prompt.nodeAttributes,
+  };
+
   return {
+    newNodeAttributes,
     nodesForPrompt: networkNodesForPrompt(state, props),
   };
 }
