@@ -10,25 +10,31 @@ $component-name: modal;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparentize(palette('modal-overlay'), .05);
+  background-color: palette('background');
 
   &__window {
     width: 750px;
-    background: palette('modal-main-panel');
-    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
     position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    height: 100vh;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__layout {
+    align-self: flex-start;
     display: flex;
     flex-direction: column;
     max-height: 80vh;
     margin: 0 50px 50px;
+    max-width: 650px;
+    width: 100%;
 
     &-content {
       flex: 1 auto;
       overflow-x: hidden;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     &-title {
@@ -87,6 +93,22 @@ $component-name: modal;
           transition: transform $animation-default-easing $animation-fast-duration;
           transform: translate(0, -100vh);
         }
+      }
+    }
+  }
+
+  @include breakpoint('full') {
+    background-color: transparentize(palette('modal-overlay'), .05);
+
+    &__window {
+      background: palette('modal-main-panel');
+      box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
+      display: initial;
+      flex: initial;
+      height: initial;
+
+      > .icon {
+        display: none;
       }
     }
   }
