@@ -15,6 +15,11 @@ const mockProps = {
   toggleNodeAttributes: () => {},
   width: 123,
   height: 456,
+  attributes: {},
+  edge: null,
+  select: null,
+  canPosition: false,
+  canSelect: false,
   layout,
 };
 
@@ -25,7 +30,7 @@ describe('<NodeLayout />', () => {
     expect(component).toMatchSnapshot();
   });
 
-  it('shouldComponentUpdate() only when prop `nodes` changes length', () => {
+  it('shouldComponentUpdate() when prop `nodes` changes length only', () => {
     const componentDidUpdate = jest.fn();
     NodeLayoutPure.prototype.componentDidUpdate = componentDidUpdate;
 
@@ -35,15 +40,35 @@ describe('<NodeLayout />', () => {
     );
 
     component.setProps({
+      ...mockProps,
       nodes: [{ bar: 'buzz', uid: 123 }],
     });
 
     component.setProps({
-      nodes: [{ bar: 'buzz', uid: 123 }],
-    });
-
-    component.setProps({
+      ...mockProps,
       nodes: [{ bar: 'buzz', uid: 123 }, { bar: 'bing', uid: 456 }],
+    });
+
+    expect(componentDidUpdate.mock.calls.length).toEqual(1);
+  });
+
+  it('shouldComponentUpdate() when prop other than `nodes` changes', () => {
+    const componentDidUpdate = jest.fn();
+    NodeLayoutPure.prototype.componentDidUpdate = componentDidUpdate;
+
+    const component = shallow(
+      <NodeLayoutPure {...mockProps} />,
+      { lifecycleExperimental: true },
+    );
+
+    component.setProps({
+      ...mockProps,
+      nodes: [{ bar: 'buzz', uid: 123 }],
+    });
+
+    component.setProps({
+      ...mockProps,
+      width: 789,
     });
 
     expect(componentDidUpdate.mock.calls.length).toEqual(1);
