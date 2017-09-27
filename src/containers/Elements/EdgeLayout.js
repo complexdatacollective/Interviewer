@@ -35,7 +35,7 @@ const makeEdgeCoordsForSociogram = () => {
           to: to[layout],
         };
       }),
-    );
+  );
 };
 
 export class EdgeLayout extends PureComponent {

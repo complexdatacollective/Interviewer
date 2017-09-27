@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode, unstable_batchedUpdates } from 'react-dom';  // eslint-disable-line camelcase
+import { findDOMNode, unstable_batchedUpdates } from 'react-dom'; // eslint-disable-line camelcase
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { throttle, filter, isMatch } from 'lodash';

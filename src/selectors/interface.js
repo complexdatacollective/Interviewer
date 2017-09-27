@@ -29,9 +29,9 @@ export const protocolData = state => state.protocol.config.data;
 // MemoedSelectors
 
 export const networkNodes = createDeepEqualSelector(
-    state => state.network.nodes,
-    nodes => nodes,
-  );
+  state => state.network.nodes,
+  nodes => nodes,
+);
 
 export const propPromptIds = createSelector(
   [propStageId, propPromptId],
