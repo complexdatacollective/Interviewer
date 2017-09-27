@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionCreators, actionTypes } from '../../modules/network';
+import reducer, { actionCreators, actionTypes } from '../network';
 
 const mockState = {
   ego: {},

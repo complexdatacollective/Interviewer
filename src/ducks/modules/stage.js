@@ -1,5 +1,5 @@
 import { REHYDRATE } from 'redux-persist/constants';
-import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
+import { actionTypes as protocolActionTypes } from './protocol';
 
 const NEXT_STAGE = 'NEXT_STAGE';
 const PREVIOUS_STAGE = 'PREVIOUS_STAGE';

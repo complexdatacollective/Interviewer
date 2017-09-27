@@ -52,40 +52,43 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
-      const nodes = [...state.nodes];
-      const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
-      let node = { ...state.nodes[nodeIndex] };
+      const attributes = omit(action.attributes, ['uid', 'id']);
 
-      if (isMatch(node, action.attributes)) {
-        node = omit(node, Object.getOwnPropertyNames(action.attributes));
-      } else {
-        node = { ...node, ...action.attributes };
-      }
+      const updatedNodes = state.nodes.map((node) => {
+        if (node.uid !== action.node.uid) { return node; }
 
-      nodes[nodeIndex] = {
-        ...node,
-        id: nodes[nodeIndex].id, // ids can't be altered
-        uid: nodes[nodeIndex].uid, // uids can't be altered
-      };
+        if (isMatch(node, attributes)) {
+          return omit(node, Object.getOwnPropertyNames(attributes));
+        }
+
+        return {
+          ...node,
+          ...action.attributes,
+          id: node.id,
+          uid: node.uid,
+        };
+      });
 
       return {
         ...state,
-        nodes,
+        nodes: updatedNodes,
       };
     }
     case UPDATE_NODE: {
-      const nodes = [...state.nodes];
-      const nodeIndex = findIndex(state.nodes, ['uid', action.node.uid]);
+      const updatedNodes = state.nodes.map((node) => {
+        if (node.uid !== action.node.uid) { return node; }
 
-      nodes[nodeIndex] = {
-        ...action.node,
-        id: nodes[nodeIndex].id, // ids can't be altered
-        uid: nodes[nodeIndex].uid, // uids can't be altered
-      };
+        return {
+          ...node,
+          ...action.node,
+          id: node.id,
+          uid: node.uid,
+        };
+      });
 
       return {
         ...state,
-        nodes,
+        nodes: updatedNodes,
       };
     }
     case REMOVE_NODE:

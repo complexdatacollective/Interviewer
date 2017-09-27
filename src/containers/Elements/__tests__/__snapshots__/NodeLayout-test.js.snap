@@ -15,7 +15,28 @@ ShallowWrapper {
     <div
         className="node-layout"
     >
-        
+        <Connect(LayoutNode)
+            animate={false}
+            areaHeight={456}
+            areaWidth={123}
+            canDrag={false}
+            canSelect={false}
+            draggableType="POSITIONED_NODE"
+            layout="foo"
+            node={
+                Object {
+                    "bar": "buzz",
+                    "foo": Object {
+                      "x": 0,
+                      "y": 0,
+                    },
+                    "uid": 123,
+                  }
+            }
+            onDropped={[Function]}
+            onSelected={[Function]}
+            selected={false}
+        />
     </div>
 </Connect(Droppable)>,
   "nodes": Array [
@@ -26,7 +47,28 @@ ShallowWrapper {
       <div
             className="node-layout"
       >
-            
+            <Connect(LayoutNode)
+                  animate={false}
+                  areaHeight={456}
+                  areaWidth={123}
+                  canDrag={false}
+                  canSelect={false}
+                  draggableType="POSITIONED_NODE"
+                  layout="foo"
+                  node={
+                        Object {
+                              "bar": "buzz",
+                              "foo": Object {
+                                "x": 0,
+                                "y": 0,
+                              },
+                              "uid": 123,
+                            }
+                  }
+                  onDropped={[Function]}
+                  onSelected={[Function]}
+                  selected={false}
+            />
       </div>
 </Connect(Droppable)>,
   ],
@@ -38,11 +80,23 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <NodeLayout
         attributes={Object {}}
+        canPosition={false}
+        canSelect={false}
         edge={null}
         height={456}
         layout="foo"
-        nodes={Array []}
-        position={false}
+        nodes={
+                Array [
+                        Object {
+                          "bar": "buzz",
+                          "foo": Object {
+                            "x": 0,
+                            "y": 0,
+                          },
+                          "uid": 123,
+                        },
+                      ]
+        }
         select={null}
         toggleEdge={[Function]}
         toggleNodeAttributes={[Function]}
@@ -55,14 +109,25 @@ ShallowWrapper {
       "_instance": NodeLayout {
         "_reactInternalInstance": [Circular],
         "context": Object {},
+        "onDropNode": [Function],
         "onSelectNode": [Function],
         "props": Object {
           "attributes": Object {},
+          "canPosition": false,
+          "canSelect": false,
           "edge": null,
           "height": 456,
           "layout": "foo",
-          "nodes": Array [],
-          "position": false,
+          "nodes": Array [
+            Object {
+              "bar": "buzz",
+              "foo": Object {
+                "x": 0,
+                "y": 0,
+              },
+              "uid": 123,
+            },
+          ],
           "select": null,
           "toggleEdge": [Function],
           "toggleNodeAttributes": [Function],
@@ -73,7 +138,6 @@ ShallowWrapper {
         "state": Object {
           "connectFrom": null,
         },
-        "updateNodeLayout": [Function],
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -99,7 +163,28 @@ ShallowWrapper {
           <div
                     className="node-layout"
           >
-                    
+                    <Connect(LayoutNode)
+                              animate={false}
+                              areaHeight={456}
+                              areaWidth={123}
+                              canDrag={false}
+                              canSelect={false}
+                              draggableType="POSITIONED_NODE"
+                              layout="foo"
+                              node={
+                                        Object {
+                                                  "bar": "buzz",
+                                                  "foo": Object {
+                                                    "x": 0,
+                                                    "y": 0,
+                                                  },
+                                                  "uid": 123,
+                                                }
+                              }
+                              onDropped={[Function]}
+                              onSelected={[Function]}
+                              selected={false}
+                    />
           </div>
 </Connect(Droppable)>,
         "_debugID": 2,
@@ -110,7 +195,28 @@ ShallowWrapper {
           <div
                     className="node-layout"
           >
-                    
+                    <Connect(LayoutNode)
+                              animate={false}
+                              areaHeight={456}
+                              areaWidth={123}
+                              canDrag={false}
+                              canSelect={false}
+                              draggableType="POSITIONED_NODE"
+                              layout="foo"
+                              node={
+                                        Object {
+                                                  "bar": "buzz",
+                                                  "foo": Object {
+                                                    "x": 0,
+                                                    "y": 0,
+                                                  },
+                                                  "uid": 123,
+                                                }
+                              }
+                              onDropped={[Function]}
+                              onSelected={[Function]}
+                              selected={false}
+                    />
           </div>
 </Connect(Droppable)>,
       },
@@ -126,11 +232,23 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <NodeLayout
     attributes={Object {}}
+    canPosition={false}
+    canSelect={false}
     edge={null}
     height={456}
     layout="foo"
-    nodes={Array []}
-    position={false}
+    nodes={
+        Array [
+            Object {
+              "bar": "buzz",
+              "foo": Object {
+                "x": 0,
+                "y": 0,
+              },
+              "uid": 123,
+            },
+          ]
+    }
     select={null}
     toggleEdge={[Function]}
     toggleNodeAttributes={[Function]}

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { networkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/interface';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 
@@ -158,17 +158,15 @@ NameGenerator.propTypes = {
   promptBackward: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  const newNodeAttributes = {
-    type: props.stage.params.nodeType,
-    stageId: props.stage.id,
-    promptId: props.prompt.id,
-    ...props.prompt.nodeAttributes,
-  };
+function makeMapStateToProps() {
+  const networkNodesForPrompt = makeNetworkNodesForPrompt();
+  const newNodeAttributes = makeNewNodeAttributes();
 
-  return {
-    newNodeAttributes,
-    nodesForPrompt: networkNodesForPrompt(state, props),
+  return function mapStateToProps(state, props) {
+    return {
+      newNodeAttributes: newNodeAttributes(state, props),
+      nodesForPrompt: networkNodesForPrompt(state, props),
+    };
   };
 }
 
@@ -184,5 +182,5 @@ function mapDispatchToProps(dispatch) {
 
 export default compose(
   withPrompt,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(makeMapStateToProps, mapDispatchToProps),
 )(NameGenerator);
