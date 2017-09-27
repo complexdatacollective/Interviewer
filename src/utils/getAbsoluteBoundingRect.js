@@ -38,7 +38,7 @@ export default function getAbsoluteBoundingRect(el) {
         // The element's rect will be affected by the scroll positions of
         // *all* of its scrollable parents, not just the window, so we have
         // to walk up the tree and collect every scroll offset. Good times.
-        while (parent !== body) {
+        while (parent && parent !== body) {
             offsetX += parent.scrollLeft;
             offsetY += parent.scrollTop;
             parent   = parent.parentNode;
