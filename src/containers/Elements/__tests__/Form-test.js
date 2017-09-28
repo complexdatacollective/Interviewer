@@ -30,8 +30,8 @@ describe('<Form />', () => {
       <Form {...props()} store={createStore(() => {})} />
     ));
 
-    expect(continuousForm.find('button').length).toBe(2)
-    expect(singularForm.find('button').length).toBe(1)
+    expect(continuousForm.find('button').length).toBe(2);
+    expect(singularForm.find('button').length).toBe(1);
   });
 
   it('renders an array of <Field />', () => {
