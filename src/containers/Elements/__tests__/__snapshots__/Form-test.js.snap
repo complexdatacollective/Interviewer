@@ -136,9 +136,16 @@ ShallowWrapper {
           }
 />,
         "state": Object {
-          "storeState": undefined,
+          "storeState": Object {
+            "protocol": Object {
+              "config": Object {
+                "registry": Object {},
+              },
+            },
+          },
         },
         "stateProps": Object {
+          "fields": Array [],
           "meta": Object {
             "fields": undefined,
             "values": undefined,
