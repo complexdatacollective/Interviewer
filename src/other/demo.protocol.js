@@ -1,5 +1,62 @@
 /* eslint-disable */
 
+const variableRegistry = {
+  name: {
+    label: 'Name',
+    type: 'text',
+    rules: {
+      required: true,
+      length: 10,
+    },
+  },
+  age: {
+    label: 'age',
+    type: 'number',
+    rules: {
+      required: true,
+      min: 18,
+      max: 122,
+    },
+  },
+  nickname: {
+    label: 'Nickname',
+    type: 'text',
+    rules: {
+      required: true,
+      length: 10,
+    },
+  },
+  special_category: {
+    label: 'Special category',
+    type: 'enumerable',
+    options: [46],
+  },
+  some_options: {
+    label: 'Some possible options',
+    type: 'options',
+    options: [46],
+    rules: {
+      max: 1,
+    }
+  },
+  close_friend: {
+    label: 'Close Friend',
+    type: 'boolean',
+  },
+  support_friend: {
+    label: 'Support Friend',
+    type: 'boolean',
+  },
+  advice_friend: {
+    label: 'Advice Friend',
+    type: 'boolean',
+  },
+  has_given_advice: {
+    label: 'Has given advice?',
+    type: 'boolean',
+  }
+};
+
 const data = {
   "previous": {
     nodes: [
