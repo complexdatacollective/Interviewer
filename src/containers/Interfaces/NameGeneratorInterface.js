@@ -9,7 +9,7 @@ import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selector
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 
-const modals = {
+const forms = {
   ADD_NODE: Symbol('ADD_NODE'),
   EDIT_NODE: Symbol('EDIT_NODE'),
 };
@@ -57,7 +57,7 @@ class NameGenerator extends Component {
    */
   onSelectNode = (node) => {
     this.setState({ selectedNode: node }, () => {
-      this.props.openModal(modals.EDIT_NODE);
+      this.props.openModal(forms.EDIT_NODE);
     });
   }
 
@@ -121,19 +121,21 @@ class NameGenerator extends Component {
 
         <NodeForm
           node={this.state.selectedNode}
-          modalName={modals.EDIT_NODE}
-          form={form}
+          name={forms.EDIT_NODE}
+          title={form.title}
+          fields={form.fields}
           handleSubmit={this.onSubmitEditNode}
         />
 
         <NodeForm
-          modalName={modals.ADD_NODE}
-          form={form}
+          name={forms.ADD_NODE}
+          title={form.title}
+          fields={form.fields}
           handleSubmit={this.onSubmitNewNode}
           addAnother
         />
 
-        <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>
+        <button className="name-generator-interface__add-person" onClick={() => openModal(forms.ADD_NODE)}>
           Add a person
         </button>
 

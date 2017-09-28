@@ -6,6 +6,7 @@ import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { Button } from 'network-canvas-ui';
 import { autoInitialisedForm } from '../../behaviours';
 import { Field } from '../../containers/Elements';
+import { rehydrateFieldsFromRegistry } from '../../selectors/registry';
 
 /**
   * Renders a redux form that contains fields according to a `fields` config.
@@ -73,7 +74,7 @@ class Form extends Component {
         }) }
         <div className="form__button-container">
           {addAnotherButton}
-          <Button onClick={normalSubmit} accessibityLabel="Submit">Submit</Button>
+          <Button onClick={normalSubmit}>Submit</Button>
         </div>
       </form>
     );
@@ -100,12 +101,13 @@ Form.defaultProps = {
   normalSubmit: null,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, props) {
   return {
     meta: {
-      fields: getFormMeta(ownProps.form)(state),
-      values: getFormValues(ownProps.form)(state),
+      fields: getFormMeta(props.form)(state),
+      values: getFormValues(props.form)(state),
     },
+    fields: rehydrateFieldsFromRegistry(state, props),
   };
 }
 
