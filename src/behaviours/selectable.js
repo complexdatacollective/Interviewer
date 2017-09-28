@@ -1,30 +1,25 @@
+/* eslint-disable react/no-find-dom-node */
+
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 
 export default function selectable(WrappedComponent) {
   class Selectable extends Component {
-    constructor(props) {
-      super(props);
+    componentDidMount() {
+      if (!this.props.canSelect) { return; }
+      this.el = findDOMNode(this.node);
+      this.el.addEventListener('click', this.onTap, { passive: true });
+    }
 
-      this.state = {
-        time: 0,
-      };
+    componentWillUnmount() {
+      if (this.el) {
+        this.el.removeEventListener('click', this.onTap);
+      }
     }
 
     onTap = () => {
       this.props.onSelected();
-    }
-
-    onTouchStart = () => {
-      this.setState({ time: new Date().getTime() });
-    }
-
-    onTouchEnd = () => {
-      const time = new Date().getTime();
-
-      if (time - this.state.time < 100) {
-        this.onTap();
-      }
     }
 
     render() {
@@ -36,15 +31,7 @@ export default function selectable(WrappedComponent) {
 
       if (!canSelect) { return <WrappedComponent {...rest} />; }
 
-      return (
-        <span
-          onClick={this.onTap}
-          onTouchStart={this.onTouchStart}
-          onTouchEnd={this.onTouchEnd}
-        >
-          <WrappedComponent {...rest} />
-        </span>
-      );
+      return <WrappedComponent {...rest} ref={(node) => { this.node = node; }} />;
     }
   }
 
