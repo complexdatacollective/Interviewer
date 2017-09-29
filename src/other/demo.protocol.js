@@ -4,7 +4,7 @@ const registry = {
   name: {
     label: 'Name',
     type: 'text',
-    rules: {
+    validation: {
       required: true,
       minLength: 1,
       maxLength: 24,
@@ -13,7 +13,7 @@ const registry = {
   age: {
     label: 'Age',
     type: 'number',
-    rules: {
+    validation: {
       required: true,
       minValue: 16,
       maxValue: 100,
@@ -22,7 +22,7 @@ const registry = {
   nickname: {
     label: 'Nickname',
     type: 'text',
-    rules: {
+    validation: {
       required: true,
       minLength: 1,
       maxLength: 8,
@@ -37,7 +37,7 @@ const registry = {
     label: 'Some possible options',
     type: 'options',
     options: [46],
-    rules: {
+    validation: {
       max: 1,
     }
   },
@@ -57,6 +57,27 @@ const registry = {
     label: 'Has given advice?',
     type: 'boolean',
   }
+};
+
+const forms = {
+  add_a_person: {
+    title: 'Add A Person',
+    fields: [
+      {
+        variable: 'name',
+        component: 'Alphanumeric',
+      },
+      {
+        variable: 'nickname',
+        component: 'Alphanumeric',
+      },
+      {
+        variable: 'age',
+        component: 'Alphanumeric',
+      },
+    ],
+    autoPopulate: autoPopulate,
+  },
 };
 
 const data = {
@@ -179,15 +200,7 @@ export default {
               },
             },
           ],
-          form: {
-            title: 'Add A Person',
-            fields: [
-              'name',
-              'nickname',
-              'age',
-            ],
-            autoPopulate: autoPopulate,
-          },
+          form: 'add_a_person',
         },
       },
       {
