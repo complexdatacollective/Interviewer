@@ -1,5 +1,20 @@
 /* eslint-disable */
 
+const generateNickname = (name) => {
+  if (name) {
+    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
+    return nickName.substring(0,8);
+  } else {
+    return '';
+  }
+}
+
+const autoPopulate = (fields, values, populate) => {
+  if((!fields['nickname'] || !fields['nickname'].touched) && values) {
+    populate('nickname', generateNickname(values['name']));
+  }
+}
+
 const registry = {
   name: {
     label: 'Name',
@@ -66,7 +81,6 @@ const forms = {
       {
         variable: 'name',
         component: 'TextInput',
-        component: () => '',  // Custom component
       },
       {
         variable: 'nickname',
@@ -141,21 +155,6 @@ const data = {
     ],
   },
 };
-
-const generateNickname = (name) => {
-  if (name) {
-    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
-    return nickName.substring(0,8);
-  } else {
-    return '';
-  }
-}
-
-const autoPopulate = (fields, values, populate) => {
-  if((!fields['nickname'] || !fields['nickname'].touched) && values) {
-    populate('nickname', generateNickname(values['name']));
-  }
-}
 
 export default {
   config: {

@@ -2,12 +2,12 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Field, { renderInput } from '../Field';
+import Field, { makeRenderInput } from '../Field';
 
 const attributes = {
   label: 'Name',
   name: 'name',
-  type: 'Alphanumeric',
+  component: 'Alphanumeric',
 };
 
 const validation = {
@@ -15,19 +15,27 @@ const validation = {
   minLength: 2,
 };
 
-describe('Containers/Elements/Field', () => {
+const reduxFormFieldProperties = { input: { name: 'foo', value: '' }, meta: { invalid: false } };
+
+describe('makeRenderInput()', () => {
+  it('should return renderable component', () => {
+    const Input = makeRenderInput('Alphanumeric');
+
+    const subject = shallow((
+      <Input {...reduxFormFieldProperties} />
+    ));
+
+    expect(subject).toMatchSnapshot();
+  });
+});
+
+describe('<Field />', () => {
   it('should render', () => {
     const subject = shallow((
       <Field {...attributes} />
     ));
 
     expect(subject).toMatchSnapshot();
-  });
-
-  it('renders the input', () => {
-    const field = shallow(<Field {...attributes} />);
-
-    expect(field.find('Field').prop('component')).toBe(renderInput);
   });
 
   it('Loads validations from the register', () => {

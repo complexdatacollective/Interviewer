@@ -52,14 +52,14 @@ describe('<Form />', () => {
       {
         label: 'Name',
         name: 'name',
-        type: 'Alphanumeric',
+        component: 'TextInput',
         placeholder: 'Name',
         validation: {},
       },
       {
         label: 'Nickname',
         name: 'nickname',
-        type: 'Alphanumeric',
+        component: 'TextInput',
         placeholder: 'Nickname',
         validation: {},
       },
