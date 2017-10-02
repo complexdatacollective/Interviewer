@@ -5,18 +5,24 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
-import { pick } from 'lodash';
+import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { Form } from '../../containers/Elements';
 import { Modal } from '../../components/Elements';
+import { makeRehydrateFields } from '../../selectors/rehydrate';
 
-const propFields = (_, props) => props.fields;
 const propNode = (_, props) => props.node;
+
+const makePropFieldVariables = () =>
+  createSelector(
+    makeRehydrateFields(),
+    fields => map(fields, 'name'),
+  );
 
 const makeGetInitialValuesFromProps = () =>
   createSelector(
-    propFields,
+    makePropFieldVariables(),
     propNode,
     (fields, node) => pick(node, fields),
   );
