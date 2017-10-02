@@ -296,6 +296,13 @@ export default {
                   "Never",
                   "Prefer not to respond"
                 ],
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
                 background: {
                   n: 4,
                   skewed: true,
@@ -319,6 +326,13 @@ export default {
                   "Never",
                   "Prefer not to respond"
                 ],
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
                 background: {
                   n: 4,
                   skewed: true,
@@ -348,6 +362,13 @@ export default {
                   "Never",
                   "Prefer not to respond"
                 ],
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
                 nodeAttributes: {
                   has_given_advice: true,
                 },
@@ -381,6 +402,13 @@ export default {
                   "Never",
                   "Prefer not to respond"
                 ],
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
                 background: {
                   n: 4,
                   skewed: true,
