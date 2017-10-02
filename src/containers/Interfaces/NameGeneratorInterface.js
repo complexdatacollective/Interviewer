@@ -8,6 +8,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/interface';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
+import { makeRehydrateForm } from '../../selectors/rehydrate';
 
 const forms = {
   ADD_NODE: Symbol('ADD_NODE'),
@@ -85,10 +86,10 @@ class NameGenerator extends Component {
       prompt,
       nodesForPrompt,
       stage,
+      form,
     } = this.props;
 
     const {
-      form,
       prompts,
     } = this.props.stage.params;
 
@@ -158,16 +159,19 @@ NameGenerator.propTypes = {
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  form: PropTypes.object.isRequired,
 };
 
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const newNodeAttributes = makeNewNodeAttributes();
+  const rehydrateForm = makeRehydrateForm();
 
   return function mapStateToProps(state, props) {
     return {
       newNodeAttributes: newNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
+      form: rehydrateForm(state, props),
     };
   };
 }

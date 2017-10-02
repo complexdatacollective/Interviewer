@@ -65,15 +65,16 @@ const forms = {
     fields: [
       {
         variable: 'name',
-        component: 'Alphanumeric',
+        component: 'TextInput',
+        component: () => '',  // Custom component
       },
       {
         variable: 'nickname',
-        component: 'Alphanumeric',
+        component: 'TextInput',
       },
       {
         variable: 'age',
-        component: 'Alphanumeric',
+        component: 'TextInput',
       },
     ],
     autoPopulate: autoPopulate,
@@ -164,6 +165,7 @@ export default {
     "exportPath": "some/path/here.json",
     "registry": registry,
     "data": data,
+    "forms": forms,
     "stages": [
       {
         "id": "namegen1",
