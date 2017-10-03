@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unused-prop-types */
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -91,7 +89,7 @@ NodeForm.propTypes = {
   ]).isRequired,
   title: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
-  node: PropTypes.any,
+  node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   addAnother: PropTypes.bool,
 };
 
