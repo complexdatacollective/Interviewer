@@ -1,31 +1,64 @@
+@mixin generate-bins($palette, $content: false, $bin: false) {
+    @for $total-num from 2 through 6 {
+        @if $bin {
+            &--#{$total-num}-0 {
+                border-color: transparentize(palette('dark-background'), .15);
+            }
+        }
+        @else {
+            @for $num from 1 through $total-num {
+                &--#{$total-num}-#{$num} {
+                    background-color: transparentize($palette, $num / $total-num);
+                    border-color: transparentize($palette, $num / $total-num);
+                }
+            }
+            @if $content {
+                &--#{$total-num}-0 {
+                    background-color: transparentize(palette('dark-background'), .25);
+                }
+            }
+            @else {
+                &--#{$total-num}-0 {
+                    background-color: transparentize(palette('dark-background'), .15);
+                }
+            }
+        }
+    }
+}
+
 .ordinal-bin {
     display: flex;
+    display: -webkit-flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
 
     &__bin {
         display: flex;
+        display: -webkit-flex;
         flex-direction: column;
-        background-color: palette('light-background');
-        border-bottom: 10px solid palette('primary');
+        @include generate-bins(palette('primary'), false, true);
+        border-bottom: 10px solid;
         margin: 0 0 100px;
         overflow: hidden;
         width: 100%;
 
         &--title {
-            background-color: palette('primary');
             height: 100px;
+            display: -webkit-flex;
             display: flex;
             align-items: center;
             justify-content: center;
+            @include generate-bins(palette('primary'));
         }
 
         &--content {
             height: 100%;
+            display: -webkit-flex;
             display: flex;
             align-items: center;
             justify-content: center;
+            @include generate-bins(palette('light-background'), true);
         }
     }
 }

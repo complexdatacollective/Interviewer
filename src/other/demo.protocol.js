@@ -288,14 +288,6 @@ export default {
               },
               bins: {
                 name: "DemoBins",
-                titles: [
-                  "Very Often",
-                  "Often",
-                  "Sometimes",
-                  "Rarely",
-                  "Never",
-                  "Prefer not to respond"
-                ],
                 values: {
                   "Very Often": 4,
                   "Often": 3,
@@ -318,14 +310,6 @@ export default {
               },
               bins: {
                 name: "DemoBins",
-                titles: [
-                  "Very Often",
-                  "Often",
-                  "Sometimes",
-                  "Rarely",
-                  "Never",
-                  "Prefer not to respond"
-                ],
                 values: {
                   "Very Often": 4,
                   "Often": 3,
@@ -354,14 +338,6 @@ export default {
               },
               bins: {
                 name: "DemoBins",
-                titles: [
-                  "Very Often",
-                  "Often",
-                  "Sometimes",
-                  "Rarely",
-                  "Never",
-                  "Prefer not to respond"
-                ],
                 values: {
                   "Very Often": 4,
                   "Often": 3,
@@ -394,14 +370,6 @@ export default {
               },
               bins: {
                 name: "DemoBins",
-                titles: [
-                  "Very Often",
-                  "Often",
-                  "Sometimes",
-                  "Rarely",
-                  "Never",
-                  "Prefer not to respond"
-                ],
                 values: {
                   "Very Often": 4,
                   "Often": 3,

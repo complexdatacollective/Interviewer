@@ -8,11 +8,11 @@ import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable } from '../../behaviours';
 
 const Bin = ({ title, key, value, count }) => {
-  // const keyWithValue = value > 0 ? key + 1 : 0;
+  const keyWithValue = value > 0 ? key + 1 : 0;
   return (
-    <div className={'ordinal-bin__bin'}>
-      <div className={'ordinal-bin__bin--title'}>{title}</div>
-      <div className={'ordinal-bin__bin--content'}></div>
+    <div className={'ordinal-bin__bin ordinal-bin__bin--' + count + '-' + keyWithValue}>
+      <div className={'ordinal-bin__bin--title ordinal-bin__bin--title--' + count + '-' + keyWithValue}>{title}</div>
+      <div className={'ordinal-bin__bin--content ordinal-bin__bin--content--' + count + '-' + keyWithValue}></div>
     </div>
   )
 }
