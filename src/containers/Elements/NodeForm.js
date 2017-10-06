@@ -38,7 +38,7 @@ class NodeForm extends Component {
     this.close();
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
-      this.props.resetValues(form.name);
+      this.props.resetValues(form.form);
       this.props.openModal(this.props.modalName);
     }
   };
