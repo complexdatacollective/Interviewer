@@ -1,4 +1,4 @@
-import { reject } from 'lodash';
+import { reject, isEqual } from 'lodash';
 import { actionTypes as draggableActions } from './draggable';
 
 const UPDATE_ZONE = 'UPDATE_ZONE';
@@ -18,12 +18,13 @@ export default function reducer(state = initialState, action = {}) {
         zones,
       };
     }
-    case UPDATE_ACTIVE_ZONES: {
-      return {
-        ...state,
-        activeZones: action.zones,
-      };
-    }
+    case UPDATE_ACTIVE_ZONES:
+      return isEqual(action.zones, state.activeZones) ?
+        state :
+        ({
+          ...state,
+          activeZones: action.zones,
+        });
     case draggableActions.DRAG_STOP:
       return {
         ...state,

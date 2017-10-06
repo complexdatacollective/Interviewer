@@ -1,11 +1,11 @@
-/* eslint-disable */
+/* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { throttle, isEqual } from 'lodash';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 
-const maxFramesPerSecond = 6;
+const maxUpdatesPerSecond = 6;
 
 const initialState = {
   width: 0,
@@ -22,7 +22,7 @@ export default function withBounds(WrappedComponent) {
       this.state = initialState;
       this.lastState = initialState;
 
-      // this.trackSize = throttle(this.trackSize, 1000 / maxFramesPerSecond);
+      this.trackSize = throttle(this.trackSize, 1000 / maxUpdatesPerSecond);
     }
 
     componentDidMount() {

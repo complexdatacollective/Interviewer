@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import reducer, { actionCreators, actionTypes } from '../../modules/stage';
-import { actionTypes as protocolActionTypes } from '../../modules/protocol';
+import reducer, { actionCreators, actionTypes } from '../stage';
+import { actionTypes as protocolActionTypes } from '../protocol';
 
 describe('session reducer', () => {
   it('should return the initial state', () => {
