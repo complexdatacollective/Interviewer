@@ -8,7 +8,6 @@ import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable } from '../../behaviours';
 
 const Bin = ({ title, index, value, count }) => {
-  console.log(index);
   const keyWithValue = value > 0 ? index + 1 : 0;
   return (
     <div className={'ordinal-bin__bin ordinal-bin__bin--' + count + '-' + keyWithValue}>
@@ -27,7 +26,7 @@ const OrdinalBins = ({ stage, prompt }) => {
     'desc',
   );
   const bins = binValues.map(
-    (binValue, index) => <Bin title={binValue[0]} count={binValues.length} index={index} value={binValue[1]} />
+    (binValue, index) => <Bin title={binValue[0]} count={binValues.length} index={index} key={index} value={binValue[1]} />
   );
   
   return (

@@ -12,8 +12,22 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
 
-const propSort = (_, props) => props.prompt.sociogram.sort;
-const propLayout = (_, props) => props.prompt.sociogram.layout;
+const propSort = (_, props) => {
+  if (props.prompt.sociogram) {
+    return props.prompt.sociogram.sort;
+  } else if (props.prompt.bins) {
+    return props.prompt.bins.sort;
+  }
+  return null;
+};
+const propLayout = (_, props) => {
+  if (props.prompt.sociogram) {
+    return props.prompt.sociogram.layout;
+  } else if (props.prompt.bins) {
+    return props.prompt.bins.layout;
+  }
+  return null;
+};
 
 const getUnplacedNodes = createSelector(
   [networkNodesOfStageType, propLayout],

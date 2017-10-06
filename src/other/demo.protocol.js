@@ -287,6 +287,7 @@ export default {
                 advice_friend: false,
               },
               bins: {
+                layout: "ordinalBins",
                 name: "DemoBins",
                 values: {
                   "Very Often": 4,
@@ -309,6 +310,7 @@ export default {
                 advice_friend: false,
               },
               bins: {
+                layout: "ordinalBins",
                 name: "DemoBins",
                 values: {
                   "Very Often": 4,
@@ -337,6 +339,7 @@ export default {
                 advice_friend: false,
               },
               bins: {
+                layout: "ordinalBins",
                 name: "DemoBins",
                 values: {
                   "Very Often": 4,
@@ -369,6 +372,7 @@ export default {
                 advice_friend: false,
               },
               bins: {
+                layout: "ordinalBins",
                 name: "DemoBins",
                 values: {
                   "Very Often": 4,
