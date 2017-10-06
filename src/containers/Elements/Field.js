@@ -30,6 +30,7 @@ export const renderInput = (field) => {
     isNumericOnly,
     toggleComponent,
     autoFocus,
+    className,
   } = field;
   let InputComponent = Alphanumeric;
 
@@ -40,6 +41,7 @@ export const renderInput = (field) => {
     label,
     autoFocus,
     isNumericOnly,
+    className,
   };
 
   if (type === 'RadioGroup') {

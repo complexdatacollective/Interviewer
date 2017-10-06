@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { Icon, animation } from 'network-canvas-ui';
+import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
 import modal from '../../behaviours/modal';
 
@@ -11,6 +11,7 @@ import modal from '../../behaviours/modal';
 function Modal(props) {
   const {
     children,
+    className,
     close,
     show,
     title,
@@ -23,9 +24,8 @@ function Modal(props) {
       transitionLeaveTimeout={animation.duration.standard}
     >
       { show &&
-        <div key="modal" className="modal" onClick={() => close()}>
+        <div key="modal" className={`modal ${className}`} onClick={() => close()}>
           <div className="modal__window" onClick={e => e.stopPropagation()}>
-            <Icon name="form-arrow-left" />
             <div className="modal__layout">
               <div className="modal__layout-title">
                 <h1>{title}</h1>
@@ -34,7 +34,6 @@ function Modal(props) {
                 {children}
               </div>
             </div>
-            <Icon name="form-arrow-right" />
             <button className="modal__close" onClick={() => close()}>
               Cancel
             </button>
@@ -46,6 +45,7 @@ function Modal(props) {
 }
 
 Modal.propTypes = {
+  className: PropTypes.string,
   close: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   show: PropTypes.bool,
@@ -53,6 +53,7 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
+  className: '',
   show: false,
   children: null,
 };

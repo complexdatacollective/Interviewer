@@ -52,14 +52,17 @@ class Form extends Component {
       continuousSubmit,
       normalSubmit,
       autoFocus,
+      previous,
+      next,
     } = this.props;
 
     const addAnotherButton = addAnother
-      ? <Button type="button" color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
+      ? <Button color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
       : null;
 
     return (
       <form onSubmit={handleSubmit}>
+        {previous}
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
@@ -72,8 +75,9 @@ class Form extends Component {
           );
         }) }
         <div className="form__button-container">
-          {addAnotherButton}
-          <Button onClick={normalSubmit} aria-label="Submit">Submit</Button>
+          {next}
+          {!next && addAnotherButton}
+          {!next && <Button onClick={normalSubmit} aria-label="Submit">Submit</Button>}
         </div>
       </form>
     );
@@ -90,6 +94,8 @@ Form.propTypes = {
   addAnother: PropTypes.bool,
   continuousSubmit: PropTypes.func,
   normalSubmit: PropTypes.func,
+  next: PropTypes.object,
+  previous: PropTypes.object,
 };
 
 Form.defaultProps = {
@@ -98,6 +104,8 @@ Form.defaultProps = {
   autoPopulate: null,
   continuousSubmit: null,
   normalSubmit: null,
+  next: null,
+  previous: null,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -113,7 +121,9 @@ export default compose(
   connect(mapStateToProps),
   autoInitialisedForm,
   reduxForm({
-    destroyOnUnmount: true,
+    destroyOnUnmount: false, // need this false to make it validate across wizard
+    enableReinitialize: true,
     forceUnregisterOnUnmount: true,
+    keepDirtyOnReinitialize: true,
   }),
 )(Form);
