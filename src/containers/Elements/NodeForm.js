@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { reset, submit } from 'redux-form';
+import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
 import { map, pick } from 'lodash';
 import { createSelector } from 'reselect';
@@ -93,7 +93,7 @@ class NodeForm extends Component {
       </div>);
     const lastField = this.state.fieldIndex === form.fields.length - 1;
     const nextElement = lastField || large ? null :
-      (<Icon name="form-arrow-right" onClick={() => this.props.remoteSubmit(form.name)} />);
+      (<Icon name="form-arrow-right" />);
 
     return (
       <Modal name={modalName} title={form.title} close={this.close} className={large ? '' : 'modal--mobile'}>
@@ -131,7 +131,6 @@ NodeForm.propTypes = {
   form: PropTypes.any.isRequired,
   node: PropTypes.any,
   addAnother: PropTypes.bool,
-  remoteSubmit: PropTypes.func.isRequired,
 };
 
 NodeForm.defaultProps = {
@@ -150,7 +149,6 @@ function mapDispatchToProps(dispatch) {
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
     resetValues: bindActionCreators(reset, dispatch),
-    remoteSubmit: bindActionCreators(submit, dispatch),
   };
 }
 

@@ -38,10 +38,15 @@ class Form extends Component {
         fields,
         values,
       },
+      dirty,
       autofill,
     } = this.props;
 
-    this.props.autoPopulate(fields, values, autofill);
+    // if we don't check dirty state, this ends up firing and auto populating fields
+    // when it shouldn't, like when closing the form
+    if (dirty) {
+      this.props.autoPopulate(fields, values, autofill);
+    }
   };
 
   render() {
@@ -56,7 +61,7 @@ class Form extends Component {
       next,
     } = this.props;
 
-    const addAnotherButton = addAnother
+    const addAnotherButton = addAnother && !next
       ? <Button color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
       : null;
 
@@ -75,9 +80,11 @@ class Form extends Component {
           );
         }) }
         <div className="form__button-container">
-          {next}
-          {!next && addAnotherButton}
-          {!next && <Button onClick={normalSubmit} aria-label="Submit">Submit</Button>}
+          {addAnotherButton}
+          {next ?
+            <button className="form__next-button" onClick={normalSubmit} aria-label="Submit">{next}</button> :
+            <Button onClick={normalSubmit} aria-label="Submit">Submit</Button>
+          }
         </div>
       </form>
     );
@@ -88,6 +95,7 @@ Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   autofill: PropTypes.func.isRequired,
+  dirty: PropTypes.bool.isRequired,
   meta: PropTypes.object.isRequired,
   autoPopulate: PropTypes.func,
   autoFocus: PropTypes.bool,
