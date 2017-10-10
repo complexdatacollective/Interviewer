@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { first } from 'lodash';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins, NodeBucket } from '../Elements';
@@ -16,31 +17,44 @@ const OrdinalBin = ({
   promptBackward,
   prompt,
   stage,
-}) => (
-  <div className="ordinal-bin-interface">
-    <div className="ordinal-bin-interface__prompt">
-      <PromptSwiper
-        forward={promptForward}
-        backward={promptBackward}
-        prompts={stage.params.prompts}
-        prompt={prompt}
-      />
+}) => {
+  const onDropNode = (hits, coords, node) => {
+    const hit = first(hits);
+    const relativeCoords = {
+      x: (coords.x - hit.x) / hit.width,
+      y: (coords.y - hit.y) / hit.height,
+    };
+
+    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
+  };
+
+  return (
+    <div className="ordinal-bin-interface">
+      <div className="ordinal-bin-interface__prompt">
+        <PromptSwiper
+          forward={promptForward}
+          backward={promptBackward}
+          prompts={stage.params.prompts}
+          prompt={prompt}
+        />
+      </div>
+      <div className="ordinal-bin-interface__nodes">
+        <NodeBucket
+          stage={stage}
+          prompt={prompt}
+          onDropNode={onDropNode}
+        />
+      </div>
+      <div className="ordinal-bin-interface__ordinalbin">
+        <OrdinalBins
+          stage={stage}
+          prompt={prompt}
+          key={prompt.id}
+        />
+      </div>
     </div>
-    <div className="ordinal-bin-interface__nodes">
-      <NodeBucket
-        stage={stage}
-        prompt={prompt}
-      />
-    </div>
-    <div className="ordinal-bin-interface__ordinalbin">
-      <OrdinalBins
-        stage={stage}
-        prompt={prompt}
-        key={prompt.id}
-      />
-    </div>
-  </div>
-);
+  );
+};
 
 OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,

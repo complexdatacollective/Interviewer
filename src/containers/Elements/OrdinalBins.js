@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { map, orderBy } from 'lodash';
 import { animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, droppable } from '../../behaviours';
@@ -18,8 +18,8 @@ const Bin = ({ title, index, value, count }) => {
 }
 
 const OrdinalBins = ({ stage, prompt }) => {
-  const binValues = _.orderBy(
-    _.map(prompt.bins.values,
+  const binValues = orderBy(
+    map(prompt.bins.values,
       (value, title) => [title, value]
     ),
     (titleValuePair) => titleValuePair[1],

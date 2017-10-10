@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { first, sortBy, reject, has, map } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { networkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
@@ -48,16 +46,6 @@ const getNextUnplacedNode = createSelector(
 const draggableType = 'POSITIONED_NODE';
 
 export class NodeBucket extends Component {
-  onDropNode = (hits, coords, node) => {
-    const hit = first(hits);
-    const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
-    };
-
-    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
-  };
-
   render() {
     const {
       nodes,
@@ -84,7 +72,7 @@ export class NodeBucket extends Component {
 
 NodeBucket.propTypes = {
   nodes: PropTypes.array,
-  updateNode: PropTypes.func.isRequired,
+  onDropNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
 };
 
@@ -99,10 +87,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NodeBucket);
+export default connect(mapStateToProps)(NodeBucket);
