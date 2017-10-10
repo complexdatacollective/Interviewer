@@ -112,6 +112,8 @@ $component-name: modal;
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         margin-bottom: 1em;
+        min-width: 150px;
+        width: 90%;
       }
 
       .form__next-button {
@@ -158,10 +160,6 @@ $component-name: modal;
 
           & > form {
             flex-direction: column;
-
-            .input__container {
-              width: 100%;
-            }
           }
         }
       }
