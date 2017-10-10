@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { first, sortBy, reject, has } from 'lodash';
+import { first, sortBy, reject, has, map } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { networkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
@@ -40,7 +40,8 @@ const getNextUnplacedNode = createSelector(
     let sortedNodes = [...nodes];
     if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
     if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-    return first(sortedNodes);
+    if (sort && sort.number) { return sortedNodes.slice(0, sort.number - 1); }
+    return [first(sortedNodes)];
   },
 );
 
@@ -59,39 +60,41 @@ export class NodeBucket extends Component {
 
   render() {
     const {
-      node,
+      nodes,
     } = this.props;
 
-    if (!node) { return null; }
+    if (!nodes) { return null; }
 
     return (
       <div className="node-bucket">
-        { node &&
+        {map(nodes, (node, i) =>
+          node &&
           <EnhancedNode
             label={label(node)}
             onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
             draggableType={draggableType}
             {...node}
-          />
-        }
+            key={i}
+          />,
+        )}
       </div>
     );
   }
 }
 
 NodeBucket.propTypes = {
-  node: PropTypes.object,
+  nodes: PropTypes.array,
   updateNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
 };
 
 NodeBucket.defaultProps = {
-  node: null,
+  nodes: null,
 };
 
 function mapStateToProps(state, props) {
   return {
-    node: getNextUnplacedNode(state, props),
+    nodes: getNextUnplacedNode(state, props),
     layout: propLayout(state, props),
   };
 }

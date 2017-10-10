@@ -327,6 +327,7 @@ export default {
                   action: 'EDGE',
                 },
                 sort: {
+                  number: 2,
                   by: 'nickname',
                   order: 'DESC',
                 },
@@ -360,6 +361,7 @@ export default {
                   action: 'ATTRIBUTES',
                 },
                 sort: {
+                  number: 3,
                   by: 'nickname',
                   order: 'DESC',
                 },
