@@ -7,6 +7,19 @@ import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
+const mockStore = () =>
+  createStore(
+    () => (
+      {
+        protocol: {
+          config: {
+            registry: {},
+          },
+        },
+      }
+    ),
+  );
+
 const props = testProps => ({
   form: 'form1',
   fields: [],
@@ -16,7 +29,7 @@ const props = testProps => ({
 describe('<Form />', () => {
   it('should render', () => {
     const subject = shallow((
-      <Form {...props()} store={createStore(() => {})} />
+      <Form {...props()} store={mockStore()} />
     ));
 
     expect(subject).toMatchSnapshot();
@@ -24,14 +37,14 @@ describe('<Form />', () => {
 
   it('should render add another button', () => {
     const continuousForm = mount((
-      <Form {...props()} addAnother store={createStore(() => {})} />
+      <Form {...props()} addAnother store={mockStore()} />
     ));
     const singularForm = mount((
-      <Form {...props()} store={createStore(() => {})} />
+      <Form {...props()} store={mockStore()} />
     ));
 
-    expect(continuousForm.find('button').length).toBe(2)
-    expect(singularForm.find('button').length).toBe(1)
+    expect(continuousForm.find('button').length).toBe(2);
+    expect(singularForm.find('button').length).toBe(1);
   });
 
   it('renders an array of <Field />', () => {
@@ -39,21 +52,21 @@ describe('<Form />', () => {
       {
         label: 'Name',
         name: 'name',
-        type: 'Alphanumeric',
+        component: 'TextInput',
         placeholder: 'Name',
         validation: {},
       },
       {
         label: 'Nickname',
         name: 'nickname',
-        type: 'Alphanumeric',
+        component: 'TextInput',
         placeholder: 'Nickname',
         validation: {},
       },
     ];
 
     const subject = mount((
-      <Provider store={createStore(() => {})} >
+      <Provider store={mockStore()} >
         <Form {...props({ fields })} />
       </Provider>
     ));

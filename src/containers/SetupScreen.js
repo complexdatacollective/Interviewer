@@ -13,7 +13,7 @@ const formConfig = {
     {
       label: 'Protocol URL',
       name: 'protocol_url',
-      type: 'Alphanumeric',
+      component: 'TextInput',
       placeholder: 'Protocol URL',
       required: true,
     },

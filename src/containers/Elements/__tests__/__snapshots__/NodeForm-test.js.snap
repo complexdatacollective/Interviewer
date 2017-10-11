@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Form /> should render 1`] = `
+exports[`<NodeForm /> should render 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -8,16 +8,23 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <AutoInitialisedForm
-    dispatch={[Function]}
-    fields={Array []}
-    form="form1"
-    meta={
-        Object {
-            "fields": undefined,
-            "values": undefined,
-          }
+  "node": <NodeForm
+    addAnother={false}
+    closeModal={[Function]}
+    fields={
+        Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ]
     }
+    handleSubmit={[Function]}
+    initialValues={Object {}}
+    name="baz"
+    node={Object {}}
+    openModal={[Function]}
+    resetValues={[Function]}
     store={
         Object {
             "dispatch": [Function],
@@ -27,18 +34,26 @@ ShallowWrapper {
             Symbol(observable): [Function],
           }
     }
+    title="The form title"
 />,
   "nodes": Array [
-    <AutoInitialisedForm
-      dispatch={[Function]}
-      fields={Array []}
-      form="form1"
-      meta={
-            Object {
-                  "fields": undefined,
-                  "values": undefined,
-                }
+    <NodeForm
+      addAnother={false}
+      closeModal={[Function]}
+      fields={
+            Array [
+                  Object {
+                    "component": "TextInput",
+                    "variable": "foo",
+                  },
+                ]
       }
+      handleSubmit={[Function]}
+      initialValues={Object {}}
+      name="baz"
+      node={Object {}}
+      openModal={[Function]}
+      resetValues={[Function]}
       store={
             Object {
                   "dispatch": [Function],
@@ -48,6 +63,7 @@ ShallowWrapper {
                   Symbol(observable): [Function],
                 }
       }
+      title="The form title"
 />,
   ],
   "options": Object {},
@@ -56,9 +72,17 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(AutoInitialisedForm)
-        fields={Array []}
-        form="form1"
+      "_currentElement": <Connect(NodeForm)
+        fields={
+                Array [
+                        Object {
+                          "component": "TextInput",
+                          "variable": "foo",
+                        },
+                      ]
+        }
+        handleSubmit={[Function]}
+        name="baz"
         store={
                 Object {
                         "dispatch": [Function],
@@ -68,6 +92,7 @@ ShallowWrapper {
                         Symbol(observable): [Function],
                       }
         }
+        title="The form title"
 />,
       "_debugID": 1,
       "_hostContainerInfo": null,
@@ -78,7 +103,9 @@ ShallowWrapper {
           "store": undefined,
         },
         "dispatchProps": Object {
-          "dispatch": [Function],
+          "closeModal": [Function],
+          "openModal": [Function],
+          "resetValues": [Function],
         },
         "doDispatchPropsDependOnOwnProps": false,
         "doStatePropsDependOnOwnProps": true,
@@ -88,13 +115,18 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "dispatch": [Function],
-          "fields": Array [],
-          "form": "form1",
-          "meta": Object {
-            "fields": undefined,
-            "values": undefined,
-          },
+          "closeModal": [Function],
+          "fields": Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ],
+          "handleSubmit": [Function],
+          "initialValues": Object {},
+          "name": "baz",
+          "openModal": [Function],
+          "resetValues": [Function],
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -102,10 +134,17 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           },
+          "title": "The form title",
         },
         "props": Object {
-          "fields": Array [],
-          "form": "form1",
+          "fields": Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ],
+          "handleSubmit": [Function],
+          "name": "baz",
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -113,18 +152,26 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           },
+          "title": "The form title",
         },
         "refs": Object {},
-        "renderedElement": <AutoInitialisedForm
-          dispatch={[Function]}
-          fields={Array []}
-          form="form1"
-          meta={
-                    Object {
-                              "fields": undefined,
-                              "values": undefined,
-                            }
+        "renderedElement": <NodeForm
+          addAnother={false}
+          closeModal={[Function]}
+          fields={
+                    Array [
+                              Object {
+                                "component": "TextInput",
+                                "variable": "foo",
+                              },
+                            ]
           }
+          handleSubmit={[Function]}
+          initialValues={Object {}}
+          name="baz"
+          node={Object {}}
+          openModal={[Function]}
+          resetValues={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -134,22 +181,30 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          title="The form title"
 />,
         "state": Object {
           "storeState": Object {
+            "modals": Array [
+              Object {
+                "name": "baz",
+                "open": true,
+              },
+            ],
             "protocol": Object {
               "config": Object {
-                "registry": Object {},
+                "registry": Object {
+                  "foo": Object {
+                    "label": "Foo",
+                    "type": "string",
+                  },
+                },
               },
             },
           },
         },
         "stateProps": Object {
-          "fields": Array [],
-          "meta": Object {
-            "fields": undefined,
-            "values": undefined,
-          },
+          "initialValues": Object {},
         },
         "statePropsPrecalculationError": null,
         "store": Object {
@@ -169,7 +224,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 19,
+        "version": 20,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -178,16 +233,23 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <AutoInitialisedForm
-          dispatch={[Function]}
-          fields={Array []}
-          form="form1"
-          meta={
-                    Object {
-                              "fields": undefined,
-                              "values": undefined,
-                            }
+        "_currentElement": <NodeForm
+          addAnother={false}
+          closeModal={[Function]}
+          fields={
+                    Array [
+                              Object {
+                                "component": "TextInput",
+                                "variable": "foo",
+                              },
+                            ]
           }
+          handleSubmit={[Function]}
+          initialValues={Object {}}
+          name="baz"
+          node={Object {}}
+          openModal={[Function]}
+          resetValues={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -197,18 +259,26 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          title="The form title"
 />,
         "_debugID": 2,
-        "_renderedOutput": <AutoInitialisedForm
-          dispatch={[Function]}
-          fields={Array []}
-          form="form1"
-          meta={
-                    Object {
-                              "fields": undefined,
-                              "values": undefined,
-                            }
+        "_renderedOutput": <NodeForm
+          addAnother={false}
+          closeModal={[Function]}
+          fields={
+                    Array [
+                              Object {
+                                "component": "TextInput",
+                                "variable": "foo",
+                              },
+                            ]
           }
+          handleSubmit={[Function]}
+          initialValues={Object {}}
+          name="baz"
+          node={Object {}}
+          openModal={[Function]}
+          resetValues={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -218,6 +288,7 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          title="The form title"
 />,
       },
       "_renderedNodeType": 1,
@@ -230,9 +301,17 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(AutoInitialisedForm)
-    fields={Array []}
-    form="form1"
+  "unrendered": <Connect(NodeForm)
+    fields={
+        Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ]
+    }
+    handleSubmit={[Function]}
+    name="baz"
     store={
         Object {
             "dispatch": [Function],
@@ -242,6 +321,7 @@ ShallowWrapper {
             Symbol(observable): [Function],
           }
     }
+    title="The form title"
 />,
 }
 `;
