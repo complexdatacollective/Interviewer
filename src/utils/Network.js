@@ -4,7 +4,7 @@ const nodeIncludesAttributes = (network, attributes) => {
   const nodes = filter(network.nodes, attributes);
 
   return {
-    ...network,  // TODO: filter edge etc.
+    ...network, // TODO: filter edge etc.
     nodes,
   };
 };
@@ -13,7 +13,7 @@ const difference = (source, target) => {
   const nodes = differenceBy(source.nodes, target.nodes, 'uid');
 
   return {
-    ...source,  // TODO: filter edge etc.
+    ...source, // TODO: filter edge etc.
     nodes,
   };
 };

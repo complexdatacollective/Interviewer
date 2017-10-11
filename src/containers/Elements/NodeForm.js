@@ -1,25 +1,30 @@
-/* eslint-disable no-shadow, react/no-unused-prop-types */
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
-import { map, pick } from 'lodash';
+import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import { Icon } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { Form } from '../../containers/Elements';
 import { Modal, Pips } from '../../components/Elements';
+import { makeRehydrateFields } from '../../selectors/rehydrate';
 
-const fieldNames = (_, props) => map(props.form.fields, 'name');
-const node = (_, props) => props.node;
+const propNode = (_, props) => props.node;
 
-const initialValues = createSelector(
-  fieldNames,
-  node,
-  (fieldNames, node) => pick(node, fieldNames),
-);
+const makePropFieldVariables = () =>
+  createSelector(
+    makeRehydrateFields(),
+    fields => map(fields, 'name'),
+  );
+
+const makeGetInitialValuesFromProps = () =>
+  createSelector(
+    makePropFieldVariables(),
+    propNode,
+    (fields, node) => pick(node, fields),
+  );
 
 /**
   * Modal Node Form, than can handle new/editing of nodes
@@ -39,19 +44,19 @@ class NodeForm extends Component {
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
       this.props.resetValues(form.form);
-      this.props.openModal(this.props.modalName);
+      this.props.openModal(this.props.name);
     }
   };
 
   nextField = () => {
-    const count = this.props.form.fields.length;
+    const count = this.props.fields.length;
     this.setState({
       fieldIndex: (this.state.fieldIndex + 1 + count) % count,
     });
   }
 
   previousField = () => {
-    const count = this.props.form.fields.length;
+    const count = this.props.fields.length;
     this.setState({
       fieldIndex: (this.state.fieldIndex - 1 + count) % count,
     });
@@ -71,7 +76,7 @@ class NodeForm extends Component {
 
 
   close = () => {
-    this.props.closeModal(this.props.modalName);
+    this.props.closeModal(this.props.name);
     this.setState({
       fieldIndex: 0,
     });
@@ -79,10 +84,12 @@ class NodeForm extends Component {
 
   render() {
     const {
-      modalName,
-      form,
-      initialValues,
+      title,
+      fields,
+      autoPopulate,
+      name,
       addAnother,
+      initialValues,
     } = this.props;
 
     const large = window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
@@ -91,21 +98,21 @@ class NodeForm extends Component {
       <div>
         {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
       </div>);
-    const lastField = this.state.fieldIndex === form.fields.length - 1;
+    const lastField = this.state.fieldIndex === fields.length - 1;
     const nextElement = lastField || large ? null :
       (<Icon name="form-arrow-right" />);
 
     return (
-      <Modal name={modalName} title={form.title} close={this.close} className={large ? '' : 'modal--mobile'}>
+      <Modal name={name} title={title} close={this.close} className={large ? '' : 'modal--mobile'}>
         { !large && <div className="modal__pips">
-          <Pips count={form.fields.length} currentIndex={this.state.fieldIndex} />
+          <Pips count={fields.length} currentIndex={this.state.fieldIndex} />
         </div>}
         <Form
-          fields={large ? form.fields : [form.fields[this.state.fieldIndex]]}
-          autoPopulate={form.autoPopulate}
+          fields={large ? fields : [fields[this.state.fieldIndex]]}
+          autoPopulate={autoPopulate}
           initialValues={initialValues}
           autoFocus
-          form={form.name}
+          form={name.toString()}
           onSubmit={lastField || large ? this.onSubmit : this.nextField}
           addAnother={addAnother}
           continuousSubmit={this.continuousSubmit}
@@ -124,23 +131,30 @@ NodeForm.propTypes = {
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
-  modalName: PropTypes.oneOfType([
+  name: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.symbol,
   ]).isRequired,
-  form: PropTypes.any.isRequired,
-  node: PropTypes.any,
+  title: PropTypes.string.isRequired,
+  fields: PropTypes.array.isRequired,
+  autoPopulate: PropTypes.func,
+  node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   addAnother: PropTypes.bool,
 };
 
 NodeForm.defaultProps = {
   addAnother: false,
+  autoPopulate: () => {},
   node: {},
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    initialValues: initialValues(null, ownProps),
+function makeMapStateToProps() {
+  const getInitialValuesFromProps = makeGetInitialValuesFromProps();
+
+  return function mapStateToProps(state, props) {
+    return {
+      initialValues: getInitialValuesFromProps(state, props),
+    };
   };
 }
 
@@ -152,4 +166,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeForm);
+export default connect(makeMapStateToProps, mapDispatchToProps)(NodeForm);

@@ -16,10 +16,11 @@ const modalState = createSelector(
   (modals, modalName) => modals.find(modal => modal.name === modalName),
 );
 
-const modalIsOpen = createSelector(
-  modalState,
-  modal => (modal ? modal.open : false),
-);
+const makeModalIsOpen = () =>
+  createSelector(
+    modalState,
+    modal => (modal ? modal.open : false),
+  );
 
 function modal(WrappedComponent) {
   class Modal extends Component {
@@ -65,9 +66,13 @@ function modal(WrappedComponent) {
     show: false,
   };
 
-  function mapStateToProps(state, ownProps) {
-    return {
-      show: modalIsOpen(state, ownProps),
+  function makeMapStateToProps() {
+    const modalIsOpen = makeModalIsOpen();
+
+    return function mapStateToProps(state, props) {
+      return {
+        show: modalIsOpen(state, props),
+      };
     };
   }
 
@@ -81,7 +86,7 @@ function modal(WrappedComponent) {
     };
   }
 
-  return connect(mapStateToProps, mapDispatchToProps)(Modal);
+  return connect(makeMapStateToProps, mapDispatchToProps)(Modal);
 }
 
 export default modal;

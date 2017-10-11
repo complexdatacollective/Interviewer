@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-for */
-import React from 'react';
+
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import {
-  TextInput as Alphanumeric,
+  TextInput,
   RadioGroup,
-  ToggleGroup as CheckboxGroup,
+  ToggleGroup,
 } from 'network-canvas-ui';
 
 import validations from '../../utils/Validations';
@@ -19,62 +20,64 @@ import { withOptionsFromSelector } from '../../behaviours';
   * @param {object} field The properties handed down from the protocol form
   */
 
-export const renderInput = (field) => {
-  const {
-    type,
-    input,
-    meta,
-    label,
-    options,
-    optionsSelector,
-    isNumericOnly,
-    toggleComponent,
-    autoFocus,
-    className,
-  } = field;
-  let InputComponent = Alphanumeric;
+export const makeRenderInput = (type) => {
+  const renderInput = (field) => {
+    const {
+      input,
+      meta,
+      label,
+      options,
+      optionsSelector,
+      isNumericOnly,
+      toggleComponent,
+      autoFocus,
+      className,
+    } = field;
 
-  let inputProps = {
-    name: input.name,
-    value: input.value,
-    errorText: meta.invalid && meta.touched && meta.error,
-    label,
-    autoFocus,
-    isNumericOnly,
-    className,
+    let InputComponent = TextInput;
+
+    let inputProps = {
+      name: input.name,
+      value: input.value,
+      errorText: meta.invalid && meta.touched && meta.error,
+      label,
+      autoFocus,
+      isNumericOnly,
+      className,
+    };
+
+    if (type === 'RadioGroup') {
+      InputComponent = RadioGroup;
+      inputProps = {
+        ...inputProps,
+        options,
+        onRadioClick: input.onChange,
+      };
+    }
+
+    if (type === 'CheckboxGroup') {
+      const { colors } = field;
+      InputComponent = ToggleGroup;
+      inputProps = {
+        ...inputProps,
+        toggleComponent,
+        options,
+        colors,
+        onOptionClick: (e, checked, optionVal) => input.onChange({
+          ...input.value,
+          [optionVal]: checked,
+        }),
+      };
+    }
+
+    if (optionsSelector) {
+      InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
+    }
+
+    return <InputComponent {...inputProps} {...input} />;
   };
 
-  if (type === 'RadioGroup') {
-    InputComponent = RadioGroup;
-    inputProps = {
-      ...inputProps,
-      options,
-      onRadioClick: input.onChange,
-    };
-  }
-
-  if (type === 'CheckboxGroup') {
-    const { colors } = field;
-    InputComponent = CheckboxGroup;
-    inputProps = {
-      ...inputProps,
-      toggleComponent,
-      options,
-      colors,
-      onOptionClick: (e, checked, optionVal) => input.onChange({
-        ...input.value,
-        [optionVal]: checked,
-      }),
-    };
-  }
-
-  if (optionsSelector) {
-    InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
-  }
-
-  return (
-    <InputComponent {...inputProps} {...input} />
-  );
+  return renderInput;
 };
 
 /**
@@ -94,37 +97,42 @@ const getValidation = validation =>
   * Renders a redux-form field in the style of our app.
   * @param {string} label Presentational label
   * @param {string} name Property name
-  * @param {string} type Field component type
+  * @param {string} component Field component
   * @param {string} placeholder Presentational placeholder text
   * @param {object} validation Validation methods
   */
-const Field = ({ label, name, type, validation, optionsSelector, ...rest }) => {
-  const validate = getValidation(validation);
+class Field extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.component = (typeof props.component === 'string') ? makeRenderInput(props.component) : props.component;
+  }
 
-  return (
-    <ReduxFormField
-      name={name}
-      label={label}
-      component={renderInput}
-      validate={validate}
-      optionsSelector={optionsSelector}
-      type={type}
-      {...rest}
-    />
-  );
-};
+  render() {
+    const { label, name, component, validation, ...rest } = this.props;
+
+    const validate = getValidation(validation);
+
+    return (
+      <ReduxFormField
+        name={name}
+        label={label}
+        component={this.component}
+        validate={validate}
+        {...rest}
+      />
+    );
+  }
+}
 
 Field.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  optionsSelector: PropTypes.func,
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   validation: PropTypes.object,
 };
 
 Field.defaultProps = {
   validation: {},
-  optionsSelector: null,
 };
 
 export default Field;

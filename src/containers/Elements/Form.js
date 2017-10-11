@@ -6,6 +6,7 @@ import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { Button } from 'network-canvas-ui';
 import { autoInitialisedForm } from '../../behaviours';
 import { Field } from '../../containers/Elements';
+import { makeRehydrateFields } from '../../selectors/rehydrate';
 
 /**
   * Renders a redux form that contains fields according to a `fields` config.
@@ -116,17 +117,22 @@ Form.defaultProps = {
   previous: null,
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    meta: {
-      fields: getFormMeta(ownProps.form)(state),
-      values: getFormValues(ownProps.form)(state),
-    },
+function makeMapStateToProps() {
+  const rehydrateFields = makeRehydrateFields();
+
+  return function mapStateToProps(state, props) {
+    return {
+      meta: {
+        fields: getFormMeta(props.form)(state),
+        values: getFormValues(props.form)(state),
+      },
+      fields: rehydrateFields(state, props),
+    };
   };
 }
 
 export default compose(
-  connect(mapStateToProps),
+  connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
     destroyOnUnmount: false, // need this false to make it validate across wizard
