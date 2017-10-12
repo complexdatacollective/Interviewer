@@ -6,6 +6,10 @@ import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import NodeForm from '../NodeForm';
 
+window.matchMedia = window.matchMedia || (() => ({
+  matches: false, addListener: () => {}, removeListener: () => {},
+}));
+
 const node = {
   foo: 'bar',
 };

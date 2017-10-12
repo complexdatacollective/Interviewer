@@ -10,6 +10,7 @@ ShallowWrapper {
   "length": 1,
   "node": <NodeForm
     addAnother={false}
+    autoPopulate={[Function]}
     closeModal={[Function]}
     fields={
         Array [
@@ -39,6 +40,7 @@ ShallowWrapper {
   "nodes": Array [
     <NodeForm
       addAnother={false}
+      autoPopulate={[Function]}
       closeModal={[Function]}
       fields={
             Array [
@@ -157,6 +159,7 @@ ShallowWrapper {
         "refs": Object {},
         "renderedElement": <NodeForm
           addAnother={false}
+          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
@@ -235,6 +238,7 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <NodeForm
           addAnother={false}
+          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
@@ -264,6 +268,7 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <NodeForm
           addAnother={false}
+          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
