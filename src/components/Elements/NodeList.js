@@ -18,15 +18,21 @@ const NodeList = ({
   handleDropNode,
   draggableType,
   hover,
+  classNames,
 }) => {
-  const classNames = cx(
-    'node-list',
-    { 'node-list--hover': hover },
-  );
+  let className;
+  if (classNames) {
+    className = classNames;
+  } else {
+    className = cx(
+      'node-list',
+      { 'node-list--hover': hover },
+    );
+  }
 
   return (
     <StaggeredTransitionGroup
-      className={classNames}
+      className={className}
       component="div"
       delay={animation.duration.fast * 0.2}
       duration={animation.duration.slow}
@@ -63,6 +69,7 @@ NodeList.propTypes = {
   selected: PropTypes.func,
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
+  classNames: PropTypes.string,
 };
 
 NodeList.defaultProps = {
@@ -73,6 +80,7 @@ NodeList.defaultProps = {
   handleDropNode: () => {},
   draggableType: '',
   hover: false,
+  classNames: null,
 };
 
 export default droppable(scrollable(NodeList));

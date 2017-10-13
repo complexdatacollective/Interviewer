@@ -43,6 +43,8 @@ const getNextUnplacedNode = createSelector(
   },
 );
 
+// first one draggable, rest in disabled state
+
 const draggableType = 'POSITIONED_NODE';
 
 export class NodeBucket extends Component {
@@ -73,11 +75,12 @@ export class NodeBucket extends Component {
 NodeBucket.propTypes = {
   nodes: PropTypes.array,
   onDropNode: PropTypes.func.isRequired,
-  layout: PropTypes.string.isRequired,
+  layout: PropTypes.string,
 };
 
 NodeBucket.defaultProps = {
   nodes: null,
+  layout: 'ordinalBin',
 };
 
 function mapStateToProps(state, props) {

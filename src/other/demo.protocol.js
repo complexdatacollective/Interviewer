@@ -283,12 +283,7 @@ export default {
             {
               id: 'closeness1',
               title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-              nodeAttributes: {
-                advice_friend: false,
-              },
               bins: {
-                layout: "ordinalBins",
-                name: "DemoBins",
                 values: {
                   "Very Often": 4,
                   "Often": 3,
@@ -296,85 +291,38 @@ export default {
                   "Rarely": 1,
                   "Never": -1,
                 },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: true,
               },
             },
             {
               id: 'closeness2',
               title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              nodeAttributes: {
-                advice_friend: false,
-              },
               bins: {
-                layout: "ordinalBins",
-                name: "DemoBins",
                 values: {
                   "Very Often": 4,
                   "Often": 3,
                   "Sometimes": 2,
                   "Rarely": 1,
                   "Never": -1,
-                },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                select: {
-                  action: 'EDGE',
-                },
-                sort: {
-                  number: 2,
-                  by: 'nickname',
-                  order: 'DESC',
                 },
               },
             },
             {
               id: 'closeness3',
               title: "Tap on anyone who has given you advice within the past 6 months.",
-              nodeAttributes: {
-                advice_friend: false,
-              },
               bins: {
-                layout: "ordinalBins",
-                name: "DemoBins",
                 values: {
                   "Very Often": 4,
                   "Often": 3,
                   "Sometimes": 2,
                   "Rarely": 1,
                   "Never": -1,
-                },
-                nodeAttributes: {
-                  has_given_advice: true,
-                },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: false,
-                select: {
-                  action: 'ATTRIBUTES',
-                },
-                sort: {
-                  number: 3,
-                  by: 'nickname',
-                  order: 'DESC',
                 },
               },
             },
             {
               id: 'closeness5',
               title: "Connect any two people who are work together professionally.",
-              nodeAttributes: {
-                advice_friend: false,
-              },
               bins: {
-                layout: "ordinalBins",
                 name: "DemoBins",
                 values: {
                   "Very Often": 4,
@@ -383,14 +331,6 @@ export default {
                   "Rarely": 1,
                   "Never": -1,
                 },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: true,
-                select: {
-                  action: 'EDGE',
-                }
               },
             },
           ],
