@@ -84,6 +84,7 @@ class MenuFactory extends Component {
         onClick={() => this.menuItemClick(item.onClick)}
         title={item.title}
         isActive={item.isActive}
+        icon={item.icon}
         interfaceType={item.interfaceType}
         menuType={item.menuType}
       />),
