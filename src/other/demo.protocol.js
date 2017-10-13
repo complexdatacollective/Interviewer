@@ -171,148 +171,144 @@ export default {
         "type": "NameGenerator",
         "icon": "menu-name-generator",
         "title": "Closeness",
-        "params": {
-          "nodeType": 'person',
-          "panels": [
-            'existing',
-            'previous',
-          ],
-          "prompts": [
-            {
-              id: '6cl',
-              title: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
-              nodeAttributes: {
-                special_category: 46,
-                close_friend: true,
-              },
+        "nodeType": 'person',
+        "panels": [
+          'existing',
+          'previous',
+        ],
+        "prompts": [
+          {
+            id: '6cl',
+            title: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
+            nodeAttributes: {
+              special_category: 46,
+              close_friend: true,
             },
-            {
-              id: '6su',
-              title: "Within the past 6 months, who has been supportive?",
-              nodeAttributes: {
-                support_friend: true,
-              },
+          },
+          {
+            id: '6su',
+            title: "Within the past 6 months, who has been supportive?",
+            nodeAttributes: {
+              support_friend: true,
             },
-            {
-              id: '2we',
-              title: "Within the past 2 weeks, who has provided advice?",
-              nodeAttributes: {
-                advice_friend: true,
-              },
+          },
+          {
+            id: '2we',
+            title: "Within the past 2 weeks, who has provided advice?",
+            nodeAttributes: {
+              advice_friend: true,
             },
-          ],
-          form: 'add_a_person',
-        },
+          },
+        ],
+        form: 'add_a_person',
       },
       {
         "id": "sociogram",
         "type": "Sociogram",
         "icon": "menu-sociogram",
         "title": "Sociogram",
-        "params": {
-          "nodeType": 'person',
-          "prompts": [
-            {
-              id: 'closeness1',
-              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-              sociogram: {
-                edge: {
-                  type: 'friends',
-                },
-                layout: 'closenessLayout',
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: true,
+        "nodeType": 'person',
+        "prompts": [
+          {
+            id: 'closeness1',
+            title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+            sociogram: {
+              edge: {
+                type: 'friends',
+              },
+              layout: 'closenessLayout',
+              background: {
+                n: 4,
+                skewed: true,
+              },
+              position: true,
+            },
+          },
+          {
+            id: 'closeness2',
+            title: "Connect any two people who are friends, or who would spend time together without you being there.",
+            sociogram: {
+              layout: 'closenessLayout',
+              edge: {
+                type: 'friends',
+              },
+              background: {
+                n: 4,
+                skewed: true,
+              },
+              select: {
+                action: 'EDGE',
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
               },
             },
-            {
-              id: 'closeness2',
-              title: "Connect any two people who are friends, or who would spend time together without you being there.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                select: {
-                  action: 'EDGE',
-                },
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
+          },
+          {
+            id: 'closeness3',
+            title: "Tap on anyone who has given you advice within the past 6 months.",
+            sociogram: {
+              layout: 'closenessLayout',
+              edge: {
+                type: 'friends',
+              },
+              nodeAttributes: {
+                has_given_advice: true,
+              },
+              background: {
+                n: 4,
+                skewed: true,
+              },
+              position: false,
+              select: {
+                action: 'ATTRIBUTES',
+              },
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
               },
             },
-            {
-              id: 'closeness3',
-              title: "Tap on anyone who has given you advice within the past 6 months.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'friends',
-                },
-                nodeAttributes: {
-                  has_given_advice: true,
-                },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: false,
-                select: {
-                  action: 'ATTRIBUTES',
-                },
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
+          },
+          {
+            id: 'closeness5',
+            title: "Connect any two people who are work together professionally.",
+            sociogram: {
+              layout: 'closenessLayout',
+              edge: {
+                type: 'professional',
+                color: 'edge-alt-3',
+              },
+              background: {
+                n: 4,
+                skewed: true,
+              },
+              position: true,
+              select: {
+                action: 'EDGE',
+              }
+            },
+          },
+          {
+            id: 'closeness4',
+            title: "Position people on the map",
+            sociogram: {
+              layout: 'geographicLayout',
+              edge: {
+                type: 'family',
+                color: 'edge-alt-3',
+              },
+              background: {
+                image: 'map.svg',
+              },
+              position: true,
+              sort: {
+                by: 'nickname',
+                order: 'DESC',
               },
             },
-            {
-              id: 'closeness5',
-              title: "Connect any two people who are work together professionally.",
-              sociogram: {
-                layout: 'closenessLayout',
-                edge: {
-                  type: 'professional',
-                  color: 'edge-alt-3',
-                },
-                background: {
-                  n: 4,
-                  skewed: true,
-                },
-                position: true,
-                select: {
-                  action: 'EDGE',
-                }
-              },
-            },
-            {
-              id: 'closeness4',
-              title: "Position people on the map",
-              sociogram: {
-                layout: 'geographicLayout',
-                edge: {
-                  type: 'family',
-                  color: 'edge-alt-3',
-                },
-                background: {
-                  image: 'map.svg',
-                },
-                position: true,
-                sort: {
-                  by: 'nickname',
-                  order: 'DESC',
-                },
-              },
-            },
-          ],
-        },
+          },
+        ],
       },
     ],
   },
