@@ -91,7 +91,7 @@ class NameGenerator extends Component {
 
     const {
       prompts,
-    } = this.props.stage.params;
+    } = this.props.stage;
 
     return (
       <div className="name-generator-interface">
