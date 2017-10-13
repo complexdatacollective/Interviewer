@@ -49,8 +49,8 @@ const Bin = ({ title, index, value, count, nodes }) => {
       <NodeList
         classNames={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}
         nodes={nodes}
-        droppableName="MAIN_NODE_LIST"
-        acceptsDraggableType="NEW_NODE"
+        droppableName={`ORDINAL_BIN-${index}`}
+        acceptsDraggableType="POSITIONED_NODE"
         draggableType="EXISTING_NODE"
         styled={false}
       />
@@ -63,7 +63,11 @@ Bin.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
   count: PropTypes.number.isRequired,
-  nodes: PropTypes.object.isRequired,
+  nodes: PropTypes.array,
+};
+
+Bin.defaultProps = {
+  nodes: [],
 };
 
 OrdinalBins.propTypes = {

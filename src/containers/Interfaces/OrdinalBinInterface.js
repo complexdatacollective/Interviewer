@@ -1,10 +1,11 @@
 import React from 'react';
-import { compose } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { first } from 'lodash';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins, NodeBucket } from '../Elements';
+import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 // Render method for the node labels
 
@@ -17,6 +18,7 @@ const OrdinalBin = ({
   promptBackward,
   prompt,
   stage,
+  updateNode,
 }) => {
   const onDropNode = (hits, coords, node) => {
     const hit = first(hits);
@@ -25,7 +27,7 @@ const OrdinalBin = ({
       y: (coords.y - hit.y) / hit.height,
     };
 
-    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
+    updateNode({ ...node, [this.props.layout]: relativeCoords });
   };
 
   return (
@@ -61,6 +63,7 @@ OrdinalBin.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, props) {
@@ -76,7 +79,13 @@ function mapStateToProps(state, props) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+  };
+}
+
 export default compose(
   withPrompt,
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(OrdinalBin);

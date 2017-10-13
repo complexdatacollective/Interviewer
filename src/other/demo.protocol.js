@@ -282,7 +282,7 @@ export default {
           "prompts": [
             {
               id: 'closeness1',
-              title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+              title: 'Place the node in the bin representing how often you talk to that person.',
               bins: {
                 values: {
                   "Very Often": 4,
@@ -295,7 +295,7 @@ export default {
             },
             {
               id: 'closeness2',
-              title: "Connect any two people who are friends, or who would spend time together without you being there.",
+              title: "Place the node in the bin representing how often you talk to that person.",
               bins: {
                 values: {
                   "Very Often": 4,
@@ -308,7 +308,7 @@ export default {
             },
             {
               id: 'closeness3',
-              title: "Tap on anyone who has given you advice within the past 6 months.",
+              title: "Place the node in the bin representing how often you talk to that person.",
               bins: {
                 values: {
                   "Very Often": 4,
