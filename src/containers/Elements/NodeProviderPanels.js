@@ -42,7 +42,7 @@ const rehydratePreset = (panelConfig) => {
   return panelConfig;
 };
 
-const propPanelConfigs = (_, props) => props.stage.params.panels;
+const propPanelConfigs = (_, props) => props.stage.panels;
 
 const makeGetProviderConfigsWithNodes = () => {
   const otherNetworkNodesWithStageNodeType = makeOtherNetworkNodesWithStageNodeType();

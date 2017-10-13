@@ -12,7 +12,7 @@ export default function withPrompt(WrappedComponent) {
     }
 
     prompts() {
-      return this.props.stage.params.prompts;
+      return this.props.stage.prompts;
     }
 
     promptsCount() {

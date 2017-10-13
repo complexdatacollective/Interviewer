@@ -12,7 +12,7 @@ const createDeepEqualSelector = createSelectorCreator(
 // Prop selectors
 
 const propFields = (_, props) => props.fields;
-const propForm = (_, props) => props.stage.params.form;
+const propForm = (_, props) => props.stage.form;
 
 // MemoedSelectors
 

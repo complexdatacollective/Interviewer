@@ -20,7 +20,7 @@ These selectors assume the following props:
 const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
 const propPromptNodeAttributes = (_, props) => props.prompt.nodeAttributes;
-export const propStageNodeType = (_, props) => props.stage.params.nodeType;
+export const propStageNodeType = (_, props) => props.stage.nodeType;
 
 // State selectors
 
