@@ -23,5 +23,5 @@ export const filteredStages = createSelector(
   stageSearchTerm,
   stages,
   (stageSearchTerm, stages) =>
-    stages.filter(stage => stage.title.toLowerCase().includes(stageSearchTerm.toLowerCase())),
+    stages.filter(stage => stage.label.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );

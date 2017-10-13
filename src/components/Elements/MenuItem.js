@@ -7,7 +7,7 @@ import { Icon } from 'network-canvas-ui';
   * Renders a menu item. Image is based on icon.
   */
 function MenuItem(props) {
-  const { onClick, interfaceType, icon, isActive, menuType, title } = props;
+  const { onClick, interfaceType, icon, isActive, menuType, label } = props;
 
   const iconMap = {
     NameGenerator: 'menu-name-generator',
@@ -27,7 +27,7 @@ function MenuItem(props) {
   return (
     <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
       <Icon name={mappedIcon} />
-      {title}
+      {label}
     </a>
   );
 }
@@ -38,7 +38,7 @@ MenuItem.propTypes = {
   interfaceType: PropTypes.string,
   isActive: PropTypes.bool,
   menuType: PropTypes.string,
-  title: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
 MenuItem.defaultProps = {

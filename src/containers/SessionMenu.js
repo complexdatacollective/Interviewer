@@ -151,15 +151,15 @@ class SessionMenu extends Component {
     const menuType = 'settings';
 
     const items = [
-      { id: 'export', title: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
-      { id: 'reset', title: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
-      { id: 'mock-data', title: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
+      { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
+      { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
+      { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
-      { id: 'quit', title: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
+      { id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
     ];
 
     if (isElectron()) {
-      items.push({ id: 'update-check', title: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
+      items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
     }
 
     items.map((item) => {

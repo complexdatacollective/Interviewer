@@ -82,7 +82,7 @@ class MenuFactory extends Component {
         key={item.id}
         to={item.to}
         onClick={() => this.menuItemClick(item.onClick)}
-        title={item.title}
+        label={item.label}
         isActive={item.isActive}
         icon={item.icon}
         interfaceType={item.interfaceType}
