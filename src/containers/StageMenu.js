@@ -44,7 +44,7 @@ class StageMenu extends Component {
       ({
         id: filteredStage.id,
         title: filteredStage.title,
-        interfaceType: (typeof filteredStage.icon === 'string' && filteredStage.icon) || 'menu-custom-interface',
+        interfaceType: filteredStage.type,
         isActive: currentStage === filteredStage,
         onClick: () => onStageClick(currentStages, filteredStage.id),
       }));
