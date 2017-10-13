@@ -169,7 +169,6 @@ export default {
       {
         "id": "namegen1",
         "type": "NameGenerator",
-        "icon": "menu-name-generator",
         "title": "Closeness",
         "nodeType": 'person',
         "panels": [
@@ -205,7 +204,6 @@ export default {
       {
         "id": "sociogram",
         "type": "Sociogram",
-        "icon": "menu-sociogram",
         "title": "Sociogram",
         "nodeType": 'person',
         "prompts": [
