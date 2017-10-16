@@ -5,12 +5,12 @@ import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttle, isMatch } from 'lodash';
+import { debounce, isMatch } from 'lodash';
 import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
-const maxFramesPerSecond = 6;
+const maxFramesPerSecond = 60;
 const initialZoneState = {
   name: null,
   acceptsDraggableType: null,
@@ -27,8 +27,9 @@ export default function droppable(WrappedComponent) {
 
       this.lastZoneState = initialZoneState;
 
-      this.updateZone = throttle(this.updateZone, 1000 / maxFramesPerSecond);
+      this.updateZone = debounce(this.updateZone, 1000 / maxFramesPerSecond);
       window.addEventListener('resize', this.updateZone);
+      window.addEventListener('orientationchange', this.updateZone);
     }
 
     componentDidMount() {
@@ -37,6 +38,7 @@ export default function droppable(WrappedComponent) {
 
     componentWillUnmount() {
       window.removeEventListener('resize', this.updateZone);
+      window.removeEventListener('orientationchange', this.updateZone);
       this.updateZone.cancel();
     }
 
