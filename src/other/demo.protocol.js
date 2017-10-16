@@ -1,76 +1,123 @@
 /* eslint-disable */
 
-const generateNickname = (name) => {
-  if (name) {
-    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
-    return nickName.substring(0,8);
-  } else {
-    return '';
-  }
-}
-
-const autoPopulate = (fields, values, populate) => {
-  if((!fields['nickname'] || !fields['nickname'].touched) && values) {
-    populate('nickname', generateNickname(values['name']));
-  }
-}
-
 const registry = {
-  name: {
-    label: 'Name',
-    type: 'text',
-    validation: {
-      required: true,
-      minLength: 1,
-      maxLength: 24,
-    },
-  },
-  age: {
-    label: 'Age',
-    type: 'number',
-    validation: {
-      required: true,
-      minValue: 16,
-      maxValue: 100,
-    },
-  },
-  nickname: {
-    label: 'Nickname',
-    type: 'text',
-    validation: {
-      required: true,
-      minLength: 1,
-      maxLength: 8,
-    },
-  },
-  special_category: {
-    label: 'Special category',
-    type: 'enumerable',
-    options: [46],
-  },
-  some_options: {
-    label: 'Some possible options',
-    type: 'options',
-    options: [46],
-    validation: {
-      max: 1,
+  node: {
+    types: {
+      person: {
+        label: 'Person',
+        color: 'coral',
+        displayVariable: 'nickname', // Used to tell network canvas which variable to use for the visual representation of the node. Should default to the first variable of type 'text' if not provided.
+        variables: {
+          name: {
+            label: 'Name',
+            description: 'Human readable description',
+            type: 'text',
+            validation: {
+              required: true,
+              minLength: 1,
+              maxLength: 24,
+            },
+          },
+          age: {
+            label: 'Age',
+            description: 'Human readable description',
+            type: 'number',
+            validation: {
+              required: true,
+              minValue: 16,
+              maxValue: 100,
+            },
+          },
+          nickname: {
+            label: 'Nickname',
+            description: 'Human readable description',
+            type: 'text',
+            validation: {
+              required: true,
+              minLength: 1,
+              maxLength: 8,
+            },
+          },
+          special_category: {
+            label: 'Special category',
+            description: 'Human readable description',
+            type: 'enumerable',
+            options: [46],
+          },
+          some_options: {
+            label: 'Some possible options',
+            description: 'Human readable description',
+            type: 'options',
+            options: [46],
+            validation: {
+              max: 1,
+            }
+          },
+          close_friend: {
+            label: 'Close Friend',
+            description: 'Human readable description',
+            type: 'boolean',
+          },
+          support_friend: {
+            label: 'Support Friend',
+            description: 'Human readable description',
+            type: 'boolean',
+          },
+          advice_friend: {
+            label: 'Advice Friend',
+            description: 'Human readable description',
+            type: 'boolean',
+          },
+          has_given_advice: {
+            label: 'Has given advice?',
+            description: 'Human readable description',
+            type: 'boolean',
+          }
+        }
+      },
+      venue: {
+        label: 'Venue',
+        color: 'kiwi',
+        variables: {
+          name: {
+            label: 'Name',
+            description: 'Human readable description',
+            type: 'text',
+            validation: {
+              required: true,
+              minLength: 1,
+              maxLength: 24,
+            },
+          },
+          location: {
+            label: 'Location',
+            description: 'Human readable description',
+            type: 'coordinates',
+          }
+        }
+      }
     }
   },
-  close_friend: {
-    label: 'Close Friend',
-    type: 'boolean',
-  },
-  support_friend: {
-    label: 'Support Friend',
-    type: 'boolean',
-  },
-  advice_friend: {
-    label: 'Advice Friend',
-    type: 'boolean',
-  },
-  has_given_advice: {
-    label: 'Has given advice?',
-    type: 'boolean',
+  edge: {
+    types: {
+      friend: {
+        label: 'Friend',
+        variables: {
+          contact_freq: {
+            label: 'contact_freq',
+            description: 'Contact frequency.',
+            type: 'ordinal',
+            values: {
+              "Very Often": 4,
+              "Often": 3,
+              "Sometimes": 2,
+              "Rarely": 1,
+              "Never": -1,
+            },
+          }
+        }
+      }
+    }
   }
 };
 
@@ -79,7 +126,7 @@ const forms = {
     title: 'Add A Person',
     fields: [
       {
-        variable: 'name',
+        variable: 'name', // These variables are assumed to be children of the object type that is being created.
         component: 'TextInput',
       },
       {
@@ -90,13 +137,19 @@ const forms = {
         variable: 'age',
         component: 'TextInput',
       },
-    ],
-    autoPopulate: autoPopulate,
+      {
+        variable: 'timeCreated',
+        component: 'hidden',
+        value: () => {
+          return Date.now().toString(); // This is intended as an example of a hidden field that has a value set when the form is shown. Will this work?
+        }
+      },
+    ]
   },
 };
 
 const data = {
-  "previous": {
+  "previousInterview": {
     nodes: [
       {
         uid: "previous_1",
@@ -135,22 +188,19 @@ const data = {
       },
     ],
   },
-  "foodNetwork": {
+  "venue_list": {
     nodes: [
       {
-        type: "food",
-        subType: "vegetable",
-        name: "tomato",
+        type: "venue",
+        name: "My Home",
       },
       {
-        type: "food",
-        subType: "fruit",
-        name: "lime",
+        type: "venue",
+        name: "My Workplace",
       },
       {
-        type: "food",
-        subType: "fruit",
-        name: "bluefruit",
+        type: "venue",
+        name: "Local Bar",
       },
     ],
   },
@@ -158,28 +208,30 @@ const data = {
 
 export default {
   config: {
-    "name": "Demo Protocol",
-    "version": "1.0.0",
-    "required": "1.0.0",
-    "exportPath": "some/path/here.json",
-    "registry": registry,
-    "data": data,
-    "forms": forms,
-    "stages": [
+    name: "Demo Protocol",
+    version: "1.0.0",
+    requiredNetworkCanvasVersion: "4.0.0",
+    variableRegistry: registry,
+    externalData: data,
+    forms: forms,
+    stages: [
       {
-        "id": "namegen1",
-        "type": "NameGenerator",
-        "label": "Closeness",
-        "nodeType": 'person',
-        "panels": [
+        id: "namegen1",
+        type: "NameGenerator",
+        label: "Closeness",
+        creates: {
+          element: 'node',
+          type: 'person'
+        },
+        panels: [
           'existing',
           'previous',
         ],
-        "prompts": [
+        prompts: [
           {
             id: '6cl',
             title: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
-            nodeAttributes: {
+            additionalAttributes: {
               special_category: 46,
               close_friend: true,
             },
@@ -187,26 +239,26 @@ export default {
           {
             id: '6su',
             title: "Within the past 6 months, who has been supportive?",
-            nodeAttributes: {
+            additionalAttributes: {
               support_friend: true,
             },
           },
           {
             id: '2we',
             title: "Within the past 2 weeks, who has provided advice?",
-            nodeAttributes: {
+            additionalAttributes: {
               advice_friend: true,
             },
           },
         ],
-        form: 'add_a_person',
+        newNodeForm: 'add_a_person',
       },
       {
-        "id": "sociogram",
-        "type": "Sociogram",
-        "label": "Sociogram",
-        "nodeType": 'person',
-        "prompts": [
+        id: "sociogram",
+        type: "Sociogram",
+        label: "Sociogram",
+        nodeType: 'person',
+        prompts: [
           {
             id: 'closeness1',
             title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
