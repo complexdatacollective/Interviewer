@@ -10,7 +10,7 @@ import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
-const maxFramesPerSecond = 60;
+const maxFramesPerSecond = 24;
 const initialZoneState = {
   name: null,
   acceptsDraggableType: null,
@@ -27,9 +27,8 @@ export default function droppable(WrappedComponent) {
 
       this.lastZoneState = initialZoneState;
 
-      this.updateZone = debounce(this.updateZone, 1000 / maxFramesPerSecond);
-      window.addEventListener('resize', this.updateZone);
-      window.addEventListener('orientationchange', this.updateZone);
+      this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
+      window.addEventListener('resize', this.onResize);
     }
 
     componentDidMount() {
@@ -37,9 +36,13 @@ export default function droppable(WrappedComponent) {
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.updateZone);
-      window.removeEventListener('orientationchange', this.updateZone);
+      window.removeEventListener('resize', this.onResize);
       this.updateZone.cancel();
+    }
+
+    onResize = () => {
+      this.updateZone();
+      setTimeout(this.updateZone, 1000);
     }
 
     updateZone = () => {
@@ -56,6 +59,7 @@ export default function droppable(WrappedComponent) {
         x: boundingClientRect.left,
       };
 
+      this.props.updateZone(nextZoneState);
       if (!isMatch(nextZoneState, this.lastZoneState)) {
         this.lastZoneState = nextZoneState;
         this.props.updateZone(nextZoneState);
