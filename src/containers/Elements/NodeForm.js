@@ -5,6 +5,7 @@ import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
 import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
+import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { Form } from '../../containers/Elements';
@@ -40,6 +41,11 @@ class NodeForm extends Component {
   }
 
   onSubmit = (formData, dispatch, form) => {
+    if (this.shouldShowNextField()) {
+      this.nextField();
+      return;
+    }
+
     this.close();
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
@@ -48,19 +54,23 @@ class NodeForm extends Component {
     }
   };
 
+  getFields = () => (
+    this.isLarge() ? this.props.fields : [this.props.fields[this.state.fieldIndex]]
+  );
+
   nextField = () => {
     const count = this.props.fields.length;
     this.setState({
       fieldIndex: (this.state.fieldIndex + 1 + count) % count,
     });
-  }
+  };
 
   previousField = () => {
     const count = this.props.fields.length;
     this.setState({
       fieldIndex: (this.state.fieldIndex - 1 + count) % count,
     });
-  }
+  };
 
   continuousSubmit = () => {
     this.setState({
@@ -80,6 +90,13 @@ class NodeForm extends Component {
     this.setState({
       fieldIndex: 0,
     });
+  };
+
+  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
+
+  shouldShowNextField = () => {
+    const showingLastField = this.state.fieldIndex === this.props.fields.length - 1;
+    return !this.isLarge() && !showingLastField;
   }
 
   render() {
@@ -92,28 +109,26 @@ class NodeForm extends Component {
       initialValues,
     } = this.props;
 
-    const large = window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
+    const modalClassNames = cx({ 'modal--mobile': !this.isLarge() });
 
     const previousElement = (
       <div>
         {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
       </div>);
-    const lastField = this.state.fieldIndex === fields.length - 1;
-    const nextElement = lastField || large ? null :
-      (<Icon name="form-arrow-right" />);
+    const nextElement = this.shouldShowNextField() ? (<Icon name="form-arrow-right" />) : null;
 
     return (
-      <Modal name={name} title={title} close={this.close} className={large ? '' : 'modal--mobile'}>
-        { !large && <div className="modal__pips">
+      <Modal name={name} title={title} close={this.close} className={modalClassNames}>
+        { !this.isLarge() && <div className="modal__pips">
           <Pips count={fields.length} currentIndex={this.state.fieldIndex} />
         </div>}
         <Form
-          fields={large ? fields : [fields[this.state.fieldIndex]]}
+          fields={this.getFields()}
           autoPopulate={autoPopulate}
           initialValues={initialValues}
           autoFocus
           form={name.toString()}
-          onSubmit={lastField || large ? this.onSubmit : this.nextField}
+          onSubmit={this.onSubmit}
           addAnother={addAnother}
           continuousSubmit={this.continuousSubmit}
           normalSubmit={this.normalSubmit}
