@@ -19,15 +19,15 @@ const colorPresets = [
 const panelPresets = {
   existing: {
     type: 'existing',
-    title: 'People from your existing lists',
+    title: 'Already mentioned',
     source: 'existing',
     selectable: true,
     filter: network => network,
   },
-  previous: {
-    type: 'previous',
+  external: {
+    type: 'external',
     title: 'People from your previous visit',
-    source: 'previous',
+    source: 'external',
     draggable: true,
     filter: network => network,
   },
