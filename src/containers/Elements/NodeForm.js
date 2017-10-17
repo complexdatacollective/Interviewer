@@ -112,7 +112,7 @@ class NodeForm extends Component {
     const modalClassNames = cx({ 'modal--mobile': !this.isLarge() });
 
     const previousElement = (
-      <div>
+      <div className="modal--mobile__previous">
         {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
       </div>);
     const nextElement = this.shouldShowNextField() ? (<Icon name="form-arrow-right" />) : null;

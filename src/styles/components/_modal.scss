@@ -104,9 +104,23 @@ $component-name: modal;
       }
     }
 
+    &__previous {
+      left: 0;
+    }
+
+    &__previous,
+    .form__button-container {
+      display: flex;
+      max-width: 25%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
     .form__button-container {
       align-items: flex-end;
       flex-direction: column-reverse;
+      right: 0;
 
       .button {
         border-bottom-right-radius: 0;
@@ -127,16 +141,11 @@ $component-name: modal;
 
     form {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: flex-start;
 
       div {
         flex-basis: 50%;
-
-        &:first-child,
-        &:last-child {
-          flex-basis: 25%;
-        }
       }
     }
   }
