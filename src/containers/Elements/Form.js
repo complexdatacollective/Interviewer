@@ -11,6 +11,11 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   *
+  * @param {bool} addAnother tells whether or not there should be an "Add Another" button
+  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
+  * based on field value changes. Called on change with current field values and meta,
+  * and a callback to allow the setting of otherfields
+  * @param {func} continuousSubmit() handles continuous submission
   * @param {array} fields Contains an array of field definitions
   * see Field for detailed format of definitions:
   * {
@@ -22,12 +27,10 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
   *     required: true,
   *   }
   * }
+  * @param {string} form The name of the form
   * @param {func} handleSubmit(data) Recieves data as jsonfrom a sucessful form submission
-  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
-  * based on field value changes. Called on change with current field values and meta,
-  * and a callback to allow the setting of otherfields
-  * @param {func} continuousSubmit() handles continuous submission
-  * @param {bool} addAnother tells whether or not there should be an "Add Another" button
+  * @param {component} next An optional component to trigger the next field in a wizard
+  * @param {component} previous An optional component to trigger the previous field in a wizard
   *
   */
 class Form extends Component {
@@ -52,14 +55,14 @@ class Form extends Component {
 
   render() {
     const {
+      addAnother,
+      autoFocus,
+      continuousSubmit,
       fields,
       handleSubmit,
-      addAnother,
-      continuousSubmit,
-      normalSubmit,
-      autoFocus,
-      previous,
       next,
+      normalSubmit,
+      previous,
     } = this.props;
 
     const addAnotherButton = addAnother && !next
@@ -93,27 +96,28 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  addAnother: PropTypes.bool,
+  autofill: PropTypes.func.isRequired,
+  autoFocus: PropTypes.bool,
+  autoPopulate: PropTypes.func,
+  continuousSubmit: PropTypes.func,
+  dirty: PropTypes.bool.isRequired,
+  form: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  autofill: PropTypes.func.isRequired,
-  dirty: PropTypes.bool.isRequired,
   meta: PropTypes.object.isRequired,
-  autoPopulate: PropTypes.func,
-  autoFocus: PropTypes.bool,
-  addAnother: PropTypes.bool,
-  continuousSubmit: PropTypes.func,
-  normalSubmit: PropTypes.func,
   next: PropTypes.object,
+  normalSubmit: PropTypes.func,
   previous: PropTypes.object,
 };
 
 Form.defaultProps = {
-  autoFocus: false,
   addAnother: false,
+  autoFocus: false,
   autoPopulate: null,
   continuousSubmit: null,
-  normalSubmit: null,
   next: null,
+  normalSubmit: null,
   previous: null,
 };
 
