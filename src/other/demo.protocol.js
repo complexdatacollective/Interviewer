@@ -2,7 +2,6 @@
 
 const registry = {
   node: {
-    types: {
       person: {
         label: 'Person',
         color: 'coral',
@@ -96,10 +95,8 @@ const registry = {
           }
         }
       }
-    }
   },
   edge: {
-    types: {
       friend: {
         label: 'Friend',
         variables: {
@@ -117,12 +114,11 @@ const registry = {
           }
         }
       }
-    }
   }
 };
 
 const forms = {
-  add_a_person: {
+  person: { // By default, an interface will look for a form with the same name as the object type.
     title: 'Add A Person',
     fields: [
       {
@@ -206,6 +202,42 @@ const data = {
   },
 };
 
+const nameGenerator = {
+  id: "namegen1",
+  type: "NameGenerator",
+  label: "NG Closeness",
+  creates: 'person',
+  form: 'myCustomForm',
+  panels: [
+    'existing',
+    'external',
+  ],
+  prompts: [
+    {
+      id: '6cl',
+      text: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
+      additionalAttributes: {
+        special_category: 46,
+        close_friend: true,
+      },
+    },
+    {
+      id: '6su',
+      text: "Within the past 6 months, who has been supportive?",
+      additionalAttributes: {
+        support_friend: true,
+      },
+    },
+    {
+      id: '2we',
+      text: "Within the past 2 weeks, who has provided advice?",
+      additionalAttributes: {
+        advice_friend: true,
+      },
+    },
+  ],
+};
+
 export default {
   config: {
     name: "Demo Protocol",
@@ -214,45 +246,7 @@ export default {
     variableRegistry: registry,
     externalData: data,
     forms: forms,
-    stages: [
-      {
-        id: "namegen1",
-        type: "NameGenerator",
-        label: "Closeness",
-        creates: {
-          element: 'node',
-          type: 'person'
-        },
-        panels: [
-          'existing',
-          'previous',
-        ],
-        prompts: [
-          {
-            id: '6cl',
-            title: 'Within the past 6 months, who have you felt particularly close to, or discussed important personal matters with?',
-            additionalAttributes: {
-              special_category: 46,
-              close_friend: true,
-            },
-          },
-          {
-            id: '6su',
-            title: "Within the past 6 months, who has been supportive?",
-            additionalAttributes: {
-              support_friend: true,
-            },
-          },
-          {
-            id: '2we',
-            title: "Within the past 2 weeks, who has provided advice?",
-            additionalAttributes: {
-              advice_friend: true,
-            },
-          },
-        ],
-        newNodeForm: 'add_a_person',
-      },
+    stages: [ nameGenerator,
       {
         id: "sociogram",
         type: "Sociogram",
