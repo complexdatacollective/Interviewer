@@ -40,7 +40,7 @@
     font-size: 100px;
     margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
-    margin:5px;
+    margin: 5px;
     @include breakpoint('full') {
       font-size: 120px;
     }
@@ -51,5 +51,14 @@
     flex-grow: 0;
     margin-bottom: 0;
     opacity: 0;
+  }
+
+  &--collapsed {
+    flex: 0 0 auto;
+
+    .panel__content {
+      transition: height $animation-default-easing $animation-slow-duration;
+      height: 0;
+    }
   }
 }
