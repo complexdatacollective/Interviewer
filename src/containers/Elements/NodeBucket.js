@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { first, sortBy, reject, has, map } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { networkNodesOfStageType } from '../../selectors/interface';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { draggable } from '../../behaviours';
 
 const EnhancedNode = draggable(Node);
@@ -24,7 +22,7 @@ const propLayout = (_, props) => {
   if (props.prompt.sociogram) {
     return props.prompt.sociogram.layout;
   } else if (props.prompt.bins) {
-    return props.prompt.bins.layout;
+    return 'ordinalBin';
   }
   return null;
 };
@@ -49,51 +47,33 @@ const getNextUnplacedNode = createSelector(
 
 const draggableType = 'POSITIONED_NODE';
 
-export class NodeBucket extends Component {
-  onDropNode = (hits, coords, node) => {
-    const hit = first(hits);
-    const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
-    };
-
-    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
-  };
-
-  render() {
-    const {
-      nodes,
-    } = this.props;
-
-    if (!nodes) { return null; }
-
-    return (
-      <div className="node-bucket">
-        {map(nodes, (node, i) =>
-          node &&
-          <EnhancedNode
-            label={label(node)}
-            onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
-            draggableType={draggableType}
-            {...node}
-            key={i}
-          />,
-        )}
-      </div>
-    );
-  }
-}
+export const NodeBucket = ({ nodes, layout, onDropNode }) => {
+  if (!nodes) { return null; }
+  return (
+    <div className="node-bucket">
+      {map(nodes, (node, i) =>
+        node &&
+        <EnhancedNode
+          label={label(node)}
+          onDropped={(hits, coords) => onDropNode(hits, coords, node, layout)}
+          draggableType={draggableType}
+          {...node}
+          key={i}
+        />,
+      )}
+    </div>
+  );
+};
 
 NodeBucket.propTypes = {
   nodes: PropTypes.array,
-  onDropNode: PropTypes.func.isRequired,
-  updateNode: PropTypes.func.isRequired,
-  layout: PropTypes.string,
+  onDropNode: PropTypes.func,
+  layout: PropTypes.string.isRequired,
 };
 
 NodeBucket.defaultProps = {
   nodes: null,
-  layout: 'ordinalBin',
+  onDropNode: () => {},
 };
 
 function mapStateToProps(state, props) {
@@ -103,10 +83,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NodeBucket);
+export default connect(mapStateToProps)(NodeBucket);

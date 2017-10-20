@@ -22,7 +22,13 @@ const NodeList = ({
 }) => {
   let className;
   if (classNames) {
-    className = classNames;
+    const hoverClass = `${classNames}--hover`;
+    const hoverHash = {};
+    hoverHash[hoverClass] = hover;
+    className = cx(
+      classNames,
+      hoverHash,
+    );
   } else {
     className = cx(
       'node-list',
@@ -64,7 +70,7 @@ const NodeList = ({
 NodeList.propTypes = {
   nodes: PropTypes.array,
   handleSelectNode: PropTypes.func,
-  handleDropNode: PropTypes.func,
+  handleDropNode: PropTypes.func.isRequired,
   label: PropTypes.func,
   selected: PropTypes.func,
   draggableType: PropTypes.string,
@@ -77,7 +83,6 @@ NodeList.defaultProps = {
   label: () => (''),
   selected: () => false,
   handleSelectNode: () => {},
-  handleDropNode: () => {},
   draggableType: '',
   hover: false,
   classNames: null,
