@@ -56,7 +56,7 @@ class Form extends Component {
     } = this.props;
 
     const addAnotherButton = addAnother
-      ? <Button type="button" color="white" onClick={continuousSubmit} accessibityLabel="Submit and add another node">Submit and New</Button>
+      ? <Button type="button" color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
       : null;
 
     return (
