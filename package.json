@@ -16,7 +16,7 @@
         "lint": "eslint src",
         "test": "node scripts/test.js --env=jsdom",
         "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
-        "build-docs": "jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
+        "build-docs": "NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
         "electron": "electron ./www",
         "generate-icons": "node generate-app-icons.js",
         "dist": "electron-builder",
