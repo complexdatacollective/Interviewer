@@ -210,7 +210,6 @@ const nameGenerator = {
   form: 'myCustomForm',
   panels: [
     'existing',
-    'external',
   ],
   prompts: [
     {
@@ -239,121 +238,119 @@ const nameGenerator = {
 };
 
 export default {
-  config: {
-    name: "Demo Protocol",
-    version: "1.0.0",
-    requiredNetworkCanvasVersion: "4.0.0",
-    variableRegistry: registry,
-    externalData: data,
-    forms: forms,
-    stages: [ nameGenerator,
-      {
-        id: "sociogram",
-        type: "Sociogram",
-        label: "Sociogram",
-        nodeType: 'person',
-        prompts: [
-          {
-            id: 'closeness1',
-            title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-            sociogram: {
-              edge: {
-                type: 'friends',
-              },
-              layout: 'closenessLayout',
-              background: {
-                n: 4,
-                skewed: true,
-              },
-              position: true,
+  name: "Demo Protocol",
+  version: "1.0.0",
+  networkCanvasVersion: "~4.0.0",
+  variableRegistry: registry,
+  externalData: data,
+  forms: forms,
+  stages: [ nameGenerator,
+    {
+      id: "sociogram",
+      type: "Sociogram",
+      label: "Sociogram",
+      nodeType: 'person',
+      prompts: [
+        {
+          id: 'closeness1',
+          title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+          sociogram: {
+            edge: {
+              type: 'friends',
+            },
+            layout: 'closenessLayout',
+            background: {
+              n: 4,
+              skewed: true,
+            },
+            position: true,
+          },
+        },
+        {
+          id: 'closeness2',
+          title: "Connect any two people who are friends, or who would spend time together without you being there.",
+          sociogram: {
+            layout: 'closenessLayout',
+            edge: {
+              type: 'friends',
+            },
+            background: {
+              n: 4,
+              skewed: true,
+            },
+            select: {
+              action: 'EDGE',
+            },
+            sort: {
+              by: 'nickname',
+              order: 'DESC',
             },
           },
-          {
-            id: 'closeness2',
-            title: "Connect any two people who are friends, or who would spend time together without you being there.",
-            sociogram: {
-              layout: 'closenessLayout',
-              edge: {
-                type: 'friends',
-              },
-              background: {
-                n: 4,
-                skewed: true,
-              },
-              select: {
-                action: 'EDGE',
-              },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
-              },
+        },
+        {
+          id: 'closeness3',
+          title: "Tap on anyone who has given you advice within the past 6 months.",
+          sociogram: {
+            layout: 'closenessLayout',
+            edge: {
+              type: 'friends',
+            },
+            nodeAttributes: {
+              has_given_advice: true,
+            },
+            background: {
+              n: 4,
+              skewed: true,
+            },
+            position: false,
+            select: {
+              action: 'ATTRIBUTES',
+            },
+            sort: {
+              by: 'nickname',
+              order: 'DESC',
             },
           },
-          {
-            id: 'closeness3',
-            title: "Tap on anyone who has given you advice within the past 6 months.",
-            sociogram: {
-              layout: 'closenessLayout',
-              edge: {
-                type: 'friends',
-              },
-              nodeAttributes: {
-                has_given_advice: true,
-              },
-              background: {
-                n: 4,
-                skewed: true,
-              },
-              position: false,
-              select: {
-                action: 'ATTRIBUTES',
-              },
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
-              },
+        },
+        {
+          id: 'closeness5',
+          title: "Connect any two people who are work together professionally.",
+          sociogram: {
+            layout: 'closenessLayout',
+            edge: {
+              type: 'professional',
+              color: 'edge-alt-3',
+            },
+            background: {
+              n: 4,
+              skewed: true,
+            },
+            position: true,
+            select: {
+              action: 'EDGE',
+            }
+          },
+        },
+        {
+          id: 'closeness4',
+          title: "Position people on the map",
+          sociogram: {
+            layout: 'geographicLayout',
+            edge: {
+              type: 'family',
+              color: 'edge-alt-3',
+            },
+            background: {
+              image: 'map.svg',
+            },
+            position: true,
+            sort: {
+              by: 'nickname',
+              order: 'DESC',
             },
           },
-          {
-            id: 'closeness5',
-            title: "Connect any two people who are work together professionally.",
-            sociogram: {
-              layout: 'closenessLayout',
-              edge: {
-                type: 'professional',
-                color: 'edge-alt-3',
-              },
-              background: {
-                n: 4,
-                skewed: true,
-              },
-              position: true,
-              select: {
-                action: 'EDGE',
-              }
-            },
-          },
-          {
-            id: 'closeness4',
-            title: "Position people on the map",
-            sociogram: {
-              layout: 'geographicLayout',
-              edge: {
-                type: 'family',
-                color: 'edge-alt-3',
-              },
-              background: {
-                image: 'map.svg',
-              },
-              position: true,
-              sort: {
-                by: 'nickname',
-                order: 'DESC',
-              },
-            },
-          },
-        ],
-      },
-    ],
-  },
+        },
+      ],
+    },
+  ],
 };
