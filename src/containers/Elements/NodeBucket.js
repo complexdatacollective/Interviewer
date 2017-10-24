@@ -38,7 +38,7 @@ const makeGetUnplacedNodes = () => {
   );
 };
 
-const makeGetNextUnplacedNode = () => {
+const makeGetNextUnplacedNodes = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
   return createSelector(
@@ -47,7 +47,8 @@ const makeGetNextUnplacedNode = () => {
       let sortedNodes = [...nodes];
       if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
       if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-      return first(sortedNodes);
+      if (sort && sort.number) { return sortedNodes.slice(0, sort.number - 1); }
+      return [first(sortedNodes)];
     },
   );
 };
@@ -56,7 +57,7 @@ const makeGetNextUnplacedNode = () => {
 
 const draggableType = 'POSITIONED_NODE';
 
-export const NodeBucket = ({ nodes, layout, onDropNode }) => {
+const NodeBucket = ({ nodes, layout, onDropNode }) => {
   if (!nodes) { return null; }
   return (
     <div className="node-bucket">
@@ -86,10 +87,10 @@ NodeBucket.defaultProps = {
 };
 
 function makeMapStateToProps() {
-  const getNextUnplacedNode = makeGetNextUnplacedNode();
+  const getNextUnplacedNodes = makeGetNextUnplacedNodes();
   return function mapStateToProps(state, props) {
     return {
-      node: getNextUnplacedNode(state, props),
+      nodes: getNextUnplacedNodes(state, props),
       layout: propLayout(state, props),
     };
   };
