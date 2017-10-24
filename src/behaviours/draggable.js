@@ -2,13 +2,15 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
+import { findDOMNode, unstable_batchedUpdates } from 'react-dom'; // eslint-disable-line camelcase
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { throttle, filter, isMatch } from 'lodash';
 import DraggablePreview from '../utils/DraggablePreview';
 import { actionCreators as draggableActions } from '../ducks/modules/draggable';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
+
+const maxReportingPerSecond = 60;
 
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -71,24 +73,38 @@ export default function draggable(WrappedComponent) {
 
       this.state = initalState;
       this.preview = null;
+      this.componentHandlers = throttle(
+        this.componentHandlers,
+        1000 / maxReportingPerSecond,
+      );
     }
 
     componentDidMount() {
+      if (!this.props.canDrag) { return; }
       this.el = findDOMNode(this.node);
-      this.el.addEventListener('touchstart', this.handleMoveStart);
+      this.el.addEventListener('touchstart', this.handleMoveStart, { passive: true });
       this.el.addEventListener('touchmove', this.handleMove);
-      this.el.addEventListener('touchend', this.handleMoveEnd);
-      this.el.addEventListener('mousedown', this.handleMoveStart);
+      this.el.addEventListener('touchend', this.handleMoveEnd, { passive: true });
+      this.el.addEventListener('mousedown', this.handleMoveStart, { passive: true });
+    }
+
+    shouldComponentUpdate(newProps, newState) {
+      const propsChanged = !isMatch(this.props, newProps);
+      const dragStateChanged = newState.dragStart !== this.state.dragStart;
+      return dragStateChanged || propsChanged;
     }
 
     componentWillUnmount() {
       this.cleanupPreview();
-      this.el.removeEventListener('touchstart', this.handleMoveStart);
-      this.el.removeEventListener('touchmove', this.handleMove);
-      this.el.removeEventListener('touchend', this.handleMoveEnd);
-      this.el.removeEventListener('mousedown', this.handleMoveStart);
       window.removeEventListener('mousemove', this.handleMove);
       window.removeEventListener('mouseup', this.handleMoveEnd);
+      this.componentHandlers.cancel();
+      if (this.el) {
+        this.el.removeEventListener('touchstart', this.handleMoveStart);
+        this.el.removeEventListener('touchmove', this.handleMove);
+        this.el.removeEventListener('touchend', this.handleMoveEnd);
+        this.el.removeEventListener('mousedown', this.handleMoveStart);
+      }
     }
 
     determineHits = ({ x, y }) =>
@@ -98,8 +114,9 @@ export default function draggable(WrappedComponent) {
       });
 
     trackMouse = () => {
+      if (!this.props.canDrag) { return; }
       window.addEventListener('mousemove', this.handleMove);
-      window.addEventListener('mouseup', this.handleMoveEnd);
+      window.addEventListener('mouseup', this.handleMoveEnd, { passive: true });
     }
 
     removeMouseTracking = () => {
@@ -173,12 +190,14 @@ export default function draggable(WrappedComponent) {
 
     componentHandlers = (movement) => {
       if (this.state.dragStart) {
-        const hits = this.determineHits(movement);
-        this.props.updateActiveZones(hits.map(hit => hit.name));
+        unstable_batchedUpdates(() => {
+          const hits = this.determineHits(movement);
+          this.props.updateActiveZones(hits.map(hit => hit.name));
 
-        if (hits.length > 0) {
-          this.props.onMove(hits, movement);
-        }
+          if (hits.length > 0) {
+            this.props.onMove(hits, movement);
+          }
+        });
       }
     }
 
@@ -217,7 +236,7 @@ export default function draggable(WrappedComponent) {
     handleMoveEnd = (e) => {
       this.removeMouseTracking();
       this.cleanupPreview();
-      this.props.dragStop();
+
       if (this.state.dragStart) {
         const movement = this.movementFromEvent(e);
         const hits = this.determineHits(movement);
@@ -230,6 +249,8 @@ export default function draggable(WrappedComponent) {
       } else {
         this.setState(initalState);
       }
+
+      this.props.dragStop();
     }
 
     styles() {
@@ -237,10 +258,22 @@ export default function draggable(WrappedComponent) {
     }
 
     render() {
+      const {
+        zones,
+        draggableType,
+        dragStart,
+        dragStop,
+        onDropped,
+        onMove,
+        updateActiveZones,
+        canDrag,
+        ...rest
+      } = this.props;
+
       return (
         <div style={this.styles()}>
           <div ref={(node) => { this.node = node; }}>
-            <WrappedComponent {...this.props} />
+            <WrappedComponent {...rest} />
           </div>
         </div>
       );
@@ -255,7 +288,7 @@ export default function draggable(WrappedComponent) {
     onDropped: PropTypes.func,
     onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
-    // canDrag: PropTypes.bool,
+    canDrag: PropTypes.bool,
   };
 
   Draggable.defaultProps = {

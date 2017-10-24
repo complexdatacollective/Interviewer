@@ -1,5 +1,100 @@
 /* eslint-disable */
 
+const generateNickname = (name) => {
+  if (name) {
+    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
+    return nickName.substring(0,8);
+  } else {
+    return '';
+  }
+}
+
+const autoPopulate = (fields, values, populate) => {
+  if((!fields['nickname'] || !fields['nickname'].touched) && values) {
+    populate('nickname', generateNickname(values['name']));
+  }
+}
+
+const registry = {
+  name: {
+    label: 'Name',
+    type: 'text',
+    validation: {
+      required: true,
+      minLength: 1,
+      maxLength: 24,
+    },
+  },
+  age: {
+    label: 'Age',
+    type: 'number',
+    validation: {
+      required: true,
+      minValue: 16,
+      maxValue: 100,
+    },
+  },
+  nickname: {
+    label: 'Nickname',
+    type: 'text',
+    validation: {
+      required: true,
+      minLength: 1,
+      maxLength: 8,
+    },
+  },
+  special_category: {
+    label: 'Special category',
+    type: 'enumerable',
+    options: [46],
+  },
+  some_options: {
+    label: 'Some possible options',
+    type: 'options',
+    options: [46],
+    validation: {
+      max: 1,
+    }
+  },
+  close_friend: {
+    label: 'Close Friend',
+    type: 'boolean',
+  },
+  support_friend: {
+    label: 'Support Friend',
+    type: 'boolean',
+  },
+  advice_friend: {
+    label: 'Advice Friend',
+    type: 'boolean',
+  },
+  has_given_advice: {
+    label: 'Has given advice?',
+    type: 'boolean',
+  }
+};
+
+const forms = {
+  add_a_person: {
+    title: 'Add A Person',
+    fields: [
+      {
+        variable: 'name',
+        component: 'TextInput',
+      },
+      {
+        variable: 'nickname',
+        component: 'TextInput',
+      },
+      {
+        variable: 'age',
+        component: 'TextInput',
+      },
+    ],
+    autoPopulate: autoPopulate,
+  },
+};
+
 const data = {
   "previous": {
     nodes: [
@@ -61,59 +156,15 @@ const data = {
   },
 };
 
-const fields = [
-  {
-    label: 'Name',
-    name: 'name',
-    type: 'Alphanumeric',
-    placeholder: 'Name',
-    validation: {
-      required: true,
-      minLength: 1,
-      maxLength: 24,
-    }
-  },
-  {
-    label: 'Nickname',
-    name: 'nickname',
-    type: 'Alphanumeric',
-    placeholder: 'Nickname',
-    validation: {
-      required: true,
-      minLength: 1,
-      maxLength: 8,
-    },
-  },
-  {
-    label: 'Age',
-    name: 'age',
-    type: 'Alphanumeric',
-    isNumericOnly: true,
-    validation: {
-      required: true,
-      minValue: 16,
-      maxValue: 100,
-    },
-  },
-];
-
-let generateNickname = (name) => {
-  if (name) {
-    const nickName = name.split(' ')[0]+(name.split(' ')[1] ? ' ' + name.split(' ')[1][0] : '');
-    return nickName.substring(0,8);
-  } else {
-    return '';
-  }
-
-}
-
 export default {
   config: {
     "name": "Demo Protocol",
     "version": "1.0.0",
     "required": "1.0.0",
     "exportPath": "some/path/here.json",
+    "registry": registry,
     "data": data,
+    "forms": forms,
     "stages": [
       {
         "id": "namegen1",
@@ -150,16 +201,7 @@ export default {
               },
             },
           ],
-          form: {
-            title: 'Add A Person',
-            name: 'name-generator-form',
-            fields: fields,
-            autoPopulate: (fields, values, populate) => {
-              if((!fields['nickname'] || !fields['nickname'].touched) && values) {
-                populate('nickname', generateNickname(values['name']));
-              }
-            },
-          },
+          form: 'add_a_person',
         },
       },
       {

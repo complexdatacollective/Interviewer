@@ -1,27 +1,47 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 /**
   * Renders a side panel, with a title and `props.children`.
   */
 
-const Panel = ({ title, children, minimise, highlight }) => {
-  const panelClasses = cx(
-    'panel',
-    { 'panel--minimise': minimise },
-  );
+class Panel extends Component {
+  constructor() {
+    super();
 
-  const styles = { borderColor: highlight };
+    this.state = { collapsed: false };
+  }
 
-  return (
-    <div className={panelClasses} style={styles}>
-      <div className="panel__heading"><h3 className="panel__heading-header">{title}</h3></div>
-      <div className="panel__content">
-        {children}
+  toggleCollapsed = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  render() {
+    const { title, children, minimise, highlight } = this.props;
+
+    const panelClasses = cx(
+      'panel',
+      { 'panel--minimise': minimise },
+      { 'panel--collapsed': this.state.collapsed },
+    );
+
+    const styles = { borderColor: highlight };
+
+    return (
+      <div className={panelClasses} style={styles}>
+        <div className="panel__heading" onClick={this.toggleCollapsed}>
+          <h3 className="panel__heading-header">{title}</h3>
+        </div>
+        <div className="panel__content">
+          {children}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 Panel.propTypes = {
   title: PropTypes.string,

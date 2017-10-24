@@ -7,7 +7,7 @@ import { animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { NodeList } from '../../components/Elements';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { networkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 
 const OrdinalBins = ({ prompt, nodes, updateNode }) => {
   const binValues = orderBy(
@@ -96,7 +96,7 @@ OrdinalBins.propTypes = {
 
 function mapStateToProps(state, props) {
   return {
-    nodes: networkNodesForPrompt(state, props),
+    nodes: makeNetworkNodesForPrompt(state, props),
   };
 }
 

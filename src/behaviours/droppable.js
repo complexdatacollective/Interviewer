@@ -1,15 +1,16 @@
-/* eslint-disable */
+/* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { throttle, isEqual } from 'lodash';
+import { debounce, isMatch } from 'lodash';
+import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 import { actionCreators as droppableActions } from '../ducks/modules/droppable';
 
-const maxFramesPerSecond = 6;
+const maxFramesPerSecond = 24;
 const initialZoneState = {
   name: null,
   acceptsDraggableType: null,
@@ -26,7 +27,8 @@ export default function droppable(WrappedComponent) {
 
       this.lastZoneState = initialZoneState;
 
-      this.updateZone = throttle(this.updateZone, 1000 / maxFramesPerSecond);
+      this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
+      window.addEventListener('resize', this.onResize);
     }
 
     componentDidMount() {
@@ -34,8 +36,13 @@ export default function droppable(WrappedComponent) {
     }
 
     componentWillUnmount() {
-      this.updateZone.cancel();
-      window.cancelAnimationFrame(this.animationRequestId);
+      window.removeEventListener('resize', this.onResize);
+      this.onResize.cancel();
+    }
+
+    onResize = () => {
+      this.updateZone();
+      setTimeout(this.updateZone, 1000);
     }
 
     updateZone = () => {
@@ -52,12 +59,11 @@ export default function droppable(WrappedComponent) {
         x: boundingClientRect.left,
       };
 
-      if (!isEqual(nextZoneState, this.lastZoneState)) {
+      this.props.updateZone(nextZoneState);
+      if (!isMatch(nextZoneState, this.lastZoneState)) {
         this.lastZoneState = nextZoneState;
         this.props.updateZone(nextZoneState);
       }
-
-      this.animationRequestId = window.requestAnimationFrame(this.updateZone);
     }
 
     render() {
@@ -84,9 +90,19 @@ export default function droppable(WrappedComponent) {
     hover: false,
   };
 
-  function mapStateToProps(state, ownProps) {
-    return {
-      hover: state.droppable.activeZones.includes(ownProps.droppableName),
+  const activeZones = state => state.droppable.activeZones;
+  const droppableName = (_, props) => props.droppableName;
+
+  function getMapStateToProps() {
+    const isZoneActive = createSelector(
+      [activeZones, droppableName],
+      (zones, name) => zones.includes(name),
+    );
+
+    return function mapStateToProps(state, props) {
+      return {
+        hover: isZoneActive(state, props),
+      };
     };
   }
 
@@ -97,5 +113,5 @@ export default function droppable(WrappedComponent) {
   }
 
 
-  return connect(mapStateToProps, mapDispatchToProps)(Droppable);
+  return connect(getMapStateToProps, mapDispatchToProps)(Droppable);
 }

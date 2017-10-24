@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { networkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/interface';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
+import { makeRehydrateForm } from '../../selectors/rehydrate';
 
-const modals = {
+const forms = {
   ADD_NODE: Symbol('ADD_NODE'),
   EDIT_NODE: Symbol('EDIT_NODE'),
 };
@@ -33,7 +34,6 @@ class NameGenerator extends Component {
 
   /**
    * New node submit handler
-   * @param {object} formData - key/value object containing node fields
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
@@ -58,7 +58,7 @@ class NameGenerator extends Component {
    */
   onSelectNode = (node) => {
     this.setState({ selectedNode: node }, () => {
-      this.props.openModal(modals.EDIT_NODE);
+      this.props.openModal(forms.EDIT_NODE);
     });
   }
 
@@ -86,10 +86,10 @@ class NameGenerator extends Component {
       prompt,
       nodesForPrompt,
       stage,
+      form,
     } = this.props;
 
     const {
-      form,
       prompts,
     } = this.props.stage.params;
 
@@ -122,18 +122,21 @@ class NameGenerator extends Component {
 
         <NodeForm
           node={this.state.selectedNode}
-          modalName={modals.EDIT_NODE}
-          form={form}
+          name={forms.EDIT_NODE}
+          title={form.title}
+          fields={form.fields}
           handleSubmit={this.onSubmitEditNode}
         />
 
         <NodeForm
-          modalName={modals.ADD_NODE}
-          form={form}
+          name={forms.ADD_NODE}
+          title={form.title}
+          fields={form.fields}
           handleSubmit={this.onSubmitNewNode}
+          addAnother
         />
 
-        <button className="name-generator-interface__add-person" onClick={() => openModal(modals.ADD_NODE)}>
+        <button className="name-generator-interface__add-person" onClick={() => openModal(forms.ADD_NODE)}>
           Add a person
         </button>
 
@@ -156,19 +159,20 @@ NameGenerator.propTypes = {
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  form: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  const newNodeAttributes = {
-    type: props.stage.params.nodeType,
-    stageId: props.stage.id,
-    promptId: props.prompt.id,
-    ...props.prompt.nodeAttributes,
-  };
+function makeMapStateToProps() {
+  const networkNodesForPrompt = makeNetworkNodesForPrompt();
+  const newNodeAttributes = makeNewNodeAttributes();
+  const rehydrateForm = makeRehydrateForm();
 
-  return {
-    newNodeAttributes,
-    nodesForPrompt: networkNodesForPrompt(state, props),
+  return function mapStateToProps(state, props) {
+    return {
+      newNodeAttributes: newNodeAttributes(state, props),
+      nodesForPrompt: networkNodesForPrompt(state, props),
+      form: rehydrateForm(state, props),
+    };
   };
 }
 
@@ -184,5 +188,5 @@ function mapDispatchToProps(dispatch) {
 
 export default compose(
   withPrompt,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(makeMapStateToProps, mapDispatchToProps),
 )(NameGenerator);

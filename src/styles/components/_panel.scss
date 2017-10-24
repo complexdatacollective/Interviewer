@@ -1,6 +1,8 @@
+$heading-size: 100px;
+
 .panel {
-  @include transition-properties((opacity flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration)
-  flex: 1 0 0;
+  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration)
+  flex: 1 0 $heading-size;
   display: flex;
   flex-direction: column;
   background-color: palette('light-background');
@@ -17,7 +19,7 @@
   }
 
   &__heading {
-    flex: 0 0 100px;
+    flex: 0 0 $heading-size;
     padding: 20px;
     border-bottom: 2px solid palette('background');
     display: flex;
@@ -40,7 +42,7 @@
     font-size: 100px;
     margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
-    margin:5px;
+    margin: 5px;
     @include breakpoint('full') {
       font-size: 120px;
     }
@@ -48,8 +50,17 @@
 
   &--minimise {
     border-bottom-width: 0;
+    flex-basis: 0;
     flex-grow: 0;
     margin-bottom: 0;
     opacity: 0;
+  }
+
+  &--collapsed:not(.panel--minimise) {
+    flex-grow: 0;
+
+    .panel__content {
+      height: 0;
+    }
   }
 }
