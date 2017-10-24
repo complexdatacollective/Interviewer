@@ -99,6 +99,7 @@ const registry = {
   edge: {
       friend: {
         label: 'Friend',
+        color: 'mustard',
         variables: {
           contact_freq: {
             label: 'contact_freq',
@@ -113,10 +114,21 @@ const registry = {
             },
           }
         }
+      },
+      professional: {
+        label: 'Professional',
+        color: 'kiwi',
+        variables: {
+        }
       }
   }
 };
 
+/*
+  * Forms map variables defined in the registry to components.
+  * For example, a text variable might be mapped to an input component, and
+  * a categorical variable could be mapped to a toggle box, or a checkbox.
+*/
 const forms = {
   person: { // By default, an interface will look for a form with the same name as the object type.
     title: 'Add A Person',
@@ -144,6 +156,10 @@ const forms = {
   },
 };
 
+
+/*
+  * The data key holds external data to be used within the app.
+*/
 const data = {
   "previousInterview": {
     nodes: [
@@ -237,6 +253,45 @@ const nameGenerator = {
   ],
 };
 
+const sociogram = {
+  id: "sociogram",
+  type: "Sociogram",
+  label: "Sociogram",
+  prompts: [
+    {
+      id: 'closeness1',
+      text: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
+      nodeType: 'person',
+      filter: (nodes) => {
+        // filter nodes by these criteria.
+      },
+      layout: {
+        layoutVariable: 'closenessLayout',
+        allowPositioning: true,
+      },
+      edges: {
+        display: ['friends', 'professional'],
+        create: 'friends',
+      },
+      highlight: {
+        variable: 'has_given_advice',
+        value: true,
+        allowHighlighting: true,
+      },
+      disable: (nodes) => {
+        // put nodes matched here into the disabled state.
+      },
+      nodeBinSortOrder: {
+        'nickname': 'DESC',
+      },
+      background: {
+        concentricCircles: 4,
+        skewedTowardCenter: true,
+      },
+    },
+  ],
+};
+
 export default {
   name: "Demo Protocol",
   version: "1.0.0",
@@ -244,113 +299,5 @@ export default {
   variableRegistry: registry,
   externalData: data,
   forms: forms,
-  stages: [ nameGenerator,
-    {
-      id: "sociogram",
-      type: "Sociogram",
-      label: "Sociogram",
-      nodeType: 'person',
-      prompts: [
-        {
-          id: 'closeness1',
-          title: 'Position the nodes amongst the concentric circles. Place people you are closer to towards the middle',
-          sociogram: {
-            edge: {
-              type: 'friends',
-            },
-            layout: 'closenessLayout',
-            background: {
-              n: 4,
-              skewed: true,
-            },
-            position: true,
-          },
-        },
-        {
-          id: 'closeness2',
-          title: "Connect any two people who are friends, or who would spend time together without you being there.",
-          sociogram: {
-            layout: 'closenessLayout',
-            edge: {
-              type: 'friends',
-            },
-            background: {
-              n: 4,
-              skewed: true,
-            },
-            select: {
-              action: 'EDGE',
-            },
-            sort: {
-              by: 'nickname',
-              order: 'DESC',
-            },
-          },
-        },
-        {
-          id: 'closeness3',
-          title: "Tap on anyone who has given you advice within the past 6 months.",
-          sociogram: {
-            layout: 'closenessLayout',
-            edge: {
-              type: 'friends',
-            },
-            nodeAttributes: {
-              has_given_advice: true,
-            },
-            background: {
-              n: 4,
-              skewed: true,
-            },
-            position: false,
-            select: {
-              action: 'ATTRIBUTES',
-            },
-            sort: {
-              by: 'nickname',
-              order: 'DESC',
-            },
-          },
-        },
-        {
-          id: 'closeness5',
-          title: "Connect any two people who are work together professionally.",
-          sociogram: {
-            layout: 'closenessLayout',
-            edge: {
-              type: 'professional',
-              color: 'edge-alt-3',
-            },
-            background: {
-              n: 4,
-              skewed: true,
-            },
-            position: true,
-            select: {
-              action: 'EDGE',
-            }
-          },
-        },
-        {
-          id: 'closeness4',
-          title: "Position people on the map",
-          sociogram: {
-            layout: 'geographicLayout',
-            edge: {
-              type: 'family',
-              color: 'edge-alt-3',
-            },
-            background: {
-              image: 'map.svg',
-            },
-            position: true,
-            sort: {
-              by: 'nickname',
-              order: 'DESC',
-            },
-          },
-        },
-      ],
-    },
-  ],
+  stages: [ nameGenerator, sociogram],
 };
