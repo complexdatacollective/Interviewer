@@ -9,7 +9,7 @@ import { NodeList } from '../../components/Elements';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { networkNodesForPrompt } from '../../selectors/interface';
 
-export const OrdinalBins = ({ prompt, nodes, updateNode }) => {
+const OrdinalBins = ({ prompt, nodes, updateNode }) => {
   const binValues = orderBy(
     map(prompt.bins.values,
       (value, title) => [title, value],
@@ -50,8 +50,10 @@ export const OrdinalBins = ({ prompt, nodes, updateNode }) => {
 const Bin = ({ title, index, value, count, nodes, updateNode }) => {
   const keyWithValue = value > 0 ? index + 1 : 0;
   const ordinalBinName = `ORDINAL_BIN-${index}`;
-  const handleDropNode = (hits, node) => {
+  console.log(ordinalBinName);
+  const onDropNode = (hits, node) => {
     const hit = first(hits);
+    console.log(hit);
     if (hit === ordinalBinName) {
       updateNode({ ...node, bin: index });
     }
@@ -67,7 +69,7 @@ const Bin = ({ title, index, value, count, nodes, updateNode }) => {
         acceptsDraggableType="POSITIONED_NODE"
         draggableType="EXISTING_NODE"
         styled={false}
-        handleDropNode={handleDropNode}
+        handleDropNode={onDropNode}
       />
     </div>
   );
