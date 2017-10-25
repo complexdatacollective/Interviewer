@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { map, orderBy, first, filter, has } from 'lodash';
+import { map, orderBy, filter, has } from 'lodash';
+import { createSelector } from 'reselect';
 import { animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { NodeList } from '../../components/Elements';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 
-const OrdinalBins = ({ prompt, nodes, updateNode }) => {
+const OrdinalBins = ({ prompt, nodes }) => {
   const binValues = orderBy(
     map(prompt.bins.values,
       (value, title) => [title, value],
@@ -27,7 +28,6 @@ const OrdinalBins = ({ prompt, nodes, updateNode }) => {
         key={index}
         value={binValue[1]}
         nodes={nodes}
-        updateNode={updateNode}
       />
     ),
   );
@@ -47,34 +47,29 @@ const OrdinalBins = ({ prompt, nodes, updateNode }) => {
   );
 };
 
-const Bin = ({ title, index, value, count, nodes, updateNode }) => {
+const Bin = ({ title, index, value, count, nodes }) => {
   const keyWithValue = value > 0 ? index + 1 : 0;
   const ordinalBinName = `ORDINAL_BIN-${index}`;
-  const onDropNode = (hits, node) => {
-    const hit = first(hits);
-    if (hit === ordinalBinName) {
-      updateNode({ ...node, bin: index });
-    }
-  };
+  const getNodes = filter(nodes, node => node.bin === ordinalBinName);
 
   return (
     <div className={`ordinal-bin__bin ordinal-bin__bin--${count}-${keyWithValue}`}>
       <div className={`ordinal-bin__bin--title ordinal-bin__bin--title--${count}-${keyWithValue}`}>{title}</div>
       <NodeList
         classNames={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}
-        nodes={filter(nodes, node => has(node, { bin: index }))}
+        nodes={getNodes}
         droppableName={ordinalBinName}
         acceptsDraggableType="POSITIONED_NODE"
         draggableType="EXISTING_NODE"
         styled={false}
-        handleDropNode={onDropNode}
+        onDropNode={() => { this.forceUpdate(); }}
+        label={node => `${node.nickname}`}
       />
     </div>
   );
 };
 
 Bin.propTypes = {
-  updateNode: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
@@ -87,14 +82,26 @@ Bin.defaultProps = {
 };
 
 OrdinalBins.propTypes = {
-  updateNode: PropTypes.func.isRequired,
   nodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, props) {
-  return {
-    nodes: makeNetworkNodesForPrompt(state, props),
+const makeGetPlacedNodes = () => {
+  const networkNodesOfStageType = makeNetworkNodesOfStageType();
+
+  return createSelector(
+    [networkNodesOfStageType],
+    nodes => filter(nodes, node => has(node, 'bin')),
+  );
+};
+
+function makeMapStateToProps() {
+  const getPlacedNodes = makeGetPlacedNodes();
+
+  return function mapStateToProps(state, props) {
+    return {
+      nodes: getPlacedNodes(state, props),
+    };
   };
 }
 
@@ -104,4 +111,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrdinalBins);
+export default connect(makeMapStateToProps, mapDispatchToProps)(OrdinalBins);

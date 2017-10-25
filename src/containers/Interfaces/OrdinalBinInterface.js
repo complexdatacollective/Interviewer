@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { first, filter } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins, NodeBucket } from '../Elements';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
@@ -12,7 +13,12 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
   */
 class OrdinalBin extends Component {
   onDropNode = (hits, coords, node) => {
-    this.props.updateNode({ ...node });
+    const ordinalHit = first(
+      filter(hits, hit => hit.name.substring(0, 11) === 'ORDINAL_BIN'),
+    );
+    if (ordinalHit && ordinalHit.name) {
+      this.props.updateNode({ ...node, bin: ordinalHit.name });
+    }
   };
   render() {
     const {

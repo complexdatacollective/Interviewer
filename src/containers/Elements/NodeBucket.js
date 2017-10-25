@@ -24,7 +24,7 @@ const propLayout = (_, props) => {
   if (props.prompt.sociogram) {
     return props.prompt.sociogram.layout;
   } else if (props.prompt.bins) {
-    return 'ordinalBin';
+    return 'bin';
   }
   return null;
 };

@@ -35,7 +35,6 @@ const NodeList = ({
       { 'node-list--hover': hover },
     );
   }
-
   return (
     <StaggeredTransitionGroup
       className={className}
@@ -70,7 +69,7 @@ const NodeList = ({
 NodeList.propTypes = {
   nodes: PropTypes.array,
   handleSelectNode: PropTypes.func,
-  handleDropNode: PropTypes.func.isRequired,
+  handleDropNode: PropTypes.func,
   label: PropTypes.func,
   selected: PropTypes.func,
   draggableType: PropTypes.string,
@@ -83,6 +82,7 @@ NodeList.defaultProps = {
   label: () => (''),
   selected: () => false,
   handleSelectNode: () => {},
+  handleDropNode: () => {},
   draggableType: '',
   hover: false,
   classNames: null,
