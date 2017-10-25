@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import cx from 'classnames';
-import { Icon } from 'network-canvas-ui';
+
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { Form } from '../../containers/Elements';
-import { Modal, Pips } from '../../components/Elements';
+import { Form, FormWizard } from '../../containers/Elements';
+import { Modal } from '../../components/Elements';
 import { makeRehydrateFields } from '../../selectors/rehydrate';
 
 const propNode = (_, props) => props.node;
@@ -35,41 +35,17 @@ class NodeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fieldIndex: 0,
       typeOfSubmit: 'normal',
     };
   }
 
   onSubmit = (formData, dispatch, form) => {
-    if (this.shouldShowNextField()) {
-      this.nextField();
-      return;
-    }
-
     this.close();
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
       this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
     }
-  };
-
-  getFields = () => (
-    this.isLarge() ? this.props.fields : [this.props.fields[this.state.fieldIndex]]
-  );
-
-  nextField = () => {
-    const count = this.props.fields.length;
-    this.setState({
-      fieldIndex: (this.state.fieldIndex + 1 + count) % count,
-    });
-  };
-
-  previousField = () => {
-    const count = this.props.fields.length;
-    this.setState({
-      fieldIndex: (this.state.fieldIndex - 1 + count) % count,
-    });
   };
 
   continuousSubmit = () => {
@@ -94,11 +70,6 @@ class NodeForm extends Component {
 
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
 
-  shouldShowNextField = () => {
-    const showingLastField = this.state.fieldIndex === this.props.fields.length - 1;
-    return !this.isLarge() && !showingLastField;
-  }
-
   render() {
     const {
       title,
@@ -111,30 +82,28 @@ class NodeForm extends Component {
 
     const modalClassNames = cx({ 'modal--mobile': !this.isLarge() });
 
-    const previousElement = (
-      <div className="modal--mobile__previous">
-        {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
-      </div>);
-    const nextElement = this.shouldShowNextField() ? (<Icon name="form-arrow-right" />) : null;
+    const props = {};
+    props.fields = fields;
+    props.autoPopulate = autoPopulate;
+    props.initialValues = initialValues;
+    props.autoFocus = true;
+    props.form = name.toString();
+    props.onSubmit = this.onSubmit;
+    props.addAnother = addAnother;
+    props.continuousSubmit = this.continuousSubmit;
+    props.normalSubmit = this.normalSubmit;
+
+    const formElement = this.isLarge() ?
+      (<Form
+        {...props}
+      />) :
+      (<FormWizard
+        {...props}
+      />);
 
     return (
       <Modal name={name} title={title} close={this.close} className={modalClassNames}>
-        { !this.isLarge() && <div className="modal__pips">
-          <Pips count={fields.length} currentIndex={this.state.fieldIndex} />
-        </div>}
-        <Form
-          fields={this.getFields()}
-          autoPopulate={autoPopulate}
-          initialValues={initialValues}
-          autoFocus
-          form={name.toString()}
-          onSubmit={this.onSubmit}
-          addAnother={addAnother}
-          continuousSubmit={this.continuousSubmit}
-          normalSubmit={this.normalSubmit}
-          next={nextElement}
-          previous={previousElement}
-        />
+        {formElement}
       </Modal>
     );
   }

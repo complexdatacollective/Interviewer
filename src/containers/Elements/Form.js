@@ -29,8 +29,6 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
   * }
   * @param {string} form The name of the form
   * @param {func} handleSubmit(data) Recieves data as jsonfrom a sucessful form submission
-  * @param {component} next An optional component to trigger the next field in a wizard
-  * @param {component} previous An optional component to trigger the previous field in a wizard
   *
   */
 class Form extends Component {
@@ -60,18 +58,17 @@ class Form extends Component {
       continuousSubmit,
       fields,
       handleSubmit,
-      next,
-      normalSubmit,
-      previous,
+      submitComponent,
     } = this.props;
 
-    const addAnotherButton = addAnother && !next
-      ? <Button color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
+    const addAnotherButton = addAnother ?
+      (<Button color="white" onClick={continuousSubmit} aria-label="Submit and add another node">
+        Submit and New
+      </Button>)
       : null;
 
     return (
       <form onSubmit={handleSubmit}>
-        {previous}
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
@@ -85,10 +82,7 @@ class Form extends Component {
         }) }
         <div className="form__button-container">
           {addAnotherButton}
-          {next ?
-            <button className="form__next-button" onClick={normalSubmit} aria-label="Submit">{next}</button> :
-            <Button onClick={normalSubmit} aria-label="Submit">Submit</Button>
-          }
+          {submitComponent}
         </div>
       </form>
     );
@@ -106,9 +100,8 @@ Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
-  next: PropTypes.object,
   normalSubmit: PropTypes.func,
-  previous: PropTypes.object,
+  submitComponent: PropTypes.object,
 };
 
 Form.defaultProps = {
@@ -116,9 +109,8 @@ Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
   continuousSubmit: null,
-  next: null,
   normalSubmit: null,
-  previous: null,
+  submitComponent: <Button aria-label="Submit">Submit</Button>,
 };
 
 function makeMapStateToProps() {
