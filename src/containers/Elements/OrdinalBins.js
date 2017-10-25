@@ -50,10 +50,8 @@ const OrdinalBins = ({ prompt, nodes, updateNode }) => {
 const Bin = ({ title, index, value, count, nodes, updateNode }) => {
   const keyWithValue = value > 0 ? index + 1 : 0;
   const ordinalBinName = `ORDINAL_BIN-${index}`;
-  console.log(ordinalBinName);
   const onDropNode = (hits, node) => {
     const hit = first(hits);
-    console.log(hit);
     if (hit === ordinalBinName) {
       updateNode({ ...node, bin: index });
     }

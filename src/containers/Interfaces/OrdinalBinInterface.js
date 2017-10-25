@@ -36,6 +36,7 @@ class OrdinalBin extends Component {
           <NodeBucket
             stage={stage}
             prompt={prompt}
+            onDropNode={this.onDropNode}
           />
         </div>
         <div className="ordinal-bin-interface__ordinalbin">

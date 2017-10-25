@@ -38,7 +38,7 @@ const makeGetUnplacedNodes = () => {
   );
 };
 
-const makeGetNextUnplacedNodes = () => {
+export const makeGetNextUnplacedNodes = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
   return createSelector(
@@ -77,13 +77,12 @@ const NodeBucket = ({ nodes, layout, onDropNode }) => {
 
 NodeBucket.propTypes = {
   nodes: PropTypes.array,
-  onDropNode: PropTypes.func,
+  onDropNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
 };
 
 NodeBucket.defaultProps = {
   nodes: null,
-  onDropNode: () => {},
 };
 
 function makeMapStateToProps() {
