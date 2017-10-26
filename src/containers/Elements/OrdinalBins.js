@@ -10,7 +10,7 @@ import { NodeList } from '../../components/Elements';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 
-const OrdinalBins = ({ prompt, nodes }) => {
+const OrdinalBins = ({ prompt, nodes, onDropNode }) => {
   const binValues = orderBy(
     map(prompt.bins.values,
       (value, title) => [title, value],
@@ -28,6 +28,7 @@ const OrdinalBins = ({ prompt, nodes }) => {
         key={index}
         value={binValue[1]}
         nodes={nodes}
+        onDropNode={onDropNode}
       />
     ),
   );
@@ -47,22 +48,22 @@ const OrdinalBins = ({ prompt, nodes }) => {
   );
 };
 
-const Bin = ({ title, index, value, count, nodes }) => {
+const Bin = ({ title, index, value, count, nodes, onDropNode }) => {
   const keyWithValue = value > 0 ? index + 1 : 0;
   const ordinalBinName = `ORDINAL_BIN-${index}`;
-  const getNodes = filter(nodes, node => node.bin === ordinalBinName);
+  const binNodes = filter(nodes, node => node.bin === ordinalBinName);
 
   return (
     <div className={`ordinal-bin__bin ordinal-bin__bin--${count}-${keyWithValue}`}>
       <div className={`ordinal-bin__bin--title ordinal-bin__bin--title--${count}-${keyWithValue}`}>{title}</div>
       <NodeList
         classNames={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}
-        nodes={getNodes}
+        nodes={binNodes}
         droppableName={ordinalBinName}
         acceptsDraggableType="POSITIONED_NODE"
-        draggableType="EXISTING_NODE"
+        draggableType="POSITIONED_NODE"
         styled={false}
-        onDropNode={() => { this.forceUpdate(); }}
+        handleDropNode={(hits, node) => onDropNode(hits, null, node)}
         label={node => `${node.nickname}`}
       />
     </div>
@@ -70,6 +71,7 @@ const Bin = ({ title, index, value, count, nodes }) => {
 };
 
 Bin.propTypes = {
+  onDropNode: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
@@ -84,6 +86,7 @@ Bin.defaultProps = {
 OrdinalBins.propTypes = {
   nodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
+  onDropNode: PropTypes.func.isRequired,
 };
 
 const makeGetPlacedNodes = () => {

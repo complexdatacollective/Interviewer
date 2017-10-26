@@ -50,6 +50,7 @@ class OrdinalBin extends Component {
             stage={stage}
             prompt={prompt}
             key={prompt.id}
+            onDropNode={this.onDropNode}
           />
         </div>
       </div>
