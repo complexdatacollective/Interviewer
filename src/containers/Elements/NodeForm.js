@@ -63,9 +63,6 @@ class NodeForm extends Component {
 
   close = () => {
     this.props.closeModal(this.props.name);
-    this.setState({
-      fieldIndex: 0,
-    });
   };
 
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
@@ -80,7 +77,7 @@ class NodeForm extends Component {
       initialValues,
     } = this.props;
 
-    const modalClassNames = cx({ 'modal--mobile': !this.isLarge() });
+    const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
 
     const props = {};
     props.fields = fields;

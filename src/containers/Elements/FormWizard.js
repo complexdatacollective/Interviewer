@@ -54,11 +54,11 @@ class FormWizard extends Component {
     }
 
     return (
-      <div>
-        <div className="modal__pips">
+      <div className="form-wizard">
+        <div className="form-wizard__pips">
           <Pips count={fields.length} currentIndex={this.state.fieldIndex} />
         </div>
-        <div className="modal--mobile__previous">
+        <div className="form-wizard__previous">
           {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
         </div>
         <Form
