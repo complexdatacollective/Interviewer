@@ -37,7 +37,7 @@ export default function droppable(WrappedComponent) {
 
     componentWillUnmount() {
       window.removeEventListener('resize', this.onResize);
-      this.updateZone.cancel();
+      this.onResize.cancel();
     }
 
     onResize = () => {
