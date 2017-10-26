@@ -56,6 +56,22 @@ describe('<NodeForm />', () => {
     expect(subject).toMatchSnapshot();
   });
 
+  it('should render add another button', () => {
+    const multipleControls = mount((
+      <Provider store={mockStore()}>
+        <NodeForm {...mockProps} addAnother />
+      </Provider>
+    ));
+    const singularForm = mount((
+      <Provider store={mockStore()}>
+        <NodeForm {...mockProps} />
+      </Provider>
+    ));
+
+    expect(multipleControls.find('form').find('button').length).toBe(2);
+    expect(singularForm.find('form').find('button').length).toBe(1);
+  });
+
   it('should render with prepopulated fields if provided', () => {
     const subject = mount((
       <Provider store={mockStore()}>
