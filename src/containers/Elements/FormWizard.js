@@ -18,6 +18,9 @@ class FormWizard extends Component {
       return;
     }
     this.props.onSubmit(formData, dispatch, form);
+    this.setState({
+      fieldIndex: 0,
+    });
   }
 
   nextField = () => {
@@ -46,11 +49,11 @@ class FormWizard extends Component {
     extraProps.fields = [fields[this.state.fieldIndex]];
     extraProps.onSubmit = this.onSubmit;
     if (this.shouldShowNextField()) {
-      extraProps.submitComponent = (
-        <button className="form__next-button" aria-label="Submit">
+      extraProps.controls = [(
+        <button key="next" className="form__next-button" aria-label="Submit">
           <Icon name="form-arrow-right" />
         </button>
-      );
+      )];
     }
 
     return (
@@ -73,7 +76,6 @@ class FormWizard extends Component {
 FormWizard.propTypes = {
   fields: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  submitComponent: PropTypes.object.isRequired,
 };
 
 export default FormWizard;

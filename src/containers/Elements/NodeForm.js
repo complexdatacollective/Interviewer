@@ -7,6 +7,7 @@ import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import cx from 'classnames';
 
+import { Button } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { Form, FormWizard } from '../../containers/Elements';
 import { Modal } from '../../components/Elements';
@@ -40,7 +41,7 @@ class NodeForm extends Component {
   }
 
   onSubmit = (formData, dispatch, form) => {
-    this.close();
+    this.props.closeModal(this.props.name);
     this.props.handleSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
       this.props.resetValues(form.form);
@@ -60,35 +61,33 @@ class NodeForm extends Component {
     }, this.submit);
   };
 
-
-  close = () => {
-    this.props.closeModal(this.props.name);
-  };
-
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
 
   render() {
     const {
-      title,
-      fields,
-      autoPopulate,
-      name,
       addAnother,
+      autoPopulate,
+      fields,
       initialValues,
+      name,
+      title,
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
 
     const props = {};
-    props.fields = fields;
-    props.autoPopulate = autoPopulate;
-    props.initialValues = initialValues;
     props.autoFocus = true;
+    props.autoPopulate = autoPopulate;
+    props.fields = fields;
     props.form = name.toString();
+    props.initialValues = initialValues;
     props.onSubmit = this.onSubmit;
-    props.addAnother = addAnother;
-    props.continuousSubmit = this.continuousSubmit;
-    props.normalSubmit = this.normalSubmit;
+    props.controls = [
+      (addAnother && <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
+        Submit and New
+      </Button>),
+      <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
+    ];
 
     const formElement = this.isLarge() ?
       (<Form
@@ -99,7 +98,7 @@ class NodeForm extends Component {
       />);
 
     return (
-      <Modal name={name} title={title} close={this.close} className={modalClassNames}>
+      <Modal name={name} title={title} className={modalClassNames}>
         {formElement}
       </Modal>
     );
@@ -107,20 +106,20 @@ class NodeForm extends Component {
 }
 
 NodeForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
+  addAnother: PropTypes.bool,
+  autoPopulate: PropTypes.func,
   closeModal: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
-  resetValues: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   name: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.symbol,
   ]).isRequired,
-  title: PropTypes.string.isRequired,
-  fields: PropTypes.array.isRequired,
-  autoPopulate: PropTypes.func,
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
-  addAnother: PropTypes.bool,
+  openModal: PropTypes.func.isRequired,
+  resetValues: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 NodeForm.defaultProps = {

@@ -11,11 +11,9 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   *
-  * @param {bool} addAnother tells whether or not there should be an "Add Another" button
   * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
   * based on field value changes. Called on change with current field values and meta,
   * and a callback to allow the setting of otherfields
-  * @param {func} continuousSubmit() handles continuous submission
   * @param {array} fields Contains an array of field definitions
   * see Field for detailed format of definitions:
   * {
@@ -53,19 +51,11 @@ class Form extends Component {
 
   render() {
     const {
-      addAnother,
       autoFocus,
-      continuousSubmit,
       fields,
       handleSubmit,
-      submitComponent,
+      controls,
     } = this.props;
-
-    const addAnotherButton = addAnother ?
-      (<Button color="white" onClick={continuousSubmit} aria-label="Submit and add another node">
-        Submit and New
-      </Button>)
-      : null;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -81,8 +71,7 @@ class Form extends Component {
           );
         }) }
         <div className="form__button-container">
-          {addAnotherButton}
-          {submitComponent}
+          {controls.map(control => control)}
         </div>
       </form>
     );
@@ -90,27 +79,21 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  addAnother: PropTypes.bool,
   autofill: PropTypes.func.isRequired,
   autoFocus: PropTypes.bool,
   autoPopulate: PropTypes.func,
-  continuousSubmit: PropTypes.func,
   dirty: PropTypes.bool.isRequired,
   form: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
-  normalSubmit: PropTypes.func,
-  submitComponent: PropTypes.object,
+  controls: PropTypes.array,
 };
 
 Form.defaultProps = {
-  addAnother: false,
   autoFocus: false,
   autoPopulate: null,
-  continuousSubmit: null,
-  normalSubmit: null,
-  submitComponent: <Button aria-label="Submit">Submit</Button>,
+  controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
 };
 
 function makeMapStateToProps() {
