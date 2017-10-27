@@ -2,7 +2,10 @@
 import { createSelector } from 'reselect';
 
 const stageIndex = state => state.session.stage.index;
-const protocol = state => state.protocol.config;
+const protocol = (state) => {
+  console.log(state);
+  return state.protocol;
+};
 
 export const sessionMenuIsOpen = state => state.menu.sessionMenuIsOpen;
 export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;

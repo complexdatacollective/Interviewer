@@ -4,6 +4,7 @@ import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 import { isEqual } from 'lodash';
 
 // create a "selector creator" that uses lodash.isEqual instead of ===
+
 const createDeepEqualSelector = createSelectorCreator(
   defaultMemoize,
   isEqual,
@@ -17,12 +18,12 @@ const propForm = (_, props) => props.stage.form;
 // MemoedSelectors
 
 export const protocolRegistry = createDeepEqualSelector(
-  state => state.protocol.config.registry,
+  state => state.protocol.registry,
   registry => registry,
 );
 
 export const protocolForms = createDeepEqualSelector(
-  state => state.protocol.config.forms,
+  state => state.protocol.forms,
   forms => forms,
 );
 

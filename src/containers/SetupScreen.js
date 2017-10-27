@@ -98,7 +98,7 @@ Setup.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    protocolLoaded: state.protocol.loaded,
+    protocolLoaded: state.protocol.isLoaded,
   };
 }
 
