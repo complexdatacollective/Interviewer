@@ -204,6 +204,28 @@
           "value": "return Date.now().toString();"
         }
       ]
+    },
+    "myCustomForm": {
+      "title": "Add A Person",
+      "fields": [
+        {
+          "variable": "name",
+          "component": "TextInput"
+        },
+        {
+          "variable": "nickname",
+          "component": "TextInput"
+        },
+        {
+          "variable": "age",
+          "component": "TextInput"
+        },
+        {
+          "variable": "timeCreated",
+          "component": "hidden",
+          "value": "return Date.now().toString();"
+        }
+      ]
     }
   },
   "stages": [
@@ -211,7 +233,10 @@
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
-      "creates": "person",
+      "creates": {
+        "entity": "node",
+        "type": "person",
+      },
       "form": "myCustomForm",
       "panels": [
         "existing"

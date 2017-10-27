@@ -13,7 +13,7 @@ const createDeepEqualSelector = createSelectorCreator(
 // Prop selectors
 
 const propFields = (_, props) => props.fields;
-const propForm = (_, props) => props.stage.form;
+const propForm = (_, props) => (props.stage.form ? props.stage.form : props.stage.creates);
 
 // MemoedSelectors
 
@@ -44,5 +44,5 @@ export const makeRehydrateFields = () =>
 export const makeRehydrateForm = () =>
   createSelector(
     [propForm, protocolForms],
-    (form, forms) => (typeof form === 'string' ? forms[form] : form),
+    (form, forms) => forms[form],
   );

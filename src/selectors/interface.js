@@ -24,7 +24,7 @@ export const propStageNodeType = (_, props) => props.stage.nodeType;
 
 // State selectors
 
-export const protocolData = state => state.protocol.config.data;
+export const protocolData = state => state.protocol.data;
 
 // MemoedSelectors
 
