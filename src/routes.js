@@ -15,7 +15,7 @@ import {
 
 function mapStateToProps(state) {
   return {
-    protocolLoaded: state.protocol.loaded,
+    isProtocolLoaded: state.protocol.isLoaded,
   };
 }
 
@@ -23,7 +23,7 @@ let SetupRequiredRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props => (
-      rest.protocolLoaded ? (
+      rest.isProtocolLoaded ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: '/setup' }} />

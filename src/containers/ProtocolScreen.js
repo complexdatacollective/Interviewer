@@ -7,7 +7,7 @@ import Stage from './Stage';
   * Check protocol is loaded, and render the stage
   */
 const Protocol = (props) => {
-  if (!props.protocolLoaded) { return null; }
+  if (!props.isProtocolLoaded) { return null; }
 
   return (
     <div className="protocol">
@@ -17,12 +17,12 @@ const Protocol = (props) => {
 };
 
 Protocol.propTypes = {
-  protocolLoaded: PropTypes.bool.isRequired,
+  isProtocolLoaded: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    protocolLoaded: state.protocol.loaded,
+    isProtocolLoaded: state.protocol.isLoaded,
   };
 }
 
