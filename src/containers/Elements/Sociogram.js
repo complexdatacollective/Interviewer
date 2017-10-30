@@ -12,21 +12,21 @@ import {
 const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
     <SociogramBackground {...prompt.background} />
-
+    {
+      prompt.edges &&
+      <EdgeLayout
+        stage={stage}
+        prompt={prompt}
+      />
+    }
+    <NodeLayout
+      stage={stage}
+      prompt={prompt}
+    />
   </div>
 );
 
-// {
-//   prompt.sociogram.edge &&
-//   <EdgeLayout
-//     stage={stage}
-//     prompt={prompt}
-//   />
-// }
-// <NodeLayout
-//   stage={stage}
-//   prompt={prompt}
-// />
+
 // <NodeBucket
 //   stage={stage}
 //   prompt={prompt}
