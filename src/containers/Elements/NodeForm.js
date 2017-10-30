@@ -65,9 +65,17 @@ class NodeForm extends Component {
 
   render() {
     const {
+<<<<<<< HEAD
       addAnother,
       name,
       title,
+=======
+      title,
+      name,
+      addAnother,
+      initialValues,
+      ...rest
+>>>>>>> 4be676ef0... Variable registry re-wired
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });

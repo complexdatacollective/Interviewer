@@ -185,6 +185,8 @@
   "forms": {
     "person": {
       "title": "Add A Person",
+      "entity": "node",
+      "type": "person",
       "fields": [
         {
           "variable": "name",
@@ -207,6 +209,8 @@
     },
     "myCustomForm": {
       "title": "Add A Person",
+      "entity": "node",
+      "type": "person",
       "fields": [
         {
           "variable": "name",
@@ -235,7 +239,7 @@
       "label": "NG Closeness",
       "creates": {
         "entity": "node",
-        "type": "person",
+        "type": "person"
       },
       "form": "myCustomForm",
       "panels": [
