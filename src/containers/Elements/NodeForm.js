@@ -65,17 +65,9 @@ class NodeForm extends Component {
 
   render() {
     const {
-<<<<<<< HEAD
       addAnother,
       name,
       title,
-=======
-      title,
-      name,
-      addAnother,
-      initialValues,
-      ...rest
->>>>>>> 4be676ef0... Variable registry re-wired
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
@@ -106,6 +98,7 @@ class NodeForm extends Component {
     return (
       <Modal name={name} title={title} className={modalClassNames}>
         {formElement}
+
       </Modal>
     );
   }
@@ -121,10 +114,12 @@ NodeForm.propTypes = {
     PropTypes.string,
     PropTypes.symbol,
   ]).isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  entity: PropTypes.string.isRequired,
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
 };
 
 NodeForm.defaultProps = {

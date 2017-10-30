@@ -31,10 +31,11 @@ export const protocolForms = createDeepEqualSelector(
 
 const rehydrateField = ({ registry, entity, type, field }) => {
   if (!field.variable) { return field; }
+
   return {
     name: field.variable,
     component: field.component,
-    ...registry[entity][type][field.variable],
+    ...registry[entity][type].variables[field.variable],
   };
 };
 
