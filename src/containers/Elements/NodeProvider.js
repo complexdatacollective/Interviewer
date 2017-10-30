@@ -82,7 +82,7 @@ function makeMapStateToProps() {
     const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
 
     return {
-      activePromptAttributes: props.prompt.nodeAttributes,
+      activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: newNodeAttributes(state, props),
       interaction,
     };
