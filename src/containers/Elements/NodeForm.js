@@ -42,7 +42,7 @@ class NodeForm extends Component {
 
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
-    this.props.handleSubmit(formData, dispatch, form);
+    this.props.onSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
       this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
@@ -66,35 +66,33 @@ class NodeForm extends Component {
   render() {
     const {
       addAnother,
-      autoPopulate,
-      fields,
-      initialValues,
       name,
       title,
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
 
-    const props = {};
-    props.autoFocus = true;
-    props.autoPopulate = autoPopulate;
-    props.fields = fields;
-    props.form = name.toString();
-    props.initialValues = initialValues;
-    props.onSubmit = this.onSubmit;
-    props.controls = [
-      (addAnother && <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
-        Submit and New
-      </Button>),
-      <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
-    ];
+    const formProps = {
+      ...this.props,
+      autoFocus: true,
+      controls: [
+        (addAnother &&
+          <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
+            Submit and New
+          </Button>
+        ),
+        <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
+      ],
+      form: name.toString(),
+      onSubmit: this.onSubmit,
+    };
 
     const formElement = this.isLarge() ?
       (<Form
-        {...props}
+        {...formProps}
       />) :
       (<FormWizard
-        {...props}
+        {...formProps}
       />);
 
     return (
@@ -107,10 +105,9 @@ class NodeForm extends Component {
 
 NodeForm.propTypes = {
   addAnother: PropTypes.bool,
-  autoPopulate: PropTypes.func,
   closeModal: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   name: PropTypes.oneOfType([
     PropTypes.string,
@@ -124,7 +121,6 @@ NodeForm.propTypes = {
 
 NodeForm.defaultProps = {
   addAnother: false,
-  autoPopulate: () => {},
   node: {},
 };
 

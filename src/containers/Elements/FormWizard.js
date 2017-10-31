@@ -13,7 +13,7 @@ class FormWizard extends Component {
   }
 
   onSubmit = (formData, dispatch, form) => {
-    if (this.shouldShowNextField()) {
+    if (this.shouldShowNextButton()) {
       this.nextField();
       return;
     }
@@ -37,36 +37,39 @@ class FormWizard extends Component {
     });
   };
 
-  shouldShowNextField = () => {
+  shouldShowNextButton = () => {
     const showingLastField = this.state.fieldIndex === this.props.fields.length - 1;
     return !showingLastField;
   }
 
-  render() {
-    const { fields, onSubmit, ...rest } = this.props;
+  currentField() {
+    return [this.props.fields[this.state.fieldIndex]];
+  }
 
-    const extraProps = {};
-    extraProps.fields = [fields[this.state.fieldIndex]];
-    extraProps.onSubmit = this.onSubmit;
-    if (this.shouldShowNextField()) {
-      extraProps.controls = [(
-        <button key="next" className="form__next-button" aria-label="Submit">
-          <Icon name="form-arrow-right" />
-        </button>
-      )];
-    }
+  render() {
+    const nextButton = (
+      <button key="next" className="form__next-button" aria-label="Submit">
+        <Icon name="form-arrow-right" />
+      </button>
+    );
+
+    const formProps = {
+      ...this.props,
+      fields: this.currentField(),
+      onSubmit: this.onSubmit,
+    };
 
     return (
       <div className="form-wizard">
         <div className="form-wizard__pips">
-          <Pips count={fields.length} currentIndex={this.state.fieldIndex} />
+          <Pips count={this.props.fields.length} currentIndex={this.state.fieldIndex} />
         </div>
         <div className="form-wizard__previous">
           {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
         </div>
         <Form
-          {...rest}
-          {...extraProps}
+          {...formProps}
+          controls={this.shouldShowNextButton() ? [nextButton] : this.props.controls}
         />
       </div>
     );
@@ -74,8 +77,13 @@ class FormWizard extends Component {
 }
 
 FormWizard.propTypes = {
+  controls: PropTypes.array,
   fields: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
+};
+
+FormWizard.defaultProps = {
+  controls: undefined,
 };
 
 export default FormWizard;

@@ -10,7 +10,6 @@ ShallowWrapper {
   "length": 1,
   "node": <NodeForm
     addAnother={false}
-    autoPopulate={[Function]}
     closeModal={[Function]}
     fields={
         Array [
@@ -20,10 +19,10 @@ ShallowWrapper {
             },
           ]
     }
-    handleSubmit={[Function]}
     initialValues={Object {}}
     name="baz"
     node={Object {}}
+    onSubmit={[Function]}
     openModal={[Function]}
     resetValues={[Function]}
     store={
@@ -40,7 +39,6 @@ ShallowWrapper {
   "nodes": Array [
     <NodeForm
       addAnother={false}
-      autoPopulate={[Function]}
       closeModal={[Function]}
       fields={
             Array [
@@ -50,10 +48,10 @@ ShallowWrapper {
                   },
                 ]
       }
-      handleSubmit={[Function]}
       initialValues={Object {}}
       name="baz"
       node={Object {}}
+      onSubmit={[Function]}
       openModal={[Function]}
       resetValues={[Function]}
       store={
@@ -83,8 +81,8 @@ ShallowWrapper {
                         },
                       ]
         }
-        handleSubmit={[Function]}
         name="baz"
+        onSubmit={[Function]}
         store={
                 Object {
                         "dispatch": [Function],
@@ -124,9 +122,9 @@ ShallowWrapper {
               "variable": "foo",
             },
           ],
-          "handleSubmit": [Function],
           "initialValues": Object {},
           "name": "baz",
+          "onSubmit": [Function],
           "openModal": [Function],
           "resetValues": [Function],
           "store": Object {
@@ -145,8 +143,8 @@ ShallowWrapper {
               "variable": "foo",
             },
           ],
-          "handleSubmit": [Function],
           "name": "baz",
+          "onSubmit": [Function],
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -159,7 +157,6 @@ ShallowWrapper {
         "refs": Object {},
         "renderedElement": <NodeForm
           addAnother={false}
-          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
@@ -169,10 +166,10 @@ ShallowWrapper {
                               },
                             ]
           }
-          handleSubmit={[Function]}
           initialValues={Object {}}
           name="baz"
           node={Object {}}
+          onSubmit={[Function]}
           openModal={[Function]}
           resetValues={[Function]}
           store={
@@ -238,7 +235,6 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <NodeForm
           addAnother={false}
-          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
@@ -248,10 +244,10 @@ ShallowWrapper {
                               },
                             ]
           }
-          handleSubmit={[Function]}
           initialValues={Object {}}
           name="baz"
           node={Object {}}
+          onSubmit={[Function]}
           openModal={[Function]}
           resetValues={[Function]}
           store={
@@ -268,7 +264,6 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <NodeForm
           addAnother={false}
-          autoPopulate={[Function]}
           closeModal={[Function]}
           fields={
                     Array [
@@ -278,10 +273,10 @@ ShallowWrapper {
                               },
                             ]
           }
-          handleSubmit={[Function]}
           initialValues={Object {}}
           name="baz"
           node={Object {}}
+          onSubmit={[Function]}
           openModal={[Function]}
           resetValues={[Function]}
           store={
@@ -315,8 +310,8 @@ ShallowWrapper {
             },
           ]
     }
-    handleSubmit={[Function]}
     name="baz"
+    onSubmit={[Function]}
     store={
         Object {
             "dispatch": [Function],

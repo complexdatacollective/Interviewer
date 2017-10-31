@@ -40,7 +40,7 @@ const mockStore = () =>
 const mockProps = {
   name: 'baz',
   title: 'The form title',
-  handleSubmit: () => {},
+  onSubmit: () => {},
   fields: [{
     variable: 'foo',
     component: 'TextInput',
