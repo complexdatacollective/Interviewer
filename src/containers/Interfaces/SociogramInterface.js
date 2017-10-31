@@ -8,8 +8,8 @@ import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
   prompts.forEach((prompt) => {
-    resetPropertyForAllNodes(prompt.sociogram.layout);
-    resetEdgesOfType(prompt.sociogram.edge.type);
+    resetPropertyForAllNodes(prompt.layout.layoutVariable);
+    resetEdgesOfType(prompt.edges.creates);
   });
 };
 

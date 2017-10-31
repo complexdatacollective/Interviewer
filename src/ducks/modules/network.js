@@ -78,6 +78,14 @@ export default function reducer(state = initialState, action = {}) {
       const updatedNodes = state.nodes.map((node) => {
         if (node.uid !== action.node.uid) { return node; }
 
+        if (action.full) {
+          return {
+            ...action.node,
+            id: node.id,
+            uid: node.uid,
+          };
+        }
+
         return {
           ...node,
           ...action.node,
@@ -134,10 +142,11 @@ function addNode(node) {
   };
 }
 
-function updateNode(node) {
+function updateNode(node, full = false) {
   return {
     type: UPDATE_NODE,
     node,
+    full,
   };
 }
 
