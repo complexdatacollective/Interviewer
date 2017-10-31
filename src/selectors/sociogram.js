@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { filter, has, reject, first, toPairs } from 'lodash';
+import { filter, has, reject, first, toPairs, unzip, orderBy, lowerCase } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { createDeepEqualSelector } from './utils';
 
@@ -40,9 +40,7 @@ const getLayoutOptions = createDeepEqualSelector(
 
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
-  sort => ({
-    sort: toPairs(sort),
-  }),
+  sort => ({ nodeBinSortOrder: sort }),
 );
 
 const getBackgroundOptions = createDeepEqualSelector(
@@ -53,7 +51,6 @@ const getBackgroundOptions = createDeepEqualSelector(
     image: has(background, 'image') ? background.image : undefined,
   }),
 );
-
 
 const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHighlight } }) => {
   if (canCreateEdge) { return 'EDGE'; }
@@ -112,16 +109,15 @@ export const makeGetNextUnplacedNode = () => {
 
   return createSelector(
     getUnplacedNodes, getSortOptions,
-    nodes => first(nodes),
-    // (nodes, sort) => {
-    //   let sortedNodes = [...nodes];
-    //   if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
-    //   if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-    //   return first(sortedNodes);
-    // },
+    (nodes, sortOptions) => {
+      const [properties, orders] = unzip(toPairs(sortOptions.nodeBinSortOrder));
+      const sortedNodes = orderBy([...nodes], properties, orders.map(lowerCase));
+      return first(sortedNodes);
+    },
   );
 };
 
+// TODO: flatten this out
 export const makeDisplayEdgesForPrompt = () => {
   const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
 
@@ -168,7 +164,7 @@ export const sociogramOptionsProps = {
   highlightAttributes: PropTypes.object.isRequired,
   allowSelect: PropTypes.bool.isRequired,
   selectMode: PropTypes.string.isRequired,
-  sort: PropTypes.array.isRequired,
+  nodeBinSortOrder: PropTypes.object.isRequired,
   concentricCircles: PropTypes.number.isRequired,
   skewedTowardCenter: PropTypes.bool.isRequired,
 };
