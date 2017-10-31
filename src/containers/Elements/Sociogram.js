@@ -23,14 +23,12 @@ const Sociogram = ({ stage, prompt }) => (
       stage={stage}
       prompt={prompt}
     />
+    <NodeBucket
+      stage={stage}
+      prompt={prompt}
+    />
   </div>
 );
-
-
-// <NodeBucket
-//   stage={stage}
-//   prompt={prompt}
-// />
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
@@ -6,7 +8,7 @@ import { isEqual, isMatch, omit } from 'lodash';
 import LayoutNode from '../LayoutNode';
 import { withBounds } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { propPromptLayout, propPromptCreateEdges, makeGetPlacedNodes } from '../../selectors/sociogram';
+import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
@@ -40,7 +42,7 @@ class NodeLayout extends Component {
   onSelectNode = (node) => {
     if (!this.canSelect()) { return; }
 
-    switch (this.selectAction()) {
+    switch (this.selectMode()) {
       case 'EDGE':
         this.connectNode(node.id); break;
       case 'HIGHLIGHT':
@@ -78,24 +80,12 @@ class NodeLayout extends Component {
     );
   }
 
-  highlightAttributes() {
-    const { highlight } = this.props.prompt;
-    return {
-      [highlight.variable]: highlight.value,
-    };
-  }
-
-  selectAction() {
-    if(edges.create) { return 'EDGE'; }
-    if(highlight.allowHighlighting) { return 'HIGHLIGHT'; }
-  }
-
   isSelected(node) {
     const { edges, highlight } = this.props.prompt;
   
     if (!this.canSelect()) { return false; }
 
-    switch (this.selectAction()) {
+    switch (this.selectMode()) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);
       case 'HIGHLIGHT':
@@ -105,16 +95,7 @@ class NodeLayout extends Component {
     }
   }
 
-  canSelect() {
-    return !!(this.props.prompt.edges.create || this.props.prompt.highlight.allowHighlighting);
-  }
-
-  canDrag() {
-    return this.props.prompt.layout.allowPositioning;
-  }
-
   render() {
-
     const {
       nodes,
       layout,
@@ -155,23 +136,22 @@ NodeLayout.propTypes = {
   nodes: PropTypes.array,
   toggleEdge: PropTypes.func.isRequired,
   toggleHighlight: PropTypes.func.isRequired,
-  attributes: PropTypes.object,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
 };
 
 NodeLayout.defaultProps = {
   nodes: [],
-  attributes: {},
 };
 
 function makeMapStateToProps() {
   const getPlacedNodes = makeGetPlacedNodes();
+  const getSociogramOptions = makeGetSociogramOptions();
 
   return function mapStateToProps(state, props) {
     return {
       nodes: getPlacedNodes(state, props),
-      layout: this.props.prompt.layout.layoutVariable,
+      ...getSociogramOptions(state, props),
     };
   };
 }

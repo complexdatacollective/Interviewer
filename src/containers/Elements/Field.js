@@ -14,7 +14,7 @@ import validations from '../../utils/Validations';
 
 import { withOptionsFromSelector } from '../../behaviours';
 
-/**
+/*
   * Returns the named field compontent, if no matching one is found
   or else it just returns a text input
   * @param {object} field The properties handed down from the protocol form
@@ -108,17 +108,17 @@ class Field extends PureComponent {
   }
 
   render() {
-    const { label, name, component, validation, ...rest } = this.props;
+    const { label, name, validation, ...rest } = this.props;
 
     const validate = getValidation(validation);
 
     return (
       <ReduxFormField
+        {...rest}
         name={name}
         label={label}
         component={this.component}
         validate={validate}
-        {...rest}
       />
     );
   }
