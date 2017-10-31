@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
@@ -8,7 +6,7 @@ import { isEqual, isMatch, omit } from 'lodash';
 import LayoutNode from '../LayoutNode';
 import { withBounds } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
+import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
@@ -20,6 +18,19 @@ const nodesLengthChanged = (nextProps, props) =>
   nextProps.nodes.length !== props.nodes.length;
 
 class NodeLayout extends Component {
+  static propTypes = {
+    nodes: PropTypes.array,
+    toggleEdge: PropTypes.func.isRequired,
+    toggleHighlight: PropTypes.func.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    ...sociogramOptionsProps,
+  };
+
+  static defaultProps = {
+    nodes: [],
+  };
+
   constructor(props) {
     super(props);
 
@@ -41,7 +52,7 @@ class NodeLayout extends Component {
 
   onSelectNode = (node) => {
     const { canSelect, selectMode } = this.props;
-  
+
     if (!canSelect) { return; }
 
     switch (selectMode) {
@@ -84,7 +95,7 @@ class NodeLayout extends Component {
 
   isSelected(node) {
     const { selectMode, canSelect } = this.props;
-  
+
     if (!canSelect) { return false; }
 
     switch (selectMode) {
@@ -100,15 +111,12 @@ class NodeLayout extends Component {
   render() {
     const {
       nodes,
-      layout,
       width,
       height,
       allowPositioning,
       allowSelect,
       layoutVariable,
     } = this.props;
-
-    console.log('NODE_LAYOUT', allowPositioning, allowSelect);
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
@@ -139,25 +147,11 @@ class NodeLayout extends Component {
   }
 }
 
-NodeLayout.propTypes = {
-  nodes: PropTypes.array,
-  toggleEdge: PropTypes.func.isRequired,
-  toggleHighlight: PropTypes.func.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
-
-NodeLayout.defaultProps = {
-  nodes: [],
-};
-
 function makeMapStateToProps() {
   const getPlacedNodes = makeGetPlacedNodes();
   const getSociogramOptions = makeGetSociogramOptions();
 
   return function mapStateToProps(state, props) {
-
-    console.log('NODE_LAYOUT', getPlacedNodes(state, props), getSociogramOptions(state, props));
     return {
       nodes: getPlacedNodes(state, props),
       ...getSociogramOptions(state, props),

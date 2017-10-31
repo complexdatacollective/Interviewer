@@ -1,12 +1,10 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../../selectors/sociogram';
+import { makeGetNextUnplacedNode, makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
 import { draggable } from '../../behaviours';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
@@ -16,6 +14,16 @@ const label = node => node.nickname;
 const draggableType = 'POSITIONED_NODE';
 
 export class NodeBucket extends Component {
+  static propTypes = {
+    node: PropTypes.object,
+    updateNode: PropTypes.func.isRequired,
+    ...sociogramOptionsProps,
+  };
+
+  static defaultProps = {
+    node: null,
+  };
+
   onDropNode = (hits, coords, node) => {
     const { layoutVariable } = this.props;
 
@@ -49,16 +57,6 @@ export class NodeBucket extends Component {
     );
   }
 }
-
-NodeBucket.propTypes = {
-  node: PropTypes.object,
-  updateNode: PropTypes.func.isRequired,
-  layout: PropTypes.string.isRequired,
-};
-
-NodeBucket.defaultProps = {
-  node: null,
-};
 
 function makeMapStateToProps() {
   const getNextUnplacedNode = makeGetNextUnplacedNode();

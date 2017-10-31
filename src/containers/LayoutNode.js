@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -51,8 +49,6 @@ class LayoutNode extends PureComponent {
 
     const { x, y } = node[layoutVariable];
 
-    console.log(canDrag, canSelect);
-
     const styles = {
       left: 0,
       top: 0,
@@ -91,12 +87,16 @@ LayoutNode.propTypes = {
   canDrag: PropTypes.bool,
   canSelect: PropTypes.bool,
   selected: PropTypes.bool,
+  areaWidth: PropTypes.number,
+  areaHeight: PropTypes.number,
 };
 
 LayoutNode.defaultProps = {
   canDrag: false,
   canSelect: false,
   selected: false,
+  areaWidth: 0,
+  areaHeight: 0,
 };
 
 function mapDispatchToProps(dispatch) {

@@ -1,8 +1,8 @@
-/* eslint-disable */
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
 import { filter, has, reject, first, toPairs } from 'lodash';
+import { PropTypes } from 'prop-types';
 import { createDeepEqualSelector } from './utils';
 
 // Prop selectors
@@ -18,42 +18,47 @@ const propPromptSort = (_, props) => props.prompt.nodeBinSortOrder;
 
 const getEdgeOptions = createDeepEqualSelector(
   propPromptEdges,
-  (edges) => ({
+  edges => ({
     displayEdges: has(edges, 'display') ? edges.display : [],
     createEdge: has(edges, 'create') ? edges.create : null,
-    canCreateEdge: has(edges, 'create') ? true : false,
+    canCreateEdge: has(edges, 'create'),
   }),
 );
 
 const getHighlightOptions = createDeepEqualSelector(
   propPromptHighlight,
-  (highlight) => ({
+  highlight => ({
     canHighlight: has(highlight, 'allowHighting') ? highlight.allowHighlighting : false,
-    highlightAttributes: has(highlight, 'allowHighting') ? { [highlight.variable]: props.prompt.highlight.value } : {},
+    highlightAttributes: has(highlight, 'allowHighting') ? { [highlight.variable]: highlight.value } : {},
   }),
 );
 
 const getLayoutOptions = createDeepEqualSelector(
   propPromptLayout,
-  (layout) => layout,
+  layout => layout,
 );
 
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
-  (sort) => ({
+  sort => ({
     sort: toPairs(sort),
   }),
-)
+);
 
 const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHighlight } }) => {
   if (canCreateEdge) { return 'EDGE'; }
   if (canHighlight) { return 'HIGHLIGHT'; }
   return null;
-}
+};
 
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
-    propPromptNodeType, getLayoutOptions, getEdgeOptions, getHighlightOptions, propPromptBackground, getSortOptions,
+    propPromptNodeType,
+    getLayoutOptions,
+    getEdgeOptions,
+    getHighlightOptions,
+    propPromptBackground,
+    getSortOptions,
     (nodeType, layoutOptions, edgeOptions, highlightOptions, background, sortOptions) => ({
       nodeType,
       ...layoutOptions,
@@ -61,8 +66,8 @@ export const makeGetSociogramOptions = () =>
       ...highlightOptions,
       allowSelect: highlightOptions.canHighlight || edgeOptions.canCreateEdge,
       selectMode: selectMode({ edgeOptions, highlightOptions }),
-      sortOptions,
-      background,
+      ...sortOptions,
+      ...background,
     }),
   );
 
@@ -112,9 +117,8 @@ export const makeDisplayEdgesForPrompt = () => {
 
   return createSelector(
     [networkNodesOfPromptType, networkEdges, getEdgeOptions, getLayoutOptions],
-    (nodes, edges, edgeOptions, { layoutVariable }) => {
-      console.log(nodes, edges, edgeOptions, { layoutVariable });
-      return edgeOptions.displayEdges.map((type) => {
+    (nodes, edges, edgeOptions, { layoutVariable }) =>
+      edgeOptions.displayEdges.map((type) => {
         const edgesOfType = filter(edges, { type });
         return edgesOfType.map((edge) => {
           const from = find(nodes, ['id', edge.from]);
@@ -128,8 +132,7 @@ export const makeDisplayEdgesForPrompt = () => {
             to: to[layoutVariable],
           };
         });
-      });
-    }
+      }),
   );
 };
 
@@ -140,4 +143,22 @@ export const makeGetPlacedNodes = () => {
     networkNodesOfPromptType, getLayoutOptions,
     (nodes, { layoutVariable }) => filter(nodes, node => has(node, layoutVariable)),
   );
+};
+
+// PropTypes
+
+export const sociogramOptionsProps = {
+  nodeType: PropTypes.string.isRequired,
+  layoutVariable: PropTypes.string.isRequired,
+  allowPositioning: PropTypes.bool.isRequired,
+  createEdge: PropTypes.string.isRequired,
+  displayEdges: PropTypes.array.isRequired,
+  canCreateEdge: PropTypes.bool.isRequired,
+  canHighlight: PropTypes.bool.isRequired,
+  highlightAttributes: PropTypes.object.isRequired,
+  allowSelect: PropTypes.bool.isRequired,
+  selectMode: PropTypes.string.isRequired,
+  sort: PropTypes.array.isRequired,
+  concentricCircles: PropTypes.number.isRequired,
+  skewedTowardCenter: PropTypes.bool.isRequired,
 };
