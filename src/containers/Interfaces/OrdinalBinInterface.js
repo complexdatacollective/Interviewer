@@ -43,6 +43,7 @@ class OrdinalBin extends Component {
             stage={stage}
             prompt={prompt}
             onDropNode={this.onDropNode}
+            expanded
           />
         </div>
         <div className="ordinal-bin-interface__ordinalbin">

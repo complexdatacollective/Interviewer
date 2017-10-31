@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createSelector } from 'reselect';
-import { first, sortBy, reject, has, map } from 'lodash';
+import { first, map, sortBy, reject, has } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
@@ -47,30 +47,57 @@ export const makeGetNextUnplacedNodes = () => {
       let sortedNodes = [...nodes];
       if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
       if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-      if (sort && sort.number) { return sortedNodes.slice(0, sort.number - 1); }
-      return [first(sortedNodes)];
+      if (sort && sort.number) { return sortedNodes.slice(0, sort.number); }
+      return sortedNodes;
     },
   );
 };
 
-// first one draggable, rest in disabled state
 
 const draggableType = 'POSITIONED_NODE';
 
-const NodeBucket = ({ nodes, layout, onDropNode }) => {
+const NodeBucket = ({ nodes, layout, onDropNode, expanded }) => {
   if (!nodes) { return null; }
+  // Styled as in Sociogram
+  if (!expanded) {
+    return (
+      <div className="node-bucket">
+        {first(nodes) &&
+          <EnhancedNode
+            label={label(first(nodes))}
+            onDropped={(hits, coords) => onDropNode(hits, coords, first(nodes), layout)}
+            draggableType={draggableType}
+            {...first(nodes)}
+          />}
+      </div>
+    );
+  }
+  // Styled as in ordinal bin
   return (
-    <div className="node-bucket">
-      {map(nodes, (node, i) =>
-        node &&
+    <div className="expanded-bucket">
+      {first(nodes) &&
         <EnhancedNode
-          label={label(node)}
-          onDropped={(hits, coords) => onDropNode(hits, coords, node, layout)}
+          label={label(first(nodes))}
+          onDropped={(hits, coords) => onDropNode(hits, coords, first(nodes), layout)}
           draggableType={draggableType}
-          {...node}
-          key={i}
-        />,
-      )}
+          {...first(nodes)}
+        />}
+      {
+        map(nodes, (node, index) => {
+          if (index !== 0) {
+            return (
+              node &&
+              <Node
+                label={label(node)}
+                key={index}
+                {...node}
+                inactive
+              />
+            );
+          }
+          return null;
+        })
+      }
     </div>
   );
 };
@@ -79,10 +106,12 @@ NodeBucket.propTypes = {
   nodes: PropTypes.array,
   onDropNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
+  expanded: PropTypes.bool,
 };
 
 NodeBucket.defaultProps = {
   nodes: null,
+  expanded: false,
 };
 
 function makeMapStateToProps() {
