@@ -4,6 +4,11 @@
             &--#{$total-num}-0 {
                 border-color: transparentize(palette('dark-background'), .15);
             }
+            @for $num from 1 through $total-num {
+                &--#{$total-num}-#{$num} {
+                    border-color: transparentize($palette, ($num - 1) * .2);
+                }
+            }
         }
         @else {
             @for $num from 1 through $total-num {
@@ -38,10 +43,10 @@
         display: -webkit-flex;
         flex-direction: column;
         @include generate-bins(palette('primary'), false, true);
-        border-bottom: 10px solid;
         margin: 0 0 100px;
         overflow: hidden;
         width: 100%;
+        border-bottom: 20px solid;
 
         &:hover {
           /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,3b3a76+100&0.1+0,0.1+100 */

@@ -56,16 +56,17 @@ const Bin = ({ title, index, value, count, nodes, onDropNode }) => {
   return (
     <div className={`ordinal-bin__bin ordinal-bin__bin--${count}-${keyWithValue}`}>
       <div className={`ordinal-bin__bin--title ordinal-bin__bin--title--${count}-${keyWithValue}`}>{title}</div>
-      <NodeList
-        classNames={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}
-        nodes={binNodes}
-        droppableName={ordinalBinName}
-        acceptsDraggableType="POSITIONED_NODE"
-        draggableType="POSITIONED_NODE"
-        styled={false}
-        handleDropNode={(hits, node) => onDropNode(hits, null, node)}
-        label={node => `${node.nickname}`}
-      />
+      <div className={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}>
+        <NodeList
+          nodes={binNodes}
+          droppableName={ordinalBinName}
+          acceptsDraggableType="POSITIONED_NODE"
+          draggableType="POSITIONED_NODE"
+          styled={false}
+          handleDropNode={(hits, node) => onDropNode(hits, null, node)}
+          label={node => `${node.nickname}`}
+        />
+      </div>
     </div>
   );
 };
