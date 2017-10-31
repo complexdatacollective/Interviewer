@@ -1,13 +1,21 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { filter, has, reject, first, toPairs, unzip, orderBy, lowerCase } from 'lodash';
+import { map, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, at, values, flow } from 'lodash';
 import { PropTypes } from 'prop-types';
+import { networkEdges, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
+
+// Selectors that are specific to the name generator
+
+/*
+These selectors assume the following props:
+  stage: which contains the protocol config for the stage
+  prompt: which contains the protocol config for the prompt
+*/
 
 // Prop selectors
 
-const propPromptNodeType = (_, props) => props.prompt.nodeType;
 const propPromptLayout = (_, props) => props.prompt.layout;
 const propPromptEdges = (_, props) => props.prompt.edges;
 const propPromptHighlight = (_, props) => props.prompt.highlight;
@@ -60,14 +68,12 @@ const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHig
 
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
-    propPromptNodeType,
     getLayoutOptions,
     getEdgeOptions,
     getHighlightOptions,
     getBackgroundOptions,
     getSortOptions,
-    (nodeType, layoutOptions, edgeOptions, highlightOptions, backgroundOptions, sortOptions) => ({
-      nodeType,
+    (layoutOptions, edgeOptions, highlightOptions, backgroundOptions, sortOptions) => ({
       ...layoutOptions,
       ...edgeOptions,
       ...highlightOptions,
@@ -78,27 +84,11 @@ export const makeGetSociogramOptions = () =>
     }),
   );
 
-export const networkEdges = createDeepEqualSelector(
-  state => state.network.edges,
-  nodes => nodes,
-);
-
-export const networkNodes = createDeepEqualSelector(
-  state => state.network.nodes,
-  nodes => nodes,
-);
-
-export const makeNetworkNodesOfPromptType = () =>
-  createSelector(
-    networkNodes, propPromptNodeType,
-    (nodes, nodeType) => filter(nodes, ['type', nodeType]),
-  );
-
 const makeGetUnplacedNodes = () => {
-  const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    networkNodesOfPromptType, getLayoutOptions,
+    networkNodesForSubject, getLayoutOptions,
     (nodes, { layoutVariable }) => reject(nodes, node => has(node, layoutVariable)),
   );
 };
@@ -117,44 +107,74 @@ export const makeGetNextUnplacedNode = () => {
   );
 };
 
-// TODO: flatten this out
+const edgeCoords = (edge, { nodes, layoutVariable }) => {
+  const from = find(nodes, ['id', edge.from]);
+  const to = find(nodes, ['id', edge.to]);
+
+  if (!from || !to) { return { from: null, to: null }; }
+
+  return {
+    key: `${edge.from}_${edge.type}_${edge.to}`,
+    type: edge.type,
+    from: from[layoutVariable],
+    to: to[layoutVariable],
+  };
+};
+
+const edgesToCoords = (edges, { nodes, layoutVariable }) =>
+  map(
+    edge => edgeCoords(edge, { nodes, layoutVariable }),
+    edges,
+  );
+
+// const edgesOfType = (edges, type) => filter(edges, { type });
+// const edgesOfTypeToCoords = (edgeType, { edges, nodes, layoutVariable }) =>
+//   edgesToCoords(
+//     edgesOfType(edges, edgeType),
+//     { nodes, layoutVariable },
+//   );
+
+const edgesOfTypes = (edges, types) =>
+  flow(
+    groupBy('type'),
+    at(types),
+    values,
+  )(edges);
+
 export const makeDisplayEdgesForPrompt = () => {
-  const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    [networkNodesOfPromptType, networkEdges, getEdgeOptions, getLayoutOptions],
+    networkNodesForSubject,
+    networkEdges,
+    getEdgeOptions,
+    getLayoutOptions,
     (nodes, edges, edgeOptions, { layoutVariable }) =>
-      edgeOptions.displayEdges.map((type) => {
-        const edgesOfType = filter(edges, { type });
-        return edgesOfType.map((edge) => {
-          const from = find(nodes, ['id', edge.from]);
-          const to = find(nodes, ['id', edge.to]);
-
-          if (!from || !to) { return { from: null, to: null }; }
-
-          return {
-            key: `${edge.from}_${edge.type}_${edge.to}`,
-            from: from[layoutVariable],
-            to: to[layoutVariable],
-          };
-        });
-      }),
+      edgesToCoords(
+        edgesOfTypes(edges, edgeOptions.displayEdges),
+        { nodes, layoutVariable },
+      ),
+    // map(
+    //   edgeOptions.displayEdges,
+    //   edgeType => edgesOfTypeToCoords(edgeType, { edges, nodes, layoutVariable }),
+    // ),
   );
 };
 
 export const makeGetPlacedNodes = () => {
-  const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    networkNodesOfPromptType, getLayoutOptions,
-    (nodes, { layoutVariable }) => filter(nodes, node => has(node, layoutVariable)),
+    networkNodesForSubject,
+    getLayoutOptions,
+    (nodes, { layoutVariable }) =>
+      filter(nodes, node => has(node, layoutVariable)),
   );
 };
 
 // PropTypes
 
 export const sociogramOptionsProps = {
-  nodeType: PropTypes.string.isRequired,
   layoutVariable: PropTypes.string.isRequired,
   allowPositioning: PropTypes.bool.isRequired,
   createEdge: PropTypes.string.isRequired,

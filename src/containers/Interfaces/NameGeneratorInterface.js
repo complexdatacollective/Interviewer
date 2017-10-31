@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/name-generator';
+import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
@@ -166,12 +167,12 @@ NameGenerator.propTypes = {
 
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
-  const newNodeAttributes = makeNewNodeAttributes();
+  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
   const rehydrateForm = makeRehydrateForm();
 
   return function mapStateToProps(state, props) {
     return {
-      newNodeAttributes: newNodeAttributes(state, props),
+      newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       form: rehydrateForm(state, props),
     };

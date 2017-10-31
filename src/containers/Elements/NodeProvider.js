@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { isMatch } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { NodeList } from '../../components/Elements';
-import { makeNewNodeAttributes } from '../../selectors/panels';
+import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 
 /**
   * Renders an interactive list of nodes for addition to the network.
@@ -76,14 +76,14 @@ NodeProvider.propTypes = {
 
 
 function makeMapStateToProps() {
-  const newNodeAttributes = makeNewNodeAttributes();
+  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
 
   return function mapStateToProps(state, props) {
     const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
 
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
-      newNodeAttributes: newNodeAttributes(state, props),
+      newNodeAttributes: getPromptNodeAttributes(state, props),
       interaction,
     };
   };

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
 import { differenceBy } from 'lodash';
 import { createSelector } from 'reselect';
-import { protocolData, networkNodes, makeOtherNetworkNodesWithStageNodeType } from '../../selectors/panels';
+import { networkNodes, makeNetworkNodesForOtherPrompts } from '../../selectors/interface';
+import { getExternalData } from '../../selectors/protocol';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
@@ -45,23 +46,27 @@ const rehydratePreset = (panelConfig) => {
 const propPanelConfigs = (_, props) => props.stage.panels;
 
 const makeGetProviderConfigsWithNodes = () => {
-  const otherNetworkNodesWithStageNodeType = makeOtherNetworkNodesWithStageNodeType();
+  const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return createSelector(
-    [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
-    (panelConfigs, nodes, existingNodes, data) => panelConfigs.map(rehydratePreset).map(
-      (providerConfig) => {
-        switch (providerConfig.source) {
-          case 'existing':
-            return { ...providerConfig, nodes: existingNodes };
-          default:
-            return {
-              ...providerConfig,
-              nodes: differenceBy(data[providerConfig.source].nodes, nodes, 'uid'),
-            };
-        }
-      },
-    ),
+    propPanelConfigs,
+    networkNodes,
+    networkNodesForOtherPrompts,
+    getExternalData,
+    (panelConfigs, nodes, existingNodes, externalData) =>
+      panelConfigs.map(rehydratePreset).map(
+        (providerConfig) => {
+          switch (providerConfig.source) {
+            case 'existing':
+              return { ...providerConfig, nodes: existingNodes };
+            default:
+              return {
+                ...providerConfig,
+                nodes: differenceBy(externalData[providerConfig.source].nodes, nodes, 'uid'),
+              };
+          }
+        },
+      ),
   );
 };
 
