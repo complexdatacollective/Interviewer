@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
+import cx from 'classnames';
 import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
 import modal from '../../behaviours/modal';
@@ -11,10 +12,13 @@ import modal from '../../behaviours/modal';
 function Modal(props) {
   const {
     children,
+    className,
     close,
     show,
     title,
   } = props;
+
+  const classnames = cx('modal', className);
 
   return (
     <CSSTransitionGroup
@@ -23,7 +27,7 @@ function Modal(props) {
       transitionLeaveTimeout={animation.duration.standard}
     >
       { show &&
-        <div key="modal" className="modal" onClick={() => close()}>
+        <div key="modal" className={classnames} onClick={() => close()}>
           <div className="modal__window" onClick={e => e.stopPropagation()}>
             <div className="modal__layout">
               <div className="modal__layout-title">
@@ -44,6 +48,7 @@ function Modal(props) {
 }
 
 Modal.propTypes = {
+  className: PropTypes.string,
   close: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   show: PropTypes.bool,
@@ -51,6 +56,7 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
+  className: '',
   show: false,
   children: null,
 };

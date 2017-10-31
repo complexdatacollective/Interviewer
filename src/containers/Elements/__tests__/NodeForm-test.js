@@ -6,6 +6,10 @@ import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import NodeForm from '../NodeForm';
 
+window.matchMedia = window.matchMedia || (() => ({
+  matches: false, addListener: () => {}, removeListener: () => {},
+}));
+
 const node = {
   foo: 'bar',
 };
@@ -36,7 +40,7 @@ const mockStore = () =>
 const mockProps = {
   name: 'baz',
   title: 'The form title',
-  handleSubmit: () => {},
+  onSubmit: () => {},
   fields: [{
     variable: 'foo',
     component: 'TextInput',
@@ -50,6 +54,22 @@ describe('<NodeForm />', () => {
     ));
 
     expect(subject).toMatchSnapshot();
+  });
+
+  it('should render add another button', () => {
+    const multipleControls = mount((
+      <Provider store={mockStore()}>
+        <NodeForm {...mockProps} addAnother />
+      </Provider>
+    ));
+    const singularForm = mount((
+      <Provider store={mockStore()}>
+        <NodeForm {...mockProps} />
+      </Provider>
+    ));
+
+    expect(multipleControls.find('form').find('button').length).toBe(2);
+    expect(singularForm.find('form').find('button').length).toBe(1);
   });
 
   it('should render with prepopulated fields if provided', () => {

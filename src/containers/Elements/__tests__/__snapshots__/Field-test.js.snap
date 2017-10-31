@@ -110,6 +110,7 @@ ShallowWrapper {
   "length": 1,
   "node": <TextInput
     autoFocus={undefined}
+    className={undefined}
     errorText={false}
     isNumericOnly={undefined}
     label={undefined}
@@ -119,6 +120,7 @@ ShallowWrapper {
   "nodes": Array [
     <TextInput
       autoFocus={undefined}
+      className={undefined}
       errorText={false}
       isNumericOnly={undefined}
       label={undefined}
@@ -182,6 +184,7 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <TextInput
           autoFocus={undefined}
+          className={undefined}
           errorText={false}
           isNumericOnly={undefined}
           label={undefined}
@@ -191,6 +194,7 @@ ShallowWrapper {
         "_debugID": 2,
         "_renderedOutput": <TextInput
           autoFocus={undefined}
+          className={undefined}
           errorText={false}
           isNumericOnly={undefined}
           label={undefined}

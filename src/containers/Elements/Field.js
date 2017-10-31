@@ -31,6 +31,7 @@ export const makeRenderInput = (type) => {
       isNumericOnly,
       toggleComponent,
       autoFocus,
+      className,
     } = field;
 
     let InputComponent = TextInput;
@@ -42,6 +43,7 @@ export const makeRenderInput = (type) => {
       label,
       autoFocus,
       isNumericOnly,
+      className,
     };
 
     if (type === 'RadioGroup') {

@@ -35,15 +35,19 @@ describe('<Form />', () => {
     expect(subject).toMatchSnapshot();
   });
 
-  it('should render add another button', () => {
-    const continuousForm = mount((
-      <Form {...props()} addAnother store={mockStore()} />
+  it('should render multiple buttons', () => {
+    const multipleControls = mount((
+      <Form
+        {...props()}
+        controls={[<button key="one">one</button>, <button key="two">two</button>]}
+        store={mockStore()}
+      />
     ));
     const singularForm = mount((
       <Form {...props()} store={mockStore()} />
     ));
 
-    expect(continuousForm.find('button').length).toBe(2);
+    expect(multipleControls.find('button').length).toBe(2);
     expect(singularForm.find('button').length).toBe(1);
   });
 

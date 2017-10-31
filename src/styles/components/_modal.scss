@@ -13,22 +13,17 @@ $component-name: modal;
   background-color: transparentize(palette('modal-overlay'), .05);
 
   &__window {
-    width: 750px;
-    background: palette('modal-main-panel');
-    box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
     position: relative;
   }
 
   &__layout {
+    align-self: flex-start;
     display: flex;
     flex-direction: column;
-    max-height: 80vh;
-    margin: 0 50px 50px;
+    width: 100%;
 
     &-content {
-      flex: 1 auto;
-      overflow-x: hidden;
-      overflow-y: scroll;
+      max-height: 80vh;
     }
 
     &-title {
@@ -86,6 +81,43 @@ $component-name: modal;
         .#{$component-name}__window {
           transition: transform $animation-default-easing $animation-fast-duration;
           transform: translate(0, -100vh);
+        }
+      }
+    }
+  }
+
+  &--fullscreen {
+    background-color: palette('background');
+
+    .#{$component-name} {
+      &__window {
+        display: flex;
+        flex: 1 1 auto;
+        height: 100vh;
+      }
+    }
+  }
+
+  &:not(&--fullscreen) {
+    .#{$component-name} {
+      &__window {
+        background: palette('modal-main-panel');
+        box-shadow: 0 0 4px 0 transparentize(palette('dark-background'), .25);
+        width: 750px;
+      }
+
+      &__layout {
+        max-height: 80vh;
+        max-width: 650px;
+        margin: 0 50px 50px;
+
+        &-content {
+          overflow-x: hidden;
+          overflow-y: auto;
+
+          & > form {
+            flex-direction: column;
+          }
         }
       }
     }

@@ -5,8 +5,11 @@ import { reset } from 'redux-form';
 import PropTypes from 'prop-types';
 import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
+import cx from 'classnames';
+
+import { Button } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { Form } from '../../containers/Elements';
+import { Form, FormWizard } from '../../containers/Elements';
 import { Modal } from '../../components/Elements';
 import { makeRehydrateFields } from '../../selectors/rehydrate';
 
@@ -30,11 +33,18 @@ const makeGetInitialValuesFromProps = () =>
   * @extends Component
   */
 class NodeForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      typeOfSubmit: 'normal',
+    };
+  }
+
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
-    this.props.handleSubmit(formData, dispatch, form);
+    this.props.onSubmit(formData, dispatch, form);
     if (this.state.typeOfSubmit === 'continuous') {
-      this.props.resetValues(form.name);
+      this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
     }
   };
@@ -51,46 +61,62 @@ class NodeForm extends Component {
     }, this.submit);
   };
 
+  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
+
   render() {
     const {
-      title,
-      fields,
-      name,
       addAnother,
-      initialValues,
+      name,
+      title,
     } = this.props;
 
+    const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
+
+    const formProps = {
+      ...this.props,
+      autoFocus: true,
+      controls: [
+        (addAnother &&
+          <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
+            Submit and New
+          </Button>
+        ),
+        <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
+      ],
+      form: name.toString(),
+      onSubmit: this.onSubmit,
+    };
+
+    const formElement = this.isLarge() ?
+      (<Form
+        {...formProps}
+      />) :
+      (<FormWizard
+        {...formProps}
+      />);
+
     return (
-      <Modal name={name} title={title}>
-        <Form
-          fields={fields}
-          initialValues={!addAnother ? initialValues : null}
-          autoFocus
-          form={name.toString()}
-          onSubmit={this.onSubmit}
-          addAnother={addAnother}
-          continuousSubmit={this.continuousSubmit}
-          normalSubmit={this.normalSubmit}
-        />
+      <Modal name={name} title={title} className={modalClassNames}>
+        {formElement}
       </Modal>
     );
   }
 }
 
 NodeForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
+  addAnother: PropTypes.bool,
   closeModal: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
-  resetValues: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.any.isRequired,
   name: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.symbol,
   ]).isRequired,
-  title: PropTypes.string.isRequired,
-  fields: PropTypes.array.isRequired,
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
-  addAnother: PropTypes.bool,
+  openModal: PropTypes.func.isRequired,
+  resetValues: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 NodeForm.defaultProps = {

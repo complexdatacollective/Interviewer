@@ -11,6 +11,9 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   *
+  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
+  * based on field value changes. Called on change with current field values and meta,
+  * and a callback to allow the setting of otherfields
   * @param {array} fields Contains an array of field definitions
   * see Field for detailed format of definitions:
   * {
@@ -22,12 +25,8 @@ import { makeRehydrateFields } from '../../selectors/rehydrate';
   *     required: true,
   *   }
   * }
+  * @param {string} form The name of the form
   * @param {func} handleSubmit(data) Recieves data as jsonfrom a sucessful form submission
-  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
-  * based on field value changes. Called on change with current field values and meta,
-  * and a callback to allow the setting of otherfields
-  * @param {func} continuousSubmit() handles continuous submission
-  * @param {bool} addAnother tells whether or not there should be an "Add Another" button
   *
   */
 class Form extends Component {
@@ -39,25 +38,24 @@ class Form extends Component {
         fields,
         values,
       },
+      dirty,
       autofill,
     } = this.props;
 
-    this.props.autoPopulate(fields, values, autofill);
+    // if we don't check dirty state, this ends up firing and auto populating fields
+    // when it shouldn't, like when closing the form
+    if (dirty) {
+      this.props.autoPopulate(fields, values, autofill);
+    }
   };
 
   render() {
     const {
+      autoFocus,
       fields,
       handleSubmit,
-      addAnother,
-      continuousSubmit,
-      normalSubmit,
-      autoFocus,
+      controls,
     } = this.props;
-
-    const addAnotherButton = addAnother
-      ? <Button type="button" color="white" onClick={continuousSubmit} aria-label="Submit and add another node">Submit and New</Button>
-      : null;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -73,8 +71,7 @@ class Form extends Component {
           );
         }) }
         <div className="form__button-container">
-          {addAnotherButton}
-          <Button onClick={normalSubmit}>Submit</Button>
+          {controls.map(control => control)}
         </div>
       </form>
     );
@@ -82,23 +79,21 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  autofill: PropTypes.func.isRequired,
+  autoFocus: PropTypes.bool,
+  autoPopulate: PropTypes.func,
+  dirty: PropTypes.bool.isRequired,
+  form: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  autofill: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
-  autoPopulate: PropTypes.func,
-  autoFocus: PropTypes.bool,
-  addAnother: PropTypes.bool,
-  continuousSubmit: PropTypes.func,
-  normalSubmit: PropTypes.func,
+  controls: PropTypes.array,
 };
 
 Form.defaultProps = {
   autoFocus: false,
-  addAnother: false,
   autoPopulate: null,
-  continuousSubmit: null,
-  normalSubmit: null,
+  controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
 };
 
 function makeMapStateToProps() {
@@ -119,7 +114,9 @@ export default compose(
   connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
-    destroyOnUnmount: true,
+    destroyOnUnmount: false, // need this false to make it validate across wizard
+    enableReinitialize: true,
     forceUnregisterOnUnmount: true,
+    keepDirtyOnReinitialize: true,
   }),
 )(Form);

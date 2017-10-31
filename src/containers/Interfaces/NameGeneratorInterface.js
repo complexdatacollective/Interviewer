@@ -125,14 +125,16 @@ class NameGenerator extends Component {
           name={forms.EDIT_NODE}
           title={form.title}
           fields={form.fields}
-          handleSubmit={this.onSubmitEditNode}
+          autoPopulate={form.autoPopulate}
+          onSubmit={this.onSubmitEditNode}
         />
 
         <NodeForm
           name={forms.ADD_NODE}
           title={form.title}
           fields={form.fields}
-          handleSubmit={this.onSubmitNewNode}
+          autoPopulate={form.autoPopulate}
+          onSubmit={this.onSubmitNewNode}
           addAnother
         />
 
