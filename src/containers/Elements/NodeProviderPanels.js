@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
 import { differenceBy } from 'lodash';
 import { createSelector } from 'reselect';
-import { protocolData, networkNodes, makeOtherNetworkNodesWithStageNodeType } from '../../selectors/interface';
+import { protocolData, networkNodes, makeOtherNetworkNodesWithStageNodeType } from '../../selectors/panels';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 

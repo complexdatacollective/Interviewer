@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { isMatch } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { NodeList } from '../../components/Elements';
-import { makeNewNodeAttributes } from '../../selectors/interface';
+import { makeNewNodeAttributes } from '../../selectors/panels';
 
 /**
   * Renders an interactive list of nodes for addition to the network.

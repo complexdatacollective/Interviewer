@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
