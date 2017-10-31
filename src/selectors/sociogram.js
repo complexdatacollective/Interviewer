@@ -16,7 +16,7 @@ const propPromptSort = (_, props) => props.prompt.nodeBinSortOrder;
 
 // MemoedSelectors
 
-const edgeOptions = createDeepEqualSelector(
+const getEdgeOptions = createDeepEqualSelector(
   propPromptEdges,
   (edges) => ({
     displayEdges: has(edges, 'display') ? edges.display : [],
@@ -25,7 +25,7 @@ const edgeOptions = createDeepEqualSelector(
   }),
 );
 
-const highlightOptions = createDeepEqualSelector(
+const getHighlightOptions = createDeepEqualSelector(
   propPromptHighlight,
   (highlight) => ({
     canHighlight: has(highlight, 'allowHighting') ? highlight.allowHighlighting : false,
@@ -33,35 +33,35 @@ const highlightOptions = createDeepEqualSelector(
   }),
 );
 
-const layoutOptions = createDeepEqualSelector(
+const getLayoutOptions = createDeepEqualSelector(
   propPromptLayout,
   (layout) => layout,
 );
 
-const sortOptions = createDeepEqualSelector(
+const getSortOptions = createDeepEqualSelector(
   propPromptSort,
   (sort) => ({
     sort: toPairs(sort),
   }),
 )
 
-const selectMode = ({ edges, highlight }) => {
-  if(edges.canCreateEdge) { return 'EDGE'; }
-  if(highlight.canHighlighting) { return 'HIGHLIGHT'; }
+const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHighlight } }) => {
+  if (canCreateEdge) { return 'EDGE'; }
+  if (canHighlight) { return 'HIGHLIGHT'; }
   return null;
 }
 
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
-    propPromptNodeType, layoutOptions, edgeOptions, highlightOptions, propPromptBackground, propPromptSort,
-    (nodeType, layout, edges, highlight, background, sort) => ({
+    propPromptNodeType, getLayoutOptions, getEdgeOptions, getHighlightOptions, propPromptBackground, getSortOptions,
+    (nodeType, layoutOptions, edgeOptions, highlightOptions, background, sortOptions) => ({
       nodeType,
-      ...layout,
-      ...edges,
-      ...highlight,
-      allowSelect: highlight.canHighlight || edges.canCreateEdge,
-      selectMode: selectMode({ edges, highlight }),
-      sort,
+      ...layoutOptions,
+      ...edgeOptions,
+      ...highlightOptions,
+      allowSelect: highlightOptions.canHighlight || edgeOptions.canCreateEdge,
+      selectMode: selectMode({ edgeOptions, highlightOptions }),
+      sortOptions,
       background,
     }),
   );
@@ -78,7 +78,7 @@ export const networkNodes = createDeepEqualSelector(
 
 export const makeNetworkNodesOfPromptType = () =>
   createSelector(
-    [networkNodes, propPromptNodeType],
+    networkNodes, propPromptNodeType,
     (nodes, nodeType) => filter(nodes, ['type', nodeType]),
   );
 
@@ -86,8 +86,8 @@ const makeGetUnplacedNodes = () => {
   const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
 
   return createSelector(
-    [networkNodesOfPromptType, layoutOptions],
-    (nodes, layout) => reject(nodes, node => has(node, layout.layoutVariable)),
+    networkNodesOfPromptType, getLayoutOptions,
+    (nodes, { canHighlighting }) => reject(nodes, node => has(node, canHighlighting)),
   );
 };
 
@@ -96,7 +96,7 @@ export const makeGetNextUnplacedNode = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
   return createSelector(
-    getUnplacedNodes, sortOptions,
+    getUnplacedNodes, getSortOptions,
     nodes => first(nodes),
     // (nodes, sort) => {
     //   let sortedNodes = [...nodes];
@@ -111,7 +111,7 @@ export const makeDisplayEdgesForPrompt = () => {
   const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
 
   return createSelector(
-    [networkNodesOfPromptType, networkEdges, edgeOptions, layoutOptions],
+    [networkNodesOfPromptType, networkEdges, getEdgeOptions, getLayoutOptions],
     (nodes, edges, edgeOptions, { layoutVariable }) => {
       console.log(nodes, edges, edgeOptions, { layoutVariable });
       return edgeOptions.displayEdges.map((type) => {
@@ -137,7 +137,7 @@ export const makeGetPlacedNodes = () => {
   const networkNodesOfPromptType = makeNetworkNodesOfPromptType();
 
   return createSelector(
-    networkNodesOfPromptType, layoutOptions,
+    networkNodesOfPromptType, getLayoutOptions,
     (nodes, { layoutVariable }) => filter(nodes, node => has(node, layoutVariable)),
   );
 };
