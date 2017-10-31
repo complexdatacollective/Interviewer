@@ -45,6 +45,16 @@ const getSortOptions = createDeepEqualSelector(
   }),
 );
 
+const getBackgroundOptions = createDeepEqualSelector(
+  propPromptBackground,
+  background => ({
+    concentricCircles: has(background, 'concentricCircles') ? background.concentricCircles : undefined,
+    skewedTowardCenter: has(background, 'skewedTowardCenter') ? background.skewedTowardCenter : true,
+    image: has(background, 'image') ? background.image : undefined,
+  }),
+);
+
+
 const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHighlight } }) => {
   if (canCreateEdge) { return 'EDGE'; }
   if (canHighlight) { return 'HIGHLIGHT'; }
@@ -57,17 +67,17 @@ export const makeGetSociogramOptions = () =>
     getLayoutOptions,
     getEdgeOptions,
     getHighlightOptions,
-    propPromptBackground,
+    getBackgroundOptions,
     getSortOptions,
-    (nodeType, layoutOptions, edgeOptions, highlightOptions, background, sortOptions) => ({
+    (nodeType, layoutOptions, edgeOptions, highlightOptions, backgroundOptions, sortOptions) => ({
       nodeType,
       ...layoutOptions,
       ...edgeOptions,
       ...highlightOptions,
+      ...sortOptions,
+      ...backgroundOptions,
       allowSelect: highlightOptions.canHighlight || edgeOptions.canCreateEdge,
       selectMode: selectMode({ edgeOptions, highlightOptions }),
-      ...sortOptions,
-      ...background,
     }),
   );
 
