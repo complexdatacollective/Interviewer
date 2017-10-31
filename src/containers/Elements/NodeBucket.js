@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -15,13 +17,15 @@ const draggableType = 'POSITIONED_NODE';
 
 export class NodeBucket extends Component {
   onDropNode = (hits, coords, node) => {
+    const { layoutVariable } = this.props;
+
     const hit = first(hits);
     const relativeCoords = {
       x: (coords.x - hit.x) / hit.width,
       y: (coords.y - hit.y) / hit.height,
     };
 
-    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
+    this.props.updateNode({ ...node, [layoutVariable]: relativeCoords });
   };
 
   render() {

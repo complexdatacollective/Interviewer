@@ -20,7 +20,7 @@ const getEdgeOptions = createDeepEqualSelector(
   propPromptEdges,
   (edges) => ({
     displayEdges: has(edges, 'display') ? edges.display : [],
-    createEdges: has(edges, 'create') ? edges.create : null,
+    createEdge: has(edges, 'create') ? edges.create : null,
     canCreateEdge: has(edges, 'create') ? true : false,
   }),
 );
@@ -87,7 +87,7 @@ const makeGetUnplacedNodes = () => {
 
   return createSelector(
     networkNodesOfPromptType, getLayoutOptions,
-    (nodes, { canHighlighting }) => reject(nodes, node => has(node, canHighlighting)),
+    (nodes, { layoutVariable }) => reject(nodes, node => has(node, layoutVariable)),
   );
 };
 

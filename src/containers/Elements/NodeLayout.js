@@ -40,9 +40,11 @@ class NodeLayout extends Component {
   }
 
   onSelectNode = (node) => {
-    if (!this.canSelect()) { return; }
+    const { canSelect, selectMode } = this.props;
+  
+    if (!canSelect) { return; }
 
-    switch (this.selectMode()) {
+    switch (selectMode) {
       case 'EDGE':
         this.connectNode(node.id); break;
       case 'HIGHLIGHT':
@@ -54,8 +56,8 @@ class NodeLayout extends Component {
   }
 
   connectNode(nodeId) {
-    const { create: edgeType } = this.props.props.edge;
-    const connectFrom = this.state.connectFrom;
+    const { createEdge } = this.props;
+    const { connectFrom } = this.state;
 
     if (!connectFrom) {
       this.setState({ connectFrom: nodeId });
@@ -66,7 +68,7 @@ class NodeLayout extends Component {
       this.props.toggleEdge({
         from: connectFrom,
         to: nodeId,
-        type: edgeType,
+        type: createEdge,
       });
     }
 
@@ -81,11 +83,11 @@ class NodeLayout extends Component {
   }
 
   isSelected(node) {
-    const { edges, highlight } = this.props.prompt;
+    const { selectMode, canSelect } = this.props;
   
-    if (!this.canSelect()) { return false; }
+    if (!canSelect) { return false; }
 
-    switch (this.selectMode()) {
+    switch (selectMode) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);
       case 'HIGHLIGHT':
@@ -100,26 +102,31 @@ class NodeLayout extends Component {
       nodes,
       layout,
       width,
-      height
+      height,
+      allowPositioning,
+      allowSelect,
+      layoutVariable,
     } = this.props;
+
+    console.log('NODE_LAYOUT', allowPositioning, allowSelect);
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
         <div className="node-layout">
           { nodes.map((node) => {
-            if (!Object.prototype.hasOwnProperty.call(node, layout)) { return null; }
+            if (!Object.prototype.hasOwnProperty.call(node, layoutVariable)) { return null; }
 
             return (
               <LayoutNode
                 key={node.uid}
-                layout={layout}
+                layoutVariable={layoutVariable}
                 node={node}
                 draggableType={draggableType}
                 onSelected={this.onSelectNode}
                 onDropped={this.onDropNode}
                 selected={this.isSelected(node)}
-                canDrag={this.canPosition()}
-                canSelect={this.canSelect()}
+                canDrag={allowPositioning}
+                canSelect={allowSelect}
                 areaWidth={width}
                 areaHeight={height}
                 animate={false}
@@ -149,6 +156,8 @@ function makeMapStateToProps() {
   const getSociogramOptions = makeGetSociogramOptions();
 
   return function mapStateToProps(state, props) {
+
+    console.log('NODE_LAYOUT', getPlacedNodes(state, props), getSociogramOptions(state, props));
     return {
       nodes: getPlacedNodes(state, props),
       ...getSociogramOptions(state, props),
