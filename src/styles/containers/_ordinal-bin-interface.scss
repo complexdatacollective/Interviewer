@@ -1,0 +1,43 @@
+.ordinal-bin-interface {
+
+  height: 100vh;
+  padding: 20px 30px 20px;
+  @include breakpoint('full') {
+      padding: 20px 80px 80px;
+  }
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+
+  &__prompt {
+    flex: 0 0 12vw;
+    @include breakpoint('full') {
+        flex: 0 0 200px;
+    }
+  }
+
+  &__ordinalbin {
+    flex: 1 auto;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+  }
+
+  &__nodes {
+    flex: 3 1 auto;
+    height: 25%;
+    display: flex;
+    padding-left: 30px;
+    @include breakpoint('full') {
+      padding-left: 0;
+    }
+    .node {
+      font-size: 160px;
+      @include breakpoint('full') {
+        font-size: 200px;
+      }
+    }
+  }
+}

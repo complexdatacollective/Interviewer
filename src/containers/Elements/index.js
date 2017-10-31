@@ -9,5 +9,6 @@ export { default as Field } from './Field';
 export { default as EdgeLayout } from './EdgeLayout';
 export { default as NodeLayout } from './NodeLayout';
 export { default as NodeBucket } from './NodeBucket';
+export { default as OrdinalBins } from './OrdinalBins';
 export { default as SociogramRadar } from './SociogramRadar';
 export { default as SociogramBackground } from './SociogramBackground';

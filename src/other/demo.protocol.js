@@ -314,6 +314,70 @@ export default {
           ],
         },
       },
+      {
+        "id": "ordinalbin",
+        "type": "OrdinalBin",
+        "icon": "menu-sociogram",
+        "title": "OrdinalBin",
+        "params": {
+          "nodeType": 'person',
+          "prompts": [
+            {
+              id: 'closeness1',
+              title: 'Place the node in the bin representing how often you talk to that person.',
+              bins: {
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
+              },
+            },
+            {
+              id: 'closeness2',
+              title: "Place the node in the bin representing how often you talk to that person.",
+              bins: {
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
+              },
+            },
+            {
+              id: 'closeness3',
+              title: "Place the node in the bin representing how often you talk to that person.",
+              bins: {
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
+              },
+            },
+            {
+              id: 'closeness5',
+              title: "Connect any two people who are work together professionally.",
+              bins: {
+                name: "DemoBins",
+                values: {
+                  "Very Often": 4,
+                  "Often": 3,
+                  "Sometimes": 2,
+                  "Rarely": 1,
+                  "Never": -1,
+                },
+              },
+            },
+          ],
+        },
+      },
     ],
   },
 };

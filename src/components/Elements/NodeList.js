@@ -56,7 +56,7 @@ const NodeList = ({
 };
 
 NodeList.propTypes = {
-  nodes: PropTypes.array.isRequired,
+  nodes: PropTypes.array,
   handleSelectNode: PropTypes.func,
   handleDropNode: PropTypes.func,
   label: PropTypes.func,

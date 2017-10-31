@@ -3,6 +3,7 @@ import {
   NameGeneratorInterface,
   QuizInterface,
   SociogramInterface,
+  OrdinalBinInterface,
 } from '../containers/Interfaces';
 
 export default function loadInterface(options) {
@@ -14,6 +15,8 @@ export default function loadInterface(options) {
       return SociogramInterface;
     case 'Quiz':
       return QuizInterface;
+    case 'OrdinalBin':
+      return OrdinalBinInterface;
     default:
       return () => (<div>No &quot;{options}&quot; interface found.</div>);
   }

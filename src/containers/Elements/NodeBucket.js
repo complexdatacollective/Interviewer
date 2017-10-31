@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { createSelector } from 'reselect';
-import { first, sortBy, reject, has } from 'lodash';
+import { first, map, sortBy, reject, has } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { makeNetworkNodesOfStageType } from '../../selectors/interface';
 import { draggable } from '../../behaviours';
@@ -12,8 +12,22 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 const EnhancedNode = draggable(Node);
 const label = node => node.nickname;
 
-const propSort = (_, props) => props.prompt.sociogram.sort;
-const propLayout = (_, props) => props.prompt.sociogram.layout;
+const propSort = (_, props) => {
+  if (props.prompt.sociogram) {
+    return props.prompt.sociogram.sort;
+  } else if (props.prompt.bins) {
+    return props.prompt.bins.sort;
+  }
+  return null;
+};
+const propLayout = (_, props) => {
+  if (props.prompt.sociogram) {
+    return props.prompt.sociogram.layout;
+  } else if (props.prompt.bins) {
+    return 'bin';
+  }
+  return null;
+};
 
 const makeGetUnplacedNodes = () => {
   const networkNodesOfStageType = makeNetworkNodesOfStageType();
@@ -24,7 +38,7 @@ const makeGetUnplacedNodes = () => {
   );
 };
 
-const makeGetNextUnplacedNode = () => {
+export const makeGetNextUnplacedNodes = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
   return createSelector(
@@ -33,61 +47,78 @@ const makeGetNextUnplacedNode = () => {
       let sortedNodes = [...nodes];
       if (sort && sort.by) { sortedNodes = sortBy([...sortedNodes], sort.by); }
       if (sort && sort.order === 'DESC') { sortedNodes = [...sortedNodes].reverse(); }
-      return first(sortedNodes);
+      if (sort && sort.number) { return sortedNodes.slice(0, sort.number); }
+      return sortedNodes;
     },
   );
 };
 
+
 const draggableType = 'POSITIONED_NODE';
 
-export class NodeBucket extends Component {
-  onDropNode = (hits, coords, node) => {
-    const hit = first(hits);
-    const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
-    };
-
-    this.props.updateNode({ ...node, [this.props.layout]: relativeCoords });
-  };
-
-  render() {
-    const {
-      node,
-    } = this.props;
-
-    if (!node) { return null; }
-
+const NodeBucket = ({ nodes, layout, onDropNode, expanded }) => {
+  if (!nodes) { return null; }
+  // Styled as in Sociogram
+  if (!expanded) {
     return (
       <div className="node-bucket">
-        { node &&
+        {first(nodes) &&
           <EnhancedNode
-            label={label(node)}
-            onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
+            label={label(first(nodes))}
+            onDropped={(hits, coords) => onDropNode(hits, coords, first(nodes), layout)}
             draggableType={draggableType}
-            {...node}
-          />
-        }
+            {...first(nodes)}
+          />}
       </div>
     );
   }
-}
+  // Styled as in ordinal bin
+  return (
+    <div className="expanded-bucket">
+      {first(nodes) &&
+        <EnhancedNode
+          label={label(first(nodes))}
+          onDropped={(hits, coords) => onDropNode(hits, coords, first(nodes), layout)}
+          draggableType={draggableType}
+          {...first(nodes)}
+        />}
+      {
+        map(nodes, (node, index) => {
+          if (index !== 0) {
+            return (
+              node &&
+              <Node
+                label={label(node)}
+                key={index}
+                {...node}
+                inactive
+              />
+            );
+          }
+          return null;
+        })
+      }
+    </div>
+  );
+};
 
 NodeBucket.propTypes = {
-  node: PropTypes.object,
-  updateNode: PropTypes.func.isRequired,
+  nodes: PropTypes.array,
+  onDropNode: PropTypes.func.isRequired,
   layout: PropTypes.string.isRequired,
+  expanded: PropTypes.bool,
 };
 
 NodeBucket.defaultProps = {
-  node: null,
+  nodes: null,
+  expanded: false,
 };
 
 function makeMapStateToProps() {
-  const getNextUnplacedNode = makeGetNextUnplacedNode();
+  const getNextUnplacedNodes = makeGetNextUnplacedNodes();
   return function mapStateToProps(state, props) {
     return {
-      node: getNextUnplacedNode(state, props),
+      nodes: getNextUnplacedNodes(state, props),
       layout: propLayout(state, props),
     };
   };
