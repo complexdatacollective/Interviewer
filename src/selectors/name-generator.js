@@ -25,7 +25,7 @@ export const makeGetPromptNodeAttributes = () => {
     ,
     ({ type }, ids, additionalAttributes) => ({
       type,
-      ids,
+      ...ids,
       ...additionalAttributes,
     }),
   );

@@ -64,7 +64,8 @@ export const makeGetSubject = () =>
 
 export const makeNetworkNodesForSubject = () => {
   const getSubject = makeGetSubject();
-  createSelector(
+
+  return createSelector(
     networkNodes, getSubject,
     (nodes, subject) => filter(nodes, ['type', subject.type]),
   );
@@ -83,12 +84,13 @@ export const makeNetworkNodesForPrompt = () => {
 export const makeNetworkNodesForOtherPrompts = () => {
   // used to check node attributes
   const getIds = makeGetIds();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    networkNodes, getIds,
-    (nodes, { stageId, promptId }) =>
+    networkNodesForSubject, getIds,
+    (nodes, { promptId }) =>
       reject(
-        filter(nodes, { stageId }),
+        nodes,
         { promptId },
       ),
   );
