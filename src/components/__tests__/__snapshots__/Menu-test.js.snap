@@ -66,7 +66,6 @@ ShallowWrapper {
         color=""
         name="menu"
         onClick={[Function]}
-        size=""
         style={Object {}}
     />
 </div>,
@@ -129,7 +128,6 @@ ShallowWrapper {
             color=""
             name="menu"
             onClick={[Function]}
-            size=""
             style={Object {}}
       />
 </div>,
@@ -280,7 +278,6 @@ ShallowWrapper {
                     color=""
                     name="menu"
                     onClick={[Function]}
-                    size=""
                     style={Object {}}
           />
 </div>,
@@ -343,7 +340,6 @@ ShallowWrapper {
                     color=""
                     name="menu"
                     onClick={[Function]}
-                    size=""
                     style={Object {}}
           />
 </div>,
