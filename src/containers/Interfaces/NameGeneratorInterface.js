@@ -126,6 +126,8 @@ class NameGenerator extends Component {
           name={forms.EDIT_NODE}
           title={form.title}
           fields={form.fields}
+          entity={form.entity}
+          type={form.type}
           autoPopulate={form.autoPopulate}
           onSubmit={this.onSubmitEditNode}
         />
@@ -134,6 +136,8 @@ class NameGenerator extends Component {
           name={forms.ADD_NODE}
           title={form.title}
           fields={form.fields}
+          entity={form.entity}
+          type={form.type}
           autoPopulate={form.autoPopulate}
           onSubmit={this.onSubmitNewNode}
           addAnother
