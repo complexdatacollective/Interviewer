@@ -136,9 +136,9 @@ const edgesToCoords = (edges, { nodes, layoutVariable }) =>
 
 const edgesOfTypes = (edges, types) =>
   flow(
-    groupBy('type'),
-    at(types),
-    values,
+    allEdges => groupBy(allEdges, 'type'), // sort by type
+    groupedEdges => at(groupedEdges, types), // discard unwanted types
+    groupedEdges => values(groupedEdges), // flatten
   )(edges);
 
 export const makeDisplayEdgesForPrompt = () => {
