@@ -25,7 +25,7 @@ class Quiz extends Component {
 
     const {
       form,
-    } = this.props.config.params;
+    } = this.props.config;
 
     return (
       <div className="quiz-interface">

@@ -8,9 +8,282 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <NodeForm
+  "node": <Connect(Modal)
+    className="modal--fullscreen"
+    name="baz"
+    title="The form title"
+>
+    <FormWizard
+        addAnother={false}
+        autoFocus={true}
+        closeModal={[Function]}
+        controls={
+            Array [
+                false,
+                <Button
+                  aria-label="Submit"
+                  color=""
+                  content=""
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size=""
+            >
+                  Submit
+            </Button>,
+              ]
+        }
+        entity="node"
+        fields={
+            Array [
+                Object {
+                  "component": "TextInput",
+                  "variable": "foo",
+                },
+              ]
+        }
+        form="baz"
+        initialValues={Object {}}
+        name="baz"
+        node={Object {}}
+        onSubmit={[Function]}
+        openModal={[Function]}
+        resetValues={[Function]}
+        title="The form title"
+        type="person"
+    />
+</Connect(Modal)>,
+  "nodes": Array [
+    <Connect(Modal)
+      className="modal--fullscreen"
+      name="baz"
+      title="The form title"
+>
+      <FormWizard
+            addAnother={false}
+            autoFocus={true}
+            closeModal={[Function]}
+            controls={
+                  Array [
+                        false,
+                        <Button
+                          aria-label="Submit"
+                          color=""
+                          content=""
+                          icon=""
+                          iconPosition="right"
+                          onClick={[Function]}
+                          size=""
+                  >
+                          Submit
+                  </Button>,
+                      ]
+            }
+            entity="node"
+            fields={
+                  Array [
+                        Object {
+                          "component": "TextInput",
+                          "variable": "foo",
+                        },
+                      ]
+            }
+            form="baz"
+            initialValues={Object {}}
+            name="baz"
+            node={Object {}}
+            onSubmit={[Function]}
+            openModal={[Function]}
+            resetValues={[Function]}
+            title="The form title"
+            type="person"
+      />
+</Connect(Modal)>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 0,
+      "_context": Object {},
+      "_currentElement": <NodeForm
+        addAnother={false}
+        closeModal={[Function]}
+        entity="node"
+        fields={
+                Array [
+                        Object {
+                          "component": "TextInput",
+                          "variable": "foo",
+                        },
+                      ]
+        }
+        initialValues={Object {}}
+        name="baz"
+        node={Object {}}
+        onSubmit={[Function]}
+        openModal={[Function]}
+        resetValues={[Function]}
+        title="The form title"
+        type="person"
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": NodeForm {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "continuousSubmit": [Function],
+        "isLarge": [Function],
+        "normalSubmit": [Function],
+        "onSubmit": [Function],
+        "props": Object {
+          "addAnother": false,
+          "closeModal": [Function],
+          "entity": "node",
+          "fields": Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ],
+          "initialValues": Object {},
+          "name": "baz",
+          "node": Object {},
+          "onSubmit": [Function],
+          "openModal": [Function],
+          "resetValues": [Function],
+          "title": "The form title",
+          "type": "person",
+        },
+        "refs": Object {},
+        "state": Object {
+          "typeOfSubmit": "normal",
+        },
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <Connect(Modal)
+          className="modal--fullscreen"
+          name="baz"
+          title="The form title"
+>
+          <FormWizard
+                    addAnother={false}
+                    autoFocus={true}
+                    closeModal={[Function]}
+                    controls={
+                              Array [
+                                        false,
+                                        <Button
+                                          aria-label="Submit"
+                                          color=""
+                                          content=""
+                                          icon=""
+                                          iconPosition="right"
+                                          onClick={[Function]}
+                                          size=""
+                              >
+                                          Submit
+                              </Button>,
+                                      ]
+                    }
+                    entity="node"
+                    fields={
+                              Array [
+                                        Object {
+                                          "component": "TextInput",
+                                          "variable": "foo",
+                                        },
+                                      ]
+                    }
+                    form="baz"
+                    initialValues={Object {}}
+                    name="baz"
+                    node={Object {}}
+                    onSubmit={[Function]}
+                    openModal={[Function]}
+                    resetValues={[Function]}
+                    title="The form title"
+                    type="person"
+          />
+</Connect(Modal)>,
+        "_debugID": 2,
+        "_renderedOutput": <Connect(Modal)
+          className="modal--fullscreen"
+          name="baz"
+          title="The form title"
+>
+          <FormWizard
+                    addAnother={false}
+                    autoFocus={true}
+                    closeModal={[Function]}
+                    controls={
+                              Array [
+                                        false,
+                                        <Button
+                                          aria-label="Submit"
+                                          color=""
+                                          content=""
+                                          icon=""
+                                          iconPosition="right"
+                                          onClick={[Function]}
+                                          size=""
+                              >
+                                          Submit
+                              </Button>,
+                                      ]
+                    }
+                    entity="node"
+                    fields={
+                              Array [
+                                        Object {
+                                          "component": "TextInput",
+                                          "variable": "foo",
+                                        },
+                                      ]
+                    }
+                    form="baz"
+                    initialValues={Object {}}
+                    name="baz"
+                    node={Object {}}
+                    onSubmit={[Function]}
+                    openModal={[Function]}
+                    resetValues={[Function]}
+                    title="The form title"
+                    type="person"
+          />
+</Connect(Modal)>,
+      },
+      "_renderedNodeType": 1,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <NodeForm
     addAnother={false}
     closeModal={[Function]}
+    entity="node"
     fields={
         Array [
             Object {
@@ -25,303 +298,8 @@ ShallowWrapper {
     onSubmit={[Function]}
     openModal={[Function]}
     resetValues={[Function]}
-    store={
-        Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          }
-    }
     title="The form title"
-/>,
-  "nodes": Array [
-    <NodeForm
-      addAnother={false}
-      closeModal={[Function]}
-      fields={
-            Array [
-                  Object {
-                    "component": "TextInput",
-                    "variable": "foo",
-                  },
-                ]
-      }
-      initialValues={Object {}}
-      name="baz"
-      node={Object {}}
-      onSubmit={[Function]}
-      openModal={[Function]}
-      resetValues={[Function]}
-      store={
-            Object {
-                  "dispatch": [Function],
-                  "getState": [Function],
-                  "replaceReducer": [Function],
-                  "subscribe": [Function],
-                  Symbol(observable): [Function],
-                }
-      }
-      title="The form title"
-/>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 0,
-      "_context": Object {},
-      "_currentElement": <Connect(NodeForm)
-        fields={
-                Array [
-                        Object {
-                          "component": "TextInput",
-                          "variable": "foo",
-                        },
-                      ]
-        }
-        name="baz"
-        onSubmit={[Function]}
-        store={
-                Object {
-                        "dispatch": [Function],
-                        "getState": [Function],
-                        "replaceReducer": [Function],
-                        "subscribe": [Function],
-                        Symbol(observable): [Function],
-                      }
-        }
-        title="The form title"
-/>,
-      "_debugID": 1,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": Connect {
-        "_reactInternalInstance": [Circular],
-        "context": Object {
-          "store": undefined,
-        },
-        "dispatchProps": Object {
-          "closeModal": [Function],
-          "openModal": [Function],
-          "resetValues": [Function],
-        },
-        "doDispatchPropsDependOnOwnProps": false,
-        "doStatePropsDependOnOwnProps": true,
-        "finalMapDispatchToProps": [Function],
-        "finalMapStateToProps": [Function],
-        "hasStoreStateChanged": false,
-        "haveOwnPropsChanged": false,
-        "haveStatePropsBeenPrecalculated": false,
-        "mergedProps": Object {
-          "closeModal": [Function],
-          "fields": Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ],
-          "initialValues": Object {},
-          "name": "baz",
-          "onSubmit": [Function],
-          "openModal": [Function],
-          "resetValues": [Function],
-          "store": Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          },
-          "title": "The form title",
-        },
-        "props": Object {
-          "fields": Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ],
-          "name": "baz",
-          "onSubmit": [Function],
-          "store": Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          },
-          "title": "The form title",
-        },
-        "refs": Object {},
-        "renderedElement": <NodeForm
-          addAnother={false}
-          closeModal={[Function]}
-          fields={
-                    Array [
-                              Object {
-                                "component": "TextInput",
-                                "variable": "foo",
-                              },
-                            ]
-          }
-          initialValues={Object {}}
-          name="baz"
-          node={Object {}}
-          onSubmit={[Function]}
-          openModal={[Function]}
-          resetValues={[Function]}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          title="The form title"
-/>,
-        "state": Object {
-          "storeState": Object {
-            "modals": Array [
-              Object {
-                "name": "baz",
-                "open": true,
-              },
-            ],
-            "protocol": Object {
-              "config": Object {
-                "registry": Object {
-                  "foo": Object {
-                    "label": "Foo",
-                    "type": "string",
-                  },
-                },
-              },
-            },
-          },
-        },
-        "stateProps": Object {
-          "initialValues": Object {},
-        },
-        "statePropsPrecalculationError": null,
-        "store": Object {
-          "dispatch": [Function],
-          "getState": [Function],
-          "replaceReducer": [Function],
-          "subscribe": [Function],
-          Symbol(observable): [Function],
-        },
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-        "version": 20,
-      },
-      "_mountOrder": 1,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <NodeForm
-          addAnother={false}
-          closeModal={[Function]}
-          fields={
-                    Array [
-                              Object {
-                                "component": "TextInput",
-                                "variable": "foo",
-                              },
-                            ]
-          }
-          initialValues={Object {}}
-          name="baz"
-          node={Object {}}
-          onSubmit={[Function]}
-          openModal={[Function]}
-          resetValues={[Function]}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          title="The form title"
-/>,
-        "_debugID": 2,
-        "_renderedOutput": <NodeForm
-          addAnother={false}
-          closeModal={[Function]}
-          fields={
-                    Array [
-                              Object {
-                                "component": "TextInput",
-                                "variable": "foo",
-                              },
-                            ]
-          }
-          initialValues={Object {}}
-          name="baz"
-          node={Object {}}
-          onSubmit={[Function]}
-          openModal={[Function]}
-          resetValues={[Function]}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          title="The form title"
-/>,
-      },
-      "_renderedNodeType": 1,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <Connect(NodeForm)
-    fields={
-        Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ]
-    }
-    name="baz"
-    onSubmit={[Function]}
-    store={
-        Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          }
-    }
-    title="The form title"
+    type="person"
 />,
 }
 `;

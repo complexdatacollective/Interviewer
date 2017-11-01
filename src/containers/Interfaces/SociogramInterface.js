@@ -8,8 +8,8 @@ import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
   prompts.forEach((prompt) => {
-    resetPropertyForAllNodes(prompt.sociogram.layout);
-    resetEdgesOfType(prompt.sociogram.edge.type);
+    resetPropertyForAllNodes(prompt.layout.layoutVariable);
+    resetEdgesOfType(prompt.edges.creates);
   });
 };
 
@@ -28,7 +28,7 @@ const SociogramInterface = ({
       <PromptSwiper
         forward={promptForward}
         backward={promptBackward}
-        prompts={stage.params.prompts}
+        prompts={stage.prompts}
         prompt={prompt}
         floating
       />
@@ -42,7 +42,7 @@ const SociogramInterface = ({
     </div>
     <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
       <Button
-        onClick={() => { resetInterface(stage.params.prompts); }}
+        onClick={() => { resetInterface(stage.prompts); }}
       >
         Reset interface
       </Button>

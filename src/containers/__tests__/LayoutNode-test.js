@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { LayoutNodePure as LayoutNode } from '../LayoutNode';
+import { LayoutNode } from '../LayoutNode';
 
 const layout = 'foo';
 
@@ -10,7 +10,7 @@ const mockProps = {
   onDropped: () => {},
   updateNode: () => {},
   onSelected: () => {},
-  layout,
+  layoutVariable: layout,
   node: { [layout]: { x: 0.77, y: 0.2 } },
   areaWidth: 100,
   areaHeight: 40,

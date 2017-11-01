@@ -50,7 +50,7 @@ class Setup extends Component {
   }
 
   render() {
-    if (this.props.protocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
+    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
 
     return (
       <div className="setup">
@@ -91,14 +91,14 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  protocolLoaded: PropTypes.bool.isRequired,
+  isProtocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   loadDemoProtocol: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    protocolLoaded: state.protocol.loaded,
+    isProtocolLoaded: state.protocol.isLoaded,
   };
 }
 

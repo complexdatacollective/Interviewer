@@ -9,9 +9,9 @@ import {
 
 const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
-    <SociogramBackground {...prompt.sociogram.background} />
+    <SociogramBackground stage={stage} prompt={prompt} />
     {
-      prompt.sociogram.edge &&
+      prompt.edges &&
       <EdgeLayout
         stage={stage}
         prompt={prompt}

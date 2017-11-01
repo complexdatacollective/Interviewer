@@ -8,7 +8,7 @@ export const resetPropertyForAllNodes = (property) => {
   const state = store.getState();
 
   state.network.nodes.forEach((node) => {
-    store.dispatch(networkActions.updateNode(omit(node, property)));
+    store.dispatch(networkActions.updateNode(omit(node, property), true));
   });
 };
 

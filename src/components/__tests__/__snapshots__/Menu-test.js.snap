@@ -32,27 +32,30 @@ ShallowWrapper {
             </header>
             <nav>
                 <MenuItem
+                    icon=""
                     interfaceType=""
                     isActive={false}
+                    label={undefined}
                     menuType="primary"
                     onClick={[Function]}
-                    title="a title"
                     to="a-to"
                 />
                 <MenuItem
+                    icon=""
                     interfaceType=""
                     isActive={false}
+                    label={undefined}
                     menuType="primary"
                     onClick={[Function]}
-                    title="b title"
                     to="b-to"
                 />
                 <MenuItem
+                    icon=""
                     interfaceType=""
                     isActive={false}
+                    label={undefined}
                     menuType="primary"
                     onClick={[Function]}
-                    title="c title"
                     to="c-to"
                 />
             </nav>
@@ -63,6 +66,7 @@ ShallowWrapper {
         color=""
         name="menu"
         onClick={[Function]}
+        size=""
         style={Object {}}
     />
 </div>,
@@ -91,27 +95,30 @@ ShallowWrapper {
                   </header>
                   <nav>
                         <MenuItem
+                              icon=""
                               interfaceType=""
                               isActive={false}
+                              label={undefined}
                               menuType="primary"
                               onClick={[Function]}
-                              title="a title"
                               to="a-to"
                         />
                         <MenuItem
+                              icon=""
                               interfaceType=""
                               isActive={false}
+                              label={undefined}
                               menuType="primary"
                               onClick={[Function]}
-                              title="b title"
                               to="b-to"
                         />
                         <MenuItem
+                              icon=""
                               interfaceType=""
                               isActive={false}
+                              label={undefined}
                               menuType="primary"
                               onClick={[Function]}
-                              title="c title"
                               to="c-to"
                         />
                   </nav>
@@ -122,6 +129,7 @@ ShallowWrapper {
             color=""
             name="menu"
             onClick={[Function]}
+            size=""
             style={Object {}}
       />
 </div>,
@@ -238,27 +246,30 @@ ShallowWrapper {
                               </header>
                               <nav>
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="a title"
                                                   to="a-to"
                                         />
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="b title"
                                                   to="b-to"
                                         />
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="c title"
                                                   to="c-to"
                                         />
                               </nav>
@@ -269,6 +280,7 @@ ShallowWrapper {
                     color=""
                     name="menu"
                     onClick={[Function]}
+                    size=""
                     style={Object {}}
           />
 </div>,
@@ -297,27 +309,30 @@ ShallowWrapper {
                               </header>
                               <nav>
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="a title"
                                                   to="a-to"
                                         />
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="b title"
                                                   to="b-to"
                                         />
                                         <MenuItem
+                                                  icon=""
                                                   interfaceType=""
                                                   isActive={false}
+                                                  label={undefined}
                                                   menuType="primary"
                                                   onClick={[Function]}
-                                                  title="c title"
                                                   to="c-to"
                                         />
                               </nav>
@@ -328,6 +343,7 @@ ShallowWrapper {
                     color=""
                     name="menu"
                     onClick={[Function]}
+                    size=""
                     style={Object {}}
           />
 </div>,

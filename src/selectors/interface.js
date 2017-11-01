@@ -1,13 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 
-import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
-import { filter, reject, isEqual } from 'lodash';
+import { createSelector } from 'reselect';
+import { filter, has, reject } from 'lodash';
+import { createDeepEqualSelector } from './utils';
 
-// create a "selector creator" that uses lodash.isEqual instead of ===
-const createDeepEqualSelector = createSelectorCreator(
-  defaultMemoize,
-  isEqual,
-);
+// Selectors that are generic between interfaces
 
 /*
 These selectors assume the following props:
@@ -17,14 +14,12 @@ These selectors assume the following props:
 
 // Prop selectors
 
+const propStage = (_, props) => props.stage;
+const propPrompt = (_, props) => props.prompt;
 const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
-const propPromptNodeAttributes = (_, props) => props.prompt.nodeAttributes;
-export const propStageNodeType = (_, props) => props.stage.params.nodeType;
 
 // State selectors
-
-export const protocolData = state => state.protocol.config.data;
 
 // MemoedSelectors
 
@@ -33,39 +28,70 @@ export const networkNodes = createDeepEqualSelector(
   nodes => nodes,
 );
 
-export const propPromptIds = createSelector(
-  [propStageId, propPromptId],
-  (stageId, promptId) => ({ stageId, promptId }),
+export const networkEdges = createDeepEqualSelector(
+  state => state.network.edges,
+  nodes => nodes,
 );
 
-export const makeNetworkNodesOfStageType = () =>
+export const makeGetIds = () =>
   createSelector(
-    [networkNodes, propStageNodeType],
-    (nodes, nodeType) => filter(nodes, ['type', nodeType]),
+    propStageId, propPromptId,
+    (stageId, promptId) => ({ stageId, promptId }),
   );
 
-export const makeNewNodeAttributes = () =>
+export const makeGetAdditionalAttributes = () =>
   createSelector(
-    [propStageNodeType, propStageId, propPromptId, propPromptNodeAttributes],
-    (type, stageId, promptId, nodeAttributes) => ({
-      type,
-      stageId,
-      promptId,
-      ...nodeAttributes,
-    }),
+    propStage, propPrompt,
+    (stage, prompt) => {
+      const stageAttributes = (has(stage, 'additionalAttributes') ? stage.additionalAttributes : {});
+      const promptAttributes = (has(prompt, 'additionalAttributes') ? prompt.additionalAttributes : {});
+
+      return {
+        ...stageAttributes,
+        ...promptAttributes,
+      };
+    },
   );
 
-export const makeNetworkNodesForPrompt = () =>
+export const makeGetSubject = () =>
   createSelector(
-    [networkNodes, propPromptIds],
-    (nodes, attributes) => filter(nodes, attributes),
+    propStage, propPrompt,
+    (stage, prompt) => {
+      if (has(stage, 'subject')) { return stage.subject; }
+      return prompt.subject;
+    },
   );
 
-export const makeOtherNetworkNodesWithStageNodeType = () => {
-  const networkNodesOfStageType = makeNetworkNodesOfStageType();
+export const makeNetworkNodesForSubject = () => {
+  const getSubject = makeGetSubject();
 
   return createSelector(
-    [networkNodesOfStageType, propPromptIds],
-    (nodes, promptAttributes) => reject(nodes, promptAttributes),
+    networkNodes, getSubject,
+    (nodes, subject) => filter(nodes, ['type', subject.type]),
+  );
+};
+
+export const makeNetworkNodesForPrompt = () => {
+  // used to check node attributes
+  const getIds = makeGetIds();
+
+  return createSelector(
+    networkNodes, getIds,
+    (nodes, attributes) => filter(nodes, attributes),
+  );
+};
+
+export const makeNetworkNodesForOtherPrompts = () => {
+  // used to check node attributes
+  const getIds = makeGetIds();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
+
+  return createSelector(
+    networkNodesForSubject, getIds,
+    (nodes, { promptId }) =>
+      reject(
+        nodes,
+        { promptId },
+      ),
   );
 };

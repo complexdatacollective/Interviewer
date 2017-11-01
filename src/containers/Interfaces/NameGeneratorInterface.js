@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { makeNetworkNodesForPrompt, makeNewNodeAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
@@ -91,7 +92,7 @@ class NameGenerator extends Component {
 
     const {
       prompts,
-    } = this.props.stage.params;
+    } = this.props.stage;
 
     return (
       <div className="name-generator-interface">
@@ -125,6 +126,8 @@ class NameGenerator extends Component {
           name={forms.EDIT_NODE}
           title={form.title}
           fields={form.fields}
+          entity={form.entity}
+          type={form.type}
           autoPopulate={form.autoPopulate}
           onSubmit={this.onSubmitEditNode}
         />
@@ -133,6 +136,8 @@ class NameGenerator extends Component {
           name={forms.ADD_NODE}
           title={form.title}
           fields={form.fields}
+          entity={form.entity}
+          type={form.type}
           autoPopulate={form.autoPopulate}
           onSubmit={this.onSubmitNewNode}
           addAnother
@@ -166,12 +171,12 @@ NameGenerator.propTypes = {
 
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
-  const newNodeAttributes = makeNewNodeAttributes();
+  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
   const rehydrateForm = makeRehydrateForm();
 
   return function mapStateToProps(state, props) {
     return {
-      newNodeAttributes: newNodeAttributes(state, props),
+      newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       form: rehydrateForm(state, props),
     };

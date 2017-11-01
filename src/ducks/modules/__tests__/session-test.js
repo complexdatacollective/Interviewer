@@ -20,9 +20,7 @@ describe('session reducer', () => {
       reducer([], {
         type: protocolActionTypes.SET_PROTOCOL,
         protocol: {
-          config: {
-            stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
-          },
+          stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         },
       }),
     ).toEqual(

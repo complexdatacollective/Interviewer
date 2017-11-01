@@ -1,33 +1,47 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import SociogramRadar from './SociogramRadar';
+import { makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
 
-const SociogramBackground = ({ n, skewed, image }) => {
-  let background;
+class SociogramBackground extends PureComponent {
+  static propTypes = {
+    ...sociogramOptionsProps,
+  };
 
-  if (image) {
-    background = <div className="sociogram-background__image" style={{ backgroundImage: `url(${image})` }} />;
-  } else {
-    background = <SociogramRadar n={n} skewed={skewed} />;
+  static defaultProps = {
+    concentricCircles: 4,
+    skewedTowardCenter: true,
+    image: null,
+  };
+
+  render() {
+    const { concentricCircles, skewedTowardCenter, image } = this.props;
+    let background;
+
+    if (image) {
+      background = <div className="sociogram-background__image" style={{ backgroundImage: `url(${image})` }} />;
+    } else {
+      background = <SociogramRadar n={concentricCircles} skewed={skewedTowardCenter} />;
+    }
+
+    return (
+      <div className="sociogram-background">
+        { background }
+      </div>
+    );
   }
+}
 
-  return (
-    <div className="sociogram-background">
-      { background }
-    </div>
-  );
-};
+function makeMapStateToProps() {
+  const getSociogramOptions = makeGetSociogramOptions();
 
-SociogramBackground.propTypes = {
-  n: PropTypes.number,
-  skewed: PropTypes.bool,
-  image: PropTypes.string,
-};
+  return function mapStateToProps(state, props) {
+    return {
+      ...getSociogramOptions(state, props),
+    };
+  };
+}
 
-SociogramBackground.defaultProps = {
-  n: 4,
-  skewed: true,
-  image: null,
-};
+export { SociogramBackground };
 
-export default SociogramBackground;
+export default connect(makeMapStateToProps)(SociogramBackground);

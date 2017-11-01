@@ -35,8 +35,20 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <NodeBucket
+        allowPositioning={false}
+        allowSelect={false}
+        canCreateEdge={false}
+        canHighlight={false}
+        concentricCircles={0}
+        createEdge="bar"
+        displayEdges={Array []}
+        highlightAttributes={Object {}}
         layout="foo"
+        layoutVariable="foo"
         node={Object {}}
+        nodeBinSortOrder={Object {}}
+        selectMode=""
+        skewedTowardCenter={false}
         sort={Object {}}
         updateNode={[Function]}
 />,
@@ -48,8 +60,20 @@ ShallowWrapper {
         "context": Object {},
         "onDropNode": [Function],
         "props": Object {
+          "allowPositioning": false,
+          "allowSelect": false,
+          "canCreateEdge": false,
+          "canHighlight": false,
+          "concentricCircles": 0,
+          "createEdge": "bar",
+          "displayEdges": Array [],
+          "highlightAttributes": Object {},
           "layout": "foo",
+          "layoutVariable": "foo",
           "node": Object {},
+          "nodeBinSortOrder": Object {},
+          "selectMode": "",
+          "skewedTowardCenter": false,
           "sort": Object {},
           "updateNode": [Function],
         },
@@ -104,8 +128,20 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <NodeBucket
+    allowPositioning={false}
+    allowSelect={false}
+    canCreateEdge={false}
+    canHighlight={false}
+    concentricCircles={0}
+    createEdge="bar"
+    displayEdges={Array []}
+    highlightAttributes={Object {}}
     layout="foo"
+    layoutVariable="foo"
     node={Object {}}
+    nodeBinSortOrder={Object {}}
+    selectMode=""
+    skewedTowardCenter={false}
     sort={Object {}}
     updateNode={[Function]}
 />,

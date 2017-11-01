@@ -78,7 +78,7 @@ ShallowWrapper {
         canDrag={false}
         canSelect={false}
         draggableType="bar"
-        layout="foo"
+        layoutVariable="foo"
         node={
                 Object {
                         "foo": Object {
@@ -107,7 +107,7 @@ ShallowWrapper {
           "canDrag": false,
           "canSelect": false,
           "draggableType": "bar",
-          "layout": "foo",
+          "layoutVariable": "foo",
           "node": Object {
             "foo": Object {
               "x": 0.77,
@@ -213,7 +213,7 @@ ShallowWrapper {
     canDrag={false}
     canSelect={false}
     draggableType="bar"
-    layout="foo"
+    layoutVariable="foo"
     node={
         Object {
             "foo": Object {

@@ -2,7 +2,7 @@
 import { createSelector } from 'reselect';
 
 const stageIndex = state => state.session.stage.index;
-const protocol = state => state.protocol.config;
+const protocol = state => state.protocol;
 
 export const sessionMenuIsOpen = state => state.menu.sessionMenuIsOpen;
 export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;
@@ -23,5 +23,5 @@ export const filteredStages = createSelector(
   stageSearchTerm,
   stages,
   (stageSearchTerm, stages) =>
-    stages.filter(stage => stage.title.toLowerCase().includes(stageSearchTerm.toLowerCase())),
+    stages.filter(stage => stage.label.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NodeLayoutPure } from '../NodeLayout';
+import { NodeLayout } from '../NodeLayout';
 
 const layout = 'foo';
 
@@ -12,30 +12,36 @@ const mockProps = {
   ],
   updateNode: () => {},
   toggleEdge: () => {},
-  toggleNodeAttributes: () => {},
+  toggleHighlight: () => {},
   width: 123,
   height: 456,
-  attributes: {},
-  edge: null,
-  select: null,
-  canPosition: false,
-  canSelect: false,
-  layout,
+  layoutVariable: layout,
+  createEdge: 'bar',
+  displayEdges: [],
+  canCreateEdge: false,
+  canHighlight: false,
+  highlightAttributes: {},
+  allowSelect: false,
+  allowPositioning: false,
+  selectMode: '',
+  nodeBinSortOrder: {},
+  concentricCircles: 0,
+  skewedTowardCenter: false,
 };
 
 describe('<NodeLayout />', () => {
   it('renders ok', () => {
-    const component = shallow(<NodeLayoutPure {...mockProps} />);
+    const component = shallow(<NodeLayout {...mockProps} />);
 
     expect(component).toMatchSnapshot();
   });
 
   it('shouldComponentUpdate() when prop `nodes` changes length only', () => {
     const componentDidUpdate = jest.fn();
-    NodeLayoutPure.prototype.componentDidUpdate = componentDidUpdate;
+    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
 
     const component = shallow(
-      <NodeLayoutPure {...mockProps} />,
+      <NodeLayout {...mockProps} />,
       { lifecycleExperimental: true },
     );
 
@@ -54,10 +60,10 @@ describe('<NodeLayout />', () => {
 
   it('shouldComponentUpdate() when prop other than `nodes` changes', () => {
     const componentDidUpdate = jest.fn();
-    NodeLayoutPure.prototype.componentDidUpdate = componentDidUpdate;
+    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
 
     const component = shallow(
-      <NodeLayoutPure {...mockProps} />,
+      <NodeLayout {...mockProps} />,
       { lifecycleExperimental: true },
     );
 
@@ -76,10 +82,10 @@ describe('<NodeLayout />', () => {
 
   it('should forceUpdate() when onDropped callback is called', () => {
     const componentDidUpdate = jest.fn();
-    NodeLayoutPure.prototype.componentDidUpdate = componentDidUpdate;
+    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
 
     const component = shallow(
-      <NodeLayoutPure {...mockProps} />,
+      <NodeLayout {...mockProps} />,
       { lifecycleExperimental: true },
     );
 

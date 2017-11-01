@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
-import { differenceBy } from 'lodash';
 import { createSelector } from 'reselect';
-import { protocolData, networkNodes, makeOtherNetworkNodesWithStageNodeType } from '../../selectors/interface';
+import { has, map, some } from 'lodash';
 import { Panels, Panel } from '../../components/Elements';
 import { NodeProvider } from '../Elements';
 
@@ -18,52 +17,32 @@ const colorPresets = [
 
 const panelPresets = {
   existing: {
-    type: 'existing',
-    title: 'People from your existing lists',
-    source: 'existing',
+    title: 'Already mentioned',
+    dataSource: 'existing',
     selectable: true,
     filter: network => network,
   },
-  previous: {
-    type: 'previous',
+  external: {
     title: 'People from your previous visit',
-    source: 'previous',
+    dataSource: 'previousInterview',
     draggable: true,
     filter: network => network,
   },
 };
 
 const rehydratePreset = (panelConfig) => {
-  // TODO: rehydrate looses methods, this puts a placehoder back in
-  if (!panelConfig) { return () => true; }
-  if (Object.prototype.hasOwnProperty.call(panelPresets, panelConfig)) {
+  if (has(panelPresets, panelConfig)) {
     return panelPresets[panelConfig];
   }
   return panelConfig;
 };
 
-const propPanelConfigs = (_, props) => props.stage.params.panels;
+const propPanelConfigs = (_, props) => props.stage.panels;
 
-const makeGetProviderConfigsWithNodes = () => {
-  const otherNetworkNodesWithStageNodeType = makeOtherNetworkNodesWithStageNodeType();
-
-  return createSelector(
-    [propPanelConfigs, networkNodes, otherNetworkNodesWithStageNodeType, protocolData],
-    (panelConfigs, nodes, existingNodes, data) => panelConfigs.map(rehydratePreset).map(
-      (providerConfig) => {
-        switch (providerConfig.source) {
-          case 'existing':
-            return { ...providerConfig, nodes: existingNodes };
-          default:
-            return {
-              ...providerConfig,
-              nodes: differenceBy(data[providerConfig.source].nodes, nodes, 'uid'),
-            };
-        }
-      },
-    ),
-  );
-};
+const getPanelConfigs = createSelector(
+  propPanelConfigs,
+  panelConfigs => map(panelConfigs, rehydratePreset),
+);
 
 const getHighlight = (provider, panelNumber) => {
   if (provider.highlight) { return provider.highlight; }
@@ -74,42 +53,69 @@ const getHighlight = (provider, panelNumber) => {
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
-const NodeProviderPanels = ({ providerConfigsWithNodes, stage, prompt }) => {
-  const totalNodes = providerConfigsWithNodes.reduce(
-    (sum, providerConfig) => sum + providerConfig.nodes.length,
-    0,
+class NodeProviderPanels extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      panels: map(props.panels, () => true),
+    };
+  }
+
+  onUpdatePanelState = (updateIndex, state) => {
+    this.setState(previousState => ({
+      panels: map(
+        previousState.panels,
+        (item, index) => {
+          if (updateIndex === index) { return state; }
+          return item;
+        },
+      ),
+    }));
+  }
+
+  isPanelOpen = index => this.state.panels[index];
+
+  anyPanelOpen = () => some(
+    map(this.state.panels, (value, index) => this.isPanelOpen(index)),
+    open => open === true,
   );
 
-  return (
-    <Panels minimise={totalNodes === 0}>
-      { providerConfigsWithNodes.map((providerConfig, panelNumber) => (
-        <Panel
-          title={providerConfig.title}
-          key={providerConfig.type}
-          minimise={providerConfig.nodes.length === 0}
-          highlight={getHighlight(providerConfig, panelNumber)}
-        >
-          <NodeProvider {...providerConfig} stage={stage} prompt={prompt} />
-        </Panel>
-      )) }
-    </Panels>
-  );
-};
+  render() {
+    const { panels, stage, prompt } = this.props;
+
+    return (
+      <Panels minimise={!this.anyPanelOpen()}>
+        { panels.map((panel, panelIndex) => (
+          <Panel
+            title={panel.title}
+            key={panelIndex}
+            minimise={!this.isPanelOpen(panelIndex)}
+            highlight={getHighlight(panel, panelIndex)}
+          >
+            <NodeProvider
+              {...panel}
+              stage={stage}
+              prompt={prompt}
+              onUpdateNodes={nodes => this.onUpdatePanelState(panelIndex, nodes.length !== 0)}
+            />
+          </Panel>
+        )) }
+      </Panels>
+    );
+  }
+}
 
 NodeProviderPanels.propTypes = {
-  providerConfigsWithNodes: PropTypes.array.isRequired,
+  panels: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 
-function makeMapStateToProps() {
-  const getProviderConfigsWithNodes = makeGetProviderConfigsWithNodes();
-
-  return function mapStateToProps(state, props) {
-    return {
-      providerConfigsWithNodes: getProviderConfigsWithNodes(state, props),
-    };
+function mapStateToProps(state, props) {
+  return {
+    panels: getPanelConfigs(state, props),
   };
 }
 
-export default connect(makeMapStateToProps)(NodeProviderPanels);
+export default connect(mapStateToProps)(NodeProviderPanels);

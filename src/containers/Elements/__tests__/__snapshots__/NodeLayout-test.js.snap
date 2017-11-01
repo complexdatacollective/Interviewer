@@ -22,7 +22,7 @@ ShallowWrapper {
             canDrag={false}
             canSelect={false}
             draggableType="POSITIONED_NODE"
-            layout="foo"
+            layoutVariable="foo"
             node={
                 Object {
                     "bar": "buzz",
@@ -54,7 +54,7 @@ ShallowWrapper {
                   canDrag={false}
                   canSelect={false}
                   draggableType="POSITIONED_NODE"
-                  layout="foo"
+                  layoutVariable="foo"
                   node={
                         Object {
                               "bar": "buzz",
@@ -79,12 +79,17 @@ ShallowWrapper {
       "_compositeType": 0,
       "_context": Object {},
       "_currentElement": <NodeLayout
-        attributes={Object {}}
-        canPosition={false}
-        canSelect={false}
-        edge={null}
+        allowPositioning={false}
+        allowSelect={false}
+        canCreateEdge={false}
+        canHighlight={false}
+        concentricCircles={0}
+        createEdge="bar"
+        displayEdges={Array []}
         height={456}
-        layout="foo"
+        highlightAttributes={Object {}}
+        layoutVariable="foo"
+        nodeBinSortOrder={Object {}}
         nodes={
                 Array [
                         Object {
@@ -97,9 +102,10 @@ ShallowWrapper {
                         },
                       ]
         }
-        select={null}
+        selectMode=""
+        skewedTowardCenter={false}
         toggleEdge={[Function]}
-        toggleNodeAttributes={[Function]}
+        toggleHighlight={[Function]}
         updateNode={[Function]}
         width={123}
 />,
@@ -112,12 +118,17 @@ ShallowWrapper {
         "onDropNode": [Function],
         "onSelectNode": [Function],
         "props": Object {
-          "attributes": Object {},
-          "canPosition": false,
-          "canSelect": false,
-          "edge": null,
+          "allowPositioning": false,
+          "allowSelect": false,
+          "canCreateEdge": false,
+          "canHighlight": false,
+          "concentricCircles": 0,
+          "createEdge": "bar",
+          "displayEdges": Array [],
           "height": 456,
-          "layout": "foo",
+          "highlightAttributes": Object {},
+          "layoutVariable": "foo",
+          "nodeBinSortOrder": Object {},
           "nodes": Array [
             Object {
               "bar": "buzz",
@@ -128,9 +139,10 @@ ShallowWrapper {
               "uid": 123,
             },
           ],
-          "select": null,
+          "selectMode": "",
+          "skewedTowardCenter": false,
           "toggleEdge": [Function],
-          "toggleNodeAttributes": [Function],
+          "toggleHighlight": [Function],
           "updateNode": [Function],
           "width": 123,
         },
@@ -170,7 +182,7 @@ ShallowWrapper {
                               canDrag={false}
                               canSelect={false}
                               draggableType="POSITIONED_NODE"
-                              layout="foo"
+                              layoutVariable="foo"
                               node={
                                         Object {
                                                   "bar": "buzz",
@@ -202,7 +214,7 @@ ShallowWrapper {
                               canDrag={false}
                               canSelect={false}
                               draggableType="POSITIONED_NODE"
-                              layout="foo"
+                              layoutVariable="foo"
                               node={
                                         Object {
                                                   "bar": "buzz",
@@ -231,12 +243,17 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <NodeLayout
-    attributes={Object {}}
-    canPosition={false}
-    canSelect={false}
-    edge={null}
+    allowPositioning={false}
+    allowSelect={false}
+    canCreateEdge={false}
+    canHighlight={false}
+    concentricCircles={0}
+    createEdge="bar"
+    displayEdges={Array []}
     height={456}
-    layout="foo"
+    highlightAttributes={Object {}}
+    layoutVariable="foo"
+    nodeBinSortOrder={Object {}}
     nodes={
         Array [
             Object {
@@ -249,9 +266,10 @@ ShallowWrapper {
             },
           ]
     }
-    select={null}
+    selectMode=""
+    skewedTowardCenter={false}
     toggleEdge={[Function]}
-    toggleNodeAttributes={[Function]}
+    toggleHighlight={[Function]}
     updateNode={[Function]}
     width={123}
 />,

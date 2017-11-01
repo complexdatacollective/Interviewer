@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -20,7 +18,7 @@ class LayoutNode extends PureComponent {
   }
 
   onMove = (hits, { x, y }) => {
-    const { layout, updateNode, node: { uid } } = this.props;
+    const { layoutVariable, updateNode, node: { uid } } = this.props;
     const hitbox = first(hits);
 
     // Calculate x/y position as a decimal within the hitbox
@@ -30,7 +28,7 @@ class LayoutNode extends PureComponent {
       y: (y - hitbox.y) / hitbox.height,
     };
 
-    updateNode({ uid, [layout]: relativeCoords });
+    updateNode({ uid, [layoutVariable]: relativeCoords });
   }
 
   onSelected = () => {
@@ -44,12 +42,12 @@ class LayoutNode extends PureComponent {
       selected,
       canDrag,
       canSelect,
-      layout,
+      layoutVariable,
       areaWidth,
       areaHeight,
     } = this.props;
 
-    const { x, y } = node[layout];
+    const { x, y } = node[layoutVariable];
 
     const styles = {
       left: 0,
@@ -83,18 +81,22 @@ LayoutNode.propTypes = {
   onDropped: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   onSelected: PropTypes.func.isRequired,
-  layout: PropTypes.string.isRequired,
+  layoutVariable: PropTypes.string.isRequired,
   node: PropTypes.object.isRequired,
   draggableType: PropTypes.string.isRequired,
   canDrag: PropTypes.bool,
   canSelect: PropTypes.bool,
   selected: PropTypes.bool,
+  areaWidth: PropTypes.number,
+  areaHeight: PropTypes.number,
 };
 
 LayoutNode.defaultProps = {
   canDrag: false,
   canSelect: false,
   selected: false,
+  areaWidth: 0,
+  areaHeight: 0,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -103,5 +105,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export { LayoutNode as LayoutNodePure };
+export { LayoutNode };
 export default connect(null, mapDispatchToProps)(LayoutNode);

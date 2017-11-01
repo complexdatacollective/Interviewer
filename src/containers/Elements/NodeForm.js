@@ -98,6 +98,7 @@ class NodeForm extends Component {
     return (
       <Modal name={name} title={title} className={modalClassNames}>
         {formElement}
+
       </Modal>
     );
   }
@@ -113,10 +114,12 @@ NodeForm.propTypes = {
     PropTypes.string,
     PropTypes.symbol,
   ]).isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  entity: PropTypes.string.isRequired,
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
 };
 
 NodeForm.defaultProps = {
@@ -141,5 +144,7 @@ function mapDispatchToProps(dispatch) {
     resetValues: bindActionCreators(reset, dispatch),
   };
 }
+
+export { NodeForm };
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(NodeForm);

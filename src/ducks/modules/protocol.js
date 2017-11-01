@@ -4,7 +4,7 @@ import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import getProtocol from '../../utils/getProtocol';
 import runProtocol from '../../utils/runProtocol';
-import demoProtocol from '../../other/demo.protocol';
+import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_DEMO_PROTOCOL = 'LOAD_DEMO_PROTOCOL';
@@ -12,13 +12,11 @@ const LOAD_PROTOCOL_FAILED = 'LOAD_PROTOCOL_FAILED';
 const SET_PROTOCOL = 'SET_PROTOCOL';
 
 const initialState = {
-  config: {
-    name: '',
-    version: '',
-    required: '',
-    stages: [],
-  },
-  loaded: false,
+  isLoaded: false,
+  name: '',
+  version: '',
+  required: '',
+  stages: [],
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -26,11 +24,8 @@ export default function reducer(state = initialState, action = {}) {
     case SET_PROTOCOL:
       return {
         ...state,
-        loaded: true,
-        config: {
-          ...state.config,
-          ...action.protocol.config,
-        },
+        ...action.protocol,
+        isLoaded: true,
       };
     default:
       return state;

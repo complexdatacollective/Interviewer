@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { isEqual, isMatch, filter, has, omit } from 'lodash';
-import { createSelector } from 'reselect';
+import { isEqual, isMatch, omit } from 'lodash';
 import LayoutNode from '../LayoutNode';
 import { withBounds } from '../../behaviours';
 import { DropZone } from '../../components/Elements';
-import { makeNetworkNodesOfStageType } from '../../selectors/interface';
+import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
@@ -19,6 +18,19 @@ const nodesLengthChanged = (nextProps, props) =>
   nextProps.nodes.length !== props.nodes.length;
 
 class NodeLayout extends Component {
+  static propTypes = {
+    nodes: PropTypes.array,
+    toggleEdge: PropTypes.func.isRequired,
+    toggleHighlight: PropTypes.func.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    ...sociogramOptionsProps,
+  };
+
+  static defaultProps = {
+    nodes: [],
+  };
+
   constructor(props) {
     super(props);
 
@@ -39,15 +51,15 @@ class NodeLayout extends Component {
   }
 
   onSelectNode = (node) => {
-    const { select } = this.props;
+    const { canSelect, selectMode } = this.props;
 
-    if (!select && !select.action) { return; }
+    if (!canSelect) { return; }
 
-    switch (select.action) {
+    switch (selectMode) {
       case 'EDGE':
         this.connectNode(node.id); break;
-      case 'ATTRIBUTES':
-        this.toggleNodeAttributes(node.uid); break;
+      case 'HIGHLIGHT':
+        this.toggleHighlightAttributes(node.uid); break;
       default:
     }
 
@@ -55,8 +67,8 @@ class NodeLayout extends Component {
   }
 
   connectNode(nodeId) {
-    const edgeType = this.props.edge.type;
-    const connectFrom = this.state.connectFrom;
+    const { createEdge } = this.props;
+    const { connectFrom } = this.state;
 
     if (!connectFrom) {
       this.setState({ connectFrom: nodeId });
@@ -67,25 +79,30 @@ class NodeLayout extends Component {
       this.props.toggleEdge({
         from: connectFrom,
         to: nodeId,
-        type: edgeType,
+        type: createEdge,
       });
     }
 
     this.setState({ connectFrom: null });
   }
 
-  toggleNodeAttributes(nodeId) {
-    this.props.toggleNodeAttributes({ uid: nodeId }, this.props.attributes);
+  toggleHighlightAttributes(nodeId) {
+    this.props.toggleNodeAttributes(
+      { uid: nodeId },
+      this.highlightAttributes(),
+    );
   }
 
   isSelected(node) {
-    const { select, canSelect } = this.props;
+    const { selectMode, canSelect } = this.props;
+
     if (!canSelect) { return false; }
-    switch (select.action) {
+
+    switch (selectMode) {
       case 'EDGE':
         return (node.id === this.state.connectFrom);
-      case 'ATTRIBUTES':
-        return isMatch(node, this.props.attributes);
+      case 'HIGHLIGHT':
+        return isMatch(node, this.highlightAttributes());
       default:
         return false;
     }
@@ -93,31 +110,33 @@ class NodeLayout extends Component {
 
   render() {
     const {
-      layout,
       nodes,
-      canPosition,
-      canSelect,
+      width,
+      height,
+      allowPositioning,
+      allowSelect,
+      layoutVariable,
     } = this.props;
 
     return (
       <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
         <div className="node-layout">
           { nodes.map((node) => {
-            if (!Object.prototype.hasOwnProperty.call(node, layout)) { return null; }
+            if (!Object.prototype.hasOwnProperty.call(node, layoutVariable)) { return null; }
 
             return (
               <LayoutNode
                 key={node.uid}
-                layout={layout}
+                layoutVariable={layoutVariable}
                 node={node}
                 draggableType={draggableType}
                 onSelected={this.onSelectNode}
                 onDropped={this.onDropNode}
                 selected={this.isSelected(node)}
-                canDrag={canPosition}
-                canSelect={canSelect}
-                areaWidth={this.props.width}
-                areaHeight={this.props.height}
+                canDrag={allowPositioning}
+                canSelect={allowSelect}
+                areaWidth={width}
+                areaHeight={height}
                 animate={false}
               />
             );
@@ -128,67 +147,26 @@ class NodeLayout extends Component {
   }
 }
 
-NodeLayout.propTypes = {
-  nodes: PropTypes.array,
-  toggleEdge: PropTypes.func.isRequired,
-  toggleNodeAttributes: PropTypes.func.isRequired,
-  layout: PropTypes.string.isRequired,
-  edge: PropTypes.object,
-  select: PropTypes.object,
-  attributes: PropTypes.object,
-  canPosition: PropTypes.bool,
-  canSelect: PropTypes.bool,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
-
-NodeLayout.defaultProps = {
-  nodes: [],
-  attributes: {},
-  edge: null,
-  select: null,
-  canPosition: false,
-  canSelect: false,
-};
-
-const propLayout = (_, props) => props.prompt.sociogram.layout;
-
-const makeGetPlacedNodes = () => {
-  const networkNodesOfStageType = makeNetworkNodesOfStageType();
-
-  return createSelector(
-    [networkNodesOfStageType, propLayout],
-    (nodes, layout) => filter(nodes, node => has(node, layout)),
-  );
-};
-
 function makeMapStateToProps() {
   const getPlacedNodes = makeGetPlacedNodes();
+  const getSociogramOptions = makeGetSociogramOptions();
 
   return function mapStateToProps(state, props) {
-    const sociogram = props.prompt.sociogram;
-
     return {
       nodes: getPlacedNodes(state, props),
-      layout: sociogram.layout,
-      edge: sociogram.edge,
-      select: sociogram.select,
-      position: sociogram.position,
-      attributes: sociogram.nodeAttributes,
-      canPosition: !sociogram.select || !sociogram.select.action,
-      canSelect: !!sociogram.select,
+      ...getSociogramOptions(state, props),
     };
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
+    toggleHighlight: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
   };
 }
 
-export { NodeLayout as NodeLayoutPure };
+export { NodeLayout };
 
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),

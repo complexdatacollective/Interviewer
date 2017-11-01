@@ -4,10 +4,17 @@ import classNames from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
 /**
-  * Renders a menu item. Image is based on interfaceType.
+  * Renders a menu item. Image is based on icon.
   */
 function MenuItem(props) {
-  const { onClick, interfaceType, isActive, menuType, title } = props;
+  const { onClick, interfaceType, icon, isActive, menuType, label } = props;
+
+  const iconMap = {
+    NameGenerator: 'menu-name-generator',
+    Sociogram: 'menu-sociogram',
+  };
+
+  const mappedIcon = icon || (interfaceType && iconMap[interfaceType]) || 'menu-default-interface';
 
   const itemClasses = classNames(
     'menu__menuitem',
@@ -19,23 +26,25 @@ function MenuItem(props) {
 
   return (
     <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
-      <Icon name={interfaceType} />
-      {title}
+      <Icon name={mappedIcon} />
+      {label}
     </a>
   );
 }
 
 MenuItem.propTypes = {
   onClick: PropTypes.func.isRequired,
+  icon: PropTypes.string,
   interfaceType: PropTypes.string,
   isActive: PropTypes.bool,
   menuType: PropTypes.string,
-  title: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
 MenuItem.defaultProps = {
-  interfaceType: '',
   isActive: false,
+  icon: '',
+  interfaceType: '',
   menuType: 'primary',
 };
 
