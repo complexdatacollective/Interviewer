@@ -11,10 +11,15 @@ ShallowWrapper {
   "node": <div
     className="sociogram"
 >
-    <SociogramBackground
-        image={null}
-        n={4}
-        skewed={true}
+    <Connect(SociogramBackground)
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
+        }
+        stage={Object {}}
     />
     <Connect(ReactComponent)
         prompt={
@@ -41,10 +46,15 @@ ShallowWrapper {
     <div
       className="sociogram"
 >
-      <SociogramBackground
-            image={null}
-            n={4}
-            skewed={true}
+      <Connect(SociogramBackground)
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}}
       />
       <Connect(ReactComponent)
             prompt={
@@ -121,10 +131,15 @@ ShallowWrapper {
         "_currentElement": <div
           className="sociogram"
 >
-          <SociogramBackground
-                    image={null}
-                    n={4}
-                    skewed={true}
+          <Connect(SociogramBackground)
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(ReactComponent)
                     prompt={
@@ -151,10 +166,15 @@ ShallowWrapper {
         "_renderedOutput": <div
           className="sociogram"
 >
-          <SociogramBackground
-                    image={null}
-                    n={4}
-                    skewed={true}
+          <Connect(SociogramBackground)
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(ReactComponent)
                     prompt={

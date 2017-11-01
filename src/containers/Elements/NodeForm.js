@@ -145,4 +145,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+export { NodeForm };
+
 export default connect(makeMapStateToProps, mapDispatchToProps)(NodeForm);

@@ -13,7 +13,7 @@ const label = node => node.nickname;
 
 const draggableType = 'POSITIONED_NODE';
 
-export class NodeBucket extends Component {
+class NodeBucket extends Component {
   static propTypes = {
     node: PropTypes.object,
     updateNode: PropTypes.func.isRequired,
@@ -75,5 +75,7 @@ function mapDispatchToProps(dispatch) {
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
   };
 }
+
+export { NodeBucket };
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(NodeBucket);

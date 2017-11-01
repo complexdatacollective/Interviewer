@@ -17,10 +17,10 @@ ShallowWrapper {
     <Icon
         className=""
         color=""
-        name=""
+        name="menu-default-interface"
+        size=""
         style={Object {}}
     />
-    title
 </a>,
   "nodes": Array [
     <a
@@ -32,10 +32,10 @@ ShallowWrapper {
       <Icon
             className=""
             color=""
-            name=""
+            name="menu-default-interface"
+            size=""
             style={Object {}}
       />
-      title
 </a>,
   ],
   "options": Object {},
@@ -45,6 +45,7 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <MenuItem
+        icon=""
         interfaceType=""
         isActive={false}
         menuType="primary"
@@ -59,6 +60,7 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "icon": "",
           "interfaceType": "",
           "isActive": false,
           "menuType": "primary",
@@ -95,10 +97,10 @@ ShallowWrapper {
           <Icon
                     className=""
                     color=""
-                    name=""
+                    name="menu-default-interface"
+                    size=""
                     style={Object {}}
           />
-          title
 </a>,
         "_debugID": 4,
         "_renderedOutput": <a
@@ -110,10 +112,10 @@ ShallowWrapper {
           <Icon
                     className=""
                     color=""
-                    name=""
+                    name="menu-default-interface"
+                    size=""
                     style={Object {}}
           />
-          title
 </a>,
       },
       "_renderedNodeType": 0,
@@ -127,6 +129,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <MenuItem
+    icon=""
     interfaceType=""
     isActive={false}
     menuType="primary"
@@ -154,10 +157,10 @@ ShallowWrapper {
     <Icon
         className=""
         color=""
-        name=""
+        name="menu-default-interface"
+        size=""
         style={Object {}}
     />
-    title
 </a>,
   "nodes": Array [
     <a
@@ -169,10 +172,10 @@ ShallowWrapper {
       <Icon
             className=""
             color=""
-            name=""
+            name="menu-default-interface"
+            size=""
             style={Object {}}
       />
-      title
 </a>,
   ],
   "options": Object {},
@@ -182,6 +185,7 @@ ShallowWrapper {
       "_compositeType": 2,
       "_context": Object {},
       "_currentElement": <MenuItem
+        icon=""
         imageType="type"
         interfaceType=""
         isActive={false}
@@ -197,6 +201,7 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "icon": "",
           "imageType": "type",
           "interfaceType": "",
           "isActive": false,
@@ -234,10 +239,10 @@ ShallowWrapper {
           <Icon
                     className=""
                     color=""
-                    name=""
+                    name="menu-default-interface"
+                    size=""
                     style={Object {}}
           />
-          title
 </a>,
         "_debugID": 2,
         "_renderedOutput": <a
@@ -249,10 +254,10 @@ ShallowWrapper {
           <Icon
                     className=""
                     color=""
-                    name=""
+                    name="menu-default-interface"
+                    size=""
                     style={Object {}}
           />
-          title
 </a>,
       },
       "_renderedNodeType": 0,
@@ -266,6 +271,7 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <MenuItem
+    icon=""
     imageType="type"
     interfaceType=""
     isActive={false}

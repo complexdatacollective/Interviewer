@@ -166,7 +166,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export { NodeLayout as NodeLayoutPure };
+export { NodeLayout };
 
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),

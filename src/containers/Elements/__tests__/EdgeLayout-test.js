@@ -20,7 +20,9 @@ const mockEdgeCoords = [
 
 const mockProps = {
   stage: {},
-  prompt: {},
+  prompt: {
+    edges: {},
+  },
   edgeCoords: mockEdgeCoords,
 };
 

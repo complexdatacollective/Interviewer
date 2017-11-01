@@ -42,4 +42,6 @@ function makeMapStateToProps() {
   };
 }
 
+export { SociogramBackground };
+
 export default connect(makeMapStateToProps)(SociogramBackground);

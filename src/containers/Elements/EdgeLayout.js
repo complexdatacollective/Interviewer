@@ -24,6 +24,14 @@ const renderEdges = (edges, color) =>
   );
 
 export class EdgeLayout extends PureComponent {
+  static propTypes = {
+    displayEdges: PropTypes.array,
+  };
+
+  static defaultProps = {
+    displayEdges: [],
+  };
+
   render() {
     const { displayEdges } = this.props;
     const color = colorDictionary['edge-base'];
@@ -37,10 +45,6 @@ export class EdgeLayout extends PureComponent {
     );
   }
 }
-
-EdgeLayout.propTypes = {
-  displayEdges: PropTypes.array.isRequired,
-};
 
 function makeMapStateToProps() {
   const displayEdgesForPrompt = makeDisplayEdgesForPrompt();

@@ -105,5 +105,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export { LayoutNode as LayoutNodePure };
+export { LayoutNode };
 export default connect(null, mapDispatchToProps)(LayoutNode);

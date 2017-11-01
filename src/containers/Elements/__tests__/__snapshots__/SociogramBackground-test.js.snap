@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SociogramBackground /> renders ok for image 1`] = `
+exports[`<SociowgramBackground /> renders ok for image 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -38,23 +38,43 @@ ShallowWrapper {
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
+      "_compositeType": 1,
       "_context": Object {},
       "_currentElement": <SociogramBackground
+        allowPositioning={false}
+        allowSelect={false}
+        canCreateEdge={false}
+        canHighlight={false}
+        concentricCircles={0}
+        createEdge="bar"
+        displayEdges={Array []}
+        highlightAttributes={Object {}}
         image="map.png"
-        n={4}
-        skewed={true}
+        layoutVariable="foo"
+        nodeBinSortOrder={Object {}}
+        selectMode=""
+        skewedTowardCenter={false}
 />,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": SociogramBackground {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "allowPositioning": false,
+          "allowSelect": false,
+          "canCreateEdge": false,
+          "canHighlight": false,
+          "concentricCircles": 0,
+          "createEdge": "bar",
+          "displayEdges": Array [],
+          "highlightAttributes": Object {},
           "image": "map.png",
-          "n": 4,
-          "skewed": true,
+          "layoutVariable": "foo",
+          "nodeBinSortOrder": Object {},
+          "selectMode": "",
+          "skewedTowardCenter": false,
         },
         "refs": Object {},
         "state": null,
@@ -113,14 +133,24 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <SociogramBackground
+    allowPositioning={false}
+    allowSelect={false}
+    canCreateEdge={false}
+    canHighlight={false}
+    concentricCircles={0}
+    createEdge="bar"
+    displayEdges={Array []}
+    highlightAttributes={Object {}}
     image="map.png"
-    n={4}
-    skewed={true}
+    layoutVariable="foo"
+    nodeBinSortOrder={Object {}}
+    selectMode=""
+    skewedTowardCenter={false}
 />,
 }
 `;
 
-exports[`<SociogramBackground /> renders ok for radar 1`] = `
+exports[`<SociowgramBackground /> renders ok for radar 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -132,7 +162,7 @@ ShallowWrapper {
     className="sociogram-background"
 >
     <SociogramRadar
-        n={5}
+        n={4}
         skewed={true}
     />
 </div>,
@@ -141,7 +171,7 @@ ShallowWrapper {
       className="sociogram-background"
 >
       <SociogramRadar
-            n={5}
+            n={4}
             skewed={true}
       />
 </div>,
@@ -150,23 +180,43 @@ ShallowWrapper {
   "renderer": ReactShallowRenderer {
     "_instance": ShallowComponentWrapper {
       "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
+      "_compositeType": 1,
       "_context": Object {},
       "_currentElement": <SociogramBackground
+        allowPositioning={false}
+        allowSelect={false}
+        canCreateEdge={false}
+        canHighlight={false}
+        concentricCircles={4}
+        createEdge="bar"
+        displayEdges={Array []}
+        highlightAttributes={Object {}}
         image={null}
-        n={5}
-        skewed={true}
+        layoutVariable="foo"
+        nodeBinSortOrder={Object {}}
+        selectMode=""
+        skewedTowardCenter={true}
 />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": SociogramBackground {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "allowPositioning": false,
+          "allowSelect": false,
+          "canCreateEdge": false,
+          "canHighlight": false,
+          "concentricCircles": 4,
+          "createEdge": "bar",
+          "displayEdges": Array [],
+          "highlightAttributes": Object {},
           "image": null,
-          "n": 5,
-          "skewed": true,
+          "layoutVariable": "foo",
+          "nodeBinSortOrder": Object {},
+          "selectMode": "",
+          "skewedTowardCenter": true,
         },
         "refs": Object {},
         "state": null,
@@ -192,7 +242,7 @@ ShallowWrapper {
           className="sociogram-background"
 >
           <SociogramRadar
-                    n={5}
+                    n={4}
                     skewed={true}
           />
 </div>,
@@ -201,7 +251,7 @@ ShallowWrapper {
           className="sociogram-background"
 >
           <SociogramRadar
-                    n={5}
+                    n={4}
                     skewed={true}
           />
 </div>,
@@ -217,9 +267,19 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <SociogramBackground
+    allowPositioning={false}
+    allowSelect={false}
+    canCreateEdge={false}
+    canHighlight={false}
+    concentricCircles={4}
+    createEdge="bar"
+    displayEdges={Array []}
+    highlightAttributes={Object {}}
     image={null}
-    n={5}
-    skewed={true}
+    layoutVariable="foo"
+    nodeBinSortOrder={Object {}}
+    selectMode=""
+    skewedTowardCenter={true}
 />,
 }
 `;

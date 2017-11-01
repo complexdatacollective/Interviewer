@@ -4,7 +4,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
-import NodeForm from '../NodeForm';
+import NodeForm, { NodeForm as NodeFormPure } from '../NodeForm';
 
 window.matchMedia = window.matchMedia || (() => ({
   matches: false, addListener: () => {}, removeListener: () => {},
@@ -14,28 +14,18 @@ const node = {
   foo: 'bar',
 };
 
-const registry = {
-  foo: {
-    type: 'string',
-    label: 'Foo',
+const variableRegistry = {
+  node: {
+    person: {
+      variables: {
+        foo: {
+          type: 'string',
+          label: 'Foo',
+        },
+      },
+    },
   },
 };
-
-const mockStore = () =>
-  createStore(
-    () => (
-      {
-        protocol: {
-          config: {
-            registry,
-          },
-        },
-        modals: [
-          { name: 'baz', open: true },
-        ],
-      }
-    ),
-  );
 
 const mockProps = {
   name: 'baz',
@@ -45,12 +35,32 @@ const mockProps = {
     variable: 'foo',
     component: 'TextInput',
   }],
+  entity: 'node',
+  type: 'person',
+  closeModal: () => {},
+  openModal: () => {},
+  resetValues: () => {},
+  initialValues: {},
 };
+
+const mockStore = () =>
+  createStore(
+    () => (
+      {
+        protocol: {
+          variableRegistry,
+        },
+        modals: [
+          { name: 'baz', open: true },
+        ],
+      }
+    ),
+  );
 
 describe('<NodeForm />', () => {
   it('should render', () => {
     const subject = shallow((
-      <NodeForm {...mockProps} store={mockStore()} />
+      <NodeFormPure {...mockProps} />
     ));
 
     expect(subject).toMatchSnapshot();
