@@ -27,9 +27,9 @@ describe('session reducer', () => {
         protocol: {
           config: {
             stages: [
-              { params: { prompts: Array(3) } },
-              { params: { prompts: Array(1) } },
-              { params: { prompts: Array(2) } },
+              { prompts: Array(3) },
+              { prompts: Array(1) },
+              { prompts: Array(2) },
             ],
           },
         },

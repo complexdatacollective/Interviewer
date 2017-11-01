@@ -43,8 +43,8 @@ class StageMenu extends Component {
     const items = filteredList.map(filteredStage =>
       ({
         id: filteredStage.id,
-        title: filteredStage.title,
-        interfaceType: (typeof filteredStage.icon === 'string' && filteredStage.icon) || 'menu-custom-interface',
+        label: filteredStage.label,
+        interfaceType: filteredStage.type,
         isActive: currentStage === filteredStage,
         onClick: () => onStageClick(currentStages, filteredStage.id),
       }));

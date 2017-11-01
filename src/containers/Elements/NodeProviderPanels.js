@@ -19,15 +19,15 @@ const colorPresets = [
 const panelPresets = {
   existing: {
     type: 'existing',
-    title: 'People from your existing lists',
+    title: 'Already mentioned',
     source: 'existing',
     selectable: true,
     filter: network => network,
   },
-  previous: {
-    type: 'previous',
+  external: {
+    type: 'external',
     title: 'People from your previous visit',
-    source: 'previous',
+    source: 'external',
     draggable: true,
     filter: network => network,
   },
@@ -42,7 +42,7 @@ const rehydratePreset = (panelConfig) => {
   return panelConfig;
 };
 
-const propPanelConfigs = (_, props) => props.stage.params.panels;
+const propPanelConfigs = (_, props) => props.stage.panels;
 
 const makeGetProviderConfigsWithNodes = () => {
   const otherNetworkNodesWithStageNodeType = makeOtherNetworkNodesWithStageNodeType();
