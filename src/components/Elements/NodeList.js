@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
@@ -18,10 +19,12 @@ const NodeList = ({
   handleDropNode,
   draggableType,
   hover,
+  isDragging,
 }) => {
   const classNames = cx(
     'node-list',
     { 'node-list--hover': hover },
+    { 'node-list--drag': isDragging },
   );
 
   return (
@@ -63,6 +66,7 @@ NodeList.propTypes = {
   selected: PropTypes.func,
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
+  isDragging: PropTypes.bool.isRequired,
 };
 
 NodeList.defaultProps = {
@@ -75,4 +79,10 @@ NodeList.defaultProps = {
   hover: false,
 };
 
-export default droppable(scrollable(NodeList));
+function mapStateToProps(state) {
+  return {
+    isDragging: state.draggable.isDragging,
+  };
+}
+
+export default connect(mapStateToProps)(droppable(scrollable(NodeList)));
