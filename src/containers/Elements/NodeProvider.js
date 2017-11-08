@@ -17,6 +17,7 @@ class NodeProvider extends Component {
     newNodeAttributes: PropTypes.object.isRequired,
     activePromptAttributes: PropTypes.object.isRequired,
     nodes: PropTypes.array.isRequired,
+    nodeColor: PropTypes.string,
     interaction: PropTypes.string.isRequired,
     addNode: PropTypes.func.isRequired,
     removeNode: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ class NodeProvider extends Component {
   };
 
   static defaultProps = {
+    nodeColor: null,
     onUpdateNodes: () => {},
   };
 
@@ -60,6 +62,7 @@ class NodeProvider extends Component {
     const {
       interaction,
       nodes,
+      nodeColor,
     } = this.props;
 
     const label = node => `${node.nickname}`;
@@ -70,6 +73,7 @@ class NodeProvider extends Component {
         return (
           <NodeList
             nodes={nodes}
+            nodeColor={nodeColor}
             label={label}
             draggableType="EXISTING_NODE"
             handleDropNode={this.handleDropNode}
@@ -81,6 +85,7 @@ class NodeProvider extends Component {
         return (
           <NodeList
             nodes={nodes}
+            nodeColor={nodeColor}
             label={label}
             draggableType="NEW_NODE"
             handleDropNode={this.onDropNode}

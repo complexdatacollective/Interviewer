@@ -13,6 +13,7 @@ const EnhancedNode = draggable(selectable(Node));
   */
 const NodeList = ({
   nodes,
+  nodeColor,
   label,
   selected,
   handleSelectNode,
@@ -44,6 +45,7 @@ const NodeList = ({
         nodes.map(node => (
           <span key={node.uid}>
             <EnhancedNode
+              color={nodeColor}
               label={label(node)}
               selected={selected(node)}
               onSelected={() => handleSelectNode(node)}
@@ -60,6 +62,7 @@ const NodeList = ({
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
+  nodeColor: PropTypes.string,
   handleSelectNode: PropTypes.func,
   handleDropNode: PropTypes.func,
   label: PropTypes.func,
@@ -71,6 +74,7 @@ NodeList.propTypes = {
 
 NodeList.defaultProps = {
   nodes: [],
+  nodeColor: '',
   label: () => (''),
   selected: () => false,
   handleSelectNode: () => {},

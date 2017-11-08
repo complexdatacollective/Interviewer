@@ -45,7 +45,7 @@ const getPanelConfigs = createSelector(
 );
 
 const getHighlight = (provider, panelNumber) => {
-  if (provider.highlight) { return provider.highlight; }
+  if (provider.highlight) { return colorDictionary[provider.highlight]; }
   if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
   return null;
 };
@@ -98,6 +98,7 @@ class NodeProviderPanels extends PureComponent {
               stage={stage}
               prompt={prompt}
               onUpdateNodes={nodes => this.onUpdatePanelState(panelIndex, nodes.length !== 0)}
+              nodeColor={panel.nodeColor}
             />
           </Panel>
         )) }
