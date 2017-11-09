@@ -19,13 +19,11 @@ const panelPresets = {
   existing: {
     title: 'Already mentioned',
     dataSource: 'existing',
-    selectable: true,
     filter: network => network,
   },
   external: {
     title: 'People from your previous visit',
     dataSource: 'previousInterview',
-    draggable: true,
     filter: network => network,
   },
 };

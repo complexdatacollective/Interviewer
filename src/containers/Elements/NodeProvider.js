@@ -19,7 +19,7 @@ class NodeProvider extends Component {
     nodes: PropTypes.array.isRequired,
     nodeColor: PropTypes.string,
     interaction: PropTypes.string.isRequired,
-    addNode: PropTypes.func.isRequired,
+    addOrUpdateNode: PropTypes.func.isRequired,
     removeNode: PropTypes.func.isRequired,
     toggleNodeAttributes: PropTypes.func.isRequired,
     onUpdateNodes: PropTypes.func,
@@ -45,10 +45,11 @@ class NodeProvider extends Component {
   }
 
   onDropNode = (hits, node) => {
+    // TODO add OR update???
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'MAIN_NODE_LIST':
-          this.props.addNode({ ...this.props.newNodeAttributes, ...node });
+          this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...node });
           break;
         case 'NODE_BIN':
           this.props.removeNode(node.uid);
@@ -113,7 +114,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch),
+    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
