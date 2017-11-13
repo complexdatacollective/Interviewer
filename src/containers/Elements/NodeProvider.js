@@ -45,7 +45,6 @@ class NodeProvider extends Component {
   }
 
   onDropNode = (hits, node) => {
-    // TODO add OR update???
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'MAIN_NODE_LIST':
@@ -82,6 +81,18 @@ class NodeProvider extends Component {
             selected={selected}
           />
         );
+      case 'droppable':
+        return (
+          <NodeList
+            nodes={nodes}
+            nodeColor={nodeColor}
+            label={label}
+            draggableType="NEW_NODE"
+            handleDropNode={this.onDropNode}
+            droppableName="NODE_PROVIDER"
+            acceptsDraggableType="EXISTING_NODE"
+          />
+        );
       default:
         return (
           <NodeList
@@ -101,7 +112,10 @@ function makeMapStateToProps() {
   const getProviderNodes = makeGetProviderNodes();
 
   return function mapStateToProps(state, props) {
-    const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
+    const interaction = (props.selectable && 'selectable') ||
+      (props.draggable && 'draggable') ||
+      (props.droppable && 'droppable') ||
+      'none';
 
     return {
       activePromptAttributes: props.prompt.additionalAttributes,

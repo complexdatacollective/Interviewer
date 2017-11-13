@@ -83,9 +83,10 @@ NodeList.defaultProps = {
   hover: false,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    isDragging: state.draggable.isDragging,
+    isDragging: state.draggable.isDragging &&
+      state.draggable.draggableType === ownProps.acceptsDraggableType,
   };
 }
 

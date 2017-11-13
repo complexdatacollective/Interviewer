@@ -63,4 +63,9 @@ $heading-size: 100px;
       height: 0;
     }
   }
+
+  & .node-list--hover,
+  & .node-list--drag {
+    background-color: transparentize(palette('selected'), .95);
+  }
 }

@@ -19,6 +19,7 @@ const panelPresets = {
   existing: {
     title: 'Already mentioned',
     dataSource: 'existing',
+    droppable: true,
     filter: network => network,
   },
   external: {
