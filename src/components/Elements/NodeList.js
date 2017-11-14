@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -11,54 +11,67 @@ const EnhancedNode = draggable(selectable(Node));
 /**
   * Renders a list of Node.
   */
-const NodeList = ({
-  nodes,
-  nodeColor,
-  label,
-  selected,
-  handleSelectNode,
-  handleDropNode,
-  draggableType,
-  hover,
-  isDragging,
-}) => {
-  const classNames = cx(
-    'node-list',
-    { 'node-list--hover': hover },
-    { 'node-list--drag': isDragging },
-  );
+class NodeList extends Component {
+  componentDidMount() {
+    this.props.showPanelAlways(this.props.isDragging);
+  }
 
-  return (
-    <StaggeredTransitionGroup
-      className={classNames}
-      component="div"
-      delay={animation.duration.fast * 0.2}
-      duration={animation.duration.slow}
-      start={animation.duration.slow + 3}
-      transitionName="node-list--transition"
-      transitionLeave={false}
-    >
-      { hover &&
-        <Node key="placeholder" placeholder />
-      }
-      {
-        nodes.map(node => (
-          <span key={node.uid}>
-            <EnhancedNode
-              color={nodeColor}
-              label={label(node)}
-              selected={selected(node)}
-              onSelected={() => handleSelectNode(node)}
-              onDropped={hits => handleDropNode(hits, node)}
-              draggableType={draggableType}
-              {...node}
-            />
-          </span>
-        ))
-      }
-    </StaggeredTransitionGroup>
-  );
-};
+  componentWillReceiveProps(props) {
+    if (props.isDragging !== this.props.isDragging) {
+      props.showPanelAlways(props.isDragging);
+    }
+  }
+
+  render() {
+    const { nodes,
+      nodeColor,
+      label,
+      selected,
+      handleSelectNode,
+      handleDropNode,
+      draggableType,
+      hover,
+      isDragging,
+    } = this.props;
+
+    const classNames = cx(
+      'node-list',
+      { 'node-list--hover': hover },
+      { 'node-list--drag': isDragging },
+    );
+
+    return (
+      <StaggeredTransitionGroup
+        className={classNames}
+        component="div"
+        delay={animation.duration.fast * 0.2}
+        duration={animation.duration.slow}
+        start={animation.duration.slow + 3}
+        transitionName="node-list--transition"
+        transitionLeave={false}
+      >
+        { hover &&
+          <Node key="placeholder" placeholder />
+        }
+        {
+          nodes.map(node => (
+            <span key={node.uid}>
+              <EnhancedNode
+                color={nodeColor}
+                label={label(node)}
+                selected={selected(node)}
+                onSelected={() => handleSelectNode(node)}
+                onDropped={hits => handleDropNode(hits, node)}
+                draggableType={draggableType}
+                {...node}
+              />
+            </span>
+          ))
+        }
+      </StaggeredTransitionGroup>
+    );
+  }
+}
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
@@ -70,6 +83,7 @@ NodeList.propTypes = {
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  showPanelAlways: PropTypes.func,
 };
 
 NodeList.defaultProps = {
@@ -81,6 +95,7 @@ NodeList.defaultProps = {
   handleDropNode: () => {},
   draggableType: '',
   hover: false,
+  showPanelAlways: () => {},
 };
 
 function mapStateToProps(state, ownProps) {

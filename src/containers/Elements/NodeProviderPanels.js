@@ -57,14 +57,15 @@ class NodeProviderPanels extends PureComponent {
     super(props);
 
     this.state = {
-      panels: map(props.panels, () => true),
+      panelsOpen: map(props.panels, () => true),
+      panelsAlwaysOpen: map(props.panels, () => false),
     };
   }
 
   onUpdatePanelState = (updateIndex, state) => {
     this.setState(previousState => ({
-      panels: map(
-        previousState.panels,
+      panelsOpen: map(
+        previousState.panelsOpen,
         (item, index) => {
           if (updateIndex === index) { return state; }
           return item;
@@ -73,10 +74,29 @@ class NodeProviderPanels extends PureComponent {
     }));
   }
 
-  isPanelOpen = index => this.state.panels[index];
+  showPanelAlwaysOpen = (panelIndex, show) => {
+    this.setState(previousState => ({
+      panelsAlwaysOpen: map(
+        previousState.panelsAlwaysOpen,
+        (item, index) => {
+          if (panelIndex === index) { return show; }
+          return item;
+        },
+      ),
+    }));
+  };
+
+  isPanelAlwaysOpen = index => this.state.panelsAlwaysOpen[index];
+
+  anyPanelAlwaysOpen = () => some(
+    map(this.state.panelsAlwaysOpen, (value, index) => this.isPanelAlwaysOpen(index)),
+    show => show === true,
+  );
+
+  isPanelOpen = index => this.state.panelsOpen[index];
 
   anyPanelOpen = () => some(
-    map(this.state.panels, (value, index) => this.isPanelOpen(index)),
+    map(this.state.panelsOpen, (value, index) => this.isPanelOpen(index)),
     open => open === true,
   );
 
@@ -84,12 +104,12 @@ class NodeProviderPanels extends PureComponent {
     const { panels, stage, prompt } = this.props;
 
     return (
-      <Panels minimise={!this.anyPanelOpen()}>
+      <Panels minimise={!this.anyPanelAlwaysOpen() && !this.anyPanelOpen()}>
         { panels.map((panel, panelIndex) => (
           <Panel
             title={panel.title}
             key={panelIndex}
-            minimise={!this.isPanelOpen(panelIndex)}
+            minimise={!this.isPanelAlwaysOpen(panelIndex) && !this.isPanelOpen(panelIndex)}
             highlight={getHighlight(panel, panelIndex)}
           >
             <NodeProvider
@@ -97,6 +117,7 @@ class NodeProviderPanels extends PureComponent {
               stage={stage}
               prompt={prompt}
               onUpdateNodes={nodes => this.onUpdatePanelState(panelIndex, nodes.length !== 0)}
+              showPanelAlways={show => this.showPanelAlwaysOpen(panelIndex, show)}
               nodeColor={panel.nodeColor}
             />
           </Panel>
