@@ -3,6 +3,7 @@ import { actionTypes as draggableActions } from './draggable';
 
 const UPDATE_ZONE = 'UPDATE_ZONE';
 const UPDATE_ACTIVE_ZONES = 'UPDATE_ACTIVE_ZONES';
+const UPDATE_ACCEPTED_TYPE = 'UPDATE_ACCEPTED_TYPE';
 
 const initialState = {
   zones: [],
@@ -25,6 +26,15 @@ export default function reducer(state = initialState, action = {}) {
           ...state,
           activeZones: action.zones,
         });
+    case UPDATE_ACCEPTED_TYPE: {
+      const oldZone = state.zones.find(zone => zone.name === action.name);
+      oldZone.acceptsDraggableType = action.acceptedType;
+      const zones = [...reject(state.zones, ['name', action.name]), oldZone];
+      return {
+        ...state,
+        zones,
+      };
+    }
     case draggableActions.DRAG_STOP:
       return {
         ...state,
@@ -49,14 +59,24 @@ function updateActiveZones(zones) {
   };
 }
 
+function updateAcceptedType(name, acceptedType) {
+  return {
+    type: UPDATE_ACCEPTED_TYPE,
+    name,
+    acceptedType,
+  };
+}
+
 const actionCreators = {
   updateZone,
   updateActiveZones,
+  updateAcceptedType,
 };
 
 const actionTypes = {
   UPDATE_ZONE,
   UPDATE_ACTIVE_ZONES,
+  UPDATE_ACCEPTED_TYPE,
 };
 
 export {

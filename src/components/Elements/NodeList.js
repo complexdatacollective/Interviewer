@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { isEqual } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
@@ -99,9 +100,12 @@ NodeList.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
+  const isOrigin = isEqual(state.draggable.draggingFromIds, ownProps.currentIds);
+
   return {
     isDragging: state.draggable.isDragging &&
-      state.draggable.draggableType === ownProps.acceptsDraggableType,
+      state.draggable.draggableType === ownProps.acceptsDraggableType &&
+      !isOrigin,
   };
 }
 

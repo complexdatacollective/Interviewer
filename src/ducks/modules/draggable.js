@@ -4,6 +4,7 @@ const DRAG_STOP = 'DRAG_STOP';
 const initialState = {
   isDragging: false,
   draggableType: '',
+  draggingFromIds: {},
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -13,22 +14,25 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         isDragging: true,
         draggableType: action.draggableType,
+        draggingFromIds: action.draggingFromIds,
       };
     case DRAG_STOP:
       return {
         ...state,
         isDragging: false,
         draggableType: '',
+        draggingFromIds: {},
       };
     default:
       return state;
   }
 }
 
-function dragStart(draggableType) {
+function dragStart(draggableType, draggingFromIds) {
   return {
     type: DRAG_START,
     draggableType,
+    draggingFromIds,
   };
 }
 

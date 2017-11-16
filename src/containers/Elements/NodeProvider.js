@@ -24,6 +24,8 @@ class NodeProvider extends Component {
     toggleNodeAttributes: PropTypes.func.isRequired,
     onUpdateNodes: PropTypes.func,
     showPanelAlways: PropTypes.func,
+    currentIds: PropTypes.object.isRequired,
+    isOrigin: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -66,10 +68,13 @@ class NodeProvider extends Component {
       nodes,
       nodeColor,
       showPanelAlways,
+      currentIds,
+      isOrigin,
     } = this.props;
 
     const label = node => `${node.nickname}`;
     const selected = node => isMatch(node, this.props.activePromptAttributes);
+    const nodeType = isOrigin ? null : 'EXISTING_NODE';
 
     switch (interaction) {
       case 'selectable':
@@ -82,6 +87,7 @@ class NodeProvider extends Component {
             handleDropNode={this.handleDropNode}
             handleSelectNode={this.onSelectNode}
             selected={selected}
+            currentIds={currentIds}
           />
         );
       case 'droppable':
@@ -93,8 +99,9 @@ class NodeProvider extends Component {
             draggableType="NEW_NODE"
             handleDropNode={this.onDropNode}
             droppableName="NODE_PROVIDER"
-            acceptsDraggableType="EXISTING_NODE"
+            acceptsDraggableType={nodeType}
             showPanelAlways={showPanelAlways}
+            currentIds={currentIds}
           />
         );
       default:
@@ -105,6 +112,7 @@ class NodeProvider extends Component {
             label={label}
             draggableType="NEW_NODE"
             handleDropNode={this.onDropNode}
+            currentIds={currentIds}
           />
         );
     }
@@ -116,6 +124,9 @@ function makeMapStateToProps() {
   const getProviderNodes = makeGetProviderNodes();
 
   return function mapStateToProps(state, props) {
+    const currentIds = { promptId: props.prompt.id, stageId: props.stage.id };
+    const isOrigin = isEqual(state.draggable.draggingFromIds, currentIds);
+
     const interaction = (props.selectable && 'selectable') ||
       (props.draggable && 'draggable') ||
       (props.droppable && 'droppable') ||
@@ -125,6 +136,8 @@ function makeMapStateToProps() {
       activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodes: getProviderNodes(state, props),
+      currentIds,
+      isOrigin,
       interaction,
     };
   };

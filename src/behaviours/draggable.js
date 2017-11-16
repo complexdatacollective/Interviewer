@@ -178,7 +178,7 @@ export default function draggable(WrappedComponent) {
     detectDragStart = (movement) => {
       if (this.state.type === 'DRAG' && !this.preview && movement.distance > 4) {
         this.setState({ dragStart: true }, () => {
-          this.props.dragStart(this.props.draggableType);
+          this.props.dragStart(this.props.draggableType, this.props.originIds);
           this.createPreview();
         });
       }
@@ -288,6 +288,7 @@ export default function draggable(WrappedComponent) {
     onDropped: PropTypes.func,
     onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
+    originIds: PropTypes.object,
     canDrag: PropTypes.bool,
   };
 
@@ -296,11 +297,13 @@ export default function draggable(WrappedComponent) {
     animate: false,
     onDropped: () => {},
     onMove: () => {},
+    originIds: {},
   };
 
-  function mapStateToProps(state) {
+  function mapStateToProps(state, props) {
     return {
       zones: state.droppable.zones,
+      originIds: { promptId: props.promptId, stageId: props.stageId },
     };
   }
 
