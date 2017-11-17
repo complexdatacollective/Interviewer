@@ -21,6 +21,7 @@ ShallowWrapper {
             Symbol(observable): [Function],
           }
     }
+    updateAcceptedType={[Function]}
     updateZone={[Function]}
 />,
   "nodes": Array [
@@ -37,6 +38,7 @@ ShallowWrapper {
                   Symbol(observable): [Function],
                 }
       }
+      updateAcceptedType={[Function]}
       updateZone={[Function]}
 />,
   ],
@@ -67,6 +69,7 @@ ShallowWrapper {
           "store": undefined,
         },
         "dispatchProps": Object {
+          "updateAcceptedType": [Function],
           "updateZone": [Function],
         },
         "doDispatchPropsDependOnOwnProps": false,
@@ -86,6 +89,7 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           },
+          "updateAcceptedType": [Function],
           "updateZone": [Function],
         },
         "props": Object {
@@ -112,6 +116,7 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          updateAcceptedType={[Function]}
           updateZone={[Function]}
 />,
         "state": Object {
@@ -164,6 +169,7 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          updateAcceptedType={[Function]}
           updateZone={[Function]}
 />,
         "_debugID": 2,
@@ -180,6 +186,7 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
+          updateAcceptedType={[Function]}
           updateZone={[Function]}
 />,
       },

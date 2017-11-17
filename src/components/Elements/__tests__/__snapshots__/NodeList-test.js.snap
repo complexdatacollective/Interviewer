@@ -8,10 +8,9 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <Droppable
-    acceptsDraggableType={null}
-    droppableName={null}
-    hover={false}
+  "node": <Connect(Droppable)
+    dispatch={[Function]}
+    isDragging={undefined}
     store={
         Object {
             "dispatch": [Function],
@@ -21,13 +20,11 @@ ShallowWrapper {
             Symbol(observable): [Function],
           }
     }
-    updateZone={[Function]}
 />,
   "nodes": Array [
-    <Droppable
-      acceptsDraggableType={null}
-      droppableName={null}
-      hover={false}
+    <Connect(Droppable)
+      dispatch={[Function]}
+      isDragging={undefined}
       store={
             Object {
                   "dispatch": [Function],
@@ -37,7 +34,6 @@ ShallowWrapper {
                   Symbol(observable): [Function],
                 }
       }
-      updateZone={[Function]}
 />,
   ],
   "options": Object {},
@@ -46,7 +42,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(Droppable)
+      "_currentElement": <Connect(Connect(Droppable))
         store={
                 Object {
                         "dispatch": [Function],
@@ -66,7 +62,7 @@ ShallowWrapper {
           "store": undefined,
         },
         "dispatchProps": Object {
-          "updateZone": [Function],
+          "dispatch": [Function],
         },
         "doDispatchPropsDependOnOwnProps": false,
         "doStatePropsDependOnOwnProps": true,
@@ -76,7 +72,8 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "hover": false,
+          "dispatch": [Function],
+          "isDragging": undefined,
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -84,7 +81,6 @@ ShallowWrapper {
             "subscribe": [Function],
             Symbol(observable): [Function],
           },
-          "updateZone": [Function],
         },
         "props": Object {
           "store": Object {
@@ -96,10 +92,9 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "renderedElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
+        "renderedElement": <Connect(Droppable)
+          dispatch={[Function]}
+          isDragging={undefined}
           store={
                     Object {
                               "dispatch": [Function],
@@ -109,17 +104,19 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]}
 />,
         "state": Object {
           "storeState": Object {
+            "draggable": Object {
+              "draggingFromIds": Object {},
+            },
             "droppable": Object {
               "activeZones": Array [],
             },
           },
         },
         "stateProps": Object {
-          "hover": false,
+          "isDragging": undefined,
         },
         "statePropsPrecalculationError": null,
         "store": Object {
@@ -148,10 +145,9 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
+        "_currentElement": <Connect(Droppable)
+          dispatch={[Function]}
+          isDragging={undefined}
           store={
                     Object {
                               "dispatch": [Function],
@@ -161,13 +157,11 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]}
 />,
         "_debugID": 2,
-        "_renderedOutput": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
+        "_renderedOutput": <Connect(Droppable)
+          dispatch={[Function]}
+          isDragging={undefined}
           store={
                     Object {
                               "dispatch": [Function],
@@ -177,7 +171,6 @@ ShallowWrapper {
                               Symbol(observable): [Function],
                             }
           }
-          updateZone={[Function]}
 />,
       },
       "_renderedNodeType": 1,
@@ -190,7 +183,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(Droppable)
+  "unrendered": <Connect(Connect(Droppable))
     store={
         Object {
             "dispatch": [Function],

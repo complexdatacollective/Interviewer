@@ -10,9 +10,9 @@ const imageType = 'type';
 const title = 'title';
 
 describe('MenuItem component', () => {
-  it('renders menu item with title', () => {
+  it('renders menu item with label', () => {
     const component = shallow(
-      <MenuItem to={toLink} onClick={onClick} imageType={imageType} title={title} />,
+      <MenuItem to={toLink} onClick={onClick} imageType={imageType} label={title} />,
     );
 
     expect(component).toMatchSnapshot();
@@ -20,7 +20,7 @@ describe('MenuItem component', () => {
 
   it('renders menu item with no image', () => {
     const component = shallow(
-      <MenuItem to={toLink} onClick={onClick} title={title} />,
+      <MenuItem to={toLink} onClick={onClick} label={title} />,
     );
 
     expect(component).toMatchSnapshot();
