@@ -254,7 +254,7 @@ export default function draggable(WrappedComponent) {
     }
 
     styles() {
-      return this.state.dragStart ? { opacity: 0, width: 0, height: 0 } : { opacity: 1 };
+      return this.state.dragStart ? { visibility: 'hidden' } : { visibility: 'initial' };
     }
 
     render() {
