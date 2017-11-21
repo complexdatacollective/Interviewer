@@ -15,12 +15,12 @@ const EnhancedNode = draggable(selectable(Node));
   */
 class NodeList extends Component {
   componentDidMount() {
-    this.props.showPanelAlways(this.props.isDragging);
+    this.props.onDrag(this.props.isDragging);
   }
 
   componentWillReceiveProps(props) {
     if (props.isDragging !== this.props.isDragging) {
-      props.showPanelAlways(props.isDragging);
+      props.onDrag(props.isDragging);
     }
   }
 
@@ -85,7 +85,7 @@ NodeList.propTypes = {
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
-  showPanelAlways: PropTypes.func,
+  onDrag: PropTypes.func,
 };
 
 NodeList.defaultProps = {
@@ -97,7 +97,7 @@ NodeList.defaultProps = {
   handleDropNode: () => {},
   draggableType: '',
   hover: false,
-  showPanelAlways: () => {},
+  onDrag: () => {},
 };
 
 function mapStateToProps(state, ownProps) {

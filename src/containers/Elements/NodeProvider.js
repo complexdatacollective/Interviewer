@@ -23,7 +23,7 @@ class NodeProvider extends Component {
     removeNode: PropTypes.func.isRequired,
     toggleNodeAttributes: PropTypes.func.isRequired,
     onUpdateNodes: PropTypes.func,
-    showPanelAlways: PropTypes.func,
+    onDrag: PropTypes.func,
     currentIds: PropTypes.object.isRequired,
     isOrigin: PropTypes.bool.isRequired,
   };
@@ -31,7 +31,7 @@ class NodeProvider extends Component {
   static defaultProps = {
     nodeColor: null,
     onUpdateNodes: () => {},
-    showPanelAlways: () => {},
+    onDrag: () => {},
   };
 
   componentDidMount() {
@@ -67,7 +67,7 @@ class NodeProvider extends Component {
       interaction,
       nodes,
       nodeColor,
-      showPanelAlways,
+      onDrag,
       currentIds,
       isOrigin,
     } = this.props;
@@ -100,7 +100,7 @@ class NodeProvider extends Component {
             handleDropNode={this.onDropNode}
             droppableName="NODE_PROVIDER"
             acceptsDraggableType={nodeType}
-            showPanelAlways={showPanelAlways}
+            onDrag={onDrag}
             currentIds={currentIds}
           />
         );

@@ -74,7 +74,7 @@ class NodeProviderPanels extends PureComponent {
     }));
   }
 
-  showPanelAlwaysOpen = (panelIndex, show) => {
+  onUpdateNodeDragging = (panelIndex, show) => {
     this.setState(previousState => ({
       panelsDragging: map(
         previousState.panelsDragging,
@@ -121,7 +121,7 @@ class NodeProviderPanels extends PureComponent {
               stage={stage}
               prompt={prompt}
               onUpdateNodes={nodes => this.onUpdatePanelState(panelIndex, nodes.length !== 0)}
-              showPanelAlways={show => this.showPanelAlwaysOpen(panelIndex, show)}
+              onDrag={show => this.onUpdateNodeDragging(panelIndex, show)}
               nodeColor={panel.nodeColor}
             />
           </Panel>
