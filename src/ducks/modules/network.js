@@ -1,4 +1,4 @@
-import { maxBy, reject, findIndex, isMatch, omit } from 'lodash';
+import { find, maxBy, reject, findIndex, isMatch, omit } from 'lodash';
 
 const ADD_NODE = 'ADD_NODE';
 const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
@@ -80,7 +80,7 @@ export default function reducer(state = initialState, action = {}) {
     }
     case ADD_OR_UPDATE_NODE: {
       let nodes = state.nodes;
-      if (state.nodes.filter(node => node.uid === action.node.uid).length > 0) {
+      if (find(state.nodes, ['uid', action.node.uid])) {
         nodes = getUpdatedNodes(state.nodes, action.node, action.full);
       } else {
         nodes = getNodesWithAdd(state.nodes, action.node);
