@@ -58,7 +58,7 @@ class NodeProviderPanels extends PureComponent {
 
     this.state = {
       panelsOpen: map(props.panels, () => true),
-      panelsAlwaysOpen: map(props.panels, () => false),
+      panelsDragging: map(props.panels, () => false),
     };
   }
 
@@ -76,8 +76,8 @@ class NodeProviderPanels extends PureComponent {
 
   showPanelAlwaysOpen = (panelIndex, show) => {
     this.setState(previousState => ({
-      panelsAlwaysOpen: map(
-        previousState.panelsAlwaysOpen,
+      panelsDragging: map(
+        previousState.panelsDragging,
         (item, index) => {
           if (panelIndex === index) { return show; }
           return item;
@@ -86,30 +86,34 @@ class NodeProviderPanels extends PureComponent {
     }));
   };
 
-  isPanelAlwaysOpen = index => this.state.panelsAlwaysOpen[index];
+  panelIsDragging = index => this.state.panelsDragging[index];
 
-  anyPanelAlwaysOpen = () => some(
-    map(this.state.panelsAlwaysOpen, (value, index) => this.isPanelAlwaysOpen(index)),
+  panelHasNodes = index => this.state.panelsOpen[index];
+
+  isPanelOpen = index => this.panelHasNodes(index) || this.panelIsDragging(index);
+
+  anyPanelIsDragging = () => some(
+    map(this.state.panelsDragging, (value, index) => this.panelIsDragging(index)),
     show => show === true,
   );
 
-  isPanelOpen = index => this.state.panelsOpen[index];
-
-  anyPanelOpen = () => some(
-    map(this.state.panelsOpen, (value, index) => this.isPanelOpen(index)),
+  anyPanelHasNodes = () => some(
+    map(this.state.panelsOpen, (value, index) => this.panelHasNodes(index)),
     open => open === true,
   );
+
+  anyPanelOpen = () => this.anyPanelHasNodes() || this.anyPanelIsDragging();
 
   render() {
     const { panels, stage, prompt } = this.props;
 
     return (
-      <Panels minimise={!this.anyPanelAlwaysOpen() && !this.anyPanelOpen()}>
+      <Panels minimise={!this.anyPanelOpen()}>
         { panels.map((panel, panelIndex) => (
           <Panel
             title={panel.title}
             key={panelIndex}
-            minimise={!this.isPanelAlwaysOpen(panelIndex) && !this.isPanelOpen(panelIndex)}
+            minimise={!this.isPanelOpen(panelIndex)}
             highlight={getHighlight(panel, panelIndex)}
           >
             <NodeProvider
