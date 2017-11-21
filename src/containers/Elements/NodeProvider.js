@@ -25,7 +25,6 @@ class NodeProvider extends Component {
     onUpdateNodes: PropTypes.func,
     onDrag: PropTypes.func,
     currentIds: PropTypes.object.isRequired,
-    isOrigin: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -69,12 +68,10 @@ class NodeProvider extends Component {
       nodeColor,
       onDrag,
       currentIds,
-      isOrigin,
     } = this.props;
 
     const label = node => `${node.nickname}`;
     const selected = node => isMatch(node, this.props.activePromptAttributes);
-    const nodeType = isOrigin ? null : 'EXISTING_NODE';
 
     switch (interaction) {
       case 'selectable':
@@ -99,7 +96,7 @@ class NodeProvider extends Component {
             draggableType="NEW_NODE"
             handleDropNode={this.onDropNode}
             droppableName="NODE_PROVIDER"
-            acceptsDraggableType={nodeType}
+            acceptsDraggableType="EXISTING_NODE"
             onDrag={onDrag}
             currentIds={currentIds}
           />
@@ -125,7 +122,6 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     const currentIds = { promptId: props.prompt.id, stageId: props.stage.id };
-    const isOrigin = isEqual(state.draggable.draggingFromIds, currentIds);
 
     const interaction = (props.selectable && 'selectable') ||
       (props.draggable && 'draggable') ||
@@ -137,7 +133,6 @@ function makeMapStateToProps() {
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodes: getProviderNodes(state, props),
       currentIds,
-      isOrigin,
       interaction,
     };
   };

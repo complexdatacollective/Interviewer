@@ -34,11 +34,12 @@ class NodeList extends Component {
       draggableType,
       hover,
       isDragging,
+      isOrigin,
     } = this.props;
 
     const classNames = cx(
       'node-list',
-      { 'node-list--hover': hover },
+      { 'node-list--hover': (hover && !isOrigin) },
       { 'node-list--drag': isDragging },
     );
 
@@ -52,7 +53,7 @@ class NodeList extends Component {
         transitionName="node-list--transition"
         transitionLeave={false}
       >
-        { hover &&
+        { hover && !isOrigin && isDragging &&
           <Node key="placeholder" placeholder />
         }
         {
@@ -85,6 +86,7 @@ NodeList.propTypes = {
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
+  isOrigin: PropTypes.bool.isRequired,
   onDrag: PropTypes.func,
 };
 
@@ -107,6 +109,7 @@ function mapStateToProps(state, ownProps) {
     isDragging: state.draggable.isDragging &&
       state.draggable.draggableType === ownProps.acceptsDraggableType &&
       !isOrigin,
+    isOrigin,
   };
 }
 

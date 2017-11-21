@@ -69,12 +69,18 @@ class NameGenerator extends Component {
    * @param {object} node - key/value object containing node object from the network store
    */
   onDropNode = (hits, node) => {
+    const currentPromptId = this.props.prompt.id;
+    const currentStageId = this.props.stage.id;
+
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'NODE_BIN':
           this.props.removeNode(node.uid);
           break;
         case 'NODE_PROVIDER':
+          if (node.promptId === currentPromptId && node.stageId === currentStageId) {
+            return;
+          }
           this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
           break;
         default:

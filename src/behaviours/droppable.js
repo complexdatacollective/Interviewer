@@ -35,12 +35,6 @@ export default function droppable(WrappedComponent) {
       this.updateZone();
     }
 
-    componentDidUpdate(prevProps) {
-      if (prevProps.acceptsDraggableType !== this.props.acceptsDraggableType) {
-        this.props.updateAcceptedType(this.props.droppableName, this.props.acceptsDraggableType);
-      }
-    }
-
     componentWillUnmount() {
       window.removeEventListener('resize', this.onResize);
       this.onResize.cancel();
@@ -85,7 +79,6 @@ export default function droppable(WrappedComponent) {
 
   Droppable.propTypes = {
     updateZone: PropTypes.func.isRequired,
-    updateAcceptedType: PropTypes.func.isRequired,
     droppableName: PropTypes.string,
     acceptsDraggableType: PropTypes.string,
     hover: PropTypes.bool,
@@ -116,7 +109,6 @@ export default function droppable(WrappedComponent) {
   function mapDispatchToProps(dispatch) {
     return {
       updateZone: bindActionCreators(droppableActions.updateZone, dispatch),
-      updateAcceptedType: bindActionCreators(droppableActions.updateAcceptedType, dispatch),
     };
   }
 
