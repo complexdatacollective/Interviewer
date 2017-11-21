@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import cx from 'classnames';
@@ -109,4 +110,8 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(droppable(scrollable(NodeList)));
+export default compose(
+  scrollable,
+  droppable,
+  connect(mapStateToProps),
+)(NodeList);
