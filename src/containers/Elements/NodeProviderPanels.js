@@ -44,7 +44,7 @@ const getPanelConfigs = createSelector(
 );
 
 const getHighlight = (provider, panelNumber) => {
-  if (provider.highlight) { return colorDictionary[provider.highlight]; }
+  if (colorDictionary[provider.highlight]) { return colorDictionary[provider.highlight]; }
   if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
   return null;
 };
