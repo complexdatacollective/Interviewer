@@ -2,32 +2,40 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { DropZone } from '../../components/Elements';
+import { droppable } from '../../behaviours';
 
 /**
   * Renders a droppable NodeBin which accepts `EXISTING_NODE`.
   */
-const NodeBin = ({ isDraggableDeleteable }) => {
+const NodeBin = ({ isDraggableDeleteable, hover }) => {
   const classNames = cx(
     'node-bin',
     { 'node-bin--active': isDraggableDeleteable },
+    { 'node-bin--hover': hover },
   );
 
   return (
-    <DropZone droppableName="NODE_BIN" acceptsDraggableType="EXISTING_NODE">
+    <div className="drop-zone">
       <div className={classNames} />
-    </DropZone>
+    </div>
   );
 };
 
 NodeBin.propTypes = {
+  hover: PropTypes.bool,
   isDraggableDeleteable: PropTypes.bool.isRequired,
+};
+
+NodeBin.defaultProps = {
+  hover: false,
 };
 
 function mapStateToProps(state) {
   return {
+    acceptsDraggableType: 'EXISTING_NODE',
+    droppableName: 'NODE_BIN',
     isDraggableDeleteable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
   };
 }
 
-export default connect(mapStateToProps)(NodeBin);
+export default connect(mapStateToProps)(droppable(NodeBin));
