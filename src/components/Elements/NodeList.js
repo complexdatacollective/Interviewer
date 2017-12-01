@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
+import { isMatch } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
@@ -103,7 +103,7 @@ NodeList.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const isOrigin = isEqual(state.draggable.draggingFromIds, ownProps.currentIds);
+  const isOrigin = ownProps.currentIds && isMatch(state.draggable.meta, ownProps.currentIds);
 
   return {
     isDragging: state.draggable.isDragging &&
