@@ -5,7 +5,7 @@ import { colorDictionary } from 'network-canvas-ui';
 import { createSelector } from 'reselect';
 import { has, map, some } from 'lodash';
 import { Panels, Panel } from '../../components/Elements';
-import { NodePanel } from '../Elements';
+import { NodeProvider } from '../Elements';
 
 const colorPresets = [
   colorDictionary['edge-alt-1'],
@@ -116,7 +116,7 @@ class NodeProviderPanels extends PureComponent {
             minimise={!this.isPanelOpen(panelIndex)}
             highlight={getHighlight(panel, panelIndex)}
           >
-            <NodePanel
+            <NodeProvider
               {...panel}
               stage={stage}
               prompt={prompt}
