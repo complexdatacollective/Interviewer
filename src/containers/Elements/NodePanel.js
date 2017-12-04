@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
+import { isEqual, isMatch } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { makeGetProviderNodes } from '../../selectors/node-provider';
-import { NodeProvider } from '.';
+import NodeList from '../../components/Elements/NodeList';
 
 /**
   * Renders an interactive list of nodes for addition to the network.
@@ -61,7 +61,7 @@ class NodePanel extends Component {
     });
   }
 
-  render() {
+  getNodeListProps() {
     const {
       activePromptAttributes,
       currentIds,
@@ -72,18 +72,46 @@ class NodePanel extends Component {
     } = this.props;
 
     const label = node => `${node.nickname}`;
+    const selected = node => isMatch(node, activePromptAttributes);
 
+    const defaultProps = {
+      activePromptAttributes,
+      interaction,
+      currentIds,
+      handleDropNode: this.onDropNode,
+      label,
+      nodes,
+      nodeColor,
+      onDrag,
+      onSelectNode: this.onSelectNode,
+    };
+
+    switch (interaction) {
+      case 'selectable':
+        return {
+          ...defaultProps,
+          draggableType: 'EXISTING_NODE',
+          selected,
+        };
+      case 'droppable':
+        return {
+          ...defaultProps,
+          draggableType: 'NEW_NODE',
+          droppableName: 'NODE_PROVIDER',
+          acceptsDraggableType: 'EXISTING_NODE',
+        };
+      default:
+        return {
+          ...defaultProps,
+          draggableType: 'NEW_NODE',
+        };
+    }
+  }
+
+  render() {
     return (
-      <NodeProvider
-        activePromptAttributes={activePromptAttributes}
-        interaction={interaction}
-        currentIds={currentIds}
-        handleDropNode={this.onDropNode}
-        label={label}
-        nodes={nodes}
-        nodeColor={nodeColor}
-        onDrag={onDrag}
-        onSelectNode={this.onSelectNode}
+      <NodeList
+        {...this.getNodeListProps()}
       />
     );
   }
