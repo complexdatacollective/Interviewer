@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -25,15 +23,18 @@ class NodeProvider extends Component {
     removeNode: PropTypes.func.isRequired,
     toggleNodeAttributes: PropTypes.func.isRequired,
     onUpdate: PropTypes.func,
-    onDragNode: PropTypes.func,
-    currentIds: PropTypes.object.isRequired,
+    draggableType: PropTypes.string,
+    droppableName: PropTypes.string,
+    acceptsDraggableType: PropTypes.string,
   };
 
   static defaultProps = {
     nodeColor: null,
-    onDragNode: () => {},
     onDropNode: () => {},
     onUpdate: () => {},
+    draggableType: null,
+    droppableName: null,
+    acceptsDraggableType: null,
   };
 
   constructor(props) {
@@ -73,11 +74,11 @@ class NodeProvider extends Component {
   getNodeListProps() {
     const {
       activePromptAttributes,
-      currentIds,
       interaction,
       nodes,
       nodeColor,
       draggableType,
+      droppableName,
       acceptsDraggableType,
     } = this.props;
 
@@ -87,13 +88,13 @@ class NodeProvider extends Component {
     const defaultProps = {
       activePromptAttributes,
       interaction,
-      currentIds,
       label,
       nodes,
       nodeColor,
       draggableType,
       acceptsDraggableType,
-      droppableName: `NODE_PROVIDER_${this.state.id}`,
+      selected,
+      droppableName,
     };
 
     switch (interaction) {
@@ -101,13 +102,11 @@ class NodeProvider extends Component {
         return {
           ...defaultProps,
           onSelectNode: this.onSelectNode,
-          selected,
         };
       case 'draggable':
         return {
           ...defaultProps,
           onDropNode: this.onDropNode,
-          onDragNode: this.onDragNode,
         };
       default:
         return defaultProps;
@@ -115,8 +114,6 @@ class NodeProvider extends Component {
   }
 
   render() {
-    console.log('NODE_PROVIDER', this.getNodeListProps());
-
     return (
       <NodeList
         {...this.getNodeListProps()}

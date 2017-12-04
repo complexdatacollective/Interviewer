@@ -1,6 +1,5 @@
-/* eslint-disable */
-
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
 import { NodeProvider } from '../Elements';
 import { Panel } from '../../components/Elements';
@@ -23,22 +22,33 @@ const getHighlight = (highlight, panelNumber) => {
   * Renders an interactive list of nodes for addition to the network.
   * @extends Component
   */
-class NodePanel extends Component {
-  render() {
-    const { title, index, highlight, ...rest } = this.props;
+const NodePanel = ({
+  title,
+  index,
+  highlight,
+  ...rest
+}) => (
+  <Panel
+    title={title}
+    key={index}
+    highlight={getHighlight(highlight, index)}
+  >
+    <NodeProvider
+      {...rest}
+    />
+  </Panel>
+);
 
-    return (
-      <Panel
-        title={title}
-        key={index}
-        highlight={getHighlight(highlight, index)}
-      >
-        <NodeProvider
-          {...rest}
-        />
-      </Panel>
-    );
-  }
-}
+NodePanel.propTypes = {
+  title: PropTypes.string,
+  index: PropTypes.number,
+  highlight: PropTypes.bool,
+};
+
+NodePanel.defaultProps = {
+  title: '',
+  index: null,
+  highlight: false,
+};
 
 export default NodePanel;

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -14,6 +12,7 @@ const panelPresets = {
     dataSource: 'existing',
     interaction: 'draggable',
     acceptsDraggableType: 'EXISTING_NODE',
+    droppableName: 'NODE_PROVIDER_EXISTING',
     filter: network => network,
   },
   external: {
