@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -14,33 +16,24 @@ const EnhancedNode = draggable(selectable(Node));
   * Renders a list of Node.
   */
 class NodeList extends Component {
-  componentDidMount() {
-    this.props.onDrag(this.props.isDragging);
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.isDragging !== this.props.isDragging) {
-      props.onDrag(props.isDragging);
-    }
-  }
-
   render() {
     const { nodes,
       nodeColor,
       label,
       selected,
-      handleSelectNode,
-      handleDropNode,
+      onSelectNode,
+      onDragNode,
+      onDropNode,
       draggableType,
-      hover,
+      isHovered,
       isDragging,
-      isOrigin,
+      isPossibleTarget,
     } = this.props;
 
     const classNames = cx(
       'node-list',
-      { 'node-list--hover': (hover && !isOrigin) },
-      { 'node-list--drag': isDragging },
+      { 'node-list--hover': isHovered },
+      { 'node-list--drag': isDragging && isPossibleTarget }, // TODO: rename class
     );
 
     return (
@@ -53,7 +46,7 @@ class NodeList extends Component {
         transitionName="node-list--transition"
         transitionLeave={false}
       >
-        { hover && !isOrigin && isDragging &&
+        { isHovered && isPossibleTarget &&
           <Node key="placeholder" placeholder />
         }
         {
@@ -63,8 +56,9 @@ class NodeList extends Component {
                 color={nodeColor}
                 label={label(node)}
                 selected={selected(node)}
-                onSelected={() => handleSelectNode(node)}
-                onDropped={hits => handleDropNode(hits, node)}
+                onSelected={() => onSelectNode(node)}
+                onDropped={hits => onDropNode(hits, node)}
+                onMove={() => onDragNode(node)}
                 draggableType={draggableType}
                 {...node}
               />
@@ -79,15 +73,14 @@ class NodeList extends Component {
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  handleSelectNode: PropTypes.func,
-  handleDropNode: PropTypes.func,
+  onSelectNode: PropTypes.func,
+  onDropNode: PropTypes.func,
+  onMoveNode: PropTypes.func,
   label: PropTypes.func,
   selected: PropTypes.func,
   draggableType: PropTypes.string,
   hover: PropTypes.bool,
   isDragging: PropTypes.bool.isRequired,
-  isOrigin: PropTypes.bool.isRequired,
-  onDrag: PropTypes.func,
 };
 
 NodeList.defaultProps = {
@@ -95,21 +88,29 @@ NodeList.defaultProps = {
   nodeColor: '',
   label: () => (''),
   selected: () => false,
-  handleSelectNode: () => {},
-  handleDropNode: () => {},
+  onSelectNode: () => {},
+  onDropNode: () => {},
+  onDragNode: () => {},
   draggableType: '',
   hover: false,
-  onDrag: () => {},
 };
 
 function mapStateToProps(state, ownProps) {
-  const isOrigin = ownProps.currentIds && isMatch(state.draggable.meta, ownProps.currentIds);
+  const { isDragging, draggableType } = state.draggable;
+
+  console.log('NODE_LIST', {
+    name: ownProps.droppableName,
+    type: draggableType,
+    accepts: ownProps.acceptsDraggableType,
+    isHovered: state.droppable.activeZones.indexOf(ownProps.droppableName) !== -1,
+    isDragging,
+    isPossibleTarget: draggableType === ownProps.acceptsDraggableType,
+  });
 
   return {
-    isDragging: state.draggable.isDragging &&
-      state.draggable.draggableType === ownProps.acceptsDraggableType &&
-      !isOrigin,
-    isOrigin,
+    isHovered: state.droppable.activeZones.indexOf(ownProps.droppableName) !== -1,
+    isDragging,
+    isPossibleTarget: draggableType === ownProps.acceptsDraggableType,
   };
 }
 

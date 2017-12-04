@@ -302,10 +302,9 @@ export default function draggable(WrappedComponent) {
     meta: {},
   };
 
-  function mapStateToProps(state, props) {
+  function mapStateToProps(state) {
     return {
       zones: state.droppable.zones,
-      meta: { promptId: props.promptId, stageId: props.stageId },
     };
   }
 

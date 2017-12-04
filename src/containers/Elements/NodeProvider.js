@@ -1,8 +1,10 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { isEqual, isMatch } from 'lodash';
+import { isEqual, isMatch, uniqueId } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { makeGetProviderNodes } from '../../selectors/node-provider';
@@ -12,7 +14,7 @@ import NodeList from '../../components/Elements/NodeList';
   * Renders an interactive list of nodes for addition to the network.
   * @extends Component
   */
-class NodePanel extends Component {
+class NodeProvider extends Component {
   static propTypes = {
     newNodeAttributes: PropTypes.object.isRequired,
     activePromptAttributes: PropTypes.object.isRequired,
@@ -22,30 +24,37 @@ class NodePanel extends Component {
     addOrUpdateNode: PropTypes.func.isRequired,
     removeNode: PropTypes.func.isRequired,
     toggleNodeAttributes: PropTypes.func.isRequired,
-    onUpdateNodes: PropTypes.func,
-    onDrag: PropTypes.func,
+    onUpdate: PropTypes.func,
+    onDragNode: PropTypes.func,
     currentIds: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     nodeColor: null,
-    onUpdateNodes: () => {},
-    onDrag: () => {},
+    onDragNode: () => {},
+    onDropNode: () => {},
+    onUpdate: () => {},
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = { isDragging: false, id: uniqueId() };
+  }
+
   componentDidMount() {
-    this.props.onUpdateNodes(this.props.nodes);
+    this.onUpdate(this.props.nodes);
   }
 
   componentWillReceiveProps(props) {
     if (!isEqual(props.nodes, this.props.nodes)) {
-      this.props.onUpdateNodes(props.nodes);
+      this.onUpdate(props.nodes);
     }
   }
 
-  onSelectNode = (node) => {
-    this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
-  }
+  onUpdate = (nodes) => {
+    this.props.onUpdate({ nodes });
+  };
 
   onDropNode = (hits, node) => {
     hits.forEach((hit) => {
@@ -68,7 +77,8 @@ class NodePanel extends Component {
       interaction,
       nodes,
       nodeColor,
-      onDrag,
+      draggableType,
+      acceptsDraggableType,
     } = this.props;
 
     const label = node => `${node.nickname}`;
@@ -78,37 +88,35 @@ class NodePanel extends Component {
       activePromptAttributes,
       interaction,
       currentIds,
-      handleDropNode: this.onDropNode,
       label,
       nodes,
       nodeColor,
-      onDrag,
-      onSelectNode: this.onSelectNode,
+      draggableType,
+      acceptsDraggableType,
+      droppableName: `NODE_PROVIDER_${this.state.id}`,
     };
 
     switch (interaction) {
       case 'selectable':
         return {
           ...defaultProps,
-          draggableType: 'EXISTING_NODE',
+          onSelectNode: this.onSelectNode,
           selected,
         };
-      case 'droppable':
+      case 'draggable':
         return {
           ...defaultProps,
-          draggableType: 'NEW_NODE',
-          droppableName: 'NODE_PROVIDER',
-          acceptsDraggableType: 'EXISTING_NODE',
+          onDropNode: this.onDropNode,
+          onDragNode: this.onDragNode,
         };
       default:
-        return {
-          ...defaultProps,
-          draggableType: 'NEW_NODE',
-        };
+        return defaultProps;
     }
   }
 
   render() {
+    console.log('NODE_PROVIDER', this.getNodeListProps());
+
     return (
       <NodeList
         {...this.getNodeListProps()}
@@ -122,19 +130,11 @@ function makeMapStateToProps() {
   const getProviderNodes = makeGetProviderNodes();
 
   return function mapStateToProps(state, props) {
-    const currentIds = { promptId: props.prompt.id, stageId: props.stage.id };
-
-    const interaction = (props.selectable && 'selectable') ||
-      (props.draggable && 'draggable') ||
-      (props.droppable && 'droppable') ||
-      'none';
-
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodes: getProviderNodes(state, props),
-      currentIds,
-      interaction,
+      draggableType: 'NEW_NODE',
     };
   };
 }
@@ -147,4 +147,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(NodePanel);
+export default connect(makeMapStateToProps, mapDispatchToProps)(NodeProvider);

@@ -124,8 +124,8 @@ class NameGenerator extends Component {
               droppableName="MAIN_NODE_LIST"
               acceptsDraggableType="NEW_NODE"
               draggableType="EXISTING_NODE"
-              handleDropNode={this.onDropNode}
-              handleSelectNode={this.onSelectNode}
+              onDropNode={this.onDropNode}
+              onSelectNode={this.onSelectNode}
             />
           </div>
         </div>
