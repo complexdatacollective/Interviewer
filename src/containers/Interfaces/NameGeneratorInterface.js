@@ -7,7 +7,7 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
+import { PromptSwiper, NodePanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 
@@ -73,7 +73,6 @@ class NameGenerator extends Component {
     const currentStageId = this.props.stage.id;
 
     hits.forEach((hit) => {
-      console.log('do thing', hit, node);
       switch (hit.name) {
         case 'NODE_BIN':
           this.props.removeNode(node.uid);
@@ -116,7 +115,7 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodeProviderPanels stage={stage} prompt={prompt} />
+            <NodePanels stage={stage} prompt={prompt} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
