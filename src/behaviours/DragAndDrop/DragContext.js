@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import { withContext, getContext } from 'recompose';
 import createDragStore from './createDragStore';
 
+const dragStore = createDragStore();
+
 const provideDragContext = () => withContext(
-  { DragStore: PropTypes.object },
-  () => ({ DragStore: createDragStore }),
+  { DragContext: PropTypes.object },
+  () => ({ DragContext: dragStore }),
 );
 
 const getDragContext = () => getContext(
-  { DragStore: PropTypes.object },
+  { DragContext: PropTypes.object },
 );
 
 export {

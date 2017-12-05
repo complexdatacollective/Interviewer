@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
+import { provideDragContext } from '../behaviours/DragAndDrop/DragContext';
+
+console.log(provideDragContext, 'CONTEXT');
 
 require('../styles/main.scss');
 
@@ -51,4 +55,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default compose(
+  connect(mapStateToProps),
+  provideDragContext(),
+)(App);

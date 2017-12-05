@@ -1,118 +1,64 @@
-/* eslint-disable react/no-find-dom-node */
+/* eslint-disable */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { debounce, isMatch } from 'lodash';
-import { createSelector } from 'reselect';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
-export default WrappedComponent => WrappedComponent;
+import { getDragContext } from './DragContext';
 
-// const maxFramesPerSecond = 24;
-// const initialZoneState = {
-//   name: null,
-//   acceptsDraggableType: null,
-//   width: null,
-//   height: null,
-//   y: null,
-//   x: null,
-// };
+const maxFramesPerSecond = 10;
 
-// export default function droppable(WrappedComponent) {
-//   class Droppable extends Component {
-//     constructor(props) {
-//       super(props);
+const dropTarget = WrappedComponent =>
+  getDragContext()(
+    class DropTarget extends Component {
+      constructor(props) {
+        super(props);
 
-//       this.lastZoneState = initialZoneState;
+        this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
+        window.addEventListener('resize', this.onResize);
+      }
 
-//       this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
-//       window.addEventListener('resize', this.onResize);
-//     }
+      componentDidMount() {
+        if (this.component) { this.node = findDOMNode(this.component); }
+        this.updateTarget();
+      }
 
-//     componentDidMount() {
-//       this.updateZone();
-//     }
+      componentWillUnmount() {
+        window.removeEventListener('resize', this.onResize);
+        this.onResize.cancel();
+      }
 
-//     componentWillUnmount() {
-//       window.removeEventListener('resize', this.onResize);
-//       this.onResize.cancel();
-//     }
+      onResize = () => {
+        this.updateTarget();
+        setTimeout(this.updateTarget, 1000);
+      }
 
-//     onResize = () => {
-//       this.updateZone();
-//       setTimeout(this.updateZone, 1000);
-//     }
+      updateTarget = () => {
+        if (!this.props.droppableName) { return; }
 
-//     updateZone = () => {
-//       if (!this.props.droppableName) { return; }
+        const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
-//       const boundingClientRect = getAbsoluteBoundingRect(this.node);
+        this.props.DragContext.dispatch({
+          type: 'UPDATE_TARGET',
+          accepts: this.props.accepts,
+          width: boundingClientRect.width,
+          height: boundingClientRect.height,
+          y: boundingClientRect.top,
+          x: boundingClientRect.left,
+        });
+      }
 
-//       const nextZoneState = {
-//         name: this.props.droppableName,
-//         acceptsDraggableType: this.props.acceptsDraggableType,
-//         width: boundingClientRect.width,
-//         height: boundingClientRect.height,
-//         y: boundingClientRect.top,
-//         x: boundingClientRect.left,
-//       };
+      render() {
+        return (
+          <WrappedComponent
+            ref={(component) => { this.component; }}
+            hover={this.props.hover}
+            {...this.props}
+          />
+        );
+      }
+    }
+  );
 
-//       this.props.updateZone(nextZoneState);
-//       if (!isMatch(nextZoneState, this.lastZoneState)) {
-//         this.lastZoneState = nextZoneState;
-//         this.props.updateZone(nextZoneState);
-//       }
-//     }
-
-//     render() {
-//       return (
-//         <WrappedComponent
-//           ref={() => { this.node = findDOMNode(this); }}
-//           hover={this.props.hover}
-//           {...this.props}
-//         />
-//       );
-//     }
-//   }
-
-//   Droppable.propTypes = {
-//     updateZone: PropTypes.func.isRequired,
-//     droppableName: PropTypes.string,
-//     acceptsDraggableType: PropTypes.string,
-//     hover: PropTypes.bool,
-//   };
-
-//   Droppable.defaultProps = {
-//     acceptsDraggableType: null,
-//     droppableName: null,
-//     hover: false,
-//   };
-
-//   const activeZones = state => state.droppable.activeZones;
-//   const droppableName = (_, props) => props.droppableName;
-
-//   function getMapStateToProps() {
-//     const isZoneActive = createSelector(
-//       [activeZones, droppableName],
-//       (zones, name) => zones.includes(name),
-//     );
-
-//     return function mapStateToProps(state, props) {
-//       return {
-//         hover: isZoneActive(state, props),
-//       };
-//     };
-//   }
-
-//   function mapDispatchToProps(dispatch) {
-//     return {
-//       updateZone: bindActionCreators(droppableActions.updateZone, dispatch),
-//     };
-//   }
-
-
-//   return connect(getMapStateToProps, mapDispatchToProps)(Droppable);
-// }
+export default dropTarget;
