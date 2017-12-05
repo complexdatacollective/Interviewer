@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { isEqual, isMatch, uniqueId } from 'lodash';
+import { isEqual, isMatch } from 'lodash';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { makeGetProviderNodes } from '../../selectors/node-provider';
@@ -32,16 +32,10 @@ class NodeProvider extends Component {
     nodeColor: null,
     onDropNode: () => {},
     onUpdate: () => {},
-    draggableType: null,
+    draggableType: 'NEW_NODE',
     droppableName: null,
     acceptsDraggableType: null,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = { isDragging: false, id: uniqueId() };
-  }
 
   componentDidMount() {
     this.onUpdate(this.props.nodes);
@@ -75,11 +69,6 @@ class NodeProvider extends Component {
     const {
       activePromptAttributes,
       interaction,
-      nodes,
-      nodeColor,
-      draggableType,
-      droppableName,
-      acceptsDraggableType,
     } = this.props;
 
     const label = node => `${node.nickname}`;
@@ -87,14 +76,13 @@ class NodeProvider extends Component {
 
     const defaultProps = {
       activePromptAttributes,
-      interaction,
       label,
-      nodes,
-      nodeColor,
-      draggableType,
-      acceptsDraggableType,
       selected,
-      droppableName,
+      nodes: this.props.nodes,
+      nodeColor: this.props.nodeColor,
+      draggableType: this.props.draggableType,
+      acceptsDraggableType: this.props.acceptsDraggableType,
+      droppableName: this.props.droppableName,
     };
 
     switch (interaction) {
@@ -131,7 +119,6 @@ function makeMapStateToProps() {
       activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodes: getProviderNodes(state, props),
-      draggableType: 'NEW_NODE',
     };
   };
 }

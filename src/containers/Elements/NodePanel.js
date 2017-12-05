@@ -35,6 +35,7 @@ const NodePanel = ({
   >
     <NodeProvider
       {...rest}
+      onUpdateNodes={}
     />
   </Panel>
 );
