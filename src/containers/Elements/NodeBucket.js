@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
-import { draggable } from '../../behaviours';
+import { DragSource } from '../../behaviours/DragAndDrop';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
-const EnhancedNode = draggable(Node);
+const EnhancedNode = DragSource(Node);
 const label = node => node.nickname;
 
 const draggableType = 'POSITIONED_NODE';

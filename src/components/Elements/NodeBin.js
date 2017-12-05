@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { droppable } from '../../behaviours';
+import { DropTarget } from '../../behaviours/DragAndDrop';
 
 /**
   * Renders a droppable NodeBin which accepts `EXISTING_NODE`.
@@ -38,4 +38,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(droppable(NodeBin));
+export default connect(mapStateToProps)(DropTarget(NodeBin));

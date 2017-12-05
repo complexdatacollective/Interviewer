@@ -1,16 +1,12 @@
-/* eslint-disable react/no-find-dom-node */
+/* eslint-disable */
+/* eslint-disable react/no-find-dom-node, react/sort-comp */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { findDOMNode, unstable_batchedUpdates } from 'react-dom'; // eslint-disable-line camelcase
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
+import { findDOMNode } from 'react-dom'; // eslint-disable-line camelcase
 import { throttle, filter, isMatch } from 'lodash';
-import DraggablePreview from '../utils/DraggablePreview';
-import { actionCreators as draggableActions } from '../ducks/modules/draggable';
-import { actionCreators as droppableActions } from '../ducks/modules/droppable';
-
-const maxReportingPerSecond = 60;
+import { getDragContext } from './DragContext';
+import DragPreview from './DragPreview';
 
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
@@ -66,26 +62,28 @@ const initalState = {
   type: null,
 };
 
-export default function draggable(WrappedComponent) {
-  class Draggable extends Component {
+const dragSource = WrappedComponent =>
+  class DragSource extends Component {
+    static propTypes = {
+    };
+
+    static defaultProps = {
+    };
+
     constructor(props) {
       super(props);
 
       this.state = initalState;
       this.preview = null;
-      this.componentHandlers = throttle(
-        this.componentHandlers,
-        1000 / maxReportingPerSecond,
-      );
     }
 
     componentDidMount() {
       if (!this.props.canDrag) { return; }
       this.el = findDOMNode(this.node);
-      this.el.addEventListener('touchstart', this.handleMoveStart, { passive: true });
-      this.el.addEventListener('touchmove', this.handleMove);
-      this.el.addEventListener('touchend', this.handleMoveEnd, { passive: true });
-      this.el.addEventListener('mousedown', this.handleMoveStart, { passive: true });
+      this.el.addEventListener('touchstart', this.onMoveStart, { passive: true });
+      this.el.addEventListener('touchmove', this.onMove);
+      this.el.addEventListener('touchend', this.onMoveEnd, { passive: true });
+      this.el.addEventListener('mousedown', this.onMoveStart, { passive: true });
     }
 
     shouldComponentUpdate(newProps, newState) {
@@ -96,32 +94,25 @@ export default function draggable(WrappedComponent) {
 
     componentWillUnmount() {
       this.cleanupPreview();
-      window.removeEventListener('mousemove', this.handleMove);
-      window.removeEventListener('mouseup', this.handleMoveEnd);
-      this.componentHandlers.cancel();
+      window.removeEventListener('mousemove', this.onMove);
+      window.removeEventListener('mouseup', this.onMoveEnd);
       if (this.el) {
-        this.el.removeEventListener('touchstart', this.handleMoveStart);
-        this.el.removeEventListener('touchmove', this.handleMove);
-        this.el.removeEventListener('touchend', this.handleMoveEnd);
-        this.el.removeEventListener('mousedown', this.handleMoveStart);
+        this.el.removeEventListener('touchstart', this.onMoveStart);
+        this.el.removeEventListener('touchmove', this.onMove);
+        this.el.removeEventListener('touchend', this.onMoveEnd);
+        this.el.removeEventListener('mousedown', this.onMoveStart);
       }
     }
 
-    determineHits = ({ x, y }) =>
-      filter(this.props.zones, (zone) => {
-        if (zone.acceptsDraggableType !== this.props.draggableType) { return false; }
-        return x > zone.x && x < zone.x + zone.width && y > zone.y && y < zone.y + zone.height;
-      });
-
     trackMouse = () => {
       if (!this.props.canDrag) { return; }
-      window.addEventListener('mousemove', this.handleMove);
-      window.addEventListener('mouseup', this.handleMoveEnd, { passive: true });
+      window.addEventListener('mousemove', this.onMove);
+      window.addEventListener('mouseup', this.onMoveEnd, { passive: true });
     }
 
     removeMouseTracking = () => {
-      window.removeEventListener('mousemove', this.handleMove);
-      window.removeEventListener('mouseup', this.handleMoveEnd);
+      window.removeEventListener('mousemove', this.onMove);
+      window.removeEventListener('mouseup', this.onMoveEnd);
     }
 
     movementFromEvent = (e) => {
@@ -154,7 +145,7 @@ export default function draggable(WrappedComponent) {
     }
 
     createPreview = () => {
-      const draggablePreview = new DraggablePreview(this.node);
+      const draggablePreview = new DragPreview(this.node);
 
       this.preview = draggablePreview;
     }
@@ -178,7 +169,7 @@ export default function draggable(WrappedComponent) {
     detectDragStart = (movement) => {
       if (this.state.type === 'DRAG' && !this.preview && movement.distance > 4) {
         this.setState({ dragStart: true }, () => {
-          this.props.dragStart(this.props.draggableType, this.props.meta);
+          // TODO: Drag start event
           this.createPreview();
         });
       }
@@ -188,22 +179,7 @@ export default function draggable(WrappedComponent) {
       }
     }
 
-    componentHandlers = (movement) => {
-      if (this.state.dragStart) {
-        unstable_batchedUpdates(() => {
-          const hits = this.determineHits(movement);
-          this.props.updateActiveZones(hits.map(hit => hit.name));
-
-          // if (hits.length > 0) {
-          //   this.props.onMove(hits, movement);
-          // }
-
-          this.props.onMove(hits, movement);
-        });
-      }
-    }
-
-    handleMoveStart = (e) => {
+    onMoveStart = (e) => {
       this.trackMouse();
       const { x, y } = getCoords(e);
       this.setState({
@@ -217,7 +193,7 @@ export default function draggable(WrappedComponent) {
       });
     }
 
-    handleMove = (e) => {
+    onMove = (e) => {
       if (this.state.moveStart) {
         const movement = this.movementFromEvent(e);
         const { x, y, t } = movement;
@@ -228,31 +204,28 @@ export default function draggable(WrappedComponent) {
         // Detect drag start
         this.detectDragStart(movement);
 
-        // If drag started, actually track stuff
-        this.componentHandlers(movement);
+        if (this.state.dragStart) {
+        //   this.setState({ x, y, t });
+        // TODO: Drag move event
+        }
 
         this.setState({ x, y, t });
       }
     }
 
-    handleMoveEnd = (e) => {
+    onMoveEnd = (e) => {
       this.removeMouseTracking();
       this.cleanupPreview();
 
       if (this.state.dragStart) {
         const movement = this.movementFromEvent(e);
-        const hits = this.determineHits(movement);
 
-        this.setState(initalState);
-
-        if (hits.length > 0) {
-          this.props.onDropped(hits, movement);
-        }
+        // TODO: Drag stop
       } else {
         this.setState(initalState);
       }
 
-      this.props.dragStop();
+      // this.props.dragStop();?
     }
 
     styles() {
@@ -275,46 +248,11 @@ export default function draggable(WrappedComponent) {
       return (
         <div style={this.styles()}>
           <div ref={(node) => { this.node = node; }}>
-            <WrappedComponent {...rest} />
+            <WrappedComponent {...rest} ref={(component) => { this.component = component; }} />
           </div>
         </div>
       );
     }
-  }
-
-  Draggable.propTypes = {
-    zones: PropTypes.array.isRequired,
-    draggableType: PropTypes.string.isRequired,
-    dragStart: PropTypes.func.isRequired,
-    dragStop: PropTypes.func.isRequired,
-    onDropped: PropTypes.func,
-    onMove: PropTypes.func,
-    updateActiveZones: PropTypes.func.isRequired,
-    meta: PropTypes.object,
-    canDrag: PropTypes.bool,
   };
 
-  Draggable.defaultProps = {
-    canDrag: true,
-    animate: false,
-    onDropped: () => {},
-    onMove: () => {},
-    meta: {},
-  };
-
-  function mapStateToProps(state) {
-    return {
-      zones: state.droppable.zones,
-    };
-  }
-
-  function mapDispatchToProps(dispatch) {
-    return {
-      dragStart: bindActionCreators(draggableActions.dragStart, dispatch),
-      dragStop: bindActionCreators(draggableActions.dragStop, dispatch),
-      updateActiveZones: bindActionCreators(droppableActions.updateActiveZones, dispatch),
-    };
-  }
-
-  return connect(mapStateToProps, mapDispatchToProps)(Draggable);
-}
+export default dragSource;

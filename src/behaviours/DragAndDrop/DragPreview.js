@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import getAbsoluteBoundingRect from './getAbsoluteBoundingRect';
+import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const getSize = (element) => {
   const boundingClientRect = getAbsoluteBoundingRect(element);

@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
-import { draggable, selectable } from '../behaviours';
+import { selectable } from '../behaviours';
 import { actionCreators as networkActions } from '../ducks/modules/network';
+import { DragSource } from '../behaviours/DragAndDrop';
 
 const label = node => node.nickname;
 
-const EnhancedNode = draggable(selectable(Node));
+const EnhancedNode = DragSource(selectable(Node));
 
 class LayoutNode extends PureComponent {
   onDropped = (...args) => {

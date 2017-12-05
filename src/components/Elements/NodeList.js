@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
-import { scrollable, droppable, draggable, selectable } from '../../behaviours';
+import { scrollable, selectable } from '../../behaviours';
+import { DropTarget, DragSource } from '../../behaviours/DragAndDrop';
 
-const EnhancedNode = draggable(selectable(Node));
+const EnhancedNode = DragSource(selectable(Node));
 
 /**
   * Renders a list of Node.
@@ -104,6 +105,6 @@ function mapStateToProps(state, ownProps) {
 
 export default compose(
   scrollable,
-  droppable,
+  DropTarget,
   connect(mapStateToProps),
 )(NodeList);
