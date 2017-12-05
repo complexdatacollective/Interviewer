@@ -73,11 +73,12 @@ class NameGenerator extends Component {
     const currentStageId = this.props.stage.id;
 
     hits.forEach((hit) => {
+      console.log('do thing', hit, node);
       switch (hit.name) {
         case 'NODE_BIN':
           this.props.removeNode(node.uid);
           break;
-        case 'NODE_PROVIDER':
+        case 'NODE_PROVIDER_EXISTING':
           if (node.promptId === currentPromptId && node.stageId === currentStageId) {
             return;
           }
