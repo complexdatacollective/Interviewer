@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { debounce, isMatch } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
-
 import { getDragContext } from './DragContext';
 
 const maxFramesPerSecond = 10;
@@ -12,6 +11,10 @@ const maxFramesPerSecond = 10;
 const dropTarget = WrappedComponent =>
   getDragContext()(
     class DropTarget extends Component {
+      static defaultProps = {
+        meta: () => ({}),
+      }
+
       constructor(props) {
         super(props);
 
@@ -20,7 +23,8 @@ const dropTarget = WrappedComponent =>
       }
 
       componentDidMount() {
-        if (this.component) { this.node = findDOMNode(this.component); }
+        if(!this.component) { return; }
+        this.node = findDOMNode(this.component);
         this.updateTarget();
       }
 
@@ -35,13 +39,14 @@ const dropTarget = WrappedComponent =>
       }
 
       updateTarget = () => {
-        if (!this.props.droppableName) { return; }
+        if(!this.node) { return; }
 
         const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
         this.props.DragContext.dispatch({
           type: 'UPDATE_TARGET',
           accepts: this.props.accepts,
+          meta: this.props.meta(),
           width: boundingClientRect.width,
           height: boundingClientRect.height,
           y: boundingClientRect.top,
@@ -50,11 +55,17 @@ const dropTarget = WrappedComponent =>
       }
 
       render() {
+        const {
+          accepts,
+          meta,
+          DragContext,
+          ...props,
+        } = this.props;
+
         return (
           <WrappedComponent
-            ref={(component) => { this.component; }}
-            hover={this.props.hover}
-            {...this.props}
+            ref={(component) => { this.component = component; }}
+            {...props}
           />
         );
       }
