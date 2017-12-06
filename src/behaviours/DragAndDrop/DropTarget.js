@@ -1,75 +1,91 @@
-/* eslint-disable */
+/* eslint-disable react/no-find-dom-node */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { debounce, isMatch } from 'lodash';
+import { compose } from 'redux';
+import PropTypes from 'prop-types';
+import { mapProps } from 'recompose';
+import { debounce, isMatch, uniqueId } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
-import { getDragContext } from './DragContext';
+import dropId from './dropId';
+import { actionCreators as dragActions, store } from './dragState';
 
 const maxFramesPerSecond = 10;
 
 const dropTarget = WrappedComponent =>
-  getDragContext()(
-    class DropTarget extends Component {
-      static defaultProps = {
-        meta: () => ({}),
-      }
+  class DropTarget extends Component {
+    static propTypes = {
+      id: PropTypes.string.isRequired,
+      onDrop: PropTypes.func,
+      accepts: PropTypes.array,
+      meta: PropTypes.func,
+    }
 
-      constructor(props) {
-        super(props);
+    static defaultProps = {
+      meta: () => ({}),
+      accepts: [],
+      onDrop: (...args) => { console.log(...args); },
+    }
 
-        this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
-        window.addEventListener('resize', this.onResize);
-      }
+    constructor(props) {
+      super(props);
 
-      componentDidMount() {
-        if(!this.component) { return; }
-        this.node = findDOMNode(this.component);
-        this.updateTarget();
-      }
+      this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
+      window.addEventListener('resize', this.onResize);
+    }
 
-      componentWillUnmount() {
-        window.removeEventListener('resize', this.onResize);
-        this.onResize.cancel();
-      }
+    componentDidMount() {
+      if (!this.component) { return; }
+      this.node = findDOMNode(this.component);
+      this.updateTarget();
+    }
 
-      onResize = () => {
-        this.updateTarget();
-        setTimeout(this.updateTarget, 1000);
-      }
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.onResize);
+      this.onResize.cancel();
+    }
 
-      updateTarget = () => {
-        if(!this.node) { return; }
+    onResize = () => {
+      this.updateTarget();
+      setTimeout(this.updateTarget, 1000);
+    }
 
-        const boundingClientRect = getAbsoluteBoundingRect(this.node);
+    updateTarget = () => {
+      if (!this.node) { return; }
 
-        this.props.DragContext.dispatch({
-          type: 'UPDATE_TARGET',
+      const boundingClientRect = getAbsoluteBoundingRect(this.node);
+
+      store.dispatch(
+        dragActions.updateTarget({
+          id: this.props.id,
+          onDrop: this.props.onDrop,
           accepts: this.props.accepts,
           meta: this.props.meta(),
           width: boundingClientRect.width,
           height: boundingClientRect.height,
           y: boundingClientRect.top,
           x: boundingClientRect.left,
-        });
-      }
-
-      render() {
-        const {
-          accepts,
-          meta,
-          DragContext,
-          ...props,
-        } = this.props;
-
-        return (
-          <WrappedComponent
-            ref={(component) => { this.component = component; }}
-            {...props}
-          />
-        );
-      }
+        }),
+      );
     }
-  );
 
-export default dropTarget;
+    render() {
+      const {
+        accepts,
+        meta,
+        ...props
+      } = this.props;
+
+      return (
+        <WrappedComponent
+          ref={(component) => { this.component = component; }}
+          {...props}
+        />
+      );
+    }
+  };
+
+export default compose(
+  dropId('DropTarget'),
+  dropTarget,
+);

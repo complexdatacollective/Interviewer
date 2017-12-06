@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const getSize = (element) => {

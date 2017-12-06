@@ -1,14 +1,20 @@
+/* eslint-disable */
+
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { setDisplayName } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
 import { scrollable, selectable } from '../../behaviours';
-import { DropTarget, DragSource } from '../../behaviours/DragAndDrop';
+import {
+  DragSource,
+  DropTarget,
+  MonitorDropTarget,
+} from '../../behaviours/DragAndDrop';
 
-const EnhancedNode = DragSource(selectable(Node));
+const EnhancedNode = DragSource(Node);
 
 /**
   * Renders a list of Node.
@@ -19,17 +25,15 @@ const NodeList = ({
   label,
   selected,
   onSelectNode,
-  onDragNode,
-  onDropNode,
-  draggableType,
-  isHovered,
+  itemType,
+  isOver,
+  canAccept,
   isDragging,
-  isPossibleTarget,
 }) => {
   const classNames = cx(
     'node-list',
-    { 'node-list--hover': isHovered },
-    { 'node-list--drag': isDragging && isPossibleTarget }, // TODO: rename class
+    { 'node-list--hover': isOver},
+    { 'node-list--drag': canAccept }, // TODO: rename class
   );
 
   return (
@@ -42,7 +46,7 @@ const NodeList = ({
       transitionName="node-list--transition"
       transitionLeave={false}
     >
-      { isHovered && isPossibleTarget &&
+      { isOver && canAccept &&
         <Node key="placeholder" placeholder />
       }
       {
@@ -53,9 +57,7 @@ const NodeList = ({
               label={label(node)}
               selected={selected(node)}
               onSelected={() => onSelectNode(node)}
-              onDropped={hits => onDropNode(hits, node)}
-              onMove={() => onDragNode(node)}
-              draggableType={draggableType}
+              itemType={itemType}
               {...node}
             />
           </span>
@@ -69,14 +71,8 @@ NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
   onSelectNode: PropTypes.func,
-  onDropNode: PropTypes.func,
-  onDragNode: PropTypes.func,
   label: PropTypes.func,
   selected: PropTypes.func,
-  draggableType: PropTypes.string,
-  isHovered: PropTypes.bool,
-  isDragging: PropTypes.bool,
-  isPossibleTarget: PropTypes.bool,
 };
 
 NodeList.defaultProps = {
@@ -85,26 +81,16 @@ NodeList.defaultProps = {
   label: () => (''),
   selected: () => false,
   onSelectNode: () => {},
-  onDropNode: () => {},
-  onDragNode: () => {},
-  draggableType: null,
-  isHovered: false,
+  onDrop: () => { alert('foo'); },
+  itemType: 'NODE',
+  isOver: false,
+  canAccept: false,
   isDragging: false,
-  isPossibleTarget: false,
 };
-
-function mapStateToProps(state, ownProps) {
-  const { isDragging, draggableType } = state.draggable;
-
-  return {
-    isHovered: state.droppable.activeZones.indexOf(ownProps.droppableName) !== -1,
-    isDragging,
-    isPossibleTarget: draggableType === ownProps.acceptsDraggableType,
-  };
-}
 
 export default compose(
   scrollable,
   DropTarget,
-  connect(mapStateToProps),
+  MonitorDropTarget(['isOver', 'canAccept']),
+  // MonitorDragLayer(['isDragging']),
 )(NodeList);

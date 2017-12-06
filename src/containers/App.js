@@ -5,9 +5,6 @@ import { compose } from 'redux';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
-import { provideDragContext } from '../behaviours/DragAndDrop/DragContext';
-
-console.log(provideDragContext, 'CONTEXT');
 
 require('../styles/main.scss');
 
@@ -57,5 +54,4 @@ function mapStateToProps(state) {
 
 export default compose(
   connect(mapStateToProps),
-  provideDragContext(),
 )(App);

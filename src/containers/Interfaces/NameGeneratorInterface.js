@@ -121,11 +121,8 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              droppableName="MAIN_NODE_LIST"
-              acceptsDraggableType="NEW_NODE"
-              draggableType="EXISTING_NODE"
-              onDropNode={this.onDropNode}
-              onSelectNode={this.onSelectNode}
+              accepts={['NEW_NODE']}
+              itemType="EXISTING_NODE"
             />
           </div>
         </div>
