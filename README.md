@@ -1,4 +1,5 @@
 # Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas?ref=badge_shield)
 
 Technologies used:
 ES6 (via Babel)
@@ -49,3 +50,7 @@ This repository assumes that `npm` is installed. If you don't have it installed,
 │   ├── ducks                # Middleware, modules (ducks-style with actions, reducers, and action creators), and store
 │   └── utils                # Helpers and utils
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas?ref=badge_large)
