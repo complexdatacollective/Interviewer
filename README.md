@@ -1,4 +1,4 @@
-# Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas)
+# Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas) [![Dependency Status](https://dependencyci.com/github/codaco/Network-Canvas/badge)](https://dependencyci.com/github/codaco/Network-Canvas)
 
 Technologies used:
 ES6 (via Babel)
