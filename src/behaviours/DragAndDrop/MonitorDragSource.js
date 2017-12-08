@@ -1,4 +1,3 @@
-import mergeMapPropsStream from './mergeMapPropsStream';
 import Monitor from './Monitor';
 
 const defaultMonitorProps = {
