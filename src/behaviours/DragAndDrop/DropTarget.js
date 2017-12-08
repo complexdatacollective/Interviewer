@@ -51,14 +51,20 @@ const dropTarget = WrappedComponent =>
     }
 
     componentWillUnmount() {
-      console.log('unmount');
       window.removeEventListener('resize', this.onResize);
       this.onResize.cancel();
+      this.removeTarget();
     }
 
     onResize = () => {
       this.updateTarget();
       setTimeout(this.updateTarget, 1000);
+    }
+
+    removeTarget = () => {
+      store.dispatch(
+        dragActions.renameTarget(this.props.id),
+      );
     }
 
     renameTarget = ({ from, to }) => {

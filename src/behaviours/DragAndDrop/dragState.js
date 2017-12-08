@@ -1,8 +1,9 @@
-import { filter, omit, uniqBy, throttle } from 'lodash';
+import { filter, reject, omit, uniqBy, throttle } from 'lodash';
 import { compose, createStore } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
+const REMOVE_TARGET = Symbol('DRAG_AND_DROP/REMOVE_TARGET');
 const UPDATE_SOURCE = Symbol('DRAG_AND_DROP/UPDATE_SOURCE');
 const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
 const DRAG_MOVE = Symbol('DRAG_AND_DROP/DRAG_MOVE');
@@ -66,6 +67,11 @@ const reducer = (state = initialState, { type, ...action }) => {
           };
         }),
       };
+    case REMOVE_TARGET:
+      return {
+        ...state,
+        targets: reject(state.targets, ['id', action.id]),
+      };
     case DRAG_START:
       return markHits({
         ...state,
@@ -118,6 +124,13 @@ function renameTarget({ from, to }) {
   };
 }
 
+function removeTarget(id) {
+  return {
+    type: REMOVE_TARGET,
+    id,
+  };
+}
+
 function dragStart(data) {
   return {
     type: DRAG_START,
@@ -146,6 +159,7 @@ store.subscribe(() => console.log(store.getState()));
 const actionCreators = {
   updateTarget,
   renameTarget,
+  removeTarget,
   dragStart,
   dragMove,
   dragEnd,
