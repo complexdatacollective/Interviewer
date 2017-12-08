@@ -134,14 +134,12 @@ function dragMove(data) {
 
 function dragEnd(data) {
   return (dispatch, getState) => {
-    const action = {
+    triggerDrop(getState(), data);
+
+    dispatch({
       type: DRAG_END,
       ...data,
-    };
-
-    triggerDrop(getState(), action);
-
-    dispatch(action);
+    });
   }
 }
 

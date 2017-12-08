@@ -12,9 +12,10 @@ import {
   DragSource,
   DropTarget,
   MonitorDropTarget,
+  MonitorDragSource,
 } from '../../behaviours/DragAndDrop';
 
-const EnhancedNode = DragSource(Node);
+const EnhancedNode = DragSource(selectable(Node));
 
 /**
   * Renders a list of Node.
@@ -24,7 +25,7 @@ const NodeList = ({
   nodeColor,
   label,
   selected,
-  onSelectNode,
+  onSelect,
   itemType,
   isOver,
   canAccept,
@@ -56,7 +57,7 @@ const NodeList = ({
               color={nodeColor}
               label={label(node)}
               selected={selected(node)}
-              onSelected={() => onSelectNode(node)}
+              onSelected={() => onSelect(node)}
               itemType={itemType}
               meta={() => node}
               {...node}
@@ -81,8 +82,8 @@ NodeList.defaultProps = {
   nodeColor: '',
   label: () => (''),
   selected: () => false,
-  onSelectNode: () => {},
-  onDrop: () => { alert('foo'); },
+  onSelect: () => {},
+  onDrop: () => {},
   itemType: 'NODE',
   isOver: false,
   canAccept: false,

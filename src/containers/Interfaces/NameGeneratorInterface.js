@@ -73,25 +73,6 @@ class NameGenerator extends Component {
   onDrop = (item) => {
     const node = { ...this.props.newNodeAttributes, ...item.meta };
     this.props.addOrUpdateNode(node);
-
-    // this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...item.meta });
-    // const currentPromptId = this.props.prompt.id;
-    // const currentStageId = this.props.stage.id;
-
-    // hits.forEach((hit) => {
-    //   switch (hit.name) {
-    //     case 'NODE_BIN':
-    //       this.props.removeNode(node.uid);
-    //       break;
-    //     case 'NODE_PROVIDER_EXISTING':
-    //       if (node.promptId === currentPromptId && node.stageId === currentStageId) {
-    //         return;
-    //       }
-    //       this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
-    //       break;
-    //     default:
-    //   }
-    // });
   }
 
   render() {
@@ -130,6 +111,7 @@ class NameGenerator extends Component {
               accepts={['NEW_NODE']}
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
+              onSelect={this.onSelectNode}
             />
           </div>
         </div>
