@@ -1,5 +1,5 @@
 import { filter, reject, omit, uniqBy, throttle } from 'lodash';
-import { compose, createStore } from 'redux';
+import { compose } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
@@ -86,19 +86,6 @@ const reducer = (state = initialState, { type, ...action }) => {
         },
       });
     case DRAG_END: {
-      const hits = markHits({
-        ...state,
-        source: {
-          ...state.source,
-          ...action,
-        },
-      });
-
-      filter(hits.targets, 'isOver')
-        .forEach((target) => {
-          target.onDrop(target, hits.source);
-        });
-
       return resetHits({
         ...state,
         source: {},
@@ -146,15 +133,32 @@ function dragMove(data) {
 }
 
 function dragEnd(data) {
-  return {
-    type: DRAG_END,
-    ...data,
-  };
+  return (dispatch, getState) => {
+    const action = {
+      type: DRAG_END,
+      ...data,
+    };
+
+    triggerDrop(getState(), action);
+
+    dispatch(action);
+  }
 }
 
-const store = createStore(reducer);
+const triggerDrop = (state, action) => {
+  const hits = markHits({
+    ...state,
+    source: {
+      ...state.source,
+      ...action,
+    },
+  });
 
-// store.subscribe(() => console.log(store.getState()));
+  filter(hits.targets, 'isOver')
+    .forEach((target) => {
+      target.onDrop(hits.source);
+    });
+};
 
 const actionCreators = {
   updateTarget,

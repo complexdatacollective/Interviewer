@@ -7,17 +7,20 @@ import PropTypes from 'prop-types';
 import dropId from './dropId';
 import DragPreview from './DragPreview';
 import dragManager from './dragManager';
-import { actionCreators as dragActions, store } from './dragState';
+import { actionCreators as actions } from './reducer';
+import store from './store';
 
 const dragSource = WrappedComponent =>
   class DragSource extends PureComponent {
     static propTypes = {
       canDrag: PropTypes.bool,
       itemType: PropTypes.string.isRequired,
+      meta: PropTypes.func,
     };
 
     static defaultProps = {
       canDrag: true,
+      meta: () => ({}),
     };
 
     constructor(props) {
@@ -72,9 +75,10 @@ const dragSource = WrappedComponent =>
     onDragStart = (movement) => {
       this.createPreview();
       store.dispatch(
-        dragActions.dragStart({
+        actions.dragStart({
           ...movement,
           itemType: this.props.itemType,
+          meta: this.props.meta(),
         }),
       );
       this.setState({ isDragging: true }); // TODO: Should this be handled in a manager?
@@ -83,7 +87,7 @@ const dragSource = WrappedComponent =>
     onDragMove = ({ x,  y, ...rest }) => {
       this.updatePreview({ x,  y });
       store.dispatch(
-        dragActions.dragMove({
+        actions.dragMove({
           x, y, ...rest,
         }),
       );
@@ -93,7 +97,7 @@ const dragSource = WrappedComponent =>
       this.cleanupPreview();
       this.setState({ isDragging: false });
       store.dispatch(
-        dragActions.dragEnd(movement),
+        actions.dragEnd(movement),
       );
     }
 

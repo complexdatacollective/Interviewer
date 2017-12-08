@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { compose } from 'redux';
 import { pick, isEqual } from 'lodash';
-import { store } from './dragState';
+import store from './store';
 
 const monitor = (getMonitorProps, types) =>
   WrappedComponent =>

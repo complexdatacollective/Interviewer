@@ -8,7 +8,8 @@ import { mapProps } from 'recompose';
 import { debounce, isMatch, uniqueId } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import dropId from './dropId';
-import { actionCreators as dragActions, store } from './dragState';
+import { actionCreators as actions } from './reducer';
+import store from './store';
 
 const maxFramesPerSecond = 10;
 
@@ -63,13 +64,13 @@ const dropTarget = WrappedComponent =>
 
     removeTarget = () => {
       store.dispatch(
-        dragActions.renameTarget(this.props.id),
+        actions.renameTarget(this.props.id),
       );
     }
 
     renameTarget = ({ from, to }) => {
       store.dispatch(
-        dragActions.renameTarget({
+        actions.renameTarget({
           from,
           to,
         }),
@@ -82,7 +83,7 @@ const dropTarget = WrappedComponent =>
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
       store.dispatch(
-        dragActions.updateTarget({
+        actions.updateTarget({
           id: this.props.id,
           onDrop: this.props.onDrop,
           accepts: this.props.accepts,

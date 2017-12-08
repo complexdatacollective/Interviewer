@@ -58,6 +58,7 @@ const NodeList = ({
               selected={selected(node)}
               onSelected={() => onSelectNode(node)}
               itemType={itemType}
+              meta={() => node}
               {...node}
             />
           </span>

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
@@ -65,27 +67,31 @@ class NameGenerator extends Component {
 
   /**
    * Drop node handler
-   * Deletes node from network when dropped on bin
+   * Deletes node from network whe  n dropped on bin
    * @param {object} node - key/value object containing node object from the network store
    */
-  onDropNode = (hits, node) => {
-    const currentPromptId = this.props.prompt.id;
-    const currentStageId = this.props.stage.id;
+  onDrop = (item) => {
+    const node = { ...this.props.newNodeAttributes, ...item.meta };
+    this.props.addOrUpdateNode(node);
 
-    hits.forEach((hit) => {
-      switch (hit.name) {
-        case 'NODE_BIN':
-          this.props.removeNode(node.uid);
-          break;
-        case 'NODE_PROVIDER_EXISTING':
-          if (node.promptId === currentPromptId && node.stageId === currentStageId) {
-            return;
-          }
-          this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
-          break;
-        default:
-      }
-    });
+    // this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...item.meta });
+    // const currentPromptId = this.props.prompt.id;
+    // const currentStageId = this.props.stage.id;
+
+    // hits.forEach((hit) => {
+    //   switch (hit.name) {
+    //     case 'NODE_BIN':
+    //       this.props.removeNode(node.uid);
+    //       break;
+    //     case 'NODE_PROVIDER_EXISTING':
+    //       if (node.promptId === currentPromptId && node.stageId === currentStageId) {
+    //         return;
+    //       }
+    //       this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
+    //       break;
+    //     default:
+    //   }
+    // });
   }
 
   render() {
@@ -123,6 +129,7 @@ class NameGenerator extends Component {
               label={label}
               accepts={['NEW_NODE']}
               itemType="EXISTING_NODE"
+              onDrop={this.onDrop}
             />
           </div>
         </div>
@@ -195,7 +202,7 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
+    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
