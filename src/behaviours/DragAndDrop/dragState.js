@@ -154,14 +154,14 @@ function dragEnd(data) {
 
 const store = createStore(reducer);
 
-store.subscribe(() => console.log(store.getState()));
+// store.subscribe(() => console.log(store.getState()));
 
 const actionCreators = {
   updateTarget,
   renameTarget,
   removeTarget,
   dragStart,
-  dragMove,
+  dragMove: throttle(dragMove, 1000/16),
   dragEnd,
 };
 

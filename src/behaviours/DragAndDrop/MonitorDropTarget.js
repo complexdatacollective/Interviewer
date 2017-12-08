@@ -8,7 +8,6 @@ const defaultMonitorProps = {
 };
 
 const getMonitorProps = (state, props) => {
-  console.log('getMonitorProps', state, props);
   const target = find(state.targets, ['id', props.id]);
   if (!target) { return { ...defaultMonitorProps } };
   const monitorProps = {
