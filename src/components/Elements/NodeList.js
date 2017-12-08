@@ -32,7 +32,7 @@ const NodeList = ({
 }) => {
   const classNames = cx(
     'node-list',
-    { 'node-list--hover': isOver},
+    { 'node-list--hover': canAccept && isOver},
     { 'node-list--drag': canAccept }, // TODO: rename class
   );
 
@@ -89,8 +89,7 @@ NodeList.defaultProps = {
 };
 
 export default compose(
-  scrollable,
   DropTarget,
   MonitorDropTarget(['isOver', 'canAccept']),
-  // MonitorDragLayer(['isDragging']),
+  scrollable,
 )(NodeList);

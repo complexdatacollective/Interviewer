@@ -2,6 +2,7 @@ import { filter, omit, uniqBy, throttle } from 'lodash';
 import { compose, createStore } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
+const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
 const UPDATE_SOURCE = Symbol('DRAG_AND_DROP/UPDATE_SOURCE');
 const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
 const DRAG_MOVE = Symbol('DRAG_AND_DROP/DRAG_MOVE');
@@ -53,6 +54,18 @@ const reducer = (state = initialState, { type, ...action }) => {
         ...state,
         targets: uniqBy([action, ...state.targets], 'id'),
       });
+    case RENAME_TARGET:
+      return {
+        ...state,
+        targets: state.targets.map((target) => {
+          if (action.from !== target.id ) { return target; }
+
+          return {
+            ...target,
+            id: action.to,
+          };
+        }),
+      };
     case DRAG_START:
       return markHits({
         ...state,
@@ -97,6 +110,14 @@ function updateTarget(data) {
   };
 }
 
+function renameTarget({ from, to }) {
+  return {
+    type: RENAME_TARGET,
+    from,
+    to,
+  };
+}
+
 function dragStart(data) {
   return {
     type: DRAG_START,
@@ -124,8 +145,9 @@ store.subscribe(() => console.log(store.getState()));
 
 const actionCreators = {
   updateTarget,
+  renameTarget,
   dragStart,
-  dragMove: throttle(dragMove, 100000),
+  dragMove,
   dragEnd,
 };
 

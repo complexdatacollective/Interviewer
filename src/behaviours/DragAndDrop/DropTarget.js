@@ -40,7 +40,18 @@ const dropTarget = WrappedComponent =>
       this.updateTarget();
     }
 
+    componentWillReceiveProps(props) {
+      // TODO: Why is this necessary?
+      if (props.id !== this.props.id) {
+        this.renameTarget({
+          from: this.props.id,
+          to: props.id,
+        });
+      }
+    }
+
     componentWillUnmount() {
+      console.log('unmount');
       window.removeEventListener('resize', this.onResize);
       this.onResize.cancel();
     }
@@ -48,6 +59,15 @@ const dropTarget = WrappedComponent =>
     onResize = () => {
       this.updateTarget();
       setTimeout(this.updateTarget, 1000);
+    }
+
+    renameTarget = ({ from, to }) => {
+      store.dispatch(
+        dragActions.renameTarget({
+          from,
+          to,
+        }),
+      );
     }
 
     updateTarget = () => {
