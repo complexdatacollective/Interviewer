@@ -1,41 +1,50 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { DropTarget } from '../../behaviours/DragAndDrop';
+import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
 
 /**
   * Renders a droppable NodeBin which accepts `EXISTING_NODE`.
   */
-const NodeBin = ({ isDraggableDeleteable, hover }) => {
+const NodeBin = ({
+  willAccept,
+  isOver,
+}) => {
   const classNames = cx(
     'node-bin',
-    { 'node-bin--active': isDraggableDeleteable },
-    { 'node-bin--hover': hover },
+    { 'node-bin--active': willAccept },
+    { 'node-bin--hover': willAccept && isOver },
   );
 
-  return (
-    <div className="drop-zone">
-      <div className={classNames} />
-    </div>
-  );
+  return <div className={classNames} />;
 };
 
 NodeBin.propTypes = {
-  hover: PropTypes.bool,
-  isDraggableDeleteable: PropTypes.bool.isRequired,
+  isOver: PropTypes.bool,
+  willAccept: PropTypes.bool,
 };
 
 NodeBin.defaultProps = {
-  hover: false,
+  isOver: false,
+  willAccept: false,
 };
 
-function mapStateToProps(state) {
+function mapDispatchToProps(dispatch) {
   return {
-    acceptsDraggableType: 'EXISTING_NODE',
-    droppableName: 'NODE_BIN',
-    isDraggableDeleteable: state.draggable.isDragging && state.draggable.draggableType === 'EXISTING_NODE',
+    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
 }
 
-export default connect(mapStateToProps)(DropTarget(NodeBin));
+export default compose(
+  connect(null, mapDispatchToProps),
+  withProps(props => ({
+    accepts: ({ meta }) => meta.itemType === 'EXISTING_NODE',
+    onDrop: ({ meta }) => props.removeNode(meta.uid),
+  })),
+  DropTarget,
+  MonitorDropTarget(['isOver', 'willAccept']),
+)(NodeBin);
