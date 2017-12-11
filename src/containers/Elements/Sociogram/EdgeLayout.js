@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { colorDictionary } from 'network-canvas-ui';
-import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
+import { makeDisplayEdgesForPrompt } from '../../../selectors/sociogram';
 
 const renderEdge = (key, color, from, to) => {
   if (!from || !to) { return null; }

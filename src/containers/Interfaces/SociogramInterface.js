@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'network-canvas-ui';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper } from '../Elements';
-import Sociogram from '../Elements/Sociogram';
+import { PromptSwiper, Sociogram } from '../Elements';
 import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isEqual, isMatch, omit } from 'lodash';
-import LayoutNode from '../LayoutNode';
-import { withBounds } from '../../behaviours';
-import { DropZone } from '../../components/Elements';
-import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import LayoutNode from './LayoutNode';
+import { withBounds } from '../../../behaviours';
+import { DropZone } from '../../../components/Elements';
+import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../../selectors/sociogram';
+import { actionCreators as networkActions } from '../../../ducks/modules/network';
 
 const draggableType = 'POSITIONED_NODE';
 

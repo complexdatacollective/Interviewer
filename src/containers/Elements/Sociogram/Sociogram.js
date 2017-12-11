@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  SociogramBackground,
-  NodeLayout,
-  EdgeLayout,
-  NodeBucket,
-} from '../Elements';
+import { NodeBucket } from '../../Elements';
+import NodeLayout from './NodeLayout';
+import EdgeLayout from './EdgeLayout';
+import Background from './Background';
 
 const Sociogram = ({ stage, prompt }) => (
   <div className="sociogram">
-    <SociogramBackground stage={stage} prompt={prompt} />
+    <Background stage={stage} prompt={prompt} />
     {
       prompt.edges &&
       <EdgeLayout

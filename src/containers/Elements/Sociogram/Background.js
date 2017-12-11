@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import SociogramRadar from './SociogramRadar';
-import { makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
+import Radar from './Radar';
+import { makeGetSociogramOptions, sociogramOptionsProps } from '../../../selectors/sociogram';
 
-class SociogramBackground extends PureComponent {
+class Background extends PureComponent {
   static propTypes = {
     ...sociogramOptionsProps,
   };
@@ -21,7 +21,7 @@ class SociogramBackground extends PureComponent {
     if (image) {
       background = <div className="sociogram-background__image" style={{ backgroundImage: `url(${image})` }} />;
     } else {
-      background = <SociogramRadar n={concentricCircles} skewed={skewedTowardCenter} />;
+      background = <Radar n={concentricCircles} skewed={skewedTowardCenter} />;
     }
 
     return (
@@ -42,6 +42,6 @@ function makeMapStateToProps() {
   };
 }
 
-export { SociogramBackground };
+export { Background };
 
-export default connect(makeMapStateToProps)(SociogramBackground);
+export default connect(makeMapStateToProps)(Background);

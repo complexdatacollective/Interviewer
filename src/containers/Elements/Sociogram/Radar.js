@@ -26,7 +26,7 @@ const equalByIncrement = (outerRadius, n) =>
 const weightedAverage = (a, b, factor = 1) =>
   zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
 
-const SociogramRadar = ({ n, skewed }) => {
+const Radar = ({ n, skewed }) => {
   const radii = skewed ?
     weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
     equalByIncrement(50, n);
@@ -48,14 +48,14 @@ const SociogramRadar = ({ n, skewed }) => {
   );
 };
 
-SociogramRadar.propTypes = {
+Radar.propTypes = {
   n: PropTypes.number,
   skewed: PropTypes.bool,
 };
 
-SociogramRadar.defaultProps = {
+Radar.defaultProps = {
   n: 4,
   skewed: true,
 };
 
-export default SociogramRadar;
+export default Radar;
