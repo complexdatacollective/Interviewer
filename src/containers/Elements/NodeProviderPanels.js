@@ -5,7 +5,7 @@ import { colorDictionary } from 'network-canvas-ui';
 import { createSelector } from 'reselect';
 import { has, map, some } from 'lodash';
 import { Panels, Panel } from '../../components/Elements';
-import { NodeProvider } from '../Elements';
+import { NodePanel } from '../Elements';
 
 const colorPresets = [
   colorDictionary['edge-alt-1'],
@@ -19,13 +19,12 @@ const panelPresets = {
   existing: {
     title: 'Already mentioned',
     dataSource: 'existing',
-    selectable: true,
+    droppable: true,
     filter: network => network,
   },
   external: {
     title: 'People from your previous visit',
     dataSource: 'previousInterview',
-    draggable: true,
     filter: network => network,
   },
 };
@@ -45,7 +44,7 @@ const getPanelConfigs = createSelector(
 );
 
 const getHighlight = (provider, panelNumber) => {
-  if (provider.highlight) { return provider.highlight; }
+  if (colorDictionary[provider.highlight]) { return colorDictionary[provider.highlight]; }
   if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
   return null;
 };
@@ -58,14 +57,15 @@ class NodeProviderPanels extends PureComponent {
     super(props);
 
     this.state = {
-      panels: map(props.panels, () => true),
+      panelsOpen: map(props.panels, () => true),
+      panelsDragging: map(props.panels, () => false),
     };
   }
 
   onUpdatePanelState = (updateIndex, state) => {
     this.setState(previousState => ({
-      panels: map(
-        previousState.panels,
+      panelsOpen: map(
+        previousState.panelsOpen,
         (item, index) => {
           if (updateIndex === index) { return state; }
           return item;
@@ -74,12 +74,35 @@ class NodeProviderPanels extends PureComponent {
     }));
   }
 
-  isPanelOpen = index => this.state.panels[index];
+  onUpdateNodeDragging = (panelIndex, show) => {
+    this.setState(previousState => ({
+      panelsDragging: map(
+        previousState.panelsDragging,
+        (item, index) => {
+          if (panelIndex === index) { return show; }
+          return item;
+        },
+      ),
+    }));
+  };
 
-  anyPanelOpen = () => some(
-    map(this.state.panels, (value, index) => this.isPanelOpen(index)),
+  panelIsDragging = index => this.state.panelsDragging[index];
+
+  panelHasNodes = index => this.state.panelsOpen[index];
+
+  isPanelOpen = index => this.panelHasNodes(index) || this.panelIsDragging(index);
+
+  anyPanelIsDragging = () => some(
+    map(this.state.panelsDragging, (value, index) => this.panelIsDragging(index)),
+    show => show === true,
+  );
+
+  anyPanelHasNodes = () => some(
+    map(this.state.panelsOpen, (value, index) => this.panelHasNodes(index)),
     open => open === true,
   );
+
+  anyPanelOpen = () => this.anyPanelHasNodes() || this.anyPanelIsDragging();
 
   render() {
     const { panels, stage, prompt } = this.props;
@@ -93,11 +116,13 @@ class NodeProviderPanels extends PureComponent {
             minimise={!this.isPanelOpen(panelIndex)}
             highlight={getHighlight(panel, panelIndex)}
           >
-            <NodeProvider
+            <NodePanel
               {...panel}
               stage={stage}
               prompt={prompt}
               onUpdateNodes={nodes => this.onUpdatePanelState(panelIndex, nodes.length !== 0)}
+              onDrag={show => this.onUpdateNodeDragging(panelIndex, show)}
+              nodeColor={panel.nodeColor}
             />
           </Panel>
         )) }

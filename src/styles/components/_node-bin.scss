@@ -13,4 +13,9 @@
     transform: translate3d(0, 0, 0);
     opacity: 1;
   }
+
+  &--hover {
+    width: 120px;
+    height: 160px;
+  }
 }

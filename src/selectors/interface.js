@@ -72,26 +72,26 @@ export const makeNetworkNodesForSubject = () => {
 };
 
 export const makeNetworkNodesForPrompt = () => {
-  // used to check node attributes
-  const getIds = makeGetIds();
+  // used to check prompt ids
+  const getAttributes = makeGetAdditionalAttributes();
 
   return createSelector(
-    networkNodes, getIds,
+    networkNodes, getAttributes,
     (nodes, attributes) => filter(nodes, attributes),
   );
 };
 
 export const makeNetworkNodesForOtherPrompts = () => {
-  // used to check node attributes
-  const getIds = makeGetIds();
+  // used to check prompt ids
+  const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    networkNodesForSubject, getIds,
-    (nodes, { promptId }) =>
+    networkNodesForSubject, getAttributes,
+    (nodes, attributes) =>
       reject(
         nodes,
-        { promptId },
+        attributes,
       ),
   );
 };

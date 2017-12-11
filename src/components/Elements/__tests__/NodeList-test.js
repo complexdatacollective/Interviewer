@@ -5,7 +5,9 @@ import { createStore } from 'redux';
 import { shallow } from 'enzyme';
 import NodeList from '../../Elements/NodeList';
 
-const mockStore = createStore(() => ({ droppable: { activeZones: [] } }));
+const mockStore = createStore(() => (
+  { droppable: { activeZones: [] }, draggable: { draggingFromIds: {} } }
+));
 
 describe('NodeList component', () => {
   it('renders ok', () => {

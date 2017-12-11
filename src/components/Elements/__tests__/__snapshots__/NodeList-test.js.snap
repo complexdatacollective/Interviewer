@@ -8,37 +8,37 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <Droppable
-    acceptsDraggableType={null}
-    droppableName={null}
-    hover={false}
-    store={
-        Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          }
-    }
-    updateZone={[Function]}
-/>,
-  "nodes": Array [
-    <Droppable
-      acceptsDraggableType={null}
-      droppableName={null}
-      hover={false}
-      store={
+  "node": <div
+    className="scrollable"
+>
+    <Connect(Droppable)
+        store={
             Object {
-                  "dispatch": [Function],
-                  "getState": [Function],
-                  "replaceReducer": [Function],
-                  "subscribe": [Function],
-                  Symbol(observable): [Function],
-                }
-      }
-      updateZone={[Function]}
-/>,
+                "dispatch": [Function],
+                "getState": [Function],
+                "replaceReducer": [Function],
+                "subscribe": [Function],
+                Symbol(observable): [Function],
+              }
+        }
+    />
+</div>,
+  "nodes": Array [
+    <div
+      className="scrollable"
+>
+      <Connect(Droppable)
+            store={
+                  Object {
+                        "dispatch": [Function],
+                        "getState": [Function],
+                        "replaceReducer": [Function],
+                        "subscribe": [Function],
+                        Symbol(observable): [Function],
+                      }
+            }
+      />
+</div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -46,7 +46,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(Droppable)
+      "_currentElement": <Scrollable
         store={
                 Object {
                         "dispatch": [Function],
@@ -60,32 +60,9 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": Connect {
+      "_instance": Scrollable {
         "_reactInternalInstance": [Circular],
-        "context": Object {
-          "store": undefined,
-        },
-        "dispatchProps": Object {
-          "updateZone": [Function],
-        },
-        "doDispatchPropsDependOnOwnProps": false,
-        "doStatePropsDependOnOwnProps": true,
-        "finalMapDispatchToProps": [Function],
-        "finalMapStateToProps": [Function],
-        "hasStoreStateChanged": false,
-        "haveOwnPropsChanged": false,
-        "haveStatePropsBeenPrecalculated": false,
-        "mergedProps": Object {
-          "hover": false,
-          "store": Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          },
-          "updateZone": [Function],
-        },
+        "context": Object {},
         "props": Object {
           "store": Object {
             "dispatch": [Function],
@@ -96,39 +73,10 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "renderedElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          updateZone={[Function]}
-/>,
         "state": Object {
-          "storeState": Object {
-            "droppable": Object {
-              "activeZones": Array [],
-            },
-          },
+          "isScrolling": false,
         },
-        "stateProps": Object {
-          "hover": false,
-        },
-        "statePropsPrecalculationError": null,
-        "store": Object {
-          "dispatch": [Function],
-          "getState": [Function],
-          "replaceReducer": [Function],
-          "subscribe": [Function],
-          Symbol(observable): [Function],
-        },
+        "updateScrollState": [Function],
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -139,7 +87,6 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 1,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -148,39 +95,39 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          updateZone={[Function]}
-/>,
+        "_currentElement": <div
+          className="scrollable"
+>
+          <Connect(Droppable)
+                    store={
+                              Object {
+                                        "dispatch": [Function],
+                                        "getState": [Function],
+                                        "replaceReducer": [Function],
+                                        "subscribe": [Function],
+                                        Symbol(observable): [Function],
+                                      }
+                    }
+          />
+</div>,
         "_debugID": 2,
-        "_renderedOutput": <Droppable
-          acceptsDraggableType={null}
-          droppableName={null}
-          hover={false}
-          store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
-          }
-          updateZone={[Function]}
-/>,
+        "_renderedOutput": <div
+          className="scrollable"
+>
+          <Connect(Droppable)
+                    store={
+                              Object {
+                                        "dispatch": [Function],
+                                        "getState": [Function],
+                                        "replaceReducer": [Function],
+                                        "subscribe": [Function],
+                                        Symbol(observable): [Function],
+                                      }
+                    }
+          />
+</div>,
       },
-      "_renderedNodeType": 1,
+      "_renderedNodeType": 0,
       "_rootNodeID": 0,
       "_topLevelWrapper": null,
       "_updateBatchNumber": null,
@@ -190,7 +137,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(Droppable)
+  "unrendered": <Scrollable
     store={
         Object {
             "dispatch": [Function],

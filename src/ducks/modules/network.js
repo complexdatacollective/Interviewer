@@ -1,6 +1,7 @@
-import { maxBy, reject, findIndex, isMatch, omit } from 'lodash';
+import { find, maxBy, reject, findIndex, isMatch, omit } from 'lodash';
 
 const ADD_NODE = 'ADD_NODE';
+const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
 const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
@@ -39,16 +40,54 @@ function edgeExists(edges, edge) {
   );
 }
 
+function getNodesWithAdd(nodes, node) {
+  const id = nextId(nodes);
+  const uid = nextUid(nodes);
+  // Provided uid can override generated one, but not id
+  const nodeWithId = { uid, ...node, id };
+  return [...nodes, nodeWithId];
+}
+
+function getUpdatedNodes(nodes, updatedNode, full) {
+  const updatedNodes = nodes.map((node) => {
+    if (node.uid !== updatedNode.uid) { return node; }
+
+    if (full) {
+      return {
+        ...updatedNode,
+        id: node.id,
+        uid: node.uid,
+      };
+    }
+
+    return {
+      ...node,
+      ...updatedNode,
+      id: node.id,
+      uid: node.uid,
+    };
+  });
+  return updatedNodes;
+}
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE: {
-      const id = nextId(state.nodes);
-      const uid = nextUid(state.nodes);
-      // Provided uid can override generated one, but not id
-      const node = { uid, ...action.node, id };
       return {
         ...state,
-        nodes: [...state.nodes, node],
+        nodes: getNodesWithAdd(state.nodes, action.node),
+      };
+    }
+    case ADD_OR_UPDATE_NODE: {
+      let nodes = state.nodes;
+      if (find(state.nodes, ['uid', action.node.uid])) {
+        nodes = getUpdatedNodes(state.nodes, action.node, action.full);
+      } else {
+        nodes = getNodesWithAdd(state.nodes, action.node);
+      }
+      return {
+        ...state,
+        nodes,
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
@@ -75,28 +114,9 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case UPDATE_NODE: {
-      const updatedNodes = state.nodes.map((node) => {
-        if (node.uid !== action.node.uid) { return node; }
-
-        if (action.full) {
-          return {
-            ...action.node,
-            id: node.id,
-            uid: node.uid,
-          };
-        }
-
-        return {
-          ...node,
-          ...action.node,
-          id: node.id,
-          uid: node.uid,
-        };
-      });
-
       return {
         ...state,
-        nodes: updatedNodes,
+        nodes: getUpdatedNodes(state.nodes, action.node, action.full),
       };
     }
     case REMOVE_NODE:
@@ -138,6 +158,13 @@ export default function reducer(state = initialState, action = {}) {
 function addNode(node) {
   return {
     type: ADD_NODE,
+    node,
+  };
+}
+
+function addOrUpdateNode(node) {
+  return {
+    type: ADD_OR_UPDATE_NODE,
     node,
   };
 }
@@ -188,6 +215,7 @@ function removeEdge(edge) {
 
 const actionCreators = {
   addNode,
+  addOrUpdateNode,
   updateNode,
   removeNode,
   addEdge,
@@ -198,6 +226,7 @@ const actionCreators = {
 
 const actionTypes = {
   ADD_NODE,
+  ADD_OR_UPDATE_NODE,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,

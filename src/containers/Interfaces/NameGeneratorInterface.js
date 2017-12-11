@@ -69,10 +69,19 @@ class NameGenerator extends Component {
    * @param {object} node - key/value object containing node object from the network store
    */
   onDropNode = (hits, node) => {
+    const currentPromptId = this.props.prompt.id;
+    const currentStageId = this.props.stage.id;
+
     hits.forEach((hit) => {
       switch (hit.name) {
         case 'NODE_BIN':
           this.props.removeNode(node.uid);
+          break;
+        case 'NODE_PROVIDER':
+          if (node.promptId === currentPromptId && node.stageId === currentStageId) {
+            return;
+          }
+          this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
           break;
         default:
       }
@@ -161,8 +170,10 @@ NameGenerator.propTypes = {
   prompt: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
+  toggleNodeAttributes: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
+  activePromptAttributes: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
@@ -176,6 +187,7 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
+      activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       form: rehydrateForm(state, props),
@@ -186,6 +198,7 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
+    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),

@@ -178,7 +178,7 @@ export default function draggable(WrappedComponent) {
     detectDragStart = (movement) => {
       if (this.state.type === 'DRAG' && !this.preview && movement.distance > 4) {
         this.setState({ dragStart: true }, () => {
-          this.props.dragStart(this.props.draggableType);
+          this.props.dragStart(this.props.draggableType, this.props.meta);
           this.createPreview();
         });
       }
@@ -254,7 +254,7 @@ export default function draggable(WrappedComponent) {
     }
 
     styles() {
-      return this.state.dragStart ? { opacity: 0, width: 0, height: 0 } : { opacity: 1 };
+      return this.state.dragStart ? { visibility: 'hidden' } : { visibility: 'initial' };
     }
 
     render() {
@@ -288,6 +288,7 @@ export default function draggable(WrappedComponent) {
     onDropped: PropTypes.func,
     onMove: PropTypes.func,
     updateActiveZones: PropTypes.func.isRequired,
+    meta: PropTypes.object,
     canDrag: PropTypes.bool,
   };
 
@@ -296,11 +297,13 @@ export default function draggable(WrappedComponent) {
     animate: false,
     onDropped: () => {},
     onMove: () => {},
+    meta: {},
   };
 
-  function mapStateToProps(state) {
+  function mapStateToProps(state, props) {
     return {
       zones: state.droppable.zones,
+      meta: { promptId: props.promptId, stageId: props.stageId },
     };
   }
 

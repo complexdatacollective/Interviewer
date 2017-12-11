@@ -8,7 +8,7 @@ import { droppable } from '../../behaviours';
   */
 const DropZone = ({ children }) => (
   <div className="drop-zone">
-    { children }
+    {children}
   </div>
 );
 

@@ -35,7 +35,7 @@ ShallowWrapper {
                     icon=""
                     interfaceType=""
                     isActive={false}
-                    label={undefined}
+                    label="a title"
                     menuType="primary"
                     onClick={[Function]}
                     to="a-to"
@@ -44,7 +44,7 @@ ShallowWrapper {
                     icon=""
                     interfaceType=""
                     isActive={false}
-                    label={undefined}
+                    label="b title"
                     menuType="primary"
                     onClick={[Function]}
                     to="b-to"
@@ -53,7 +53,7 @@ ShallowWrapper {
                     icon=""
                     interfaceType=""
                     isActive={false}
-                    label={undefined}
+                    label="c title"
                     menuType="primary"
                     onClick={[Function]}
                     to="c-to"
@@ -97,7 +97,7 @@ ShallowWrapper {
                               icon=""
                               interfaceType=""
                               isActive={false}
-                              label={undefined}
+                              label="a title"
                               menuType="primary"
                               onClick={[Function]}
                               to="a-to"
@@ -106,7 +106,7 @@ ShallowWrapper {
                               icon=""
                               interfaceType=""
                               isActive={false}
-                              label={undefined}
+                              label="b title"
                               menuType="primary"
                               onClick={[Function]}
                               to="b-to"
@@ -115,7 +115,7 @@ ShallowWrapper {
                               icon=""
                               interfaceType=""
                               isActive={false}
-                              label={undefined}
+                              label="c title"
                               menuType="primary"
                               onClick={[Function]}
                               to="c-to"
@@ -146,17 +146,17 @@ ShallowWrapper {
                 Array [
                         Object {
                           "id": "a",
-                          "title": "a title",
+                          "label": "a title",
                           "to": "a-to",
                         },
                         Object {
                           "id": "b",
-                          "title": "b title",
+                          "label": "b title",
                           "to": "b-to",
                         },
                         Object {
                           "id": "c",
-                          "title": "c title",
+                          "label": "c title",
                           "to": "c-to",
                         },
                       ]
@@ -182,17 +182,17 @@ ShallowWrapper {
           "items": Array [
             Object {
               "id": "a",
-              "title": "a title",
+              "label": "a title",
               "to": "a-to",
             },
             Object {
               "id": "b",
-              "title": "b title",
+              "label": "b title",
               "to": "b-to",
             },
             Object {
               "id": "c",
-              "title": "c title",
+              "label": "c title",
               "to": "c-to",
             },
           ],
@@ -247,7 +247,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="a title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="a-to"
@@ -256,7 +256,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="b title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="b-to"
@@ -265,7 +265,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="c title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="c-to"
@@ -309,7 +309,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="a title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="a-to"
@@ -318,7 +318,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="b title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="b-to"
@@ -327,7 +327,7 @@ ShallowWrapper {
                                                   icon=""
                                                   interfaceType=""
                                                   isActive={false}
-                                                  label={undefined}
+                                                  label="c title"
                                                   menuType="primary"
                                                   onClick={[Function]}
                                                   to="c-to"
@@ -362,17 +362,17 @@ ShallowWrapper {
         Array [
             Object {
               "id": "a",
-              "title": "a title",
+              "label": "a title",
               "to": "a-to",
             },
             Object {
               "id": "b",
-              "title": "b title",
+              "label": "b title",
               "to": "b-to",
             },
             Object {
               "id": "c",
-              "title": "c title",
+              "label": "c title",
               "to": "c-to",
             },
           ]

@@ -5,9 +5,9 @@ import { shallow } from 'enzyme';
 import Menu from '../Menu';
 
 const items = [
-  { id: 'a', title: 'a title', to: 'a-to' },
-  { id: 'b', title: 'b title', to: 'b-to' },
-  { id: 'c', title: 'c title', to: 'c-to' },
+  { id: 'a', label: 'a title', to: 'a-to' },
+  { id: 'b', label: 'b title', to: 'b-to' },
+  { id: 'c', label: 'c title', to: 'c-to' },
 ];
 
 describe('Menu component', () => {

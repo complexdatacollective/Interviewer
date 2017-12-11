@@ -8,8 +8,10 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <NodeBin
+  "node": <Connect(Droppable)
+    acceptsDraggableType="EXISTING_NODE"
     dispatch={[Function]}
+    droppableName="NODE_BIN"
     isDraggableDeleteable={false}
     store={
         Object {
@@ -22,8 +24,10 @@ ShallowWrapper {
     }
 />,
   "nodes": Array [
-    <NodeBin
+    <Connect(Droppable)
+      acceptsDraggableType="EXISTING_NODE"
       dispatch={[Function]}
+      droppableName="NODE_BIN"
       isDraggableDeleteable={false}
       store={
             Object {
@@ -42,7 +46,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(NodeBin)
+      "_currentElement": <Connect(Connect(Droppable))
         store={
                 Object {
                         "dispatch": [Function],
@@ -72,7 +76,9 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
+          "acceptsDraggableType": "EXISTING_NODE",
           "dispatch": [Function],
+          "droppableName": "NODE_BIN",
           "isDraggableDeleteable": false,
           "store": Object {
             "dispatch": [Function],
@@ -92,8 +98,10 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "renderedElement": <NodeBin
+        "renderedElement": <Connect(Droppable)
+          acceptsDraggableType="EXISTING_NODE"
           dispatch={[Function]}
+          droppableName="NODE_BIN"
           isDraggableDeleteable={false}
           store={
                     Object {
@@ -114,6 +122,8 @@ ShallowWrapper {
           },
         },
         "stateProps": Object {
+          "acceptsDraggableType": "EXISTING_NODE",
+          "droppableName": "NODE_BIN",
           "isDraggableDeleteable": false,
         },
         "statePropsPrecalculationError": null,
@@ -134,7 +144,7 @@ ShallowWrapper {
           "isMounted": [Function],
           "validateCallback": [Function],
         },
-        "version": 4,
+        "version": 0,
       },
       "_mountOrder": 1,
       "_pendingCallbacks": null,
@@ -143,8 +153,10 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <NodeBin
+        "_currentElement": <Connect(Droppable)
+          acceptsDraggableType="EXISTING_NODE"
           dispatch={[Function]}
+          droppableName="NODE_BIN"
           isDraggableDeleteable={false}
           store={
                     Object {
@@ -157,8 +169,10 @@ ShallowWrapper {
           }
 />,
         "_debugID": 2,
-        "_renderedOutput": <NodeBin
+        "_renderedOutput": <Connect(Droppable)
+          acceptsDraggableType="EXISTING_NODE"
           dispatch={[Function]}
+          droppableName="NODE_BIN"
           isDraggableDeleteable={false}
           store={
                     Object {
@@ -181,7 +195,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(NodeBin)
+  "unrendered": <Connect(Connect(Droppable))
     store={
         Object {
             "dispatch": [Function],

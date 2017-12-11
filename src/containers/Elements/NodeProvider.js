@@ -1,117 +1,54 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { isMatch, isEqual } from 'lodash';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { isMatch } from 'lodash';
 import { NodeList } from '../../components/Elements';
-import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { makeGetProviderNodes } from '../../selectors/node-provider';
 
 /**
   * Renders an interactive list of nodes for addition to the network.
   * @extends Component
   */
-class NodeProvider extends Component {
-  static propTypes = {
-    newNodeAttributes: PropTypes.object.isRequired,
-    activePromptAttributes: PropTypes.object.isRequired,
-    nodes: PropTypes.array.isRequired,
-    interaction: PropTypes.string.isRequired,
-    addNode: PropTypes.func.isRequired,
-    removeNode: PropTypes.func.isRequired,
-    toggleNodeAttributes: PropTypes.func.isRequired,
-    onUpdateNodes: PropTypes.func,
-  };
+function interactableNodeList(WrappedComponent) {
+  return function InteractionNodeList(props) {
+    InteractionNodeList.propTypes = {
+      activePromptAttributes: PropTypes.object.isRequired,
+      interaction: PropTypes.string.isRequired,
+    };
 
-  static defaultProps = {
-    onUpdateNodes: () => {},
-  };
-
-  componentDidMount() {
-    this.props.onUpdateNodes(this.props.nodes);
-  }
-
-  componentWillReceiveProps(props) {
-    if (!isEqual(props.nodes, this.props.nodes)) {
-      this.props.onUpdateNodes(props.nodes);
-    }
-  }
-
-  onSelectNode = (node) => {
-    this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
-  }
-
-  onDropNode = (hits, node) => {
-    hits.forEach((hit) => {
-      switch (hit.name) {
-        case 'MAIN_NODE_LIST':
-          this.props.addNode({ ...this.props.newNodeAttributes, ...node });
-          break;
-        case 'NODE_BIN':
-          this.props.removeNode(node.uid);
-          break;
-        default:
-      }
-    });
-  }
-
-  render() {
     const {
+      activePromptAttributes,
       interaction,
-      nodes,
-    } = this.props;
+    } = props;
 
-    const label = node => `${node.nickname}`;
-    const selected = node => isMatch(node, this.props.activePromptAttributes);
+    const selected = node => isMatch(node, activePromptAttributes);
 
     switch (interaction) {
       case 'selectable':
         return (
-          <NodeList
-            nodes={nodes}
-            label={label}
+          <WrappedComponent
             draggableType="EXISTING_NODE"
-            handleDropNode={this.handleDropNode}
-            handleSelectNode={this.onSelectNode}
             selected={selected}
+            {...props}
+          />
+        );
+      case 'droppable':
+        return (
+          <WrappedComponent
+            draggableType="NEW_NODE"
+            droppableName="NODE_PROVIDER"
+            acceptsDraggableType="EXISTING_NODE"
+            {...props}
           />
         );
       default:
         return (
-          <NodeList
-            nodes={nodes}
-            label={label}
+          <WrappedComponent
             draggableType="NEW_NODE"
-            handleDropNode={this.onDropNode}
+            {...props}
           />
         );
     }
-  }
-}
-
-function makeMapStateToProps() {
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-  const getProviderNodes = makeGetProviderNodes();
-
-  return function mapStateToProps(state, props) {
-    const interaction = (props.selectable && 'selectable') || (props.draggable && 'draggable') || 'none';
-
-    return {
-      activePromptAttributes: props.prompt.additionalAttributes,
-      newNodeAttributes: getPromptNodeAttributes(state, props),
-      nodes: getProviderNodes(state, props),
-      interaction,
-    };
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch),
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
-  };
-}
-
-export default connect(makeMapStateToProps, mapDispatchToProps)(NodeProvider);
+const NodeProvider = interactableNodeList(NodeList);
+export default NodeProvider;
