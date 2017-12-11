@@ -31,4 +31,6 @@ Sociogram.propTypes = {
   prompt: PropTypes.object.isRequired,
 };
 
+export { Sociogram };
+
 export default Sociogram;

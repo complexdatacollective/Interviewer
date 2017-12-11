@@ -18,6 +18,7 @@ const dropTarget = WrappedComponent =>
     static propTypes = {
       id: PropTypes.string.isRequired,
       onDrop: PropTypes.func,
+      onDrag: PropTypes.func,
       accepts: PropTypes.func,
       meta: PropTypes.func,
     }
@@ -25,7 +26,8 @@ const dropTarget = WrappedComponent =>
     static defaultProps = {
       meta: () => ({}),
       accepts: () => false,
-      onDrop: (...args) => { console.log(...args); },
+      onDrop: (...args) => { console.log('DropTarget.onDrop()', ...args); },
+      onDrag: (...args) => { console.log('DropTarget.onDrag()', ...args); },
     }
 
     constructor(props) {
@@ -90,6 +92,7 @@ const dropTarget = WrappedComponent =>
         actions.updateTarget({
           id: this.props.id,
           onDrop: this.props.onDrop,
+          onDrag: this.props.onDrag,
           accepts: this.props.accepts,
           meta: this.props.meta(),
           width: boundingClientRect.width,

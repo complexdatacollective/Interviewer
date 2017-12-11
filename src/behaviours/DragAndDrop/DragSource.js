@@ -13,12 +13,12 @@ import store from './store';
 const dragSource = WrappedComponent =>
   class DragSource extends PureComponent {
     static propTypes = {
-      canDrag: PropTypes.bool,
+      allowDrag: PropTypes.bool,
       meta: PropTypes.func,
     };
 
     static defaultProps = {
-      canDrag: true,
+      allowDrag: true,
       meta: () => ({}),
     };
 
@@ -32,7 +32,7 @@ const dragSource = WrappedComponent =>
     }
 
     componentDidMount() {
-      if (!this.props.canDrag) { return; }
+      if (!this.props.allowDrag) { return; }
 
       this.dragManager = new dragManager({
         el: this.node,
@@ -48,8 +48,10 @@ const dragSource = WrappedComponent =>
     }
 
     cleanupDragManager = () => {
-      this.dragManager.unmount();
-      this.dragManager = null;
+      if (this.dragManager) {
+        this.dragManager.unmount();
+        this.dragManager = null;
+      }
     };
 
     cleanupPreview = () => {
@@ -103,7 +105,7 @@ const dragSource = WrappedComponent =>
 
     render() {
       const {
-        canDrag,
+        allowDrag,
         ...rest
       } = this.props;
 

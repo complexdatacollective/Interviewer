@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators, compose } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { isEqual, isMatch, omit } from 'lodash';
+import { compose, withProps } from 'recompose';
+import { isEqual, isMatch, omit, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../../behaviours';
-import { DropZone } from '../../../components/Elements';
 import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../../selectors/sociogram';
 import { actionCreators as networkActions } from '../../../ducks/modules/network';
-
-const draggableType = 'POSITIONED_NODE';
+import { DropTarget } from '../../../behaviours/DragAndDrop';
 
 const propsChangedExcludingNodes = (nextProps, props) =>
   !isEqual(omit(nextProps, 'nodes'), omit(props, 'nodes'));
@@ -17,18 +16,41 @@ const propsChangedExcludingNodes = (nextProps, props) =>
 const nodesLengthChanged = (nextProps, props) =>
   nextProps.nodes.length !== props.nodes.length;
 
+const relativeCoords = (container, node) => ({
+  x: (node.x - container.x) / container.width,
+  y: (node.y - container.y) / container.height,
+});
+
+const dropHandlers = withProps(props => ({
+  accepts: ({ meta }) => meta.itemType === 'POSITIONED_NODE',
+  onDrop: (item) => {
+    props.updateNode({
+      uid: item.meta.uid,
+      [props.layoutVariable]: relativeCoords(props, item),
+    });
+  },
+  onDrag: (item) => {
+    if (!has(item.meta, props.layoutVariable)) { return; }
+
+    props.updateNode({
+      uid: item.meta.uid,
+      [props.layoutVariable]: relativeCoords(props, item),
+    });
+  },
+}));
+
 class NodeLayout extends Component {
   static propTypes = {
     nodes: PropTypes.array,
     toggleEdge: PropTypes.func.isRequired,
     toggleHighlight: PropTypes.func.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     ...sociogramOptionsProps,
   };
 
   static defaultProps = {
     nodes: [],
+    allowPositioning: true,
+    allowSelect: true,
   };
 
   constructor(props) {
@@ -46,22 +68,14 @@ class NodeLayout extends Component {
     return false;
   }
 
-  onDropNode = () => {
-    this.forceUpdate();
-  }
+  onSelected = (node) => {
+    const { allowSelect } = this.props;
 
-  onSelectNode = (node) => {
-    const { canSelect, selectMode } = this.props;
+    if (!allowSelect) { return; }
 
-    if (!canSelect) { return; }
+    this.connectNode(node.id);
 
-    switch (selectMode) {
-      case 'EDGE':
-        this.connectNode(node.id); break;
-      case 'HIGHLIGHT':
-        this.toggleHighlightAttributes(node.uid); break;
-      default:
-    }
+    this.toggleHighlightAttributes(node.uid);
 
     this.forceUpdate();
   }
@@ -87,62 +101,51 @@ class NodeLayout extends Component {
   }
 
   toggleHighlightAttributes(nodeId) {
-    this.props.toggleNodeAttributes(
+    this.props.toggleHighlight(
       { uid: nodeId },
-      this.highlightAttributes(),
+      { ...this.props.highlightAttributes },
     );
   }
 
   isSelected(node) {
-    const { selectMode, canSelect } = this.props;
+    const { allowSelect } = this.props;
 
-    if (!canSelect) { return false; }
+    if (!allowSelect) { return false; }
 
-    switch (selectMode) {
-      case 'EDGE':
-        return (node.id === this.state.connectFrom);
-      case 'HIGHLIGHT':
-        return isMatch(node, this.highlightAttributes());
-      default:
-        return false;
-    }
+    return (
+      node.id === this.state.connectFrom ||
+      isMatch(node, this.props.highlightAttributes)
+    );
   }
 
   render() {
     const {
       nodes,
-      width,
-      height,
       allowPositioning,
       allowSelect,
       layoutVariable,
     } = this.props;
 
     return (
-      <DropZone droppableName="NODE_LAYOUT" acceptsDraggableType={draggableType}>
-        <div className="node-layout">
-          { nodes.map((node) => {
-            if (!Object.prototype.hasOwnProperty.call(node, layoutVariable)) { return null; }
+      <div className="node-layout">
+        { nodes.map((node) => {
+          if (!has(node, layoutVariable)) { return null; }
 
-            return (
-              <LayoutNode
-                key={node.uid}
-                layoutVariable={layoutVariable}
-                node={node}
-                draggableType={draggableType}
-                onSelected={this.onSelectNode}
-                onDropped={this.onDropNode}
-                selected={this.isSelected(node)}
-                canDrag={allowPositioning}
-                canSelect={allowSelect}
-                areaWidth={width}
-                areaHeight={height}
-                animate={false}
-              />
-            );
-          }) }
-        </div>
-      </DropZone>
+          return (
+            <LayoutNode
+              key={node.uid}
+              node={node}
+              layoutVariable={layoutVariable}
+              onSelected={() => this.onSelected(node)}
+              selected={this.isSelected(node)}
+              allowPositioning={allowPositioning}
+              allowSelect={allowSelect}
+              areaWidth={this.props.width}
+              areaHeight={this.props.height}
+            />
+          );
+        }) }
+      </div>
     );
   }
 }
@@ -163,6 +166,7 @@ function mapDispatchToProps(dispatch) {
   return {
     toggleHighlight: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
   };
 }
 
@@ -171,4 +175,6 @@ export { NodeLayout };
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),
   withBounds,
+  dropHandlers,
+  DropTarget,
 )(NodeLayout);

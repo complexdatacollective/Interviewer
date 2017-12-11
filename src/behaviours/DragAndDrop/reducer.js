@@ -86,11 +86,12 @@ const reducer = (state = initialState, { type, ...action }) => {
         ...state,
         targets: reject(state.targets, ['id', action.id]),
       };
-    case DRAG_START:
+    case DRAG_START: {
       return markHits({
         ...state,
         source: action,
       });
+    }
     case DRAG_MOVE:
       return markHits({
         ...state,
@@ -139,10 +140,14 @@ function dragStart(data) {
 }
 
 function dragMove(data) {
-  return {
-    type: DRAG_MOVE,
-    ...data,
-  };
+  return (dispatch, getState) => {
+    triggerDrag(getState(), data);
+
+    dispatch({
+      type: DRAG_MOVE,
+      ...data,
+    });
+  }
 }
 
 function dragEnd(data) {
@@ -155,6 +160,21 @@ function dragEnd(data) {
     });
   }
 }
+
+const triggerDrag = (state, action) => {
+  const hits = markHits({
+    ...state,
+    source: {
+      ...state.source,
+      ...action,
+    },
+  });
+
+  filter(hits.targets, { isOver: true, willAccept: true })
+    .forEach((target) => {
+      target.onDrag(hits.source);
+    });
+};
 
 const triggerDrop = (state, action) => {
   const hits = markHits({
