@@ -1,4 +1,4 @@
-import { filter, reject, omit, uniqBy, throttle } from 'lodash';
+import { filter, reject, omit, uniqBy, throttle, isEmpty, tap } from 'lodash';
 import { compose } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
@@ -11,38 +11,52 @@ const DRAG_END = Symbol('DRAG_AND_DROP/DRAG_END');
 
 const initialState = {
   targets: [],
-  source: {},
+  source: null,
+};
+
+const willAccept = (accepts, source) => {
+  try {
+    return accepts(source);
+  } catch (e) {
+    console.log('Error in accept() function', e, source);
+    return false;
+  }
+};
+
+const markTargetHit = ({ target, source }) => {
+  if (!source) { return { ...target, isOver: false, willAccept: false }; }
+
+  const isOver = (
+    source.x > target.x &&
+    source.x < target.x + target.width &&
+    source.y > target.y &&
+    source.y < target.y + target.height
+  );
+
+  return { ...target, isOver, willAccept: willAccept(target.accepts, source) };
 };
 
 const markTargetHits = ({ targets, source, ...rest }) => ({
-  targets: targets.map((target) => {
-    if (
-      source.x > target.x &&
-      source.x < target.x + target.width &&
-      source.y > target.y &&
-      source.y < target.y + target.height
-    ) {
-      return { ...target, isOver: true };
-    }
-
-    return { ...target, isOver: false };
-  }),
+  targets: targets.map(target => markTargetHit({ target, source })),
   source,
   ...rest,
 });
 
 const markSourceHit = ({ targets, source, ...rest }) => ({
   targets,
-  source: {
-    ...source,
-    isOver: filter(targets, 'isOver').length > 0,
-  },
+  source: tap(source, (source) => {
+    if (isEmpty(source)) { return source; }
+
+    return {
+      ...source,
+      isOver: filter(targets, 'isOver').length > 0,
+    };
+  }),
   ...rest,
 });
 
 const resetHits = ({ targets, source, ...rest }) => ({
-  targets: targets.map(target => omit(target, ['isOver'])),
-  source: omit(source, ['isOver']),
+  targets: targets.map(target => omit(target, ['isOver', 'willAccept'])),
   ...rest,
 });
 
@@ -85,12 +99,11 @@ const reducer = (state = initialState, { type, ...action }) => {
           ...action,
         },
       });
-    case DRAG_END: {
+    case DRAG_END:
       return resetHits({
         ...state,
-        source: {},
+        source: null,
       });
-    }
     default:
       return state;
   }
@@ -152,7 +165,7 @@ const triggerDrop = (state, action) => {
     },
   });
 
-  filter(hits.targets, 'isOver')
+  filter(hits.targets, { isOver: true, willAccept: true })
     .forEach((target) => {
       target.onDrop(hits.source);
     });

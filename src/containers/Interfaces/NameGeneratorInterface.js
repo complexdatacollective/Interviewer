@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
@@ -71,6 +72,8 @@ class NameGenerator extends Component {
    * @param {object} node - key/value object containing node object from the network store
    */
   onDrop = (item) => {
+    console.log(item);
+    alert('name gen');
     const node = { ...this.props.newNodeAttributes, ...item.meta };
     this.props.addOrUpdateNode(node);
   }
@@ -108,7 +111,7 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              accepts={['NEW_NODE']}
+              accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE' }
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
               onSelect={this.onSelectNode}

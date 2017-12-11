@@ -14,7 +14,6 @@ const dragSource = WrappedComponent =>
   class DragSource extends PureComponent {
     static propTypes = {
       canDrag: PropTypes.bool,
-      itemType: PropTypes.string.isRequired,
       meta: PropTypes.func,
     };
 
@@ -77,7 +76,6 @@ const dragSource = WrappedComponent =>
       store.dispatch(
         actions.dragStart({
           ...movement,
-          itemType: this.props.itemType,
           meta: this.props.meta(),
         }),
       );

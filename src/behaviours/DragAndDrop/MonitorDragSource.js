@@ -3,24 +3,24 @@ import Monitor from './Monitor';
 
 const defaultMonitorProps = {
   isDragging: false,
-  isOver: false,
-  canAccept: false,
   meta: {},
 };
 
 const getMonitorProps = (state, props) => {
   const source = state.source;
+
+  if (!source) { return { ...defaultMonitorProps }; }
+
   const monitorProps = {
-    isOver: source.isOver,
-    isDragging: isEmpty(source),
+    isDragging: true,
     meta: { ...source.meta },
-    canAccept: false, // TODO: Add this to reducer
   }
+
   return monitorProps;
 };
 
-const MonitorDropTarget = types =>
+const MonitorDragSource = types =>
   Monitor(getMonitorProps, types);
 
-export default MonitorDropTarget;
+export default MonitorDragSource;
 

@@ -11,20 +11,20 @@ import dropId from './dropId';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
-const maxFramesPerSecond = 10;
+const maxFramesPerSecond = 12;
 
 const dropTarget = WrappedComponent =>
   class DropTarget extends Component {
     static propTypes = {
       id: PropTypes.string.isRequired,
       onDrop: PropTypes.func,
-      accepts: PropTypes.array,
+      accepts: PropTypes.func,
       meta: PropTypes.func,
     }
 
     static defaultProps = {
       meta: () => ({}),
-      accepts: [],
+      accepts: () => false,
       onDrop: (...args) => { console.log(...args); },
     }
 
@@ -33,6 +33,7 @@ const dropTarget = WrappedComponent =>
 
       this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
       window.addEventListener('resize', this.onResize);
+      this.interval = setInterval(this.updateTarget, 1000 / maxFramesPerSecond);
     }
 
     componentDidMount() {
@@ -42,6 +43,8 @@ const dropTarget = WrappedComponent =>
     }
 
     componentWillReceiveProps(props) {
+      this.updateTarget();
+
       // TODO: Why is this necessary?
       if (props.id !== this.props.id) {
         this.renameTarget({
@@ -55,6 +58,7 @@ const dropTarget = WrappedComponent =>
       window.removeEventListener('resize', this.onResize);
       this.onResize.cancel();
       this.removeTarget();
+      clearInterval(this.interval);
     }
 
     onResize = () => {

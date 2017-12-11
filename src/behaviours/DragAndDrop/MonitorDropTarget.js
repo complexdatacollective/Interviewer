@@ -1,10 +1,10 @@
 
-import { find } from 'lodash';
+import { find, get } from 'lodash';
 import Monitor from './Monitor';
 
 const defaultMonitorProps = {
   isOver: false,
-  acceptsType: false,
+  willAccept: false,
 };
 
 const getMonitorProps = (state, props) => {
@@ -12,11 +12,9 @@ const getMonitorProps = (state, props) => {
 
   if (!target) { return { ...defaultMonitorProps } };
 
-  const acceptsType = target.accepts.includes(state.source.itemType);
-
   const monitorProps = {
-    isOver: (target.isOver || false),
-    acceptsType,
+    isOver: get(target, 'isOver', false),
+    willAccept: get(target, 'willAccept', false),
   }
 
   return monitorProps;

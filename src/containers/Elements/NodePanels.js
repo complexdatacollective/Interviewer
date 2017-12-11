@@ -11,6 +11,7 @@ import { getExternalData } from '../../selectors/protocol';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../../components/Elements';
+import { MonitorDragSource } from '../../behaviours/DragAndDrop';
 import configurePanels from '../../behaviours/configurePanels';
 
 const colorPresets = [
@@ -27,6 +28,11 @@ const getHighlight = (highlight, panelNumber) => {
   return null;
 };
 
+// const accepts = (
+//   meta.itemType === 'EXISTING_NODE' &&
+//   (meta.stageId !== newNodeAttributes.stageId || meta.promptId !== newNodeAttributes.promptId)
+// );
+
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
@@ -34,20 +40,23 @@ class NodePanels extends PureComponent {
 
   static defaultProps = {
     panels: [],
+    isDragging: false,
   };
 
-  onDropNode = (hits, node) => {
-    hits.forEach((hit) => {
-      switch (hit.name) {
-        case 'MAIN_NODE_LIST':
-          this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...node });
-          break;
-        case 'NODE_BIN':
-          this.props.removeNode(node.uid);
-          break;
-        default:
-      }
-    });
+  onDrop = (item) => {
+    console.log(item);
+    alert('panels');
+    // hits.forEach((hit) => {
+    //   switch (hit.name) {
+    //     case 'MAIN_NODE_LIST':
+    //       this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...node });
+    //       break;
+    //     case 'NODE_BIN':
+    //       this.props.removeNode(node.uid);
+    //       break;
+    //     default:
+    //   }
+    // });
   }
 
   panelHasNodes = (index) => this.props.panels[index].nodes.length;
@@ -64,11 +73,11 @@ class NodePanels extends PureComponent {
     switch (interaction) {
       case 'selectable':
         return {
-          onSelectNode: this.onSelectNode,
+          onSelect: this.onSelect,
         };
       case 'draggable':
         return {
-          onDropNode: this.onDropNode,
+          onDrop: this.onDrop,
         };
       default:
         return {};
@@ -88,6 +97,13 @@ class NodePanels extends PureComponent {
 
     const label = node => `${node.nickname}`;
     const selected = node => isMatch(node, activePromptAttributes);
+    const accepts = ({ meta, wfpwfp }) => {
+      return (
+        meta.wfiep == false &&
+        meta.itemType === 'EXISTING_NODE' &&
+        (meta.stageId !== activePromptAttributes.stageId || meta.promptId !== activePromptAttributes.promptId)
+      );
+    }
 
     return (
       <Panel
@@ -99,6 +115,7 @@ class NodePanels extends PureComponent {
         <NodeList
           {...nodeListProps}
           {...this.getInteractionHandlers(nodeListProps.interaction)}
+          accepts={accepts}
           label={label}
           selected={selected}
         />
@@ -162,4 +179,5 @@ function mapDispatchToProps(dispatch) {
 export default compose(
   configurePanels,
   connect(makeMapStateToProps, mapDispatchToProps),
+  MonitorDragSource(['isDragging']),
 )(NodePanels);

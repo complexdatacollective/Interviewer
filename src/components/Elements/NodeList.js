@@ -4,6 +4,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { setDisplayName } from 'recompose';
 import PropTypes from 'prop-types';
+import { find, get } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
@@ -28,13 +29,16 @@ const NodeList = ({
   onSelect,
   itemType,
   isOver,
-  acceptsType,
+  willAccept,
   isDragging,
+  meta,
 }) => {
+  const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
+
   const classNames = cx(
     'node-list',
-    { 'node-list--hover': acceptsType && isOver},
-    { 'node-list--drag': acceptsType }, // TODO: rename class
+    { 'node-list--hover': !isSource && willAccept && isOver},
+    { 'node-list--drag': !isSource && willAccept }, // TODO: rename class
   );
 
   return (
@@ -47,7 +51,7 @@ const NodeList = ({
       transitionName="node-list--transition"
       transitionLeave={false}
     >
-      { isOver && acceptsType &&
+      { isOver && willAccept &&
         <Node key="placeholder" placeholder />
       }
       {
@@ -58,8 +62,7 @@ const NodeList = ({
               label={label(node)}
               selected={selected(node)}
               onSelected={() => onSelect(node)}
-              itemType={itemType}
-              meta={() => node}
+              meta={() => ({ ...node, itemType })}
               {...node}
             />
           </span>
@@ -86,12 +89,14 @@ NodeList.defaultProps = {
   onDrop: () => {},
   itemType: 'NODE',
   isOver: false,
-  acceptsType: false,
+  willAccept: false,
   isDragging: false,
+  meta: {},
 };
 
 export default compose(
   DropTarget,
-  MonitorDropTarget(['isOver', 'acceptsType']),
+  MonitorDropTarget(['isOver', 'willAccept']),
+  MonitorDragSource(['meta', 'isDragging']),
   scrollable,
 )(NodeList);
