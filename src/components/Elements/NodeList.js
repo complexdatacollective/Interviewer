@@ -28,13 +28,13 @@ const NodeList = ({
   onSelect,
   itemType,
   isOver,
-  canAccept,
+  acceptsType,
   isDragging,
 }) => {
   const classNames = cx(
     'node-list',
-    { 'node-list--hover': canAccept && isOver},
-    { 'node-list--drag': canAccept }, // TODO: rename class
+    { 'node-list--hover': acceptsType && isOver},
+    { 'node-list--drag': acceptsType }, // TODO: rename class
   );
 
   return (
@@ -47,7 +47,7 @@ const NodeList = ({
       transitionName="node-list--transition"
       transitionLeave={false}
     >
-      { isOver && canAccept &&
+      { isOver && acceptsType &&
         <Node key="placeholder" placeholder />
       }
       {
@@ -86,12 +86,12 @@ NodeList.defaultProps = {
   onDrop: () => {},
   itemType: 'NODE',
   isOver: false,
-  canAccept: false,
+  acceptsType: false,
   isDragging: false,
 };
 
 export default compose(
   DropTarget,
-  MonitorDropTarget(['isOver', 'canAccept']),
+  MonitorDropTarget(['isOver', 'acceptsType']),
   scrollable,
 )(NodeList);

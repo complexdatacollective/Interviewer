@@ -4,16 +4,21 @@ import Monitor from './Monitor';
 
 const defaultMonitorProps = {
   isOver: false,
-  canAccept: false,
+  acceptsType: false,
 };
 
 const getMonitorProps = (state, props) => {
   const target = find(state.targets, ['id', props.id]);
+
   if (!target) { return { ...defaultMonitorProps } };
+
+  const acceptsType = target.accepts.includes(state.source.itemType);
+
   const monitorProps = {
     isOver: (target.isOver || false),
-    canAccept: target.accepts.indexOf(state.source.itemType) !== -1,
+    acceptsType,
   }
+
   return monitorProps;
 };
 
