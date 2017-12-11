@@ -2,6 +2,7 @@
 import React from 'react';
 import { has } from 'lodash';
 import NameGenerator from './NameGenerator';
+import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
@@ -9,6 +10,7 @@ import Instructions from './Instructions';
 
 const interfaces = {
   NameGenerator,
+  NameGeneratorAutoComplete,
   NameGeneratorList,
   Sociogram,
   Quiz,
@@ -23,6 +25,7 @@ const getInterface = (interfaceConfig) => {
 
 export {
   NameGenerator,
+  NameGeneratorAutoComplete,
   NameGeneratorList,
   Sociogram,
   Quiz,

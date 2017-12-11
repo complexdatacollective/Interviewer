@@ -66,6 +66,7 @@ class NodeForm extends Component {
   render() {
     const {
       addAnother,
+      children,
       name,
       title,
     } = this.props;
@@ -98,7 +99,7 @@ class NodeForm extends Component {
     return (
       <Modal name={name} title={title} className={modalClassNames}>
         {formElement}
-
+        {children}
       </Modal>
     );
   }
@@ -106,6 +107,7 @@ class NodeForm extends Component {
 
 NodeForm.propTypes = {
   addAnother: PropTypes.bool,
+  children: PropTypes.array.isRequired,
   closeModal: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,

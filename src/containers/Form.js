@@ -54,6 +54,7 @@ class Form extends Component {
       autoFocus,
       fields,
       handleSubmit,
+      handleChange,
       controls,
     } = this.props;
 
@@ -68,6 +69,7 @@ class Form extends Component {
               {...field}
               autoFocus={isFirst}
               onBlur={() => { this.handleFieldBlur(); }}
+              onChange={handleChange}
             />
           );
         }) }
@@ -87,6 +89,7 @@ Form.propTypes = {
   form: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func,
   meta: PropTypes.object.isRequired,
   controls: PropTypes.array,
 };
@@ -95,6 +98,7 @@ Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
   controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
+  handleChange: null,
 };
 
 function makeMapStateToProps() {
