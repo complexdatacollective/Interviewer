@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as networkActions } from '../ducks/modules/network';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { PromptSwiper, NodeProviderPanels } from '../containers/Elements';
+import { PromptSwiper } from '../containers/Elements';
 import { NodeList, DropZone } from '../components/Elements';
 
 const actions = {
@@ -18,7 +18,7 @@ const selectors = {
 };
 
 const elements = {
-  PromptSwiper, NodeProviderPanels, NodeList, DropZone,
+  PromptSwiper, NodeList, DropZone,
 };
 
 const environment = {

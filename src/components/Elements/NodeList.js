@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { isMatch } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
@@ -13,81 +12,70 @@ const EnhancedNode = draggable(selectable(Node));
 /**
   * Renders a list of Node.
   */
-class NodeList extends Component {
-  componentDidMount() {
-    this.props.onDrag(this.props.isDragging);
-  }
+const NodeList = ({
+  nodes,
+  nodeColor,
+  label,
+  selected,
+  onSelectNode,
+  onDragNode,
+  onDropNode,
+  draggableType,
+  isHovered,
+  isDragging,
+  isPossibleTarget,
+}) => {
+  const classNames = cx(
+    'node-list',
+    { 'node-list--hover': isHovered },
+    { 'node-list--drag': isDragging && isPossibleTarget }, // TODO: rename class
+  );
 
-  componentWillReceiveProps(props) {
-    if (props.isDragging !== this.props.isDragging) {
-      props.onDrag(props.isDragging);
-    }
-  }
-
-  render() {
-    const { nodes,
-      nodeColor,
-      label,
-      selected,
-      handleSelectNode,
-      handleDropNode,
-      draggableType,
-      hover,
-      isDragging,
-      isOrigin,
-    } = this.props;
-
-    const classNames = cx(
-      'node-list',
-      { 'node-list--hover': (hover && !isOrigin) },
-      { 'node-list--drag': isDragging },
-    );
-
-    return (
-      <StaggeredTransitionGroup
-        className={classNames}
-        component="div"
-        delay={animation.duration.fast * 0.2}
-        duration={animation.duration.slow}
-        start={animation.duration.slow + 3}
-        transitionName="node-list--transition"
-        transitionLeave={false}
-      >
-        { hover && !isOrigin && isDragging &&
-          <Node key="placeholder" placeholder />
-        }
-        {
-          nodes.map(node => (
-            <span key={node.uid}>
-              <EnhancedNode
-                color={nodeColor}
-                label={label(node)}
-                selected={selected(node)}
-                onSelected={() => handleSelectNode(node)}
-                onDropped={hits => handleDropNode(hits, node)}
-                draggableType={draggableType}
-                {...node}
-              />
-            </span>
-          ))
-        }
-      </StaggeredTransitionGroup>
-    );
-  }
-}
+  return (
+    <StaggeredTransitionGroup
+      className={classNames}
+      component="div"
+      delay={animation.duration.fast * 0.2}
+      duration={animation.duration.slow}
+      start={animation.duration.slow + 3}
+      transitionName="node-list--transition"
+      transitionLeave={false}
+    >
+      { isHovered && isPossibleTarget &&
+        <Node key="placeholder" placeholder />
+      }
+      {
+        nodes.map(node => (
+          <span key={node.uid}>
+            <EnhancedNode
+              color={nodeColor}
+              label={label(node)}
+              selected={selected(node)}
+              onSelected={() => onSelectNode(node)}
+              onDropped={hits => onDropNode(hits, node)}
+              onMove={() => onDragNode(node)}
+              draggableType={draggableType}
+              {...node}
+            />
+          </span>
+        ))
+      }
+    </StaggeredTransitionGroup>
+  );
+};
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  handleSelectNode: PropTypes.func,
-  handleDropNode: PropTypes.func,
+  onSelectNode: PropTypes.func,
+  onDropNode: PropTypes.func,
+  onDragNode: PropTypes.func,
   label: PropTypes.func,
   selected: PropTypes.func,
   draggableType: PropTypes.string,
-  hover: PropTypes.bool,
-  isDragging: PropTypes.bool.isRequired,
-  isOrigin: PropTypes.bool.isRequired,
-  onDrag: PropTypes.func,
+  isHovered: PropTypes.bool,
+  isDragging: PropTypes.bool,
+  isPossibleTarget: PropTypes.bool,
 };
 
 NodeList.defaultProps = {
@@ -95,21 +83,22 @@ NodeList.defaultProps = {
   nodeColor: '',
   label: () => (''),
   selected: () => false,
-  handleSelectNode: () => {},
-  handleDropNode: () => {},
-  draggableType: '',
-  hover: false,
-  onDrag: () => {},
+  onSelectNode: () => {},
+  onDropNode: () => {},
+  onDragNode: () => {},
+  draggableType: null,
+  isHovered: false,
+  isDragging: false,
+  isPossibleTarget: false,
 };
 
 function mapStateToProps(state, ownProps) {
-  const isOrigin = ownProps.currentIds && isMatch(state.draggable.meta, ownProps.currentIds);
+  const { isDragging, draggableType } = state.draggable;
 
   return {
-    isDragging: state.draggable.isDragging &&
-      state.draggable.draggableType === ownProps.acceptsDraggableType &&
-      !isOrigin,
-    isOrigin,
+    isHovered: state.droppable.activeZones.indexOf(ownProps.droppableName) !== -1,
+    isDragging,
+    isPossibleTarget: draggableType === ownProps.acceptsDraggableType,
   };
 }
 

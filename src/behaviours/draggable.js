@@ -194,9 +194,11 @@ export default function draggable(WrappedComponent) {
           const hits = this.determineHits(movement);
           this.props.updateActiveZones(hits.map(hit => hit.name));
 
-          if (hits.length > 0) {
-            this.props.onMove(hits, movement);
-          }
+          // if (hits.length > 0) {
+          //   this.props.onMove(hits, movement);
+          // }
+
+          this.props.onMove(hits, movement);
         });
       }
     }
@@ -300,10 +302,9 @@ export default function draggable(WrappedComponent) {
     meta: {},
   };
 
-  function mapStateToProps(state, props) {
+  function mapStateToProps(state) {
     return {
       zones: state.droppable.zones,
-      meta: { promptId: props.promptId, stageId: props.stageId },
     };
   }
 
