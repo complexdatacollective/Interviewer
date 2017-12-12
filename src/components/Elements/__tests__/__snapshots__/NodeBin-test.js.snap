@@ -8,11 +8,8 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <Connect(Droppable)
-    acceptsDraggableType="EXISTING_NODE"
-    dispatch={[Function]}
-    droppableName="NODE_BIN"
-    isDraggableDeleteable={false}
+  "node": <withProps(mapProps(DropTarget))
+    removeNode={[Function]}
     store={
         Object {
             "dispatch": [Function],
@@ -24,11 +21,8 @@ ShallowWrapper {
     }
 />,
   "nodes": Array [
-    <Connect(Droppable)
-      acceptsDraggableType="EXISTING_NODE"
-      dispatch={[Function]}
-      droppableName="NODE_BIN"
-      isDraggableDeleteable={false}
+    <withProps(mapProps(DropTarget))
+      removeNode={[Function]}
       store={
             Object {
                   "dispatch": [Function],
@@ -46,7 +40,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Connect(Connect(Droppable))
+      "_currentElement": <Connect(withProps(mapProps(DropTarget)))
         store={
                 Object {
                         "dispatch": [Function],
@@ -66,7 +60,7 @@ ShallowWrapper {
           "store": undefined,
         },
         "dispatchProps": Object {
-          "dispatch": [Function],
+          "removeNode": [Function],
         },
         "doDispatchPropsDependOnOwnProps": false,
         "doStatePropsDependOnOwnProps": false,
@@ -76,10 +70,7 @@ ShallowWrapper {
         "haveOwnPropsChanged": false,
         "haveStatePropsBeenPrecalculated": false,
         "mergedProps": Object {
-          "acceptsDraggableType": "EXISTING_NODE",
-          "dispatch": [Function],
-          "droppableName": "NODE_BIN",
-          "isDraggableDeleteable": false,
+          "removeNode": [Function],
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -98,11 +89,8 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "renderedElement": <Connect(Droppable)
-          acceptsDraggableType="EXISTING_NODE"
-          dispatch={[Function]}
-          droppableName="NODE_BIN"
-          isDraggableDeleteable={false}
+        "renderedElement": <withProps(mapProps(DropTarget))
+          removeNode={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -121,11 +109,7 @@ ShallowWrapper {
             },
           },
         },
-        "stateProps": Object {
-          "acceptsDraggableType": "EXISTING_NODE",
-          "droppableName": "NODE_BIN",
-          "isDraggableDeleteable": false,
-        },
+        "stateProps": Object {},
         "statePropsPrecalculationError": null,
         "store": Object {
           "dispatch": [Function],
@@ -153,11 +137,8 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <Connect(Droppable)
-          acceptsDraggableType="EXISTING_NODE"
-          dispatch={[Function]}
-          droppableName="NODE_BIN"
-          isDraggableDeleteable={false}
+        "_currentElement": <withProps(mapProps(DropTarget))
+          removeNode={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -169,11 +150,8 @@ ShallowWrapper {
           }
 />,
         "_debugID": 2,
-        "_renderedOutput": <Connect(Droppable)
-          acceptsDraggableType="EXISTING_NODE"
-          dispatch={[Function]}
-          droppableName="NODE_BIN"
-          isDraggableDeleteable={false}
+        "_renderedOutput": <withProps(mapProps(DropTarget))
+          removeNode={[Function]}
           store={
                     Object {
                               "dispatch": [Function],
@@ -195,7 +173,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Connect(Connect(Droppable))
+  "unrendered": <Connect(withProps(mapProps(DropTarget)))
     store={
         Object {
             "dispatch": [Function],

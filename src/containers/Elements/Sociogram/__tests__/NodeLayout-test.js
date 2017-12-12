@@ -21,7 +21,7 @@ const mockProps = {
   canCreateEdge: false,
   canHighlight: false,
   highlightAttributes: {},
-  allowSelect: false,
+  allowHighlighting: false,
   allowPositioning: false,
   selectMode: '',
   nodeBinSortOrder: {},
@@ -76,20 +76,6 @@ describe('<NodeLayout />', () => {
       ...mockProps,
       width: 789,
     });
-
-    expect(componentDidUpdate.mock.calls.length).toEqual(1);
-  });
-
-  it('should forceUpdate() when onDropped callback is called', () => {
-    const componentDidUpdate = jest.fn();
-    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
-
-    const component = shallow(
-      <NodeLayout {...mockProps} />,
-      { lifecycleExperimental: true },
-    );
-
-    component.find('Connect(LayoutNode)').at(0).prop('onDropped')();
 
     expect(componentDidUpdate.mock.calls.length).toEqual(1);
   });

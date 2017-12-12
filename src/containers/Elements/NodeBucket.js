@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
-import { makeGetNextUnplacedNode, makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
+import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../../selectors/sociogram';
 import { DragSource } from '../../behaviours/DragAndDrop';
 
 const EnhancedNode = DragSource(Node);
@@ -12,7 +12,6 @@ const label = node => node.nickname;
 class NodeBucket extends Component {
   static propTypes = {
     node: PropTypes.object,
-    ...sociogramOptionsProps,
   };
 
   static defaultProps = {

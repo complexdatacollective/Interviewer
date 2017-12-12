@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
-import { isEqual, isMatch, omit, has } from 'lodash';
+import { isEqual, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../../selectors/sociogram';
 import { actionCreators as networkActions } from '../../../ducks/modules/network';
 import { DropTarget } from '../../../behaviours/DragAndDrop';
 
+const watchProps = ['width', 'height'];
+
 const propsChangedExcludingNodes = (nextProps, props) =>
-  !isEqual(omit(nextProps, 'nodes'), omit(props, 'nodes'));
+  !isEqual(pick(nextProps, watchProps), pick(props, watchProps));
 
 const nodesLengthChanged = (nextProps, props) =>
   nextProps.nodes.length !== props.nodes.length;

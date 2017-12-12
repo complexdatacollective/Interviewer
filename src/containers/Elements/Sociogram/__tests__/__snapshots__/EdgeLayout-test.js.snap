@@ -89,6 +89,7 @@ ShallowWrapper {
           "stage": Object {},
         },
         "refs": Object {},
+        "renderEdge": [Function],
         "state": null,
         "updater": Object {
           "enqueueCallback": [Function],

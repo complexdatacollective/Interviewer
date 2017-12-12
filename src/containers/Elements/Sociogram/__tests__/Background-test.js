@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SociogramBackground } from '../../Elements/SociogramBackground';
+import { Background } from '../Background';
 
 const sociogramOptionsDefault = {
   layoutVariable: 'foo',
@@ -11,7 +11,7 @@ const sociogramOptionsDefault = {
   canCreateEdge: false,
   canHighlight: false,
   highlightAttributes: {},
-  allowSelect: false,
+  allowHighlighting: false,
   allowPositioning: false,
   selectMode: '',
   nodeBinSortOrder: {},
@@ -32,13 +32,13 @@ const mockPropsForImage = {
 
 describe('<SociowgramBackground />', () => {
   it('renders ok for radar', () => {
-    const component = shallow(<SociogramBackground {...mockPropsForRadar} />);
+    const component = shallow(<Background {...mockPropsForRadar} />);
 
     expect(component).toMatchSnapshot();
   });
 
   it('renders ok for image', () => {
-    const component = shallow(<SociogramBackground {...mockPropsForImage} />);
+    const component = shallow(<Background {...mockPropsForImage} />);
 
     expect(component).toMatchSnapshot();
   });

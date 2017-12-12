@@ -11,7 +11,7 @@ ShallowWrapper {
   "node": <div
     className="sociogram"
 >
-    <Connect(SociogramBackground)
+    <Connect(Background)
         prompt={
             Object {
                 "sociogram": Object {
@@ -46,7 +46,7 @@ ShallowWrapper {
     <div
       className="sociogram"
 >
-      <Connect(SociogramBackground)
+      <Connect(Background)
             prompt={
                   Object {
                         "sociogram": Object {
@@ -131,7 +131,7 @@ ShallowWrapper {
         "_currentElement": <div
           className="sociogram"
 >
-          <Connect(SociogramBackground)
+          <Connect(Background)
                     prompt={
                               Object {
                                         "sociogram": Object {
@@ -166,7 +166,7 @@ ShallowWrapper {
         "_renderedOutput": <div
           className="sociogram"
 >
-          <Connect(SociogramBackground)
+          <Connect(Background)
                     prompt={
                               Object {
                                         "sociogram": Object {

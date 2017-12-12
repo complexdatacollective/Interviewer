@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { EdgeLayout } from '../../Elements/EdgeLayout';
+import { EdgeLayout } from '../EdgeLayout';
 
 const mockEdgeCoords = [
   {

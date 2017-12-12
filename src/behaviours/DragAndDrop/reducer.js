@@ -207,7 +207,6 @@ export {
   actionCreators,
   actionTypes,
   reducer,
-  store,
 };
 
 export default reducer;

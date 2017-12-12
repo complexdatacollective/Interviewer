@@ -40,9 +40,9 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 1,
       "_context": Object {},
-      "_currentElement": <SociogramBackground
+      "_currentElement": <Background
+        allowHighlighting={false}
         allowPositioning={false}
-        allowSelect={false}
         canCreateEdge={false}
         canHighlight={false}
         concentricCircles={0}
@@ -58,12 +58,12 @@ ShallowWrapper {
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": SociogramBackground {
+      "_instance": Background {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "allowHighlighting": false,
           "allowPositioning": false,
-          "allowSelect": false,
           "canCreateEdge": false,
           "canHighlight": false,
           "concentricCircles": 0,
@@ -132,9 +132,9 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <SociogramBackground
+  "unrendered": <Background
+    allowHighlighting={false}
     allowPositioning={false}
-    allowSelect={false}
     canCreateEdge={false}
     canHighlight={false}
     concentricCircles={0}
@@ -161,7 +161,7 @@ ShallowWrapper {
   "node": <div
     className="sociogram-background"
 >
-    <SociogramRadar
+    <Radar
         n={4}
         skewed={true}
     />
@@ -170,7 +170,7 @@ ShallowWrapper {
     <div
       className="sociogram-background"
 >
-      <SociogramRadar
+      <Radar
             n={4}
             skewed={true}
       />
@@ -182,9 +182,9 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 1,
       "_context": Object {},
-      "_currentElement": <SociogramBackground
+      "_currentElement": <Background
+        allowHighlighting={false}
         allowPositioning={false}
-        allowSelect={false}
         canCreateEdge={false}
         canHighlight={false}
         concentricCircles={4}
@@ -200,12 +200,12 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": SociogramBackground {
+      "_instance": Background {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "allowHighlighting": false,
           "allowPositioning": false,
-          "allowSelect": false,
           "canCreateEdge": false,
           "canHighlight": false,
           "concentricCircles": 4,
@@ -241,7 +241,7 @@ ShallowWrapper {
         "_currentElement": <div
           className="sociogram-background"
 >
-          <SociogramRadar
+          <Radar
                     n={4}
                     skewed={true}
           />
@@ -250,7 +250,7 @@ ShallowWrapper {
         "_renderedOutput": <div
           className="sociogram-background"
 >
-          <SociogramRadar
+          <Radar
                     n={4}
                     skewed={true}
           />
@@ -266,9 +266,9 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <SociogramBackground
+  "unrendered": <Background
+    allowHighlighting={false}
     allowPositioning={false}
-    allowSelect={false}
     canCreateEdge={false}
     canHighlight={false}
     concentricCircles={4}

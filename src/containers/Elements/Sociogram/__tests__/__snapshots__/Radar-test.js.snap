@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SociogramRadar /> renders ok 1`] = `
+exports[`<Radar /> renders ok 1`] = `
 ShallowWrapper {
   "complexSelector": ComplexSelector {
     "buildPredicate": [Function],
@@ -98,7 +98,7 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 2,
       "_context": Object {},
-      "_currentElement": <SociogramRadar
+      "_currentElement": <Radar
         n={5}
         skewed={true}
 />,
@@ -226,7 +226,7 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <SociogramRadar
+  "unrendered": <Radar
     n={5}
     skewed={true}
 />,

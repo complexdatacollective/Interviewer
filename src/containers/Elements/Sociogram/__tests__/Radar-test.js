@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import SociogramRadar from '../../Elements/SociogramRadar';
+import Radar from '../Radar';
 
 const mockProps = {
   n: 5,
   skewed: true,
 };
 
-describe('<SociogramRadar />', () => {
+describe('<Radar />', () => {
   it('renders ok', () => {
-    const component = shallow(<SociogramRadar {...mockProps} />);
+    const component = shallow(<Radar {...mockProps} />);
 
     expect(component).toMatchSnapshot();
   });

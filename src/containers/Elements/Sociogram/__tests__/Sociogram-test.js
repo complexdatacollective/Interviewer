@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Sociogram from '../../Elements/Sociogram';
+import Sociogram from '../Sociogram';
 
 const mockProps = {
   prompt: { sociogram: { background: {} } },

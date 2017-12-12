@@ -18,11 +18,10 @@ ShallowWrapper {
           }
     }
 >
-    <Connect(Draggable)
+    <mapProps(DragSource)
+        allowDrag={false}
+        allowSelect={false}
         animate={false}
-        canDrag={false}
-        canSelect={false}
-        draggableType="bar"
         foo={
             Object {
                 "x": 0.77,
@@ -30,8 +29,7 @@ ShallowWrapper {
               }
         }
         label={undefined}
-        onDropped={[Function]}
-        onMove={[Function]}
+        meta={[Function]}
         onSelected={[Function]}
         selected={false}
     />
@@ -47,11 +45,10 @@ ShallowWrapper {
                 }
       }
 >
-      <Connect(Draggable)
+      <mapProps(DragSource)
+            allowDrag={false}
+            allowSelect={false}
             animate={false}
-            canDrag={false}
-            canSelect={false}
-            draggableType="bar"
             foo={
                   Object {
                         "x": 0.77,
@@ -59,8 +56,7 @@ ShallowWrapper {
                       }
             }
             label={undefined}
-            onDropped={[Function]}
-            onMove={[Function]}
+            meta={[Function]}
             onSelected={[Function]}
             selected={false}
       />
@@ -73,10 +69,10 @@ ShallowWrapper {
       "_compositeType": 1,
       "_context": Object {},
       "_currentElement": <LayoutNode
+        allowPositioning={false}
+        allowSelect={false}
         areaHeight={40}
         areaWidth={100}
-        canDrag={false}
-        canSelect={false}
         draggableType="bar"
         layoutVariable="foo"
         node={
@@ -98,14 +94,11 @@ ShallowWrapper {
       "_instance": LayoutNode {
         "_reactInternalInstance": [Circular],
         "context": Object {},
-        "onDropped": [Function],
-        "onMove": [Function],
-        "onSelected": [Function],
         "props": Object {
+          "allowPositioning": false,
+          "allowSelect": false,
           "areaHeight": 40,
           "areaWidth": 100,
-          "canDrag": false,
-          "canSelect": false,
           "draggableType": "bar",
           "layoutVariable": "foo",
           "node": Object {
@@ -149,11 +142,10 @@ ShallowWrapper {
                             }
           }
 >
-          <Connect(Draggable)
+          <mapProps(DragSource)
+                    allowDrag={false}
+                    allowSelect={false}
                     animate={false}
-                    canDrag={false}
-                    canSelect={false}
-                    draggableType="bar"
                     foo={
                               Object {
                                         "x": 0.77,
@@ -161,8 +153,7 @@ ShallowWrapper {
                                       }
                     }
                     label={undefined}
-                    onDropped={[Function]}
-                    onMove={[Function]}
+                    meta={[Function]}
                     onSelected={[Function]}
                     selected={false}
           />
@@ -178,11 +169,10 @@ ShallowWrapper {
                             }
           }
 >
-          <Connect(Draggable)
+          <mapProps(DragSource)
+                    allowDrag={false}
+                    allowSelect={false}
                     animate={false}
-                    canDrag={false}
-                    canSelect={false}
-                    draggableType="bar"
                     foo={
                               Object {
                                         "x": 0.77,
@@ -190,8 +180,7 @@ ShallowWrapper {
                                       }
                     }
                     label={undefined}
-                    onDropped={[Function]}
-                    onMove={[Function]}
+                    meta={[Function]}
                     onSelected={[Function]}
                     selected={false}
           />
@@ -208,10 +197,10 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <LayoutNode
+    allowPositioning={false}
+    allowSelect={false}
     areaHeight={40}
     areaWidth={100}
-    canDrag={false}
-    canSelect={false}
     draggableType="bar"
     layoutVariable="foo"
     node={
