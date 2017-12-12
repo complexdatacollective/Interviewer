@@ -1,0 +1,29 @@
+.search {
+  background-color: color('cyber-grape');
+  bottom: 0;
+  display: block;
+  padding: 2rem 10%;
+  position: absolute;
+  width: 100%;
+
+  &--transition {
+  }
+
+  &--has-results {
+  }
+
+  &--collapsed {
+    display: none;
+  }
+
+  &__results {
+    border: 1px solid white;
+    display: block;
+    height: 400px;
+
+    &--transition {
+      @include group-transition(zoom, $animation-fast-duration);
+    }
+  }
+
+}
