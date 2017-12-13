@@ -64,7 +64,7 @@ class NodePanels extends PureComponent {
       .map((panel, index) => this.panelIsOpen(index))
       .reduce((memo, panelOpen) => memo || panelOpen, false);
 
-  configureNodeList = ({ dataSource, ...nodeListOptions }) => {
+  configureNodeList = ({ dataSource, originNodeIds, ...nodeListOptions }) => {
     const {
       newNodeAttributes: {
         stageId,
@@ -72,9 +72,9 @@ class NodePanels extends PureComponent {
       },
     } = this.props;
 
-    const label = node => `${node.nickname}`;
+    console.log(nodeListOptions);
 
-    const nodeIds = map(nodeListOptions.nodes, 'id');
+    const label = node => `${node.nickname}`;
 
     // external, needs to check list
     // otherwise check created at details.
@@ -85,12 +85,13 @@ class NodePanels extends PureComponent {
       ) :
       ({ meta }) => (
         meta.itemType === 'EXISTING_NODE' &&
-        includes(nodeIds, meta.id)
+        includes(originNodeIds, meta.uid)
       );
 
     return {
       ...nodeListOptions,
       onDrop: item => this.onDrop(item, dataSource),
+      itemType: 'NEW_NODE',
       accepts,
       label,
     };
@@ -130,6 +131,12 @@ const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource 
     differenceBy(externalData[dataSource].nodes, nodes, 'uid')
 );
 
+const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
+  dataSource === 'existing' ?
+    map(existingNodes, 'uid') :
+    map(externalData[dataSource].nodes, 'uid')
+);
+
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
@@ -142,6 +149,11 @@ function makeMapStateToProps() {
     const panels = props.panels.map(
       panel => ({
         ...panel,
+        originNodeIds: getOriginNodeIds({
+          existingNodes,
+          externalData,
+          dataSource: panel.dataSource,
+        }),
         nodes: getNodesForDataSource({
           nodes,
           existingNodes,
