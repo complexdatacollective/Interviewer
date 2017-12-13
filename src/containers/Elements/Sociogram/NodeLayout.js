@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { compose, withProps } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import { isEqual, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../../behaviours';
@@ -10,7 +10,7 @@ import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } fr
 import { actionCreators as networkActions } from '../../../ducks/modules/network';
 import { DropTarget } from '../../../behaviours/DragAndDrop';
 
-const watchProps = ['width', 'height'];
+const watchProps = ['width', 'height', 'dropCount'];
 
 const propsChangedExcludingNodes = (nextProps, props) =>
   !isEqual(pick(nextProps, watchProps), pick(props, watchProps));
@@ -23,23 +23,29 @@ const relativeCoords = (container, node) => ({
   y: (node.y - container.y) / container.height,
 });
 
-const dropHandlers = withProps(props => ({
-  accepts: ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: (item) => {
-    props.updateNode({
-      uid: item.meta.uid,
-      [props.layoutVariable]: relativeCoords(props, item),
-    });
-  },
-  onDrag: (item) => {
-    if (!has(item.meta, props.layoutVariable)) { return; }
+const dropHandlers = compose(
+  withState('dropCount', 'setDropCount', 0),
+  withHandlers({
+    accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
+    onDrop: props => (item) => {
+      props.updateNode({
+        uid: item.meta.uid,
+        [props.layoutVariable]: relativeCoords(props, item),
+      });
 
-    props.updateNode({
-      uid: item.meta.uid,
-      [props.layoutVariable]: relativeCoords(props, item),
-    });
-  },
-}));
+      // Horrible hack for performance (only re-render nodes on drop, not on drag)
+      props.setDropCount(props.dropCount + 1);
+    },
+    onDrag: props => (item) => {
+      if (!has(item.meta, props.layoutVariable)) { return; }
+
+      props.updateNode({
+        uid: item.meta.uid,
+        [props.layoutVariable]: relativeCoords(props, item),
+      });
+    },
+  }),
+);
 
 class NodeLayout extends Component {
   static propTypes = {
@@ -64,6 +70,7 @@ class NodeLayout extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    console.log(nextProps, this.props);
     if (nodesLengthChanged(nextProps, this.props)) { return true; }
     if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
 
@@ -127,6 +134,8 @@ class NodeLayout extends Component {
       allowSelect,
       layoutVariable,
     } = this.props;
+
+    console.log(this.props);
 
     return (
       <div className="node-layout">
