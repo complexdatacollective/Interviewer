@@ -25,8 +25,8 @@ const dropTarget = WrappedComponent =>
     static defaultProps = {
       meta: () => ({}),
       accepts: () => false,
-      onDrop: (...args) => { console.log('DropTarget.onDrop()', ...args); },
-      onDrag: (...args) => { console.log('DropTarget.onDrag()', ...args); },
+      onDrop: () => {},
+      onDrag: () => {},
     }
 
     constructor(props) {

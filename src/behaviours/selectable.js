@@ -41,7 +41,7 @@ export default function selectable(WrappedComponent) {
   };
 
   Selectable.defaultProps = {
-    onSelected: (...args) => { console.log('selectable.onSelected()', args); },
+    onSelected: () => {},
     allowSelect: true,
   };
 

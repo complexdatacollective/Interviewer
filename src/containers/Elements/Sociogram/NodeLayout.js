@@ -70,7 +70,6 @@ class NodeLayout extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    console.log(nextProps, this.props);
     if (nodesLengthChanged(nextProps, this.props)) { return true; }
     if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
 
@@ -134,8 +133,6 @@ class NodeLayout extends Component {
       allowSelect,
       layoutVariable,
     } = this.props;
-
-    console.log(this.props);
 
     return (
       <div className="node-layout">

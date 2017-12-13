@@ -46,7 +46,6 @@ class NodePanels extends PureComponent {
   };
 
   onDrop = ({ meta }, dataSource) => {
-    console.log(meta, dataSource);
     if (dataSource === 'existing') {
       this.props.toggleNodeAttributes(meta.uid, { ...this.props.activePromptAttributes });
     } else {
@@ -71,8 +70,6 @@ class NodePanels extends PureComponent {
         promptId,
       },
     } = this.props;
-
-    console.log(nodeListOptions);
 
     const label = node => `${node.nickname}`;
 

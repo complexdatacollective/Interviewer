@@ -72,7 +72,7 @@ LayoutNode.defaultProps = {
   selected: false,
   areaWidth: 0,
   areaHeight: 0,
-  onSelected: (...args) => { console.log('LayoutNode.onSelected()', args) },
+  onSelected: () => {},
 };
 
 export { LayoutNode };
