@@ -1,29 +1,58 @@
+$results-height: 50vh;
+
 .search {
   background-color: color('cyber-grape');
   bottom: 0;
-  display: block;
   padding: 2rem 10%;
   position: absolute;
+  transform: translateX(0);
+  transition: all $animation-fast-duration $animation-default-easing;
   width: 100%;
+  // On top of button. FIXME: magic number
+  z-index: 1000;
 
   &--transition {
   }
 
-  &--has-results {
+  &--hasInput {
   }
 
   &--collapsed {
-    display: none;
+    transform: translateX(100%);
   }
 
   &__results {
     border: 1px solid white;
     display: block;
-    height: 400px;
+    height: $results-height;
+    overflow: hidden;
+    transition: height $animation-fast-duration $animation-default-easing;
+
+    &--collapsed {
+      border: none;
+      height: 0;
+    }
 
     &--transition {
       @include group-transition(zoom, $animation-fast-duration);
     }
+  }
+
+  &__result {
+    &--selected {
+      border: 1px solid white;
+    }
+  }
+
+  .button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+  }
+
+  // Temporary. TODO: remove once real input integration done.
+  .form__button-container {
+    display: none;
   }
 
 }

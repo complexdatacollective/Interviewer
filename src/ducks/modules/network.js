@@ -1,6 +1,8 @@
+/* eslint-disable */
 import { find, maxBy, reject, findIndex, isMatch, omit } from 'lodash';
 
 const ADD_NODE = 'ADD_NODE';
+const ADD_NODE_BATCH = 'ADD_NODE_BATCH';
 const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -49,6 +51,17 @@ function getNodesWithAdd(nodes, node) {
   return [...nodes];
 }
 
+// TODO: ensure no dupes?
+function getNodesWithBatchAdd(nodes, newNodes, additionalAttributes) {
+  newNodes = newNodes.map(newNode => {
+    const id = nextId(nodes);
+    const uid = nextUid(nodes);
+    // Provided uid can override generated one, but not id
+    return { uid, ...newNode, ...additionalAttributes, id };
+  })
+  return [...nodes, ...newNodes];
+}
+
 function getUpdatedNodes(nodes, updatedNode, full) {
   const updatedNodes = nodes.map((node) => {
     if (node.uid !== updatedNode.uid) { return node; }
@@ -74,12 +87,24 @@ function getUpdatedNodes(nodes, updatedNode, full) {
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE: {
+      console.warn(action.type, state, action)
       return {
         ...state,
         nodes: getNodesWithAdd(state.nodes, action.node),
       };
     }
+    case ADD_NODE_BATCH: {
+      console.warn(action.type, state, action)
+      // const actionNodeIds = action.nodes.map(node => node.uid).filter(id => id !== undefined);
+      // const newNodes = state.nodes.filter(node => actionNodeIds.indexOf(node.uid) === -1);
+      // const nodes = action.nodes.map(newNode => getNodesWithAdd(state.nodes, newNode));
+      return {
+        ...state,
+        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
+      };
+    }
     case ADD_OR_UPDATE_NODE: {
+      console.warn(action.type, state, action)
       let nodes = state.nodes;
       if (find(state.nodes, ['uid', action.node.uid])) {
         nodes = getUpdatedNodes(state.nodes, action.node, action.full);
@@ -161,6 +186,14 @@ function addNode(node) {
   };
 }
 
+function addNodeBatch(nodes, additionalAttributes) {
+  return {
+    type: ADD_NODE_BATCH,
+    nodes,
+    additionalAttributes,
+  };
+}
+
 function addOrUpdateNode(node) {
   return {
     type: ADD_OR_UPDATE_NODE,
@@ -214,6 +247,7 @@ function removeEdge(edge) {
 
 const actionCreators = {
   addNode,
+  addNodeBatch,
   addOrUpdateNode,
   updateNode,
   removeNode,
@@ -225,6 +259,7 @@ const actionCreators = {
 
 const actionTypes = {
   ADD_NODE,
+  ADD_NODE_BATCH,
   ADD_OR_UPDATE_NODE,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Button, animation } from 'network-canvas-ui';
+import { Button, Icon } from 'network-canvas-ui';
 
 import Form from './Form';
 import SearchResults from '../components/SearchResults';
@@ -16,8 +15,6 @@ import { getExternalData } from '../selectors/protocol';
   * Supports selecting multiple...
   */
 // TODO: less generic name
-// TODO: container?
-// const Search = ({ /*children,*/ collapsed }) => {
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -27,13 +24,17 @@ class Search extends Component {
       selectedResults: [],
     };
     this.searchOptions = props.options;
-    this.searchDataNodes = props.externalData[props.dataSourceKey].nodes;
   }
 
-  onChange(event, newValue) {
+  componentWillMount() {
+    this.searchDataNodes = this.props.externalData[this.props.dataSourceKey].nodes;
+  }
+
+  onInputChange(event, newValue) {
     let searchResults;
     if (newValue.length > 0) {
       searchResults = this.searchDataNodes.filter(node => this.isMatchingResult(newValue, node));
+      searchResults = searchResults.filter(r => this.isAllowedResult(r));
     } else {
       searchResults = [];
     }
@@ -41,12 +42,13 @@ class Search extends Component {
       searchResults,
       searchTerm: newValue,
       hasInput: newValue.length > 0,
-      hasResults: searchResults.length > 0,
     });
   }
 
   onCommit() {
-    this.props.completeSearch(this.state.selectedResults);
+    // TODO: redux? This is sort of a one-shot handler; caller should parse and then discard.
+    // But would be nice to have management (i.e., clearing results)
+    this.props.onComplete(this.state.selectedResults);
   }
 
   // TODO: "select" or "toggleSelected"?
@@ -66,70 +68,94 @@ class Search extends Component {
     });
   }
 
-  get displayField() {
-    // TODO: review protocol definition
-    return this.searchOptions.matchProperties[0];
-  }
-
   isMatchingResult(searchTerm, candidate) {
     const searchProps = this.searchOptions.matchProperties;
     // TODO: fuzziness
     return searchProps.some(prop => candidate[prop].includes(searchTerm));
   }
 
+  // Result is allowed if there is no excluded node that 'matches'
+  // if true, suppress candidate from appearing in search results
+  // example: node has already been selected.
+  // TODO: Performance?
+  //   I'm assuming that excludedNodes size is small, but search set may be large,
+  //   and so preferable to filter found results dynamically. Could cache as well.
+  isAllowedResult(candidate) {
+    // A search result is equal to a [excluded] node if all displayFields are equal
+    // TODO: I'm assuming sufficient since user would have no way to distinguish.
+    const matchAttrs = this.props.displayFields;
+    function isNotMatch(result, node) {
+      return matchAttrs.some(attr => node[attr] !== result[attr]);
+    }
+
+    return this.props.excludedNodes.every(excluded => isNotMatch(excluded, candidate));
+  }
+
   render() {
-    const { form, collapsed } = this.props;
+    const {
+      closeSearch,
+      collapsed,
+      displayFields,
+      form,
+    } = this.props;
 
     const searchClasses = cx(
       'search',
-      { 'search--collapsed': collapsed },
+      {
+        'search--collapsed': collapsed,
+        'search--hasInput': this.state.hasInput,
+      },
     );
 
+    // TODO: real input integration. Investigate slowness.
     return (
-      <CSSTransitionGroup
-        component="div"
-        className={searchClasses}
-        transitionName="search--transition"
-        transitionEnterTimeout={animation.duration.fast}
-        transitionLeaveTimeout={animation.duration.fast}
-      >
+      <div className={searchClasses}>
+        <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
+
         <h1>Type in the box below to Search</h1>
 
-        {this.state.hasInput &&
-          <SearchResults
-            results={this.state.searchResults}
-            displayKey={this.displayField}
-            onSelectResult={result => this.onSelectResult(result)}
-          />
-        }
+        <SearchResults
+          hasInput={this.state.hasInput}
+          results={this.state.searchResults}
+          selectedResults={this.state.selectedResults}
+          displayKey={displayFields[0]}
+          onSelectResult={result => this.onSelectResult(result)}
+        />
 
         <Form
           form={form.title}
           {...form}
-          handleChange={(event, newValue) => this.onChange(event, newValue)}
+          handleChange={(event, newValue) => this.onInputChange(event, newValue)}
         />
 
-        <Button onClick={() => this.onCommit()}>
-          Add all ({this.state.selectedResults.length})
-        </Button>
+        {
+          this.state.selectedResults.length > 0 &&
+          <Button onClick={() => this.onCommit()}>
+            Add all ({this.state.selectedResults.length})
+          </Button>
+        }
 
-      </CSSTransitionGroup>
+      </div>
     );
   }
 }
 
 Search.propTypes = {
+  closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  completeSearch: PropTypes.func.isRequired,
+  displayFields: PropTypes.array.isRequired,
+  // TODO: is `Nodes` general enough for search (naming)?
+  excludedNodes: PropTypes.array.isRequired,
   externalData: PropTypes.object.isRequired,
   form: PropTypes.object.isRequired,
   dataSourceKey: PropTypes.string.isRequired,
+  onComplete: PropTypes.func.isRequired,
   options: PropTypes.object.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    completeSearch: bindActionCreators(searchActions.completeSearch, dispatch),
+    closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
   };
 }
 

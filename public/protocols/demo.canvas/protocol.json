@@ -656,6 +656,10 @@
       "type": "NameGeneratorAutoComplete",
       "label": "NG Classmates",
       "form": "autocompletingSearchForm",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
       "prompts": [
         {
           "id": "7cl",
@@ -665,13 +669,11 @@
             "close_friend": true
           },
           "dataSource": "schoolPupils",
-          "filter": "network => network",
+          "displayLabel": "nickname",
+          "displayProperties": ["name", "age"],
           "autoCompleteOptions": {
-            "fuzzyness": 5,
-            "matchProperties": ["nickname", "name"],
-            "sortOrder": {
-              "nickname": "DESC"
-            }
+            "fuzzyness": 0.2,
+            "matchProperties": ["nickname", "name"]
           }
         },
         {
@@ -681,13 +683,11 @@
             "primary_venue": true
           },
           "dataSource": "HIVServices",
-          "filter": "network => network",
+          "displayLabel": "Main/Parent Organization",
+          "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
           "autoCompleteOptions": {
-            "fuzzyness": 5,
-            "matchProperties": ["address", "name"],
-            "sortOrder": {
-              "address": "DESC"
-            }
+            "fuzzyness": 0,
+            "matchProperties": ["address", "name"]
           }
         }
       ]

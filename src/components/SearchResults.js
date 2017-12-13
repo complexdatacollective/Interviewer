@@ -1,24 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransitionGroup } from 'react-transition-group';
+import cx from 'classnames';
 
 import SearchResult from './SearchResult';
 
-const SearchResults = ({ results, displayKey, onSelectResult }) => {
-  function searchResult(resultData, id) {
+// class SearchResults extends Component {
+const SearchResults = (props) => {
+  const {
+    hasInput,
+    results,
+    displayKey,
+    onSelectResult,
+    selectedResults,
+  } = props;
+
+  const classNames = cx(
+    'search__results',
+    { 'search__results--collapsed': !hasInput },
+  );
+
+  function toSearchResult(resultData, id) {
+    const isSelected = selectedResults.indexOf(resultData) > -1;
     return (
       <SearchResult
         key={`search__result_${id}`}
         data={resultData}
         displayKey={displayKey}
         onClick={onSelectResult}
+        isSelected={isSelected}
       />
     );
   }
 
   let content;
   if (results.length) {
-    content = results.map(searchResult);
+    content = results.map(toSearchResult);
   } else {
     content = (<p>Nothing matching that search</p>);
   }
@@ -26,7 +43,7 @@ const SearchResults = ({ results, displayKey, onSelectResult }) => {
   return (
     <CSSTransitionGroup
       component="div"
-      className="search__results"
+      className={classNames}
       transitionName="search__results--transition"
       transitionEnterTimeout={2000}
       transitionLeaveTimeout={2000}
@@ -38,9 +55,13 @@ const SearchResults = ({ results, displayKey, onSelectResult }) => {
 };
 
 SearchResults.propTypes = {
-  results: PropTypes.array.isRequired,
   displayKey: PropTypes.string.isRequired,
+  hasInput: PropTypes.bool.isRequired,
   onSelectResult: PropTypes.func.isRequired,
+  results: PropTypes.array.isRequired,
+  // TODO: selectedNodes?
+  // TODO: move into redux store
+  selectedResults: PropTypes.array.isRequired,
 };
 
 export default SearchResults;

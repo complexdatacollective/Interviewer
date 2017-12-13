@@ -1,9 +1,13 @@
 .name-generator-auto-complete-interface {
   // TODO: real styling; or consolidate with other interfaces.
-  display: block;
   height: 100%;
   padding: 1rem 0;
   position: relative;
   text-align: center;
   width: 100%;
+
+  // TODO: need a more generic icon, or customizability
+  &__add-person {
+  }
+
 }
