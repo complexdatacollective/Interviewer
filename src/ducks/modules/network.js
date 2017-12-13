@@ -94,7 +94,7 @@ export default function reducer(state = initialState, action = {}) {
       const attributes = omit(action.attributes, ['uid', 'id']);
 
       const updatedNodes = state.nodes.map((node) => {
-        if (node.uid !== action.node.uid) { return node; }
+        if (node.uid !== action.uid) { return node; }
 
         if (isMatch(node, attributes)) {
           return omit(node, Object.getOwnPropertyNames(attributes));
@@ -103,8 +103,6 @@ export default function reducer(state = initialState, action = {}) {
         return {
           ...node,
           ...action.attributes,
-          id: node.id,
-          uid: node.uid,
         };
       });
 
@@ -177,10 +175,10 @@ function updateNode(node, full = false) {
   };
 }
 
-function toggleNodeAttributes(node, attributes) {
+function toggleNodeAttributes(uid, attributes) {
   return {
     type: TOGGLE_NODE_ATTRIBUTES,
-    node,
+    uid,
     attributes,
   };
 }

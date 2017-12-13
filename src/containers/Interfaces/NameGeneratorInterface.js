@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
@@ -70,10 +70,13 @@ class NameGenerator extends Component {
    * @param {object} node - key/value object containing node object from the network store
    */
   onDrop = (item) => {
-    const node = { ...this.props.newNodeAttributes, ...item.meta };
-    // if node exists update
-    this.props.addOrUpdateNode(node);
-    // otherwise update
+    const node = { ...item.meta };
+
+    if (has(node, 'promptId') || has(node, 'stageId')) {
+      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
+    } else {
+      this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+    }
   }
 
   render() {
@@ -158,7 +161,6 @@ NameGenerator.propTypes = {
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  addOrUpdateNode: PropTypes.func.isRequired,
   activePromptAttributes: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,

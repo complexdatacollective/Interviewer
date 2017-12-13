@@ -104,7 +104,7 @@ class NodeLayout extends Component {
 
   toggleHighlightAttributes(nodeId) {
     this.props.toggleHighlight(
-      { uid: nodeId },
+      nodeId,
       { ...this.props.highlightAttributes },
     );
   }

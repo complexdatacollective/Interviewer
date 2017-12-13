@@ -1,11 +1,9 @@
-/* eslint-disable */
-
 import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { colorDictionary } from 'network-canvas-ui';
-import { isMatch, differenceBy } from 'lodash';
+import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from '../../selectors/interface';
 import { getExternalData } from '../../selectors/protocol';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
@@ -28,40 +26,37 @@ const getHighlight = (highlight, panelNumber) => {
   return null;
 };
 
-// const accepts = (
-//   meta.itemType === 'EXISTING_NODE' &&
-//   (meta.stageId !== newNodeAttributes.stageId || meta.promptId !== newNodeAttributes.promptId)
-// );
-
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
 class NodePanels extends PureComponent {
+  static propTypes = {
+    toggleNodeAttributes: PropTypes.func.isRequired,
+    removeNode: PropTypes.func.isRequired,
+    activePromptAttributes: PropTypes.object.isRequired,
+    newNodeAttributes: PropTypes.object.isRequired,
+    isDragging: PropTypes.bool,
+    externalData: PropTypes.array.isRequired,
+    panels: PropTypes.array,
+  };
 
   static defaultProps = {
     panels: [],
     isDragging: false,
   };
 
-  onDrop = (item) => {
-    console.log(item);
-    alert('panels');
-    // hits.forEach((hit) => {
-    //   switch (hit.name) {
-    //     case 'MAIN_NODE_LIST':
-    //       this.props.addOrUpdateNode({ ...this.props.newNodeAttributes, ...node });
-    //       break;
-    //     case 'NODE_BIN':
-    //       this.props.removeNode(node.uid);
-    //       break;
-    //     default:
-    //   }
-    // });
+  onDrop = ({ meta }, dataSource) => {
+    console.log(meta, dataSource);
+    if (dataSource === 'existing') {
+      this.props.toggleNodeAttributes(meta.uid, { ...this.props.activePromptAttributes });
+    } else {
+      this.props.removeNode(meta.uid);
+    }
   }
 
-  panelHasNodes = (index) => this.props.panels[index].nodes.length;
+  panelHasNodes = index => this.props.panels[index].nodes.length;
 
-  panelIsOpen = (index) =>
+  panelIsOpen = index =>
     this.props.isDragging || this.panelHasNodes(index) > 0;
 
   anyPanelIsOpen = () =>
@@ -69,41 +64,44 @@ class NodePanels extends PureComponent {
       .map((panel, index) => this.panelIsOpen(index))
       .reduce((memo, panelOpen) => memo || panelOpen, false);
 
-  getInteractionHandlers(interaction) {
-    switch (interaction) {
-      case 'selectable':
-        return {
-          onSelect: this.onSelect,
-        };
-      case 'draggable':
-        return {
-          onDrop: this.onDrop,
-        };
-      default:
-        return {};
-    }
+  configureNodeList = ({ dataSource, ...nodeListOptions }) => {
+    const {
+      newNodeAttributes: {
+        stageId,
+        promptId,
+      },
+    } = this.props;
+
+    const label = node => `${node.nickname}`;
+
+    const nodeIds = map(nodeListOptions.nodes, 'id');
+
+    // external, needs to check list
+    // otherwise check created at details.
+    const accepts = (dataSource === 'existing') ?
+      ({ meta }) => (
+        meta.itemType === 'EXISTING_NODE' &&
+        (meta.stageId !== stageId || meta.promptId !== promptId)
+      ) :
+      ({ meta }) => (
+        meta.itemType === 'EXISTING_NODE' &&
+        includes(nodeIds, meta.id)
+      );
+
+    return {
+      ...nodeListOptions,
+      onDrop: item => this.onDrop(item, dataSource),
+      accepts,
+      label,
+    };
   }
 
   renderNodePanel = (panel, index) => {
     const {
-      activePromptAttributes,
-    } = this.props;
-
-    const {
       title,
       highlight,
-      ...nodeListProps,
+      ...nodeListOptions
     } = panel;
-
-    const label = node => `${node.nickname}`;
-    const selected = node => isMatch(node, activePromptAttributes);
-    const accepts = ({ meta, wfpwfp }) => {
-      return (
-        meta.wfiep == false &&
-        meta.itemType === 'EXISTING_NODE' &&
-        (meta.stageId !== activePromptAttributes.stageId || meta.promptId !== activePromptAttributes.promptId)
-      );
-    }
 
     return (
       <Panel
@@ -112,13 +110,7 @@ class NodePanels extends PureComponent {
         highlight={getHighlight(highlight, index)}
         minimise={!this.panelIsOpen(index)}
       >
-        <NodeList
-          {...nodeListProps}
-          {...this.getInteractionHandlers(nodeListProps.interaction)}
-          accepts={accepts}
-          label={label}
-          selected={selected}
-        />
+        <NodeList {...this.configureNodeList(nodeListOptions)} />
       </Panel>
     );
   }
@@ -170,7 +162,6 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };

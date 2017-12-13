@@ -6,16 +6,11 @@ const panelPresets = {
   existing: {
     title: 'Already mentioned',
     dataSource: 'existing',
-    interaction: 'draggable',
-    accepts: ['EXISTING_NODE'],
-    itemType: 'NEW_NODE',
     filter: network => network,
   },
   external: {
     title: 'People from your previous visit',
     dataSource: 'previousInterview',
-    interaction: 'draggable',
-    itemType: 'NEW_NODE',
     filter: network => network,
   },
 };
