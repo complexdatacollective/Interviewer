@@ -1,7 +1,3 @@
-import { throttle, filter, isMatch } from 'lodash';
-
-const maxFramesPerSecond = 60;
-
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
     return true;

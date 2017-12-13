@@ -4,7 +4,6 @@ import { compose } from 'redux';
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
 const REMOVE_TARGET = Symbol('DRAG_AND_DROP/REMOVE_TARGET');
-const UPDATE_SOURCE = Symbol('DRAG_AND_DROP/UPDATE_SOURCE');
 const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
 const DRAG_MOVE = Symbol('DRAG_AND_DROP/DRAG_MOVE');
 const DRAG_END = Symbol('DRAG_AND_DROP/DRAG_END');
@@ -44,11 +43,11 @@ const markTargetHits = ({ targets, source, ...rest }) => ({
 
 const markSourceHit = ({ targets, source, ...rest }) => ({
   targets,
-  source: tap(source, (source) => {
-    if (isEmpty(source)) { return source; }
+  source: tap(source, (s) => {
+    if (isEmpty(s)) { return s; }
 
     return {
-      ...source,
+      ...s,
       isOver: filter(targets, 'isOver').length > 0,
     };
   }),
@@ -62,6 +61,36 @@ const resetHits = ({ targets, source, ...rest }) => ({
 
 const markHits = compose(markSourceHit, markTargetHits);
 
+const triggerDrag = (state, action) => {
+  const hits = markHits({
+    ...state,
+    source: {
+      ...state.source,
+      ...action,
+    },
+  });
+
+  filter(hits.targets, { isOver: true, willAccept: true })
+    .forEach((target) => {
+      target.onDrag(hits.source);
+    });
+};
+
+const triggerDrop = (state, action) => {
+  const hits = markHits({
+    ...state,
+    source: {
+      ...state.source,
+      ...action,
+    },
+  });
+
+  filter(hits.targets, { isOver: true, willAccept: true })
+    .forEach((target) => {
+      target.onDrop(hits.source);
+    });
+};
+
 const reducer = (state = initialState, { type, ...action }) => {
   switch (type) {
     case UPDATE_TARGET:
@@ -73,7 +102,7 @@ const reducer = (state = initialState, { type, ...action }) => {
       return {
         ...state,
         targets: state.targets.map((target) => {
-          if (action.from !== target.id ) { return target; }
+          if (action.from !== target.id) { return target; }
 
           return {
             ...target,
@@ -147,7 +176,7 @@ function dragMove(data) {
       type: DRAG_MOVE,
       ...data,
     });
-  }
+  };
 }
 
 function dragEnd(data) {
@@ -158,45 +187,16 @@ function dragEnd(data) {
       type: DRAG_END,
       ...data,
     });
-  }
+  };
 }
 
-const triggerDrag = (state, action) => {
-  const hits = markHits({
-    ...state,
-    source: {
-      ...state.source,
-      ...action,
-    },
-  });
-
-  filter(hits.targets, { isOver: true, willAccept: true })
-    .forEach((target) => {
-      target.onDrag(hits.source);
-    });
-};
-
-const triggerDrop = (state, action) => {
-  const hits = markHits({
-    ...state,
-    source: {
-      ...state.source,
-      ...action,
-    },
-  });
-
-  filter(hits.targets, { isOver: true, willAccept: true })
-    .forEach((target) => {
-      target.onDrop(hits.source);
-    });
-};
 
 const actionCreators = {
   updateTarget,
   renameTarget,
   removeTarget,
   dragStart,
-  dragMove: throttle(dragMove, 1000/16),
+  dragMove: throttle(dragMove, 1000 / 24), // 24 fps
   dragEnd,
 };
 

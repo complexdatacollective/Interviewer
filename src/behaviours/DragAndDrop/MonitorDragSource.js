@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import Monitor from './Monitor';
 
 const defaultMonitorProps = {
@@ -6,7 +5,7 @@ const defaultMonitorProps = {
   meta: {},
 };
 
-const getMonitorProps = (state, props) => {
+const getMonitorProps = (state) => {
   const source = state.source;
 
   if (!source) { return { ...defaultMonitorProps }; }
@@ -14,7 +13,7 @@ const getMonitorProps = (state, props) => {
   const monitorProps = {
     isDragging: true,
     meta: { ...source.meta },
-  }
+  };
 
   return monitorProps;
 };

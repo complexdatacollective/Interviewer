@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
@@ -72,10 +70,10 @@ class NameGenerator extends Component {
    * @param {object} node - key/value object containing node object from the network store
    */
   onDrop = (item) => {
-    console.log(item);
-    alert('name gen');
     const node = { ...this.props.newNodeAttributes, ...item.meta };
+    // if node exists update
     this.props.addOrUpdateNode(node);
+    // otherwise update
   }
 
   render() {
@@ -111,7 +109,7 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE' }
+              accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
               onSelect={this.onSelectNode}
@@ -159,9 +157,8 @@ NameGenerator.propTypes = {
   prompt: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
-  toggleNodeAttributes: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  removeNode: PropTypes.func.isRequired,
+  addOrUpdateNode: PropTypes.func.isRequired,
   activePromptAttributes: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,

@@ -10,12 +10,12 @@ const defaultMonitorProps = {
 const getMonitorProps = (state, props) => {
   const target = find(state.targets, ['id', props.id]);
 
-  if (!target) { return { ...defaultMonitorProps } };
+  if (!target) { return { ...defaultMonitorProps }; }
 
   const monitorProps = {
     isOver: get(target, 'isOver', false),
     willAccept: get(target, 'willAccept', false),
-  }
+  };
 
   return monitorProps;
 };

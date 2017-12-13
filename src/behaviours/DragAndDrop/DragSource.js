@@ -2,11 +2,10 @@
 
 import React, { PureComponent } from 'react';
 import { compose } from 'redux';
-import { findDOMNode } from 'react-dom'; // eslint-disable-line camelcase
 import PropTypes from 'prop-types';
 import dropId from './dropId';
 import DragPreview from './DragPreview';
-import dragManager from './dragManager';
+import DragManager from './DragManager';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
@@ -34,7 +33,7 @@ const dragSource = WrappedComponent =>
     componentDidMount() {
       if (!this.props.allowDrag) { return; }
 
-      this.dragManager = new dragManager({
+      this.dragManager = new DragManager({
         el: this.node,
         onDragStart: this.onDragStart,
         onDragMove: this.onDragMove,
@@ -84,8 +83,8 @@ const dragSource = WrappedComponent =>
       this.setState({ isDragging: true }); // TODO: Should this be handled in a manager?
     }
 
-    onDragMove = ({ x,  y, ...rest }) => {
-      this.updatePreview({ x,  y });
+    onDragMove = ({ x, y, ...rest }) => {
+      this.updatePreview({ x, y });
       store.dispatch(
         actions.dragMove({
           x, y, ...rest,
@@ -101,7 +100,7 @@ const dragSource = WrappedComponent =>
       );
     }
 
-    styles = () =>  (this.state.isDragging ? { visibility: 'hidden' } : {});
+    styles = () => (this.state.isDragging ? { visibility: 'hidden' } : {});
 
     render() {
       const {

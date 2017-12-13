@@ -1,5 +1,4 @@
-import { throttle } from 'lodash';
-import { compose, createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './reducer';
 

@@ -43,7 +43,7 @@ function edgeExists(edges, edge) {
 function getNodesWithAdd(nodes, node) {
   const id = nextId(nodes);
   const uid = nextUid(nodes);
-  // Provided uid can override generated one, but not id
+  // Use supplied UID if provided, otherwise use generated one
   const nodeWithId = { uid, ...node, id };
   return [...nodes, nodeWithId];
 }

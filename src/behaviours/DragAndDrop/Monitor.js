@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { compose } from 'redux';
 import { pick, isEqual } from 'lodash';
 import store from './store';
 
