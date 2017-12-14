@@ -1,13 +1,26 @@
 .name-generator-auto-complete-interface {
-  // TODO: real styling; or consolidate with other interfaces.
+  // TODO: extract shared styling with other interfaces
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 1rem 0;
   position: relative;
   text-align: center;
   width: 100%;
 
-  // TODO: need a more generic icon, or customizability
-  &__add-person {
+  // XXX: this duplicates name-generator-interface
+  &__prompt {
+    flex: 0 0 12vw;
+    @include breakpoint('full') {
+        flex: 0 0 200px;
+    }
+  }
+
+  &__search-button {
+    bottom: 35px;
+    cursor: pointer;
+    position: absolute;
+    right: 35px;
   }
 
 }

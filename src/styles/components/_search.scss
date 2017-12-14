@@ -44,9 +44,10 @@ $results-height: 50vh;
     }
   }
 
-  .button {
+  .add-count-button {
+    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
     position: absolute;
-    right: 0;
+    right: -4rem;
     top: 50%;
   }
 

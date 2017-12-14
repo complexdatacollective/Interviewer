@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Button, Icon } from 'network-canvas-ui';
+import { Icon } from 'network-canvas-ui';
 
+import AddCountButton from '../components/AddCountButton';
 import Form from './Form';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
@@ -19,6 +20,7 @@ class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasInput: false,
       searchResults: [],
       searchTerm: '',
       selectedResults: [],
@@ -130,9 +132,10 @@ class Search extends Component {
 
         {
           this.state.selectedResults.length > 0 &&
-          <Button onClick={() => this.onCommit()}>
-            Add all ({this.state.selectedResults.length})
-          </Button>
+          <AddCountButton
+            count={this.state.selectedResults.length}
+            onClick={() => this.onCommit()}
+          />
         }
 
       </div>

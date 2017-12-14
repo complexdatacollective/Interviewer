@@ -1,0 +1,19 @@
+$add-count-button-height: 120px;
+$add-count-button-inner-size: 112px; // width of the core circle (without badge)
+$add-count-button-width: 140px;
+
+.add-count-button {
+  @include svg-button('../images/add-generic.svg');
+  color: color('white');
+  display: block;
+  font-size: 3rem;
+  font-weight: 500;
+  height: $add-count-button-height;
+  line-height: 1.6;
+  padding-left: 0;
+  padding-right: $add-count-button-width - $add-count-button-inner-size;
+  padding-top: $add-count-button-height - $add-count-button-inner-size;
+  text-align: center;
+  text-indent: 0; // override svg-button text hiding
+  width: $add-count-button-width;
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Icon } from 'network-canvas-ui';
 
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
@@ -11,6 +12,7 @@ import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 import PromptSwiper from '../PromptSwiper';
+
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -40,7 +42,7 @@ class NameGeneratorAutoComplete extends Component {
     } = this.props.stage;
 
     return (
-      <div className="name-generator-interface name-generator-auto-complete-interface">
+      <div className="name-generator-auto-complete-interface">
         <div className="name-generator-interface__prompt">
           <PromptSwiper
             forward={promptForward}
@@ -56,9 +58,12 @@ class NameGeneratorAutoComplete extends Component {
           </ol>
         </div>
 
-        <button className="name-generator-interface__add-person" onClick={() => openSearch()}>
-          Add
-        </button>
+        { /* TODO: need a more generic icon, or customizability */ }
+        <Icon
+          name="add-a-person"
+          onClick={() => openSearch()}
+          className="name-generator-auto-complete-interface__search-button"
+        />
 
         <Search
           form={form}

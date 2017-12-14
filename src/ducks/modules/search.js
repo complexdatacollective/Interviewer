@@ -1,6 +1,5 @@
 const OPEN_SEARCH = 'OPEN_SEARCH';
 const CLOSE_SEARCH = 'CLOSE_SEARCH';
-const COMPLETE_SEARCH = 'COMPLETE_SEARCH';
 
 const initialState = {
   collapsed: true,
@@ -19,12 +18,6 @@ export default function reducer(state = initialState, action = {}) {
         collapsed: !state.collapsed,
         selectedResults: [],
       };
-    case COMPLETE_SEARCH:
-      return {
-        ...state,
-        collapsed: true,
-        selectedResults: action.selectedResults,
-      };
     default:
       return state;
   }
@@ -42,17 +35,9 @@ function closeSearch() {
   };
 }
 
-function completeSearch(selectedResults) {
-  return {
-    type: COMPLETE_SEARCH,
-    selectedResults,
-  };
-}
-
 const actionCreators = {
   openSearch,
   closeSearch,
-  completeSearch,
 };
 
 export {

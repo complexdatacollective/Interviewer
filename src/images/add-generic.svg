@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240">
+  <title>Add</title>
+  <style>.cls-1{fill:#e82d3f;}.cls-2{fill:#f2f6f7;}.cls-3{fill:#848a8b;}</style>
+  <g id="add-generic">
+    <circle class="cls-1" cx="112" cy="128" r="112"/>
+    <ellipse class="cls-2" cx="224.5" cy="56" rx="55.5" ry="56"/>
+    <rect class="cls-3" x="220.5" y="38" width="8" height="36"/>
+    <rect class="cls-3" x="220.5" y="38" width="8" height="36" transform="translate(168.5 280.5) rotate(-90)"/>
+  </g>
+</svg>
