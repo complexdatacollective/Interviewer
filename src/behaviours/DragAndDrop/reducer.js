@@ -1,4 +1,4 @@
-import { filter, reject, omit, uniqBy, throttle, isEmpty, tap } from 'lodash';
+import { filter, reject, omit, uniqBy, throttle, isEmpty, thru } from 'lodash';
 import { compose } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
@@ -43,7 +43,7 @@ const markTargetHits = ({ targets, source, ...rest }) => ({
 
 const markSourceHit = ({ targets, source, ...rest }) => ({
   targets,
-  source: tap(source, (s) => {
+  source: thru(source, (s) => {
     if (isEmpty(s)) { return s; }
 
     return {
@@ -91,12 +91,12 @@ const triggerDrop = (state, action) => {
     });
 };
 
-const reducer = (state = initialState, { type, ...action }) => {
-  switch (type) {
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
     case UPDATE_TARGET:
       return markHits({
         ...state,
-        targets: uniqBy([action, ...state.targets], 'id'),
+        targets: uniqBy([action.target, ...state.targets], 'id'),
       });
     case RENAME_TARGET:
       return {
@@ -118,7 +118,7 @@ const reducer = (state = initialState, { type, ...action }) => {
     case DRAG_START: {
       return markHits({
         ...state,
-        source: action,
+        source: action.source,
       });
     }
     case DRAG_MOVE:
@@ -126,7 +126,7 @@ const reducer = (state = initialState, { type, ...action }) => {
         ...state,
         source: {
           ...state.source,
-          ...action,
+          ...action.source,
         },
       });
     case DRAG_END:
@@ -142,7 +142,7 @@ const reducer = (state = initialState, { type, ...action }) => {
 function updateTarget(data) {
   return {
     type: UPDATE_TARGET,
-    ...data,
+    target: data,
   };
 }
 
@@ -164,7 +164,7 @@ function removeTarget(id) {
 function dragStart(data) {
   return {
     type: DRAG_START,
-    ...data,
+    source: data,
   };
 }
 
@@ -201,6 +201,9 @@ const actionCreators = {
 };
 
 const actionTypes = {
+  DRAG_START,
+  DRAG_MOVE,
+  DRAG_END,
 };
 
 export {

@@ -1,12 +1,13 @@
-import { mapProps } from 'recompose';
-import { uniqueId, has } from 'lodash/fp';
-
-const hasId = has('id');
+import { withPropsOnChange } from 'recompose';
+import { uniqueId, has } from 'lodash';
 
 const dropId = (prefix = '') =>
-  mapProps((props) => {
-    if (hasId(props)) { return props; }
-    return { ...props, id: uniqueId(prefix) };
-  });
+  withPropsOnChange(
+    'id',
+    (props) => {
+      if (has(props, 'id')) { return props; }
+      return { ...props, id: uniqueId(prefix) };
+    },
+  );
 
 export default dropId;
