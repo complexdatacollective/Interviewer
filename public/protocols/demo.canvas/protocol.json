@@ -672,7 +672,7 @@
           "displayLabel": "nickname",
           "displayProperties": ["name", "age"],
           "autoCompleteOptions": {
-            "fuzzyness": 0.5,
+            "fuzzyness": 0.4,
             "matchProperties": ["nickname", "name"]
           }
         },
@@ -686,7 +686,7 @@
           "displayLabel": "Abbreviated Name",
           "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
           "autoCompleteOptions": {
-            "fuzzyness": 0,
+            "fuzzyness": 0.5,
             "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
           }
         }
