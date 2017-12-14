@@ -50,14 +50,15 @@ function getNodesWithAdd(nodes, node) {
   return [...nodes];
 }
 
-function getNodesWithBatchAdd(nodes, newNodes, additionalAttributes) {
-  const createdNodes = newNodes.map((newNode) => {
+function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
+  let nodes = oldNodes;
+  newNodes.forEach((newNode) => {
     const id = nextId(nodes);
     const uid = nextUid(nodes);
     // Provided uid can override generated one, but not id
-    return { uid, ...newNode, ...additionalAttributes, id };
+    nodes = [...nodes, { uid, ...newNode, ...additionalAttributes, id }];
   });
-  return [...nodes, ...createdNodes];
+  return nodes;
 }
 
 function getUpdatedNodes(nodes, updatedNode, full) {
