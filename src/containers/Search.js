@@ -1,12 +1,15 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { reduxForm, Form, Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from 'network-canvas-ui';
+import { Icon, TextInput } from 'network-canvas-ui';
 
 import AddCountButton from '../components/AddCountButton';
-import Form from './Form';
+import SearchForm from './SearchForm';
+import NCForm from './Form';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
 import { getExternalData } from '../selectors/protocol';
@@ -32,9 +35,11 @@ class Search extends Component {
     this.searchDataNodes = this.props.externalData[this.props.dataSourceKey].nodes;
   }
 
-  onInputChange(event, newValue) {
+  onInputChange(changeset) {
     let searchResults;
-    if (newValue.length > 0) {
+    const newValue = changeset.searchTerm;
+    const hasInput = newValue && newValue.length > 0;
+    if (hasInput) {
       searchResults = this.searchDataNodes.filter(node => this.isMatchingResult(newValue, node));
       searchResults = searchResults.filter(r => this.isAllowedResult(r));
     } else {
@@ -43,7 +48,7 @@ class Search extends Component {
     this.setState({
       searchResults,
       searchTerm: newValue,
-      hasInput: newValue.length > 0,
+      hasInput: hasInput || false,
     });
   }
 
@@ -112,32 +117,30 @@ class Search extends Component {
     // TODO: real input integration. Investigate slowness.
     return (
       <div className={searchClasses}>
-        <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
+        <div className="search__content">
+          <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
 
-        <h1>Type in the box below to Search</h1>
+          <h1>Type in the box below to Search</h1>
 
-        <SearchResults
-          hasInput={this.state.hasInput}
-          results={this.state.searchResults}
-          selectedResults={this.state.selectedResults}
-          displayKey={displayFields[0]}
-          onSelectResult={result => this.onSelectResult(result)}
-        />
-
-        <Form
-          form={form.title}
-          {...form}
-          handleChange={(event, newValue) => this.onInputChange(event, newValue)}
-        />
-
-        {
-          this.state.selectedResults.length > 0 &&
-          <AddCountButton
-            count={this.state.selectedResults.length}
-            onClick={() => this.onCommit()}
+          <SearchResults
+            hasInput={this.state.hasInput}
+            results={this.state.searchResults}
+            selectedResults={this.state.selectedResults}
+            displayKey={displayFields[0]}
+            onSelectResult={result => this.onSelectResult(result)}
           />
-        }
+          {
+            /* TODO: move to form (submit)? */
+            this.state.selectedResults.length > 0 &&
+            <AddCountButton
+              count={this.state.selectedResults.length}
+              onClick={() => this.onCommit()}
+            />
+          }
 
+          <SearchForm onChange={(event, newValue) => this.onInputChange(event, newValue)} />
+
+        </div>
       </div>
     );
   }

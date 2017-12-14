@@ -58,6 +58,8 @@ class Form extends Component {
       controls,
     } = this.props;
 
+    console.log('FIELDS', fields);
+
     return (
       <form onSubmit={handleSubmit}>
         { fields.map((field, index) => {

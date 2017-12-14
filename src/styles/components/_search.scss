@@ -1,9 +1,7 @@
 $results-height: 50vh;
 
 .search {
-  background-color: color('cyber-grape');
   bottom: 0;
-  padding: 2rem 10%;
   position: absolute;
   transform: translateX(0);
   transition: all $animation-fast-duration $animation-default-easing;
@@ -11,7 +9,20 @@ $results-height: 50vh;
   // On top of button. FIXME: magic number
   z-index: 1000;
 
-  &--transition {
+  &__content {
+    background-color: color('cyber-grape');
+    height: 100%;
+    margin: 0 10%;
+    overflow: visible;
+    padding: 2rem;
+    position: relative;
+    width: 80%;
+
+    [name="close"] {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 
   &--hasInput {
@@ -49,11 +60,6 @@ $results-height: 50vh;
     position: absolute;
     right: -4rem;
     top: 50%;
-  }
-
-  // Temporary. TODO: remove once real input integration done.
-  .form__button-container {
-    display: none;
   }
 
 }
