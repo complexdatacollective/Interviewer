@@ -1,22 +1,30 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { reduxForm, Form, Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon, TextInput } from 'network-canvas-ui';
+import { Icon } from 'network-canvas-ui';
+import Fuse from 'fuse.js';
 
 import AddCountButton from '../components/AddCountButton';
 import SearchForm from './SearchForm';
-import NCForm from './Form';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
 import { getExternalData } from '../selectors/protocol';
 
+const DefaultFuzzyness = 0.5;
+
 /**
-  * Renders a search interface in a semi-modal display
-  * Supports selecting multiple...
+  * Renders a plaintext search interface in a semi-modal display,
+  * with a single text input supporting autocomplete.
+  *
+  * props.options:
+  *   - matchProperties: An array of key names to search in the dataset
+  *   - fuzzyness: How inexact search results may be, in the range [0,1].
+  *     A value of zero requires an exact match. Large search sets may do better
+  *     with smaller values (e.g., 0.2).
+  *     Default: 0.5
+  *
   */
 // TODO: less generic name
 class Search extends Component {
@@ -28,11 +36,17 @@ class Search extends Component {
       searchTerm: '',
       selectedResults: [],
     };
-    this.searchOptions = props.options;
   }
 
   componentWillMount() {
+    const opts = this.props.options;
     this.searchDataNodes = this.props.externalData[this.props.dataSourceKey].nodes;
+    this.fuse = new Fuse(this.searchDataNodes, {
+      keys: opts.matchProperties,
+      minMatchCharLength: 1,
+      shouldSort: true,
+      threshold: opts.fuzzyness === undefined ? DefaultFuzzyness : opts.fuzzyness,
+    });
   }
 
   onInputChange(changeset) {
@@ -40,7 +54,7 @@ class Search extends Component {
     const newValue = changeset.searchTerm;
     const hasInput = newValue && newValue.length > 0;
     if (hasInput) {
-      searchResults = this.searchDataNodes.filter(node => this.isMatchingResult(newValue, node));
+      searchResults = this.fuse.search(newValue);
       searchResults = searchResults.filter(r => this.isAllowedResult(r));
     } else {
       searchResults = [];
@@ -75,12 +89,6 @@ class Search extends Component {
     });
   }
 
-  isMatchingResult(searchTerm, candidate) {
-    const searchProps = this.searchOptions.matchProperties;
-    // TODO: fuzziness
-    return searchProps.some(prop => candidate[prop].includes(searchTerm));
-  }
-
   // Result is allowed if there is no excluded node that 'matches'
   // if true, suppress candidate from appearing in search results
   // example: node has already been selected.
@@ -91,9 +99,7 @@ class Search extends Component {
     // A search result is equal to a [excluded] node if all displayFields are equal
     // TODO: I'm assuming sufficient since user would have no way to distinguish.
     const matchAttrs = this.props.displayFields;
-    function isNotMatch(result, node) {
-      return matchAttrs.some(attr => node[attr] !== result[attr]);
-    }
+    const isNotMatch = (result, node) => matchAttrs.some(attr => node[attr] !== result[attr]);
 
     return this.props.excludedNodes.every(excluded => isNotMatch(excluded, candidate));
   }
@@ -103,7 +109,6 @@ class Search extends Component {
       closeSearch,
       collapsed,
       displayFields,
-      form,
     } = this.props;
 
     const searchClasses = cx(
@@ -153,7 +158,6 @@ Search.propTypes = {
   // TODO: is `Nodes` general enough for search (naming)?
   excludedNodes: PropTypes.array.isRequired,
   externalData: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
   dataSourceKey: PropTypes.string.isRequired,
   onComplete: PropTypes.func.isRequired,
   options: PropTypes.object.isRequired,

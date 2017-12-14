@@ -672,7 +672,7 @@
           "displayLabel": "nickname",
           "displayProperties": ["name", "age"],
           "autoCompleteOptions": {
-            "fuzzyness": 0.2,
+            "fuzzyness": 0.5,
             "matchProperties": ["nickname", "name"]
           }
         },
