@@ -683,11 +683,11 @@
             "primary_venue": true
           },
           "dataSource": "HIVServices",
-          "displayLabel": "Main/Parent Organization",
+          "displayLabel": "Abbreviated Name",
           "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
           "autoCompleteOptions": {
             "fuzzyness": 0,
-            "matchProperties": ["address", "name"]
+            "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
           }
         }
       ]

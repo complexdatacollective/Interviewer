@@ -1,8 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CSSTransitionGroup } from 'react-transition-group';
+// import { CSSTransitionGroup } from 'react-transition-group';
 import cx from 'classnames';
 
+// <CSSTransitionGroup
+//   component="div"
+//   className={classNames}
+//   transitionName="search__results--transition"
+//   transitionEnterTimeout={2000}
+//   transitionLeaveTimeout={2000}
+// >
+
+
+import Scroller from './Scroller';
 import SearchResult from './SearchResult';
 
 // class SearchResults extends Component {
@@ -41,16 +51,12 @@ const SearchResults = (props) => {
   }
 
   return (
-    <CSSTransitionGroup
-      component="div"
-      className={classNames}
-      transitionName="search__results--transition"
-      transitionEnterTimeout={2000}
-      transitionLeaveTimeout={2000}
-    >
-      <p>results:</p>
-      {content}
-    </CSSTransitionGroup>
+    <div className={classNames}>
+      <Scroller>
+        <p>results:</p>
+        {content}
+      </Scroller>
+    </div>
   );
 };
 

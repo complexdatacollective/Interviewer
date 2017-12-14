@@ -4,15 +4,22 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
-import Fuse from 'fuse.js';
 
 import AddCountButton from '../components/AddCountButton';
 import SearchForm from './SearchForm';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
-import { getExternalData } from '../selectors/protocol';
+import { makeGetFuse } from '../selectors/search';
 
-const DefaultFuzzyness = 0.5;
+/**
+ * Fuse.js: approximate string matching.
+ * See makeGetFuse() in the search selectors.
+ */
+const DefaultFuseOpts = {
+  threshold: 0.5,
+  minMatchCharLength: 1,
+  shouldSort: true,
+};
 
 /**
   * Renders a plaintext search interface in a semi-modal display,
@@ -38,23 +45,12 @@ class Search extends Component {
     };
   }
 
-  componentWillMount() {
-    const opts = this.props.options;
-    this.searchDataNodes = this.props.externalData[this.props.dataSourceKey].nodes;
-    this.fuse = new Fuse(this.searchDataNodes, {
-      keys: opts.matchProperties,
-      minMatchCharLength: 1,
-      shouldSort: true,
-      threshold: opts.fuzzyness === undefined ? DefaultFuzzyness : opts.fuzzyness,
-    });
-  }
-
   onInputChange(changeset) {
     let searchResults;
     const newValue = changeset.searchTerm;
     const hasInput = newValue && newValue.length > 0;
     if (hasInput) {
-      searchResults = this.fuse.search(newValue);
+      searchResults = this.props.fuse.search(newValue);
       searchResults = searchResults.filter(r => this.isAllowedResult(r));
     } else {
       searchResults = [];
@@ -157,10 +153,14 @@ Search.propTypes = {
   displayFields: PropTypes.array.isRequired,
   // TODO: is `Nodes` general enough for search (naming)?
   excludedNodes: PropTypes.array.isRequired,
-  externalData: PropTypes.object.isRequired,
-  dataSourceKey: PropTypes.string.isRequired,
+  fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
+
+  // These props are required by the fuse selector
+  /* eslint-disable react/no-unused-prop-types */
+  dataSourceKey: PropTypes.string.isRequired,
   options: PropTypes.object.isRequired,
+  /* eslint-enable react/no-unused-prop-types */
 };
 
 function mapDispatchToProps(dispatch) {
@@ -170,10 +170,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state, props) {
+  const getFuse = makeGetFuse(DefaultFuseOpts);
   return {
-    externalData: getExternalData(state, props),
     // TODO: define this in selectors/search
     collapsed: state.search.collapsed,
+    fuse: getFuse(state, props),
+    // searchData: getSearchData(state, props),
   };
 }
 
