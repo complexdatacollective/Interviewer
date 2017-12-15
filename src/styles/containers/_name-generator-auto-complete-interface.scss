@@ -22,6 +22,19 @@
     cursor: pointer;
     position: absolute;
     right: 35px;
+    transition: opacity $animation-standard-duration $animation-default-easing;
+
+    &--hidden {
+      opacity: 0;
+    }
+  }
+
+  &__nodes {
+    text-align: left;
+
+    .node__label {
+      line-height: 1; // tighter fit for longer text (e.g., venues)
+    }
   }
 
 }

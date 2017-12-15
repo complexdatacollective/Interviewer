@@ -1,5 +1,6 @@
 const OPEN_SEARCH = 'OPEN_SEARCH';
 const CLOSE_SEARCH = 'CLOSE_SEARCH';
+const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
 
 const initialState = {
   collapsed: true,
@@ -8,14 +9,22 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    // TODO: decide on interface based on other components
-    // case TOGGLE_SEARCH:
-    case OPEN_SEARCH:
-      // fallthrough
-    case CLOSE_SEARCH:
+    case TOGGLE_SEARCH:
       return {
         ...state,
         collapsed: !state.collapsed,
+        selectedResults: [],
+      };
+    case OPEN_SEARCH:
+      return {
+        ...state,
+        collapsed: false,
+        selectedResults: [],
+      };
+    case CLOSE_SEARCH:
+      return {
+        ...state,
+        collapsed: true,
         selectedResults: [],
       };
     default:
@@ -35,9 +44,16 @@ function closeSearch() {
   };
 }
 
+function toggleSearch() {
+  return {
+    type: TOGGLE_SEARCH,
+  };
+}
+
 const actionCreators = {
-  openSearch,
   closeSearch,
+  openSearch,
+  toggleSearch,
 };
 
 export {

@@ -22,9 +22,11 @@ const DefaultFuseOpts = {
 };
 
 /**
-  * Renders a plaintext search interface in a semi-modal display,
+  * Renders a plaintext node search interface in a semi-modal display,
   * with a single text input supporting autocomplete.
   *
+  * props.displayFields: An array of strings representing keys in each search set
+  *     object. The first field is treated as the primary label and is required.
   * props.options:
   *   - matchProperties: An array of key names to search in the dataset
   *   - fuzzyness: How inexact search results may be, in the range [0,1].
@@ -56,6 +58,8 @@ class Search extends Component {
       searchResults = [];
     }
     this.setState({
+      // TODO: Move searchResults to the SearchResults container state (or redux?).
+      // ...manage selected results (selectedNodes) at this level.
       searchResults,
       searchTerm: newValue,
       hasInput: hasInput || false,
@@ -115,7 +119,7 @@ class Search extends Component {
       },
     );
 
-    // TODO: real input integration. Investigate slowness.
+    // TODO: Investigate slowness.
     return (
       <div className={searchClasses}>
         <div className="search__content">
@@ -151,7 +155,6 @@ Search.propTypes = {
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   displayFields: PropTypes.array.isRequired,
-  // TODO: is `Nodes` general enough for search (naming)?
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
@@ -172,10 +175,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state, props) {
   const getFuse = makeGetFuse(DefaultFuseOpts);
   return {
-    // TODO: define this in selectors/search
     collapsed: state.search.collapsed,
     fuse: getFuse(state, props),
-    // searchData: getSearchData(state, props),
   };
 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
 import withPrompt from '../../behaviours/withPrompt';
@@ -10,8 +11,8 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { makeRehydrateForm } from '../../selectors/rehydrate';
-import PromptSwiper from '../PromptSwiper';
+import { PromptSwiper } from '../';
+import { NodeList } from '../../components/';
 
 
 /**
@@ -19,27 +20,43 @@ import PromptSwiper from '../PromptSwiper';
   * @extends Component
   */
 class NameGeneratorAutoComplete extends Component {
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
   onSearchComplete(selectedResults) {
     this.props.addNodeBatch(selectedResults, this.props.newNodeAttributes);
     this.props.closeSearch();
   }
 
+  onKeyDown = (evt) => {
+    if (this.props.searchIsOpen && (evt.key === 'Escape' || evt.keyCode === 27)) {
+      this.props.closeSearch();
+    }
+  }
+
   render() {
     const {
-      form,
+      closeSearch,
       nodesForPrompt,
       prompt,
       promptForward,
       promptBackward,
-      openSearch,
-      closeSearch,
+      searchIsOpen,
+      stage,
+      toggleSearch,
     } = this.props;
 
-    const displayField = prompt.displayLabel;
-
-    const {
-      prompts,
-    } = this.props.stage;
+    const searchBtnClasses = cx(
+      'name-generator-auto-complete-interface__search-button',
+      {
+        'name-generator-auto-complete-interface__search-button--hidden': searchIsOpen,
+      },
+    );
 
     return (
       <div className="name-generator-auto-complete-interface">
@@ -48,25 +65,25 @@ class NameGeneratorAutoComplete extends Component {
             forward={promptForward}
             backward={promptBackward}
             prompt={prompt}
-            prompts={prompts}
+            prompts={stage.prompts}
           />
         </div>
 
-        <div>
-          <ol className="name-generator-auto-complete-interface__selected-nodes">
-            {nodesForPrompt && nodesForPrompt.map((r, i) => <li key={`${i}`}>{r[displayField]}</li>)}
-          </ol>
+        <div className="name-generator-auto-complete-interface__nodes">
+          <NodeList
+            nodes={nodesForPrompt}
+            label={node => node[prompt.displayLabel]}
+          />
         </div>
 
         { /* TODO: need a more generic icon, or customizability */ }
         <Icon
           name="add-a-person"
-          onClick={() => openSearch()}
-          className="name-generator-auto-complete-interface__search-button"
+          onClick={toggleSearch}
+          className={searchBtnClasses}
         />
 
         <Search
-          form={form}
           options={prompt.autoCompleteOptions}
           dataSourceKey={prompt.dataSource}
           onClick={closeSearch}
@@ -83,13 +100,13 @@ class NameGeneratorAutoComplete extends Component {
 NameGeneratorAutoComplete.propTypes = {
   addNodeBatch: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
-  form: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
-  openSearch: PropTypes.func.isRequired,
+  toggleSearch: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  searchIsOpen: PropTypes.bool.isRequired,
   stage: PropTypes.object.isRequired,
 };
 
@@ -97,20 +114,19 @@ function mapDispatchToProps(dispatch) {
   return {
     addNodeBatch: bindActionCreators(networkActions.addNodeBatch, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
-    openSearch: bindActionCreators(searchActions.openSearch, dispatch),
+    toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };
 }
 
 function makeMapStateToProps() {
-  const rehydrateForm = makeRehydrateForm();
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
 
   return function mapStateToProps(state, props) {
     return {
-      form: rehydrateForm(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
+      searchIsOpen: !state.search.collapsed,
     };
   };
 }
