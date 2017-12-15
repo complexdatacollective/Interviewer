@@ -72,17 +72,20 @@ const dragSource = WrappedComponent =>
 
     onDragStart = (movement) => {
       this.createPreview();
+
       store.dispatch(
         actions.dragStart({
           ...movement,
           meta: this.props.meta(),
         }),
       );
+
       this.setState({ isDragging: true }); // TODO: Should this be handled in a manager?
     }
 
     onDragMove = ({ x, y, ...rest }) => {
       this.updatePreview({ x, y });
+
       store.dispatch(
         actions.dragMove({
           x, y, ...rest,
@@ -93,6 +96,7 @@ const dragSource = WrappedComponent =>
     onDragEnd = (movement) => {
       this.cleanupPreview();
       this.setState({ isDragging: false });
+
       store.dispatch(
         actions.dragEnd(movement),
       );
@@ -103,6 +107,7 @@ const dragSource = WrappedComponent =>
     render() {
       const {
         allowDrag,
+        meta,
         ...rest
       } = this.props;
 

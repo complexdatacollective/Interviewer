@@ -1,4 +1,4 @@
-
+import { PropTypes } from 'prop-types';
 import { find, get } from 'lodash';
 import Monitor from './Monitor';
 
@@ -20,7 +20,14 @@ const getMonitorProps = (state, props) => {
   return monitorProps;
 };
 
-const MonitorDropTarget = types =>
-  Monitor(getMonitorProps, types);
+const monitorDropTarget = (types) => {
+  const MonitorDropTarget = Monitor(getMonitorProps, types);
 
-export default MonitorDropTarget;
+  MonitorDropTarget.propTypes = {
+    id: PropTypes.string.isRequired,
+  };
+
+  return MonitorDropTarget;
+};
+
+export default monitorDropTarget;

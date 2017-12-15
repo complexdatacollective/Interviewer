@@ -3,12 +3,12 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
-const maxFramesPerSecond = 12;
+const maxFramesPerSecond = 10;
 
 const dropTarget = WrappedComponent =>
   class DropTarget extends Component {
@@ -30,7 +30,7 @@ const dropTarget = WrappedComponent =>
     constructor(props) {
       super(props);
 
-      this.onResize = debounce(this.onResize, 1000 / maxFramesPerSecond);
+      this.onResize = throttle(this.onResize, 1000 / maxFramesPerSecond);
       window.addEventListener('resize', this.onResize);
       this.interval = setInterval(this.updateTarget, 1000 / maxFramesPerSecond);
     }
