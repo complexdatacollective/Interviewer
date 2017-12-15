@@ -56,6 +56,13 @@ const actionCreators = {
   toggleSearch,
 };
 
+const actionTypes = {
+  CLOSE_SEARCH,
+  OPEN_SEARCH,
+  TOGGLE_SEARCH,
+};
+
 export {
   actionCreators,
+  actionTypes,
 };
