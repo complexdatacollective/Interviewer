@@ -170,22 +170,22 @@ function dragStart(data) {
 
 function dragMove(data) {
   return (dispatch, getState) => {
+    triggerDrag(getState(), data);
+
     dispatch({
       type: DRAG_MOVE,
       source: data,
     });
-
-    triggerDrag(getState(), data);
   };
 }
 
 function dragEnd(data) {
   return (dispatch, getState) => {
+    triggerDrop(getState(), data);
+
     dispatch({
       type: DRAG_END,
     });
-
-    triggerDrop(getState(), data);
   };
 }
 
@@ -200,6 +200,9 @@ const actionCreators = {
 };
 
 const actionTypes = {
+  UPDATE_TARGET,
+  RENAME_TARGET,
+  REMOVE_TARGET,
   DRAG_START,
   DRAG_MOVE,
   DRAG_END,

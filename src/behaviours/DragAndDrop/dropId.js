@@ -1,12 +1,11 @@
-import { withPropsOnChange } from 'recompose';
+import { withHandlers } from 'recompose';
 import { uniqueId, has } from 'lodash';
 
 const dropId = (prefix = '') =>
-  withPropsOnChange(
-    'id',
+  withHandlers(
     (props) => {
       if (has(props, 'id')) { return props; }
-      return { ...props, id: uniqueId(prefix) };
+      return { id: uniqueId(prefix) };
     },
   );
 

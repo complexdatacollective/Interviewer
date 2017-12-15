@@ -1,9 +1,7 @@
 /* eslint-disable react/no-find-dom-node, react/sort-comp */
 
 import React, { PureComponent } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import dropId from './dropId';
 import DragPreview from './DragPreview';
 import DragManager from './DragManager';
 import { actionCreators as actions } from './reducer';
@@ -118,7 +116,4 @@ const dragSource = WrappedComponent =>
     }
   };
 
-export default compose(
-  dropId('DragSource'),
-  dragSource,
-);
+export default dragSource;

@@ -108,7 +108,10 @@ class NodePanels extends PureComponent {
         highlight={getHighlight(highlight, index)}
         minimise={!this.panelIsOpen(index)}
       >
-        <NodeList {...this.configureNodeList(nodeListOptions)} />
+        <NodeList
+          id={`PANEL_NODE_LIST_${index}`}
+          {...this.configureNodeList(nodeListOptions)}
+        />
       </Panel>
     );
   }

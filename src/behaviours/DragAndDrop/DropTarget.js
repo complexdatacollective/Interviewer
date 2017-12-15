@@ -2,11 +2,9 @@
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
-import dropId from './dropId';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
@@ -43,18 +41,6 @@ const dropTarget = WrappedComponent =>
       this.updateTarget();
     }
 
-    componentWillReceiveProps(props) {
-      this.updateTarget();
-
-      // TODO: Why is this necessary?
-      if (props.id !== this.props.id) {
-        this.renameTarget({
-          from: this.props.id,
-          to: props.id,
-        });
-      }
-    }
-
     componentWillUnmount() {
       window.removeEventListener('resize', this.onResize);
       this.onResize.cancel();
@@ -69,16 +55,7 @@ const dropTarget = WrappedComponent =>
 
     removeTarget = () => {
       store.dispatch(
-        actions.renameTarget(this.props.id),
-      );
-    }
-
-    renameTarget = ({ from, to }) => {
-      store.dispatch(
-        actions.renameTarget({
-          from,
-          to,
-        }),
+        actions.removeTarget(this.props.id),
       );
     }
 
@@ -118,7 +95,4 @@ const dropTarget = WrappedComponent =>
     }
   };
 
-export default compose(
-  dropId('DropTarget'),
-  dropTarget,
-);
+export default dropTarget;
