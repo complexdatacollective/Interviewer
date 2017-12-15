@@ -1,4 +1,4 @@
-import { filter, reject, omit, uniqBy, throttle, isEmpty, thru } from 'lodash';
+import { filter, reject, omit, uniqBy, isEmpty, thru } from 'lodash';
 import { compose } from 'redux';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
@@ -17,7 +17,7 @@ const willAccept = (accepts, source) => {
   try {
     return accepts(source);
   } catch (e) {
-    console.log('Error in accept() function', e, source);
+    console.log('Error in accept() function', e, source); // eslint-disable-line no-console
     return false;
   }
 };
@@ -54,19 +54,19 @@ const markSourceHit = ({ targets, source, ...rest }) => ({
   ...rest,
 });
 
-const resetHits = ({ targets, source, ...rest }) => ({
+const resetHits = ({ targets, ...rest }) => ({
   targets: targets.map(target => omit(target, ['isOver', 'willAccept'])),
   ...rest,
 });
 
 const markHits = compose(markSourceHit, markTargetHits);
 
-const triggerDrag = (state, action) => {
+const triggerDrag = (state, source) => {
   const hits = markHits({
     ...state,
     source: {
       ...state.source,
-      ...action,
+      ...source,
     },
   });
 
@@ -76,12 +76,12 @@ const triggerDrag = (state, action) => {
     });
 };
 
-const triggerDrop = (state, action) => {
+const triggerDrop = (state, source) => {
   const hits = markHits({
     ...state,
     source: {
       ...state.source,
-      ...action,
+      ...source,
     },
   });
 
@@ -170,23 +170,22 @@ function dragStart(data) {
 
 function dragMove(data) {
   return (dispatch, getState) => {
-    triggerDrag(getState(), data);
-
     dispatch({
       type: DRAG_MOVE,
-      ...data,
+      source: data,
     });
+
+    triggerDrag(getState(), data);
   };
 }
 
 function dragEnd(data) {
   return (dispatch, getState) => {
-    triggerDrop(getState(), data);
-
     dispatch({
       type: DRAG_END,
-      ...data,
     });
+
+    triggerDrop(getState(), data);
   };
 }
 
@@ -196,7 +195,7 @@ const actionCreators = {
   renameTarget,
   removeTarget,
   dragStart,
-  dragMove: throttle(dragMove, 1000 / 24), // 24 fps
+  dragMove,
   dragEnd,
 };
 

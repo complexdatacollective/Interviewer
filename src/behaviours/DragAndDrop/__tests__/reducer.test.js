@@ -117,8 +117,69 @@ describe('reducer', () => {
 
   describe('DRAG_MOVE', () => {
     describe('dragMove', () => {
-      it('triggers DRAG_MOVE');
-      it('calls onDrag on targets');
+      it('triggers DRAG_MOVE', () => {
+        const store = mockStore({
+          targets: [],
+          source: null,
+        });
+
+        store.dispatch(actions.dragMove({
+          bazz: 'buzz',
+        }));
+
+        expect(store.getActions()).toEqual([
+          {
+            type: actionTypes.DRAG_MOVE,
+            source: {
+              bazz: 'buzz',
+            },
+          },
+        ]);
+      });
+
+      it('calls onDrag on targets', () => {
+        const onDrag = jest.fn();
+        const missedTargetOnDrag = jest.fn();
+
+        const store = mockStore({
+          targets: [
+            {
+              x: 0,
+              y: 0,
+              width: 100,
+              height: 100,
+              accepts: () => true,
+              onDrag,
+            },
+            {
+              x: 100,
+              y: 100,
+              width: 100,
+              height: 100,
+              accepts: () => true,
+              onDrag: missedTargetOnDrag,
+            },
+          ],
+          source: null,
+        });
+
+        store.dispatch(actions.dragMove({
+          foo: 'bar',
+          x: 50,
+          y: 50,
+        }));
+
+        expect(onDrag.mock.calls).toEqual([
+          [{
+            foo: 'bar',
+            isOver: true,
+            x: 50,
+            y: 50,
+          }],
+        ]);
+
+        expect(missedTargetOnDrag.mock.calls).toEqual([]);
+      });
     });
 
     it('update source properties', () => {
@@ -150,6 +211,89 @@ describe('reducer', () => {
   });
 
   describe('DRAG_END', () => {
-    it('remove target from list');
+    it('triggers DRAG_MOVE', () => {
+      const store = mockStore({
+        targets: [],
+        source: null,
+      });
+
+      store.dispatch(actions.dragEnd());
+
+      expect(store.getActions()).toEqual([
+        {
+          type: actionTypes.DRAG_END,
+        },
+      ]);
+    });
+
+    it('calls onDrop on targets', () => {
+      const onDrop = jest.fn();
+      const onDrag = jest.fn();
+      const missedTargetOnDrop = jest.fn();
+
+      const store = mockStore({
+        targets: [
+          {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            accepts: () => true,
+            onDrag,
+            onDrop,
+          },
+          {
+            x: 100,
+            y: 100,
+            width: 100,
+            height: 100,
+            accepts: () => true,
+            onDrop: missedTargetOnDrop,
+          },
+        ],
+        source: null,
+      });
+
+      store.dispatch(actions.dragEnd({
+        foo: 'bar',
+        x: 50,
+        y: 50,
+      }));
+
+      expect(onDrop.mock.calls).toEqual([
+        [{
+          foo: 'bar',
+          isOver: true,
+          x: 50,
+          y: 50,
+        }],
+      ]);
+
+      expect(onDrag.mock.calls).toEqual([]);
+
+      expect(missedTargetOnDrop.mock.calls).toEqual([]);
+    });
+
+    it('set source to null', () => {
+      const result = getResult([
+        actions.updateTarget({
+          id: 'foo',
+          accepts: () => {},
+        }),
+        actions.dragStart({
+          x: 100,
+          y: 100,
+        }),
+        {
+          type: actionTypes.DRAG_END,
+          source: {
+            y: 50,
+            z: 200,
+          },
+        },
+      ]);
+
+      expect(result.source).toEqual(null);
+    });
   });
 });

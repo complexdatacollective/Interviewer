@@ -1,3 +1,5 @@
+import { throttle } from 'lodash';
+
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
     return true;
@@ -57,7 +59,7 @@ class dragManager {
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;
-    this.onDragMove = onDragMove;
+    this.onDragMove = throttle(onDragMove, 1000 / 60);
     this.onDragEnd = onDragEnd;
     this.el.addEventListener('touchstart', this.onMoveStart, { passive: true });
     this.el.addEventListener('touchmove', this.onMove);
