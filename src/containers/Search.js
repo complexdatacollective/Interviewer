@@ -21,6 +21,11 @@ const DefaultFuseOpts = {
   shouldSort: true,
 };
 
+/**
+ * The `reselect` selector which provides a Fuse instance for searching.
+ */
+const FuseSelector = makeGetFuse(DefaultFuseOpts);
+
 const InitialState = {
   hasInput: false,
   searchResults: [],
@@ -45,7 +50,6 @@ const InitialState = {
   *     Default: 0.5
   *
   */
-// TODO: less generic name
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -100,7 +104,6 @@ class Search extends Component {
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
     // A search result is equal to a [excluded] node if all displayFields are equal
-    // TODO: I'm assuming sufficient since user would have no way to distinguish.
     const matchAttrs = this.props.displayFields;
     const isNotMatch = (result, node) => matchAttrs.some(attr => node[attr] !== result[attr]);
 
@@ -122,7 +125,6 @@ class Search extends Component {
       },
     );
 
-    // TODO: Investigate slowness.
     return (
       <div className={searchClasses}>
         <div className="search__content">
@@ -178,10 +180,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state, props) {
-  const getFuse = makeGetFuse(DefaultFuseOpts);
   return {
     collapsed: state.search.collapsed,
-    fuse: getFuse(state, props),
+    fuse: FuseSelector(state, props),
   };
 }
 

@@ -13,7 +13,6 @@ export const getSearchData = createSelector(
   (externalData, key) => externalData[key].nodes,
 );
 
-// TODO: review reselect lib; memoization not working as expected?
 export const makeGetFuse = fuseOpts => createSelector(
   getSearchData,
   getSearchOpts,
