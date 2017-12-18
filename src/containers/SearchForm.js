@@ -7,7 +7,7 @@ import { TextInput } from 'network-canvas-ui';
 const autocompleteInput = field => <TextInput {...field.input} />;
 
 /**
- * Redux-form to handle plaintext search with autocomplete.
+ * Redux form to handle plaintext search with autocomplete.
  * Attributes are passed to the input field.
  *
  * @extends Component

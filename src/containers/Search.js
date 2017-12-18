@@ -34,20 +34,25 @@ const InitialState = {
 };
 
 /**
+  * @class Search
+  * @extends Component
+  *
   * Renders a plaintext node search interface in a semi-modal display,
   * with a single text input supporting autocomplete.
   *
   * Multiple results may be selected by the user, and the final collection
   * committed to an `onComplete()` handler.
   *
-  * props.displayFields: An array of strings representing keys in each search set
-  *     object. The first field is treated as the primary label and is required.
-  * props.options:
-  *   - matchProperties: An array of key names to search in the dataset
-  *   - fuzzyness: How inexact search results may be, in the range [0,1].
+  * @param props.displayFields {array} - An array of strings representing keys
+  *     in each search set object. The first field is treated as the primary
+  *     label and is required.
+  * @param props.options {object}
+  * @param props.options.matchProperties {array} - one or more key names to search
+  *     in the dataset
+  * @param [props.options.fuzzyness=0.5] {number} -
+  *     How inexact search results may be, in the range [0,1].
   *     A value of zero requires an exact match. Large search sets may do better
   *     with smaller values (e.g., 0.2).
-  *     Default: 0.5
   *
   */
 class Search extends Component {
