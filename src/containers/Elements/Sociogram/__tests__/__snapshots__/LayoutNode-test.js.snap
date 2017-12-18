@@ -11,56 +11,56 @@ ShallowWrapper {
   "node": <div
     className="node-layout__node"
     style={
-        Object {
-            "left": 0,
-            "top": 0,
-            "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
-          }
+      Object {
+        "left": 0,
+        "top": 0,
+        "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+      }
     }
->
-    <mapProps(DragSource)
+  >
+    <DragSource
+      allowDrag={false}
+      allowSelect={false}
+      animate={false}
+      foo={
+        Object {
+          "x": 0.77,
+          "y": 0.2,
+        }
+      }
+      label={undefined}
+      meta={[Function]}
+      onSelected={[Function]}
+      selected={false}
+    />
+  </div>,
+  "nodes": Array [
+    <div
+      className="node-layout__node"
+      style={
+        Object {
+          "left": 0,
+          "top": 0,
+          "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+        }
+      }
+    >
+      <DragSource
         allowDrag={false}
         allowSelect={false}
         animate={false}
         foo={
-            Object {
-                "x": 0.77,
-                "y": 0.2,
-              }
+          Object {
+            "x": 0.77,
+            "y": 0.2,
+          }
         }
         label={undefined}
         meta={[Function]}
         onSelected={[Function]}
         selected={false}
-    />
-</div>,
-  "nodes": Array [
-    <div
-      className="node-layout__node"
-      style={
-            Object {
-                  "left": 0,
-                  "top": 0,
-                  "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
-                }
-      }
->
-      <mapProps(DragSource)
-            allowDrag={false}
-            allowSelect={false}
-            animate={false}
-            foo={
-                  Object {
-                        "x": 0.77,
-                        "y": 0.2,
-                      }
-            }
-            label={undefined}
-            meta={[Function]}
-            onSelected={[Function]}
-            selected={false}
       />
-</div>,
+    </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -76,18 +76,18 @@ ShallowWrapper {
         draggableType="bar"
         layoutVariable="foo"
         node={
-                Object {
-                        "foo": Object {
-                          "x": 0.77,
-                          "y": 0.2,
-                        },
-                      }
+          Object {
+            "foo": Object {
+              "x": 0.77,
+              "y": 0.2,
+            },
+          }
         }
         onDropped={[Function]}
         onSelected={[Function]}
         selected={false}
         updateNode={[Function]}
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -135,56 +135,56 @@ ShallowWrapper {
         "_currentElement": <div
           className="node-layout__node"
           style={
-                    Object {
-                              "left": 0,
-                              "top": 0,
-                              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
-                            }
+            Object {
+              "left": 0,
+              "top": 0,
+              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+            }
           }
->
-          <mapProps(DragSource)
-                    allowDrag={false}
-                    allowSelect={false}
-                    animate={false}
-                    foo={
-                              Object {
-                                        "x": 0.77,
-                                        "y": 0.2,
-                                      }
-                    }
-                    label={undefined}
-                    meta={[Function]}
-                    onSelected={[Function]}
-                    selected={false}
+        >
+          <DragSource
+            allowDrag={false}
+            allowSelect={false}
+            animate={false}
+            foo={
+              Object {
+                "x": 0.77,
+                "y": 0.2,
+              }
+            }
+            label={undefined}
+            meta={[Function]}
+            onSelected={[Function]}
+            selected={false}
           />
-</div>,
+        </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node-layout__node"
           style={
-                    Object {
-                              "left": 0,
-                              "top": 0,
-                              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
-                            }
+            Object {
+              "left": 0,
+              "top": 0,
+              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+            }
           }
->
-          <mapProps(DragSource)
-                    allowDrag={false}
-                    allowSelect={false}
-                    animate={false}
-                    foo={
-                              Object {
-                                        "x": 0.77,
-                                        "y": 0.2,
-                                      }
-                    }
-                    label={undefined}
-                    meta={[Function]}
-                    onSelected={[Function]}
-                    selected={false}
+        >
+          <DragSource
+            allowDrag={false}
+            allowSelect={false}
+            animate={false}
+            foo={
+              Object {
+                "x": 0.77,
+                "y": 0.2,
+              }
+            }
+            label={undefined}
+            meta={[Function]}
+            onSelected={[Function]}
+            selected={false}
           />
-</div>,
+        </div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -204,17 +204,17 @@ ShallowWrapper {
     draggableType="bar"
     layoutVariable="foo"
     node={
-        Object {
-            "foo": Object {
-              "x": 0.77,
-              "y": 0.2,
-            },
-          }
+      Object {
+        "foo": Object {
+          "x": 0.77,
+          "y": 0.2,
+        },
+      }
     }
     onDropped={[Function]}
     onSelected={[Function]}
     selected={false}
     updateNode={[Function]}
-/>,
+  />,
 }
 `;

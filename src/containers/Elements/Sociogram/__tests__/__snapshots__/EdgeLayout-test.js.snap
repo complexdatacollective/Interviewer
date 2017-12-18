@@ -10,27 +10,23 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="edge-layout"
->
+  >
     <svg
-        preserveAspectRatio="none"
-        viewBox="0 0 1 1"
-        xmlns="http://www.w3.org/2000/svg"
-    >
-        
-    </svg>
-</div>,
+      preserveAspectRatio="none"
+      viewBox="0 0 1 1"
+      xmlns="http://www.w3.org/2000/svg"
+    />
+  </div>,
   "nodes": Array [
     <div
       className="edge-layout"
->
+    >
       <svg
-            preserveAspectRatio="none"
-            viewBox="0 0 1 1"
-            xmlns="http://www.w3.org/2000/svg"
-      >
-            
-      </svg>
-</div>,
+        preserveAspectRatio="none"
+        viewBox="0 0 1 1"
+        xmlns="http://www.w3.org/2000/svg"
+      />
+    </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -41,27 +37,27 @@ ShallowWrapper {
       "_currentElement": <EdgeLayout
         displayEdges={Array []}
         edgeCoords={
-                Array [
-                        Object {
-                          "from": Object {
-                            "x": 100,
-                            "y": 100,
-                          },
-                          "key": "foo_bar_baz",
-                          "to": Object {
-                            "x": 100,
-                            "y": 100,
-                          },
-                        },
-                      ]
+          Array [
+            Object {
+              "from": Object {
+                "x": 100,
+                "y": 100,
+              },
+              "key": "foo_bar_baz",
+              "to": Object {
+                "x": 100,
+                "y": 100,
+              },
+            },
+          ]
         }
         prompt={
-                Object {
-                        "edges": Object {},
-                      }
+          Object {
+            "edges": Object {},
+          }
         }
         stage={Object {}}
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -111,27 +107,23 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="edge-layout"
->
+        >
           <svg
-                    preserveAspectRatio="none"
-                    viewBox="0 0 1 1"
-                    xmlns="http://www.w3.org/2000/svg"
-          >
-                    
-          </svg>
-</div>,
+            preserveAspectRatio="none"
+            viewBox="0 0 1 1"
+            xmlns="http://www.w3.org/2000/svg"
+          />
+        </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="edge-layout"
->
+        >
           <svg
-                    preserveAspectRatio="none"
-                    viewBox="0 0 1 1"
-                    xmlns="http://www.w3.org/2000/svg"
-          >
-                    
-          </svg>
-</div>,
+            preserveAspectRatio="none"
+            viewBox="0 0 1 1"
+            xmlns="http://www.w3.org/2000/svg"
+          />
+        </div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -146,26 +138,26 @@ ShallowWrapper {
   "unrendered": <EdgeLayout
     displayEdges={Array []}
     edgeCoords={
-        Array [
-            Object {
-              "from": Object {
-                "x": 100,
-                "y": 100,
-              },
-              "key": "foo_bar_baz",
-              "to": Object {
-                "x": 100,
-                "y": 100,
-              },
-            },
-          ]
+      Array [
+        Object {
+          "from": Object {
+            "x": 100,
+            "y": 100,
+          },
+          "key": "foo_bar_baz",
+          "to": Object {
+            "x": 100,
+            "y": 100,
+          },
+        },
+      ]
     }
     prompt={
-        Object {
-            "edges": Object {},
-          }
+      Object {
+        "edges": Object {},
+      }
     }
     stage={Object {}}
-/>,
+  />,
 }
 `;

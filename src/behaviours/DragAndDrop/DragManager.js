@@ -56,8 +56,6 @@ const initalState = {
 
 class dragManager {
   constructor({ el, onDragStart, onDragMove, onDragEnd }) {
-    console.log('sadly it was me');
-
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;

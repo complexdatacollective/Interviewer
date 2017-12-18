@@ -1,9 +1,6 @@
-/* eslint-disable */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { first } from 'lodash';
 import { Node } from 'network-canvas-ui';
 import { selectable } from '../../../behaviours';
 import { DragSource } from '../../../behaviours/DragAndDrop';

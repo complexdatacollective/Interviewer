@@ -1,8 +1,5 @@
-/* eslint-disable */
-
 import React from 'react';
 import { compose } from 'redux';
-import { setDisplayName } from 'recompose';
 import PropTypes from 'prop-types';
 import { find, get } from 'lodash';
 import cx from 'classnames';
@@ -30,14 +27,13 @@ const NodeList = ({
   itemType,
   isOver,
   willAccept,
-  isDragging,
   meta,
 }) => {
   const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
 
   const classNames = cx(
     'node-list',
-    { 'node-list--hover': !isSource && willAccept && isOver},
+    { 'node-list--hover': !isSource && willAccept && isOver },
     { 'node-list--drag': !isSource && willAccept }, // TODO: rename class
   );
 
@@ -75,9 +71,13 @@ const NodeList = ({
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  onSelectNode: PropTypes.func,
+  onSelect: PropTypes.func,
+  itemType: PropTypes.string,
   label: PropTypes.func,
   selected: PropTypes.func,
+  isOver: PropTypes.func,
+  willAccept: PropTypes.bool,
+  meta: PropTypes.object,
 };
 
 NodeList.defaultProps = {

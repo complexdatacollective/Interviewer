@@ -10,21 +10,23 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="node-bucket"
->
-    <mapProps(DragSource)
-        label={undefined}
-        meta={[Function]}
+  >
+    <DragSource
+      allowDrag={true}
+      label={undefined}
+      meta={[Function]}
     />
-</div>,
+  </div>,
   "nodes": Array [
     <div
       className="node-bucket"
->
-      <mapProps(DragSource)
-            label={undefined}
-            meta={[Function]}
+    >
+      <DragSource
+        allowDrag={true}
+        label={undefined}
+        meta={[Function]}
       />
-</div>,
+    </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -49,7 +51,7 @@ ShallowWrapper {
         skewedTowardCenter={false}
         sort={Object {}}
         updateNode={[Function]}
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -96,21 +98,23 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="node-bucket"
->
-          <mapProps(DragSource)
-                    label={undefined}
-                    meta={[Function]}
+        >
+          <DragSource
+            allowDrag={true}
+            label={undefined}
+            meta={[Function]}
           />
-</div>,
+        </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node-bucket"
->
-          <mapProps(DragSource)
-                    label={undefined}
-                    meta={[Function]}
+        >
+          <DragSource
+            allowDrag={true}
+            label={undefined}
+            meta={[Function]}
           />
-</div>,
+        </div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -139,6 +143,6 @@ ShallowWrapper {
     skewedTowardCenter={false}
     sort={Object {}}
     updateNode={[Function]}
-/>,
+  />,
 }
 `;

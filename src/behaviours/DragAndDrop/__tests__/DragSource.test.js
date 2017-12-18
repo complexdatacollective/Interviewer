@@ -113,7 +113,7 @@ describe('DragSource', () => {
 
       component = mount((
         <MockComponent />
-      ))
+      ));
 
       DragManager.getOptions().onDragStart({ x: 0, y: 0 });
 

@@ -1,8 +1,7 @@
-/* eslint-disable */
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { find, map, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, at, pick, values, flatten, flow } from 'lodash';
+import { find, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, pick, values, flatten, flow } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { networkEdges, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
@@ -115,14 +114,13 @@ const edgeCoords = (edge, { nodes, layoutVariable }) => {
   };
 };
 
-const edgesToCoords = (edges, { nodes, layoutVariable }) => {
-  return edges.map(
+const edgesToCoords = (edges, { nodes, layoutVariable }) =>
+  edges.map(
     edge => edgeCoords(
       edge,
-      { nodes, layoutVariable }
+      { nodes, layoutVariable },
     ),
   );
-}
 
 const edgesOfTypes = (edges, types) =>
   flow(
@@ -142,11 +140,10 @@ export const makeDisplayEdgesForPrompt = () => {
     getLayoutOptions,
     (nodes, edges, edgeOptions, { layoutVariable }) => {
       const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);
-      const edgeCoords = edgesToCoords(
+      return edgesToCoords(
         selectedEdges,
         { nodes, layoutVariable },
       );
-      return edgeCoords;
     },
   );
 };

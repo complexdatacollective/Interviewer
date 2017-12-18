@@ -13,14 +13,14 @@ ShallowWrapper {
     label="Name"
     name="name"
     validate={Array []}
-/>,
+  />,
   "nodes": Array [
     <Field
       component={[Function]}
       label="Name"
       name="name"
       validate={Array []}
-/>,
+    />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -33,7 +33,7 @@ ShallowWrapper {
         label="Name"
         name="name"
         validation={Object {}}
-/>,
+      />,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -72,14 +72,14 @@ ShallowWrapper {
           label="Name"
           name="name"
           validate={Array []}
-/>,
+        />,
         "_debugID": 4,
         "_renderedOutput": <Field
           component={[Function]}
           label="Name"
           name="name"
           validate={Array []}
-/>,
+        />,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -96,7 +96,7 @@ ShallowWrapper {
     label="Name"
     name="name"
     validation={Object {}}
-/>,
+  />,
 }
 `;
 
@@ -116,7 +116,7 @@ ShallowWrapper {
     label={undefined}
     name="foo"
     value=""
-/>,
+  />,
   "nodes": Array [
     <TextInput
       autoFocus={undefined}
@@ -126,7 +126,7 @@ ShallowWrapper {
       label={undefined}
       name="foo"
       value=""
-/>,
+    />,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -136,17 +136,17 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <renderInput
         input={
-                Object {
-                        "name": "foo",
-                        "value": "",
-                      }
+          Object {
+            "name": "foo",
+            "value": "",
+          }
         }
         meta={
-                Object {
-                        "invalid": false,
-                      }
+          Object {
+            "invalid": false,
+          }
         }
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -190,7 +190,7 @@ ShallowWrapper {
           label={undefined}
           name="foo"
           value=""
-/>,
+        />,
         "_debugID": 2,
         "_renderedOutput": <TextInput
           autoFocus={undefined}
@@ -200,7 +200,7 @@ ShallowWrapper {
           label={undefined}
           name="foo"
           value=""
-/>,
+        />,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -214,16 +214,16 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <renderInput
     input={
-        Object {
-            "name": "foo",
-            "value": "",
-          }
+      Object {
+        "name": "foo",
+        "value": "",
+      }
     }
     meta={
-        Object {
-            "invalid": false,
-          }
+      Object {
+        "invalid": false,
+      }
     }
-/>,
+  />,
 }
 `;

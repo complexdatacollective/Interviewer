@@ -10,51 +10,51 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="node-layout"
->
+  >
     <LayoutNode
+      allowPositioning={false}
+      allowSelect={true}
+      areaHeight={456}
+      areaWidth={123}
+      layoutVariable="foo"
+      node={
+        Object {
+          "bar": "buzz",
+          "foo": Object {
+            "x": 0,
+            "y": 0,
+          },
+          "uid": 123,
+        }
+      }
+      onSelected={[Function]}
+      selected={true}
+    />
+  </div>,
+  "nodes": Array [
+    <div
+      className="node-layout"
+    >
+      <LayoutNode
         allowPositioning={false}
         allowSelect={true}
         areaHeight={456}
         areaWidth={123}
         layoutVariable="foo"
         node={
-            Object {
-                "bar": "buzz",
-                "foo": Object {
-                  "x": 0,
-                  "y": 0,
-                },
-                "uid": 123,
-              }
+          Object {
+            "bar": "buzz",
+            "foo": Object {
+              "x": 0,
+              "y": 0,
+            },
+            "uid": 123,
+          }
         }
         onSelected={[Function]}
         selected={true}
-    />
-</div>,
-  "nodes": Array [
-    <div
-      className="node-layout"
->
-      <LayoutNode
-            allowPositioning={false}
-            allowSelect={true}
-            areaHeight={456}
-            areaWidth={123}
-            layoutVariable="foo"
-            node={
-                  Object {
-                        "bar": "buzz",
-                        "foo": Object {
-                          "x": 0,
-                          "y": 0,
-                        },
-                        "uid": 123,
-                      }
-            }
-            onSelected={[Function]}
-            selected={true}
       />
-</div>,
+    </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -76,16 +76,16 @@ ShallowWrapper {
         layoutVariable="foo"
         nodeBinSortOrder={Object {}}
         nodes={
-                Array [
-                        Object {
-                          "bar": "buzz",
-                          "foo": Object {
-                            "x": 0,
-                            "y": 0,
-                          },
-                          "uid": 123,
-                        },
-                      ]
+          Array [
+            Object {
+              "bar": "buzz",
+              "foo": Object {
+                "x": 0,
+                "y": 0,
+              },
+              "uid": 123,
+            },
+          ]
         }
         selectMode=""
         skewedTowardCenter={false}
@@ -93,7 +93,7 @@ ShallowWrapper {
         toggleHighlight={[Function]}
         updateNode={[Function]}
         width={123}
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -155,51 +155,51 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="node-layout"
->
+        >
           <LayoutNode
-                    allowPositioning={false}
-                    allowSelect={true}
-                    areaHeight={456}
-                    areaWidth={123}
-                    layoutVariable="foo"
-                    node={
-                              Object {
-                                        "bar": "buzz",
-                                        "foo": Object {
-                                          "x": 0,
-                                          "y": 0,
-                                        },
-                                        "uid": 123,
-                                      }
-                    }
-                    onSelected={[Function]}
-                    selected={true}
+            allowPositioning={false}
+            allowSelect={true}
+            areaHeight={456}
+            areaWidth={123}
+            layoutVariable="foo"
+            node={
+              Object {
+                "bar": "buzz",
+                "foo": Object {
+                  "x": 0,
+                  "y": 0,
+                },
+                "uid": 123,
+              }
+            }
+            onSelected={[Function]}
+            selected={true}
           />
-</div>,
+        </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node-layout"
->
+        >
           <LayoutNode
-                    allowPositioning={false}
-                    allowSelect={true}
-                    areaHeight={456}
-                    areaWidth={123}
-                    layoutVariable="foo"
-                    node={
-                              Object {
-                                        "bar": "buzz",
-                                        "foo": Object {
-                                          "x": 0,
-                                          "y": 0,
-                                        },
-                                        "uid": 123,
-                                      }
-                    }
-                    onSelected={[Function]}
-                    selected={true}
+            allowPositioning={false}
+            allowSelect={true}
+            areaHeight={456}
+            areaWidth={123}
+            layoutVariable="foo"
+            node={
+              Object {
+                "bar": "buzz",
+                "foo": Object {
+                  "x": 0,
+                  "y": 0,
+                },
+                "uid": 123,
+              }
+            }
+            onSelected={[Function]}
+            selected={true}
           />
-</div>,
+        </div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -225,16 +225,16 @@ ShallowWrapper {
     layoutVariable="foo"
     nodeBinSortOrder={Object {}}
     nodes={
-        Array [
-            Object {
-              "bar": "buzz",
-              "foo": Object {
-                "x": 0,
-                "y": 0,
-              },
-              "uid": 123,
-            },
-          ]
+      Array [
+        Object {
+          "bar": "buzz",
+          "foo": Object {
+            "x": 0,
+            "y": 0,
+          },
+          "uid": 123,
+        },
+      ]
     }
     selectMode=""
     skewedTowardCenter={false}
@@ -242,6 +242,6 @@ ShallowWrapper {
     toggleHighlight={[Function]}
     updateNode={[Function]}
     width={123}
-/>,
+  />,
 }
 `;
