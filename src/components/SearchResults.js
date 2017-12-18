@@ -55,7 +55,6 @@ SearchResults.propTypes = {
   hasInput: PropTypes.bool.isRequired,
   onSelectResult: PropTypes.func.isRequired,
   results: PropTypes.array.isRequired,
-  // TODO: move into redux store?
   selectedResults: PropTypes.array.isRequired,
 };
 

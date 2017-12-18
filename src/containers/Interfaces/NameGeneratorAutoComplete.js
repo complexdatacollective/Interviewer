@@ -71,6 +71,7 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className="name-generator-auto-complete-interface__nodes">
           <NodeList
+            isOrigin
             nodes={nodesForPrompt}
             label={node => node[prompt.displayLabel]}
           />

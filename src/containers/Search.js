@@ -21,9 +21,19 @@ const DefaultFuseOpts = {
   shouldSort: true,
 };
 
+const InitialState = {
+  hasInput: false,
+  searchResults: [],
+  searchTerm: null,
+  selectedResults: [],
+};
+
 /**
   * Renders a plaintext node search interface in a semi-modal display,
   * with a single text input supporting autocomplete.
+  *
+  * Multiple results may be selected by the user, and the final collection
+  * committed to an `onComplete()` handler.
   *
   * props.displayFields: An array of strings representing keys in each search set
   *     object. The first field is treated as the primary label and is required.
@@ -39,12 +49,7 @@ const DefaultFuseOpts = {
 class Search extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hasInput: false,
-      searchResults: [],
-      searchTerm: '',
-      selectedResults: [],
-    };
+    this.state = InitialState;
   }
 
   onInputChange(changeset) {
@@ -67,13 +72,11 @@ class Search extends Component {
   }
 
   onCommit() {
-    // TODO: redux? This is sort of a one-shot handler; caller should parse and then discard.
-    // But would be nice to have management (i.e., clearing results)
     this.props.onComplete(this.state.selectedResults);
+    this.setState(InitialState);
   }
 
-  // TODO: "select" or "toggleSelected"?
-  onSelectResult(result) {
+  toggleSelectedResult(result) {
     this.setState((previousState) => {
       let newResults;
       const existingIndex = previousState.selectedResults.indexOf(result);
@@ -92,9 +95,9 @@ class Search extends Component {
   // Result is allowed if there is no excluded node that 'matches'
   // if true, suppress candidate from appearing in search results
   // example: node has already been selected.
-  // TODO: Performance?
-  //   I'm assuming that excludedNodes size is small, but search set may be large,
-  //   and so preferable to filter found results dynamically. Could cache as well.
+  // Assumption:
+  //   `excludedNodes` size is small, but search set may be large,
+  //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
     // A search result is equal to a [excluded] node if all displayFields are equal
     // TODO: I'm assuming sufficient since user would have no way to distinguish.
@@ -132,10 +135,9 @@ class Search extends Component {
             results={this.state.searchResults}
             selectedResults={this.state.selectedResults}
             displayKey={displayFields[0]}
-            onSelectResult={result => this.onSelectResult(result)}
+            onSelectResult={result => this.toggleSelectedResult(result)}
           />
           {
-            /* TODO: move to form (submit)? */
             this.state.selectedResults.length > 0 &&
             <AddCountButton
               count={this.state.selectedResults.length}
@@ -143,7 +145,10 @@ class Search extends Component {
             />
           }
 
-          <SearchForm onChange={(event, newValue) => this.onInputChange(event, newValue)} />
+          <SearchForm
+            searchValue={this.state.searchTerm}
+            onChange={(event, newValue) => this.onInputChange(event, newValue)}
+          />
 
         </div>
       </div>

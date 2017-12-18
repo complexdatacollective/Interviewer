@@ -4,12 +4,12 @@ import { createSelector } from 'reselect';
 
 import { getExternalData } from './protocol';
 
-const getDatsourceKey = (_, props) => props.dataSourceKey;
+const getDatasourceKey = (_, props) => props.dataSourceKey;
 const getSearchOpts = (_, props) => props.options;
 
 export const getSearchData = createSelector(
   getExternalData,
-  getDatsourceKey,
+  getDatasourceKey,
   (externalData, key) => externalData[key].nodes,
 );
 

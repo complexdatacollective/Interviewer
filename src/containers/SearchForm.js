@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { compose } from 'redux';
 import { reduxForm, Form, Field } from 'redux-form';
 import { TextInput } from 'network-canvas-ui';
@@ -11,10 +11,18 @@ const autocompleteInput = field => <TextInput {...field.input} />;
  *
  * @extends Component
  */
-const SearchForm = () => (
+const SearchForm = ({ searchValue }) => (
   <Form onSubmit={() => {}}>
-    <Field name="searchTerm" component={autocompleteInput} type="text" />
+    <Field name="searchTerm" value={searchValue} component={autocompleteInput} type="text" />
   </Form>
 );
+
+SearchForm.defaultProps = {
+  searchValue: '',
+};
+
+SearchForm.propTypes = {
+  searchValue: PropTypes.string,
+};
 
 export default compose(reduxForm({ form: 'search' }))(SearchForm);
