@@ -14,109 +14,117 @@ jest.mock('../reducer');
 
 describe('DragSource', () => {
   describe('on drag start', () => {
-    const startDrag = () => {
+    let component;
+
+    beforeEach(() => {
       DragPreview.mockClear();
       actions.dragStart.mockClear();
 
       const MockComponent = DragSource('div');
 
-      mount((
+      component = mount((
         <MockComponent />
       ));
 
       DragManager.getOptions().onDragStart({ x: 0, y: 0 });
-    };
+    });
+
+    afterEach(() => {
+      component.unmount();
+    });
 
     it('it creates a preview', () => {
-      startDrag();
-
       expect(DragPreview.mock.calls.length).toEqual(1);
     });
 
     it('registers source with DRAG_START', () => {
-      startDrag();
-
       expect(actions.dragStart.mock.calls.length).toEqual(1);
     });
   });
 
   describe('on drag move', () => {
-    const dragMove = () => {
+    let component;
+
+    beforeEach(() => {
       DragPreview.mockClear();
       actions.dragMove.mockClear();
 
       const MockComponent = DragSource('div');
 
-      mount((
+      component = mount((
         <MockComponent />
       ));
 
       DragManager.getOptions().onDragStart({ x: 0, y: 0 });
       DragManager.getOptions().onDragMove({ x: 0, y: 0 });
-    };
+    });
+
+    afterEach(() => {
+      component.unmount();
+    });
 
     it('updates the preview', () => {
-      dragMove();
-
       expect(previewPosition.mock.calls.length).toEqual(1);
     });
 
     it('updates source with DRAG_MOVE', () => {
-      dragMove();
-
       expect(actions.dragMove.mock.calls.length).toEqual(1);
     });
   });
 
   describe('on drag end', () => {
-    const dragEnd = () => {
-      DragPreview.mockClear();
+    let component;
+
+    beforeEach(() => {
+      previewCleanup.mockClear();
       actions.dragEnd.mockClear();
 
       const MockComponent = DragSource('div');
 
-      mount((
+      component = mount((
         <MockComponent />
       ));
 
       DragManager.getOptions().onDragStart({ x: 0, y: 0 });
       DragManager.getOptions().onDragEnd({ x: 0, y: 0 });
-    };
+    });
+
+    afterEach(() => {
+      component.unmount();
+    });
 
     it('it removes the preview', () => {
-      dragEnd();
-
       expect(previewCleanup.mock.calls.length).toEqual(1);
     });
 
     it('removes source with DRAG_END', () => {
-      dragEnd();
-
       expect(actions.dragEnd.mock.calls.length).toEqual(1);
     });
   });
 
   describe('on unmount', () => {
-    const onUnmount = () => {
+    let component;
+
+    beforeEach(() => {
       previewCleanup.mockClear();
-      DragPreview.mockClear();
+      DragManager.unmount.mockClear();
 
       const MockComponent = DragSource('div');
 
-      mount((
+      component = mount((
         <MockComponent />
-      )).unmount();
-    };
+      ))
+
+      DragManager.getOptions().onDragStart({ x: 0, y: 0 });
+
+      component.unmount();
+    });
 
     it('it removes the preview', () => {
-      onUnmount();
-
       expect(previewCleanup.mock.calls.length).toEqual(1);
     });
 
     it('removes source with DRAG_END', () => {
-      onUnmount();
-
       expect(DragManager.unmount.mock.calls.length).toEqual(1);
     });
   });

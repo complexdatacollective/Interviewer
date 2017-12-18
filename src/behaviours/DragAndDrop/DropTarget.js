@@ -27,35 +27,32 @@ const dropTarget = WrappedComponent =>
       onDrag: () => {},
     }
 
-    constructor(props) {
-      super(props);
-
-      this.onResize = throttle(this.onResize, 1000 / maxFramesPerSecond);
-      window.addEventListener('resize', this.onResize);
-      this.interval = setInterval(this.updateTarget, 1000 / maxFramesPerSecond);
-    }
-
     componentDidMount() {
       if (!this.component) { return; }
       this.node = findDOMNode(this.component);
-      this.updateTarget();
+      this.update();
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.onResize);
-      this.onResize.cancel();
       this.removeTarget();
-      clearInterval(this.interval);
-    }
-
-    onResize = () => {
-      this.updateTarget();
-      setTimeout(this.updateTarget, 1000);
+      clearTimeout(this.interval);
+      cancelAnimationFrame(this.animationFrame);
     }
 
     removeTarget = () => {
       store.dispatch(
         actions.removeTarget(this.props.id),
+      );
+    }
+
+    update = () => {
+      this.updateTarget();
+
+      this.interval = setTimeout(
+        () => {
+          this.animationFrame = requestAnimationFrame(this.update);
+        },
+        1000 / maxFramesPerSecond,
       );
     }
 

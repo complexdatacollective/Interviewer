@@ -1,9 +1,7 @@
-global.requestAnimationFrame = function (callback) {
-  setTimeout(callback, 0);
+global.requestAnimationFrame = (callback) => {
+  setTimeout(callback, 1);
 };
 
-global.cancelAnimationFrame = function(callback) {
-  setTimeout(callback, 0);
-};
+global.cancelAnimationFrame = () => {};
 
 global.SVGElement = global.Element;
