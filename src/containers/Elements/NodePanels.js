@@ -36,7 +36,6 @@ class NodePanels extends PureComponent {
     activePromptAttributes: PropTypes.object.isRequired,
     newNodeAttributes: PropTypes.object.isRequired,
     isDragging: PropTypes.bool,
-    //externalData: PropTypes.array.isRequired,
     panels: PropTypes.array,
   };
 

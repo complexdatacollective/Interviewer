@@ -13,16 +13,24 @@ const initialState = {
   source: null,
 };
 
+const defaultSource = {
+  meta: {},
+};
+
+// Since accepts() is a weak link and can throw errors if not carefully written.
 const willAccept = (accepts, source) => {
   try {
-    return accepts(source);
+    return accepts({
+      ...defaultSource,
+      ...source,
+    });
   } catch (e) {
     console.log('Error in accept() function', e, source); // eslint-disable-line no-console
     return false;
   }
 };
 
-const markTargetHit = ({ target, source }) => {
+const markHitTarget = ({ target, source }) => {
   if (!source) { return { ...target, isOver: false, willAccept: false }; }
 
   const isOver = (
@@ -35,34 +43,37 @@ const markTargetHit = ({ target, source }) => {
   return { ...target, isOver, willAccept: willAccept(target.accepts, source) };
 };
 
-const markTargetHits = ({ targets, source, ...rest }) => ({
-  targets: targets.map(target => markTargetHit({ target, source })),
-  source,
-  ...rest,
-});
+const markHitTargets = ({ targets, source }) =>
+  targets.map(target => markHitTarget({ target, source }));
 
-const markSourceHit = ({ targets, source, ...rest }) => ({
-  targets,
-  source: thru(source, (s) => {
+const markHitSource = ({ targets, source }) =>
+  thru(source, (s) => {
     if (isEmpty(s)) { return s; }
 
     return {
       ...s,
       isOver: filter(targets, 'isOver').length > 0,
     };
-  }),
-  ...rest,
-});
+  });
+
+const markHitAll = ({ targets, source, ...rest }) => {
+  const targetsWithHits = markHitTargets({ targets, source });
+  const sourceWithHits = markHitSource({ targets: targetsWithHits, source });
+
+  return {
+    ...rest,
+    targets: targetsWithHits,
+    source: sourceWithHits,
+  };
+};
 
 const resetHits = ({ targets, ...rest }) => ({
   targets: targets.map(target => omit(target, ['isOver', 'willAccept'])),
   ...rest,
 });
 
-const markHits = compose(markSourceHit, markTargetHits);
-
 const triggerDrag = (state, source) => {
-  const hits = markHits({
+  const hits = markHitAll({
     ...state,
     source: {
       ...state.source,
@@ -77,7 +88,7 @@ const triggerDrag = (state, source) => {
 };
 
 const triggerDrop = (state, source) => {
-  const hits = markHits({
+  const hits = markHitAll({
     ...state,
     source: {
       ...state.source,
@@ -93,11 +104,23 @@ const triggerDrop = (state, source) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_TARGET:
-      return markHits({
-        ...state,
-        targets: uniqBy([action.target, ...state.targets], 'id'),
+    case UPDATE_TARGET: {
+      const targets = [
+        ...reject(state.targets, ['id', action.target.id]),
+        markHitTarget({ target: action.target, source: state.source }),
+      ];
+
+      const source = markHitSource({
+        targets,
+        source: state.source,
       });
+
+      return {
+        ...state,
+        targets,
+        source,
+      };
+    }
     case RENAME_TARGET:
       return {
         ...state,
@@ -110,19 +133,25 @@ const reducer = (state = initialState, action) => {
           };
         }),
       };
-    case REMOVE_TARGET:
+    case REMOVE_TARGET: {
+      const targets = reject(state.targets, ['id', action.id]);
+      const source = markHitSource({ targets, source: state.source });
       return {
         ...state,
-        targets: reject(state.targets, ['id', action.id]),
+        targets,
+        source,
       };
+    }
     case DRAG_START: {
-      return markHits({
+      return markHitAll({
         ...state,
         source: action.source,
       });
     }
     case DRAG_MOVE:
-      return markHits({
+      if (state.source === null) { return state; }
+
+      return markHitAll({
         ...state,
         source: {
           ...state.source,

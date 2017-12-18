@@ -56,8 +56,8 @@ describe('reducer', () => {
       ]);
 
       expect(result.targets).toEqual([
-        { id: 'foo', count: 5, ...hitAttributes() },
         { id: 'bar', count: 7, ...hitAttributes() },
+        { id: 'foo', count: 5, ...hitAttributes() },
       ]);
     });
   });

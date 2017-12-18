@@ -68,6 +68,7 @@ class dragManager {
   }
 
   unmount() {
+    this.onDragMove.cancel();
     this.removeMouseTracking();
     if (this.el) {
       this.el.removeEventListener('touchstart', this.onMoveStart);
@@ -164,6 +165,8 @@ class dragManager {
 
   onMoveEnd = (e) => {
     this.removeMouseTracking();
+
+    this.onDragMove.flush();
 
     if (this.state.dragStart === true) {
       const movement = this.movementFromEvent(e);
