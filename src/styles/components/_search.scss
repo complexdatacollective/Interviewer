@@ -39,6 +39,10 @@ $results-height: 50vh;
     overflow: hidden;
     transition: height $animation-fast-duration $animation-default-easing;
 
+    .scrollable {
+      height: 100%;
+    }
+
     &--collapsed {
       border: none;
       height: 0;
@@ -47,6 +51,7 @@ $results-height: 50vh;
 
   &__result {
     &--selected {
+      background-color: color('white', 0.15);
       border: 1px solid white;
     }
   }

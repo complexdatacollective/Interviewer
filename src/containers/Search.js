@@ -136,8 +136,8 @@ class Search extends Component {
             hasInput={this.state.hasInput}
             results={this.state.searchResults}
             selectedResults={this.state.selectedResults}
-            displayKey={displayFields[0]}
             onSelectResult={result => this.toggleSelectedResult(result)}
+            displayFields={displayFields}
           />
           {
             this.state.selectedResults.length > 0 &&

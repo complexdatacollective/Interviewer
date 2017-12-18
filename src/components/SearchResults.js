@@ -10,7 +10,7 @@ const SearchResults = (props) => {
   const {
     hasInput,
     results,
-    displayKey,
+    displayFields,
     onSelectResult,
     selectedResults,
   } = props;
@@ -26,7 +26,7 @@ const SearchResults = (props) => {
       <SearchResult
         key={`search__result_${id}`}
         data={resultData}
-        displayKey={displayKey}
+        displayFields={displayFields}
         onClick={onSelectResult}
         isSelected={isSelected}
       />
@@ -51,7 +51,7 @@ const SearchResults = (props) => {
 };
 
 SearchResults.propTypes = {
-  displayKey: PropTypes.string.isRequired,
+  displayFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasInput: PropTypes.bool.isRequired,
   onSelectResult: PropTypes.func.isRequired,
   results: PropTypes.array.isRequired,
