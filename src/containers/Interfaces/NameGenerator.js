@@ -9,7 +9,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
-import { NodeList, NodeBin } from '../../components/';
+import { NodeList, NodeBin, CardList } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 
 const forms = {
@@ -117,6 +117,10 @@ class NameGenerator extends Component {
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
               onSelect={this.onSelectNode}
+            />
+            <CardList
+              nodes={nodesForPrompt}
+              label={label}
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 export { default as Card } from './Card';
+export { default as CardList } from './CardList';
 export { default as Menu } from './Menu';
 export { default as Scroller } from './Scroller';
 export { default as Pips } from './Pips';

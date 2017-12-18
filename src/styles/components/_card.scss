@@ -7,6 +7,7 @@
   padding: 1rem;
 
   &__indicator {
+    box-sizing: content-box;
     fill: palette('text-dark');
     height: 40px;
     margin-right: 10px;
@@ -34,50 +35,5 @@
 
   &__attribute {
     font-weight: 300;
-  }
-
-  // context input formatting - incomplete
-  .context__container {
-    min-height: 40px;
-    min-width: 40px;
-  }
-
-  .context__button {
-    color: palette('text-dark');
-    border-color: palette('text-dark');
-    font-size: 20px;
-    height: 40px;
-    width: 40px;
-  }
-
-  &--selected {
-    .context__container {
-      min-height: 60px;
-      min-width: 60px;
-    }
-
-    .context__button {
-      height: 60px;
-      width: 60px;
-    }
-  }
-
-  &:hover {
-    cursor: pointer;
-
-    .context__button:after {
-      transition: transform $animation-default-easing $animation-fast-duration;
-      opacity: 1;
-      background-color: palette('primary');
-    }
-  }
-
-  &:hover,
-  &--selected {
-    .context__button {
-      background-color: transparent;
-      border-color: palette('primary');
-      color: palette('text');
-    }
   }
 }

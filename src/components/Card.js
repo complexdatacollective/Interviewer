@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { ContextInput } from 'network-canvas-ui';
-
 /**
   * Renders a card with details.
   */
@@ -29,11 +27,6 @@ const Card = (props) => {
 
   return (
     <div className={classes}>
-      <ContextInput
-        name="indicator"
-        label="&#10003;"
-        checked={selected}
-      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
