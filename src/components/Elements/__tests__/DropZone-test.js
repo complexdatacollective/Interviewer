@@ -9,7 +9,7 @@ const mockStore = createStore(() => ({ droppable: { activeZones: [] } }));
 
 describe('DropZone component', () => {
   it('renders ok', () => {
-    const component = shallow(<DropZone droppableName="foo" store={mockStore} />);
+    const component = shallow(<DropZone id="foo" store={mockStore} />);
 
     expect(component).toMatchSnapshot();
   });

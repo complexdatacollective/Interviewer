@@ -8,68 +8,70 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <DropTarget
-    accepts={[Function]}
-    droppableName="foo"
-    id="DropTarget1"
-    meta={[Function]}
+  "node": <DropZone
+    id="foo"
     onDrag={[Function]}
     onDrop={[Function]}
     store={
+      Object {
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
+    }
+  />,
+  "nodes": Array [
+    <DropZone
+      id="foo"
+      onDrag={[Function]}
+      onDrop={[Function]}
+      store={
         Object {
+          "dispatch": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+          Symbol(observable): [Function],
+        }
+      }
+    />,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 0,
+      "_context": Object {},
+      "_currentElement": <DropTarget
+        accepts={[Function]}
+        id="foo"
+        meta={[Function]}
+        onDrag={[Function]}
+        onDrop={[Function]}
+        store={
+          Object {
             "dispatch": [Function],
             "getState": [Function],
             "replaceReducer": [Function],
             "subscribe": [Function],
             Symbol(observable): [Function],
           }
-    }
-/>,
-  "nodes": Array [
-    <DropTarget
-      accepts={[Function]}
-      droppableName="foo"
-      id="DropTarget1"
-      meta={[Function]}
-      onDrag={[Function]}
-      onDrop={[Function]}
-      store={
-            Object {
-                  "dispatch": [Function],
-                  "getState": [Function],
-                  "replaceReducer": [Function],
-                  "subscribe": [Function],
-                  Symbol(observable): [Function],
-                }
-      }
-/>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
-      "_context": Object {},
-      "_currentElement": <mapProps(DropTarget)
-        droppableName="foo"
-        store={
-                Object {
-                        "dispatch": [Function],
-                        "getState": [Function],
-                        "replaceReducer": [Function],
-                        "subscribe": [Function],
-                        Symbol(observable): [Function],
-                      }
         }
-/>,
+      />,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": StatelessComponent {
+      "_instance": DropTarget {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
-          "droppableName": "foo",
+          "accepts": [Function],
+          "id": "foo",
+          "meta": [Function],
+          "onDrag": [Function],
+          "onDrop": [Function],
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -79,7 +81,10 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
+        "removeTarget": [Function],
         "state": null,
+        "update": [Function],
+        "updateTarget": [Function],
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -98,41 +103,35 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <DropTarget
-          accepts={[Function]}
-          droppableName="foo"
-          id="DropTarget1"
-          meta={[Function]}
+        "_currentElement": <DropZone
+          id="foo"
           onDrag={[Function]}
           onDrop={[Function]}
           store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
+            Object {
+              "dispatch": [Function],
+              "getState": [Function],
+              "replaceReducer": [Function],
+              "subscribe": [Function],
+              Symbol(observable): [Function],
+            }
           }
-/>,
+        />,
         "_debugID": 2,
-        "_renderedOutput": <DropTarget
-          accepts={[Function]}
-          droppableName="foo"
-          id="DropTarget1"
-          meta={[Function]}
+        "_renderedOutput": <DropZone
+          id="foo"
           onDrag={[Function]}
           onDrop={[Function]}
           store={
-                    Object {
-                              "dispatch": [Function],
-                              "getState": [Function],
-                              "replaceReducer": [Function],
-                              "subscribe": [Function],
-                              Symbol(observable): [Function],
-                            }
+            Object {
+              "dispatch": [Function],
+              "getState": [Function],
+              "replaceReducer": [Function],
+              "subscribe": [Function],
+              Symbol(observable): [Function],
+            }
           }
-/>,
+        />,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -144,17 +143,21 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <mapProps(DropTarget)
-    droppableName="foo"
+  "unrendered": <DropTarget
+    accepts={[Function]}
+    id="foo"
+    meta={[Function]}
+    onDrag={[Function]}
+    onDrop={[Function]}
     store={
-        Object {
-            "dispatch": [Function],
-            "getState": [Function],
-            "replaceReducer": [Function],
-            "subscribe": [Function],
-            Symbol(observable): [Function],
-          }
+      Object {
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
     }
-/>,
+  />,
 }
 `;

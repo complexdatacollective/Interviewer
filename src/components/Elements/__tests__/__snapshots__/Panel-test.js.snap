@@ -11,56 +11,56 @@ ShallowWrapper {
   "node": <div
     className="panel"
     style={
-        Object {
-            "borderColor": null,
-          }
+      Object {
+        "borderColor": null,
+      }
     }
->
+  >
     <div
-        className="panel__heading"
-        onClick={[Function]}
+      className="panel__heading"
+      onClick={[Function]}
     >
-        <h3
-            className="panel__heading-header"
-        >
-            foo
-        </h3>
+      <h3
+        className="panel__heading-header"
+      >
+        foo
+      </h3>
     </div>
     <div
-        className="panel__content"
+      className="panel__content"
     >
-        <span>
-            bar
-        </span>
+      <span>
+        bar
+      </span>
     </div>
-</div>,
+  </div>,
   "nodes": Array [
     <div
       className="panel"
       style={
-            Object {
-                  "borderColor": null,
-                }
+        Object {
+          "borderColor": null,
+        }
       }
->
+    >
       <div
-            className="panel__heading"
-            onClick={[Function]}
+        className="panel__heading"
+        onClick={[Function]}
       >
-            <h3
-                  className="panel__heading-header"
-            >
-                  foo
-            </h3>
+        <h3
+          className="panel__heading-header"
+        >
+          foo
+        </h3>
       </div>
       <div
-            className="panel__content"
+        className="panel__content"
       >
-            <span>
-                  bar
-            </span>
+        <span>
+          bar
+        </span>
       </div>
-</div>,
+    </div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -72,11 +72,11 @@ ShallowWrapper {
         highlight={null}
         minimise={false}
         title="foo"
->
+      >
         <span>
-                bar
+          bar
         </span>
-</Panel>,
+      </Panel>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -86,7 +86,7 @@ ShallowWrapper {
         "props": Object {
           "children": <span>
             bar
-</span>,
+          </span>,
           "highlight": null,
           "minimise": false,
           "title": "foo",
@@ -117,56 +117,56 @@ ShallowWrapper {
         "_currentElement": <div
           className="panel"
           style={
-                    Object {
-                              "borderColor": null,
-                            }
+            Object {
+              "borderColor": null,
+            }
           }
->
+        >
           <div
-                    className="panel__heading"
-                    onClick={[Function]}
+            className="panel__heading"
+            onClick={[Function]}
           >
-                    <h3
-                              className="panel__heading-header"
-                    >
-                              foo
-                    </h3>
+            <h3
+              className="panel__heading-header"
+            >
+              foo
+            </h3>
           </div>
           <div
-                    className="panel__content"
+            className="panel__content"
           >
-                    <span>
-                              bar
-                    </span>
+            <span>
+              bar
+            </span>
           </div>
-</div>,
+        </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="panel"
           style={
-                    Object {
-                              "borderColor": null,
-                            }
+            Object {
+              "borderColor": null,
+            }
           }
->
+        >
           <div
-                    className="panel__heading"
-                    onClick={[Function]}
+            className="panel__heading"
+            onClick={[Function]}
           >
-                    <h3
-                              className="panel__heading-header"
-                    >
-                              foo
-                    </h3>
+            <h3
+              className="panel__heading-header"
+            >
+              foo
+            </h3>
           </div>
           <div
-                    className="panel__content"
+            className="panel__content"
           >
-                    <span>
-                              bar
-                    </span>
+            <span>
+              bar
+            </span>
           </div>
-</div>,
+        </div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -182,10 +182,10 @@ ShallowWrapper {
     highlight={null}
     minimise={false}
     title="foo"
->
+  >
     <span>
-        bar
+      bar
     </span>
-</Panel>,
+  </Panel>,
 }
 `;
