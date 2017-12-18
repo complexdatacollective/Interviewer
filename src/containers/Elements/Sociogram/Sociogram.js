@@ -16,6 +16,7 @@ const Sociogram = ({ stage, prompt }) => (
       />
     }
     <NodeLayout
+      id="NODE_LAYOUT"
       stage={stage}
       prompt={prompt}
     />

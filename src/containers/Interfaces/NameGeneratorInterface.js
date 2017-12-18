@@ -148,7 +148,7 @@ class NameGenerator extends Component {
         </button>
 
         <div className="name-generator-interface__node-bin">
-          <NodeBin />
+          <NodeBin id="NODE_BIN" />
         </div>
       </div>
     );

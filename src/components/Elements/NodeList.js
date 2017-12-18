@@ -75,7 +75,7 @@ NodeList.propTypes = {
   itemType: PropTypes.string,
   label: PropTypes.func,
   selected: PropTypes.func,
-  isOver: PropTypes.func,
+  isOver: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
 };
