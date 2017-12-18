@@ -751,7 +751,7 @@
           "text": "Position the nodes amongst the concentric circles. Place people you are closer to towards the middle",
           "subject": {
             "entity": "node",
-            "type": "location"
+            "type": "person"
           },
           "filter": "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
