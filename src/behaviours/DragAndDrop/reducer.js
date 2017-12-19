@@ -1,5 +1,4 @@
-import { filter, reject, omit, uniqBy, isEmpty, thru } from 'lodash';
-import { compose } from 'redux';
+import { filter, reject, omit, isEmpty, thru } from 'lodash';
 
 const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
