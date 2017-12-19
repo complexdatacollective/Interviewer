@@ -10,10 +10,13 @@ import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeList } from '../../components/';
 
+const networkNodesForPrompt = makeNetworkNodesForPrompt();
+const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+const getNodeType = makeGetNodeType();
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -43,6 +46,7 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       nodesForPrompt,
+      nodeType,
       prompt,
       promptForward,
       promptBackward,
@@ -85,12 +89,13 @@ class NameGeneratorAutoComplete extends Component {
         />
 
         <Search
-          options={prompt.autoCompleteOptions}
           dataSourceKey={prompt.dataSource}
+          displayFields={[prompt.displayLabel, ...prompt.displayProperties]}
+          excludedNodes={nodesForPrompt}
+          nodeType={nodeType}
           onClick={closeSearch}
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
-          excludedNodes={nodesForPrompt}
-          displayFields={[prompt.displayLabel, ...prompt.displayProperties]}
+          options={prompt.autoCompleteOptions}
         />
 
       </div>
@@ -103,6 +108,7 @@ NameGeneratorAutoComplete.propTypes = {
   closeSearch: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
+  nodeType: PropTypes.string.isRequired,
   toggleSearch: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -120,13 +126,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function makeMapStateToProps() {
-  const networkNodesForPrompt = makeNetworkNodesForPrompt();
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-
   return function mapStateToProps(state, props) {
     return {
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
+      nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
     };
   };

@@ -10,6 +10,7 @@ import SearchForm from './SearchForm';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
 import { makeGetFuse } from '../selectors/search';
+import { getNodePalette } from '../utils/NodePalettes';
 
 /**
  * Fuse.js: approximate string matching.
@@ -120,6 +121,7 @@ class Search extends Component {
       closeSearch,
       collapsed,
       displayFields,
+      nodeType,
     } = this.props;
 
     const searchClasses = cx(
@@ -129,6 +131,8 @@ class Search extends Component {
         'search--hasInput': this.state.hasInput,
       },
     );
+
+    const addButtonAlt = getNodePalette(nodeType);
 
     return (
       <div className={searchClasses}>
@@ -144,10 +148,12 @@ class Search extends Component {
             onSelectResult={result => this.toggleSelectedResult(result)}
             displayFields={displayFields}
           />
+
           {
             this.state.selectedResults.length > 0 &&
             <AddCountButton
               count={this.state.selectedResults.length}
+              altClass={addButtonAlt}
               onClick={() => this.onCommit()}
             />
           }
@@ -163,6 +169,10 @@ class Search extends Component {
   }
 }
 
+Search.defaultProps = {
+  nodeType: '',
+};
+
 Search.propTypes = {
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
@@ -170,6 +180,7 @@ Search.propTypes = {
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
+  nodeType: PropTypes.string,
 
   // These props are required by the fuse selector
   /* eslint-disable react/no-unused-prop-types */

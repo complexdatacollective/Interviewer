@@ -8,12 +8,11 @@ describe('AddCountButton component', () => {
   it('renders a count', () => {
     const count = 321;
     const component = shallow(<AddCountButton count={count} />);
-    expect(component.text()).toEqual(String(count));
+    expect(component.text()).toMatch(String(count));
   });
 
   it('defaults to empty', () => {
-    const count = 321;
     const component = shallow(<AddCountButton />);
-    expect(component.text()).toEqual('');
+    expect(component.text()).not.toMatch(/\d/);
   });
 });

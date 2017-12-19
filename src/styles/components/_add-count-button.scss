@@ -1,10 +1,21 @@
 $add-count-button-height: 120px;
 $add-count-button-inner-size: 112px; // width of the core circle (without badge)
 $add-count-button-width: 140px;
+$module-name: add-count-button;
 
-.add-count-button {
-  @include svg-button('../images/add-generic.svg');
+// Provides alternate colors (e.g., to represent different node types)
+@mixin add-count-palette($base_palette, $flash_palette) {
+  fill: palette($base_palette);
+  &-flash {
+    fill: palette($flash_palette);
+  }
+}
+
+.#{$module-name} {
+  background-color: transparent;
+  border: none;
   color: color('white');
+  cursor: pointer;
   display: block;
   font-size: 3rem;
   font-weight: 500;
@@ -16,4 +27,37 @@ $add-count-button-width: 140px;
   text-align: center;
   text-indent: 0; // override svg-button text hiding
   width: $add-count-button-width;
+
+  &__count {
+    position: relative;
+  }
+
+  &__background {
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &__base {
+    @include add-count-palette('node-base', 'node-dark');
+  }
+
+  @for $i from 1 through 9 {
+    &--node-alt-#{$i} {
+      .#{$module-name}__base {
+        @include add-count-palette('node-alt-#{$i}', 'node-alt-#{$i}--dark');
+      }
+    }
+  }
+
+  &__badge {
+    fill: color('white');
+  }
+
+  &__plus {
+    fill: color('charcoal');
+  }
+
 }

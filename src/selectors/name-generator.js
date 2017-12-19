@@ -20,6 +20,11 @@ const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 
+export const makeGetNodeType = () => (createSelector(
+  makeGetSubject(),
+  subject => subject && subject.type,
+));
+
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
   const getIds = makeGetIds();

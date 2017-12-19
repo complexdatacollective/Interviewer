@@ -11,18 +11,18 @@ const SearchResult = ({ data, displayFields, isSelected, onClick }) => {
   );
 
   const headerLabel = field => (
-    <h1>{ data[field] }</h1>
+    <h1 key="header">{ data[field] }</h1>
   );
 
-  const subLabel = field => (
-    <p>{ data[field] }</p>
+  const subLabel = (field, i) => (
+    <p key={`label_${i}`}>{ data[field] }</p>
   );
 
   const labelForField = (field, i) => {
     if (i === 0) {
       return headerLabel(field);
     }
-    return subLabel(field);
+    return subLabel(field, i);
   };
 
   return (
