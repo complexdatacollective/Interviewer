@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { droppable } from '../../behaviours';
+import { DropTarget } from '../../behaviours/DragAndDrop';
 
 /**
   * Renders a container onto which a `draggable` can be dropped.
@@ -20,4 +20,4 @@ DropZone.defaultProps = {
   children: null,
 };
 
-export default droppable(DropZone);
+export default DropTarget(DropZone);

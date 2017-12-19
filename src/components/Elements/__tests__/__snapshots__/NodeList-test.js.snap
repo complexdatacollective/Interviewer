@@ -8,37 +8,35 @@ ShallowWrapper {
     "findWhereUnwrapped": [Function],
   },
   "length": 1,
-  "node": <div
-    className="scrollable"
->
-    <Connect(Droppable)
-        store={
-            Object {
-                "dispatch": [Function],
-                "getState": [Function],
-                "replaceReducer": [Function],
-                "subscribe": [Function],
-                Symbol(observable): [Function],
-              }
-        }
-    />
-</div>,
+  "node": <Monitor
+    id="foo"
+    onDrag={[Function]}
+    onDrop={[Function]}
+    store={
+        Object {
+            "dispatch": [Function],
+            "getState": [Function],
+            "replaceReducer": [Function],
+            "subscribe": [Function],
+            Symbol(observable): [Function],
+          }
+    }
+/>,
   "nodes": Array [
-    <div
-      className="scrollable"
->
-      <Connect(Droppable)
-            store={
-                  Object {
-                        "dispatch": [Function],
-                        "getState": [Function],
-                        "replaceReducer": [Function],
-                        "subscribe": [Function],
-                        Symbol(observable): [Function],
-                      }
-            }
-      />
-</div>,
+    <Monitor
+      id="foo"
+      onDrag={[Function]}
+      onDrop={[Function]}
+      store={
+            Object {
+                  "dispatch": [Function],
+                  "getState": [Function],
+                  "replaceReducer": [Function],
+                  "subscribe": [Function],
+                  Symbol(observable): [Function],
+                }
+      }
+/>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -46,7 +44,12 @@ ShallowWrapper {
       "_calledComponentWillUnmount": false,
       "_compositeType": 0,
       "_context": Object {},
-      "_currentElement": <Scrollable
+      "_currentElement": <DropTarget
+        accepts={[Function]}
+        id="foo"
+        meta={[Function]}
+        onDrag={[Function]}
+        onDrop={[Function]}
         store={
                 Object {
                         "dispatch": [Function],
@@ -60,10 +63,15 @@ ShallowWrapper {
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
-      "_instance": Scrollable {
+      "_instance": DropTarget {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "props": Object {
+          "accepts": [Function],
+          "id": "foo",
+          "meta": [Function],
+          "onDrag": [Function],
+          "onDrop": [Function],
           "store": Object {
             "dispatch": [Function],
             "getState": [Function],
@@ -73,10 +81,10 @@ ShallowWrapper {
           },
         },
         "refs": Object {},
-        "state": Object {
-          "isScrolling": false,
-        },
-        "updateScrollState": [Function],
+        "removeTarget": [Function],
+        "state": null,
+        "update": [Function],
+        "updateTarget": [Function],
         "updater": Object {
           "enqueueCallback": [Function],
           "enqueueCallbackInternal": [Function],
@@ -95,39 +103,37 @@ ShallowWrapper {
       "_pendingReplaceState": false,
       "_pendingStateQueue": null,
       "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <div
-          className="scrollable"
->
-          <Connect(Droppable)
-                    store={
-                              Object {
-                                        "dispatch": [Function],
-                                        "getState": [Function],
-                                        "replaceReducer": [Function],
-                                        "subscribe": [Function],
-                                        Symbol(observable): [Function],
-                                      }
-                    }
-          />
-</div>,
+        "_currentElement": <Monitor
+          id="foo"
+          onDrag={[Function]}
+          onDrop={[Function]}
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+/>,
         "_debugID": 2,
-        "_renderedOutput": <div
-          className="scrollable"
->
-          <Connect(Droppable)
-                    store={
-                              Object {
-                                        "dispatch": [Function],
-                                        "getState": [Function],
-                                        "replaceReducer": [Function],
-                                        "subscribe": [Function],
-                                        Symbol(observable): [Function],
-                                      }
-                    }
-          />
-</div>,
+        "_renderedOutput": <Monitor
+          id="foo"
+          onDrag={[Function]}
+          onDrop={[Function]}
+          store={
+                    Object {
+                              "dispatch": [Function],
+                              "getState": [Function],
+                              "replaceReducer": [Function],
+                              "subscribe": [Function],
+                              Symbol(observable): [Function],
+                            }
+          }
+/>,
       },
-      "_renderedNodeType": 0,
+      "_renderedNodeType": 1,
       "_rootNodeID": 0,
       "_topLevelWrapper": null,
       "_updateBatchNumber": null,
@@ -137,7 +143,12 @@ ShallowWrapper {
     "render": [Function],
   },
   "root": [Circular],
-  "unrendered": <Scrollable
+  "unrendered": <DropTarget
+    accepts={[Function]}
+    id="foo"
+    meta={[Function]}
+    onDrag={[Function]}
+    onDrop={[Function]}
     store={
         Object {
             "dispatch": [Function],

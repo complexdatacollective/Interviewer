@@ -1,39 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { first } from 'lodash';
+import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
-import { makeGetNextUnplacedNode, makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
-import { draggable } from '../../behaviours';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../../selectors/sociogram';
+import { DragSource } from '../../behaviours/DragAndDrop';
 
-const EnhancedNode = draggable(Node);
+const EnhancedNode = DragSource(Node);
 const label = node => node.nickname;
-
-const draggableType = 'POSITIONED_NODE';
 
 class NodeBucket extends Component {
   static propTypes = {
     node: PropTypes.object,
-    updateNode: PropTypes.func.isRequired,
-    ...sociogramOptionsProps,
   };
 
   static defaultProps = {
     node: null,
-  };
-
-  onDropNode = (hits, coords, node) => {
-    const { layoutVariable } = this.props;
-
-    const hit = first(hits);
-    const relativeCoords = {
-      x: (coords.x - hit.x) / hit.width,
-      y: (coords.y - hit.y) / hit.height,
-    };
-
-    this.props.updateNode({ ...node, [layoutVariable]: relativeCoords });
   };
 
   render() {
@@ -48,8 +30,7 @@ class NodeBucket extends Component {
         { node &&
           <EnhancedNode
             label={label(node)}
-            onDropped={(hits, coords) => this.onDropNode(hits, coords, node)}
-            draggableType={draggableType}
+            meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
             {...node}
           />
         }
@@ -70,12 +51,8 @@ function makeMapStateToProps() {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-  };
-}
-
 export { NodeBucket };
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(NodeBucket);
+export default compose(
+  connect(makeMapStateToProps),
+)(NodeBucket);

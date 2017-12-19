@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { map, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, at, values, flow } from 'lodash';
+import { find, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, pick, values, flatten, flow } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { networkEdges, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
@@ -36,8 +36,8 @@ const getEdgeOptions = createDeepEqualSelector(
 const getHighlightOptions = createDeepEqualSelector(
   propPromptHighlight,
   highlight => ({
-    canHighlight: has(highlight, 'allowHighting') ? highlight.allowHighlighting : false,
-    highlightAttributes: has(highlight, 'allowHighting') ? { [highlight.variable]: highlight.value } : {},
+    allowHighlighting: has(highlight, 'allowHighlighting') ? highlight.allowHighlighting : false,
+    highlightAttributes: has(highlight, 'allowHighlighting') ? { [highlight.variable]: highlight.value } : {},
   }),
 );
 
@@ -60,12 +60,6 @@ const getBackgroundOptions = createDeepEqualSelector(
   }),
 );
 
-const selectMode = ({ edgeOptions: { canCreateEdge }, highlightOptions: { canHighlight } }) => {
-  if (canCreateEdge) { return 'EDGE'; }
-  if (canHighlight) { return 'HIGHLIGHT'; }
-  return null;
-};
-
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
     getLayoutOptions,
@@ -79,8 +73,7 @@ export const makeGetSociogramOptions = () =>
       ...highlightOptions,
       ...sortOptions,
       ...backgroundOptions,
-      allowSelect: highlightOptions.canHighlight || edgeOptions.canCreateEdge,
-      selectMode: selectMode({ edgeOptions, highlightOptions }),
+      allowSelect: highlightOptions.allowHighlighting || edgeOptions.canCreateEdge,
     }),
   );
 
@@ -122,23 +115,19 @@ const edgeCoords = (edge, { nodes, layoutVariable }) => {
 };
 
 const edgesToCoords = (edges, { nodes, layoutVariable }) =>
-  map(
-    edge => edgeCoords(edge, { nodes, layoutVariable }),
-    edges,
+  edges.map(
+    edge => edgeCoords(
+      edge,
+      { nodes, layoutVariable },
+    ),
   );
-
-// const edgesOfType = (edges, type) => filter(edges, { type });
-// const edgesOfTypeToCoords = (edgeType, { edges, nodes, layoutVariable }) =>
-//   edgesToCoords(
-//     edgesOfType(edges, edgeType),
-//     { nodes, layoutVariable },
-//   );
 
 const edgesOfTypes = (edges, types) =>
   flow(
     allEdges => groupBy(allEdges, 'type'), // sort by type
-    groupedEdges => at(groupedEdges, types), // discard unwanted types
+    groupedEdges => pick(groupedEdges, types), // discard unwanted types
     groupedEdges => values(groupedEdges), // flatten
+    selectedEdges => flatten(selectedEdges),
   )(edges);
 
 export const makeDisplayEdgesForPrompt = () => {
@@ -149,15 +138,13 @@ export const makeDisplayEdgesForPrompt = () => {
     networkEdges,
     getEdgeOptions,
     getLayoutOptions,
-    (nodes, edges, edgeOptions, { layoutVariable }) =>
-      edgesToCoords(
-        edgesOfTypes(edges, edgeOptions.displayEdges),
+    (nodes, edges, edgeOptions, { layoutVariable }) => {
+      const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);
+      return edgesToCoords(
+        selectedEdges,
         { nodes, layoutVariable },
-      ),
-    // map(
-    //   edgeOptions.displayEdges,
-    //   edgeType => edgesOfTypeToCoords(edgeType, { edges, nodes, layoutVariable }),
-    // ),
+      );
+    },
   );
 };
 
@@ -180,10 +167,8 @@ export const sociogramOptionsProps = {
   createEdge: PropTypes.string.isRequired,
   displayEdges: PropTypes.array.isRequired,
   canCreateEdge: PropTypes.bool.isRequired,
-  canHighlight: PropTypes.bool.isRequired,
+  allowHighlighting: PropTypes.bool.isRequired,
   highlightAttributes: PropTypes.object.isRequired,
-  allowSelect: PropTypes.bool.isRequired,
-  selectMode: PropTypes.string.isRequired,
   nodeBinSortOrder: PropTypes.object.isRequired,
   concentricCircles: PropTypes.number.isRequired,
   skewedTowardCenter: PropTypes.bool.isRequired,

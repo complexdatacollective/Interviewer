@@ -1,93 +1,83 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { isMatch } from 'lodash';
+import { find, get } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
-import { scrollable, droppable, draggable, selectable } from '../../behaviours';
+import { scrollable, selectable } from '../../behaviours';
+import {
+  DragSource,
+  DropTarget,
+  MonitorDropTarget,
+  MonitorDragSource,
+} from '../../behaviours/DragAndDrop';
 
-const EnhancedNode = draggable(selectable(Node));
+const EnhancedNode = DragSource(selectable(Node));
 
 /**
   * Renders a list of Node.
   */
-class NodeList extends Component {
-  componentDidMount() {
-    this.props.onDrag(this.props.isDragging);
-  }
+const NodeList = ({
+  nodes,
+  nodeColor,
+  label,
+  selected,
+  onSelect,
+  itemType,
+  isOver,
+  willAccept,
+  meta,
+}) => {
+  const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
 
-  componentWillReceiveProps(props) {
-    if (props.isDragging !== this.props.isDragging) {
-      props.onDrag(props.isDragging);
-    }
-  }
+  const classNames = cx(
+    'node-list',
+    { 'node-list--hover': !isSource && willAccept && isOver },
+    { 'node-list--drag': !isSource && willAccept }, // TODO: rename class
+  );
 
-  render() {
-    const { nodes,
-      nodeColor,
-      label,
-      selected,
-      handleSelectNode,
-      handleDropNode,
-      draggableType,
-      hover,
-      isDragging,
-      isOrigin,
-    } = this.props;
-
-    const classNames = cx(
-      'node-list',
-      { 'node-list--hover': (hover && !isOrigin) },
-      { 'node-list--drag': isDragging },
-    );
-
-    return (
-      <StaggeredTransitionGroup
-        className={classNames}
-        component="div"
-        delay={animation.duration.fast * 0.2}
-        duration={animation.duration.slow}
-        start={animation.duration.slow + 3}
-        transitionName="node-list--transition"
-        transitionLeave={false}
-      >
-        { hover && !isOrigin && isDragging &&
-          <Node key="placeholder" placeholder />
-        }
-        {
-          nodes.map(node => (
-            <span key={node.uid}>
-              <EnhancedNode
-                color={nodeColor}
-                label={label(node)}
-                selected={selected(node)}
-                onSelected={() => handleSelectNode(node)}
-                onDropped={hits => handleDropNode(hits, node)}
-                draggableType={draggableType}
-                {...node}
-              />
-            </span>
-          ))
-        }
-      </StaggeredTransitionGroup>
-    );
-  }
-}
+  return (
+    <StaggeredTransitionGroup
+      className={classNames}
+      component="div"
+      delay={animation.duration.fast * 0.2}
+      duration={animation.duration.slow}
+      start={animation.duration.slow + 3}
+      transitionName="node-list--transition"
+      transitionLeave={false}
+    >
+      { isOver && willAccept &&
+        <Node key="placeholder" placeholder />
+      }
+      {
+        nodes.map(node => (
+          <span key={node.uid}>
+            <EnhancedNode
+              color={nodeColor}
+              label={label(node)}
+              selected={selected(node)}
+              onSelected={() => onSelect(node)}
+              meta={() => ({ ...node, itemType })}
+              {...node}
+            />
+          </span>
+        ))
+      }
+    </StaggeredTransitionGroup>
+  );
+};
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  handleSelectNode: PropTypes.func,
-  handleDropNode: PropTypes.func,
+  onSelect: PropTypes.func,
+  itemType: PropTypes.string,
   label: PropTypes.func,
   selected: PropTypes.func,
-  draggableType: PropTypes.string,
-  hover: PropTypes.bool,
-  isDragging: PropTypes.bool.isRequired,
-  isOrigin: PropTypes.bool.isRequired,
-  onDrag: PropTypes.func,
+  isOver: PropTypes.bool,
+  willAccept: PropTypes.bool,
+  meta: PropTypes.object,
 };
 
 NodeList.defaultProps = {
@@ -95,26 +85,18 @@ NodeList.defaultProps = {
   nodeColor: '',
   label: () => (''),
   selected: () => false,
-  handleSelectNode: () => {},
-  handleDropNode: () => {},
-  draggableType: '',
-  hover: false,
-  onDrag: () => {},
+  onSelect: () => {},
+  onDrop: () => {},
+  itemType: 'NODE',
+  isOver: false,
+  willAccept: false,
+  isDragging: false,
+  meta: {},
 };
 
-function mapStateToProps(state, ownProps) {
-  const isOrigin = ownProps.currentIds && isMatch(state.draggable.meta, ownProps.currentIds);
-
-  return {
-    isDragging: state.draggable.isDragging &&
-      state.draggable.draggableType === ownProps.acceptsDraggableType &&
-      !isOrigin,
-    isOrigin,
-  };
-}
-
 export default compose(
+  DropTarget,
+  MonitorDropTarget(['isOver', 'willAccept']),
+  MonitorDragSource(['meta', 'isDragging']),
   scrollable,
-  droppable,
-  connect(mapStateToProps),
 )(NodeList);

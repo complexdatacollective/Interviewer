@@ -4,7 +4,7 @@ import { throttle } from 'lodash';
 
 const maxFramesPerSecond = 10;
 
-export default function scrollable(WrappedComponent) {
+const scrollable = WrappedComponent =>
   class Scrollable extends Component {
     constructor() {
       super();
@@ -38,7 +38,6 @@ export default function scrollable(WrappedComponent) {
         </div>
       );
     }
-  }
+  };
 
-  return Scrollable;
-}
+export default scrollable;

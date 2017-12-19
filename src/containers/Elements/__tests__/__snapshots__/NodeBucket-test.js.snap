@@ -11,20 +11,20 @@ ShallowWrapper {
   "node": <div
     className="node-bucket"
 >
-    <Connect(Draggable)
-        draggableType="POSITIONED_NODE"
+    <DragSource
+        allowDrag={true}
         label={undefined}
-        onDropped={[Function]}
+        meta={[Function]}
     />
 </div>,
   "nodes": Array [
     <div
       className="node-bucket"
 >
-      <Connect(Draggable)
-            draggableType="POSITIONED_NODE"
+      <DragSource
+            allowDrag={true}
             label={undefined}
-            onDropped={[Function]}
+            meta={[Function]}
       />
 </div>,
   ],
@@ -58,7 +58,6 @@ ShallowWrapper {
       "_instance": NodeBucket {
         "_reactInternalInstance": [Circular],
         "context": Object {},
-        "onDropNode": [Function],
         "props": Object {
           "allowPositioning": false,
           "allowSelect": false,
@@ -100,20 +99,20 @@ ShallowWrapper {
         "_currentElement": <div
           className="node-bucket"
 >
-          <Connect(Draggable)
-                    draggableType="POSITIONED_NODE"
+          <DragSource
+                    allowDrag={true}
                     label={undefined}
-                    onDropped={[Function]}
+                    meta={[Function]}
           />
 </div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="node-bucket"
 >
-          <Connect(Draggable)
-                    draggableType="POSITIONED_NODE"
+          <DragSource
+                    allowDrag={true}
                     label={undefined}
-                    onDropped={[Function]}
+                    meta={[Function]}
           />
 </div>,
       },

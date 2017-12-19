@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 export default function selectable(WrappedComponent) {
   class Selectable extends Component {
     componentDidMount() {
-      if (!this.props.canSelect) { return; }
+      if (!this.props.allowSelect) { return; }
       this.el = findDOMNode(this.node);
       this.el.addEventListener('click', this.onTap, { passive: true });
     }
@@ -24,12 +24,12 @@ export default function selectable(WrappedComponent) {
 
     render() {
       const {
-        canSelect,
+        allowSelect,
         onSelected,
         ...rest
       } = this.props;
 
-      if (!canSelect) { return <WrappedComponent {...rest} />; }
+      if (!allowSelect) { return <WrappedComponent {...rest} />; }
 
       return <WrappedComponent {...rest} ref={(node) => { this.node = node; }} />;
     }
@@ -37,12 +37,12 @@ export default function selectable(WrappedComponent) {
 
   Selectable.propTypes = {
     onSelected: PropTypes.func,
-    canSelect: PropTypes.bool,
+    allowSelect: PropTypes.bool,
   };
 
   Selectable.defaultProps = {
     onSelected: () => {},
-    canSelect: true,
+    allowSelect: true,
   };
 
   return Selectable;

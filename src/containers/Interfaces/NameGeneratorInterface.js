@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { PromptSwiper, NodeProviderPanels, NodeForm } from '../../containers/Elements';
+import { PromptSwiper, NodePanels, NodeForm } from '../../containers/Elements';
 import { NodeList, NodeBin } from '../../components/Elements';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 
@@ -65,27 +66,17 @@ class NameGenerator extends Component {
 
   /**
    * Drop node handler
-   * Deletes node from network when dropped on bin
+   * Deletes node from network whe  n dropped on bin
    * @param {object} node - key/value object containing node object from the network store
    */
-  onDropNode = (hits, node) => {
-    const currentPromptId = this.props.prompt.id;
-    const currentStageId = this.props.stage.id;
+  onDrop = (item) => {
+    const node = { ...item.meta };
 
-    hits.forEach((hit) => {
-      switch (hit.name) {
-        case 'NODE_BIN':
-          this.props.removeNode(node.uid);
-          break;
-        case 'NODE_PROVIDER':
-          if (node.promptId === currentPromptId && node.stageId === currentStageId) {
-            return;
-          }
-          this.props.toggleNodeAttributes(node, this.props.activePromptAttributes);
-          break;
-        default:
-      }
-    });
+    if (has(node, 'promptId') || has(node, 'stageId')) {
+      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
+    } else {
+      this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+    }
   }
 
   render() {
@@ -115,17 +106,17 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodeProviderPanels stage={stage} prompt={prompt} />
+            <NodePanels stage={stage} prompt={prompt} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              droppableName="MAIN_NODE_LIST"
-              acceptsDraggableType="NEW_NODE"
-              draggableType="EXISTING_NODE"
-              handleDropNode={this.onDropNode}
-              handleSelectNode={this.onSelectNode}
+              id="MAIN_NODE_LIST"
+              accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
+              itemType="EXISTING_NODE"
+              onDrop={this.onDrop}
+              onSelect={this.onSelectNode}
             />
           </div>
         </div>
@@ -157,7 +148,7 @@ class NameGenerator extends Component {
         </button>
 
         <div className="name-generator-interface__node-bin">
-          <NodeBin />
+          <NodeBin id="NODE_BIN" />
         </div>
       </div>
     );
@@ -170,9 +161,7 @@ NameGenerator.propTypes = {
   prompt: PropTypes.object.isRequired,
   addNode: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
-  toggleNodeAttributes: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  removeNode: PropTypes.func.isRequired,
   activePromptAttributes: PropTypes.object.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -198,7 +187,7 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
+    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
