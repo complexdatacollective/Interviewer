@@ -10,75 +10,75 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="sociogram"
-  >
+>
     <Connect(Background)
-      prompt={
-        Object {
-          "sociogram": Object {
-            "background": Object {},
-          },
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
         }
-      }
-      stage={Object {}}
+        stage={Object {}}
     />
     <Connect(ReactComponent)
-      id="NODE_LAYOUT"
-      prompt={
-        Object {
-          "sociogram": Object {
-            "background": Object {},
-          },
+        id="NODE_LAYOUT"
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
         }
-      }
-      stage={Object {}}
+        stage={Object {}}
     />
     <Connect(NodeBucket)
-      prompt={
-        Object {
-          "sociogram": Object {
-            "background": Object {},
-          },
+        prompt={
+            Object {
+                "sociogram": Object {
+                  "background": Object {},
+                },
+              }
         }
-      }
-      stage={Object {}}
+        stage={Object {}}
     />
-  </div>,
+</div>,
   "nodes": Array [
     <div
       className="sociogram"
-    >
+>
       <Connect(Background)
-        prompt={
-          Object {
-            "sociogram": Object {
-              "background": Object {},
-            },
-          }
-        }
-        stage={Object {}}
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}}
       />
       <Connect(ReactComponent)
-        id="NODE_LAYOUT"
-        prompt={
-          Object {
-            "sociogram": Object {
-              "background": Object {},
-            },
-          }
-        }
-        stage={Object {}}
+            id="NODE_LAYOUT"
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}}
       />
       <Connect(NodeBucket)
-        prompt={
-          Object {
-            "sociogram": Object {
-              "background": Object {},
-            },
-          }
-        }
-        stage={Object {}}
+            prompt={
+                  Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
+            }
+            stage={Object {}}
       />
-    </div>,
+</div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -88,14 +88,14 @@ ShallowWrapper {
       "_context": Object {},
       "_currentElement": <Sociogram
         prompt={
-          Object {
-            "sociogram": Object {
-              "background": Object {},
-            },
-          }
+                Object {
+                        "sociogram": Object {
+                          "background": Object {},
+                        },
+                      }
         }
         stage={Object {}}
-      />,
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -132,75 +132,75 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="sociogram"
-        >
+>
           <Connect(Background)
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(ReactComponent)
-            id="NODE_LAYOUT"
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    id="NODE_LAYOUT"
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(NodeBucket)
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
-        </div>,
+</div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="sociogram"
-        >
+>
           <Connect(Background)
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(ReactComponent)
-            id="NODE_LAYOUT"
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    id="NODE_LAYOUT"
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
           <Connect(NodeBucket)
-            prompt={
-              Object {
-                "sociogram": Object {
-                  "background": Object {},
-                },
-              }
-            }
-            stage={Object {}}
+                    prompt={
+                              Object {
+                                        "sociogram": Object {
+                                          "background": Object {},
+                                        },
+                                      }
+                    }
+                    stage={Object {}}
           />
-        </div>,
+</div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -214,13 +214,13 @@ ShallowWrapper {
   "root": [Circular],
   "unrendered": <Sociogram
     prompt={
-      Object {
-        "sociogram": Object {
-          "background": Object {},
-        },
-      }
+        Object {
+            "sociogram": Object {
+              "background": Object {},
+            },
+          }
     }
     stage={Object {}}
-  />,
+/>,
 }
 `;

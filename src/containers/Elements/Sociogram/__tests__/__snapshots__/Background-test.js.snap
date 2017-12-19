@@ -10,29 +10,29 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="sociogram-background"
-  >
+>
     <div
-      className="sociogram-background__image"
-      style={
-        Object {
-          "backgroundImage": "url(map.png)",
+        className="sociogram-background__image"
+        style={
+            Object {
+                "backgroundImage": "url(map.png)",
+              }
         }
-      }
     />
-  </div>,
+</div>,
   "nodes": Array [
     <div
       className="sociogram-background"
-    >
+>
       <div
-        className="sociogram-background__image"
-        style={
-          Object {
-            "backgroundImage": "url(map.png)",
-          }
-        }
+            className="sociogram-background__image"
+            style={
+                  Object {
+                        "backgroundImage": "url(map.png)",
+                      }
+            }
       />
-    </div>,
+</div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -54,7 +54,7 @@ ShallowWrapper {
         nodeBinSortOrder={Object {}}
         selectMode=""
         skewedTowardCenter={false}
-      />,
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -98,29 +98,29 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="sociogram-background"
-        >
+>
           <div
-            className="sociogram-background__image"
-            style={
-              Object {
-                "backgroundImage": "url(map.png)",
-              }
-            }
+                    className="sociogram-background__image"
+                    style={
+                              Object {
+                                        "backgroundImage": "url(map.png)",
+                                      }
+                    }
           />
-        </div>,
+</div>,
         "_debugID": 4,
         "_renderedOutput": <div
           className="sociogram-background"
-        >
+>
           <div
-            className="sociogram-background__image"
-            style={
-              Object {
-                "backgroundImage": "url(map.png)",
-              }
-            }
+                    className="sociogram-background__image"
+                    style={
+                              Object {
+                                        "backgroundImage": "url(map.png)",
+                                      }
+                    }
           />
-        </div>,
+</div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -146,7 +146,7 @@ ShallowWrapper {
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
-  />,
+/>,
 }
 `;
 
@@ -160,21 +160,21 @@ ShallowWrapper {
   "length": 1,
   "node": <div
     className="sociogram-background"
-  >
+>
     <Radar
-      n={4}
-      skewed={true}
+        n={4}
+        skewed={true}
     />
-  </div>,
+</div>,
   "nodes": Array [
     <div
       className="sociogram-background"
-    >
+>
       <Radar
-        n={4}
-        skewed={true}
+            n={4}
+            skewed={true}
       />
-    </div>,
+</div>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -196,7 +196,7 @@ ShallowWrapper {
         nodeBinSortOrder={Object {}}
         selectMode=""
         skewedTowardCenter={true}
-      />,
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -240,21 +240,21 @@ ShallowWrapper {
       "_renderedComponent": NoopInternalComponent {
         "_currentElement": <div
           className="sociogram-background"
-        >
+>
           <Radar
-            n={4}
-            skewed={true}
+                    n={4}
+                    skewed={true}
           />
-        </div>,
+</div>,
         "_debugID": 2,
         "_renderedOutput": <div
           className="sociogram-background"
-        >
+>
           <Radar
-            n={4}
-            skewed={true}
+                    n={4}
+                    skewed={true}
           />
-        </div>,
+</div>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -280,6 +280,6 @@ ShallowWrapper {
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={true}
-  />,
+/>,
 }
 `;

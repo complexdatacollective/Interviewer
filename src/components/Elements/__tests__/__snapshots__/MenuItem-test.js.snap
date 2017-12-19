@@ -13,30 +13,30 @@ ShallowWrapper {
     onClick={[Function]}
     role="menuitem"
     tabIndex={0}
-  >
+>
     <Icon
-      className=""
-      color=""
-      name="menu-default-interface"
-      style={Object {}}
+        className=""
+        color=""
+        name="menu-default-interface"
+        style={Object {}}
     />
     title
-  </a>,
+</a>,
   "nodes": Array [
     <a
       className="menu__menuitem menu__menuitem--primary"
       onClick={[Function]}
       role="menuitem"
       tabIndex={0}
-    >
+>
       <Icon
-        className=""
-        color=""
-        name="menu-default-interface"
-        style={Object {}}
+            className=""
+            color=""
+            name="menu-default-interface"
+            style={Object {}}
       />
       title
-    </a>,
+</a>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -53,7 +53,7 @@ ShallowWrapper {
         menuType="primary"
         onClick={[Function]}
         to="linkyLink"
-      />,
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -95,30 +95,30 @@ ShallowWrapper {
           onClick={[Function]}
           role="menuitem"
           tabIndex={0}
-        >
+>
           <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
+                    className=""
+                    color=""
+                    name="menu-default-interface"
+                    style={Object {}}
           />
           title
-        </a>,
+</a>,
         "_debugID": 2,
         "_renderedOutput": <a
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
           tabIndex={0}
-        >
+>
           <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
+                    className=""
+                    color=""
+                    name="menu-default-interface"
+                    style={Object {}}
           />
           title
-        </a>,
+</a>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -139,7 +139,7 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     to="linkyLink"
-  />,
+/>,
 }
 `;
 
@@ -156,30 +156,30 @@ ShallowWrapper {
     onClick={[Function]}
     role="menuitem"
     tabIndex={0}
-  >
+>
     <Icon
-      className=""
-      color=""
-      name="menu-default-interface"
-      style={Object {}}
+        className=""
+        color=""
+        name="menu-default-interface"
+        style={Object {}}
     />
     title
-  </a>,
+</a>,
   "nodes": Array [
     <a
       className="menu__menuitem menu__menuitem--primary"
       onClick={[Function]}
       role="menuitem"
       tabIndex={0}
-    >
+>
       <Icon
-        className=""
-        color=""
-        name="menu-default-interface"
-        style={Object {}}
+            className=""
+            color=""
+            name="menu-default-interface"
+            style={Object {}}
       />
       title
-    </a>,
+</a>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -195,7 +195,7 @@ ShallowWrapper {
         menuType="primary"
         onClick={[Function]}
         to="linkyLink"
-      />,
+/>,
       "_debugID": 3,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -236,30 +236,30 @@ ShallowWrapper {
           onClick={[Function]}
           role="menuitem"
           tabIndex={0}
-        >
+>
           <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
+                    className=""
+                    color=""
+                    name="menu-default-interface"
+                    style={Object {}}
           />
           title
-        </a>,
+</a>,
         "_debugID": 4,
         "_renderedOutput": <a
           className="menu__menuitem menu__menuitem--primary"
           onClick={[Function]}
           role="menuitem"
           tabIndex={0}
-        >
+>
           <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
+                    className=""
+                    color=""
+                    name="menu-default-interface"
+                    style={Object {}}
           />
           title
-        </a>,
+</a>,
       },
       "_renderedNodeType": 0,
       "_rootNodeID": 0,
@@ -279,6 +279,6 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     to="linkyLink"
-  />,
+/>,
 }
 `;

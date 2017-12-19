@@ -12,81 +12,35 @@ ShallowWrapper {
     className="modal--fullscreen"
     name="baz"
     title="The form title"
-  >
+>
     <FormWizard
-      addAnother={false}
-      autoFocus={true}
-      closeModal={[Function]}
-      controls={
-        Array [
-          false,
-          <Button
-            aria-label="Submit"
-            color=""
-            content=""
-            icon=""
-            iconPosition="right"
-            onClick={[Function]}
-            size=""
-          >
-            Submit
-          </Button>,
-        ]
-      }
-      entity="node"
-      fields={
-        Array [
-          Object {
-            "component": "TextInput",
-            "variable": "foo",
-          },
-        ]
-      }
-      form="baz"
-      initialValues={Object {}}
-      name="baz"
-      node={Object {}}
-      onSubmit={[Function]}
-      openModal={[Function]}
-      resetValues={[Function]}
-      title="The form title"
-      type="person"
-    />
-  </Connect(Modal)>,
-  "nodes": Array [
-    <Connect(Modal)
-      className="modal--fullscreen"
-      name="baz"
-      title="The form title"
-    >
-      <FormWizard
         addAnother={false}
         autoFocus={true}
         closeModal={[Function]}
         controls={
-          Array [
-            false,
-            <Button
-              aria-label="Submit"
-              color=""
-              content=""
-              icon=""
-              iconPosition="right"
-              onClick={[Function]}
-              size=""
+            Array [
+                false,
+                <Button
+                  aria-label="Submit"
+                  color=""
+                  content=""
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size=""
             >
-              Submit
+                  Submit
             </Button>,
-          ]
+              ]
         }
         entity="node"
         fields={
-          Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ]
+            Array [
+                Object {
+                  "component": "TextInput",
+                  "variable": "foo",
+                },
+              ]
         }
         form="baz"
         initialValues={Object {}}
@@ -97,8 +51,54 @@ ShallowWrapper {
         resetValues={[Function]}
         title="The form title"
         type="person"
+    />
+</Connect(Modal)>,
+  "nodes": Array [
+    <Connect(Modal)
+      className="modal--fullscreen"
+      name="baz"
+      title="The form title"
+>
+      <FormWizard
+            addAnother={false}
+            autoFocus={true}
+            closeModal={[Function]}
+            controls={
+                  Array [
+                        false,
+                        <Button
+                          aria-label="Submit"
+                          color=""
+                          content=""
+                          icon=""
+                          iconPosition="right"
+                          onClick={[Function]}
+                          size=""
+                  >
+                          Submit
+                  </Button>,
+                      ]
+            }
+            entity="node"
+            fields={
+                  Array [
+                        Object {
+                          "component": "TextInput",
+                          "variable": "foo",
+                        },
+                      ]
+            }
+            form="baz"
+            initialValues={Object {}}
+            name="baz"
+            node={Object {}}
+            onSubmit={[Function]}
+            openModal={[Function]}
+            resetValues={[Function]}
+            title="The form title"
+            type="person"
       />
-    </Connect(Modal)>,
+</Connect(Modal)>,
   ],
   "options": Object {},
   "renderer": ReactShallowRenderer {
@@ -111,12 +111,12 @@ ShallowWrapper {
         closeModal={[Function]}
         entity="node"
         fields={
-          Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ]
+                Array [
+                        Object {
+                          "component": "TextInput",
+                          "variable": "foo",
+                        },
+                      ]
         }
         initialValues={Object {}}
         name="baz"
@@ -126,7 +126,7 @@ ShallowWrapper {
         resetValues={[Function]}
         title="The form title"
         type="person"
-      />,
+/>,
       "_debugID": 1,
       "_hostContainerInfo": null,
       "_hostParent": null,
@@ -182,93 +182,93 @@ ShallowWrapper {
           className="modal--fullscreen"
           name="baz"
           title="The form title"
-        >
+>
           <FormWizard
-            addAnother={false}
-            autoFocus={true}
-            closeModal={[Function]}
-            controls={
-              Array [
-                false,
-                <Button
-                  aria-label="Submit"
-                  color=""
-                  content=""
-                  icon=""
-                  iconPosition="right"
-                  onClick={[Function]}
-                  size=""
-                >
-                  Submit
-                </Button>,
-              ]
-            }
-            entity="node"
-            fields={
-              Array [
-                Object {
-                  "component": "TextInput",
-                  "variable": "foo",
-                },
-              ]
-            }
-            form="baz"
-            initialValues={Object {}}
-            name="baz"
-            node={Object {}}
-            onSubmit={[Function]}
-            openModal={[Function]}
-            resetValues={[Function]}
-            title="The form title"
-            type="person"
+                    addAnother={false}
+                    autoFocus={true}
+                    closeModal={[Function]}
+                    controls={
+                              Array [
+                                        false,
+                                        <Button
+                                          aria-label="Submit"
+                                          color=""
+                                          content=""
+                                          icon=""
+                                          iconPosition="right"
+                                          onClick={[Function]}
+                                          size=""
+                              >
+                                          Submit
+                              </Button>,
+                                      ]
+                    }
+                    entity="node"
+                    fields={
+                              Array [
+                                        Object {
+                                          "component": "TextInput",
+                                          "variable": "foo",
+                                        },
+                                      ]
+                    }
+                    form="baz"
+                    initialValues={Object {}}
+                    name="baz"
+                    node={Object {}}
+                    onSubmit={[Function]}
+                    openModal={[Function]}
+                    resetValues={[Function]}
+                    title="The form title"
+                    type="person"
           />
-        </Connect(Modal)>,
+</Connect(Modal)>,
         "_debugID": 2,
         "_renderedOutput": <Connect(Modal)
           className="modal--fullscreen"
           name="baz"
           title="The form title"
-        >
+>
           <FormWizard
-            addAnother={false}
-            autoFocus={true}
-            closeModal={[Function]}
-            controls={
-              Array [
-                false,
-                <Button
-                  aria-label="Submit"
-                  color=""
-                  content=""
-                  icon=""
-                  iconPosition="right"
-                  onClick={[Function]}
-                  size=""
-                >
-                  Submit
-                </Button>,
-              ]
-            }
-            entity="node"
-            fields={
-              Array [
-                Object {
-                  "component": "TextInput",
-                  "variable": "foo",
-                },
-              ]
-            }
-            form="baz"
-            initialValues={Object {}}
-            name="baz"
-            node={Object {}}
-            onSubmit={[Function]}
-            openModal={[Function]}
-            resetValues={[Function]}
-            title="The form title"
-            type="person"
+                    addAnother={false}
+                    autoFocus={true}
+                    closeModal={[Function]}
+                    controls={
+                              Array [
+                                        false,
+                                        <Button
+                                          aria-label="Submit"
+                                          color=""
+                                          content=""
+                                          icon=""
+                                          iconPosition="right"
+                                          onClick={[Function]}
+                                          size=""
+                              >
+                                          Submit
+                              </Button>,
+                                      ]
+                    }
+                    entity="node"
+                    fields={
+                              Array [
+                                        Object {
+                                          "component": "TextInput",
+                                          "variable": "foo",
+                                        },
+                                      ]
+                    }
+                    form="baz"
+                    initialValues={Object {}}
+                    name="baz"
+                    node={Object {}}
+                    onSubmit={[Function]}
+                    openModal={[Function]}
+                    resetValues={[Function]}
+                    title="The form title"
+                    type="person"
           />
-        </Connect(Modal)>,
+</Connect(Modal)>,
       },
       "_renderedNodeType": 1,
       "_rootNodeID": 0,
@@ -285,12 +285,12 @@ ShallowWrapper {
     closeModal={[Function]}
     entity="node"
     fields={
-      Array [
-        Object {
-          "component": "TextInput",
-          "variable": "foo",
-        },
-      ]
+        Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ]
     }
     initialValues={Object {}}
     name="baz"
@@ -300,6 +300,6 @@ ShallowWrapper {
     resetValues={[Function]}
     title="The form title"
     type="person"
-  />,
+/>,
 }
 `;
