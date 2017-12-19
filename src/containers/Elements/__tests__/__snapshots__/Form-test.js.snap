@@ -14,7 +14,7 @@ ShallowWrapper {
     form="form1"
     meta={
       Object {
-        "fields": Object {},
+        "fields": undefined,
         "values": undefined,
       }
     }
@@ -35,7 +35,7 @@ ShallowWrapper {
       form="form1"
       meta={
         Object {
-          "fields": Object {},
+          "fields": undefined,
           "values": undefined,
         }
       }
@@ -92,7 +92,7 @@ ShallowWrapper {
           "fields": Array [],
           "form": "form1",
           "meta": Object {
-            "fields": Object {},
+            "fields": undefined,
             "values": undefined,
           },
           "store": Object {
@@ -121,7 +121,7 @@ ShallowWrapper {
           form="form1"
           meta={
             Object {
-              "fields": Object {},
+              "fields": undefined,
               "values": undefined,
             }
           }
@@ -147,7 +147,7 @@ ShallowWrapper {
         "stateProps": Object {
           "fields": Array [],
           "meta": Object {
-            "fields": Object {},
+            "fields": undefined,
             "values": undefined,
           },
         },
@@ -184,7 +184,7 @@ ShallowWrapper {
           form="form1"
           meta={
             Object {
-              "fields": Object {},
+              "fields": undefined,
               "values": undefined,
             }
           }
@@ -205,7 +205,7 @@ ShallowWrapper {
           form="form1"
           meta={
             Object {
-              "fields": Object {},
+              "fields": undefined,
               "values": undefined,
             }
           }
