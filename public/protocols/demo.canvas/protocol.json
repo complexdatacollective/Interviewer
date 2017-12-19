@@ -662,7 +662,6 @@
       "id": "namegenroster1",
       "type": "NameGeneratorAutoComplete",
       "label": "NG Classmates",
-      "form": "autocompletingSearchForm",
       "prompts": [
         {
           "id": "7cl",
