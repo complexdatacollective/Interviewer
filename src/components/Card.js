@@ -12,12 +12,15 @@ const Card = (props) => {
     selected,
   } = props;
 
-  const attributes = Object.entries(details).map(
-    ([key, value]) => (
-      <h5 key={key} className="card__attribute">
-        {key}: {value}
-      </h5>
-    ),
+  const attributes = details.map(
+    (detail, index) => {
+      const key = Object.keys(detail)[0];
+      return (
+        <h5 key={index} className="card__attribute">
+          {key}: {detail[key]}
+        </h5>
+      );
+    },
   );
 
   const classes = cx({
@@ -53,13 +56,13 @@ const Card = (props) => {
 };
 
 Card.propTypes = {
-  details: PropTypes.object,
+  details: PropTypes.array,
   label: PropTypes.string,
   selected: PropTypes.bool,
 };
 
 Card.defaultProps = {
-  details: {},
+  details: [],
   label: '',
   selected: false,
 };

@@ -19,6 +19,7 @@ const forms = {
 
 // Render method for the node labels
 const label = node => `${node.nickname}`;
+const details = node => [{ name: `${node.name}` }, { age: `${node.age}` }];
 
 
 /**
@@ -119,8 +120,9 @@ class NameGenerator extends Component {
               onSelect={this.onSelectNode}
             />
             <CardList
-              nodes={nodesForPrompt}
+              details={details}
               label={label}
+              nodes={nodesForPrompt}
             />
           </div>
         </div>

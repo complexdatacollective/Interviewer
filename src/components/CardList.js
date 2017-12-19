@@ -11,6 +11,10 @@ import { Card } from '.';
 
 const EnhancedCard = selectable(Card);
 
+/**
+  * Card List
+  * @extends Component
+  */
 class CardList extends Component {
   constructor(props) {
     super(props);
@@ -20,8 +24,15 @@ class CardList extends Component {
     };
   }
 
+  /**
+    * @param {object} node
+    */
   selected = node => !!this.state.selected.find(current => current.uid === node.uid);
 
+  /**
+    * toggle whether the card is selected or not.
+    * @param {object} node
+    */
   toggleCard = (node) => {
     const index = this.state.selected.findIndex(current => current.uid === node.uid);
     if (index !== -1) {
@@ -37,8 +48,9 @@ class CardList extends Component {
 
   render() {
     const {
-      nodes,
+      details,
       label,
+      nodes,
     } = this.props;
 
     return (
@@ -57,7 +69,7 @@ class CardList extends Component {
               <EnhancedCard
                 label={label(node)}
                 selected={this.selected(node)}
-                details={node}
+                details={details(node)}
                 onSelected={() => this.toggleCard(node)}
               />
             </span>
@@ -69,13 +81,15 @@ class CardList extends Component {
 }
 
 CardList.propTypes = {
-  nodes: PropTypes.array.isRequired,
+  details: PropTypes.func,
   label: PropTypes.func,
+  nodes: PropTypes.array.isRequired,
 };
 
 CardList.defaultProps = {
-  nodes: [],
+  details: () => (''),
   label: () => (''),
+  nodes: [],
 };
 
 function mapStateToProps(state) {
