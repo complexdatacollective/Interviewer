@@ -55,15 +55,20 @@ class NameGeneratorAutoComplete extends Component {
       toggleSearch,
     } = this.props;
 
+    const baseClass = 'name-generator-auto-complete-interface';
+
     const searchBtnClasses = cx(
-      'name-generator-auto-complete-interface__search-button',
+      `${baseClass}__search-button`,
       {
-        'name-generator-auto-complete-interface__search-button--hidden': searchIsOpen,
+        [`${baseClass}__search-button--hidden`]: searchIsOpen,
       },
     );
 
+    // TODO: fix ui/protocol discrepancy and/or move normalization elsewhere
+    const iconNodeName = nodeType === 'venue' ? 'place' : nodeType;
+
     return (
-      <div className="name-generator-auto-complete-interface">
+      <div className={baseClass}>
         <div className="name-generator-interface__prompt">
           <PromptSwiper
             forward={promptForward}
@@ -73,7 +78,7 @@ class NameGeneratorAutoComplete extends Component {
           />
         </div>
 
-        <div className="name-generator-auto-complete-interface__nodes">
+        <div className={`${baseClass}__nodes`}>
           <NodeList
             id="AUTOCOMPLETE_NODE_LIST"
             nodes={nodesForPrompt}
@@ -81,9 +86,8 @@ class NameGeneratorAutoComplete extends Component {
           />
         </div>
 
-        { /* TODO: need a more generic icon, or customizability */ }
         <Icon
-          name="add-a-person"
+          name={`add-a-${iconNodeName}`}
           onClick={toggleSearch}
           className={searchBtnClasses}
         />
