@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { animation } from 'network-canvas-ui';
 import StaggeredTransitionGroup from '../utils/StaggeredTransitionGroup';
 import { scrollable, selectable } from '../behaviours';
-import { protocolRegistry } from '../selectors/rehydrate';
 import { Card } from '.';
 
 const EnhancedCard = selectable(Card);
@@ -92,14 +90,7 @@ CardList.defaultProps = {
   nodes: [],
 };
 
-function mapStateToProps(state) {
-  return {
-    variables: protocolRegistry(state).node.person.variables,
-  };
-}
-
 export default compose(
   scrollable,
-  connect(mapStateToProps),
 )(CardList);
 
