@@ -39,10 +39,12 @@ class NodePanels extends PureComponent {
     newNodeAttributes: PropTypes.object.isRequired,
     isDragging: PropTypes.bool,
     panels: PropTypes.array,
+    meta: PropTypes.object,
   };
 
   static defaultProps = {
     panels: [],
+    meta: {},
     isDragging: false,
   };
 
@@ -56,8 +58,10 @@ class NodePanels extends PureComponent {
 
   isPanelEmpty = index => this.props.panels[index].nodes.length === 0;
 
+  isPanelCompatible = index => this.props.panels[index].accepts({ meta: this.props.meta });
+
   isPanelOpen = index =>
-    this.props.isDragging || !this.isPanelEmpty(index);
+    (this.props.isDragging && this.isPanelCompatible(index)) || !this.isPanelEmpty(index);
 
   isAnyPanelOpen = () =>
     this.props.panels
@@ -175,5 +179,5 @@ export { NodePanels };
 export default compose(
   configurePanels,
   connect(makeMapStateToProps, mapDispatchToProps),
-  MonitorDragSource(['isDragging']),
+  MonitorDragSource(['isDragging', 'meta']),
 )(NodePanels);

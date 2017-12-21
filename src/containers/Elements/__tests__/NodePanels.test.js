@@ -7,8 +7,8 @@ import { NodePanels } from '../../Elements/NodePanels';
 const mockProps = {
   toggleNodeAttributes: () => {},
   removeNode: () => {},
-  activePromptAttributes: () => {},
-  newNodeAttributes: () => {},
+  activePromptAttributes: {},
+  newNodeAttributes: {},
 };
 
 describe('<NodePanels />', () => {

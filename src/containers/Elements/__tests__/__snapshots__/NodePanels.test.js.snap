@@ -27,9 +27,10 @@ ShallowWrapper {
       "_compositeType": 1,
       "_context": Object {},
       "_currentElement": <NodePanels
-        activePromptAttributes={[Function]}
+        activePromptAttributes={Object {}}
         isDragging={false}
-        newNodeAttributes={[Function]}
+        meta={Object {}}
+        newNodeAttributes={Object {}}
         panels={Array []}
         removeNode={[Function]}
         toggleNodeAttributes={[Function]}
@@ -41,13 +42,15 @@ ShallowWrapper {
         "_reactInternalInstance": [Circular],
         "context": Object {},
         "isAnyPanelOpen": [Function],
+        "isPanelCompatible": [Function],
         "isPanelEmpty": [Function],
         "isPanelOpen": [Function],
         "onDrop": [Function],
         "props": Object {
-          "activePromptAttributes": [Function],
+          "activePromptAttributes": Object {},
           "isDragging": false,
-          "newNodeAttributes": [Function],
+          "meta": Object {},
+          "newNodeAttributes": Object {},
           "panels": Array [],
           "removeNode": [Function],
           "toggleNodeAttributes": [Function],
@@ -96,9 +99,10 @@ ShallowWrapper {
   },
   "root": [Circular],
   "unrendered": <NodePanels
-    activePromptAttributes={[Function]}
+    activePromptAttributes={Object {}}
     isDragging={false}
-    newNodeAttributes={[Function]}
+    meta={Object {}}
+    newNodeAttributes={Object {}}
     panels={Array []}
     removeNode={[Function]}
     toggleNodeAttributes={[Function]}
