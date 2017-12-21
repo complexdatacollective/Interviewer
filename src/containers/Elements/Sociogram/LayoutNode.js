@@ -20,16 +20,14 @@ class LayoutNode extends PureComponent {
       allowPositioning,
       allowSelect,
       layoutVariable,
-      areaWidth,
-      areaHeight,
     } = this.props;
 
     const { x, y } = node[layoutVariable];
 
     const styles = {
-      left: 0,
-      top: 0,
-      transform: `translate(calc(${x * areaWidth}px - 50%), calc(${y * areaHeight}px - 50%))`,
+      left: `${100 * x}%`,
+      top: `${100 * y}%`,
+      transform: 'translate(-50%, -50%)',
     };
 
     return (

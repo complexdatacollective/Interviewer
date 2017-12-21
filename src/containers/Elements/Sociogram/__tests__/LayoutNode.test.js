@@ -24,14 +24,14 @@ describe('<LayoutNode />', () => {
     expect(component).toMatchSnapshot();
   });
 
-  it('positions using translate', () => {
+  it('positions using translate/top/left', () => {
     const component = shallow(<LayoutNode {...mockProps} />);
 
     expect(component.prop('style')).toEqual(
       {
-        left: 0,
-        top: 0,
-        transform: 'translate(calc(77px - 50%), calc(8px - 50%))',
+        left: '77%',
+        top: '20%',
+        transform: 'translate(-50%, -50%)',
       },
     );
   });

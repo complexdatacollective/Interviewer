@@ -12,9 +12,9 @@ ShallowWrapper {
     className="node-layout__node"
     style={
         Object {
-            "left": 0,
-            "top": 0,
-            "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+            "left": "77%",
+            "top": "20%",
+            "transform": "translate(-50%, -50%)",
           }
     }
 >
@@ -39,9 +39,9 @@ ShallowWrapper {
       className="node-layout__node"
       style={
             Object {
-                  "left": 0,
-                  "top": 0,
-                  "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+                  "left": "77%",
+                  "top": "20%",
+                  "transform": "translate(-50%, -50%)",
                 }
       }
 >
@@ -136,9 +136,9 @@ ShallowWrapper {
           className="node-layout__node"
           style={
                     Object {
-                              "left": 0,
-                              "top": 0,
-                              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+                              "left": "77%",
+                              "top": "20%",
+                              "transform": "translate(-50%, -50%)",
                             }
           }
 >
@@ -163,9 +163,9 @@ ShallowWrapper {
           className="node-layout__node"
           style={
                     Object {
-                              "left": 0,
-                              "top": 0,
-                              "transform": "translate(calc(77px - 50%), calc(8px - 50%))",
+                              "left": "77%",
+                              "top": "20%",
+                              "transform": "translate(-50%, -50%)",
                             }
           }
 >
