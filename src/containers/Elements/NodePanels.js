@@ -26,6 +26,8 @@ const getHighlight = (highlight, panelNumber) => {
   return null;
 };
 
+const label = node => `${node.nickname}`;
+
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
@@ -52,52 +54,22 @@ class NodePanels extends PureComponent {
     }
   }
 
-  panelHasNodes = index => this.props.panels[index].nodes.length;
+  isPanelEmpty = index => this.props.panels[index].nodes.length === 0;
 
-  panelIsOpen = index =>
-    this.props.isDragging || this.panelHasNodes(index) > 0;
+  isPanelOpen = index =>
+    this.props.isDragging || !this.isPanelEmpty(index);
 
-  anyPanelIsOpen = () =>
+  isAnyPanelOpen = () =>
     this.props.panels
-      .map((panel, index) => this.panelIsOpen(index))
+      .map((panel, index) => this.isPanelOpen(index))
       .reduce((memo, panelOpen) => memo || panelOpen, false);
-
-  configureNodeList = ({ dataSource, originNodeIds, ...nodeListOptions }) => {
-    const {
-      newNodeAttributes: {
-        stageId,
-        promptId,
-      },
-    } = this.props;
-
-    const label = node => `${node.nickname}`;
-
-    // external, needs to check list
-    // otherwise check created at details.
-    const accepts = (dataSource === 'existing') ?
-      ({ meta }) => (
-        meta.itemType === 'EXISTING_NODE' &&
-        (meta.stageId !== stageId || meta.promptId !== promptId)
-      ) :
-      ({ meta }) => (
-        meta.itemType === 'EXISTING_NODE' &&
-        includes(originNodeIds, meta.uid)
-      );
-
-    return {
-      ...nodeListOptions,
-      onDrop: item => this.onDrop(item, dataSource),
-      itemType: 'NEW_NODE',
-      accepts,
-      label,
-    };
-  }
 
   renderNodePanel = (panel, index) => {
     const {
       title,
       highlight,
-      ...nodeListOptions
+      dataSource,
+      ...nodeListProps
     } = panel;
 
     return (
@@ -105,11 +77,14 @@ class NodePanels extends PureComponent {
         title={title}
         key={index}
         highlight={getHighlight(highlight, index)}
-        minimise={!this.panelIsOpen(index)}
+        minimise={!this.isPanelOpen(index)}
       >
         <NodeList
           id={`PANEL_NODE_LIST_${index}`}
-          {...this.configureNodeList(nodeListOptions)}
+          {...nodeListProps}
+          label={label}
+          itemType="NEW_NODE"
+          onDrop={item => this.onDrop(item, dataSource)}
         />
       </Panel>
     );
@@ -117,7 +92,7 @@ class NodePanels extends PureComponent {
 
   render() {
     return (
-      <Panels minimise={!this.anyPanelIsOpen()}>
+      <Panels minimise={!this.isAnyPanelOpen()}>
         {this.props.panels.map(this.renderNodePanel)}
       </Panels>
     );
@@ -141,32 +116,49 @@ function makeMapStateToProps() {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
-    const nodes = networkNodes(state);
+    const allNodes = networkNodes(state);
     const existingNodes = networkNodesForOtherPrompts(state, props);
     const externalData = getExternalData(state);
+    const newNodeAttributes = getPromptNodeAttributes(state, props);
 
-    const panels = props.panels.map(
-      panel => ({
+    const panels = props.panels.map((panel) => {
+      const originNodeIds = getOriginNodeIds({
+        existingNodes,
+        externalData,
+        dataSource: panel.dataSource,
+      });
+
+      const nodes = getNodesForDataSource({
+        nodes: allNodes,
+        existingNodes,
+        externalData,
+        dataSource: panel.dataSource,
+      });
+
+      const accepts = (panel.dataSource === 'existing') ?
+        ({ meta }) => (
+          meta.itemType === 'EXISTING_NODE' &&
+          (meta.stageId !== newNodeAttributes.stageId ||
+            meta.promptId !== newNodeAttributes.promptId)
+        ) :
+        ({ meta }) => (
+          meta.itemType === 'EXISTING_NODE' &&
+          includes(originNodeIds, meta.uid)
+        );
+
+      return {
         ...panel,
-        originNodeIds: getOriginNodeIds({
-          existingNodes,
-          externalData,
-          dataSource: panel.dataSource,
-        }),
-        nodes: getNodesForDataSource({
-          nodes,
-          existingNodes,
-          externalData,
-          dataSource: panel.dataSource,
-        }),
-      }),
-    );
+        originNodeIds,
+        nodes,
+        accepts,
+      };
+    });
 
     return {
       isDragging: state.draggable.isDragging,
       activePromptAttributes: props.prompt.additionalAttributes,
       panels,
-      newNodeAttributes: getPromptNodeAttributes(state, props),
+      newNodeAttributes,
     };
   };
 }
@@ -177,6 +169,8 @@ function mapDispatchToProps(dispatch) {
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
 }
+
+export { NodePanels };
 
 export default compose(
   configurePanels,

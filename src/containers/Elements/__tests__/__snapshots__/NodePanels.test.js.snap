@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NodePanels /> renders ok 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <Panels
+    minimise={true}
+>
+    
+</Panels>,
+  "nodes": Array [
+    <Panels
+      minimise={true}
+>
+      
+</Panels>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 1,
+      "_context": Object {},
+      "_currentElement": <NodePanels
+        activePromptAttributes={[Function]}
+        isDragging={false}
+        newNodeAttributes={[Function]}
+        panels={Array []}
+        removeNode={[Function]}
+        toggleNodeAttributes={[Function]}
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": NodePanels {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "isAnyPanelOpen": [Function],
+        "isPanelEmpty": [Function],
+        "isPanelOpen": [Function],
+        "onDrop": [Function],
+        "props": Object {
+          "activePromptAttributes": [Function],
+          "isDragging": false,
+          "newNodeAttributes": [Function],
+          "panels": Array [],
+          "removeNode": [Function],
+          "toggleNodeAttributes": [Function],
+        },
+        "refs": Object {},
+        "renderNodePanel": [Function],
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <Panels
+          minimise={true}
+>
+          
+</Panels>,
+        "_debugID": 2,
+        "_renderedOutput": <Panels
+          minimise={true}
+>
+          
+</Panels>,
+      },
+      "_renderedNodeType": 1,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <NodePanels
+    activePromptAttributes={[Function]}
+    isDragging={false}
+    newNodeAttributes={[Function]}
+    panels={Array []}
+    removeNode={[Function]}
+    toggleNodeAttributes={[Function]}
+/>,
+}
+`;
