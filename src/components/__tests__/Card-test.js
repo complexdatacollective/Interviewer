@@ -7,7 +7,7 @@ import Card from '../Card';
 describe('Card component', () => {
   it('renders unselected card', () => {
     const component = shallow(
-      <Card selected={false} label="name" details={[{ age: "33" }]} />,
+      <Card selected={false} label="name" details={[{ age: '33' }]} />,
     );
 
     expect(component).toMatchSnapshot();
@@ -15,7 +15,7 @@ describe('Card component', () => {
 
   it('renders selected card', () => {
     const component = shallow(
-      <Card selected label="name" details={[{ age: "33" }, { fullname: "full name"}]} />,
+      <Card selected label="name" details={[{ age: '33' }, { fullname: 'full name' }]} />,
     );
 
     expect(component).toMatchSnapshot();
