@@ -2,6 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
+import { getExternalData } from './protocol';
 
 // Selectors that are specific to the name generator
 
@@ -12,6 +13,15 @@ These selectors assume the following props:
 */
 
 // MemoedSelectors
+
+const getDatasourceKey = (_, props) => props.prompt.dataSource;
+// const getSortOrder = (_, props) => props.sortOrder;
+
+export const getDataByPrompt = createSelector(
+  getExternalData,
+  getDatasourceKey,
+  (externalData, key) => externalData[key].nodes,
+);
 
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();

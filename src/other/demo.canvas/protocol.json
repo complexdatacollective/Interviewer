@@ -180,6 +180,45 @@
           "name": "Local Bar"
         }
       ]
+    },
+    "schoolPupils": {
+      "nodes": [
+        {
+          "uid": "person_1",
+          "type": "person",
+          "name": "Anita",
+          "nickname": "Annie",
+          "age": "23"
+        },
+        {
+          "uid": "person_2",
+          "type": "person",
+          "name": "Barry",
+          "nickname": "Baz",
+          "age": "23"
+        },
+        {
+          "uid": "person_3",
+          "type": "person",
+          "name": "Carlito",
+          "nickname": "Carl",
+          "age": "23"
+        },
+        {
+          "uid": "person_4",
+          "type": "person",
+          "name": "Dee",
+          "nickname": "Dee",
+          "age": "23"
+        },
+        {
+          "uid": "person_5",
+          "type": "person",
+          "name": "Eugine",
+          "nickname": "Eu",
+          "age": "23"
+        }
+      ]
     }
   },
   "forms": {
@@ -267,6 +306,30 @@
           "text": "Within the past 2 weeks, who has provided advice?",
           "additionalAttributes": {
             "advice_friend": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "namegenroster2",
+      "type": "NameGeneratorList",
+      "label": "NG Classmates",
+      "form": "person",
+      "prompts": [
+        {
+          "id": "7cl",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": {
+            "special_category": 56,
+            "close_friend": true
+          },
+          "dataSource": "previousInterview",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "sortOrder": {
+            "nickname": "DESC"
           }
         }
       ]
