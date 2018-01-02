@@ -107,10 +107,12 @@ class Field extends PureComponent {
     this.component = (typeof props.component === 'string') ? makeRenderInput(props.component) : props.component;
   }
 
+  componentWillMount() {
+    this.validate = getValidation(this.props.validation);
+  }
+
   render() {
     const { label, name, validation, ...rest } = this.props;
-
-    const validate = getValidation(validation);
 
     return (
       <ReduxFormField
@@ -118,7 +120,7 @@ class Field extends PureComponent {
         name={name}
         label={label}
         component={this.component}
-        validate={validate}
+        validate={this.validate}
       />
     );
   }

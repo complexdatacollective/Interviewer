@@ -118,6 +118,6 @@ export default compose(
     destroyOnUnmount: false, // need this false to make it validate across wizard
     enableReinitialize: true,
     forceUnregisterOnUnmount: true,
-    keepDirtyOnReinitialize: true,
+    keepDirtyOnReinitialize: false,
   }),
 )(Form);

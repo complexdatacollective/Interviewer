@@ -2,135 +2,9 @@
 
 exports[`MenuItem component renders menu item with label 1`] = `
 ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
   "length": 1,
-  "node": <a
-    className="menu__menuitem menu__menuitem--primary"
-    onClick={[Function]}
-    role="menuitem"
-    tabIndex={0}
->
-    <Icon
-        className=""
-        color=""
-        name="menu-default-interface"
-        style={Object {}}
-    />
-    title
-</a>,
-  "nodes": Array [
-    <a
-      className="menu__menuitem menu__menuitem--primary"
-      onClick={[Function]}
-      role="menuitem"
-      tabIndex={0}
->
-      <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
-      />
-      title
-</a>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
-      "_context": Object {},
-      "_currentElement": <MenuItem
-        icon=""
-        imageType="type"
-        interfaceType=""
-        isActive={false}
-        label="title"
-        menuType="primary"
-        onClick={[Function]}
-        to="linkyLink"
-/>,
-      "_debugID": 1,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": StatelessComponent {
-        "_reactInternalInstance": [Circular],
-        "context": Object {},
-        "props": Object {
-          "icon": "",
-          "imageType": "type",
-          "interfaceType": "",
-          "isActive": false,
-          "label": "title",
-          "menuType": "primary",
-          "onClick": [Function],
-          "to": "linkyLink",
-        },
-        "refs": Object {},
-        "state": null,
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-      },
-      "_mountOrder": 1,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <a
-          className="menu__menuitem menu__menuitem--primary"
-          onClick={[Function]}
-          role="menuitem"
-          tabIndex={0}
->
-          <Icon
-                    className=""
-                    color=""
-                    name="menu-default-interface"
-                    style={Object {}}
-          />
-          title
-</a>,
-        "_debugID": 2,
-        "_renderedOutput": <a
-          className="menu__menuitem menu__menuitem--primary"
-          onClick={[Function]}
-          role="menuitem"
-          tabIndex={0}
->
-          <Icon
-                    className=""
-                    color=""
-                    name="menu-default-interface"
-                    style={Object {}}
-          />
-          title
-</a>,
-      },
-      "_renderedNodeType": 0,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <MenuItem
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <MenuItem
     icon=""
     imageType="type"
     interfaceType=""
@@ -140,138 +14,108 @@ ShallowWrapper {
     onClick={[Function]}
     to="linkyLink"
 />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Icon
+          className=""
+          color=""
+          name="menu-default-interface"
+          style={Object {}}
+/>,
+        "title",
+      ],
+      "className": "menu__menuitem menu__menuitem--primary",
+      "onClick": [Function],
+      "role": "menuitem",
+      "tabIndex": 0,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "className": "",
+          "color": "",
+          "name": "menu-default-interface",
+          "style": Object {},
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      "title",
+    ],
+    "type": "a",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Icon
+            className=""
+            color=""
+            name="menu-default-interface"
+            style={Object {}}
+/>,
+          "title",
+        ],
+        "className": "menu__menuitem menu__menuitem--primary",
+        "onClick": [Function],
+        "role": "menuitem",
+        "tabIndex": 0,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "className": "",
+            "color": "",
+            "name": "menu-default-interface",
+            "style": Object {},
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "title",
+      ],
+      "type": "a",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
 }
 `;
 
 exports[`MenuItem component renders menu item with no image 1`] = `
 ShallowWrapper {
-  "complexSelector": ComplexSelector {
-    "buildPredicate": [Function],
-    "childrenOfNode": [Function],
-    "findWhereUnwrapped": [Function],
-  },
   "length": 1,
-  "node": <a
-    className="menu__menuitem menu__menuitem--primary"
-    onClick={[Function]}
-    role="menuitem"
-    tabIndex={0}
->
-    <Icon
-        className=""
-        color=""
-        name="menu-default-interface"
-        style={Object {}}
-    />
-    title
-</a>,
-  "nodes": Array [
-    <a
-      className="menu__menuitem menu__menuitem--primary"
-      onClick={[Function]}
-      role="menuitem"
-      tabIndex={0}
->
-      <Icon
-            className=""
-            color=""
-            name="menu-default-interface"
-            style={Object {}}
-      />
-      title
-</a>,
-  ],
-  "options": Object {},
-  "renderer": ReactShallowRenderer {
-    "_instance": ShallowComponentWrapper {
-      "_calledComponentWillUnmount": false,
-      "_compositeType": 2,
-      "_context": Object {},
-      "_currentElement": <MenuItem
-        icon=""
-        interfaceType=""
-        isActive={false}
-        label="title"
-        menuType="primary"
-        onClick={[Function]}
-        to="linkyLink"
-/>,
-      "_debugID": 3,
-      "_hostContainerInfo": null,
-      "_hostParent": null,
-      "_instance": StatelessComponent {
-        "_reactInternalInstance": [Circular],
-        "context": Object {},
-        "props": Object {
-          "icon": "",
-          "interfaceType": "",
-          "isActive": false,
-          "label": "title",
-          "menuType": "primary",
-          "onClick": [Function],
-          "to": "linkyLink",
-        },
-        "refs": Object {},
-        "state": null,
-        "updater": Object {
-          "enqueueCallback": [Function],
-          "enqueueCallbackInternal": [Function],
-          "enqueueElementInternal": [Function],
-          "enqueueForceUpdate": [Function],
-          "enqueueReplaceState": [Function],
-          "enqueueSetState": [Function],
-          "isMounted": [Function],
-          "validateCallback": [Function],
-        },
-      },
-      "_mountOrder": 2,
-      "_pendingCallbacks": null,
-      "_pendingElement": null,
-      "_pendingForceUpdate": false,
-      "_pendingReplaceState": false,
-      "_pendingStateQueue": null,
-      "_renderedComponent": NoopInternalComponent {
-        "_currentElement": <a
-          className="menu__menuitem menu__menuitem--primary"
-          onClick={[Function]}
-          role="menuitem"
-          tabIndex={0}
->
-          <Icon
-                    className=""
-                    color=""
-                    name="menu-default-interface"
-                    style={Object {}}
-          />
-          title
-</a>,
-        "_debugID": 4,
-        "_renderedOutput": <a
-          className="menu__menuitem menu__menuitem--primary"
-          onClick={[Function]}
-          role="menuitem"
-          tabIndex={0}
->
-          <Icon
-                    className=""
-                    color=""
-                    name="menu-default-interface"
-                    style={Object {}}
-          />
-          title
-</a>,
-      },
-      "_renderedNodeType": 0,
-      "_rootNodeID": 0,
-      "_topLevelWrapper": null,
-      "_updateBatchNumber": null,
-      "_warnedAboutRefsInRender": false,
-    },
-    "getRenderOutput": [Function],
-    "render": [Function],
-  },
-  "root": [Circular],
-  "unrendered": <MenuItem
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <MenuItem
     icon=""
     interfaceType=""
     isActive={false}
@@ -280,5 +124,99 @@ ShallowWrapper {
     onClick={[Function]}
     to="linkyLink"
 />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <Icon
+          className=""
+          color=""
+          name="menu-default-interface"
+          style={Object {}}
+/>,
+        "title",
+      ],
+      "className": "menu__menuitem menu__menuitem--primary",
+      "onClick": [Function],
+      "role": "menuitem",
+      "tabIndex": 0,
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "className": "",
+          "color": "",
+          "name": "menu-default-interface",
+          "style": Object {},
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+      "title",
+    ],
+    "type": "a",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <Icon
+            className=""
+            color=""
+            name="menu-default-interface"
+            style={Object {}}
+/>,
+          "title",
+        ],
+        "className": "menu__menuitem menu__menuitem--primary",
+        "onClick": [Function],
+        "role": "menuitem",
+        "tabIndex": 0,
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "className": "",
+            "color": "",
+            "name": "menu-default-interface",
+            "style": Object {},
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "title",
+      ],
+      "type": "a",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
 }
 `;
