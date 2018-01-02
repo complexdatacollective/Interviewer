@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PromptSwiper /> renders ok 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <Hammer
+    onSwipe={[Function]}
+    onTap={[Function]}
+>
+    <div
+        className="prompts"
+    >
+        <div
+            className="prompts__pips"
+        >
+            <Pips
+                count={2}
+                currentIndex={0}
+            />
+        </div>
+        <div
+            className="prompts__prompts"
+        >
+            <Prompt
+                isActive={true}
+                label="bar"
+            />
+            <Prompt
+                isActive={false}
+                label="foo"
+            />
+        </div>
+    </div>
+</Hammer>,
+  "nodes": Array [
+    <Hammer
+      onSwipe={[Function]}
+      onTap={[Function]}
+>
+      <div
+            className="prompts"
+      >
+            <div
+                  className="prompts__pips"
+            >
+                  <Pips
+                        count={2}
+                        currentIndex={0}
+                  />
+            </div>
+            <div
+                  className="prompts__prompts"
+            >
+                  <Prompt
+                        isActive={true}
+                        label="bar"
+                  />
+                  <Prompt
+                        isActive={false}
+                        label="foo"
+                  />
+            </div>
+      </div>
+</Hammer>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 0,
+      "_context": Object {},
+      "_currentElement": <PromptSwiper
+        backward={[Function]}
+        floating={false}
+        forward={[Function]}
+        promptIndex={0}
+        prompts={
+                Array [
+                        Object {
+                          "text": "bar",
+                        },
+                        Object {
+                          "text": "foo",
+                        },
+                      ]
+        }
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": PromptSwiper {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "handleSwipe": [Function],
+        "handleTap": [Function],
+        "props": Object {
+          "backward": [Function],
+          "floating": false,
+          "forward": [Function],
+          "promptIndex": 0,
+          "prompts": Array [
+            Object {
+              "text": "bar",
+            },
+            Object {
+              "text": "foo",
+            },
+          ],
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <Hammer
+          onSwipe={[Function]}
+          onTap={[Function]}
+>
+          <div
+                    className="prompts"
+          >
+                    <div
+                              className="prompts__pips"
+                    >
+                              <Pips
+                                        count={2}
+                                        currentIndex={0}
+                              />
+                    </div>
+                    <div
+                              className="prompts__prompts"
+                    >
+                              <Prompt
+                                        isActive={true}
+                                        label="bar"
+                              />
+                              <Prompt
+                                        isActive={false}
+                                        label="foo"
+                              />
+                    </div>
+          </div>
+</Hammer>,
+        "_debugID": 2,
+        "_renderedOutput": <Hammer
+          onSwipe={[Function]}
+          onTap={[Function]}
+>
+          <div
+                    className="prompts"
+          >
+                    <div
+                              className="prompts__pips"
+                    >
+                              <Pips
+                                        count={2}
+                                        currentIndex={0}
+                              />
+                    </div>
+                    <div
+                              className="prompts__prompts"
+                    >
+                              <Prompt
+                                        isActive={true}
+                                        label="bar"
+                              />
+                              <Prompt
+                                        isActive={false}
+                                        label="foo"
+                              />
+                    </div>
+          </div>
+</Hammer>,
+      },
+      "_renderedNodeType": 1,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <PromptSwiper
+    backward={[Function]}
+    floating={false}
+    forward={[Function]}
+    promptIndex={0}
+    prompts={
+        Array [
+            Object {
+              "text": "bar",
+            },
+            Object {
+              "text": "foo",
+            },
+          ]
+    }
+/>,
+}
+`;

@@ -11,6 +11,19 @@ import { Prompt, Pips } from '../../components/Elements';
   * @extends Component
   */
 class PromptSwiper extends Component {
+
+  static propTypes = {
+    forward: PropTypes.func.isRequired,
+    backward: PropTypes.func.isRequired,
+    prompts: PropTypes.any.isRequired,
+    promptIndex: PropTypes.number.isRequired,
+    floating: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    floating: false,
+  };
+
   constructor(props) {
     super(props);
 
@@ -51,6 +64,16 @@ class PromptSwiper extends Component {
       { 'prompts--floating': this.props.floating },
     );
 
+    if (prompts.length <= 1) {
+      return (
+        <div className={classes}>
+          <div className="prompts__prompts">
+            {promptsRender}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
         <div className={classes}>
@@ -67,22 +90,12 @@ class PromptSwiper extends Component {
   }
 }
 
-PromptSwiper.propTypes = {
-  forward: PropTypes.func.isRequired,
-  backward: PropTypes.func.isRequired,
-  prompts: PropTypes.any.isRequired,
-  promptIndex: PropTypes.number.isRequired,
-  floating: PropTypes.bool,
-};
-
-PromptSwiper.defaultProps = {
-  floating: false,
-};
-
 function mapStateToProps(state, ownProps) {
   return {
     promptIndex: findIndex(ownProps.prompts, ownProps.prompt),
   };
 }
+
+export { PromptSwiper };
 
 export default connect(mapStateToProps)(PromptSwiper);
