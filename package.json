@@ -6,8 +6,8 @@
     "author": "Complex Data Collective",
     "private": true,
     "engines": {
-        "node": "8.5.0",
-        "npm": "5.3.0"
+        "node": "8.9.3",
+        "npm": "5.5.1"
     },
     "scripts": {
         "pack": "electron-builder --dir",
