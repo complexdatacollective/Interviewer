@@ -1,4 +1,4 @@
-# Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas) [![Dependency Status](https://dependencyci.com/github/codaco/Network-Canvas/badge)](https://dependencyci.com/github/codaco/Network-Canvas) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas?ref=badge_shield)
+# Network Canvas [![Build Status](https://travis-ci.org/codaco/Network-Canvas.svg?branch=master)](https://travis-ci.org/codaco/Network-Canvas) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcodaco%2FNetwork-Canvas?ref=badge_shield)
 
 Technologies used:
 ES6 (via Babel)
@@ -11,11 +11,21 @@ Jest (Testing suite)
 React Scripts
 
 # Operation
-## Installation
-This repository assumes that `npm` is installed. If you don't have it installed, here are [installation instructions](https://docs.npmjs.com/getting-started/installing-node).
 
-1. Clone this repo.
-2. Go into the repo directory
+## Node/NPM Version
+
+This project currently requires version `8.9.3` of node, and version `5.5.1` of npm. These are the only supported versions for this project.
+
+As a convinience, the repository contains configuration files that support the use of both `nvm` and `nodenv`. If you use either of these environment/version managers, you can install the correct node and npm versions automatically. For nvm, you can type `nvm use` from within the project directory. For nodenv, the command is `nodenv install`. Please refer to the documentation for these projects for further information.
+
+## Installation
+
+0. Install the correct node and npm versions.
+1. Clone this repsitory.
+2. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
+3. Refer to the development tasks section below to learn how to test and build the app.
+
+## Development Tasks
 
 |`npm run <script>`|Description|
 |------------------|-----------|
