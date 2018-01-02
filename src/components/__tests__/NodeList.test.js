@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import NodeList from '../../NodeList';
+import NodeList from '../NodeList';
 
 const mockStore = createStore(() => (
   { droppable: { activeZones: [] }, draggable: { draggingFromIds: {} } }

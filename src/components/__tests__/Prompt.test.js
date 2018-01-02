@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Prompt from '../../Prompt';
+import Prompt from '../Prompt';
 
 describe('Prompt component', () => {
   it('renders prompt with title', () => {

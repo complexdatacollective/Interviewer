@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Sociogram from '../Sociogram';
+import ConcentricCircles from '../ConcentricCircles';
 
 const mockProps = {
   prompt: { sociogram: { background: {} } },
   stage: {},
 };
 
-describe('<Sociogram />', () => {
+describe('<ConcentricCircles />', () => {
   it('renders ok', () => {
-    const component = shallow(<Sociogram {...mockProps} />);
+    const component = shallow(<ConcentricCircles {...mockProps} />);
 
     expect(component).toMatchSnapshot();
   });

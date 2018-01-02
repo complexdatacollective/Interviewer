@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import MenuItem from '../../MenuItem';
+import MenuItem from '../MenuItem';
 
 const toLink = 'linkyLink';
 const onClick = () => {};

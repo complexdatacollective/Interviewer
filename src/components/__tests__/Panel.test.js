@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Panel from '../../Panel';
+import Panel from '../Panel';
 
 describe('Panel component', () => {
   it('renders ok', () => {

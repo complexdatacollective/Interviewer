@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import NodeBin from '../../NodeBin';
+import NodeBin from '../NodeBin';
 
 const mockState = {
   draggable: {

@@ -4,7 +4,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
-import Modal from '../../Modal';
+import Modal from '../Modal';
 
 const modalName = 'foo';
 

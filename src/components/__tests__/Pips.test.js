@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Pips from '../../Pips';
+import Pips from '../Pips';
 
 describe('Pips component', () => {
   it('renders pips matching count', () => {
