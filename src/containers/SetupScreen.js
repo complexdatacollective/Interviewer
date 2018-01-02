@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../containers/Elements';
+import { Form } from '../containers/';
 
 const formConfig = {
   formName: 'setup',
