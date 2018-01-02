@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NodePanels } from '../../Elements/NodePanels';
+import { NodePanels } from '../NodePanels';
 
 const mockProps = {
   toggleNodeAttributes: () => {},

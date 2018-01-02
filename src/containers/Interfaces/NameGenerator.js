@@ -8,8 +8,8 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '../../containers/Elements';
-import { NodeList, NodeBin } from '../../components/Elements';
+import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
+import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 
 const forms = {

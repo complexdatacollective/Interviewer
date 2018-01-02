@@ -8,10 +8,10 @@ import { createSelector } from 'reselect';
 import cx from 'classnames';
 
 import { Button } from 'network-canvas-ui';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { Form, FormWizard } from '../../containers/Elements';
-import { Modal } from '../../components/Elements';
-import { makeRehydrateFields } from '../../selectors/rehydrate';
+import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { Form, FormWizard } from '../containers/';
+import { Modal } from '../components/';
+import { makeRehydrateFields } from '../selectors/rehydrate';
 
 const propNode = (_, props) => props.node;
 

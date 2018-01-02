@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Radar from './Radar';
-import { makeGetSociogramOptions, sociogramOptionsProps } from '../../../selectors/sociogram';
+import { makeGetSociogramOptions, sociogramOptionsProps } from '../../selectors/sociogram';
 
 class Background extends PureComponent {
   static propTypes = {

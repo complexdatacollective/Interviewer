@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
-import { selectable } from '../../../behaviours';
-import { DragSource } from '../../../behaviours/DragAndDrop';
+import { selectable } from '../../behaviours';
+import { DragSource } from '../../behaviours/DragAndDrop';
 
 const label = node => node.nickname;
 

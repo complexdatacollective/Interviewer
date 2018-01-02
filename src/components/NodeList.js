@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { find, get } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
-import StaggeredTransitionGroup from '../../utils/StaggeredTransitionGroup';
-import { scrollable, selectable } from '../../behaviours';
+import StaggeredTransitionGroup from '../utils/StaggeredTransitionGroup';
+import { scrollable, selectable } from '../behaviours';
 import {
   DragSource,
   DropTarget,
   MonitorDropTarget,
   MonitorDragSource,
-} from '../../behaviours/DragAndDrop';
+} from '../behaviours/DragAndDrop';
 
 const EnhancedNode = DragSource(selectable(Node));
 

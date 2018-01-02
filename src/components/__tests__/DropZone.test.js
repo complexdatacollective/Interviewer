@@ -3,7 +3,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
-import DropZone from '../../Elements/DropZone';
+import DropZone from '../../DropZone';
 
 const mockStore = createStore(() => ({ droppable: { activeZones: [] } }));
 

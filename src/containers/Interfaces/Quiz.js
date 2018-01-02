@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   actionCreators as modalActions,
 } from '../../ducks/modules/modals';
-import { Form } from '../../containers/Elements';
+import { Form } from '../../containers';
 
 /**
   * Quiz Interface

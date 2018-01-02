@@ -4,7 +4,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import cx from 'classnames';
 import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
-import modal from '../../behaviours/modal';
+import modal from '../behaviours/modal';
 
 /**
   * Renders a modal window.

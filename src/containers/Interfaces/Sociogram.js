@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'network-canvas-ui';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper, Sociogram } from '../Elements';
+import { PromptSwiper, ConcentricCircles } from '../../containers/';
 import { resetPropertyForAllNodes, resetEdgesOfType } from '../../utils/reset';
 
 const resetInterface = (prompts) => {
@@ -16,7 +16,7 @@ const resetInterface = (prompts) => {
   * Sociogram Interface
   * @extends Component
   */
-const SociogramInterface = ({
+const Sociogram = ({
   promptForward,
   promptBackward,
   prompt,
@@ -33,7 +33,7 @@ const SociogramInterface = ({
       />
     </div>
     <div className="sociogram-interface__sociogram">
-      <Sociogram
+      <ConcentricCircles
         stage={stage}
         prompt={prompt}
         key={prompt.id}
@@ -49,11 +49,11 @@ const SociogramInterface = ({
   </div>
 );
 
-SociogramInterface.propTypes = {
+Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
 };
 
-export default withPrompt(SociogramInterface);
+export default withPrompt(Sociogram);

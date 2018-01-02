@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { isEqual, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
-import { withBounds } from '../../../behaviours';
-import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../../selectors/sociogram';
-import { actionCreators as networkActions } from '../../../ducks/modules/network';
-import { DropTarget } from '../../../behaviours/DragAndDrop';
+import { withBounds } from '../../behaviours';
+import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
+import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { DropTarget } from '../../behaviours/DragAndDrop';
 
 const watchProps = ['width', 'height', 'dropCount'];
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NodeBucket } from '../../Elements/NodeBucket';
+import { NodeBucket } from '../../NodeBucket';
 
 const sociogramOptionsDefault = {
   layoutVariable: 'foo',

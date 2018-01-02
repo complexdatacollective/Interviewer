@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NodeBucket } from '../../Elements';
+import { NodeBucket } from '../../containers';
 import NodeLayout from './NodeLayout';
 import EdgeLayout from './EdgeLayout';
 import Background from './Background';

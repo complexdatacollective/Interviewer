@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DropTarget } from '../../behaviours/DragAndDrop';
+import { DropTarget } from '../behaviours/DragAndDrop';
 
 /**
   * Renders a container onto which a `draggable` can be dropped.

@@ -9,7 +9,7 @@ import { sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
-import { Dialog } from './';
+import { Dialog } from '../containers/';
 import { populateNodes } from '../utils/mockData';
 import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';

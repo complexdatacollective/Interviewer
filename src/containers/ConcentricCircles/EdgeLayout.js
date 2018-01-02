@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { colorDictionary } from 'network-canvas-ui';
-import { makeDisplayEdgesForPrompt } from '../../../selectors/sociogram';
+import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
 const color = colorDictionary['edge-base'];
 

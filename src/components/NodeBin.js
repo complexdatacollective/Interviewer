@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
+import { actionCreators as networkActions } from '../ducks/modules/network';
+import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
   * Renders a droppable NodeBin which accepts `EXISTING_NODE`.

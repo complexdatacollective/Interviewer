@@ -1,8 +1,8 @@
 /* eslint-disable no-shadow */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog as DialogComponent } from '../../components/Elements';
-import modal from '../../behaviours/modal';
+import { Dialog as DialogComponent } from '../components/';
+import modal from '../behaviours/modal';
 
 /**
   * A modal window which can be toggled open an closed.

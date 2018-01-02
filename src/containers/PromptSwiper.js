@@ -4,7 +4,7 @@ import Touch from 'react-hammerjs';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
 import cx from 'classnames';
-import { Prompt, Pips } from '../../components/Elements';
+import { Prompt, Pips } from '../components/';
 
 /**
   * Displays a control to swipe through prompts

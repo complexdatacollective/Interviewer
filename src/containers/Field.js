@@ -10,9 +10,9 @@ import {
   ToggleGroup,
 } from 'network-canvas-ui';
 
-import validations from '../../utils/Validations';
+import validations from '../utils/Validations';
 
-import { withOptionsFromSelector } from '../../behaviours';
+import { withOptionsFromSelector } from '../behaviours';
 
 /*
   * Returns the named field compontent, if no matching one is found
