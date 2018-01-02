@@ -25,7 +25,8 @@ describe('<PromptSwiper />', () => {
 
 describe("when only one prompt, don't show pips", () => {
   it('renders ok', () => {
-    const component = shallow(<PromptSwiper { ...mockProps } prompts={[{ text: 'baz' }]} />);
+    const prompts = [{ text: 'baz' }];
+    const component = shallow(<PromptSwiper {...mockProps} prompts={prompts} />);
 
     expect(component.find('.prompts__pips').exists()).toBe(false);
   });

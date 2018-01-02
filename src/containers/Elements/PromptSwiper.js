@@ -11,7 +11,6 @@ import { Prompt, Pips } from '../../components/Elements';
   * @extends Component
   */
 class PromptSwiper extends Component {
-
   static propTypes = {
     forward: PropTypes.func.isRequired,
     backward: PropTypes.func.isRequired,
