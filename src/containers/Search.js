@@ -122,25 +122,41 @@ class Search extends Component {
       nodeType,
     } = this.props;
 
+    const hasInput = this.state.hasInput;
     const searchClasses = cx(
       'search',
       {
         'search--collapsed': collapsed,
-        'search--hasInput': this.state.hasInput,
+        'search--hasInput': hasInput,
       },
     );
 
     const addButtonAlt = getNodePalette(nodeType);
+
+    const SearchPrompt = 'Type in the box below to Search';
+    const SelectPrompt = 'Tap an item to select it';
+
+    const HeaderClass = 'search__header';
+    const Headers = [SearchPrompt, SelectPrompt].map((prompt, i) => {
+      let hiddenClass = '';
+      if ((prompt === SearchPrompt && hasInput) ||
+        (prompt === SelectPrompt && !hasInput)) {
+        hiddenClass = `${HeaderClass}--hidden`;
+      }
+      return (<h1 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
+        {prompt}
+      </h1>);
+    });
 
     return (
       <div className={searchClasses}>
         <form className="search__content">
           <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
 
-          <h1>Type in the box below to Search</h1>
+          {Headers}
 
           <SearchResults
-            hasInput={this.state.hasInput}
+            hasInput={hasInput}
             results={this.state.searchResults}
             selectedResults={this.state.selectedResults}
             onSelectResult={result => this.toggleSelectedResult(result)}
@@ -157,6 +173,7 @@ class Search extends Component {
           }
 
           <input
+            className="search__input"
             onChange={evt => this.onInputChange(evt.target.value)}
             name="searchTerm"
             value={this.state.searchTerm}

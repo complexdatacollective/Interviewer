@@ -1,6 +1,10 @@
+$module-name: search;
 $results-height: 50vh;
 
-.search {
+// Base input on global styling; override as needed below.
+@include text-input('#{$module-name}__input');
+
+.#{$module-name} {
   bottom: 0;
   position: absolute;
   transform: translateX(0);
@@ -9,7 +13,20 @@ $results-height: 50vh;
   // On top of button. FIXME: magic number
   z-index: 1000;
 
+  &__header {
+    text-align: center;
+    // transition header content changes (based on --hasInput)
+    transition: opacity $animation-fast-duration $animation-default-easing;
+
+    &--hidden {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
   &__content {
+    @include flex-stack;
+
     background-color: color('cyber-grape');
     height: 100%;
     margin: 0 10%;
@@ -25,6 +42,13 @@ $results-height: 50vh;
     }
   }
 
+  &__input {
+    background-color: color('white');
+    border-radius: spacing(small);
+    color: palette('text-dark');
+    padding: spacing(medium);
+  }
+
   &--hasInput {
   }
 
@@ -36,6 +60,7 @@ $results-height: 50vh;
     border: 1px solid white;
     display: block;
     height: $results-height;
+    margin: spacing(small) 0;
     overflow: hidden;
     transition: height $animation-fast-duration $animation-default-easing;
 
@@ -60,7 +85,8 @@ $results-height: 50vh;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
     position: absolute;
     right: -4rem;
-    top: 50%;
+    top: 30%;
+    z-index: 1;
   }
 
 }
