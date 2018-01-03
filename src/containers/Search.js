@@ -79,6 +79,13 @@ class Search extends Component {
     });
   }
 
+  onClose() {
+    if (this.props.clearResultsOnClose) {
+      this.setState({ selectedResults: [] });
+    }
+    this.props.closeSearch();
+  }
+
   onCommit() {
     this.props.onComplete(this.state.selectedResults);
     this.setState(InitialState);
@@ -116,7 +123,6 @@ class Search extends Component {
 
   render() {
     const {
-      closeSearch,
       collapsed,
       displayFields,
       nodeType,
@@ -151,7 +157,7 @@ class Search extends Component {
     return (
       <div className={searchClasses}>
         <form className="search__content">
-          <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
+          <Icon name="close" size="40px" className="menu__cross" onClick={evt => this.onClose(evt)} />
 
           {Headers}
 
@@ -187,10 +193,12 @@ class Search extends Component {
 }
 
 Search.defaultProps = {
+  clearResultsOnClose: true,
   nodeType: '',
 };
 
 Search.propTypes = {
+  clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   displayFields: PropTypes.array.isRequired,
