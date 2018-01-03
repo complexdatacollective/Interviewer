@@ -6,7 +6,6 @@ import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
 import AddCountButton from '../components/AddCountButton';
-import SearchForm from './SearchForm';
 import SearchResults from '../components/SearchResults';
 import { actionCreators as searchActions } from '../ducks/modules/search';
 import { makeGetFuse } from '../selectors/search';
@@ -30,7 +29,7 @@ const FuseSelector = makeGetFuse(DefaultFuseOpts);
 const InitialState = {
   hasInput: false,
   searchResults: [],
-  searchTerm: null,
+  searchTerm: '',
   selectedResults: [],
 };
 
@@ -62,9 +61,8 @@ class Search extends Component {
     this.state = InitialState;
   }
 
-  onInputChange(changeset) {
+  onInputChange(newValue) {
     let searchResults;
-    const newValue = changeset.searchTerm;
     const hasInput = newValue && newValue.length > 0;
     if (hasInput) {
       searchResults = this.props.fuse.search(newValue);
@@ -136,7 +134,7 @@ class Search extends Component {
 
     return (
       <div className={searchClasses}>
-        <div className="search__content">
+        <form className="search__content">
           <Icon name="close" size="40px" className="menu__cross" onClick={closeSearch} />
 
           <h1>Type in the box below to Search</h1>
@@ -158,12 +156,14 @@ class Search extends Component {
             />
           }
 
-          <SearchForm
-            searchValue={this.state.searchTerm}
-            onChange={(event, newValue) => this.onInputChange(event, newValue)}
+          <input
+            onChange={evt => this.onInputChange(evt.target.value)}
+            name="searchTerm"
+            value={this.state.searchTerm}
+            type="search"
           />
 
-        </div>
+        </form>
       </div>
     );
   }
