@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { CSSTransitionGroup } from 'react-transition-group';
 import { animation } from 'network-canvas-ui';
 import loadInterface from '../utils/loadInterface';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
@@ -28,13 +27,7 @@ class Stage extends Component {
     const CurrentInterface = loadInterface(activeStageConfig.type);
 
     return (
-      <CSSTransitionGroup
-        transitionName="stage--transition"
-        transitionEnterTimeout={animation.duration.slow * 2}
-        transitionLeaveTimeout={animation.duration.slow}
-        transitionAppear
-        transitionAppearTimeout={animation.duration.slow * 2}
-      >
+      <div>
         <div className="stage" key={activeStageConfig.id}>
           <div className="stage__control">
             <button
@@ -58,7 +51,7 @@ class Stage extends Component {
             </button>
           </div>
         </div>
-      </CSSTransitionGroup>
+      </div>
     );
   }
 }

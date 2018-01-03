@@ -20,30 +20,24 @@ function Modal(props) {
 
   const classnames = cx('modal', className);
 
+  if (!show) { return null; }
+
   return (
-    <CSSTransitionGroup
-      transitionName="modal--transition"
-      transitionEnterTimeout={animation.duration.standard}
-      transitionLeaveTimeout={animation.duration.standard}
-    >
-      { show &&
-        <div key="modal" className={classnames} onClick={() => close()}>
-          <div className="modal__window" onClick={e => e.stopPropagation()}>
-            <div className="modal__layout">
-              <div className="modal__layout-title">
-                <h1>{title}</h1>
-              </div>
-              <div className="modal__layout-content">
-                {children}
-              </div>
-            </div>
-            <button className="modal__close" onClick={() => close()}>
-              Cancel
-            </button>
+    <div key="modal" className={classnames} onClick={() => close()}>
+      <div className="modal__window" onClick={e => e.stopPropagation()}>
+        <div className="modal__layout">
+          <div className="modal__layout-title">
+            <h1>{title}</h1>
+          </div>
+          <div className="modal__layout-content">
+            {children}
           </div>
         </div>
-      }
-    </CSSTransitionGroup>
+        <button className="modal__close" onClick={() => close()}>
+          Cancel
+        </button>
+      </div>
+    </div>
   );
 }
 

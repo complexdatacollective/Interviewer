@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { find, get } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
-import StaggeredTransitionGroup from '../utils/StaggeredTransitionGroup';
 import { scrollable, selectable } from '../behaviours';
 import {
   DragSource,
@@ -38,14 +37,8 @@ const NodeList = ({
   );
 
   return (
-    <StaggeredTransitionGroup
+    <div
       className={classNames}
-      component="div"
-      delay={animation.duration.fast * 0.2}
-      duration={animation.duration.slow}
-      start={animation.duration.slow + 3}
-      transitionName="node-list--transition"
-      transitionLeave={false}
     >
       { isOver && willAccept &&
         <Node key="placeholder" placeholder />
@@ -64,7 +57,7 @@ const NodeList = ({
           </span>
         ))
       }
-    </StaggeredTransitionGroup>
+    </div>
   );
 };
 
