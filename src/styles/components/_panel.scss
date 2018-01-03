@@ -1,8 +1,10 @@
 $heading-size: 100px;
 
 .panel {
-  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration)
-  flex: 1 0 $heading-size;
+  @include transition-properties((opacity max-height margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration);
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: $heading-size;
   display: flex;
   flex-direction: column;
   background-color: palette('light-background');
@@ -13,6 +15,7 @@ $heading-size: 100px;
   margin: 0 0 30px;
   overflow: hidden;
   opacity: 1;
+  max-height: 1000px;
 
   &:last-child {
     margin-bottom: 0;
@@ -50,8 +53,9 @@ $heading-size: 100px;
 
   &--minimise {
     border-bottom-width: 0;
-    flex-basis: 0;
-    flex-grow: 0;
+    max-height: 0; // flex-grow, flex-basis would be preferable, but not supported on safari/ios
+    // flex-basis: 0;
+    // flex-grow: 0;
     margin-bottom: 0;
     opacity: 0;
   }
