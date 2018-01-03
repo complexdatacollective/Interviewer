@@ -25,8 +25,14 @@ const SearchResult = ({ data, displayFields, isSelected, onClick }) => {
     return subLabel(field, i);
   };
 
+  const clickHandler = (evt) => {
+    // Default on some devices is to hide software keyboard
+    evt.preventDefault();
+    onClick(data, evt);
+  };
+
   return (
-    <div className={classNames} onClick={evt => onClick(data, evt)}>
+    <div className={classNames} onClick={clickHandler}>
       { displayFields.map(labelForField) }
     </div>
   );
