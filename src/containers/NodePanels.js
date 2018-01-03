@@ -69,6 +69,8 @@ class NodePanels extends PureComponent {
       .reduce((memo, panelOpen) => memo || panelOpen, false);
 
   renderNodePanel = (panel, index) => {
+    const promptId = this.props.prompt.id;
+
     const {
       title,
       highlight,
@@ -84,7 +86,7 @@ class NodePanels extends PureComponent {
         minimise={!this.isPanelOpen(index)}
       >
         <NodeList
-          id={`PANEL_NODE_LIST_${index}`}
+          id={`PANEL_NODE_LIST_${promptId}__${index}`}
           {...nodeListProps}
           label={label}
           itemType="NEW_NODE"
