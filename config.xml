@@ -39,9 +39,9 @@
     <preference name="Orientation" value="landscape" />
     <preference name="target-device" value="tablet" />
     <preference name="DisallowOverscroll" value="true" />
-    <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="^4.5.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
+    <engine name="android" spec="^6.2.3" />
+    <engine name="ios" spec="^4.5.0" />
 </widget>
