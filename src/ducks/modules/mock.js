@@ -1,8 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { shuffle, range } from 'lodash';
-import { store } from '../ducks/store';
-import { actionCreators as networkActions } from '../ducks/modules/network';
+import { actionCreators as networkActions } from './network';
 
 const nodes = [
   {
@@ -47,16 +46,32 @@ const nodes = [
   },
 ];
 
-export const populateNodes = (howMany = 0) => {
-  const pseudoRandom = shuffle(range(0, nodes.length - 1));
+const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
-  const randomNodes = pseudoRandom.splice(0, howMany < nodes.length ? howMany : nodes.length - 1);
+const generateNodes = (howMany = 0) =>
+  (dispatch) => {
+    const pseudoRandom = shuffle(range(0, nodes.length - 1));
 
-  return randomNodes.map((key) => {
-    const node = nodes[key];
+    const randomNodes = pseudoRandom.splice(0, howMany < nodes.length ? howMany : nodes.length - 1);
 
-    store.dispatch(networkActions.addNode(node));
+    return randomNodes.map((key) => {
+      const node = nodes[key];
 
-    return node;
-  });
+      dispatch(networkActions.addNode(node));
+
+      return node;
+    });
+  };
+
+const actionCreators = {
+  generateNodes,
+};
+
+const actionTypes = {
+  MOCK_GENERATE_NODES,
+};
+
+export {
+  actionCreators,
+  actionTypes,
 };

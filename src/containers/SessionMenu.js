@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import { withHandlers, compose } from 'recompose';
+import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
@@ -10,7 +11,6 @@ import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
-import { populateNodes } from '../utils/mockData';
 import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';
 
@@ -28,10 +28,6 @@ const initialState = {
     hasCancelButton: false,
   },
 };
-
-function addMockNodes() {
-  populateNodes(20);
-}
 
 /**
   * Renders a Menu using stages to construct items in the menu
@@ -143,7 +139,7 @@ class SessionMenu extends Component {
 
   render() {
     const {
-      customItems, hideButton, isOpen, toggleMenu,
+      customItems, hideButton, isOpen, toggleMenu, addMockNodes,
     } = this.props;
 
     const { version } = this.state;
@@ -217,6 +213,7 @@ SessionMenu.propTypes = {
   openModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  addMockNodes: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
@@ -236,6 +233,14 @@ const mapDispatchToProps = dispatch => ({
   openModal: bindActionCreators(modalActions.openModal, dispatch),
   resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
+  generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SessionMenu);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withHandlers({
+    addMockNodes: props => () => {
+      props.generateNodes(20);
+    },
+  }),
+)(SessionMenu);
