@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PromptSwiper } from '../../Elements/PromptSwiper';
+import { PromptSwiper } from '../PromptSwiper';
 
 const mockProps = {
   forward: () => {},
