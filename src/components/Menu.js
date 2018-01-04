@@ -54,17 +54,13 @@ class MenuFactory extends Component {
   }
 
   outsideClick = (e) => {
-    console.log('outsideClick');
     if (!this.domNode.contains(e.target)) {
       this.props.toggleMenu(e);
     }
   }
 
   menuClick = (e) => {
-    console.log('menuClick');
     if (e) {
-      console.log('e');
-      console.log(e);
       e.stopPropagation();
       e.preventDefault();
     }
@@ -73,7 +69,6 @@ class MenuFactory extends Component {
 
   // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
-    console.log('menuItemClick');
     this.menuClick();
     itemClick();
   }

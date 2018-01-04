@@ -77,7 +77,6 @@ class NodeLayout extends Component {
   }
 
   onSelected = (node) => {
-    console.log('onSelected');
     const { allowSelect } = this.props;
 
     if (!allowSelect) { return; }
