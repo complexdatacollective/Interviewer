@@ -33,7 +33,7 @@ const NodeTransition = ({ children, index, stagger, ...props }) => {
       timeout={duration}
       appear
       unmountOnExit
-      onEntering={
+      onEnter={
         (el) => {
           anime({
             targets: el,
@@ -44,7 +44,7 @@ const NodeTransition = ({ children, index, stagger, ...props }) => {
           });
         }
       }
-      onExiting={
+      onExit={
         (el) => {
           anime({
             targets: el,

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { animation } from 'network-canvas-ui';
 import loadInterface from '../utils/loadInterface';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 import { stage } from '../selectors/session';
@@ -23,33 +22,31 @@ class Stage extends Component {
   }
 
   render() {
-    const { activeStageConfig } = this.props;
-    const CurrentInterface = loadInterface(activeStageConfig.type);
+    const { config } = this.props;
+    const CurrentInterface = loadInterface(config.type);
 
     return (
-      <div>
-        <div className="stage" key={activeStageConfig.id}>
-          <div className="stage__control">
-            <button
-              className="stage__control-button stage__control-button--back"
-              onClick={this.onClickBack}
-            >
-              Back
-            </button>
-          </div>
-          <div className="stage__interface">
-            { CurrentInterface &&
-              <CurrentInterface stage={activeStageConfig} />
-            }
-          </div>
-          <div className="stage__control">
-            <button
-              className="stage__control-button stage__control-button--next"
-              onClick={this.onClickNext}
-            >
-              Next
-            </button>
-          </div>
+      <div className="stage">
+        <div className="stage__control">
+          <button
+            className="stage__control-button stage__control-button--back"
+            onClick={this.onClickBack}
+          >
+            Back
+          </button>
+        </div>
+        <div className="stage__interface">
+          { CurrentInterface &&
+            <CurrentInterface stage={config} />
+          }
+        </div>
+        <div className="stage__control">
+          <button
+            className="stage__control-button stage__control-button--next"
+            onClick={this.onClickNext}
+          >
+            Next
+          </button>
         </div>
       </div>
     );
@@ -57,18 +54,10 @@ class Stage extends Component {
 }
 
 Stage.propTypes = {
-  activeStageConfig: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
   next: PropTypes.func.isRequired,
   previous: PropTypes.func.isRequired,
 };
-
-function mapStateToProps(state) {
-  const activeStageConfig = stage(state);
-
-  return {
-    activeStageConfig,
-  };
-}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -77,4 +66,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stage);
+export default connect(null, mapDispatchToProps)(Stage);

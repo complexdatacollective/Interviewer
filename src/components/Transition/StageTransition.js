@@ -5,57 +5,62 @@ import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
 
 const duration = {
-  enter: animation.duration.standard,
-  exit: 1,
+  enter: animation.duration.slow,
+  exit: animation.duration.slow,
 };
 
 const enterAnimation = {
   opacity: [0, 1],
+  zIndex: [100, 100],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.enter,
+  delay: duration.exit,
 };
 
 const exitAnimation = {
   opacity: [1, 0],
+  zIndex: [0, 0],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.exit,
 };
 
-const FadeTransition = ({ children, ...props }) => (
+const StageTransition = ({ children, ...props }) => (
   <Transition
+    {...props}
     timeout={duration}
     onEnter={
       (el) => {
+        console.log('ENTERING');
         anime({
           targets: el,
-          elasticity: 0,
-          easing: 'easeOutElastic',
           ...enterAnimation,
         });
       }
     }
     onExit={
       (el) => {
+        console.log('EXITING');
         anime({
           targets: el,
           ...exitAnimation,
         });
       }
     }
-    {...props}
+    appear
+    unmountOnExit
   >
     { children }
   </Transition>
 );
 
-FadeTransition.propTypes = {
+StageTransition.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-FadeTransition.defaultProps = {
+StageTransition.defaultProps = {
   children: null,
 };
 
-export default FadeTransition;
+export default StageTransition;
