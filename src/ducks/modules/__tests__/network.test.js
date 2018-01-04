@@ -17,15 +17,15 @@ describe('network reducer', () => {
     ).toEqual(mockState);
   });
 
-  it('should handle ADD_NODE', () => {
+  it('should handle ADD_NODES with a single node', () => {
     const newState = reducer({
       ...mockState,
       nodes: [
         { id: 1, name: 'baz' },
       ],
     }, {
-      type: actionTypes.ADD_NODE,
-      node: { name: 'foo' },
+      type: actionTypes.ADD_NODES,
+      nodes: [{ name: 'foo' }],
     });
 
     expect(newState.nodes.length).toBe(2);
@@ -37,14 +37,14 @@ describe('network reducer', () => {
     expect(newNode.uid).toMatch(UIDPattern);
   });
 
-  it('should handle ADD_NODE_BATCH', () => {
+  it('should handle ADD_NODES', () => {
     const newState = reducer({
       ...mockState,
       nodes: [
         { id: 1, name: 'baz' },
       ],
     }, {
-      type: actionTypes.ADD_NODE_BATCH,
+      type: actionTypes.ADD_NODES,
       nodes: [{ name: 'foo' }, { name: 'bar' }],
     });
 
@@ -57,6 +57,20 @@ describe('network reducer', () => {
     expect(node1.uid).toMatch(UIDPattern);
     expect(node2).toMatchObject({ name: 'bar', id: 3 });
     expect(node2.uid).toMatch(UIDPattern);
+  });
+
+  it('should support additionalAttributes for ADD_NODES', () => {
+    const newState = reducer({
+      ...mockState,
+      nodes: [],
+    }, {
+      type: actionTypes.ADD_NODES,
+      nodes: [{ name: 'foo' }, { name: 'bar' }],
+      additionalAttributes: { stage: 1 },
+    });
+
+    expect(newState.nodes[0].stage).toEqual(1);
+    expect(newState.nodes[1].stage).toEqual(1);
   });
 
   it('should handle REMOVE_NODE', () => {
@@ -85,22 +99,23 @@ describe('network reducer', () => {
 });
 
 describe('session actions', () => {
-  it('should create an ADD_NODE action', () => {
+  it('should create an ADD_NODES action with a single node', () => {
     const expectedAction = {
-      type: actionTypes.ADD_NODE,
-      node: { name: 'foo' },
-    };
-
-    expect(actionCreators.addNode({ name: 'foo' })).toEqual(expectedAction);
-  });
-
-  it('should create an ADD_NODE_BATCH action', () => {
-    const expectedAction = {
-      type: actionTypes.ADD_NODE_BATCH,
+      type: actionTypes.ADD_NODES,
       nodes: [{ name: 'foo' }],
     };
 
-    expect(actionCreators.addNodeBatch([{ name: 'foo' }])).toEqual(expectedAction);
+    expect(actionCreators.addNodes({ name: 'foo' })).toMatchObject(expectedAction);
+  });
+
+  it('should create an ADD_NODES action for batch adding', () => {
+    const expectedAction = {
+      type: actionTypes.ADD_NODES,
+      nodes: [{ name: 'foo' }, { name: 'bar' }],
+    };
+
+    const action = actionCreators.addNodes([{ name: 'foo' }, { name: 'bar' }]);
+    expect(action).toEqual(expectedAction);
   });
 
   it('should create a REMOVE_NODE action', () => {

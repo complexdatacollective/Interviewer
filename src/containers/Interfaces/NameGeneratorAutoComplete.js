@@ -32,7 +32,7 @@ class NameGeneratorAutoComplete extends Component {
   }
 
   onSearchComplete(selectedResults) {
-    this.props.addNodeBatch(selectedResults, this.props.newNodeAttributes);
+    this.props.addNodes(selectedResults, this.props.newNodeAttributes);
     this.props.closeSearch();
   }
 
@@ -108,7 +108,7 @@ class NameGeneratorAutoComplete extends Component {
 }
 
 NameGeneratorAutoComplete.propTypes = {
-  addNodeBatch: PropTypes.func.isRequired,
+  addNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
@@ -123,7 +123,7 @@ NameGeneratorAutoComplete.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodeBatch: bindActionCreators(networkActions.addNodeBatch, dispatch),
+    addNodes: bindActionCreators(networkActions.addNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };

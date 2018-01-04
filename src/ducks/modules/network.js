@@ -1,7 +1,6 @@
-import { find, maxBy, reject, findIndex, isMatch, omit } from 'lodash';
+import { find, maxBy, reject, findIndex, isMatch, isArray, omit } from 'lodash';
 
-const ADD_NODE = 'ADD_NODE';
-const ADD_NODE_BATCH = 'ADD_NODE_BATCH';
+const ADD_NODES = 'ADD_NODES';
 const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -85,13 +84,7 @@ function getUpdatedNodes(nodes, updatedNode, full) {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_NODE: {
-      return {
-        ...state,
-        nodes: getNodesWithAdd(state.nodes, action.node),
-      };
-    }
-    case ADD_NODE_BATCH: {
+    case ADD_NODES: {
       return {
         ...state,
         nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
@@ -172,17 +165,23 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function addNode(node) {
+/**
+ * Add a node or nodes to the state.
+ *
+ * @param {Array|Object} nodes - one or more nodes to add
+ * @param {Object} [additionalAttributes] shared attributes to apply to every
+ *  new node
+ *
+ * @memberof! NetworkActionCreators
+ */
+function addNodes(nodes, additionalAttributes) {
+  let nodeOrNodes = nodes;
+  if (!isArray(nodeOrNodes)) {
+    nodeOrNodes = [nodeOrNodes];
+  }
   return {
-    type: ADD_NODE,
-    node,
-  };
-}
-
-function addNodeBatch(nodes, additionalAttributes) {
-  return {
-    type: ADD_NODE_BATCH,
-    nodes,
+    type: ADD_NODES,
+    nodes: nodeOrNodes,
     additionalAttributes,
   };
 }
@@ -238,9 +237,11 @@ function removeEdge(edge) {
   };
 }
 
+/**
+ * @namespace NetworkActionCreators
+ */
 const actionCreators = {
-  addNode,
-  addNodeBatch,
+  addNodes,
   addOrUpdateNode,
   updateNode,
   removeNode,
@@ -251,8 +252,7 @@ const actionCreators = {
 };
 
 const actionTypes = {
-  ADD_NODE,
-  ADD_NODE_BATCH,
+  ADD_NODES,
   ADD_OR_UPDATE_NODE,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,

@@ -38,7 +38,7 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNode({ ...formData, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...formData, ...this.props.newNodeAttributes });
     }
   }
 
@@ -74,7 +74,7 @@ class NameGenerator extends Component {
     if (has(node, 'promptId') || has(node, 'stageId')) {
       this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
     } else {
-      this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...node, ...this.props.newNodeAttributes });
     }
   }
 
@@ -159,7 +159,7 @@ NameGenerator.propTypes = {
   nodesForPrompt: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
-  addNode: PropTypes.func.isRequired,
+  addNodes: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   activePromptAttributes: PropTypes.object.isRequired,
@@ -186,7 +186,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch),
+    addNodes: bindActionCreators(networkActions.addNodes, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),

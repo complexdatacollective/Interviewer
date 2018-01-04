@@ -132,7 +132,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNode, dispatch),
+    addNode: bindActionCreators(networkActions.addNodes, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
 }
