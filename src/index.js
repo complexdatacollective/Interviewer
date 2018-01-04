@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import initReactFastclick from 'react-fastclick';
 import { Provider } from 'react-redux';
 import { store } from './ducks/store';
 import { actionCreators as mockActions } from './ducks/modules/mock';
@@ -12,9 +10,6 @@ import { isCordova } from './utils/Environment';
 window.populateNodes = (howMany = 0) => {
   store.dispatch(mockActions.generateNodes(howMany));
 };
-
-injectTapEventPlugin();
-initReactFastclick();
 
 const startApp = () => {
   ReactDOM.render(
