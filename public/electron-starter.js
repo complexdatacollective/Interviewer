@@ -17,8 +17,8 @@ let mainWindow;
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600, center: true, title: 'Network Canvas' });
-  mainWindow.maximize();
+  mainWindow = new BrowserWindow({ titleBarStyle: 'hidden', frame: false, width: 800, height: 600, center: true, title: 'Network Canvas' });
+  mainWindow.setFullScreen(true);
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
