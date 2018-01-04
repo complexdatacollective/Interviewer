@@ -13,7 +13,13 @@ const nodes = [
 describe('CardList component', () => {
   it('renders cards with list', () => {
     const component = shallow(
-      <CardList nodes={nodes} label={node => node.name} details={node => [{ age: `${node.age}` }]} />,
+      <CardList
+        nodes={nodes}
+        label={node => node.name}
+        details={node => [{ age: `${node.age}` }]}
+        onToggleCard={() => {}}
+        selected={() => false}
+      />,
     );
 
     expect(component).toMatchSnapshot();

@@ -14,11 +14,15 @@ const scrollable = WrappedComponent =>
     }
 
     componentDidMount() {
-      this.scrollable.addEventListener('scroll', this.updateScrollState);
+      if (this.scrollable) {
+        this.scrollable.addEventListener('scroll', this.updateScrollState);
+      }
     }
 
     componentWillUnmount() {
-      this.scrollable.removeEventListener('scroll', this.updateScrollState);
+      if (this.scrollable) {
+        this.scrollable.removeEventListener('scroll', this.updateScrollState);
+      }
     }
 
     updateScrollState = () => {
