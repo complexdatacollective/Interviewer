@@ -5,15 +5,15 @@ import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
 
 const duration = {
-  enter: animation.duration.slow,
-  exit: animation.duration.slow,
+  enter: animation.duration.standard,
+  exit: animation.duration.standard,
 };
 
 const enterAnimation = {
   opacity: [0, 1],
   zIndex: [2, 2],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.enter,
   delay: duration.exit,
 };
@@ -22,7 +22,7 @@ const exitAnimation = {
   opacity: [1, 0],
   zIndex: [1, 1],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.exit,
 };
 

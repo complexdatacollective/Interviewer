@@ -7,21 +7,21 @@ import anime from 'animejs';
 const placeholderOpacity = 0.3;
 
 const duration = {
-  enter: animation.duration.standard,
+  enter: animation.duration.fast,
   exit: 1,
 };
 
 const enterAnimation = {
   opacity: [0, placeholderOpacity],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.enter,
 };
 
 const exitAnimation = {
   opacity: [placeholderOpacity, 0],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.exit,
 };
 
@@ -33,8 +33,6 @@ const Placeholder = ({ children, ...props }) => (
       (el) => {
         anime({
           targets: el,
-          elasticity: 0,
-          easing: 'easeOutElastic',
           ...enterAnimation,
         });
       }

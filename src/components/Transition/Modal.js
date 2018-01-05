@@ -5,15 +5,15 @@ import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
 
 const duration = {
-  enter: animation.duration.slow,
-  exit: animation.duration.slow,
+  enter: animation.duration.fast,
+  exit: animation.duration.fast,
 };
 
 const enterAnimation = {
   opacity: [0, 1],
   translateY: [-100, 0],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.enter,
 };
 
@@ -21,7 +21,7 @@ const exitAnimation = {
   opacity: [1, 0],
   translateY: [0, -100],
   elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.exit,
 };
 
@@ -33,8 +33,6 @@ const Modal = ({ children, ...props }) => (
       (el) => {
         anime({
           targets: el,
-          elasticity: 0,
-          easing: 'easeOutElastic',
           ...enterAnimation,
         });
       }
