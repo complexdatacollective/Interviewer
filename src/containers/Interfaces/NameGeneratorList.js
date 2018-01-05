@@ -9,9 +9,8 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes, getDataByPrompt } from '../../selectors/name-generator';
-import { PromptSwiper, NodeForm } from '../../containers/Elements';
-import { NodeList, NodeBin } from '../../components/Elements';
-import { ListSelect } from '../../components';
+import { PromptSwiper, NodeForm } from '../../containers';
+import { ListSelect, NodeList, NodeBin } from '../../components';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
 
 const modals = {

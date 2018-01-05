@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from 'network-canvas-ui';
-import { Modal } from './Elements';
-import { CardList } from '.';
+import { CardList, Modal } from '.';
 
 class ListSelect extends Component {
   constructor(props) {
