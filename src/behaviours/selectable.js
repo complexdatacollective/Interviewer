@@ -31,7 +31,7 @@ export default function selectable(WrappedComponent) {
 
       if (!allowSelect) { return <WrappedComponent {...rest} />; }
 
-      return <WrappedComponent {...rest} ref={() => { this.node = findDOMNode(this); }} />;
+      return <WrappedComponent {...rest} ref={(node) => { this.node = node; }} />;
     }
   }
 
