@@ -1,0 +1,39 @@
+.card {
+  align-items: center;
+  border: 2px solid palette('text-dark');
+  border-radius: .5rem;
+  display: flex;
+  margin: 1rem;
+  padding: 1rem;
+
+  &__indicator {
+    box-sizing: content-box;
+    fill: palette('text-dark');
+    height: 40px;
+    margin-right: 10px;
+    padding: 10px;
+    width: 40px;
+  }
+
+  &--selected {
+    .card__indicator {
+      height: 60px;
+      padding: 0;
+      width: 60px;
+    }
+  }
+
+  &:hover,
+  &--selected {
+    background-color: transparentize(palette('selected'), .95);
+    border-color: palette('primary');
+
+    > .card__indicator {
+      fill: palette('primary');
+    }
+  }
+
+  &__attribute {
+    font-weight: 300;
+  }
+}

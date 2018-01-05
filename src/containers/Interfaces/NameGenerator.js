@@ -20,7 +20,6 @@ const forms = {
 // Render method for the node labels
 const label = node => `${node.nickname}`;
 
-
 /**
   * Name Generator Interface
   * @extends Component
