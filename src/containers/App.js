@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { SessionMenu, StageMenu } from '.';
+import { isElectron } from '../utils/Environment';
 
 require('../styles/main.scss');
 
@@ -15,9 +16,11 @@ require('../styles/main.scss');
 const App = props => (
   <div className={cx({
     app: true,
+    'app--electron': isElectron(),
     'app--session': props.isSessionMenu,
   })}
   >
+    <div className="electron-titlebar" />
     <SessionMenu hideButton={props.isMenuOpen} />
     <StageMenu hideButton={props.isMenuOpen} />
     <div
