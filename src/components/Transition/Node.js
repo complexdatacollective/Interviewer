@@ -6,13 +6,12 @@ import anime from 'animejs';
 
 const duration = {
   enter: animation.duration.standard,
-  exit: animation.duration.slow,
+  exit: animation.duration.standard,
 };
 
 const enterAnimation = {
   opacity: [0, 1],
-  translateY: ['100%', 0],
-  elasticity: 0,
+  translateY: ['50%', 0],
   easing: 'easeOutElastic',
   duration: duration.enter,
 };
@@ -20,13 +19,12 @@ const enterAnimation = {
 const exitAnimation = {
   opacity: [1, 0],
   scale: [1, 0],
-  elasticity: 0,
-  easing: 'easeOutElastic',
+  easing: animation.easing.default,
   duration: duration.exit,
 };
 
 const Node = ({ children, index, stagger, ...props }) => {
-  const delay = stagger ? index * 50 : 0;
+  const delay = stagger ? index * 30 : 0;
 
   return (
     <Transition
