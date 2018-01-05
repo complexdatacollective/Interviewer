@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import loadInterface from '../utils/loadInterface';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
-import { stage } from '../selectors/session';
 
 /**
   * Render a protocol interface based on protocol info and id

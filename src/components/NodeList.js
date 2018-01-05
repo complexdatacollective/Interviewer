@@ -52,7 +52,6 @@ class NodeList extends Component {
         );
       },
     );
-
   }
 
   render() {
@@ -113,7 +112,7 @@ class NodeList extends Component {
       </TransitionGroup>
     );
   }
-};
+}
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
@@ -125,6 +124,8 @@ NodeList.propTypes = {
   isOver: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
+  id: PropTypes.string.isRequired,
+  scrollTop: PropTypes.func,
 };
 
 NodeList.defaultProps = {
@@ -139,6 +140,7 @@ NodeList.defaultProps = {
   willAccept: false,
   isDragging: false,
   meta: {},
+  scrollTop: () => {},
 };
 
 export default compose(

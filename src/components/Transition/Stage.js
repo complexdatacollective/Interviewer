@@ -32,7 +32,6 @@ const Stage = ({ children, ...props }) => (
     timeout={duration}
     onEnter={
       (el) => {
-        console.log('ENTERING');
         anime({
           targets: el,
           ...enterAnimation,
@@ -41,7 +40,6 @@ const Stage = ({ children, ...props }) => (
     }
     onExit={
       (el) => {
-        console.log('EXITING');
         anime({
           targets: el,
           ...exitAnimation,

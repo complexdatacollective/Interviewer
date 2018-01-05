@@ -40,12 +40,14 @@ class NodePanels extends PureComponent {
     isDragging: PropTypes.bool,
     panels: PropTypes.array,
     meta: PropTypes.object,
+    prompt: PropTypes.object,
   };
 
   static defaultProps = {
     panels: [],
     meta: {},
     isDragging: false,
+    prompt: { id: null },
   };
 
   onDrop = ({ meta }, dataSource) => {

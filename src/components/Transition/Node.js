@@ -57,10 +57,12 @@ const Node = ({ children, index, stagger, ...props }) => {
       { children }
     </Transition>
   );
-}
+};
 
 Node.propTypes = {
   children: PropTypes.any.isRequired,
+  index: PropTypes.number,
+  stagger: PropTypes.bool,
 };
 
 Node.defaultProps = {

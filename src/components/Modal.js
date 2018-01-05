@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 import cx from 'classnames';
-import { animation } from 'network-canvas-ui';
 import PropTypes from 'prop-types';
 import modal from '../behaviours/modal';
 
