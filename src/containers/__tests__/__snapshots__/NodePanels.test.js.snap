@@ -10,6 +10,11 @@ ShallowWrapper {
     meta={Object {}}
     newNodeAttributes={Object {}}
     panels={Array []}
+    prompt={
+        Object {
+            "id": null,
+          }
+    }
     removeNode={[Function]}
     toggleNodeAttributes={[Function]}
 />,
