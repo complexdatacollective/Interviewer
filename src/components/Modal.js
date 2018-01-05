@@ -3,6 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import modal from '../behaviours/modal';
+import { Modal as ModalTransition } from '../components/Transition';
 
 /**
   * Renders a modal window.
@@ -18,24 +19,26 @@ function Modal(props) {
 
   const classnames = cx('modal', className);
 
-  if (!show) { return null; }
+  // if (!show) { return null; }
 
   return (
-    <div key="modal" className={classnames} onClick={() => close()}>
-      <div className="modal__window" onClick={e => e.stopPropagation()}>
-        <div className="modal__layout">
-          <div className="modal__layout-title">
-            <h1>{title}</h1>
+    <ModalTransition in={show}>
+      <div key="modal" className={classnames} onClick={() => close()}>
+        <div className="modal__window" onClick={e => e.stopPropagation()}>
+          <div className="modal__layout">
+            <div className="modal__layout-title">
+              <h1>{title}</h1>
+            </div>
+            <div className="modal__layout-content">
+              {children}
+            </div>
           </div>
-          <div className="modal__layout-content">
-            {children}
-          </div>
+          <button className="modal__close" onClick={() => close()}>
+            Cancel
+          </button>
         </div>
-        <button className="modal__close" onClick={() => close()}>
-          Cancel
-        </button>
       </div>
-    </div>
+    </ModalTransition>
   );
 }
 

@@ -11,6 +11,7 @@ const duration = {
 
 const enterAnimation = {
   opacity: [0, 1],
+  translateY: [-100, 0],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.enter,
@@ -18,12 +19,13 @@ const enterAnimation = {
 
 const exitAnimation = {
   opacity: [1, 0],
+  translateY: [0, -100],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.exit,
 };
 
-const Fade = ({ children, ...props }) => (
+const Modal = ({ children, ...props }) => (
   <Transition
     {...props}
     timeout={duration}
@@ -52,12 +54,12 @@ const Fade = ({ children, ...props }) => (
   </Transition>
 );
 
-Fade.propTypes = {
+Modal.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-Fade.defaultProps = {
+Modal.defaultProps = {
   children: null,
 };
 
-export default Fade;
+export default Modal;

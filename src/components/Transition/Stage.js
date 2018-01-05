@@ -11,7 +11,7 @@ const duration = {
 
 const enterAnimation = {
   opacity: [0, 1],
-  zIndex: [100, 100],
+  zIndex: [2, 2],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.enter,
@@ -20,7 +20,7 @@ const enterAnimation = {
 
 const exitAnimation = {
   opacity: [1, 0],
-  zIndex: [0, 0],
+  zIndex: [1, 1],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.exit,
