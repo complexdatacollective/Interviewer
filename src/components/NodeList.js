@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { find, get } from 'lodash';
+import { find, get, map, isEqual } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
-import { Node as NodeTransition, Placeholder as PlaceholderTransition } from './Transition';
+import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
 import {
   DragSource,
@@ -25,6 +25,7 @@ class NodeList extends Component {
 
     this.state = {
       nodes: props.nodes,
+      refresh: 0,
       stagger: true,
     };
 
@@ -32,11 +33,18 @@ class NodeList extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    // Don't update if nodes are the same
+    if (isEqual(map(newProps.nodes, 'uid'), map(this.state.nodes, 'uid'))) {
+      return;
+    }
+
+    // if we are on the same prompt/provided same id, then just append the node
     if (newProps.id === this.props.id) {
       this.setState({ nodes: newProps.nodes, stagger: false });
       return;
     }
 
+    // Otherwise, transition out and in again
     this.props.scrollTop(0);
 
     this.setState(
@@ -64,7 +72,6 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
-      id,
     } = this.props;
 
     const {
@@ -87,13 +94,13 @@ class NodeList extends Component {
         {
           nodes.map((node, index) => (
             <NodeTransition
-              key={`${id}_ ${node.uid}`}
+              key={`${node.uid}`}
               index={index}
               stagger={stagger}
             >
               <EnhancedNode
                 color={nodeColor}
-                label={label(node)}
+                label={`${label(node)}_${index}`}
                 selected={selected(node)}
                 onSelected={() => onSelect(node)}
                 meta={() => ({ ...node, itemType })}
@@ -101,13 +108,6 @@ class NodeList extends Component {
               />
             </NodeTransition>
           ))
-        }
-        { isOver && willAccept &&
-          <PlaceholderTransition
-            key={`${id}_placeholder`}
-          >
-            <Node key="placeholder" placeholder />
-          </PlaceholderTransition>
         }
       </TransitionGroup>
     );

@@ -32,24 +32,31 @@ const Node = ({ children, index, stagger, ...props }) => {
       timeout={duration}
       onEnter={
         (el) => {
-          anime({
-            targets: el,
-            elasticity: 0,
-            easing: 'easeOutElastic',
-            delay,
-            ...enterAnimation,
-          });
+          // dirty performance hack
+          if (index < 10) {
+            anime({
+              targets: el,
+              delay,
+              ...enterAnimation,
+            });
+          }
         }
       }
       onExit={
         (el) => {
-          anime({
-            targets: el,
-            ...exitAnimation,
-          });
+          // dirty performance hack
+          if (index < 10) {
+            anime({
+              targets: el,
+              ...exitAnimation,
+            });
+          } else {
+            el.setAttribute('style', 'display: none;');
+          }
         }
       }
       appear
+      mountOnEnter
       unmountOnExit
     >
       { children }
