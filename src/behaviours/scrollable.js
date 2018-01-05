@@ -14,27 +14,36 @@ const scrollable = WrappedComponent =>
     }
 
     componentDidMount() {
-      this.scrollable.addEventListener('scroll', this.updateScrollState);
+      this.el.addEventListener('scroll', this.updateScrollState);
     }
 
     componentWillUnmount() {
-      this.scrollable.removeEventListener('scroll', this.updateScrollState);
+      this.el.removeEventListener('scroll', this.updateScrollState);
     }
 
     updateScrollState = () => {
-      const isScrolling = this.scrollable.scrollTop > 0;
-
       this.setState({
-        isScrolling,
+        isScrolling: this.isScrolling(),
       });
+    }
+
+    isScrolling = () => {
+      const scrollTop = this.scrollTop();
+      return scrollTop && scrollTop > 0;
+    }
+
+    scrollTop = (pixels = null) => {
+      if (!this.el) { return null; }
+      if (pixels !== null) { this.el.scrollTop = pixels; }
+      return this.el.scrollTop;
     }
 
     render() {
       const classes = classNames('scrollable', { 'scrollable--is-scrolling': this.state.isScrolling });
 
       return (
-        <div className={classes} ref={(node) => { this.scrollable = node; }}>
-          <WrappedComponent {...this.props} />
+        <div className={classes} ref={(el) => { this.el = el; }}>
+          <WrappedComponent {...this.props} scrollTop={this.scrollTop} />
         </div>
       );
     }

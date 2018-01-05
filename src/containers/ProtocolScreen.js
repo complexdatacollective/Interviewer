@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
-import { StageTransition } from '../components/Transition';
+import { Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
 import { stage as getStage } from '../selectors/session';
 

@@ -5,7 +5,7 @@ import { find, get } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
-import { NodeTransition, FadeTransition } from './Transition';
+import { Node as NodeTransition, Placeholder as PlaceholderTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
 import {
   DragSource,
@@ -36,6 +36,8 @@ class NodeList extends Component {
       this.setState({ nodes: newProps.nodes, stagger: false });
       return;
     }
+
+    this.props.scrollTop(0);
 
     this.setState(
       { nodes: [] },
@@ -102,11 +104,11 @@ class NodeList extends Component {
           ))
         }
         { isOver && willAccept &&
-          <FadeTransition
+          <PlaceholderTransition
             key={`${id}_placeholder`}
           >
             <Node key="placeholder" placeholder />
-          </FadeTransition>
+          </PlaceholderTransition>
         }
       </TransitionGroup>
     );

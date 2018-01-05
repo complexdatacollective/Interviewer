@@ -4,27 +4,30 @@ import { Transition } from 'react-transition-group';
 import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
 
+const placeholderOpacity = 0.3;
+
 const duration = {
   enter: animation.duration.standard,
   exit: 1,
 };
 
 const enterAnimation = {
-  opacity: [0, 1],
+  opacity: [0, placeholderOpacity],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.enter,
 };
 
 const exitAnimation = {
-  opacity: [1, 0],
+  opacity: [placeholderOpacity, 0],
   elasticity: 0,
   easing: 'easeOutElastic',
   duration: duration.exit,
 };
 
-const FadeTransition = ({ children, ...props }) => (
+const Placeholder = ({ children, ...props }) => (
   <Transition
+    {...props}
     timeout={duration}
     onEnter={
       (el) => {
@@ -44,18 +47,19 @@ const FadeTransition = ({ children, ...props }) => (
         });
       }
     }
-    {...props}
+    appear
+    unmountOnExit
   >
     { children }
   </Transition>
 );
 
-FadeTransition.propTypes = {
+Placeholder.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-FadeTransition.defaultProps = {
+Placeholder.defaultProps = {
   children: null,
 };
 
-export default FadeTransition;
+export default Placeholder;

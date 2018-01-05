@@ -25,14 +25,13 @@ const exitAnimation = {
   duration: duration.exit,
 };
 
-const NodeTransition = ({ children, index, stagger, ...props }) => {
+const Node = ({ children, index, stagger, ...props }) => {
   const delay = stagger ? index * 50 : 0;
 
   return (
     <Transition
+      {...props}
       timeout={duration}
-      appear
-      unmountOnExit
       onEnter={
         (el) => {
           anime({
@@ -52,21 +51,22 @@ const NodeTransition = ({ children, index, stagger, ...props }) => {
           });
         }
       }
-      {...props}
+      appear
+      unmountOnExit
     >
       { children }
     </Transition>
   );
 }
 
-NodeTransition.propTypes = {
+Node.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-NodeTransition.defaultProps = {
+Node.defaultProps = {
   children: null,
   index: 0,
   stagger: false,
 };
 
-export default NodeTransition;
+export default Node;
