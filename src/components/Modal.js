@@ -19,8 +19,6 @@ function Modal(props) {
 
   const classnames = cx('modal', className);
 
-  // if (!show) { return null; }
-
   return (
     <ModalTransition in={show}>
       <div key="modal" className={classnames} onClick={() => close()}>
