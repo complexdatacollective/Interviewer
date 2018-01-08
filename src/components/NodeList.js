@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { find, get, map, isEqual } from 'lodash';
+import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
 import { Node, animation } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
@@ -34,11 +34,11 @@ class NodeList extends Component {
 
   componentWillReceiveProps(newProps) {
     // Don't update if nodes are the same
-    if (isEqual(map(newProps.nodes, 'uid'), map(this.state.nodes, 'uid'))) {
+    if (isEqual(newProps.nodes, this.state.nodes)) {
       return;
     }
 
-    // if we are on the same prompt/provided same id, then just append the node
+    // if we provided the same id, then just update normally
     if (newProps.id === this.props.id) {
       this.setState({ nodes: newProps.nodes, stagger: false });
       return;
