@@ -100,7 +100,7 @@ class NodeList extends Component {
             >
               <EnhancedNode
                 color={nodeColor}
-                label={`${label(node)}_${index}`}
+                label={label(node)}
                 selected={selected(node)}
                 onSelected={() => onSelect(node)}
                 meta={() => ({ ...node, itemType })}
