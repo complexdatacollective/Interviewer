@@ -11,6 +11,7 @@ const generateNodes = (howMany = 0) =>
     times(howMany, () => {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
+      const age = faker.random.number({ min: 16, max: 99 });
 
       return dispatch(networkActions.addNode({
         type: 'person',
@@ -18,6 +19,8 @@ const generateNodes = (howMany = 0) =>
         stageId: 'mock',
         name: `${firstName} ${lastName}`,
         nickname: lastName,
+        age,
+        timeCreated: Date.now().toString(),
       }));
     });
   };
