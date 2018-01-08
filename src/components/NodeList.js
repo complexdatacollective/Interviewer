@@ -25,7 +25,6 @@ class NodeList extends Component {
 
     this.state = {
       nodes: props.nodes,
-      refresh: 0,
       stagger: true,
     };
 
@@ -48,7 +47,7 @@ class NodeList extends Component {
     this.props.scrollTop(0);
 
     this.setState(
-      { nodes: [] },
+      { nodes: [], stagger: true },
       () => {
         if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
         this.refreshTimer = setTimeout(
@@ -60,6 +59,10 @@ class NodeList extends Component {
         );
       },
     );
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(nextState, this.state);
   }
 
   render() {
@@ -100,7 +103,7 @@ class NodeList extends Component {
             >
               <EnhancedNode
                 color={nodeColor}
-                label={label(node)}
+                label={`${label(node)}`}
                 selected={selected(node)}
                 onSelected={() => onSelect(node)}
                 meta={() => ({ ...node, itemType })}

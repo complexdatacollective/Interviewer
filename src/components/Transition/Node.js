@@ -55,8 +55,7 @@ const Node = ({ children, index, stagger, ...props }) => {
           }
         }
       }
-      appear
-      mountOnEnter
+      mountOnEnter={false}
       unmountOnExit
     >
       { children }

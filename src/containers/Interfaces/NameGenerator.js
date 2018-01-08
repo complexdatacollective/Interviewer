@@ -94,8 +94,6 @@ class NameGenerator extends Component {
       prompts,
     } = this.props.stage;
 
-    console.log('NODES FOR PROMPT', nodesForPrompt);
-
     return (
       <div className="name-generator-interface">
         <div className="name-generator-interface__prompt">
@@ -114,7 +112,7 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              id={`${prompt.id}_MAIN_NODE_LIST`}
+              id={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
