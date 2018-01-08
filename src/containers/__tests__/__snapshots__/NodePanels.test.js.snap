@@ -16,6 +16,11 @@ ShallowWrapper {
           }
     }
     removeNode={[Function]}
+    stage={
+        Object {
+            "id": null,
+          }
+    }
     toggleNodeAttributes={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {
