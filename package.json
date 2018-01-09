@@ -83,6 +83,7 @@
         "jsdoc": "^3.4.3",
         "jsdoc-babel": "^0.3.0",
         "json-loader": "0.5.4",
+        "jszip": "^3.1.5",
         "lodash": "^4.17.4",
         "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
         "node-sass": "^4.5.3",

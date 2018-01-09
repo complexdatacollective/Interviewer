@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
+import importer from '../utils/importer';
 
 const formConfig = {
   formName: 'setup',
@@ -39,6 +40,12 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
+
+  onClickImportProtocol = () => {
+    importer('/Users/steve/Projects/codaco/demo.canvas.zip');
+  }
+
+
   onDialogConfirm = () => {
     // eslint-disable-next-line no-console
     console.log('dialog confirmed');
@@ -69,6 +76,8 @@ class Setup extends Component {
         <br />
 
         <div className="setup__start">
+
+          <Button onClick={this.onClickImportProtocol} content="Import protocol" />
 
           <p>
             <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
