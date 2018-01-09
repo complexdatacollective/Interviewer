@@ -9,7 +9,11 @@ class ListSelect extends Component {
     super(props);
 
     this.state = {
+      ascending: true,
+      filterValue: '',
+      property: this.props.labelKey,
       selected: [],
+      sortedNodes: this.props.nodes.slice().sort(this.compare(this.props.labelKey)),
     };
   }
 
@@ -22,9 +26,87 @@ class ListSelect extends Component {
   };
 
   /**
+    *
+    */
+  onFilterChange = (event) => {
+    this.setState({
+      filterValue: event.target.value,
+    });
+  };
+
+  /**
+    * @param {string} current property
+    * @return character to indicate sort direction (if applicable)
+    */
+  getDirection = (property) => {
+    if (property === this.state.property) {
+      return this.state.ascending ? ' \u25B2' : ' \u25BC';
+    }
+    return '';
+  }
+
+  /**
     * @param {object} node
     */
   selected = node => !!this.state.selected.find(current => current.uid === node.uid);
+
+  /**
+    * @param property to sort by
+    * @param {boolean} ascending
+    */
+  compare = (property, ascending = true) => {
+    let sortOrder = 1;
+    if (!ascending) {
+      sortOrder = -1;
+    }
+
+    return (a, b) => {
+      if (!Object.hasOwnProperty.call(a, property) || !Object.hasOwnProperty.call(b, property)) {
+        return 0;
+      }
+
+      let result = 0;
+
+      const varA = (typeof a[property] === 'string') ?
+        a[property].toUpperCase() : a[property];
+      const varB = (typeof b[property] === 'string') ?
+        b[property].toUpperCase() : b[property];
+
+      if (varA < varB) {
+        result = -1;
+      } else if (varA > varB) {
+        result = 1;
+      }
+      return result * sortOrder;
+    };
+  };
+
+  /**
+    * @param property to sort by
+    */
+  sortBy = (property) => {
+    if (this.state.property === property) {
+      this.toggleSortDirection();
+    } else {
+      this.setState({
+        ascending: true,
+        property,
+        sortedNodes: this.props.nodes.slice().sort(this.compare(property)),
+      });
+    }
+  };
+
+  /**
+    * changes direction of current sort
+    */
+  toggleSortDirection = () => {
+    this.setState({
+      ascending: !this.state.ascending,
+      sortedNodes: this.props.nodes.slice().sort(
+        this.compare(this.state.property, !this.state.ascending),
+      ),
+    });
+  };
 
   /**
     * toggle whether the card is selected or not.
@@ -47,16 +129,43 @@ class ListSelect extends Component {
     const {
       details,
       label,
+      labelKey,
       name,
-      nodes,
     } = this.props;
+
+    const filteredNodes = this.state.sortedNodes.filter(node => (
+      label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
+      details(node).some(detail => Object.values(detail).some(
+        item => item.toLowerCase().includes(this.state.filterValue.toLowerCase()),
+      ))
+    ));
 
     return (
       <Modal name={name} title="Add some nodes">
+        <div>
+          <Button
+            color={this.state.property === labelKey ? 'primary' : 'white'}
+            onClick={() => this.sortBy(labelKey)}
+          >
+            {labelKey + this.getDirection(labelKey)}
+          </Button>
+          {
+            details({}).map(detail => (
+              <Button
+                color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
+                key={Object.keys(detail)[0]}
+                onClick={() => this.sortBy(Object.keys(detail)[0])}
+              >
+                {Object.keys(detail)[0] + this.getDirection(Object.keys(detail)[0])}
+              </Button>
+            ))
+          }
+        </div>
+        <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />
         <CardList
           details={details}
           label={label}
-          nodes={nodes}
+          nodes={filteredNodes}
           onToggleCard={this.toggleCard}
           selected={this.selected}
         />
@@ -69,6 +178,7 @@ class ListSelect extends Component {
 ListSelect.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
+  labelKey: PropTypes.string,
   name: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.symbol,
@@ -80,6 +190,7 @@ ListSelect.propTypes = {
 ListSelect.defaultProps = {
   details: () => (''),
   label: () => (''),
+  labelKey: '',
   nodes: [],
   onSubmit: () => {},
 };

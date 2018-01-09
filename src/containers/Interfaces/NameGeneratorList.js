@@ -19,7 +19,8 @@ const modals = {
 };
 
 // Render method for the node labels
-const label = node => `${node.nickname}`;
+const labelKey = 'nickname';
+const label = node => `${node[labelKey]}`;
 const details = node => [{ name: `${node.name}` }, { age: `${node.age}` }];
 
 /**
@@ -122,6 +123,7 @@ class NameGeneratorList extends Component {
         <ListSelect
           details={details}
           label={label}
+          labelKey={labelKey}
           name={modals.LIST_SELECT}
           nodes={nodesForList}
           onSubmit={this.onSubmitNewNodes}
