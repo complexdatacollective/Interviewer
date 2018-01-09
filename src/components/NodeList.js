@@ -3,7 +3,8 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
-import { Node, animation } from 'network-canvas-ui';
+import Color from 'color';
+import { Node, animation, colorDictionary } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -61,10 +62,6 @@ class NodeList extends Component {
     );
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(nextState, this.state);
-  }
-
   render() {
     const {
       nodeColor,
@@ -83,16 +80,24 @@ class NodeList extends Component {
     } = this.state;
 
     const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
+    const isValidTarget = !isSource && willAccept;
+    const isHovering = isValidTarget && isOver;
 
     const classNames = cx(
       'node-list',
-      { 'node-list--hover': !isSource && willAccept && isOver },
-      { 'node-list--drag': !isSource && willAccept }, // TODO: rename class
+      { 'node-list--drag': isValidTarget },
     );
+
+    const backgroundColor = Color(
+      nodeColor || colorDictionary['node-base'],
+    ).alpha(0.1);
+
+    const styles = isHovering ? { backgroundColor } : {};
 
     return (
       <TransitionGroup
         className={classNames}
+        style={styles}
       >
         {
           nodes.map((node, index) => (
