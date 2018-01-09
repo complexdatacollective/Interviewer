@@ -4,6 +4,8 @@ import { Transition } from 'react-transition-group';
 import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
 
+const animationThreshold = 20;
+
 const duration = {
   enter: animation.duration.standard,
   exit: animation.duration.standard,
@@ -33,7 +35,7 @@ const Node = ({ children, index, stagger, ...props }) => {
       onEnter={
         (el) => {
           // dirty performance hack
-          if (index < 10) {
+          if (!stagger || index < animationThreshold) {
             anime({
               targets: el,
               delay,
@@ -45,7 +47,7 @@ const Node = ({ children, index, stagger, ...props }) => {
       onExit={
         (el) => {
           // dirty performance hack
-          if (index < 10) {
+          if (index < animationThreshold) {
             anime({
               targets: el,
               ...exitAnimation,
