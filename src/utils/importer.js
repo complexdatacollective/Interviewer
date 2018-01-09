@@ -1,100 +1,105 @@
-import electron from 'electron';
-import path from 'path';
-// import fs from 'fs';
+/* eslint-disable import/no-mutable-exports */
 import Zip from 'jszip';
-
-const fs = electron.remote.require('fs');
-
-const readFile = filename =>
-  new Promise((resolve, reject) => {
-    fs.readFile(filename, (err, data) => {
-      if (err) { reject(err); }
-      resolve(data);
-    });
-  });
-
-// Import => move file to user dir
-// Load => load protocol from user dir
+import { isElectron } from '../utils/Environment';
 
 // 1. copy zip to app dir
 // 2. unzip
 // 3. delete zip
 
-const userDataPath = (electron.app || electron.remote.app).getPath('userData');
+let importer = null;
 
-const getUserDataFilename = (filename) => {
-  const basename = path.basename(filename);
-  return path.join(userDataPath, basename);
-};
+if (isElectron()) {
+  const electron = window.require('electron');
+  const path = electron.remote.require('path');
+  const fs = electron.remote.require('fs');
 
-const copyProtocolToApp = (source) => {
-  const destination = getUserDataFilename(source);
+  const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
-  console.log('copy', source, destination);
+  const getUserDataFilename = (filename) => {
+    const basename = path.basename(filename);
+    return path.join(userDataPath, basename);
+  };
 
-  return new Promise((resolve, reject) => {
-    const destinationStream = fs.createWriteStream(destination);
-    const sourceStream = fs.createReadStream(source);
-
-    destinationStream.on('close', (err) => {
-      if (err) { reject(err); }
-      resolve(destination);
+  const readFile = filename =>
+    new Promise((resolve, reject) => {
+      fs.readFile(filename, (err, data) => {
+        if (err) { reject(err); }
+        resolve(data);
+      });
     });
 
-    sourceStream.pipe(destinationStream);
-  });
-};
+  const copyFile = (source, destination) => {
+    console.log('copy', source, destination);
 
-const extractFile = (zipObject) => {
-  const destination = path.join(userDataPath, zipObject.name);
+    return new Promise((resolve, reject) => {
+      const destinationStream = fs.createWriteStream(destination);
+      const sourceStream = fs.createReadStream(source);
 
-  console.log(destination, zipObject);
-
-  return new Promise((resolve, reject) => {
-    zipObject
-      .nodeStream()
-      .pipe(fs.createWriteStream(destination))
-      .on('error', (err) => {
-        reject(destination, err);
-      })
-      .on('finish', () => {
+      destinationStream.on('close', (err) => {
+        if (err) { reject(err); }
         resolve(destination);
       });
-  });
-};
 
-const extractDir = (zipObject) => {
-  const destination = path.join(userDataPath, zipObject.name);
-
-  console.log(destination, zipObject);
-
-  return new Promise((resolve, reject) => {
-    fs.mkdir(destination, (err) => {
-      if (err) { reject(err); }
-      resolve(destination);
+      sourceStream.pipe(destinationStream);
     });
-  });
-};
+  };
 
-const extractProtocol = (protocol) => {
-  console.log('extract', protocol);
+  const extractZipFile = (zipObject) => {
+    const destination = path.join(userDataPath, zipObject.name);
 
-  return readFile(protocol)
-    .then(data => Zip.loadAsync(data))
-    .then(zip =>
-      Promise.all(
-        Object.keys(zip.files)
-          .map(filename => zip.files[filename])
-          .map(zipObject => (zipObject.dir ? extractDir(zipObject) : extractFile(zipObject))),
-      ),
-    )
-    .then((files) => { console.log(files); });
-};
+    console.log(destination, zipObject);
 
-const importer = (filename) => {
-  console.log('import', filename);
-  return copyProtocolToApp(filename)
-    .then(extractProtocol);
-};
+    return new Promise((resolve, reject) => {
+      zipObject
+        .nodeStream()
+        .pipe(fs.createWriteStream(destination))
+        .on('error', (err) => {
+          reject(destination, err);
+        })
+        .on('finish', () => {
+          resolve(destination);
+        });
+    });
+  };
+
+  const extractZipDir = (zipObject) => {
+    const destination = path.join(userDataPath, zipObject.name);
+
+    console.log(destination, zipObject);
+
+    return new Promise((resolve, reject) => {
+      fs.mkdir(destination, (err) => {
+        if (err) { reject(err); }
+        resolve(destination);
+      });
+    });
+  };
+
+  const extractZip = (protocol) => {
+    console.log('extract', protocol);
+
+    return readFile(protocol)
+      .then(data => Zip.loadAsync(data))
+      .then(zip =>
+        Promise.all(
+          Object.keys(zip.files)
+            .map(filename => zip.files[filename])
+            .map(zipObject => (
+              zipObject.dir ? extractZipDir(zipObject) : extractZipFile(zipObject)
+            )),
+        ),
+      )
+      .then((files) => { console.log(files); });
+  };
+
+  importer = (source) => {
+    console.log('import', source);
+    const destination = getUserDataFilename(source);
+
+    return copyFile(source, destination)
+      .then(extractZip)
+      .then(() => console.log(`delete zip ${destination}`));
+  };
+}
 
 export default importer;
