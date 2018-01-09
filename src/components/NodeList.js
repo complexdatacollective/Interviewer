@@ -27,6 +27,7 @@ class NodeList extends Component {
     this.state = {
       nodes: props.nodes,
       stagger: true,
+      exit: true,
     };
 
     this.refreshTimer = null;
@@ -40,26 +41,30 @@ class NodeList extends Component {
 
     // if we provided the same id, then just update normally
     if (newProps.id === this.props.id) {
-      this.setState({ nodes: newProps.nodes, stagger: false });
+      this.setState({ exit: false }, () => {
+        this.setState({ nodes: newProps.nodes, stagger: false });
+      });
       return;
     }
 
     // Otherwise, transition out and in again
     this.props.scrollTop(0);
 
-    this.setState(
-      { nodes: [], stagger: true },
-      () => {
-        if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
-        this.refreshTimer = setTimeout(
-          () => this.setState({
-            nodes: newProps.nodes,
-            stagger: true,
-          }),
-          animation.duration.slow,
-        );
-      },
-    );
+    this.setState({ exit: true }, () => {
+      this.setState(
+        { nodes: [], stagger: true },
+        () => {
+          if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
+          this.refreshTimer = setTimeout(
+            () => this.setState({
+              nodes: newProps.nodes,
+              stagger: true,
+            }),
+            animation.duration.slow,
+          );
+        },
+      );
+    });
   }
 
   render() {
@@ -77,6 +82,7 @@ class NodeList extends Component {
     const {
       stagger,
       nodes,
+      exit,
     } = this.state;
 
     const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
@@ -98,6 +104,7 @@ class NodeList extends Component {
       <TransitionGroup
         className={classNames}
         style={styles}
+        exit={exit}
       >
         {
           nodes.map((node, index) => (
