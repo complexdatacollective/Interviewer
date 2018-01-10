@@ -1,20 +1,26 @@
 /* eslint-disable */
 import axios from 'axios';
 import Promise from 'bluebird';
+import { filesystem } from '../utils/importer';
 import { isCordova, isElectron } from './Environment';
 
-const getProtocolFile = (path) => {
+const getProtocolFile = (protocolName) => {
   if (isCordova()) {
     return Promise.reject('Local protocol file not yet supported in Cordova');
   } else if (isElectron()) {
-    const fs = window.require('fs');
+    const electron = require('electron');
+    const path = electron.remote.require('path');
+    const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
-    return new Promise((resolve, reject) => {
-      fs.readFile(path, 'utf8', (err, data) => {
-        if (err) reject(err);
-        resolve({ data });
-      });
-    });
+    const getProtocolPath = (protocolName) => {
+      const basename = path.basename(protocolName);
+      return path.join(userDataPath, 'protocols', basename);
+    };
+
+    console.log('getProtocolFile', path.join(getProtocolPath(protocolName), 'protocol.json'));
+
+    return filesystem.readFile(path.join(getProtocolPath(protocolName), 'protocol.json'), 'utf8')
+      .then(data => JSON.parse(data));
   }
 
   return Promise.reject('Environment not recognised');

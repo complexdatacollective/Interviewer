@@ -64,7 +64,7 @@ const loadProtocolEpic = action$ =>
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
         .fromPromise(getProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(runProtocol(response.data))) // Parse and save
+        .map(response => setProtocol(response)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
