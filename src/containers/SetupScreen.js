@@ -42,7 +42,7 @@ class Setup extends Component {
 
 
   onClickImportProtocol = () => {
-    importer('/Users/steve/Projects/codaco/demo.canvas.zip');
+    importer('/Users/steve/Desktop/demo.canvas');
   }
 
 

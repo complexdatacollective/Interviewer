@@ -15,9 +15,9 @@ if (isElectron()) {
 
   const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
-  const getUserDataFilename = (filename) => {
-    const basename = path.basename(filename);
-    return path.join(userDataPath, basename);
+  const getProtocolPath = (protocolName) => {
+    const basename = path.basename(protocolName);
+    return path.join(userDataPath, 'protocols', basename);
   };
 
   const readFile = filename =>
@@ -44,61 +44,91 @@ if (isElectron()) {
     });
   };
 
-  const extractZipFile = (zipObject) => {
-    const destination = path.join(userDataPath, zipObject.name);
+  const extractZipFile = (zipObject, destination) => {
+    const extractPath = path.join(destination, zipObject.name);
 
-    console.log(destination, zipObject);
+    console.log(extractPath, zipObject);
 
     return new Promise((resolve, reject) => {
       zipObject
         .nodeStream()
-        .pipe(fs.createWriteStream(destination))
+        .pipe(fs.createWriteStream(extractPath))
         .on('error', (err) => {
-          reject(destination, err);
+          reject(extractPath, err);
         })
         .on('finish', () => {
-          resolve(destination);
+          resolve(extractPath);
         });
     });
   };
 
-  const extractZipDir = (zipObject) => {
-    const destination = path.join(userDataPath, zipObject.name);
-
-    console.log(destination, zipObject);
-
-    return new Promise((resolve, reject) => {
-      fs.mkdir(destination, (err) => {
+  const mkDir = targetPath =>
+    new Promise((resolve, reject) => {
+      fs.mkdir(targetPath, (err) => {
         if (err) { reject(err); }
-        resolve(destination);
+        console.log(targetPath);
+        resolve(targetPath);
       });
     });
+
+  const extractZipDir = (zipObject, destination) => {
+    const extractPath = path.join(destination, zipObject.name);
+
+    console.log(extractPath, zipObject);
+
+    return mkDir(extractPath);
   };
 
-  const extractZip = (protocol) => {
-    console.log('extract', protocol);
+  const getNestedPaths = targetPath =>
+    targetPath
+      .split(path.sep)
+      .reduce(
+        (memo, dir) => (
+          memo.length === 0 ?
+            [dir] :
+            [...memo, path.join(memo[memo.length - 1], dir)]
+        ),
+        [],
+      );
 
-    return readFile(protocol)
+  const extractZip = (source, destination) =>
+    readFile(source)
       .then(data => Zip.loadAsync(data))
       .then(zip =>
         Promise.all(
           Object.keys(zip.files)
             .map(filename => zip.files[filename])
             .map(zipObject => (
-              zipObject.dir ? extractZipDir(zipObject) : extractZipFile(zipObject)
+              zipObject.dir ?
+                extractZipDir(zipObject, destination) :
+                extractZipFile(zipObject, destination)
             )),
         ),
-      )
-      .then((files) => { console.log(files); });
+      );
+
+  const inSequence = promises =>
+    promises.reduce(
+      (memo, promise) => memo.then(promise),
+      Promise.resolve(),
+    );
+
+  const ensurePathExists = (targetPath) => {
+    const relativePath = path.relative(userDataPath, targetPath);
+
+    inSequence(
+      getNestedPaths(relativePath)
+        .map(pathSegment => mkDir(path.join(userDataPath, pathSegment))),
+    );
   };
 
-  importer = (source) => {
-    console.log('import', source);
-    const destination = getUserDataFilename(source);
+  importer = (protocolFile) => {
+    console.log('import', protocolFile);
+    const destination = getProtocolPath(protocolFile);
 
-    return copyFile(source, destination)
-      .then(extractZip)
-      .then(() => console.log(`delete zip ${destination}`));
+    ensurePathExists(destination);
+
+    return extractZip(protocolFile, destination)
+      .then((files) => { console.log(files); });
   };
 }
 
