@@ -13,7 +13,6 @@ class ListSelect extends Component {
       filterValue: '',
       property: this.props.labelKey,
       selected: [],
-      sortedNodes: this.props.nodes.slice().sort(this.compare(this.props.labelKey)),
     };
   }
 
@@ -43,7 +42,37 @@ class ListSelect extends Component {
       return this.state.ascending ? ' \u25B2' : ' \u25BC';
     }
     return '';
-  }
+  };
+
+  /**
+    * @return sorted list
+    */
+  getSortedList = () =>
+    this.props.nodes.sort(this.compare(this.state.property, this.state.ascending));
+
+  /**
+    * @return filtered list
+    */
+  getFilteredList = list => list.filter(node => (
+    this.props.label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
+    this.props.details(node).some(detail => Object.values(detail).some(
+      item => item.toLowerCase().includes(this.state.filterValue.toLowerCase()),
+    ))
+  ));
+
+  /**
+    * @param property to sort by
+    */
+  setSortBy = (property) => {
+    if (this.state.property === property) {
+      this.toggleSortDirection();
+    } else {
+      this.setState({
+        ascending: true,
+        property,
+      });
+    }
+  };
 
   /**
     * @param {object} node
@@ -82,29 +111,11 @@ class ListSelect extends Component {
   };
 
   /**
-    * @param property to sort by
-    */
-  sortBy = (property) => {
-    if (this.state.property === property) {
-      this.toggleSortDirection();
-    } else {
-      this.setState({
-        ascending: true,
-        property,
-        sortedNodes: this.props.nodes.slice().sort(this.compare(property)),
-      });
-    }
-  };
-
-  /**
     * changes direction of current sort
     */
   toggleSortDirection = () => {
     this.setState({
       ascending: !this.state.ascending,
-      sortedNodes: this.props.nodes.slice().sort(
-        this.compare(this.state.property, !this.state.ascending),
-      ),
     });
   };
 
@@ -133,19 +144,12 @@ class ListSelect extends Component {
       name,
     } = this.props;
 
-    const filteredNodes = this.state.sortedNodes.filter(node => (
-      label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
-      details(node).some(detail => Object.values(detail).some(
-        item => item.toLowerCase().includes(this.state.filterValue.toLowerCase()),
-      ))
-    ));
-
     return (
       <Modal name={name} title="Add some nodes">
         <div>
           <Button
             color={this.state.property === labelKey ? 'primary' : 'white'}
-            onClick={() => this.sortBy(labelKey)}
+            onClick={() => this.setSortBy(labelKey)}
           >
             {labelKey + this.getDirection(labelKey)}
           </Button>
@@ -154,7 +158,7 @@ class ListSelect extends Component {
               <Button
                 color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
                 key={Object.keys(detail)[0]}
-                onClick={() => this.sortBy(Object.keys(detail)[0])}
+                onClick={() => this.setSortBy(Object.keys(detail)[0])}
               >
                 {Object.keys(detail)[0] + this.getDirection(Object.keys(detail)[0])}
               </Button>
@@ -165,7 +169,7 @@ class ListSelect extends Component {
         <CardList
           details={details}
           label={label}
-          nodes={filteredNodes}
+          nodes={this.getFilteredList(this.getSortedList())}
           onToggleCard={this.toggleCard}
           selected={this.selected}
         />

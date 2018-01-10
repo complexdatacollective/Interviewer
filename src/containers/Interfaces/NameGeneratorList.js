@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
@@ -98,12 +98,10 @@ class NameGeneratorList extends Component {
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__nodes">
             <NodeList
-              accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               id="MAIN_NODE_LIST"
               itemType="EXISTING_NODE"
               label={label}
               nodes={nodesForPrompt}
-              onDrop={this.onDrop}
               onSelect={this.onSelectNode}
             />
           </div>
@@ -162,12 +160,10 @@ function makeMapStateToProps() {
   const rehydrateForm = makeRehydrateForm();
 
   return function mapStateToProps(state, props) {
-    const externalData = getDataByPrompt(state, props);
-
     return {
       form: rehydrateForm(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
-      nodesForList: externalData,
+      nodesForList: differenceBy(getDataByPrompt(state, props), networkNodesForPrompt(state, props), 'uid'),
       nodesForPrompt: networkNodesForPrompt(state, props),
     };
   };
