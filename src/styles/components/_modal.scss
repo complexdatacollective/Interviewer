@@ -20,9 +20,11 @@ $component-name: modal;
     align-self: flex-start;
     display: flex;
     flex-direction: column;
+    height: inherit;
     width: 100%;
 
     &-content {
+      height: inherit;
       max-height: 80vh;
     }
 
@@ -32,6 +34,7 @@ $component-name: modal;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      max-height: 20vh;
       padding: 65px 0 0;
     }
   }

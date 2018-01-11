@@ -186,37 +186,37 @@
         {
           "uid": "person_1",
           "type": "person",
-          "name": "Anita",
+          "name": "FAnita",
           "nickname": "Annie",
           "age": "23"
         },
         {
           "uid": "person_2",
           "type": "person",
-          "name": "Barry",
+          "name": "HBarry",
           "nickname": "Baz",
-          "age": "23"
+          "age": "21"
         },
         {
           "uid": "person_3",
           "type": "person",
           "name": "Carlito",
           "nickname": "Carl",
-          "age": "23"
+          "age": "25"
         },
         {
           "uid": "person_4",
           "type": "person",
           "name": "Dee",
           "nickname": "Dee",
-          "age": "23"
+          "age": "22"
         },
         {
           "uid": "person_5",
           "type": "person",
-          "name": "Eugine",
+          "name": "AEugine",
           "nickname": "Eu",
-          "age": "23"
+          "age": "27"
         }
       ]
     }
@@ -323,7 +323,7 @@
             "special_category": 56,
             "close_friend": true
           },
-          "dataSource": "previousInterview",
+          "dataSource": "schoolPupils",
           "subject": {
             "entity": "node",
             "type": "person"

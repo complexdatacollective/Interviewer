@@ -125,6 +125,7 @@ class NameGeneratorList extends Component {
           name={modals.LIST_SELECT}
           nodes={nodesForList}
           onSubmit={this.onSubmitNewNodes}
+          title={prompt.text}
         />
 
         <button className="name-generator-interface__add-person" onClick={() => openModal(modals.LIST_SELECT)}>
