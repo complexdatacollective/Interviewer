@@ -54,10 +54,11 @@ class ListSelect extends Component {
     * @return filtered list
     */
   getFilteredList = list => list.filter(node => (
-    this.props.label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
+    this.props.label(node) && this.props.details(node) &&
+    (this.props.label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
     this.props.details(node).some(detail => Object.values(detail).some(
       item => item.toLowerCase().includes(this.state.filterValue.toLowerCase()),
-    ))
+    )))
   ));
 
   /**
@@ -157,7 +158,7 @@ class ListSelect extends Component {
               {labelKey + this.getDirection(labelKey)}
             </Button>
             {
-              details({}).map(detail => (
+              details({}) && details({}).map(detail => (
                 <Button
                   color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
                   key={Object.keys(detail)[0]}
@@ -200,10 +201,10 @@ ListSelect.propTypes = {
 };
 
 ListSelect.defaultProps = {
-  details: () => (''),
+  details: () => {},
   initialSortOrder: '',
   initialSortDirection: '',
-  label: () => (''),
+  label: () => {},
   labelKey: '',
   nodes: [],
   onSubmit: () => {},

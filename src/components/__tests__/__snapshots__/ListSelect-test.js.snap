@@ -1,0 +1,457 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListSelect component renders ok 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ListSelect
+    details={[Function]}
+    initialSortDirection=""
+    initialSortOrder=""
+    label={[Function]}
+    labelKey=""
+    name="foo"
+    nodes={
+        Array [
+            Object {
+              "age": "22",
+              "name": "a name",
+              "uid": "a",
+            },
+            Object {
+              "age": "88",
+              "name": "b name",
+              "uid": "b",
+            },
+            Object {
+              "age": "33",
+              "name": "c name",
+              "uid": "c",
+            },
+          ]
+    }
+    onSubmit={[Function]}
+    title="Add a Node"
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "children": <div
+        className="list-select"
+>
+        <div
+                className="list-select__sort"
+        >
+                <Button
+                        color="primary"
+                        content=""
+                        icon=""
+                        iconPosition="right"
+                        onClick={[Function]}
+                        size="small"
+                >
+                         ▼
+                </Button>
+                <input
+                        onChange={[Function]}
+                        placeholder="Filter"
+                        type="search"
+                        value=""
+                />
+        </div>
+        <Scrollable
+                details={[Function]}
+                label={[Function]}
+                nodes={Array []}
+                onToggleCard={[Function]}
+                selected={[Function]}
+        />
+        <Button
+                className="button list-select__submit"
+                color=""
+                content=""
+                icon=""
+                iconPosition="right"
+                onClick={[Function]}
+                size=""
+        >
+                Add Nodes
+        </Button>
+</div>,
+      "className": "modal--fullscreen",
+      "name": "foo",
+      "title": "Add a Node",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="list-select__sort"
+>
+            <Button
+                        color="primary"
+                        content=""
+                        icon=""
+                        iconPosition="right"
+                        onClick={[Function]}
+                        size="small"
+            >
+                         ▼
+            </Button>
+            <input
+                        onChange={[Function]}
+                        placeholder="Filter"
+                        type="search"
+                        value=""
+            />
+</div>,
+          <Scrollable
+            details={[Function]}
+            label={[Function]}
+            nodes={Array []}
+            onToggleCard={[Function]}
+            selected={[Function]}
+/>,
+          <Button
+            className="button list-select__submit"
+            color=""
+            content=""
+            icon=""
+            iconPosition="right"
+            onClick={[Function]}
+            size=""
+>
+            Add Nodes
+</Button>,
+        ],
+        "className": "list-select",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <Button
+                color="primary"
+                content=""
+                icon=""
+                iconPosition="right"
+                onClick={[Function]}
+                size="small"
+>
+                 ▼
+</Button>,
+              undefined,
+              <input
+                onChange={[Function]}
+                placeholder="Filter"
+                type="search"
+                value=""
+/>,
+            ],
+            "className": "list-select__sort",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": " ▼",
+                "color": "primary",
+                "content": "",
+                "icon": "",
+                "iconPosition": "right",
+                "onClick": [Function],
+                "size": "small",
+              },
+              "ref": null,
+              "rendered": " ▼",
+              "type": [Function],
+            },
+            undefined,
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "onChange": [Function],
+                "placeholder": "Filter",
+                "type": "search",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+          ],
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "details": [Function],
+            "label": [Function],
+            "nodes": Array [],
+            "onToggleCard": [Function],
+            "selected": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": "Add Nodes",
+            "className": "button list-select__submit",
+            "color": "",
+            "content": "",
+            "icon": "",
+            "iconPosition": "right",
+            "onClick": [Function],
+            "size": "",
+          },
+          "ref": null,
+          "rendered": "Add Nodes",
+          "type": [Function],
+        },
+      ],
+      "type": "div",
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": <div
+          className="list-select"
+>
+          <div
+                    className="list-select__sort"
+          >
+                    <Button
+                              color="primary"
+                              content=""
+                              icon=""
+                              iconPosition="right"
+                              onClick={[Function]}
+                              size="small"
+                    >
+                               ▼
+                    </Button>
+                    <input
+                              onChange={[Function]}
+                              placeholder="Filter"
+                              type="search"
+                              value=""
+                    />
+          </div>
+          <Scrollable
+                    details={[Function]}
+                    label={[Function]}
+                    nodes={Array []}
+                    onToggleCard={[Function]}
+                    selected={[Function]}
+          />
+          <Button
+                    className="button list-select__submit"
+                    color=""
+                    content=""
+                    icon=""
+                    iconPosition="right"
+                    onClick={[Function]}
+                    size=""
+          >
+                    Add Nodes
+          </Button>
+</div>,
+        "className": "modal--fullscreen",
+        "name": "foo",
+        "title": "Add a Node",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="list-select__sort"
+>
+              <Button
+                            color="primary"
+                            content=""
+                            icon=""
+                            iconPosition="right"
+                            onClick={[Function]}
+                            size="small"
+              >
+                             ▼
+              </Button>
+              <input
+                            onChange={[Function]}
+                            placeholder="Filter"
+                            type="search"
+                            value=""
+              />
+</div>,
+            <Scrollable
+              details={[Function]}
+              label={[Function]}
+              nodes={Array []}
+              onToggleCard={[Function]}
+              selected={[Function]}
+/>,
+            <Button
+              className="button list-select__submit"
+              color=""
+              content=""
+              icon=""
+              iconPosition="right"
+              onClick={[Function]}
+              size=""
+>
+              Add Nodes
+</Button>,
+          ],
+          "className": "list-select",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <Button
+                  color="primary"
+                  content=""
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size="small"
+>
+                   ▼
+</Button>,
+                undefined,
+                <input
+                  onChange={[Function]}
+                  placeholder="Filter"
+                  type="search"
+                  value=""
+/>,
+              ],
+              "className": "list-select__sort",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": " ▼",
+                  "color": "primary",
+                  "content": "",
+                  "icon": "",
+                  "iconPosition": "right",
+                  "onClick": [Function],
+                  "size": "small",
+                },
+                "ref": null,
+                "rendered": " ▼",
+                "type": [Function],
+              },
+              undefined,
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "onChange": [Function],
+                  "placeholder": "Filter",
+                  "type": "search",
+                  "value": "",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": "input",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "details": [Function],
+              "label": [Function],
+              "nodes": Array [],
+              "onToggleCard": [Function],
+              "selected": [Function],
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": "Add Nodes",
+              "className": "button list-select__submit",
+              "color": "",
+              "content": "",
+              "icon": "",
+              "iconPosition": "right",
+              "onClick": [Function],
+              "size": "",
+            },
+            "ref": null,
+            "rendered": "Add Nodes",
+            "type": [Function],
+          },
+        ],
+        "type": "div",
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
