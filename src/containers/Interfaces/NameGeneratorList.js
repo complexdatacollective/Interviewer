@@ -8,7 +8,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { makeGetPromptNodeAttributes, getDataByPrompt } from '../../selectors/name-generator';
+import { makeGetPromptNodeAttributes, getDataByPrompt, getSortOrderDefault, getSortDirectionDefault } from '../../selectors/name-generator';
 import { PromptSwiper, NodeForm } from '../../containers';
 import { ListSelect, NodeList, NodeBin } from '../../components';
 import { makeRehydrateForm } from '../../selectors/rehydrate';
@@ -73,6 +73,8 @@ class NameGeneratorList extends Component {
   render() {
     const {
       form,
+      initialSortOrder,
+      initialSortDirection,
       nodesForList,
       nodesForPrompt,
       openModal,
@@ -120,6 +122,8 @@ class NameGeneratorList extends Component {
 
         <ListSelect
           details={details}
+          initialSortOrder={initialSortOrder}
+          initialSortDirection={initialSortDirection}
           label={label}
           labelKey={labelKey}
           name={modals.LIST_SELECT}
@@ -144,6 +148,8 @@ NameGeneratorList.propTypes = {
   addOrUpdateNode: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired,
+  initialSortOrder: PropTypes.string,
+  initialSortDirection: PropTypes.string,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
@@ -155,6 +161,11 @@ NameGeneratorList.propTypes = {
   updateNode: PropTypes.func.isRequired,
 };
 
+NameGeneratorList.defaultProps = {
+  initialSortOrder: '',
+  initialSortDirection: 'ASC',
+};
+
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
@@ -163,6 +174,8 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       form: rehydrateForm(state, props),
+      initialSortOrder: getSortOrderDefault(state, props),
+      initialSortDirection: getSortDirectionDefault(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList: differenceBy(getDataByPrompt(state, props), networkNodesForPrompt(state, props), 'uid'),
       nodesForPrompt: networkNodesForPrompt(state, props),

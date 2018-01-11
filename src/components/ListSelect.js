@@ -9,9 +9,9 @@ class ListSelect extends Component {
     super(props);
 
     this.state = {
-      ascending: true,
+      ascending: this.props.initialSortDirection === 'ASC',
       filterValue: '',
-      property: this.props.labelKey,
+      property: this.props.initialSortOrder || this.props.labelKey,
       selected: [],
     };
   }
@@ -186,6 +186,8 @@ class ListSelect extends Component {
 
 ListSelect.propTypes = {
   details: PropTypes.func,
+  initialSortOrder: PropTypes.string,
+  initialSortDirection: PropTypes.string,
   label: PropTypes.func,
   labelKey: PropTypes.string,
   name: PropTypes.oneOfType([
@@ -199,6 +201,8 @@ ListSelect.propTypes = {
 
 ListSelect.defaultProps = {
   details: () => (''),
+  initialSortOrder: '',
+  initialSortDirection: '',
   label: () => (''),
   labelKey: '',
   nodes: [],

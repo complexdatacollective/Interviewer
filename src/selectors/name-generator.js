@@ -15,7 +15,18 @@ These selectors assume the following props:
 // MemoedSelectors
 
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
-// const getSortOrder = (_, props) => props.sortOrder;
+const getSortDefault = (_, props) => props.prompt.sortOrder;
+
+export const getSortOrderDefault = createSelector(
+  getSortDefault,
+  sortData => sortData && (Object.keys(sortData)[0] || ''),
+);
+
+export const getSortDirectionDefault = createSelector(
+  getSortDefault,
+  getSortOrderDefault,
+  (sortData, key) => sortData && (sortData[key] || ''),
+);
 
 export const getDataByPrompt = createSelector(
   getExternalData,
