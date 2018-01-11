@@ -303,7 +303,8 @@
           },
           "background": {
             "concentricCircles": 4,
-            "skewedTowardCenter": true
+            "skewedTowardCenter": true,
+            "image": "rubberduck.png"
           }
         }
       ]
