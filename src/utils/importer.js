@@ -1,7 +1,8 @@
 /* eslint-disable import/no-mutable-exports */
 import Zip from 'jszip';
-import { isElectron } from '../../utils/Environment';
+import { isElectron } from './Environment';
 import filesystem from './filesystem';
+import { protocolPath } from './protocol';
 
 let importer = null;
 
@@ -9,13 +10,6 @@ if (isElectron()) {
   const electron = window.require('electron');
   const path = electron.remote.require('path');
   const fs = electron.remote.require('fs');
-
-  const userDataPath = (electron.app || electron.remote.app).getPath('userData');
-
-  const getProtocolPath = (protocolName) => {
-    const basename = path.basename(protocolName);
-    return path.join(userDataPath, 'protocols', basename);
-  };
 
   const extractZipFile = (zipObject, destination) => {
     const extractPath = path.join(destination, zipObject.name);
@@ -55,12 +49,12 @@ if (isElectron()) {
       );
 
   importer = (protocolFile) => {
-    const destination = getProtocolPath(protocolFile);
+    const basename = path.basename(protocolFile);
+    const destination = protocolPath(basename);
 
     filesystem.ensurePathExists(destination);
 
-    return extractZip(protocolFile, destination)
-      .then((files) => { console.log(files); });
+    return extractZip(protocolFile, destination);
   };
 }
 

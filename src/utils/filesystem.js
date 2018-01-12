@@ -1,5 +1,5 @@
 /* eslint-disable import/no-mutable-exports */
-import { isElectron } from '../../utils/Environment';
+import { isElectron } from './Environment';
 
 let filesystem = {};
 

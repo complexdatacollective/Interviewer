@@ -2,8 +2,7 @@
 
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import getProtocol from '../../utils/getProtocol';
-import runProtocol from '../../utils/runProtocol';
+import { getProtocol } from '../../utils/protocol';
 import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
