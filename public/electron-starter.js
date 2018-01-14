@@ -3,6 +3,7 @@ const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 require('./components/updater');
+require('./components/serverDiscovery');
 
 // Module to control application life.
 const app = electron.app;
