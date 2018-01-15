@@ -10,7 +10,7 @@ const userDataPath = inEnvironment((environment) => {
     return (electron.app || electron.remote.app).getPath('userData');
   }
 
-  throw Error('userDataPath not defined for this environment', environment);
+  return '';
 });
 
 const readFile = inEnvironment((environment) => {
@@ -26,7 +26,7 @@ const readFile = inEnvironment((environment) => {
       });
   }
 
-  throw Error('readFile not defined for this environment', environment);
+  return Promise.resolve('');
 });
 
 const copyFile = inEnvironment((environment) => {
@@ -47,7 +47,7 @@ const copyFile = inEnvironment((environment) => {
       });
   }
 
-  throw Error('copyFile not defined for this environment', environment);
+  return Promise.resolve();
 });
 
 const mkDir = inEnvironment((environment) => {
@@ -63,7 +63,7 @@ const mkDir = inEnvironment((environment) => {
       });
   }
 
-  throw Error('mkDir not defined for this environment', environment);
+  return Promise.resolve();
 });
 
 const getNestedPaths = inEnvironment((environment) => {
@@ -83,7 +83,7 @@ const getNestedPaths = inEnvironment((environment) => {
         );
   }
 
-  throw Error('getNestedPaths not defined for this environment', environment);
+  return [];
 });
 
 const inSequence = promises =>
@@ -106,7 +106,7 @@ const ensurePathExists = inEnvironment((environment) => {
     };
   }
 
-  throw Error('ensurePathExists not defined for this environment', environment);
+  return Promise.resolve();
 });
 
 export {

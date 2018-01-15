@@ -16,7 +16,7 @@ const protocolPath = (environment) => {
       path.join(userDataPath, 'protocols', protocolName, filePath);
   }
 
-  return () => {};
+  return () => '';
 };
 
 export { protocolPath };

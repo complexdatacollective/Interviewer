@@ -1,73 +1,74 @@
+/* eslint-disable global-require */
+
 import Zip from 'jszip';
-import inEnvironment, { environments } from './Environment';
+import environments from './environments';
+import inEnvironment from './Environment';
 import { ensurePathExists, readFile } from './filesystem';
 import { protocolPath } from './protocol';
 
-const extractZipDir = inEnvironment(
-  (environment) => {
-    switch (environment) {
-      case environments.ELECTRON: {
-        const path = window.require('path');
+const extractZipDir = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const path = require('path');
 
-        return (zipObject, destination) => {
-          const extractPath = path.join(destination, zipObject.name);
+    return (zipObject, destination) => {
+      const extractPath = path.join(destination, zipObject.name);
 
-          return ensurePathExists(extractPath);
-        };
-      }
-      default:
-        return () => Promise.reject('Environment not recognised');
-    }
-  },
-);
+      return ensurePathExists(extractPath);
+    };
+  }
 
-const extractZipFile = inEnvironment(
-  (environment) => {
-    switch (environment) {
-      case environments.ELECTRON: {
-        const path = window.require('path');
-        const fs = window.require('fs');
+  return () => Promise.reject('Environment not recognised');
+});
 
-        return (zipObject, destination) => {
-          const extractPath = path.join(destination, zipObject.name);
+const extractZipFile = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const path = require('path');
+    const fs = require('fs');
 
-          return new Promise((resolve, reject) => {
-            zipObject
-              .nodeStream()
-              .pipe(fs.createWriteStream(extractPath))
-              .on('error', (err) => {
-                reject(extractPath, err);
-              })
-              .on('finish', () => {
-                resolve(extractPath);
-              });
+    return (zipObject, destination) => {
+      const extractPath = path.join(destination, zipObject.name);
+
+      return new Promise((resolve, reject) => {
+        zipObject
+          .nodeStream()
+          .pipe(fs.createWriteStream(extractPath))
+          .on('error', (err) => {
+            reject(extractPath, err);
+          })
+          .on('finish', () => {
+            resolve(extractPath);
           });
-        };
-      }
-      default:
-        return () => Promise.reject('Environment not recognised');
-    }
-  },
-);
+      });
+    };
+  }
 
-const extractZip = (source, destination) =>
-  readFile(source)
-    .then(data => Zip.loadAsync(data))
-    .then(zip =>
-      Promise.all(
-        Object.keys(zip.files)
-          .map(filename => zip.files[filename])
-          .map(zipObject => (
-            zipObject.dir ?
-              extractZipDir(zipObject, destination) :
-              extractZipFile(zipObject, destination)
-          )),
-      ),
-    );
+  return () => Promise.reject('Environment not recognised');
+});
+
+const extractZip = inEnvironment((environment) => {
+  if (environment !== environments.WEB) {
+    return (source, destination) =>
+      readFile(source)
+        .then(data => Zip.loadAsync(data))
+        .then(zip =>
+          Promise.all(
+            Object.keys(zip.files)
+              .map(filename => zip.files[filename])
+              .map(zipObject => (
+                zipObject.dir ?
+                  extractZipDir(zipObject, destination) :
+                  extractZipFile(zipObject, destination)
+              )),
+          ),
+        );
+  }
+
+  return Promise.resolve();
+});
 
 const importer = (environment) => {
   if (environment === environments.ELECTRON) {
-    const path = window.require('path');
+    const path = require('path');
 
     return (protocolFile) => {
       const basename = path.basename(protocolFile);
@@ -79,7 +80,7 @@ const importer = (environment) => {
     };
   }
 
-  return null;
+  return () => { console.log('Import feature not available for web'); return true; };
 };
 
 export { importer };
