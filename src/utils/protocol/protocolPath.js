@@ -1,17 +1,19 @@
-/* eslint-disable import/no-mutable-exports */
-import { isElectron } from '../Environment';
+import inEnvironment, { environments } from '../Environment';
 
-let protocolPath = null;
+const protocolPath = (environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const path = electron.remote.require('path');
 
-if (isElectron()) {
-  const electron = window.require('electron');
-  const path = electron.remote.require('path');
+    const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
-  const userDataPath = (electron.app || electron.remote.app).getPath('userData');
+    return (protocolName, filePath = '') =>
+      path.join(userDataPath, 'protocols', protocolName, filePath);
+  }
 
-  protocolPath = (protocolName, filePath = '') => {
-    return path.join(userDataPath, 'protocols', protocolName, filePath);
-  };
-}
+  return () => {};
+};
 
-export default protocolPath;
+export { protocolPath };
+
+export default inEnvironment(protocolPath);

@@ -1,61 +1,87 @@
-/* eslint-disable import/no-mutable-exports */
 import Zip from 'jszip';
-import { isElectron } from './Environment';
-import filesystem from './filesystem';
+import inEnvironment, { environments } from './Environment';
+import { ensurePathExists, readFile } from './filesystem';
 import { protocolPath } from './protocol';
 
-let importer = null;
+const extractZipDir = inEnvironment(
+  (environment) => {
+    switch (environment) {
+      case environments.ELECTRON: {
+        const path = window.require('path');
 
-if (isElectron()) {
-  const electron = window.require('electron');
-  const path = electron.remote.require('path');
-  const fs = electron.remote.require('fs');
+        return (zipObject, destination) => {
+          const extractPath = path.join(destination, zipObject.name);
 
-  const extractZipFile = (zipObject, destination) => {
-    const extractPath = path.join(destination, zipObject.name);
+          return ensurePathExists(extractPath);
+        };
+      }
+      default:
+        return () => Promise.reject('Environment not recognised');
+    }
+  },
+);
 
-    return new Promise((resolve, reject) => {
-      zipObject
-        .nodeStream()
-        .pipe(fs.createWriteStream(extractPath))
-        .on('error', (err) => {
-          reject(extractPath, err);
-        })
-        .on('finish', () => {
-          resolve(extractPath);
-        });
-    });
-  };
+const extractZipFile = inEnvironment(
+  (environment) => {
+    switch (environment) {
+      case environments.ELECTRON: {
+        const path = window.require('path');
+        const fs = window.require('fs');
 
-  const extractZipDir = (zipObject, destination) => {
-    const extractPath = path.join(destination, zipObject.name);
+        return (zipObject, destination) => {
+          const extractPath = path.join(destination, zipObject.name);
 
-    return filesystem.ensurePathExists(extractPath);
-  };
+          return new Promise((resolve, reject) => {
+            zipObject
+              .nodeStream()
+              .pipe(fs.createWriteStream(extractPath))
+              .on('error', (err) => {
+                reject(extractPath, err);
+              })
+              .on('finish', () => {
+                resolve(extractPath);
+              });
+          });
+        };
+      }
+      default:
+        return () => Promise.reject('Environment not recognised');
+    }
+  },
+);
 
-  const extractZip = (source, destination) =>
-    filesystem.readFile(source)
-      .then(data => Zip.loadAsync(data))
-      .then(zip =>
-        Promise.all(
-          Object.keys(zip.files)
-            .map(filename => zip.files[filename])
-            .map(zipObject => (
-              zipObject.dir ?
-                extractZipDir(zipObject, destination) :
-                extractZipFile(zipObject, destination)
-            )),
-        ),
-      );
+const extractZip = (source, destination) =>
+  readFile(source)
+    .then(data => Zip.loadAsync(data))
+    .then(zip =>
+      Promise.all(
+        Object.keys(zip.files)
+          .map(filename => zip.files[filename])
+          .map(zipObject => (
+            zipObject.dir ?
+              extractZipDir(zipObject, destination) :
+              extractZipFile(zipObject, destination)
+          )),
+      ),
+    );
 
-  importer = (protocolFile) => {
-    const basename = path.basename(protocolFile);
-    const destination = protocolPath(basename);
+const importer = (environment) => {
+  if (environment === environments.ELECTRON) {
+    const path = window.require('path');
 
-    filesystem.ensurePathExists(destination);
+    return (protocolFile) => {
+      const basename = path.basename(protocolFile);
+      const destination = protocolPath(basename);
 
-    return extractZip(protocolFile, destination);
-  };
-}
+      ensurePathExists(destination);
 
-export default importer;
+      return extractZip(protocolFile, destination);
+    };
+  }
+
+  return null;
+};
+
+export { importer };
+
+export default inEnvironment(importer);

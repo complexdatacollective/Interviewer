@@ -1,77 +1,118 @@
-/* eslint-disable import/no-mutable-exports */
-import { isElectron } from './Environment';
+import inEnvironment, { environments } from './Environment';
 
-let filesystem = {};
+const userDataPath = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
 
-if (isElectron()) {
-  const electron = window.require('electron');
-  const path = electron.remote.require('path');
-  const fs = electron.remote.require('fs');
+    return (electron.app || electron.remote.app).getPath('userData');
+  }
 
-  const userDataPath = (electron.app || electron.remote.app).getPath('userData');
+  throw Error(`userDataPath not defined for this environment (${environment})`);
+});
 
-  const readFile = (filename, options = null) =>
-    new Promise((resolve, reject) => {
-      fs.readFile(filename, options, (err, data) => {
-        if (err) { reject(err); }
-        console.log('readFile', filename, data);
-        resolve(data);
+const readFile = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const fs = electron.remote.require('fs');
+
+    return (filename, options = null) =>
+      new Promise((resolve, reject) => {
+        fs.readFile(filename, options, (err, data) => {
+          if (err) { reject(err); }
+          resolve(data);
+        });
       });
-    });
+  }
 
-  const copyFile = (source, destination) =>
-    new Promise((resolve, reject) => {
-      const destinationStream = fs.createWriteStream(destination);
-      const sourceStream = fs.createReadStream(source);
+  throw Error(`readFile not defined for this environment (${environment})`);
+});
 
-      destinationStream.on('close', (err) => {
-        if (err) { reject(err); }
-        resolve(destination);
+const copyFile = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const fs = electron.remote.require('fs');
+
+    return (source, destination) =>
+      new Promise((resolve, reject) => {
+        const destinationStream = fs.createWriteStream(destination);
+        const sourceStream = fs.createReadStream(source);
+
+        destinationStream.on('close', (err) => {
+          if (err) { reject(err); }
+          resolve(destination);
+        });
+
+        sourceStream.pipe(destinationStream);
       });
+  }
 
-      sourceStream.pipe(destinationStream);
-    });
+  throw Error(`copyFile not defined for this environment (${environment})`);
+});
 
-  const mkDir = targetPath =>
-    new Promise((resolve, reject) => {
-      fs.mkdir(targetPath, (err) => {
-        if (err) { reject(err); }
-        resolve(targetPath);
+const mkDir = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const fs = electron.remote.require('fs');
+
+    return targetPath =>
+      new Promise((resolve, reject) => {
+        fs.mkdir(targetPath, (err) => {
+          if (err) { reject(err); }
+          resolve(targetPath);
+        });
       });
-    });
+  }
 
-  const getNestedPaths = targetPath =>
-    targetPath
-      .split(path.sep)
-      .reduce(
-        (memo, dir) => (
-          memo.length === 0 ?
-            [dir] :
-            [...memo, path.join(memo[memo.length - 1], dir)]
-        ),
-        [],
-      );
+  throw Error(`mkDir not defined for this environment (${environment})`);
+});
 
-  const inSequence = promises =>
-    promises.reduce(
-      (memo, promise) => memo.then(promise),
-      Promise.resolve(),
-    );
+const getNestedPaths = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const path = electron.remote.require('path');
 
-  const ensurePathExists = (targetPath) => {
-    const relativePath = path.relative(userDataPath, targetPath);
+    return targetPath =>
+      targetPath
+        .split(path.sep)
+        .reduce(
+          (memo, dir) => (
+            memo.length === 0 ?
+              [dir] :
+              [...memo, path.join(memo[memo.length - 1], dir)]
+          ),
+          [],
+        );
+  }
 
-    inSequence(
-      getNestedPaths(relativePath)
-        .map(pathSegment => mkDir(path.join(userDataPath, pathSegment))),
-    ).then(() => targetPath);
-  };
+  throw Error(`getNestedPaths not defined for this environment (${environment})`);
+});
 
-  filesystem = {
-    ensurePathExists,
-    copyFile,
-    readFile,
-  };
-}
+const inSequence = promises =>
+  promises.reduce(
+    (memo, promise) => memo.then(promise),
+    Promise.resolve(),
+  );
 
-export default filesystem;
+const ensurePathExists = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+    const path = electron.remote.require('path');
+
+    return (targetPath) => {
+      const relativePath = path.relative(userDataPath, targetPath);
+
+      inSequence(
+        getNestedPaths(relativePath)
+          .map(pathSegment => mkDir(path.join(userDataPath, pathSegment))),
+      ).then(() => targetPath);
+    };
+  }
+
+  throw Error(`ensurePathExists not defined for this environment (${environment})`);
+});
+
+export {
+  ensurePathExists,
+  copyFile,
+  readFile,
+};

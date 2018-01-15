@@ -1,19 +1,19 @@
-import Promise from 'bluebird';
-import filesystem from '../filesystem';
+import { readFile } from '../filesystem';
 import { protocolPath } from './';
-import { isCordova, isElectron } from '../Environment';
+import inEnvironment, { environments } from '../Environment';
 
-const getProtocolFile = (protocolName) => {
-  if (isCordova()) {
-    return Promise.reject('Local protocol file not yet supported in Cordova');
-  } else if (isElectron()) {
-    return filesystem.readFile(protocolPath(protocolName, 'protocol.json'), 'utf8')
-      .then(data => JSON.parse(data));
+const getProtocol = (environment) => {
+  switch (environment) {
+    case environments.ELECTRON: {
+      return protocolName =>
+        readFile(protocolPath(protocolName, 'protocol.json'), 'utf8')
+          .then(data => JSON.parse(data));
+    }
+    default:
+      return Promise.reject('Local protocol file not yet supported in Cordova');
   }
-
-  return Promise.reject('Environment not recognised');
 };
 
-const getProtocol = source => getProtocolFile(source);
+export { getProtocol };
 
-export default getProtocol;
+export default inEnvironment(getProtocol);
