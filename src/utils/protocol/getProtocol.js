@@ -1,6 +1,7 @@
 import { readFile } from '../filesystem';
 import { protocolPath } from './';
-import inEnvironment, { environments } from '../Environment';
+import environments from '../environments';
+import inEnvironment from '../Environment';
 
 const getProtocol = (environment) => {
   switch (environment) {

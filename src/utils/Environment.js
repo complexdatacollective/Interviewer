@@ -1,26 +1,16 @@
-const CORDOVA = Symbol('ENVIRONMENT/CORDOVA');
-const ELECTRON = Symbol('ENVIRONMENT/ELECTRON');
-const UNKNOWN = Symbol('ENVIRONMENT/UNKNOWN');
-
-export const environments = {
-  CORDOVA,
-  ELECTRON,
-  UNKNOWN,
-};
+import environments from './environments';
 
 export const isElectron = () => !!window.require;
 
 export const isCordova = () => !!window.cordova;
 
 const getEnvironment = () => {
-  if (isCordova()) return CORDOVA;
-  if (isElectron()) return ELECTRON;
-  return UNKNOWN;
+  if (isCordova()) return environments.CORDOVA;
+  if (isElectron()) return environments.ELECTRON;
+  return environments.UNKNOWN;
 };
 
-const inEnvironment = (tree) => {
-  console.log(tree);
-  return tree(getEnvironment());
-};
+const inEnvironment = tree =>
+  tree(getEnvironment());
 
 export default inEnvironment;

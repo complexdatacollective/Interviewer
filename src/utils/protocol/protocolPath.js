@@ -1,13 +1,18 @@
-import inEnvironment, { environments } from '../Environment';
+/* eslint-disable global-require */
+
+import environments from '../environments';
+import inEnvironment from '../Environment';
+
+const isRequired = (param) => { throw new Error(`${param} is required`); };
 
 const protocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const path = electron.remote.require('path');
+    const electron = require('electron');
+    const path = require('path');
 
     const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
-    return (protocolName, filePath = '') =>
+    return (protocolName = isRequired('protocolName'), filePath = '') =>
       path.join(userDataPath, 'protocols', protocolName, filePath);
   }
 

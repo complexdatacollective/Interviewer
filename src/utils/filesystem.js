@@ -1,19 +1,21 @@
-import inEnvironment, { environments } from './Environment';
+/* eslint-disable global-require */
+
+import environments from './environments';
+import inEnvironment from './Environment';
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
+    const electron = require('electron');
 
     return (electron.app || electron.remote.app).getPath('userData');
   }
 
-  throw Error(`userDataPath not defined for this environment (${environment})`);
+  throw Error('userDataPath not defined for this environment', environment);
 });
 
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const fs = electron.remote.require('fs');
+    const fs = require('fs');
 
     return (filename, options = null) =>
       new Promise((resolve, reject) => {
@@ -24,13 +26,12 @@ const readFile = inEnvironment((environment) => {
       });
   }
 
-  throw Error(`readFile not defined for this environment (${environment})`);
+  throw Error('readFile not defined for this environment', environment);
 });
 
 const copyFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const fs = electron.remote.require('fs');
+    const fs = require('fs');
 
     return (source, destination) =>
       new Promise((resolve, reject) => {
@@ -46,13 +47,12 @@ const copyFile = inEnvironment((environment) => {
       });
   }
 
-  throw Error(`copyFile not defined for this environment (${environment})`);
+  throw Error('copyFile not defined for this environment', environment);
 });
 
 const mkDir = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const fs = electron.remote.require('fs');
+    const fs = require('fs');
 
     return targetPath =>
       new Promise((resolve, reject) => {
@@ -63,13 +63,12 @@ const mkDir = inEnvironment((environment) => {
       });
   }
 
-  throw Error(`mkDir not defined for this environment (${environment})`);
+  throw Error('mkDir not defined for this environment', environment);
 });
 
 const getNestedPaths = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const path = electron.remote.require('path');
+    const path = require('path');
 
     return targetPath =>
       targetPath
@@ -84,7 +83,7 @@ const getNestedPaths = inEnvironment((environment) => {
         );
   }
 
-  throw Error(`getNestedPaths not defined for this environment (${environment})`);
+  throw Error('getNestedPaths not defined for this environment', environment);
 });
 
 const inSequence = promises =>
@@ -95,8 +94,7 @@ const inSequence = promises =>
 
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-    const path = electron.remote.require('path');
+    const path = require('path');
 
     return (targetPath) => {
       const relativePath = path.relative(userDataPath, targetPath);
@@ -108,7 +106,7 @@ const ensurePathExists = inEnvironment((environment) => {
     };
   }
 
-  throw Error(`ensurePathExists not defined for this environment (${environment})`);
+  throw Error('ensurePathExists not defined for this environment', environment);
 });
 
 export {
