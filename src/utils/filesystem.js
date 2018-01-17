@@ -86,6 +86,26 @@ const getNestedPaths = inEnvironment((environment) => {
   throw new Error();
 });
 
+const writeStream = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
+    return (destination, stream) =>
+      new Promise((resolve, reject) => {
+        stream
+          .pipe(fs.createWriteStream(destination))
+          .on('error', (err) => {
+            reject(destination, err);
+          })
+          .on('finish', () => {
+            resolve(destination);
+          });
+      });
+  }
+
+  return () => Promise.reject('Environment not recognised');
+});
+
 const inSequence = promises =>
   promises.reduce(
     (memo, promise) => memo.then(promise),
@@ -93,14 +113,10 @@ const inSequence = promises =>
   );
 
 const ensurePathExists = inEnvironment((environment) => {
-  console.log('ensure path Exists', environment);
-
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
     return (targetPath) => {
-      console.log('ensure path Exists 2', userDataPath(), targetPath);
-
       const relativePath = path.relative(userDataPath(), targetPath);
 
       return inSequence(
@@ -117,4 +133,5 @@ export {
   ensurePathExists,
   copyFile,
   readFile,
+  writeStream,
 };

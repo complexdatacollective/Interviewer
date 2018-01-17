@@ -3,7 +3,7 @@
 import Zip from 'jszip';
 import environments from './environments';
 import inEnvironment from './Environment';
-import { ensurePathExists, readFile } from './filesystem';
+import { ensurePathExists, readFile, writeStream } from './filesystem';
 import { protocolPath } from './protocol';
 
 const extractZipDir = inEnvironment((environment) => {
@@ -23,22 +23,11 @@ const extractZipDir = inEnvironment((environment) => {
 const extractZipFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
-    const fs = require('fs');
 
     return (zipObject, destination) => {
       const extractPath = path.join(destination, zipObject.name);
 
-      return new Promise((resolve, reject) => {
-        zipObject
-          .nodeStream()
-          .pipe(fs.createWriteStream(extractPath))
-          .on('error', (err) => {
-            reject(extractPath, err);
-          })
-          .on('finish', () => {
-            resolve(extractPath);
-          });
-      });
+      return writeStream(extractPath, zipObject.nodeStream());
     };
   }
 

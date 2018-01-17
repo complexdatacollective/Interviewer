@@ -1,24 +1,27 @@
 /* eslint-env jest */
 
 import environments from '../../environments';
-import { protocolPath } from '../protocolPath';
+import { getEnvironment } from '../../Environment';
+import protocolPath from '../protocolPath';
 
 describe('protocolPath', () => {
   describe('Electron', () => {
-    const subject = protocolPath(environments.ELECTRON);
+    beforeAll(() => {
+      getEnvironment.mockReturnValue(environments.ELECTRON);
+    });
 
     it('Generates an asset path for the file', () => {
       expect(
-        subject('foo.canvas', 'protocol.json'),
+        protocolPath('foo.canvas', 'protocol.json'),
       ).toEqual('/Users/Foo/Library/Application Support/Network Canvas/protocols/foo.canvas/protocol.json');
 
       expect(
-        subject('foo.canvas'),
-      ).toEqual('/Users/Foo/Library/Application Support/Network Canvas/protocols/foo.canvas/');
+        protocolPath('foo.canvas'),
+      ).toEqual('/Users/Foo/Library/Application Support/Network Canvas/protocols/foo.canvas');
     });
 
     it('Thows an error if the protocol is not specified', () => {
-      expect(() => subject()).toThrow();
+      expect(() => protocolPath()).toThrow();
     });
   });
 });

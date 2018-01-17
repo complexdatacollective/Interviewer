@@ -19,6 +19,4 @@ const protocolPath = (environment) => {
   return () => '';
 };
 
-export { protocolPath };
-
 export default inEnvironment(protocolPath);

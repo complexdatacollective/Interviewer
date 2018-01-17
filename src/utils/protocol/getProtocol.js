@@ -19,6 +19,4 @@ const getProtocol = (environment) => {
   };
 };
 
-export { getProtocol };
-
 export default inEnvironment(getProtocol);

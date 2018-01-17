@@ -1,7 +1,8 @@
 /* eslint-env jest */
 
 import environments from '../../environments';
-import { getProtocol } from '../getProtocol';
+import { getEnvironment } from '../../Environment';
+import getProtocol from '../getProtocol';
 import protocolPath from '../protocolPath';
 import { readFile } from '../../filesystem';
 
@@ -10,10 +11,14 @@ jest.mock('../protocolPath');
 
 describe('getProtocol', () => {
   describe('Electron', () => {
-    const subject = getProtocol(environments.ELECTRON);
+    beforeAll(() => {
+      getEnvironment.mockReturnValue(environments.ELECTRON);
+      readFile.mockReturnValue(Promise.resolve('{ "foo": "bar" }'));
+    });
 
     it('returns the parsed protocol object', () => {
-      expect(subject('bazz.protocol')).resolves.toEqual({
+
+      expect(getProtocol('bazz.protocol')).resolves.toEqual({
         foo: 'bar',
       });
 

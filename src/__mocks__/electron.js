@@ -1,5 +1,8 @@
+import path from 'path';
+import process from 'process';
+
 const app = {
-  getPath: () => '/Users/Foo/Library/Application Support/Network Canvas',
+  getPath: () => path.join(process.cwd(), '__tests__', 'tmp'),
 };
 
 const electron = {
