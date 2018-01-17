@@ -7,10 +7,10 @@ const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const electron = require('electron');
 
-    return (electron.app || electron.remote.app).getPath('userData');
+    return () => (electron.app || electron.remote.app).getPath('userData');
   }
 
-  return '';
+  throw new Error();
 });
 
 const readFile = inEnvironment((environment) => {
@@ -26,7 +26,7 @@ const readFile = inEnvironment((environment) => {
       });
   }
 
-  return Promise.resolve('');
+  throw new Error();
 });
 
 const copyFile = inEnvironment((environment) => {
@@ -47,7 +47,7 @@ const copyFile = inEnvironment((environment) => {
       });
   }
 
-  return Promise.resolve();
+  throw new Error();
 });
 
 const mkDir = inEnvironment((environment) => {
@@ -63,7 +63,7 @@ const mkDir = inEnvironment((environment) => {
       });
   }
 
-  return Promise.resolve();
+  throw new Error();
 });
 
 const getNestedPaths = inEnvironment((environment) => {
@@ -83,7 +83,7 @@ const getNestedPaths = inEnvironment((environment) => {
         );
   }
 
-  return [];
+  throw new Error();
 });
 
 const inSequence = promises =>
@@ -93,20 +93,24 @@ const inSequence = promises =>
   );
 
 const ensurePathExists = inEnvironment((environment) => {
+  console.log('ensure path Exists', environment);
+
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
     return (targetPath) => {
-      const relativePath = path.relative(userDataPath, targetPath);
+      console.log('ensure path Exists 2', userDataPath(), targetPath);
 
-      inSequence(
+      const relativePath = path.relative(userDataPath(), targetPath);
+
+      return inSequence(
         getNestedPaths(relativePath)
-          .map(pathSegment => mkDir(path.join(userDataPath, pathSegment))),
+          .map(pathSegment => mkDir(path.join(userDataPath(), pathSegment))),
       ).then(() => targetPath);
     };
   }
 
-  return Promise.resolve();
+  throw new Error();
 });
 
 export {

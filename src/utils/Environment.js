@@ -12,7 +12,8 @@ const getEnvironment = () => {
   return environments.WEB;
 };
 
-const inEnvironment = tree =>
-  tree(getEnvironment());
+const inEnvironment = (tree, debug = '') =>
+  (...args) =>
+    tree(getEnvironment())(...args);
 
 export default inEnvironment;

@@ -63,10 +63,10 @@ const extractZip = inEnvironment((environment) => {
         );
   }
 
-  return Promise.resolve();
+  return Promise.reject();
 });
 
-const importer = (environment) => {
+const importer = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
@@ -81,8 +81,6 @@ const importer = (environment) => {
   }
 
   return () => { console.log('Import feature not available for web'); return true; };
-};
+});
 
-export { importer };
-
-export default inEnvironment(importer);
+export default importer;

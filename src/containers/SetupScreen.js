@@ -40,11 +40,9 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
-
   onClickImportProtocol = () => {
     importer('/Users/steve/Desktop/demo.canvas');
   }
-
 
   onDialogConfirm = () => {
     // eslint-disable-next-line no-console
