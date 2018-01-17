@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from 'network-canvas-ui';
-import { CardList, Modal } from '.';
+import { CardList } from '.';
 
 class ListSelect extends Component {
   constructor(props) {
@@ -12,17 +12,8 @@ class ListSelect extends Component {
       ascending: this.props.initialSortDirection === 'ASC',
       filterValue: '',
       property: this.props.initialSortOrder || this.props.labelKey,
-      selected: [],
     };
   }
-
-  /**
-    * submit all selected nodes
-    */
-  onSubmit = () => {
-    this.props.onSubmit(this.state.selected);
-    this.setState({ selected: [] });
-  };
 
   /**
     *
@@ -78,7 +69,7 @@ class ListSelect extends Component {
   /**
     * @param {object} node
     */
-  selected = node => !!this.state.selected.find(current => current.uid === node.uid);
+  selected = node => !!this.props.selectedNodes.find(current => current.uid === node.uid);
 
   /**
     * @param property to sort by
@@ -125,15 +116,11 @@ class ListSelect extends Component {
     * @param {object} node
     */
   toggleCard = (node) => {
-    const index = this.state.selected.findIndex(current => current.uid === node.uid);
+    const index = this.props.selectedNodes.findIndex(current => current.uid === node.uid);
     if (index !== -1) {
-      this.setState({
-        selected: this.state.selected.filter((ele, i) => index !== i),
-      });
+      this.props.onRemoveNode(this.props.nodes.find(current => current.uid === node.uid));
     } else {
-      this.setState({
-        selected: this.state.selected.concat(node),
-      });
+      this.props.onSubmitNode(this.props.nodes.find(current => current.uid === node.uid));
     }
   };
 
@@ -142,45 +129,40 @@ class ListSelect extends Component {
       details,
       label,
       labelKey,
-      name,
-      title,
     } = this.props;
 
     return (
-      <Modal name={name} title={title} className="modal--fullscreen">
-        <div className="list-select">
-          <div className="list-select__sort">
-            <Button
-              color={this.state.property === labelKey ? 'primary' : 'white'}
-              onClick={() => this.setSortBy(labelKey)}
-              size="small"
-            >
-              {labelKey + this.getDirection(labelKey)}
-            </Button>
-            {
-              details({}) && details({}).map(detail => (
-                <Button
-                  color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
-                  key={Object.keys(detail)[0]}
-                  onClick={() => this.setSortBy(Object.keys(detail)[0])}
-                  size="small"
-                >
-                  {Object.keys(detail)[0] + this.getDirection(Object.keys(detail)[0])}
-                </Button>
-              ))
-            }
-            <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />
-          </div>
-          <CardList
-            details={details}
-            label={label}
-            nodes={this.getFilteredList(this.getSortedList())}
-            onToggleCard={this.toggleCard}
-            selected={this.selected}
-          />
-          <Button className="button list-select__submit" onClick={this.onSubmit}>Add Nodes</Button>
+      <div className="list-select">
+        <div className="list-select__sort">
+          <Button
+            color={this.state.property === labelKey ? 'primary' : 'white'}
+            onClick={() => this.setSortBy(labelKey)}
+            size="small"
+          >
+            {labelKey + this.getDirection(labelKey)}
+          </Button>
+          {
+            details({}) && details({}).map(detail => (
+              <Button
+                color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
+                key={Object.keys(detail)[0]}
+                onClick={() => this.setSortBy(Object.keys(detail)[0])}
+                size="small"
+              >
+                {Object.keys(detail)[0] + this.getDirection(Object.keys(detail)[0])}
+              </Button>
+            ))
+          }
+          <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />
         </div>
-      </Modal>
+        <CardList
+          details={details}
+          label={label}
+          nodes={this.getFilteredList(this.getSortedList())}
+          onToggleCard={this.toggleCard}
+          selected={this.selected}
+        />
+      </div>
     );
   }
 }
@@ -191,13 +173,10 @@ ListSelect.propTypes = {
   initialSortDirection: PropTypes.string,
   label: PropTypes.func,
   labelKey: PropTypes.string,
-  name: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.symbol,
-  ]).isRequired,
   nodes: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func,
-  title: PropTypes.string,
+  onRemoveNode: PropTypes.func,
+  onSubmitNode: PropTypes.func,
+  selectedNodes: PropTypes.array,
 };
 
 ListSelect.defaultProps = {
@@ -207,8 +186,9 @@ ListSelect.defaultProps = {
   label: () => {},
   labelKey: '',
   nodes: [],
-  onSubmit: () => {},
-  title: 'Add a Node',
+  onRemoveNode: () => {},
+  onSubmitNode: () => {},
+  selectedNodes: [],
 };
 
 export default ListSelect;
