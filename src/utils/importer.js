@@ -1,9 +1,10 @@
 /* eslint-disable global-require */
+/* global cordova */
 
 import Zip from 'jszip';
 import environments from './environments';
 import inEnvironment from './Environment';
-import { ensurePathExists, readFile, writeStream } from './filesystem';
+import { getNestedPaths, ensurePathExists, readFile, writeStream, writeFile } from './filesystem';
 import { protocolPath } from './protocol';
 
 const extractZipDir = inEnvironment((environment) => {
@@ -12,6 +13,15 @@ const extractZipDir = inEnvironment((environment) => {
 
     return (zipObject, destination) => {
       const extractPath = path.join(destination, zipObject.name);
+
+      return ensurePathExists(extractPath);
+    };
+  }
+
+  if (environment === environments.CORDOVA) {
+    return (zipObject, destination) => {
+      // console.log('extractZipDir', { zipObject, destination, extractPath: `${destination}${zipObject.name}` });
+      const extractPath = `${destination}${zipObject.name}`;
 
       return ensurePathExists(extractPath);
     };
@@ -31,14 +41,33 @@ const extractZipFile = inEnvironment((environment) => {
     };
   }
 
+  if (environment === environments.CORDOVA) {
+    return (zipObject, destination) => {
+      const extractPath = `${destination}${zipObject.name}`;
+
+      console.log('extractZipFile', { zipObject, destination, extractPath });
+
+      return zipObject.async('string')
+        .then((text) => {
+          console.log('async', text);
+          return writeFile(extractPath, text)
+            .catch((err) => { console.log('err', err); });
+        });
+    };
+  }
+
   return () => Promise.reject('Environment not recognised');
 });
 
 const extractZip = inEnvironment((environment) => {
   if (environment !== environments.WEB) {
+    const zipLoadOptions = environment === environments.CORDOVA ?
+      { base64: true } :
+      {};
+
     return (source, destination) =>
       readFile(source)
-        .then(data => Zip.loadAsync(data))
+        .then(data => Zip.loadAsync(data, zipLoadOptions))
         .then(zip =>
           Promise.all(
             Object.keys(zip.files)
@@ -57,11 +86,26 @@ const extractZip = inEnvironment((environment) => {
 
 const importer = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    console.log('electron');
     const path = require('path');
 
     return (protocolFile) => {
       const basename = path.basename(protocolFile);
       const destination = protocolPath(basename);
+
+      ensurePathExists(destination);
+
+      return extractZip(protocolFile, destination);
+    };
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => {
+      const protocolFile = `${cordova.file.applicationDirectory}www/demo.canvas`;
+      const destination = protocolPath('demo.canvas');
+
+      console.log('importer', { destination, protocolFile });
+      getNestedPaths(destination);
 
       ensurePathExists(destination);
 

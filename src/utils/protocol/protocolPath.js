@@ -2,21 +2,24 @@
 
 import environments from '../environments';
 import inEnvironment from '../Environment';
+import { userDataPath } from '../filesystem';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
 const protocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
     const path = require('path');
 
-    const userDataPath = (electron.app || electron.remote.app).getPath('userData');
-
     return (protocolName = isRequired('protocolName'), filePath = '') =>
-      path.join(userDataPath, 'protocols', protocolName, filePath);
+      path.join(userDataPath(), 'protocols', protocolName, filePath);
   }
 
-  return () => '';
+  if (environment === environments.CORDOVA) {
+    return (protocolName = isRequired('protocolName'), filePath = '') =>
+      [userDataPath(), protocolName, filePath].join('/');
+  }
+
+  throw new Error('protocolPath not specified on this platform');
 };
 
 export default inEnvironment(protocolPath);

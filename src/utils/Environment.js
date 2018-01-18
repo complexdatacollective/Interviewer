@@ -12,7 +12,7 @@ const getEnvironment = () => {
   return environments.WEB;
 };
 
-const inEnvironment = (tree, debug = '') =>
+const inEnvironment = tree =>
   (...args) =>
     tree(getEnvironment())(...args);
 

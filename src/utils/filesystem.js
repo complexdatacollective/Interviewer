@@ -1,13 +1,45 @@
 /* eslint-disable global-require */
+/* global FileReader, window */
 
+import { trimChars } from 'lodash/fp';
 import environments from './environments';
 import inEnvironment from './Environment';
+
+const trimPath = trimChars('/ ');
+
+const splitUrl = (targetPath) => {
+  const pathParts = targetPath.split('/');
+  const baseDirectory = pathParts.slice(0, -1).join('/');
+  const [tail] = pathParts.slice(-1);
+  return [baseDirectory, tail];
+};
+
+const inSequence = promises =>
+  promises.reduce(
+    (memo, promise) => memo.then(promise),
+    Promise.resolve(),
+  );
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const electron = require('electron');
 
     return () => (electron.app || electron.remote.app).getPath('userData');
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => 'cdvfile://localhost/persistent';
+  }
+
+  throw new Error();
+});
+
+const resolveFileSystemUrl = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA) {
+    return path =>
+      new Promise((resolve, reject) => {
+        window.resolveLocalFileSystemURL(path, resolve, reject);
+      });
   }
 
   throw new Error();
@@ -17,38 +49,99 @@ const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const fs = require('fs');
 
-    return (filename, options = null) =>
+    return filename =>
       new Promise((resolve, reject) => {
-        fs.readFile(filename, options, (err, data) => {
+        fs.readFile(filename, null, (err, data) => {
           if (err) { reject(err); }
           resolve(data);
         });
       });
   }
 
-  throw new Error();
-});
+  if (environment === environments.CORDOVA) {
+    const fileReader = (fileEntry) => {
+      console.log('fileReader', { fileEntry });
+      return new Promise((resolve, reject) => {
+        fileEntry.file((file) => {
+          console.log('file', { file });
+          const reader = new FileReader();
 
-const copyFile = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+          reader.onloadend = (event) => {
+            console.log(event.target.result);
+            resolve(event.target.result.replace(/^data:\*\/\*;base64,/, ''));
+          };
 
-    return (source, destination) =>
-      new Promise((resolve, reject) => {
-        const destinationStream = fs.createWriteStream(destination);
-        const sourceStream = fs.createReadStream(source);
-
-        destinationStream.on('close', (err) => {
-          if (err) { reject(err); }
-          resolve(destination);
-        });
-
-        sourceStream.pipe(destinationStream);
+          reader.readAsDataURL(file);
+        }, reject);
       });
+    };
+
+    return filename =>
+      resolveFileSystemUrl(filename)
+        .then(fileReader);
   }
 
   throw new Error();
 });
+
+const writeFile = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA) {
+    const makeFileWriter = fileEntry =>
+      new Promise((resolve, reject) => {
+        fileEntry.createWriter(resolve, reject);
+      });
+
+    const newFile = (directoryEntry, filename) =>
+      new Promise((resolve, reject) => {
+        directoryEntry.getFile(filename, { create: true }, resolve, reject);
+      });
+
+    return (fileUrl, textData) => {
+      const [baseDirectory, filename] = splitUrl(fileUrl);
+
+      return resolveFileSystemUrl(baseDirectory)
+        .then(directoryEntry => newFile(directoryEntry, filename))
+        .then(makeFileWriter)
+        .then(fileWriter =>
+          new Promise((resolve, reject) => {
+            console.log('writing', textData);
+            fileWriter.onwriteend = () => resolve(); // eslint-disable-line no-param-reassign
+            fileWriter.onerror = () => reject(); // eslint-disable-line no-param-reassign
+            fileWriter.write(textData);
+          }),
+        );
+    };
+  }
+
+  throw new Error();
+});
+
+// const copyFile = inEnvironment((environment) => {
+//   if (environment === environments.ELECTRON) {
+//     const fs = require('fs');
+
+//     return (source, destination) =>
+//       new Promise((resolve, reject) => {
+//         const destinationStream = fs.createWriteStream(destination);
+//         const sourceStream = fs.createReadStream(source);
+
+//         destinationStream.on('close', (err) => {
+//           if (err) { reject(err); }
+//           resolve(destination);
+//         });
+
+//         sourceStream.pipe(destinationStream);
+//       });
+//   }
+
+//   if (environment === environments.CORDOVA) {
+//     return (source, destination) =>
+//       resolveFileSystemUrl(source)
+//         .then(fileEntry => fileEntry.copyTo(destination));
+//   }
+
+//   throw new Error();
+// });
 
 const mkDir = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -61,6 +154,22 @@ const mkDir = inEnvironment((environment) => {
           resolve(targetPath);
         });
       });
+  }
+
+  if (environment === environments.CORDOVA) {
+    const appendDirectory = (directoryEntry, directoryToAppend) =>
+      new Promise((resolve, reject) => {
+        directoryEntry.getDirectory(directoryToAppend, { create: true }, resolve, reject);
+      });
+
+    return (targetUrl) => {
+      const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
+
+      return resolveFileSystemUrl(baseDirectory).then(
+        directoryEntry =>
+          appendDirectory(directoryEntry, directoryToAppend),
+      );
+    };
   }
 
   throw new Error();
@@ -81,6 +190,27 @@ const getNestedPaths = inEnvironment((environment) => {
           ),
           [],
         );
+  }
+
+  if (environment === environments.CORDOVA) {
+    // Only works for cdvfile:// format paths
+    return (targetUrl) => {
+      const url = new URL(targetUrl);
+
+      const path = trimPath(url.pathname).split('/');
+
+      return path
+        .slice(1)
+        .reduce(
+          (memo, dir) => (
+            memo.length === 0 ?
+              [dir] :
+              [...memo, `${memo[memo.length - 1]}/${dir}`]
+          ),
+          [`${url.protocol}//${url.hostname}/${path[0]}`],
+        )
+        .slice(1);
+    };
   }
 
   throw new Error();
@@ -106,12 +236,6 @@ const writeStream = inEnvironment((environment) => {
   return () => Promise.reject('Environment not recognised');
 });
 
-const inSequence = promises =>
-  promises.reduce(
-    (memo, promise) => memo.then(promise),
-    Promise.resolve(),
-  );
-
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
@@ -126,12 +250,30 @@ const ensurePathExists = inEnvironment((environment) => {
     };
   }
 
+  if (environment === environments.CORDOVA) {
+    return (targetUrl) => {
+      return inSequence(
+        getNestedPaths(targetUrl)
+          .map(pathSegment => mkDir(pathSegment)),
+      ).then(() => targetUrl);
+    };
+  }
+
   throw new Error();
 });
 
+window.resolveFileSystemUrl = resolveFileSystemUrl;
+window.getNestedPaths = getNestedPaths;
+window.ensurePathExists = ensurePathExists;
+window.mkDir = mkDir;
+window.writeFile = writeFile;
+
 export {
+  userDataPath,
+  getNestedPaths,
   ensurePathExists,
-  copyFile,
+  // copyFile,
   readFile,
+  writeFile,
   writeStream,
 };

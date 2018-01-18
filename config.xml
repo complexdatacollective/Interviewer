@@ -44,10 +44,13 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="iosPersistentFileLocation" value="Library" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
     <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="^4.5.0" />
+    <engine name="ios" spec="^4.5.4" />
 </widget>
