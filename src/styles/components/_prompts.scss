@@ -36,6 +36,11 @@ $module-name: prompts;
       transform: translateX(0);
     }
 
+    &--leaving {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+
     &-header {
       font-weight: 200;
       max-width: 80vw;
