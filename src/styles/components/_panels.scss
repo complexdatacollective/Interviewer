@@ -1,5 +1,5 @@
 .panels {
-  @include transition-properties((opacity width margin-right), $animation-default-easing, $animation-standard-duration)
+  @include transition-properties((opacity width margin-right), $animation-default-easing, $animation-standard-duration);
   display: flex;
   flex-direction: column;
   opacity: 1;
