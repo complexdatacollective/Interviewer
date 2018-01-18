@@ -1,5 +1,4 @@
 @import '~network-canvas-ui/src/styles/all';
-@import 'ui/all';
 @import 'utils/all';
 @import 'helpers/all';
 @import 'components/all';
@@ -16,8 +15,12 @@
 
 html,
 body {
-  margin: 0;
   overflow: hidden;
-  padding: 0;
   user-select: none;
+  color: palette('text');
+  background: palette('background');
+}
+
+a {
+  color: palette('link');
 }
