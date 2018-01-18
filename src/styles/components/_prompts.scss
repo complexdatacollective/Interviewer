@@ -23,7 +23,7 @@ $module-name: prompts;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    transition: transform $animation-slow-duration $animation-default-easing, opacity $animation-fast-duration $animation-default-easing;
+    transition: transform $animation-standard-duration $animation-default-easing, opacity $animation-fast-duration $animation-default-easing;
     text-align: center;
     padding-bottom: 2.5rem;
 
