@@ -13,6 +13,7 @@ import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
 import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';
+import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const updater = new Updater();
 
@@ -26,6 +27,15 @@ const initialState = {
     onConfirm: () => {},
     confirmLabel: 'Continue',
     hasCancelButton: false,
+  },
+  serverDiscoverDialog: {
+    title: 'Server Discovery',
+    type: 'info',
+    additionalInformation: '',
+    content: null,
+    onConfirm: () => { },
+    confirmLabel: 'Continue',
+    hasCancelButton: true,
   },
 };
 
@@ -130,6 +140,19 @@ class SessionMenu extends Component {
     this.props.resetState();
   };
 
+  getServerDiscoveryInfo = () => {
+    const serverDiscoverer = ServerDiscoverer();
+    serverDiscoverer.stopListening();
+    this.setState({
+      serverDiscoverDialog: {
+        ...this.state.serverDiscoverDialog,
+        content: serverDiscoverer.getServiceInfos(),
+      },
+    }, () => {
+      this.props.openModal('SERVER_DISCOVERY');
+    });
+  }
+
   confirmUpdateDownload = () => {
     // User clicked download Button
     // TODO: implement progress updates/loader
@@ -155,7 +178,21 @@ class SessionMenu extends Component {
     ];
 
     if (isElectron()) {
-      items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
+      items.push({
+        id: 'update-check',
+        label: 'Check for Update',
+        icon: 'menu-custom-interface',
+        onClick: updater.checkForUpdate,
+      });
+    }
+
+    if (isElectron() || isCordova()) {
+      items.push({
+        id: 'server-discovery',
+        label: 'Pair with Server',
+        icon: 'menu-custom-interface',
+        onClick: this.getServerDiscoveryInfo,
+      });
     }
 
     items.map((item) => {
@@ -199,6 +236,17 @@ class SessionMenu extends Component {
           onConfirm={this.state.updateDialog.onConfirm}
         >
           {this.state.updateDialog.content}
+        </Dialog>
+        <Dialog
+          name="SERVER_DISCOVERY"
+          title={this.state.serverDiscoverDialog.title}
+          type={this.state.serverDiscoverDialog.type}
+          confirmLabel={this.state.serverDiscoverDialog.confirmLabel}
+          hasCancelButton={this.state.serverDiscoverDialog.hasCancelButton}
+          additionalInformation={this.state.serverDiscoverDialog.additionalInformation}
+          onConfirm={this.state.serverDiscoverDialog.onConfirm}
+        >
+          {this.state.serverDiscoverDialog.content}
         </Dialog>
       </Menu>
     );

@@ -50,6 +50,7 @@
         "cross-spawn": "4.0.2",
         "css-loader": "0.28.4",
         "detect-port": "1.1.0",
+        "diont": "git+https://github.com/codaco/Diont.git",
         "dotenv": "4.0.0",
         "electron": "^1.7.6",
         "electron-builder": "^19.26.3",
@@ -131,8 +132,7 @@
         "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-wkwebview-engine": "^1.1.4",
-        "cordova-plugin-x-socialsharing": "^5.2.0",
-        "diont": "^0.9.7"
+        "cordova-plugin-x-socialsharing": "^5.2.0"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",
