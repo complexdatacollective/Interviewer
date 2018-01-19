@@ -40,7 +40,7 @@ class NodeList extends Component {
     }
 
     // if we provided the same id, then just update normally
-    if (newProps.id === this.props.id) {
+    if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
         this.setState({ nodes: newProps.nodes, stagger: false });
       });
@@ -139,7 +139,7 @@ NodeList.propTypes = {
   isOver: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
-  id: PropTypes.string.isRequired,
+  listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
 };
 

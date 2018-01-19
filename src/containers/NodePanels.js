@@ -91,7 +91,8 @@ class NodePanels extends PureComponent {
         minimise={!this.isPanelOpen(index)}
       >
         <NodeList
-          id={`PANEL_NODE_LIST_${stageId}_${promptId}_${index}`}
+          listId={`PANEL_NODE_LIST_${stageId}_${promptId}_${index}`}
+          id={`PANEL_NODE_LIST_${index}`}
           {...nodeListProps}
           label={label}
           itemType="NEW_NODE"

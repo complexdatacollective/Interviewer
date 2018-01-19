@@ -61,7 +61,7 @@ const dropTarget = WrappedComponent =>
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
       store.dispatch(
-        actions.updateTarget({
+        actions.upsertTarget({
           id: this.props.id,
           onDrop: this.props.onDrop,
           onDrag: this.props.onDrag,
