@@ -55,7 +55,12 @@ class PromptSwiper extends Component {
     } = this.props;
 
     const promptsRender = prompts.map((prompt, index) =>
-      <Prompt key={index} label={prompt.text} isActive={promptIndex === index} />,
+      (<Prompt
+        key={index}
+        label={prompt.text}
+        isActive={promptIndex === index}
+        isLeaving={promptIndex === (index - 1)}
+      />),
     );
 
     const classes = cx(
