@@ -8,7 +8,7 @@ import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
-import { Menu } from '../components';
+import { Menu, Modal } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
 import Updater from '../utils/Updater';
@@ -28,7 +28,7 @@ const initialState = {
     confirmLabel: 'Continue',
     hasCancelButton: false,
   },
-  serverDiscoverDialog: {
+  serverDiscoveryModal: {
     title: 'Server Discovery',
     type: 'info',
     additionalInformation: '',
@@ -142,15 +142,17 @@ class SessionMenu extends Component {
 
   getServerDiscoveryInfo = () => {
     const serverDiscoverer = ServerDiscoverer();
-    serverDiscoverer.stopListening();
     this.setState({
-      serverDiscoverDialog: {
-        ...this.state.serverDiscoverDialog,
+      serverDiscoveryModal: {
+        ...this.state.serverDiscoveryModal,
         content: serverDiscoverer.getServiceInfos(),
       },
     }, () => {
       this.props.openModal('SERVER_DISCOVERY');
     });
+
+    // on modal close
+    // serverDiscoverer.stopListening();
   }
 
   confirmUpdateDownload = () => {
@@ -237,17 +239,12 @@ class SessionMenu extends Component {
         >
           {this.state.updateDialog.content}
         </Dialog>
-        <Dialog
+        <Modal
           name="SERVER_DISCOVERY"
-          title={this.state.serverDiscoverDialog.title}
-          type={this.state.serverDiscoverDialog.type}
-          confirmLabel={this.state.serverDiscoverDialog.confirmLabel}
-          hasCancelButton={this.state.serverDiscoverDialog.hasCancelButton}
-          additionalInformation={this.state.serverDiscoverDialog.additionalInformation}
-          onConfirm={this.state.serverDiscoverDialog.onConfirm}
+          title={this.state.serverDiscoveryModal.title}
         >
-          {this.state.serverDiscoverDialog.content}
-        </Dialog>
+          {this.state.serverDiscoveryModal.content}
+        </Modal>
       </Menu>
     );
   }

@@ -7,10 +7,9 @@ import environments from './environments';
 const serverDiscoverer = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const diont = require('diont')({
-      onClose: () => console.log('hi'),
+      onClose: () => console.log('server discovery socket closed'),
     });
 
-    console.log(diont);
     diont.on('serviceAnnounced', (serviceInfo) => {
       // A service was announced
       // This function triggers for services not yet available in diont.getServiceInfos()
@@ -21,9 +20,11 @@ const serverDiscoverer = inEnvironment((environment) => {
       console.log('All known services', diont.getServiceInfos());
     });
 
+    console.log(diont.getServiceInfos());
+
     return () => ({
       getServiceInfos: diont.getServiceInfos,
-      stopListening: diont.close,
+      stopListening: diont.closeSocket,
     });
   }
 
