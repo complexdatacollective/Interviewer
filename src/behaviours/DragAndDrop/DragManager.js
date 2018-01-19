@@ -62,7 +62,7 @@ class dragManager {
     this.onDragMove = throttle(onDragMove, 1000 / 60);
     this.onDragEnd = onDragEnd;
     this.el.addEventListener('touchstart', this.onMoveStart, { passive: true });
-    this.el.addEventListener('touchmove', this.onMove);
+    this.el.addEventListener('touchmove', this.onMove, { passive: false });
     this.el.addEventListener('touchend', this.onMoveEnd, { passive: true });
     this.el.addEventListener('mousedown', this.onMoveStart, { passive: true });
   }
@@ -79,7 +79,7 @@ class dragManager {
   }
 
   trackMouse = () => {
-    window.addEventListener('mousemove', this.onMove);
+    window.addEventListener('mousemove', this.onMove, { passive: false });
     window.addEventListener('mouseup', this.onMoveEnd, { passive: true });
   }
 

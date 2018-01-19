@@ -18,7 +18,7 @@ describe('DropTarget', () => {
     let component;
 
     beforeEach(() => {
-      actions.updateTarget.mockClear();
+      actions.upsertTarget.mockClear();
       const MockComponent = DropTarget('div');
 
       component = mount((
@@ -30,8 +30,8 @@ describe('DropTarget', () => {
       component.unmount();
     });
 
-    it('registers target with UPDATE_TARGET on mount', () => {
-      expect(actions.updateTarget.mock.calls.length).toEqual(1);
+    it('registers target with UPSERT_TARGET on mount', () => {
+      expect(actions.upsertTarget.mock.calls.length).toEqual(1);
     });
   });
 
@@ -39,7 +39,7 @@ describe('DropTarget', () => {
     let component;
 
     beforeEach(() => {
-      actions.updateTarget.mockClear();
+      actions.upsertTarget.mockClear();
       const MockComponent = DropTarget('div');
 
       component = mount((
@@ -51,9 +51,9 @@ describe('DropTarget', () => {
       component.unmount();
     });
 
-    it('updates target with UPDATE_TARGET on interval', () => {
+    it('upserts target with UPSERT_TARGET on interval', () => {
       jest.runTimersToTime(1000);
-      expect(actions.updateTarget.mock.calls.length).toEqual(10); // 10 fps
+      expect(actions.upsertTarget.mock.calls.length).toEqual(10); // 10 fps
     });
   });
 
