@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes, getDataByPrompt, getSortOrderDefault, getSortDirectionDefault } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
@@ -32,7 +33,7 @@ class NameGeneratorList extends Component {
    * New node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addorUpdateNode({ ...node, ...this.props.newNodeAttributes });
+    this.props.addNode({ ...node, ...this.props.newNodeAttributes });
   }
 
   onRemoveNode = (item) => {
@@ -82,7 +83,7 @@ class NameGeneratorList extends Component {
 }
 
 NameGeneratorList.propTypes = {
-  addorUpdateNode: PropTypes.func.isRequired,
+  addNode: PropTypes.func.isRequired,
   initialSortOrder: PropTypes.string,
   initialSortDirection: PropTypes.string,
   newNodeAttributes: PropTypes.object.isRequired,
@@ -101,24 +102,28 @@ NameGeneratorList.defaultProps = {
 };
 
 function makeMapStateToProps() {
-  const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+  const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
+    let nodesForList = getDataByPrompt(state, props);
+    if (!props.stage.showExistingNodes) {
+      nodesForList = differenceBy(getDataByPrompt(state, props), networkNodesForOtherPrompts(state, props), 'uid');
+    }
+
     return {
-      activePromptAttributes: props.prompt.additionalAttributes,
       initialSortOrder: getSortOrderDefault(state, props),
       initialSortDirection: getSortDirectionDefault(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
-      nodesForList: getDataByPrompt(state, props),
-      selectedNodes: networkNodesForPrompt(state, props),
+      nodesForList,
+      selectedNodes: networkNodes(state),
     };
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addorUpdateNode: bindActionCreators(networkActions.addNode, dispatch),
+    addNode: bindActionCreators(networkActions.addNode, dispatch),
     removeNode: bindActionCreators(networkActions.removeNode, dispatch),
   };
 }
