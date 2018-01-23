@@ -20,10 +20,9 @@ const serverDiscoverer = inEnvironment((environment) => {
       console.log('All known services', diont.getServiceInfos());
     });
 
-    console.log(diont.getServiceInfos());
-
     return () => ({
       getServiceInfos: diont.getServiceInfos,
+      serverDetected: !!diont.getServiceInfos(),
       stopListening: diont.closeSocket,
     });
   }
