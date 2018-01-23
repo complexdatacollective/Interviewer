@@ -143,19 +143,23 @@ class SessionMenu extends Component {
   };
 
   getServerDiscoveryInfo = () => {
-    const { service: { name, host, port } } = serverDiscoverer.getServiceInfos();
-    console.log(serverDiscoverer.getServiceInfos());
+    const services = serverDiscoverer.getServiceInfos();
+
     const serverDiscContent = (
       <div>
-        <p>Server Name: {name}</p>
-        <p>Server Host: {host}</p>
-        <p>Server port: {port}</p>
+        {
+          services && Object.keys(services).map((service, idx) => (
+            <div key={idx}>
+              <p>{service}</p>
+            </div>
+          ))
+        }
       </div>
     );
     this.setState({
       serverDiscoveryModal: {
         ...this.state.serverDiscoveryModal,
-        content: serverDiscoverer.serverDetected ? serverDiscContent : 'Server Offline',
+        content: services ? serverDiscContent : 'Server Offline',
       },
     }, () => {
       this.props.openModal('SERVER_DISCOVERY');
