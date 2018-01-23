@@ -16,6 +16,7 @@ import getVersion from '../utils/getVersion';
 import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const updater = new Updater();
+const serverDiscoverer = ServerDiscoverer();
 
 const initialState = {
   version: '0.0.0',
@@ -48,7 +49,6 @@ class SessionMenu extends Component {
     super();
 
     this.state = initialState;
-
     updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
       this.setState({
         updateDialog: {
@@ -115,6 +115,8 @@ class SessionMenu extends Component {
   }
 
   componentWillMount() {
+    this.props.registerModal('SERVER_DISCOVERY');
+
     getVersion().then((version) => {
       this.setState(...this.state, {
         version,
@@ -141,18 +143,18 @@ class SessionMenu extends Component {
   };
 
   getServerDiscoveryInfo = () => {
-    const serverDiscoverer = ServerDiscoverer();
     this.setState({
       serverDiscoveryModal: {
         ...this.state.serverDiscoveryModal,
-        content: serverDiscoverer.getServiceInfos(),
+        content: 'bloop',
       },
     }, () => {
       this.props.openModal('SERVER_DISCOVERY');
     });
+  }
 
-    // on modal close
-    // serverDiscoverer.stopListening();
+  stopServerDiscovererListen = () => {
+    serverDiscoverer.stopListening();
   }
 
   confirmUpdateDownload = () => {
@@ -242,6 +244,7 @@ class SessionMenu extends Component {
         <Modal
           name="SERVER_DISCOVERY"
           title={this.state.serverDiscoveryModal.title}
+          onCloseModal={this.stopServerDiscovererListen}
         >
           {this.state.serverDiscoveryModal.content}
         </Modal>
@@ -256,6 +259,7 @@ SessionMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
+  registerModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   addMockNodes: PropTypes.func.isRequired,
@@ -276,6 +280,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   openModal: bindActionCreators(modalActions.openModal, dispatch),
+  registerModal: bindActionCreators(modalActions.registerModal, dispatch),
   resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),

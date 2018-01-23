@@ -104,6 +104,7 @@ class MenuFactory extends Component {
           </Scroller>
         </div>
         {!hideButton && <Icon name={icon} className="menu__burger" onClick={this.menuClick} />}
+        {this.props.children}
       </div>
     );
   } // end render
@@ -117,6 +118,7 @@ MenuFactory.propTypes = {
   title: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   searchField: PropTypes.object,
+  children: PropTypes.node,
 };
 
 MenuFactory.defaultProps = {
@@ -125,6 +127,7 @@ MenuFactory.defaultProps = {
   items: [],
   searchField: null,
   title: 'Options',
+  children: null,
 };
 
 export default MenuFactory;
