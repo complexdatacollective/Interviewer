@@ -16,7 +16,6 @@ import getVersion from '../utils/getVersion';
 import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const updater = new Updater();
-const serverDiscoverer = ServerDiscoverer();
 
 const initialState = {
   version: '0.0.0',
@@ -49,6 +48,7 @@ class SessionMenu extends Component {
     super();
 
     this.state = initialState;
+    this.serverDiscoverer = null;
     updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
       this.setState({
         updateDialog: {
@@ -115,6 +115,7 @@ class SessionMenu extends Component {
   }
 
   componentWillMount() {
+    this.serverDiscoverer = ServerDiscoverer();
     this.props.registerModal('SERVER_DISCOVERY');
 
     getVersion().then((version) => {
@@ -143,7 +144,7 @@ class SessionMenu extends Component {
   };
 
   getServerDiscoveryInfo = () => {
-    const services = serverDiscoverer.getServiceInfos();
+    const services = this.serverDiscoverer.getServiceInfos();
 
     const serverDiscContent = (
       <div>
@@ -167,7 +168,7 @@ class SessionMenu extends Component {
   }
 
   stopServerDiscovererListen = () => {
-    serverDiscoverer.stopListening();
+    this.serverDiscoverer.stopListening();
   }
 
   confirmUpdateDownload = () => {

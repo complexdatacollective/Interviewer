@@ -1,5 +1,4 @@
 /* eslint-disable global-require */
-/* global cordova */
 
 import inEnvironment from './Environment';
 import environments from './environments';
@@ -22,13 +21,19 @@ const serverDiscoverer = inEnvironment((environment) => {
 
     return () => ({
       getServiceInfos: diont.getServiceInfos,
-      serverDetected: !!diont.getServiceInfos(),
       stopListening: diont.closeSocket,
     });
   }
 
   if (environment === environments.CORDOVA) {
-    return () => cordova.file.dataDirectory;
+    return new Promise((resolve) => {
+      const diont = window.Diont();
+
+      resolve({
+        getServiceInfos: diont.getServiceInfos,
+        stopListening: diont.closeSocket,
+      });
+    });
   }
 
   return () => Promise.reject('Environment not recognised');
