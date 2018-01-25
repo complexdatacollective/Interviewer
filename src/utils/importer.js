@@ -20,7 +20,6 @@ const extractZipDir = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     return (zipObject, destination) => {
-      // console.log('extractZipDir', { zipObject, destination, extractPath: `${destination}${zipObject.name}` });
       const extractPath = `${destination}${zipObject.name}`;
 
       return ensurePathExists(extractPath);
@@ -61,13 +60,9 @@ const extractZipFile = inEnvironment((environment) => {
 
 const extractZip = inEnvironment((environment) => {
   if (environment !== environments.WEB) {
-    const zipLoadOptions = environment === environments.CORDOVA ?
-      { base64: true } :
-      {};
-
     return (source, destination) =>
-      readFile(source, 'base64')
-        .then(data => Zip.loadAsync(data.replace(/^data:\*\/\*;base64,/, ''), zipLoadOptions))
+      readFile(source)
+        .then(data => Zip.loadAsync(data))
         .then((zip) => {
           console.log(Object.keys(zip.files));
           return zip;
@@ -93,7 +88,8 @@ const importer = inEnvironment((environment) => {
     console.log('electron');
     const path = require('path');
 
-    return (protocolFile) => {
+    return () => { // return (protocolFile) => { TODO: Proper spec
+      const protocolFile = `${window.__dirname}/demo.canvas`; // eslint-disable-line
       const basename = path.basename(protocolFile);
       const destination = protocolPath(basename);
 
@@ -104,11 +100,10 @@ const importer = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return () => {
+    return () => { // return (protocolFile) => { TODO: Proper spec
       const protocolFile = `${cordova.file.applicationDirectory}www/demo.canvas`;
       const destination = protocolPath('demo.canvas');
 
-      console.log('importer', { destination, protocolFile });
       getNestedPaths(destination);
 
       ensurePathExists(destination);

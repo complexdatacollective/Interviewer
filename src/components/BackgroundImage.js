@@ -4,6 +4,16 @@ import { connect } from 'react-redux';
 import { assetUrl } from '../utils/protocol';
 
 class BackgroundImage extends Component {
+  static propTypes = {
+    path: PropTypes.string.isRequired,
+    style: PropTypes.object,
+    getAssetUrl: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    style: {},
+  };
+
   constructor(props) {
     super(props);
 
@@ -14,7 +24,7 @@ class BackgroundImage extends Component {
 
   componentDidMount() {
     const { getAssetUrl, path } = this.props;
-    getAssetUrl(path).then(src => this.setState({ src })).catch(console.log);
+    getAssetUrl(path).then(src => this.setState({ src }));
   }
 
   render() {
@@ -25,18 +35,8 @@ class BackgroundImage extends Component {
         {...props}
       />
     );
-  };
-};
-
-BackgroundImage.propTypes = {
-  path: PropTypes.string.isRequired,
-  style: PropTypes.object,
-  getAssetUrl: PropTypes.func.isRequired,
-};
-
-BackgroundImage.defaultProps = {
-  style: {},
-};
+  }
+}
 
 const mapStateToProps = state => ({
   getAssetUrl: assetPath => assetUrl(state.protocol.path, assetPath),

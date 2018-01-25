@@ -41,7 +41,7 @@ class Setup extends Component {
   }
 
   onClickImportProtocol = () => {
-    importer('/Users/steve/Desktop/demo.canvas');
+    importer('Path to protocol here');
   }
 
   onDialogConfirm = () => {

@@ -4,6 +4,16 @@ import { connect } from 'react-redux';
 import { assetUrl } from '../utils/protocol';
 
 class Image extends Component {
+  static propTypes = {
+    alt: PropTypes.string,
+    path: PropTypes.string.isRequired,
+    getAssetUrl: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    alt: '',
+  };
+
   constructor(props) {
     super(props);
 
@@ -20,18 +30,8 @@ class Image extends Component {
   render() {
     const { getAssetUrl, path, alt, ...props } = this.props;
     return <img src={this.state.src} alt={alt} {...props} />;
-  };
-};
-
-Image.propTypes = {
-  alt: PropTypes.string,
-  path: PropTypes.string.isRequired,
-  getAssetUrl: PropTypes.func.isRequired,
-};
-
-Image.defaultProps = {
-  alt: '',
-};
+  }
+}
 
 const mapStateToProps = state => ({
   getAssetUrl: assetPath => assetUrl(state.protocol.path, assetPath),

@@ -59,36 +59,45 @@ const readFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const fileReader = (encoding = 'utf-8') =>
-      (fileEntry) => {
-        console.log('fileReader', { fileEntry });
-        return new Promise((resolve, reject) => {
-          fileEntry.file((file) => {
-            console.log('file', { file });
-            const reader = new FileReader();
+    const fileReader = fileEntry =>
+      new Promise((resolve, reject) => {
+        fileEntry.file((file) => {
+          const reader = new FileReader();
 
-            if (encoding === 'base64') {
-              reader.onloadend = (event) => {
-                console.log(event.target.result);
-                resolve(event.target.result);
-              };
+          reader.onloadend = (event) => {
+            resolve(event.target.result);
+          };
 
-              reader.readAsDataURL(file);
-            } else {
-              reader.onloadend = (event) => {
-                console.log(event.target.result);
-                resolve(event.target.result);
-              };
+          reader.readAsArrayBuffer(file);
+        }, reject);
+      });
 
-              reader.readAsText(file);
-            }
-          }, reject);
-        });
-      };
-
-    return (filename, encoding) =>
+    return filename =>
       resolveFileSystemUrl(filename)
-        .then(fileReader(encoding));
+        .then(fileReader);
+  }
+
+  throw new Error();
+});
+
+const readFileAsDataUrl = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA) {
+    const fileReader = fileEntry =>
+      new Promise((resolve, reject) => {
+        fileEntry.file((file) => {
+          const reader = new FileReader();
+
+          reader.onloadend = (event) => {
+            resolve(event.target.result);
+          };
+
+          reader.readAsDataURL(file);
+        }, reject);
+      });
+
+    return filename =>
+      resolveFileSystemUrl(filename)
+        .then(fileReader);
   }
 
   throw new Error();
@@ -106,7 +115,7 @@ const writeFile = inEnvironment((environment) => {
         directoryEntry.getFile(filename, { create: true, exclusive: false }, resolve, reject);
       });
 
-    return (fileUrl, textData) => {
+    return (fileUrl, data) => {
       const [baseDirectory, filename] = splitUrl(fileUrl);
 
       return resolveFileSystemUrl(baseDirectory)
@@ -114,10 +123,9 @@ const writeFile = inEnvironment((environment) => {
         .then(makeFileWriter)
         .then(fileWriter =>
           new Promise((resolve, reject) => {
-            console.log('writing', textData);
             fileWriter.onwriteend = () => resolve(); // eslint-disable-line no-param-reassign
             fileWriter.onerror = () => reject(); // eslint-disable-line no-param-reassign
-            fileWriter.write(textData);
+            fileWriter.write(data);
           }),
         );
     };
@@ -125,33 +133,6 @@ const writeFile = inEnvironment((environment) => {
 
   throw new Error();
 });
-
-// const copyFile = inEnvironment((environment) => {
-//   if (environment === environments.ELECTRON) {
-//     const fs = require('fs');
-
-//     return (source, destination) =>
-//       new Promise((resolve, reject) => {
-//         const destinationStream = fs.createWriteStream(destination);
-//         const sourceStream = fs.createReadStream(source);
-
-//         destinationStream.on('close', (err) => {
-//           if (err) { reject(err); }
-//           resolve(destination);
-//         });
-
-//         sourceStream.pipe(destinationStream);
-//       });
-//   }
-
-//   if (environment === environments.CORDOVA) {
-//     return (source, destination) =>
-//       resolveFileSystemUrl(source)
-//         .then(fileEntry => fileEntry.copyTo(destination));
-//   }
-
-//   throw new Error();
-// });
 
 const mkDir = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -261,30 +242,22 @@ const ensurePathExists = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return (targetUrl) => {
-      return inSequence(
+    return targetUrl =>
+      inSequence(
         getNestedPaths(targetUrl)
           .map(pathSegment => mkDir(pathSegment)),
       ).then(() => targetUrl);
-    };
   }
 
   throw new Error();
 });
 
-window.resolveFileSystemUrl = resolveFileSystemUrl;
-window.getNestedPaths = getNestedPaths;
-window.ensurePathExists = ensurePathExists;
-window.mkDir = mkDir;
-window.writeFile = writeFile;
-window.readFile = readFile;
-
 export {
   userDataPath,
   getNestedPaths,
   ensurePathExists,
-  // copyFile,
   readFile,
+  readFileAsDataUrl,
   writeFile,
   writeStream,
 };
