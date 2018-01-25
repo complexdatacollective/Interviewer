@@ -66,8 +66,12 @@ const extractZip = inEnvironment((environment) => {
       {};
 
     return (source, destination) =>
-      readFile(source)
+      readFile(source, 'base64')
         .then(data => Zip.loadAsync(data, zipLoadOptions))
+        .then((zip) => {
+          console.log(Object.keys(zip.files));
+          return zip;
+        })
         .then(zip =>
           Promise.all(
             Object.keys(zip.files)

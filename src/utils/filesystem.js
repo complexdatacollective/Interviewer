@@ -59,26 +59,36 @@ const readFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const fileReader = (fileEntry) => {
-      console.log('fileReader', { fileEntry });
-      return new Promise((resolve, reject) => {
-        fileEntry.file((file) => {
-          console.log('file', { file });
-          const reader = new FileReader();
+    const fileReader = (encoding = 'utf-8') =>
+      (fileEntry) => {
+        console.log('fileReader', { fileEntry });
+        return new Promise((resolve, reject) => {
+          fileEntry.file((file) => {
+            console.log('file', { file });
+            const reader = new FileReader();
 
-          reader.onloadend = (event) => {
-            console.log(event.target.result);
-            resolve(event.target.result.replace(/^data:\*\/\*;base64,/, ''));
-          };
+            if (encoding === 'base64') {
+              reader.onloadend = (event) => {
+                console.log(event.target.result);
+                resolve(event.target.result.replace(/^data:\*\/\*;base64,/, ''));
+              };
 
-          reader.readAsDataURL(file);
-        }, reject);
-      });
-    };
+              reader.readAsDataURL(file);
+            } else {
+              reader.onloadend = (event) => {
+                console.log(event.target.result);
+                resolve(event.target.result);
+              };
 
-    return filename =>
+              reader.readAsText(file);
+            }
+          }, reject);
+        });
+      };
+
+    return (filename, encoding) =>
       resolveFileSystemUrl(filename)
-        .then(fileReader);
+        .then(fileReader(encoding));
   }
 
   throw new Error();
