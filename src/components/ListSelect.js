@@ -15,6 +15,19 @@ class ListSelect extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.initialSortOrder) {
+      this.setState({
+        property: nextProps.initialSortOrder,
+      });
+    }
+    if (nextProps.initialSortDirection) {
+      this.setState({
+        ascending: nextProps.initialSortDirection === 'ASC',
+      });
+    }
+  }
+
   /**
     *
     */
@@ -128,31 +141,22 @@ class ListSelect extends Component {
     const {
       details,
       label,
-      labelKey,
+      sortFields,
     } = this.props;
 
     return (
       <div className="list-select">
         <div className="list-select__sort">
-          <Button
-            color={this.state.property === labelKey ? 'primary' : 'white'}
-            onClick={() => this.setSortBy(labelKey)}
-            size="small"
-          >
-            {labelKey + this.getDirection(labelKey)}
-          </Button>
-          {
-            details({}) && details({}).map(detail => (
-              <Button
-                color={this.state.property === Object.keys(detail)[0] ? 'primary' : 'white'}
-                key={Object.keys(detail)[0]}
-                onClick={() => this.setSortBy(Object.keys(detail)[0])}
-                size="small"
-              >
-                {Object.keys(detail)[0] + this.getDirection(Object.keys(detail)[0])}
-              </Button>
-            ))
-          }
+          { sortFields && sortFields.map(sortField => (
+            <Button
+              color={this.state.property === sortField ? 'primary' : 'white'}
+              key={sortField}
+              onClick={() => this.setSortBy(sortField)}
+              size="small"
+            >
+              {sortField + this.getDirection(sortField)}
+            </Button>
+          ))}
           <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />
         </div>
         <CardList
@@ -177,6 +181,7 @@ ListSelect.propTypes = {
   onRemoveNode: PropTypes.func,
   onSubmitNode: PropTypes.func,
   selectedNodes: PropTypes.array,
+  sortFields: PropTypes.array,
 };
 
 ListSelect.defaultProps = {
@@ -189,6 +194,7 @@ ListSelect.defaultProps = {
   onRemoveNode: () => {},
   onSubmitNode: () => {},
   selectedNodes: [],
+  sortFields: [],
 };
 
 export default ListSelect;

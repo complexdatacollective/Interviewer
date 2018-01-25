@@ -505,6 +505,21 @@
           },
           "sortOrder": {
             "name": "ASC"
+          },
+          "nodeDisplay": {
+            "primary": "nickname",
+            "secondary": [
+              {
+                "label": "Name",
+                "variable": "name",
+                "sortable": true
+              },
+              {
+                "label": "Age",
+                "variable": "age",
+                "sortable": true
+              }
+            ]
           }
         },
         {
@@ -521,6 +536,20 @@
           },
           "sortOrder": {
             "nickname": "DESC"
+          },
+          "nodeDisplay": {
+            "primary": "nickname",
+            "secondary": [
+              {
+                "label": "Name",
+                "variable": "name",
+                "sortable": true
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
           }
         }
       ]

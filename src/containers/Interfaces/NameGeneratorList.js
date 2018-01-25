@@ -7,14 +7,9 @@ import { differenceBy } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
-import { makeGetPromptNodeAttributes, getDataByPrompt, getSortOrderDefault, getSortDirectionDefault } from '../../selectors/name-generator';
+import { getDataByPrompt, getPrimaryDisplay, getSecondaryDisplay, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
-
-// Render method for the node labels
-const labelKey = 'nickname';
-const label = node => `${node[labelKey]}`;
-const details = node => [{ name: `${node.name}` }, { age: `${node.age}` }];
 
 /**
   * Name Generator List Interface
@@ -40,15 +35,22 @@ class NameGeneratorList extends Component {
     this.props.removeNode(item.uid);
   }
 
+  label = node => `${node[this.props.labelKey]}`;
+
+  details = node => this.props.visibleSupplementaryFields.map(
+    field => ({ [field.label]: node[field.variable] }));
+
   render() {
     const {
       initialSortOrder,
       initialSortDirection,
+      labelKey,
       nodesForList,
       prompt,
       promptBackward,
       promptForward,
       selectedNodes,
+      sortFields,
     } = this.props;
 
     const {
@@ -66,15 +68,16 @@ class NameGeneratorList extends Component {
           />
         </div>
         <ListSelect
-          details={details}
+          details={this.details}
           initialSortOrder={initialSortOrder}
           initialSortDirection={initialSortDirection}
-          label={label}
+          label={this.label}
           labelKey={labelKey}
           nodes={nodesForList}
           onRemoveNode={this.onRemoveNode}
           onSubmitNode={this.onSubmitNewNode}
           selectedNodes={selectedNodes}
+          sortFields={sortFields}
           title={prompt.text}
         />
       </div>
@@ -86,6 +89,7 @@ NameGeneratorList.propTypes = {
   addNode: PropTypes.func.isRequired,
   initialSortOrder: PropTypes.string,
   initialSortDirection: PropTypes.string,
+  labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
@@ -93,7 +97,9 @@ NameGeneratorList.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
   selectedNodes: PropTypes.array.isRequired,
+  sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
+  visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
 NameGeneratorList.defaultProps = {
@@ -114,9 +120,12 @@ function makeMapStateToProps() {
     return {
       initialSortOrder: getSortOrderDefault(state, props),
       initialSortDirection: getSortDirectionDefault(state, props),
+      labelKey: getPrimaryDisplay(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
       selectedNodes: networkNodes(state),
+      sortFields: getSortFields(state, props),
+      visibleSupplementaryFields: getSecondaryDisplay(state, props),
     };
   };
 }
