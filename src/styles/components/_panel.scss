@@ -38,11 +38,15 @@ $heading-size: 100px;
     display: flex;
   }
 
+  .node-list {
+    padding-top: 20px;
+  }
+
   .node {
-    font-size: 100px;
+    font-size: 120px;
     margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
-    margin: 5px;
+    margin: 2px;
     @include breakpoint('full') {
       font-size: 120px;
     }
