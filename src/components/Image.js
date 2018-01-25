@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { assetUrl } from '../utils/protocol';
 
-const Image = ({ getAssetUrl, path, alt, ...props }) =>
-  <img src={getAssetUrl(path)} alt={alt} {...props} />;
+class Image extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      src: '',
+    };
+  }
+
+  componentDidMount() {
+    const { getAssetUrl, path } = this.props;
+    getAssetUrl(path).then(src => this.setState({ src })).catch(console.log);
+  }
+
+  render() {
+    const { getAssetUrl, path, alt, ...props } = this.props;
+    return <img src={this.state.src} alt={alt} {...props} />;
+  };
+};
 
 Image.propTypes = {
   alt: PropTypes.string,

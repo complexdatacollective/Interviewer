@@ -16,12 +16,11 @@ const protocolPath = (environment) => {
 
   if (environment === environments.CORDOVA) {
     return (protocolName = isRequired('protocolName'), filePath = '') =>
-      [userDataPath(), protocolName, protocolName, filePath].join('/');  // TODO: WORK AROUND MALFORMED PATHS
+      [userDataPath(), protocolName, protocolName, filePath].join('/'); // TODO: WORK AROUND MALFORMED PATHS
   }
 
   throw new Error('protocolPath not specified on this platform');
 };
 
 window.protocolPath = inEnvironment(protocolPath);
-
 export default inEnvironment(protocolPath);

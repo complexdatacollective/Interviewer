@@ -70,7 +70,7 @@ const readFile = inEnvironment((environment) => {
             if (encoding === 'base64') {
               reader.onloadend = (event) => {
                 console.log(event.target.result);
-                resolve(event.target.result.replace(/^data:\*\/\*;base64,/, ''));
+                resolve(event.target.result);
               };
 
               reader.readAsDataURL(file);
@@ -103,7 +103,7 @@ const writeFile = inEnvironment((environment) => {
 
     const newFile = (directoryEntry, filename) =>
       new Promise((resolve, reject) => {
-        directoryEntry.getFile(filename, { create: true }, resolve, reject);
+        directoryEntry.getFile(filename, { create: true, exclusive: false }, resolve, reject);
       });
 
     return (fileUrl, textData) => {
@@ -277,6 +277,7 @@ window.getNestedPaths = getNestedPaths;
 window.ensurePathExists = ensurePathExists;
 window.mkDir = mkDir;
 window.writeFile = writeFile;
+window.readFile = readFile;
 
 export {
   userDataPath,

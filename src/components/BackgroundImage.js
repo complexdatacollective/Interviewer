@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { assetUrl } from '../utils/protocol';
 
-const BackgroundImage = ({ getAssetUrl, path, style, ...props }) => (
-  <div
-    style={{ ...style, backgroundImage: `url(${getAssetUrl(path)})` }}
-    {...props}
-  />
-);
+class BackgroundImage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      src: '',
+    };
+  }
+
+  componentDidMount() {
+    const { getAssetUrl, path } = this.props;
+    getAssetUrl(path).then(src => this.setState({ src })).catch(console.log);
+  }
+
+  render() {
+    const { getAssetUrl, path, style, ...props } = this.props;
+    return (
+      <div
+        style={{ ...style, backgroundImage: `url(${this.state.src})` }}
+        {...props}
+      />
+    );
+  };
+};
 
 BackgroundImage.propTypes = {
   path: PropTypes.string.isRequired,

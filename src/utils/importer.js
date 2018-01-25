@@ -47,7 +47,7 @@ const extractZipFile = inEnvironment((environment) => {
 
       console.log('extractZipFile', { zipObject, destination, extractPath });
 
-      return zipObject.async('string')
+      return zipObject.async('blob')
         .then((text) => {
           console.log('async', text);
           return writeFile(extractPath, text)
@@ -67,7 +67,7 @@ const extractZip = inEnvironment((environment) => {
 
     return (source, destination) =>
       readFile(source, 'base64')
-        .then(data => Zip.loadAsync(data, zipLoadOptions))
+        .then(data => Zip.loadAsync(data.replace(/^data:\*\/\*;base64,/, ''), zipLoadOptions))
         .then((zip) => {
           console.log(Object.keys(zip.files));
           return zip;
