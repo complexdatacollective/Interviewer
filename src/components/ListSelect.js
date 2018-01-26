@@ -16,12 +16,12 @@ class ListSelect extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.initialSortOrder) {
+    if (nextProps.initialSortOrder !== this.props.initialSortOrder) {
       this.setState({
         property: nextProps.initialSortOrder,
       });
     }
-    if (nextProps.initialSortDirection) {
+    if (nextProps.initialSortDirection !== this.props.initialSortDirection) {
       this.setState({
         ascending: nextProps.initialSortDirection === 'ASC',
       });
