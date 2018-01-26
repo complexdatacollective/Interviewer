@@ -111,7 +111,8 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              id="MAIN_NODE_LIST"
+              listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
+              id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}

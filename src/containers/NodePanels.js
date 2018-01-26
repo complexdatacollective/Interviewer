@@ -40,12 +40,16 @@ class NodePanels extends PureComponent {
     isDragging: PropTypes.bool,
     panels: PropTypes.array,
     meta: PropTypes.object,
+    prompt: PropTypes.object,
+    stage: PropTypes.object,
   };
 
   static defaultProps = {
     panels: [],
     meta: {},
     isDragging: false,
+    prompt: { id: null },
+    stage: { id: null },
   };
 
   onDrop = ({ meta }, dataSource) => {
@@ -69,6 +73,9 @@ class NodePanels extends PureComponent {
       .reduce((memo, panelOpen) => memo || panelOpen, false);
 
   renderNodePanel = (panel, index) => {
+    const stageId = this.props.stage.id;
+    const promptId = this.props.prompt.id;
+
     const {
       title,
       highlight,
@@ -84,6 +91,7 @@ class NodePanels extends PureComponent {
         minimise={!this.isPanelOpen(index)}
       >
         <NodeList
+          listId={`PANEL_NODE_LIST_${stageId}_${promptId}_${index}`}
           id={`PANEL_NODE_LIST_${index}`}
           {...nodeListProps}
           label={label}

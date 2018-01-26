@@ -25,10 +25,10 @@ describe('reducer', () => {
     });
   });
 
-  describe('UPDATE_TARGET', () => {
+  describe('UPSERT_TARGET', () => {
     it('when new add to list', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           count: 3,
         }),
@@ -41,15 +41,15 @@ describe('reducer', () => {
 
     it('when existing replace previous instance', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           count: 3,
         }),
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'bar',
           count: 7,
         }),
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           count: 5,
         }),
@@ -63,9 +63,9 @@ describe('reducer', () => {
   });
 
   describe('RENAME_TARGET', () => {
-    it('updates the target ids', () => {
+    it('upserts the target ids', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           count: 8,
         }),
@@ -84,7 +84,7 @@ describe('reducer', () => {
   describe('REMOVE_TARGET', () => {
     it('remove target from list', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           count: 8,
         }),
@@ -99,7 +99,7 @@ describe('reducer', () => {
   describe('DRAG_START', () => {
     it('add source to the state', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           accepts: () => {},
         }),
@@ -182,9 +182,9 @@ describe('reducer', () => {
       });
     });
 
-    it('update source properties', () => {
+    it('upsert source properties', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           accepts: () => {},
         }),
@@ -276,7 +276,7 @@ describe('reducer', () => {
 
     it('set source to null', () => {
       const result = getResult([
-        actions.updateTarget({
+        actions.upsertTarget({
           id: 'foo',
           accepts: () => {},
         }),

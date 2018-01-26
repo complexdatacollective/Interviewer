@@ -9,6 +9,7 @@
   height: 100vh;
   overflow: hidden;
   background-color: palette('background');
+  opacity: 0;
 
   &__interface {
     flex: 1 auto;

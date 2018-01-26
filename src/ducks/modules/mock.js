@@ -1,65 +1,27 @@
 /* eslint-disable import/prefer-default-export */
 
-import { shuffle, range } from 'lodash';
+import faker from 'faker';
+import { times } from 'lodash';
 import { actionCreators as networkActions } from './network';
-
-const nodes = [
-  {
-    type: 'person',
-    name: 'Anita',
-    nickname: 'Annie',
-  },
-  {
-    type: 'person',
-    name: 'Barry',
-    nickname: 'Baz',
-  },
-  {
-    type: 'person',
-    name: 'Carlito',
-    nickname: 'Carl',
-  },
-  {
-    type: 'person',
-    name: 'Dee',
-    nickname: 'Dee',
-  },
-  {
-    type: 'person',
-    name: 'Eugine',
-    nickname: 'Eu',
-  },
-  {
-    type: 'person',
-    name: 'Fiona',
-    nickname: 'Fi',
-  },
-  {
-    type: 'person',
-    name: 'Geoff',
-    nickname: 'Geoff',
-  },
-  {
-    type: 'person',
-    name: 'Harmony',
-    nickname: 'Harmony',
-  },
-];
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
 const generateNodes = (howMany = 0) =>
   (dispatch) => {
-    const pseudoRandom = shuffle(range(0, nodes.length - 1));
+    times(howMany, () => {
+      const firstName = faker.name.firstName();
+      const lastName = faker.name.lastName();
+      const age = faker.random.number({ min: 16, max: 99 });
 
-    const randomNodes = pseudoRandom.splice(0, howMany < nodes.length ? howMany : nodes.length - 1);
-
-    return randomNodes.map((key) => {
-      const node = nodes[key];
-
-      dispatch(networkActions.addNode(node));
-
-      return node;
+      return dispatch(networkActions.addNode({
+        type: 'person',
+        promptId: 'mock',
+        stageId: 'mock',
+        name: `${firstName} ${lastName}`,
+        nickname: lastName,
+        age,
+        timeCreated: Date.now().toString(),
+      }));
     });
   };
 
