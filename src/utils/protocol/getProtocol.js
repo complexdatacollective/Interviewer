@@ -12,12 +12,10 @@ const getProtocol = (environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return (protocolName) => {
-      return readFile(protocolPath(protocolName, 'protocol.json'))
+    return protocolName =>
+      readFile(protocolPath(protocolName, 'protocol.json'))
         .then(data => JSON.parse(new TextDecoder('utf-8').decode(data)));
-    };
   }
-
   // NOTE: loads demo protocol from local import, ignoring protocol name
   return () => {
     console.log('Loading demo protocol from local import, and ignoring protocol name');
