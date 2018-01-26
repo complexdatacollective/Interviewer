@@ -5,6 +5,8 @@ import { trimChars } from 'lodash/fp';
 import environments from './environments';
 import inEnvironment from './Environment';
 
+const Buffer = require('buffer/').Buffer;
+
 const trimPath = trimChars('/ ');
 
 const splitUrl = (targetPath) => {
@@ -65,7 +67,7 @@ const readFile = inEnvironment((environment) => {
           const reader = new FileReader();
 
           reader.onloadend = (event) => {
-            resolve(event.target.result);
+            resolve(Buffer.from(event.target.result));
           };
 
           reader.readAsArrayBuffer(file);

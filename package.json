@@ -42,6 +42,7 @@
         "babel-preset-stage-3": "^6.24.1",
         "babel-runtime": "6.26.0",
         "bluebird": "^3.5.0",
+        "buffer": "^5.0.8",
         "case-sensitive-paths-webpack-plugin": "2.1.1",
         "chalk": "1.1.3",
         "change-case": "^3.0.1",
@@ -189,14 +190,14 @@
     },
     "cordova": {
         "platforms": [
-            "android",
-            "ios"
+            "android"
         ],
         "plugins": {
             "cordova-plugin-app-version": {},
             "cordova-plugin-file": {},
             "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-wkwebview-engine": {}
+            "cordova-plugin-wkwebview-engine": {},
+            "cordova-hot-code-push-local-dev-addon": {}
         }
     }
 }
