@@ -1,4 +1,7 @@
 .card-list {
+  display: flex; // fallback option if grid isn't supported
+  flex-wrap: wrap;
+
   display: grid;
   grid-template-columns: 1fr 1fr;
   @media screen and (min-width: 1200px) {
