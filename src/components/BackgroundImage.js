@@ -1,47 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { assetUrl } from '../utils/protocol';
+import pathAsAssetUrl from '../behaviours/pathAsAssetUrl';
 
-class BackgroundImage extends Component {
-  static propTypes = {
-    path: PropTypes.string.isRequired,
-    style: PropTypes.object,
-    getAssetUrl: PropTypes.func.isRequired,
-  };
+const BackgroundImage = ({ style, assetUrl, ...props }) =>
+  (
+    <div
+      style={{ ...style, backgroundImage: `url(${assetUrl})` }}
+      {...props}
+    />
+  );
 
-  static defaultProps = {
-    style: {},
-  };
+BackgroundImage.propTypes = {
+  style: PropTypes.object,
+  assetUrl: PropTypes.string.isRequired,
+};
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      src: '',
-    };
-  }
-
-  componentDidMount() {
-    const { getAssetUrl, path } = this.props;
-    getAssetUrl(path).then(src => this.setState({ src }));
-  }
-
-  render() {
-    const { getAssetUrl, path, style, ...props } = this.props;
-    return (
-      <div
-        style={{ ...style, backgroundImage: `url(${this.state.src})` }}
-        {...props}
-      />
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  getAssetUrl: assetPath => assetUrl(state.protocol.path, assetPath),
-});
+BackgroundImage.defaultProps = {
+  style: {},
+};
 
 export { BackgroundImage };
 
-export default connect(mapStateToProps)(BackgroundImage);
+export default pathAsAssetUrl(BackgroundImage);

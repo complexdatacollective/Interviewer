@@ -1,42 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { assetUrl } from '../utils/protocol';
+import pathAsAssetUrl from '../behaviours/pathAsAssetUrl';
 
-class Image extends Component {
-  static propTypes = {
-    alt: PropTypes.string,
-    path: PropTypes.string.isRequired,
-    getAssetUrl: PropTypes.func.isRequired,
-  };
+const Image = ({ assetUrl, alt, ...props }) =>
+  <img src={assetUrl} alt={alt} {...props} />;
 
-  static defaultProps = {
-    alt: '',
-  };
+Image.propTypes = {
+  alt: PropTypes.string,
+  assetUrl: PropTypes.string.isRequired,
+};
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      src: '',
-    };
-  }
-
-  componentDidMount() {
-    const { getAssetUrl, path } = this.props;
-    getAssetUrl(path).then(src => this.setState({ src })).catch(console.log);
-  }
-
-  render() {
-    const { getAssetUrl, path, alt, ...props } = this.props;
-    return <img src={this.state.src} alt={alt} {...props} />;
-  }
-}
-
-const mapStateToProps = state => ({
-  getAssetUrl: assetPath => assetUrl(state.protocol.path, assetPath),
-});
+Image.defaultProps = {
+  alt: '',
+};
 
 export { Image };
 
-export default connect(mapStateToProps)(Image);
+export default pathAsAssetUrl(Image);
