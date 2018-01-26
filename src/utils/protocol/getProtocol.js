@@ -13,9 +13,8 @@ const getProtocol = (environment) => {
 
   if (environment === environments.CORDOVA) {
     return (protocolName) => {
-      console.log('getProtocol', { path: protocolPath(protocolName, 'protocol.json') });
       return readFile(protocolPath(protocolName, 'protocol.json'))
-        .then(data => JSON.parse(data));
+        .then(data => JSON.parse(new TextDecoder('utf-8').decode(data)));
     };
   }
 

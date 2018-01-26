@@ -252,6 +252,14 @@ const ensurePathExists = inEnvironment((environment) => {
   throw new Error();
 });
 
+window.userDataPath = userDataPath;
+window.getNestedPaths = getNestedPaths;
+window.ensurePathExists = ensurePathExists;
+window.readFile = readFile;
+window.readFileAsDataUrl = readFileAsDataUrl;
+window.writeFile = writeFile;
+window.writeStream = writeStream;
+
 export {
   userDataPath,
   getNestedPaths,
