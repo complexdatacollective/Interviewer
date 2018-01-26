@@ -18,7 +18,7 @@ const initialState = {
 };
 
 // We use these internally to uniquely identify nodes accross previous data / network data
-export function nextUid(nodes, index: 1) {
+export function nextUid(nodes, index = 1) {
   return `${Date.now()}_${nodes.length + index}`;
 }
 
