@@ -5,13 +5,13 @@ import path from 'path';
 import fs from 'fs';
 import environments from '../environments';
 import { getEnvironment } from '../Environment';
-import importer from '../importer';
+// import importer from '../importer';
 import { readFile, writeStream, ensurePathExists } from '../filesystem';
 
 jest.mock('../filesystem');
 jest.mock('../protocol/protocolPath');
 
-const protocolFilePath = path.join(process.cwd(), '__tests__', 'assets', 'demo.canvas');
+const protocolFilePath = path.join(process.cwd(), 'public', 'demo.canvas');
 const protocolFileData = fs.readFileSync(protocolFilePath);
 
 readFile.mockReturnValue(Promise.resolve(protocolFileData));

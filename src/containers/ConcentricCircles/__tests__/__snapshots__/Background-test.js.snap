@@ -31,7 +31,7 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": <Connect(BackgroundImage)
+      "children": <Connect(withState(lifecycle(BackgroundImage)))
         className="sociogram-background__image"
         path="map.png"
 />,
@@ -58,7 +58,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": <Connect(BackgroundImage)
+        "children": <Connect(withState(lifecycle(BackgroundImage)))
           className="sociogram-background__image"
           path="map.png"
 />,

@@ -23,7 +23,7 @@ describe('getProtocol', () => {
       });
 
       expect(protocolPath.mock.calls[0]).toEqual(['bazz.protocol', 'protocol.json']);
-      expect(readFile.mock.calls[0]).toEqual(['tmp/fake/path/bazz.protocol/protocol.json', 'utf8']);
+      expect(readFile.mock.calls[0]).toEqual(['tmp/mock/path/protocols/bazz.protocol/protocol.json']);
     });
   });
 });

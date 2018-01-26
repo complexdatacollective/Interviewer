@@ -4,6 +4,8 @@ import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import protocolPath from '../protocolPath';
 
+jest.mock('../../filesystem');
+
 describe('protocolPath', () => {
   describe('Electron', () => {
     beforeAll(() => {
@@ -13,11 +15,11 @@ describe('protocolPath', () => {
     it('Generates an asset path for the file', () => {
       expect(
         protocolPath('foo.canvas', 'protocol.json'),
-      ).toEqual('/Users/Foo/Library/Application Support/Network Canvas/protocols/foo.canvas/protocol.json');
+      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/protocol.json');
 
       expect(
         protocolPath('foo.canvas'),
-      ).toEqual('/Users/Foo/Library/Application Support/Network Canvas/protocols/foo.canvas');
+      ).toEqual('tmp/mock/user/path/protocols/foo.canvas');
     });
 
     it('Thows an error if the protocol is not specified', () => {

@@ -11,12 +11,9 @@ describe('filesystem', () => {
     });
 
     it('getNestedPaths', () => {
-      //cordova.file.applicationDirectory
       expect(
-        getNestedPaths('cdvfile://localhost/persistent/protocols/demo.canvas/assets')
+        getNestedPaths('cdvfile://localhost/persistent/protocols/demo.canvas/assets'),
       ).toEqual([
-        'cdvfile://localhost',
-        'cdvfile://localhost/persistent',
         'cdvfile://localhost/persistent/protocols',
         'cdvfile://localhost/persistent/protocols/demo.canvas',
         'cdvfile://localhost/persistent/protocols/demo.canvas/assets',
