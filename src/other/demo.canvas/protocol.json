@@ -184,14 +184,12 @@
     "schoolPupils": {
       "nodes": [
         {
-          "uid": "person_1",
           "type": "person",
           "name": "F. Anita",
           "nickname": "Annie",
           "age": "23"
         },
         {
-          "uid": "person_2",
           "type": "person",
           "name": "H. Barry",
           "nickname": "Baz",

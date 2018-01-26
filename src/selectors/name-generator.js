@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { has, omit } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
 import { getExternalData } from './protocol';
+import { nextUid } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -74,5 +75,6 @@ export const getSortDirectionDefault = createSelector(
 export const getDataByPrompt = createSelector(
   getExternalData,
   getDatasourceKey,
-  (externalData, key) => externalData[key].nodes,
+  (externalData, key) => externalData[key].nodes.map(
+    (node, index) => ({ uid: nextUid(externalData[key].nodes, index), ...node })),
 );
