@@ -85,7 +85,7 @@ class Search extends Component {
 
   onClose() {
     if (this.props.clearResultsOnClose) {
-      this.setState({ selectedResults: [] });
+      this.setState(InitialState);
     }
     this.props.closeSearch();
   }
