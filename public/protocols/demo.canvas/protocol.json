@@ -659,50 +659,6 @@
       ]
     },
     {
-      "id": "namegenroster1",
-      "type": "NameGeneratorAutoComplete",
-      "label": "NG Classmates",
-      "prompts": [
-        {
-          "id": "7cl",
-          "text": "Which classmates would you also think of as friends?",
-          "additionalAttributes": {
-            "special_category": 46,
-            "close_friend": true
-          },
-          "dataSource": "schoolPupils",
-          "displayLabel": "nickname",
-          "displayProperties": ["name", "age"],
-          "autoCompleteOptions": {
-            "fuzzyness": 0.4,
-            "matchProperties": ["nickname", "name"]
-          },
-          "subject": {
-            "entity": "node",
-            "type": "person"
-          }
-        },
-        {
-          "id": "7su",
-          "text": "Which of these venues have you visited in the previous 6 months?",
-          "additionalAttributes": {
-            "primary_venue": true
-          },
-          "dataSource": "HIVServices",
-          "displayLabel": "Abbreviated Name",
-          "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
-          "autoCompleteOptions": {
-            "fuzzyness": 0.5,
-            "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
-          },
-          "subject": {
-            "entity": "node",
-            "type": "venue"
-          }
-        }
-      ]
-    },
-    {
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
@@ -774,6 +730,50 @@
             "image": "rubberduck.jpg",
             "concentricCircles": 4,
             "skewedTowardCenter": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "namegenroster1",
+      "type": "NameGeneratorAutoComplete",
+      "label": "NG Classmates",
+      "prompts": [
+        {
+          "id": "7cl",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": {
+            "special_category": 46,
+            "close_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "displayLabel": "nickname",
+          "displayProperties": ["name", "age"],
+          "autoCompleteOptions": {
+            "fuzzyness": 0.4,
+            "matchProperties": ["nickname", "name"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          }
+        },
+        {
+          "id": "7su",
+          "text": "Which of these venues have you visited in the previous 6 months?",
+          "additionalAttributes": {
+            "primary_venue": true
+          },
+          "dataSource": "HIVServices",
+          "displayLabel": "Abbreviated Name",
+          "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
+          "autoCompleteOptions": {
+            "fuzzyness": 0.5,
+            "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "venue"
           }
         }
       ]

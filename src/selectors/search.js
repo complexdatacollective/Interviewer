@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import Fuse from 'fuse.js';
 import { createSelector } from 'reselect';
 
