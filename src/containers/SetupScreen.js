@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
+import importer from '../utils/importer';
+import { isElectron, isCordova } from '../utils/Environment';
 
 const formConfig = {
   formName: 'setup',
@@ -21,7 +23,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
+  protocol_url: '',
 };
 
 /**
@@ -39,6 +41,16 @@ class Setup extends Component {
     this.props.loadDemoProtocol();
   }
 
+  onClickLoadImportedProtocol = () => {
+    console.log('Loading "demo.canvas"');
+    this.props.loadProtocol('demo.canvas');
+  }
+
+  onClickImportProtocol = () => {
+    console.log('Importing "demo.canvas"');
+    importer('Path to protocol here');
+  }
+
   onDialogConfirm = () => {
     // eslint-disable-next-line no-console
     console.log('dialog confirmed');
@@ -47,6 +59,21 @@ class Setup extends Component {
   onDialogCancel = () => {
     // eslint-disable-next-line no-console
     console.log('dialog cancelled');
+  }
+
+  renderImportButtons() {
+    if (isElectron() || isCordova()) {
+      return (
+        <p>
+          <Button onClick={this.onClickImportProtocol} content="Import demo protocol" /><br />
+          <br />
+          <Button onClick={this.onClickLoadImportedProtocol} content="Load imported demo protocol" />
+          <hr />
+        </p>
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -69,6 +96,8 @@ class Setup extends Component {
         <br />
 
         <div className="setup__start">
+
+          {this.renderImportButtons()}
 
           <p>
             <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />

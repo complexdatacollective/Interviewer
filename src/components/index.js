@@ -14,3 +14,5 @@ export { default as Panels } from './Panels';
 export { default as Panel } from './Panel';
 export { default as DropZone } from './DropZone';
 export { default as NodeBin } from './NodeBin';
+export { default as Image } from './Image';
+export { default as BackgroundImage } from './BackgroundImage';

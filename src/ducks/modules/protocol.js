@@ -2,8 +2,7 @@
 
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import getProtocol from '../../utils/getProtocol';
-import runProtocol from '../../utils/runProtocol';
+import { getProtocol } from '../../utils/protocol';
 import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
@@ -25,6 +24,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         ...action.protocol,
+        path: action.path,
         isLoaded: true,
       };
     default:
@@ -32,9 +32,10 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function setProtocol(protocol) {
+function setProtocol(path, protocol) {
   return {
     type: SET_PROTOCOL,
+    path,
     protocol,
   };
 }
@@ -64,13 +65,13 @@ const loadProtocolEpic = action$ =>
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
         .fromPromise(getProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(runProtocol(response.data))) // Parse and save
+        .map(response => setProtocol(action.path, response)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
 const loadDemoProtocolEpic = action$ =>
   action$.ofType(LOAD_DEMO_PROTOCOL)
-    .map(() => setProtocol(demoProtocol));
+    .map(() => setProtocol(null, demoProtocol));
 
 const actionCreators = {
   loadProtocol,
