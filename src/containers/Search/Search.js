@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
-import AddCountButton from '../components/AddCountButton';
-import SearchResults from '../components/SearchResults';
-import { actionCreators as searchActions } from '../ducks/modules/search';
-import { makeGetFuse } from '../selectors/search';
-import { getNodePalette } from '../utils/NodePalettes';
+import SearchResults from './SearchResults';
+import AddCountButton from '../../components/AddCountButton';
+import { actionCreators as searchActions } from '../../ducks/modules/search';
+import { makeGetFuse } from '../../selectors/search';
+import { getNodePalette } from '../../utils/NodePalettes';
 
 /**
  * Fuse.js: approximate string matching.
