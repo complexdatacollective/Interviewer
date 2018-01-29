@@ -36,8 +36,6 @@ describe('search reducer', () => {
     newState = reducer(newState, { type: actionTypes.TOGGLE_SEARCH });
     expect(newState.collapsed).toBe(true);
   });
-
-  // TODO: test selectedResults[] if that's where they end up.
 });
 
 describe('search actionCreators', () => {

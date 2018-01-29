@@ -37,6 +37,7 @@ const InitialState = {
   * @class Search
   * @extends Component
   *
+  * @description
   * Renders a plaintext node search interface in a semi-modal display,
   * with a single text input supporting autocomplete.
   *
@@ -67,15 +68,15 @@ class Search extends Component {
   onInputChange(newValue) {
     let searchResults;
     const hasInput = newValue && newValue.length > 0;
+
     if (hasInput) {
       searchResults = this.props.fuse.search(newValue);
       searchResults = searchResults.filter(r => this.isAllowedResult(r));
+      searchResults = searchResults.map(r => this.withUid(r));
     } else {
       searchResults = [];
     }
     this.setState({
-      // TODO: Move searchResults to the SearchResults container state (or redux?).
-      // ...manage selected results (selectedNodes) at this level.
       searchResults,
       searchTerm: newValue,
       hasInput: hasInput || false,
@@ -110,18 +111,40 @@ class Search extends Component {
     });
   }
 
-  // Result is allowed if there is no excluded node that 'matches'
-  // if true, suppress candidate from appearing in search results
-  // example: node has already been selected.
+  /**
+   * A result is considered unique only if it presents some disambiguating
+   * information to the user (i.e., its combination of display attributes is unique).
+   *
+   * If the protocol defines a `uid` attribute, that will be used instead
+   * (and assumed to be unique).
+   *
+   * @param  {object} result A search result
+   * @return {string} a unique identifier for the result
+   */
+  uidForResult(result) {
+    if (result.uid) {
+      return result.uid;
+    }
+    return this.props.displayFields.map(field => result[field]).join('.');
+  }
+
+  withUid(result) {
+    if (result.uid) {
+      return result;
+    }
+    return { ...result, uid: this.uidForResult(result) };
+  }
+
+  // See uniqueness discussion at uidForResult.
+  // If false, suppress candidate from appearing in search results —
+  // for example, if the node has already been selected.
   // Assumption:
   //   `excludedNodes` size is small, but search set may be large,
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
-    // A search result is equal to a [excluded] node if all displayFields are equal
-    const matchAttrs = this.props.displayFields;
-    const isNotMatch = (result, node) => matchAttrs.some(attr => node[attr] !== result[attr]);
-
-    return this.props.excludedNodes.every(excluded => isNotMatch(excluded, candidate));
+    const uid = this.uidForResult.bind(this);
+    const candidateUid = uid(candidate);
+    return this.props.excludedNodes.every(excluded => uid(excluded) !== candidateUid);
   }
 
   render() {
@@ -157,6 +180,15 @@ class Search extends Component {
       </h1>);
     });
 
+    // Result formatters:
+    const primaryDisplayField = displayFields[0];
+    const auxFields = displayFields.slice(1);
+
+    const toDetail = (result, field) => ({ [field]: result[field] });
+    const getLabel = result => result[primaryDisplayField];
+    const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
+    const getDetails = result => auxFields.map(field => toDetail(result, field));
+
     return (
       <div className={searchClasses}>
         <form className="search__content">
@@ -167,9 +199,11 @@ class Search extends Component {
           <SearchResults
             hasInput={hasInput}
             results={this.state.searchResults}
-            selectedResults={this.state.selectedResults}
-            onSelectResult={result => this.toggleSelectedResult(result)}
-            displayFields={displayFields}
+
+            label={getLabel}
+            details={getDetails}
+            selected={getSelected}
+            onToggleCard={item => this.toggleSelectedResult(item)}
           />
 
           {

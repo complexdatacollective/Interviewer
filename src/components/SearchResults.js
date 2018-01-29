@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import CardList from './CardList';
 
-import Scroller from './Scroller';
-import SearchResult from './SearchResult';
-
-// class SearchResults extends Component {
+/**
+ * @class SearchResults
+ * @extends Component
+ *
+ * @description
+ * Thin wrapper to render {@link Search} component results in a CardList.
+ *
+ * @param props.hasInput {boolean} true if there is user input to the search component
+ * @param props.results {array} the search results to render. See CardList for formatters.
+ */
 const SearchResults = (props) => {
   const {
     hasInput,
     results,
-    displayFields,
-    onSelectResult,
-    selectedResults,
+    ...rest
   } = props;
 
   const classNames = cx(
@@ -20,42 +25,28 @@ const SearchResults = (props) => {
     { 'search__results--collapsed': !hasInput },
   );
 
-  function toSearchResult(resultData, id) {
-    const isSelected = selectedResults.indexOf(resultData) > -1;
-    return (
-      <SearchResult
-        key={`search__result_${id}`}
-        data={resultData}
-        displayFields={displayFields}
-        onClick={onSelectResult}
-        isSelected={isSelected}
-      />
-    );
-  }
-
   let content;
   if (results.length) {
-    content = results.map(toSearchResult);
+    content = (
+      <CardList
+        nodes={results}
+        {...rest}
+      />
+    );
   } else {
     content = (<p>Nothing matching that search</p>);
   }
 
   return (
     <div className={classNames}>
-      <Scroller>
-        <p>results:</p>
-        {content}
-      </Scroller>
+      {content}
     </div>
   );
 };
 
 SearchResults.propTypes = {
-  displayFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasInput: PropTypes.bool.isRequired,
-  onSelectResult: PropTypes.func.isRequired,
   results: PropTypes.array.isRequired,
-  selectedResults: PropTypes.array.isRequired,
 };
 
 export default SearchResults;
