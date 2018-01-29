@@ -58,7 +58,7 @@ class Form extends Component {
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
 
