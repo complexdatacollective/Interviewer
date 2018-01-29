@@ -1,5 +1,7 @@
 $module-name: search;
-$results-height: 50vh;
+$results-height: calc(100vh - 320px);
+// Magic number. TODO: coordinate with other components.
+$search-z-index: 1000;
 
 // Base input on global styling; override as needed below.
 @include text-input('#{$module-name}__input');
@@ -10,8 +12,7 @@ $results-height: 50vh;
   transform: translateX(0);
   transition: all $animation-fast-duration $animation-default-easing;
   width: 100%;
-  // On top of button. FIXME: magic number
-  z-index: 1000;
+  z-index: $search-z-index;
 
   &__header {
     text-align: center;
@@ -31,7 +32,7 @@ $results-height: 50vh;
     height: 100%;
     margin: 0 10%;
     overflow: visible;
-    padding: 2rem;
+    padding: 1rem 2rem 2rem 2rem;
     position: relative;
     width: 80%;
 
@@ -59,8 +60,12 @@ $results-height: 50vh;
   &__results {
     border: 1px solid white;
     display: block;
+    // A calculated height here attempts to use all available space without
+    // hiding the prompt question. min-height ensures results are readable,
+    // even if prompt is hidden at very short viewport heights.
     height: $results-height;
     margin: spacing(small) 0;
+    min-height: 8em;
     overflow: hidden;
     transition: height $animation-fast-duration $animation-default-easing;
 
@@ -71,6 +76,7 @@ $results-height: 50vh;
     &--collapsed {
       border: none;
       height: 0;
+      min-height: 0;
     }
   }
 
