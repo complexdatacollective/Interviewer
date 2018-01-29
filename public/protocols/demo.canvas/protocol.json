@@ -234,6 +234,17 @@
   },
   "stages": [
     {
+      "id": "intructrions1",
+      "label": "Instructions",
+      "type": "Instructions",
+      "title": "Title for the screen",
+      "audioDescription": "sound/",
+      "content": [
+        "<p>Some arbitrary text content that can contain <strong>HTML</strong> tags.</p>",
+        "<p>Some additional content.</p>"
+      ]
+    },
+    {
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
