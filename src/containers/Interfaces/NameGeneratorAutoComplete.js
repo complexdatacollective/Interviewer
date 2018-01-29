@@ -12,7 +12,7 @@ import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
-import { NodeList } from '../../components/';
+import { NodeBin, NodeList } from '../../components/';
 
 const networkNodesForPrompt = makeNetworkNodesForPrompt();
 const getPromptNodeAttributes = makeGetPromptNodeAttributes();
@@ -64,6 +64,8 @@ class NameGeneratorAutoComplete extends Component {
       },
     );
 
+    const ListId = 'AUTOCOMPLETE_NODE_LIST';
+
     // TODO: fix ui/protocol discrepancy and/or move normalization elsewhere
     const iconNodeName = nodeType === 'venue' ? 'place' : nodeType;
 
@@ -80,9 +82,11 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className={`${baseClass}__nodes`}>
           <NodeList
-            id="AUTOCOMPLETE_NODE_LIST"
+            id={ListId}
+            listId={`${stage.id}_${prompt.id}_${ListId}`}
             nodes={nodesForPrompt}
             label={node => node[prompt.displayLabel]}
+            itemType="EXISTING_NODE"
           />
         </div>
 
@@ -102,6 +106,10 @@ class NameGeneratorAutoComplete extends Component {
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
           options={prompt.autoCompleteOptions}
         />
+
+        <div className="name-generator-auto-complete-interface__node-bin">
+          <NodeBin id="NODE_BIN" />
+        </div>
 
       </div>
     );
