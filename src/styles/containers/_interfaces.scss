@@ -1,0 +1,10 @@
+/**
+ * Shared mixins forinterfaces.
+ */
+
+@mixin interface-prompt {
+  flex: 0 0 12vw;
+  @include breakpoint('full') {
+    flex: 0 0 200px;
+  }
+}

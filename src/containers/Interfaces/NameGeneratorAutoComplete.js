@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
+import getNodeIconName from '../../utils/getNodeIconName';
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
@@ -66,12 +67,11 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
-    // TODO: fix ui/protocol discrepancy and/or move normalization elsewhere
-    const iconNodeName = nodeType === 'venue' ? 'place' : nodeType;
+    const IconNodeName = getNodeIconName(nodeType);
 
     return (
       <div className={baseClass}>
-        <div className="name-generator-interface__prompt">
+        <div className={`${baseClass}__prompt`}>
           <PromptSwiper
             forward={promptForward}
             backward={promptBackward}
@@ -91,7 +91,7 @@ class NameGeneratorAutoComplete extends Component {
         </div>
 
         <Icon
-          name={`add-a-${iconNodeName}`}
+          name={`add-a-${IconNodeName}`}
           onClick={toggleSearch}
           className={searchBtnClasses}
         />

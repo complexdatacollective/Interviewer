@@ -1,5 +1,4 @@
 .name-generator-auto-complete-interface {
-  // TODO: extract shared styling with other interfaces
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -9,12 +8,8 @@
   text-align: center;
   width: 100%;
 
-  // XXX: this duplicates name-generator-interface
   &__prompt {
-    flex: 0 0 12vw;
-    @include breakpoint('full') {
-        flex: 0 0 200px;
-    }
+    @include interface-prompt;
   }
 
   &__search-button {
