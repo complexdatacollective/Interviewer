@@ -43,6 +43,9 @@ const InitialState = {
   * Multiple results may be selected by the user, and the final collection
   * committed to an `onComplete()` handler.
   *
+  * Note: to ensure that search state is tied to a source data set, set a `key`
+  * prop that uniquely identifies the source data.
+  *
   * @param props.displayFields {array} - An array of strings representing keys
   *     in each search set object. The first field is treated as the primary
   *     label and is required.

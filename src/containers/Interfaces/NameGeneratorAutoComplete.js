@@ -93,6 +93,7 @@ class NameGeneratorAutoComplete extends Component {
         />
 
         <Search
+          key={prompt.id}
           dataSourceKey={prompt.dataSource}
           displayFields={[prompt.displayLabel, ...prompt.displayProperties]}
           excludedNodes={nodesForPrompt}
