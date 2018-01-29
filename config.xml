@@ -44,11 +44,12 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Fullscreen" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
-    <plugin name="cordova-plugin-file" spec="^4.3.3" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
-    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
-    <plugin name="cordova-plugin-diont" spec="https://github.com/codaco/Diont-for-Cordova.git" />
-    <engine name="android" spec="^6.2.3" />
+    <engine name="android" spec="^6.4.0" />
     <engine name="ios" spec="^4.5.4" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-compat" spec="^1.2.0" />
+    <plugin name="cordova-plugin-diont" spec="git+https://github.com/codaco/Diont-for-Cordova.git" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
 </widget>
