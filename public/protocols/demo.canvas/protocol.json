@@ -8,6 +8,7 @@
         "label": "Person",
         "color": "coral",
         "displayVariable": "nickname",
+        "iconVariant": "add-a-person",
         "variables": {
           "name": {
             "label": "Name",
@@ -79,6 +80,7 @@
       "venue": {
         "label": "Venue",
         "color": "kiwi",
+        "iconVariant": "add-a-place",
         "variables": {
           "name": {
             "label": "Name",

@@ -5,13 +5,12 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
-import getNodeIconName from '../../utils/getNodeIconName';
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 
@@ -47,6 +46,7 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       nodesForPrompt,
+      nodeIconName,
       nodeType,
       prompt,
       promptForward,
@@ -66,8 +66,6 @@ class NameGeneratorAutoComplete extends Component {
     );
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
-
-    const IconNodeName = getNodeIconName(nodeType);
 
     return (
       <div className={baseClass}>
@@ -91,7 +89,7 @@ class NameGeneratorAutoComplete extends Component {
         </div>
 
         <Icon
-          name={`add-a-${IconNodeName}`}
+          name={nodeIconName}
           onClick={toggleSearch}
           className={searchBtnClasses}
         />
@@ -121,6 +119,7 @@ NameGeneratorAutoComplete.propTypes = {
   closeSearch: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
+  nodeIconName: PropTypes.string.isRequired,
   nodeType: PropTypes.string.isRequired,
   toggleSearch: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
@@ -142,6 +141,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       newNodeAttributes: getPromptNodeAttributes(state, props),
+      nodeIconName: getNodeIconName(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
