@@ -42,6 +42,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <CardList
+        className=""
         details={[Function]}
         label={[Function]}
         nodes={
@@ -75,6 +76,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "function",
       "props": Object {
+        "className": "",
         "details": [Function],
         "label": [Function],
         "nodes": Array [
@@ -111,6 +113,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <CardList
+          className=""
           details={[Function]}
           label={[Function]}
           nodes={
@@ -144,6 +147,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
+          "className": "",
           "details": [Function],
           "label": [Function],
           "nodes": Array [

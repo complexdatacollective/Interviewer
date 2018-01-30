@@ -55,7 +55,6 @@ $search-z-index: 1000;
   }
 
   &__results {
-    border: 1px solid color('white');
     display: block;
     // A calculated height here attempts to use all available space without
     // hiding the prompt question. min-height ensures results are readable,

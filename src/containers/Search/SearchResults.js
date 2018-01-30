@@ -29,6 +29,7 @@ const SearchResults = (props) => {
   if (results.length) {
     content = (
       <CardList
+        className="card-list--single"
         nodes={results}
         {...rest}
       />
