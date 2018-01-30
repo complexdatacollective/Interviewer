@@ -16,9 +16,9 @@ const splitUrl = (targetPath) => {
   return [baseDirectory, tail];
 };
 
-const inSequence = promises =>
-  promises.reduce(
-    (memo, promise) => memo.then(promise),
+const inSequence = (items, apply) =>
+  items.reduce(
+    (result, item) => result.then(() => apply(item)),
     Promise.resolve(),
   );
 
@@ -40,7 +40,7 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return path =>
       new Promise((resolve, reject) => {
-        window.resolveLocalFileSystemURL(path, resolve, reject);
+        window.resolveLocalFileSystemURL(path, resolve, error => reject(error, 'filesystem.resolveFileSystemUrl'));
       });
   }
 
@@ -61,8 +61,8 @@ const readFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const fileReader = fileEntry =>
-      new Promise((resolve, reject) => {
+    const fileReader = (fileEntry) => {
+      return new Promise((resolve, reject) => {
         fileEntry.file((file) => {
           const reader = new FileReader();
 
@@ -73,6 +73,7 @@ const readFile = inEnvironment((environment) => {
           reader.readAsArrayBuffer(file);
         }, reject);
       });
+    }
 
     return filename =>
       resolveFileSystemUrl(filename)
@@ -114,7 +115,7 @@ const writeFile = inEnvironment((environment) => {
 
     const newFile = (directoryEntry, filename) =>
       new Promise((resolve, reject) => {
-        directoryEntry.getFile(filename, { create: true, exclusive: false }, resolve, reject);
+        directoryEntry.getFile(filename, { create: true }, resolve, error => reject(error, 'filesystem.writeFile'));
       });
 
     return (fileUrl, data) => {
@@ -126,7 +127,7 @@ const writeFile = inEnvironment((environment) => {
         .then(fileWriter =>
           new Promise((resolve, reject) => {
             fileWriter.onwriteend = () => resolve(); // eslint-disable-line no-param-reassign
-            fileWriter.onerror = () => reject(); // eslint-disable-line no-param-reassign
+            fileWriter.onerror = error => reject(error, 'filesystem.writeFile.fileWriter'); // eslint-disable-line no-param-reassign
             fileWriter.write(data);
           }),
         );
@@ -136,7 +137,7 @@ const writeFile = inEnvironment((environment) => {
   throw new Error();
 });
 
-const mkDir = inEnvironment((environment) => {
+const createDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const fs = require('fs');
 
@@ -152,17 +153,43 @@ const mkDir = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     const appendDirectory = (directoryEntry, directoryToAppend) =>
       new Promise((resolve, reject) => {
-        directoryEntry.getDirectory(directoryToAppend, { create: true }, resolve, reject);
+        directoryEntry.getDirectory(
+          directoryToAppend,
+          { create: true },
+          resolve,
+          error => reject(error, 'filesystem.createDirectory.appendDirectory'),
+        );
       });
 
     return (targetUrl) => {
       const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
 
-      return resolveFileSystemUrl(baseDirectory).then(
-        directoryEntry =>
-          appendDirectory(directoryEntry, directoryToAppend),
-      );
+      return resolveFileSystemUrl(baseDirectory)
+        .then(directoryEntry => appendDirectory(directoryEntry, directoryToAppend));
     };
+  }
+
+  throw new Error();
+});
+
+const removeDirectory = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA) {
+    const removeRecursively = directoryEntry =>
+      new Promise((resolve, reject) => {
+        directoryEntry.removeRecursively(resolve, error => reject(error, 'filesystem.removeDirectory.removeRecursively'));
+      });
+
+    // If folder doesn't exist that's fine
+    const ignoreMissingEntry = e => (
+      e.code === FileError.NOT_FOUND_ERR ?
+        Promise.resolve() :
+        Promise.reject(e)
+    );
+
+    return targetUrl =>
+      resolveFileSystemUrl(targetUrl)
+        .then(removeRecursively)
+        .catch(ignoreMissingEntry);
   }
 
   throw new Error();
@@ -238,7 +265,7 @@ const ensurePathExists = inEnvironment((environment) => {
 
       return inSequence(
         getNestedPaths(relativePath)
-          .map(pathSegment => mkDir(path.join(userDataPath(), pathSegment))),
+          .map(pathSegment => createDirectory(path.join(userDataPath(), pathSegment))),
       ).then(() => targetPath);
     };
   }
@@ -246,28 +273,34 @@ const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return targetUrl =>
       inSequence(
-        getNestedPaths(targetUrl)
-          .map(pathSegment => mkDir(pathSegment)),
-      ).then(() => targetUrl);
+        getNestedPaths(targetUrl),
+        createDirectory,
+      );
   }
 
   throw new Error();
 });
 
+// TODO: remove these debug exports
 window.userDataPath = userDataPath;
 window.getNestedPaths = getNestedPaths;
 window.ensurePathExists = ensurePathExists;
 window.readFile = readFile;
+window.removeDirectory = removeDirectory;
 window.readFileAsDataUrl = readFileAsDataUrl;
 window.writeFile = writeFile;
 window.writeStream = writeStream;
+window.createDirectory = createDirectory;
+window.resolveFileSystemUrl = resolveFileSystemUrl;
 
 export {
   userDataPath,
   getNestedPaths,
   ensurePathExists,
+  removeDirectory,
   readFile,
   readFileAsDataUrl,
   writeFile,
   writeStream,
+  inSequence,
 };

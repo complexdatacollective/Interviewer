@@ -4,10 +4,10 @@
 import Zip from 'jszip';
 import environments from './environments';
 import inEnvironment from './Environment';
-import { getNestedPaths, ensurePathExists, readFile, writeStream, writeFile } from './filesystem';
+import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from './filesystem';
 import { protocolPath } from './protocol';
 
-const extractZipDir = inEnvironment((environment) => {
+const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
@@ -44,14 +44,8 @@ const extractZipFile = inEnvironment((environment) => {
     return (zipObject, destination) => {
       const extractPath = `${destination}${zipObject.name}`;
 
-      console.log('extractZipFile', { zipObject, destination, extractPath });
-
       return zipObject.async('blob')
-        .then((text) => {
-          console.log('async', text);
-          return writeFile(extractPath, text)
-            .catch((err) => { console.log('err', err); });
-        });
+        .then(data => writeFile(extractPath, data));
     };
   }
 
@@ -63,19 +57,16 @@ const extractZip = inEnvironment((environment) => {
     return (source, destination) =>
       readFile(source)
         .then(data => Zip.loadAsync(data))
-        .then((zip) => {
-          console.log(Object.keys(zip.files));
-          return zip;
-        })
         .then(zip =>
-          Promise.all(
-            Object.keys(zip.files)
-              .map(filename => zip.files[filename])
-              .map(zipObject => (
-                zipObject.dir ?
-                  extractZipDir(zipObject, destination) :
-                  extractZipFile(zipObject, destination)
-              )),
+          inSequence(
+            Object.values(zip.files),
+            // Object.keys(zip.files)
+            //   .map(filename => zip.files[filename]), // get zipObjects for each file
+            zipObject => (
+              zipObject.dir ?
+                extractZipDirectory(zipObject, destination) :
+                extractZipFile(zipObject, destination)
+            ),
           ),
         );
   }
@@ -93,9 +84,8 @@ const importer = inEnvironment((environment) => {
       const basename = path.basename(protocolFile);
       const destination = protocolPath(basename);
 
-      ensurePathExists(destination);
-
-      return extractZip(protocolFile, destination);
+      return ensurePathExists(destination)
+        .then(extractZip(protocolFile, destination));
     };
   }
 
@@ -104,11 +94,10 @@ const importer = inEnvironment((environment) => {
       const protocolFile = `${cordova.file.applicationDirectory}www/demo.canvas`;
       const destination = protocolPath('demo.canvas');
 
-      getNestedPaths(destination);
-
-      ensurePathExists(destination);
-
-      return extractZip(protocolFile, destination);
+      return removeDirectory(destination)
+        .then(() => ensurePathExists(destination))
+        .then(() => extractZip(protocolFile, destination))
+        .catch(e => console.log({ e }, 'an error happened in importer'));
     };
   }
 
