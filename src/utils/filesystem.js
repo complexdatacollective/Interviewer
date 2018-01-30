@@ -142,10 +142,14 @@ const createDirectory = inEnvironment((environment) => {
 
     return targetPath =>
       new Promise((resolve, reject) => {
-        fs.mkdir(targetPath, (err) => {
-          if (err) { reject(err); }
-          resolve(targetPath);
-        });
+        try {
+          fs.mkdir(targetPath, () => {
+            resolve(targetPath);
+          });
+        } catch (error) {
+          if (error.code !== 'EEXISTS') { reject(error); }
+          throw error;
+        }
       });
   }
 
@@ -261,9 +265,11 @@ const ensurePathExists = inEnvironment((environment) => {
 
     return (targetPath) => {
       const relativePath = path.relative(userDataPath(), targetPath);
+      const nestedPaths = getNestedPaths(relativePath)
+        .map(pathSegment => path.join(userDataPath(), pathSegment));
 
       return inSequence(
-        getNestedPaths(relativePath).map(pathSegment => path.join(userDataPath(), pathSegment)),
+        nestedPaths,
         createDirectory,
       );
     };
