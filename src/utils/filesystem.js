@@ -176,6 +176,21 @@ const createDirectory = inEnvironment((environment) => {
 });
 
 const removeDirectory = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const rimraf = require('rimraf');
+    return targetPath =>
+      new Promise((resolve, reject) => {
+        try {
+          console.log('removeDir', targetPath);
+          if (!targetPath.includes(userDataPath())) { reject('Path not in userDataPath'); return; }
+          rimraf(targetPath, resolve);
+        } catch (error) {
+          if (error.code !== 'EEXISTS') { reject(error); }
+          throw error;
+        }
+      });
+  }
+
   if (environment === environments.CORDOVA) {
     const removeRecursively = directoryEntry =>
       new Promise((resolve, reject) => {

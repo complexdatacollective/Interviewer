@@ -82,8 +82,9 @@ const importer = inEnvironment((environment) => {
       const basename = path.basename(protocolFile);
       const destination = protocolPath(basename);
 
-      return ensurePathExists(destination)
-        .then(extractZip(protocolFile, destination));
+      return removeDirectory(destination)
+        .then(() => ensurePathExists(destination))
+        .then(() => extractZip(protocolFile, destination));
     };
   }
 
