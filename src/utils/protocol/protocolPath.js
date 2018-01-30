@@ -14,7 +14,7 @@ const protocolPath = (environment) => {
     return (protocolName, filePath = '') => {
       if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');
       return path.join(userDataPath(), 'protocols', protocolName, filePath);
-    }
+    };
   }
 
   if (environment === environments.CORDOVA) {

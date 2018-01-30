@@ -26,7 +26,7 @@ const extractZipDirectory = inEnvironment((environment) => {
     };
   }
 
-  return () => Promise.reject('Environment not recognised');
+  throw new Error(`extractZipDir() not available on platform ${environment}`);
 });
 
 const extractZipFile = inEnvironment((environment) => {
@@ -49,7 +49,7 @@ const extractZipFile = inEnvironment((environment) => {
     };
   }
 
-  return () => Promise.reject('Environment not recognised');
+  throw new Error(`extractZipFile() not available on platform ${environment}`);
 });
 
 const extractZip = inEnvironment((environment) => {
@@ -60,8 +60,6 @@ const extractZip = inEnvironment((environment) => {
         .then(zip =>
           inSequence(
             Object.values(zip.files),
-            // Object.keys(zip.files)
-            //   .map(filename => zip.files[filename]), // get zipObjects for each file
             zipObject => (
               zipObject.dir ?
                 extractZipDirectory(zipObject, destination) :
@@ -71,7 +69,7 @@ const extractZip = inEnvironment((environment) => {
         );
   }
 
-  return Promise.reject();
+  throw new Error(`extractZip() not available on platform ${environment}`);
 });
 
 const importer = inEnvironment((environment) => {
@@ -96,12 +94,11 @@ const importer = inEnvironment((environment) => {
 
       return removeDirectory(destination)
         .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFile, destination))
-        .catch(e => console.log({ e }, 'an error happened in importer'));
+        .then(() => extractZip(protocolFile, destination));
     };
   }
 
-  return () => { console.log('Import feature not available for web'); return true; };
+  throw new Error(`importer() not available on platform ${environment}`);
 });
 
 export default importer;

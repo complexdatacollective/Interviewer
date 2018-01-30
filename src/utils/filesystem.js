@@ -33,7 +33,7 @@ const userDataPath = inEnvironment((environment) => {
     return () => 'cdvfile://localhost/persistent';
   }
 
-  throw new Error();
+  throw new Error(`userDataPath() not available on platform ${environment}`);
 });
 
 const resolveFileSystemUrl = inEnvironment((environment) => {
@@ -44,7 +44,7 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
       });
   }
 
-  throw new Error();
+  throw new Error(`resolveFileSystemUrl() not available on platform ${environment}`);
 });
 
 const readFile = inEnvironment((environment) => {
@@ -61,8 +61,8 @@ const readFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const fileReader = (fileEntry) => {
-      return new Promise((resolve, reject) => {
+    const fileReader = fileEntry =>
+      new Promise((resolve, reject) => {
         fileEntry.file((file) => {
           const reader = new FileReader();
 
@@ -73,14 +73,13 @@ const readFile = inEnvironment((environment) => {
           reader.readAsArrayBuffer(file);
         }, reject);
       });
-    }
 
     return filename =>
       resolveFileSystemUrl(filename)
         .then(fileReader);
   }
 
-  throw new Error();
+  throw new Error(`readFile() not available on platform ${environment}`);
 });
 
 const readFileAsDataUrl = inEnvironment((environment) => {
@@ -103,7 +102,7 @@ const readFileAsDataUrl = inEnvironment((environment) => {
         .then(fileReader);
   }
 
-  throw new Error();
+  throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
 const writeFile = inEnvironment((environment) => {
@@ -134,7 +133,7 @@ const writeFile = inEnvironment((environment) => {
     };
   }
 
-  throw new Error();
+  throw new Error(`writeFile() not available on platform ${environment}`);
 });
 
 const createDirectory = inEnvironment((environment) => {
@@ -169,7 +168,7 @@ const createDirectory = inEnvironment((environment) => {
     };
   }
 
-  throw new Error();
+  throw new Error(`createDirectory() not available on platform ${environment}`);
 });
 
 const removeDirectory = inEnvironment((environment) => {
@@ -192,7 +191,7 @@ const removeDirectory = inEnvironment((environment) => {
         .catch(ignoreMissingEntry);
   }
 
-  throw new Error();
+  throw new Error(`removeDirectory() not available on platform ${environment}`);
 });
 
 const getNestedPaths = inEnvironment((environment) => {
@@ -233,7 +232,7 @@ const getNestedPaths = inEnvironment((environment) => {
     };
   }
 
-  throw new Error();
+  throw new Error(`getNestedPaths() not available on platform ${environment}`);
 });
 
 const writeStream = inEnvironment((environment) => {
@@ -253,7 +252,7 @@ const writeStream = inEnvironment((environment) => {
       });
   }
 
-  return () => Promise.reject('Environment not recognised');
+  throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
 const ensurePathExists = inEnvironment((environment) => {
@@ -264,9 +263,9 @@ const ensurePathExists = inEnvironment((environment) => {
       const relativePath = path.relative(userDataPath(), targetPath);
 
       return inSequence(
-        getNestedPaths(relativePath)
-          .map(pathSegment => createDirectory(path.join(userDataPath(), pathSegment))),
-      ).then(() => targetPath);
+        getNestedPaths(relativePath).map(pathSegment => path.join(userDataPath(), pathSegment)),
+        createDirectory,
+      );
     };
   }
 
@@ -278,20 +277,8 @@ const ensurePathExists = inEnvironment((environment) => {
       );
   }
 
-  throw new Error();
+  throw new Error(`ensurePathExists() not available on platform ${environment}`);
 });
-
-// TODO: remove these debug exports
-window.userDataPath = userDataPath;
-window.getNestedPaths = getNestedPaths;
-window.ensurePathExists = ensurePathExists;
-window.readFile = readFile;
-window.removeDirectory = removeDirectory;
-window.readFileAsDataUrl = readFileAsDataUrl;
-window.writeFile = writeFile;
-window.writeStream = writeStream;
-window.createDirectory = createDirectory;
-window.resolveFileSystemUrl = resolveFileSystemUrl;
 
 export {
   userDataPath,
