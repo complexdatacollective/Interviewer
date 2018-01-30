@@ -13,12 +13,13 @@ const EnhancedCard = selectable(Card);
   */
 const CardList = (props) => {
   const {
+    className,
     details,
     label,
     nodes,
     onToggleCard,
     selected,
-    className,
+    uid,
   } = props;
 
   const classNames = cx('card-list', className);
@@ -27,7 +28,7 @@ const CardList = (props) => {
     <div className={classNames}>
       {
         nodes.map(node => (
-          <span key={node.uid}>
+          <span key={uid(node)}>
             <EnhancedCard
               label={label(node)}
               selected={selected(node)}
@@ -48,6 +49,7 @@ CardList.propTypes = {
   nodes: PropTypes.array.isRequired,
   onToggleCard: PropTypes.func,
   selected: PropTypes.func,
+  uid: PropTypes.func,
 };
 
 CardList.defaultProps = {
@@ -57,6 +59,7 @@ CardList.defaultProps = {
   nodes: [],
   onToggleCard: () => {},
   selected: () => false,
+  uid: node => node.uid,
 };
 
 export default compose(

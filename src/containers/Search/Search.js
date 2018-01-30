@@ -72,7 +72,6 @@ class Search extends Component {
     if (hasInput) {
       searchResults = this.props.fuse.search(newValue);
       searchResults = searchResults.filter(r => this.isAllowedResult(r));
-      searchResults = searchResults.map(r => this.withUid(r));
     } else {
       searchResults = [];
     }
@@ -128,13 +127,6 @@ class Search extends Component {
     return this.props.displayFields.map(field => result[field]).join('.');
   }
 
-  withUid(result) {
-    if (result.uid) {
-      return result;
-    }
-    return { ...result, uid: this.uidForResult(result) };
-  }
-
   // See uniqueness discussion at uidForResult.
   // If false, suppress candidate from appearing in search results —
   // for example, if the node has already been selected.
@@ -186,6 +178,7 @@ class Search extends Component {
     const getLabel = result => result[primaryDisplayField];
     const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
     const getDetails = result => auxFields.map(field => toDetail(result, field));
+    const getUid = result => this.uidForResult(result);
 
     return (
       <div className={searchClasses}>
@@ -198,6 +191,7 @@ class Search extends Component {
             hasInput={hasInput}
             results={this.state.searchResults}
 
+            uid={getUid}
             label={getLabel}
             details={getDetails}
             selected={getSelected}
