@@ -4,16 +4,19 @@ $add-count-button-width: 140px;
 $module-name: add-count-button;
 
 // Provides alternate colors (e.g., to represent different node types)
-@mixin add-count-palette($base_palette, $flash_palette) {
-  fill: palette($base_palette);
+// 'flash' is the darkened 45° overlay
+@mixin add-count-colors($base-color, $flash-color) {
+  fill: color($base-color);
+
   &-flash {
-    fill: palette($flash_palette);
+    fill: color($flash-color);
   }
 }
 
+
 .#{$module-name} {
   background-color: transparent;
-  border: none;
+  border: 0;
   color: color('white');
   cursor: pointer;
   display: block;
@@ -41,13 +44,14 @@ $module-name: add-count-button;
   }
 
   &__base {
-    @include add-count-palette('node-base', 'node-dark');
+    @include add-count-colors('neon-coral', 'neon-coral--dark');
   }
 
-  @for $i from 1 through 9 {
-    &--node-alt-#{$i} {
+  // Allow button to take on any available named color
+  @each $color, $_ in $-color-map {
+    &--#{$color} {
       .#{$module-name}__base {
-        @include add-count-palette('node-alt-#{$i}', 'node-alt-#{$i}--dark');
+        @include add-count-colors($color, '#{$color}--dark');
       }
     }
   }

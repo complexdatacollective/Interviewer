@@ -4,12 +4,18 @@ import PropTypes from 'prop-types';
 const baseClass = 'add-count-button';
 
 /**
+ * @class  AddCountButton
+ *
+ * @description
  * Renders an "Add" button with a count [of the number of items to be added].
  *
  * Example use: selecting multiple search results from autocomplete interface.
+ *
+ * @param {string} props.colorName a color named defined by Network-Canvas-UI
+ * @param {number} props.count the natural number to display
  */
-const AddCountButton = ({ altClass, className, count, onClick }) => (
-  <button className={`${baseClass} ${baseClass}--${altClass} ${className}`} onClick={() => onClick()}>
+const AddCountButton = ({ colorName, className, count, onClick }) => (
+  <button className={`${baseClass} ${baseClass}--${colorName} ${className}`} onClick={() => onClick()}>
     <div className={`${baseClass}__background`}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240">
         <title>Add</title>
@@ -30,14 +36,14 @@ const AddCountButton = ({ altClass, className, count, onClick }) => (
 AddCountButton.defaultProps = {
   count: null,
   className: '',
-  altClass: '',
+  colorName: '',
   onClick: () => {},
 };
 
 AddCountButton.propTypes = {
   className: PropTypes.string,
   count: PropTypes.number,
-  altClass: PropTypes.string,
+  colorName: PropTypes.string,
   onClick: PropTypes.func,
 };
 

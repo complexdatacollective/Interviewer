@@ -32,11 +32,11 @@ $search-z-index: 1000;
     height: 100%;
     margin: 0 10%;
     overflow: visible;
-    padding: 1rem 2rem 2rem 2rem;
+    padding: 1rem 2rem 2rem;
     position: relative;
     width: 80%;
 
-    [name="close"] {
+    [name='close'] {
       position: absolute;
       right: 0;
       top: 0;
@@ -50,15 +50,12 @@ $search-z-index: 1000;
     padding: spacing(medium);
   }
 
-  &--hasInput {
-  }
-
   &--collapsed {
     transform: translateX(100%);
   }
 
   &__results {
-    border: 1px solid white;
+    border: 1px solid color('white');
     display: block;
     // A calculated height here attempts to use all available space without
     // hiding the prompt question. min-height ensures results are readable,
@@ -74,7 +71,7 @@ $search-z-index: 1000;
     }
 
     &--collapsed {
-      border: none;
+      border: 0;
       height: 0;
       min-height: 0;
     }
@@ -82,8 +79,8 @@ $search-z-index: 1000;
 
   &__result {
     &--selected {
-      background-color: color('white', 0.15);
-      border: 1px solid white;
+      background-color: color('white', .15);
+      border: 1px solid color('white');
     }
   }
 

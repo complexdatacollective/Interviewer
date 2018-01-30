@@ -17,6 +17,7 @@ jest.mock('fuse.js', () => jest.fn(() => (
 
 const mockReduxState = {
   protocol: {
+    variableRegistry: {},
     externalData: {},
   },
   search: {

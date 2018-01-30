@@ -8,8 +8,8 @@ import { Icon } from 'network-canvas-ui';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
+import { getNodeColor } from '../../selectors/protocol';
 import { makeGetFuse } from '../../selectors/search';
-import { getNodePalette } from '../../utils/NodePalettes';
 
 /**
  * Fuse.js: approximate string matching.
@@ -151,7 +151,7 @@ class Search extends Component {
     const {
       collapsed,
       displayFields,
-      nodeType,
+      nodeColor,
     } = this.props;
 
     const hasInput = this.state.hasInput;
@@ -162,8 +162,6 @@ class Search extends Component {
         'search--hasInput': hasInput,
       },
     );
-
-    const addButtonAlt = getNodePalette(nodeType);
 
     const SearchPrompt = 'Type in the box below to Search';
     const SelectPrompt = 'Tap an item to select it';
@@ -210,7 +208,7 @@ class Search extends Component {
             this.state.selectedResults.length > 0 &&
             <AddCountButton
               count={this.state.selectedResults.length}
-              altClass={addButtonAlt}
+              colorName={nodeColor}
               onClick={() => this.onCommit()}
             />
           }
@@ -231,6 +229,7 @@ class Search extends Component {
 
 Search.defaultProps = {
   clearResultsOnClose: true,
+  nodeColor: '',
   nodeType: '',
 };
 
@@ -242,12 +241,14 @@ Search.propTypes = {
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
-  nodeType: PropTypes.string,
+  nodeColor: PropTypes.string,
 
-  // These props are required by the fuse selector
   /* eslint-disable react/no-unused-prop-types */
+  // These props are required by the fuse selector
   dataSourceKey: PropTypes.string.isRequired,
   options: PropTypes.object.isRequired,
+  // This prop used by the nodeColor selector
+  nodeType: PropTypes.string,
   /* eslint-enable react/no-unused-prop-types */
 };
 
@@ -261,6 +262,7 @@ function mapStateToProps(state, props) {
   return {
     collapsed: state.search.collapsed,
     fuse: FuseSelector(state, props),
+    nodeColor: getNodeColor(state, props),
   };
 }
 
