@@ -114,27 +114,25 @@ class Search extends Component {
    * A result is considered unique only if it presents some disambiguating
    * information to the user (i.e., its combination of display attributes is unique).
    *
-   * If the protocol defines a `uid` attribute, that will be used instead
-   * (and assumed to be unique).
+   * The `uid` attribute cannot be used to determine uniqueness: once an item
+   * from external data (having no `uid`) is added to the network, it will have
+   * a `uid`.
    *
    * @param  {object} result A search result
    * @return {string} a unique identifier for the result
    */
-  uidForResult(result) {
-    if (result.uid) {
-      return result.uid;
-    }
+  uniqueKeyForResult(result) {
     return this.props.displayFields.map(field => result[field]).join('.');
   }
 
-  // See uniqueness discussion at uidForResult.
+  // See uniqueness discussion at uniqueKeyForResult.
   // If false, suppress candidate from appearing in search results —
   // for example, if the node has already been selected.
   // Assumption:
   //   `excludedNodes` size is small, but search set may be large,
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
-    const uid = this.uidForResult.bind(this);
+    const uid = this.uniqueKeyForResult.bind(this);
     const candidateUid = uid(candidate);
     return this.props.excludedNodes.every(excluded => uid(excluded) !== candidateUid);
   }
@@ -178,7 +176,7 @@ class Search extends Component {
     const getLabel = result => result[primaryDisplayField];
     const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
     const getDetails = result => auxFields.map(field => toDetail(result, field));
-    const getUid = result => this.uidForResult(result);
+    const getUid = result => this.uniqueKeyForResult(result);
 
     return (
       <div className={searchClasses}>

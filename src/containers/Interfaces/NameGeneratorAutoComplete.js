@@ -9,7 +9,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
 import { getNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
@@ -45,6 +45,7 @@ class NameGeneratorAutoComplete extends Component {
   render() {
     const {
       closeSearch,
+      excludedNodes,
       nodesForPrompt,
       nodeIconName,
       nodeType,
@@ -98,7 +99,7 @@ class NameGeneratorAutoComplete extends Component {
           key={prompt.id}
           dataSourceKey={prompt.dataSource}
           displayFields={[prompt.displayLabel, ...prompt.displayProperties]}
-          excludedNodes={nodesForPrompt}
+          excludedNodes={excludedNodes}
           nodeType={nodeType}
           onClick={closeSearch}
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
@@ -117,6 +118,7 @@ class NameGeneratorAutoComplete extends Component {
 NameGeneratorAutoComplete.propTypes = {
   addNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
+  excludedNodes: PropTypes.array.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
@@ -142,6 +144,7 @@ function makeMapStateToProps() {
     return {
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodeIconName: getNodeIconName(state, props),
+      excludedNodes: networkNodes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,

@@ -742,11 +742,29 @@
       "label": "NG Classmates",
       "prompts": [
         {
-          "id": "7cl",
+          "id": "7cl1",
           "text": "Which classmates would you also think of as friends?",
           "additionalAttributes": {
             "special_category": 46,
             "close_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "displayLabel": "nickname",
+          "displayProperties": ["name", "age"],
+          "autoCompleteOptions": {
+            "fuzzyness": 0.4,
+            "matchProperties": ["nickname", "name"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          }
+        },
+        {
+          "id": "7cl2",
+          "text": "Within the past 6 months, who has been supportive?",
+          "additionalAttributes": {
+            "support_friend": true
           },
           "dataSource": "schoolPupils",
           "displayLabel": "nickname",
