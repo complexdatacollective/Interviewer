@@ -7,7 +7,7 @@ import { differenceBy } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
-import { getDataByPrompt, getPrimaryDisplay, getSecondaryDisplay, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
 
@@ -120,12 +120,12 @@ function makeMapStateToProps() {
     return {
       initialSortOrder: getSortOrderDefault(state, props),
       initialSortDirection: getSortDirectionDefault(state, props),
-      labelKey: getPrimaryDisplay(state, props),
+      labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
       selectedNodes: networkNodes(state),
       sortFields: getSortFields(state, props),
-      visibleSupplementaryFields: getSecondaryDisplay(state, props),
+      visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };
 }

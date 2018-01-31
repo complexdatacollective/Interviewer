@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { has, omit } from 'lodash';
+import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
 import { getExternalData } from './protocol';
 import { nextUid } from '../ducks/modules/network';
@@ -17,8 +17,8 @@ These selectors assume the following props:
 // MemoedSelectors
 
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
-const getSortDefault = (_, props) => props.prompt.sortOrder;
-const propNodeDisplay = (_, props) => props.prompt.nodeDisplay;
+const propCardOptions = (_, props) => props.prompt.cardOptions;
+const propSortOptions = (_, props) => props.prompt.sortOptions;
 
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
@@ -38,38 +38,30 @@ export const makeGetPromptNodeAttributes = () => {
   );
 };
 
-export const getPrimaryDisplay = createSelector(
-  propNodeDisplay,
-  nodeDisplay => nodeDisplay.primary,
+export const getCardDisplayLabel = createSelector(
+  propCardOptions,
+  cardOptions => cardOptions.displayLabel,
 );
 
-const propSecondaryDisplay = createSelector(
-  propNodeDisplay,
-  nodeDisplay => (has(nodeDisplay, 'secondary') ? nodeDisplay.secondary : []),
-);
-
-export const getSecondaryDisplay = createSelector(
-  propSecondaryDisplay,
-  secondary => secondary.map(property => omit(property, 'sortable')),
+export const getCardAdditionalProperties = createSelector(
+  propCardOptions,
+  cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
 );
 
 export const getSortFields = createSelector(
-  getPrimaryDisplay,
-  propSecondaryDisplay,
-  (primary, secondary) => [primary].concat(secondary.filter(
-    property => property.sortable && property.variable).map(property => property.variable),
-  ),
+  propSortOptions,
+  sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
 
 export const getSortOrderDefault = createSelector(
-  getSortDefault,
-  sortData => sortData && (Object.keys(sortData)[0] || ''),
+  propSortOptions,
+  sortOptions => sortOptions.sortOrder && (Object.keys(sortOptions.sortOrder)[0] || ''),
 );
 
 export const getSortDirectionDefault = createSelector(
-  getSortDefault,
+  propSortOptions,
   getSortOrderDefault,
-  (sortData, key) => sortData && (sortData[key] || ''),
+  (sortOptions, key) => sortOptions.sortOrder && (sortOptions.sortOrder[key] || ''),
 );
 
 export const getDataByPrompt = createSelector(
