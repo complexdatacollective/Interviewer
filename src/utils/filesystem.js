@@ -10,10 +10,10 @@ const Buffer = require('buffer/').Buffer;
 const trimPath = trimChars('/ ');
 
 const splitUrl = (targetPath) => {
-  const pathParts = targetPath.split('/');
-  const baseDirectory = pathParts.slice(0, -1).join('/');
-  const [tail] = pathParts.slice(-1);
-  return [baseDirectory, tail];
+  const pathParts = trimPath(targetPath).split('/');
+  const baseDirectory = `${pathParts.slice(0, -1).join('/')}/`;
+  const directory = `${pathParts.slice(-1)}/`;
+  return [baseDirectory, directory];
 };
 
 const inSequence = (items, apply) =>
@@ -181,7 +181,6 @@ const removeDirectory = inEnvironment((environment) => {
     return targetPath =>
       new Promise((resolve, reject) => {
         try {
-          console.log('removeDir', targetPath);
           if (!targetPath.includes(userDataPath())) { reject('Path not in userDataPath'); return; }
           rimraf(targetPath, resolve);
         } catch (error) {
@@ -233,19 +232,20 @@ const getNestedPaths = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     // Only works for cdvfile:// format paths
     return (targetUrl) => {
-      const url = new URL(targetUrl);
+      const pathMatcher = /^([a-z]+:\/\/[a-z]+\/[a-z]+)\/(.*)/;
+      const matches = pathMatcher.exec(targetUrl);
 
-      const path = trimPath(url.pathname).split('/');
+      const location = matches[1];
+      const path = trimPath(matches[2]).split('/');
 
       return path
-        .slice(1)
         .reduce(
           (memo, dir) => (
             memo.length === 0 ?
               [dir] :
-              [...memo, `${memo[memo.length - 1]}/${dir}`]
+              [...memo, `${memo[memo.length - 1]}${dir}/`]
           ),
-          [`${url.protocol}//${url.hostname}/${path[0]}`],
+          [`${location}/`],
         )
         .slice(1);
     };

@@ -18,14 +18,16 @@ const protocolPath = (environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return (protocolName, filePath = '') => {
+    return (protocolName, ...rest) => {
       if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');
-      return [userDataPath(), 'protocols', protocolName, filePath].join('/');
+
+      const path = rest.length > 0 ? rest : [null];
+
+      return [userDataPath(), 'protocols', protocolName].concat(path).join('/');
     };
   }
 
   throw new Error('protocolPath not specified on this platform');
 };
 
-window.protocolPath = inEnvironment(protocolPath);
 export default inEnvironment(protocolPath);
