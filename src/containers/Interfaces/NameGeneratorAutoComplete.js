@@ -68,6 +68,9 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
+    // TODO: Remove this workaround for the label formatter depending on prompt vars. See #305.
+    const labeledNodes = nodesForPrompt.map(n => ({ ...n, label: n[prompt.displayLabel] }));
+
     return (
       <div className={baseClass}>
         <div className={`${baseClass}__prompt`}>
@@ -83,8 +86,7 @@ class NameGeneratorAutoComplete extends Component {
           <NodeList
             id={ListId}
             listId={`${stage.id}_${prompt.id}_${ListId}`}
-            nodes={nodesForPrompt}
-            label={node => node[prompt.displayLabel]}
+            nodes={labeledNodes}
             itemType="EXISTING_NODE"
           />
         </div>
