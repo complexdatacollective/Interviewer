@@ -11,13 +11,9 @@ const getProtocolNameFromUri = uri => new URL(uri).pathname.split('/').pop();
 
 const fetchRemoteProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const https = require('https');
+    const request = require('request');
     const path = require('path');
     const electron = require('electron');
-
-    const get = (uri) => new Promise((resolve, reject) => {
-      https.get(uri, resolve).on('error', reject);
-    });
 
     return (uri) => {
       const protocolName = getProtocolNameFromUri(uri);
@@ -26,8 +22,7 @@ const fetchRemoteProtocol = inEnvironment((environment) => {
 
       console.log('fetch', uri, protocolName, destination);
 
-      return get(uri)
-        .then((stream) => writeStream(destination, stream));
+      return writeStream(destination, request(uri));
     };
   }
 
