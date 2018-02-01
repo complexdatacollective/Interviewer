@@ -8,6 +8,7 @@ import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
 import importer from '../utils/importer';
 import { isElectron, isCordova } from '../utils/Environment';
+import importRemoteProtocol from '../utils/protocol/importRemoteProtocol';
 
 const formConfig = {
   formName: 'setup',
@@ -23,7 +24,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: '',
+  protocol_url: 'https://github.com/codaco/Network-Canvas/raw/7f3766f3275e6f74d6a2ddfebc29b0da4e3b3e30/public/demo.canvas',
 };
 
 /**
@@ -33,7 +34,7 @@ const initialValues = {
 class Setup extends Component {
   onClickLoadProtocol = (fields) => {
     if (fields) {
-      this.props.loadProtocol(fields.protocol_url);
+      importRemoteProtocol(fields.protocol_url);
     }
   }
 

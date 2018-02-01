@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable global-require */
 /* global FileReader, window */
 
@@ -230,9 +231,9 @@ const getNestedPaths = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    // Only works for cdvfile:// format paths
+    // Only tested for cdvfile:// format paths
     return (targetUrl) => {
-      const pathMatcher = /^([a-z]+:\/\/[a-z]+\/[a-z]+)\/(.*)/;
+      const pathMatcher = /^([a-z]+:\/\/[a-z]+\/[a-z]+\/)(.*)/;
       const matches = pathMatcher.exec(targetUrl);
 
       const location = matches[1];
@@ -245,7 +246,7 @@ const getNestedPaths = inEnvironment((environment) => {
               [dir] :
               [...memo, `${memo[memo.length - 1]}${dir}/`]
           ),
-          [`${location}/`],
+          [location],
         )
         .slice(1);
     };
@@ -300,6 +301,11 @@ const ensurePathExists = inEnvironment((environment) => {
 
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
 });
+
+window.removeDirectory = removeDirectory;
+window.resolve = path => new Promise((resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject));
+window.readFileAsDataUrl = readFileAsDataUrl;
+window.readFile = readFile;
 
 export {
   userDataPath,

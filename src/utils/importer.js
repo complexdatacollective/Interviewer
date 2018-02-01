@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable global-require */
 /* global cordova */
 
@@ -54,9 +55,11 @@ const extractZipFile = inEnvironment((environment) => {
 
 const extractZip = inEnvironment((environment) => {
   if (environment !== environments.WEB) {
-    return (source, destination) =>
-      readFile(source)
+    return (source, destination) => {
+      console.log('extract zip');
+      return readFile(source)
         .then(data => Zip.loadAsync(data))
+        .then((zip) => { console.log(zip); return zip; })
         .then(zip =>
           inSequence(
             Object.values(zip.files),
@@ -67,6 +70,7 @@ const extractZip = inEnvironment((environment) => {
             ),
           ),
         );
+    };
   }
 
   throw new Error(`extractZip() not available on platform ${environment}`);
@@ -77,8 +81,8 @@ const importer = inEnvironment((environment) => {
     console.log('electron');
     const path = require('path');
 
-    return () => { // return (protocolFile) => { TODO: Proper spec
-      const protocolFile = `${window.__dirname}/demo.canvas`; // eslint-disable-line
+    // TODO: remove fallback file
+    return (protocolFile = `${window.__dirname}/demo.canvas`) => { // eslint-disable-line
       const basename = path.basename(protocolFile);
       const destination = protocolPath(basename);
 
@@ -89,17 +93,20 @@ const importer = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return () => { // return (protocolFile) => { TODO: Proper spec
-      const protocolFile = `${cordova.file.applicationDirectory}www/demo.canvas`;
-      const destination = protocolPath('demo.canvas');
+    // TODO: remove fallback file
+    return (protocolFileUri = `${cordova.file.applicationDirectory}www/demo.canvas`) => {
+      const protocolName = new URL(protocolFileUri).pathname.split('/').pop();
+      const destination = protocolPath(protocolName);
 
       return removeDirectory(destination)
         .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFile, destination));
+        .then(() => extractZip(protocolFileUri, destination));
     };
   }
 
   throw new Error(`importer() not available on platform ${environment}`);
 });
+
+window.importer = importer;
 
 export default importer;
