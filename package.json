@@ -14,6 +14,7 @@
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
         "lint": "eslint src",
+        "sass-lint": "sass-lint -vc .sass-lint.yml",
         "test": "node scripts/test.js --env=jsdom",
         "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
         "build-docs": "NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
