@@ -3,6 +3,20 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import CardList from '../../components/CardList';
 
+// This provides a workaround for visibility when a softkeyboard scrolls the viewport
+// (for example, on iOS). TODO: better solution once animation is in place.
+function styleForSoftKeyboard() {
+  let style = {};
+  const scrollTop = window.pageYOffset || window.scrollY || 0;
+  if (scrollTop > 0) {
+    style = {
+      height: `calc(100vh - 320px - ${scrollTop}px)`,
+      minHeight: '10em',
+    };
+  }
+  return style;
+}
+
 /**
  * @class SearchResults
  * @extends Component
@@ -20,12 +34,14 @@ const SearchResults = (props) => {
     ...rest
   } = props;
 
+  const style = styleForSoftKeyboard();
+
   const classNames = cx(
     'search__results',
     { 'search__results--collapsed': !hasInput },
   );
 
-  let content;
+  let content = '';
   if (results.length) {
     content = (
       <CardList
@@ -34,12 +50,12 @@ const SearchResults = (props) => {
         {...rest}
       />
     );
-  } else {
+  } else if (hasInput) {
     content = (<p>Nothing matching that search</p>);
   }
 
   return (
-    <div className={classNames}>
+    <div className={classNames} style={style}>
       {content}
     </div>
   );
