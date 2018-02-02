@@ -149,12 +149,12 @@ class ListSelect extends Component {
         <div className="list-select__sort">
           { sortFields && sortFields.map(sortField => (
             <Button
-              color={this.state.property === sortField ? 'primary' : 'white'}
-              key={sortField}
-              onClick={() => this.setSortBy(sortField)}
+              color={this.state.property === sortField.variable ? 'primary' : 'white'}
+              key={sortField.variable}
+              onClick={() => this.setSortBy(sortField.variable)}
               size="small"
             >
-              {sortField + this.getDirection(sortField)}
+              {(sortField.label || sortField.variable) + this.getDirection(sortField.variable)}
             </Button>
           ))}
           <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />

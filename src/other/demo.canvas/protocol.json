@@ -487,7 +487,6 @@
       "id": "namegenroster2",
       "type": "NameGeneratorList",
       "label": "NG Classmates",
-      "form": "person",
       "showExistingNodes": false,
       "prompts": [
         {
@@ -501,21 +500,31 @@
             "entity": "node",
             "type": "person"
           },
-          "sortOrder": {
-            "name": "ASC"
-          },
-          "nodeDisplay": {
-            "primary": "nickname",
-            "secondary": [
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name",
-                "sortable": true
+                "variable": "name"
               },
               {
                 "label": "Age",
-                "variable": "age",
-                "sortable": true
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "name": "ASC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Pupil Name",
+                "variable": "name"
+              },
+              {
+                "label": "Pupil Age",
+                "variable": "age"
               }
             ]
           }
@@ -532,16 +541,27 @@
             "entity": "node",
             "type": "person"
           },
-          "sortOrder": {
-            "nickname": "DESC"
-          },
-          "nodeDisplay": {
-            "primary": "nickname",
-            "secondary": [
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name",
-                "sortable": true
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "nickname": "DESC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Nickname",
+                "variable": "nickname"
               },
               {
                 "label": "Age",
