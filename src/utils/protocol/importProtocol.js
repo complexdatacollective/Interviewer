@@ -1,12 +1,11 @@
-/* eslint-disable */
 /* eslint-disable global-require */
 /* global cordova */
 
 import Zip from 'jszip';
-import environments from './environments';
-import inEnvironment from './Environment';
-import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from './filesystem';
-import { protocolPath } from './protocol';
+import environments from '../environments';
+import inEnvironment from '../Environment';
+import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from '../filesystem';
+import { protocolPath } from './';
 
 const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -55,11 +54,9 @@ const extractZipFile = inEnvironment((environment) => {
 
 const extractZip = inEnvironment((environment) => {
   if (environment !== environments.WEB) {
-    return (source, destination) => {
-      console.log('extract zip');
-      return readFile(source)
+    return (source, destination) =>
+      readFile(source)
         .then(data => Zip.loadAsync(data))
-        .then((zip) => { console.log(zip); return zip; })
         .then(zip =>
           inSequence(
             Object.values(zip.files),
@@ -70,15 +67,13 @@ const extractZip = inEnvironment((environment) => {
             ),
           ),
         );
-    };
   }
 
   throw new Error(`extractZip() not available on platform ${environment}`);
 });
 
-const importer = inEnvironment((environment) => {
+const importProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    console.log('electron');
     const path = require('path');
 
     // TODO: remove fallback file
@@ -104,9 +99,7 @@ const importer = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`importer() not available on platform ${environment}`);
+  throw new Error(`importProtocol() not available on platform ${environment}`);
 });
 
-window.importer = importer;
-
-export default importer;
+export default importProtocol;

@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-export, no-console */
 /* eslint-env jest */
 
 const readFile = jest.fn(console.log);

@@ -2,7 +2,7 @@
 
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { getProtocol } from '../../utils/protocol';
+import { loadProtocol as loadProtocolByName } from '../../utils/protocol';
 import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
@@ -64,7 +64,7 @@ const loadProtocolEpic = action$ =>
   action$.ofType(LOAD_PROTOCOL) // Filter for load protocol action
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
-        .fromPromise(getProtocol(action.path)) // Get protocol
+        .fromPromise(loadProtocolByName(action.path)) // Get protocol
         .map(response => setProtocol(action.path, response)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );

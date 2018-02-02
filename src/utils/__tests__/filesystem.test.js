@@ -14,9 +14,9 @@ describe('filesystem', () => {
       expect(
         getNestedPaths('cdvfile://localhost/persistent/protocols/demo.canvas/assets'),
       ).toEqual([
-        'cdvfile://localhost/persistent/protocols',
-        'cdvfile://localhost/persistent/protocols/demo.canvas',
-        'cdvfile://localhost/persistent/protocols/demo.canvas/assets',
+        'cdvfile://localhost/persistent/protocols/',
+        'cdvfile://localhost/persistent/protocols/demo.canvas/',
+        'cdvfile://localhost/persistent/protocols/demo.canvas/assets/',
       ]);
     });
   });

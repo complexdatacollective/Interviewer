@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
-import importer from '../utils/importer';
+import { importProtocol, importRemoteProtocol } from '../utils/protocol';
 import { isElectron, isCordova } from '../utils/Environment';
-import importRemoteProtocol from '../utils/protocol/importRemoteProtocol';
 
 const formConfig = {
   formName: 'setup',
@@ -43,13 +42,12 @@ class Setup extends Component {
   }
 
   onClickLoadImportedProtocol = () => {
-    console.log('Loading "demo.canvas"');
     this.props.loadProtocol('demo.canvas');
   }
 
   onClickImportProtocol = () => {
-    console.log('Importing "demo.canvas"');
-    importer('Path to protocol here');
+    // takes one argument, path to protocol, defaults to loading test protocol from public
+    importProtocol();
   }
 
   onDialogConfirm = () => {

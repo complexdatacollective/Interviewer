@@ -2,14 +2,14 @@
 
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
-import getProtocol from '../getProtocol';
+import loadProtocol from '../loadProtocol';
 import protocolPath from '../protocolPath';
 import { readFile } from '../../filesystem';
 
 jest.mock('../../filesystem');
 jest.mock('../protocolPath');
 
-describe('getProtocol', () => {
+describe('loadProtocol', () => {
   describe('Electron', () => {
     beforeAll(() => {
       getEnvironment.mockReturnValue(environments.ELECTRON);
@@ -17,8 +17,7 @@ describe('getProtocol', () => {
     });
 
     it('returns the parsed protocol object', () => {
-
-      expect(getProtocol('bazz.protocol')).resolves.toEqual({
+      expect(loadProtocol('bazz.protocol')).resolves.toEqual({
         foo: 'bar',
       });
 
