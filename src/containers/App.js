@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
-import { SessionMenu, StageMenu } from '.';
+import { SessionMenu, StageMenu, LoadScreen } from '.';
 
 require('../styles/main.scss');
 
@@ -29,6 +29,7 @@ const App = props => (
     >
       { props.children }
     </div>
+    <LoadScreen />
   </div>
 
 );

@@ -16,6 +16,8 @@ const SET_PROTOCOL = 'SET_PROTOCOL';
 
 const initialState = {
   isLoaded: false,
+  isLoading: false,
+  error: null,
   name: '',
   version: '',
   required: '',
@@ -30,6 +32,24 @@ export default function reducer(state = initialState, action = {}) {
         ...action.protocol,
         path: action.path,
         isLoaded: true,
+        isLoading: false,
+        error: null,
+      };
+    case DOWNLOAD_PROTOCOL:
+    case IMPORT_PROTOCOL:
+    case LOAD_PROTOCOL:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case DOWNLOAD_PROTOCOL_FAILED:
+    case IMPORT_PROTOCOL_FAILED:
+    case LOAD_PROTOCOL_FAILED:
+      return {
+        ...state,
+        isLoaded: true,
+        isLoading: false,
+        error: action.error,
       };
     default:
       return state;
