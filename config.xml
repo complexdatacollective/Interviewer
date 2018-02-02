@@ -14,6 +14,7 @@
     <allow-intent href="https://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <allow-navigation href="https://*/*" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -53,6 +54,7 @@
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <engine name="android" spec="^6.4.0" />
     <engine name="ios" spec="^4.5.4" />
 </widget>
