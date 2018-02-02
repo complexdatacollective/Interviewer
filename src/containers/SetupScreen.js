@@ -31,9 +31,10 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickLoadProtocol = (fields) => {
+  onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      importRemoteProtocol(fields.protocol_url);
+      importRemoteProtocol(fields.protocol_url)
+        .then(protocolName => this.props.loadProtocol(protocolName));
     }
   }
 
@@ -107,7 +108,7 @@ class Setup extends Component {
           <div className="setup__custom-protocol">
             <Form
               form={formConfig.formName}
-              onSubmit={this.onClickLoadProtocol}
+              onSubmit={this.onClickImportRemoteProtocol}
               initialValues={initialValues}
               {...formConfig}
             />

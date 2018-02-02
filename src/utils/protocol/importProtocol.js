@@ -78,12 +78,13 @@ const importProtocol = inEnvironment((environment) => {
 
     // TODO: remove fallback file
     return (protocolFile = `${window.__dirname}/demo.canvas`) => { // eslint-disable-line
-      const basename = path.basename(protocolFile);
-      const destination = protocolPath(basename);
+      const protocolName = path.basename(protocolFile);
+      const destination = protocolPath(protocolName);
 
       return removeDirectory(destination)
         .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFile, destination));
+        .then(() => extractZip(protocolFile, destination))
+        .then(() => protocolName);
     };
   }
 
@@ -95,7 +96,8 @@ const importProtocol = inEnvironment((environment) => {
 
       return removeDirectory(destination)
         .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFileUri, destination));
+        .then(() => extractZip(protocolFileUri, destination))
+        .then(() => protocolName);
     };
   }
 
