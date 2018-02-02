@@ -3,12 +3,11 @@
 
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import { importProtocol } from './';
 import { writeStream } from '../filesystem';
 
 const getProtocolNameFromUri = uri => new URL(uri).pathname.split('/').pop();
 
-const fetchRemoteProtocol = inEnvironment((environment) => {
+const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request');
     const path = require('path');
@@ -35,17 +34,17 @@ const fetchRemoteProtocol = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`userDataPath() not available on platform ${environment}`);
+  throw new Error(`downloadProtocol() not available on platform ${environment}`);
 });
 
-const importRemoteProtocol = inEnvironment((environment) => {
-  if (environment !== environments.WEB) {
-    return uri =>
-      fetchRemoteProtocol(uri)
-        .then(importProtocol);
-  }
+// const importRemoteProtocol = inEnvironment((environment) => {
+//   if (environment !== environments.WEB) {
+//     return uri =>
+//       downloadProtocol(uri)
+//         .then(importProtocol);
+//   }
 
-  throw new Error(`userDataPath() not available on platform ${environment}`);
-});
+//   throw new Error(`importRemoteProtocol() not available on platform ${environment}`);
+// });
 
-export default importRemoteProtocol;
+export default downloadProtocol;

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
-import { importProtocol, importRemoteProtocol } from '../utils/protocol';
 import { isElectron, isCordova } from '../utils/Environment';
 
 const formConfig = {
@@ -33,14 +32,12 @@ const initialValues = {
 class Setup extends Component {
   onClickImportProtocol = () => {
     // takes one argument, path to protocol, defaults to loading test protocol from public
-    importProtocol()
-      .then(protocolName => this.props.loadProtocol(protocolName));
+    this.props.importProtocol();
   }
 
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      importRemoteProtocol(fields.protocol_url)
-        .then(protocolName => this.props.loadProtocol(protocolName));
+      this.props.downloadProtocol(fields.protocol_url);
     }
   }
 
@@ -121,6 +118,8 @@ Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   loadDemoProtocol: PropTypes.func.isRequired,
+  downloadProtocol: PropTypes.func.isRequired,
+  importProtocol: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -131,6 +130,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
   };
