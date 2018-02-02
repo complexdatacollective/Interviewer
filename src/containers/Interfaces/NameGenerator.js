@@ -10,7 +10,7 @@ import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
 import { NodeList, NodeBin } from '../../components/';
-import { makeRehydrateForm } from '../../selectors/rehydrate';
+import { makeRehydrateForm } from '../../selectors/forms';
 
 const forms = {
   ADD_NODE: Symbol('ADD_NODE'),

@@ -17,7 +17,7 @@ export const getExternalData = createDeepEqualSelector(
   protocolData => protocolData,
 );
 
-export const getNodeColor = createDeepEqualSelector(
+export const makeGetNodeColor = () => createDeepEqualSelector(
   protocolRegistry,
   (state, props) => props.nodeType,
   (variableRegistry, nodeType) => {

@@ -77,7 +77,7 @@ export const getDataByPrompt = createSelector(
     (node, index) => ({ uid: nextUid(externalData[key].nodes, index), ...node })),
 );
 
-export const getNodeIconName = createSelector(
+export const makeGetNodeIconName = () => createSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {

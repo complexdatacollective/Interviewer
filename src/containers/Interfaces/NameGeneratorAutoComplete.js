@@ -10,13 +10,14 @@ import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { getNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { makeGetNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 
 const networkNodesForPrompt = makeNetworkNodesForPrompt();
 const getPromptNodeAttributes = makeGetPromptNodeAttributes();
 const getNodeType = makeGetNodeType();
+const getNodeIconName = makeGetNodeIconName();
 
 /**
   * NameGeneratorAutoComplete Interface

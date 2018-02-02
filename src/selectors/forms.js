@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import { createSelector } from 'reselect';
 import { protocolRegistry, protocolForms } from './protocol';
 

@@ -11,7 +11,7 @@ import { Button } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
-import { makeRehydrateFields } from '../selectors/rehydrate';
+import { makeRehydrateFields } from '../selectors/forms';
 
 const propNode = (_, props) => props.node;
 

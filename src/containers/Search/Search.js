@@ -8,7 +8,7 @@ import { Icon } from 'network-canvas-ui';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getNodeColor } from '../../selectors/protocol';
+import { makeGetNodeColor } from '../../selectors/protocol';
 import { makeGetFuse } from '../../selectors/search';
 
 /**
@@ -32,6 +32,8 @@ const InitialState = {
   searchTerm: '',
   selectedResults: [],
 };
+
+const getNodeColor = makeGetNodeColor();
 
 /**
   * @class Search
