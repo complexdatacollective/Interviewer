@@ -31,6 +31,12 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
+  onClickImportProtocol = () => {
+    // takes one argument, path to protocol, defaults to loading test protocol from public
+    importProtocol()
+      .then(protocolName => this.props.loadProtocol(protocolName));
+  }
+
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       importRemoteProtocol(fields.protocol_url)
@@ -40,15 +46,6 @@ class Setup extends Component {
 
   onClickLoadDemoProtocol = () => {
     this.props.loadDemoProtocol();
-  }
-
-  onClickLoadImportedProtocol = () => {
-    this.props.loadProtocol('demo.canvas');
-  }
-
-  onClickImportProtocol = () => {
-    // takes one argument, path to protocol, defaults to loading test protocol from public
-    importProtocol();
   }
 
   onDialogConfirm = () => {
@@ -64,12 +61,24 @@ class Setup extends Component {
   renderImportButtons() {
     if (isElectron() || isCordova()) {
       return (
-        <p>
-          <Button onClick={this.onClickImportProtocol} content="Import demo protocol" /><br />
+        <div>
+          <p>
+            <Button onClick={this.onClickImportProtocol} content="Load protocol (via import from app directory)" /><br />
+          </p>
+          <p>Or import a custom one:</p>
+          <div className="setup__custom-protocol">
+            <Form
+              form={formConfig.formName}
+              onSubmit={this.onClickImportRemoteProtocol}
+              initialValues={initialValues}
+              controls={[<Button key="submit" aria-label="Load remote protocol">Load remote protocol</Button>]}
+              {...formConfig}
+            />
+          </div>
           <br />
-          <Button onClick={this.onClickLoadImportedProtocol} content="Load imported demo protocol" />
           <hr />
-        </p>
+          <br />
+        </div>
       );
     }
 
@@ -102,17 +111,6 @@ class Setup extends Component {
           <p>
             <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
           </p>
-
-          <p>Or load a custom one:</p>
-
-          <div className="setup__custom-protocol">
-            <Form
-              form={formConfig.formName}
-              onSubmit={this.onClickImportRemoteProtocol}
-              initialValues={initialValues}
-              {...formConfig}
-            />
-          </div>
         </div>
       </div>
     );
