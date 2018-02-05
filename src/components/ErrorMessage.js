@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Icon } from 'network-canvas-ui'; // eslint-disable-line
 import { actionCreators as errorActions } from '../ducks/modules/errors';
-import { Fade } from '../components/Transition';
+import { Modal } from '../components/Transition';
 
 /**
   * Renders a dialog box.
@@ -19,7 +19,7 @@ const ErrorMessage = ({
   const isActive = (!!errorMessage && !acknowledged);
 
   return (
-    <Fade in={isActive}>
+    <Modal in={isActive}>
       <div className="dialog">
         <div className="dialog__window" onClick={e => e.stopPropagation()}>
           <div className="dialog__main">
@@ -36,7 +36,7 @@ const ErrorMessage = ({
           </footer>
         </div>
       </div>
-    </Fade>
+    </Modal>
   );
 };
 
