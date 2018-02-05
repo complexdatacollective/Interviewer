@@ -12,7 +12,7 @@ const initialState = {
 
 const getErrorMessage = (error) => {
   if (isString(error)) return error;
-  if (error && error.message) return error.message;
+  if (error && error.toString) return error.toString();
   return 'Unknown error';
 };
 
@@ -21,6 +21,7 @@ export default function reducer(state = initialState, action = {}) {
     case errorActionTypes.DOWNLOAD_PROTOCOL_FAILED:
     case errorActionTypes.IMPORT_PROTOCOL_FAILED:
     case errorActionTypes.LOAD_PROTOCOL_FAILED:
+      console.error(action.error);
       return {
         ...state,
         acknowledged: false,
