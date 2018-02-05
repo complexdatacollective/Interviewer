@@ -130,7 +130,7 @@
         "xss": "^0.3.4"
     },
     "dependencies": {
-        "cordova-android": "^6.4.0",
+        "cordova-android": "^7.0.0",
         "cordova-ios": "^4.5.4",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-device": "^1.1.6",
