@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   NameGeneratorInterface,
+  NameGeneratorListInterface,
   QuizInterface,
   SociogramInterface,
 } from '../containers/Interfaces';
@@ -10,6 +11,8 @@ export default function loadInterface(options) {
   switch (options) {
     case 'NameGenerator':
       return NameGeneratorInterface;
+    case 'NameGeneratorList':
+      return NameGeneratorListInterface;
     case 'Sociogram':
       return SociogramInterface;
     case 'Quiz':

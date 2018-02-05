@@ -1,0 +1,217 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListSelect component renders ok 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ListSelect
+    details={[Function]}
+    initialSortDirection=""
+    initialSortOrder=""
+    label={[Function]}
+    labelKey=""
+    name="foo"
+    nodes={
+        Array [
+            Object {
+              "age": "22",
+              "name": "a name",
+              "uid": "a",
+            },
+            Object {
+              "age": "88",
+              "name": "b name",
+              "uid": "b",
+            },
+            Object {
+              "age": "33",
+              "name": "c name",
+              "uid": "c",
+            },
+          ]
+    }
+    onRemoveNode={[Function]}
+    onSubmitNode={[Function]}
+    selectedNodes={Array []}
+    sortFields={Array []}
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <div
+          className="list-select__sort"
+>
+          <input
+                    onChange={[Function]}
+                    placeholder="Filter"
+                    type="search"
+                    value=""
+          />
+</div>,
+        <Scrollable
+          details={[Function]}
+          label={[Function]}
+          nodes={Array []}
+          onToggleCard={[Function]}
+          selected={[Function]}
+/>,
+      ],
+      "className": "list-select",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            Array [],
+            <input
+              onChange={[Function]}
+              placeholder="Filter"
+              type="search"
+              value=""
+/>,
+          ],
+          "className": "list-select__sort",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "onChange": [Function],
+              "placeholder": "Filter",
+              "type": "search",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+        ],
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "details": [Function],
+          "label": [Function],
+          "nodes": Array [],
+          "onToggleCard": [Function],
+          "selected": [Function],
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="list-select__sort"
+>
+            <input
+                        onChange={[Function]}
+                        placeholder="Filter"
+                        type="search"
+                        value=""
+            />
+</div>,
+          <Scrollable
+            details={[Function]}
+            label={[Function]}
+            nodes={Array []}
+            onToggleCard={[Function]}
+            selected={[Function]}
+/>,
+        ],
+        "className": "list-select",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              Array [],
+              <input
+                onChange={[Function]}
+                placeholder="Filter"
+                type="search"
+                value=""
+/>,
+            ],
+            "className": "list-select__sort",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "onChange": [Function],
+                "placeholder": "Filter",
+                "type": "search",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+          ],
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "details": [Function],
+            "label": [Function],
+            "nodes": Array [],
+            "onToggleCard": [Function],
+            "selected": [Function],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

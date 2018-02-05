@@ -38,14 +38,13 @@ ShallowWrapper {
           xmlns="http://www.w3.org/2000/svg"
           y="0px"
 >
-          <g>
-                    <path
-                              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-                    />
-                    <polygon
-                              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-                    />
-          </g>
+          <path
+                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+          />
+          <polygon
+                    className="tick"
+                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+          />
 </svg>,
         <div>
           <h1
@@ -82,14 +81,15 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <g>
+          "children": Array [
             <path
-                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-            />
+              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+/>,
             <polygon
-                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-            />
-</g>,
+              className="tick"
+              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+/>,
+          ],
           "className": "card__indicator",
           "viewBox": "0 0 100 100",
           "x": "0px",
@@ -97,47 +97,31 @@ ShallowWrapper {
           "y": "0px",
         },
         "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <path
-                d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
-              <polygon
-                points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
-            ],
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "path",
           },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": "path",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "className": "tick",
+              "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": "polygon",
-            },
-          ],
-          "type": "g",
-        },
+            "ref": null,
+            "rendered": null,
+            "type": "polygon",
+          },
+        ],
         "type": "svg",
       },
       Object {
@@ -273,14 +257,13 @@ ShallowWrapper {
             xmlns="http://www.w3.org/2000/svg"
             y="0px"
 >
-            <g>
-                        <path
-                                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-                        />
-                        <polygon
-                                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-                        />
-            </g>
+            <path
+                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+            />
+            <polygon
+                        className="tick"
+                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+            />
 </svg>,
           <div>
             <h1
@@ -317,14 +300,15 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <g>
+            "children": Array [
               <path
-                            d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-              />
+                d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+/>,
               <polygon
-                            points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-              />
-</g>,
+                className="tick"
+                points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+/>,
+            ],
             "className": "card__indicator",
             "viewBox": "0 0 100 100",
             "x": "0px",
@@ -332,47 +316,31 @@ ShallowWrapper {
             "y": "0px",
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <path
-                  d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
-                <polygon
-                  points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
-              ],
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "path",
             },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "path",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "className": "tick",
+                "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
               },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "polygon",
-              },
-            ],
-            "type": "g",
-          },
+              "ref": null,
+              "rendered": null,
+              "type": "polygon",
+            },
+          ],
           "type": "svg",
         },
         Object {
@@ -540,14 +508,13 @@ ShallowWrapper {
           xmlns="http://www.w3.org/2000/svg"
           y="0px"
 >
-          <g>
-                    <path
-                              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-                    />
-                    <polygon
-                              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-                    />
-          </g>
+          <path
+                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+          />
+          <polygon
+                    className="tick"
+                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+          />
 </svg>,
         <div>
           <h1
@@ -577,14 +544,15 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <g>
+          "children": Array [
             <path
-                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-            />
+              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+/>,
             <polygon
-                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-            />
-</g>,
+              className="tick"
+              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+/>,
+          ],
           "className": "card__indicator",
           "viewBox": "0 0 100 100",
           "x": "0px",
@@ -592,47 +560,31 @@ ShallowWrapper {
           "y": "0px",
         },
         "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <path
-                d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
-              <polygon
-                points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
-            ],
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "path",
           },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": "path",
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "className": "tick",
+              "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
             },
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": "polygon",
-            },
-          ],
-          "type": "g",
-        },
+            "ref": null,
+            "rendered": null,
+            "type": "polygon",
+          },
+        ],
         "type": "svg",
       },
       Object {
@@ -734,14 +686,13 @@ ShallowWrapper {
             xmlns="http://www.w3.org/2000/svg"
             y="0px"
 >
-            <g>
-                        <path
-                                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-                        />
-                        <polygon
-                                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-                        />
-            </g>
+            <path
+                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+            />
+            <polygon
+                        className="tick"
+                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+            />
 </svg>,
           <div>
             <h1
@@ -771,14 +722,15 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <g>
+            "children": Array [
               <path
-                            d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-              />
+                d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+/>,
               <polygon
-                            points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-              />
-</g>,
+                className="tick"
+                points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+/>,
+            ],
             "className": "card__indicator",
             "viewBox": "0 0 100 100",
             "x": "0px",
@@ -786,47 +738,31 @@ ShallowWrapper {
             "y": "0px",
           },
           "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <path
-                  d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
-                <polygon
-                  points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
-              ],
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "path",
             },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "d": "M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "path",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "className": "tick",
+                "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
               },
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "points": "30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": "polygon",
-              },
-            ],
-            "type": "g",
-          },
+              "ref": null,
+              "rendered": null,
+              "type": "polygon",
+            },
+          ],
           "type": "svg",
         },
         Object {
