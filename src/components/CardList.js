@@ -20,7 +20,7 @@ const CardList = (props) => {
   } = props;
 
   return (
-    <div>
+    <div className="card-list">
       {
         nodes.map(node => (
           <span key={node.uid}>

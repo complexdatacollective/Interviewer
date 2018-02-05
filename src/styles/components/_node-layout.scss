@@ -13,8 +13,10 @@
 
     .node {
       margin: 0;
-      // TODO: Add size presets to UI?
-      font-size: 100px;
+      font-size: calc(var(--node-base-size) * 0.6);
+      @include breakpoint('full') {
+        font-size: calc(var(--node-base-size) * 0.5);
+      }
     }
   }
 }
