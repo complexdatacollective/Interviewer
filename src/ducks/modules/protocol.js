@@ -6,12 +6,12 @@ import { loadProtocol, importProtocol, downloadProtocol } from '../../utils/prot
 import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
-const DOWNLOAD_PROTOCOL_FAILED = 'PROTOCOL/DOWNLOAD_PROTOCOL_FAILED';
+const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL = 'PROTOCOL/IMPORT_PROTOCOL';
-const IMPORT_PROTOCOL_FAILED = 'PROTOCOL/IMPORT_PROTOCOL';
+const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_DEMO_PROTOCOL = 'LOAD_DEMO_PROTOCOL';
-const LOAD_PROTOCOL_FAILED = 'LOAD_PROTOCOL_FAILED';
+const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
 
 const initialState = {
@@ -33,7 +33,6 @@ export default function reducer(state = initialState, action = {}) {
         path: action.path,
         isLoaded: true,
         isLoading: false,
-        error: null,
       };
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
@@ -47,9 +46,8 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_PROTOCOL_FAILED:
       return {
         ...state,
-        isLoaded: true,
+        isLoaded: false,
         isLoading: false,
-        error: action.error,
       };
     default:
       return state;

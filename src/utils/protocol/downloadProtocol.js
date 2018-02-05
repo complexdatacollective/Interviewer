@@ -5,7 +5,14 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeStream } from '../filesystem';
 
-const getProtocolNameFromUri = uri => new URL(uri).pathname.split('/').pop();
+const getProtocolNameFromUri = uri =>
+  new Promise((resolve, reject) => {
+    try {
+      resolve(new URL(uri).pathname.split('/').pop());
+    } catch (e) {
+      reject(e);
+    }
+  });
 
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -14,23 +21,24 @@ const downloadProtocol = inEnvironment((environment) => {
     const electron = require('electron');
 
     return (uri) => {
-      const protocolName = getProtocolNameFromUri(uri);
       const tempPath = (electron.app || electron.remote.app).getPath('temp');
-      const destination = path.join(tempPath, protocolName);
 
-      return writeStream(destination, request(uri));
+      return getProtocolNameFromUri(uri)
+        .then(protocolName => path.join(tempPath, protocolName))
+        .then(destination => writeStream(destination, request(uri)));
     };
   }
 
   if (environment === environments.CORDOVA) {
     return (uri) => {
-      const protocolName = getProtocolNameFromUri(uri);
-      const destination = `cdvfile://localhost/temporary/${protocolName}`;
-
-      return new Promise((resolve, reject) => {
-        const fileTransfer = new FileTransfer();
-        fileTransfer.download(encodeURI(uri), destination, () => resolve(destination), reject);
-      });
+      getProtocolNameFromUri(uri)
+        .then(protocolName => `cdvfile://localhost/temporary/${protocolName}`)
+        .then(destination =>
+          new Promise((resolve, reject) => {
+            const fileTransfer = new FileTransfer();
+            fileTransfer.download(encodeURI(uri), destination, () => resolve(destination), reject);
+          }),
+        );
     };
   }
 
