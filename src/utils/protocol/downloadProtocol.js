@@ -30,7 +30,7 @@ const downloadProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return (uri) => {
+    return uri =>
       getProtocolNameFromUri(uri)
         .then(protocolName => `cdvfile://localhost/temporary/${protocolName}`)
         .then(destination =>
@@ -39,7 +39,6 @@ const downloadProtocol = inEnvironment((environment) => {
             fileTransfer.download(encodeURI(uri), destination, () => resolve(destination), reject);
           }),
         );
-    };
   }
 
   throw new Error(`downloadProtocol() not available on platform ${environment}`);
