@@ -55,7 +55,7 @@ const getNodeColor = makeGetNodeColor();
   * @param props.options {object}
   * @param props.options.matchProperties {array} - one or more key names to search
   *     in the dataset
-  * @param [props.options.fuzzyness=0.5] {number} -
+  * @param [props.options.fuzziness=0.5] {number} -
   *     How inexact search results may be, in the range [0,1].
   *     A value of zero requires an exact match. Large search sets may do better
   *     with smaller values (e.g., 0.2).

@@ -20,7 +20,7 @@ export const makeGetFuse = fuseOpts => createSelector(
   getSearchData,
   getSearchOpts,
   (searchData, searchOpts = {}) => {
-    let threshold = searchOpts.fuzzyness;
+    let threshold = searchOpts.fuzziness;
     if (typeof threshold !== 'number') {
       threshold = fuseOpts.threshold;
     }
