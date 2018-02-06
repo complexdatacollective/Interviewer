@@ -1,0 +1,11 @@
+const CORDOVA = Symbol('ENVIRONMENT/CORDOVA');
+const ELECTRON = Symbol('ENVIRONMENT/ELECTRON');
+const WEB = Symbol('ENVIRONMENT/WEB');
+const UNKNOWN = Symbol('ENVIRONMENT/UNKNOWN');
+
+export default {
+  CORDOVA,
+  ELECTRON,
+  WEB,
+  UNKNOWN,
+};

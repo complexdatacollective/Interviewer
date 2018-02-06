@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
+import { isElectron, isCordova } from '../utils/Environment';
 
 const formConfig = {
   formName: 'setup',
@@ -21,7 +22,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://raw.githubusercontent.com/codaco/Network-Canvas-example-protocols/master/example.protocol.js',
+  protocol_url: 'https://github.com/codaco/Network-Canvas/raw/7f3766f3275e6f74d6a2ddfebc29b0da4e3b3e30/public/demo.canvas',
 };
 
 /**
@@ -29,9 +30,14 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickLoadProtocol = (fields) => {
+  onClickImportProtocol = () => {
+    // takes one argument, path to protocol, defaults to loading test protocol from public
+    this.props.importProtocol();
+  }
+
+  onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      this.props.loadProtocol(fields.protocol_url);
+      this.props.downloadProtocol(fields.protocol_url);
     }
   }
 
@@ -47,6 +53,33 @@ class Setup extends Component {
   onDialogCancel = () => {
     // eslint-disable-next-line no-console
     console.log('dialog cancelled');
+  }
+
+  renderImportButtons() {
+    if (isElectron() || isCordova()) {
+      return (
+        <div>
+          <p>
+            <Button onClick={this.onClickImportProtocol} content="Load protocol (via import from app directory)" /><br />
+          </p>
+          <p>Or import a custom one:</p>
+          <div className="setup__custom-protocol">
+            <Form
+              form={formConfig.formName}
+              onSubmit={this.onClickImportRemoteProtocol}
+              initialValues={initialValues}
+              controls={[<Button key="submit" aria-label="Load remote protocol">Load remote protocol</Button>]}
+              {...formConfig}
+            />
+          </div>
+          <br />
+          <hr />
+          <br />
+        </div>
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -70,20 +103,11 @@ class Setup extends Component {
 
         <div className="setup__start">
 
+          {this.renderImportButtons()}
+
           <p>
             <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
           </p>
-
-          <p>Or load a custom one:</p>
-
-          <div className="setup__custom-protocol">
-            <Form
-              form={formConfig.formName}
-              onSubmit={this.onClickLoadProtocol}
-              initialValues={initialValues}
-              {...formConfig}
-            />
-          </div>
         </div>
       </div>
     );
@@ -94,6 +118,8 @@ Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   loadDemoProtocol: PropTypes.func.isRequired,
+  downloadProtocol: PropTypes.func.isRequired,
+  importProtocol: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -104,6 +130,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
   };
