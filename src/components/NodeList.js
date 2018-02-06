@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
 import Color from 'color';
-import { Node, animation, colorDictionary } from 'network-canvas-ui';
+import { Node, colorDictionary } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -18,8 +18,26 @@ import {
 const EnhancedNode = DragSource(selectable(Node));
 
 /**
-  * Renders a list of Node.
-  */
+ * @class NodeList
+ *
+ * Renders a list of Nodes.
+ *
+ * @param { string } props.listId A unique identifier for this list.
+ *    Note: `key` is not used, to simplify the animations used to re-render lists.
+ *
+ * @description
+ * Notes on state/props:
+ *
+ * `props.nodes` are copied to state so that they can be modified out of sync
+ * from props. For example, so that we can modify the transition properties
+ * of previously-displayed nodes in response to props changes before displaying
+ * the new nodes.
+ *
+ * `listId` is similarly copied to state, as it is used (in conjunction with
+ * node.uid) to identify a group of nodes. If the same node appears in two lists,
+ * then it is logically separate so that it still disappears & reappears with
+ * the rest of its group.
+ */
 class NodeList extends Component {
   constructor(props) {
     super(props);
@@ -28,13 +46,14 @@ class NodeList extends Component {
       nodes: props.nodes,
       stagger: true,
       exit: true,
+      waitForExitAnimation: true,
     };
 
     this.refreshTimer = null;
   }
 
   componentWillReceiveProps(newProps) {
-    // Don't update if nodes are the same
+    // Don't update node display if nodes are the same
     if (isEqual(newProps.nodes, this.state.nodes)) {
       return;
     }
@@ -42,7 +61,11 @@ class NodeList extends Component {
     // if we provided the same id, then just update normally
     if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
-        this.setState({ nodes: newProps.nodes, stagger: false });
+        this.setState({
+          nodes: newProps.nodes,
+          waitForExitAnimation: false,
+          stagger: false,
+        });
       });
       return;
     }
@@ -50,20 +73,16 @@ class NodeList extends Component {
     // Otherwise, transition out and in again
     this.props.scrollTop(0);
 
+    // First, ensure that exit animations are enabled for previous nodes
     this.setState({ exit: true }, () => {
-      this.setState(
-        { nodes: [], stagger: true },
-        () => {
-          if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
-          this.refreshTimer = setTimeout(
-            () => this.setState({
-              nodes: newProps.nodes,
-              stagger: true,
-            }),
-            animation.duration.slow,
-          );
-        },
-      );
+      // Then transition new ones in
+      this.setState({
+        listId: newProps.listId,
+        nodes: newProps.nodes,
+        stagger: true,
+        // Even if there were no previous nodes, include the pause
+        waitForExitAnimation: true,
+      });
     });
   }
 
@@ -81,8 +100,10 @@ class NodeList extends Component {
 
     const {
       stagger,
-      nodes,
       exit,
+      listId,
+      nodes,
+      waitForExitAnimation,
     } = this.state;
 
     const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
@@ -109,9 +130,11 @@ class NodeList extends Component {
         {
           nodes.map((node, index) => (
             <NodeTransition
-              key={`${node.uid}`}
+              key={`${listId}-${node.uid}`}
               index={index}
               stagger={stagger}
+              waitForPreviousExit={waitForExitAnimation}
+              listId={listId}
             >
               <EnhancedNode
                 color={nodeColor}
