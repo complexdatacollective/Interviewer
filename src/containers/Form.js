@@ -119,9 +119,7 @@ export default compose(
   connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
-    destroyOnUnmount: false, // need this false to make it validate across wizard
-    enableReinitialize: true,
-    forceUnregisterOnUnmount: true,
-    keepDirtyOnReinitialize: false,
+    touchOnChange: true,
+    touchOnBlur: false,
   }),
 )(Form);
