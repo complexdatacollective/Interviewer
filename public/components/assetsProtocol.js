@@ -20,8 +20,6 @@ const registerAssetsProtocol = () =>
 
       callback({ path: filePath });
     });
-
-    // callback({ path: userDataFilePath });
   }, (error) => {
     if (error) {
       console.error('Failed to register protocol');
