@@ -2,7 +2,7 @@
 
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { loadProtocol, importProtocol, downloadProtocol } from '../../utils/protocol';
+import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
@@ -82,7 +82,7 @@ function loadProtocolAction(path) {
   };
 }
 
-function loadFactoryProtocol(path) {
+function loadFactoryProtocolAction(path) {
   return {
     type: LOAD_FACTORY_PROTOCOL,
     path,
@@ -141,7 +141,7 @@ const loadFactoryProtocolEpic = action$ =>
   action$.ofType(LOAD_FACTORY_PROTOCOL) // Filter for load protocol action
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
-        .fromPromise(loadProtocol(action.path)) // Get protocol
+        .fromPromise(loadFactoryProtocol(action.path)) // Get protocol
         .map(response => setProtocol(action.path, response)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
@@ -151,7 +151,7 @@ const actionCreators = {
   importProtocol: importProtocolAction,
   downloadProtocol: downloadProtocolAction,
   setProtocol,
-  loadFactoryProtocol,
+  loadFactoryProtocol: loadFactoryProtocolAction,
 };
 
 const actionTypes = {

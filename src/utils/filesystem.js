@@ -37,6 +37,20 @@ const userDataPath = inEnvironment((environment) => {
   throw new Error(`userDataPath() not available on platform ${environment}`);
 });
 
+const appPath = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = require('electron');
+
+    return () => (electron.app || electron.remote.app).getAppPath();
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => cordova.file.applicationDirectory;
+  }
+
+  throw new Error(`appDataPath() not available on platform ${environment}`);
+});
+
 const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return path =>
@@ -302,6 +316,7 @@ const ensurePathExists = inEnvironment((environment) => {
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
 });
 
+// TODO: remove following
 window.removeDirectory = removeDirectory;
 window.resolve = path => new Promise((resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject));
 window.readFileAsDataUrl = readFileAsDataUrl;
@@ -309,6 +324,7 @@ window.readFile = readFile;
 
 export {
   userDataPath,
+  appPath,
   getNestedPaths,
   ensurePathExists,
   removeDirectory,
