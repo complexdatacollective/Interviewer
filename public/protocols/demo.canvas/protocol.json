@@ -249,7 +249,7 @@
       "prompts": [
         {
           "id": "6cl",
-          "text": "Congrats",
+          "text": "This is the factory preset protocol",
           "additionalAttributes": {
             "special_category": 46,
             "close_friend": true
