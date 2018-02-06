@@ -187,9 +187,7 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
-    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
   };

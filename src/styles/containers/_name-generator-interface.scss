@@ -1,6 +1,6 @@
 .name-generator-interface {
   height: 100vh;
-  padding: 20px 30px 20px;
+  padding: 20px 50px 60px;
   @include breakpoint('full') {
       padding: 20px 80px 80px;
   }
@@ -31,12 +31,6 @@
     padding-left:30px;
     @include breakpoint('full') {
       padding-left:0;
-    }
-    .node {
-      font-size: 160px;
-      @include breakpoint('full') {
-        font-size: 200px;
-      }
     }
   }
 

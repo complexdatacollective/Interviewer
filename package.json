@@ -14,6 +14,7 @@
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
         "lint": "eslint src",
+        "sass-lint": "sass-lint -vc .sass-lint.yml",
         "test": "node scripts/test.js --env=jsdom",
         "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
         "build-docs": "NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
@@ -126,8 +127,8 @@
         "xss": "^0.3.4"
     },
     "dependencies": {
-        "cordova-android": "^6.2.3",
-        "cordova-ios": "^4.5.0",
+        "cordova-android": "^7.0.0",
+        "cordova-ios": "^4.5.4",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-compat": "^1.0.0",
         "cordova-plugin-device": "^1.1.6",
