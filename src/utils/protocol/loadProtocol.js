@@ -1,8 +1,10 @@
+/* eslint-disable */
+
 import { readFile } from '../filesystem';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import protocolPath from './protocolPath';
-import demoProtocol from '../../other/demo.canvas/protocol.json';
+// import demoProtocol from '../../other/demo.canvas/protocol.json';
 
 const loadProtocol = (environment) => {
   if (environment !== environments.WEB) {
@@ -11,11 +13,17 @@ const loadProtocol = (environment) => {
         .then(data => JSON.parse(data));
   }
 
-  // NOTE: loads demo protocol from local import, ignoring protocol name
-  return () => {
-    console.log('Loading demo protocol from local import, and ignoring protocol name'); // eslint-disable-line
-    return Promise.resolve(demoProtocol);
-  };
+  if (environment === environments.WEB) {
+    return protocolName => {
+
+      fetch(`/protocols/${protocolName}/protocol.json`).then(response => console.log(response.json()));
+
+      return fetch(`/protocols/${protocolName}/protocol.json`)
+        .then(response => response.json());
+    }
+  }
+
+  throw Error(`loadProtocol not supported in this environment "${environment}"`);
 };
 
 export default inEnvironment(loadProtocol);

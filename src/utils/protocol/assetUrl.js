@@ -24,6 +24,14 @@ const assetUrl = (environment) => {
     };
   }
 
+  if (environment === environments.WEB) {
+    return (
+      protocolName = isRequired('protocolName'),
+      assetPath = isRequired('assetPath'),
+    ) =>
+      Promise.resolve(`/protocols/${protocolName}/assets/${assetPath}`);
+  }
+
   throw Error();
 };
 
