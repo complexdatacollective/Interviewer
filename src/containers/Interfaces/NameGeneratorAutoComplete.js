@@ -10,7 +10,7 @@ import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { makeGetNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 
@@ -47,6 +47,7 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       excludedNodes,
+      labelKey,
       nodesForPrompt,
       nodeIconName,
       nodeType,
@@ -56,6 +57,7 @@ class NameGeneratorAutoComplete extends Component {
       searchIsOpen,
       stage,
       toggleSearch,
+      visibleSupplementaryFields,
     } = this.props;
 
     const baseClass = 'name-generator-auto-complete-interface';
@@ -70,7 +72,7 @@ class NameGeneratorAutoComplete extends Component {
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
     // TODO: Remove this workaround for the label formatter depending on prompt vars. See #305.
-    const labeledNodes = nodesForPrompt.map(n => ({ ...n, label: n[prompt.displayLabel] }));
+    const labeledNodes = nodesForPrompt.map(n => ({ ...n, label: n[labelKey] }));
 
     return (
       <div className={baseClass}>
@@ -101,12 +103,13 @@ class NameGeneratorAutoComplete extends Component {
         <Search
           key={prompt.id}
           dataSourceKey={prompt.dataSource}
-          displayFields={[prompt.displayLabel, ...prompt.displayProperties]}
+          primaryDisplayField={labelKey}
+          additionalAttributes={visibleSupplementaryFields}
           excludedNodes={excludedNodes}
           nodeType={nodeType}
           onClick={closeSearch}
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
-          options={prompt.autoCompleteOptions}
+          options={prompt.searchOptions}
         />
 
         <div className="name-generator-auto-complete-interface__node-bin">
@@ -122,6 +125,7 @@ NameGeneratorAutoComplete.propTypes = {
   addNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
+  labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
@@ -132,6 +136,7 @@ NameGeneratorAutoComplete.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   searchIsOpen: PropTypes.bool.isRequired,
   stage: PropTypes.object.isRequired,
+  visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -145,12 +150,14 @@ function mapDispatchToProps(dispatch) {
 function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
+      labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodeIconName: getNodeIconName(state, props),
       excludedNodes: networkNodes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
+      visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };
 }

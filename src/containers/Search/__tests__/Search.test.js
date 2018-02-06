@@ -28,7 +28,7 @@ const mockReduxState = {
 const mockProps = {
   dataSourceKey: '',
   closeSearch: () => {},
-  displayFields: [],
+  primaryDisplayField: '',
   excludedNodes: [],
   options: {},
   store: createStore(() => mockReduxState),

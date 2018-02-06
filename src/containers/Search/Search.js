@@ -49,9 +49,9 @@ const getNodeColor = makeGetNodeColor();
   * Note: to ensure that search state is tied to a source data set, set a `key`
   * prop that uniquely identifies the source data.
   *
-  * @param props.displayFields {array} - An array of strings representing keys
-  *     in each search set object. The first field is treated as the primary
-  *     label and is required.
+  * @param {string} primaryDisplayField The attribute to use for rendering a result
+  * @param props.additionalAttributes {array} - An array of objects shaped
+  *     `{label: '', variable: ''}` in each search set object.
   * @param props.options {object}
   * @param props.options.matchProperties {array} - one or more key names to search
   *     in the dataset
@@ -124,7 +124,11 @@ class Search extends Component {
    * @return {string} a unique identifier for the result
    */
   uniqueKeyForResult(result) {
-    return this.props.displayFields.map(field => result[field]).join('.');
+    const displayFields = [
+      result[this.props.primaryDisplayField],
+      ...this.props.additionalAttributes.map(prop => prop.variable),
+    ];
+    return displayFields.map(field => result[field]).join('.');
   }
 
   // See uniqueness discussion at uniqueKeyForResult.
@@ -141,9 +145,10 @@ class Search extends Component {
 
   render() {
     const {
+      additionalAttributes,
       collapsed,
-      displayFields,
       nodeColor,
+      primaryDisplayField,
     } = this.props;
 
     const hasInput = this.state.hasInput;
@@ -171,13 +176,10 @@ class Search extends Component {
     });
 
     // Result formatters:
-    const primaryDisplayField = displayFields[0];
-    const auxFields = displayFields.slice(1);
-
-    const toDetail = (result, field) => ({ [field]: result[field] });
+    const toDetail = (result, field) => ({ [field.label]: result[field.variable] });
     const getLabel = result => result[primaryDisplayField];
     const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
-    const getDetails = result => auxFields.map(field => toDetail(result, field));
+    const getDetails = result => additionalAttributes.map(attr => toDetail(result, attr));
     const getUid = result => this.uniqueKeyForResult(result);
 
     return (
@@ -222,16 +224,18 @@ class Search extends Component {
 }
 
 Search.defaultProps = {
+  additionalAttributes: [],
   clearResultsOnClose: true,
   nodeColor: '',
   nodeType: '',
 };
 
 Search.propTypes = {
+  additionalAttributes: PropTypes.array,
   clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  displayFields: PropTypes.array.isRequired,
+  primaryDisplayField: PropTypes.string.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,

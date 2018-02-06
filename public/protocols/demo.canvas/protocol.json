@@ -749,9 +749,20 @@
             "close_friend": true
           },
           "dataSource": "schoolPupils",
-          "displayLabel": "nickname",
-          "displayProperties": ["name", "age"],
-          "autoCompleteOptions": {
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "searchOptions": {
             "fuzzyness": 0.4,
             "matchProperties": ["nickname", "name"]
           },
@@ -767,9 +778,20 @@
             "support_friend": true
           },
           "dataSource": "schoolPupils",
-          "displayLabel": "nickname",
-          "displayProperties": ["name", "age"],
-          "autoCompleteOptions": {
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "searchOptions": {
             "fuzzyness": 0.4,
             "matchProperties": ["nickname", "name"]
           },
@@ -785,9 +807,20 @@
             "primary_venue": true
           },
           "dataSource": "HIVServices",
-          "displayLabel": "Abbreviated Name",
-          "displayProperties": ["Geocoded Address", "Subsidiary/Program/Project"],
-          "autoCompleteOptions": {
+          "cardOptions": {
+            "displayLabel": "Abbreviated Name",
+            "additionalProperties": [
+              {
+                "label": "Address",
+                "variable": "Geocoded Address"
+              },
+              {
+                "label": "Subsidiary/Program/Project",
+                "variable": "Subsidiary/Program/Project"
+              }
+            ]
+          },
+          "searchOptions": {
             "fuzzyness": 0.5,
             "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
           },
