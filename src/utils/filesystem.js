@@ -316,12 +316,6 @@ const ensurePathExists = inEnvironment((environment) => {
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
 });
 
-// TODO: remove following
-window.removeDirectory = removeDirectory;
-window.resolve = path => new Promise((resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject));
-window.readFileAsDataUrl = readFileAsDataUrl;
-window.readFile = readFile;
-
 export {
   userDataPath,
   appPath,
