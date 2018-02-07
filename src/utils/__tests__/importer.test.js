@@ -1,0 +1,24 @@
+/* eslint-env jest */
+import environments from '../environments';
+import { getEnvironment } from '../Environment';
+
+jest.mock('../filesystem');
+jest.mock('../protocol/protocolPath');
+
+describe('importer', () => {
+  describe('Electron', () => {
+    beforeAll(() => {
+      getEnvironment.mockReturnValue(environments.ELECTRON);
+    });
+
+    it('copies the protocol files to the user data directory');
+  });
+
+  describe('Cordova', () => {
+    beforeAll(() => {
+      getEnvironment.mockReturnValue(environments.CORDOVA);
+    });
+
+    it('copies the protocol files to the user data directory');
+  });
+});
