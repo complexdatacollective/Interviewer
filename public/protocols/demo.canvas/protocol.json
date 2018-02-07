@@ -699,6 +699,95 @@
       ]
     },
     {
+      "id": "namegenroster2",
+      "type": "NameGeneratorList",
+      "label": "NG Classmates",
+      "showExistingNodes": false,
+      "prompts": [
+        {
+          "id": "7tk",
+          "text": "Which classmates would you talk to outside of class?",
+          "additionalAttributes": {
+            "talk_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "name": "ASC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Pupil Name",
+                "variable": "name"
+              },
+              {
+                "label": "Pupil Age",
+                "variable": "age"
+              }
+            ]
+          }
+        },
+        {
+          "id": "7cl",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": {
+            "special_category": 56,
+            "close_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "nickname": "DESC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Nickname",
+                "variable": "nickname"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "sociogram",
       "type": "Sociogram",
       "label": "Sociogram",
