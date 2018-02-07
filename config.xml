@@ -57,4 +57,5 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <engine name="android" spec="^7.0.0" />
     <engine name="ios" spec="latest" />
+    <plugin name="cordova-plugin-diont" spec="https://github.com/willemmulder/Diont-for-Cordova.git" />
 </widget>
