@@ -5,8 +5,7 @@ const fs = require('fs');
 const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 const appPath = (electron.app || electron.remote.app).getAppPath();
 
-// check for factory protocl first?
-
+// default to asset from from factory protocol (with same name) first
 const registerAssetsProtocol = () =>
   electron.protocol.registerFileProtocol('asset', (request, callback) => {
     const file = request.url.substr(8);
