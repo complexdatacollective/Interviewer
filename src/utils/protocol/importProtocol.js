@@ -72,12 +72,13 @@ const extractZip = inEnvironment((environment) => {
   throw new Error(`extractZip() not available on platform ${environment}`);
 });
 
+const isRequired = (param) => { throw new Error(`${param} is required`); };
+
 const importProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
-    // TODO: remove fallback file
-    return (protocolFile = `${window.__dirname}/demo.canvas`) => { // eslint-disable-line
+    return (protocolFile = isRequired('protocolFile')) => {
       const protocolName = path.basename(protocolFile);
       const destination = protocolPath(protocolName);
 
@@ -89,8 +90,7 @@ const importProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    // TODO: remove fallback file
-    return (protocolFileUri = `${cordova.file.applicationDirectory}www/demo.canvas`) => {
+    return (protocolFileUri = isRequired('protocolFileUri')) => {
       const protocolName = new URL(protocolFileUri).pathname.split('/').pop();
       const destination = protocolPath(protocolName);
 

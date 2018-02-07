@@ -30,11 +30,6 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickImportProtocol = () => {
-    // takes one argument, path to protocol, defaults to loading test protocol from public
-    this.props.importProtocol();
-  }
-
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.downloadProtocol(fields.protocol_url);
@@ -59,16 +54,13 @@ class Setup extends Component {
     if (isElectron() || isCordova()) {
       return (
         <div>
-          <p>
-            <Button onClick={this.onClickImportProtocol} content="Load protocol (via import from app directory)" /><br />
-          </p>
-          <p>Or import a custom one:</p>
+          <p>Import a custom protocol:</p>
           <div className="setup__custom-protocol">
             <Form
               form={formConfig.formName}
               onSubmit={this.onClickImportRemoteProtocol}
               initialValues={initialValues}
-              controls={[<Button key="submit" aria-label="Load remote protocol">Load remote protocol</Button>]}
+              controls={[<Button key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
               {...formConfig}
             />
           </div>
