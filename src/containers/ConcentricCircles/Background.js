@@ -20,7 +20,7 @@ class Background extends PureComponent {
     let background;
 
     if (image) {
-      background = <BackgroundImage className="sociogram-background__image" path={image} />;
+      background = <BackgroundImage className="sociogram-background__image" url={image} />;
     } else {
       background = <Radar n={concentricCircles} skewed={skewedTowardCenter} />;
     }
