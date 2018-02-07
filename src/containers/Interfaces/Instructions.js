@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Audio, Image, BackgroundImage } from '../../components';
+import { Audio, Image, Video } from '../../components';
 
 const renderItem = (item) => {
   switch (item.type) {
@@ -13,6 +13,8 @@ const renderItem = (item) => {
       return <Image url={item.content} />;
     case 'audio':
       return <Audio url={item.content} controls autoPlay />;
+    case 'video':
+      return <Video url={item.content} controls autoPlay />;
     default:
       return null;
   }
