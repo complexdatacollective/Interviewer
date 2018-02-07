@@ -2,15 +2,14 @@
 
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { loadProtocol, importProtocol, downloadProtocol } from '../../utils/protocol';
-import demoProtocol from '../../other/demo.canvas/protocol.json';
+import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL = 'PROTOCOL/IMPORT_PROTOCOL';
 const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
-const LOAD_DEMO_PROTOCOL = 'LOAD_DEMO_PROTOCOL';
+const LOAD_FACTORY_PROTOCOL = 'LOAD_FACTORY_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
 
@@ -83,9 +82,10 @@ function loadProtocolAction(path) {
   };
 }
 
-function loadDemoProtocol() {
+function loadFactoryProtocolAction(path) {
   return {
-    type: LOAD_DEMO_PROTOCOL,
+    type: LOAD_FACTORY_PROTOCOL,
+    path,
   };
 }
 
@@ -137,16 +137,21 @@ const loadProtocolEpic = action$ =>
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
-const loadDemoProtocolEpic = action$ =>
-  action$.ofType(LOAD_DEMO_PROTOCOL)
-    .map(() => setProtocol(null, demoProtocol));
+const loadFactoryProtocolEpic = action$ =>
+  action$.ofType(LOAD_FACTORY_PROTOCOL) // Filter for load protocol action
+    .switchMap(action => // Favour subsequent load actions over earlier ones
+      Observable
+        .fromPromise(loadFactoryProtocol(action.path)) // Get protocol
+        .map(response => setProtocol(action.path, response)) // Parse and save
+        .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
+    );
 
 const actionCreators = {
   loadProtocol: loadProtocolAction,
   importProtocol: importProtocolAction,
   downloadProtocol: downloadProtocolAction,
   setProtocol,
-  loadDemoProtocol,
+  loadFactoryProtocol: loadFactoryProtocolAction,
 };
 
 const actionTypes = {
@@ -156,7 +161,7 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   LOAD_PROTOCOL,
   LOAD_PROTOCOL_FAILED,
-  LOAD_DEMO_PROTOCOL,
+  LOAD_FACTORY_PROTOCOL,
   SET_PROTOCOL,
 };
 
@@ -164,7 +169,7 @@ const epics = combineEpics(
   downloadProtocolEpic,
   importProtocolEpic,
   loadProtocolEpic,
-  loadDemoProtocolEpic,
+  loadFactoryProtocolEpic,
 );
 
 export {

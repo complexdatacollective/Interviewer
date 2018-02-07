@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import pathAsAssetUrl from '../behaviours/pathAsAssetUrl';
+import injectAssetUrl from '../behaviours/injectAssetUrl';
 
-const Image = ({ assetUrl, alt, ...props }) =>
-  <img src={assetUrl} alt={alt} {...props} />;
+const Image = ({ url, alt, ...props }) =>
+  <img src={url} alt={alt} {...props} />;
 
 Image.propTypes = {
   alt: PropTypes.string,
-  assetUrl: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 Image.defaultProps = {
@@ -16,4 +16,4 @@ Image.defaultProps = {
 
 export { Image };
 
-export default pathAsAssetUrl(Image);
+export default injectAssetUrl(Image);

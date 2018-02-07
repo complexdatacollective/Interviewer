@@ -22,7 +22,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://github.com/codaco/Network-Canvas/raw/7f3766f3275e6f74d6a2ddfebc29b0da4e3b3e30/public/demo.canvas',
+  protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.canvas',
 };
 
 /**
@@ -30,19 +30,14 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickImportProtocol = () => {
-    // takes one argument, path to protocol, defaults to loading test protocol from public
-    this.props.importProtocol();
-  }
-
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.downloadProtocol(fields.protocol_url);
     }
   }
 
-  onClickLoadDemoProtocol = () => {
-    this.props.loadDemoProtocol();
+  onClickLoadFactoryProtocol = () => {
+    this.props.loadFactoryProtocol('demo.canvas');
   }
 
   onDialogConfirm = () => {
@@ -59,16 +54,13 @@ class Setup extends Component {
     if (isElectron() || isCordova()) {
       return (
         <div>
-          <p>
-            <Button onClick={this.onClickImportProtocol} content="Load protocol (via import from app directory)" /><br />
-          </p>
-          <p>Or import a custom one:</p>
+          <p>Import a custom protocol:</p>
           <div className="setup__custom-protocol">
             <Form
               form={formConfig.formName}
               onSubmit={this.onClickImportRemoteProtocol}
               initialValues={initialValues}
-              controls={[<Button key="submit" aria-label="Load remote protocol">Load remote protocol</Button>]}
+              controls={[<Button key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
               {...formConfig}
             />
           </div>
@@ -106,7 +98,7 @@ class Setup extends Component {
           {this.renderImportButtons()}
 
           <p>
-            <Button onClick={this.onClickLoadDemoProtocol} content="Load demo protocol" />
+            <Button onClick={this.onClickLoadFactoryProtocol} content="Load demo protocol" />
           </p>
         </div>
       </div>
@@ -117,7 +109,7 @@ class Setup extends Component {
 Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadProtocol: PropTypes.func.isRequired,
-  loadDemoProtocol: PropTypes.func.isRequired,
+  loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
 };
@@ -133,7 +125,7 @@ function mapDispatchToProps(dispatch) {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
-    loadDemoProtocol: bindActionCreators(protocolActions.loadDemoProtocol, dispatch),
+    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
   };
 }
 
