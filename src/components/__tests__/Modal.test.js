@@ -55,12 +55,12 @@ describe('Modal component', () => {
     });
 
     it('calls close when close button is clicked', (done) => {
-      jest.useFakeTimers();
-
       const close = jest.fn();
       const component = mount((
         <Provider store={createStore(() => openState)}>
-          <Modal title="foo" name={modalName} close={close} />
+          <Modal title="foo" name={modalName} close={close}>
+            <span>foo</span>
+          </Modal>
         </Provider>
       ));
 
@@ -81,8 +81,6 @@ describe('Modal component', () => {
 
         done();
       }, 100);
-
-      jest.runAllTimers();
     });
   });
 });

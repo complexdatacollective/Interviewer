@@ -10,7 +10,17 @@ ShallowWrapper {
     meta={Object {}}
     newNodeAttributes={Object {}}
     panels={Array []}
+    prompt={
+        Object {
+            "id": null,
+          }
+    }
     removeNode={[Function]}
+    stage={
+        Object {
+            "id": null,
+          }
+    }
     toggleNodeAttributes={[Function]}
 />,
   Symbol(enzyme.__renderer__): Object {

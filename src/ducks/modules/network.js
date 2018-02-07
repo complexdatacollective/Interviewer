@@ -18,8 +18,8 @@ const initialState = {
 };
 
 // We use these internally to uniquely identify nodes accross previous data / network data
-function nextUid(nodes) {
-  return `${Date.now()}_${nodes.length + 1}`;
+export function nextUid(nodes, index = 1) {
+  return `${Date.now()}_${nodes.length + index}`;
 }
 
 // We use these internally to uniquely identify nodes accross network data only
@@ -45,7 +45,8 @@ function getNodesWithAdd(nodes, node) {
   const uid = nextUid(nodes);
   // Use supplied UID if provided, otherwise use generated one
   const nodeWithId = { uid, ...node, id };
-  return [...nodes, nodeWithId];
+  if (!find(nodes, ['uid', nodeWithId.uid])) { return [...nodes, nodeWithId]; }
+  return [...nodes];
 }
 
 function getUpdatedNodes(nodes, updatedNode, full) {

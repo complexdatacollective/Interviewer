@@ -48,10 +48,12 @@ ShallowWrapper {
         >
                 <Prompt
                         isActive={true}
+                        isLeaving={false}
                         label="bar"
                 />
                 <Prompt
                         isActive={false}
+                        isLeaving={true}
                         label="foo"
                 />
         </div>
@@ -79,10 +81,12 @@ ShallowWrapper {
 >
             <Prompt
                         isActive={true}
+                        isLeaving={false}
                         label="bar"
             />
             <Prompt
                         isActive={false}
+                        isLeaving={true}
                         label="foo"
             />
 </div>,
@@ -125,10 +129,12 @@ ShallowWrapper {
             "children": Array [
               <Prompt
                 isActive={true}
+                isLeaving={false}
                 label="bar"
 />,
               <Prompt
                 isActive={false}
+                isLeaving={true}
                 label="foo"
 />,
             ],
@@ -142,6 +148,7 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "isActive": true,
+                "isLeaving": false,
                 "label": "bar",
               },
               "ref": null,
@@ -154,6 +161,7 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "isActive": false,
+                "isLeaving": true,
                 "label": "foo",
               },
               "ref": null,
@@ -190,10 +198,12 @@ ShallowWrapper {
           >
                     <Prompt
                               isActive={true}
+                              isLeaving={false}
                               label="bar"
                     />
                     <Prompt
                               isActive={false}
+                              isLeaving={true}
                               label="foo"
                     />
           </div>
@@ -221,10 +231,12 @@ ShallowWrapper {
 >
               <Prompt
                             isActive={true}
+                            isLeaving={false}
                             label="bar"
               />
               <Prompt
                             isActive={false}
+                            isLeaving={true}
                             label="foo"
               />
 </div>,
@@ -267,10 +279,12 @@ ShallowWrapper {
               "children": Array [
                 <Prompt
                   isActive={true}
+                  isLeaving={false}
                   label="bar"
 />,
                 <Prompt
                   isActive={false}
+                  isLeaving={true}
                   label="foo"
 />,
               ],
@@ -284,6 +298,7 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "isActive": true,
+                  "isLeaving": false,
                   "label": "bar",
                 },
                 "ref": null,
@@ -296,6 +311,7 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "isActive": false,
+                  "isLeaving": true,
                   "label": "foo",
                 },
                 "ref": null,

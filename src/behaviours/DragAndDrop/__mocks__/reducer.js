@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const updateTarget = jest.fn(() => ({ type: null }));
+const upsertTarget = jest.fn(() => ({ type: null }));
 const renameTarget = jest.fn(() => ({ type: null }));
 const removeTarget = jest.fn(() => ({ type: null }));
 
@@ -9,7 +9,7 @@ const dragMove = jest.fn(() => ({ type: null }));
 const dragEnd = jest.fn(() => ({ type: null }));
 
 const actionCreators = {
-  updateTarget,
+  upsertTarget,
   renameTarget,
   removeTarget,
   dragStart,

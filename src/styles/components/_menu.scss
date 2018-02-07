@@ -4,6 +4,9 @@
 }
 
 .menu {
+  position: absolute;
+  z-index: 10;
+
   &__wrap {
     // General sidebar styles
     height: 100%;
@@ -11,7 +14,6 @@
     position: fixed;
     transform: translate3d(-100%, 0, 0);
     transition: all $animation-standard-duration $animation-default-easing;
-    z-index: 2;
     width: 370px;
 
     &--open {

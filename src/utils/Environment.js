@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import environments from './environments';
 
 export const isElectron = () => !!window.require;
@@ -14,7 +12,7 @@ const getEnvironment = () => {
   return environments.WEB;
 };
 
-const inEnvironment = (tree, debug = '') =>
+const inEnvironment = tree =>
   (...args) =>
     tree(getEnvironment())(...args);
 

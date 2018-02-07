@@ -1,6 +1,6 @@
 import { filter, reject, omit, isEmpty, thru } from 'lodash';
 
-const UPDATE_TARGET = Symbol('DRAG_AND_DROP/UPDATE_TARGET');
+const UPSERT_TARGET = Symbol('DRAG_AND_DROP/UPSERT_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
 const REMOVE_TARGET = Symbol('DRAG_AND_DROP/REMOVE_TARGET');
 const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
@@ -103,7 +103,7 @@ const triggerDrop = (state, source) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_TARGET: {
+    case UPSERT_TARGET: {
       const targets = [
         ...reject(state.targets, ['id', action.target.id]),
         markHitTarget({ target: action.target, source: state.source }),
@@ -167,9 +167,9 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-function updateTarget(data) {
+function upsertTarget(data) {
   return {
-    type: UPDATE_TARGET,
+    type: UPSERT_TARGET,
     target: data,
   };
 }
@@ -219,7 +219,7 @@ function dragEnd(data) {
 
 
 const actionCreators = {
-  updateTarget,
+  upsertTarget,
   renameTarget,
   removeTarget,
   dragStart,
@@ -228,7 +228,7 @@ const actionCreators = {
 };
 
 const actionTypes = {
-  UPDATE_TARGET,
+  UPSERT_TARGET,
   RENAME_TARGET,
   REMOVE_TARGET,
   DRAG_START,

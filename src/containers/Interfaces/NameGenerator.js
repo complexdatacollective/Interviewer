@@ -111,7 +111,8 @@ class NameGenerator extends Component {
             <NodeList
               nodes={nodesForPrompt}
               label={label}
-              id="MAIN_NODE_LIST"
+              listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
+              id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.onDrop}
@@ -186,9 +187,7 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(networkActions.addNode, dispatch),
-    addOrUpdateNode: bindActionCreators(networkActions.addOrUpdateNode, dispatch),
     updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
   };

@@ -64,6 +64,7 @@ ShallowWrapper {
                       ]
         }
         onToggleCard={[Function]}
+        scrollTop={[Function]}
         selected={[Function]}
 />,
       "className": "scrollable",
@@ -94,6 +95,7 @@ ShallowWrapper {
           },
         ],
         "onToggleCard": [Function],
+        "scrollTop": [Function],
         "selected": [Function],
       },
       "ref": null,
@@ -131,6 +133,7 @@ ShallowWrapper {
                             ]
           }
           onToggleCard={[Function]}
+          scrollTop={[Function]}
           selected={[Function]}
 />,
         "className": "scrollable",
@@ -161,6 +164,7 @@ ShallowWrapper {
             },
           ],
           "onToggleCard": [Function],
+          "scrollTop": [Function],
           "selected": [Function],
         },
         "ref": null,

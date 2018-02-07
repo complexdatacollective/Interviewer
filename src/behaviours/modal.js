@@ -89,7 +89,7 @@ function modal(WrappedComponent) {
       openModal: bindActionCreators(modalActions.openModal, dispatch),
       closeModal: bindActionCreators(modalActions.closeModal, dispatch),
       registerModal: bindActionCreators(modalActions.registerModal, dispatch),
-      unregisterModal: bindActionCreators(modalActions.registerModal, dispatch),
+      unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
     };
   }
 

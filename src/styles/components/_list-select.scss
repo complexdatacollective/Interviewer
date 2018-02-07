@@ -1,0 +1,39 @@
+.list-select {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0 50px;
+  @include breakpoint(full) {
+    margin: 0 100px;
+  }
+  max-height: inherit;
+  overflow: hidden;
+
+  &__sort {
+    button {
+      margin: 10px;
+      padding: 1em;
+    }
+
+    input {
+      border-radius: .5rem;
+      margin: 10px;
+      min-width: 250px;
+      outline: none;
+      padding: .3rem;
+
+      &:focus {
+        border-width: 3px;
+      }
+
+      &:not(:focus) {
+        margin: 11px;
+      }
+    }
+  }
+
+  &__submit {
+    align-self: flex-end;
+    margin: 10px;
+  }
+}
