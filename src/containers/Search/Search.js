@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from 'network-canvas-ui';
 
+import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
@@ -146,6 +147,7 @@ class Search extends Component {
   render() {
     const {
       additionalAttributes,
+      className,
       collapsed,
       nodeColor,
       primaryDisplayField,
@@ -153,9 +155,9 @@ class Search extends Component {
 
     const hasInput = this.state.hasInput;
     const searchClasses = cx(
+      className,
       'search',
       {
-        'search--collapsed': collapsed,
         'search--hasInput': hasInput,
       },
     );
@@ -163,6 +165,7 @@ class Search extends Component {
     const SearchPrompt = 'Type in the box below to Search';
     const SelectPrompt = 'Tap an item to select it';
 
+    // Render both headers to allow transitions between them
     const HeaderClass = 'search__header';
     const Headers = [SearchPrompt, SelectPrompt].map((prompt, i) => {
       let hiddenClass = '';
@@ -175,6 +178,7 @@ class Search extends Component {
       </h1>);
     });
 
+
     // Result formatters:
     const toDetail = (result, field) => ({ [field.label]: result[field.variable] });
     const getLabel = result => result[primaryDisplayField];
@@ -183,9 +187,13 @@ class Search extends Component {
     const getUid = result => this.uniqueKeyForResult(result);
 
     return (
-      <div className={searchClasses}>
-        <form className="search__content">
-          <Icon name="close" size="40px" className="menu__cross" onClick={evt => this.onClose(evt)} />
+      <SearchTransition
+        className={searchClasses}
+        in={!collapsed}
+      >
+
+        <form>
+          <Icon name="close" size="40px" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
 
           {Headers}
 
@@ -218,13 +226,15 @@ class Search extends Component {
           />
 
         </form>
-      </div>
+
+      </SearchTransition>
     );
   }
 }
 
 Search.defaultProps = {
   additionalAttributes: [],
+  className: '',
   clearResultsOnClose: true,
   nodeColor: '',
   nodeType: '',
@@ -232,6 +242,7 @@ Search.defaultProps = {
 
 Search.propTypes = {
   additionalAttributes: PropTypes.array,
+  className: PropTypes.string,
   clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,

@@ -1,53 +1,61 @@
+$content-padding: 1rem;
 $module-name: search;
-$results-height: calc(100vh - 320px);
-// Magic number. TODO: coordinate with other components.
-$search-z-index: 1000;
+$min-content-height: 114px;
+$results-height: calc(100vh - 350px);
 
 // Base input on global styling; override as needed below.
 @include text-input('#{$module-name}__input');
 
 .#{$module-name} {
-  bottom: 0;
+  --collapsed-square-size: 114px;
+  --border-radius: 10px;
+  --content-padding: 1rem;
+
+  background-color: color('cyber-grape');
+  border-radius: var(--border-radius);
+  max-height: 100vh;
   position: absolute;
-  transform: translateX(0);
-  transition: all $animation-fast-duration $animation-default-easing;
+  transform-origin: right bottom;
   width: 100%;
-  z-index: $search-z-index;
 
   &__header {
+    padding: 2rem 0;
     text-align: center;
-    // transition header content changes (based on --hasInput)
-    transition: opacity $animation-fast-duration $animation-default-easing;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     &--hidden {
       height: 0;
+      margin: 0;
       opacity: 0;
+      padding: 0;
     }
   }
 
+  &__close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+
   &__content {
-    @include flex-stack;
-
-    background-color: color('cyber-grape');
     height: 100%;
-    margin: 0 10%;
+    min-height: $min-content-height;
     overflow: visible;
-    padding: 1rem 2rem 2rem;
+    padding: $content-padding;
     position: relative;
-    width: 80%;
-
-    [name='close'] {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
   }
 
   &__input {
     background-color: color('white');
     border-radius: spacing(small);
+    bottom: var(--content-padding);
     color: palette('text-dark');
+    left: var(--content-padding);
     padding: spacing(medium);
+    height: auto;
+    width: calc(100% - 2 * var(--content-padding));
   }
 
   &--collapsed {

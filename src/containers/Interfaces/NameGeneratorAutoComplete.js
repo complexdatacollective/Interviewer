@@ -101,6 +101,7 @@ class NameGeneratorAutoComplete extends Component {
         />
 
         <Search
+          className={`${baseClass}__search`}
           key={prompt.id}
           dataSourceKey={prompt.dataSource}
           primaryDisplayField={labelKey}
