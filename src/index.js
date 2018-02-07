@@ -5,7 +5,6 @@ import { store } from './ducks/store';
 import { actionCreators as mockActions } from './ducks/modules/mock';
 import App from './containers/App';
 import AppRouter from './routes';
-import { isCordova, isElectron, isMacOS, isWindows, isLinux } from './utils/Environment';
 
 window.populateNodes = (howMany = 0) => {
   store.dispatch(mockActions.generateNodes(howMany));
