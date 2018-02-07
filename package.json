@@ -134,8 +134,7 @@
         "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-wkwebview-engine": "^1.1.4",
-        "cordova-plugin-x-socialsharing": "^5.2.0",
-        "electron-titlebar": "0.0.3"
+        "cordova-plugin-x-socialsharing": "^5.2.0"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",

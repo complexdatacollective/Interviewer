@@ -9,6 +9,10 @@ const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+const isMacOS = () => require('os').platform() === 'darwin';
+
+const macWindowsParams = isMacOS ? { titleBarStyle: 'hidden', frame: false, width: 1440, height: 900, center: true, title: 'Network Canvas' } : { width: 1440, height: 900, center: true, title: 'Network Canvas' };
+
 log.info('App starting...');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -17,7 +21,7 @@ let mainWindow;
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ titleBarStyle: 'hidden', frame: false, width: 1280, height: 800, center: true, title: 'Network Canvas' });
+  mainWindow = new BrowserWindow(macWindowsParams);
   // mainWindow.setFullScreen(true);npm run
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
