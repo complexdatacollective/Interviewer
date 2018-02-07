@@ -5,7 +5,7 @@ import environments from './environments';
 
 const serverDiscoverer = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const diont = require('diont')({
+    const diont = window.require('diont')({
       onClose: () => console.log('server discovery socket closed'),
     });
 

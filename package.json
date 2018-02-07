@@ -141,7 +141,8 @@
         "cordova-plugin-file-transfer": "^1.7.1",
         "cordova-plugin-whitelist": "^1.3.3",
         "cordova-plugin-wkwebview-engine": "^1.1.4",
-        "cordova-plugin-x-socialsharing": "^5.2.1"
+        "cordova-plugin-x-socialsharing": "^5.2.1",
+        "diont": "^0.9.7"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",

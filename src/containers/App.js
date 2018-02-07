@@ -7,8 +7,16 @@ import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 import { SessionMenu, StageMenu, LoadScreen } from '../containers';
 import { ErrorMessage } from '../components';
+import serverDiscoverer from '../utils/serverDiscovery';
 
 require('../styles/main.scss');
+
+
+console.log(serverDiscoverer);
+
+const serverDiscovery = serverDiscoverer();
+
+console.log(serverDiscovery);
 
 /**
   * Main app container.
