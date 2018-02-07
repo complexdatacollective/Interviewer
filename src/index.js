@@ -27,9 +27,3 @@ if (isCordova()) {
 } else {
   startApp();
 }
-
-console.log(`isCordova: ${isCordova()}`);
-console.log(`isElectron: ${isElectron()}`);
-console.log(`isMacOS: ${isMacOS()}`);
-console.log(`isWindows: ${isWindows()}`);
-console.log(`isLinux: ${isLinux()}`);
