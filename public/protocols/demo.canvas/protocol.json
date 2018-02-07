@@ -234,6 +234,17 @@
   },
   "stages": [
     {
+      "id": "intructrions1",
+      "label": "Instructions",
+      "type": "Instructions",
+      "title": "Title for the screen",
+      "items": [
+        { "type": "text", "content": "<p>Some arbitrary text content that can contain <strong>HTML</strong> tags.</p>" },
+        { "type": "audio", "content": "click_the_thing.mp3", "description": "Click by clicking the thing" },
+        { "type": "image", "content": "rubberduck.jpg" }
+      ]
+    },
+    {
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
