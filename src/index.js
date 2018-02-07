@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './ducks/store';
 import { actionCreators as mockActions } from './ducks/modules/mock';
 import App from './containers/App';
+import { isCordova } from './utils/Environment';
 import AppRouter from './routes';
 
 window.populateNodes = (howMany = 0) => {
