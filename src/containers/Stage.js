@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import loadInterface from '../utils/loadInterface';
+import getInterface from '../containers/Interfaces';
 import { actionCreators as stageActions } from '../ducks/modules/stage';
 
 /**
@@ -22,7 +22,7 @@ class Stage extends Component {
 
   render() {
     const { config } = this.props;
-    const CurrentInterface = loadInterface(config.type);
+    const CurrentInterface = getInterface(config.type);
 
     return (
       <div className="stage">

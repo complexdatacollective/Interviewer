@@ -1,0 +1,18 @@
+.instructions-interface {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    text-align: center;
+  }
+
+  &__items {
+    margin-top: spacing('large');
+  }
+
+  &__item {
+    margin-top: spacing('medium');
+  }
+}
