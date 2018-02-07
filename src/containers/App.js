@@ -9,6 +9,8 @@ import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 
 require('../styles/main.scss');
 
+window.require('electron-titlebar');
+
 /**
   * Main app container.
   * @param props {object} - children
@@ -23,7 +25,7 @@ const App = props => (
     'app--session': props.isSessionMenu,
   })}
   >
-    <div className="electron-titlebar" />
+    <div id="electron-titlebar" className="drag" />
     <SessionMenu hideButton={props.isMenuOpen} />
     <StageMenu hideButton={props.isMenuOpen} />
     <div
