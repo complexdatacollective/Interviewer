@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Audio, Image, Video } from '../../components';
@@ -8,6 +6,7 @@ const renderItem = (item) => {
   switch (item.type) {
     case 'text':
       // TODO: Do we really need it to contain html tags?
+      // eslint-disable-next-line react/no-danger
       return <div dangerouslySetInnerHTML={{ __html: item.content }} />;
     case 'image':
       return <Image url={item.content} />;
@@ -30,20 +29,19 @@ const renderItems = items =>
 /**
   * Instruction Interface
   */
-const Instructions = ({ stage: { title, items } }) => {
-  return (
-    <div className="interface instructions-interface">
-      <div className="instructions-interface__frame">
-        <h1 className="instructions-interface__title">{ title }</h1>
-        <div className="instructions-interface__items">
-          { renderItems(items) }
-        </div>
+const Instructions = ({ stage: { title, items } }) => (
+  <div className="interface instructions-interface">
+    <div className="instructions-interface__frame">
+      <h1 className="instructions-interface__title">{ title }</h1>
+      <div className="instructions-interface__items">
+        { renderItems(items) }
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 Instructions.propTypes = {
+  stage: PropTypes.object.isRequired,
 };
 
 export default Instructions;
