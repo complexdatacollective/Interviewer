@@ -1,5 +1,4 @@
 /* eslint-disable global-require */
-/* global cordova */
 
 import Zip from 'jszip';
 import environments from '../environments';
