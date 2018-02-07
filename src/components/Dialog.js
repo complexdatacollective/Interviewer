@@ -5,8 +5,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon, animation } from 'network-canvas-ui';
-import { CSSTransitionGroup } from 'react-transition-group';
 import xss from 'xss';
+import { Modal } from '../components/Transition';
 
 /**
   * Renders a dialog box.
@@ -36,7 +36,7 @@ const Dialog = (props) => {
     'error': 'neon-coral',
   }
 
-  function createMarkup() {
+  const createMarkup = () => {
     const safeString = xss(additionalInformation, {
       whiteList: {
         h3: [],
@@ -56,12 +56,7 @@ const Dialog = (props) => {
   let additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} />: '';
 
   return (
-    <CSSTransitionGroup
-      transitionName="dialog--transition"
-      transitionEnterTimeout={animation.duration.standard}
-      transitionLeaveTimeout={animation.duration.standard}
-    >
-      { show &&
+      <Modal in={show}>
         <div key="dialog" className="dialog">
           <div className={dialogClasses} onClick={e => e.stopPropagation()}>
             <div className="dialog__main">
@@ -82,8 +77,7 @@ const Dialog = (props) => {
             </footer>
           </div>
         </div>
-      }
-    </CSSTransitionGroup>
+      </Modal>
   );
 };
 

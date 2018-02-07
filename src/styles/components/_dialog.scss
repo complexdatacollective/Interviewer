@@ -1,7 +1,7 @@
 $component-name: dialog;
 
 .#{$component-name} {
-  position: absolute;
+  position: fixed;
   z-index: 2000;
   top: 0;
   left: 0;

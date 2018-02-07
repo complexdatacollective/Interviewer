@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import pathAsAssetUrl from '../behaviours/pathAsAssetUrl';
+import injectAssetUrl from '../behaviours/injectAssetUrl';
 
-const BackgroundImage = ({ style, assetUrl, ...props }) =>
+const BackgroundImage = ({ style, url, ...props }) =>
   (
     <div
-      style={{ ...style, backgroundImage: `url(${assetUrl})` }}
+      style={{ ...style, backgroundImage: `url(${url})` }}
       {...props}
     />
   );
 
 BackgroundImage.propTypes = {
   style: PropTypes.object,
-  assetUrl: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 BackgroundImage.defaultProps = {
@@ -21,4 +21,4 @@ BackgroundImage.defaultProps = {
 
 export { BackgroundImage };
 
-export default pathAsAssetUrl(BackgroundImage);
+export default injectAssetUrl(BackgroundImage);

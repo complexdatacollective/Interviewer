@@ -5,7 +5,6 @@
 
 .menu {
   position: absolute;
-  z-index: 10;
 
   &__wrap {
     // General sidebar styles
@@ -133,7 +132,7 @@
     cursor: pointer;
     left: 40px;
     position: absolute;
-    top: 20px;
+    top: 40px;
     z-index: 1;
 
     &[name='settings'] {
