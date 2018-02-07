@@ -5,10 +5,6 @@
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
   "private": true,
-  "engines": {
-    "node": "6.9.1",
-    "npm": "3.10.7"
-  },
   "homepage": ".",
   "main": "electron-starter.js",
   "dependencies": {

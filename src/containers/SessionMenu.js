@@ -29,6 +29,17 @@ const initialState = {
   },
 };
 
+const toggleFullscreen = () => {
+  const electron = window.require('electron');
+  const electronWindow = electron.remote.getCurrentWindow();
+
+  if (electronWindow.isFullScreen()) {
+    electronWindow.setFullScreen(false);
+  } else {
+    electronWindow.setFullScreen(true);
+  }
+};
+
 /**
   * Renders a Menu using stages to construct items in the menu
   * @extends Component
@@ -156,6 +167,7 @@ class SessionMenu extends Component {
 
     if (isElectron()) {
       items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
+      items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
     }
 
     items.map((item) => {

@@ -6,6 +6,25 @@
   transition: $animation-slow-duration $animation-default-easing;
   width: 100vw;
 
+  .electron-titlebar {
+    display: none;
+    visibility: hidden;
+  }
+
+  &--electron {
+    .electron-titlebar {
+      display: block;
+      visibility: visible;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 25px;
+      width:100%;
+      -webkit-app-region: drag;
+    }
+  }
+
   &--session {
     background: palette('settings');
     transition: none;
