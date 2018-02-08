@@ -39,11 +39,12 @@ class Setup extends Component {
 
     this.state = {
       serverDiscoveryDialog: {
-        title: 'Server Discovered',
+        title: 'Server Dialog',
         type: 'info',
+        additionalInformation: '',
         content: null,
         onConfirm: () => {},
-        confirmLabel: 'Okay',
+        confirmLabel: 'Continue',
         hasCancelButton: false,
       },
     };
@@ -53,8 +54,13 @@ class Setup extends Component {
     this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
       this.setState({
         serverDiscoveryDialog: {
-          content: 'An instance of Network Canvas Server has been found nearby!',
-          additionalInformation: response,
+          title: 'Network Canvas Server Found!',
+          type: 'info',
+          additionalInformation: JSON.stringify(response),
+          content: 'An installation of Network Canvas Server has been found nearby.',
+          onConfirm: () => {},
+          confirmLabel: 'Great!',
+          hasCancelButton: false,
         },
       }, () => {
         this.props.openModal('SERVER_DISCOVERY');
@@ -66,20 +72,10 @@ class Setup extends Component {
     this.props.loadFactoryProtocol('demo.canvas');
   }
 
-  onDialogConfirm = () => {
-    // eslint-disable-next-line no-console
-    console.log('dialog confirmed');
-  }
-
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.downloadProtocol(fields.protocol_url);
     }
-  }
-
-  onDialogCancel = () => {
-    // eslint-disable-next-line no-console
-    console.log('dialog cancelled');
   }
 
   renderImportButtons() {

@@ -198,7 +198,7 @@ class SessionMenu extends Component {
         title="Session"
         toggleMenu={toggleMenu}
       >
-        <div style={{ position: 'absolute', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
+        <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="EXPORT_DATA"
           title="Export Error"
