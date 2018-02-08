@@ -5,8 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
+import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const formConfig = {
   formName: 'setup',
@@ -21,6 +23,18 @@ const formConfig = {
   ],
 };
 
+// const initialState = {
+//   serverDiscoveryModal: {
+//     title: 'Server Discovery',
+//     type: 'info',
+//     additionalInformation: '',
+//     content: null,
+//     onConfirm: () => { },
+//     confirmLabel: 'Continue',
+//     hasCancelButton: true,
+//   },
+// };
+
 const initialValues = {
   protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.canvas',
 };
@@ -30,10 +44,21 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickImportRemoteProtocol = (fields) => {
-    if (fields) {
-      this.props.downloadProtocol(fields.protocol_url);
-    }
+  constructor() {
+    super();
+
+    this.serverDiscoverer = new ServerDiscoverer();
+    console.log(this.serverDiscoverer);
+  }
+
+  componentWillMount() {
+    this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
+      console.log(response);
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.unregisterModal('SERVER_DISCOVERY');
   }
 
   onClickLoadFactoryProtocol = () => {
@@ -43,6 +68,12 @@ class Setup extends Component {
   onDialogConfirm = () => {
     // eslint-disable-next-line no-console
     console.log('dialog confirmed');
+  }
+
+  onClickImportRemoteProtocol = (fields) => {
+    if (fields) {
+      this.props.downloadProtocol(fields.protocol_url);
+    }
   }
 
   onDialogCancel = () => {
@@ -112,6 +143,8 @@ Setup.propTypes = {
   loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
+  registerModal: PropTypes.func.isRequired,
+  unregisterModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -126,6 +159,8 @@ function mapDispatchToProps(dispatch) {
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    registerModal: bindActionCreators(modalActions.registerModal, dispatch),
+    unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
   };
 }
 

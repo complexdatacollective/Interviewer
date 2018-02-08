@@ -1,42 +1,32 @@
 /* eslint-disable global-require */
 
-import inEnvironment from './Environment';
-import environments from './environments';
+import { isElectron, isCordova } from '../utils/Environment';
 
-const serverDiscoverer = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const diont = require('diont')({
-      onClose: () => console.log('server discovery socket closed'),
-    });
+let EventEmitter;
+let diont;
 
-    diont.on('serviceAnnounced', (serviceInfo) => {
-      // A service was announced
-      // This function triggers for services not yet available in diont.getServiceInfos()
-      // serviceInfo is an Object { isOurService : Boolean, service: Object }
-      // service.name, service.host and service.port are always filled
-      console.log('A new service was announced', serviceInfo.service);
-      // List currently known services
-      console.log('All known services', diont.getServiceInfos());
-    });
+if (isElectron()) {
+  EventEmitter = window.require('events').EventEmitter;
+  diont = window.require('diont')();
+}
 
-    return () => ({
-      getServiceInfos: diont.getServiceInfos,
-      stopListening: diont.closeSocket,
-    });
+if (isCordova()) {
+  EventEmitter = window.require('events').EventEmitter;
+  diont = window.Diont();
+}
+
+class ServerDiscoverer {
+  constructor() {
+    if (!isElectron() && !isCordova()) {
+      return { on: () => { /* noop */ } };
+    }
+    this.events = new EventEmitter();
+    diont.on('serviceAnnounced', response => this.events.emit('SERVICE_ANNOUNCED', response));
   }
 
-  if (environment === environments.CORDOVA) {
-    return new Promise((resolve) => {
-      const diont = window.Diont();
-
-      resolve({
-        getServiceInfos: diont.getServiceInfos,
-        stopListening: diont.closeSocket,
-      });
-    });
+  on(...args) {
+    this.events.on(...args);
   }
+}
 
-  return () => Promise.reject('Environment not recognised');
-});
-
-export default serverDiscoverer;
+export default ServerDiscoverer;

@@ -8,12 +8,11 @@ import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
-import { Menu, Modal } from '../components';
+import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
 import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';
-import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const updater = new Updater();
 
@@ -28,18 +27,12 @@ const initialState = {
     confirmLabel: 'Continue',
     hasCancelButton: false,
   },
-  serverDiscoveryModal: {
-    title: 'Server Discovery',
-    type: 'info',
-    additionalInformation: '',
-    content: null,
-    onConfirm: () => { },
-    confirmLabel: 'Continue',
-    hasCancelButton: true,
-  },
 };
 
 const toggleFullscreen = () => {
+  // Todo: use inEnvironment to provide a browser based verion of this.
+  // Is there anything we can do for Chromebooks?
+
   const electron = window.require('electron');
   const electronWindow = electron.remote.getCurrentWindow();
 
@@ -59,7 +52,6 @@ class SessionMenu extends Component {
     super();
 
     this.state = initialState;
-    this.serverDiscoverer = null;
     updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
       this.setState({
         updateDialog: {
@@ -126,9 +118,6 @@ class SessionMenu extends Component {
   }
 
   componentWillMount() {
-    this.serverDiscoverer = ServerDiscoverer();
-    this.props.registerModal('SERVER_DISCOVERY');
-
     getVersion().then((version) => {
       this.setState(...this.state, {
         version,
@@ -154,34 +143,6 @@ class SessionMenu extends Component {
     this.props.resetState();
   };
 
-  getServerDiscoveryInfo = () => {
-    const services = this.serverDiscoverer.getServiceInfos();
-
-    const serverDiscContent = (
-      <div>
-        {
-          services && Object.keys(services).map((service, idx) => (
-            <div key={idx}>
-              <p>{service}</p>
-            </div>
-          ))
-        }
-      </div>
-    );
-    this.setState({
-      serverDiscoveryModal: {
-        ...this.state.serverDiscoveryModal,
-        content: services ? serverDiscContent : 'Server Offline',
-      },
-    }, () => {
-      this.props.openModal('SERVER_DISCOVERY');
-    });
-  }
-
-  stopServerDiscovererListen = () => {
-    this.serverDiscoverer.stopListening();
-  }
-
   confirmUpdateDownload = () => {
     // User clicked download Button
     // TODO: implement progress updates/loader
@@ -198,6 +159,16 @@ class SessionMenu extends Component {
 
     const menuType = 'settings';
 
+    if (isElectron()) {
+      customItems.push({
+        id: 'update-check',
+        label: 'Check for Update',
+        icon: 'menu-custom-interface',
+        onClick: updater.checkForUpdate,
+      });
+      customItems.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
+    }
+
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
@@ -205,25 +176,6 @@ class SessionMenu extends Component {
       ...customItems,
       { id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
     ];
-
-    if (isElectron()) {
-      items.push({
-        id: 'update-check',
-        label: 'Check for Update',
-        icon: 'menu-custom-interface',
-        onClick: updater.checkForUpdate,
-      });
-      items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
-    }
-
-    if (isElectron() || isCordova()) {
-      items.push({
-        id: 'server-discovery',
-        label: 'Pair with Server',
-        icon: 'menu-custom-interface',
-        onClick: this.getServerDiscoveryInfo,
-      });
-    }
 
     items.map((item) => {
       const temp = item;
@@ -267,13 +219,6 @@ class SessionMenu extends Component {
         >
           {this.state.updateDialog.content}
         </Dialog>
-        <Modal
-          name="SERVER_DISCOVERY"
-          title={this.state.serverDiscoveryModal.title}
-          onCloseModal={this.stopServerDiscovererListen}
-        >
-          {this.state.serverDiscoveryModal.content}
-        </Modal>
       </Menu>
     );
   }
@@ -285,7 +230,6 @@ SessionMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
-  registerModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   addMockNodes: PropTypes.func.isRequired,
@@ -306,7 +250,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   openModal: bindActionCreators(modalActions.openModal, dispatch),
-  registerModal: bindActionCreators(modalActions.registerModal, dispatch),
   resetState: bindActionCreators(menuActions.resetState, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
