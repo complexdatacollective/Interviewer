@@ -48,7 +48,7 @@ const Dialog = (props) => {
     return {
       __html: safeString,
     };
-  }
+  };
 
   const dialogClasses = cx(`dialog__window dialog__window--${type}`);
   // eslint-disable-next-line react/no-danger
