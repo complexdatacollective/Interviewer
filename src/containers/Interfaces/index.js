@@ -1,5 +1,35 @@
 /* eslint-disable import/prefer-default-export */
-export { default as NameGeneratorInterface } from './NameGenerator';
-export { default as NameGeneratorListInterface } from './NameGeneratorList';
-export { default as SociogramInterface } from './Sociogram';
-export { default as QuizInterface } from './Quiz';
+import React from 'react';
+import { has } from 'lodash';
+import NameGenerator from './NameGenerator';
+import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
+import NameGeneratorList from './NameGeneratorList';
+import Sociogram from './Sociogram';
+import Quiz from './Quiz';
+import Instructions from './Instructions';
+
+const interfaces = {
+  NameGenerator,
+  NameGeneratorAutoComplete,
+  NameGeneratorList,
+  Sociogram,
+  Quiz,
+  Instructions,
+};
+
+const getInterface = (interfaceConfig) => {
+  if (has(interfaceConfig, 'custom')) { return interfaceConfig.custom; }
+  if (has(interfaces, interfaceConfig)) { return interfaces[interfaceConfig]; }
+  return () => (<div>No &quot;{interfaceConfig}&quot; interface found.</div>);
+};
+
+export {
+  NameGenerator,
+  NameGeneratorAutoComplete,
+  NameGeneratorList,
+  Sociogram,
+  Quiz,
+  Instructions,
+};
+
+export default getInterface;

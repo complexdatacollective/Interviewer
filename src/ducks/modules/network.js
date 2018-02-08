@@ -1,6 +1,6 @@
-import { find, maxBy, reject, findIndex, isMatch, omit } from 'lodash';
+import { find, maxBy, reject, findIndex, isMatch, isArray, omit } from 'lodash';
 
-const ADD_NODE = 'ADD_NODE';
+const ADD_NODES = 'ADD_NODES';
 const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -49,6 +49,17 @@ function getNodesWithAdd(nodes, node) {
   return [...nodes];
 }
 
+function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
+  let nodes = oldNodes;
+  newNodes.forEach((newNode) => {
+    const id = nextId(nodes);
+    const uid = nextUid(nodes);
+    // Provided uid can override generated one, but not id
+    nodes = [...nodes, { uid, ...newNode, ...additionalAttributes, id }];
+  });
+  return nodes;
+}
+
 function getUpdatedNodes(nodes, updatedNode, full) {
   const updatedNodes = nodes.map((node) => {
     if (node.uid !== updatedNode.uid) { return node; }
@@ -73,10 +84,10 @@ function getUpdatedNodes(nodes, updatedNode, full) {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_NODE: {
+    case ADD_NODES: {
       return {
         ...state,
-        nodes: getNodesWithAdd(state.nodes, action.node),
+        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
       };
     }
     case ADD_OR_UPDATE_NODE: {
@@ -154,10 +165,24 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function addNode(node) {
+/**
+ * Add a node or nodes to the state.
+ *
+ * @param {Array|Object} nodes - one or more nodes to add
+ * @param {Object} [additionalAttributes] shared attributes to apply to every
+ *  new node
+ *
+ * @memberof! NetworkActionCreators
+ */
+function addNodes(nodes, additionalAttributes) {
+  let nodeOrNodes = nodes;
+  if (!isArray(nodeOrNodes)) {
+    nodeOrNodes = [nodeOrNodes];
+  }
   return {
-    type: ADD_NODE,
-    node,
+    type: ADD_NODES,
+    nodes: nodeOrNodes,
+    additionalAttributes,
   };
 }
 
@@ -212,8 +237,11 @@ function removeEdge(edge) {
   };
 }
 
+/**
+ * @namespace NetworkActionCreators
+ */
 const actionCreators = {
-  addNode,
+  addNodes,
   addOrUpdateNode,
   updateNode,
   removeNode,
@@ -224,7 +252,7 @@ const actionCreators = {
 };
 
 const actionTypes = {
-  ADD_NODE,
+  ADD_NODES,
   ADD_OR_UPDATE_NODE,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,

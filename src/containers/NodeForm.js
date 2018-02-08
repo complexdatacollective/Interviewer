@@ -11,7 +11,7 @@ import { Button } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
-import { makeRehydrateFields } from '../selectors/rehydrate';
+import { makeRehydrateFields } from '../selectors/forms';
 
 const propNode = (_, props) => props.node;
 
@@ -85,6 +85,7 @@ class NodeForm extends Component {
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,
+      tooltip: this.isLarge() ? 'right' : 'bottom',
     };
 
     const formElement = this.isLarge() ?
@@ -98,7 +99,6 @@ class NodeForm extends Component {
     return (
       <Modal name={name} title={title} className={modalClassNames}>
         {formElement}
-
       </Modal>
     );
   }

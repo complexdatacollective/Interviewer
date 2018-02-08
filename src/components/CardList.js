@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
@@ -12,18 +13,22 @@ const EnhancedCard = selectable(Card);
   */
 const CardList = (props) => {
   const {
+    className,
     details,
     label,
     nodes,
     onToggleCard,
     selected,
+    uid,
   } = props;
 
+  const classNames = cx('card-list', className);
+
   return (
-    <div className="card-list">
+    <div className={classNames}>
       {
         nodes.map(node => (
-          <span key={node.uid}>
+          <span key={uid(node)}>
             <EnhancedCard
               label={label(node)}
               selected={selected(node)}
@@ -38,19 +43,23 @@ const CardList = (props) => {
 };
 
 CardList.propTypes = {
+  className: PropTypes.string,
   details: PropTypes.func,
   label: PropTypes.func,
   nodes: PropTypes.array.isRequired,
   onToggleCard: PropTypes.func,
   selected: PropTypes.func,
+  uid: PropTypes.func,
 };
 
 CardList.defaultProps = {
+  className: '',
   details: () => (''),
   label: () => (''),
   nodes: [],
   onToggleCard: () => {},
   selected: () => false,
+  uid: node => node.uid,
 };
 
 export default compose(

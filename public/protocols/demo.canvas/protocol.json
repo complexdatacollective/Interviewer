@@ -8,6 +8,7 @@
         "label": "Person",
         "color": "coral",
         "displayVariable": "nickname",
+        "iconVariant": "add-a-person",
         "variables": {
           "name": {
             "label": "Name",
@@ -79,6 +80,7 @@
       "venue": {
         "label": "Venue",
         "color": "kiwi",
+        "iconVariant": "add-a-place",
         "variables": {
           "name": {
             "label": "Name",
@@ -180,6 +182,420 @@
           "name": "Local Bar"
         }
       ]
+    },
+    "HIVServices": {
+      "nodes": [
+        {
+            "Main/Parent Organization": "About My Health",
+            "Subsidiary/Program/Project": "",
+            "Abbreviated Name": "About My Health",
+            "name": "About My Health",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "55 E Washington St, Chicago, Illinois, 60602",
+            "Latitude": 41.882945,
+            "Longitude": -87.62572,
+            "Raw Address": "55 E Washington St, Chicago, Illinois 60602, United States"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "Access Anixter Center",
+            "Abbreviated Name": "Access - Anixter",
+            "name": "Access - Anixter",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "2020 N Clybourn Ave, Chicago, Illinois, 60614",
+            "Latitude": 41.91837,
+            "Longitude": -87.660281,
+            "Raw Address": "2020 N Clybourn Ave, Chicago, Illinois 60614, United States"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Ashland Family Health Center",
+            "Abbreviated Name": "Access - Ashland Family Health Center",
+            "name": "Access - Ashland Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "5159 S Ashland Ave, Chicago, IL 60609",
+            "Latitude": 41.799756,
+            "Longitude": -87.66443,
+            "Raw Address": "5159 S Ashland Ave, Chicago, Illinois, 60609"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Auburn-Gresham Family Health Center",
+            "Abbreviated Name": "Access - Auburn-Gresham Family Health Center",
+            "name": "Access - Auburn-Gresham Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "8234 S Ashland Ave, Chicago, IL 60620",
+            "Latitude": 41.743832,
+            "Longitude": -87.663648,
+            "Raw Address": "8234 S Ashland Ave, Chicago, Illinois, 60620"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Booker Family Health Center",
+            "Abbreviated Name": "Access - Booker Family Health Center",
+            "name": "Access - Booker Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "654 E 47th St, Chicago, IL 60653",
+            "Latitude": 41.809683,
+            "Longitude": -87.609344,
+            "Raw Address": "654 E 47th St, Chicago, Illinois, 60653"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Brandon Family Health Center",
+            "Abbreviated Name": "Access - Brandon Family Health Center",
+            "name": "Access - Brandon Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "8300 S Brandon Ave, Chicago, IL 60617",
+            "Latitude": 41.74453,
+            "Longitude": -87.547014,
+            "Raw Address": "8300 S Brandon Ave, Chicago, Illinois, 60617"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Cabrini Family Health Center",
+            "Abbreviated Name": "Access - Cabrini Family Health Center",
+            "name": "Access - Cabrini Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3450 S Archer Ave, Chicago, IL 60608",
+            "Latitude": 41.831331,
+            "Longitude": -87.676624,
+            "Raw Address": "3450 S Archer Ave, Chicago, Illinois, 60608"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Centro Medico",
+            "Abbreviated Name": "Access - Centro Medico",
+            "name": "Access - Centro Medico",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3700 W 26th St, Chicago, IL 60623",
+            "Latitude": 41.844509,
+            "Longitude": -87.717409,
+            "Raw Address": "3700 W 26th St, Chicago, Illinois, 60623"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Centro Medico San Rafael",
+            "Abbreviated Name": "Access - Centro Medico San Rafael",
+            "name": "Access - Centro Medico San Rafael",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3204 W 26th St, Chicago, IL 60623",
+            "Latitude": 41.844713,
+            "Longitude": -87.705448,
+            "Raw Address": "3204 W 26th St, Chicago, Illinois, 60623"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Doctors Medical Center",
+            "Abbreviated Name": "Access - Doctors Medical Center",
+            "name": "Access - Doctors Medical Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "6240 W 55th St, Chicago, IL 60638",
+            "Latitude": 41.792657,
+            "Longitude": -87.778601,
+            "Raw Address": "6240 W 55th St, Chicago, Illinois, 60638"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Evanston-Rogers Park Family Health Center",
+            "Abbreviated Name": "Access - Evanston-Rogers Park Family Health Center",
+            "name": "Access - Evanston-Rogers Park Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "1555 Howard St, Chicago, IL 60626",
+            "Latitude": 42.019113,
+            "Longitude": -87.670241,
+            "Raw Address": "1555 W Howard St, Chicago, Illinois, 60626"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS at Gary Comer Youth Center",
+            "Abbreviated Name": "Access - Gary Comer Youth Center",
+            "name": "Access - Gary Comer Youth Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "7200 S Ingleside Ave, Chicago, IL 60619",
+            "Latitude": 41.764069,
+            "Longitude": -87.602436,
+            "Raw Address": "7200 S Ingleside Ave, Chicago, Illinois, 60619"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "Grand Boulevard Health and Specialty Center",
+            "Abbreviated Name": "Access - Grand Boulevard",
+            "name": "Access - Grand Boulevard",
+            "Standard Word Abbreviations": "Blvd",
+            "Geocoded Address": "5401 S Wentworth Ave, Chicago, Illinois, 60609",
+            "Latitude": 41.795962,
+            "Longitude": -87.629572,
+            "Raw Address": "5401 S Wentworth Ave, Chicago, Illinois 60609, United States"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Humboldt Park Family Health Center",
+            "Abbreviated Name": "Access - Humboldt Park Family Health Center",
+            "name": "Access - Humboldt Park Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3202 W North Ave, Chicago, IL 60647",
+            "Latitude": 41.910444,
+            "Longitude": -87.707085,
+            "Raw Address": "3202 W North Ave, Chicago, Illinois, 60647"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS at the Illinois Eye Institute",
+            "Abbreviated Name": "Access - Illinois Eye Institute",
+            "name": "Access - Illinois Eye Institute",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3241 S Michigan Ave, Chicago, IL 60616",
+            "Latitude": 41.835265,
+            "Longitude": -87.622279,
+            "Raw Address": "3241 S Michigan Ave, Chicago, Illinois, 60616"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Kedzie Family Health Center",
+            "Abbreviated Name": "Access - Kedzie Family Health Center",
+            "name": "Access - Kedzie Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3213 W 47th Pl, Chicago, IL 60632",
+            "Latitude": 41.806249,
+            "Longitude": -87.704915,
+            "Raw Address": "3213 W 47th Place, Chicago, Illinois, 60632"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "Servicios Medicos La Villita",
+            "Abbreviated Name": "Access - La Villita",
+            "name": "Access - La Villita",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3303 W 26th St, Chicago, Illinois, 60623",
+            "Latitude": 41.843835,
+            "Longitude": -87.707797,
+            "Raw Address": "3303 W 26th St, Chicago, Illinois 60623, United States"
+        },
+        {
+            "Main/Parent Organization": "Access Community Health Network",
+            "Subsidiary/Program/Project": "ACCESS Madison Family Health Center",
+            "Abbreviated Name": "Access - Madison Family Health Center",
+            "name": "Access - Madison Family Health Center",
+            "Standard Word Abbreviations": "",
+            "Geocoded Address": "3800 W Madison St, Chicago, IL 60624",
+            "Latitude": 41.881126,
+            "Longitude": -87.721142,
+            "Raw Address": "3800 W Madison Ave, Chicago, Illinois, 60624"
+        }
+      ]
+    },
+    "schoolPupils": {
+      "nodes": [
+        {
+          "type": "person",
+          "name": "F. Anita",
+          "nickname": "Annie",
+          "age": "23"
+        },
+        {
+          "type": "person",
+          "name": "H. Barry",
+          "nickname": "Baz",
+          "age": "31"
+        },
+        {
+          "uid": "person_3",
+          "type": "person",
+          "name": "Carlito",
+          "nickname": "Carl",
+          "age": "25"
+        },
+        {
+          "uid": "person_4",
+          "type": "person",
+          "name": "Dee",
+          "nickname": "Dee",
+          "age": "72"
+        },
+        {
+          "uid": "person_5",
+          "type": "person",
+          "name": "A. Eugine",
+          "nickname": "Eu",
+          "age": "27"
+        },
+        {
+          "uid": "person_6",
+          "type": "person",
+          "name": "Gerald",
+          "nickname": "Gary",
+          "age": "33"
+        },
+        {
+          "uid": "person_7",
+          "type": "person",
+          "name": "Hannah L.",
+          "nickname": "Hannah",
+          "age": "81"
+        },
+        {
+          "uid": "person_8",
+          "type": "person",
+          "name": "Isabella",
+          "nickname": "Izzy",
+          "age": "25"
+        },
+        {
+          "uid": "person_9",
+          "type": "person",
+          "name": "Jacob",
+          "nickname": "Jake",
+          "age": "52"
+        },
+        {
+          "uid": "person_10",
+          "type": "person",
+          "name": "Kaylee",
+          "nickname": "Lee",
+          "age": "57"
+        },
+        {
+          "uid": "person_11",
+          "type": "person",
+          "name": "Lily",
+          "nickname": "Lil",
+          "age": "93"
+        },
+        {
+          "uid": "person_12",
+          "type": "person",
+          "name": "Michael",
+          "nickname": "Mike",
+          "age": "91"
+        },
+        {
+          "uid": "person_13",
+          "type": "person",
+          "name": "Noah",
+          "nickname": "Nole",
+          "age": "65"
+        },
+        {
+          "uid": "person_14",
+          "type": "person",
+          "name": "K. Olivia",
+          "nickname": "Olivia",
+          "age": "42"
+        },
+        {
+          "uid": "person_15",
+          "type": "person",
+          "name": "Penelope",
+          "nickname": "Nellie",
+          "age": "47"
+        },
+        {
+          "uid": "person_16",
+          "type": "person",
+          "name": "Quentin",
+          "nickname": "Quinn",
+          "age": "33"
+        },
+        {
+          "uid": "person_17",
+          "type": "person",
+          "name": "Y. Randall",
+          "nickname": "Randy",
+          "age": "51"
+        },
+        {
+          "uid": "person_18",
+          "type": "person",
+          "name": "Sophia",
+          "nickname": "Fia",
+          "age": "85"
+        },
+        {
+          "uid": "person_19",
+          "type": "person",
+          "name": "Tatiana",
+          "nickname": "Ana",
+          "age": "72"
+        },
+        {
+          "uid": "person_20",
+          "type": "person",
+          "name": "Uriel",
+          "nickname": "Uri",
+          "age": "17"
+        },
+        {
+          "uid": "person_21",
+          "type": "person",
+          "name": "Vanessa",
+          "nickname": "Ness",
+          "age": "56"
+        },
+        {
+          "uid": "person_22",
+          "type": "person",
+          "name": "William",
+          "nickname": "Bill",
+          "age": "61"
+        },
+        {
+          "uid": "person_23",
+          "type": "person",
+          "name": "Xavier",
+          "nickname": "X",
+          "age": "65"
+        },
+        {
+          "uid": "person_24",
+          "type": "person",
+          "name": "Yolanda",
+          "nickname": "Landa",
+          "age": "29"
+        },
+        {
+          "uid": "person_25",
+          "type": "person",
+          "name": "T. Zoe",
+          "nickname": "Zoe",
+          "age": "87"
+        },
+        {
+          "uid": "person_26",
+          "type": "person",
+          "name": "Fernando",
+          "nickname": "Finn",
+          "age": "63"
+        },
+        {
+          "uid": "person_27",
+          "type": "person",
+          "name": "Daniella",
+          "nickname": "Dani",
+          "age": "71"
+        },
+        {
+          "uid": "person_28",
+          "type": "person",
+          "name": "P. Samuel",
+          "nickname": "Sammy",
+          "age": "20"
+        },
+        {
+          "uid": "person_29",
+          "type": "person",
+          "name": "Brooklyn",
+          "nickname": "Brook",
+          "age": "24"
+        },
+        {
+          "uid": "person_30",
+          "type": "person",
+          "name": "Christopher",
+          "nickname": "Topher",
+          "age": "66"
+        }
+      ]
     }
   },
   "forms": {
@@ -234,6 +650,17 @@
   },
   "stages": [
     {
+      "id": "intructrions1",
+      "label": "Instructions",
+      "type": "Instructions",
+      "title": "Title for the screen",
+      "items": [
+        { "type": "text", "content": "<p>Some arbitrary text content that can contain <strong>HTML</strong> tags.</p>" },
+        { "type": "audio", "content": "click_the_thing.mp3", "description": "Click by clicking the thing" },
+        { "type": "image", "content": "rubberduck.jpg" }
+      ]
+    },
+    {
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
@@ -272,6 +699,95 @@
       ]
     },
     {
+      "id": "namegenroster2",
+      "type": "NameGeneratorList",
+      "label": "NG Classmates",
+      "showExistingNodes": false,
+      "prompts": [
+        {
+          "id": "7tk",
+          "text": "Which classmates would you talk to outside of class?",
+          "additionalAttributes": {
+            "talk_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "name": "ASC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Pupil Name",
+                "variable": "name"
+              },
+              {
+                "label": "Pupil Age",
+                "variable": "age"
+              }
+            ]
+          }
+        },
+        {
+          "id": "7cl",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": {
+            "special_category": 56,
+            "close_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "sortOptions": {
+            "sortOrder": {
+              "nickname": "DESC"
+            },
+            "sortableProperties": [
+              {
+                "label": "Nickname",
+                "variable": "nickname"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "sociogram",
       "type": "Sociogram",
       "label": "Sociogram",
@@ -305,6 +821,101 @@
             "image": "rubberduck.jpg",
             "concentricCircles": 4,
             "skewedTowardCenter": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "namegenroster1",
+      "type": "NameGeneratorAutoComplete",
+      "label": "NG Classmates",
+      "prompts": [
+        {
+          "id": "7cl1",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": {
+            "special_category": 46,
+            "close_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "searchOptions": {
+            "fuzziness": 0.4,
+            "matchProperties": ["nickname", "name"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          }
+        },
+        {
+          "id": "7cl2",
+          "text": "Within the past 6 months, who has been supportive?",
+          "additionalAttributes": {
+            "support_friend": true
+          },
+          "dataSource": "schoolPupils",
+          "cardOptions": {
+            "displayLabel": "nickname",
+            "additionalProperties": [
+              {
+                "label": "Name",
+                "variable": "name"
+              },
+              {
+                "label": "Age",
+                "variable": "age"
+              }
+            ]
+          },
+          "searchOptions": {
+            "fuzziness": 0.4,
+            "matchProperties": ["nickname", "name"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          }
+        },
+        {
+          "id": "7su",
+          "text": "Which of these venues have you visited in the previous 6 months?",
+          "additionalAttributes": {
+            "primary_venue": true
+          },
+          "dataSource": "HIVServices",
+          "cardOptions": {
+            "displayLabel": "Abbreviated Name",
+            "additionalProperties": [
+              {
+                "label": "Address",
+                "variable": "Geocoded Address"
+              },
+              {
+                "label": "Subsidiary/Program/Project",
+                "variable": "Subsidiary/Program/Project"
+              }
+            ]
+          },
+          "searchOptions": {
+            "fuzziness": 0.5,
+            "matchProperties": ["Abbreviated Name", "Subsidiary/Program/Project", "Geocoded Address"]
+          },
+          "subject": {
+            "entity": "node",
+            "type": "venue"
           }
         }
       ]

@@ -10,4 +10,10 @@
   @media screen and (min-width: 1600px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
+
+  // Single-column layout variant
+  &--single {
+    display: flex;
+    flex-direction: column;
+  }
 }

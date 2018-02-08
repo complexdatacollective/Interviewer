@@ -11,6 +11,7 @@ function MenuItem(props) {
 
   const iconMap = {
     NameGenerator: 'menu-name-generator',
+    NameGeneratorAutoComplete: 'menu-name-generator',
     NameGeneratorList: 'menu-name-generator',
     Sociogram: 'menu-sociogram',
   };
