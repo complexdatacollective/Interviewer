@@ -105,7 +105,6 @@ class MenuFactory extends Component {
           </Scroller>
         </div>
         {!hideButton && <Icon name={icon} className="menu__burger" onClick={this.menuClick} />}
-        {this.props.children}
       </div>
     );
   } // end render
