@@ -159,15 +159,6 @@ class SessionMenu extends Component {
 
     const menuType = 'settings';
 
-    if (isElectron()) {
-      customItems.push({
-        id: 'update-check',
-        label: 'Check for Update',
-        icon: 'menu-custom-interface',
-        onClick: updater.checkForUpdate,
-      });
-      customItems.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
-    }
 
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
@@ -176,6 +167,16 @@ class SessionMenu extends Component {
       ...customItems,
       { id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
     ];
+
+    if (isElectron()) {
+      items.push({
+        id: 'update-check',
+        label: 'Check for Update',
+        icon: 'menu-custom-interface',
+        onClick: updater.checkForUpdate,
+      });
+      items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
+    }
 
     items.map((item) => {
       const temp = item;

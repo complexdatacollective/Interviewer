@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { Form } from '../containers/';
+import { Form, Dialog } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 import ServerDiscoverer from '../utils/serverDiscoverer';
 
@@ -23,18 +23,6 @@ const formConfig = {
   ],
 };
 
-// const initialState = {
-//   serverDiscoveryModal: {
-//     title: 'Server Discovery',
-//     type: 'info',
-//     additionalInformation: '',
-//     content: null,
-//     onConfirm: () => { },
-//     confirmLabel: 'Continue',
-//     hasCancelButton: true,
-//   },
-// };
-
 const initialValues = {
   protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.canvas',
 };
@@ -48,12 +36,31 @@ class Setup extends Component {
     super();
 
     this.serverDiscoverer = new ServerDiscoverer();
-    console.log(this.serverDiscoverer);
+
+    this.state = {
+      serverDiscoveryDialog: {
+        title: 'Server Discovered',
+        type: 'info',
+        content: null,
+        onConfirm: () => {},
+        confirmLabel: 'Okay',
+        hasCancelButton: false,
+      },
+    };
   }
 
   componentWillMount() {
+    this.props.registerModal('SERVER_DISCOVERY');
+
     this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
-      console.log(response);
+      this.setState({
+        serverDiscoveryDialog: {
+          content: 'An instance of Network Canvas Server has been found nearby!',
+          additionalInformation: response,
+        },
+      }, () => {
+        this.props.openModal('SERVER_DISCOVERY');
+      });
     });
   }
 
@@ -110,6 +117,17 @@ class Setup extends Component {
 
     return (
       <div className="setup">
+        <Dialog
+          name="SERVER_DISCOVERY"
+          title={this.state.serverDiscoveryDialog.title}
+          type={this.state.serverDiscoveryDialog.type}
+          confirmLabel={this.state.serverDiscoveryDialog.confirmLabel}
+          hasCancelButton={this.state.serverDiscoveryDialog.hasCancelButton}
+          additionalInformation={this.state.serverDiscoveryDialog.additionalInformation}
+          onConfirm={this.state.serverDiscoveryDialog.onConfirm}
+        >
+          {this.state.serverDiscoveryDialog.content}
+        </Dialog>
         <h1 className="type--title-1">Welcome to Network Canvas</h1>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
@@ -143,6 +161,7 @@ Setup.propTypes = {
   loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   registerModal: PropTypes.func.isRequired,
   unregisterModal: PropTypes.func.isRequired,
 };
@@ -161,6 +180,7 @@ function mapDispatchToProps(dispatch) {
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     registerModal: bindActionCreators(modalActions.registerModal, dispatch),
     unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 
