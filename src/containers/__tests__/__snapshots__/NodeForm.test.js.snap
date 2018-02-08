@@ -74,6 +74,7 @@ ShallowWrapper {
         openModal={[Function]}
         resetValues={[Function]}
         title="The form title"
+        tooltip="bottom"
         type="person"
 />,
       "className": "modal--fullscreen",
@@ -118,6 +119,7 @@ ShallowWrapper {
         "openModal": [Function],
         "resetValues": [Function],
         "title": "The form title",
+        "tooltip": "bottom",
         "type": "person",
       },
       "ref": null,
@@ -169,6 +171,7 @@ ShallowWrapper {
           openModal={[Function]}
           resetValues={[Function]}
           title="The form title"
+          tooltip="bottom"
           type="person"
 />,
         "className": "modal--fullscreen",
@@ -213,6 +216,7 @@ ShallowWrapper {
           "openModal": [Function],
           "resetValues": [Function],
           "title": "The form title",
+          "tooltip": "bottom",
           "type": "person",
         },
         "ref": null,

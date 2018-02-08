@@ -20,7 +20,7 @@ import { withOptionsFromSelector } from '../behaviours';
   * @param {object} field The properties handed down from the protocol form
   */
 
-export const makeRenderInput = (type) => {
+export const makeRenderInput = (componentType) => {
   const renderInput = (field) => {
     const {
       input,
@@ -32,6 +32,8 @@ export const makeRenderInput = (type) => {
       toggleComponent,
       autoFocus,
       className,
+      tooltip,
+      type: inputType,
     } = field;
 
     let InputComponent = TextInput;
@@ -44,9 +46,11 @@ export const makeRenderInput = (type) => {
       autoFocus,
       isNumericOnly,
       className,
+      tooltip,
+      type: componentType === 'hidden' ? 'hidden' : inputType,
     };
 
-    if (type === 'RadioGroup') {
+    if (componentType === 'RadioGroup') {
       InputComponent = RadioGroup;
       inputProps = {
         ...inputProps,
@@ -55,7 +59,7 @@ export const makeRenderInput = (type) => {
       };
     }
 
-    if (type === 'CheckboxGroup') {
+    if (componentType === 'CheckboxGroup') {
       const { colors } = field;
       InputComponent = ToggleGroup;
       inputProps = {
@@ -127,13 +131,14 @@ class Field extends PureComponent {
 }
 
 Field.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   name: PropTypes.string.isRequired,
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   validation: PropTypes.object,
 };
 
 Field.defaultProps = {
+  label: '',
   validation: {},
 };
 

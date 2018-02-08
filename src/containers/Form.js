@@ -55,10 +55,11 @@ class Form extends Component {
       fields,
       handleSubmit,
       controls,
+      tooltip,
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
 
@@ -68,6 +69,7 @@ class Form extends Component {
               {...field}
               autoFocus={isFirst}
               onBlur={() => { this.handleFieldBlur(); }}
+              tooltip={tooltip}
             />
           );
         }) }
@@ -89,12 +91,14 @@ Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
   controls: PropTypes.array,
+  tooltip: PropTypes.string,
 };
 
 Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
   controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
+  tooltip: 'none',
 };
 
 function makeMapStateToProps() {
@@ -115,9 +119,7 @@ export default compose(
   connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
-    destroyOnUnmount: false, // need this false to make it validate across wizard
-    enableReinitialize: true,
-    forceUnregisterOnUnmount: true,
-    keepDirtyOnReinitialize: false,
+    touchOnChange: true,
+    touchOnBlur: false,
   }),
 )(Form);
