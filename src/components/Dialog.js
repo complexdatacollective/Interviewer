@@ -3,15 +3,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-<<<<<<< HEAD
-import { Button, Icon, animation } from 'network-canvas-ui';
-import xss from 'xss';
-import { Modal } from '../components/Transition';
-=======
 import { Button, Icon } from 'network-canvas-ui';
 import xss from 'xss';
 import { Modal as ModalTransition } from '../components/Transition';
->>>>>>> fix/modal-performance
 
 /**
   * Renders a dialog box.
