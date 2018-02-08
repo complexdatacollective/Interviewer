@@ -1,0 +1,27 @@
+.transition-window {
+    &-enter, &-appear {
+      opacity: 0;
+
+      [transition-role="window"] {
+        transform: translate(0, -100vh);
+      }
+
+      &-active {
+        transition: opacity $animation-default-easing $animation-fast-duration;
+        opacity: 1;
+
+        [transition-role="window"] {
+          transition: transform $animation-default-easing $animation-fast-duration;
+          transform: translate(0, 0);
+        }
+      }
+    }
+
+    &-exit {
+      opacity: 1;
+      &-active {
+        transition: opacity $animation-default-easing $animation-fast-duration;
+        opacity: 0;
+      }
+    }
+}
