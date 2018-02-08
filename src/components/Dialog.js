@@ -5,7 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon, animation } from 'network-canvas-ui';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { Modal as ModalTransition } from '../components/Transition';
 import xss from 'xss';
 
 /**
@@ -56,34 +56,29 @@ const Dialog = (props) => {
   let additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} />: '';
 
   return (
-    <CSSTransitionGroup
-      transitionName="dialog--transition"
-      transitionEnterTimeout={animation.duration.standard}
-      transitionLeaveTimeout={animation.duration.standard}
-    >
-      { show &&
-        <div key="dialog" className="dialog">
-          <div className={dialogClasses} onClick={e => e.stopPropagation()}>
-            <div className="dialog__main">
-              <div className="dialog__main-icon">
-                <Icon name={type} />
-              </div>
-              <div className="dialog__main-content">
-                <h2 className="dialog__main-title">{title}</h2>
-                {children}
-              </div>
+    <ModalTransition in={show}>
+      <div key="dialog" className="dialog">
+        <div className="dialog__background" transition-role="background" />
+        <div className={dialogClasses} transition-role="window" onClick={e => e.stopPropagation()}>
+          <div className="dialog__main">
+            <div className="dialog__main-icon">
+              <Icon name={type} />
             </div>
-            <div className="dialog__additional-content">
-              {additionalTextarea}
+            <div className="dialog__main-content">
+              <h2 className="dialog__main-title">{title}</h2>
+              {children}
             </div>
-            <footer className="dialog__footer">
-              { cancelButton }
-              <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />
-            </footer>
           </div>
+          <div className="dialog__additional-content">
+            {additionalTextarea}
+          </div>
+          <footer className="dialog__footer">
+            { cancelButton }
+            <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />
+          </footer>
         </div>
-      }
-    </CSSTransitionGroup>
+      </div>
+    </ModalTransition>
   );
 };
 

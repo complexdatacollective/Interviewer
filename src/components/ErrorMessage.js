@@ -21,7 +21,8 @@ const ErrorMessage = ({
   return (
     <Modal in={isActive}>
       <div className="dialog">
-        <div className="dialog__window" onClick={e => e.stopPropagation()}>
+        <div className="dialog__background" transition-role="background" />
+        <div className="dialog__window" transition-role="window" onClick={e => e.stopPropagation()}>
           <div className="dialog__main">
             <div className="dialog__main-icon">
               <Icon name="error" />
