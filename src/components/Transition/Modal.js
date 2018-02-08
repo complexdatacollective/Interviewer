@@ -12,7 +12,7 @@ const Modal = ({ children, ...props }) => (
   <CSSTransition
     {...props}
     timeout={duration}
-    classNames="transition-window"
+    classNames="transition--window"
     appear
     unmountOnExit
   >
