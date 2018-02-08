@@ -36,22 +36,17 @@ const downloadProtocol = inEnvironment((environment) => {
         .then(destination =>
           new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
-            fileTransfer.download(encodeURI(uri), destination, () => resolve(destination), reject);
+            fileTransfer.download(
+              encodeURI(uri),
+              destination,
+              () => resolve(destination),
+              error => reject(`Error code: ${error.code}. (${error.source})`),
+            );
           }),
         );
   }
 
   throw new Error(`downloadProtocol() not available on platform ${environment}`);
 });
-
-// const importRemoteProtocol = inEnvironment((environment) => {
-//   if (environment !== environments.WEB) {
-//     return uri =>
-//       downloadProtocol(uri)
-//         .then(importProtocol);
-//   }
-
-//   throw new Error(`importRemoteProtocol() not available on platform ${environment}`);
-// });
 
 export default downloadProtocol;

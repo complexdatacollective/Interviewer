@@ -2,6 +2,7 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import { readFileAsDataUrl } from '../filesystem';
 import protocolPath from './protocolPath';
+import factoryProtocolPath from './factoryProtocolPath';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -19,8 +20,10 @@ const assetUrl = (environment) => {
       protocolName = isRequired('protocolName'),
       assetPath = isRequired('assetPath'),
     ) => {
+      const factoryFilename = factoryProtocolPath(protocolName, `assets/${assetPath}`);
       const filename = protocolPath(protocolName, `assets/${assetPath}`);
-      return readFileAsDataUrl(filename);
+      return readFileAsDataUrl(factoryFilename)
+        .catch(readFileAsDataUrl(filename));
     };
   }
 
