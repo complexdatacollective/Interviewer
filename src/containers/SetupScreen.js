@@ -50,8 +50,6 @@ class Setup extends Component {
   }
 
   componentWillMount() {
-    this.props.registerModal('SERVER_DISCOVERY');
-
     this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
       this.setState({
         serverDiscoveryDialog: {
@@ -62,10 +60,6 @@ class Setup extends Component {
         this.props.openModal('SERVER_DISCOVERY');
       });
     });
-  }
-
-  componentWillUnmount() {
-    this.props.unregisterModal('SERVER_DISCOVERY');
   }
 
   onClickLoadFactoryProtocol = () => {
@@ -162,8 +156,6 @@ Setup.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  registerModal: PropTypes.func.isRequired,
-  unregisterModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -178,8 +170,6 @@ function mapDispatchToProps(dispatch) {
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    registerModal: bindActionCreators(modalActions.registerModal, dispatch),
-    unregisterModal: bindActionCreators(modalActions.unregisterModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
