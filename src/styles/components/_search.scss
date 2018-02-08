@@ -1,0 +1,102 @@
+$content-padding: 1rem;
+$module-name: search;
+$min-content-height: 114px;
+$results-height: calc(100vh - 350px);
+
+// Base input on global styling; override as needed below.
+@include text-input('#{$module-name}__input');
+
+.#{$module-name} {
+  --collapsed-square-size: 114px;
+  --border-radius: 10px;
+  --content-padding: 1rem;
+
+  background-color: color('cyber-grape');
+  border-radius: var(--border-radius);
+  max-height: 100vh;
+  position: absolute;
+  transform-origin: right bottom;
+  width: 100%;
+
+  &__header {
+    padding: 2rem 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--hidden {
+      height: 0;
+      margin: 0;
+      opacity: 0;
+      padding: 0;
+    }
+  }
+
+  &__close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+
+  &__content {
+    height: 100%;
+    min-height: $min-content-height;
+    overflow: visible;
+    padding: $content-padding;
+    position: relative;
+  }
+
+  &__input {
+    background-color: color('white');
+    border-radius: spacing(small);
+    bottom: var(--content-padding);
+    color: palette('text-dark');
+    left: var(--content-padding);
+    padding: spacing(medium);
+    height: auto;
+    width: calc(100% - 2 * var(--content-padding));
+  }
+
+  &--collapsed {
+    transform: translateX(100%);
+  }
+
+  &__results {
+    display: block;
+    // A calculated height here attempts to use all available space without
+    // hiding the prompt question. min-height ensures results are readable,
+    // even if prompt is hidden at very short viewport heights.
+    height: $results-height;
+    margin: spacing(small) 0;
+    min-height: 8em;
+    overflow: hidden;
+    transition: height $animation-fast-duration $animation-default-easing;
+
+    .scrollable {
+      height: 100%;
+    }
+
+    &--collapsed {
+      border: 0;
+      height: 0;
+      min-height: 0;
+    }
+  }
+
+  &__result {
+    &--selected {
+      background-color: color('white', .15);
+      border: 1px solid color('white');
+    }
+  }
+
+  .add-count-button {
+    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
+    position: absolute;
+    right: -4rem;
+    top: 30%;
+    z-index: 1;
+  }
+
+}

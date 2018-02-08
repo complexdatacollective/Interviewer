@@ -3,8 +3,9 @@
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
-import { getExternalData } from './protocol';
+import { getExternalData, protocolRegistry } from './protocol';
 import { nextUid } from '../ducks/modules/network';
+
 
 // Selectors that are specific to the name generator
 
@@ -19,6 +20,11 @@ These selectors assume the following props:
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
+
+export const makeGetNodeType = () => (createSelector(
+  makeGetSubject(),
+  subject => subject && subject.type,
+));
 
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
@@ -69,4 +75,13 @@ export const getDataByPrompt = createSelector(
   getDatasourceKey,
   (externalData, key) => externalData[key].nodes.map(
     (node, index) => ({ uid: nextUid(externalData[key].nodes, index), ...node })),
+);
+
+export const makeGetNodeIconName = () => createSelector(
+  protocolRegistry,
+  makeGetNodeType(),
+  (variableRegistry, nodeType) => {
+    const nodeInfo = variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant;
+  },
 );

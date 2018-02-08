@@ -6,7 +6,7 @@ import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { Button } from 'network-canvas-ui';
 import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
-import { makeRehydrateFields } from '../selectors/rehydrate';
+import { makeRehydrateFields } from '../selectors/forms';
 
 /**
   * Renders a redux form that contains fields according to a `fields` config.
