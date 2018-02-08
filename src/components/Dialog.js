@@ -1,12 +1,11 @@
-/* eslint-disable */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Button, Icon, animation } from 'network-canvas-ui';
-import { Modal as ModalTransition } from '../components/Transition';
+import { Button, Icon } from 'network-canvas-ui';
 import xss from 'xss';
+import { Modal as ModalTransition } from '../components/Transition';
 
 /**
   * Renders a dialog box.
@@ -31,10 +30,10 @@ const Dialog = (props) => {
   }
 
   const typeColor = {
-    'info': 'primary',
-    'warning': 'mustard',
-    'error': 'neon-coral',
-  }
+    info: 'primary',
+    warning: 'mustard',
+    error: 'neon-coral',
+  };
 
   function createMarkup() {
     const safeString = xss(additionalInformation, {
@@ -47,13 +46,13 @@ const Dialog = (props) => {
       stripIgnoreTag: true,
     });
     return {
-      __html: safeString
+      __html: safeString,
     };
-  };
+  }
 
-
-  let dialogClasses  = cx('dialog__window dialog__window--' + type);
-  let additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} />: '';
+  const dialogClasses = cx(`dialog__window dialog__window--${type}`);
+  // eslint-disable-next-line react/no-danger
+  const additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} /> : '';
 
   return (
     <ModalTransition in={show}>
