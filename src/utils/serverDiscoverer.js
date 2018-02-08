@@ -2,21 +2,20 @@
 
 import { isElectron, isCordova } from '../utils/Environment';
 
-let EventEmitter;
-let diont;
-
-if (isElectron()) {
-  EventEmitter = window.require('events').EventEmitter;
-  diont = window.require('diont')();
-}
-
-if (isCordova()) {
-  EventEmitter = window.require('events').EventEmitter;
-  diont = window.Diont();
-}
-
 class ServerDiscoverer {
   constructor() {
+    let EventEmitter;
+    let diont;
+    if (isElectron()) {
+      EventEmitter = window.require('eventemitter3');
+      diont = window.require('diont')();
+    }
+
+    if (isCordova()) {
+      EventEmitter = require('eventemitter3');
+      diont = window.Diont();
+    }
+
     if (!isElectron() && !isCordova()) {
       return { on: () => { /* noop */ } };
     }
