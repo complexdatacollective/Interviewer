@@ -1,7 +1,6 @@
-import { find, maxBy, reject, findIndex, isMatch, isArray, omit } from 'lodash';
+import { maxBy, reject, findIndex, isMatch, isArray, omit } from 'lodash';
 
 const ADD_NODES = 'ADD_NODES';
-const ADD_OR_UPDATE_NODE = 'ADD_OR_UPDATE_NODE';
 const REMOVE_NODE = 'REMOVE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
 const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
@@ -38,15 +37,6 @@ function edgeExists(edges, edge) {
     findIndex(edges, edge) !== -1 ||
     findIndex(edges, flipEdge(edge)) !== -1
   );
-}
-
-function getNodesWithAdd(nodes, node) {
-  const id = nextId(nodes);
-  const uid = nextUid(nodes);
-  // Use supplied UID if provided, otherwise use generated one
-  const nodeWithId = { uid, ...node, id };
-  if (!find(nodes, ['uid', nodeWithId.uid])) { return [...nodes, nodeWithId]; }
-  return [...nodes];
 }
 
 function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
@@ -88,18 +78,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
-      };
-    }
-    case ADD_OR_UPDATE_NODE: {
-      let nodes = state.nodes;
-      if (find(state.nodes, ['uid', action.node.uid])) {
-        nodes = getUpdatedNodes(state.nodes, action.node, action.full);
-      } else {
-        nodes = getNodesWithAdd(state.nodes, action.node);
-      }
-      return {
-        ...state,
-        nodes,
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
@@ -186,13 +164,6 @@ function addNodes(nodes, additionalAttributes) {
   };
 }
 
-function addOrUpdateNode(node) {
-  return {
-    type: ADD_OR_UPDATE_NODE,
-    node,
-  };
-}
-
 function updateNode(node, full = false) {
   return {
     type: UPDATE_NODE,
@@ -242,7 +213,6 @@ function removeEdge(edge) {
  */
 const actionCreators = {
   addNodes,
-  addOrUpdateNode,
   updateNode,
   removeNode,
   addEdge,
@@ -253,7 +223,6 @@ const actionCreators = {
 
 const actionTypes = {
   ADD_NODES,
-  ADD_OR_UPDATE_NODE,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
