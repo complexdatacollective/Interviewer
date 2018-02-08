@@ -1,0 +1,35 @@
+.transition--window {
+    &-enter, &-appear {
+      [transition-role="background"] {
+        opacity: 0;
+      }
+
+      [transition-role="window"] {
+        opacity: 0;
+        transform: translate(0, -100vh);
+      }
+
+      &-active {
+        [transition-role="background"] {
+          transition: opacity $animation-default-easing $animation-fast-duration;
+          opacity: 1;
+        }
+
+        [transition-role="window"] {
+          transition: transform $animation-default-easing $animation-standard-duration,
+            opacity $animation-default-easing $animation-standard-duration;
+          transform: translate(0, 0);
+          opacity: 1;
+        }
+      }
+    }
+
+    &-exit {
+      opacity: 1;
+
+      &-active {
+        transition: opacity $animation-default-easing $animation-standard-duration;
+        opacity: 0;
+      }
+    }
+}

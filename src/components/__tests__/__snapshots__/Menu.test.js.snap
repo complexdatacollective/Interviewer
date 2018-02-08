@@ -44,6 +44,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
+        null,
         <div
           className="menu__wrap menu__content"
 >
@@ -106,6 +107,7 @@ ShallowWrapper {
     },
     "ref": [Function],
     "rendered": Array [
+      null,
       Object {
         "instance": null,
         "key": undefined,
@@ -379,6 +381,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
+          null,
           <div
             className="menu__wrap menu__content"
 >
@@ -441,6 +444,7 @@ ShallowWrapper {
       },
       "ref": [Function],
       "rendered": Array [
+        null,
         Object {
           "instance": null,
           "key": undefined,

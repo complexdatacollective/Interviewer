@@ -74,7 +74,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { hideButton, icon, isOpen, items, searchField, title } = this.props;
+    const { hideButton, icon, isOpen, items, searchField, title, children } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -91,6 +91,7 @@ class MenuFactory extends Component {
 
     return (
       <div className="menu" ref={(node) => { this.domNode = node; }}>
+        {children}
         <div className={isOpen ? 'menu__wrap menu__content menu__wrap--open' : 'menu__wrap menu__content'}>
           <Scroller>
             <Icon name="close" size="40px" className="menu__cross" onClick={this.menuClick} />
@@ -117,6 +118,7 @@ MenuFactory.propTypes = {
   title: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   searchField: PropTypes.object,
+  children: PropTypes.node,
 };
 
 MenuFactory.defaultProps = {
@@ -125,6 +127,7 @@ MenuFactory.defaultProps = {
   items: [],
   searchField: null,
   title: 'Options',
+  children: null,
 };
 
 export default MenuFactory;
