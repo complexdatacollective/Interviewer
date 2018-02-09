@@ -30,6 +30,9 @@ const initialState = {
 };
 
 const toggleFullscreen = () => {
+  // Todo: use inEnvironment to provide a browser based verion of this.
+  // Is there anything we can do for Chromebooks?
+
   const electron = window.require('electron');
   const electronWindow = electron.remote.getCurrentWindow();
 
@@ -49,7 +52,6 @@ class SessionMenu extends Component {
     super();
 
     this.state = initialState;
-
     updater.on('UPDATE_AVAILABLE', ({ version, releaseNotes }) => {
       this.setState({
         updateDialog: {
@@ -157,6 +159,7 @@ class SessionMenu extends Component {
 
     const menuType = 'settings';
 
+
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
@@ -166,7 +169,12 @@ class SessionMenu extends Component {
     ];
 
     if (isElectron()) {
-      items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
+      items.push({
+        id: 'update-check',
+        label: 'Check for Update',
+        icon: 'menu-custom-interface',
+        onClick: updater.checkForUpdate,
+      });
       items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
     }
 
@@ -190,7 +198,7 @@ class SessionMenu extends Component {
         title="Session"
         toggleMenu={toggleMenu}
       >
-        <div style={{ position: 'absolute', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
+        <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="EXPORT_DATA"
           title="Export Error"

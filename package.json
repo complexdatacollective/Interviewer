@@ -53,6 +53,7 @@
         "cross-spawn": "4.0.2",
         "css-loader": "0.28.4",
         "detect-port": "1.1.0",
+        "diont": "git+https://github.com/codaco/Diont.git",
         "dotenv": "4.0.0",
         "electron": "^1.7.6",
         "electron-builder": "^19.26.3",
@@ -73,6 +74,7 @@
         "eslint-plugin-import": "2.7.0",
         "eslint-plugin-jsx-a11y": "5.1.1",
         "eslint-plugin-react": "^7.3.0",
+        "eventemitter3": "^3.0.1",
         "extract-text-webpack-plugin": "3.0.0",
         "faker": "^4.1.0",
         "file-loader": "0.11.2",
@@ -135,12 +137,15 @@
         "cordova-android": "^7.0.0",
         "cordova-ios": "^4.5.4",
         "cordova-plugin-app-version": "^0.1.9",
+        "cordova-plugin-chrome-apps-system-network": "git+https://github.com/MobileChromeApps/cordova-plugin-chrome-apps-system-network.git",
         "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-diont": "git+https://github.com/willemmulder/Diont-for-Cordova.git",
         "cordova-plugin-file": "^5.0.0",
         "cordova-plugin-file-transfer": "^1.7.1",
         "cordova-plugin-whitelist": "^1.3.3",
         "cordova-plugin-wkwebview-engine": "^1.1.4",
-        "cordova-plugin-x-socialsharing": "^5.2.1"
+        "cordova-plugin-x-socialsharing": "^5.2.1",
+        "diont": "^0.9.7"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",
@@ -203,6 +208,7 @@
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-wkwebview-engine": {},
             "cordova-plugin-file": {},
+            "cordova-plugin-diont": {},
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-whitelist": {}
         }

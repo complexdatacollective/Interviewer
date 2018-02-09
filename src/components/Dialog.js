@@ -35,7 +35,7 @@ const Dialog = (props) => {
     error: 'neon-coral',
   };
 
-  function createMarkup() {
+  const createMarkup = () => {
     const safeString = xss(additionalInformation, {
       whiteList: {
         h3: [],
@@ -48,7 +48,7 @@ const Dialog = (props) => {
     return {
       __html: safeString,
     };
-  }
+  };
 
   const dialogClasses = cx(`dialog__window dialog__window--${type}`);
   // eslint-disable-next-line react/no-danger

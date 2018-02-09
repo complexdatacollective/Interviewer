@@ -5,8 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { Form } from '../containers/';
+import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { Form, Dialog } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
+import ServerDiscoverer from '../utils/serverDiscoverer';
 
 const formConfig = {
   formName: 'setup',
@@ -30,24 +32,50 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  onClickImportRemoteProtocol = (fields) => {
-    if (fields) {
-      this.props.downloadProtocol(fields.protocol_url);
-    }
+  constructor() {
+    super();
+
+    this.serverDiscoverer = new ServerDiscoverer();
+
+    this.state = {
+      serverDiscoveryDialog: {
+        title: 'Server Dialog',
+        type: 'info',
+        additionalInformation: '',
+        content: null,
+        onConfirm: () => {},
+        confirmLabel: 'Continue',
+        hasCancelButton: false,
+      },
+    };
+  }
+
+  componentWillMount() {
+    this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
+      this.setState({
+        serverDiscoveryDialog: {
+          title: 'Network Canvas Server Found!',
+          type: 'info',
+          additionalInformation: JSON.stringify(response),
+          content: 'An installation of Network Canvas Server has been found nearby.',
+          onConfirm: () => {},
+          confirmLabel: 'Great!',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('SERVER_DISCOVERY');
+      });
+    });
   }
 
   onClickLoadFactoryProtocol = () => {
     this.props.loadFactoryProtocol('demo.canvas');
   }
 
-  onDialogConfirm = () => {
-    // eslint-disable-next-line no-console
-    console.log('dialog confirmed');
-  }
-
-  onDialogCancel = () => {
-    // eslint-disable-next-line no-console
-    console.log('dialog cancelled');
+  onClickImportRemoteProtocol = (fields) => {
+    if (fields) {
+      this.props.downloadProtocol(fields.protocol_url);
+    }
   }
 
   renderImportButtons() {
@@ -79,6 +107,17 @@ class Setup extends Component {
 
     return (
       <div className="setup">
+        <Dialog
+          name="SERVER_DISCOVERY"
+          title={this.state.serverDiscoveryDialog.title}
+          type={this.state.serverDiscoveryDialog.type}
+          confirmLabel={this.state.serverDiscoveryDialog.confirmLabel}
+          hasCancelButton={this.state.serverDiscoveryDialog.hasCancelButton}
+          additionalInformation={this.state.serverDiscoveryDialog.additionalInformation}
+          onConfirm={this.state.serverDiscoveryDialog.onConfirm}
+        >
+          {this.state.serverDiscoveryDialog.content}
+        </Dialog>
         <h1 className="type--title-1">Welcome to Network Canvas</h1>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
@@ -112,6 +151,7 @@ Setup.propTypes = {
   loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -126,6 +166,7 @@ function mapDispatchToProps(dispatch) {
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 

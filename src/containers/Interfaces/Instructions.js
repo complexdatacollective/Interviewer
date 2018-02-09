@@ -6,6 +6,8 @@ const renderItem = (item) => {
   switch (item.type) {
     case 'text':
       // TODO: Do we really need it to contain html tags?
+      // JRM: yes, we do. We can use the xss library (as we already do in Dialog)
+      // to be safer.
       // eslint-disable-next-line react/no-danger
       return <div dangerouslySetInnerHTML={{ __html: item.content }} />;
     case 'image':
