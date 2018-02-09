@@ -27,9 +27,9 @@ const renderItems = items =>
   ));
 
 /**
-  * Instruction Interface
+  * Information Interface
   */
-const Instructions = ({ stage: { title, items } }) => (
+const Information = ({ stage: { title, items } }) => (
   <div className="interface instructions-interface">
     <div className="instructions-interface__frame">
       <h1 className="instructions-interface__title">{ title }</h1>
@@ -40,8 +40,8 @@ const Instructions = ({ stage: { title, items } }) => (
   </div>
 );
 
-Instructions.propTypes = {
+Information.propTypes = {
   stage: PropTypes.object.isRequired,
 };
 
-export default Instructions;
+export default Information;
