@@ -17,11 +17,9 @@ class ServerDiscoverer {
       const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
       browser.on('serviceUp', (service) => {
         this.events.emit('SERVICE_ANNOUNCED', service);
-        console.log(service);
       });
       browser.on('serviceDown', (service) => {
         this.events.emit('SERVICE_REMOVED', service);
-        console.log(service);
       });
       browser.start();
     }
@@ -34,13 +32,10 @@ class ServerDiscoverer {
         const action = result.action;
         const service = result.service;
         if (action === 'added') {
-          console.log('service added', service);
           this.events.emit('SERVICE_ANNOUNCED', service);
         } else if (action === 'resolved') {
-          console.log('service resolved', service);
           this.events.emit('SERVICE_RESOLVED', service);
         } else {
-          console.log('service removed', service);
           this.events.emit('SERVICE_REMOVED', service);
         }
       });

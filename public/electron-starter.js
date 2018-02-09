@@ -1,4 +1,5 @@
 const electron = require('electron');
+const os = require('os');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -10,7 +11,7 @@ const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
-const isMacOS = () => require('os').platform() === 'darwin';
+const isMacOS = () => os.platform() === 'darwin';
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : {};
 

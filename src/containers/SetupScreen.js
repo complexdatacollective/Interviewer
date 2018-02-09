@@ -83,8 +83,7 @@ class Setup extends Component {
       });
     });
 
-    this.serverDiscoverer.on('SERVICE_REMOVED', (response) => {
-      console.log(response);
+    this.serverDiscoverer.on('SERVICE_REMOVED', () => {
       this.props.closeModal('SERVER_DISCOVERY');
     });
   }
