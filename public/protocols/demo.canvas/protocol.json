@@ -650,9 +650,9 @@
   },
   "stages": [
     {
-      "id": "intructrions1",
-      "label": "Instructions",
-      "type": "Instructions",
+      "id": "welcome",
+      "label": "Welcome",
+      "type": "Information",
       "title": "Title for the screen",
       "items": [
         { "type": "text", "content": "<p>Some arbitrary text content that can contain <strong>HTML</strong> tags.</p>" },
