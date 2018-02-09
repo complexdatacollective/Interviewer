@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 
-import { isString } from 'lodash';
 import { actionTypes as errorActionTypes } from './protocol';
 
 const ACKNOWLEDGE_ERROR = 'ERRORS/ACKNOWLEDGE_ERROR';
@@ -11,9 +10,8 @@ const initialState = {
 };
 
 const getErrorMessage = (error) => {
-  if (isString(error)) return error;
-  if (error && error.toString) return error.toString();
-  return 'Unknown error';
+  if (error && error.message) return error.message;
+  return error.toString();
 };
 
 export default function reducer(state = initialState, action = {}) {
