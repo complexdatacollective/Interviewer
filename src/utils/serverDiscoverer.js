@@ -8,7 +8,7 @@ class ServerDiscoverer {
       return { on: () => { /* noop */ } };
     }
 
-    const EventEmitter = window.require('eventemitter3');
+    const EventEmitter = require('eventemitter3');
     this.events = new EventEmitter();
 
     if (isElectron()) {

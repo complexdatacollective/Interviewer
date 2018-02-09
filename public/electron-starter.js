@@ -34,6 +34,8 @@ function createWindow() {
     protocol: 'file:'
   }));
 
+  mainWindow.openDevTools();
+
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
