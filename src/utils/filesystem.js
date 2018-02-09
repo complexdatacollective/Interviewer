@@ -1,6 +1,5 @@
-/* eslint-disable */
 /* eslint-disable global-require */
-/* global FileReader, window */
+/* global FileReader, window, cordova */
 
 import { trimChars } from 'lodash/fp';
 import environments from './environments';

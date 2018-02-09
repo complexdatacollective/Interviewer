@@ -6,6 +6,12 @@ import inEnvironment from '../Environment';
 import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from '../filesystem';
 import { protocolPath } from './';
 
+const isRequired = (param) => { throw new Error(`${param} is required`); };
+
+const prepareDestination = destination =>
+  removeDirectory(destination)
+    .then(() => ensurePathExists(destination));
+
 const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
@@ -51,12 +57,21 @@ const extractZipFile = inEnvironment((environment) => {
   throw new Error(`extractZipFile() not available on platform ${environment}`);
 });
 
-const extractZip = inEnvironment((environment) => {
-  if (environment !== environments.WEB) {
-    return (source, destination) =>
+const loadZip = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
+    return source =>
       readFile(source)
-        .then(data => Zip.loadAsync(data))
-        .then(zip =>
+        .then(data => Zip.loadAsync(data));
+  }
+
+  throw new Error(`loadZip() not available on platform ${environment}`);
+});
+
+const extractZip = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
+    return (zip, destination) =>
+      prepareDestination(destination)
+        .then(() =>
           inSequence(
             Object.values(zip.files),
             zipObject => (
@@ -71,7 +86,6 @@ const extractZip = inEnvironment((environment) => {
   throw new Error(`extractZip() not available on platform ${environment}`);
 });
 
-const isRequired = (param) => { throw new Error(`${param} is required`); };
 
 const importProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -81,9 +95,8 @@ const importProtocol = inEnvironment((environment) => {
       const protocolName = path.basename(protocolFile);
       const destination = protocolPath(protocolName);
 
-      return removeDirectory(destination)
-        .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFile, destination))
+      return loadZip(protocolFile)
+        .then(zip => extractZip(zip, destination))
         .then(() => protocolName);
     };
   }
@@ -93,9 +106,8 @@ const importProtocol = inEnvironment((environment) => {
       const protocolName = new URL(protocolFileUri).pathname.split('/').pop();
       const destination = protocolPath(protocolName);
 
-      return removeDirectory(destination)
-        .then(() => ensurePathExists(destination))
-        .then(() => extractZip(protocolFileUri, destination))
+      return loadZip(protocolFileUri)
+        .then(zip => extractZip(zip, destination))
         .then(() => protocolName);
     };
   }
