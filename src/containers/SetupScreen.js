@@ -66,6 +66,27 @@ class Setup extends Component {
         this.props.openModal('SERVER_DISCOVERY');
       });
     });
+
+    this.serverDiscoverer.on('SERVICE_RESOLVED', (response) => {
+      this.setState({
+        serverDiscoveryDialog: {
+          title: 'Network Canvas Server Resolved!',
+          type: 'info',
+          additionalInformation: JSON.stringify(response),
+          content: 'An installation of Network Canvas Server has been resolved nearby.',
+          onConfirm: () => {},
+          confirmLabel: 'Great!',
+          hasCancelButton: false,
+        },
+      }, () => {
+        this.props.openModal('SERVER_DISCOVERY');
+      });
+    });
+
+    this.serverDiscoverer.on('SERVICE_REMOVED', (response) => {
+      console.log(response);
+      this.props.closeModal('SERVER_DISCOVERY');
+    });
   }
 
   onClickLoadFactoryProtocol = () => {
@@ -152,6 +173,7 @@ Setup.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -167,6 +189,7 @@ function mapDispatchToProps(dispatch) {
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
+    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
   };
 }
 
