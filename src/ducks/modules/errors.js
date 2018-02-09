@@ -2,6 +2,7 @@
 
 import { actionTypes as errorActionTypes } from './protocol';
 
+const ERROR = 'ERRORS/ERROR';
 const ACKNOWLEDGE_ERROR = 'ERRORS/ACKNOWLEDGE_ERROR';
 
 const initialState = {
@@ -9,13 +10,9 @@ const initialState = {
   acknowledged: true,
 };
 
-const getErrorMessage = (error) => {
-  if (error && error.message) return error.message;
-  return error.toString();
-};
-
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ERROR:
     case errorActionTypes.DOWNLOAD_PROTOCOL_FAILED:
     case errorActionTypes.IMPORT_PROTOCOL_FAILED:
     case errorActionTypes.LOAD_PROTOCOL_FAILED:
@@ -23,7 +20,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         acknowledged: false,
-        errors: [...state.errors, getErrorMessage(action.error)],
+        errors: [...state.errors, action.error],
       };
     case ACKNOWLEDGE_ERROR:
       return {
@@ -39,11 +36,18 @@ const acknowledge = () => ({
   type: ACKNOWLEDGE_ERROR,
 });
 
+const error = e => ({
+  type: ERROR,
+  error: e,
+});
+
 const actionCreators = {
   acknowledge,
+  error,
 };
 
 const actionTypes = {
+  ERROR,
   ACKNOWLEDGE_ERROR,
 };
 

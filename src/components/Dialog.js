@@ -86,11 +86,11 @@ Dialog.propTypes = {
   children: PropTypes.any,
   show: PropTypes.bool,
   type: PropTypes.string.isRequired,
-  hasCancelButton: PropTypes.bool.isRequired,
+  hasCancelButton: PropTypes.bool,
   confirmLabel: PropTypes.string.isRequired,
   additionalInformation: PropTypes.string,
-  cancelLabel: PropTypes.string.isRequired,
-  onCancel: PropTypes.func.isRequired,
+  cancelLabel: PropTypes.string,
+  onCancel: PropTypes.func,
   onConfirm: PropTypes.func.isRequired,
 };
 
@@ -98,6 +98,9 @@ Dialog.defaultProps = {
   children: null,
   additionalInformation: null,
   show: false,
+  onCancel: () => {},
+  hasCancelButton: false,
+  cancelLabel: '',
 };
 
 export default Dialog;
