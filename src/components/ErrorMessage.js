@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Icon } from 'network-canvas-ui'; // eslint-disable-line
 import { actionCreators as errorActions } from '../ducks/modules/errors';
-import { Modal } from '../components/Transition';
+import { Dialog } from '../components';
 
 /**
   * Renders a dialog box.
@@ -19,25 +19,16 @@ const ErrorMessage = ({
   const isActive = (!!errorMessage && !acknowledged);
 
   return (
-    <Modal in={isActive}>
-      <div className="dialog">
-        <div className="dialog__background" transition-role="background" />
-        <div className="dialog__window" transition-role="window" onClick={e => e.stopPropagation()}>
-          <div className="dialog__main">
-            <div className="dialog__main-icon">
-              <Icon name="error" />
-            </div>
-            <div className="dialog__main-content">
-              <h2 className="dialog__main-title">Something went wrong!</h2>
-              {errorMessage}
-            </div>
-          </div>
-          <footer className="dialog__footer">
-            <Button onClick={acknowledgeError} content="Acknowledged" />
-          </footer>
-        </div>
-      </div>
-    </Modal>
+    <Dialog
+      title="Something went wrong!"
+      show={isActive}
+      type="error"
+      hasCancelButton={false}
+      confirmLabel="Acknowledged"
+      onConfirm={acknowledgeError}
+    >
+      {errorMessage}
+    </Dialog>
   );
 };
 
