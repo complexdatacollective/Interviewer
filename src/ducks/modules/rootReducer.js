@@ -5,8 +5,6 @@ import network from './network';
 import participant from './participant';
 import protocol from './protocol';
 import session from './session';
-import draggable from './draggable';
-import droppable from './droppable';
 import modals from './modals';
 import menu from './menu';
 import errors from './errors';
@@ -18,8 +16,6 @@ const appReducer = combineReducers({
   participant,
   protocol,
   session,
-  draggable,
-  droppable,
   modals,
   menu,
   errors,
