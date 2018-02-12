@@ -167,7 +167,6 @@ function makeMapStateToProps() {
     });
 
     return {
-      isDragging: state.draggable.isDragging,
       activePromptAttributes: props.prompt.additionalAttributes,
       panels,
       newNodeAttributes,
