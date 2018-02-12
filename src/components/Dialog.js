@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon } from 'network-canvas-ui';
-import xss from 'xss';
 import { Modal as ModalTransition } from '../components/Transition';
 
 /**
@@ -35,24 +34,7 @@ const Dialog = (props) => {
     error: 'neon-coral',
   };
 
-  function createMarkup() {
-    const safeString = xss(additionalInformation, {
-      whiteList: {
-        h3: [],
-        p: [],
-        ul: [],
-        li: [],
-      },
-      stripIgnoreTag: true,
-    });
-    return {
-      __html: safeString,
-    };
-  }
-
   const dialogClasses = cx(`dialog__window dialog__window--${type}`);
-  // eslint-disable-next-line react/no-danger
-  const additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} /> : '';
 
   return (
     <ModalTransition in={show}>
@@ -69,7 +51,9 @@ const Dialog = (props) => {
             </div>
           </div>
           <div className="dialog__additional-content">
-            {additionalTextarea}
+            <div className="dialog__additional-box">
+              {additionalInformation}
+            </div>
           </div>
           <footer className="dialog__footer">
             { cancelButton }
@@ -88,7 +72,7 @@ Dialog.propTypes = {
   type: PropTypes.string.isRequired,
   hasCancelButton: PropTypes.bool,
   confirmLabel: PropTypes.string.isRequired,
-  additionalInformation: PropTypes.string,
+  additionalInformation: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   cancelLabel: PropTypes.string,
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func.isRequired,
