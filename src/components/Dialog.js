@@ -50,11 +50,13 @@ const Dialog = (props) => {
               {children}
             </div>
           </div>
-          <div className="dialog__additional-content">
-            <div className="dialog__additional-box">
-              {additionalInformation}
+          { additionalInformation &&
+            <div className="dialog__additional-content">
+              <div className="dialog__additional-box">
+                {additionalInformation}
+              </div>
             </div>
-          </div>
+          }
           <footer className="dialog__footer">
             { cancelButton }
             <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />

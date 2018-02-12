@@ -14,6 +14,11 @@ const getErrorMessage = error =>
 
 const getStack = error => !!error && error.stack;
 
+const renderAdditionalInformation = stack => ([
+  <p><strong>You can help us sending us the information below:</strong></p>,
+  <code>{stack}</code>,
+]);
+
 /**
   * Renders a dialog box.
   */
@@ -24,6 +29,8 @@ const ErrorMessage = ({
 }) => {
   const isActive = (!!error && !acknowledged);
 
+  const stack = getStack(error);
+
   return (
     <Dialog
       title="Something went wrong!"
@@ -32,10 +39,7 @@ const ErrorMessage = ({
       hasCancelButton={false}
       confirmLabel="Acknowledged"
       onConfirm={acknowledgeError}
-      additionalInformation={[
-        <p><strong>You can help us sending us the information below:</strong></p>,
-        <code>{getStack(error)}</code>,
-      ]}
+      additionalInformation={stack && renderAdditionalInformation(stack)}
     >
       {error && (
         <div>

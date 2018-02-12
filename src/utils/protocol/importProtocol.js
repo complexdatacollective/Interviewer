@@ -94,7 +94,7 @@ const importZip = inEnvironment((environment) => {
       loadZip(protocolFile)
         .then(zip => extractZip(zip, destination))
         .catch(friendlyErrorMessage("We couldn't import the protocol. Check the format, and try again."))
-        .then(() => { console.log('pname', protocolName); return protocolName; });
+        .then(() => protocolName);
   }
 
   throw new Error(`loadZip() not available on platform ${environment}`);

@@ -58,15 +58,13 @@ const downloadProtocol = inEnvironment((environment) => {
           }),
         )
         .catch((error) => {
-          console.error(error);
-
           const getErrorMessage = ({ code }) => {
             if (code === 1) return "We couldn't find a Network Canvas protocol at the location you gave us. Check the location, and try again.";
             if (code === 3) return "Your device doesn't have an active internet connection, so we weren't able to fetch your protocol at this time. Connect to a network, and try again.";
             return "The location you gave us doesn't seem to be valid. Check the location, and try again.";
           };
 
-          friendlyErrorMessage(getErrorMessage(error))(new Error(error));
+          friendlyErrorMessage(getErrorMessage(error))(error);
         });
   }
 
