@@ -4,9 +4,9 @@ import inEnvironment from '../Environment';
 import factoryProtocolPath from './factoryProtocolPath';
 import { friendlyErrorMessage } from '../../ducks/modules/errors';
 
-const loadFactoryProtocol = (environment) => {
-  const readProtocolError = friendlyErrorMessage("We couldn't read the protocol. The file may be broken, please try importing it again.");
+const readProtocolError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 
+const loadFactoryProtocol = (environment) => {
   if (environment !== environments.WEB) {
     return protocolName =>
       readFile(factoryProtocolPath(protocolName, 'protocol.json'))

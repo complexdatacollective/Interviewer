@@ -18,6 +18,9 @@ const getURL = uri =>
 
 const getProtocolNameFromUrl = url => url.pathname.split('/').pop();
 
+const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
+const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again.");
+
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request');
@@ -32,9 +35,9 @@ const downloadProtocol = inEnvironment((environment) => {
           url.href,
           path.join(tempPath, getProtocolNameFromUrl(url)),
         ])
-        .catch(friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again."))
+        .catch(urlError)
         .then(([url, destination]) => writeStream(destination, request({ uri: url })))
-        .catch(friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again."));
+        .catch(networkError);
     };
   }
 
@@ -45,7 +48,7 @@ const downloadProtocol = inEnvironment((environment) => {
           url.href,
           `cdvfile://localhost/temporary/${getProtocolNameFromUrl(url)}`,
         ])
-        .catch(friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again."))
+        .catch(urlError)
         .then(([url, destination]) =>
           new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();

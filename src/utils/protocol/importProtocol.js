@@ -9,6 +9,9 @@ import { friendlyErrorMessage } from '../../ducks/modules/errors';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
+const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
+const loadError = friendlyErrorMessage("We couldn't load that Network Canvas protocol. Try importing again.");
+
 const prepareDestination = destination =>
   removeDirectory(destination)
     .then(() => ensurePathExists(destination));
@@ -82,7 +85,7 @@ const loadZip = inEnvironment((environment) => {
     return source =>
       readFile(source)
         .then(data => Zip.loadAsync(data))
-        .catch(friendlyErrorMessage("We couldn't find a Network Canvas protocol at the location you gave us. Check the location, and try again."));
+        .catch(loadError);
   }
 
   throw new Error(`loadZip() not available on platform ${environment}`);
@@ -93,7 +96,7 @@ const importZip = inEnvironment((environment) => {
     return (protocolFile, protocolName, destination) =>
       loadZip(protocolFile)
         .then(zip => extractZip(zip, destination))
-        .catch(friendlyErrorMessage("We couldn't import the protocol. Check the format, and try again."))
+        .catch(openError)
         .then(() => protocolName);
   }
 
