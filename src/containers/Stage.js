@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import getInterface from '../containers/Interfaces';
-import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { actionCreators as stageActions } from '../ducks/modules/session/stage';
 
 /**
   * Render a protocol interface based on protocol info and id

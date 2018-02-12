@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
-import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { actionCreators as stageActions } from '../ducks/modules/session/stage';
 import { stages, stage, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
 import { Menu } from '../components';
 
