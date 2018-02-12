@@ -36,14 +36,23 @@ const acknowledge = () => ({
   type: ACKNOWLEDGE_ERROR,
 });
 
-const error = e => ({
+const errorAction = e => ({
   type: ERROR,
   error: e,
 });
 
+const friendlyErrorMessage = message =>
+  (error) => {
+    if (error.friendlyMessage) { throw error; }
+
+    // eslint-disable-next-line no-param-reassign
+    error.friendlyMessage = message;
+    throw error;
+  };
+
 const actionCreators = {
   acknowledge,
-  error,
+  error: errorAction,
 };
 
 const actionTypes = {
@@ -54,4 +63,5 @@ const actionTypes = {
 export {
   actionCreators,
   actionTypes,
+  friendlyErrorMessage,
 };

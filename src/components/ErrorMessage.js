@@ -9,7 +9,8 @@ import { Button, Icon } from 'network-canvas-ui'; // eslint-disable-line
 import { actionCreators as errorActions } from '../ducks/modules/errors';
 import { Dialog } from '../components';
 
-const getErrorMessage = error => !!error && error.message;
+const getErrorMessage = error =>
+  !!error && (error.friendlyMessage ? error.friendlyMessage : error.toString());
 
 const getStack = error => !!error && error.stack;
 
@@ -31,12 +32,16 @@ const ErrorMessage = ({
       hasCancelButton={false}
       confirmLabel="Acknowledged"
       onConfirm={acknowledgeError}
-      additionalInformation={getStack(error)}
-    >
-      {error && ([
-        <p>{getErrorMessage(error)}</p>,
+      additionalInformation={[
         <p><strong>You can help us sending us the information below:</strong></p>,
-      ])}
+        <code>{getStack(error)}</code>,
+      ]}
+    >
+      {error && (
+        <div>
+          <p>{getErrorMessage(error)}</p>
+        </div>
+      )}
     </Dialog>
   );
 };

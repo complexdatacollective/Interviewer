@@ -1,18 +1,22 @@
 /* eslint-disable global-require */
 /* global window, FileTransfer */
 
+import Promise from 'bluebird';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeStream } from '../filesystem';
+import { friendlyErrorMessage } from '../../ducks/modules/errors';
 
-const getProtocolNameFromUri = uri =>
+const getURL = uri =>
   new Promise((resolve, reject) => {
     try {
-      resolve(new URL(uri).pathname.split('/').pop());
-    } catch (e) {
-      reject(e);
+      resolve(new URL(uri));
+    } catch (error) {
+      reject(error);
     }
   });
+
+const getProtocolNameFromUrl = url => url.pathname.split('/').pop();
 
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -23,27 +27,37 @@ const downloadProtocol = inEnvironment((environment) => {
     return (uri) => {
       const tempPath = (electron.app || electron.remote.app).getPath('temp');
 
-      return getProtocolNameFromUri(uri)
-        .then(protocolName => path.join(tempPath, protocolName))
-        .then(destination => writeStream(destination, request(uri)));
+      return getURL(uri)
+        .then(url => [
+          url.href,
+          path.join(tempPath, getProtocolNameFromUrl(url)),
+        ])
+        .catch(friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again."))
+        .then(([url, destination]) => writeStream(destination, request({ uri: url })))
+        .catch(friendlyErrorMessage("Your device doesn't have an active internet connection, so we weren't able to fetch your protocol at this time. Connect to a network, and try again."));
     };
   }
 
   if (environment === environments.CORDOVA) {
     return uri =>
-      getProtocolNameFromUri(uri)
-        .then(protocolName => `cdvfile://localhost/temporary/${protocolName}`)
-        .then(destination =>
+      getURL(uri)
+        .then(url => [
+          url.href,
+          `cdvfile://localhost/temporary/${getProtocolNameFromUrl(url)}`,
+        ])
+        .catch(friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again."))
+        .then(([url, destination]) =>
           new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
             fileTransfer.download(
-              encodeURI(uri),
+              url,
               destination,
               () => resolve(destination),
               error => reject(`Error code: ${error.code}. (${error.source})`),
             );
           }),
-        );
+        )
+        .catch(friendlyErrorMessage("Your device doesn't have an active internet connection, so we weren't able to fetch your protocol at this time. Connect to a network, and try again."));
   }
 
   throw new Error(`downloadProtocol() not available on platform ${environment}`);
