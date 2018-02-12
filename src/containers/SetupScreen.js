@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
@@ -7,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { actionCreators as errorActions } from '../ducks/modules/errors';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 
@@ -33,10 +30,6 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  componentDidMount() {
-    this.props.error(new Error('test'));
-  }
-
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.downloadProtocol(fields.protocol_url);
@@ -129,7 +122,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    error: bindActionCreators(errorActions.error, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
