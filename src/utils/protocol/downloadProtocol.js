@@ -34,7 +34,7 @@ const downloadProtocol = inEnvironment((environment) => {
         ])
         .catch(friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again."))
         .then(([url, destination]) => writeStream(destination, request({ uri: url })))
-        .catch(friendlyErrorMessage("Your device doesn't have an active internet connection, so we weren't able to fetch your protocol at this time. Connect to a network, and try again."));
+        .catch(friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again."));
     };
   }
 
