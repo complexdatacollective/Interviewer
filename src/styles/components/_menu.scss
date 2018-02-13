@@ -43,6 +43,11 @@
   &__search {
     padding: 1rem;
 
+    &--closed {
+      // Hiding the input keeps iOS from displaying input nav keys to it
+      visibility: hidden;
+    }
+
     input {
       border-radius: .5rem;
       outline: none;
