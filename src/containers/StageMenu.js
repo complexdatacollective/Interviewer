@@ -50,7 +50,7 @@ class StageMenu extends Component {
       }));
 
     const search = (
-      <div className="menu__search">
+      <div className={`menu__search ${isOpen ? '' : 'menu__search--closed'}`}>
         <input ref={(input) => { this.search = input; }} type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
       </div>
     );
