@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, ToggleInput } from 'network-canvas-ui';
+import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -84,10 +84,6 @@ class Setup extends Component {
           Thank you for taking the time to explore this exciting new chapter in
           the development of our software.
         </p>
-        <ToggleInput
-          name="likesHedgehogs"
-          label="Do you like hedgehogs?"
-        />
         <h2 className="type--title-2">Help us to improve</h2>
         <p>
           You can help us by giving feedback on

@@ -167,9 +167,6 @@ export const sociogramOptionsProps = {
   createEdge: PropTypes.string.isRequired,
   displayEdges: PropTypes.array.isRequired,
   canCreateEdge: PropTypes.bool.isRequired,
-  allowHighlighting: PropTypes.bool.isRequired,
   highlightAttributes: PropTypes.object.isRequired,
   nodeBinSortOrder: PropTypes.object.isRequired,
-  concentricCircles: PropTypes.number.isRequired,
-  skewedTowardCenter: PropTypes.bool.isRequired,
 };

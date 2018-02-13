@@ -12,7 +12,7 @@
         "variables": {
           "name": {
             "label": "Name",
-            "description": "Human readable description",
+            "description": "The alter's name.",
             "type": "text",
             "validation": {
               "required": true,
@@ -20,22 +20,28 @@
               "maxLength": 24
             }
           },
+          "contactFreq": {
+            "label": "Contact frequency ordinal variable.",
+            "description": "Contact frequency ordinal variable",
+            "type": "ordinal"
+          },
           "outsideOfSchool": {
             "label": "Have you contacted this person outside of school in the past 7 days?",
+            "description": "If the participant has contacted the alter outside of school in the past 7 days.",
             "type": "checkbox"
           },
           "yearsKnown": {
             "label": "How many years have you known this person for?",
-            "description": "Human readable description",
+            "description": "How many years the participant has known the alter.",
             "type": "number",
             "validation": {
               "required": true
             }
           },
           "gender": {
-            "label": "Gender",
-            "description": "Human readable description",
-            "type": "number",
+            "label": "What is this person's gender?",
+            "description": "Percieved gender of the alter.",
+            "type": "text",
             "options": ["Male", "Female", "Non-binary"],
             "validation": {
               "required": true
@@ -43,12 +49,12 @@
           },
           "nickname": {
             "label": "Nickname",
-            "description": "Human readable description",
+            "description": "Participant Nickname",
             "type": "text",
             "validation": {
               "required": true,
               "minLength": 1,
-              "maxLength": 8
+              "maxLength": 10
             }
           }
         }
@@ -361,18 +367,212 @@
       "prompts": [
         {
           "id": "6cl",
-          "text": "Please list all the <strong>people from school</strong> who are important to you.",
+          "text": "Please list all the people from school who are important to you.",
           "additionalAttributes": {
             "school_important": true
           }
-        },
+        }
+      ]
+    },
+    {
+      "id": "namegen2",
+      "type": "NameGenerator",
+      "label": "Name Generator 2",
+      "form": "person",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
         {
           "id": "6dl",
-          "text": "Please list all the <strong>family members</strong> who are important to you.",
+          "text": "Please list all the family members who are important to you.",
           "additionalAttributes": {
             "family_important": true
           }
+        },
+        {
+          "id": "6el",
+          "text": "Please list all the people the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
+          "additionalAttributes": {
+            "community_important": true
+          }
+        },
+        {
+          "id": "6fl",
+          "text": "Please list anyone you only know online who is important to you.",
+          "additionalAttributes": {
+            "online_important": true
+          }
+        },
+        {
+          "id": "6gl",
+          "text": "Finally, is there anyone else important to you who was not yet listed",
+          "additionalAttributes": {
+            "other_important": true
+          }
         }
+      ]
+    },
+    {
+      "id": "sociogramInstruction",
+      "label": "Arranging Nodes",
+      "type": "Information",
+      "title": "Arranging nodes in the sociogram.",
+      "items": [
+        { "type": "text", "content": "<p>On the next screen you will be able to move the nodes corresponding to each person. One by one move them from the corner of the screen to the circle in the middle. Then, we will draw lines between people who know each other.</p>" },
+        { "type": "text", "content": "<p>Tips:</p><ul><li>Place people who know each other near to each other</li><li>Please people who know you best closest to the middle</li><li>Leave lots of room between nodes</li></ul>" }
+      ]
+    },
+    {
+      "id": "sociogram",
+      "type": "Sociogram",
+      "label": "Sociogram",
+      "prompts": [
+        {
+          "id": "layout",
+          "text": "Please arrange the nodes on the screen. Place people who know each other near each other and place the people you know best closest to the centre. Leave space between each node if you can.",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          }
+        }
+      ]
+    },
+    {
+      "id": "edgeInstruction",
+      "label": "Drawing Ties",
+      "type": "Information",
+      "title": "Drawing ties between people.",
+      "items": [
+        { "type": "text", "content": "<p>A social network typically includes a way to show relationship between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:</p>" },
+        { "type": "text", "content": "<ul><li>Click (or tap) on the first node.</li><li>Click (or tap) on the second node.</li></ul><p>A line should appear between the two nodes.</p>" },
+        { "type": "text", "content": "<p>Tips:</p><ul><li> If the people are too close to see the line, spread them out a little bit.</li><li>If you make a line and want to delete it, just select the two people like before and the line should disappear.</li></ul>" },
+        { "type": "image", "content": "demo.gif" }
+      ]
+    },
+    {
+      "id": "sociogram2",
+      "type": "Sociogram",
+      "label": "Sociogram Edges",
+      "prompts": [
+        {
+          "id": "edge",
+          "text": "Please mark the relationships between any two people who know each other personally. Click on the first person and then the second to draw the line between two nodes. ",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"],
+            "create": "friends"
+          }
+        },
+        {
+          "id": "select1",
+          "text": "Who lives near (<5km) to you?",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"]
+          },
+          "highlight": {
+            "variable": "lives_nearby",
+            "value": true,
+            "allowHighlighting": true
+          }
+        },
+        {
+          "id": "select2",
+          "text": "If you have a Facebook account, which of these people are your friends on Facebook?",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"]
+          },
+          "highlight": {
+            "variable": "facebook_friend",
+            "value": true,
+            "allowHighlighting": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin1",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
+        {
+          "id": "contactFreq",
+          "title": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
+          "variable": "contact_freq",
+          "bins": {
+            "values": {
+              "Last 24 hours": 4,
+              "Last week": 3,
+              "Last six months": 2,
+              "Last two years": 1,
+              "Over two years ago": -1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "exportInstruction",
+      "label": "Export Data",
+      "type": "Information",
+      "title": "Exporting Data",
+      "items": [
+        { "type": "text", "content": "<p>This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire.</p>" },
+        { "type": "text", "content": "<p>Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning.</p>" },
+        { "type": "text", "content": "<p>To export this data and continue with some further analysis, please use the option in the settings menu.</p>" }
+      ]
+    },
+    {
+      "id": "finalInstruction",
+      "label": "Finished",
+      "type": "Information",
+      "title": "Thank you!",
+      "items": [
+        { "type": "text", "content": "<p>To learn more about Network Canvas, please visit our website at <a href=\"http://www.networkcanvas.com/\">http://www.networkcanvas.com/</a>.</p>" }
       ]
     }
   ]
