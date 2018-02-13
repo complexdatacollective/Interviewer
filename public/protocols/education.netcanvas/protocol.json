@@ -20,6 +20,10 @@
               "maxLength": 24
             }
           },
+          "outsideOfSchool": {
+            "label": "Have you contacted this person outside of school in the past 7 days?",
+            "type": "checkbox"
+          },
           "yearsKnown": {
             "label": "How many years have you known this person for?",
             "description": "Human readable description",
@@ -304,6 +308,10 @@
         {
           "variable": "nickname",
           "component": "TextInput"
+        },
+        {
+          "variable": "outsideOfSchool",
+          "component": "ToggleInput"
         },
         {
           "variable": "gender",

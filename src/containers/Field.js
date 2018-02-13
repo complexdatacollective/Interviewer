@@ -8,6 +8,7 @@ import {
   TextInput,
   RadioGroup,
   ToggleGroup,
+  ToggleInput,
 } from 'network-canvas-ui';
 
 import validations from '../utils/Validations';
@@ -69,6 +70,17 @@ export const makeRenderInput = (componentType) => {
         options,
         colors,
         onOptionClick: (e, checked, optionVal) => input.onChange({
+          ...input.value,
+          [optionVal]: checked,
+        }),
+      };
+    }
+
+    if (componentType === 'ToggleInput') {
+      InputComponent = ToggleInput;
+      inputProps = {
+        ...inputProps,
+        onCheck: (e, checked, optionVal) => input.onCheck({
           ...input.value,
           [optionVal]: checked,
         }),
