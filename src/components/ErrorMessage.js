@@ -4,59 +4,65 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { last } from 'lodash';
 import { Button, Icon } from 'network-canvas-ui'; // eslint-disable-line
 import { actionCreators as errorActions } from '../ducks/modules/errors';
-import { Modal } from '../components/Transition';
+import { Dialog } from '../components';
+
+const getErrorMessage = error =>
+  !!error && (error.friendlyMessage ? error.friendlyMessage : error.toString());
+
+const getStack = error => !!error && error.stack;
+
+const renderAdditionalInformation = stack => ([
+  <p><strong>Detailed information:</strong></p>,
+  <code>{stack}</code>,
+]);
 
 /**
   * Renders a dialog box.
   */
 const ErrorMessage = ({
-  errorMessage,
+  error,
   acknowledged,
   acknowledgeError,
 }) => {
-  const isActive = (!!errorMessage && !acknowledged);
+  const isActive = (!!error && !acknowledged);
+
+  const stack = getStack(error);
 
   return (
-    <Modal in={isActive}>
-      <div className="dialog">
-        <div className="dialog__background" transition-role="background" />
-        <div className="dialog__window" transition-role="window" onClick={e => e.stopPropagation()}>
-          <div className="dialog__main">
-            <div className="dialog__main-icon">
-              <Icon name="error" />
-            </div>
-            <div className="dialog__main-content">
-              <h2 className="dialog__main-title">Something went wrong!</h2>
-              {errorMessage}
-            </div>
-          </div>
-          <footer className="dialog__footer">
-            <Button onClick={acknowledgeError} content="Acknowledged" />
-          </footer>
+    <Dialog
+      title="Something went wrong!"
+      show={isActive}
+      type="error"
+      hasCancelButton={false}
+      confirmLabel="Acknowledged"
+      onConfirm={acknowledgeError}
+      additionalInformation={stack && renderAdditionalInformation(stack)}
+    >
+      {error && (
+        <div>
+          <p>{getErrorMessage(error)}</p>
         </div>
-      </div>
-    </Modal>
+      )}
+    </Dialog>
   );
 };
 
 ErrorMessage.propTypes = {
   acknowledged: PropTypes.bool,
-  errorMessage: PropTypes.string,
+  error: PropTypes.instanceOf(Error),
   acknowledgeError: PropTypes.func.isRequired,
 };
 
 ErrorMessage.defaultProps = {
   acknowledged: true,
-  errorMessage: '',
+  error: null,
 };
 
-
 const mapStateToProps = state => ({
-  errorMessage: state.errors.errors.length > 0 ?
-    state.errors.errors[state.errors.errors.length - 1] :
-    '',
+  error: last(state.errors.errors) || null,
   acknowledged: state.errors.acknowledged,
 });
 

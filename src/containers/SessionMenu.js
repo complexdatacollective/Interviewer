@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
+import xss from 'xss';
 import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
@@ -40,6 +41,21 @@ const toggleFullscreen = () => {
   }
 };
 
+function createMarkup(htmlString) {
+  const safeString = xss(htmlString, {
+    whiteList: {
+      h3: [],
+      p: [],
+      ul: [],
+      li: [],
+    },
+    stripIgnoreTag: true,
+  });
+
+  // eslint-disable-next-line react/no-danger
+  return <div dangerouslySetInnerHTML={{ __html: safeString }} />;
+}
+
 /**
   * Renders a Menu using stages to construct items in the menu
   * @extends Component
@@ -56,7 +72,7 @@ class SessionMenu extends Component {
           title: `Version ${version} is Available`,
           type: 'info',
           content: `Version ${version} of Network Canvas is available to download. You are currently using ${this.state.version}. Would you like to download it now?`,
-          additionalInformation: releaseNotes,
+          additionalInformation: createMarkup(releaseNotes),
           onConfirm: () => { this.confirmUpdateDownload(); },
           confirmLabel: 'Download now',
           hasCancelButton: true,

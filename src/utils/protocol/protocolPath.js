@@ -25,7 +25,7 @@ const protocolPath = (environment) => {
     };
   }
 
-  throw new Error('protocolPath not specified on this platform');
+  throw new Error('protocolPath() not specified on this platform');
 };
 
 export default inEnvironment(protocolPath);
