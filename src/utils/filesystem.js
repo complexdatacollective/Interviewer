@@ -144,12 +144,24 @@ const writeFile = inEnvironment((environment) => {
         .then(makeFileWriter)
         .then(fileWriter =>
           new Promise((resolve, reject) => {
-            fileWriter.onwriteend = () => resolve(); // eslint-disable-line no-param-reassign
+            fileWriter.onwriteend = () => resolve(fileUrl); // eslint-disable-line no-param-reassign
             fileWriter.onerror = error => reject(error); // eslint-disable-line no-param-reassign
             fileWriter.write(data);
           }),
         );
     };
+  }
+
+  if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
+    return (filePath, data) =>
+      new Promise((resolve, reject) => {
+        fs.writeFile(filePath, data, (error) => {
+          if (error) { reject(error); }
+          resolve(filePath);
+        });
+      });
   }
 
   throw new Error(`writeFile() not available on platform ${environment}`);
@@ -279,12 +291,16 @@ const writeStream = inEnvironment((environment) => {
 
     return (destination, stream) =>
       new Promise((resolve, reject) => {
-        stream
-          .pipe(fs.createWriteStream(destination))
-          .on('error', reject)
-          .on('finish', () => {
-            resolve(destination);
-          });
+        try {
+          stream
+            .pipe(fs.createWriteStream(destination))
+            .on('error', reject)
+            .on('finish', () => {
+              resolve(destination);
+            });
+        } catch (error) {
+          reject(error);
+        }
       });
   }
 
