@@ -15,7 +15,7 @@ const getErrorMessage = error =>
 const getStack = error => !!error && error.stack;
 
 const renderAdditionalInformation = stack => ([
-  <p><strong>You can help us sending us the information below:</strong></p>,
+  <p><strong>Detailed information:</strong></p>,
   <code>{stack}</code>,
 ]);
 
