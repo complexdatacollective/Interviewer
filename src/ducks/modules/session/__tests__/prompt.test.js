@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import reducer, { actionCreators, actionTypes } from '../prompt';
-import { actionTypes as protocolActionTypes } from '../protocol';
+import { actionTypes as protocolActionTypes } from '../../protocol';
 import { actionTypes as stageActionTypes } from '../stage';
 
 const stage = {
