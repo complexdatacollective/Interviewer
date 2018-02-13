@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 /* global window, FileTransfer */
-
-import Promise from 'bluebird';
+import { isEmpty } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeStream } from '../filesystem';
@@ -16,7 +15,11 @@ const getURL = uri =>
     }
   });
 
-const getProtocolNameFromUrl = url => url.pathname.split('/').pop();
+const getProtocolNameFromUrl = (url) => {
+  const protocolName = url.pathname.split('/').pop();
+  if (isEmpty(protocolName)) { throw Error('Protocol name cannot be empty'); }
+  return protocolName;
+};
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again.");
