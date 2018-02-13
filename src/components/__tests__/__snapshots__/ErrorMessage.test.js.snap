@@ -1,0 +1,661 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ErrorMessage /> renders ok 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <ErrorMessage
+    acknowledgeError={[Function]}
+    acknowledged={false}
+    errorMessage="There was an error"
+/>,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "children": <div
+        className="dialog"
+>
+        <div
+                className="dialog__background"
+                transition-role="background"
+        />
+        <div
+                className="dialog__window"
+                onClick={[Function]}
+                transition-role="window"
+        >
+                <div
+                        className="dialog__main"
+                >
+                        <div
+                                className="dialog__main-icon"
+                        >
+                                <Icon
+                                        className=""
+                                        color=""
+                                        name="error"
+                                        style={Object {}}
+                                />
+                        </div>
+                        <div
+                                className="dialog__main-content"
+                        >
+                                <h2
+                                        className="dialog__main-title"
+                                >
+                                        Something went wrong!
+                                </h2>
+                                There was an error
+                        </div>
+                </div>
+                <footer
+                        className="dialog__footer"
+                >
+                        <Button
+                                color=""
+                                content="Acknowledged"
+                                icon=""
+                                iconPosition="right"
+                                onClick={[Function]}
+                                size=""
+                        />
+                </footer>
+        </div>
+</div>,
+      "in": true,
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="dialog__background"
+            transition-role="background"
+/>,
+          <div
+            className="dialog__window"
+            onClick={[Function]}
+            transition-role="window"
+>
+            <div
+                        className="dialog__main"
+            >
+                        <div
+                                    className="dialog__main-icon"
+                        >
+                                    <Icon
+                                                className=""
+                                                color=""
+                                                name="error"
+                                                style={Object {}}
+                                    />
+                        </div>
+                        <div
+                                    className="dialog__main-content"
+                        >
+                                    <h2
+                                                className="dialog__main-title"
+                                    >
+                                                Something went wrong!
+                                    </h2>
+                                    There was an error
+                        </div>
+            </div>
+            <footer
+                        className="dialog__footer"
+            >
+                        <Button
+                                    color=""
+                                    content="Acknowledged"
+                                    icon=""
+                                    iconPosition="right"
+                                    onClick={[Function]}
+                                    size=""
+                        />
+            </footer>
+</div>,
+        ],
+        "className": "dialog",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "className": "dialog__background",
+            "transition-role": "background",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="dialog__main"
+>
+                <div
+                                className="dialog__main-icon"
+                >
+                                <Icon
+                                                className=""
+                                                color=""
+                                                name="error"
+                                                style={Object {}}
+                                />
+                </div>
+                <div
+                                className="dialog__main-content"
+                >
+                                <h2
+                                                className="dialog__main-title"
+                                >
+                                                Something went wrong!
+                                </h2>
+                                There was an error
+                </div>
+</div>,
+              <footer
+                className="dialog__footer"
+>
+                <Button
+                                color=""
+                                content="Acknowledged"
+                                icon=""
+                                iconPosition="right"
+                                onClick={[Function]}
+                                size=""
+                />
+</footer>,
+            ],
+            "className": "dialog__window",
+            "onClick": [Function],
+            "transition-role": "window",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <div
+                    className="dialog__main-icon"
+>
+                    <Icon
+                                        className=""
+                                        color=""
+                                        name="error"
+                                        style={Object {}}
+                    />
+</div>,
+                  <div
+                    className="dialog__main-content"
+>
+                    <h2
+                                        className="dialog__main-title"
+                    >
+                                        Something went wrong!
+                    </h2>
+                    There was an error
+</div>,
+                ],
+                "className": "dialog__main",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <Icon
+                      className=""
+                      color=""
+                      name="error"
+                      style={Object {}}
+/>,
+                    "className": "dialog__main-icon",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "class",
+                    "props": Object {
+                      "className": "",
+                      "color": "",
+                      "name": "error",
+                      "style": Object {},
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "div",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <h2
+                        className="dialog__main-title"
+>
+                        Something went wrong!
+</h2>,
+                      "There was an error",
+                    ],
+                    "className": "dialog__main-content",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "children": "Something went wrong!",
+                        "className": "dialog__main-title",
+                      },
+                      "ref": null,
+                      "rendered": "Something went wrong!",
+                      "type": "h2",
+                    },
+                    "There was an error",
+                  ],
+                  "type": "div",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <Button
+                  color=""
+                  content="Acknowledged"
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size=""
+/>,
+                "className": "dialog__footer",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": null,
+                  "color": "",
+                  "content": "Acknowledged",
+                  "icon": "",
+                  "iconPosition": "right",
+                  "onClick": [Function],
+                  "size": "",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "footer",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": <div
+          className="dialog"
+>
+          <div
+                    className="dialog__background"
+                    transition-role="background"
+          />
+          <div
+                    className="dialog__window"
+                    onClick={[Function]}
+                    transition-role="window"
+          >
+                    <div
+                              className="dialog__main"
+                    >
+                              <div
+                                        className="dialog__main-icon"
+                              >
+                                        <Icon
+                                                  className=""
+                                                  color=""
+                                                  name="error"
+                                                  style={Object {}}
+                                        />
+                              </div>
+                              <div
+                                        className="dialog__main-content"
+                              >
+                                        <h2
+                                                  className="dialog__main-title"
+                                        >
+                                                  Something went wrong!
+                                        </h2>
+                                        There was an error
+                              </div>
+                    </div>
+                    <footer
+                              className="dialog__footer"
+                    >
+                              <Button
+                                        color=""
+                                        content="Acknowledged"
+                                        icon=""
+                                        iconPosition="right"
+                                        onClick={[Function]}
+                                        size=""
+                              />
+                    </footer>
+          </div>
+</div>,
+        "in": true,
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="dialog__background"
+              transition-role="background"
+/>,
+            <div
+              className="dialog__window"
+              onClick={[Function]}
+              transition-role="window"
+>
+              <div
+                            className="dialog__main"
+              >
+                            <div
+                                          className="dialog__main-icon"
+                            >
+                                          <Icon
+                                                        className=""
+                                                        color=""
+                                                        name="error"
+                                                        style={Object {}}
+                                          />
+                            </div>
+                            <div
+                                          className="dialog__main-content"
+                            >
+                                          <h2
+                                                        className="dialog__main-title"
+                                          >
+                                                        Something went wrong!
+                                          </h2>
+                                          There was an error
+                            </div>
+              </div>
+              <footer
+                            className="dialog__footer"
+              >
+                            <Button
+                                          color=""
+                                          content="Acknowledged"
+                                          icon=""
+                                          iconPosition="right"
+                                          onClick={[Function]}
+                                          size=""
+                            />
+              </footer>
+</div>,
+          ],
+          "className": "dialog",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "className": "dialog__background",
+              "transition-role": "background",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <div
+                  className="dialog__main"
+>
+                  <div
+                                    className="dialog__main-icon"
+                  >
+                                    <Icon
+                                                      className=""
+                                                      color=""
+                                                      name="error"
+                                                      style={Object {}}
+                                    />
+                  </div>
+                  <div
+                                    className="dialog__main-content"
+                  >
+                                    <h2
+                                                      className="dialog__main-title"
+                                    >
+                                                      Something went wrong!
+                                    </h2>
+                                    There was an error
+                  </div>
+</div>,
+                <footer
+                  className="dialog__footer"
+>
+                  <Button
+                                    color=""
+                                    content="Acknowledged"
+                                    icon=""
+                                    iconPosition="right"
+                                    onClick={[Function]}
+                                    size=""
+                  />
+</footer>,
+              ],
+              "className": "dialog__window",
+              "onClick": [Function],
+              "transition-role": "window",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <div
+                      className="dialog__main-icon"
+>
+                      <Icon
+                                            className=""
+                                            color=""
+                                            name="error"
+                                            style={Object {}}
+                      />
+</div>,
+                    <div
+                      className="dialog__main-content"
+>
+                      <h2
+                                            className="dialog__main-title"
+                      >
+                                            Something went wrong!
+                      </h2>
+                      There was an error
+</div>,
+                  ],
+                  "className": "dialog__main",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": <Icon
+                        className=""
+                        color=""
+                        name="error"
+                        style={Object {}}
+/>,
+                      "className": "dialog__main-icon",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "class",
+                      "props": Object {
+                        "className": "",
+                        "color": "",
+                        "name": "error",
+                        "style": Object {},
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": "div",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "children": Array [
+                        <h2
+                          className="dialog__main-title"
+>
+                          Something went wrong!
+</h2>,
+                        "There was an error",
+                      ],
+                      "className": "dialog__main-content",
+                    },
+                    "ref": null,
+                    "rendered": Array [
+                      Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "host",
+                        "props": Object {
+                          "children": "Something went wrong!",
+                          "className": "dialog__main-title",
+                        },
+                        "ref": null,
+                        "rendered": "Something went wrong!",
+                        "type": "h2",
+                      },
+                      "There was an error",
+                    ],
+                    "type": "div",
+                  },
+                ],
+                "type": "div",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <Button
+                    color=""
+                    content="Acknowledged"
+                    icon=""
+                    iconPosition="right"
+                    onClick={[Function]}
+                    size=""
+/>,
+                  "className": "dialog__footer",
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": null,
+                    "color": "",
+                    "content": "Acknowledged",
+                    "icon": "",
+                    "iconPosition": "right",
+                    "onClick": [Function],
+                    "size": "",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "footer",
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

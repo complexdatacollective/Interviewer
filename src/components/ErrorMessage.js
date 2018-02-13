@@ -70,6 +70,8 @@ const mapDispatchToProps = dispatch => ({
   acknowledgeError: bindActionCreators(errorActions.acknowledge, dispatch),
 });
 
+export { ErrorMessage };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
