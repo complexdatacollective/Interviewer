@@ -6,6 +6,7 @@ import loadProtocol from '../loadProtocol';
 import protocolPath from '../protocolPath';
 import { readFile } from '../../filesystem';
 
+jest.mock('../../../ducks/modules/protocol');
 jest.mock('../../filesystem');
 jest.mock('../protocolPath');
 

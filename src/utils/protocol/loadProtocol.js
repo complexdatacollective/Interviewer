@@ -14,7 +14,7 @@ const loadProtocol = (environment) => {
         .catch(openError);
   }
 
-  throw Error(`loadProtocol not supported in this environment "${environment}"`);
+  return () => Promise.reject(new Error('loadProtocol() not supported on this platform'));
 };
 
 export default inEnvironment(loadProtocol);

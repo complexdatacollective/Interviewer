@@ -35,7 +35,7 @@ const extractZipDirectory = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`extractZipDir() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZipDir() not available on platform'));
 });
 
 const extractZipFile = inEnvironment((environment) => {
@@ -58,7 +58,7 @@ const extractZipFile = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`extractZipFile() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZipFile() not available on platform'));
 });
 
 const extractZip = inEnvironment((environment) => {
@@ -77,7 +77,7 @@ const extractZip = inEnvironment((environment) => {
         );
   }
 
-  throw new Error(`extractZip() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZip() not available on platform'));
 });
 
 const loadZip = inEnvironment((environment) => {
@@ -100,7 +100,7 @@ const importZip = inEnvironment((environment) => {
         .then(() => protocolName);
   }
 
-  throw new Error(`loadZip() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('loadZip() not available on platform'));
 });
 
 const importProtocol = inEnvironment((environment) => {
@@ -124,7 +124,7 @@ const importProtocol = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`importProtocol() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('importProtocol() not available on platform'));
 });
 
 export default importProtocol;

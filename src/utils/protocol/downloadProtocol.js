@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* eslint-disable global-require */
 /* global window, FileTransfer */
 import { isEmpty } from 'lodash';
@@ -24,7 +23,7 @@ const getProtocolNameFromUrl = (url) => {
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again.");
-const fileError = friendlyErrorMessage("The protocol could not be saved to your device.");
+const fileError = friendlyErrorMessage('The protocol could not be saved to your device.');
 
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -79,7 +78,7 @@ const downloadProtocol = inEnvironment((environment) => {
         });
   }
 
-  throw new Error(`downloadProtocol() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('downloadProtocol() not available on platform'));
 });
 
 export default downloadProtocol;

@@ -21,7 +21,7 @@ const loadFactoryProtocol = (environment) => {
         .catch(readProtocolError);
   }
 
-  throw Error(`loadFactoryProtocol not supported in this environment "${environment}"`);
+  return () => Promise.reject(new Error('loadFactoryProtocol not supported on this platform'));
 };
 
 export default inEnvironment(loadFactoryProtocol);
