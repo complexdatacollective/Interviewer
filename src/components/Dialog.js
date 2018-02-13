@@ -74,7 +74,7 @@ Dialog.propTypes = {
   type: PropTypes.string.isRequired,
   hasCancelButton: PropTypes.bool,
   confirmLabel: PropTypes.string.isRequired,
-  additionalInformation: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  additionalInformation: PropTypes.node,
   cancelLabel: PropTypes.string,
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func.isRequired,
