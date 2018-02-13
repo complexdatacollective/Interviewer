@@ -36,8 +36,8 @@ class Setup extends Component {
     }
   }
 
-  onClickLoadFactoryProtocol = () => {
-    this.props.loadFactoryProtocol('demo.canvas');
+  onClickLoadFactoryProtocol = (protocolName) => {
+    this.props.loadFactoryProtocol(protocolName);
   }
 
   onDialogConfirm = () => {
@@ -79,7 +79,7 @@ class Setup extends Component {
 
     return (
       <div className="setup">
-        <h1 className="type--title-1">Welcome to Network Canvas</h1>
+        <h1 className="type--title-1">Welcome to Network Canvas Alpha 2 - Milliways</h1>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
           the development of our software.
@@ -98,7 +98,8 @@ class Setup extends Component {
           {this.renderImportButtons()}
 
           <p>
-            <Button onClick={this.onClickLoadFactoryProtocol} content="Load demo protocol" />
+            <Button onClick={() => this.onClickLoadFactoryProtocol('education.netcanvas')} content="Load teaching protocol" />&nbsp;
+            <Button onClick={() => this.onClickLoadFactoryProtocol('development.netcanvas')} content="Load development protocol" />
           </p>
         </div>
       </div>

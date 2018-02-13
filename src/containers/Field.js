@@ -51,6 +51,7 @@ export const makeRenderInput = (componentType) => {
     };
 
     if (componentType === 'RadioGroup') {
+      console.log('RADIO');
       InputComponent = RadioGroup;
       inputProps = {
         ...inputProps,

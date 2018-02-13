@@ -1,0 +1,371 @@
+{
+  "name": "Teaching Protocol",
+  "version": "1.0.0",
+  "networkCanvasVersion": "~4.0.0",
+  "variableRegistry": {
+    "node": {
+      "person": {
+        "label": "Person",
+        "color": "coral",
+        "displayVariable": "nickname",
+        "iconVariant": "add-a-person",
+        "variables": {
+          "name": {
+            "label": "Name",
+            "description": "Human readable description",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 24
+            }
+          },
+          "yearsKnown": {
+            "label": "How many years have you known this person for?",
+            "description": "Human readable description",
+            "type": "number",
+            "validation": {
+              "required": true
+            }
+          },
+          "gender": {
+            "label": "Gender",
+            "description": "Human readable description",
+            "type": "number",
+            "options": ["Male", "Female", "Non-binary"],
+            "validation": {
+              "required": true
+            }
+          },
+          "nickname": {
+            "label": "Nickname",
+            "description": "Human readable description",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 8
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "friend": {
+        "label": "Friend",
+        "color": "mustard",
+        "variables": {
+          "contact_freq": {
+            "label": "contact_freq",
+            "description": "Contact frequency.",
+            "type": "ordinal",
+            "values": {
+              "Very Often": 4,
+              "Often": 3,
+              "Sometimes": 2,
+              "Rarely": 1,
+              "Never": -1
+            }
+          }
+        }
+      },
+      "professional": {
+        "label": "Professional",
+        "color": "kiwi",
+        "variables": {
+        }
+      }
+    }
+  },
+  "externalData": {
+    "schoolPupils": {
+      "nodes": [
+        {
+          "type": "person",
+          "name": "F. Anita",
+          "nickname": "Annie",
+          "age": "23"
+        },
+        {
+          "type": "person",
+          "name": "H. Barry",
+          "nickname": "Baz",
+          "age": "31"
+        },
+        {
+          "uid": "person_3",
+          "type": "person",
+          "name": "Carlito",
+          "nickname": "Carl",
+          "age": "25"
+        },
+        {
+          "uid": "person_4",
+          "type": "person",
+          "name": "Dee",
+          "nickname": "Dee",
+          "age": "72"
+        },
+        {
+          "uid": "person_5",
+          "type": "person",
+          "name": "A. Eugine",
+          "nickname": "Eu",
+          "age": "27"
+        },
+        {
+          "uid": "person_6",
+          "type": "person",
+          "name": "Gerald",
+          "nickname": "Gary",
+          "age": "33"
+        },
+        {
+          "uid": "person_7",
+          "type": "person",
+          "name": "Hannah L.",
+          "nickname": "Hannah",
+          "age": "81"
+        },
+        {
+          "uid": "person_8",
+          "type": "person",
+          "name": "Isabella",
+          "nickname": "Izzy",
+          "age": "25"
+        },
+        {
+          "uid": "person_9",
+          "type": "person",
+          "name": "Jacob",
+          "nickname": "Jake",
+          "age": "52"
+        },
+        {
+          "uid": "person_10",
+          "type": "person",
+          "name": "Kaylee",
+          "nickname": "Lee",
+          "age": "57"
+        },
+        {
+          "uid": "person_11",
+          "type": "person",
+          "name": "Lily",
+          "nickname": "Lil",
+          "age": "93"
+        },
+        {
+          "uid": "person_12",
+          "type": "person",
+          "name": "Michael",
+          "nickname": "Mike",
+          "age": "91"
+        },
+        {
+          "uid": "person_13",
+          "type": "person",
+          "name": "Noah",
+          "nickname": "Nole",
+          "age": "65"
+        },
+        {
+          "uid": "person_14",
+          "type": "person",
+          "name": "K. Olivia",
+          "nickname": "Olivia",
+          "age": "42"
+        },
+        {
+          "uid": "person_15",
+          "type": "person",
+          "name": "Penelope",
+          "nickname": "Nellie",
+          "age": "47"
+        },
+        {
+          "uid": "person_16",
+          "type": "person",
+          "name": "Quentin",
+          "nickname": "Quinn",
+          "age": "33"
+        },
+        {
+          "uid": "person_17",
+          "type": "person",
+          "name": "Y. Randall",
+          "nickname": "Randy",
+          "age": "51"
+        },
+        {
+          "uid": "person_18",
+          "type": "person",
+          "name": "Sophia",
+          "nickname": "Fia",
+          "age": "85"
+        },
+        {
+          "uid": "person_19",
+          "type": "person",
+          "name": "Tatiana",
+          "nickname": "Ana",
+          "age": "72"
+        },
+        {
+          "uid": "person_20",
+          "type": "person",
+          "name": "Uriel",
+          "nickname": "Uri",
+          "age": "17"
+        },
+        {
+          "uid": "person_21",
+          "type": "person",
+          "name": "Vanessa",
+          "nickname": "Ness",
+          "age": "56"
+        },
+        {
+          "uid": "person_22",
+          "type": "person",
+          "name": "William",
+          "nickname": "Bill",
+          "age": "61"
+        },
+        {
+          "uid": "person_23",
+          "type": "person",
+          "name": "Xavier",
+          "nickname": "X",
+          "age": "65"
+        },
+        {
+          "uid": "person_24",
+          "type": "person",
+          "name": "Yolanda",
+          "nickname": "Landa",
+          "age": "29"
+        },
+        {
+          "uid": "person_25",
+          "type": "person",
+          "name": "T. Zoe",
+          "nickname": "Zoe",
+          "age": "87"
+        },
+        {
+          "uid": "person_26",
+          "type": "person",
+          "name": "Fernando",
+          "nickname": "Finn",
+          "age": "63"
+        },
+        {
+          "uid": "person_27",
+          "type": "person",
+          "name": "Daniella",
+          "nickname": "Dani",
+          "age": "71"
+        },
+        {
+          "uid": "person_28",
+          "type": "person",
+          "name": "P. Samuel",
+          "nickname": "Sammy",
+          "age": "20"
+        },
+        {
+          "uid": "person_29",
+          "type": "person",
+          "name": "Brooklyn",
+          "nickname": "Brook",
+          "age": "24"
+        },
+        {
+          "uid": "person_30",
+          "type": "person",
+          "name": "Christopher",
+          "nickname": "Topher",
+          "age": "66"
+        }
+      ]
+    }
+  },
+  "forms": {
+    "person": {
+      "title": "Add A Person",
+      "entity": "node",
+      "type": "person",
+      "fields": [
+        {
+          "variable": "name",
+          "component": "TextInput"
+        },
+        {
+          "variable": "nickname",
+          "component": "TextInput"
+        },
+        {
+          "variable": "gender",
+          "component": "RadioGroup"
+        },
+        {
+          "variable": "yearsKnown",
+          "component": "TextInput"
+        }
+      ]
+    }
+  },
+  "stages": [
+    {
+      "id": "welcome",
+      "label": "Welcome",
+      "type": "Information",
+      "title": "Welcome to the Teaching Protocol",
+      "items": [
+        { "type": "text", "content": "<p>Welcome to Network Canvas. This is the Network Canvas App. It is used for field studies of self-reported social network data. It is part of a suite of apps being developed by the Complex Data Collective and administered by Northwestern University and the University of Oxford. The other apps in the suite enable users to develop their own protocols for the Network Canvas App as well as manage the data that is returned from the app.</p><p>This version is a simple name generator. Answer these questions honestly and sincerely and you will create a version of your own personal network. You can then visualize this network here or open it in social network analysis programs such as UCInet, NodeXL and Gephi.</p><p>No data is transmitted between this app and the Network Canvas team. This is solely for demonstration purposes. To begin tap “Continue” (or use the > next button on the right).</p>" }
+      ]
+    },
+    {
+      "id": "generatingNames",
+      "label": "Generating Names",
+      "type": "Information",
+      "title": "Generating Names",
+      "items": [
+        { "type": "text", "content": "<p>The first part of creating a personal network is to generate a list of names. On the next screen you will be asked to create “nodes”. Each node represents a person you know. List as many people as you can who fit the criteria.</p>" }
+      ]
+    },
+    {
+      "id": "namegen1",
+      "type": "NameGenerator",
+      "label": "Name Generator 1",
+      "form": "person",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "panels": {
+          "external": {
+            "title": "Your classmates",
+            "dataSource": "schoolPupils"
+          }
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "Please list all the <strong>people from school</strong> who are important to you.",
+          "additionalAttributes": {
+            "school_important": true
+          }
+        },
+        {
+          "id": "6dl",
+          "text": "Please list all the <strong>family members</strong> who are important to you.",
+          "additionalAttributes": {
+            "family_important": true
+          }
+        }
+      ]
+    }
+  ]
+}
