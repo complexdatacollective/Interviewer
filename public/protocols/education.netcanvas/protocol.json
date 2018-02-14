@@ -452,7 +452,7 @@
       "type": "Information",
       "title": "Drawing ties between people.",
       "items": [
-        { "type": "text", "content": "<p>A social network typically includes a way to show relationship between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:</p>" },
+        { "type": "text", "content": "<p>A social network typically includes a way to show relationships between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:</p>" },
         { "type": "text", "content": "<ul><li>Click (or tap) on the first node.</li><li>Click (or tap) on the second node.</li></ul><p>A line should appear between the two nodes.</p>" },
         { "type": "text", "content": "<p>Tips:</p><ul><li> If the people are too close to see the line, spread them out a little bit.</li><li>If you make a line and want to delete it, just select the two people like before and the line should disappear.</li></ul>" },
         { "type": "video", "content": "linking.mp4" }

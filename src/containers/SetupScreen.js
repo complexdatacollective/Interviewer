@@ -85,9 +85,8 @@ class Setup extends Component {
         </div>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
-          the development of our software.
+          the development of our software. Help us to improve by giving feedback on our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u>
         </p>
-        <p className="type--title-2">Help us to improve by giving feedback on our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u></p>
         <br />
 
         <div className="setup__start">
