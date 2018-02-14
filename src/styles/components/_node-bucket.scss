@@ -6,4 +6,7 @@
   );
   border-radius: 150px;
   padding: 20px;
+  .node {
+    font-size: calc(var(--node-base-size) * 0.66);
+  }
 }

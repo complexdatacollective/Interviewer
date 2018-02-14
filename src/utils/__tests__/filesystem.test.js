@@ -12,11 +12,11 @@ describe('filesystem', () => {
 
     it('getNestedPaths', () => {
       expect(
-        getNestedPaths('cdvfile://localhost/persistent/protocols/demo.canvas/assets'),
+        getNestedPaths('cdvfile://localhost/persistent/protocols/development.netcanvas/assets'),
       ).toEqual([
         'cdvfile://localhost/persistent/protocols/',
-        'cdvfile://localhost/persistent/protocols/demo.canvas/',
-        'cdvfile://localhost/persistent/protocols/demo.canvas/assets/',
+        'cdvfile://localhost/persistent/protocols/development.netcanvas/',
+        'cdvfile://localhost/persistent/protocols/development.netcanvas/assets/',
       ]);
     });
   });

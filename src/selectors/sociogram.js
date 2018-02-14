@@ -194,6 +194,4 @@ export const sociogramOptionsProps = {
   allowHighlighting: PropTypes.bool.isRequired,
   highlightAttributes: PropTypes.object,
   nodeBinSortOrder: PropTypes.object.isRequired,
-  concentricCircles: PropTypes.number.isRequired,
-  skewedTowardCenter: PropTypes.bool.isRequired,
 };

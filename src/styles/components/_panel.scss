@@ -1,11 +1,11 @@
 $heading-size: 100px;
 
 .panel {
-  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration)
+  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration);
   flex: 1 0 $heading-size;
   display: flex;
   flex-direction: column;
-  background-color: palette('light-background');
+  background-color: #36335f; // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
   border-color: palette('primary');
   border-style: solid;
   border-width: 0;
