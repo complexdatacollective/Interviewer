@@ -7,7 +7,7 @@
   flex: 1;
   overflow-x: hidden;
   overflow-y: scroll;
-  -webkit-overflow-scrolling: touch; // gives native inertial scrolling on iOS
+  -webkit-overflow-scrolling: touch;
   mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 1) 75px, rgba(0, 0, 0, 1) 100%, rgba(0, 0, 0, 0) 100%);
 
   &::-webkit-scrollbar {
