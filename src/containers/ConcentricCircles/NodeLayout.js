@@ -121,7 +121,7 @@ class NodeLayout extends Component {
     );
   }
 
-  isSelected(node) {
+  isHighlighted(node) {
     return !isEmpty(this.props.highlightAttributes) &&
       isMatch(node, this.props.highlightAttributes);
   }
@@ -151,7 +151,7 @@ class NodeLayout extends Component {
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}
-              selected={this.isSelected(node)}
+              selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}
               allowPositioning={allowPositioning}
               allowSelect={allowSelect}

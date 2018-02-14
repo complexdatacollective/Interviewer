@@ -58,7 +58,9 @@ const makeGetHighlightOptions = () =>
       const allowHighlighting = highlight && !edges.canCreateEdge ? get(highlight, 'allowHighlighting', true) : false;
       return ({
         allowHighlighting,
-        highlightAttributes: allowHighlighting ? { [highlight.variable]: highlight.value } : {},
+        highlightAttributes: highlight.variable ?
+          { [highlight.variable]: highlight.value } :
+          undefined,
       });
     },
   );
@@ -190,7 +192,7 @@ export const sociogramOptionsProps = {
   displayEdges: PropTypes.array.isRequired,
   canCreateEdge: PropTypes.bool.isRequired,
   allowHighlighting: PropTypes.bool.isRequired,
-  highlightAttributes: PropTypes.object.isRequired,
+  highlightAttributes: PropTypes.object,
   nodeBinSortOrder: PropTypes.object.isRequired,
   concentricCircles: PropTypes.number.isRequired,
   skewedTowardCenter: PropTypes.bool.isRequired,
