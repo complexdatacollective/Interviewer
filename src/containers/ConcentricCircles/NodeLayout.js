@@ -77,7 +77,9 @@ class NodeLayout extends Component {
   }
 
   onSelected = (node) => {
-    const { allowSelect } = this.props;
+    const {
+      allowSelect,
+    } = this.props;
 
     if (!allowSelect) { return; }
 
@@ -89,8 +91,10 @@ class NodeLayout extends Component {
   }
 
   connectNode(nodeId) {
-    const { createEdge } = this.props;
+    const { createEdge, canCreateEdge } = this.props;
     const { connectFrom } = this.state;
+
+    if (!canCreateEdge) { return; }
 
     if (!connectFrom) {
       this.setState({ connectFrom: nodeId });
@@ -109,6 +113,8 @@ class NodeLayout extends Component {
   }
 
   toggleHighlightAttributes(nodeId) {
+    if (!this.props.allowHighlighting) { return; }
+
     this.props.toggleHighlight(
       nodeId,
       { ...this.props.highlightAttributes },

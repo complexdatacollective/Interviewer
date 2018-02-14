@@ -44,8 +44,8 @@ const makeGetEdgeOptions = () =>
   createDeepEqualSelector(
     propPromptEdges,
     edges => ({
-      displayEdges: has(edges, 'display') ? edges.display : [],
-      createEdge: has(edges, 'create') ? edges.create : null,
+      displayEdges: get(edges, 'display', []),
+      createEdge: get(edges, 'create', undefined),
       canCreateEdge: has(edges, 'create'),
     }),
   );
@@ -78,7 +78,7 @@ const getBackgroundOptions = createDeepEqualSelector(
   background => ({
     concentricCircles: has(background, 'concentricCircles') ? background.concentricCircles : undefined,
     skewedTowardCenter: has(background, 'skewedTowardCenter') ? background.skewedTowardCenter : true,
-    image: has(background, 'image') ? background.image : undefined,
+    image: get(background, 'image', undefined),
   }),
 );
 
@@ -186,7 +186,7 @@ export const makeGetPlacedNodes = () => {
 export const sociogramOptionsProps = {
   layoutVariable: PropTypes.string.isRequired,
   allowPositioning: PropTypes.bool.isRequired,
-  createEdge: PropTypes.string.isRequired,
+  createEdge: PropTypes.string,
   displayEdges: PropTypes.array.isRequired,
   canCreateEdge: PropTypes.bool.isRequired,
   allowHighlighting: PropTypes.bool.isRequired,
