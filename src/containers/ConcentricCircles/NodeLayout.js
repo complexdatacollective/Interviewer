@@ -116,9 +116,11 @@ class NodeLayout extends Component {
   }
 
   isSelected(node) {
-    const { allowSelect } = this.props;
+    const { allowHighlighting } = this.props;
 
-    if (!allowSelect) { return false; }
+    console.log(node, allowHighlighting);
+
+    if (!allowHighlighting) { return false; }
 
     return (
       node.id === this.state.connectFrom ||
@@ -130,7 +132,7 @@ class NodeLayout extends Component {
     const {
       nodes,
       allowPositioning,
-      allowSelect,
+      allowHighlighting,
       layoutVariable,
     } = this.props;
 
@@ -147,7 +149,7 @@ class NodeLayout extends Component {
               onSelected={() => this.onSelected(node)}
               selected={this.isSelected(node)}
               allowPositioning={allowPositioning}
-              allowSelect={allowSelect}
+              allowSelect={allowHighlighting}
               areaWidth={this.props.width}
               areaHeight={this.props.height}
             />

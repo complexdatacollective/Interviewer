@@ -1,7 +1,23 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { find, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, pick, values, flatten, flow } from 'lodash';
+import {
+  find,
+  filter,
+  has,
+  get,
+  reject,
+  first,
+  toPairs,
+  unzip,
+  orderBy,
+  lowerCase,
+  groupBy,
+  pick,
+  values,
+  flatten,
+  flow,
+} from 'lodash';
 import { PropTypes } from 'prop-types';
 import { networkEdges, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
@@ -35,10 +51,13 @@ const getEdgeOptions = createDeepEqualSelector(
 
 const getHighlightOptions = createDeepEqualSelector(
   propPromptHighlight,
-  highlight => ({
-    allowHighlighting: has(highlight, 'allowHighlighting') ? highlight.allowHighlighting : false,
-    highlightAttributes: has(highlight, 'allowHighlighting') ? { [highlight.variable]: highlight.value } : {},
-  }),
+  (highlight) => {
+    const allowHighlighting = highlight ? get(highlight, 'allowHighlighting', true) : false;
+    return ({
+      allowHighlighting,
+      highlightAttributes: allowHighlighting ? { [highlight.variable]: highlight.value } : {},
+    });
+  },
 );
 
 const getLayoutOptions = createDeepEqualSelector(
