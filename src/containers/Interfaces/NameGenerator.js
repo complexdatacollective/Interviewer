@@ -12,11 +12,6 @@ import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
 
-const forms = {
-  ADD_NODE: Symbol('ADD_NODE'),
-  EDIT_NODE: Symbol('EDIT_NODE'),
-};
-
 // Render method for the node labels
 const label = node => `${node.nickname}`;
 
@@ -27,6 +22,11 @@ const label = node => `${node.nickname}`;
 class NameGenerator extends Component {
   constructor(props) {
     super(props);
+
+    this.forms = {
+      ADD_NODE: Symbol('ADD_NODE'),
+      EDIT_NODE: Symbol('EDIT_NODE'),
+    };
 
     this.state = {
       selectedNode: null,
@@ -59,7 +59,7 @@ class NameGenerator extends Component {
    */
   onSelectNode = (node) => {
     this.setState({ selectedNode: node }, () => {
-      this.props.openModal(forms.EDIT_NODE);
+      this.props.openModal(this.forms.EDIT_NODE);
     });
   }
 
@@ -123,7 +123,7 @@ class NameGenerator extends Component {
 
         <NodeForm
           node={this.state.selectedNode}
-          name={forms.EDIT_NODE}
+          name={this.forms.EDIT_NODE}
           title={form.title}
           fields={form.fields}
           entity={form.entity}
@@ -133,7 +133,7 @@ class NameGenerator extends Component {
         />
 
         <NodeForm
-          name={forms.ADD_NODE}
+          name={this.forms.ADD_NODE}
           title={form.title}
           fields={form.fields}
           entity={form.entity}
@@ -143,7 +143,7 @@ class NameGenerator extends Component {
           addAnother
         />
 
-        <button className="name-generator-interface__add-person" onClick={() => openModal(forms.ADD_NODE)}>
+        <button className="name-generator-interface__add-person" onClick={() => openModal(this.forms.ADD_NODE)}>
           Add a person
         </button>
 
