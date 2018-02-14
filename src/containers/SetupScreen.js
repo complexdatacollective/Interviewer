@@ -7,6 +7,7 @@ import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
+import logo from '../images/NC-Round.svg';
 
 const formConfig = {
   formName: 'setup',
@@ -54,13 +55,12 @@ class Setup extends Component {
     if (isElectron() || isCordova()) {
       return (
         <div>
-          <p>Import a custom protocol:</p>
           <div className="setup__custom-protocol">
             <Form
               form={formConfig.formName}
               onSubmit={this.onClickImportRemoteProtocol}
               initialValues={initialValues}
-              controls={[<Button key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
+              controls={[<Button size="small" key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
               {...formConfig}
             />
           </div>
@@ -79,18 +79,15 @@ class Setup extends Component {
 
     return (
       <div className="setup">
-        <h1 className="type--title-1">Welcome to Network Canvas Alpha 2 - Milliways</h1>
+        <div className="setup__header">
+          <img src={logo} className="logo" alt="Network Canvas" />
+          <h1 className="type--title-1">Welcome to Network Canvas Alpha 2 - Milliways</h1>
+        </div>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
           the development of our software.
         </p>
-        <h2 className="type--title-2">Help us to improve</h2>
-        <p>
-          You can help us by giving feedback on
-          our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u>
-        </p>
-        <br />
-        <hr />
+        <p className="type--title-2">Help us to improve by giving feedback on our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u></p>
         <br />
 
         <div className="setup__start">
