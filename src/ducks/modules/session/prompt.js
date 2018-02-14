@@ -1,6 +1,6 @@
 import { REHYDRATE } from 'redux-persist/constants';
-import { actionTypes as protocolActionTypes } from '../../ducks/modules/protocol';
-import { actionTypes as stageActionTypes } from '../../ducks/modules/stage';
+import { actionTypes as protocolActionTypes } from '../protocol';
+import { actionTypes as stageActionTypes } from './stage';
 
 const NEXT_PROMPT = 'NEXT_PROMPT';
 const PREVIOUS_PROMPT = 'PREVIOUS_PROMPT';

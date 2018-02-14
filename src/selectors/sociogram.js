@@ -1,7 +1,23 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { find, filter, has, reject, first, toPairs, unzip, orderBy, lowerCase, groupBy, pick, values, flatten, flow } from 'lodash';
+import {
+  find,
+  filter,
+  has,
+  get,
+  reject,
+  first,
+  toPairs,
+  unzip,
+  orderBy,
+  lowerCase,
+  groupBy,
+  pick,
+  values,
+  flatten,
+  flow,
+} from 'lodash';
 import { PropTypes } from 'prop-types';
 import { networkEdges, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
@@ -24,22 +40,30 @@ const propPromptSort = (_, props) => props.prompt.nodeBinSortOrder;
 
 // MemoedSelectors
 
-const getEdgeOptions = createDeepEqualSelector(
-  propPromptEdges,
-  edges => ({
-    displayEdges: has(edges, 'display') ? edges.display : [],
-    createEdge: has(edges, 'create') ? edges.create : null,
-    canCreateEdge: has(edges, 'create'),
-  }),
-);
+const makeGetEdgeOptions = () =>
+  createDeepEqualSelector(
+    propPromptEdges,
+    edges => ({
+      displayEdges: get(edges, 'display', []),
+      createEdge: get(edges, 'create', undefined),
+      canCreateEdge: has(edges, 'create'),
+    }),
+  );
 
-const getHighlightOptions = createDeepEqualSelector(
-  propPromptHighlight,
-  highlight => ({
-    allowHighlighting: has(highlight, 'allowHighlighting') ? highlight.allowHighlighting : false,
-    highlightAttributes: has(highlight, 'allowHighlighting') ? { [highlight.variable]: highlight.value } : {},
-  }),
-);
+const makeGetHighlightOptions = () =>
+  createDeepEqualSelector(
+    makeGetEdgeOptions(),
+    propPromptHighlight,
+    (edges, highlight) => {
+      const allowHighlighting = highlight && !edges.canCreateEdge ? get(highlight, 'allowHighlighting', true) : false;
+      return ({
+        allowHighlighting,
+        highlightAttributes: has(highlight, 'variable') ?
+          { [highlight.variable]: highlight.value } :
+          undefined,
+      });
+    },
+  );
 
 const getLayoutOptions = createDeepEqualSelector(
   propPromptLayout,
@@ -56,15 +80,15 @@ const getBackgroundOptions = createDeepEqualSelector(
   background => ({
     concentricCircles: has(background, 'concentricCircles') ? background.concentricCircles : undefined,
     skewedTowardCenter: has(background, 'skewedTowardCenter') ? background.skewedTowardCenter : true,
-    image: has(background, 'image') ? background.image : undefined,
+    image: get(background, 'image', undefined),
   }),
 );
 
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
     getLayoutOptions,
-    getEdgeOptions,
-    getHighlightOptions,
+    makeGetEdgeOptions(),
+    makeGetHighlightOptions(),
     getBackgroundOptions,
     getSortOptions,
     (layoutOptions, edgeOptions, highlightOptions, backgroundOptions, sortOptions) => ({
@@ -73,7 +97,7 @@ export const makeGetSociogramOptions = () =>
       ...highlightOptions,
       ...sortOptions,
       ...backgroundOptions,
-      allowSelect: highlightOptions.allowHighlighting || edgeOptions.canCreateEdge,
+      allowSelect: edgeOptions.canCreateEdge || highlightOptions.allowHighlighting,
     }),
   );
 
@@ -136,7 +160,7 @@ export const makeDisplayEdgesForPrompt = () => {
   return createSelector(
     networkNodesForSubject,
     networkEdges,
-    getEdgeOptions,
+    makeGetEdgeOptions(),
     getLayoutOptions,
     (nodes, edges, edgeOptions, { layoutVariable }) => {
       const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);
@@ -164,9 +188,10 @@ export const makeGetPlacedNodes = () => {
 export const sociogramOptionsProps = {
   layoutVariable: PropTypes.string.isRequired,
   allowPositioning: PropTypes.bool.isRequired,
-  createEdge: PropTypes.string.isRequired,
+  createEdge: PropTypes.string,
   displayEdges: PropTypes.array.isRequired,
   canCreateEdge: PropTypes.bool.isRequired,
-  highlightAttributes: PropTypes.object.isRequired,
+  allowHighlighting: PropTypes.bool.isRequired,
+  highlightAttributes: PropTypes.object,
   nodeBinSortOrder: PropTypes.object.isRequired,
 };

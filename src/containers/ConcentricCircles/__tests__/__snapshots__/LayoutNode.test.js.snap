@@ -11,6 +11,7 @@ ShallowWrapper {
     areaWidth={100}
     draggableType="bar"
     layoutVariable="foo"
+    linking={false}
     node={
         Object {
             "foo": Object {
@@ -47,6 +48,7 @@ ShallowWrapper {
                       }
         }
         label={undefined}
+        linking={false}
         meta={[Function]}
         onSelected={[Function]}
         selected={false}
@@ -72,6 +74,7 @@ ShallowWrapper {
           "y": 0.2,
         },
         "label": undefined,
+        "linking": false,
         "meta": [Function],
         "onSelected": [Function],
         "selected": false,
@@ -99,6 +102,7 @@ ShallowWrapper {
                             }
           }
           label={undefined}
+          linking={false}
           meta={[Function]}
           onSelected={[Function]}
           selected={false}
@@ -124,6 +128,7 @@ ShallowWrapper {
             "y": 0.2,
           },
           "label": undefined,
+          "linking": false,
           "meta": [Function],
           "onSelected": [Function],
           "selected": false,

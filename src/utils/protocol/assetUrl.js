@@ -35,7 +35,7 @@ const assetUrl = (environment) => {
       Promise.resolve(`/protocols/${protocolName}/assets/${assetPath}`);
   }
 
-  throw Error();
+  return () => Promise.reject(new Error('assetUrl is not supported on this platform'));
 };
 
 export default inEnvironment(assetUrl);

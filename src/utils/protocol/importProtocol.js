@@ -5,8 +5,12 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from '../filesystem';
 import { protocolPath } from './';
+import { friendlyErrorMessage } from '../../ducks/modules/errors';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
+
+const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
+const loadError = friendlyErrorMessage("We couldn't load that Network Canvas protocol. Try importing again.");
 
 const prepareDestination = destination =>
   removeDirectory(destination)
@@ -31,7 +35,7 @@ const extractZipDirectory = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`extractZipDir() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZipDir() not available on platform'));
 });
 
 const extractZipFile = inEnvironment((environment) => {
@@ -54,17 +58,7 @@ const extractZipFile = inEnvironment((environment) => {
     };
   }
 
-  throw new Error(`extractZipFile() not available on platform ${environment}`);
-});
-
-const loadZip = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return source =>
-      readFile(source)
-        .then(data => Zip.loadAsync(data));
-  }
-
-  throw new Error(`loadZip() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZipFile() not available on platform'));
 });
 
 const extractZip = inEnvironment((environment) => {
@@ -83,9 +77,31 @@ const extractZip = inEnvironment((environment) => {
         );
   }
 
-  throw new Error(`extractZip() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('extractZip() not available on platform'));
 });
 
+const loadZip = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
+    return source =>
+      readFile(source)
+        .then(data => Zip.loadAsync(data))
+        .catch(loadError);
+  }
+
+  throw new Error(`loadZip() not available on platform ${environment}`);
+});
+
+const importZip = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
+    return (protocolFile, protocolName, destination) =>
+      loadZip(protocolFile)
+        .then(zip => extractZip(zip, destination))
+        .catch(openError)
+        .then(() => protocolName);
+  }
+
+  return () => Promise.reject(new Error('loadZip() not available on platform'));
+});
 
 const importProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -95,9 +111,7 @@ const importProtocol = inEnvironment((environment) => {
       const protocolName = path.basename(protocolFile);
       const destination = protocolPath(protocolName);
 
-      return loadZip(protocolFile)
-        .then(zip => extractZip(zip, destination))
-        .then(() => protocolName);
+      return importZip(protocolFile, protocolName, destination);
     };
   }
 
@@ -106,13 +120,11 @@ const importProtocol = inEnvironment((environment) => {
       const protocolName = new URL(protocolFileUri).pathname.split('/').pop();
       const destination = protocolPath(protocolName);
 
-      return loadZip(protocolFileUri)
-        .then(zip => extractZip(zip, destination))
-        .then(() => protocolName);
+      return importZip(protocolFileUri, protocolName, destination);
     };
   }
 
-  throw new Error(`importProtocol() not available on platform ${environment}`);
+  return () => Promise.reject(new Error('importProtocol() not available on platform'));
 });
 
 export default importProtocol;
