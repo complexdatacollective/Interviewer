@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { isEqual, pick, isMatch, has } from 'lodash';
+import { isEqual, isEmpty, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
@@ -116,23 +116,21 @@ class NodeLayout extends Component {
   }
 
   isSelected(node) {
-    const { allowHighlighting } = this.props;
+    return !isEmpty(this.props.highlightAttributes) &&
+      isMatch(node, this.props.highlightAttributes);
+  }
 
-    console.log(node, allowHighlighting);
-
-    if (!allowHighlighting) { return false; }
-
-    return (
-      node.id === this.state.connectFrom ||
-      isMatch(node, this.props.highlightAttributes)
-    );
+  isLinking(node) {
+    return this.props.allowSelect &&
+      this.props.canCreateEdge &&
+      node.id === this.state.connectFrom;
   }
 
   render() {
     const {
       nodes,
       allowPositioning,
-      allowHighlighting,
+      allowSelect,
       layoutVariable,
     } = this.props;
 
@@ -148,8 +146,9 @@ class NodeLayout extends Component {
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}
               selected={this.isSelected(node)}
+              linking={this.isLinking(node)}
               allowPositioning={allowPositioning}
-              allowSelect={allowHighlighting}
+              allowSelect={allowSelect}
               areaWidth={this.props.width}
               areaHeight={this.props.height}
             />

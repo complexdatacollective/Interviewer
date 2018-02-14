@@ -40,25 +40,28 @@ const propPromptSort = (_, props) => props.prompt.nodeBinSortOrder;
 
 // MemoedSelectors
 
-const getEdgeOptions = createDeepEqualSelector(
-  propPromptEdges,
-  edges => ({
-    displayEdges: has(edges, 'display') ? edges.display : [],
-    createEdge: has(edges, 'create') ? edges.create : null,
-    canCreateEdge: has(edges, 'create'),
-  }),
-);
+const makeGetEdgeOptions = () =>
+  createDeepEqualSelector(
+    propPromptEdges,
+    edges => ({
+      displayEdges: has(edges, 'display') ? edges.display : [],
+      createEdge: has(edges, 'create') ? edges.create : null,
+      canCreateEdge: has(edges, 'create'),
+    }),
+  );
 
-const getHighlightOptions = createDeepEqualSelector(
-  propPromptHighlight,
-  (highlight) => {
-    const allowHighlighting = highlight ? get(highlight, 'allowHighlighting', true) : false;
-    return ({
-      allowHighlighting,
-      highlightAttributes: allowHighlighting ? { [highlight.variable]: highlight.value } : {},
-    });
-  },
-);
+const makeGetHighlightOptions = () =>
+  createDeepEqualSelector(
+    makeGetEdgeOptions(),
+    propPromptHighlight,
+    (edges, highlight) => {
+      const allowHighlighting = highlight && !edges.canCreateEdge ? get(highlight, 'allowHighlighting', true) : false;
+      return ({
+        allowHighlighting,
+        highlightAttributes: allowHighlighting ? { [highlight.variable]: highlight.value } : {},
+      });
+    },
+  );
 
 const getLayoutOptions = createDeepEqualSelector(
   propPromptLayout,
@@ -82,8 +85,8 @@ const getBackgroundOptions = createDeepEqualSelector(
 export const makeGetSociogramOptions = () =>
   createDeepEqualSelector(
     getLayoutOptions,
-    getEdgeOptions,
-    getHighlightOptions,
+    makeGetEdgeOptions(),
+    makeGetHighlightOptions(),
     getBackgroundOptions,
     getSortOptions,
     (layoutOptions, edgeOptions, highlightOptions, backgroundOptions, sortOptions) => ({
@@ -92,7 +95,7 @@ export const makeGetSociogramOptions = () =>
       ...highlightOptions,
       ...sortOptions,
       ...backgroundOptions,
-      allowSelect: highlightOptions.allowHighlighting || edgeOptions.canCreateEdge,
+      allowSelect: edgeOptions.canCreateEdge || highlightOptions.allowHighlighting,
     }),
   );
 
@@ -155,7 +158,7 @@ export const makeDisplayEdgesForPrompt = () => {
   return createSelector(
     networkNodesForSubject,
     networkEdges,
-    getEdgeOptions,
+    makeGetEdgeOptions(),
     getLayoutOptions,
     (nodes, edges, edgeOptions, { layoutVariable }) => {
       const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);

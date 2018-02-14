@@ -21,7 +21,7 @@ describe('sociogram selector', () => {
       getSociogramOptions = makeGetSociogramOptions();
     });
 
-    describe('props.prompt.highlight', () => {
+    describe('allowHighlighting', () => {
       it('when highlight option is missing, allowHighlighting is false', () => {
         const subject = getSociogramOptions(mockState, mockProps);
         expect(subject.allowHighlighting).toEqual(false);
@@ -48,6 +48,15 @@ describe('sociogram selector', () => {
         };
         subject = getSociogramOptions(mockState, { prompt });
         expect(subject.allowHighlighting).toEqual(true);
+      });
+      it('when props.prompt.edges.create option exists, allowHighlighting should be false', () => {
+        const prompt = {
+          ...mockPrompt,
+          edges: { create: 'foo' },
+          highlight: { allowHighlighting: true },
+        };
+        const subject = getSociogramOptions(mockState, { prompt });
+        expect(subject.allowHighlighting).toEqual(false);
       });
     });
   });
