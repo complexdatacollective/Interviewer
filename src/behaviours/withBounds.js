@@ -22,7 +22,7 @@ export default function withBounds(WrappedComponent) {
       this.state = initialState;
       this.lastState = initialState;
 
-      this.trackSize = throttle(this.trackSize, 1000 / maxUpdatesPerSecond);
+      this.throttledTrackSize = throttle(this.trackSize.bind(this), 1000 / maxUpdatesPerSecond);
     }
 
     componentDidMount() {
@@ -30,10 +30,10 @@ export default function withBounds(WrappedComponent) {
     }
 
     componentWillUnmount() {
-      window.cancelAnimationFrame(this.animationRequestId);
+      this.throttledTrackSize.cancel();
     }
 
-    trackSize = () => {
+    trackSize() {
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
       const nextState = {
@@ -48,7 +48,7 @@ export default function withBounds(WrappedComponent) {
         this.setState(nextState);
       }
 
-      this.animationRequestId = window.requestAnimationFrame(this.trackSize);
+      this.throttledTrackSize();
     }
 
     render() {

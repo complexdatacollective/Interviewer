@@ -54,7 +54,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(api.actions.network.addNode, dispatch),
+    addNode: bindActionCreators(api.actions.network.addNodes, dispatch),
     closeModal: bindActionCreators(api.actions.modal.closeModal, dispatch),
     openModal: bindActionCreators(api.actions.modal.openModal, dispatch),
   };

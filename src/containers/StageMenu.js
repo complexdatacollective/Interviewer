@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
-import { actionCreators as stageActions } from '../ducks/modules/stage';
+import { actionCreators as stageActions } from '../ducks/modules/session/stage';
 import { stages, stage, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
 import { Menu } from '../components';
 
@@ -50,7 +50,7 @@ class StageMenu extends Component {
       }));
 
     const search = (
-      <div className="menu__search">
+      <div className={`menu__search ${isOpen ? '' : 'menu__search--closed'}`}>
         <input ref={(input) => { this.search = input; }} type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
       </div>
     );

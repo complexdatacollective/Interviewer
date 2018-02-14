@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 
-import { isString } from 'lodash';
 import { actionTypes as errorActionTypes } from './protocol';
 
+const ERROR = 'ERRORS/ERROR';
 const ACKNOWLEDGE_ERROR = 'ERRORS/ACKNOWLEDGE_ERROR';
 
 const initialState = {
@@ -10,14 +10,9 @@ const initialState = {
   acknowledged: true,
 };
 
-const getErrorMessage = (error) => {
-  if (isString(error)) return error;
-  if (error && error.toString) return error.toString();
-  return 'Unknown error';
-};
-
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ERROR:
     case errorActionTypes.DOWNLOAD_PROTOCOL_FAILED:
     case errorActionTypes.IMPORT_PROTOCOL_FAILED:
     case errorActionTypes.LOAD_PROTOCOL_FAILED:
@@ -25,7 +20,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         acknowledged: false,
-        errors: [...state.errors, getErrorMessage(action.error)],
+        errors: [...state.errors, action.error],
       };
     case ACKNOWLEDGE_ERROR:
       return {
@@ -41,15 +36,32 @@ const acknowledge = () => ({
   type: ACKNOWLEDGE_ERROR,
 });
 
+const errorAction = e => ({
+  type: ERROR,
+  error: e,
+});
+
+const friendlyErrorMessage = message =>
+  (error) => {
+    if (error.friendlyMessage) { throw error; }
+
+    // eslint-disable-next-line no-param-reassign
+    error.friendlyMessage = message;
+    throw error;
+  };
+
 const actionCreators = {
   acknowledge,
+  error: errorAction,
 };
 
 const actionTypes = {
+  ERROR,
   ACKNOWLEDGE_ERROR,
 };
 
 export {
   actionCreators,
   actionTypes,
+  friendlyErrorMessage,
 };

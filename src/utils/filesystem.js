@@ -1,6 +1,5 @@
-/* eslint-disable */
 /* eslint-disable global-require */
-/* global FileReader, window */
+/* global FileReader, window, cordova */
 
 import { trimChars } from 'lodash/fp';
 import environments from './environments';
@@ -55,7 +54,7 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return path =>
       new Promise((resolve, reject) => {
-        window.resolveLocalFileSystemURL(path, resolve, error => reject(error, 'filesystem.resolveFileSystemUrl'));
+        window.resolveLocalFileSystemURL(path, resolve, reject);
       });
   }
 
@@ -85,6 +84,8 @@ const readFile = inEnvironment((environment) => {
             resolve(Buffer.from(event.target.result));
           };
 
+          reader.onerror = error => reject(error);
+
           reader.readAsArrayBuffer(file);
         }, reject);
       });
@@ -101,12 +102,15 @@ const readFileAsDataUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     const fileReader = fileEntry =>
       new Promise((resolve, reject) => {
+        if (!fileEntry) { reject('File not found'); }
         fileEntry.file((file) => {
           const reader = new FileReader();
 
           reader.onloadend = (event) => {
             resolve(event.target.result);
           };
+
+          reader.onerror = error => reject(error, 'filesystem.readFileAsDataUrl');
 
           reader.readAsDataURL(file);
         }, reject);
@@ -129,7 +133,7 @@ const writeFile = inEnvironment((environment) => {
 
     const newFile = (directoryEntry, filename) =>
       new Promise((resolve, reject) => {
-        directoryEntry.getFile(filename, { create: true }, resolve, error => reject(error, 'filesystem.writeFile'));
+        directoryEntry.getFile(filename, { create: true }, resolve, reject);
       });
 
     return (fileUrl, data) => {
@@ -140,12 +144,24 @@ const writeFile = inEnvironment((environment) => {
         .then(makeFileWriter)
         .then(fileWriter =>
           new Promise((resolve, reject) => {
-            fileWriter.onwriteend = () => resolve(); // eslint-disable-line no-param-reassign
-            fileWriter.onerror = error => reject(error, 'filesystem.writeFile.fileWriter'); // eslint-disable-line no-param-reassign
+            fileWriter.onwriteend = () => resolve(fileUrl); // eslint-disable-line no-param-reassign
+            fileWriter.onerror = error => reject(error); // eslint-disable-line no-param-reassign
             fileWriter.write(data);
           }),
         );
     };
+  }
+
+  if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
+    return (filePath, data) =>
+      new Promise((resolve, reject) => {
+        fs.writeFile(filePath, data, (error) => {
+          if (error) { reject(error); }
+          resolve(filePath);
+        });
+      });
   }
 
   throw new Error(`writeFile() not available on platform ${environment}`);
@@ -175,7 +191,7 @@ const createDirectory = inEnvironment((environment) => {
           directoryToAppend,
           { create: true },
           resolve,
-          error => reject(error, 'filesystem.createDirectory.appendDirectory'),
+          reject,
         );
       });
 
@@ -208,7 +224,7 @@ const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     const removeRecursively = directoryEntry =>
       new Promise((resolve, reject) => {
-        directoryEntry.removeRecursively(resolve, error => reject(error, 'filesystem.removeDirectory.removeRecursively'));
+        directoryEntry.removeRecursively(resolve, reject);
       });
 
     // If folder doesn't exist that's fine
@@ -275,14 +291,16 @@ const writeStream = inEnvironment((environment) => {
 
     return (destination, stream) =>
       new Promise((resolve, reject) => {
-        stream
-          .pipe(fs.createWriteStream(destination))
-          .on('error', (err) => {
-            reject(destination, err);
-          })
-          .on('finish', () => {
-            resolve(destination);
-          });
+        try {
+          stream
+            .pipe(fs.createWriteStream(destination))
+            .on('error', reject)
+            .on('finish', () => {
+              resolve(destination);
+            });
+        } catch (error) {
+          reject(error);
+        }
       });
   }
 

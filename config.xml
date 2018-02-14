@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.codaco.networkCanvas" version="4.0.0-alpha.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.codaco.networkCanvas" version="4.0.0-alpha.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NetworkCanvas</name>
     <description>
-    Simplifying complex network data collection.
-  </description>
+        Simplifying complex network data collection.
+    </description>
     <author email="developers@coda.co" href="http://coda.co">
-    Complex Data Collective
-  </author>
+        Complex Data Collective
+    </author>
     <content src="index.html" />
     <access origin="*" />
     <access origin="cdvfile://*" />
@@ -15,6 +15,13 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <allow-navigation href="https://*/*" />
+        <hook src="scripts/cordova/prebuild-android.js" type="before_build" />
+        <icon density="ldpi" src="www/icons/android/NC-Round-ldpi.png" />
+        <icon density="mdpi" src="www/icons/android/NC-Round-mdpi.png" />
+        <icon density="hdpi" src="www/icons/android/NC-Round-hdpi.png" />
+        <icon density="xhdpi" src="www/icons/android/NC-Round-xhdpi.png" />
+        <icon density="xxhdpi" src="www/icons/android/NC-Round-xxhdpi.png" />
+        <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -30,25 +37,18 @@
         <icon height="167" src="www/icons/ios/NC-Square-167.png" width="167" />
         <splash src="www/icons/ios/Default@2x~universal~anyany.png" />
     </platform>
-    <platform name="android">
-        <icon density="ldpi" src="www/icons/android/NC-Round-ldpi.png" />
-        <icon density="mdpi" src="www/icons/android/NC-Round-mdpi.png" />
-        <icon density="hdpi" src="www/icons/android/NC-Round-hdpi.png" />
-        <icon density="xhdpi" src="www/icons/android/NC-Round-xhdpi.png" />
-        <icon density="xxhdpi" src="www/icons/android/NC-Round-xxhdpi.png" />
-        <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
-    </platform>
     <feature name="CDVWKWebViewEngine">
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
     <preference name="Orientation" value="landscape" />
     <preference name="target-device" value="tablet" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="Fullscreen" value="true" />
+    <preference name="Fullscreen" value="false" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="android-maxSdkVersion" value="21" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />

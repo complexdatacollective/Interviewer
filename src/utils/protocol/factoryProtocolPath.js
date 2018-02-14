@@ -25,7 +25,7 @@ const factoryProtocolPath = (environment) => {
     };
   }
 
-  throw new Error('factoryProtocolPath not specified on this platform');
+  throw new Error('factoryProtocolPath() is not supported on this platform');
 };
 
 export default inEnvironment(factoryProtocolPath);

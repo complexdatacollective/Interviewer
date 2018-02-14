@@ -13,7 +13,7 @@ const generateNodes = (howMany = 0) =>
       const lastName = faker.name.lastName();
       const age = faker.random.number({ min: 16, max: 99 });
 
-      return dispatch(networkActions.addNode({
+      return dispatch(networkActions.addNodes({
         type: 'person',
         promptId: 'mock',
         stageId: 'mock',

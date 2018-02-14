@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon } from 'network-canvas-ui';
-import xss from 'xss';
 import { Modal as ModalTransition } from '../components/Transition';
 
 /**
@@ -35,24 +34,7 @@ const Dialog = (props) => {
     error: 'neon-coral',
   };
 
-  const createMarkup = () => {
-    const safeString = xss(additionalInformation, {
-      whiteList: {
-        h3: [],
-        p: [],
-        ul: [],
-        li: [],
-      },
-      stripIgnoreTag: true,
-    });
-    return {
-      __html: safeString,
-    };
-  };
-
   const dialogClasses = cx(`dialog__window dialog__window--${type}`);
-  // eslint-disable-next-line react/no-danger
-  const additionalTextarea = additionalInformation ? <div className="dialog__additional-box" dangerouslySetInnerHTML={createMarkup()} /> : '';
 
   return (
     <ModalTransition in={show}>
@@ -68,9 +50,13 @@ const Dialog = (props) => {
               {children}
             </div>
           </div>
-          <div className="dialog__additional-content">
-            {additionalTextarea}
-          </div>
+          { additionalInformation &&
+            <div className="dialog__additional-content">
+              <div className="dialog__additional-box">
+                {additionalInformation}
+              </div>
+            </div>
+          }
           <footer className="dialog__footer">
             { cancelButton }
             <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />
@@ -86,11 +72,11 @@ Dialog.propTypes = {
   children: PropTypes.any,
   show: PropTypes.bool,
   type: PropTypes.string.isRequired,
-  hasCancelButton: PropTypes.bool.isRequired,
+  hasCancelButton: PropTypes.bool,
   confirmLabel: PropTypes.string.isRequired,
-  additionalInformation: PropTypes.string,
-  cancelLabel: PropTypes.string.isRequired,
-  onCancel: PropTypes.func.isRequired,
+  additionalInformation: PropTypes.node,
+  cancelLabel: PropTypes.string,
+  onCancel: PropTypes.func,
   onConfirm: PropTypes.func.isRequired,
 };
 
@@ -98,6 +84,9 @@ Dialog.defaultProps = {
   children: null,
   additionalInformation: null,
   show: false,
+  onCancel: () => {},
+  hasCancelButton: false,
+  cancelLabel: '',
 };
 
 export default Dialog;

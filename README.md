@@ -44,12 +44,21 @@ npm --add-python-to-path install --global windows-build-tools
 |`build-docs`|Builds HTML API docs into the docs-build directory.|
 |`electron`|Runs the current code in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
-|`package-mac`|Uses electron-packager to package an OSX release.|
-|`package-win`|Uses electron-packager to package a Windows release.|
-|`package-linux`|Uses electron-packager to package a Linux release.|
-|`package-cordova`|Builds Android and iOS cordova projects|
+|`dist:mac`|Uses electron-packager to package an OSX release.|
+|`dist:win`|Uses electron-packager to package a Windows release.|
+|`dist:ios`|Builds iOS cordova project|
+|`dist:android`|Builds Android cordova project|
+|`dist:cordova`|Builds Android and iOS cordova projects|
 |`create-installer-mac`|Creates a DMG based installer for OSX.|
 
+## Cordova Builds
+
+1. Install [cordova](https://cordova.apache.org) on your system: `npm install -g cordova`
+2. Add ios and android platforms for the project:
+  - `cordova platform add ios`
+  - `cordova platform add android`
+
+See Cordova's [iOS docs](http://cordova.apache.org/docs/en/7.x/guide/platforms/ios/index.html#page-toc-source) and [Android docs](http://cordova.apache.org/docs/en/7.x/guide/platforms/android/index.html) for requirements, configuration, and deploy instructions.
 
 ## Application Structure
 

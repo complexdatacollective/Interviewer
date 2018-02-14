@@ -6,7 +6,7 @@ import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
-import Instructions from './Instructions';
+import Information from './Information';
 
 const interfaces = {
   NameGenerator,
@@ -14,7 +14,7 @@ const interfaces = {
   NameGeneratorList,
   Sociogram,
   Quiz,
-  Instructions,
+  Information,
 };
 
 const getInterface = (interfaceConfig) => {
@@ -29,7 +29,7 @@ export {
   NameGeneratorList,
   Sociogram,
   Quiz,
-  Instructions,
+  Information,
 };
 
 export default getInterface;

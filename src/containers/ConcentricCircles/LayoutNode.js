@@ -17,6 +17,7 @@ class LayoutNode extends PureComponent {
     const {
       node,
       selected,
+      linking,
       allowPositioning,
       allowSelect,
       layoutVariable,
@@ -39,6 +40,7 @@ class LayoutNode extends PureComponent {
           label={label(node)}
           onSelected={this.props.onSelected}
           selected={selected}
+          linking={linking}
           allowDrag={allowPositioning}
           allowSelect={allowSelect}
           meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
@@ -57,6 +59,7 @@ LayoutNode.propTypes = {
   allowPositioning: PropTypes.bool,
   allowSelect: PropTypes.bool,
   selected: PropTypes.bool,
+  linking: PropTypes.bool,
   areaWidth: PropTypes.number,
   areaHeight: PropTypes.number,
 };
@@ -65,6 +68,7 @@ LayoutNode.defaultProps = {
   allowPositioning: false,
   allowSelect: false,
   selected: false,
+  linking: false,
   areaWidth: 0,
   areaHeight: 0,
   onSelected: () => {},
