@@ -59,7 +59,9 @@ class NameGenerator extends Component {
    */
   onSelectNode = (node) => {
     this.setState({ selectedNode: node }, () => {
-      this.props.openModal(this.forms.EDIT_NODE);
+      if (this.props.form) {
+        this.props.openModal(this.forms.EDIT_NODE);
+      }
     });
   }
 
@@ -93,6 +95,34 @@ class NameGenerator extends Component {
       prompts,
     } = this.props.stage;
 
+    const nodeForms = form && (
+      <React.Fragment>
+        <NodeForm
+          node={this.state.selectedNode}
+          name={this.forms.EDIT_NODE}
+          title={form.title}
+          fields={form.fields}
+          entity={form.entity}
+          type={form.type}
+          autoPopulate={form.autoPopulate}
+          onSubmit={this.onSubmitEditNode}
+        />
+        <NodeForm
+          name={this.forms.ADD_NODE}
+          title={form.title}
+          fields={form.fields}
+          entity={form.entity}
+          type={form.type}
+          autoPopulate={form.autoPopulate}
+          onSubmit={this.onSubmitNewNode}
+          addAnother
+        />
+        <button className="name-generator-interface__add-person" onClick={() => openModal(this.forms.ADD_NODE)}>
+          Add a person
+        </button>
+      </React.Fragment>
+    );
+
     return (
       <div className="name-generator-interface">
         <div className="name-generator-interface__prompt">
@@ -121,31 +151,7 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        <NodeForm
-          node={this.state.selectedNode}
-          name={this.forms.EDIT_NODE}
-          title={form.title}
-          fields={form.fields}
-          entity={form.entity}
-          type={form.type}
-          autoPopulate={form.autoPopulate}
-          onSubmit={this.onSubmitEditNode}
-        />
-
-        <NodeForm
-          name={this.forms.ADD_NODE}
-          title={form.title}
-          fields={form.fields}
-          entity={form.entity}
-          type={form.type}
-          autoPopulate={form.autoPopulate}
-          onSubmit={this.onSubmitNewNode}
-          addAnother
-        />
-
-        <button className="name-generator-interface__add-person" onClick={() => openModal(this.forms.ADD_NODE)}>
-          Add a person
-        </button>
+        { nodeForms }
 
         <div className="name-generator-interface__node-bin">
           <NodeBin id="NODE_BIN" />
