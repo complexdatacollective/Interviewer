@@ -55,6 +55,7 @@ ShallowWrapper {
           areaHeight={456}
           areaWidth={123}
           layoutVariable="foo"
+          linking={false}
           node={
                     Object {
                               "bar": "buzz",
@@ -66,7 +67,7 @@ ShallowWrapper {
                             }
           }
           onSelected={[Function]}
-          selected={true}
+          selected={false}
 />,
       ],
       "className": "node-layout",
@@ -83,6 +84,7 @@ ShallowWrapper {
           "areaHeight": 456,
           "areaWidth": 123,
           "layoutVariable": "foo",
+          "linking": false,
           "node": Object {
             "bar": "buzz",
             "foo": Object {
@@ -92,7 +94,7 @@ ShallowWrapper {
             "uid": 123,
           },
           "onSelected": [Function],
-          "selected": true,
+          "selected": false,
         },
         "ref": null,
         "rendered": null,
@@ -114,6 +116,7 @@ ShallowWrapper {
             areaHeight={456}
             areaWidth={123}
             layoutVariable="foo"
+            linking={false}
             node={
                         Object {
                                     "bar": "buzz",
@@ -125,7 +128,7 @@ ShallowWrapper {
                                   }
             }
             onSelected={[Function]}
-            selected={true}
+            selected={false}
 />,
         ],
         "className": "node-layout",
@@ -142,6 +145,7 @@ ShallowWrapper {
             "areaHeight": 456,
             "areaWidth": 123,
             "layoutVariable": "foo",
+            "linking": false,
             "node": Object {
               "bar": "buzz",
               "foo": Object {
@@ -151,7 +155,7 @@ ShallowWrapper {
               "uid": 123,
             },
             "onSelected": [Function],
-            "selected": true,
+            "selected": false,
           },
           "ref": null,
           "rendered": null,
