@@ -90,13 +90,9 @@ class Setup extends Component {
         <br />
 
         <div className="setup__start">
-
           {this.renderImportButtons()}
-
           <p>
-            <Button onClick={() => this.onClickLoadFactoryProtocol('education.netcanvas')} content="Load teaching protocol" />
-          </p>
-          <p>
+            <Button size="small" onClick={() => this.onClickLoadFactoryProtocol('education.netcanvas')} content="Load teaching protocol" />&nbsp;
             <Button size="small" color="platinum" onClick={() => this.onClickLoadFactoryProtocol('development.netcanvas')} content="Load development protocol" />
           </p>
         </div>
