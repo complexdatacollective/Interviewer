@@ -9,6 +9,7 @@ import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, Dialog } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 import ServerDiscoverer from '../utils/serverDiscoverer';
+import logo from '../images/NC-Round.svg';
 
 const formConfig = {
   formName: 'setup',
@@ -86,6 +87,8 @@ class Setup extends Component {
     this.serverDiscoverer.on('SERVICE_REMOVED', () => {
       this.props.closeModal('SERVER_DISCOVERY');
     });
+  onClickLoadFactoryProtocol = (protocolName) => {
+    this.props.loadFactoryProtocol(protocolName);
   }
 
   onClickLoadFactoryProtocol = () => {
@@ -102,13 +105,12 @@ class Setup extends Component {
     if (isElectron() || isCordova()) {
       return (
         <div>
-          <p>Import a custom protocol:</p>
           <div className="setup__custom-protocol">
             <Form
               form={formConfig.formName}
               onSubmit={this.onClickImportRemoteProtocol}
               initialValues={initialValues}
-              controls={[<Button key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
+              controls={[<Button size="small" key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
               {...formConfig}
             />
           </div>
@@ -138,26 +140,21 @@ class Setup extends Component {
         >
           {this.state.serverDiscoveryDialog.content}
         </Dialog>
-        <h1 className="type--title-1">Welcome to Network Canvas</h1>
+        <div className="setup__header">
+          <img src={logo} className="logo" alt="Network Canvas" />
+          <h1 className="type--title-1">Welcome to Network Canvas Alpha 2 - Milliways</h1>
+        </div>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
-          the development of our software.
+          the development of our software. Help us to improve by giving feedback on our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u>
         </p>
-        <h2 className="type--title-2">Help us to improve</h2>
-        <p>
-          You can help us by giving feedback on
-          our <u><a href="http://feedback.networkcanvas.com/">feedback website</a></u>
-        </p>
-        <br />
-        <hr />
         <br />
 
         <div className="setup__start">
-
           {this.renderImportButtons()}
-
           <p>
-            <Button onClick={this.onClickLoadFactoryProtocol} content="Load demo protocol" />
+            <Button size="small" onClick={() => this.onClickLoadFactoryProtocol('education.netcanvas')} content="Load teaching protocol" />&nbsp;
+            <Button size="small" color="platinum" onClick={() => this.onClickLoadFactoryProtocol('development.netcanvas')} content="Load development protocol" />
           </p>
         </div>
       </div>

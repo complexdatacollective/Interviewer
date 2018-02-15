@@ -34,7 +34,7 @@ const renderItems = items =>
 const Information = ({ stage: { title, items } }) => (
   <div className="interface instructions-interface">
     <div className="instructions-interface__frame">
-      <h1 className="instructions-interface__title">{ title }</h1>
+      <h1 className="instructions-interface__title type--title-1">{ title }</h1>
       <div className="instructions-interface__items">
         { renderItems(items) }
       </div>

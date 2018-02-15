@@ -1,0 +1,579 @@
+{
+  "name": "Teaching Protocol",
+  "version": "1.0.0",
+  "networkCanvasVersion": "~4.0.0",
+  "variableRegistry": {
+    "node": {
+      "person": {
+        "label": "Person",
+        "color": "coral",
+        "displayVariable": "nickname",
+        "iconVariant": "add-a-person",
+        "variables": {
+          "name": {
+            "label": "Name",
+            "description": "The alter's name.",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 24
+            }
+          },
+          "contactFreq": {
+            "label": "Contact frequency ordinal variable.",
+            "description": "Contact frequency ordinal variable",
+            "type": "ordinal"
+          },
+          "outsideOfSchool": {
+            "label": "Have you contacted this person outside of school in the past 7 days?",
+            "description": "If the participant has contacted the alter outside of school in the past 7 days.",
+            "type": "checkbox"
+          },
+          "yearsKnown": {
+            "label": "How many years have you known this person for?",
+            "description": "How many years the participant has known the alter.",
+            "type": "number",
+            "validation": {
+              "required": true
+            }
+          },
+          "gender": {
+            "label": "What is this person's gender?",
+            "description": "Percieved gender of the alter.",
+            "type": "text",
+            "options": ["Male", "Female", "Non-binary"],
+            "validation": {
+              "required": true
+            }
+          },
+          "nickname": {
+            "label": "Nickname",
+            "description": "Participant Nickname",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 10
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "friend": {
+        "label": "Friend",
+        "color": "mustard",
+        "variables": {
+          "contact_freq": {
+            "label": "contact_freq",
+            "description": "Contact frequency.",
+            "type": "ordinal",
+            "values": {
+              "Very Often": 4,
+              "Often": 3,
+              "Sometimes": 2,
+              "Rarely": 1,
+              "Never": -1
+            }
+          }
+        }
+      },
+      "professional": {
+        "label": "Professional",
+        "color": "kiwi",
+        "variables": {
+        }
+      }
+    }
+  },
+  "externalData": {
+    "schoolPupils": {
+      "nodes": [
+        {
+          "type": "person",
+          "name": "F. Anita",
+          "nickname": "Annie",
+          "age": "23"
+        },
+        {
+          "type": "person",
+          "name": "H. Barry",
+          "nickname": "Baz",
+          "age": "31"
+        },
+        {
+          "uid": "person_3",
+          "type": "person",
+          "name": "Carlito",
+          "nickname": "Carl",
+          "age": "25"
+        },
+        {
+          "uid": "person_4",
+          "type": "person",
+          "name": "Dee",
+          "nickname": "Dee",
+          "age": "72"
+        },
+        {
+          "uid": "person_5",
+          "type": "person",
+          "name": "A. Eugine",
+          "nickname": "Eu",
+          "age": "27"
+        },
+        {
+          "uid": "person_6",
+          "type": "person",
+          "name": "Gerald",
+          "nickname": "Gary",
+          "age": "33"
+        },
+        {
+          "uid": "person_7",
+          "type": "person",
+          "name": "Hannah L.",
+          "nickname": "Hannah",
+          "age": "81"
+        },
+        {
+          "uid": "person_8",
+          "type": "person",
+          "name": "Isabella",
+          "nickname": "Izzy",
+          "age": "25"
+        },
+        {
+          "uid": "person_9",
+          "type": "person",
+          "name": "Jacob",
+          "nickname": "Jake",
+          "age": "52"
+        },
+        {
+          "uid": "person_10",
+          "type": "person",
+          "name": "Kaylee",
+          "nickname": "Lee",
+          "age": "57"
+        },
+        {
+          "uid": "person_11",
+          "type": "person",
+          "name": "Lily",
+          "nickname": "Lil",
+          "age": "93"
+        },
+        {
+          "uid": "person_12",
+          "type": "person",
+          "name": "Michael",
+          "nickname": "Mike",
+          "age": "91"
+        },
+        {
+          "uid": "person_13",
+          "type": "person",
+          "name": "Noah",
+          "nickname": "Nole",
+          "age": "65"
+        },
+        {
+          "uid": "person_14",
+          "type": "person",
+          "name": "K. Olivia",
+          "nickname": "Olivia",
+          "age": "42"
+        },
+        {
+          "uid": "person_15",
+          "type": "person",
+          "name": "Penelope",
+          "nickname": "Nellie",
+          "age": "47"
+        },
+        {
+          "uid": "person_16",
+          "type": "person",
+          "name": "Quentin",
+          "nickname": "Quinn",
+          "age": "33"
+        },
+        {
+          "uid": "person_17",
+          "type": "person",
+          "name": "Y. Randall",
+          "nickname": "Randy",
+          "age": "51"
+        },
+        {
+          "uid": "person_18",
+          "type": "person",
+          "name": "Sophia",
+          "nickname": "Fia",
+          "age": "85"
+        },
+        {
+          "uid": "person_19",
+          "type": "person",
+          "name": "Tatiana",
+          "nickname": "Ana",
+          "age": "72"
+        },
+        {
+          "uid": "person_20",
+          "type": "person",
+          "name": "Uriel",
+          "nickname": "Uri",
+          "age": "17"
+        },
+        {
+          "uid": "person_21",
+          "type": "person",
+          "name": "Vanessa",
+          "nickname": "Ness",
+          "age": "56"
+        },
+        {
+          "uid": "person_22",
+          "type": "person",
+          "name": "William",
+          "nickname": "Bill",
+          "age": "61"
+        },
+        {
+          "uid": "person_23",
+          "type": "person",
+          "name": "Xavier",
+          "nickname": "X",
+          "age": "65"
+        },
+        {
+          "uid": "person_24",
+          "type": "person",
+          "name": "Yolanda",
+          "nickname": "Landa",
+          "age": "29"
+        },
+        {
+          "uid": "person_25",
+          "type": "person",
+          "name": "T. Zoe",
+          "nickname": "Zoe",
+          "age": "87"
+        },
+        {
+          "uid": "person_26",
+          "type": "person",
+          "name": "Fernando",
+          "nickname": "Finn",
+          "age": "63"
+        },
+        {
+          "uid": "person_27",
+          "type": "person",
+          "name": "Daniella",
+          "nickname": "Dani",
+          "age": "71"
+        },
+        {
+          "uid": "person_28",
+          "type": "person",
+          "name": "P. Samuel",
+          "nickname": "Sammy",
+          "age": "20"
+        },
+        {
+          "uid": "person_29",
+          "type": "person",
+          "name": "Brooklyn",
+          "nickname": "Brook",
+          "age": "24"
+        },
+        {
+          "uid": "person_30",
+          "type": "person",
+          "name": "Christopher",
+          "nickname": "Topher",
+          "age": "66"
+        }
+      ]
+    }
+  },
+  "forms": {
+    "person": {
+      "title": "Add A Person",
+      "entity": "node",
+      "type": "person",
+      "fields": [
+        {
+          "variable": "name",
+          "component": "TextInput"
+        },
+        {
+          "variable": "nickname",
+          "component": "TextInput"
+        },
+        {
+          "variable": "outsideOfSchool",
+          "component": "ToggleInput"
+        },
+        {
+          "variable": "gender",
+          "component": "RadioGroup"
+        },
+        {
+          "variable": "yearsKnown",
+          "component": "TextInput"
+        }
+      ]
+    }
+  },
+  "stages": [
+    {
+      "id": "welcome",
+      "label": "Welcome",
+      "type": "Information",
+      "title": "Welcome to the Teaching Protocol",
+      "items": [
+        { "type": "text", "content": "<p>Welcome to Network Canvas. This is the Network Canvas App. It is used for field studies of self-reported social network data. It is part of a suite of apps being developed by the Complex Data Collective and administered by Northwestern University and the University of Oxford. The other apps in the suite enable users to develop their own protocols for the Network Canvas App as well as manage the data that is returned from the app.</p><p>This version is a simple name generator. Answer these questions honestly and sincerely and you will create a version of your own personal network. You can then visualize this network here or open it in social network analysis programs such as UCInet, NodeXL and Gephi.</p><p>No data is transmitted between this app and the Network Canvas team. This is solely for demonstration purposes. To begin tap the next button on the right.</p>" }
+      ]
+    },
+    {
+      "id": "generatingNames",
+      "label": "Generating Names",
+      "type": "Information",
+      "title": "Generating Names",
+      "items": [
+        { "type": "text", "content": "<p>The first part of creating a personal network is to generate a list of names. On the next screen you will be asked to create “nodes”. Each node represents a person you know. List as many people as you can who fit the criteria.</p>" }
+      ]
+    },
+    {
+      "id": "namegen1",
+      "type": "NameGenerator",
+      "label": "Name Generator 1",
+      "form": "person",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "panels": {
+          "external": {
+            "title": "Your classmates",
+            "dataSource": "schoolPupils"
+          }
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "Please list all the people from school who are important to you.",
+          "additionalAttributes": {
+            "school_important": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "namegen2",
+      "type": "NameGenerator",
+      "label": "Name Generator 2",
+      "form": "person",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
+        {
+          "id": "6dl",
+          "text": "Please list all the family members who are important to you.",
+          "additionalAttributes": {
+            "family_important": true
+          }
+        },
+        {
+          "id": "6el",
+          "text": "Please list all the people the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
+          "additionalAttributes": {
+            "community_important": true
+          }
+        },
+        {
+          "id": "6fl",
+          "text": "Please list anyone you only know online who is important to you.",
+          "additionalAttributes": {
+            "online_important": true
+          }
+        },
+        {
+          "id": "6gl",
+          "text": "Finally, is there anyone else important to you who was not yet listed",
+          "additionalAttributes": {
+            "other_important": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "sociogramInstruction",
+      "label": "Arranging Nodes",
+      "type": "Information",
+      "title": "Arranging nodes in the sociogram.",
+      "items": [
+        { "type": "text", "content": "<p>On the next screen you will be able to move the nodes corresponding to each person. One by one move them from the corner of the screen to the circle in the middle. Then, we will draw lines between people who know each other.</p>" },
+        { "type": "text", "content": "<p>Tips:</p><ul><li>Place people who know each other near to each other</li><li>Place people who know you best closest to the middle</li><li>Leave lots of room between nodes</li></ul>" }
+      ]
+    },
+    {
+      "id": "sociogram",
+      "type": "Sociogram",
+      "label": "Sociogram",
+      "prompts": [
+        {
+          "id": "layout",
+          "text": "Please arrange the nodes on the screen. Place people who know each other near each other and place the people you know best closest to the centre. Leave space between each node if you can.",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          }
+        }
+      ]
+    },
+    {
+      "id": "edgeInstruction",
+      "label": "Drawing Ties",
+      "type": "Information",
+      "title": "Drawing ties between people.",
+      "items": [
+        { "type": "text", "content": "<p>A social network typically includes a way to show relationships between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:</p>" },
+        { "type": "text", "content": "<ul><li>Click (or tap) on the first node.</li><li>Click (or tap) on the second node.</li></ul><p>A line should appear between the two nodes.</p>" },
+        { "type": "text", "content": "<p>Tips:</p><ul><li> If the people are too close to see the line, spread them out a little bit.</li><li>If you make a line and want to delete it, just select the two people like before and the line should disappear.</li></ul>" },
+        { "type": "video", "content": "linking.mp4" }
+      ]
+    },
+    {
+      "id": "sociogram2",
+      "type": "Sociogram",
+      "label": "Sociogram Edges",
+      "prompts": [
+        {
+          "id": "edge",
+          "text": "Please mark the relationships between any two people who know each other personally. Click on the first person and then the second to draw the line between two nodes. ",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"],
+            "create": "friends"
+          }
+        },
+        {
+          "id": "select1",
+          "text": "Who lives near (<5km) to you?",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"]
+          },
+          "highlight": {
+            "variable": "lives_nearby",
+            "value": true,
+            "allowHighlighting": true
+          }
+        },
+        {
+          "id": "select2",
+          "text": "If you have a Facebook account, which of these people are your friends on Facebook?",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "edges": {
+            "display": ["friends"]
+          },
+          "highlight": {
+            "variable": "facebook_friend",
+            "value": true,
+            "allowHighlighting": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin1",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
+        {
+          "id": "contactFreq",
+          "title": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
+          "variable": "contact_freq",
+          "bins": {
+            "values": {
+              "Last 24 hours": 4,
+              "Last week": 3,
+              "Last six months": 2,
+              "Last two years": 1,
+              "Over two years ago": -1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "exportInstruction",
+      "label": "Export Data",
+      "type": "Information",
+      "title": "Exporting Data",
+      "items": [
+        { "type": "text", "content": "<p>This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire.</p>" },
+        { "type": "text", "content": "<p>Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning.</p>" },
+        { "type": "text", "content": "<p>To export this data and continue with some further analysis, please use the \"Download Data\" option in the settings menu.</p>" }
+      ]
+    },
+    {
+      "id": "finalInstruction",
+      "label": "Finished",
+      "type": "Information",
+      "title": "Thank you!",
+      "items": [
+        { "type": "text", "content": "<p>To learn more about Network Canvas, please visit our website at <a href=\"http://www.networkcanvas.com/\">http://www.networkcanvas.com/</a>.</p>" }
+      ]
+    }
+  ]
+}

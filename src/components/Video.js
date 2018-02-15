@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import injectAssetUrl from '../behaviours/injectAssetUrl';
 
 const Video = ({ url, description, ...props }) =>
-  <video src={url} {...props}>{description}</video>;
+  <video src={url} {...props} playsinline>{description}</video>;
 
 Video.propTypes = {
   description: PropTypes.string,

@@ -14,9 +14,6 @@
     .node {
       margin: 0;
       font-size: calc(var(--node-base-size) * 0.6);
-      @include breakpoint('full') {
-        font-size: calc(var(--node-base-size) * 0.5);
-      }
     }
   }
 }
