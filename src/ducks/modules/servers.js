@@ -1,5 +1,8 @@
+/* eslint-disable */
+
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import { unionWith } from 'lodash';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 
 const SERVICE_ANNOUNCED = Symbol('SERVERS/SERVICE_ANNOUNCED');
@@ -15,17 +18,17 @@ export default function reducer(state = initialState, action = {}) {
     case SERVICE_ANNOUNCED:
       return {
         ...state,
-        services: [...state.services].splice(action.service.serviceIndex, 1, action.service),
+        services: [...state.services, action.service],
       };
     case SERVICE_RESOLVED:
       return {
         ...state,
-        services: [...state.services].splice(action.service.serviceIndex, 1, action.service),
+        services: unionWith([action.service], state.services, service => service.interfaceIndex),
       };
     case SERVICE_REMOVED:
       return {
         ...state,
-        services: [...state.services].splice(action.service.serviceIndex, 1),
+        services: [...state.services].splice(action.service.interfaceIndex, 1),
       };
     default:
       return state;
@@ -53,13 +56,19 @@ const serviceRemoved = service => ({
   service,
 });
 
+const fromEventEmitter = (emitter, eventName) =>
+  Observable.fromEventPattern(
+    handler => emitter.on(eventName, handler),
+    handler => emitter.removeListener(eventName, handler)
+  );
+
 const serverDiscoveryEpic = () => {
   const serverDiscoverer = new ServerDiscoverer();
 
   return Observable.merge(
-    Observable.fromEvent(serverDiscoverer, 'SERVICE_ANNOUNCED').map(service => serviceAnnounced(service)),
-    Observable.fromEvent(serverDiscoverer, 'SERVICE_RESOLVED').map(service => serviceResolved(service)),
-    Observable.fromEvent(serverDiscoverer, 'SERVICE_REMOVED').map(service => serviceRemoved(service)),
+    fromEventEmitter(serverDiscoverer, 'SERVICE_ANNOUNCED').map(service => serviceAnnounced(service)),
+    fromEventEmitter(serverDiscoverer, 'SERVICE_RESOLVED').map(service => serviceResolved(service)),
+    fromEventEmitter(serverDiscoverer, 'SERVICE_REMOVED').map(service => serviceRemoved(service)),
   );
 };
 
