@@ -87,6 +87,8 @@ class Setup extends Component {
     this.serverDiscoverer.on('SERVICE_REMOVED', () => {
       this.props.closeModal('SERVER_DISCOVERY');
     });
+  }
+
   onClickLoadFactoryProtocol = (protocolName) => {
     this.props.loadFactoryProtocol(protocolName);
   }
