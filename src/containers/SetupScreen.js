@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { isEqual } from 'lodash';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, Dialog } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
-import ServerDiscoverer from '../utils/serverDiscoverer';
 import logo from '../images/NC-Round.svg';
 
 const formConfig = {
@@ -36,8 +36,6 @@ class Setup extends Component {
   constructor() {
     super();
 
-    this.serverDiscoverer = new ServerDiscoverer();
-
     this.state = {
       serverDiscoveryDialog: {
         title: 'Server Dialog',
@@ -51,13 +49,13 @@ class Setup extends Component {
     };
   }
 
-  componentWillMount() {
-    this.serverDiscoverer.on('SERVICE_ANNOUNCED', (response) => {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.services > this.props.services) {
       this.setState({
         serverDiscoveryDialog: {
           title: 'Network Canvas Server Found!',
           type: 'info',
-          additionalInformation: JSON.stringify(response),
+          additionalInformation: JSON.stringify(nextProps.services),
           content: 'An installation of Network Canvas Server has been found nearby.',
           onConfirm: () => {},
           confirmLabel: 'Great!',
@@ -66,15 +64,16 @@ class Setup extends Component {
       }, () => {
         this.props.openModal('SERVER_DISCOVERY');
       });
-    });
+      return;
+    }
 
-    this.serverDiscoverer.on('SERVICE_RESOLVED', (response) => {
+    if (!isEqual(nextProps.services, this.props.services)) {
       this.setState({
         serverDiscoveryDialog: {
           title: 'Network Canvas Server Resolved!',
           type: 'info',
-          additionalInformation: JSON.stringify(response),
-          content: 'An installation of Network Canvas Server has been resolved nearby.',
+          additionalInformation: JSON.stringify(nextProps.services),
+          content: 'An installation of Network Canvas Server has been resolved.',
           onConfirm: () => {},
           confirmLabel: 'Great!',
           hasCancelButton: false,
@@ -82,11 +81,12 @@ class Setup extends Component {
       }, () => {
         this.props.openModal('SERVER_DISCOVERY');
       });
-    });
+      return;
+    }
 
-    this.serverDiscoverer.on('SERVICE_REMOVED', () => {
+    if (nextProps.services < this.props.services) {
       this.props.closeModal('SERVER_DISCOVERY');
-    });
+    }
   }
 
   onClickLoadFactoryProtocol = (protocolName) => {
@@ -172,11 +172,13 @@ Setup.propTypes = {
   importProtocol: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
+  services: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    services: state.servers.services,
   };
 }
 
