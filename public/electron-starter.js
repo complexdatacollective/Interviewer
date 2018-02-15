@@ -17,8 +17,8 @@ const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false }
 const windowParameters = Object.assign({
   width: 1440,
   height: 900,
-  minWidth: 1440,
-  minHeight: 900,
+  minWidth: 1280,
+  minHeight: 800,
   center: true,
   title: 'Network Canvas'
 
