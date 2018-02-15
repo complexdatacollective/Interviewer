@@ -23,7 +23,7 @@ const assetUrl = (environment) => {
       const factoryFilename = factoryProtocolPath(protocolName, `assets/${assetPath}`);
       const filename = protocolPath(protocolName, `assets/${assetPath}`);
       return readFileAsDataUrl(factoryFilename)
-        .catch(readFileAsDataUrl(filename));
+        .catch(() => readFileAsDataUrl(filename));
     };
   }
 
