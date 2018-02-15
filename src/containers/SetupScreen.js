@@ -23,7 +23,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.canvas',
+  protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.netcanvas',
 };
 
 /**
