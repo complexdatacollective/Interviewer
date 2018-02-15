@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import network from './network';
 import protocol from './protocol';
+import servers from './servers';
 import session from './session';
 import modals from './modals';
 import menu from './menu';
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
   form: formReducer,
   network,
   protocol,
+  servers,
   session,
   modals,
   menu,
