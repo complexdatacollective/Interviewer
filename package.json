@@ -20,6 +20,8 @@
         "build-docs": "NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
         "electron": "electron ./www",
         "generate-icons": "node generate-app-icons.js",
+        "dev:ios": "node scripts/check-dev-server.js && LIVE_RELOAD=1 cordova run ios",
+        "dev:android": "node scripts/check-dev-server.js && LIVE_RELOAD=1 cordova run android",
         "dist": "electron-builder",
         "dist:ios": "npm run build && cordova build ios",
         "dist:android": "npm run build && cordova build android",

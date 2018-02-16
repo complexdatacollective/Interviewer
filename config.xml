@@ -12,6 +12,8 @@
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <hook src="scripts/cordova/before-run.js" type="before_run" />
+    <hook src="scripts/cordova/after-run.js" type="after_run" />
     <platform name="android">
         <allow-intent href="market:*" />
         <allow-navigation href="https://*/*" />
