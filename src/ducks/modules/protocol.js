@@ -152,6 +152,9 @@ const actionCreators = {
   downloadProtocol: downloadProtocolAction,
   setProtocol,
   loadFactoryProtocol: loadFactoryProtocolAction,
+  loadProtocolFailed,
+  importProtocolFailed,
+  downloadProtocolFailed,
 };
 
 const actionTypes = {
