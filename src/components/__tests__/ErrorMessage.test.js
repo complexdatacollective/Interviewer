@@ -51,6 +51,4 @@ describe('<ErrorMessage />', () => {
       expect(component.find('Dialog').prop('show')).toEqual(false);
     });
   });
-
-
 });
