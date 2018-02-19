@@ -36,8 +36,10 @@ export default function reducer(state = initialState, action = {}) {
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
     case LOAD_PROTOCOL:
+    case LOAD_FACTORY_PROTOCOL:
       return {
         ...state,
+        isLoaded: false,
         isLoading: true,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
