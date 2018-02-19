@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
-import { friendlyErrorMessage } from '../../ducks/modules/errors';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {

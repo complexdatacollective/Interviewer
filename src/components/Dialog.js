@@ -23,10 +23,9 @@ const Dialog = (props) => {
     type,
   } = props;
 
-  let cancelButton = null;
-  if (hasCancelButton) {
-    cancelButton = <Button color="navy-taupe" onClick={onCancel} content={cancelLabel} />;
-  }
+  const cancelButton = hasCancelButton ?
+    <Button color="navy-taupe" onClick={onCancel} content={cancelLabel} /> :
+    null;
 
   const typeColor = {
     info: 'primary',

@@ -41,15 +41,6 @@ const errorAction = e => ({
   error: e,
 });
 
-const friendlyErrorMessage = message =>
-  (error) => {
-    if (error.friendlyMessage) { throw error; }
-
-    // eslint-disable-next-line no-param-reassign
-    error.friendlyMessage = message;
-    throw error;
-  };
-
 const actionCreators = {
   acknowledge,
   error: errorAction,
@@ -63,5 +54,4 @@ const actionTypes = {
 export {
   actionCreators,
   actionTypes,
-  friendlyErrorMessage,
 };

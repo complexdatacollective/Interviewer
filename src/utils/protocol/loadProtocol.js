@@ -2,7 +2,7 @@ import { readFile } from '../filesystem';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import protocolPath from './protocolPath';
-import { friendlyErrorMessage } from '../../ducks/modules/errors';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
 const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 
