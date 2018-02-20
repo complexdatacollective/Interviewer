@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';

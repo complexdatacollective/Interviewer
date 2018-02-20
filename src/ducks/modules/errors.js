@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import { actionTypes as errorActionTypes } from './protocol';
 
 const ERROR = 'ERRORS/ERROR';
