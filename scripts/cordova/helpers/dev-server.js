@@ -68,19 +68,6 @@ function revertDevConfig(ctx) {
   const backupXml = path.join(projRoot, BackupConfigFilename);
   const devServerConf = path.join(projRoot, DevServerFilename);
 
-  let devServerUrl;
-
-  try {
-    devServerUrl = fs.readFileSync(devServerConf, 'utf-8');
-  } catch (e) {
-    console.warn(e);
-    return;
-  }
-
-  if (!devServerUrl) {
-    return;
-  }
-
   try {
     fs.copyFileSync(backupXml, configXml);
     fs.unlinkSync(backupXml);
