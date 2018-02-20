@@ -47,7 +47,9 @@ As a convinience, the repository contains configuration files that support the u
 ## Cordova Builds
 
 1. Install [cordova](https://cordova.apache.org) on your system: `npm install -g cordova`
-2. Add ios and android platforms for the project:
+2. If you haven't already, build the project: `npm run build`
+  - Without the `www/` directory, cordova commands won't recognize this as a valid project.
+3. Add ios and android platforms for the project:
   - `cordova platform add ios`
   - `cordova platform add android`
 
@@ -58,6 +60,11 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/7.x/guide/platforms/i
 If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
 Run `npm run dev:[android|ios]`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.2"`. Changes will be picked up from the dev server.
+
+Troubleshooting:
+
+- If a dev cordova build is interrupted, you may find that `config.xml` has changes, and that there's a `config.xml.original` file (ignored by git). You may restore the contents of `config.xml` from git or the original, and delete the '.original' file.
+- The webpack dev server writes a `.devserver` file on startup, which is removed when it exits. The file is used by the cordova dev build; it should contain the LAN URL of the running dev server.
 
 ## Application Structure
 
