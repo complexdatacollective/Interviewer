@@ -14,7 +14,8 @@ export default function reducer(state = initialState, action = {}) {
     case errorActionTypes.DOWNLOAD_PROTOCOL_FAILED:
     case errorActionTypes.IMPORT_PROTOCOL_FAILED:
     case errorActionTypes.LOAD_PROTOCOL_FAILED:
-      if (!jest) { console.error(action.error); } // eslint-disable-line
+      // eslint-disable-next-line no-console
+      console.error(action.error);
       return {
         ...state,
         acknowledged: false,
