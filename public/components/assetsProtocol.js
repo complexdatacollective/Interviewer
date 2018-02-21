@@ -14,7 +14,7 @@ const registerAssetsProtocol = () =>
     const userDataFilePath = path.normalize(path.join(userDataPath, 'protocols', file));
 
     // eslint-disable-next-line
-    fs.access(appFilePath, fs.constants.R_OK | fs.constants.W_OK, (err) => {
+    fs.access(appFilePath, fs.constants.R_OK, (err) => {
       const filePath = err ? userDataFilePath : appFilePath;
 
       callback({ path: filePath });
