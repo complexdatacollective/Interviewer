@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 import { ActionsObservable } from 'redux-observable';
-import 'rxjs';
 import reducer, { actionCreators, epics } from '../protocol';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
