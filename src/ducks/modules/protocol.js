@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
@@ -36,8 +34,10 @@ export default function reducer(state = initialState, action = {}) {
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
     case LOAD_PROTOCOL:
+    case LOAD_FACTORY_PROTOCOL:
       return {
         ...state,
+        isLoaded: false,
         isLoading: true,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
@@ -152,6 +152,9 @@ const actionCreators = {
   downloadProtocol: downloadProtocolAction,
   setProtocol,
   loadFactoryProtocol: loadFactoryProtocolAction,
+  loadProtocolFailed,
+  importProtocolFailed,
+  downloadProtocolFailed,
 };
 
 const actionTypes = {
