@@ -5,7 +5,7 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from '../filesystem';
 import { protocolPath } from './';
-import { friendlyErrorMessage } from '../../ducks/modules/errors';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 

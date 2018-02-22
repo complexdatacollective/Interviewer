@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
-import { friendlyErrorMessage } from '../../ducks/modules/errors';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ const getProtocolNameFromUrl = (url) => {
 };
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
-const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection, connect to a network, and try again.");
+const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection - connect to a network, and try again.");
 const fileError = friendlyErrorMessage('The protocol could not be saved to your device.');
 
 const downloadProtocol = inEnvironment((environment) => {

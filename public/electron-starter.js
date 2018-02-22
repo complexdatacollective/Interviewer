@@ -15,7 +15,15 @@ const isMacOS = () => os.platform() === 'darwin';
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : {};
 
-const windowParameters = Object.assign({ width: 1440, height: 900, center: true, title: 'Network Canvas' }, titlebarParameters);
+const windowParameters = Object.assign({
+  width: 1440,
+  height: 900,
+  minWidth: 1280,
+  minHeight: 800,
+  center: true,
+  title: 'Network Canvas'
+
+}, titlebarParameters);
 
 log.info('App starting...');
 

@@ -55,7 +55,11 @@
         "detect-port": "1.1.0",
         "dotenv": "4.0.0",
         "electron": "^1.8.2",
+<<<<<<< HEAD
         "electron-builder": "^19.56.0",
+=======
+        "electron-builder": "^19.26.3",
+>>>>>>> master
         "electron-installer-dmg": "^0.2.0",
         "electron-log": "^2.2.7",
         "electron-packager": "^8.5.2",
@@ -150,6 +154,7 @@
     "homepage": ".",
     "main": "www/electron-starter.js",
     "build": {
+        "asar": false,
         "extends": null,
         "appId": "Network-Canvas",
         "directories": {
