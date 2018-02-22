@@ -18,3 +18,6 @@ build.json
 *.zip
 *.pbxproj
 Icon^M^M
+
+.devserver
+config.xml.original

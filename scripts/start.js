@@ -15,6 +15,7 @@ process.on('unhandledRejection', err => {
 require('../config/env');
 
 const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -42,6 +43,24 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
+
+// Write the LAN URL to a file while running, so that cordova builds can attach.
+const devUrlFile = paths.dotdevserver;
+const makeDevUrlFile = (serverUrl) => {
+  try {
+    fs.writeFileSync(devUrlFile, chalk.stripColor(serverUrl));
+    console.log(chalk.cyan('Live mobile dev available: `npm run dev:[ios|android]`'));
+  } catch (err) {
+    console.warn(chalk.yellow(`Could not write ${devUrlFile}. Live Mobile dev will be unavailable.`));
+  }
+}
+const cleanDevUrlFile = () => {
+  try {
+    fs.unlinkSync(devUrlFile);
+  } catch(err) {
+    console.warn(err);
+  }
+}
 
 // We attempt to use the default port but if it is busy, we offer the user to
 // run on a different port. `detect()` Promise resolves to the next free port.
@@ -74,12 +93,14 @@ choosePort(HOST, DEFAULT_PORT)
         clearConsole();
       }
       console.log(chalk.cyan('Starting the development server...\n'));
+      makeDevUrlFile(urls.lanUrlForTerminal);
       openBrowser(urls.localUrlForBrowser);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {
       process.on(sig, function() {
         devServer.close();
+        cleanDevUrlFile();
         process.exit();
       });
     });
