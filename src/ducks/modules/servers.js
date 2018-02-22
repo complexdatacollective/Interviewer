@@ -3,6 +3,7 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { unionWith } from 'lodash';
+import { friendlyErrorMessage, actionCreators as errorActions } from './errors';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 
 const SERVICE_ANNOUNCED = Symbol('SERVERS/SERVICE_ANNOUNCED');
@@ -62,6 +63,8 @@ const fromEventEmitter = (emitter, eventName) =>
     handler => emitter.removeListener(eventName, handler)
   );
 
+const discoveryError = friendlyErrorMessage('Server discovery went bad x_x');
+
 const serverDiscoveryEpic = () => {
   const serverDiscoverer = new ServerDiscoverer();
 
@@ -69,6 +72,7 @@ const serverDiscoveryEpic = () => {
     fromEventEmitter(serverDiscoverer, 'SERVICE_ANNOUNCED').map(service => serviceAnnounced(service)),
     fromEventEmitter(serverDiscoverer, 'SERVICE_RESOLVED').map(service => serviceResolved(service)),
     fromEventEmitter(serverDiscoverer, 'SERVICE_REMOVED').map(service => serviceRemoved(service)),
+    fromEventEmitter(serverDiscoverer, 'ERROR').map(error => errorActions.error(discoveryError(error))),
   );
 };
 
