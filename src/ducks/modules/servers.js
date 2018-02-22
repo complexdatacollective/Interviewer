@@ -3,7 +3,8 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { unionWith } from 'lodash';
-import { friendlyErrorMessage, actionCreators as errorActions } from './errors';
+import { actionCreators as errorActions } from './errors';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 
 const SERVICE_ANNOUNCED = Symbol('SERVERS/SERVICE_ANNOUNCED');
