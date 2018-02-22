@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import path from 'path';
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import protocolPath from '../protocolPath';
@@ -15,11 +16,11 @@ describe('protocolPath', () => {
     it('Generates an asset path for the file', () => {
       expect(
         protocolPath('foo.canvas', 'protocol.json'),
-      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/protocol.json');
+      ).toEqual(path.join('tmp', 'mock', 'user', 'path', 'protocols', 'foo.canvas', 'protocol.json'));
 
       expect(
         protocolPath('foo.canvas'),
-      ).toEqual('tmp/mock/user/path/protocols/foo.canvas');
+      ).toEqual(path.join('tmp', 'mock', 'user', 'path', 'protocols', 'foo.canvas'));
     });
 
     it('Thows an error if the protocol is not specified', () => {
