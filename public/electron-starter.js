@@ -2,7 +2,6 @@ const electron = require('electron');
 const os = require('os');
 const path = require('path');
 const url = require('url');
-const os = require('os');
 const log = require('electron-log');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
