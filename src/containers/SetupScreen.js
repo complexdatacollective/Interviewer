@@ -93,10 +93,6 @@ class Setup extends Component {
     this.props.loadFactoryProtocol(protocolName);
   }
 
-  onClickLoadFactoryProtocol = () => {
-    this.props.loadFactoryProtocol('demo.canvas');
-  }
-
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.downloadProtocol(fields.protocol_url);
