@@ -97,7 +97,7 @@ describe('session reducer', () => {
         index: 0,
         count: 3,
       }, {
-        type: actionTypes.SET_STAGE,
+        type: actionTypes.SET_STAGE_ID,
         stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         id: 'd',
       }),
@@ -113,7 +113,7 @@ describe('session reducer', () => {
         index: 1,
         count: 3,
       }, {
-        type: actionTypes.SET_STAGE,
+        type: actionTypes.SET_STAGE_ID,
         stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         id: 'c',
       }),
@@ -143,11 +143,19 @@ describe('session actions', () => {
     expect(actionCreators.previous()).toEqual(expectedAction);
   });
 
-  it('should create a set stage action', () => {
+  it('should create a set stage action by id', () => {
     const expectedAction = {
-      type: actionTypes.SET_STAGE,
+      type: actionTypes.SET_STAGE_ID,
     };
 
-    expect(actionCreators.setStage()).toEqual(expectedAction);
+    expect(actionCreators.setStageId()).toEqual(expectedAction);
+  });
+
+  it('should create a set stage action by index', () => {
+    const expectedAction = {
+      type: actionTypes.SET_STAGE_INDEX,
+    };
+
+    expect(actionCreators.setStageIndex()).toEqual(expectedAction);
   });
 });

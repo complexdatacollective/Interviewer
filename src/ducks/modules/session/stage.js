@@ -3,7 +3,8 @@ import { actionTypes as protocolActionTypes } from '../protocol';
 
 const NEXT_STAGE = 'NEXT_STAGE';
 const PREVIOUS_STAGE = 'PREVIOUS_STAGE';
-const SET_STAGE = 'SET_STAGE';
+const SET_STAGE_ID = 'SET_STAGE_ID';
+const SET_STAGE_INDEX = 'SET_STAGE_INDEX';
 
 const initialState = {
   index: 0,
@@ -43,10 +44,15 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         index: rotateIndex(state.count, state.index - 1),
       };
-    case SET_STAGE:
+    case SET_STAGE_ID:
       return {
         ...state,
         index: getStageIndex(action.stages, action.id),
+      };
+    case SET_STAGE_INDEX:
+      return {
+        ...state,
+        index: action.index,
       };
     default:
       return state;
@@ -65,24 +71,33 @@ function previous() {
   };
 }
 
-function setStage(stages, id) {
+function setStageId(stages, id) {
   return {
-    type: SET_STAGE,
+    type: SET_STAGE_ID,
     stages,
     id,
+  };
+}
+
+function setStageIndex(index) {
+  return {
+    type: SET_STAGE_INDEX,
+    index,
   };
 }
 
 const actionCreators = {
   next,
   previous,
-  setStage,
+  setStageId,
+  setStageIndex,
 };
 
 const actionTypes = {
   NEXT_STAGE,
   PREVIOUS_STAGE,
-  SET_STAGE,
+  SET_STAGE_ID,
+  SET_STAGE_INDEX,
 };
 
 export {

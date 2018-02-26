@@ -104,7 +104,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onStageClick: bindActionCreators(stageActions.setStage, dispatch),
+  onStageClick: bindActionCreators(stageActions.setStageId, dispatch),
   toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
   updateSearch: bindActionCreators(menuActions.updateStageSearch, dispatch),
 });
