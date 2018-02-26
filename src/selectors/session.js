@@ -16,7 +16,7 @@ export const stages = createSelector(
 export const stage = createSelector(
   stageIndex,
   stages,
-  (stageIndex, stages) => stages[stageIndex],
+  (stageIndex, stages) => stages[stageIndex] || {},
 );
 
 export const filteredStages = createSelector(
