@@ -81,7 +81,7 @@ class Setup extends Component {
       <div className="setup">
         <div className="setup__header">
           <img src={logo} className="logo" alt="Network Canvas" />
-          <h1 className="type--title-1">Welcome to Network Canvas Alpha 2 - Milliways</h1>
+          <h1 className="type--title-1">Welcome to Network Canvas Alpha 3 - Tiburon</h1>
         </div>
         <p>
           Thank you for taking the time to explore this exciting new chapter in
