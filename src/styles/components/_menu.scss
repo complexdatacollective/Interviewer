@@ -103,10 +103,10 @@
     }
 
     &:hover {
-      background-color: darken(palette('primary'), 5%);
+      background-color: var(--menu-item-hover);
 
       &.menu__menuitem--settings {
-        background-color: darken(palette('settings'), 5%);
+        background-color: var(--menu-item-hover-settings);
       }
     }
 
