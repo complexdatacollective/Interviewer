@@ -20,6 +20,7 @@ import {
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    protocolPath: state.protocol.path,
   };
 }
 
@@ -32,7 +33,9 @@ function mapDispatchToProps(dispatch) {
 
 class ParamsRoute extends Component {
   componentWillMount() {
-    if (this.props.computedMatch.params && this.props.computedMatch.params.protocolId) {
+    if (this.props.computedMatch.params &&
+      this.props.computedMatch.params.protocolId &&
+      this.props.computedMatch.params.protocolId !== this.props.protocolPath) {
       this.props.loadFactoryProtocol(this.props.computedMatch.params.protocolId);
     }
 
@@ -46,7 +49,8 @@ class ParamsRoute extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.computedMatch.params &&
         nextProps.computedMatch.params !== this.props.computedMatch.params &&
-        nextProps.computedMatch.params.protocolId) {
+        nextProps.computedMatch.params.protocolId &&
+        nextProps.computedMatch.params.protocolId !== this.props.protocolPath) {
       this.props.loadFactoryProtocol(nextProps.computedMatch.params.protocolId);
     }
 
