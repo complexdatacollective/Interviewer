@@ -10,7 +10,7 @@
 
   &--hover,
   &--drag {
-    background-color: transparentize(palette('ring'), .5);
+    background-color: var(--node-list-action-bg);
   }
 
   &--transition {

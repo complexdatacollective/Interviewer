@@ -92,7 +92,7 @@ $results-height: calc(100vh - 350px);
   }
 
   .add-count-button {
-    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
+    filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
     position: absolute;
     right: -4rem;
     top: 30%;
