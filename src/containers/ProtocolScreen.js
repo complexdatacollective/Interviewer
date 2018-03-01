@@ -9,14 +9,14 @@ import { stage as getStage } from '../selectors/session';
 /**
   * Check protocol is loaded, and render the stage
   */
-const Protocol = ({ isProtocolLoaded, stage }) => {
+const Protocol = ({ isProtocolLoaded, protocolPath, stage }) => {
   if (!isProtocolLoaded) { return null; }
 
   return (
     <div className="protocol">
       <TransitionGroup>
         <StageTransition key={stage.id}>
-          <Stage config={stage} />
+          <Stage config={stage} pathPrefix={`/protocol/${protocolPath}`} />
         </StageTransition>
       </TransitionGroup>
     </div>
@@ -25,12 +25,18 @@ const Protocol = ({ isProtocolLoaded, stage }) => {
 
 Protocol.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
+  protocolPath: PropTypes.string,
   stage: PropTypes.object.isRequired,
+};
+
+Protocol.defaultProps = {
+  protocolPath: '',
 };
 
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    protocolPath: state.protocol.path,
     stage: getStage(state),
   };
 }

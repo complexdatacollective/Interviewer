@@ -8,8 +8,10 @@ import {
   Switch,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 
+import { history } from './ducks/store'
 import { actionCreators as protocolActions } from './ducks/modules/protocol';
 import { actionCreators as sessionActions } from './ducks/modules/session/stage';
 import {
@@ -91,7 +93,7 @@ let SetupRequiredRoute = ({ component: Component, ...rest}) => (
 SetupRequiredRoute = connect(mapStateToProps, mapDispatchToProps)(SetupRequiredRoute);
 
 export default () => (
-  <Router>
+  <ConnectedRouter history={history}>
     <Switch>
       <SetupRequiredRoute exact path="/protocol" component={ProtocolScreen} />
       <LoadParamsRoute path="/protocol/:protocolId/:stageIndex" component={ProtocolScreen} />
@@ -99,5 +101,5 @@ export default () => (
       <Route path="/setup" component={SetupScreen} />
       <Redirect to={{ pathname: '/setup' }} />
     </Switch>
-  </Router>
+  </ConnectedRouter>
 );
