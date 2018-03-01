@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
-import { actionCreators as stageActions } from '../ducks/modules/session/stage';
 import { stages, stage, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
 import { Menu } from '../components';
 
@@ -36,6 +36,7 @@ class StageMenu extends Component {
       hideButton,
       isOpen,
       onStageClick,
+      protocolPath,
       searchValue,
       toggleMenu,
     } = this.props;
@@ -47,7 +48,7 @@ class StageMenu extends Component {
         label: filteredStage.label,
         interfaceType: filteredStage.type,
         isActive: currentStage === filteredStage,
-        onClick: () => onStageClick(currentStages, filteredStage.id),
+        onClick: () => onStageClick(`/protocol/${protocolPath}/${currentStages.indexOf(filteredStage)}`),
       }));
 
     const search = (
@@ -76,6 +77,7 @@ StageMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   onStageClick: PropTypes.func.isRequired,
+  protocolPath: PropTypes.string,
   searchValue: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   updateSearch: PropTypes.func,
@@ -85,6 +87,7 @@ StageMenu.defaultProps = {
   currentStage: null,
   hideButton: false,
   isOpen: false,
+  protocolPath: '',
   searchValue: '',
   updateSearch: () => {},
 };
@@ -99,12 +102,13 @@ function mapStateToProps(state) {
     currentStages,
     currentStage,
     filteredList,
+    protocolPath: state.protocol.path,
     searchValue: stageSearchTerm(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  onStageClick: bindActionCreators(stageActions.setStageId, dispatch),
+  onStageClick: path => dispatch(push(path)),
   toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
   updateSearch: bindActionCreators(menuActions.updateStageSearch, dispatch),
 });
