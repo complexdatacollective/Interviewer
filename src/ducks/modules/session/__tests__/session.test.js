@@ -91,7 +91,7 @@ describe('session reducer', () => {
     );
   });
 
-  it('should handle SET_STAGE', () => {
+  it('should handle SET_STAGE_ID', () => {
     expect(
       reducer({
         index: 0,
@@ -116,6 +116,38 @@ describe('session reducer', () => {
         type: actionTypes.SET_STAGE_ID,
         stages: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
         id: 'c',
+      }),
+    ).toEqual(
+      {
+        index: 2,
+        count: 3,
+      },
+    );
+  });
+
+  it('should handle SET_STAGE_INDEX', () => {
+    expect(
+      reducer({
+        index: 0,
+        count: 3,
+      }, {
+        type: actionTypes.SET_STAGE_INDEX,
+        index: 0,
+      }),
+    ).toEqual(
+      {
+        index: 0,
+        count: 3,
+      },
+    );
+
+    expect(
+      reducer({
+        index: 1,
+        count: 3,
+      }, {
+        type: actionTypes.SET_STAGE_INDEX,
+        index: 2,
       }),
     ).toEqual(
       {

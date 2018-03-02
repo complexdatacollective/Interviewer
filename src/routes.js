@@ -1,20 +1,16 @@
-/* eslint-disable */
-
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
-  HashRouter as Router,
   Route,
   Redirect,
   Switch,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { bindActionCreators } from 'redux';
 
-import { history } from './ducks/store'
-import { actionCreators as protocolActions } from './ducks/modules/protocol';
-import { actionCreators as sessionActions } from './ducks/modules/session/stage';
+import { history } from './ducks/store';
 import {
+  LoadParamsRoute,
   ProtocolScreen,
   SetupScreen,
 } from './containers';
@@ -22,62 +18,10 @@ import {
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    setStageIndex: bindActionCreators(sessionActions.setStageIndex, dispatch),
-  };
-}
-
-class ParamsRoute extends Component {
-  componentWillMount() {
-    if (this.props.computedMatch.params &&
-      this.props.computedMatch.params.protocolId &&
-      this.props.computedMatch.params.protocolId !== this.props.protocolPath) {
-      this.props.loadFactoryProtocol(this.props.computedMatch.params.protocolId);
-    }
-
-    if (this.props.computedMatch.params &&
-        this.props.computedMatch.params.stageIndex &&
-        this.props.isProtocolLoaded) {
-      this.props.setStageIndex(this.props.computedMatch.params.stageIndex);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.computedMatch.params &&
-        nextProps.computedMatch.params !== this.props.computedMatch.params &&
-        nextProps.computedMatch.params.protocolId &&
-        nextProps.computedMatch.params.protocolId !== this.props.protocolPath) {
-      this.props.loadFactoryProtocol(nextProps.computedMatch.params.protocolId);
-    }
-
-    if (nextProps.computedMatch.params &&
-        nextProps.computedMatch.params.stageIndex &&
-        nextProps.isProtocolLoaded) {
-      this.props.setStageIndex(nextProps.computedMatch.params.stageIndex);
-    }
-  }
-
-  render() {
-    const {
-      component: Component,
-      ...rest
-    } = this.props;
-
-    return (
-      <Component {...rest} />
-    );
-  }
-}
-
-const LoadParamsRoute = connect(mapStateToProps, mapDispatchToProps)(ParamsRoute);
-
-let SetupRequiredRoute = ({ component: Component, ...rest}) => (
+let SetupRequiredRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props => (
@@ -90,7 +34,11 @@ let SetupRequiredRoute = ({ component: Component, ...rest}) => (
   />
 );
 
-SetupRequiredRoute = connect(mapStateToProps, mapDispatchToProps)(SetupRequiredRoute);
+SetupRequiredRoute.propTypes = {
+  component: PropTypes.object.isRequired,
+};
+
+SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 
 export default () => (
   <ConnectedRouter history={history}>
