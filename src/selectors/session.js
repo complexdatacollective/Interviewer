@@ -24,13 +24,13 @@ export const stage = createSelector(
 export const getNextStageIndex = createSelector(
   stageIndex,
   stages,
-  (stageIndex, stages) => rotateIndex(stages.length, parseInt(stageIndex, 10) + 1),
+  (stageIndex, stages) => rotateIndex(stages.length, Math.trunc(stageIndex) + 1),
 );
 
 export const getPreviousStageIndex = createSelector(
   stageIndex,
   stages,
-  (stageIndex, stages) => rotateIndex(stages.length, parseInt(stageIndex, 10) - 1),
+  (stageIndex, stages) => rotateIndex(stages.length, Math.trunc(stageIndex) - 1),
 );
 
 export const filteredStages = createSelector(
