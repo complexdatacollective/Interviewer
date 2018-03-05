@@ -148,7 +148,6 @@
     "homepage": ".",
     "main": "www/electron-starter.js",
     "build": {
-        "asar": false,
         "extends": null,
         "appId": "Network-Canvas",
         "directories": {
