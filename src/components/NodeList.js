@@ -3,9 +3,9 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
-import Color from 'color';
-import { Node, animation, colorDictionary } from 'network-canvas-ui';
+import { Node, animation } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
+import getCSSVariable from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
 import {
@@ -94,9 +94,7 @@ class NodeList extends Component {
       { 'node-list--drag': isValidTarget },
     );
 
-    const backgroundColor = Color(
-      nodeColor || colorDictionary['node-base'],
-    ).alpha(0.1);
+    const backgroundColor = getCSSVariable('--light-background');
 
     const styles = isHovering ? { backgroundColor } : {};
 

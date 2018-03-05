@@ -2,26 +2,25 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { colorDictionary } from 'network-canvas-ui';
 import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
 import { getExternalData } from '../selectors/protocol';
 import { actionCreators as networkActions } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
+import getCSSVariable from '../utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import configurePanels from '../behaviours/configurePanels';
 
 const colorPresets = [
-  colorDictionary['edge-alt-1'],
-  colorDictionary['edge-alt-2'],
-  colorDictionary['edge-alt-3'],
-  colorDictionary['edge-alt-4'],
-  colorDictionary['edge-alt-5'],
+  getCSSVariable('--edge-alt-1'),
+  getCSSVariable('--edge-alt-2'),
+  getCSSVariable('--edge-alt-3'),
+  getCSSVariable('--edge-alt-4'),
+  getCSSVariable('--edge-alt-5'),
 ];
 
 const getHighlight = (highlight, panelNumber) => {
-  if (colorDictionary[highlight]) { return colorDictionary[highlight]; }
   if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
   return null;
 };
