@@ -75,7 +75,7 @@ class Setup extends Component {
   }
 
   render() {
-    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
+    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: `/protocol/${this.props.protocolPath}` }} />); }
 
     return (
       <div className="setup">
@@ -102,25 +102,31 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  isProtocolLoaded: PropTypes.bool.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
-  loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
+  isProtocolLoaded: PropTypes.bool.isRequired,
+  loadFactoryProtocol: PropTypes.func.isRequired,
+  loadProtocol: PropTypes.func.isRequired,
+  protocolPath: PropTypes.string,
+};
+
+Setup.defaultProps = {
+  protocolPath: '',
 };
 
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    protocolPath: state.protocol.path,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
   };
 }
 

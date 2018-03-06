@@ -18,24 +18,21 @@ import {
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    protocolPath: state.protocol.path,
   };
 }
 
-let SetupRequiredRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => (
-      rest.isProtocolLoaded ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: '/setup' }} />
-      )
-    )}
-  />
+let SetupRequiredRoute = ({ component: Component, protocolPath, ...rest }) => (
+  rest.isProtocolLoaded ? (
+    <Redirect to={{ pathname: `/protocol/${protocolPath}` }} {...rest} />
+  ) : (
+    <Redirect to={{ pathname: '/setup' }} />
+  )
 );
 
 SetupRequiredRoute.propTypes = {
   component: PropTypes.func.isRequired,
+  protocolPath: PropTypes.string.isRequired,
 };
 
 SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
