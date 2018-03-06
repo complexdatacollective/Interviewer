@@ -67,6 +67,13 @@ describe('<Form />', () => {
         placeholder: 'Nickname',
         validation: {},
       },
+      {
+        label: 'Hidden',
+        name: 'Hidden',
+        component: 'hidden',
+        placeholder: 'Hidden',
+        validation: {},
+      },
     ];
 
     const subject = mount((
@@ -75,7 +82,10 @@ describe('<Form />', () => {
       </Provider>
     ));
 
-    expect(subject.find(Field).length).toBe(2);
+    expect(subject.find(Field).length).toBe(3);
+
+    expect(subject.find('.input__container--hidden').length).toBe(1);
+    expect(subject.find('.input__container--hidden').children().find('input').props().type).toEqual('hidden');
   });
   it('Calls autoPopulate on Field blur');
 });

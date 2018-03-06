@@ -21,11 +21,19 @@ const makePropFieldVariables = () =>
     fields => map(fields, 'name'),
   );
 
+const makeGetPropFieldValues = () =>
+  createSelector(
+    makeRehydrateFields(),
+    fields => Object.assign({}, ...fields.filter(field => field.value)
+      .map(field => ({ [field.name]: field.value }))),
+  );
+
 const makeGetInitialValuesFromProps = () =>
   createSelector(
     makePropFieldVariables(),
+    makeGetPropFieldValues(),
     propNode,
-    (fields, node) => pick(node, fields),
+    (fields, values, node) => ({ ...values, ...pick(node, fields) }),
   );
 
 /**
