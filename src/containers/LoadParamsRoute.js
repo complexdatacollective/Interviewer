@@ -5,9 +5,14 @@ import { bindActionCreators, compose } from 'redux';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as sessionActions } from '../ducks/modules/session/stage';
+import { actionCreators as menuActions } from '../ducks/modules/menu';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
+    if (this.props.shouldReset) {
+      this.props.resetState();
+    }
+
     if (this.props.computedMatch.params &&
       this.props.computedMatch.params.protocolId &&
       this.props.computedMatch.params.protocolId !== this.props.protocolPath) {
@@ -22,6 +27,10 @@ class LoadParamsRoute extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.shouldReset) {
+      nextProps.resetState();
+    }
+
     if (nextProps.computedMatch.params &&
         nextProps.computedMatch.params !== this.props.computedMatch.params &&
         nextProps.computedMatch.params.protocolId &&
@@ -39,6 +48,7 @@ class LoadParamsRoute extends Component {
   render() {
     const {
       component: RenderComponent,
+      shouldReset,
       ...rest
     } = this.props;
 
@@ -49,16 +59,19 @@ class LoadParamsRoute extends Component {
 }
 
 LoadParamsRoute.propTypes = {
-  component: PropTypes.object.isRequired,
+  component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
+  resetState: PropTypes.func.isRequired,
   setStageIndex: PropTypes.func.isRequired,
+  shouldReset: PropTypes.bool,
 };
 
 LoadParamsRoute.defaultProps = {
   protocolPath: '',
+  shouldReset: false,
 };
 
 function mapStateToProps(state) {
@@ -71,6 +84,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    resetState: bindActionCreators(menuActions.resetState, dispatch),
     setStageIndex: bindActionCreators(sessionActions.setStageIndex, dispatch),
   };
 }

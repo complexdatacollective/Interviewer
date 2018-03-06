@@ -35,7 +35,7 @@ let SetupRequiredRoute = ({ component: Component, ...rest }) => (
 );
 
 SetupRequiredRoute.propTypes = {
-  component: PropTypes.object.isRequired,
+  component: PropTypes.func.isRequired,
 };
 
 SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
@@ -46,6 +46,7 @@ export default () => (
       <SetupRequiredRoute exact path="/protocol" component={ProtocolScreen} />
       <LoadParamsRoute path="/protocol/:protocolId/:stageIndex" component={ProtocolScreen} />
       <LoadParamsRoute path="/protocol/:protocolId" component={ProtocolScreen} />
+      <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/setup' }} />
       <Route path="/setup" component={SetupScreen} />
       <Redirect to={{ pathname: '/setup' }} />
     </Switch>
