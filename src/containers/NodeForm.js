@@ -7,9 +7,9 @@ import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import cx from 'classnames';
 
-import { Button } from 'network-canvas-ui';
+import { Button, ToggleInput } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { Field, Form, FormWizard } from '../containers/';
+import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
 import { makeRehydrateFields } from '../selectors/forms';
 
@@ -41,15 +41,28 @@ const makeGetInitialValuesFromProps = () =>
   * @extends Component
   */
 class NodeForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      addAnotherNode: false,
+    };
+  }
+
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
     this.props.onSubmit(formData, dispatch, form);
 
-    if (formData.addAnother) {
+    if (this.state.addAnotherNode) {
       this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
     }
   };
+
+  onToggleClick = () => {
+    this.setState({
+      addAnotherNode: !this.state.addAnotherNode,
+    });
+  }
 
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
 
@@ -65,8 +78,13 @@ class NodeForm extends Component {
       ...this.props,
       autoFocus: true,
       controls: [
-        <Field type="checkbox" component="ToggleInput" name="addAnother" label="Add another node after submit" />,
-        <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
+        <ToggleInput
+          name="addAnother"
+          label="Add another node after submit"
+          checked={this.state.addAnotherNode}
+          onCheck={this.onToggleClick}
+        />,
+        <Button key="submit" aria-label="Submit">Submit</Button>,
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,
@@ -90,7 +108,6 @@ class NodeForm extends Component {
 }
 
 NodeForm.propTypes = {
-  addAnother: PropTypes.bool,
   closeModal: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -117,10 +134,7 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
-      initialValues: {
-        addAnother: props.addAnother,
-        ...getInitialValuesFromProps(state, props),
-      },
+      initialValues: getInitialValuesFromProps(state, props),
     };
   };
 }
