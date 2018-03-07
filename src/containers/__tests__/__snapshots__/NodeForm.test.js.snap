@@ -43,7 +43,12 @@ ShallowWrapper {
         closeModal={[Function]}
         controls={
                 Array [
-                        false,
+                        <ToggleInput
+                          checked={false}
+                          label="Add another after submit"
+                          name="addAnother"
+                          onCheck={[Function]}
+                />,
                         <Button
                           aria-label="Submit"
                           color=""
@@ -91,7 +96,12 @@ ShallowWrapper {
         "autoFocus": true,
         "closeModal": [Function],
         "controls": Array [
-          false,
+          <ToggleInput
+            checked={false}
+            label="Add another after submit"
+            name="addAnother"
+            onCheck={[Function]}
+/>,
           <Button
             aria-label="Submit"
             color=""
@@ -140,7 +150,12 @@ ShallowWrapper {
           closeModal={[Function]}
           controls={
                     Array [
-                              false,
+                              <ToggleInput
+                                checked={false}
+                                label="Add another after submit"
+                                name="addAnother"
+                                onCheck={[Function]}
+                    />,
                               <Button
                                 aria-label="Submit"
                                 color=""
@@ -188,7 +203,12 @@ ShallowWrapper {
           "autoFocus": true,
           "closeModal": [Function],
           "controls": Array [
-            false,
+            <ToggleInput
+              checked={false}
+              label="Add another after submit"
+              name="addAnother"
+              onCheck={[Function]}
+/>,
             <Button
               aria-label="Submit"
               color=""

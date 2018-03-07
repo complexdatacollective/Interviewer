@@ -66,19 +66,14 @@ describe('<NodeForm />', () => {
     expect(subject).toMatchSnapshot();
   });
 
-  it('should render add another button', () => {
-    const multipleControls = mount((
-      <Provider store={mockStore()}>
-        <NodeForm {...mockProps} addAnother />
-      </Provider>
-    ));
+  it('should render a toggle to add another', () => {
     const singularForm = mount((
       <Provider store={mockStore()}>
         <NodeForm {...mockProps} />
       </Provider>
     ));
 
-    expect(multipleControls.find('form').find('button').length).toBe(2);
+    expect(singularForm.find('form').find('ToggleInput').length).toBe(1);
     expect(singularForm.find('form').find('button').length).toBe(1);
   });
 
