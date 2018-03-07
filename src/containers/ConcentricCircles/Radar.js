@@ -4,7 +4,6 @@ import { range, last, zipWith } from 'lodash';
 import color from 'color';
 import getCSSVariable from '../../utils/CSSVariables';
 
-
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;
   const b = rsq / n;
@@ -23,7 +22,7 @@ const equalByIncrement = (outerRadius, n) =>
     .map(v => (v * outerRadius) / n)
     .reverse();
 
-// Weight towards a by factor
+// Weight towards `a` by factor
 const weightedAverage = (a, b, factor = 1) =>
   zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
 
