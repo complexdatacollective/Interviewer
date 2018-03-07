@@ -80,7 +80,7 @@ class NodeForm extends Component {
       controls: [
         <ToggleInput
           name="addAnother"
-          label="Add another node after submit"
+          label="Add another after submit"
           checked={this.state.addAnotherNode}
           onCheck={this.onToggleClick}
         />,
