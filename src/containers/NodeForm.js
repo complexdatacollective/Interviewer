@@ -9,7 +9,7 @@ import cx from 'classnames';
 
 import { Button } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { Form, FormWizard } from '../containers/';
+import { Field, Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
 import { makeRehydrateFields } from '../selectors/forms';
 
@@ -51,29 +51,17 @@ class NodeForm extends Component {
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
     this.props.onSubmit(formData, dispatch, form);
-    if (this.state.typeOfSubmit === 'continuous') {
+
+    if (formData.addAnother) {
       this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
     }
-  };
-
-  continuousSubmit = () => {
-    this.setState({
-      typeOfSubmit: 'continuous',
-    }, this.submit);
-  };
-
-  normalSubmit = () => {
-    this.setState({
-      typeOfSubmit: 'normal',
-    }, this.submit);
   };
 
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
 
   render() {
     const {
-      addAnother,
       name,
       title,
     } = this.props;
@@ -84,11 +72,7 @@ class NodeForm extends Component {
       ...this.props,
       autoFocus: true,
       controls: [
-        (addAnother &&
-          <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
-            Submit and New
-          </Button>
-        ),
+        <Field type="checkbox" component="ToggleInput" name="addAnother" label="Add another node after submit" />,
         <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
       ],
       form: name.toString(),
@@ -140,7 +124,10 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
-      initialValues: getInitialValuesFromProps(state, props),
+      initialValues: {
+        addAnother: true,
+        ...getInitialValuesFromProps(state, props),
+      },
     };
   };
 }
