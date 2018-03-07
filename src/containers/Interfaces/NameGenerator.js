@@ -115,7 +115,6 @@ class NameGenerator extends Component {
           type={form.type}
           autoPopulate={form.autoPopulate}
           onSubmit={this.onSubmitNewNode}
-          addAnother
         />
         <button className="name-generator-interface__add-person" onClick={() => openModal(this.forms.ADD_NODE)}>
           Add a person

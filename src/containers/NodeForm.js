@@ -41,13 +41,6 @@ const makeGetInitialValuesFromProps = () =>
   * @extends Component
   */
 class NodeForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      typeOfSubmit: 'normal',
-    };
-  }
-
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
     this.props.onSubmit(formData, dispatch, form);
@@ -125,7 +118,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       initialValues: {
-        addAnother: true,
+        addAnother: props.addAnother,
         ...getInitialValuesFromProps(state, props),
       },
     };
