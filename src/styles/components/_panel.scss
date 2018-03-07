@@ -1,7 +1,7 @@
 $heading-size: 100px;
 
 .panel {
-  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration);
+  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-default-easing), var(--animation-standard-duration));
   flex: 1 0 $heading-size;
   display: flex;
   flex-direction: column;

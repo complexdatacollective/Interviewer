@@ -11,13 +11,13 @@
 
       &-active {
         [transition-role="background"] {
-          transition: opacity $animation-default-easing $animation-fast-duration;
+          transition: opacity var(--animation-default-easing) var(--animation-fast-duration);
           opacity: 1;
         }
 
         [transition-role="window"] {
-          transition: transform $animation-default-easing $animation-standard-duration,
-            opacity $animation-default-easing $animation-standard-duration;
+          transition: transform var(--animation-default-easing) var(--animation-standard-duration),
+            opacity var(--animation-default-easing) var(--animation-standard-duration);
           transform: translate(0, 0);
           opacity: 1;
         }
@@ -28,7 +28,7 @@
       opacity: 1;
 
       &-active {
-        transition: opacity $animation-default-easing $animation-standard-duration;
+        transition: opacity var(--animation-default-easing) var(--animation-standard-duration);
         opacity: 0;
       }
     }
