@@ -25,35 +25,35 @@ ShallowWrapper {
           className="sociogram-radar__range"
           cx="50"
           cy="50"
-          fill="#302C5B"
+          fill="#3A7030"
           r={50}
 />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
-          fill="#323062"
+          fill="#52692C"
           r={43.54101966249685}
 />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
-          fill="#353368"
+          fill="#696329"
           r={36.547375096555626}
 />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
-          fill="#37376F"
+          fill="#815C25"
           r={28.717082451262844}
 />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
-          fill="#3A3A75"
+          fill="#995522"
           r={19.270509831248425}
 />,
       ],
@@ -71,7 +71,7 @@ ShallowWrapper {
           "className": "sociogram-radar__range",
           "cx": "50",
           "cy": "50",
-          "fill": "#302C5B",
+          "fill": "#3A7030",
           "r": 50,
         },
         "ref": null,
@@ -86,7 +86,7 @@ ShallowWrapper {
           "className": "sociogram-radar__range",
           "cx": "50",
           "cy": "50",
-          "fill": "#323062",
+          "fill": "#52692C",
           "r": 43.54101966249685,
         },
         "ref": null,
@@ -101,7 +101,7 @@ ShallowWrapper {
           "className": "sociogram-radar__range",
           "cx": "50",
           "cy": "50",
-          "fill": "#353368",
+          "fill": "#696329",
           "r": 36.547375096555626,
         },
         "ref": null,
@@ -116,7 +116,7 @@ ShallowWrapper {
           "className": "sociogram-radar__range",
           "cx": "50",
           "cy": "50",
-          "fill": "#37376F",
+          "fill": "#815C25",
           "r": 28.717082451262844,
         },
         "ref": null,
@@ -131,7 +131,7 @@ ShallowWrapper {
           "className": "sociogram-radar__range",
           "cx": "50",
           "cy": "50",
-          "fill": "#3A3A75",
+          "fill": "#995522",
           "r": 19.270509831248425,
         },
         "ref": null,
@@ -152,35 +152,35 @@ ShallowWrapper {
             className="sociogram-radar__range"
             cx="50"
             cy="50"
-            fill="#302C5B"
+            fill="#3A7030"
             r={50}
 />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
-            fill="#323062"
+            fill="#52692C"
             r={43.54101966249685}
 />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
-            fill="#353368"
+            fill="#696329"
             r={36.547375096555626}
 />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
-            fill="#37376F"
+            fill="#815C25"
             r={28.717082451262844}
 />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
-            fill="#3A3A75"
+            fill="#995522"
             r={19.270509831248425}
 />,
         ],
@@ -198,7 +198,7 @@ ShallowWrapper {
             "className": "sociogram-radar__range",
             "cx": "50",
             "cy": "50",
-            "fill": "#302C5B",
+            "fill": "#3A7030",
             "r": 50,
           },
           "ref": null,
@@ -213,7 +213,7 @@ ShallowWrapper {
             "className": "sociogram-radar__range",
             "cx": "50",
             "cy": "50",
-            "fill": "#323062",
+            "fill": "#52692C",
             "r": 43.54101966249685,
           },
           "ref": null,
@@ -228,7 +228,7 @@ ShallowWrapper {
             "className": "sociogram-radar__range",
             "cx": "50",
             "cy": "50",
-            "fill": "#353368",
+            "fill": "#696329",
             "r": 36.547375096555626,
           },
           "ref": null,
@@ -243,7 +243,7 @@ ShallowWrapper {
             "className": "sociogram-radar__range",
             "cx": "50",
             "cy": "50",
-            "fill": "#37376F",
+            "fill": "#815C25",
             "r": 28.717082451262844,
           },
           "ref": null,
@@ -258,7 +258,7 @@ ShallowWrapper {
             "className": "sociogram-radar__range",
             "cx": "50",
             "cy": "50",
-            "fill": "#3A3A75",
+            "fill": "#995522",
             "r": 19.270509831248425,
           },
           "ref": null,
