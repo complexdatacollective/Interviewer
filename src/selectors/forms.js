@@ -25,6 +25,7 @@ const rehydrateField = ({ registry, entity, type, field }) => {
   return {
     name: field.variable,
     component: field.component,
+    value: field.value,
     ...registry[entity][type].variables[field.variable],
   };
 };
