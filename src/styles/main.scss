@@ -14,9 +14,13 @@
    }
 }
 
+// CSS variableoverrides for Network Canvas
+:root {
+  --body-font-family:$netcanvas-font-stack;
+}
+
 html,
 body {
-  font-family: $netcanvas-font-stack;
   overflow: hidden;
   user-select: none;
   color: palette('text');
