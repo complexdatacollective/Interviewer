@@ -12,7 +12,7 @@
     height: 40px;
     margin-right: 10px;
     width: 40px;
-    transition: all $animation-fast-duration $animation-default-easing;
+    transition: all var(--animation-fast-duration) var(--animation-default-easing);
     .tick {
       fill: transparent;
     }
@@ -25,7 +25,7 @@
       height: 60px;
       padding: 0;
       width: 60px;
-      animation: bounce $animation-standard-duration $animation-default-easing;
+      animation: bounce var(--animation-standard-duration) var(--animation-default-easing);
       fill: palette('primary');
       .tick {
         fill: palette('primary');

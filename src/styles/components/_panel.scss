@@ -1,7 +1,7 @@
 $heading-size: 100px;
 
 .panel {
-  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), $animation-default-easing, $animation-standard-duration);
+  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-default-easing), var(--animation-standard-duration));
   flex: 1 0 $heading-size;
   display: flex;
   flex-direction: column;
@@ -45,7 +45,7 @@ $heading-size: 100px;
   .node {
     font-size: calc(var(--base-node-size) * 0.66);
     margin: 0;
-    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
+    filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
     margin: 2px;
   }
 
@@ -67,6 +67,6 @@ $heading-size: 100px;
 
   & .node-list--hover,
   & .node-list--drag {
-    background-color: transparentize(palette('selected'), .95);
+    background-color: var(--panel-selected-node-bg-color)
   }
 }

@@ -10,11 +10,11 @@
 
   &--hover,
   &--drag {
-    background-color: transparentize(palette('ring'), .5);
+    background-color: var(--node-list-action-bg);
   }
 
   &--transition {
-    @include group-transition(fade, $animation-fast-duration);
+    @include group-transition(fade, var(--animation-fast-duration));
 
     &-appear,
     &-enter {

@@ -71,7 +71,7 @@ $results-height: calc(100vh - 350px);
     margin: spacing(small) 0;
     min-height: 8em;
     overflow: hidden;
-    transition: height $animation-fast-duration $animation-default-easing;
+    transition: height var(--animation-fast-duration) var(--animation-default-easing);
 
     .scrollable {
       height: 100%;
@@ -92,7 +92,7 @@ $results-height: calc(100vh - 350px);
   }
 
   .add-count-button {
-    filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
+    filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
     position: absolute;
     right: -4rem;
     top: 30%;
