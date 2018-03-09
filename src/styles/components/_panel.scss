@@ -43,7 +43,7 @@ $heading-size: 100px;
   }
 
   .node {
-    font-size: calc(var(--node-base-size) * 0.66);
+    font-size: calc(var(--base-node-size) * 0.66);
     margin: 0;
     filter: drop-shadow(0 3px 0 transparentize(palette('dark-background'), .25));
     margin: 2px;

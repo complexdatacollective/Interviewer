@@ -8,7 +8,6 @@ import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 
 const SERVICE_ANNOUNCED = Symbol('SERVERS/SERVICE_ANNOUNCED');
-const SERVICE_RESOLVED = Symbol('SERVERS/SERVICE_RESOLVED');
 const SERVICE_REMOVED = Symbol('SERVERS/SERVICE_REMOVED');
 
 const initialState = {
@@ -21,11 +20,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         services: [...state.services, action.service],
-      };
-    case SERVICE_RESOLVED:
-      return {
-        ...state,
-        services: unionWith([action.service], state.services, service => service.interfaceIndex),
       };
     case SERVICE_REMOVED:
       return {
@@ -45,14 +39,6 @@ const serviceAnnounced = service => ({
   },
 });
 
-const serviceResolved = service => ({
-  type: SERVICE_RESOLVED,
-  service: {
-    ...service,
-    status: 'RESOLVED',
-  },
-});
-
 const serviceRemoved = service => ({
   type: SERVICE_REMOVED,
   service,
@@ -64,14 +50,13 @@ const fromEventEmitter = (emitter, eventName) =>
     handler => emitter.removeListener(eventName, handler)
   );
 
-const discoveryError = friendlyErrorMessage('Server discovery went bad x_x');
+const discoveryError = friendlyErrorMessage('Server discovery went bad x_x  ');
 
 const serverDiscoveryEpic = () => {
   const serverDiscoverer = new ServerDiscoverer();
 
   return Observable.merge(
     fromEventEmitter(serverDiscoverer, 'SERVICE_ANNOUNCED').map(service => serviceAnnounced(service)),
-    fromEventEmitter(serverDiscoverer, 'SERVICE_RESOLVED').map(service => serviceResolved(service)),
     fromEventEmitter(serverDiscoverer, 'SERVICE_REMOVED').map(service => serviceRemoved(service)),
     fromEventEmitter(serverDiscoverer, 'ERROR').map(error => errorActions.error(discoveryError(error))),
   );
@@ -79,13 +64,11 @@ const serverDiscoveryEpic = () => {
 
 const actionCreators = {
   serviceAnnounced,
-  serviceResolved,
   serviceRemoved,
 };
 
 const actionTypes = {
   SERVICE_ANNOUNCED,
-  SERVICE_RESOLVED,
   SERVICE_REMOVED,
 };
 

@@ -14,8 +14,9 @@ class ServerDiscoverer {
     if (isElectron()) {
       try {
         const mdns = window.require('mdns');
-
         const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
+        console.info('MDNS browser running.');
+        console.log(browser);
         browser.on('serviceUp', service => this.events.emit('SERVICE_ANNOUNCED', service));
         browser.on('serviceDown', service => this.events.emit('SERVICE_REMOVED', service));
         browser.on('error', error => this.events.emit('ERROR', error));
@@ -31,14 +32,14 @@ class ServerDiscoverer {
         zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
           const action = result.action;
           const service = result.service;
-          if (action === 'added') {
+          if (action === 'resolved') {
             this.events.emit('SERVICE_ANNOUNCED', service);
-          } else if (action === 'resolved') {
-            this.events.emit('SERVICE_RESOLVED', service);
           } else {
             this.events.emit('SERVICE_REMOVED', service);
           }
         }, error => this.emit('ERROR', error));
+        console.info('Zeroconf browser running.');
+        console.log(zeroconf);
       } catch (error) {
         this.events.emit('ERROR', error);
       }

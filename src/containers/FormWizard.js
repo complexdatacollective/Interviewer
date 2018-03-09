@@ -24,26 +24,33 @@ class FormWizard extends Component {
   }
 
   nextField = () => {
-    const count = this.props.fields.length;
+    const count = this.shownFields().length;
     this.setState({
       fieldIndex: (this.state.fieldIndex + 1 + count) % count,
     });
   };
 
   previousField = () => {
-    const count = this.props.fields.length;
+    const count = this.shownFields().length;
     this.setState({
       fieldIndex: (this.state.fieldIndex - 1 + count) % count,
     });
   };
 
   shouldShowNextButton = () => {
-    const showingLastField = this.state.fieldIndex === this.props.fields.length - 1;
+    const showingLastField = this.state.fieldIndex === this.shownFields().length - 1;
     return !showingLastField;
   }
 
-  currentField() {
-    return [this.props.fields[this.state.fieldIndex]];
+  hiddenFields = () => this.props.fields.filter(field => field.component === 'hidden');
+
+  shownFields = () => this.props.fields.filter(field => field.component !== 'hidden');
+
+  filterFields = () => {
+    if (this.state.fieldIndex === 0) {
+      return [this.shownFields()[0]].concat(this.hiddenFields());
+    }
+    return [this.shownFields()[this.state.fieldIndex]];
   }
 
   render() {
@@ -55,14 +62,14 @@ class FormWizard extends Component {
 
     const formProps = {
       ...this.props,
-      fields: this.currentField(),
+      fields: this.filterFields(),
       onSubmit: this.onSubmit,
     };
 
     return (
       <div className="form-wizard">
         <div className="form-wizard__pips">
-          <Pips count={this.props.fields.length} currentIndex={this.state.fieldIndex} />
+          <Pips count={this.shownFields().length} currentIndex={this.state.fieldIndex} />
         </div>
         <div className="form-wizard__previous">
           {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
