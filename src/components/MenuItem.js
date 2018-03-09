@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Icon } from 'network-canvas-ui';
@@ -7,7 +8,7 @@ import { Icon } from 'network-canvas-ui';
   * Renders a menu item. Image is based on icon.
   */
 function MenuItem(props) {
-  const { onClick, interfaceType, icon, isActive, menuType, label } = props;
+  const { icon, interfaceType, isActive, label, menuType, onClick, to } = props;
 
   const iconMap = {
     NameGenerator: 'menu-name-generator',
@@ -27,27 +28,40 @@ function MenuItem(props) {
   );
 
   return (
-    <a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
-      <Icon name={mappedIcon} />
-      {label}
-    </a>
+    to ? (
+      <NavLink
+        onClick={onClick}
+        className={itemClasses}
+        activeClassName="menu__menuitem--active"
+        to={to}
+      >
+        <Icon name={mappedIcon} />
+        {label}
+      </NavLink>) :
+      (<a onClick={onClick} className={itemClasses} tabIndex={0} role="menuitem">
+        <Icon name={mappedIcon} />
+        {label}
+      </a>)
   );
 }
 
 MenuItem.propTypes = {
-  onClick: PropTypes.func.isRequired,
   icon: PropTypes.string,
   interfaceType: PropTypes.string,
   isActive: PropTypes.bool,
-  menuType: PropTypes.string,
   label: PropTypes.string.isRequired,
+  menuType: PropTypes.string,
+  onClick: PropTypes.func,
+  to: PropTypes.string,
 };
 
 MenuItem.defaultProps = {
-  isActive: false,
   icon: '',
   interfaceType: '',
+  isActive: false,
   menuType: 'primary',
+  onClick: () => {},
+  to: '',
 };
 
 export default MenuItem;

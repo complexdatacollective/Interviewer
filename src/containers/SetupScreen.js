@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
@@ -75,7 +76,7 @@ class Setup extends Component {
   }
 
   render() {
-    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: `/protocol/${this.props.protocolPath}` }} />); }
+    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: `/protocol/${this.props.protocolPath}/0` }} />); }
 
     return (
       <div className="setup">
@@ -130,4 +131,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Setup);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Setup));

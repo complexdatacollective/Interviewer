@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { store } from './ducks/store';
+import { ConnectedRouter } from 'react-router-redux';
+
+import { history, store } from './ducks/store';
 import { actionCreators as mockActions } from './ducks/modules/mock';
 import App from './containers/App';
 import { isCordova } from './utils/Environment';
@@ -14,9 +16,11 @@ window.populateNodes = (howMany = 0) => {
 const startApp = () => {
   ReactDOM.render(
     <Provider store={store}>
-      <App>
-        <AppRouter />
-      </App>
+      <ConnectedRouter history={history}>
+        <App>
+          <AppRouter />
+        </App>
+      </ConnectedRouter>
     </Provider>,
     document.getElementById('root'),
   );

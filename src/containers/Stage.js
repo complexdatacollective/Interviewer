@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import getInterface from '../containers/Interfaces';
-import { getNextStageIndex, getPreviousStageIndex } from '../selectors/session';
+import { stages } from '../selectors/session';
 
 /**
   * Render a protocol interface based on protocol info and id
@@ -65,10 +65,13 @@ Stage.defaultProps = {
   pathPrefix: '',
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
+  const maxLength = stages(state).length;
+
   return {
-    nextIndex: getNextStageIndex(state),
-    previousIndex: getPreviousStageIndex(state),
+    nextIndex: rotateIndex(maxLength, ownProps.stageIndex + 1),
+    previousIndex: rotateIndex(maxLength, ownProps.stageIndex - 1),
   };
 }
 

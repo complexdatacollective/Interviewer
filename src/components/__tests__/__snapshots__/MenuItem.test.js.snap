@@ -24,8 +24,10 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "host",
+    "nodeType": "function",
     "props": Object {
+      "activeClassName": "menu__menuitem--active",
+      "ariaCurrent": "true",
       "children": Array [
         <Icon
           className=""
@@ -37,8 +39,7 @@ ShallowWrapper {
       ],
       "className": "menu__menuitem menu__menuitem--primary",
       "onClick": [Function],
-      "role": "menuitem",
-      "tabIndex": 0,
+      "to": "linkyLink",
     },
     "ref": null,
     "rendered": Array [
@@ -58,14 +59,16 @@ ShallowWrapper {
       },
       "title",
     ],
-    "type": "a",
+    "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "host",
+      "nodeType": "function",
       "props": Object {
+        "activeClassName": "menu__menuitem--active",
+        "ariaCurrent": "true",
         "children": Array [
           <Icon
             className=""
@@ -77,8 +80,7 @@ ShallowWrapper {
         ],
         "className": "menu__menuitem menu__menuitem--primary",
         "onClick": [Function],
-        "role": "menuitem",
-        "tabIndex": 0,
+        "to": "linkyLink",
       },
       "ref": null,
       "rendered": Array [
@@ -98,7 +100,7 @@ ShallowWrapper {
         },
         "title",
       ],
-      "type": "a",
+      "type": [Function],
     },
   ],
   Symbol(enzyme.__options__): Object {
@@ -134,8 +136,10 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "host",
+    "nodeType": "function",
     "props": Object {
+      "activeClassName": "menu__menuitem--active",
+      "ariaCurrent": "true",
       "children": Array [
         <Icon
           className=""
@@ -147,8 +151,7 @@ ShallowWrapper {
       ],
       "className": "menu__menuitem menu__menuitem--primary",
       "onClick": [Function],
-      "role": "menuitem",
-      "tabIndex": 0,
+      "to": "linkyLink",
     },
     "ref": null,
     "rendered": Array [
@@ -168,14 +171,16 @@ ShallowWrapper {
       },
       "title",
     ],
-    "type": "a",
+    "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "host",
+      "nodeType": "function",
       "props": Object {
+        "activeClassName": "menu__menuitem--active",
+        "ariaCurrent": "true",
         "children": Array [
           <Icon
             className=""
@@ -187,8 +192,7 @@ ShallowWrapper {
         ],
         "className": "menu__menuitem menu__menuitem--primary",
         "onClick": [Function],
-        "role": "menuitem",
-        "tabIndex": 0,
+        "to": "linkyLink",
       },
       "ref": null,
       "rendered": Array [
@@ -208,7 +212,7 @@ ShallowWrapper {
         },
         "title",
       ],
-      "type": "a",
+      "type": [Function],
     },
   ],
   Symbol(enzyme.__options__): Object {
