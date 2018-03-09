@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
 
 import { actionCreators as menuActions } from '../ducks/modules/menu';
-import { stages, stage, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
+import { stages, filteredStages, stageMenuIsOpen, stageSearchTerm } from '../selectors/session';
 import { Menu } from '../components';
 
 /**
@@ -31,11 +30,9 @@ class StageMenu extends Component {
   render() {
     const {
       currentStages,
-      currentStage,
       filteredList,
       hideButton,
       isOpen,
-      onStageClick,
       protocolPath,
       searchValue,
       toggleMenu,
@@ -47,8 +44,7 @@ class StageMenu extends Component {
         icon: filteredStage.icon,
         label: filteredStage.label,
         interfaceType: filteredStage.type,
-        isActive: currentStage === filteredStage,
-        onClick: () => onStageClick(`/protocol/${protocolPath}/${currentStages.indexOf(filteredStage)}`),
+        to: protocolPath ? `/protocol/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
       }));
 
     const search = (
@@ -72,11 +68,9 @@ class StageMenu extends Component {
 
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
-  currentStage: PropTypes.object,
   filteredList: PropTypes.array.isRequired,
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
-  onStageClick: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   searchValue: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
@@ -84,7 +78,6 @@ StageMenu.propTypes = {
 };
 
 StageMenu.defaultProps = {
-  currentStage: null,
   hideButton: false,
   isOpen: false,
   protocolPath: '',
@@ -94,13 +87,11 @@ StageMenu.defaultProps = {
 
 function mapStateToProps(state) {
   const currentStages = stages(state);
-  const currentStage = stage(state);
   const filteredList = filteredStages(state);
 
   return {
     isOpen: stageMenuIsOpen(state),
     currentStages,
-    currentStage,
     filteredList,
     protocolPath: state.protocol.path,
     searchValue: stageSearchTerm(state),
@@ -108,7 +99,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onStageClick: path => dispatch(push(path)),
   toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
   updateSearch: bindActionCreators(menuActions.updateStageSearch, dispatch),
 });
