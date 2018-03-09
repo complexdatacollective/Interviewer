@@ -90,6 +90,10 @@ export const makeRenderInput = (componentType) => {
       InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
     }
 
+    if (['ToggleInput', 'CheckboxGroup', 'RadioGroup'].includes(componentType)) {
+      delete inputProps.isNumericOnly;
+    }
+
     return <InputComponent {...inputProps} {...input} />;
   };
 
