@@ -14,3 +14,4 @@ export { default as FormWizard } from './FormWizard';
 export { default as ConcentricCircles } from './ConcentricCircles';
 export { default as NodeBucket } from './NodeBucket';
 export { default as LoadScreen } from './LoadScreen';
+export { default as LoadParamsRoute } from './LoadParamsRoute';

@@ -1,19 +1,19 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
 import network from './network';
 import protocol from './protocol';
-import session from './session';
 import modals from './modals';
 import menu from './menu';
 import errors from './errors';
 import search from './search';
 
 const appReducer = combineReducers({
+  router: routerReducer,
   form: formReducer,
   network,
   protocol,
-  session,
   modals,
   menu,
   errors,

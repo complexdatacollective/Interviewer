@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import getInterface from '../containers/Interfaces';
-import { actionCreators as stageActions } from '../ducks/modules/session/stage';
+import { stages } from '../selectors/session';
 
 /**
   * Render a protocol interface based on protocol info and id
@@ -12,12 +13,12 @@ import { actionCreators as stageActions } from '../ducks/modules/session/stage';
 class Stage extends Component {
   // change the stage to the next
   onClickNext = () => {
-    this.props.next();
+    this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
   }
 
   // change the stage to the previous
   onClickBack = () => {
-    this.props.previous();
+    this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}`);
   }
 
   render() {
@@ -53,16 +54,31 @@ class Stage extends Component {
 }
 
 Stage.propTypes = {
+  changeStage: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
-  next: PropTypes.func.isRequired,
-  previous: PropTypes.func.isRequired,
+  nextIndex: PropTypes.number.isRequired,
+  pathPrefix: PropTypes.string,
+  previousIndex: PropTypes.number.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
+Stage.defaultProps = {
+  pathPrefix: '',
+};
+
+function mapStateToProps(state, ownProps) {
+  const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
+  const maxLength = stages(state).length;
+
   return {
-    next: bindActionCreators(stageActions.next, dispatch),
-    previous: bindActionCreators(stageActions.previous, dispatch),
+    nextIndex: rotateIndex(maxLength, ownProps.stageIndex + 1),
+    previousIndex: rotateIndex(maxLength, ownProps.stageIndex - 1),
   };
 }
 
-export default connect(null, mapDispatchToProps)(Stage);
+function mapDispatchToProps(dispatch) {
+  return {
+    changeStage: path => dispatch(push(path)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stage);

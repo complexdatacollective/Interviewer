@@ -4,19 +4,19 @@ import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 import { Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
-import { stage as getStage } from '../selectors/session';
+import { stages } from '../selectors/session';
 
 /**
   * Check protocol is loaded, and render the stage
   */
-const Protocol = ({ isProtocolLoaded, stage }) => {
+const Protocol = ({ isProtocolLoaded, protocolPath, stage, stageIndex }) => {
   if (!isProtocolLoaded) { return null; }
 
   return (
     <div className="protocol">
       <TransitionGroup>
         <StageTransition key={stage.id}>
-          <Stage config={stage} />
+          <Stage config={stage} pathPrefix={`/protocol/${protocolPath}`} stageIndex={stageIndex} />
         </StageTransition>
       </TransitionGroup>
     </div>
@@ -25,13 +25,22 @@ const Protocol = ({ isProtocolLoaded, stage }) => {
 
 Protocol.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
+  protocolPath: PropTypes.string,
   stage: PropTypes.object.isRequired,
+  stageIndex: PropTypes.number,
 };
 
-function mapStateToProps(state) {
+Protocol.defaultProps = {
+  protocolPath: '',
+  stageIndex: 0,
+};
+
+function mapStateToProps(state, ownProps) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
-    stage: getStage(state),
+    protocolPath: state.protocol.path,
+    stage: stages(state)[ownProps.stageIndex] || {},
+    stageIndex: Math.trunc(ownProps.stageIndex) || 0,
   };
 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
@@ -75,7 +76,7 @@ class Setup extends Component {
   }
 
   render() {
-    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: '/protocol' }} />); }
+    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: `/protocol/${this.props.protocolPath}/0` }} />); }
 
     return (
       <div className="setup">
@@ -102,26 +103,32 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  isProtocolLoaded: PropTypes.bool.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
-  loadFactoryProtocol: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
+  isProtocolLoaded: PropTypes.bool.isRequired,
+  loadFactoryProtocol: PropTypes.func.isRequired,
+  loadProtocol: PropTypes.func.isRequired,
+  protocolPath: PropTypes.string,
+};
+
+Setup.defaultProps = {
+  protocolPath: '',
 };
 
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
+    protocolPath: state.protocol.path,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Setup);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Setup));
