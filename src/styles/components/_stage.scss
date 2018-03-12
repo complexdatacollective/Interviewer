@@ -41,7 +41,7 @@
   }
 
   &--transition {
-    @include group-transition-with-delay(fade, $animation-slow-duration, $animation-slow-duration)
+    @include group-transition-with-delay(fade, var(--animation-slow-duration), var(--animation-slow-duration));
 
     @include group-transition-leave {
       .node-list,

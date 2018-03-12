@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { range, last, zipWith } from 'lodash';
-import { colorDictionary } from 'network-canvas-ui';
 import color from 'color';
+import getCSSVariable from '../../utils/CSSVariables';
 
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;
@@ -22,7 +22,7 @@ const equalByIncrement = (outerRadius, n) =>
     .map(v => (v * outerRadius) / n)
     .reverse();
 
-// Weight towards a by factor
+// Weight towards `a` by factor
 const weightedAverage = (a, b, factor = 1) =>
   zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
 
@@ -31,12 +31,14 @@ const Radar = ({ n, skewed }) => {
     weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
     equalByIncrement(50, n);
 
-  const colorRing = color(colorDictionary.ring);
-  const colorBackground = color(colorDictionary.background);
+  const colorRing = color(getCSSVariable('--ring'));
+  const colorBackground = color(getCSSVariable('--background'));
 
   const ringFill = (ring) => {
     const mix = (ring + 1) / n;
-    return color(colorBackground).mix(colorRing, mix).hex();
+    const colorMix = color(colorBackground).mix(colorRing, mix);
+    const hexColorMix = colorMix.hex();
+    return hexColorMix;
   };
 
   return (

@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { colorDictionary } from 'network-canvas-ui';
+import getCSSVariable from '../../utils/CSSVariables';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
-const color = colorDictionary['edge-base'];
+const color = getCSSVariable('--edge-base');
 
 export class EdgeLayout extends PureComponent {
   static propTypes = {

@@ -1,9 +1,5 @@
 .node-bucket {
-  background: radial-gradient(
-    ellipse at center,
-    transparentize(palette('background'), .5)  0%,
-    transparentize(palette('ring'), .5) 100%
-  );
+  background: var(--node-bucket-bg);
   border-radius: 150px;
   padding: 20px;
   .node {
