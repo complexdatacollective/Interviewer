@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router';
 import cx from 'classnames';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
@@ -62,5 +63,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
+  withRouter,
   connect(mapStateToProps),
 )(App);

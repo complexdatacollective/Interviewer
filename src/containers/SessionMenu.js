@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
 import xss from 'xss';
@@ -242,6 +243,7 @@ class SessionMenu extends Component {
 }
 
 SessionMenu.propTypes = {
+  addMockNodes: PropTypes.func.isRequired,
   currentNetwork: PropTypes.object.isRequired,
   customItems: PropTypes.array.isRequired,
   hideButton: PropTypes.bool,
@@ -249,7 +251,6 @@ SessionMenu.propTypes = {
   openModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
   toggleMenu: PropTypes.func.isRequired,
-  addMockNodes: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
@@ -266,10 +267,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  openModal: bindActionCreators(modalActions.openModal, dispatch),
-  resetState: bindActionCreators(menuActions.resetState, dispatch),
-  toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
+  openModal: bindActionCreators(modalActions.openModal, dispatch),
+  resetState: () => dispatch(push('/reset')),
+  toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
 });
 
 export default compose(

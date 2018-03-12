@@ -70,7 +70,7 @@ class MenuFactory extends Component {
   // intercepts click events; calls callback and toggles Menu open state
   menuItemClick = (itemClick) => {
     this.menuClick();
-    itemClick();
+    if (itemClick) itemClick();
   }
 
   render() {
