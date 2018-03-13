@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { isEqual } from 'lodash';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { actionCreators as serverActions } from '../ducks/modules/servers';
 import { Form, Dialog } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 import logo from '../images/NC-Round.svg';
@@ -50,6 +50,10 @@ class Setup extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.discoverServers();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.services > this.props.services) {
       this.setState({
@@ -58,23 +62,6 @@ class Setup extends Component {
           type: 'info',
           additionalInformation: JSON.stringify(nextProps.services),
           content: 'An installation of Network Canvas Server has been found nearby.',
-          onConfirm: () => {},
-          confirmLabel: 'Great!',
-          hasCancelButton: false,
-        },
-      }, () => {
-        this.props.openModal('SERVER_DISCOVERY');
-      });
-      return;
-    }
-
-    if (!isEqual(nextProps.services, this.props.services)) {
-      this.setState({
-        serverDiscoveryDialog: {
-          title: 'Network Canvas Server Resolved!',
-          type: 'info',
-          additionalInformation: JSON.stringify(nextProps.services),
-          content: 'An installation of Network Canvas Server has been resolved.',
           onConfirm: () => {},
           confirmLabel: 'Great!',
           hasCancelButton: false,
@@ -170,6 +157,7 @@ Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
+  discoverServers: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
 };
 
@@ -193,6 +181,7 @@ function mapDispatchToProps(dispatch) {
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
+    discoverServers: bindActionCreators(serverActions.serverDiscoveryThunk, dispatch),
   };
 }
 
