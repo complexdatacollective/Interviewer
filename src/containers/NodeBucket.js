@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
 import { DragSource } from '../behaviours/DragAndDrop';
+import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 
 const EnhancedNode = DragSource(Node);
 const label = node => node.nickname;
@@ -31,6 +32,7 @@ class NodeBucket extends Component {
           <EnhancedNode
             label={label(node)}
             meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
+            scrollDirection={NO_SCROLL}
             {...node}
           />
         }

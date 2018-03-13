@@ -38,6 +38,7 @@ ShallowWrapper {
         allowDrag={true}
         label={undefined}
         meta={[Function]}
+        scrollDirection="NO_SCROLL"
 />,
       "className": "node-bucket",
     },
@@ -50,6 +51,7 @@ ShallowWrapper {
         "allowDrag": true,
         "label": undefined,
         "meta": [Function],
+        "scrollDirection": "NO_SCROLL",
       },
       "ref": null,
       "rendered": null,
@@ -67,6 +69,7 @@ ShallowWrapper {
           allowDrag={true}
           label={undefined}
           meta={[Function]}
+          scrollDirection="NO_SCROLL"
 />,
         "className": "node-bucket",
       },
@@ -79,6 +82,7 @@ ShallowWrapper {
           "allowDrag": true,
           "label": undefined,
           "meta": [Function],
+          "scrollDirection": "NO_SCROLL",
         },
         "ref": null,
         "rendered": null,
