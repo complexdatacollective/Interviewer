@@ -72,7 +72,22 @@ class Setup extends Component {
       return;
     }
 
-    if (nextProps.services < this.props.services) {
+    if (nextProps.services !== this.props.services) {
+      this.setState({
+        serverDiscoveryDialog: {
+          title: 'Network Canvas Server Found!',
+          type: 'info',
+          additionalInformation: JSON.stringify(nextProps.services),
+          content: 'An installation of Network Canvas Server has been found nearby.',
+          onConfirm: () => {},
+          confirmLabel: 'Great!',
+          hasCancelButton: false,
+        },
+      });
+      return;
+    }
+
+    if (nextProps.services === []) {
       this.props.closeModal('SERVER_DISCOVERY');
     }
   }

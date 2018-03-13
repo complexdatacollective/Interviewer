@@ -24,7 +24,7 @@ export default function reducer(state = initialState, action = {}) {
     case SERVICE_REMOVED:
       return {
         ...state,
-        services: [...state.services].splice(action.service.interfaceIndex, 1),
+        services: [...state.services].splice(state.services.indexOf(action.service), 1),
       };
     default:
       return state;
@@ -47,7 +47,7 @@ const serviceRemoved = service => ({
 const discoveryError = friendlyErrorMessage('Server discovery went bad x_x  ');
 
 const serverDiscoveryThunk = () => {
-  console.log('serverDiscovery thunk');
+
   const serverDiscoverer = new ServerDiscoverer();
 
   return function (dispatch) {
