@@ -38,11 +38,11 @@ function moveAngle({ dx, dy }) {
 }
 
 function axisProximityFromAngle(angle) {
-  return Math.abs(Math.cos(2 * angle)) ** 2;
+  return Math.sin(angle) ** 2;
 }
 
 function determineMoveType(movement) {
-  if (movement.velocity * movement.axisProximity > 0.1) {
+  if (movement.axisProximity > 0.9 || movement.velocity / movement.axisProximity < 0.15) {
     return 'SWIPE';
   }
   return 'DRAG';
