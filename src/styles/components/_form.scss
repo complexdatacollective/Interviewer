@@ -1,14 +1,7 @@
 .form {
-    &__button-container {
-      display: flex;
-      justify-content: space-around;
-
-      .toggle__container {
-        padding-left: 2em;
-
-        .toggle__slider {
-          margin-bottom: 1em;
-        }
-      }
+  &__button-container {
+    .toggle__container {
+      margin: 3em 0 1em 0;
     }
+  }
 }

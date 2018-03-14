@@ -80,6 +80,7 @@ class NodeForm extends Component {
       autoFocus: true,
       controls: [
         (showAddAnotherToggle && <ToggleInput
+          className="toggle--inline"
           name="addAnother"
           label="Add another after submit"
           checked={this.state.addAnotherNode}
@@ -123,7 +124,7 @@ NodeForm.propTypes = {
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
-  showAddAnotherToggle: PropTypes.boolean,
+  showAddAnotherToggle: PropTypes.bool,
 };
 
 NodeForm.defaultProps = {
