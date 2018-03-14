@@ -34,7 +34,7 @@ const Information = ({ stage: { title, items } }) => (
     <div className="instructions-interface__frame">
       <h1 className="instructions-interface__title type--title-1">{ title }</h1>
       <div className="instructions-interface__items">
-        { renderItems(items) }
+        { items && renderItems(items) }
       </div>
     </div>
   </div>
