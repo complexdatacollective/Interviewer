@@ -238,6 +238,7 @@ Search.defaultProps = {
   clearResultsOnClose: true,
   nodeColor: '',
   nodeType: '',
+  options: {},
 };
 
 Search.propTypes = {
@@ -255,7 +256,7 @@ Search.propTypes = {
   /* eslint-disable react/no-unused-prop-types */
   // These props are required by the fuse selector
   dataSourceKey: PropTypes.string.isRequired,
-  options: PropTypes.object.isRequired,
+  options: PropTypes.object,
   // This prop used by the nodeColor selector
   nodeType: PropTypes.string,
   /* eslint-enable react/no-unused-prop-types */
