@@ -308,6 +308,7 @@
       "title": "Add A Person",
       "entity": "node",
       "type": "person",
+      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "name",
