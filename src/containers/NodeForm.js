@@ -70,6 +70,7 @@ class NodeForm extends Component {
     const {
       name,
       title,
+      showAddAnotherToggle,
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
@@ -78,12 +79,12 @@ class NodeForm extends Component {
       ...this.props,
       autoFocus: true,
       controls: [
-        <ToggleInput
+        (showAddAnotherToggle && <ToggleInput
           name="addAnother"
           label="Add another after submit"
           checked={this.state.addAnotherNode}
           onCheck={this.onToggleClick}
-        />,
+        />),
         <Button key="submit" aria-label="Submit">Submit</Button>,
       ],
       form: name.toString(),
@@ -122,10 +123,11 @@ NodeForm.propTypes = {
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
+  showAddAnotherToggle: PropTypes.boolean,
 };
 
 NodeForm.defaultProps = {
-  addAnother: false,
+  showAddAnotherToggle: false,
   node: {},
 };
 
