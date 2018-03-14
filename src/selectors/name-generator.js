@@ -61,13 +61,13 @@ export const getSortFields = createSelector(
 
 export const getSortOrderDefault = createSelector(
   propSortOptions,
-  sortOptions => sortOptions.sortOrder && (Object.keys(sortOptions.sortOrder)[0] || ''),
+  sortOptions => (has(sortOptions, 'sortOrder') ? Object.keys(sortOptions.sortOrder)[0] : ''),
 );
 
 export const getSortDirectionDefault = createSelector(
   propSortOptions,
   getSortOrderDefault,
-  (sortOptions, key) => sortOptions.sortOrder && (sortOptions.sortOrder[key] || ''),
+  (sortOptions, key) => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder[key] : ''),
 );
 
 export const getDataByPrompt = createSelector(
