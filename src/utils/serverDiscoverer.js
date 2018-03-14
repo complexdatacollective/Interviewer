@@ -4,23 +4,25 @@ import { isElectron, isCordova } from '../utils/Environment';
 
 class ServerDiscoverer {
   constructor() {
-    console.log('constructing serverDiscoverer');
     if (!isElectron() && !isCordova()) {
-      console.log('Server discovery not implemented on this platform.');
       return { on: () => { /* noop */ } };
     }
 
     const EventEmitter = require('eventemitter3');
     this.events = new EventEmitter();
+  }
 
+  on(...args) {
+    this.events.on(...args);
+  }
+
+  init() {
     if (isElectron()) {
       try {
         const mdns = window.require('mdns');
         const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
-        console.info('MDNS browser running.');
-        console.log(browser);
-        browser.on('serviceUp', service => this.events.emit('SERVER_SERVICE_ANNOUNCED', service));
-        browser.on('serviceDown', service => this.events.emit('SERVER_SERVICE_REMOVED', service));
+        browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', service));
+        browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', service));
         browser.on('error', error => this.events.emit('SERVER_ERROR', error));
         browser.start();
       } catch (error) {
@@ -35,21 +37,15 @@ class ServerDiscoverer {
           const action = result.action;
           const service = result.service;
           if (action === 'resolved') {
-            this.events.emit('SERVER_SERVICE_ANNOUNCED', service);
+            this.events.emit('SERVER_ANNOUNCED', service);
           } else {
-            this.events.emit('SERVER_SERVICE_REMOVED', service);
+            this.events.emit('SERVER_REMOVED', service);
           }
         }, error => this.emit('SERVER_ERROR', error));
-        console.info('Zeroconf browser running.');
-        console.log(zeroconf);
       } catch (error) {
         this.events.emit('SERVER_ERROR', error);
       }
     }
-  }
-
-  on(...args) {
-    this.events.on(...args);
   }
 }
 

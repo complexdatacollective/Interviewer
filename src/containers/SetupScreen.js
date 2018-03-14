@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { actionCreators as serverActions } from '../ducks/modules/servers';
-import { Form, Dialog } from '../containers/';
+import { ServerList } from '../components/';
+import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 import logo from '../images/NC-Round.svg';
 
@@ -34,64 +34,6 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      serverDiscoveryDialog: {
-        title: 'Server Dialog',
-        type: 'info',
-        additionalInformation: '',
-        content: null,
-        onConfirm: () => {},
-        confirmLabel: 'Continue',
-        hasCancelButton: false,
-      },
-    };
-  }
-
-  componentDidMount() {
-    this.props.discoverServers();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.services > this.props.services) {
-      this.setState({
-        serverDiscoveryDialog: {
-          title: 'Network Canvas Server Found!',
-          type: 'info',
-          additionalInformation: JSON.stringify(nextProps.services),
-          content: 'An installation of Network Canvas Server has been found nearby.',
-          onConfirm: () => {},
-          confirmLabel: 'Great!',
-          hasCancelButton: false,
-        },
-      }, () => {
-        this.props.openModal('SERVER_DISCOVERY');
-      });
-      return;
-    }
-
-    if (nextProps.services !== this.props.services) {
-      this.setState({
-        serverDiscoveryDialog: {
-          title: 'Network Canvas Server Found!',
-          type: 'info',
-          additionalInformation: JSON.stringify(nextProps.services),
-          content: 'An installation of Network Canvas Server has been found nearby.',
-          onConfirm: () => {},
-          confirmLabel: 'Great!',
-          hasCancelButton: false,
-        },
-      });
-      return;
-    }
-
-    if (nextProps.services === []) {
-      this.props.closeModal('SERVER_DISCOVERY');
-    }
-  }
-
   onClickLoadFactoryProtocol = (protocolName) => {
     this.props.loadFactoryProtocol(protocolName);
   }
@@ -130,18 +72,8 @@ class Setup extends Component {
 
     return (
       <div className="setup">
-        <Dialog
-          name="SERVER_DISCOVERY"
-          title={this.state.serverDiscoveryDialog.title}
-          type={this.state.serverDiscoveryDialog.type}
-          confirmLabel={this.state.serverDiscoveryDialog.confirmLabel}
-          hasCancelButton={this.state.serverDiscoveryDialog.hasCancelButton}
-          additionalInformation={this.state.serverDiscoveryDialog.additionalInformation}
-          onConfirm={this.state.serverDiscoveryDialog.onConfirm}
-        >
-          {this.state.serverDiscoveryDialog.content}
-        </Dialog>
         <div className="setup__header">
+          <ServerList />
           <img src={logo} className="logo" alt="Network Canvas" />
           <h1 className="type--title-1">Welcome to Network Canvas Alpha 3 - Tiburon</h1>
         </div>
@@ -168,11 +100,9 @@ Setup.propTypes = {
   importProtocol: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  services: PropTypes.array.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
-  discoverServers: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
 };
 
@@ -183,7 +113,6 @@ Setup.defaultProps = {
 function mapStateToProps(state) {
   return {
     isProtocolLoaded: state.protocol.isLoaded,
-    services: state.servers.services,
     protocolPath: state.protocol.path,
   };
 }
@@ -196,7 +125,6 @@ function mapDispatchToProps(dispatch) {
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
-    discoverServers: bindActionCreators(serverActions.serverDiscoveryThunk, dispatch),
   };
 }
 
