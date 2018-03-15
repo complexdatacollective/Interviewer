@@ -75,7 +75,9 @@ class ServerList extends Component {
           <h3 className="ServerListBrowser__heading-header">Available Servers:</h3>
         </div>
         {this.state.error ?
-          (<h4>Automatic server discovery unavailable.</h4>)
+          (<div>
+            <h4>Automatic server discovery unavailable.</h4>
+          </div>)
           :
           (<div className="ServerListBrowser__content">
             {this.state.servers.length > 0 ?
