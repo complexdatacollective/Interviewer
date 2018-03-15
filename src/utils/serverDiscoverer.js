@@ -8,7 +8,7 @@ class ServerDiscoverer {
       return {
         on: () => { /* noop */ },
         off: () => { /* noop */ },
-        start: () => { /* noop */ },
+        init: () => { /* noop */ },
       };
     }
 
@@ -20,29 +20,38 @@ class ServerDiscoverer {
     this.events.on(...args);
   }
 
+
   off() {
     this.events.removeAllListeners();
+    if (isElectron()) {
+      this.browser.removeAllListeners();
+      this.browser.stop();
+    }
+
+    if (isCordova()) {
+      this.zeroconf.unwatch('_network-canvas._tcp.', 'local.');
+    }
   }
 
-  start() {
+  init() {
     if (navigator.onLine) {
       if (isElectron()) {
         try {
           const mdns = window.require('mdns');
-          const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
-          browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', service));
-          browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', service));
-          browser.on('error', error => this.events.emit('SERVER_ERROR', error));
-          browser.start();
+          this.browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
+          this.browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', service));
+          this.browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', service));
+          this.browser.on('error', error => this.events.emit('SERVER_ERROR', error));
+          this.browser.start();
         } catch (error) {
           this.events.emit('SERVER_ERROR', error);
         }
       }
 
       if (isCordova()) {
-        const zeroconf = window.cordova.plugins.zeroconf;
+        this.zeroconf = window.cordova.plugins.zeroconf;
         try {
-          zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
+          this.zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
             const action = result.action;
             const service = result.service;
             if (action === 'resolved') {

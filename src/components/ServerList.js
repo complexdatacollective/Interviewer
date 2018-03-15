@@ -19,40 +19,21 @@ class ServerList extends Component {
 
     this.serverDiscoverer = new ServerDiscoverer();
     this.handleNetworkChange = this.handleNetworkChange.bind(this);
+    this.bindServerEvents = this.bindServerEvents.bind(this);
+    this.unbindServerEvents = this.unbindServerEvents.bind(this);
   }
-
-  componentWillMount() {
-    if (!isElectron() && !isCordova()) {
-      this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
-    }
-  }
-
   componentDidMount() {
     window.addEventListener('online', this.handleNetworkChange);
     window.addEventListener('offline', this.handleNetworkChange);
 
-    this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
-      this.setState(prevState => ({
-        servers: [...prevState.servers, normalizeServerItem(response)],
-      }));
-    });
-
-    this.serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      const position = this.state.servers.findIndex(server => server.name === response.name);
-      this.setState(prevState => ({
-        servers: [...prevState.servers.slice(0, position), ...prevState.servers.slice(position + 1)], // eslint-disable-line
-      }));
-    });
-
-    this.serverDiscoverer.on('SERVER_ERROR', (error) => {
-      this.setState({ error });
-    });
-
-    this.serverDiscoverer.start();
+    this.bindServerEvents();
+    this.serverDiscoverer.init();
   }
 
   componentDidUpdate() {
+    // Give some console output about the error, just for debugging.
     if (this.state.error) {
+      // eslint-disable-next-line
       console.warn(this.state.error);
     }
   }
@@ -60,17 +41,46 @@ class ServerList extends Component {
   componentWillUnmount() {
     window.removeEventListener('online', this.handleNetworkChange);
     window.removeEventListener('offline', this.handleNetworkChange);
-    this.serverDiscoverer.off();
+    this.unbindServerEvents();
+  }
+
+  bindServerEvents() {
+    if (!isElectron() && !isCordova()) {
+      this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
+    } else {
+      this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
+        this.setState(prevState => ({
+          servers: [...prevState.servers, normalizeServerItem(response)],
+        }));
+      });
+
+      this.serverDiscoverer.on('SERVER_REMOVED', (response) => {
+        const position = this.state.servers.findIndex(server => server.name === response.name);
+        this.setState(prevState => ({
+          servers: [...prevState.servers.slice(0, position), ...prevState.servers.slice(position + 1)], // eslint-disable-line
+        }));
+      });
+
+      this.serverDiscoverer.on('SERVER_ERROR', (error) => {
+        this.setState({ error });
+      });
+    }
   }
 
   handleNetworkChange() {
     if (navigator.onLine) {
       this.setState({ servers: [], error: null }, () => {
-        this.serverDiscoverer.start();
+        this.bindServerEvents();
+        this.serverDiscoverer.init();
       });
     } else {
+      this.unbindServerEvents();
       this.setState({ error: new Error('The Server Discovery service requires a network connection.') });
     }
+  }
+
+  unbindServerEvents() {
+    this.serverDiscoverer.off();
   }
 
   render() {
@@ -83,7 +93,7 @@ class ServerList extends Component {
         {this.state.error ?
           (<div>
             <h4>Automatic server discovery unavailable.</h4>
-            <p><strong>Reason:</strong> {this.state.error.message}</p>
+            <small><strong>Reason:</strong> {this.state.error.message}</small>
           </div>)
           :
           (<div className="ServerListBrowser__content">
