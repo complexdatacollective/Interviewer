@@ -140,6 +140,23 @@ class SessionMenu extends Component {
     });
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  onKeyDown = (event) => {
+    if (isElectron() &&
+      ((event.key === 'F12') ||
+        (event.keyCode === 73 && event.shiftKey && event.ctrlKey) ||
+        (event.keyCode === 73 && event.metaKey && event.optKey))) {
+      this.toggleDevTools();
+    }
+  };
+
   onExport = () => {
     createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
   };
@@ -165,6 +182,12 @@ class SessionMenu extends Component {
     updater.downloadUpdate();
   }
 
+  toggleDevTools = () => {
+    const electron = window.require('electron');
+    const electronWebContents = electron.remote.getCurrentWebContents();
+    electronWebContents.toggleDevTools();
+  };
+
   render() {
     const {
       customItems, hideButton, isOpen, toggleMenu, addMockNodes,
@@ -179,13 +202,15 @@ class SessionMenu extends Component {
       { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
-      { id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
     ];
 
     if (isElectron()) {
       items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
       items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
+      items.push({ id: 'toggle-dev-tools', label: 'Toggle DevTools', onClick: this.toggleDevTools });
     }
+
+    items.push({ id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit });
 
     items.map((item) => {
       const temp = item;
