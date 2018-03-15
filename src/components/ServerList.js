@@ -18,15 +18,20 @@ class ServerList extends Component {
     };
 
     this.serverDiscoverer = new ServerDiscoverer();
-
-    if (!isElectron() && !isCordova()) {
-      this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
-    }
-
     this.handleNetworkChange = this.handleNetworkChange.bind(this);
   }
 
   componentWillMount() {
+    if (!isElectron() && !isCordova()) {
+      this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('online', this.handleNetworkChange);
+    window.addEventListener('offline', this.handleNetworkChange);
+    console.log(this);
+
     this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
       this.setState(prevState => ({
         servers: [...prevState.servers, normalizeServerItem(response)],
@@ -44,11 +49,7 @@ class ServerList extends Component {
       console.warn(error);
       this.setState({ error });
     });
-  }
 
-  componentDidMount() {
-    window.addEventListener('online', this.handleNetworkChange);
-    window.addEventListener('offline', this.handleNetworkChange);
     this.serverDiscoverer.start();
   }
 

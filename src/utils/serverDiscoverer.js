@@ -5,7 +5,11 @@ import { isElectron, isCordova } from '../utils/Environment';
 class ServerDiscoverer {
   constructor() {
     if (!isElectron() && !isCordova()) {
-      return { on: () => { /* noop */ } };
+      return {
+        on: () => { /* noop */ },
+        off: () => { /* noop */ },
+        start: () => { /* noop */ },
+      };
     }
 
     const EventEmitter = require('eventemitter3');
