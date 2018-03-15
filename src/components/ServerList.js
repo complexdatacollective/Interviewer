@@ -22,6 +22,8 @@ class ServerList extends Component {
     if (!isElectron() && !isCordova()) {
       this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
     }
+
+    this.handleNetworkChange = this.handleNetworkChange.bind(this);
   }
 
   componentWillMount() {
@@ -39,21 +41,19 @@ class ServerList extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_ERROR', (error) => {
-      console.log(error);
       this.setState({ error });
     });
-
-    this.serverDiscoverer.start();
   }
 
   componentDidMount() {
-    window.addEventListener('online', () => this.handleNetworkChange);
-    window.addEventListener('offline', () => this.handleNetworkChange);
+    window.addEventListener('online', this.handleNetworkChange);
+    window.addEventListener('offline', this.handleNetworkChange);
+    this.serverDiscoverer.start();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('online', () => this.handleNetworkChange);
-    window.removeEventListener('offline', () => this.handleNetworkChange);
+    window.removeEventListener('online', this.handleNetworkChange);
+    window.removeEventListener('offline', this.handleNetworkChange);
     this.serverDiscoverer.off();
   }
 
@@ -63,9 +63,7 @@ class ServerList extends Component {
         this.serverDiscoverer.start();
       });
     } else {
-      this.setState({ error: new Error('The Server Discovery service requires a network connection.') }, () => {
-        this.serverDiscoverer.off();
-      });
+      this.setState({ error: new Error('The Server Discovery service requires a network connection.') });
     }
   }
 
@@ -81,8 +79,9 @@ class ServerList extends Component {
           :
           (<div className="ServerListBrowser__content">
             {this.state.servers.length > 0 ?
-              this.state.servers.map(server => (<button>{server.name}</button>)) :
-              (<h4>No Servers currently available.</h4>)
+              // eslint-disable-next-line
+              this.state.servers.map(server => (<button onClick={() => console.log(server)}>{server.name}</button>)) :
+              (<h4>No nearby Servers found.</h4>)
             }
           </div>)
         }
