@@ -30,7 +30,6 @@ class ServerList extends Component {
   componentDidMount() {
     window.addEventListener('online', this.handleNetworkChange);
     window.addEventListener('offline', this.handleNetworkChange);
-    console.log(this);
 
     this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
       this.setState(prevState => ({
@@ -46,11 +45,16 @@ class ServerList extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_ERROR', (error) => {
-      console.warn(error);
       this.setState({ error });
     });
 
     this.serverDiscoverer.start();
+  }
+
+  componentDidUpdate() {
+    if (this.state.error) {
+      console.warn(this.state.error);
+    }
   }
 
   componentWillUnmount() {
@@ -74,11 +78,12 @@ class ServerList extends Component {
       <div className="ServerListBrowser">
 
         <div className="ServerListBrowser__heading">
-          <h3 className="ServerListBrowser__heading-header">Available Servers:</h3>
+          <h2 className="ServerListBrowser__heading-header">Available Servers:</h2>
         </div>
         {this.state.error ?
           (<div>
             <h4>Automatic server discovery unavailable.</h4>
+            <p><strong>Reason:</strong> {this.state.error.message}</p>
           </div>)
           :
           (<div className="ServerListBrowser__content">
