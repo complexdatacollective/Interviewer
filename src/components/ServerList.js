@@ -41,6 +41,7 @@ class ServerList extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_ERROR', (error) => {
+      console.warn(error);
       this.setState({ error });
     });
   }
