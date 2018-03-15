@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Icon, Spinner } from 'network-canvas-ui';
 import ServerDiscoverer from '../utils/serverDiscoverer';
+import ServerCard from '../components/ServerCard';
 import { isElectron, isCordova } from '../utils/Environment';
 
 
@@ -85,22 +87,21 @@ class ServerList extends Component {
 
   render() {
     return (
-      <div className="ServerListBrowser">
-
-        <div className="ServerListBrowser__heading">
-          <h2 className="ServerListBrowser__heading-header">Available Servers:</h2>
-        </div>
+      <div className="server-list">
         {this.state.error ?
-          (<div>
-            <h4>Automatic server discovery unavailable.</h4>
-            <small><strong>Reason:</strong> {this.state.error.message}</small>
+          (<div className="server-list__content">
+            <div className="server-list__placeholder">
+              <Icon name="error" />{
+              // eslint-disable-next-line
+              }<h4>Automatic server discovery unavailable (<a href="#" onClick={ () => alert(this.state.error.message)}>why?</a>).</h4>
+            </div>
           </div>)
           :
-          (<div className="ServerListBrowser__content">
+          (<div className="server-list__content">
             {this.state.servers.length > 0 ?
-              // eslint-disable-next-line
-              this.state.servers.map(server => (<button onClick={() => console.log(server)}>{server.name}</button>)) :
-              (<h4>No nearby Servers found.</h4>)
+            // eslint-disable-next-line
+            this.state.servers.map(server => (<ServerCard data={server}>{server.name}</ServerCard>)) :
+              (<div className="server-list__placeholder"><Spinner /><h4>Listening for nearby Servers...</h4></div>)
             }
           </div>)
         }

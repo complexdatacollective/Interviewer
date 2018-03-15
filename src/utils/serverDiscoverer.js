@@ -53,7 +53,13 @@ class ServerDiscoverer {
         try {
           this.zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
             const action = result.action;
-            const service = result.service;
+            const service = {
+              name: result.service.name,
+              interfaceIndex: null,
+              host: result.service.hostname,
+              port: result.service.port,
+              addresses: [...result.service.ipv4Addresses, ...result.service.ipv6Addresses],
+            };
             if (action === 'resolved') {
               this.events.emit('SERVER_ANNOUNCED', service);
             } else {

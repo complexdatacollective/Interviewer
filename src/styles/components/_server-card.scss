@@ -1,0 +1,12 @@
+$module-name: server-card;
+
+.#{$module-name} {
+  margin: 15px;
+  width:130px;
+  height: 130px;
+
+  &__label {
+    text-align: center;
+    margin: 0;
+  }
+}
