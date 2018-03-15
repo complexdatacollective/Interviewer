@@ -1,5 +1,3 @@
-/* eslint-disable react/no-multi-comp */
-
 import React, { Component } from 'react';
 import ServerDiscoverer from '../utils/serverDiscoverer';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -11,32 +9,19 @@ const normalizeServerItem = (serverItem) => {
 };
 
 class ServerList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-  componentDidCatch() {
-    this.setState({ hasError: true });
-  }
-  render() {
-    if (this.state.hasError) {
-      return <h1>Automatic server discovery unavailable.</h1>;
-    }
-    return <ServerListBrowser />;
-  }
-}
-
-class ServerListBrowser extends Component {
   constructor() {
     super();
 
     this.state = {
+      error: null,
       servers: [],
     };
 
     this.serverDiscoverer = new ServerDiscoverer();
 
-    if (!isElectron() && !isCordova()) { throw new Error('Automatic server discovery is not supported in the browser.'); }
+    if (!isElectron() && !isCordova()) {
+      this.setState({ error: new Error('Automatic server discovery is not supported in the browser.') });
+    }
   }
 
   componentWillMount() {
@@ -54,12 +39,34 @@ class ServerListBrowser extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_ERROR', (error) => {
-      throw new Error(error);
+      console.log(error);
+      this.setState({ error });
     });
+
+    this.serverDiscoverer.start();
   }
 
   componentDidMount() {
-    this.serverDiscoverer.init();
+    window.addEventListener('online', () => this.handleNetworkChange);
+    window.addEventListener('offline', () => this.handleNetworkChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('online', () => this.handleNetworkChange);
+    window.removeEventListener('offline', () => this.handleNetworkChange);
+    this.serverDiscoverer.off();
+  }
+
+  handleNetworkChange() {
+    if (navigator.onLine) {
+      this.setState({ servers: [], error: null }, () => {
+        this.serverDiscoverer.start();
+      });
+    } else {
+      this.setState({ error: new Error('The Server Discovery service requires a network connection.') }, () => {
+        this.serverDiscoverer.off();
+      });
+    }
   }
 
   render() {
@@ -69,12 +76,16 @@ class ServerListBrowser extends Component {
         <div className="ServerListBrowser__heading">
           <h3 className="ServerListBrowser__heading-header">Available Servers:</h3>
         </div>
-        <div className="ServerListBrowser__content" >
-          {this.state.servers.length > 0 ?
-            this.state.servers.map(server => (<button>{server.name}</button>)) :
-            (<h4>No Servers currently available.</h4>)
-          }
-        </div>
+        {this.state.error ?
+          (<h4>Automatic server discovery unavailable.</h4>)
+          :
+          (<div className="ServerListBrowser__content">
+            {this.state.servers.length > 0 ?
+              this.state.servers.map(server => (<button>{server.name}</button>)) :
+              (<h4>No Servers currently available.</h4>)
+            }
+          </div>)
+        }
       </div>
     );
   }

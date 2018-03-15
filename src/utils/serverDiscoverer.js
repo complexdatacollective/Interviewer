@@ -16,35 +16,43 @@ class ServerDiscoverer {
     this.events.on(...args);
   }
 
-  init() {
-    if (isElectron()) {
-      try {
-        const mdns = window.require('mdns');
-        const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
-        browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', service));
-        browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', service));
-        browser.on('error', error => this.events.emit('SERVER_ERROR', error));
-        browser.start();
-      } catch (error) {
-        this.events.emit('SERVER_ERROR', error);
-      }
-    }
+  off() {
+    this.events.removeAllListeners();
+  }
 
-    if (isCordova()) {
-      const zeroconf = window.cordova.plugins.zeroconf;
-      try {
-        zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
-          const action = result.action;
-          const service = result.service;
-          if (action === 'resolved') {
-            this.events.emit('SERVER_ANNOUNCED', service);
-          } else {
-            this.events.emit('SERVER_REMOVED', service);
-          }
-        }, error => this.emit('SERVER_ERROR', error));
-      } catch (error) {
-        this.events.emit('SERVER_ERROR', error);
+  start() {
+    if (navigator.onLine) {
+      if (isElectron()) {
+        try {
+          const mdns = window.require('mdns');
+          const browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
+          browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', service));
+          browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', service));
+          browser.on('error', error => this.events.emit('SERVER_ERROR', error));
+          browser.start();
+        } catch (error) {
+          this.events.emit('SERVER_ERROR', error);
+        }
       }
+
+      if (isCordova()) {
+        const zeroconf = window.cordova.plugins.zeroconf;
+        try {
+          zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
+            const action = result.action;
+            const service = result.service;
+            if (action === 'resolved') {
+              this.events.emit('SERVER_ANNOUNCED', service);
+            } else {
+              this.events.emit('SERVER_REMOVED', service);
+            }
+          }, error => this.emit('SERVER_ERROR', error));
+        } catch (error) {
+          this.events.emit('SERVER_ERROR', error);
+        }
+      }
+    } else {
+      this.events.emit('SERVER_ERROR', new Error('The Server Discovery service requires a network connection.'));
     }
   }
 }
