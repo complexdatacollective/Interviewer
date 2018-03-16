@@ -130,6 +130,10 @@ class SessionMenu extends Component {
         this.props.openModal('UPDATE_DIALOG');
       });
     });
+
+    if (isElectron()) {
+      this.registerShortcuts();
+    }
   }
 
   componentWillMount() {
@@ -139,23 +143,6 @@ class SessionMenu extends Component {
       });
     });
   }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown);
-  }
-
-  onKeyDown = (event) => {
-    if (isElectron() &&
-      ((event.key === 'F12') ||
-        (event.keyCode === 73 && event.shiftKey && event.ctrlKey) ||
-        (event.keyCode === 73 && event.metaKey && event.optKey))) {
-      this.toggleDevTools();
-    }
-  };
 
   onExport = () => {
     createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
@@ -182,7 +169,25 @@ class SessionMenu extends Component {
     updater.downloadUpdate();
   }
 
+  registerShortcuts = () => {
+    if (!isElectron()) return;
+    const electron = window.require('electron');
+    electron.remote.globalShortcut.register('Ctrl+Shift+I', this.toggleDevTools);
+    electron.remote.globalShortcut.register('Cmd+Option+I', this.toggleDevTools);
+
+    // register and unregister on focus/blur so the shortcut is not so aggressive
+    electron.remote.getCurrentWindow().on('focus', () => {
+      electron.remote.globalShortcut.register('Ctrl+Shift+I', this.toggleDevTools);
+      electron.remote.globalShortcut.register('Cmd+Option+I', this.toggleDevTools);
+    });
+    electron.remote.getCurrentWindow().on('blur', () => {
+      electron.remote.globalShortcut.unregister('Ctrl+Shift+I');
+      electron.remote.globalShortcut.unregister('Cmd+Option+I');
+    });
+  }
+
   toggleDevTools = () => {
+    if (!isElectron()) return;
     const electron = window.require('electron');
     const electronWebContents = electron.remote.getCurrentWebContents();
     electronWebContents.toggleDevTools();
