@@ -28,7 +28,8 @@ $module-name: server-list;
   &__placeholder {
     text-align: center;
 
-    .spinner, .icon {
+    .spinner,
+    .icon {
       display: inline-block;
       padding-bottom: 20px;
     }

@@ -6,7 +6,6 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -87,8 +86,6 @@ class Setup extends Component {
 Setup.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
   importProtocol: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
@@ -110,8 +107,6 @@ function mapDispatchToProps(dispatch) {
   return {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
-    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
   };
