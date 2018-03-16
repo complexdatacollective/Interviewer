@@ -66,7 +66,9 @@ export default compose(
     resetInterface: props => (prompts) => {
       prompts.forEach((prompt) => {
         props.resetPropertyForAllNodes(prompt.layout.layoutVariable);
-        props.resetEdgesOfType(prompt.edges.creates);
+        if (prompt.edges) {
+          props.resetEdgesOfType(prompt.edges.creates);
+        }
       });
     },
   }),
