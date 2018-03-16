@@ -9,7 +9,7 @@ import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova, isElectron } from '../utils/Environment';
+import { isCordova, isElectron, isMacOS } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
@@ -132,7 +132,7 @@ class SessionMenu extends Component {
     });
 
     if (isElectron()) {
-      this.registerShortcuts();
+      this.registerPlatformShortcuts();
     }
   }
 
@@ -169,21 +169,27 @@ class SessionMenu extends Component {
     updater.downloadUpdate();
   }
 
-  registerShortcuts = () => {
+  registerShortcut = (accelerator, callback) => {
     if (!isElectron()) return;
+
     const electron = window.require('electron');
-    electron.remote.globalShortcut.register('Ctrl+Shift+I', this.toggleDevTools);
-    electron.remote.globalShortcut.register('Cmd+Option+I', this.toggleDevTools);
+    electron.remote.globalShortcut.register(accelerator, callback);
 
     // register and unregister on focus/blur so the shortcut is not so aggressive
     electron.remote.getCurrentWindow().on('focus', () => {
-      electron.remote.globalShortcut.register('Ctrl+Shift+I', this.toggleDevTools);
-      electron.remote.globalShortcut.register('Cmd+Option+I', this.toggleDevTools);
+      electron.remote.globalShortcut.register(accelerator, callback);
     });
     electron.remote.getCurrentWindow().on('blur', () => {
-      electron.remote.globalShortcut.unregister('Ctrl+Shift+I');
-      electron.remote.globalShortcut.unregister('Cmd+Option+I');
+      electron.remote.globalShortcut.unregister(accelerator);
     });
+  }
+
+  registerPlatformShortcuts = () => {
+    if (isMacOS()) {
+      this.registerShortcut('Cmd+Option+I', this.toggleDevTools);
+    } else {
+      this.registerShortcut('Ctrl+Shift+I', this.toggleDevTools);
+    }
   }
 
   toggleDevTools = () => {
