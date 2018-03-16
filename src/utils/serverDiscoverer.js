@@ -39,8 +39,14 @@ class ServerDiscoverer {
 
         // Pick the properties we want from the service object
         const normalizeService = (service) => {
-          const { name, host, port, addresses } = service;
-          return { name, host, port, addresses };
+          const { name, interfaceIndex, host, port, addresses } = service;
+          return {
+            name,
+            index: interfaceIndex,
+            host,
+            port,
+            addresses,
+          };
         };
 
         this.browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
@@ -63,6 +69,7 @@ class ServerDiscoverer {
           const normalizeService = service => (
             {
               name: service.name,
+              index: service.port,
               host: service.hostname,
               port: service.port,
               addresses: [...service.ipv4Addresses, ...service.ipv6Addresses],

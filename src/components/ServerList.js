@@ -11,12 +11,6 @@ class ServerList extends Component {
       error: null,
       servers: [],
     };
-
-    try {
-      this.serverDiscoverer = new ServerDiscoverer();
-    } catch (error) {
-      this.state.error = error;
-    }
   }
   componentDidMount() {
     window.addEventListener('online', this.handleNetworkChange);
@@ -40,6 +34,8 @@ class ServerList extends Component {
   }
 
   bindServerEvents = () => {
+    if (!this.serverDiscoverer) { return; }
+
     this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
       this.setState(prevState => ({
         servers: [...prevState.servers, response],
@@ -47,10 +43,16 @@ class ServerList extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      const position = this.state.servers.findIndex(server => server.name === response.name);
+      console.log('Looking for:');
+      console.log(response);
+
       this.setState(prevState => ({
-        servers: prevState.servers.splice(position, 1),
-      }));
+        // eslint-disable-next-line
+        servers: prevState.servers.filter(item => !(item.name == response.name && item.index == response.index)),
+      }), () => {
+        console.log('updated state.');
+        console.log(this.state.servers);
+      });
     });
 
     this.serverDiscoverer.on('SERVER_ERROR', (error) => {
@@ -62,8 +64,7 @@ class ServerList extends Component {
     if (navigator.onLine) {
       this.initServer();
     } else {
-      this.unbindServerEvents();
-      this.setState({ error: new Error('The Server Discovery service requires a network connection.') });
+      this.stopServer();
     }
   }
 
@@ -74,10 +75,15 @@ class ServerList extends Component {
   }
 
   initServer = () => {
-    this.setState({ servers: [], error: null }, () => {
-      this.bindServerEvents();
-      this.serverDiscoverer.init();
-    });
+    try {
+      this.serverDiscoverer = new ServerDiscoverer();
+      this.setState({ servers: [], error: null }, () => {
+        this.bindServerEvents();
+        this.serverDiscoverer.init();
+      });
+    } catch (error) {
+      this.setState({ error });
+    }
   }
 
   renderServerList() {
@@ -87,25 +93,25 @@ class ServerList extends Component {
       );
     }
 
-    return ([<Spinner />, <h4>Listening for nearby Servers...</h4>]);
+    return (<div className="server-list__placeholder"><Spinner /><h4>Listening for nearby Servers...</h4></div>);
   }
 
   render() {
     return (
       <div className="server-list">
         <div className="server-list__content">
-          <div className="server-list__placeholder">
-            {this.state.error ?
-              ([
-                <Icon name="error" />,
-                <h4>Automatic server discovery unavailable</h4>,
-                // eslint-disable-next-line no-alert
-                <Button small onClick={() => alert(this.state.error.message)}>why?</Button>,
-              ])
-              :
-              this.renderServerList()
-            }
-          </div>
+          {this.state.error ?
+            (
+              <div className="server-list__placeholder">
+                <Icon name="error" />
+                <h4>Automatic server discovery unavailable</h4>
+                { // eslint-disable-next-line no-alert
+                }<Button small onClick={() => alert(this.state.error.message)}>why?</Button>
+              </div>
+            )
+            :
+            this.renderServerList()
+          }
         </div>
       </div>
     );
