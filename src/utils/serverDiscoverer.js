@@ -23,7 +23,7 @@ class ServerDiscoverer {
 
   off() {
     this.events.removeAllListeners();
-    if (isElectron()) {
+    if (isElectron() && this.browser) {
       this.browser.removeAllListeners();
       this.browser.stop();
     }
