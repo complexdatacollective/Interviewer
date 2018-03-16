@@ -26,4 +26,4 @@ if (window) {
   window.store = store; // TODO: remove in production.
 }
 
-export const persistor = persistStore(store, { blacklist: ['form', 'droppable', 'modals', 'session', 'protocol', 'errors'] });
+export const persistor = persistStore(store, { blacklist: ['form', 'modals', 'session', 'protocol', 'errors'] });
