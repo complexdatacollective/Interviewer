@@ -9,7 +9,7 @@ import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova, isElectron } from '../utils/Environment';
+import { isCordova, isElectron, isMacOS } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
@@ -130,6 +130,10 @@ class SessionMenu extends Component {
         this.props.openModal('UPDATE_DIALOG');
       });
     });
+
+    if (isElectron()) {
+      this.registerPlatformShortcuts();
+    }
   }
 
   componentWillMount() {
@@ -165,6 +169,36 @@ class SessionMenu extends Component {
     updater.downloadUpdate();
   }
 
+  registerShortcut = (accelerator, callback) => {
+    if (!isElectron()) return;
+
+    const electron = window.require('electron');
+    electron.remote.globalShortcut.register(accelerator, callback);
+
+    // register and unregister on focus/blur so the shortcut is not so aggressive
+    electron.remote.getCurrentWindow().on('focus', () => {
+      electron.remote.globalShortcut.register(accelerator, callback);
+    });
+    electron.remote.getCurrentWindow().on('blur', () => {
+      electron.remote.globalShortcut.unregister(accelerator);
+    });
+  }
+
+  registerPlatformShortcuts = () => {
+    if (isMacOS()) {
+      this.registerShortcut('Cmd+Option+I', this.toggleDevTools);
+    } else {
+      this.registerShortcut('Ctrl+Shift+I', this.toggleDevTools);
+    }
+  }
+
+  toggleDevTools = () => {
+    if (!isElectron()) return;
+    const electron = window.require('electron');
+    const electronWebContents = electron.remote.getCurrentWebContents();
+    electronWebContents.toggleDevTools();
+  };
+
   render() {
     const {
       customItems, hideButton, isOpen, toggleMenu, addMockNodes,
@@ -179,13 +213,15 @@ class SessionMenu extends Component {
       { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
-      { id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit },
     ];
 
     if (isElectron()) {
       items.push({ id: 'update-check', label: 'Check for Update', icon: 'menu-custom-interface', onClick: updater.checkForUpdate });
       items.push({ id: 'toggle-fullscreen', label: 'Toggle Fullscreen', icon: 'menu-custom-interface', onClick: toggleFullscreen });
+      items.push({ id: 'toggle-dev-tools', label: 'Toggle DevTools', onClick: this.toggleDevTools });
     }
+
+    items.push({ id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit });
 
     items.map((item) => {
       const temp = item;
