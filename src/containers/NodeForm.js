@@ -69,7 +69,7 @@ class NodeForm extends Component {
     }, this.submit);
   };
 
-  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 16/9)').matches;
+  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches;
 
   render() {
     const {
