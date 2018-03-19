@@ -51,10 +51,9 @@ class ServerDiscoverer {
 
         // Pick the properties we want from the service object
         const normalizeService = (service) => {
-          const { name, interfaceIndex, host, port, addresses } = service;
+          const { name, host, port, addresses } = service;
           return {
             name,
-            index: interfaceIndex,
             host,
             port,
             addresses,
@@ -76,19 +75,19 @@ class ServerDiscoverer {
       try {
         this.zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
           const action = result.action;
-
           // Normalize the service object to match the mdns node module (above)
           const normalizeService = service => (
             {
               name: service.name,
-              index: service.port,
               host: service.hostname,
               port: service.port,
               addresses: [...service.ipv4Addresses, ...service.ipv6Addresses],
             }
           );
 
-          if (action === 'resolved') {
+          if (action === 'added') {
+            // Do nothing - we need a resolution which provides an IP address.
+          } else if (action === 'resolved') {
             this.events.emit('SERVER_ANNOUNCED', normalizeService(result.service));
           } else {
             this.events.emit('SERVER_REMOVED', normalizeService(result.service));

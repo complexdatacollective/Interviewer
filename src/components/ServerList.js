@@ -38,15 +38,22 @@ class ServerList extends Component {
     });
 
     this.serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
-      this.setState(prevState => ({
-        servers: [...prevState.servers, response],
-      }));
+      // Detect if we already have a service with this name
+      const serverIndex = this.state.servers.findIndex(server => response.name === server.name);
+
+      // TODO: update the existing record with additional data,
+      // if multiple advertisements for the same service.
+      if (serverIndex === -1) {
+        this.setState(prevState => ({
+          servers: [...prevState.servers, response],
+        }));
+      }
     });
 
     this.serverDiscoverer.on('SERVER_REMOVED', (response) => {
       this.setState(prevState => ({
         // eslint-disable-next-line
-        servers: prevState.servers.filter(item => !(item.name == response.name && item.index == response.index)),
+        servers: prevState.servers.filter(item => !(item.name == response.name)),
       }), () => {
       });
     });
