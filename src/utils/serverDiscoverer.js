@@ -4,19 +4,16 @@ import { isElectron, isCordova } from '../utils/Environment';
 
 class ServerDiscoverer {
   constructor() {
-    if (!isElectron() && !isCordova()) {
-      throw new Error('Automatic server discovery is not supported in the browser.');
-    }
-
+    window.addEventListener('online', this.handleNetworkChange);
+    window.addEventListener('offline', this.handleNetworkChange);
     this.events = new EventEmitter();
   }
 
-  on(...args) {
+  on = (...args) => {
     this.events.on(...args);
   }
 
-
-  removeAllListeners() {
+  removeAllListeners = () => {
     this.events.removeAllListeners();
     if (isElectron() && this.browser) {
       this.browser.removeAllListeners();
@@ -28,10 +25,25 @@ class ServerDiscoverer {
     }
   }
 
-  init() {
-    if (!window.navigator.onLine) {
-      this.events.emit('SERVER_ERROR', new Error('The Server Discovery service requires a network connection.'));
+  handleNetworkChange = () => {
+    this.checkEnvironment();
+    if (window.navigator.onLine) {
+      this.events.emit('SERVER_RESET');
     }
+  }
+
+  checkEnvironment = () => {
+    if (!isElectron() && !isCordova()) {
+      this.events.emit('SERVER_ERROR', 'Automatic server discovery is not supported in the browser.');
+    }
+
+    if (!window.navigator.onLine) {
+      this.events.emit('SERVER_ERROR', 'The Server Discovery service requires a network connection.');
+    }
+  }
+
+  init = () => {
+    this.checkEnvironment();
 
     if (isElectron()) {
       try {
