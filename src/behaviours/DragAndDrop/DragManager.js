@@ -1,5 +1,9 @@
 import { throttle } from 'lodash';
 
+export const VERTICAL_SCROLL = 'VERTICAL_SCROLL';
+export const HORIZONTAL_SCROLL = 'HORIZONTAL_SCROLL';
+export const NO_SCROLL = 'NO_SCROLL';
+
 function isTouch(event) {
   if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
     return true;
@@ -38,14 +42,24 @@ function moveAngle({ dx, dy }) {
 }
 
 function axisProximityFromAngle(angle) {
-  return Math.abs(Math.cos(2 * angle)) ** 2;
+  return Math.sin(angle) ** 2;
 }
 
-function determineMoveType(movement) {
-  if (movement.velocity * movement.axisProximity > 0.1) {
-    return 'SWIPE';
+function determineMoveType(movement, scrollDirection) {
+  switch (scrollDirection) {
+    case VERTICAL_SCROLL:
+      if (movement.axisProximity > 0.9 || movement.velocity / movement.axisProximity < 0.15) {
+        return 'SWIPE';
+      }
+      return 'DRAG';
+    case HORIZONTAL_SCROLL:
+      if (movement.axisProximity < 0.1 || movement.velocity / (1 - movement.axisProximity) < 0.15) {
+        return 'SWIPE';
+      }
+      return 'DRAG';
+    default:
+      return 'DRAG';
   }
-  return 'DRAG';
 }
 
 const initalState = {
@@ -55,7 +69,7 @@ const initalState = {
 };
 
 class dragManager {
-  constructor({ el, onDragStart, onDragMove, onDragEnd }) {
+  constructor({ el, onDragStart, onDragMove, onDragEnd, scrollDirection }) {
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;
@@ -65,6 +79,7 @@ class dragManager {
     this.el.addEventListener('touchmove', this.onMove, { passive: false });
     this.el.addEventListener('touchend', this.onMoveEnd, { passive: true });
     this.el.addEventListener('mousedown', this.onMoveStart, { passive: true });
+    this.scrollDirection = scrollDirection;
   }
 
   unmount() {
@@ -111,7 +126,7 @@ class dragManager {
   }
 
   detectMoveType = (e, movement) => {
-    const moveType = this.state.type || determineMoveType(movement);
+    const moveType = this.state.type || determineMoveType(movement, this.scrollDirection);
 
     if (moveType === 'DRAG') {
       e.preventDefault();

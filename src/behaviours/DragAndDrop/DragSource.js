@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DragPreview from './DragPreview';
-import DragManager from './DragManager';
+import DragManager, { VERTICAL_SCROLL } from './DragManager';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
@@ -12,11 +12,13 @@ const dragSource = WrappedComponent =>
     static propTypes = {
       allowDrag: PropTypes.bool,
       meta: PropTypes.func,
+      scrollDirection: PropTypes.string,
     };
 
     static defaultProps = {
       allowDrag: true,
       meta: () => ({}),
+      scrollDirection: VERTICAL_SCROLL,
     };
 
     constructor(props) {
@@ -36,6 +38,7 @@ const dragSource = WrappedComponent =>
         onDragStart: this.onDragStart,
         onDragMove: this.onDragMove,
         onDragEnd: this.onDragEnd,
+        scrollDirection: this.props.scrollDirection,
       });
     }
 

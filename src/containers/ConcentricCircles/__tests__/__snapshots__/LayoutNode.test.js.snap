@@ -51,6 +51,7 @@ ShallowWrapper {
         linking={false}
         meta={[Function]}
         onSelected={[Function]}
+        scrollDirection="NO_SCROLL"
         selected={false}
 />,
       "className": "node-layout__node",
@@ -77,6 +78,7 @@ ShallowWrapper {
         "linking": false,
         "meta": [Function],
         "onSelected": [Function],
+        "scrollDirection": "NO_SCROLL",
         "selected": false,
       },
       "ref": null,
@@ -105,6 +107,7 @@ ShallowWrapper {
           linking={false}
           meta={[Function]}
           onSelected={[Function]}
+          scrollDirection="NO_SCROLL"
           selected={false}
 />,
         "className": "node-layout__node",
@@ -131,6 +134,7 @@ ShallowWrapper {
           "linking": false,
           "meta": [Function],
           "onSelected": [Function],
+          "scrollDirection": "NO_SCROLL",
           "selected": false,
         },
         "ref": null,

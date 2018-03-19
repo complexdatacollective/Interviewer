@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';
+import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 const label = node => node.nickname;
 
@@ -45,6 +46,7 @@ class LayoutNode extends PureComponent {
           allowSelect={allowSelect}
           meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
           animate={false}
+          scrollDirection={NO_SCROLL}
           {...node}
         />
       </div>
