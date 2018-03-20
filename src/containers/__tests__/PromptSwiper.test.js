@@ -4,6 +4,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { PromptSwiper } from '../PromptSwiper';
 
+jest.mock('../../utils/CSSVariables');
+
 const mockProps = {
   forward: () => {},
   backward: () => {},

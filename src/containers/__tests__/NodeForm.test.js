@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import NodeForm, { NodeForm as NodeFormPure } from '../NodeForm';
 
+jest.mock('../../utils/CSSVariables');
+
 window.matchMedia =
   window.matchMedia ||
   (() => ({

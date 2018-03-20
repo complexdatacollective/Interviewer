@@ -4,6 +4,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Dialog from '../Dialog';
 
+jest.mock('../../utils/CSSVariables');
+
 const testProps = {
   title: '',
   type: '',

@@ -4,6 +4,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ListSelect from '../ListSelect';
 
+jest.mock('../../utils/CSSVariables');
+
 const nodes = [
   { uid: 'a', name: 'a name', age: '22' },
   { uid: 'b', name: 'b name', age: '88' },
