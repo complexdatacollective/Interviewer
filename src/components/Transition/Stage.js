@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
-import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
+import getCSSVariable from '../../utils/CSSVariables';
 
 const duration = {
-  enter: animation.duration.standard,
-  exit: animation.duration.standard,
+  enter: parseInt(getCSSVariable('--animation-duration-standard-ms'), 10),
+  exit: parseInt(getCSSVariable('--animation-duration-standard-ms'), 10),
 };
 
 const enterAnimation = {
   opacity: [0, 1],
   zIndex: [2, 2],
   elasticity: 0,
-  easing: animation.easing.default,
+  easing: getCSSVariable('--animation-easing'),
   duration: duration.enter,
   delay: duration.exit,
 };
@@ -22,7 +22,7 @@ const exitAnimation = {
   opacity: [1, 0],
   zIndex: [1, 1],
   elasticity: 0,
-  easing: animation.easing.default,
+  easing: getCSSVariable('--animation-easing'),
   duration: duration.exit,
 };
 

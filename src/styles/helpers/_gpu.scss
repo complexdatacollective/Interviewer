@@ -1,8 +1,7 @@
 @mixin gpu {
   backface-visibility: hidden;
   perspective: 1000;
-  transform: translate3d(0,0,0);
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   background-color: transparent;
-  transition: background-color ease var(--animation-fast-duration);
+  transition: background-color ease var(--animation-duration-fast);
 }

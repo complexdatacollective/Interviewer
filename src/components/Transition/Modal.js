@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
-import { animation } from 'network-canvas-ui';
+import getCSSVariable from '../../utils/CSSVariables';
 
 const duration = {
-  enter: animation.duration.fast * 1000,
-  exit: animation.duration.fast,
+  enter: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+  exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
 };
 
 const Modal = ({ children, ...props }) => (

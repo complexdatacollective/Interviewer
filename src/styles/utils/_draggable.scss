@@ -1,6 +1,6 @@
 .draggable {
 
   &--transition {
-    @include group-transition(zoom, var(--animation-fast-duration));
+    @include group-transition(zoom, var(--animation-duration-fast));
   }
 }

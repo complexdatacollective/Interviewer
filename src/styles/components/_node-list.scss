@@ -14,7 +14,7 @@
   }
 
   &--transition {
-    @include group-transition(fade, var(--animation-fast-duration));
+    @include group-transition(fade, var(--animation-duration-fast));
 
     &-appear,
     &-enter {

@@ -12,7 +12,8 @@
     height: 40px;
     margin-right: 10px;
     width: 40px;
-    transition: all var(--animation-fast-duration) var(--animation-default-easing);
+    transition: fill var(--animation-duration-fast) var(--animation-easing);
+
     .tick {
       fill: transparent;
     }
@@ -21,12 +22,14 @@
   &--selected {
     transform: scale(1);
     border-color: palette('primary');
+
     .card__indicator {
       height: 60px;
       padding: 0;
       width: 60px;
-      animation: bounce var(--animation-standard-duration) var(--animation-default-easing);
+      animation: bounce var(--animation-duration-standard) var(--animation-easing);
       fill: palette('primary');
+
       .tick {
         fill: palette('primary');
       }

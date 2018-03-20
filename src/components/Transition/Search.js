@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
-import { animation } from 'network-canvas-ui';
 import anime from 'animejs';
+import getCSSVariable from '../../utils/CSSVariables';
 
 const duration = {
   content: {
-    enter: animation.duration.fast,
-    exit: animation.duration.fast,
+    enter: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+    exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
   },
   wrapper: {
-    enter: animation.duration.standard,
-    exit: animation.duration.fast,
+    enter: parseInt(getCSSVariable('--animation-duration-standard-ms'), 10),
+    exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
   },
 };
 
-const TimelineOpts = { easing: animation.easing.default };
+const TimelineOpts = { easing: getCSSVariable('--animation-easing') };
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 

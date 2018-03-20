@@ -3,7 +3,7 @@
   background: palette('primary');
   height: 100vh;
   perspective: 1500px;
-  transition: var(--animation-slow-duration) var(--animation-default-easing);
+  transition: var(--animation-duration-slow) var(--animation-easing);
   width: 100vw;
 
   .electron-titlebar {
@@ -20,7 +20,7 @@
       left: 0;
       right: 0;
       height: 25px;
-      width:100%;
+      width: 100%;
       -webkit-app-region: drag;
     }
   }
@@ -32,14 +32,14 @@
 
   // page wrap for content
   &__content {
+    @include vcjc; // vertical center, justify center
     background: palette('background');
     box-sizing: border-box;
     height: 100vh;
     overflow: hidden;
-    transition: var(--animation-standard-duration) var(--animation-default-easing);
+    transition: var(--animation-duration-standard) var(--animation-easing);
     width: 100vw;
     display: flex;
-    @include vcjc; // vertical center, justify center
 
     // content being pushed e.g. by menu
     &--pushed {

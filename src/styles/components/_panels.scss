@@ -1,10 +1,10 @@
 .panels {
-  @include transition-properties((opacity width margin-right), var(--animation-default-easing), var(--animation-standard-duration));
+  @include transition-properties((opacity width margin-right), var(--animation-easing), var(--animation-duration-standard));
   display: flex;
   flex-direction: column;
   opacity: 1;
   margin-right: 0;
-  width:425px;
+  width: 425px;
   transform: translateZ(0);
   will-change: transform;
 
