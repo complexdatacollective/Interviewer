@@ -21,7 +21,7 @@ const enterAnimation = {
 const exitAnimation = {
   opacity: [1, 0],
   scale: [1, 0],
-  easing: getCSSVariable('--animation-easing'),
+  easing: JSON.parse(getCSSVariable('--animation-easing-js')),
   duration: duration.exit,
 };
 

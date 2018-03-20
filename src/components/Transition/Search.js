@@ -15,7 +15,7 @@ const duration = {
   },
 };
 
-const TimelineOpts = { easing: getCSSVariable('--animation-easing') };
+const TimelineOpts = { easing: JSON.parse(getCSSVariable('--animation-easing-js')) };
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 

@@ -12,14 +12,14 @@ const duration = {
 const enterAnimation = {
   opacity: [0, 1],
   elasticity: 0,
-  easing: getCSSVariable('--animation-easing'),
+  easing: JSON.parse(getCSSVariable('--animation-easing-js')),
   duration: duration.enter,
 };
 
 const exitAnimation = {
   opacity: [1, 0],
   elasticity: 0,
-  easing: getCSSVariable('--animation-easing'),
+  easing: JSON.parse(getCSSVariable('--animation-easing-js')),
   duration: duration.exit,
 };
 
