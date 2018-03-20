@@ -16,7 +16,16 @@ React Scripts
 
 This project currently requires version `8.9.3` of node, and version `5.5.1` of npm. These are the only supported versions for this project.
 
-As a convinience, the repository contains configuration files that support the use of both `nvm` and `nodenv`. If you use either of these environment/version managers, you can install the correct node and npm versions automatically. For nvm, you can type `nvm use` from within the project directory. For nodenv, the command is `nodenv install`. Please refer to the documentation for these projects for further information.
+As a convenience, the repository contains configuration files that support the use of both `nvm` and `nodenv`. If you use either of these environment/version managers, you can install the correct node and npm versions automatically. For nvm, you can type `nvm use` from within the project directory. For nodenv, the command is `nodenv install`. Please refer to the documentation for these projects for further information.
+
+## Windows Environment
+1. Run powershell as admin (right-click option) and then run:
+```
+npm --add-python-to-path install --global windows-build-tools
+```
+2. Install [Bonjour SDK for Windows](https://developer.apple.com/download/more/?=Bonjour%20SDK%20for%20Windows)
+(requires an apple id). Select "Bonjour SDK for Windows v.3.0". `BONJOUR_SDK_HOME` should be set for you after installation completes.
+3. Restart powershell and continue with project installation.
 
 ## Installation
 

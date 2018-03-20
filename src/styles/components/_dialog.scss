@@ -47,6 +47,7 @@ $component-name: dialog;
       margin-top: 20px;
       border: 1px solid palette('modal-overlay');
       background: palette('background');
+      user-select: initial;
       overflow-y: auto;
       overflow-x: hidden;
       margin: 25px 40px;

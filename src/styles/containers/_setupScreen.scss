@@ -4,8 +4,37 @@
   &__header {
     text-align: center;
     .logo {
-      width: 230px;
-      margin-bottom: 30px;
+      width: 180px;
+      margin-right: 20px;
+    }
+  }
+
+  &__start {
+    display: flex;
+    flex-direction: row;
+    margin-top: 35px;
+  }
+
+  &__factory-protocol {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__custom-protocol {
+    display: flex;
+    flex-direction: row;
+
+    .input__container {
+      flex-basis: 65%;
+      margin-right: 40px;
+    }
+
+    .form__button-container {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
     }
   }
 

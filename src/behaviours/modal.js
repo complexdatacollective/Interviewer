@@ -34,7 +34,12 @@ function modal(WrappedComponent) {
 
     toggle = () => this.props.toggleModal(this.props.name);
     open = () => this.props.openModal(this.props.name);
-    close = () => this.props.closeModal(this.props.name);
+    close = () => {
+      this.props.closeModal(this.props.name);
+      if (this.props.onCloseModal) {
+        this.props.onCloseModal();
+      }
+    }
 
     render() {
       return (
@@ -59,11 +64,13 @@ function modal(WrappedComponent) {
     toggleModal: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
+    onCloseModal: PropTypes.func,
     show: PropTypes.bool,
   };
 
   Modal.defaultProps = {
     show: false,
+    onCloseModal: null,
   };
 
   function makeMapStateToProps() {

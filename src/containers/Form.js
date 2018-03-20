@@ -56,10 +56,11 @@ class Form extends Component {
       handleSubmit,
       controls,
       tooltip,
+      className,
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit} autoComplete="off">
+      <form className={className} onSubmit={handleSubmit} autoComplete="off">
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
@@ -90,6 +91,7 @@ Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
   controls: PropTypes.array,
+  className: PropTypes.string,
   tooltip: PropTypes.string,
 };
 
@@ -97,6 +99,7 @@ Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
   controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
+  className: null,
   tooltip: 'none',
 };
 

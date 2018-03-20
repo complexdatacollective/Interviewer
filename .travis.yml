@@ -7,6 +7,9 @@ node_js:
 cache:
   directories:
     - node_modules # NPM packages
+before_install:
+  - sudo apt-get update -q
+  - sudo apt-get install libavahi-compat-libdnssd-dev -y
 install:
   - npm install
 jobs:
