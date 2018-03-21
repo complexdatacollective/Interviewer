@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import getCSSVariable from '../../utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
 const duration = {
   content: {
-    enter: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
-    exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+    enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+    exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
   },
   wrapper: {
-    enter: parseInt(getCSSVariable('--animation-duration-standard-ms'), 10),
-    exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+    enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
+    exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
   },
 };
 
-const TimelineOpts = { easing: JSON.parse(getCSSVariable('--animation-easing-js')) };
+const TimelineOpts = { easing: getCSSVariableAsObject('--animation-easing-js') };
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 

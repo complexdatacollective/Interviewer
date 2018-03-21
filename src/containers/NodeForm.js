@@ -81,11 +81,12 @@ class NodeForm extends Component {
       controls: [
         (showAddAnotherToggle && <ToggleInput
           name="addAnother"
-          label="Add another after submit"
+          label="Add another?"
           checked={this.state.addAnotherNode}
           onCheck={this.onToggleClick}
+          inline
         />),
-        <Button key="submit" aria-label="Submit">Submit</Button>,
+        <Button key="submit" aria-label="Submit">Finished</Button>,
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,

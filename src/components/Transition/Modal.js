@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
-import getCSSVariable from '../../utils/CSSVariables';
+import { getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
 const duration = {
-  enter: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
-  exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+  enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+  exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
 };
 
 const Modal = ({ children, ...props }) => (

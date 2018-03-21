@@ -2,24 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import getCSSVariable from '../../utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
 const duration = {
-  enter: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
-  exit: parseInt(getCSSVariable('--animation-duration-fast-ms'), 10),
+  enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+  exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
 };
 
 const enterAnimation = {
   opacity: [0, 1],
   elasticity: 0,
-  easing: JSON.parse(getCSSVariable('--animation-easing-js')),
+  easing: getCSSVariableAsObject('--animation-easing-js'),
   duration: duration.enter,
 };
 
 const exitAnimation = {
   opacity: [1, 0],
   elasticity: 0,
-  easing: JSON.parse(getCSSVariable('--animation-easing-js')),
+  easing: getCSSVariableAsObject('--animation-easing-js'),
   duration: duration.exit,
 };
 

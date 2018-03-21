@@ -14,7 +14,14 @@ const mockCSSVariables = {
   '--animation-easing-js': '[0.4, 0, 0.2, 1]',
 };
 
-const getCSSVariable = cssVariableName =>
-  get(mockCSSVariables, cssVariableName);
+export const getCSSVariableAsString = (variableName) => {
+  get(mockCSSVariables, variableName);
+};
 
-export default getCSSVariable;
+export const getCSSVariableAsNumber = (variableName) => {
+  parseInt(get(mockCSSVariables, variableName), 10);
+};
+
+export const getCSSVariableAsObject = (variableName) => {
+  JSON.parse(get(mockCSSVariables, variableName));
+};

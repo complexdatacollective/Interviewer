@@ -1,7 +1,12 @@
 .form {
   &__button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
     .toggle__container {
-      margin: 3em 0 1em 0;
+      margin: 0;
     }
   }
 }

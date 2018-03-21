@@ -52,7 +52,7 @@ ShallowWrapper {
                           onClick={[Function]}
                           size=""
                 >
-                          Submit
+                          Finished
                 </Button>,
                       ]
         }
@@ -100,7 +100,7 @@ ShallowWrapper {
             onClick={[Function]}
             size=""
 >
-            Submit
+            Finished
 </Button>,
         ],
         "entity": "node",
@@ -149,7 +149,7 @@ ShallowWrapper {
                                 onClick={[Function]}
                                 size=""
                     >
-                                Submit
+                                Finished
                     </Button>,
                             ]
           }
@@ -197,7 +197,7 @@ ShallowWrapper {
               onClick={[Function]}
               size=""
 >
-              Submit
+              Finished
 </Button>,
           ],
           "entity": "node",

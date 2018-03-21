@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { range, last, zipWith } from 'lodash';
 import color from 'color';
-import getCSSVariable from '../../utils/CSSVariables';
+import { getCSSVariableAsString } from '../../utils/CSSVariables';
 
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;
@@ -31,8 +31,8 @@ const Radar = ({ n, skewed }) => {
     weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
     equalByIncrement(50, n);
 
-  const colorRing = color(getCSSVariable('--ring'));
-  const colorBackground = color(getCSSVariable('--background'));
+  const colorRing = color(getCSSVariableAsString('--ring'));
+  const colorBackground = color(getCSSVariableAsString('--background'));
 
   const ringFill = (ring) => {
     const mix = (ring + 1) / n;
