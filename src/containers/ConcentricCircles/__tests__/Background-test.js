@@ -4,6 +4,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Background } from '../Background';
 
+jest.mock('../../../utils/CSSVariables');
+
 const sociogramOptionsDefault = {
   layoutVariable: 'foo',
   createEdge: 'bar',

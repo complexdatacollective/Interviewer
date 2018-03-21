@@ -8,16 +8,16 @@ import { getExternalData } from '../selectors/protocol';
 import { actionCreators as networkActions } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
-import getCSSVariable from '../utils/CSSVariables';
+import { getCSSVariableAsString } from '../utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import configurePanels from '../behaviours/configurePanels';
 
 const colorPresets = [
-  getCSSVariable('--edge-alt-1'),
-  getCSSVariable('--edge-alt-2'),
-  getCSSVariable('--edge-alt-3'),
-  getCSSVariable('--edge-alt-4'),
-  getCSSVariable('--edge-alt-5'),
+  getCSSVariableAsString('--edge-alt-1'),
+  getCSSVariableAsString('--edge-alt-2'),
+  getCSSVariableAsString('--edge-alt-3'),
+  getCSSVariableAsString('--edge-alt-4'),
+  getCSSVariableAsString('--edge-alt-5'),
 ];
 
 const getHighlight = (highlight, panelNumber) => {

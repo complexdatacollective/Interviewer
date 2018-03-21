@@ -8,6 +8,8 @@ import Search from '../Search';
 import SearchResults from '../SearchResults';
 import Card from '../../../components/Card';
 
+jest.mock('../../../utils/CSSVariables');
+
 jest.mock('fuse.js', () => jest.fn(() => (
   {
     // Mock: return one search result when Fuse.search() is called.

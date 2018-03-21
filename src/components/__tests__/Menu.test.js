@@ -4,6 +4,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Menu from '../Menu';
 
+jest.mock('../../utils/CSSVariables');
+
 const items = [
   { id: 'a', label: 'a title', to: 'a-to' },
   { id: 'b', label: 'b title', to: 'b-to' },

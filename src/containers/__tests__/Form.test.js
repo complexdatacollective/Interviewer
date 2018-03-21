@@ -7,6 +7,8 @@ import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
+jest.mock('../../utils/CSSVariables');
+
 const mockStore = () =>
   createStore(
     () => (

@@ -26,7 +26,7 @@ $search-z-index: 1000;
     cursor: pointer;
     position: absolute;
     right: $search-icon-offset-x - 27px;
-    transition: opacity var(--animation-standard-duration) var(--animation-default-easing);
+    transition: opacity var(--animation-duration-standard) var(--animation-easing);
     z-index: $search-z-index + 1;
 
     &--hidden {

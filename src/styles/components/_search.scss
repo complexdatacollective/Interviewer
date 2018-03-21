@@ -71,7 +71,7 @@ $results-height: calc(100vh - 350px);
     margin: spacing(small) 0;
     min-height: 8em;
     overflow: hidden;
-    transition: height var(--animation-fast-duration) var(--animation-default-easing);
+    transition: height var(--animation-duration-fast) var(--animation-easing);
 
     .scrollable {
       height: 100%;

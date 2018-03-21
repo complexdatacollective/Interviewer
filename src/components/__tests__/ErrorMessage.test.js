@@ -5,6 +5,7 @@ import { shallow } from 'enzyme';
 import { ErrorMessage } from '../ErrorMessage';
 
 jest.mock('../../ducks/modules/protocol');
+jest.mock('../../utils/CSSVariables');
 
 const mockProps = {
   error: null,

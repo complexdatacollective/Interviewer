@@ -15,3 +15,9 @@ $component-name: 'input';
     margin-right: 1em;
   }
 }
+
+.toggle {
+  &__slider {
+    margin-top: 1em;
+  }
+}

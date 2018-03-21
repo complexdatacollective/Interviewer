@@ -7,7 +7,7 @@ import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import cx from 'classnames';
 
-import { Button } from 'network-canvas-ui';
+import { Button, ToggleInput } from 'network-canvas-ui';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
@@ -44,38 +44,33 @@ class NodeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeOfSubmit: 'normal',
+      addAnotherNode: false,
     };
   }
 
   onSubmit = (formData, dispatch, form) => {
     this.props.closeModal(this.props.name);
     this.props.onSubmit(formData, dispatch, form);
-    if (this.state.typeOfSubmit === 'continuous') {
+
+    if (this.state.addAnotherNode) {
       this.props.resetValues(form.form);
       this.props.openModal(this.props.name);
     }
   };
 
-  continuousSubmit = () => {
+  onToggleClick = () => {
     this.setState({
-      typeOfSubmit: 'continuous',
-    }, this.submit);
-  };
-
-  normalSubmit = () => {
-    this.setState({
-      typeOfSubmit: 'normal',
-    }, this.submit);
-  };
+      addAnotherNode: !this.state.addAnotherNode,
+    });
+  }
 
   isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches;
 
   render() {
     const {
-      addAnother,
       name,
       title,
+      showAddAnotherToggle,
     } = this.props;
 
     const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
@@ -84,12 +79,14 @@ class NodeForm extends Component {
       ...this.props,
       autoFocus: true,
       controls: [
-        (addAnother &&
-          <Button key="more" color="white" onClick={this.continuousSubmit} aria-label="Submit and add another node">
-            Submit and New
-          </Button>
-        ),
-        <Button key="submit" aria-label="Submit" onClick={this.normalSubmit}>Submit</Button>,
+        (showAddAnotherToggle && <ToggleInput
+          name="addAnother"
+          label="Add another?"
+          checked={this.state.addAnotherNode}
+          onCheck={this.onToggleClick}
+          inline
+        />),
+        <Button key="submit" aria-label="Submit">Finished</Button>,
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,
@@ -113,7 +110,6 @@ class NodeForm extends Component {
 }
 
 NodeForm.propTypes = {
-  addAnother: PropTypes.bool,
   closeModal: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -128,10 +124,11 @@ NodeForm.propTypes = {
   node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
+  showAddAnotherToggle: PropTypes.bool,
 };
 
 NodeForm.defaultProps = {
-  addAnother: false,
+  showAddAnotherToggle: false,
   node: {},
 };
 

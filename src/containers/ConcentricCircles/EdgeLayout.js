@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import getCSSVariable from '../../utils/CSSVariables';
+import { getCSSVariableAsString } from '../../utils/CSSVariables';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
-const color = getCSSVariable('--edge-base');
+const color = getCSSVariableAsString('--edge-base');
 
 export class EdgeLayout extends PureComponent {
   static propTypes = {

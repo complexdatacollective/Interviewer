@@ -80,6 +80,17 @@ $component-name: modal;
         height: 100vh;
       }
     }
+
+    .form {
+      &__button-container {
+        display: flex;
+        justify-content: space-around;
+
+        .toggle__container {
+          padding-left: 2em;
+        }
+      }
+    }
   }
 
   &:not(&--fullscreen) {

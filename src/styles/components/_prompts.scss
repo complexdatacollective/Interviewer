@@ -23,7 +23,7 @@ $module-name: prompts;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
-    transition: transform var(--animation-standard-duration) var(--animation-default-easing), opacity var(--animation-fast-duration) var(--animation-default-easing);
+    transition: transform var(--animation-duration-standard) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
     text-align: center;
     padding-bottom: 2.5rem;
 
@@ -45,7 +45,7 @@ $module-name: prompts;
       font-weight: 200;
       max-width: 80vw;
       line-height: 1.3;
-      font-size:1.5rem;
+      font-size: 1.5rem;
 
       @include breakpoint('full') {
         max-width: 65vw;

@@ -6,6 +6,8 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import Modal from '../Modal';
 
+jest.mock('../../utils/CSSVariables');
+
 const modalName = 'foo';
 
 const closedState = {
