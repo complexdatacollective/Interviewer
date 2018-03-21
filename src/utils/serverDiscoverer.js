@@ -26,15 +26,16 @@ class ServerDiscoverer {
   }
 
   handleNetworkChange = () => {
-    this.checkEnvironment();
     if (window.navigator.onLine) {
       this.events.emit('SERVER_RESET');
     }
+    this.checkEnvironment();
   }
 
   checkEnvironment = () => {
     if (!isElectron() && !isCordova()) {
       this.events.emit('SERVER_ERROR', 'Automatic server discovery is not supported in the browser.');
+      return;
     }
 
     if (!window.navigator.onLine) {
