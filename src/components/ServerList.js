@@ -25,7 +25,7 @@ class ServerList extends Component {
   }
 
   componentWillUnmount() {
-    this.unbindServerEvents();
+    this.serverDiscoverer.removeAllListeners();
   }
 
   bindServerEvents = () => {
