@@ -19,13 +19,39 @@ This project currently requires version `8.9.3` of node, and version `5.5.1` of 
 As a convenience, the repository contains configuration files that support the use of both `nvm` and `nodenv`. If you use either of these environment/version managers, you can install the correct node and npm versions automatically. For nvm, you can type `nvm use` from within the project directory. For nodenv, the command is `nodenv install`. Please refer to the documentation for these projects for further information.
 
 ## Windows Environment
+
+There are some additional requirements for the [MDNS](https://www.npmjs.com/package/mdns) native dependency.
+
+### Before running `npm install`
+
 1. Run powershell as admin (right-click option) and then run:
 ```
 npm --add-python-to-path install --global windows-build-tools
 ```
 2. Install [Bonjour SDK for Windows](https://developer.apple.com/download/more/?=Bonjour%20SDK%20for%20Windows)
-(requires an apple id). Select "Bonjour SDK for Windows v.3.0". `BONJOUR_SDK_HOME` should be set for you after installation completes.
-3. Restart powershell and continue with project installation.
+(requires an apple id associated with a paid team account). Select "Bonjour SDK for Windows v.3.0". `BONJOUR_SDK_HOME` should be set for you after installation completes.
+3. Restart powershell and continue with [project installation](#installation).
+
+### After running `npm install`
+
+Once you've completed `npm install`, you will need to rebuild MDNS with the Electron headers:
+
+```
+cd node_modules\mdns
+node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/electron
+```
+
+`target` must match the electron version installed by npm
+
+### Troubleshooting
+
+- Native dependencies won't compile
+  + `windows-build-tools` should have installed the required compilers
+  + [MS notes on config for native modules](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules)
+  + ...You could install python and VS Build Tools manually; you should *not* need all of Visual Studio
+- Runtime error related to DLL initialization
+  + Make sure the "rebuild" step above works
+  + [More Info](https://github.com/electron/electron/blob/master/docs/tutorial/using-native-node-modules.md#using-native-node-modules)
 
 ## Installation
 
