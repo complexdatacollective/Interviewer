@@ -4,7 +4,7 @@ import { has } from 'lodash';
 import { Icon } from 'network-canvas-ui';
 import NameGenerator from './NameGenerator';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
-
+import OrdinalScale from './OrdinalScale';
 import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
@@ -17,6 +17,7 @@ const interfaces = {
   Sociogram,
   Quiz,
   Information,
+  OrdinalScale,
 };
 
 const getInterface = (interfaceConfig) => {
@@ -39,6 +40,7 @@ export {
   Sociogram,
   Quiz,
   Information,
+  OrdinalScale,
 };
 
 export default getInterface;

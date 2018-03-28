@@ -535,7 +535,7 @@
     },
     {
       "id": "ordinalBin1",
-      "type": "OrdinalBin",
+      "type": "OrdinalScale",
       "label": "Contact Freq.",
       "subject": {
         "entity": "node",
