@@ -76,7 +76,7 @@ const getFilterFunction = index => createSelector(
   },
 );
 
-export const filterNetwork = index => createSelector(
+const filterNetwork = index => createSelector(
   getFilterFunction(index),
   getNetwork,
   (filter, network) => filter(network),
