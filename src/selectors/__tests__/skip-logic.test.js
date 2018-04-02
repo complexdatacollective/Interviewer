@@ -5,14 +5,14 @@ import { getNextIndex, isStageSkipped } from '../skip-logic';
 const mockState = {
   network: {
     edges: [
-      { id: 1, type: 'friend', to: 1, from: 2 }
+      { id: 1, type: 'friend', to: 1, from: 2 },
     ],
     edgo: {},
     nodes: [
       { id: 1, type: 'person', name: 'soAndSo' },
       { id: 2, type: 'person', name: 'whoDunnit' },
-      { id: 3, type: 'person', name: 'whatsErName' }
-    ]
+      { id: 3, type: 'person', name: 'whatsErName' },
+    ],
   },
   protocol: {
     stages: [
@@ -31,12 +31,12 @@ const mockState = {
                   type: 'person',
                   attribute: 'name',
                   operator: 'GREATER_THAN',
-                  value: 't'
-                }
-              }
-            ]
-          }
-        }
+                  value: 't',
+                },
+              },
+            ],
+          },
+        },
       },
       {
         id: 3,
@@ -51,12 +51,12 @@ const mockState = {
                 options: {
                   type: 'friend',
                   attribute: 'type',
-                  operator: 'EXISTS'
-                }
-              }
-            ]
-          }
-        }
+                  operator: 'EXISTS',
+                },
+              },
+            ],
+          },
+        },
       },
       {
         id: 4,
@@ -72,12 +72,12 @@ const mockState = {
                   type: 'person',
                   attribute: 'id',
                   operator: 'GREATER_THAN_OR_EQUAL',
-                  value: '1'
-                }
-              }
-            ]
-          }
-        }
+                  value: '1',
+                },
+              },
+            ],
+          },
+        },
       },
       {
         id: 5,
@@ -93,12 +93,12 @@ const mockState = {
                   type: 'person',
                   attribute: 'name',
                   operator: 'EXACTLY',
-                  value: 'soAndSo'
-                }
-              }
-            ]
-          }
-        }
+                  value: 'soAndSo',
+                },
+              },
+            ],
+          },
+        },
       },
       {
         id: 6,
@@ -115,8 +115,8 @@ const mockState = {
                   type: 'person',
                   attribute: 'name',
                   operator: 'EXACTLY',
-                  value: 'soAndSo'
-                }
+                  value: 'soAndSo',
+                },
               },
               {
                 type: 'alter',
@@ -124,12 +124,12 @@ const mockState = {
                   type: 'person',
                   attribute: 'id',
                   operator: 'EXACTLY',
-                  value: 2
-                }
-              }
-            ]
-          }
-        }
+                  value: 2,
+                },
+              },
+            ],
+          },
+        },
       },
       {
         id: 7,
@@ -146,8 +146,8 @@ const mockState = {
                   type: 'person',
                   attribute: 'name',
                   operator: 'EXACTLY',
-                  value: 'soAndSo'
-                }
+                  value: 'soAndSo',
+                },
               },
               {
                 type: 'alter',
@@ -155,15 +155,15 @@ const mockState = {
                   type: 'person',
                   attribute: 'id',
                   operator: 'EXACTLY',
-                  value: 2
-                }
-              }
-            ]
-          }
-        }
-      }
-    ]
-  }
+                  value: 2,
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
 };
 
 describe('skip-logic selector', () => {
