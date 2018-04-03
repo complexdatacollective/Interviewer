@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import * as query from '../utils/networkQuery/query';
+import { alterRule, egoRule, edgeRule, or, and } from '../utils/networkQuery/query';
 import predicate from '../utils/networkQuery/predicate';
 import { stages as getStages } from './session';
 
@@ -12,13 +12,13 @@ const maxLength = state => getStages(state).length;
 const mapRuleType = (type) => {
   switch (type) {
     case 'alter':
-      return 'query.alterRule';
+      return alterRule;
     case 'ego':
-      return 'query.egoRule';
+      return egoRule;
     case 'edge':
-      return 'query.edgeRule';
+      return edgeRule;
     default:
-      return '';
+      return () => {};
   }
 };
 
@@ -39,7 +39,7 @@ const getFilter = index => createSelector(
 
 const getJoinType = index => createSelector(
   getFilter(index),
-  filter => ((filter && filter.join === 'OR') ? 'query.or' : 'query.and'),
+  filter => ((filter && filter.join === 'OR') ? or : and),
 );
 
 const getRules = index => createSelector(
@@ -50,30 +50,14 @@ const getRules = index => createSelector(
 const convertRules = index => createSelector(
   getRules(index),
   rules => rules.filter(rule => rule.type && rule.options).map(
-    (rule) => {
-      const fixedValue = typeof rule.options.value === 'number' ? rule.options.value : `'${rule.options.value}'`;
-      return `${mapRuleType(rule.type)}({
-        type: '${rule.options.type}',
-        attribute: '${rule.options.attribute}',
-        operator: '${rule.options.operator}',
-        value: ${fixedValue},
-      })`;
-    },
+    rule => mapRuleType(rule.type)(rule.options),
   ),
 );
 
 const getFilterFunction = index => createSelector(
   getJoinType(index),
   convertRules(index),
-  (join, rules) => {
-    const filterMethod = `
-      return ${join}([${rules}]);
-    `;
-    const Fn = Function;
-    const functionize = method => new Fn('query', `${method}`)(query);
-
-    return functionize(filterMethod);
-  },
+  (join, rules) => join(rules),
 );
 
 const filterNetwork = index => createSelector(
@@ -104,8 +88,18 @@ export const isStageSkipped = index => createSelector(
   getSkipValue(index),
   filterNetwork(index),
   (logic, action, operator, comparisonValue, results) => {
-    const outerQuery = predicate(operator)(
-      { value: results.nodes.length, other: comparisonValue });
+    let outerQuery = false;
+    switch (operator) {
+      case 'NONE':
+        outerQuery = !results.nodes.length;
+        break;
+      case 'ANY':
+        outerQuery = results.nodes.length > 0;
+        break;
+      default:
+        outerQuery = predicate(operator)(
+          { value: results.nodes.length, other: comparisonValue });
+    }
 
     return !!logic && ((action && outerQuery) || (!action && !outerQuery));
   },
