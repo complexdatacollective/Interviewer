@@ -944,7 +944,7 @@
               "options": {
                 "type": "person",
                 "attribute": "name",
-                "operator": "EQUAL",
+                "operator": "EXACTLY",
                 "value": "Dee"
               }
             },
