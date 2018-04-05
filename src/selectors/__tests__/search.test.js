@@ -35,7 +35,7 @@ const mockState = {
   protocol: mockProtocol,
 };
 
-describe('interface selector', () => {
+describe('search', () => {
   describe('memoed selectors', () => {
     it('should makeGetFuse', () => {
       const selector = Search.makeGetFuse(DefaultFuseOpts);

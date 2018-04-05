@@ -79,7 +79,7 @@ const mockState = {
   protocol: mockProtocol,
 };
 
-describe('interface selector', () => {
+describe('name generator selector', () => {
   describe('memoed selectors', () => {
     it('should get node type', () => {
       const selected = NameGen.makeGetNodeType();

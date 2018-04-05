@@ -38,7 +38,7 @@ const emptyState = {
   protocol: {},
 };
 
-describe('interface selector', () => {
+describe('protocol selector', () => {
   describe('memoed selectors', () => {
     it('should get protocol variable registery', () => {
       expect(Protocol.protocolRegistry(mockState, mockProps)).toEqual({ node: nodeVariables });
