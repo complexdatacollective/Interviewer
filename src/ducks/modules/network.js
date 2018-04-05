@@ -123,7 +123,10 @@ export default function reducer(state = initialState, action = {}) {
       if (edgeExists(state.edges, action.edge)) {
         return {
           ...state,
-          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
+          edges: [
+            ...reject(reject(state.edges, action.edge), flipEdge(action.edge)),
+            flipEdge(action.edge),
+          ],
         };
       }
       return {
