@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { alterRule, egoRule, edgeRule, or, and } from '../utils/networkQuery/query';
+import * as query from '../utils/networkQuery/query';
 import predicate from '../utils/networkQuery/predicate';
 import { stages as getStages } from './session';
 
@@ -12,11 +12,11 @@ const maxLength = state => getStages(state).length;
 const mapRuleType = (type) => {
   switch (type) {
     case 'alter':
-      return alterRule;
+      return query.alterRule;
     case 'ego':
-      return egoRule;
+      return query.egoRule;
     case 'edge':
-      return edgeRule;
+      return query.edgeRule;
     default:
       return () => {};
   }
@@ -39,7 +39,7 @@ const getFilter = index => createSelector(
 
 const getJoinType = index => createSelector(
   getFilter(index),
-  filter => ((filter && filter.join === 'OR') ? or : and),
+  filter => ((filter && filter.join === 'OR') ? query.or : query.and),
 );
 
 const getRules = index => createSelector(
@@ -54,10 +54,13 @@ const convertRules = index => createSelector(
   ),
 );
 
+const functionize = method => new Function('query', `${method}`)(query); // eslint-disable-line no-new-func
+
 const getFilterFunction = index => createSelector(
+  getFilter(index),
   getJoinType(index),
   convertRules(index),
-  (join, rules) => join(rules),
+  (filter, join, rules) => ((typeof filter === 'string') ? functionize(filter) : join(rules)),
 );
 
 const filterNetwork = index => createSelector(
