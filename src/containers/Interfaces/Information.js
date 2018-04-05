@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Markdown from 'markdown-react-js';
 import { Audio, Image, Video } from '../../components';
+
+const TAGS = {
+  html: 'div',
+  strong: 'b',
+  em: 'i',
+};
 
 const renderItem = (item) => {
   switch (item.type) {
     case 'text':
-      // TODO: remove this and replace with markdown component (see #421)
-      // eslint-disable-next-line react/no-danger
-      return <div dangerouslySetInnerHTML={{ __html: item.content }} />;
+      return (
+        <Markdown
+          markdownOptions={{ typographer: true }}
+          text={item.content}
+          tags={TAGS}
+        />
+      );
     case 'image':
       return <Image url={item.content} />;
     case 'audio':
@@ -27,15 +38,13 @@ const renderItems = items =>
   ));
 
 /**
-  * Information Interface
-  */
+ * Information Interface
+ */
 const Information = ({ stage: { title, items } }) => (
   <div className="interface instructions-interface">
     <div className="instructions-interface__frame">
-      <h1 className="instructions-interface__title type--title-1">{ title }</h1>
-      <div className="instructions-interface__items">
-        { items && renderItems(items) }
-      </div>
+      <h1 className="instructions-interface__title type--title-1">{title}</h1>
+      <div className="instructions-interface__items">{items && renderItems(items)}</div>
     </div>
   </div>
 );

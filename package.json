@@ -148,7 +148,8 @@
     },
     "dependencies": {
         "cordova-android": "^7.1.0",
-        "cordova-ios": "^4.5.4"
+        "cordova-ios": "^4.5.4",
+        "markdown-react-js": "^1.0.0"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",
