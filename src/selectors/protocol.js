@@ -3,7 +3,7 @@
 import { createDeepEqualSelector } from './utils';
 
 export const protocolRegistry = createDeepEqualSelector(
-  state => state.protocol.variableRegistry,
+  state => state.protocol && state.protocol.variableRegistry,
   registry => registry,
 );
 

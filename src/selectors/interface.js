@@ -72,8 +72,7 @@ export const makeGetDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
-    console.log(nodeInfo[nodeType].displayVariable);
+    const nodeInfo = variableRegistry && variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
   },
 );
