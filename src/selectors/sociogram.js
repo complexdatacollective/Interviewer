@@ -19,7 +19,7 @@ import {
   flow,
 } from 'lodash';
 import { PropTypes } from 'prop-types';
-import { networkEdges, makeNetworkNodesForSubject } from './interface';
+import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
 
 // Selectors that are specific to the name generator
@@ -72,7 +72,8 @@ const getLayoutOptions = createDeepEqualSelector(
 
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
-  sort => ({ nodeBinSortOrder: sort }),
+  makeGetDisplayVariable(),
+  (sort, displayVariable) => (sort ? { nodeBinSortOrder: sort } : { nodeBinSortOrder: { [displayVariable]: 'ASC' } }),
 );
 
 const getBackgroundOptions = createDeepEqualSelector(

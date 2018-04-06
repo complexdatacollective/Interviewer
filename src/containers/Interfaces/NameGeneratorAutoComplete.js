@@ -9,8 +9,8 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
+import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 

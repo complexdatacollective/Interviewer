@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { makeGetNodeType } from './name-generator';
+import { makeGetNodeType } from './interface';
 import { protocolRegistry, protocolForms } from './protocol';
 
 // Prop selectors
