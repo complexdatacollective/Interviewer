@@ -17,6 +17,7 @@ import {
   values,
   flatten,
   flow,
+  isEmpty,
 } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
@@ -73,7 +74,7 @@ const getLayoutOptions = createDeepEqualSelector(
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
   makeGetDisplayVariable(),
-  (sort, displayVariable) => (sort ? { nodeBinSortOrder: sort } : { nodeBinSortOrder: { [displayVariable]: 'ASC' } }),
+  (sort, displayVariable) => (sort && !isEmpty(sort) ? { nodeBinSortOrder: sort } : { nodeBinSortOrder: { [displayVariable]: 'ASC' } }),
 );
 
 const getBackgroundOptions = createDeepEqualSelector(
