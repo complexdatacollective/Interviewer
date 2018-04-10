@@ -1,22 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Markdown from 'markdown-react-js';
+import ReactMarkdown from 'react-markdown';
+import emoji from 'emoji-dictionary';
 import { Audio, Image, Video } from '../../components';
 
-const TAGS = {
-  html: 'div',
-  strong: 'b',
-  em: 'i',
-};
+const TAGS = [
+  'heading',
+  'break',
+  'paragraph',
+  'emphasis',
+  'strong',
+  'thematicBreak',
+];
+
+const emojiSupport = text => text.replace(/:\w+:/gi, name => emoji.getUnicode(name));
 
 const renderItem = (item) => {
   switch (item.type) {
     case 'text':
       return (
-        <Markdown
-          markdownOptions={{ typographer: true }}
-          text={item.content}
-          tags={TAGS}
+        <ReactMarkdown
+          source={item.content}
+          allowedTypes={TAGS}
+          renderers={{ text: emojiSupport }}
         />
       );
     case 'image':
