@@ -18,7 +18,7 @@ const prepareDestination = destination =>
 
 const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
+    const path = window.require('path');
 
     return (zipObject, destination) => {
       const extractPath = path.join(destination, zipObject.name);
@@ -40,7 +40,7 @@ const extractZipDirectory = inEnvironment((environment) => {
 
 const extractZipFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
+    const path = window.require('path');
 
     return (zipObject, destination) => {
       const extractPath = path.join(destination, zipObject.name);
@@ -105,7 +105,7 @@ const importZip = inEnvironment((environment) => {
 
 const importProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
+    const path = window.require('path');
 
     return (protocolFile = isRequired('protocolFile')) => {
       const protocolName = path.basename(protocolFile);

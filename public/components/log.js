@@ -1,9 +1,9 @@
-const electron = require('electron');
-const path = require('path');
-const log = require('electron-log');
-const fs = require('fs');
+const electron = window.require('electron');
+const path = window.require('path');
+const log = window.require('electron-log');
+const fs = window.require('fs');
 
-const userDataPath = (electron.app || electron.remote.app).getPath('userData')
+const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 
 // Same as for console transport
 log.transports.file.level = 'log';

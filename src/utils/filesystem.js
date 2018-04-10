@@ -24,7 +24,7 @@ const inSequence = (items, apply) =>
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
+    const electron = window.require('electron');
 
     return () => (electron.app || electron.remote.app).getPath('userData');
   }
@@ -38,7 +38,7 @@ const userDataPath = inEnvironment((environment) => {
 
 const appPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
+    const electron = window.require('electron');
 
     return () => (electron.app || electron.remote.app).getAppPath();
   }
@@ -63,7 +63,7 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
 
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fs = window.require('fs');
 
     return filename =>
       new Promise((resolve, reject) => {
@@ -153,7 +153,7 @@ const writeFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fs = window.require('fs');
 
     return (filePath, data) =>
       new Promise((resolve, reject) => {
@@ -169,7 +169,7 @@ const writeFile = inEnvironment((environment) => {
 
 const createDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fs = window.require('fs');
 
     return targetPath =>
       new Promise((resolve, reject) => {
@@ -208,7 +208,7 @@ const createDirectory = inEnvironment((environment) => {
 
 const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const rimraf = require('rimraf');
+    const rimraf = window.require('rimraf');
     return targetPath =>
       new Promise((resolve, reject) => {
         try {
@@ -287,7 +287,7 @@ const getNestedPaths = inEnvironment((environment) => {
 
 const writeStream = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fs = window.require('fs');
 
     return (destination, stream) =>
       new Promise((resolve, reject) => {
