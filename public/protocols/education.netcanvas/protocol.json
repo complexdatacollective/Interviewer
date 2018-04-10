@@ -361,12 +361,12 @@
         "entity": "node",
         "type": "person"
       },
-      "panels": {
-          "external": {
-            "title": "Your classmates",
-            "dataSource": "schoolPupils"
-          }
-      },
+      "panels": [
+        {
+          "title": "Your classmates",
+          "dataSource": "schoolPupils"
+        }
+      ],
       "prompts": [
         {
           "id": "6cl",
