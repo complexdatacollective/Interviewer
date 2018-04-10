@@ -15,11 +15,18 @@ These selectors assume the following props:
   prompt: which contains the protocol config for the prompt
 */
 
+const defaultPanelConfiguration = {
+  title: '',
+  dataSource: 'existing',
+  filter: network => network,
+};
+
 // MemoedSelectors
 
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
+const propPanels = (_, props) => props.stage.panels;
 
 export const makeGetNodeType = () => (createSelector(
   makeGetSubject(),
@@ -85,3 +92,9 @@ export const makeGetNodeIconName = () => createSelector(
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant;
   },
 );
+
+export const makeGetPanelConfiguration = () =>
+  createSelector(
+    propPanels,
+    panels => panels.map(panel => ({ ...defaultPanelConfiguration, ...panel })),
+  );

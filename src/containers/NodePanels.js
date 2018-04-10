@@ -6,11 +6,10 @@ import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
 import { getExternalData } from '../selectors/protocol';
 import { actionCreators as networkActions } from '../ducks/modules/network';
-import { makeGetPromptNodeAttributes } from '../selectors/name-generator';
+import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
-import configurePanels from '../behaviours/configurePanels';
 
 const colorPresets = [
   getCSSVariableAsString('--edge-alt-1'),
@@ -125,6 +124,7 @@ const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
+  const getPanelConfiguration = makeGetPanelConfiguration();
 
   return function mapStateToProps(state, props) {
     const allNodes = networkNodes(state);
@@ -132,38 +132,39 @@ function makeMapStateToProps() {
     const externalData = getExternalData(state);
     const newNodeAttributes = getPromptNodeAttributes(state, props);
 
-    const panels = props.panels.map((panel) => {
-      const originNodeIds = getOriginNodeIds({
-        existingNodes,
-        externalData,
-        dataSource: panel.dataSource,
+    const panels = getPanelConfiguration(state, props)
+      .map((panel) => {
+        const originNodeIds = getOriginNodeIds({
+          existingNodes,
+          externalData,
+          dataSource: panel.dataSource,
+        });
+
+        const nodes = getNodesForDataSource({
+          nodes: allNodes,
+          existingNodes,
+          externalData,
+          dataSource: panel.dataSource,
+        });
+
+        const accepts = (panel.dataSource === 'existing') ?
+          ({ meta }) => (
+            meta.itemType === 'EXISTING_NODE' &&
+            (meta.stageId !== newNodeAttributes.stageId ||
+              meta.promptId !== newNodeAttributes.promptId)
+          ) :
+          ({ meta }) => (
+            meta.itemType === 'EXISTING_NODE' &&
+            includes(originNodeIds, meta.uid)
+          );
+
+        return {
+          ...panel,
+          originNodeIds,
+          nodes,
+          accepts,
+        };
       });
-
-      const nodes = getNodesForDataSource({
-        nodes: allNodes,
-        existingNodes,
-        externalData,
-        dataSource: panel.dataSource,
-      });
-
-      const accepts = (panel.dataSource === 'existing') ?
-        ({ meta }) => (
-          meta.itemType === 'EXISTING_NODE' &&
-          (meta.stageId !== newNodeAttributes.stageId ||
-            meta.promptId !== newNodeAttributes.promptId)
-        ) :
-        ({ meta }) => (
-          meta.itemType === 'EXISTING_NODE' &&
-          includes(originNodeIds, meta.uid)
-        );
-
-      return {
-        ...panel,
-        originNodeIds,
-        nodes,
-        accepts,
-      };
-    });
 
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
@@ -183,7 +184,6 @@ function mapDispatchToProps(dispatch) {
 export { NodePanels };
 
 export default compose(
-  configurePanels,
   connect(makeMapStateToProps, mapDispatchToProps),
   MonitorDragSource(['isDragging', 'meta']),
 )(NodePanels);

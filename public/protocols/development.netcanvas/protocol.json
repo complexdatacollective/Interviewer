@@ -673,8 +673,14 @@
         "type": "person"
       },
       "panels": [
-        "existing",
-        "external"
+        {
+          "title": "Already mentioned",
+          "dataSource": "existing"
+        },
+        {
+          "title": "People from your previous visit",
+          "dataSource": "previousInterview"
+        }
       ],
       "prompts": [
         {
