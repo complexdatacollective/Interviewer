@@ -11,6 +11,7 @@ const mockProps = {
   removeNode: () => {},
   activePromptAttributes: {},
   newNodeAttributes: {},
+  getLabel: () => 'some label',
 };
 
 describe('<NodePanels />', () => {
