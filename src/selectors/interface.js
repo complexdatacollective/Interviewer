@@ -1,8 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { filter, has, reject } from 'lodash';
+import { filter, has, reject, values } from 'lodash';
 import { createDeepEqualSelector } from './utils';
+import { protocolRegistry } from './protocol';
 
 // Selectors that are generic between interfaces
 
@@ -61,6 +62,16 @@ export const makeGetSubject = () =>
       return prompt.subject;
     },
   );
+
+export const getNodeLabelFunction = createDeepEqualSelector(
+  protocolRegistry,
+  variableRegistry => (node) => {
+    const nodeInfo = variableRegistry && variableRegistry.node;
+    const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
+      nodeInfo[node.type].displayVariable;
+    return (displayVariable && node[displayVariable]) || values(node)[0] || node.id;
+  },
+);
 
 export const makeNetworkNodesForSubject = () => {
   const getSubject = makeGetSubject();

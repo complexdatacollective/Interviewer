@@ -6,14 +6,11 @@ import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { getNodeLabelFunction, makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
-
-// Render method for the node labels
-const label = node => `${node.nickname}`;
 
 /**
   * Name Generator Interface
@@ -82,13 +79,14 @@ class NameGenerator extends Component {
 
   render() {
     const {
-      openModal,
-      promptForward,
-      promptBackward,
-      prompt,
-      nodesForPrompt,
-      stage,
       form,
+      getLabel,
+      nodesForPrompt,
+      openModal,
+      prompt,
+      promptBackward,
+      promptForward,
+      stage,
     } = this.props;
 
     const {
@@ -140,7 +138,7 @@ class NameGenerator extends Component {
           <div className="name-generator-interface__nodes">
             <NodeList
               nodes={nodesForPrompt}
-              label={label}
+              label={getLabel}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -162,17 +160,18 @@ class NameGenerator extends Component {
 }
 
 NameGenerator.propTypes = {
-  nodesForPrompt: PropTypes.array.isRequired,
-  stage: PropTypes.object.isRequired,
-  prompt: PropTypes.object.isRequired,
-  addNodes: PropTypes.func.isRequired,
-  updateNode: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
   activePromptAttributes: PropTypes.object.isRequired,
-  newNodeAttributes: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
+  addNodes: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired,
+  getLabel: PropTypes.func.isRequired,
+  newNodeAttributes: PropTypes.object.isRequired,
+  nodesForPrompt: PropTypes.array.isRequired,
+  openModal: PropTypes.func.isRequired,
+  prompt: PropTypes.object.isRequired,
+  promptBackward: PropTypes.func.isRequired,
+  promptForward: PropTypes.func.isRequired,
+  stage: PropTypes.object.isRequired,
+  updateNode: PropTypes.func.isRequired,
 };
 
 function makeMapStateToProps() {
@@ -183,9 +182,10 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
+      form: rehydrateForm(state, props),
+      getLabel: getNodeLabelFunction(state),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
-      form: rehydrateForm(state, props),
     };
   };
 }
@@ -193,9 +193,9 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNodes: bindActionCreators(networkActions.addNodes, dispatch),
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
+    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
   };
 }
 
