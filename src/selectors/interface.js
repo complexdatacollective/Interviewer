@@ -3,6 +3,7 @@
 import { createSelector } from 'reselect';
 import { filter, has, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
+import { protocolRegistry } from './protocol';
 
 // Selectors that are generic between interfaces
 
@@ -61,6 +62,20 @@ export const makeGetSubject = () =>
       return prompt.subject;
     },
   );
+
+export const makeGetNodeType = () => (createSelector(
+  makeGetSubject(),
+  subject => subject && subject.type,
+));
+
+export const makeGetDisplayVariable = () => createDeepEqualSelector(
+  protocolRegistry,
+  makeGetNodeType(),
+  (variableRegistry, nodeType) => {
+    const nodeInfo = variableRegistry && variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
+  },
+);
 
 export const makeNetworkNodesForSubject = () => {
   const getSubject = makeGetSubject();
