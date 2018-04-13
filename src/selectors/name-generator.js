@@ -2,7 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
-import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
+import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
 import { getExternalData, protocolRegistry } from './protocol';
 import { nextUid } from '../ducks/modules/network';
 
@@ -20,11 +20,6 @@ These selectors assume the following props:
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
-
-export const makeGetNodeType = () => (createSelector(
-  makeGetSubject(),
-  subject => subject && subject.type,
-));
 
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();

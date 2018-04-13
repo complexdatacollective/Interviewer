@@ -73,6 +73,20 @@ export const getNodeLabelFunction = createDeepEqualSelector(
   },
 );
 
+export const makeGetNodeType = () => (createSelector(
+  makeGetSubject(),
+  subject => subject && subject.type,
+));
+
+export const makeGetDisplayVariable = () => createDeepEqualSelector(
+  protocolRegistry,
+  makeGetNodeType(),
+  (variableRegistry, nodeType) => {
+    const nodeInfo = variableRegistry && variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
+  },
+);
+
 export const makeNetworkNodesForSubject = () => {
   const getSubject = makeGetSubject();
 
