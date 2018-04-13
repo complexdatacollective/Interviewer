@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { filter, has, reject, values } from 'lodash';
+import { findKey, filter, has, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 
@@ -63,16 +63,6 @@ export const makeGetSubject = () =>
     },
   );
 
-export const getNodeLabelFunction = createDeepEqualSelector(
-  protocolRegistry,
-  variableRegistry => (node) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
-    const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
-      nodeInfo[node.type].displayVariable;
-    return (displayVariable && node[displayVariable]) || values(node)[0] || node.id;
-  },
-);
-
 export const makeGetNodeType = () => (createSelector(
   makeGetSubject(),
   subject => subject && subject.type,
@@ -84,6 +74,20 @@ export const makeGetDisplayVariable = () => createDeepEqualSelector(
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry && variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
+  },
+);
+
+export const getNodeLabelFunction = createDeepEqualSelector(
+  protocolRegistry,
+  variableRegistry => (node) => {
+    const nodeInfo = variableRegistry && variableRegistry.node;
+    const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
+      nodeInfo[node.type].displayVariable;
+    const firstTextVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
+      nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
+    return (displayVariable && node[displayVariable]) ||
+      (firstTextVariable && node[firstTextVariable]) ||
+      String(node.id);
   },
 );
 
