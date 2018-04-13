@@ -21,6 +21,58 @@ const mockStage = {
   },
 };
 
+const externalNode1 = {
+  uid: 'person_1',
+  type: 'person',
+  name: 'F. Anita',
+  nickname: 'Annie',
+  age: 23,
+  label: 'Custom Label',
+};
+
+const externalNode2 = {
+  uid: 'person_2',
+  type: 'person',
+  name: 'H. Barry',
+  nickname: 'Baz',
+  age: 31,
+};
+
+const externalNode3 = {
+  uid: 'person_3',
+  type: 'person',
+  nickname: 'Carl',
+  age: 25,
+};
+
+const externalNode4 = {
+  id: 4,
+  uid: 'person_3',
+  type: 'person',
+  age: 25,
+};
+
+const mockProtocol = {
+  externalData: {
+    schoolPupils: {
+      nodes: [externalNode1, externalNode2, externalNode3, externalNode4],
+    },
+  },
+  variableRegistry: {
+    node: {
+      person: {
+        displayVariable: 'name',
+        iconVariant: 'add-a-person',
+        variables: {
+          nickname: {
+            type: 'text',
+          },
+        },
+      },
+    },
+  },
+};
+
 const mockProps = {
   prompt: mockPrompt,
   stage: mockStage,
@@ -45,6 +97,7 @@ const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 
 const mockState = {
   network: { nodes, edges },
+  protocol: mockProtocol,
 };
 
 describe('interface selector', () => {
@@ -75,6 +128,24 @@ describe('interface selector', () => {
       const selected = Interface.makeGetSubject();
       expect(selected(mockState, mockProps)).toEqual(mockStage.subject);
       expect(selected(null, emptyProps)).toEqual({});
+    });
+
+    it('should get node type', () => {
+      const selected = Interface.makeGetNodeType();
+      expect(selected(mockState, mockProps)).toEqual('person');
+    });
+
+    it('should get displayVariable', () => {
+      const selected = Interface.makeGetDisplayVariable();
+      expect(selected(mockState, mockProps)).toEqual('name');
+    });
+
+    it('should get node label function', () => {
+      const getLabel = Interface.getNodeLabelFunction(mockState, mockProps);
+      expect(getLabel(externalNode1)).toEqual('Custom Label');
+      expect(getLabel(externalNode2)).toEqual('H. Barry');
+      expect(getLabel(externalNode3)).toEqual('Carl');
+      expect(getLabel(externalNode4)).toEqual('4');
     });
 
     it('makeNetworkNodesForSubject()', () => {

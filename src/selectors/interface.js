@@ -85,7 +85,8 @@ export const getNodeLabelFunction = createDeepEqualSelector(
       nodeInfo[node.type].displayVariable;
     const firstTextVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
       nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
-    return (displayVariable && node[displayVariable]) ||
+    return node.label ||
+      (displayVariable && node[displayVariable]) ||
       (firstTextVariable && node[firstTextVariable]) ||
       String(node.id);
   },
