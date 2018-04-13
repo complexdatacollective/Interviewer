@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -18,9 +19,20 @@ const Prompt = (props) => {
     { 'prompts__prompt--leaving': isLeaving }, // TODO: rename class
   );
 
+  const TAGS = [
+    'paragraph',
+    'emphasis',
+    'strong',
+  ];
+
   return (
     <div className={classNames}>
-      <h1 className="prompts__prompt-header">{label}</h1>
+      <h1 className="prompts__prompt-header">
+        <ReactMarkdown
+          source={label}
+          allowedTypes={TAGS}
+        />
+      </h1>
     </div>
   );
 };

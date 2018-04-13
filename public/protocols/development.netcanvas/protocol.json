@@ -696,7 +696,7 @@
       "prompts": [
         {
           "id": "6cl",
-          "text": "This is the factory preset protocol",
+          "text": "This is a _prompt_ containing **markdown**",
           "additionalAttributes": {
             "special_category": 46,
             "close_friend": true
