@@ -660,7 +660,7 @@
         {
           "type": "text",
           "content":
-            "Some arbitrary text content that can contain be **bold**"
+            "Some arbitrary text content that can _contain_ **formatting**."
         },
         {
           "type": "audio",
