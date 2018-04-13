@@ -9,10 +9,6 @@ const mockStage = {
   title: 'Title for the screen',
 };
 
-const mockProps = {
-  stage: mockStage,
-};
-
 const mockState = {
   menu: {
     sessionMenuIsOpen: false,
