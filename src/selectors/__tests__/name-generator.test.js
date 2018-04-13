@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import * as NameGen from '../name-generator';
+import * as Interface from '../interface';
 
 const mockPrompt = {
   id: 'promptId123',
@@ -82,7 +83,7 @@ const mockState = {
 describe('name generator selector', () => {
   describe('memoed selectors', () => {
     it('should get node type', () => {
-      const selected = NameGen.makeGetNodeType();
+      const selected = Interface.makeGetNodeType();
       expect(selected(mockState, mockProps)).toEqual('person');
     });
 
