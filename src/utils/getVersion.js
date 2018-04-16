@@ -4,7 +4,7 @@ import { isElectron, isCordova } from '../utils/Environment';
 
 const getVersion = () => {
   if (isElectron()) {
-    const remote = window.require('electron').remote;  // eslint-disable-line global-require
+    const remote = require('electron').remote;  // eslint-disable-line global-require
 
     return new Promise((resolve) => {
       const version = remote.app.getVersion();

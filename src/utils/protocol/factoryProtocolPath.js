@@ -9,7 +9,7 @@ const isValidProtocolName = protocolName => (isString(protocolName) && protocolN
 
 const factoryProtocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
-    const path = window.require('path');
+    const path = require('path');
 
     return (protocolName, filePath = '') => {
       if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');

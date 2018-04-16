@@ -1,9 +1,10 @@
-import { EventEmitter } from 'eventemitter3';
 import { isElectron } from '../utils/Environment';
 
+let EventEmitter;
 let ipcRenderer;
 
 if (isElectron()) {
+  EventEmitter = window.require('events').EventEmitter;
   ipcRenderer = window.require('electron').ipcRenderer;
 }
 
