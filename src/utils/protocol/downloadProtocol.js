@@ -27,9 +27,9 @@ const fileError = friendlyErrorMessage('The protocol could not be saved to your 
 
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const request = window.require('request-promise-native');
-    const path = window.require('path');
-    const electron = window.require('electron');
+    const request = require('request-promise-native');
+    const path = require('path');
+    const electron = require('electron');
 
     return (uri) => {
       const tempPath = (electron.app || electron.remote.app).getPath('temp');
