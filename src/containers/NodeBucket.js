@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -10,7 +10,7 @@ import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 const EnhancedNode = DragSource(Node);
 const label = node => node.nickname;
 
-class NodeBucket extends Component {
+class NodeBucket extends PureComponent {
   static propTypes = {
     node: PropTypes.object,
   };
