@@ -175,15 +175,22 @@ class SessionMenu extends Component {
     if (!isElectron()) return;
 
     const electron = window.require('electron');
-    electron.remote.globalShortcut.register(accelerator, callback);
+    const register = () => electron.remote.globalShortcut.register(accelerator, callback);
+    const unregister = () => electron.remote.globalShortcut.unregister(accelerator, callback);
+
+    electron.remote.getCurrentWindow().on('ready', register);
 
     // register and unregister on focus/blur so the shortcut is not so aggressive
-    electron.remote.getCurrentWindow().on('focus', () => {
-      electron.remote.globalShortcut.register(accelerator, callback);
-    });
-    electron.remote.getCurrentWindow().on('blur', () => {
-      electron.remote.globalShortcut.unregister(accelerator);
-    });
+    electron.remote.getCurrentWindow().on('focus', register);
+    electron.remote.getCurrentWindow().on('blur', unregister);
+
+    window.onbeforeunload = () => {
+      unregister();
+      // remote listeners since this renderer window is going away
+      electron.remote.getCurrentWindow().removeListener('ready', register);
+      electron.remote.getCurrentWindow().removeListener('focus', register);
+      electron.remote.getCurrentWindow().removeListener('blur', unregister);
+    };
   }
 
   registerPlatformShortcuts = () => {
