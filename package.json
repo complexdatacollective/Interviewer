@@ -6,8 +6,8 @@
     "author": "Complex Data Collective",
     "private": true,
     "engines": {
-        "node": "8.9.3",
-        "npm": "5.5.1"
+        "node": "8.11.1",
+        "npm": "5.8.0"
     },
     "scripts": {
         "pack": "electron-builder --dir",
@@ -101,7 +101,7 @@
         "jszip": "^3.1.5",
         "lodash": "^4.17.4",
         "mdns": "^2.3.4",
-        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
+        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git#1.13.3",
         "node-sass": "^4.5.3",
         "object-assign": "4.1.1",
         "postcss-flexbugs-fixes": "3.2.0",
