@@ -186,10 +186,8 @@ class SessionMenu extends Component {
 
     window.onbeforeunload = () => {
       unregister();
-      // remote listeners since this renderer window is going away
-      electron.remote.getCurrentWindow().removeListener('ready', register);
-      electron.remote.getCurrentWindow().removeListener('focus', register);
-      electron.remote.getCurrentWindow().removeListener('blur', unregister);
+      // remove listeners since this renderer window is going away
+      electron.remote.getCurrentWindow().removeAllListeners();
     };
   }
 
