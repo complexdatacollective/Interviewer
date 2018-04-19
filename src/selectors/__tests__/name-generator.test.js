@@ -1,46 +1,5 @@
 /* eslint-env jest */
 
-<<<<<<< HEAD
-import { makeGetPanelConfiguration } from '../name-generator';
-
-const mockProps = {
-  stage: {
-    panels: [
-      { foo: 'bar' },
-    ],
-  },
-};
-
-const mockState = {
-};
-
-describe('name generator selector', () => {
-  describe('makeGetPanelConfiguration()', () => {
-    const getPanelConfiguration = makeGetPanelConfiguration();
-
-    it('returns an array of panel configurations', () => {
-      const subject = getPanelConfiguration(mockState, mockProps);
-      expect(subject[0]).toMatchObject(
-        {
-          dataSource: 'existing',
-          foo: 'bar',
-          title: '',
-        },
-      );
-      expect(subject[0]).toHaveProperty('filter');
-    });
-
-    it('always returns an array', () => {
-      const subject = getPanelConfiguration(
-        mockState,
-        {
-          stage: {
-          },
-        },
-      );
-
-      expect(subject).toEqual([]);
-=======
 import * as NameGen from '../name-generator';
 
 const mockPrompt = {
@@ -71,6 +30,9 @@ const mockStage = {
     entity: 'node',
     type: 'person',
   },
+  panels: [
+    { foo: 'bar' },
+  ],
 };
 
 const externalNode = {
@@ -122,6 +84,33 @@ const mockState = {
 };
 
 describe('name generator selector', () => {
+  describe('makeGetPanelConfiguration()', () => {
+    const getPanelConfiguration = NameGen.makeGetPanelConfiguration();
+
+    it('returns an array of panel configurations', () => {
+      const subject = getPanelConfiguration(mockState, mockProps);
+      expect(subject[0]).toMatchObject(
+        {
+          dataSource: 'existing',
+          foo: 'bar',
+          title: '',
+        },
+      );
+      expect(subject[0]).toHaveProperty('filter');
+    });
+
+    it('always returns an array', () => {
+      const subject = getPanelConfiguration(
+        mockState,
+        {
+          stage: {
+          },
+        },
+      );
+
+      expect(subject).toEqual([]);
+    });
+  });
   describe('memoed selectors', () => {
     it('should get node attributes for the prompt', () => {
       const selected = NameGen.makeGetPromptNodeAttributes();
@@ -165,7 +154,6 @@ describe('name generator selector', () => {
     it('should get node icon name', () => {
       const selected = NameGen.makeGetNodeIconName();
       expect(selected(mockState, mockProps)).toEqual('add-a-person');
->>>>>>> master
     });
   });
 });
