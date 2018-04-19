@@ -52,9 +52,19 @@ class LoadParamsRoute extends Component {
       ...rest
     } = this.props;
 
+    const {
+      protocolId,
+      protocolType,
+    } = this.props.computedMatch.params;
+
     return (
       isSkipped ?
-        (<Redirect to={{ pathname: `/protocol/${this.props.computedMatch.params.protocolId}/${skipToIndex}`, search: backParam }} />) :
+        (<Redirect to={
+          {
+            pathname: `/protocol/${protocolType}/${protocolId}/${skipToIndex}`,
+            search: backParam,
+          }}
+        />) :
         (<RenderComponent {...rest} stageIndex={this.props.computedMatch.params.stageIndex || 0} />)
     );
   }
