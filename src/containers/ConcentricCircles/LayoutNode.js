@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Node } from 'network-canvas-ui';
+import { getNodeLabelFunction } from '../../selectors/interface';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-
-const label = node => node.nickname;
 
 const EnhancedNode = compose(
   DragSource,
@@ -16,12 +16,13 @@ const EnhancedNode = compose(
 class LayoutNode extends PureComponent {
   render() {
     const {
-      node,
-      selected,
-      linking,
       allowPositioning,
       allowSelect,
+      getLabel,
       layoutVariable,
+      linking,
+      node,
+      selected,
     } = this.props;
 
     const { x, y } = node[layoutVariable];
@@ -38,7 +39,7 @@ class LayoutNode extends PureComponent {
         style={styles}
       >
         <EnhancedNode
-          label={label(node)}
+          label={getLabel(node)}
           onSelected={this.props.onSelected}
           selected={selected}
           linking={linking}
@@ -55,27 +56,36 @@ class LayoutNode extends PureComponent {
 }
 
 LayoutNode.propTypes = {
-  onSelected: PropTypes.func.isRequired,
-  layoutVariable: PropTypes.string.isRequired,
-  node: PropTypes.object.isRequired,
   allowPositioning: PropTypes.bool,
   allowSelect: PropTypes.bool,
-  selected: PropTypes.bool,
-  linking: PropTypes.bool,
-  areaWidth: PropTypes.number,
   areaHeight: PropTypes.number,
+  areaWidth: PropTypes.number,
+  getLabel: PropTypes.func.isRequired,
+  layoutVariable: PropTypes.string.isRequired,
+  linking: PropTypes.bool,
+  node: PropTypes.object.isRequired,
+  onSelected: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
 };
 
 LayoutNode.defaultProps = {
   allowPositioning: false,
   allowSelect: false,
-  selected: false,
-  linking: false,
-  areaWidth: 0,
   areaHeight: 0,
+  areaWidth: 0,
+  linking: false,
   onSelected: () => {},
+  selected: false,
 };
+
+function mapStateToProps(state) {
+  return {
+    getLabel: getNodeLabelFunction(state),
+  };
+}
 
 export { LayoutNode };
 
-export default LayoutNode;
+export default compose(
+  connect(mapStateToProps),
+)(LayoutNode);

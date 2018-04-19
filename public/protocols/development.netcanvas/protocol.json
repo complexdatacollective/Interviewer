@@ -79,6 +79,7 @@
       },
       "venue": {
         "label": "Venue",
+        "displayVariable": "Abbreviated Name",
         "color": "kiwi",
         "iconVariant": "add-a-place",
         "variables": {
@@ -946,6 +947,52 @@
           }
         }
       ]
+    },
+    {
+      "id": "skippable screen",
+      "label": "Skip or Show",
+      "type": "Information",
+      "title": "To skip or not to skip...",
+      "items": [
+        { "type": "text", "content": "...that is the question." }
+      ],
+      "skipLogic": {
+        "action": "SHOW",
+        "operator": "EXACTLY",
+        "value": "3",
+        "filter": {
+          "join": "OR",
+          "rules": [
+            {
+              "type": "alter",
+              "id": "15218241538622",
+              "options": {
+                "type": "person",
+                "attribute": "name",
+                "operator": "EXACTLY",
+                "value": "Dee"
+              }
+            },
+            {
+              "type": "ego",
+              "id": "15218241553253",
+              "options": {
+                "attribute": "name",
+                "operator": "EXACTLY",
+                "value": "Bob"
+              }
+            },
+            {
+              "type": "edge",
+              "id": "15218241565624",
+              "options": {
+                "type": "friends",
+                "operator": "EXISTS"
+              }
+            }
+          ]
+        }
+      }
     }
   ]
 }

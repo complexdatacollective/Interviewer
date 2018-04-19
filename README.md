@@ -59,8 +59,9 @@ node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/e
 
 0. Install the correct node and npm versions.
 1. Clone this repsitory.
-2. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
-3. Refer to the development tasks section below to learn how to test and build the app.
+2. Fetch submodules by typing `git submodule update --init`.
+3. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
+4. Refer to the development tasks section below to learn how to test and build the app.
 
 ## Development Tasks
 
@@ -86,11 +87,9 @@ node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/e
 1. Install [cordova](https://cordova.apache.org) on your system: `npm install -g cordova`
 2. If you haven't already, build the project: `npm run build`
   - Without the `www/` directory, cordova commands won't recognize this as a valid project.
-3. Add ios and android platforms for the project:
-  - `cordova platform add ios`
-  - `cordova platform add android`
+3. Install platforms and plugins for the project: `cordova prepare`
 
-See Cordova's [iOS docs](http://cordova.apache.org/docs/en/7.x/guide/platforms/ios/index.html#page-toc-source) and [Android docs](http://cordova.apache.org/docs/en/7.x/guide/platforms/android/index.html) for requirements, configuration, and deploy instructions.
+See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html) and [Android docs](http://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) for requirements, configuration, and deploy instructions.
 
 ### Local Development & Testing
 
