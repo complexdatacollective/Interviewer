@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
+import '../styles/main.scss';
 import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 import { SessionMenu, StageMenu, LoadScreen } from '../containers';
 import { ErrorMessage } from '../components';
-
-require('../styles/main.scss');
 
 /**
   * Main app container.
