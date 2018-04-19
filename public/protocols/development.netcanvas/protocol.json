@@ -79,6 +79,7 @@
       },
       "venue": {
         "label": "Venue",
+        "displayVariable": "Abbreviated Name",
         "color": "kiwi",
         "iconVariant": "add-a-place",
         "variables": {
