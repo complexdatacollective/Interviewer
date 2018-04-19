@@ -1,0 +1,3 @@
+[submodule "src/utils/networkQuery"]
+	path = src/utils/networkQuery
+	url = https://github.com/codaco/networkQuery
