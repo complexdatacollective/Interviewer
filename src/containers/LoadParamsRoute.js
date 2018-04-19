@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
+import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
+import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
@@ -42,37 +44,54 @@ class LoadParamsRoute extends Component {
 
   render() {
     const {
+      backParam,
       component: RenderComponent,
+      isSkipped,
       shouldReset,
+      skipToIndex,
       ...rest
     } = this.props;
 
     return (
-      <RenderComponent {...rest} stageIndex={this.props.computedMatch.params.stageIndex || 0} />
+      isSkipped ?
+        (<Redirect to={{ pathname: `/protocol/${this.props.computedMatch.params.protocolId}/${skipToIndex}`, search: backParam }} />) :
+        (<RenderComponent {...rest} stageIndex={this.props.computedMatch.params.stageIndex || 0} />)
     );
   }
 }
 
 LoadParamsRoute.propTypes = {
+  backParam: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
+  isSkipped: PropTypes.bool,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   resetState: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
+  skipToIndex: PropTypes.number.isRequired,
 };
 
 LoadParamsRoute.defaultProps = {
+  isSkipped: false,
   protocolPath: '',
   shouldReset: false,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  let nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) + 1;
+  if (ownProps.location && ownProps.location.search === '?back') {
+    nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) - 1;
+  }
+
   return {
+    backParam: ownProps.location.search,
     isProtocolLoaded: state.protocol.isLoaded,
+    isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     protocolPath: state.protocol.path,
+    skipToIndex: getNextIndex(nextIndex)(state),
   };
 }
 

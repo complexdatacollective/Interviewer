@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 import * as NameGen from '../name-generator';
-import * as Interface from '../interface';
 
 const mockPrompt = {
   id: 'promptId123',
@@ -40,6 +39,7 @@ const externalNode = {
   nickname: 'Annie',
   age: 23,
 };
+
 const mockProtocol = {
   externalData: {
     schoolPupils: {
@@ -82,11 +82,6 @@ const mockState = {
 
 describe('name generator selector', () => {
   describe('memoed selectors', () => {
-    it('should get node type', () => {
-      const selected = Interface.makeGetNodeType();
-      expect(selected(mockState, mockProps)).toEqual('person');
-    });
-
     it('should get node attributes for the prompt', () => {
       const selected = NameGen.makeGetPromptNodeAttributes();
       expect(selected(mockState, mockProps)).toEqual({

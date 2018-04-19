@@ -57,8 +57,9 @@ node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/e
 
 0. Install the correct node and npm versions.
 1. Clone this repsitory.
-2. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
-3. Refer to the development tasks section below to learn how to test and build the app.
+2. Fetch submodules by typing `git submodule update --init`.
+3. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
+4. Refer to the development tasks section below to learn how to test and build the app.
 
 ## Development Tasks
 
