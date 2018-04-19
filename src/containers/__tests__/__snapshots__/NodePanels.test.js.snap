@@ -6,6 +6,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <NodePanels
     activePromptAttributes={Object {}}
+    getLabel={[Function]}
     isDragging={false}
     meta={Object {}}
     newNodeAttributes={Object {}}

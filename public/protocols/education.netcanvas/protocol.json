@@ -396,7 +396,7 @@
         },
         {
           "id": "6el",
-          "text": "Please list all the people the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
+          "text": "Please list all the people in the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
           "additionalAttributes": {
             "community_important": true
           }
@@ -410,7 +410,7 @@
         },
         {
           "id": "6gl",
-          "text": "Finally, is there anyone else important to you who was not yet listed",
+          "text": "Finally, is there anyone else important to you who was not yet listed?",
           "additionalAttributes": {
             "other_important": true
           }

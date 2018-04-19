@@ -17,7 +17,7 @@
 
 // CSS variableoverrides for Network Canvas
 :root {
-  --body-font-family:$netcanvas-font-stack;
+  --body-font-family:#{$netcanvas-font-stack};
 }
 
 html,

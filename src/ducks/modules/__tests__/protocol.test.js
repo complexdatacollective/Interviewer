@@ -14,6 +14,7 @@ const initialState = {
   name: '',
   version: '',
   required: '',
+  type: 'factory',
   stages: [],
 };
 
@@ -55,6 +56,7 @@ describe('protocol module', () => {
         ...initialState,
         isLoaded: false,
         isLoading: true,
+        type: 'download',
       });
     });
 
@@ -70,6 +72,7 @@ describe('protocol module', () => {
         ...initialState,
         isLoaded: false,
         isLoading: true,
+        type: 'download',
       });
     });
 
@@ -85,6 +88,7 @@ describe('protocol module', () => {
         ...initialState,
         isLoaded: false,
         isLoading: true,
+        type: 'download',
       });
     });
 

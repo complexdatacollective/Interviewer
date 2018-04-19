@@ -21,10 +21,11 @@ const sociogramOptionsDefault = {
 
 const mockProps = {
   ...sociogramOptionsDefault,
-  node: {},
+  node: { label: 'some label' },
   updateNode: () => {},
   layout: 'foo',
   sort: {},
+  getLabel: node => node.label,
 };
 
 describe('<NodeBucket />', () => {

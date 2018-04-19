@@ -6,8 +6,8 @@
     "author": "Complex Data Collective",
     "private": true,
     "engines": {
-        "node": "8.9.3",
-        "npm": "5.5.1"
+        "node": "8.11.1",
+        "npm": "5.8.0"
     },
     "scripts": {
         "pack": "electron-builder --dir",
@@ -52,15 +52,6 @@
         "classnames": "^2.2.5",
         "color": "^2.0.0",
         "connect-history-api-fallback": "1.3.0",
-        "cordova-plugin-add-swift-support": "^1.7.1",
-        "cordova-plugin-app-version": "^0.1.9",
-        "cordova-plugin-device": "^1.1.6",
-        "cordova-plugin-file": "^5.0.0",
-        "cordova-plugin-file-transfer": "^1.7.1",
-        "cordova-plugin-whitelist": "^1.3.3",
-        "cordova-plugin-wkwebview-engine": "^1.1.4",
-        "cordova-plugin-x-socialsharing": "^5.2.1",
-        "cordova-plugin-zeroconf": "^1.3.1",
         "cross-spawn": "4.0.2",
         "css-loader": "0.28.4",
         "detect-port": "1.1.0",
@@ -73,6 +64,7 @@
         "electron-to-chromium": "^1.3.21",
         "electron-updater": "^2.20.2",
         "electron-winstaller": "^2.5.2",
+        "emoji-dictionary": "^1.0.9",
         "enzyme": "^3.2.0",
         "enzyme-adapter-react-16": "^1.1.1",
         "es6-promise-plugin": "^4.1.0",
@@ -101,7 +93,7 @@
         "jszip": "^3.1.5",
         "lodash": "^4.17.4",
         "mdns": "^2.3.4",
-        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git",
+        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git#1.13.3",
         "node-sass": "^4.5.3",
         "object-assign": "4.1.1",
         "postcss-flexbugs-fixes": "3.2.0",
@@ -113,6 +105,7 @@
         "react-dom": "^16.2.0",
         "react-draggable": "^2.2.3",
         "react-hammerjs": "^1.0.1",
+        "react-markdown": "^3.3.0",
         "react-redux": "^4.4.5",
         "react-router-dom": "^4.1.1",
         "react-router-redux": "^5.0.0-alpha.9",
@@ -148,7 +141,14 @@
     },
     "dependencies": {
         "cordova-android": "^7.1.0",
-        "cordova-ios": "^4.5.4"
+        "cordova-ios": "^4.5.4",
+        "cordova-plugin-app-version": "^0.1.9",
+        "cordova-plugin-file": "^5.0.0",
+        "cordova-plugin-file-transfer": "^1.7.1",
+        "cordova-plugin-whitelist": "^1.3.3",
+        "cordova-plugin-wkwebview-engine": "^1.1.4",
+        "cordova-plugin-x-socialsharing": "^5.2.1",
+        "cordova-plugin-zeroconf": "^1.3.3"
     },
     "homepage": ".",
     "main": "www/electron-starter.js",

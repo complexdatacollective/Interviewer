@@ -10,5 +10,5 @@ export const getCSSVariableAsNumber = (variableName) => {
 
 export const getCSSVariableAsObject = (variableName) => {
   const style = getComputedStyle(document.body);
-  return JSON.parse(style.getPropertyValue(variableName).trim());
+  return style.getPropertyValue(variableName) ? JSON.parse(style.getPropertyValue(variableName).trim()) : '';
 };
