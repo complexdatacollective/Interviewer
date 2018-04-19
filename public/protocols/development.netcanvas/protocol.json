@@ -693,7 +693,16 @@
         "entity": "node",
         "type": "person"
       },
-      "panels": ["existing", "external"],
+      "panels": [
+        {
+          "title": "Already mentioned",
+          "dataSource": "existing"
+        },
+        {
+          "title": "People from your previous visit",
+          "dataSource": "previousInterview"
+        }
+      ],
       "prompts": [
         {
           "id": "6cl",
