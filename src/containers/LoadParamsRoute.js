@@ -17,7 +17,11 @@ class LoadParamsRoute extends Component {
     if (this.props.computedMatch.params &&
       this.props.computedMatch.params.protocolId &&
       this.props.computedMatch.params.protocolId !== this.props.protocolPath) {
-      this.props.loadFactoryProtocol(this.props.computedMatch.params.protocolId);
+      if (this.props.computedMatch.params.protocolType === 'factory') {
+        this.props.loadFactoryProtocol(this.props.computedMatch.params.protocolId);
+      } else {
+        this.props.loadProtocol(this.props.computedMatch.params.protocolId);
+      }
     }
   }
 
@@ -30,7 +34,11 @@ class LoadParamsRoute extends Component {
         nextProps.computedMatch.params !== this.props.computedMatch.params &&
         nextProps.computedMatch.params.protocolId &&
         nextProps.computedMatch.params.protocolId !== this.props.protocolPath) {
-      this.props.loadFactoryProtocol(nextProps.computedMatch.params.protocolId);
+      if (nextProps.computedMatch.params.protocolType === 'factory') {
+        this.props.loadFactoryProtocol(nextProps.computedMatch.params.protocolId);
+      } else {
+        this.props.loadProtocol(nextProps.computedMatch.params.protocolId);
+      }
     }
   }
 
@@ -44,9 +52,19 @@ class LoadParamsRoute extends Component {
       ...rest
     } = this.props;
 
+    const {
+      protocolId,
+      protocolType,
+    } = this.props.computedMatch.params;
+
     return (
       isSkipped ?
-        (<Redirect to={{ pathname: `/protocol/${this.props.computedMatch.params.protocolId}/${skipToIndex}`, search: backParam }} />) :
+        (<Redirect to={
+          {
+            pathname: `/protocol/${protocolType}/${protocolId}/${skipToIndex}`,
+            search: backParam,
+          }}
+        />) :
         (<RenderComponent {...rest} stageIndex={this.props.computedMatch.params.stageIndex || 0} />)
     );
   }
@@ -59,6 +77,7 @@ LoadParamsRoute.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   isSkipped: PropTypes.bool,
   loadFactoryProtocol: PropTypes.func.isRequired,
+  loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   resetState: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
@@ -89,6 +108,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     resetState: bindActionCreators(menuActions.resetState, dispatch),
   };
 }
