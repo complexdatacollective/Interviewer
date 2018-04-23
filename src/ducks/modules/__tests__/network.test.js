@@ -132,7 +132,7 @@ describe('session actions', () => {
     });
   });
 
-  it('should toggle edges', () => {
+  it('should toggle edges, adding if not there and removing if it is', () => {
     const edgeA = { from: 'foo', to: 'bar', type: 'friend' };
     const edgeB = { from: 'asdf', to: 'qwerty', type: 'friend' };
     expect(
@@ -145,14 +145,19 @@ describe('session actions', () => {
       ),
     ).toEqual({
       ...mockState,
-      edges: [
-        edgeB,
+      edges: [edgeB],
+    });
+    expect(
+      reducer(
         {
-          from: 'bar',
-          to: 'foo',
-          type: 'friend',
+          ...mockState,
+          edges: [edgeB],
         },
-      ],
+        actionCreators.toggleEdge(edgeA),
+      ),
+    ).toEqual({
+      ...mockState,
+      edges: [edgeB, edgeA],
     });
   });
 
