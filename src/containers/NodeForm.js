@@ -80,6 +80,7 @@ class NodeForm extends Component {
       autoFocus: true,
       controls: [
         (showAddAnotherToggle && <ToggleInput
+          key="toggleInput"
           name="addAnother"
           label="Add another?"
           checked={this.state.addAnotherNode}
