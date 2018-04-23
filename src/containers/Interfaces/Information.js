@@ -5,10 +5,13 @@ import emoji from 'emoji-dictionary';
 import { Audio, Image, Video } from '../../components';
 
 const TAGS = [
-  'heading',
   'break',
-  'paragraph',
   'emphasis',
+  'heading',
+  'link',
+  'list',
+  'listItem',
+  'paragraph',
   'strong',
   'thematicBreak',
 ];
