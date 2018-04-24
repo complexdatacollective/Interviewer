@@ -34,6 +34,8 @@ class NodeList extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
+
     // Don't update if nodes are the same
     if (isEqual(newProps.nodes, this.state.nodes)) {
       return;
@@ -54,7 +56,6 @@ class NodeList extends Component {
       this.setState(
         { nodes: [], stagger: true },
         () => {
-          if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
           this.refreshTimer = setTimeout(
             () => this.setState({
               nodes: newProps.nodes,
