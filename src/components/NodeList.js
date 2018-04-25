@@ -68,6 +68,10 @@ class NodeList extends Component {
     });
   }
 
+  componentWillUnmount() {
+    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
+  }
+
   render() {
     const {
       nodeColor,
