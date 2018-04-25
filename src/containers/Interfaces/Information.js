@@ -33,7 +33,7 @@ const renderItem = (item) => {
     case 'audio':
       return <Audio url={item.content} controls autoPlay />;
     case 'video':
-      return <Video url={item.content} controls autoPlay />;
+      return <Video url={item.content} loop={item.loop} autoPlay />;
     default:
       return null;
   }
