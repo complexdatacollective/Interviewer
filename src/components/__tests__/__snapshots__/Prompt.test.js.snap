@@ -8,7 +8,7 @@ ShallowWrapper {
     isActive={false}
     isLeaving={false}
     label="_prompt_ containing **markdown**"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -23,22 +23,22 @@ ShallowWrapper {
     "props": Object {
       "children": <h1
         className="prompts__prompt-header"
->
+      >
         <ReactMarkdown
-                allowedTypes={
-                        Array [
-                                "paragraph",
-                                "emphasis",
-                                "strong",
-                              ]
-                }
-                escapeHtml={true}
-                renderers={Object {}}
-                skipHtml={false}
-                source="_prompt_ containing **markdown**"
-                transformLinkUri={[Function]}
+          allowedTypes={
+            Array [
+              "paragraph",
+              "emphasis",
+              "strong",
+            ]
+          }
+          escapeHtml={true}
+          renderers={Object {}}
+          skipHtml={false}
+          source="_prompt_ containing **markdown**"
+          transformLinkUri={[Function]}
         />
-</h1>,
+      </h1>,
       "className": "prompts__prompt",
     },
     "ref": null,
@@ -49,18 +49,18 @@ ShallowWrapper {
       "props": Object {
         "children": <ReactMarkdown
           allowedTypes={
-                    Array [
-                              "paragraph",
-                              "emphasis",
-                              "strong",
-                            ]
+            Array [
+              "paragraph",
+              "emphasis",
+              "strong",
+            ]
           }
           escapeHtml={true}
           renderers={Object {}}
           skipHtml={false}
           source="_prompt_ containing **markdown**"
           transformLinkUri={[Function]}
-/>,
+        />,
         "className": "prompts__prompt-header",
       },
       "ref": null,
@@ -96,22 +96,22 @@ ShallowWrapper {
       "props": Object {
         "children": <h1
           className="prompts__prompt-header"
->
+        >
           <ReactMarkdown
-                    allowedTypes={
-                              Array [
-                                        "paragraph",
-                                        "emphasis",
-                                        "strong",
-                                      ]
-                    }
-                    escapeHtml={true}
-                    renderers={Object {}}
-                    skipHtml={false}
-                    source="_prompt_ containing **markdown**"
-                    transformLinkUri={[Function]}
+            allowedTypes={
+              Array [
+                "paragraph",
+                "emphasis",
+                "strong",
+              ]
+            }
+            escapeHtml={true}
+            renderers={Object {}}
+            skipHtml={false}
+            source="_prompt_ containing **markdown**"
+            transformLinkUri={[Function]}
           />
-</h1>,
+        </h1>,
         "className": "prompts__prompt",
       },
       "ref": null,
@@ -122,18 +122,18 @@ ShallowWrapper {
         "props": Object {
           "children": <ReactMarkdown
             allowedTypes={
-                        Array [
-                                    "paragraph",
-                                    "emphasis",
-                                    "strong",
-                                  ]
+              Array [
+                "paragraph",
+                "emphasis",
+                "strong",
+              ]
             }
             escapeHtml={true}
             renderers={Object {}}
             skipHtml={false}
             source="_prompt_ containing **markdown**"
             transformLinkUri={[Function]}
-/>,
+          />,
           "className": "prompts__prompt-header",
         },
         "ref": null,

@@ -7,12 +7,12 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <BackgroundImage
     miscellaneousAdditionalProperty="baz"
     style={
-        Object {
-            "width": "100%",
-          }
+      Object {
+        "width": "100%",
+      }
     }
     url="foo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

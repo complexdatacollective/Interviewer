@@ -14,19 +14,19 @@ ShallowWrapper {
     layoutVariable="foo"
     linking={false}
     node={
-        Object {
-            "foo": Object {
-              "x": 0.77,
-              "y": 0.2,
-            },
-            "label": "some content",
-          }
+      Object {
+        "foo": Object {
+          "x": 0.77,
+          "y": 0.2,
+        },
+        "label": "some content",
+      }
     }
     onDropped={[Function]}
     onSelected={[Function]}
     selected={false}
     updateNode={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -44,10 +44,10 @@ ShallowWrapper {
         allowSelect={false}
         animate={false}
         foo={
-                Object {
-                        "x": 0.77,
-                        "y": 0.2,
-                      }
+          Object {
+            "x": 0.77,
+            "y": 0.2,
+          }
         }
         label="some content"
         linking={false}
@@ -55,7 +55,7 @@ ShallowWrapper {
         onSelected={[Function]}
         scrollDirection="NO_SCROLL"
         selected={false}
-/>,
+      />,
       "className": "node-layout__node",
       "style": Object {
         "left": "77%",
@@ -100,10 +100,10 @@ ShallowWrapper {
           allowSelect={false}
           animate={false}
           foo={
-                    Object {
-                              "x": 0.77,
-                              "y": 0.2,
-                            }
+            Object {
+              "x": 0.77,
+              "y": 0.2,
+            }
           }
           label="some content"
           linking={false}
@@ -111,7 +111,7 @@ ShallowWrapper {
           onSelected={[Function]}
           scrollDirection="NO_SCROLL"
           selected={false}
-/>,
+        />,
         "className": "node-layout__node",
         "style": Object {
           "left": "77%",
