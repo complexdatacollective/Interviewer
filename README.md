@@ -40,7 +40,7 @@ Once you've completed `npm install`, you will need to rebuild MDNS with the Elec
 
 ```
 cd node_modules\mdns
-node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/electron
+node-gyp rebuild --target=2.0.0 --arch=x64 --dist-url=https://atom.io/download/electron
 ```
 
 `target` must match the electron version installed by npm
@@ -82,6 +82,14 @@ node-gyp rebuild --target=1.8.2 --arch=x64 --dist-url=https://atom.io/download/e
 |`dist:cordova`|Builds Android and iOS cordova projects|
 |`create-installer-mac`|Creates a DMG based installer for OSX.|
 
+## Quick development reference
+
+- In-browser development: `npm start`
+- Platform-specific development: `npm run start:[platform]` and `npm run [platform]:dev`, where `platform` is one of `android`, `electron`, or `ios`.
+  + Currently, you can only run *one platform at a time*
+
+See below for installation, options, and information on platform specifics.
+
 ## Cordova Builds
 
 1. Install [cordova](https://cordova.apache.org) on your system: `npm install -g cordova`
@@ -95,11 +103,22 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platform
 
 Starting the web app: If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
-*To get full Cordova support*, with native integration & plugins, set the environment variable `NC_DEV_CORDOVA_PLATFORM` to `ios` or `android` when running the start script. For example, `NC_DEV_CORDOVA_PLATFORM=ios npm run start`. This comes at the expense of only being able to run dev server content from a device or simulator on that platform.
+Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
 
-Starting a device or simulator: Run `npm run dev:[android|ios]`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
+This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.3", try `xcrun simctl list`.
 
-This assumes you have the relevant platform development tools installed. For a list of Apple simulator types and runtimes, try `xcrun simctl list`.
+*To get full Cordova support*, with native integration & plugins:
+
+1. (one time) `cordova build [android|ios]` to install cordova deps & plugins
+2. `npm run start:[android|ios]` to start the dev server (React app)
+3. `npm run [ios|android]:dev` as above
+
+Note: this comes at the expense of only being able to run dev server content from a device or simulator on that platform.
+
+## Electron development
+
+- `npm run start:electron` starts the dev server (React app)
+- `npm run electron:dev` start Electron, pointed at the dev server
 
 Troubleshooting:
 

@@ -33,7 +33,8 @@ const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const {
   isTargetingCordova,
-  logCordovaPlatformInfo,
+  isTargetingElectron,
+  logPlatformInfo,
   cleanDevUrlFile,
   makeDevUrlFile,
 } = require('../config/nc-dev-utils');
@@ -84,13 +85,13 @@ choosePort(HOST, DEFAULT_PORT)
 
       makeDevUrlFile(urls.lanUrlForTerminal);
 
-      logCordovaPlatformInfo();
+      logPlatformInfo();
       compiler.plugin('done', () => {
         // ...after react dev server clears screen again
-        logCordovaPlatformInfo();
+        logPlatformInfo();
       });
 
-      if (!isTargetingCordova) {
+      if (!isTargetingCordova && !isTargetingElectron) {
         openBrowser(urls.localUrlForBrowser);
       }
     });
