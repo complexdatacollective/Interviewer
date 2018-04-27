@@ -53,6 +53,12 @@ class ServerDiscoverer {
         // Pick the properties we want from the service object
         const normalizeService = (service) => {
           const { name, host, port, addresses } = service;
+          console.log('normalizeService', service, '->', {
+            name,
+            host,
+            port,
+            addresses,
+          });
           return {
             name,
             host,

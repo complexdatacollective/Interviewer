@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import libsodium from 'libsodium-wrappers';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
@@ -26,8 +27,10 @@ const startApp = () => {
   );
 };
 
-if (isCordova()) {
-  document.addEventListener('deviceready', startApp, false);
-} else {
-  startApp();
-}
+libsodium.ready.then(() => {
+  if (isCordova()) {
+    document.addEventListener('deviceready', startApp, false);
+  } else {
+    startApp();
+  }
+});
