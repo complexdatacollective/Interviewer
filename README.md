@@ -93,9 +93,13 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platform
 
 ### Local Development & Testing
 
-If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
+Starting the web app: If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
-Run `npm run dev:[android|ios]`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.2"`. Changes will be picked up from the dev server.
+*To get full Cordova support*, with native integration & plugins, set the environment variable `NC_DEV_CORDOVA_PLATFORM` to `ios` or `android` when running the start script. For example, `NC_DEV_CORDOVA_PLATFORM=ios npm run start`. This comes at the expense of only being able to run dev server content from a device or simulator on that platform.
+
+Starting a device or simulator: Run `npm run dev:[android|ios]`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
+
+This assumes you have the relevant platform development tools installed. For a list of Apple simulator types and runtimes, try `xcrun simctl list`.
 
 Troubleshooting:
 
