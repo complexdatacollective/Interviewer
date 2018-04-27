@@ -96,6 +96,7 @@
         "jsdoc-babel": "^0.3.0",
         "json-loader": "0.5.4",
         "jszip": "^3.1.5",
+        "libsodium-wrappers": "^0.7.3",
         "lodash": "^4.17.4",
         "mdns": "^2.3.4",
         "node-sass": "^4.5.3",
