@@ -51,7 +51,9 @@
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="AllowInlineMediaPlayback" value="true" />
-    <preference name="android-maxSdkVersion" value="21" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="26" />
+    <preference name="android-maxSdkVersion" value="27" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
