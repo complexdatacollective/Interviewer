@@ -32,7 +32,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
-       className="sociogram-background__image"
+        className="sociogram-background__image"
         url="map.png"
       />,
       "className": "sociogram-background",
@@ -59,7 +59,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
-         className="sociogram-background__image"
+          className="sociogram-background__image"
           url="map.png"
         />,
         "className": "sociogram-background",

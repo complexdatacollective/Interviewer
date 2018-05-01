@@ -22,7 +22,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <h1
-       className="prompts__prompt-header"
+        className="prompts__prompt-header"
       >
         <ReactMarkdown
           allowedTypes={
@@ -95,7 +95,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <h1
-         className="prompts__prompt-header"
+          className="prompts__prompt-header"
         >
           <ReactMarkdown
             allowedTypes={
