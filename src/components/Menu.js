@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'network-canvas-ui';
 import { debounce } from 'lodash';
+import { Icon } from '../ui/src/components';
 import { MenuItem, Scroller } from './';
 
 const closeEvents = [

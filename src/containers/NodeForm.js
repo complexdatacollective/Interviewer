@@ -7,7 +7,7 @@ import { pick, map } from 'lodash';
 import { createSelector } from 'reselect';
 import cx from 'classnames';
 
-import { Button, ToggleInput } from 'network-canvas-ui';
+import { Button, ToggleInput } from '../ui/src/components';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';

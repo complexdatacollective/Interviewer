@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Icon } from 'network-canvas-ui';
+import { Icon } from '../ui/src/components';
 
 /**
   * Renders a menu item. Image is based on icon.

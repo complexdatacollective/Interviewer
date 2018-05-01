@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
-import { Button } from 'network-canvas-ui';
+import { Button } from '../../ui/src/components';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, ConcentricCircles } from '../../containers/';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';

@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
 import { has } from 'lodash';
-import { Icon } from 'network-canvas-ui';
+import { Icon } from '../../ui/src/components';
 import NameGenerator from './NameGenerator';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 

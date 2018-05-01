@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Spinner } from 'network-canvas-ui';
+import { Button, Icon, Spinner } from '../ui/src/components';
 import ServerDiscoverer from '../utils/serverDiscoverer';
 import ServerCard from '../components/ServerCard';
 

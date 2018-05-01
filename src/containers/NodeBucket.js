@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Node } from 'network-canvas-ui';
+import { Node } from '../ui/src/components';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
 import { getNodeLabelFunction } from '../selectors/interface';
 import { DragSource } from '../behaviours/DragAndDrop';
