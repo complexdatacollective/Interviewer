@@ -49,7 +49,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="list-select__sort"
+         className="list-select__sort"
         >
           <input
             onChange={[Function]}
@@ -131,7 +131,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="list-select__sort"
+           className="list-select__sort"
           >
             <input
               onChange={[Function]}

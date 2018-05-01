@@ -27,17 +27,17 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="panel__heading"
+         className="panel__heading"
           onClick={[Function]}
         >
           <h3
-            className="panel__heading-header"
+           className="panel__heading-header"
           >
             
           </h3>
         </div>,
         <div
-          className="panel__content"
+         className="panel__content"
         >
           <span>
             foo
@@ -57,7 +57,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": <h3
-            className="panel__heading-header"
+           className="panel__heading-header"
           >
             
           </h3>,
@@ -114,17 +114,17 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="panel__heading"
+           className="panel__heading"
             onClick={[Function]}
           >
             <h3
-              className="panel__heading-header"
+             className="panel__heading-header"
             >
               
             </h3>
           </div>,
           <div
-            className="panel__content"
+           className="panel__content"
           >
             <span>
               foo
@@ -144,7 +144,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": <h3
-              className="panel__heading-header"
+             className="panel__heading-header"
             >
               
             </h3>,

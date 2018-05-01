@@ -30,7 +30,7 @@ ShallowWrapper {
       "ariaCurrent": "true",
       "children": Array [
         <Icon
-          className=""
+         className=""
           color=""
           name="menu-default-interface"
           style={Object {}}
@@ -71,7 +71,7 @@ ShallowWrapper {
         "ariaCurrent": "true",
         "children": Array [
           <Icon
-            className=""
+           className=""
             color=""
             name="menu-default-interface"
             style={Object {}}
@@ -142,7 +142,7 @@ ShallowWrapper {
       "ariaCurrent": "true",
       "children": Array [
         <Icon
-          className=""
+         className=""
           color=""
           name="menu-default-interface"
           style={Object {}}
@@ -183,7 +183,7 @@ ShallowWrapper {
         "ariaCurrent": "true",
         "children": Array [
           <Icon
-            className=""
+           className=""
             color=""
             name="menu-default-interface"
             style={Object {}}

@@ -29,42 +29,42 @@ ShallowWrapper {
     "nodeType": "function",
     "props": Object {
       "children": <div
-        className="dialog"
+       className="dialog"
       >
         <div
-          className="dialog__background"
+         className="dialog__background"
           transition-role="background"
         />
         <div
-          className="dialog__window dialog__window--"
+         className="dialog__window dialog__window--"
           onClick={[Function]}
           transition-role="window"
         >
           <div
-            className="dialog__main"
+           className="dialog__main"
           >
             <div
-              className="dialog__main-icon"
+             className="dialog__main-icon"
             >
               <Icon
-                className=""
+               className=""
                 color=""
                 name=""
                 style={Object {}}
               />
             </div>
             <div
-              className="dialog__main-content"
+             className="dialog__main-content"
             >
               <h2
-                className="dialog__main-title"
+               className="dialog__main-title"
               >
                 
               </h2>
             </div>
           </div>
           <footer
-            className="dialog__footer"
+           className="dialog__footer"
           >
             <Button
               color=""
@@ -87,39 +87,39 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="dialog__background"
+           className="dialog__background"
             transition-role="background"
           />,
           <div
-            className="dialog__window dialog__window--"
+           className="dialog__window dialog__window--"
             onClick={[Function]}
             transition-role="window"
           >
             <div
-              className="dialog__main"
+             className="dialog__main"
             >
               <div
-                className="dialog__main-icon"
+               className="dialog__main-icon"
               >
                 <Icon
-                  className=""
+                 className=""
                   color=""
                   name=""
                   style={Object {}}
                 />
               </div>
               <div
-                className="dialog__main-content"
+               className="dialog__main-content"
               >
                 <h2
-                  className="dialog__main-title"
+                 className="dialog__main-title"
                 >
                   
                 </h2>
               </div>
             </div>
             <footer
-              className="dialog__footer"
+             className="dialog__footer"
             >
               <Button
                 color=""
@@ -155,23 +155,23 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="dialog__main"
+               className="dialog__main"
               >
                 <div
-                  className="dialog__main-icon"
+                 className="dialog__main-icon"
                 >
                   <Icon
-                    className=""
+                   className=""
                     color=""
                     name=""
                     style={Object {}}
                   />
                 </div>
                 <div
-                  className="dialog__main-content"
+                 className="dialog__main-content"
                 >
                   <h2
-                    className="dialog__main-title"
+                   className="dialog__main-title"
                   >
                     
                   </h2>
@@ -179,7 +179,7 @@ ShallowWrapper {
               </div>,
               null,
               <footer
-                className="dialog__footer"
+               className="dialog__footer"
               >
                 <Button
                   color=""
@@ -204,20 +204,20 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="dialog__main-icon"
+                   className="dialog__main-icon"
                   >
                     <Icon
-                      className=""
+                     className=""
                       color=""
                       name=""
                       style={Object {}}
                     />
                   </div>,
                   <div
-                    className="dialog__main-content"
+                   className="dialog__main-content"
                   >
                     <h2
-                      className="dialog__main-title"
+                     className="dialog__main-title"
                     >
                       
                     </h2>
@@ -233,7 +233,7 @@ ShallowWrapper {
                   "nodeType": "host",
                   "props": Object {
                     "children": <Icon
-                      className=""
+                     className=""
                       color=""
                       name=""
                       style={Object {}}
@@ -264,7 +264,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <h2
-                        className="dialog__main-title"
+                       className="dialog__main-title"
                       >
                         
                       </h2>,
@@ -350,42 +350,42 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "children": <div
-          className="dialog"
+         className="dialog"
         >
           <div
-            className="dialog__background"
+           className="dialog__background"
             transition-role="background"
           />
           <div
-            className="dialog__window dialog__window--"
+           className="dialog__window dialog__window--"
             onClick={[Function]}
             transition-role="window"
           >
             <div
-              className="dialog__main"
+             className="dialog__main"
             >
               <div
-                className="dialog__main-icon"
+               className="dialog__main-icon"
               >
                 <Icon
-                  className=""
+                 className=""
                   color=""
                   name=""
                   style={Object {}}
                 />
               </div>
               <div
-                className="dialog__main-content"
+               className="dialog__main-content"
               >
                 <h2
-                  className="dialog__main-title"
+                 className="dialog__main-title"
                 >
                   
                 </h2>
               </div>
             </div>
             <footer
-              className="dialog__footer"
+             className="dialog__footer"
             >
               <Button
                 color=""
@@ -408,39 +408,39 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <div
-              className="dialog__background"
+             className="dialog__background"
               transition-role="background"
             />,
             <div
-              className="dialog__window dialog__window--"
+             className="dialog__window dialog__window--"
               onClick={[Function]}
               transition-role="window"
             >
               <div
-                className="dialog__main"
+               className="dialog__main"
               >
                 <div
-                  className="dialog__main-icon"
+                 className="dialog__main-icon"
                 >
                   <Icon
-                    className=""
+                   className=""
                     color=""
                     name=""
                     style={Object {}}
                   />
                 </div>
                 <div
-                  className="dialog__main-content"
+                 className="dialog__main-content"
                 >
                   <h2
-                    className="dialog__main-title"
+                   className="dialog__main-title"
                   >
                     
                   </h2>
                 </div>
               </div>
               <footer
-                className="dialog__footer"
+               className="dialog__footer"
               >
                 <Button
                   color=""
@@ -476,23 +476,23 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="dialog__main"
+                 className="dialog__main"
                 >
                   <div
-                    className="dialog__main-icon"
+                   className="dialog__main-icon"
                   >
                     <Icon
-                      className=""
+                     className=""
                       color=""
                       name=""
                       style={Object {}}
                     />
                   </div>
                   <div
-                    className="dialog__main-content"
+                   className="dialog__main-content"
                   >
                     <h2
-                      className="dialog__main-title"
+                     className="dialog__main-title"
                     >
                       
                     </h2>
@@ -500,7 +500,7 @@ ShallowWrapper {
                 </div>,
                 null,
                 <footer
-                  className="dialog__footer"
+                 className="dialog__footer"
                 >
                   <Button
                     color=""
@@ -525,20 +525,20 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <div
-                      className="dialog__main-icon"
+                     className="dialog__main-icon"
                     >
                       <Icon
-                        className=""
+                       className=""
                         color=""
                         name=""
                         style={Object {}}
                       />
                     </div>,
                     <div
-                      className="dialog__main-content"
+                     className="dialog__main-content"
                     >
                       <h2
-                        className="dialog__main-title"
+                       className="dialog__main-title"
                       >
                         
                       </h2>
@@ -554,7 +554,7 @@ ShallowWrapper {
                     "nodeType": "host",
                     "props": Object {
                       "children": <Icon
-                        className=""
+                       className=""
                         color=""
                         name=""
                         style={Object {}}
@@ -585,7 +585,7 @@ ShallowWrapper {
                     "props": Object {
                       "children": Array [
                         <h2
-                          className="dialog__main-title"
+                         className="dialog__main-title"
                         >
                           
                         </h2>,

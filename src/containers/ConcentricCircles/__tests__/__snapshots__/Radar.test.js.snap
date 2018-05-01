@@ -22,35 +22,35 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <circle
-          className="sociogram-radar__range"
+         className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={50}
         />,
         <circle
-          className="sociogram-radar__range"
+         className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={43.54101966249685}
         />,
         <circle
-          className="sociogram-radar__range"
+         className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={36.547375096555626}
         />,
         <circle
-          className="sociogram-radar__range"
+         className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={28.717082451262844}
         />,
         <circle
-          className="sociogram-radar__range"
+         className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
@@ -149,35 +149,35 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <circle
-            className="sociogram-radar__range"
+           className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={50}
           />,
           <circle
-            className="sociogram-radar__range"
+           className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={43.54101966249685}
           />,
           <circle
-            className="sociogram-radar__range"
+           className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={36.547375096555626}
           />,
           <circle
-            className="sociogram-radar__range"
+           className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={28.717082451262844}
           />,
           <circle
-            className="sociogram-radar__range"
+           className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
