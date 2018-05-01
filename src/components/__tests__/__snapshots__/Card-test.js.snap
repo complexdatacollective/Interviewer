@@ -6,18 +6,18 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Card
     details={
-        Array [
-            Object {
-              "age": "33",
-            },
-            Object {
-              "fullname": "full name",
-            },
-          ]
+      Array [
+        Object {
+          "age": "33",
+        },
+        Object {
+          "fullname": "full name",
+        },
+      ]
     }
     label="name"
     selected={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -37,40 +37,40 @@ ShallowWrapper {
           x="0px"
           xmlns="http://www.w3.org/2000/svg"
           y="0px"
->
+        >
           <path
-                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+            d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
           />
           <polygon
-                    className="tick"
-                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+            className="tick"
+            points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
           />
-</svg>,
+        </svg>,
         <div>
           <h1
-                    className="card__label"
+            className="card__label"
           >
-                    name
+            name
           </h1>
           <div
-                    className="card__attributes"
+            className="card__attributes"
           >
-                    <h5
-                              className="card__attribute"
-                    >
-                              age
-                              : 
-                              33
-                    </h5>
-                    <h5
-                              className="card__attribute"
-                    >
-                              fullname
-                              : 
-                              full name
-                    </h5>
+            <h5
+              className="card__attribute"
+            >
+              age
+              : 
+              33
+            </h5>
+            <h5
+              className="card__attribute"
+            >
+              fullname
+              : 
+              full name
+            </h5>
           </div>
-</div>,
+        </div>,
       ],
       "className": "card card--selected",
     },
@@ -84,11 +84,11 @@ ShallowWrapper {
           "children": Array [
             <path
               d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
+            />,
             <polygon
               className="tick"
               points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
+            />,
           ],
           "className": "card__indicator",
           "viewBox": "0 0 100 100",
@@ -132,27 +132,27 @@ ShallowWrapper {
           "children": Array [
             <h1
               className="card__label"
->
+            >
               name
-</h1>,
+            </h1>,
             <div
               className="card__attributes"
->
+            >
               <h5
-                            className="card__attribute"
+                className="card__attribute"
               >
-                            age
-                            : 
-                            33
+                age
+                : 
+                33
               </h5>
               <h5
-                            className="card__attribute"
+                className="card__attribute"
               >
-                            fullname
-                            : 
-                            full name
+                fullname
+                : 
+                full name
               </h5>
-</div>,
+            </div>,
           ],
         },
         "ref": null,
@@ -177,18 +177,18 @@ ShallowWrapper {
               "children": Array [
                 <h5
                   className="card__attribute"
->
+                >
                   age
                   : 
                   33
-</h5>,
+                </h5>,
                 <h5
                   className="card__attribute"
->
+                >
                   fullname
                   : 
                   full name
-</h5>,
+                </h5>,
               ],
               "className": "card__attributes",
             },
@@ -256,40 +256,40 @@ ShallowWrapper {
             x="0px"
             xmlns="http://www.w3.org/2000/svg"
             y="0px"
->
+          >
             <path
-                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
             />
             <polygon
-                        className="tick"
-                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+              className="tick"
+              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
             />
-</svg>,
+          </svg>,
           <div>
             <h1
-                        className="card__label"
+              className="card__label"
             >
-                        name
+              name
             </h1>
             <div
-                        className="card__attributes"
+              className="card__attributes"
             >
-                        <h5
-                                    className="card__attribute"
-                        >
-                                    age
-                                    : 
-                                    33
-                        </h5>
-                        <h5
-                                    className="card__attribute"
-                        >
-                                    fullname
-                                    : 
-                                    full name
-                        </h5>
+              <h5
+                className="card__attribute"
+              >
+                age
+                : 
+                33
+              </h5>
+              <h5
+                className="card__attribute"
+              >
+                fullname
+                : 
+                full name
+              </h5>
             </div>
-</div>,
+          </div>,
         ],
         "className": "card card--selected",
       },
@@ -303,11 +303,11 @@ ShallowWrapper {
             "children": Array [
               <path
                 d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
+              />,
               <polygon
                 className="tick"
                 points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
+              />,
             ],
             "className": "card__indicator",
             "viewBox": "0 0 100 100",
@@ -351,27 +351,27 @@ ShallowWrapper {
             "children": Array [
               <h1
                 className="card__label"
->
+              >
                 name
-</h1>,
+              </h1>,
               <div
                 className="card__attributes"
->
+              >
                 <h5
-                                className="card__attribute"
+                  className="card__attribute"
                 >
-                                age
-                                : 
-                                33
+                  age
+                  : 
+                  33
                 </h5>
                 <h5
-                                className="card__attribute"
+                  className="card__attribute"
                 >
-                                fullname
-                                : 
-                                full name
+                  fullname
+                  : 
+                  full name
                 </h5>
-</div>,
+              </div>,
             ],
           },
           "ref": null,
@@ -396,18 +396,18 @@ ShallowWrapper {
                 "children": Array [
                   <h5
                     className="card__attribute"
->
+                  >
                     age
                     : 
                     33
-</h5>,
+                  </h5>,
                   <h5
                     className="card__attribute"
->
+                  >
                     fullname
                     : 
                     full name
-</h5>,
+                  </h5>,
                 ],
                 "className": "card__attributes",
               },
@@ -479,15 +479,15 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Card
     details={
-        Array [
-            Object {
-              "age": "33",
-            },
-          ]
+      Array [
+        Object {
+          "age": "33",
+        },
+      ]
     }
     label="name"
     selected={false}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -507,33 +507,33 @@ ShallowWrapper {
           x="0px"
           xmlns="http://www.w3.org/2000/svg"
           y="0px"
->
+        >
           <path
-                    d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+            d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
           />
           <polygon
-                    className="tick"
-                    points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+            className="tick"
+            points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
           />
-</svg>,
+        </svg>,
         <div>
           <h1
-                    className="card__label"
+            className="card__label"
           >
-                    name
+            name
           </h1>
           <div
-                    className="card__attributes"
+            className="card__attributes"
           >
-                    <h5
-                              className="card__attribute"
-                    >
-                              age
-                              : 
-                              33
-                    </h5>
+            <h5
+              className="card__attribute"
+            >
+              age
+              : 
+              33
+            </h5>
           </div>
-</div>,
+        </div>,
       ],
       "className": "card",
     },
@@ -547,11 +547,11 @@ ShallowWrapper {
           "children": Array [
             <path
               d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
+            />,
             <polygon
               className="tick"
               points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
+            />,
           ],
           "className": "card__indicator",
           "viewBox": "0 0 100 100",
@@ -595,20 +595,20 @@ ShallowWrapper {
           "children": Array [
             <h1
               className="card__label"
->
+            >
               name
-</h1>,
+            </h1>,
             <div
               className="card__attributes"
->
+            >
               <h5
-                            className="card__attribute"
+                className="card__attribute"
               >
-                            age
-                            : 
-                            33
+                age
+                : 
+                33
               </h5>
-</div>,
+            </div>,
           ],
         },
         "ref": null,
@@ -633,11 +633,11 @@ ShallowWrapper {
               "children": Array [
                 <h5
                   className="card__attribute"
->
+                >
                   age
                   : 
                   33
-</h5>,
+                </h5>,
               ],
               "className": "card__attributes",
             },
@@ -685,33 +685,33 @@ ShallowWrapper {
             x="0px"
             xmlns="http://www.w3.org/2000/svg"
             y="0px"
->
+          >
             <path
-                        d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
+              d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
             />
             <polygon
-                        className="tick"
-                        points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
+              className="tick"
+              points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
             />
-</svg>,
+          </svg>,
           <div>
             <h1
-                        className="card__label"
+              className="card__label"
             >
-                        name
+              name
             </h1>
             <div
-                        className="card__attributes"
+              className="card__attributes"
             >
-                        <h5
-                                    className="card__attribute"
-                        >
-                                    age
-                                    : 
-                                    33
-                        </h5>
+              <h5
+                className="card__attribute"
+              >
+                age
+                : 
+                33
+              </h5>
             </div>
-</div>,
+          </div>,
         ],
         "className": "card",
       },
@@ -725,11 +725,11 @@ ShallowWrapper {
             "children": Array [
               <path
                 d="M100,50c0,27.6-22.4,50-50,50s-50-22.4-50-50S22.5,0,50,0S100,22.4,100,50z M50,8.3C27,8.3,8.4,27,8.4,50S27,91.6,50,91.6 S91.7,73,91.7,50S73,8.3,50,8.3z"
-/>,
+              />,
               <polygon
                 className="tick"
                 points="30.8,43 45.3,57.2 69,32.1 77.4,40.6 46.3,73.8 22.7,51.6"
-/>,
+              />,
             ],
             "className": "card__indicator",
             "viewBox": "0 0 100 100",
@@ -773,20 +773,20 @@ ShallowWrapper {
             "children": Array [
               <h1
                 className="card__label"
->
+              >
                 name
-</h1>,
+              </h1>,
               <div
                 className="card__attributes"
->
+              >
                 <h5
-                                className="card__attribute"
+                  className="card__attribute"
                 >
-                                age
-                                : 
-                                33
+                  age
+                  : 
+                  33
                 </h5>
-</div>,
+              </div>,
             ],
           },
           "ref": null,
@@ -811,11 +811,11 @@ ShallowWrapper {
                 "children": Array [
                   <h5
                     className="card__attribute"
->
+                  >
                     age
                     : 
                     33
-</h5>,
+                  </h5>,
                 ],
                 "className": "card__attributes",
               },

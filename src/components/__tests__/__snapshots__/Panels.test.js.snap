@@ -8,11 +8,11 @@ ShallowWrapper {
     highlight={null}
     minimise={false}
     title=""
->
+  >
     <span>
-        foo
+      foo
     </span>
-</Panel>,
+  </Panel>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -29,18 +29,20 @@ ShallowWrapper {
         <div
           className="panel__heading"
           onClick={[Function]}
->
+        >
           <h3
-                    className="panel__heading-header"
-          />
-</div>,
+            className="panel__heading-header"
+          >
+            
+          </h3>
+        </div>,
         <div
           className="panel__content"
->
+        >
           <span>
-                    foo
+            foo
           </span>
-</div>,
+        </div>,
       ],
       "className": "panel",
       "style": Object {
@@ -56,7 +58,9 @@ ShallowWrapper {
         "props": Object {
           "children": <h3
             className="panel__heading-header"
-/>,
+          >
+            
+          </h3>,
           "className": "panel__heading",
           "onClick": [Function],
         },
@@ -82,7 +86,7 @@ ShallowWrapper {
         "props": Object {
           "children": <span>
             foo
-</span>,
+          </span>,
           "className": "panel__content",
         },
         "ref": null,
@@ -112,18 +116,20 @@ ShallowWrapper {
           <div
             className="panel__heading"
             onClick={[Function]}
->
+          >
             <h3
-                        className="panel__heading-header"
-            />
-</div>,
+              className="panel__heading-header"
+            >
+              
+            </h3>
+          </div>,
           <div
             className="panel__content"
->
+          >
             <span>
-                        foo
+              foo
             </span>
-</div>,
+          </div>,
         ],
         "className": "panel",
         "style": Object {
@@ -139,7 +145,9 @@ ShallowWrapper {
           "props": Object {
             "children": <h3
               className="panel__heading-header"
-/>,
+            >
+              
+            </h3>,
             "className": "panel__heading",
             "onClick": [Function],
           },
@@ -165,7 +173,7 @@ ShallowWrapper {
           "props": Object {
             "children": <span>
               foo
-</span>,
+            </span>,
             "className": "panel__content",
           },
           "ref": null,

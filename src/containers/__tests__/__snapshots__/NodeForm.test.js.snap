@@ -8,12 +8,12 @@ ShallowWrapper {
     closeModal={[Function]}
     entity="node"
     fields={
-        Array [
-            Object {
-              "component": "TextInput",
-              "variable": "foo",
-            },
-          ]
+      Array [
+        Object {
+          "component": "TextInput",
+          "variable": "foo",
+        },
+      ]
     }
     initialValues={Object {}}
     name="baz"
@@ -24,7 +24,7 @@ ShallowWrapper {
     showAddAnotherToggle={false}
     title="The form title"
     type="person"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -41,29 +41,29 @@ ShallowWrapper {
         autoFocus={true}
         closeModal={[Function]}
         controls={
-                Array [
-                        false,
-                        <Button
-                          aria-label="Submit"
-                          color=""
-                          content=""
-                          icon=""
-                          iconPosition="right"
-                          onClick={[Function]}
-                          size=""
-                >
-                          Finished
-                </Button>,
-                      ]
+          Array [
+            false,
+            <Button
+              aria-label="Submit"
+              color=""
+              content=""
+              icon=""
+              iconPosition="right"
+              onClick={[Function]}
+              size=""
+            >
+              Finished
+            </Button>,
+          ]
         }
         entity="node"
         fields={
-                Array [
-                        Object {
-                          "component": "TextInput",
-                          "variable": "foo",
-                        },
-                      ]
+          Array [
+            Object {
+              "component": "TextInput",
+              "variable": "foo",
+            },
+          ]
         }
         form="baz"
         initialValues={Object {}}
@@ -76,7 +76,7 @@ ShallowWrapper {
         title="The form title"
         tooltip="bottom"
         type="person"
-/>,
+      />,
       "className": "modal--fullscreen",
       "name": "baz",
       "title": "The form title",
@@ -99,9 +99,9 @@ ShallowWrapper {
             iconPosition="right"
             onClick={[Function]}
             size=""
->
+          >
             Finished
-</Button>,
+          </Button>,
         ],
         "entity": "node",
         "fields": Array [
@@ -138,29 +138,29 @@ ShallowWrapper {
           autoFocus={true}
           closeModal={[Function]}
           controls={
-                    Array [
-                              false,
-                              <Button
-                                aria-label="Submit"
-                                color=""
-                                content=""
-                                icon=""
-                                iconPosition="right"
-                                onClick={[Function]}
-                                size=""
-                    >
-                                Finished
-                    </Button>,
-                            ]
+            Array [
+              false,
+              <Button
+                aria-label="Submit"
+                color=""
+                content=""
+                icon=""
+                iconPosition="right"
+                onClick={[Function]}
+                size=""
+              >
+                Finished
+              </Button>,
+            ]
           }
           entity="node"
           fields={
-                    Array [
-                              Object {
-                                "component": "TextInput",
-                                "variable": "foo",
-                              },
-                            ]
+            Array [
+              Object {
+                "component": "TextInput",
+                "variable": "foo",
+              },
+            ]
           }
           form="baz"
           initialValues={Object {}}
@@ -173,7 +173,7 @@ ShallowWrapper {
           title="The form title"
           tooltip="bottom"
           type="person"
-/>,
+        />,
         "className": "modal--fullscreen",
         "name": "baz",
         "title": "The form title",
@@ -196,9 +196,9 @@ ShallowWrapper {
               iconPosition="right"
               onClick={[Function]}
               size=""
->
+            >
               Finished
-</Button>,
+            </Button>,
           ],
           "entity": "node",
           "fields": Array [

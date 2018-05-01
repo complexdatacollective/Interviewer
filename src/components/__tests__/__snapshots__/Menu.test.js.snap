@@ -9,28 +9,28 @@ ShallowWrapper {
     icon="menu"
     isOpen={false}
     items={
-        Array [
-            Object {
-              "id": "a",
-              "label": "a title",
-              "to": "a-to",
-            },
-            Object {
-              "id": "b",
-              "label": "b title",
-              "to": "b-to",
-            },
-            Object {
-              "id": "c",
-              "label": "c title",
-              "to": "c-to",
-            },
-          ]
+      Array [
+        Object {
+          "id": "a",
+          "label": "a title",
+          "to": "a-to",
+        },
+        Object {
+          "id": "b",
+          "label": "b title",
+          "to": "b-to",
+        },
+        Object {
+          "id": "c",
+          "label": "c title",
+          "to": "c-to",
+        },
+      ]
     }
     searchField={null}
     title="Options"
     toggleMenu={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -47,61 +47,61 @@ ShallowWrapper {
         null,
         <div
           className="menu__wrap menu__content"
->
+        >
           <Scrollable>
-                    <Icon
-                              className="menu__cross"
-                              color=""
-                              name="close"
-                              onClick={[Function]}
-                              size="40px"
-                              style={Object {}}
-                    />
-                    <header>
-                              <h1
-                                        className="menu__title"
-                              >
-                                        Options
-                              </h1>
-                    </header>
-                    <nav>
-                              <MenuItem
-                                        icon=""
-                                        interfaceType=""
-                                        isActive={false}
-                                        label="a title"
-                                        menuType="primary"
-                                        onClick={[Function]}
-                                        to="a-to"
-                              />
-                              <MenuItem
-                                        icon=""
-                                        interfaceType=""
-                                        isActive={false}
-                                        label="b title"
-                                        menuType="primary"
-                                        onClick={[Function]}
-                                        to="b-to"
-                              />
-                              <MenuItem
-                                        icon=""
-                                        interfaceType=""
-                                        isActive={false}
-                                        label="c title"
-                                        menuType="primary"
-                                        onClick={[Function]}
-                                        to="c-to"
-                              />
-                    </nav>
+            <Icon
+              className="menu__cross"
+              color=""
+              name="close"
+              onClick={[Function]}
+              size="40px"
+              style={Object {}}
+            />
+            <header>
+              <h1
+                className="menu__title"
+              >
+                Options
+              </h1>
+            </header>
+            <nav>
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="a title"
+                menuType="primary"
+                onClick={[Function]}
+                to="a-to"
+              />
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="b title"
+                menuType="primary"
+                onClick={[Function]}
+                to="b-to"
+              />
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="c title"
+                menuType="primary"
+                onClick={[Function]}
+                to="c-to"
+              />
+            </nav>
           </Scrollable>
-</div>,
+        </div>,
         <Icon
           className="menu__burger"
           color=""
           name="menu"
           onClick={[Function]}
           style={Object {}}
-/>,
+        />,
       ],
       "className": "menu",
     },
@@ -115,50 +115,50 @@ ShallowWrapper {
         "props": Object {
           "children": <Scrollable>
             <Icon
-                        className="menu__cross"
-                        color=""
-                        name="close"
-                        onClick={[Function]}
-                        size="40px"
-                        style={Object {}}
+              className="menu__cross"
+              color=""
+              name="close"
+              onClick={[Function]}
+              size="40px"
+              style={Object {}}
             />
             <header>
-                        <h1
-                                    className="menu__title"
-                        >
-                                    Options
-                        </h1>
+              <h1
+                className="menu__title"
+              >
+                Options
+              </h1>
             </header>
             <nav>
-                        <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="a title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="a-to"
-                        />
-                        <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="b title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="b-to"
-                        />
-                        <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="c title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="c-to"
-                        />
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="a title"
+                menuType="primary"
+                onClick={[Function]}
+                to="a-to"
+              />
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="b title"
+                menuType="primary"
+                onClick={[Function]}
+                to="b-to"
+              />
+              <MenuItem
+                icon=""
+                interfaceType=""
+                isActive={false}
+                label="c title"
+                menuType="primary"
+                onClick={[Function]}
+                to="c-to"
+              />
             </nav>
-</Scrollable>,
+          </Scrollable>,
           "className": "menu__wrap menu__content",
         },
         "ref": null,
@@ -175,44 +175,44 @@ ShallowWrapper {
                 onClick={[Function]}
                 size="40px"
                 style={Object {}}
-/>,
+              />,
               <header>
                 <h1
-                                className="menu__title"
+                  className="menu__title"
                 >
-                                Options
+                  Options
                 </h1>
-</header>,
+              </header>,
               null,
               <nav>
                 <MenuItem
-                                icon=""
-                                interfaceType=""
-                                isActive={false}
-                                label="a title"
-                                menuType="primary"
-                                onClick={[Function]}
-                                to="a-to"
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="a title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="a-to"
                 />
                 <MenuItem
-                                icon=""
-                                interfaceType=""
-                                isActive={false}
-                                label="b title"
-                                menuType="primary"
-                                onClick={[Function]}
-                                to="b-to"
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="b title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="b-to"
                 />
                 <MenuItem
-                                icon=""
-                                interfaceType=""
-                                isActive={false}
-                                label="c title"
-                                menuType="primary"
-                                onClick={[Function]}
-                                to="c-to"
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="c title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="c-to"
                 />
-</nav>,
+              </nav>,
             ],
           },
           "ref": null,
@@ -240,9 +240,9 @@ ShallowWrapper {
               "props": Object {
                 "children": <h1
                   className="menu__title"
->
+                >
                   Options
-</h1>,
+                </h1>,
               },
               "ref": null,
               "rendered": Object {
@@ -274,7 +274,7 @@ ShallowWrapper {
                     menuType="primary"
                     onClick={[Function]}
                     to="a-to"
-/>,
+                  />,
                   <MenuItem
                     icon=""
                     interfaceType=""
@@ -283,7 +283,7 @@ ShallowWrapper {
                     menuType="primary"
                     onClick={[Function]}
                     to="b-to"
-/>,
+                  />,
                   <MenuItem
                     icon=""
                     interfaceType=""
@@ -292,7 +292,7 @@ ShallowWrapper {
                     menuType="primary"
                     onClick={[Function]}
                     to="c-to"
-/>,
+                  />,
                 ],
               },
               "ref": null,
@@ -384,61 +384,61 @@ ShallowWrapper {
           null,
           <div
             className="menu__wrap menu__content"
->
+          >
             <Scrollable>
-                        <Icon
-                                    className="menu__cross"
-                                    color=""
-                                    name="close"
-                                    onClick={[Function]}
-                                    size="40px"
-                                    style={Object {}}
-                        />
-                        <header>
-                                    <h1
-                                                className="menu__title"
-                                    >
-                                                Options
-                                    </h1>
-                        </header>
-                        <nav>
-                                    <MenuItem
-                                                icon=""
-                                                interfaceType=""
-                                                isActive={false}
-                                                label="a title"
-                                                menuType="primary"
-                                                onClick={[Function]}
-                                                to="a-to"
-                                    />
-                                    <MenuItem
-                                                icon=""
-                                                interfaceType=""
-                                                isActive={false}
-                                                label="b title"
-                                                menuType="primary"
-                                                onClick={[Function]}
-                                                to="b-to"
-                                    />
-                                    <MenuItem
-                                                icon=""
-                                                interfaceType=""
-                                                isActive={false}
-                                                label="c title"
-                                                menuType="primary"
-                                                onClick={[Function]}
-                                                to="c-to"
-                                    />
-                        </nav>
+              <Icon
+                className="menu__cross"
+                color=""
+                name="close"
+                onClick={[Function]}
+                size="40px"
+                style={Object {}}
+              />
+              <header>
+                <h1
+                  className="menu__title"
+                >
+                  Options
+                </h1>
+              </header>
+              <nav>
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="a title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="a-to"
+                />
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="b title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="b-to"
+                />
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="c title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="c-to"
+                />
+              </nav>
             </Scrollable>
-</div>,
+          </div>,
           <Icon
             className="menu__burger"
             color=""
             name="menu"
             onClick={[Function]}
             style={Object {}}
-/>,
+          />,
         ],
         "className": "menu",
       },
@@ -452,50 +452,50 @@ ShallowWrapper {
           "props": Object {
             "children": <Scrollable>
               <Icon
-                            className="menu__cross"
-                            color=""
-                            name="close"
-                            onClick={[Function]}
-                            size="40px"
-                            style={Object {}}
+                className="menu__cross"
+                color=""
+                name="close"
+                onClick={[Function]}
+                size="40px"
+                style={Object {}}
               />
               <header>
-                            <h1
-                                          className="menu__title"
-                            >
-                                          Options
-                            </h1>
+                <h1
+                  className="menu__title"
+                >
+                  Options
+                </h1>
               </header>
               <nav>
-                            <MenuItem
-                                          icon=""
-                                          interfaceType=""
-                                          isActive={false}
-                                          label="a title"
-                                          menuType="primary"
-                                          onClick={[Function]}
-                                          to="a-to"
-                            />
-                            <MenuItem
-                                          icon=""
-                                          interfaceType=""
-                                          isActive={false}
-                                          label="b title"
-                                          menuType="primary"
-                                          onClick={[Function]}
-                                          to="b-to"
-                            />
-                            <MenuItem
-                                          icon=""
-                                          interfaceType=""
-                                          isActive={false}
-                                          label="c title"
-                                          menuType="primary"
-                                          onClick={[Function]}
-                                          to="c-to"
-                            />
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="a title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="a-to"
+                />
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="b title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="b-to"
+                />
+                <MenuItem
+                  icon=""
+                  interfaceType=""
+                  isActive={false}
+                  label="c title"
+                  menuType="primary"
+                  onClick={[Function]}
+                  to="c-to"
+                />
               </nav>
-</Scrollable>,
+            </Scrollable>,
             "className": "menu__wrap menu__content",
           },
           "ref": null,
@@ -512,44 +512,44 @@ ShallowWrapper {
                   onClick={[Function]}
                   size="40px"
                   style={Object {}}
-/>,
+                />,
                 <header>
                   <h1
-                                    className="menu__title"
+                    className="menu__title"
                   >
-                                    Options
+                    Options
                   </h1>
-</header>,
+                </header>,
                 null,
                 <nav>
                   <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="a title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="a-to"
+                    icon=""
+                    interfaceType=""
+                    isActive={false}
+                    label="a title"
+                    menuType="primary"
+                    onClick={[Function]}
+                    to="a-to"
                   />
                   <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="b title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="b-to"
+                    icon=""
+                    interfaceType=""
+                    isActive={false}
+                    label="b title"
+                    menuType="primary"
+                    onClick={[Function]}
+                    to="b-to"
                   />
                   <MenuItem
-                                    icon=""
-                                    interfaceType=""
-                                    isActive={false}
-                                    label="c title"
-                                    menuType="primary"
-                                    onClick={[Function]}
-                                    to="c-to"
+                    icon=""
+                    interfaceType=""
+                    isActive={false}
+                    label="c title"
+                    menuType="primary"
+                    onClick={[Function]}
+                    to="c-to"
                   />
-</nav>,
+                </nav>,
               ],
             },
             "ref": null,
@@ -577,9 +577,9 @@ ShallowWrapper {
                 "props": Object {
                   "children": <h1
                     className="menu__title"
->
+                  >
                     Options
-</h1>,
+                  </h1>,
                 },
                 "ref": null,
                 "rendered": Object {
@@ -611,7 +611,7 @@ ShallowWrapper {
                       menuType="primary"
                       onClick={[Function]}
                       to="a-to"
-/>,
+                    />,
                     <MenuItem
                       icon=""
                       interfaceType=""
@@ -620,7 +620,7 @@ ShallowWrapper {
                       menuType="primary"
                       onClick={[Function]}
                       to="b-to"
-/>,
+                    />,
                     <MenuItem
                       icon=""
                       interfaceType=""
@@ -629,7 +629,7 @@ ShallowWrapper {
                       menuType="primary"
                       onClick={[Function]}
                       to="c-to"
-/>,
+                    />,
                   ],
                 },
                 "ref": null,
