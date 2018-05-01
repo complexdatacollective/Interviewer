@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
-import { Button } from '../ui/src/components';
+import { Button } from '../ui/components';
 import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
 import { makeRehydrateFields } from '../selectors/forms';

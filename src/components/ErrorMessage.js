@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { last } from 'lodash';
-import { Button, Icon } from '../ui/src/components'; // eslint-disable-line
+import { Button, Icon } from '../ui/components'; // eslint-disable-line
 import { actionCreators as errorActions } from '../ducks/modules/errors';
 import { Dialog } from '../components';
 

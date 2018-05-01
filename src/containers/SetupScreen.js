@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { Button } from '../ui/src/components';
+import { Button } from '../ui/components';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';

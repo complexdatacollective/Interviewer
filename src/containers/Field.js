@@ -9,7 +9,7 @@ import {
   RadioGroup,
   ToggleGroup,
   ToggleInput,
-} from '../ui/src/components';
+} from '../ui/components';
 
 import validations from '../utils/Validations';
 

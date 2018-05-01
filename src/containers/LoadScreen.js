@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Spinner } from '../ui/src/components';
+import { Spinner } from '../ui/components';
 import Fade from '../components/Transition/Fade';
 
 const LoadScreen = ({ isWorking }) => (
