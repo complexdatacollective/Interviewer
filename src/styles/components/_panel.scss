@@ -1,11 +1,9 @@
-$heading-size: 100px;
-
 .panel {
   @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-easing), var(--animation-duration-standard));
-  flex: 1 0 $heading-size;
+  flex: 1 0 100px;
   display: flex;
   flex-direction: column;
-  background-color: #36335f; // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
+  background-color: var(--panel-bg-muted); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
   border-color: palette('primary');
   border-style: solid;
   border-width: 0;
@@ -19,7 +17,7 @@ $heading-size: 100px;
   }
 
   &__heading {
-    flex: 0 0 $heading-size;
+    flex: 0 0 100px;
     padding: 20px;
     border-bottom: 2px solid palette('background');
     display: flex;

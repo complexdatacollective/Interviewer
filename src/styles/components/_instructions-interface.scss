@@ -18,8 +18,10 @@
 
   &__item {
     margin-top: spacing('medium');
-    video,img {
-      width:100%;
+
+    video,
+    img {
+      width: 100%;
     }
   }
 }

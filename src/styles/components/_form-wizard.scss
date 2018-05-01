@@ -6,11 +6,14 @@
     transform: translateX(-50%);
   }
 
-  .icon[name="form-arrow-left"], .icon[name="form-arrow-right"] {
+  .icon[name='form-arrow-left'],
+  .icon[name='form-arrow-right'] {
     height: 90px;
+
     .cls-2 {
       fill: palette('light-background');
     }
+
     .cls-3 {
       fill: palette('primary');
     }
