@@ -168,9 +168,6 @@ module.exports = {
                         importLoaders: 1,
                         minimize: false,
                         sourceMap: false,
-                        alias: {
-                          '../../../assets/fonts': 'network-canvas-ui/lib/assets/fonts',
-                        },
                       },
                     },
                     {
