@@ -54,11 +54,13 @@
     opacity: 0;
   }
 
-  &--collapsed:not(.panel--minimise) {
-    flex-grow: 0;
+  &--collapsed {
+    :not(.panel--minimise) {
+      flex-grow: 0;
 
-    .panel__content {
-      height: 0;
+      .panel__content {
+        height: 0;
+      }
     }
   }
 
