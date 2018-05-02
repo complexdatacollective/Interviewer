@@ -6,12 +6,14 @@ import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
     if (this.props.shouldReset) {
       this.props.resetState();
+      return;
     }
 
     if (this.props.computedMatch.params &&
@@ -23,11 +25,17 @@ class LoadParamsRoute extends Component {
         this.props.loadProtocol(this.props.computedMatch.params.protocolId);
       }
     }
+
+    if (this.props.computedMatch.url) { // TODO check if it already exists
+      // && this.props.computedMatch.url != this.props.currentUrl) {
+      this.props.addSession(0, this.props.computedMatch.url);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.shouldReset) {
       nextProps.resetState();
+      return;
     }
 
     if (nextProps.computedMatch.params &&
@@ -39,6 +47,12 @@ class LoadParamsRoute extends Component {
       } else {
         this.props.loadProtocol(nextProps.computedMatch.params.protocolId);
       }
+    }
+
+    if (nextProps.computedMatch.url &&
+      nextProps.computedMatch.url !== this.props.computedMatch.url) {
+      // TODO should this sometimes be an "add" instead of "update"?
+      this.props.updateSession(0, nextProps.computedMatch.url);
     }
   }
 
@@ -71,6 +85,7 @@ class LoadParamsRoute extends Component {
 }
 
 LoadParamsRoute.propTypes = {
+  addSession: PropTypes.func.isRequired,
   backParam: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
@@ -82,6 +97,7 @@ LoadParamsRoute.propTypes = {
   resetState: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
   skipToIndex: PropTypes.number.isRequired,
+  updateSession: PropTypes.func.isRequired,
 };
 
 LoadParamsRoute.defaultProps = {
@@ -107,9 +123,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     resetState: bindActionCreators(menuActions.resetState, dispatch),
+    updateSession: bindActionCreators(sessionsActions.updateSession, dispatch),
   };
 }
 
