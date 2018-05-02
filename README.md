@@ -73,8 +73,8 @@ node-gyp rebuild --target=2.0.0 --arch=x64 --dist-url=https://atom.io/download/e
 |`build-docs`|Builds HTML API docs into the docs-build directory.|
 |`electron`|Runs the current code in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
-|`dev:android`|Run a live-reloading build of the Android app. Requires dev server to be running.|
-|`dev:ios`|Run a live-reloading build of the iOS app. Requires dev server to be running.|
+|`android:dev`|Run a live-reloading build of the Android app. Requires dev server to be running.|
+|`ios:dev`|Run a live-reloading build of the iOS app. Requires dev server to be running.|
 |`dist:mac`|Uses electron-packager to package an OSX release.|
 |`dist:win`|Uses electron-packager to package a Windows release.|
 |`dist:ios`|Builds iOS cordova project|
@@ -103,7 +103,7 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platform
 
 Starting the web app: If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
-Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
+Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run android:dev -- --emulator`, or `npm run ios:dev -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
 
 This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.3", try `xcrun simctl list`.
 
@@ -111,7 +111,7 @@ This assumes you have the relevant platform development tools installed. For a l
 
 1. (one time) `cordova build [android|ios]` to install cordova deps & plugins
 2. `npm run start:[android|ios]` to start the dev server (React app)
-3. `npm run [ios|android]:dev` as above
+3. `npm run [android|ios]:dev` as above
 
 Note: this comes at the expense of only being able to run dev server content from a device or simulator on that platform.
 

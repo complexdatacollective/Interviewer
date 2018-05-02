@@ -5,7 +5,7 @@ const path = require('path');
 
 const paths = require('../config/paths');
 
-const cordovaPlatformMatch = (/^(ios|android)$/);
+const cordovaPlatformMatch = (/^(android|ios)$/);
 
 // Write the LAN URL to a file while running, so that cordova apps can attach
 // to the specified dev server.
@@ -21,13 +21,13 @@ const isTargetingElectron = process.env.NC_DEV_PLATFORM === 'electron';
 const logPlatformInfo = () => {
   if (isTargetingCordova) {
     console.log(chalk.green('Targeting Cordova platform', process.env.NC_DEV_PLATFORM));
-    console.log(chalk.green('Live mobile dev available: `npm run', process.env.NC_DEV_PLATFORM, ':dev`'));
+    console.log(chalk.green(`Live mobile dev available: \`npm run ${process.env.NC_DEV_PLATFORM}:dev\``));
     console.log(chalk.yellow('Content will only run in an', process.env.NC_DEV_PLATFORM, 'device or emulator'));
   } else if (isTargetingElectron) {
     console.log(chalk.green('Targeting Electron'));
     console.log(chalk.yellow('Content will only run in electron: `npm run electron:dev`'));
   } else {
-    console.log(chalk.cyan('Live mobile dev also available: `npm run dev:[ios|android]`'));
+    console.log(chalk.cyan('Live mobile dev also available: `npm run [android|ios]:dev`'));
   }
 };
 
