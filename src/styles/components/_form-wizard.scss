@@ -6,10 +6,9 @@
     transform: translateX(-50%);
   }
 
-
   .icon {
     &[name='form-arrow-left'],
-    [name='form-arrow-right'] {
+    &[name='form-arrow-right'] {
       height: 90px;
 
       .cls-2 {
@@ -63,7 +62,7 @@
     align-items: flex-start;
 
     div {
-      :not([class*='-hidden']) {
+      &:not([class*='-hidden']) {
         flex-basis: 50%;
       }
     }

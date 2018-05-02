@@ -714,7 +714,7 @@
         },
         {
           "id": "6su",
-          "text": "Within the past 6 months, who has been supportive?",
+          "text": "This is a particularly long prompt, which will be discuraged in the Architect interface but might still be desired by a researcher. What does this look like rendered?",
           "additionalAttributes": {
             "support_friend": true
           }
