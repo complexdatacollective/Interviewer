@@ -672,6 +672,25 @@
       ]
     },
     {
+      "id": "info-sound",
+      "label": "InfoSound",
+      "type": "Information",
+      "title": "This interface has a video with sound",
+      "items": [
+        {
+          "type": "text",
+          "content":
+            "The video below has sound and is set to loop."
+        },
+        {
+          "type": "video",
+          "content": "withSound.mp4",
+          "description": "Click by clicking the thing",
+          "loop": true
+        }
+      ]
+    },
+    {
       "id": "markdown",
       "label": "Markdown",
       "type": "Information",
