@@ -56,7 +56,7 @@
   }
 
   &--collapsed {
-    :not(.panel--minimise) {
+    &:not(.panel--minimise) {
       flex-grow: 0;
 
       .panel__content {
