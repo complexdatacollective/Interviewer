@@ -183,9 +183,6 @@ module.exports = {
                 loader: require.resolve('css-loader'),
                 options: {
                   importLoaders: 1,
-                  alias: {
-                    '../../../assets/fonts': 'network-canvas-ui/lib/assets/fonts',
-                  },
                 },
               },
               {
@@ -205,11 +202,6 @@ module.exports = {
               },
               {
                 loader: require.resolve('sass-loader'),
-                options: {
-                  includePaths: [
-                    path.resolve('./node_modules/network-canvas-ui/lib/styles/'),
-                  ],
-                },
               },
             ],
           },

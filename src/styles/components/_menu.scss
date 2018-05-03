@@ -79,12 +79,24 @@
     text-decoration: none;
     text-transform: uppercase;
 
-    &--settings:not(:hover):not(.menu__menuitem--active) .icon {
-      @include color-icon('slate-blue');
+    &--settings {
+      &:not(:hover) {
+        &:not(.menu__menuitem--active) {
+          .icon {
+            @include color-icon('slate-blue');
+          }
+        }
+      }
     }
 
-    &--primary:not(:hover):not(.menu__menuitem--active) .icon {
-      @include color-icon('sea-green');
+    &--primary {
+      &:not(:hover) {
+        &:not(.menu__menuitem--active) {
+          .icon {
+            @include color-icon('sea-green');
+          }
+        }
+      }
     }
 
     &--active,

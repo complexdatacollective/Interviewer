@@ -18,7 +18,7 @@ This project currently requires version `8.11.1` of node, and version `5.8.0` of
 
 ** NOTE: ** npm 5.8.0 is not installed by default with node 8.11.1. You will need to use `npm install -g npm` to do this. Test which version of npm you are using by typing `npm --version`.
 
-As a convenience, the repository contains configuration files that support the use of both `nvm` and `nodenv`. If you use either of these environment/version managers, you can install the correct node version automatically. For nvm, you can type `nvm use` from within the project directory. For nodenv, the command is `nodenv install`. Please refer to the documentation for these projects for further information.
+As a convenience, the repository contains a `.node-version` file that enables convinient use of a node environment manager.
 
 ## Windows Environment
 

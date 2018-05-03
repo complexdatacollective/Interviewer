@@ -1,6 +1,7 @@
 .draggable-preview {
   z-index: 1000;
+
   .node {
-    font-size: calc(var(--base-node-size) * 0.8);
+    font-size: calc(var(--base-node-size) * .8);
   }
 }

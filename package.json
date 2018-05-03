@@ -97,7 +97,6 @@
         "jszip": "^3.1.5",
         "lodash": "^4.17.4",
         "mdns": "^2.3.4",
-        "network-canvas-ui": "git+https://github.com/codaco/Network-Canvas-UI.git#1.13.4",
         "node-sass": "^4.5.3",
         "object-assign": "4.1.1",
         "postcss-flexbugs-fixes": "3.2.0",

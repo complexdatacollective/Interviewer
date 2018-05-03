@@ -3,7 +3,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from 'network-canvas-ui';
+import { Icon } from '../../ui/components';
 
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
