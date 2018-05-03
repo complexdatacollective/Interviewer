@@ -1,0 +1,21 @@
+$side-menu-width: 130px;
+
+.protocol-import {
+  margin: 0 $side-menu-width;
+  position: relative;
+
+  &__close {
+    position: absolute;
+    right: 0;
+  }
+
+  &__content {
+    background: var(--light-background);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    margin-right: 40px;
+    padding: spacing(large);
+  }
+}

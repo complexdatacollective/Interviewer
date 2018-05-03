@@ -1,0 +1,19 @@
+.server-pairing {
+  display: flex;
+  flex-direction: row;
+
+  &__card {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  &__form {
+    flex: auto;
+    padding-left: spacing(large);
+  }
+
+  &__protocol-list {
+    display: flex;
+    flex-direction: column;
+  }
+}

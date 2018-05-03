@@ -1,6 +1,24 @@
 import { EventEmitter } from 'eventemitter3';
 import { isElectron, isCordova } from '../utils/Environment';
 
+const DeviceApiProtocol = 'http';
+
+const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
+const isIpv6 = addr => /^[a-zA-Z0-9]{1,4}:/.test(addr); // TODO: good enough?
+
+// TODO: this should be moved to address normalization in discoverer (along with above)
+const validDeviceUrl = (address, port) => {
+  if (!address || isLinkLocal(address) || !port) {
+    return null;
+  }
+  let normalizedAddress = address;
+  if (isIpv6(address)) {
+    normalizedAddress = `[${address}]`;
+  }
+  const a = document.createElement('a');
+  a.href = `${DeviceApiProtocol}://${normalizedAddress}:${port}`;
+  return a.hostname && a.port && a.href;
+};
 
 class ServerDiscoverer {
   constructor() {
@@ -20,7 +38,7 @@ class ServerDiscoverer {
       this.browser.stop();
     }
 
-    if (isCordova()) {
+    if (isCordova() && this.zeroconf) {
       this.zeroconf.unwatch('_network-canvas._tcp.', 'local.');
     }
   }
@@ -51,19 +69,20 @@ class ServerDiscoverer {
         const mdns = window.require('mdns');
 
         // Pick the properties we want from the service object
+        // and provide a valid URL for the API if one is available
         const normalizeService = (service) => {
           const { name, host, port, addresses } = service;
-          console.log('normalizeService', service, '->', {
-            name,
-            host,
-            port,
-            addresses,
+          let apiUrl;
+          service.addresses.some((addr) => {
+            apiUrl = validDeviceUrl(addr, service.port);
+            return !!apiUrl;
           });
           return {
             name,
             host,
             port,
             addresses,
+            apiUrl,
           };
         };
 

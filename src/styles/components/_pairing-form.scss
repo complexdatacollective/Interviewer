@@ -1,0 +1,8 @@
+.pairing-form {
+  &__input {
+    @include typography('title-2');
+    margin-bottom: spacing(medium);
+    padding: spacing(small);
+    width: 100%;
+  }
+}

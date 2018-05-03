@@ -1,7 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-export { default as ServerList } from './ServerList';
-export { default as ServerCard } from './ServerCard';
 export { default as Card } from './Card';
 export { default as CardList } from './CardList';
 export { default as ListSelect } from './ListSelect';

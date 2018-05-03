@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import logo from '../images/Srv-Flat.svg';
+import logo from '../../images/Srv-Flat.svg';
 
-/**
-  * Renders a container onto which a `draggable` can be dropped.
-  */
-const ServerCard = ({ children, data, onSelectServer }) => (
-  <div className="server-card" onClick={evt => onSelectServer(evt, data)}>
+const ServerCard = ({ children, data, selectServer, className, ...props }) => (
+  <div className={`server-card ${className}`} onClick={() => selectServer(data)} {...props} >
     <img src={logo} className="server-card__icon" alt={children} />
     <h6 className="server-card__label">{children}</h6>
   </div>
@@ -15,13 +12,15 @@ const ServerCard = ({ children, data, onSelectServer }) => (
 ServerCard.propTypes = {
   data: PropTypes.object,
   children: PropTypes.any,
-  onSelectServer: PropTypes.func,
+  className: PropTypes.string,
+  selectServer: PropTypes.func,
 };
 
 ServerCard.defaultProps = {
   data: {},
   children: null,
-  onSelectServer: () => {},
+  className: '',
+  selectServer: () => {},
 };
 
 export default ServerCard;

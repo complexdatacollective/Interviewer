@@ -1,0 +1,30 @@
+.protocol-card {
+  align-items: center;
+  background-color: var(--background);
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: spacing(medium);
+  padding: spacing(large);
+
+  &__icon {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  &__labels {
+    flex: auto;
+    padding-left: spacing(large);
+  }
+
+  &__name {
+    @include typography(title-4);
+    margin-bottom: 0;
+  }
+
+  &__version {
+    @include typography(copy-small);
+    margin-bottom: 0;
+  }
+}
