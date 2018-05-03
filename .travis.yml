@@ -14,9 +14,9 @@ install:
   - npm install
 jobs:
   include:
-    - stage: test
+    - stage: prebuild
       script: npm run test
-    - stage: lint
-      script: npm run lint
+    - script: npm run lint
+    - script: npm run sass-lint
     - stage: build
       script: npm run build

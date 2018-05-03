@@ -15,7 +15,7 @@ ShallowWrapper {
     show={false}
     title=""
     type=""
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -30,51 +30,53 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="dialog"
->
+      >
         <div
-                className="dialog__background"
-                transition-role="background"
+          className="dialog__background"
+          transition-role="background"
         />
         <div
-                className="dialog__window dialog__window--"
-                onClick={[Function]}
-                transition-role="window"
+          className="dialog__window dialog__window--"
+          onClick={[Function]}
+          transition-role="window"
         >
-                <div
-                        className="dialog__main"
-                >
-                        <div
-                                className="dialog__main-icon"
-                        >
-                                <Icon
-                                        className=""
-                                        color=""
-                                        name=""
-                                        style={Object {}}
-                                />
-                        </div>
-                        <div
-                                className="dialog__main-content"
-                        >
-                                <h2
-                                        className="dialog__main-title"
-                                />
-                        </div>
-                </div>
-                <footer
-                        className="dialog__footer"
-                >
-                        <Button
-                                color=""
-                                content=""
-                                icon=""
-                                iconPosition="right"
-                                onClick={[Function]}
-                                size=""
-                        />
-                </footer>
+          <div
+            className="dialog__main"
+          >
+            <div
+              className="dialog__main-icon"
+            >
+              <Icon
+                className=""
+                color=""
+                name=""
+                style={Object {}}
+              />
+            </div>
+            <div
+              className="dialog__main-content"
+            >
+              <h2
+                className="dialog__main-title"
+              >
+                
+              </h2>
+            </div>
+          </div>
+          <footer
+            className="dialog__footer"
+          >
+            <Button
+              color=""
+              content=""
+              icon=""
+              iconPosition="right"
+              onClick={[Function]}
+              size=""
+            />
+          </footer>
         </div>
-</div>,
+      </div>,
       "in": false,
     },
     "ref": null,
@@ -87,46 +89,48 @@ ShallowWrapper {
           <div
             className="dialog__background"
             transition-role="background"
-/>,
+          />,
           <div
             className="dialog__window dialog__window--"
             onClick={[Function]}
             transition-role="window"
->
+          >
             <div
-                        className="dialog__main"
+              className="dialog__main"
             >
-                        <div
-                                    className="dialog__main-icon"
-                        >
-                                    <Icon
-                                                className=""
-                                                color=""
-                                                name=""
-                                                style={Object {}}
-                                    />
-                        </div>
-                        <div
-                                    className="dialog__main-content"
-                        >
-                                    <h2
-                                                className="dialog__main-title"
-                                    />
-                        </div>
+              <div
+                className="dialog__main-icon"
+              >
+                <Icon
+                  className=""
+                  color=""
+                  name=""
+                  style={Object {}}
+                />
+              </div>
+              <div
+                className="dialog__main-content"
+              >
+                <h2
+                  className="dialog__main-title"
+                >
+                  
+                </h2>
+              </div>
             </div>
             <footer
-                        className="dialog__footer"
+              className="dialog__footer"
             >
-                        <Button
-                                    color=""
-                                    content=""
-                                    icon=""
-                                    iconPosition="right"
-                                    onClick={[Function]}
-                                    size=""
-                        />
+              <Button
+                color=""
+                content=""
+                icon=""
+                iconPosition="right"
+                onClick={[Function]}
+                size=""
+              />
             </footer>
-</div>,
+          </div>,
         ],
         "className": "dialog",
       },
@@ -152,38 +156,40 @@ ShallowWrapper {
             "children": Array [
               <div
                 className="dialog__main"
->
+              >
                 <div
-                                className="dialog__main-icon"
+                  className="dialog__main-icon"
                 >
-                                <Icon
-                                                className=""
-                                                color=""
-                                                name=""
-                                                style={Object {}}
-                                />
+                  <Icon
+                    className=""
+                    color=""
+                    name=""
+                    style={Object {}}
+                  />
                 </div>
                 <div
-                                className="dialog__main-content"
+                  className="dialog__main-content"
                 >
-                                <h2
-                                                className="dialog__main-title"
-                                />
+                  <h2
+                    className="dialog__main-title"
+                  >
+                    
+                  </h2>
                 </div>
-</div>,
+              </div>,
               null,
               <footer
                 className="dialog__footer"
->
+              >
                 <Button
-                                color=""
-                                content=""
-                                icon=""
-                                iconPosition="right"
-                                onClick={[Function]}
-                                size=""
+                  color=""
+                  content=""
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size=""
                 />
-</footer>,
+              </footer>,
             ],
             "className": "dialog__window dialog__window--",
             "onClick": [Function],
@@ -199,21 +205,23 @@ ShallowWrapper {
                 "children": Array [
                   <div
                     className="dialog__main-icon"
->
+                  >
                     <Icon
-                                        className=""
-                                        color=""
-                                        name=""
-                                        style={Object {}}
+                      className=""
+                      color=""
+                      name=""
+                      style={Object {}}
                     />
-</div>,
+                  </div>,
                   <div
                     className="dialog__main-content"
->
+                  >
                     <h2
-                                        className="dialog__main-title"
-                    />
-</div>,
+                      className="dialog__main-title"
+                    >
+                      
+                    </h2>
+                  </div>,
                 ],
                 "className": "dialog__main",
               },
@@ -229,7 +237,7 @@ ShallowWrapper {
                       color=""
                       name=""
                       style={Object {}}
-/>,
+                    />,
                     "className": "dialog__main-icon",
                   },
                   "ref": null,
@@ -257,7 +265,9 @@ ShallowWrapper {
                     "children": Array [
                       <h2
                         className="dialog__main-title"
-/>,
+                      >
+                        
+                      </h2>,
                       null,
                     ],
                     "className": "dialog__main-content",
@@ -298,7 +308,7 @@ ShallowWrapper {
                     iconPosition="right"
                     onClick={[Function]}
                     size=""
-/>,
+                  />,
                 ],
                 "className": "dialog__footer",
               },
@@ -341,51 +351,53 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="dialog"
->
+        >
           <div
-                    className="dialog__background"
-                    transition-role="background"
+            className="dialog__background"
+            transition-role="background"
           />
           <div
-                    className="dialog__window dialog__window--"
-                    onClick={[Function]}
-                    transition-role="window"
+            className="dialog__window dialog__window--"
+            onClick={[Function]}
+            transition-role="window"
           >
-                    <div
-                              className="dialog__main"
-                    >
-                              <div
-                                        className="dialog__main-icon"
-                              >
-                                        <Icon
-                                                  className=""
-                                                  color=""
-                                                  name=""
-                                                  style={Object {}}
-                                        />
-                              </div>
-                              <div
-                                        className="dialog__main-content"
-                              >
-                                        <h2
-                                                  className="dialog__main-title"
-                                        />
-                              </div>
-                    </div>
-                    <footer
-                              className="dialog__footer"
-                    >
-                              <Button
-                                        color=""
-                                        content=""
-                                        icon=""
-                                        iconPosition="right"
-                                        onClick={[Function]}
-                                        size=""
-                              />
-                    </footer>
+            <div
+              className="dialog__main"
+            >
+              <div
+                className="dialog__main-icon"
+              >
+                <Icon
+                  className=""
+                  color=""
+                  name=""
+                  style={Object {}}
+                />
+              </div>
+              <div
+                className="dialog__main-content"
+              >
+                <h2
+                  className="dialog__main-title"
+                >
+                  
+                </h2>
+              </div>
+            </div>
+            <footer
+              className="dialog__footer"
+            >
+              <Button
+                color=""
+                content=""
+                icon=""
+                iconPosition="right"
+                onClick={[Function]}
+                size=""
+              />
+            </footer>
           </div>
-</div>,
+        </div>,
         "in": false,
       },
       "ref": null,
@@ -398,46 +410,48 @@ ShallowWrapper {
             <div
               className="dialog__background"
               transition-role="background"
-/>,
+            />,
             <div
               className="dialog__window dialog__window--"
               onClick={[Function]}
               transition-role="window"
->
+            >
               <div
-                            className="dialog__main"
+                className="dialog__main"
               >
-                            <div
-                                          className="dialog__main-icon"
-                            >
-                                          <Icon
-                                                        className=""
-                                                        color=""
-                                                        name=""
-                                                        style={Object {}}
-                                          />
-                            </div>
-                            <div
-                                          className="dialog__main-content"
-                            >
-                                          <h2
-                                                        className="dialog__main-title"
-                                          />
-                            </div>
+                <div
+                  className="dialog__main-icon"
+                >
+                  <Icon
+                    className=""
+                    color=""
+                    name=""
+                    style={Object {}}
+                  />
+                </div>
+                <div
+                  className="dialog__main-content"
+                >
+                  <h2
+                    className="dialog__main-title"
+                  >
+                    
+                  </h2>
+                </div>
               </div>
               <footer
-                            className="dialog__footer"
+                className="dialog__footer"
               >
-                            <Button
-                                          color=""
-                                          content=""
-                                          icon=""
-                                          iconPosition="right"
-                                          onClick={[Function]}
-                                          size=""
-                            />
+                <Button
+                  color=""
+                  content=""
+                  icon=""
+                  iconPosition="right"
+                  onClick={[Function]}
+                  size=""
+                />
               </footer>
-</div>,
+            </div>,
           ],
           "className": "dialog",
         },
@@ -463,38 +477,40 @@ ShallowWrapper {
               "children": Array [
                 <div
                   className="dialog__main"
->
+                >
                   <div
-                                    className="dialog__main-icon"
+                    className="dialog__main-icon"
                   >
-                                    <Icon
-                                                      className=""
-                                                      color=""
-                                                      name=""
-                                                      style={Object {}}
-                                    />
+                    <Icon
+                      className=""
+                      color=""
+                      name=""
+                      style={Object {}}
+                    />
                   </div>
                   <div
-                                    className="dialog__main-content"
+                    className="dialog__main-content"
                   >
-                                    <h2
-                                                      className="dialog__main-title"
-                                    />
+                    <h2
+                      className="dialog__main-title"
+                    >
+                      
+                    </h2>
                   </div>
-</div>,
+                </div>,
                 null,
                 <footer
                   className="dialog__footer"
->
+                >
                   <Button
-                                    color=""
-                                    content=""
-                                    icon=""
-                                    iconPosition="right"
-                                    onClick={[Function]}
-                                    size=""
+                    color=""
+                    content=""
+                    icon=""
+                    iconPosition="right"
+                    onClick={[Function]}
+                    size=""
                   />
-</footer>,
+                </footer>,
               ],
               "className": "dialog__window dialog__window--",
               "onClick": [Function],
@@ -510,21 +526,23 @@ ShallowWrapper {
                   "children": Array [
                     <div
                       className="dialog__main-icon"
->
+                    >
                       <Icon
-                                            className=""
-                                            color=""
-                                            name=""
-                                            style={Object {}}
+                        className=""
+                        color=""
+                        name=""
+                        style={Object {}}
                       />
-</div>,
+                    </div>,
                     <div
                       className="dialog__main-content"
->
+                    >
                       <h2
-                                            className="dialog__main-title"
-                      />
-</div>,
+                        className="dialog__main-title"
+                      >
+                        
+                      </h2>
+                    </div>,
                   ],
                   "className": "dialog__main",
                 },
@@ -540,7 +558,7 @@ ShallowWrapper {
                         color=""
                         name=""
                         style={Object {}}
-/>,
+                      />,
                       "className": "dialog__main-icon",
                     },
                     "ref": null,
@@ -568,7 +586,9 @@ ShallowWrapper {
                       "children": Array [
                         <h2
                           className="dialog__main-title"
-/>,
+                        >
+                          
+                        </h2>,
                         null,
                       ],
                       "className": "dialog__main-content",
@@ -609,7 +629,7 @@ ShallowWrapper {
                       iconPosition="right"
                       onClick={[Function]}
                       size=""
-/>,
+                    />,
                   ],
                   "className": "dialog__footer",
                 },

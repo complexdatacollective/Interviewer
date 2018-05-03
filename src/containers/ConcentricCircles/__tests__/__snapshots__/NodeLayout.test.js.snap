@@ -18,16 +18,16 @@ ShallowWrapper {
     layoutVariable="foo"
     nodeBinSortOrder={Object {}}
     nodes={
-        Array [
-            Object {
-              "bar": "buzz",
-              "foo": Object {
-                "x": 0,
-                "y": 0,
-              },
-              "uid": 123,
-            },
-          ]
+      Array [
+        Object {
+          "bar": "buzz",
+          "foo": Object {
+            "x": 0,
+            "y": 0,
+          },
+          "uid": 123,
+        },
+      ]
     }
     selectMode=""
     skewedTowardCenter={false}
@@ -35,7 +35,7 @@ ShallowWrapper {
     toggleHighlight={[Function]}
     updateNode={[Function]}
     width={123}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -57,18 +57,18 @@ ShallowWrapper {
           layoutVariable="foo"
           linking={false}
           node={
-                    Object {
-                              "bar": "buzz",
-                              "foo": Object {
-                                "x": 0,
-                                "y": 0,
-                              },
-                              "uid": 123,
-                            }
+            Object {
+              "bar": "buzz",
+              "foo": Object {
+                "x": 0,
+                "y": 0,
+              },
+              "uid": 123,
+            }
           }
           onSelected={[Function]}
           selected={false}
-/>,
+        />,
       ],
       "className": "node-layout",
     },
@@ -118,18 +118,18 @@ ShallowWrapper {
             layoutVariable="foo"
             linking={false}
             node={
-                        Object {
-                                    "bar": "buzz",
-                                    "foo": Object {
-                                      "x": 0,
-                                      "y": 0,
-                                    },
-                                    "uid": 123,
-                                  }
+              Object {
+                "bar": "buzz",
+                "foo": Object {
+                  "x": 0,
+                  "y": 0,
+                },
+                "uid": 123,
+              }
             }
             onSelected={[Function]}
             selected={false}
-/>,
+          />,
         ],
         "className": "node-layout",
       },

@@ -41,6 +41,7 @@ $component-name: dialog;
   }
 
   &__additional {
+
     &-box {
       height: 200px;
       padding: 20px;
@@ -51,10 +52,15 @@ $component-name: dialog;
       overflow-y: auto;
       overflow-x: hidden;
       margin: 25px 40px;
-      h1, h2, h3, h4, h5, h6 {
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         font-weight: 700;
         text-transform: uppercase;
-
       }
     }
   }
@@ -81,10 +87,11 @@ $component-name: dialog;
     &-icon {
       order: 1;
       flex: 1;
+
       .icon {
         height: 170px;
         width: 170px;
-        margin-right:20px;
+        margin-right: 20px;
       }
     }
   }
@@ -92,6 +99,7 @@ $component-name: dialog;
   &__footer {
     margin: 25px 40px;
     text-align: center;
+
     .button {
       &:last-child {
         margin-left: 20px;

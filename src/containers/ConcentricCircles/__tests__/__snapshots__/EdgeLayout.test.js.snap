@@ -7,27 +7,27 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <EdgeLayout
     displayEdges={Array []}
     edgeCoords={
-        Array [
-            Object {
-              "from": Object {
-                "x": 100,
-                "y": 100,
-              },
-              "key": "foo_bar_baz",
-              "to": Object {
-                "x": 100,
-                "y": 100,
-              },
-            },
-          ]
+      Array [
+        Object {
+          "from": Object {
+            "x": 100,
+            "y": 100,
+          },
+          "key": "foo_bar_baz",
+          "to": Object {
+            "x": 100,
+            "y": 100,
+          },
+        },
+      ]
     }
     prompt={
-        Object {
-            "edges": Object {},
-          }
+      Object {
+        "edges": Object {},
+      }
     }
     stage={Object {}}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -44,9 +44,7 @@ ShallowWrapper {
         preserveAspectRatio="none"
         viewBox="0 0 1 1"
         xmlns="http://www.w3.org/2000/svg"
->
-        
-</svg>,
+      />,
       "className": "edge-layout",
     },
     "ref": null,
@@ -76,9 +74,7 @@ ShallowWrapper {
           preserveAspectRatio="none"
           viewBox="0 0 1 1"
           xmlns="http://www.w3.org/2000/svg"
->
-          
-</svg>,
+        />,
         "className": "edge-layout",
       },
       "ref": null,

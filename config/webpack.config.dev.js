@@ -13,6 +13,8 @@ const browsers = require('./browsers');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
+const { reactBundleTarget, isTargetingElectron } = require('./nc-dev-utils');
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -23,10 +25,20 @@ const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
+const resolveAlias = {
+  // Use the UMD version of React Markdown, so that we can keep building for
+  // electron-renderer and running other browsers
+  'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
+};
+if (!isTargetingElectron) {
+  resolveAlias.electron = `${paths.appSrc}/utils/electron-shim`;
+}
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
 module.exports = {
+  target: reactBundleTarget(),
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
   devtool: 'cheap-module-source-map',
@@ -87,13 +99,10 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      // Use the UMD version of React Markdown, so that we can keep building for
-      // electron-renderer and running other browsers
-      'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      electron: `${paths.appSrc}/utils/electron-shim`,
+
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -174,9 +183,6 @@ module.exports = {
                 loader: require.resolve('css-loader'),
                 options: {
                   importLoaders: 1,
-                  alias: {
-                    '../../../assets/fonts': 'network-canvas-ui/lib/assets/fonts',
-                  },
                 },
               },
               {
@@ -196,11 +202,6 @@ module.exports = {
               },
               {
                 loader: require.resolve('sass-loader'),
-                options: {
-                  includePaths: [
-                    path.resolve('./node_modules/network-canvas-ui/lib/styles/'),
-                  ],
-                },
               },
             ],
           },

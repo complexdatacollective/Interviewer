@@ -13,7 +13,7 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     to="linkyLink"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -34,7 +34,7 @@ ShallowWrapper {
           color=""
           name="menu-default-interface"
           style={Object {}}
-/>,
+        />,
         "title",
       ],
       "className": "menu__menuitem menu__menuitem--primary",
@@ -75,7 +75,7 @@ ShallowWrapper {
             color=""
             name="menu-default-interface"
             style={Object {}}
-/>,
+          />,
           "title",
         ],
         "className": "menu__menuitem menu__menuitem--primary",
@@ -125,7 +125,7 @@ ShallowWrapper {
     menuType="primary"
     onClick={[Function]}
     to="linkyLink"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -146,7 +146,7 @@ ShallowWrapper {
           color=""
           name="menu-default-interface"
           style={Object {}}
-/>,
+        />,
         "title",
       ],
       "className": "menu__menuitem menu__menuitem--primary",
@@ -187,7 +187,7 @@ ShallowWrapper {
             color=""
             name="menu-default-interface"
             style={Object {}}
-/>,
+          />,
           "title",
         ],
         "className": "menu__menuitem menu__menuitem--primary",
