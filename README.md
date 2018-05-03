@@ -105,15 +105,21 @@ Starting the web app: If you have a running webpack dev server (started with `np
 
 Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run android:dev -- --emulator`, or `npm run ios:dev -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
 
-This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.3", try `xcrun simctl list`.
+This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.3"), try `xcrun simctl list`.
 
-*To get full Cordova support*, with native integration & plugins:
+*Known issue & caveat*: this requires temporarily changing `config.xml` contents to build a development app; if everything goes well, the changes are cleaned up upon completion. However, a Cordova build error (for example) can leave config.xml in this 'development' state.
 
-1. (one time) `cordova build [android|ios]` to install cordova deps & plugins
+#### Full Cordova support
+
+To get full Cordova support, with native integration & plugins:
+
+1. (one time) `cordova build [android|ios]` to install cordova deps, plugins, and static (public) app resources
 2. `npm run start:[android|ios]` to start the dev server (React app)
 3. `npm run [android|ios]:dev` as above
 
-Note: this comes at the expense of only being able to run dev server content from a device or simulator on that platform.
+However, this comes with some limitations:
+- You can only to run dev server content from a device or simulator on that platform. (Running simultaneous android clients is fine; running electron concurrently requires starting another server in another directory.)
+- All 'public' files, including protocols, are statically bundled with the app. These are sourced from the `www` directory in the cordova build step, so changes to any file in public requires a full `npm build` and then restarting the dev device as above.
 
 ## Electron development
 
