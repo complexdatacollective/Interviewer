@@ -1,4 +1,5 @@
 const electron = require('electron');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const url = require('url');
@@ -31,17 +32,30 @@ log.info('App starting...');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+const appUrl = (function getAppUrl() {
+  if (process.env.NODE_ENV === 'development' && process.env.NC_DEVSERVER_FILE) {
+    // NC_DEVSERVER_FILE contains the URL of a running webpack-dev-server, relative to app root
+    try {
+      const relativePath = path.join(__dirname, '..', process.env.NC_DEVSERVER_FILE);
+      return fs.readFileSync(relativePath, 'utf-8');
+    } catch (err) {
+      log.warn('Error loading dev server config -', err.message);
+      log.warn('Are you running dev server?');
+      log.warn('Continuing with index.html');
+    }
+  }
+  return url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:'
+  });
+}());
+
 function createWindow() {
   registerAssetsProtocol();
 
   // Create the browser window.
   mainWindow = new BrowserWindow(windowParameters);
-  // mainWindow.setFullScreen(true);npm run
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:'
-  }));
+  mainWindow.loadURL(appUrl);
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
