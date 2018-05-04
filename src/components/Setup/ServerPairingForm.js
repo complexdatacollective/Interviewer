@@ -16,7 +16,14 @@ class ServerPairingForm extends Component {
   render() {
     const { completePairing, disabled, ...props } = this.props;
     return (
-      <form className="pairing-form" onSubmit={() => completePairing(this.state.pairingCode)} {...props}>
+      <form
+        className="pairing-form"
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          completePairing(this.state.pairingCode);
+        }}
+        {...props}
+      >
         <h1>Pairing</h1>
         <p>
           You must pair this device with this instance of Server. This is a one-off process that
