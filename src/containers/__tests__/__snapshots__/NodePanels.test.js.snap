@@ -6,23 +6,24 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <NodePanels
     activePromptAttributes={Object {}}
+    getLabel={[Function]}
     isDragging={false}
     meta={Object {}}
     newNodeAttributes={Object {}}
     panels={Array []}
     prompt={
-        Object {
-            "id": null,
-          }
+      Object {
+        "id": null,
+      }
     }
     removeNode={[Function]}
     stage={
-        Object {
-            "id": null,
-          }
+      Object {
+        "id": null,
+      }
     }
     toggleNodeAttributes={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

@@ -47,7 +47,7 @@
       .node-list,
       .panels {
         opacity: 0;
-        transition: unset !important;
+        transition: unset !important; // sass-lint:disable-line no-important
       }
     }
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'network-canvas-ui';
+import { Icon } from '../ui/components';
 import { Pips } from '../components/';
 import { Form } from '../containers/';
 

@@ -21,7 +21,7 @@
       right: 0;
       height: 25px;
       width: 100%;
-      -webkit-app-region: drag;
+      -webkit-app-region: drag; // sass-lint:disable-line no-vendor-prefixes
     }
   }
 

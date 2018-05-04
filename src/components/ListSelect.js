@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from 'network-canvas-ui';
+import { Button } from '../ui/components';
 import { CardList } from '.';
 
 class ListSelect extends Component {

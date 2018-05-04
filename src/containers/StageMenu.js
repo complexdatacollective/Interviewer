@@ -34,6 +34,7 @@ class StageMenu extends Component {
       hideButton,
       isOpen,
       protocolPath,
+      protocolType,
       searchValue,
       toggleMenu,
     } = this.props;
@@ -44,7 +45,7 @@ class StageMenu extends Component {
         icon: filteredStage.icon,
         label: filteredStage.label,
         interfaceType: filteredStage.type,
-        to: protocolPath ? `/protocol/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
+        to: protocolPath ? `/protocol/${protocolType}/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
       }));
 
     const search = (
@@ -72,6 +73,7 @@ StageMenu.propTypes = {
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   protocolPath: PropTypes.string,
+  protocolType: PropTypes.string.isRequired,
   searchValue: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
   updateSearch: PropTypes.func,
@@ -94,6 +96,7 @@ function mapStateToProps(state) {
     currentStages,
     filteredList,
     protocolPath: state.protocol.path,
+    protocolType: state.protocol.type,
     searchValue: stageSearchTerm(state),
   };
 }

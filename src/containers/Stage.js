@@ -18,7 +18,7 @@ class Stage extends Component {
 
   // change the stage to the previous
   onClickBack = () => {
-    this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}`);
+    this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
   }
 
   render() {

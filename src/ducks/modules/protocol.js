@@ -19,6 +19,7 @@ const initialState = {
   version: '',
   required: '',
   stages: [],
+  type: 'factory',
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -39,6 +40,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         isLoaded: false,
         isLoading: true,
+        type: action.protocolType,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case IMPORT_PROTOCOL_FAILED:
@@ -64,6 +66,7 @@ function setProtocol(path, protocol) {
 function downloadProtocolAction(uri) {
   return {
     type: DOWNLOAD_PROTOCOL,
+    protocolType: 'download',
     uri,
   };
 }
@@ -71,6 +74,7 @@ function downloadProtocolAction(uri) {
 function importProtocolAction(path) {
   return {
     type: IMPORT_PROTOCOL,
+    protocolType: 'download',
     path,
   };
 }
@@ -78,6 +82,7 @@ function importProtocolAction(path) {
 function loadProtocolAction(path) {
   return {
     type: LOAD_PROTOCOL,
+    protocolType: 'download',
     path,
   };
 }
@@ -85,6 +90,7 @@ function loadProtocolAction(path) {
 function loadFactoryProtocolAction(path) {
   return {
     type: LOAD_FACTORY_PROTOCOL,
+    protocolType: 'factory',
     path,
   };
 }

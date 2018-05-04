@@ -4,8 +4,8 @@ import { CSSTransition } from 'react-transition-group';
 import { getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
 const duration = {
-  enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-  exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+  enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
+  exit: getCSSVariableAsNumber('--animation-duration-standard-ms'),
 };
 
 const Modal = ({ children, ...props }) => (

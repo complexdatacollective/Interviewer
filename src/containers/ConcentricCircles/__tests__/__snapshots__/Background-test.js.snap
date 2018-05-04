@@ -18,7 +18,7 @@ ShallowWrapper {
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -34,7 +34,7 @@ ShallowWrapper {
       "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
         className="sociogram-background__image"
         url="map.png"
-/>,
+      />,
       "className": "sociogram-background",
     },
     "ref": null,
@@ -61,7 +61,7 @@ ShallowWrapper {
         "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
           className="sociogram-background__image"
           url="map.png"
-/>,
+        />,
         "className": "sociogram-background",
       },
       "ref": null,
@@ -108,7 +108,7 @@ ShallowWrapper {
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -124,7 +124,7 @@ ShallowWrapper {
       "children": <Radar
         n={4}
         skewed={true}
-/>,
+      />,
       "className": "sociogram-background",
     },
     "ref": null,
@@ -151,7 +151,7 @@ ShallowWrapper {
         "children": <Radar
           n={4}
           skewed={true}
-/>,
+        />,
         "className": "sociogram-background",
       },
       "ref": null,

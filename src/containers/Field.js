@@ -9,7 +9,7 @@ import {
   RadioGroup,
   ToggleGroup,
   ToggleInput,
-} from 'network-canvas-ui';
+} from '../ui/components';
 
 import validations from '../utils/Validations';
 

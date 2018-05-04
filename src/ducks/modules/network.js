@@ -120,6 +120,7 @@ export default function reducer(state = initialState, action = {}) {
         edges: [...state.edges, action.edge],
       };
     case TOGGLE_EDGE:
+      // remove edge if it exists, add it if it doesn't
       if (edgeExists(state.edges, action.edge)) {
         return {
           ...state,

@@ -3,8 +3,8 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
-import { Node } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
+import { Node } from '../ui/components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -34,6 +34,8 @@ class NodeList extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
+
     // Don't update if nodes are the same
     if (isEqual(newProps.nodes, this.state.nodes)) {
       return;
@@ -54,7 +56,6 @@ class NodeList extends Component {
       this.setState(
         { nodes: [], stagger: true },
         () => {
-          if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
           this.refreshTimer = setTimeout(
             () => this.setState({
               nodes: newProps.nodes,
@@ -65,6 +66,10 @@ class NodeList extends Component {
         },
       );
     });
+  }
+
+  componentWillUnmount() {
+    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
   }
 
   render() {

@@ -82,7 +82,9 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-
+      // Use the UMD version of React Markdown, so that we can keep building for
+      // electron-renderer and running other browsers
+      'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -166,9 +168,6 @@ module.exports = {
                         importLoaders: 1,
                         minimize: false,
                         sourceMap: false,
-                        alias: {
-                          '../../../assets/fonts': 'network-canvas-ui/lib/assets/fonts',
-                        },
                       },
                     },
                     {

@@ -12,16 +12,21 @@ ShallowWrapper {
     concentricCircles={0}
     createEdge="bar"
     displayEdges={Array []}
+    getLabel={[Function]}
     highlightAttributes={Object {}}
     layout="foo"
     layoutVariable="foo"
-    node={Object {}}
+    node={
+      Object {
+        "label": "some label",
+      }
+    }
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
     sort={Object {}}
     updateNode={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -36,10 +41,10 @@ ShallowWrapper {
     "props": Object {
       "children": <DragSource
         allowDrag={true}
-        label={undefined}
+        label="some label"
         meta={[Function]}
         scrollDirection="NO_SCROLL"
-/>,
+      />,
       "className": "node-bucket",
     },
     "ref": null,
@@ -49,7 +54,7 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "allowDrag": true,
-        "label": undefined,
+        "label": "some label",
         "meta": [Function],
         "scrollDirection": "NO_SCROLL",
       },
@@ -67,10 +72,10 @@ ShallowWrapper {
       "props": Object {
         "children": <DragSource
           allowDrag={true}
-          label={undefined}
+          label="some label"
           meta={[Function]}
           scrollDirection="NO_SCROLL"
-/>,
+        />,
         "className": "node-bucket",
       },
       "ref": null,
@@ -80,7 +85,7 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "allowDrag": true,
-          "label": undefined,
+          "label": "some label",
           "meta": [Function],
           "scrollDirection": "NO_SCROLL",
         },

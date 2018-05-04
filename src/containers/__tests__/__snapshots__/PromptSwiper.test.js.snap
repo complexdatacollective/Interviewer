@@ -10,16 +10,16 @@ ShallowWrapper {
     forward={[Function]}
     promptIndex={0}
     prompts={
-        Array [
-            Object {
-              "text": "bar",
-            },
-            Object {
-              "text": "foo",
-            },
-          ]
+      Array [
+        Object {
+          "text": "bar",
+        },
+        Object {
+          "text": "foo",
+        },
+      ]
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -34,30 +34,30 @@ ShallowWrapper {
     "props": Object {
       "children": <div
         className="prompts"
->
+      >
         <div
-                className="prompts__pips"
+          className="prompts__pips"
         >
-                <Pips
-                        count={2}
-                        currentIndex={0}
-                />
+          <Pips
+            count={2}
+            currentIndex={0}
+          />
         </div>
         <div
-                className="prompts__prompts"
+          className="prompts__prompts"
         >
-                <Prompt
-                        isActive={true}
-                        isLeaving={false}
-                        label="bar"
-                />
-                <Prompt
-                        isActive={false}
-                        isLeaving={true}
-                        label="foo"
-                />
+          <Prompt
+            isActive={true}
+            isLeaving={false}
+            label="bar"
+          />
+          <Prompt
+            isActive={false}
+            isLeaving={true}
+            label="foo"
+          />
         </div>
-</div>,
+      </div>,
       "onSwipe": [Function],
       "onTap": [Function],
     },
@@ -70,26 +70,26 @@ ShallowWrapper {
         "children": Array [
           <div
             className="prompts__pips"
->
+          >
             <Pips
-                        count={2}
-                        currentIndex={0}
+              count={2}
+              currentIndex={0}
             />
-</div>,
+          </div>,
           <div
             className="prompts__prompts"
->
+          >
             <Prompt
-                        isActive={true}
-                        isLeaving={false}
-                        label="bar"
+              isActive={true}
+              isLeaving={false}
+              label="bar"
             />
             <Prompt
-                        isActive={false}
-                        isLeaving={true}
-                        label="foo"
+              isActive={false}
+              isLeaving={true}
+              label="foo"
             />
-</div>,
+          </div>,
         ],
         "className": "prompts",
       },
@@ -103,7 +103,7 @@ ShallowWrapper {
             "children": <Pips
               count={2}
               currentIndex={0}
-/>,
+            />,
             "className": "prompts__pips",
           },
           "ref": null,
@@ -131,12 +131,12 @@ ShallowWrapper {
                 isActive={true}
                 isLeaving={false}
                 label="bar"
-/>,
+              />,
               <Prompt
                 isActive={false}
                 isLeaving={true}
                 label="foo"
-/>,
+              />,
             ],
             "className": "prompts__prompts",
           },
@@ -184,30 +184,30 @@ ShallowWrapper {
       "props": Object {
         "children": <div
           className="prompts"
->
+        >
           <div
-                    className="prompts__pips"
+            className="prompts__pips"
           >
-                    <Pips
-                              count={2}
-                              currentIndex={0}
-                    />
+            <Pips
+              count={2}
+              currentIndex={0}
+            />
           </div>
           <div
-                    className="prompts__prompts"
+            className="prompts__prompts"
           >
-                    <Prompt
-                              isActive={true}
-                              isLeaving={false}
-                              label="bar"
-                    />
-                    <Prompt
-                              isActive={false}
-                              isLeaving={true}
-                              label="foo"
-                    />
+            <Prompt
+              isActive={true}
+              isLeaving={false}
+              label="bar"
+            />
+            <Prompt
+              isActive={false}
+              isLeaving={true}
+              label="foo"
+            />
           </div>
-</div>,
+        </div>,
         "onSwipe": [Function],
         "onTap": [Function],
       },
@@ -220,26 +220,26 @@ ShallowWrapper {
           "children": Array [
             <div
               className="prompts__pips"
->
+            >
               <Pips
-                            count={2}
-                            currentIndex={0}
+                count={2}
+                currentIndex={0}
               />
-</div>,
+            </div>,
             <div
               className="prompts__prompts"
->
+            >
               <Prompt
-                            isActive={true}
-                            isLeaving={false}
-                            label="bar"
+                isActive={true}
+                isLeaving={false}
+                label="bar"
               />
               <Prompt
-                            isActive={false}
-                            isLeaving={true}
-                            label="foo"
+                isActive={false}
+                isLeaving={true}
+                label="foo"
               />
-</div>,
+            </div>,
           ],
           "className": "prompts",
         },
@@ -253,7 +253,7 @@ ShallowWrapper {
               "children": <Pips
                 count={2}
                 currentIndex={0}
-/>,
+              />,
               "className": "prompts__pips",
             },
             "ref": null,
@@ -281,12 +281,12 @@ ShallowWrapper {
                   isActive={true}
                   isLeaving={false}
                   label="bar"
-/>,
+                />,
                 <Prompt
                   isActive={false}
                   isLeaving={true}
                   label="foo"
-/>,
+                />,
               ],
               "className": "prompts__prompts",
             },

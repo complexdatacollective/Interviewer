@@ -340,7 +340,7 @@
       "type": "Information",
       "title": "Welcome to the Teaching Protocol",
       "items": [
-        { "type": "text", "content": "<p>Welcome to Network Canvas. This is the Network Canvas App. It is used for field studies of self-reported social network data. It is part of a suite of apps being developed by the Complex Data Collective and administered by Northwestern University and the University of Oxford. The other apps in the suite enable users to develop their own protocols for the Network Canvas App as well as manage the data that is returned from the app.</p><p>This version is a simple name generator. Answer these questions honestly and sincerely and you will create a version of your own personal network. You can then visualize this network here or open it in social network analysis programs such as UCInet, NodeXL and Gephi.</p><p>No data is transmitted between this app and the Network Canvas team. This is solely for demonstration purposes. To begin tap the next button on the right.</p>" }
+        { "type": "text", "content": "Welcome to Network Canvas. This is the Network Canvas App. It is used for field studies of self-reported social network data. It is part of a suite of apps being developed by the Complex Data Collective and administered by Northwestern University and the University of Oxford. The other apps in the suite enable users to develop their own protocols for the Network Canvas App as well as manage the data that is returned from the app.\n\nThis version is a simple name generator. Answer these questions honestly and sincerely and you will create a version of your own personal network. You can then visualize this network here or open it in social network analysis programs such as UCInet, NodeXL and Gephi.\n\nNo data is transmitted between this app and the Network Canvas team. This is solely for demonstration purposes. To begin tap the next button on the right." }
       ]
     },
     {
@@ -349,7 +349,7 @@
       "type": "Information",
       "title": "Generating Names",
       "items": [
-        { "type": "text", "content": "<p>The first part of creating a personal network is to generate a list of names. On the next screen you will be asked to create “nodes”. Each node represents a person you know. List as many people as you can who fit the criteria.</p>" }
+        { "type": "text", "content": "The first part of creating a personal network is to generate a list of names. On the next screen you will be asked to create “nodes”. Each node represents a person you know. List as many people as you can who fit the criteria." }
       ]
     },
     {
@@ -361,12 +361,12 @@
         "entity": "node",
         "type": "person"
       },
-      "panels": {
-          "external": {
-            "title": "Your classmates",
-            "dataSource": "schoolPupils"
-          }
-      },
+      "panels": [
+        {
+          "title": "Your classmates",
+          "dataSource": "schoolPupils"
+        }
+      ],
       "prompts": [
         {
           "id": "6cl",
@@ -396,7 +396,7 @@
         },
         {
           "id": "6el",
-          "text": "Please list all the people the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
+          "text": "Please list all the people in the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
           "additionalAttributes": {
             "community_important": true
           }
@@ -410,7 +410,7 @@
         },
         {
           "id": "6gl",
-          "text": "Finally, is there anyone else important to you who was not yet listed",
+          "text": "Finally, is there anyone else important to you who was not yet listed?",
           "additionalAttributes": {
             "other_important": true
           }
@@ -423,8 +423,8 @@
       "type": "Information",
       "title": "Arranging nodes in the sociogram.",
       "items": [
-        { "type": "text", "content": "<p>On the next screen you will be able to move the nodes corresponding to each person. One by one move them from the corner of the screen to the circle in the middle. Then, we will draw lines between people who know each other.</p>" },
-        { "type": "text", "content": "<p>Tips:</p><ul><li>Place people who know each other near to each other</li><li>Place people who know you best closest to the middle</li><li>Leave lots of room between nodes</li></ul>" }
+        { "type": "text", "content": "On the next screen you will be able to move the nodes corresponding to each person. One by one move them from the corner of the screen to the circle in the middle. Then, we will draw lines between people who know each other." },
+        { "type": "text", "content": "Tips:\n- Place people who know each other near to each other\n- Place people who know you best closest to the middle\n- Leave lots of room between nodes" }
       ]
     },
     {
@@ -455,9 +455,9 @@
       "type": "Information",
       "title": "Drawing ties between people.",
       "items": [
-        { "type": "text", "content": "<p>A social network typically includes a way to show relationships between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:</p>" },
-        { "type": "text", "content": "<ul><li>Click (or tap) on the first node.</li><li>Click (or tap) on the second node.</li></ul><p>A line should appear between the two nodes.</p>" },
-        { "type": "text", "content": "<p>Tips:</p><ul><li> If the people are too close to see the line, spread them out a little bit.</li><li>If you make a line and want to delete it, just select the two people like before and the line should disappear.</li></ul>" },
+        { "type": "text", "content": "A social network typically includes a way to show relationships between people. Here, we will ask you to draw a line between two people who know each other personally. To do this:" },
+        { "type": "text", "content": "- Click (or tap) on the first node.\n- Click (or tap) on the second node.\n\nA line should appear between the two nodes." },
+        { "type": "text", "content": "Tips:\n- If the people are too close to see the line, spread them out a little bit.\n- If you make a line and want to delete it, just select the two people like before and the line should disappear." },
         { "type": "video", "content": "linking.mp4" }
       ]
     },
@@ -564,9 +564,9 @@
       "type": "Information",
       "title": "Exporting Data",
       "items": [
-        { "type": "text", "content": "<p>This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire.</p>" },
-        { "type": "text", "content": "<p>Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning.</p>" },
-        { "type": "text", "content": "<p>To export this data and continue with some further analysis, please use the \"Download Data\" option in the settings menu.</p>" }
+        { "type": "text", "content": "This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire." },
+        { "type": "text", "content": "Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning." },
+        { "type": "text", "content": "To export this data and continue with some further analysis, please use the \"Download Data\" option in the settings menu." }
       ]
     },
     {
@@ -575,7 +575,7 @@
       "type": "Information",
       "title": "Thank you!",
       "items": [
-        { "type": "text", "content": "<p>To learn more about Network Canvas, please visit our website at <a href=\"http://www.networkcanvas.com/\">http://www.networkcanvas.com/</a>.</p>" }
+        { "type": "text", "content": "To learn more about Network Canvas, please visit our website at <http://www.networkcanvas.com/>." }
       ]
     }
   ]

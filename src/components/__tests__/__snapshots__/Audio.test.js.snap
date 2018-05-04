@@ -8,7 +8,7 @@ ShallowWrapper {
     description="bar"
     miscellaneousAdditionalProperty="baz"
     url="foo"
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

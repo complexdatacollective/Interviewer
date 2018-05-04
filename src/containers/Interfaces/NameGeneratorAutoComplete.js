@@ -3,14 +3,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from 'network-canvas-ui';
+import { Icon } from '../../ui/components';
 
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetNodeType, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getNodeLabelFunction, makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
+import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 
@@ -47,13 +47,14 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       excludedNodes,
+      getLabel,
       labelKey,
-      nodesForPrompt,
       nodeIconName,
+      nodesForPrompt,
       nodeType,
       prompt,
-      promptForward,
       promptBackward,
+      promptForward,
       searchIsOpen,
       stage,
       toggleSearch,
@@ -71,9 +72,6 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
-    // TODO: Remove this workaround for the label formatter depending on prompt vars. See #305.
-    const labeledNodes = nodesForPrompt.map(n => ({ ...n, label: n[labelKey] }));
-
     return (
       <div className={baseClass}>
         <div className={`${baseClass}__prompt`}>
@@ -88,8 +86,9 @@ class NameGeneratorAutoComplete extends Component {
         <div className={`${baseClass}__nodes`}>
           <NodeList
             id={ListId}
+            label={getLabel}
             listId={`${stage.id}_${prompt.id}_${ListId}`}
-            nodes={labeledNodes}
+            nodes={nodesForPrompt}
             itemType="EXISTING_NODE"
           />
         </div>
@@ -126,17 +125,18 @@ NameGeneratorAutoComplete.propTypes = {
   addNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
+  getLabel: PropTypes.func.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
   nodeType: PropTypes.string.isRequired,
-  toggleSearch: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  promptForward: PropTypes.func.isRequired,
   searchIsOpen: PropTypes.bool.isRequired,
   stage: PropTypes.object.isRequired,
+  toggleSearch: PropTypes.func.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
@@ -151,10 +151,11 @@ function mapDispatchToProps(dispatch) {
 function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
+      excludedNodes: networkNodes(state, props),
+      getLabel: getNodeLabelFunction(state),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodeIconName: getNodeIconName(state, props),
-      excludedNodes: networkNodes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,

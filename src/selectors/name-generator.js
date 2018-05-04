@@ -2,7 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
-import { makeGetSubject, makeGetIds, makeGetAdditionalAttributes } from './interface';
+import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
 import { getExternalData, protocolRegistry } from './protocol';
 import { nextUid } from '../ducks/modules/network';
 
@@ -15,16 +15,18 @@ These selectors assume the following props:
   prompt: which contains the protocol config for the prompt
 */
 
+const defaultPanelConfiguration = {
+  title: '',
+  dataSource: 'existing',
+  filter: network => network,
+};
+
 // MemoedSelectors
 
 const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
-
-export const makeGetNodeType = () => (createSelector(
-  makeGetSubject(),
-  subject => subject && subject.type,
-));
+const propPanels = (_, props) => props.stage.panels;
 
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
@@ -85,3 +87,9 @@ export const makeGetNodeIconName = () => createSelector(
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant;
   },
 );
+
+export const makeGetPanelConfiguration = () =>
+  createSelector(
+    propPanels,
+    panels => (panels ? panels.map(panel => ({ ...defaultPanelConfiguration, ...panel })) : []),
+  );

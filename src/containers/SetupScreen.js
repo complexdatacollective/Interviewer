@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { Button } from 'network-canvas-ui';
+import { Button } from '../ui/components';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';
@@ -63,12 +63,15 @@ class Setup extends Component {
   }
 
   render() {
-    if (this.props.isProtocolLoaded) { return (<Redirect to={{ pathname: `/protocol/${this.props.protocolPath}/0` }} />); }
+    if (this.props.isProtocolLoaded) {
+      const pathname = `/protocol/${this.props.protocolType}/${this.props.protocolPath}/0`;
+      return (<Redirect to={{ pathname: `${pathname}` }} />);
+    }
 
     return (
       <div className="setup">
         <div className="setup__header">
-          <h1 className="type--title-1"><img src={logo} className="logo" alt="Network Canvas" /> Network Canvas Alpha 3 - Tiburon</h1>
+          <h1 className="type--title-1"><img src={logo} className="logo" alt="Network Canvas" /> Network Canvas Alpha 4 - Gresley</h1>
         </div>
         {this.renderImportButtons()}
         <div className="setup__start">
@@ -85,11 +88,10 @@ class Setup extends Component {
 
 Setup.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
-  importProtocol: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
+  protocolType: PropTypes.string.isRequired,
 };
 
 Setup.defaultProps = {
@@ -98,8 +100,10 @@ Setup.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    isFactory: state.protocol.isFactory,
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
+    protocolType: state.protocol.type,
   };
 }
 
@@ -107,8 +111,6 @@ function mapDispatchToProps(dispatch) {
   return {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
-    importProtocol: bindActionCreators(protocolActions.importProtocol, dispatch),
   };
 }
 
