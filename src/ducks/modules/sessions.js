@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import uuidv4 from 'uuid/v4';
 
 import network from './network';
 
@@ -22,8 +23,8 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         [action.sessionId]: {
+          ...state[action.sessionId],
           path: action.path,
-          network: state[action.sessionId].network,
         },
       };
     case REMOVE_SESSION:
@@ -33,18 +34,19 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function addSession(id, path) {
+function addSession() {
+  const id = uuidv4();
   return {
     type: ADD_SESSION,
-    sessionId: id, // TODO some unique value
-    path,
+    sessionId: id,
+    path: `/session/${id}`,
   };
 }
 
 function updateSession(id, path) {
   return {
     type: UPDATE_SESSION,
-    sessionId: id, // TODO current value
+    sessionId: id,
     path,
   };
 }
@@ -52,7 +54,7 @@ function updateSession(id, path) {
 function removeSession(id) {
   return {
     type: REMOVE_SESSION,
-    sessionId: id, // TODO current value
+    sessionId: id,
   };
 }
 

@@ -9,14 +9,16 @@ import { stages } from '../selectors/session';
 /**
   * Check protocol is loaded, and render the stage
   */
-const Protocol = ({ isProtocolLoaded, protocolPath, protocolType, stage, stageIndex }) => {
+const Protocol = (
+  { isProtocolLoaded, protocolPath, protocolType, sessionId, stage, stageIndex },
+) => {
   if (!isProtocolLoaded) { return null; }
 
   return (
     <div className="protocol">
       <TransitionGroup>
         <StageTransition key={stage.id}>
-          <Stage config={stage} pathPrefix={`/protocol/${protocolType}/${protocolPath}`} stageIndex={stageIndex} />
+          <Stage config={stage} pathPrefix={`/session/${sessionId}/${protocolType}/${protocolPath}`} stageIndex={stageIndex} />
         </StageTransition>
       </TransitionGroup>
     </div>
@@ -27,6 +29,7 @@ Protocol.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
+  sessionId: PropTypes.string.isRequired,
   stage: PropTypes.object.isRequired,
   stageIndex: PropTypes.number,
 };
@@ -41,6 +44,7 @@ function mapStateToProps(state, ownProps) {
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
+    sessionId: state.session,
     stage: stages(state)[ownProps.stageIndex] || {},
     stageIndex: Math.trunc(ownProps.stageIndex) || 0,
   };

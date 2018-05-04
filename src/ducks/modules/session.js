@@ -1,7 +1,7 @@
 const SET_SESSION = 'SET_SESSION';
 const ADD_SESSION = 'ADD_SESSION';
 
-const initialState = -1;
+const initialState = 'CREATE_NEW';
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -12,7 +12,6 @@ export default function reducer(state = initialState, action = {}) {
       return state;
   }
 }
-
 
 function setSession(id) {
   return {

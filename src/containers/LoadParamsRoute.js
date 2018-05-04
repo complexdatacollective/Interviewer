@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
+import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
@@ -16,19 +17,21 @@ class LoadParamsRoute extends Component {
       return;
     }
 
-    if (this.props.computedMatch.params &&
-      this.props.computedMatch.params.protocolId &&
-      this.props.computedMatch.params.protocolId !== this.props.protocolPath) {
-      if (this.props.computedMatch.params.protocolType === 'factory') {
-        this.props.loadFactoryProtocol(this.props.computedMatch.params.protocolId);
-      } else {
-        this.props.loadProtocol(this.props.computedMatch.params.protocolId);
+    const { params, url } = this.props.computedMatch;
+
+    if (params && params.sessionId) {
+      if (this.props.sessionId !== params.sessionId) {
+        this.props.setSession(params.sessionId);
       }
+      this.props.updateSession(params.sessionId, url);
     }
 
-    if (this.props.computedMatch.url) { // TODO check if it already exists
-      // && this.props.computedMatch.url != this.props.currentUrl) {
-      this.props.addSession(0, this.props.computedMatch.url);
+    if (params && params.protocolId && params.protocolId !== this.props.protocolPath) {
+      if (params.protocolType === 'factory') {
+        this.props.loadFactoryProtocol(params.protocolId);
+      } else {
+        this.props.loadProtocol(params.protocolId);
+      }
     }
   }
 
@@ -38,21 +41,26 @@ class LoadParamsRoute extends Component {
       return;
     }
 
-    if (nextProps.computedMatch.params &&
-        nextProps.computedMatch.params !== this.props.computedMatch.params &&
-        nextProps.computedMatch.params.protocolId &&
-        nextProps.computedMatch.params.protocolId !== this.props.protocolPath) {
-      if (nextProps.computedMatch.params.protocolType === 'factory') {
-        this.props.loadFactoryProtocol(nextProps.computedMatch.params.protocolId);
-      } else {
-        this.props.loadProtocol(nextProps.computedMatch.params.protocolId);
+    const { params: nextParams, url: nextUrl } = nextProps.computedMatch;
+    const { params } = this.props.computedMatch;
+
+    if (nextParams && nextParams.sessionId) {
+      if (this.props.sessionId !== nextParams.sessionId) {
+        this.props.setSession(nextParams.sessionId);
+      }
+
+      if (nextUrl && nextUrl !== this.props.sessionUrl) {
+        this.props.updateSession(nextParams.sessionId, nextUrl);
       }
     }
 
-    if (nextProps.computedMatch.url &&
-      nextProps.computedMatch.url !== this.props.computedMatch.url) {
-      // TODO should this sometimes be an "add" instead of "update"?
-      this.props.updateSession(0, nextProps.computedMatch.url);
+    if (nextParams && nextParams !== params && nextParams.protocolId &&
+        nextParams.protocolId !== this.props.protocolPath) {
+      if (nextParams.protocolType === 'factory') {
+        this.props.loadFactoryProtocol(nextParams.protocolId);
+      } else {
+        this.props.loadProtocol(nextParams.protocolId);
+      }
     }
   }
 
@@ -61,6 +69,7 @@ class LoadParamsRoute extends Component {
       backParam,
       component: RenderComponent,
       isSkipped,
+      sessionId,
       shouldReset,
       skipToIndex,
       ...rest
@@ -75,7 +84,7 @@ class LoadParamsRoute extends Component {
       isSkipped ?
         (<Redirect to={
           {
-            pathname: `/protocol/${protocolType}/${protocolId}/${skipToIndex}`,
+            pathname: `/session/${sessionId}/${protocolType}/${protocolId}/${skipToIndex}`,
             search: backParam,
           }}
         />) :
@@ -85,7 +94,6 @@ class LoadParamsRoute extends Component {
 }
 
 LoadParamsRoute.propTypes = {
-  addSession: PropTypes.func.isRequired,
   backParam: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
@@ -95,6 +103,9 @@ LoadParamsRoute.propTypes = {
   loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   resetState: PropTypes.func.isRequired,
+  sessionId: PropTypes.string.isRequired,
+  sessionUrl: PropTypes.string,
+  setSession: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
   skipToIndex: PropTypes.number.isRequired,
   updateSession: PropTypes.func.isRequired,
@@ -103,6 +114,7 @@ LoadParamsRoute.propTypes = {
 LoadParamsRoute.defaultProps = {
   isSkipped: false,
   protocolPath: '',
+  sessionUrl: '/setup',
   shouldReset: false,
 };
 
@@ -117,16 +129,18 @@ function mapStateToProps(state, ownProps) {
     isProtocolLoaded: state.protocol.isLoaded,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     protocolPath: state.protocol.path,
+    sessionId: state.session,
+    sessionUrl: state.sessions[state.session] && state.sessions[state.session].path,
     skipToIndex: getNextIndex(nextIndex)(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     resetState: bindActionCreators(menuActions.resetState, dispatch),
+    setSession: bindActionCreators(sessionActions.setSession, dispatch),
     updateSession: bindActionCreators(sessionsActions.updateSession, dispatch),
   };
 }

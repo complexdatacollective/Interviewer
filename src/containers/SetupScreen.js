@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+// import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { Button } from 'network-canvas-ui';
+
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+// import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -34,11 +38,17 @@ const initialValues = {
   */
 class Setup extends Component {
   onClickLoadFactoryProtocol = (protocolName) => {
+    this.props.addSession();
     this.props.loadFactoryProtocol(protocolName);
+    // TODO: to load a session looks like:
+    // const pathname = this.props.getSessionPath('somethingelse');
+    // this.props.setSession('somethingelse');
+    // this.props.loadSession(pathname);
   }
 
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
+      this.props.addSession();
       this.props.downloadProtocol(fields.protocol_url);
     }
   }
@@ -64,7 +74,7 @@ class Setup extends Component {
 
   render() {
     if (this.props.isProtocolLoaded) {
-      const pathname = `/protocol/${this.props.protocolType}/${this.props.protocolPath}/0`;
+      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/0`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -87,11 +97,16 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
+  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
+  // getSessionPath: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
+  // loadSession: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
+  sessionId: PropTypes.string.isRequired,
+  // setSession: PropTypes.func.isRequired,
 };
 
 Setup.defaultProps = {
@@ -100,17 +115,22 @@ Setup.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    // getSessionPath: sessionId => state.sessions[sessionId].path,
     isFactory: state.protocol.isFactory,
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
+    sessionId: state.session,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    // loadSession: path => dispatch(push(path)),
+    // setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }
 
