@@ -8,14 +8,13 @@ const ProtocolCardList = ({ protocols, download }) => (
   <div className="protocol-card-list">
     <div className="protocol-card-list__prefix" />
     <Scroller className="protocol-card-list__scroller">
-      <div className="protocol-card-list__left-border" />
+      <div key="left-border" className="protocol-card-list__left-border" />
       {
         protocols.map(protocol => (
-          <div className="protocol-card-list__bordered-card">
+          <div className="protocol-card-list__bordered-card" key={protocol.downloadUrl}>
             <div className="protocol-card-list__card-border" />
             <ProtocolCard
               className="protocol-card-list__card"
-              key={protocol.downloadUrl}
               download={download}
               protocol={protocol}
             />

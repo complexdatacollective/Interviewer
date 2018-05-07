@@ -91,9 +91,7 @@ class ServerPairing extends Component {
           />
         }
         {
-          protocols && (
-            <ProtocolCardList protocols={protocols} download={downloadProtocol} />
-          )
+          protocols && <ProtocolCardList protocols={protocols} download={downloadProtocol} />
         }
       </div>
     );

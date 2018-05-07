@@ -17,9 +17,9 @@ $font-path: '../ui/assets/fonts';
    }
 }
 
-// CSS variableoverrides for Network Canvas
 :root {
-  --body-font-family: #{$netcanvas-font-stack};
+  --body-font-family: #{$netcanvas-font-stack}; // override Network Canvas UI
+  --code-font: courier;
 }
 
 html,

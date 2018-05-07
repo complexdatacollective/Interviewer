@@ -1,0 +1,41 @@
+.pairing-code-input {
+  &__characters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__character {
+    --character-padding: .25rem;
+    appearance: none;
+    border-color: var(--color-navy-taupe);
+    border-radius: .25rem;
+    flex-basis: 8%; // balanced spacing/width for ~12 chars
+    font-family: var(--code-font);
+    font-size: 2rem;
+    font-weight: medium;
+    padding: var(--character-padding) 0;
+    text-align: center;
+    width: calc(1rem + var(--character-padding) * 2);
+
+    &--error {
+      background-color: var(--color-neon-carrot);
+    }
+  }
+
+  &__clear {
+    color: var(--color-platinum--dark);
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-size: 12px; // match button--small
+    letter-spacing: 3px; // match button
+    margin: 1.35rem 0; // match button padding
+    text-transform: uppercase;
+
+    &:hover {
+      color: var(--color-white);
+    }
+  }
+}

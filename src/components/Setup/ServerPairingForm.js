@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import PairingCodeInput from './PairingCodeInput';
 import { Button } from '../../ui/components';
+
+// TODO: Share with Server
+const charCount = 12;
 
 class ServerPairingForm extends Component {
   constructor(props) {
@@ -9,12 +13,16 @@ class ServerPairingForm extends Component {
     this.state = { pairingCode: '' };
   }
 
-  onPairingInputChange = (evt) => {
-    this.setState({ pairingCode: evt.target.value });
+  setPairingCode = (pairingCode) => {
+    this.setState({
+      pairingCode,
+      submittable: pairingCode.length === charCount,
+    });
   }
 
   render() {
     const { completePairing, disabled, ...props } = this.props;
+    const { submittable } = this.state;
     return (
       <form
         className="pairing-form"
@@ -31,20 +39,19 @@ class ServerPairingForm extends Component {
         </p>
         <p>Please type the number shown on the Server setup screen into the box below.</p>
 
-        <input
-          autoCapitalize="off"
-          autoComplete="off"
-          autoCorrect="off"
-          className="pairing-form__input"
-          disabled={disabled}
-          type="text"
-          value={this.state.pairingCode}
-          onChange={this.onPairingInputChange}
-        />
+        <fieldset className="pairing-form__fields">
+          <PairingCodeInput
+            charCount={charCount}
+            disabled={disabled}
+            setPairingCode={this.setPairingCode}
+          />
 
-        <Button disabled={disabled} size="small">
-          Pair
-        </Button>
+          <div className="pairing-form__submit">
+            <Button disabled={disabled || !submittable} size="small">
+              Pair
+            </Button>
+          </div>
+        </fieldset>
       </form>
     );
   }
