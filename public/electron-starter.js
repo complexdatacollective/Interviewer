@@ -77,6 +77,13 @@ function createMenu() {
         { type: 'separator' },
         { role: 'selectall' }
       ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'toggledevtools' }
+      ]
     }
   ];
   if (!isMacOS()) {
