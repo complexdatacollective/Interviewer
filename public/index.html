@@ -2,7 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* *; img-src asset: 'self' android-webview-video-poster: data: cdvfile: file:; media-src 'self' asset: cdvfile: file: data:; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'; font-src 'self' gap://ready file://* http://* https://* 'unsafe-inline' 'unsafe-eval' data:">
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src gap://ready file://* *;
+      connect-src data: *;
+      img-src asset: 'self' android-webview-video-poster: data: cdvfile: file:;
+      media-src 'self' asset: cdvfile: file: data:;
+      style-src 'self' http://* https://* 'unsafe-inline';
+      script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval';
+      font-src 'self' gap://ready file://* http://* https://* 'unsafe-inline' 'unsafe-eval' data:"
+    />
     <meta name="viewport" content="viewport-fit=cover, initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/icons/netCanvas-icon.ico">
     <title>Network Canvas</title>
