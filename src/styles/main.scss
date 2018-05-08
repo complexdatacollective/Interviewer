@@ -24,6 +24,7 @@ $font-path: '../ui/assets/fonts';
 
 html,
 body {
+  cursor: default;
   overflow: hidden;
   user-select: none;
   color: palette('text');
