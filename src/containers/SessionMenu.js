@@ -9,7 +9,7 @@ import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { sessionMenuIsOpen } from '../selectors/session';
-import { isCordova, isElectron, isMacOS } from '../utils/Environment';
+import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
@@ -132,10 +132,6 @@ class SessionMenu extends Component {
         this.props.openModal('UPDATE_DIALOG');
       });
     });
-
-    if (isElectron()) {
-      this.registerPlatformShortcuts();
-    }
   }
 
   componentWillMount() {
@@ -169,34 +165,6 @@ class SessionMenu extends Component {
     // TODO: implement progress updates/loader
     // Trigger the download. Returns promise.
     updater.downloadUpdate();
-  }
-
-  registerShortcut = (accelerator, callback) => {
-    if (!isElectron()) return;
-
-    const electron = window.require('electron');
-    const register = () => electron.remote.globalShortcut.register(accelerator, callback);
-    const unregister = () => electron.remote.globalShortcut.unregister(accelerator, callback);
-
-    electron.remote.getCurrentWindow().on('ready', register);
-
-    // register and unregister on focus/blur so the shortcut is not so aggressive
-    electron.remote.getCurrentWindow().on('focus', register);
-    electron.remote.getCurrentWindow().on('blur', unregister);
-
-    window.onbeforeunload = () => {
-      unregister();
-      // remove listeners since this renderer window is going away
-      electron.remote.getCurrentWindow().removeAllListeners();
-    };
-  }
-
-  registerPlatformShortcuts = () => {
-    if (isMacOS()) {
-      this.registerShortcut('Cmd+Option+I', this.toggleDevTools);
-    } else {
-      this.registerShortcut('Ctrl+Shift+I', this.toggleDevTools);
-    }
   }
 
   toggleDevTools = () => {
