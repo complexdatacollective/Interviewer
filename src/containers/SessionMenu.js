@@ -8,6 +8,7 @@ import xss from 'xss';
 import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { getNetwork } from '../selectors/interface';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron, isMacOS } from '../utils/Environment';
 import { Menu } from '../components';
@@ -303,7 +304,7 @@ function mapStateToProps(state) {
   return {
     customItems: state.menu.customMenuItems,
     isOpen: sessionMenuIsOpen(state),
-    currentNetwork: state.network,
+    currentNetwork: getNetwork(state),
   };
 }
 

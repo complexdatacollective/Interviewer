@@ -24,14 +24,20 @@ const propPromptId = (_, props) => props.prompt.id;
 
 // MemoedSelectors
 
+export const getNetwork = createDeepEqualSelector(
+  state => (state.sessions[state.session] && state.sessions[state.session].network) ||
+    { nodes: [], edges: [] },
+  network => network,
+);
+
 export const networkNodes = createDeepEqualSelector(
-  state => state.network.nodes,
-  nodes => nodes,
+  getNetwork,
+  network => network.nodes,
 );
 
 export const networkEdges = createDeepEqualSelector(
-  state => state.network.edges,
-  nodes => nodes,
+  getNetwork,
+  network => network.edges,
 );
 
 export const makeGetIds = () =>
