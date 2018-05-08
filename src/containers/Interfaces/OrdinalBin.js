@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper } from '../';
+import { PromptSwiper, OrdinalBins } from '../';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { OrdinalBin } from '../../components';
+import { OrdinalBinBucket } from '../../components';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
 
 
@@ -40,9 +40,8 @@ class OrdinalScale extends Component {
             prompts={prompts}
           />
         </div>
-        <div className="ordinal-bin-interface__nodes" />
-        <div className="ordinal-bin-interface__ordinalScale">
-          <OrdinalBin
+        <div className="ordinal-bin-interface__bucket">
+          <OrdinalBinBucket
             nodes={nodesForPrompt}
             label={label}
             listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
@@ -52,6 +51,9 @@ class OrdinalScale extends Component {
             onDrop={this.onDrop}
             onSelect={this.onSelectNode}
           />
+        </div>
+        <div className="ordinal-bin-interface__ordinalScale">
+          <OrdinalBins stage={stage} prompt={prompt} />
         </div>
       </div>
     );

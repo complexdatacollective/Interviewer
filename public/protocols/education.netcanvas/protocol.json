@@ -535,7 +535,7 @@
     },
     {
       "id": "ordinalBin1",
-      "type": "OrdinalScale",
+      "type": "OrdinalBin",
       "label": "Contact Freq.",
       "subject": {
         "entity": "node",
@@ -544,8 +544,9 @@
       "prompts": [
         {
           "id": "contactFreq",
-          "title": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
+          "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
           "variable": "contact_freq",
+          "//": "Ordinal variables have valid options defined in variable registry - following prop is for overriding",
           "bins": {
             "values": {
               "Last 24 hours": 4,

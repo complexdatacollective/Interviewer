@@ -3,8 +3,8 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
-import { Node } from 'network-canvas-ui';
 import { TransitionGroup } from 'react-transition-group';
+import { Node } from '../ui/components/';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -20,7 +20,7 @@ const EnhancedNode = DragSource(selectable(Node));
 /**
   * Renders a list of Node.
   */
-class OrdinalBin extends Component {
+class OrdinalBinBucket extends Component {
   constructor(props) {
     super(props);
 
@@ -127,7 +127,7 @@ class OrdinalBin extends Component {
   }
 }
 
-OrdinalBin.propTypes = {
+OrdinalBinBucket.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
   onSelect: PropTypes.func,
@@ -141,7 +141,7 @@ OrdinalBin.propTypes = {
   scrollTop: PropTypes.func,
 };
 
-OrdinalBin.defaultProps = {
+OrdinalBinBucket.defaultProps = {
   nodes: [],
   nodeColor: '',
   label: () => (''),
@@ -161,4 +161,4 @@ export default compose(
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
   scrollable,
-)(OrdinalBin);
+)(OrdinalBinBucket);

@@ -13,7 +13,7 @@ export { default as Dialog } from './Dialog';
 export { default as Modal } from './Modal';
 export { default as MenuItem } from './MenuItem';
 export { default as NodeList } from './NodeList';
-export { default as OrdinalBin } from './OrdinalBin';
+export { default as OrdinalBinBucket } from './OrdinalBinBucket';
 export { default as Panels } from './Panels';
 export { default as Panel } from './Panel';
 export { default as DropZone } from './DropZone';
