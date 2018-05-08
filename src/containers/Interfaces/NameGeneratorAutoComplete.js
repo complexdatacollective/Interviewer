@@ -7,7 +7,7 @@ import { Icon } from 'network-canvas-ui';
 
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { getNodeLabelFunction, makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
@@ -33,7 +33,7 @@ class NameGeneratorAutoComplete extends Component {
   }
 
   onSearchComplete(selectedResults) {
-    this.props.addNodes(selectedResults, this.props.newNodeAttributes);
+    this.props.addNodes(this.props.sessionId, selectedResults, this.props.newNodeAttributes);
     this.props.closeSearch();
   }
 
@@ -135,6 +135,7 @@ NameGeneratorAutoComplete.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
   searchIsOpen: PropTypes.bool.isRequired,
+  sessionId: PropTypes.string.isRequired,
   stage: PropTypes.object.isRequired,
   toggleSearch: PropTypes.func.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
@@ -142,7 +143,7 @@ NameGeneratorAutoComplete.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodes: bindActionCreators(networkActions.addNodes, dispatch),
+    addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };
@@ -159,6 +160,7 @@ function makeMapStateToProps() {
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
+      sessionId: state.session,
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };

@@ -7,7 +7,7 @@ import { isEqual, isEmpty, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 
 const watchProps = ['width', 'height', 'dropCount'];
@@ -28,7 +28,7 @@ const dropHandlers = compose(
   withHandlers({
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
-      props.updateNode({
+      props.updateNode(props.sessionId, {
         uid: item.meta.uid,
         [props.layoutVariable]: relativeCoords(props, item),
       });
@@ -39,7 +39,7 @@ const dropHandlers = compose(
     onDrag: props => (item) => {
       if (!has(item.meta, props.layoutVariable)) { return; }
 
-      props.updateNode({
+      props.updateNode(props.sessionId, {
         uid: item.meta.uid,
         [props.layoutVariable]: relativeCoords(props, item),
       });
@@ -50,6 +50,7 @@ const dropHandlers = compose(
 class NodeLayout extends Component {
   static propTypes = {
     nodes: PropTypes.array,
+    sessionId: PropTypes.string.isRequired,
     toggleEdge: PropTypes.func.isRequired,
     toggleHighlight: PropTypes.func.isRequired,
     ...sociogramOptionsProps,
@@ -102,7 +103,7 @@ class NodeLayout extends Component {
     }
 
     if (connectFrom !== nodeId) {
-      this.props.toggleEdge({
+      this.props.toggleEdge(this.props.sessionId, {
         from: connectFrom,
         to: nodeId,
         type: createEdge,
@@ -116,6 +117,7 @@ class NodeLayout extends Component {
     if (!this.props.allowHighlighting) { return; }
 
     this.props.toggleHighlight(
+      this.props.sessionId,
       nodeId,
       { ...this.props.highlightAttributes },
     );
@@ -172,6 +174,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       nodes: getPlacedNodes(state, props),
+      sessionId: state.session,
       ...getSociogramOptions(state, props),
     };
   };
@@ -179,9 +182,9 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleHighlight: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
-    toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    toggleHighlight: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    toggleEdge: bindActionCreators(sessionsActions.toggleEdge, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

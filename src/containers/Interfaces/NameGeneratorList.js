@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
 import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
@@ -28,11 +28,11 @@ class NameGeneratorList extends Component {
    * New node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+    this.props.addNode(this.props.sessionId, { ...node, ...this.props.newNodeAttributes });
   }
 
   onRemoveNode = (item) => {
-    this.props.removeNode(item.uid);
+    this.props.removeNode(this.props.sessionId, item.uid);
   }
 
   label = node => `${node[this.props.labelKey]}`;
@@ -97,6 +97,7 @@ NameGeneratorList.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
   selectedNodes: PropTypes.array.isRequired,
+  sessionId: PropTypes.string.isRequired,
   sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
@@ -124,6 +125,7 @@ function makeMapStateToProps() {
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
       selectedNodes: networkNodes(state),
+      sessionId: state.session,
       sortFields: getSortFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
@@ -132,8 +134,8 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNodes, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
+    addNode: bindActionCreators(sessionsActions.addNodes, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

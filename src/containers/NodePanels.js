@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { includes, map, differenceBy } from 'lodash';
 import { getNodeLabelFunction, networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
 import { getExternalData } from '../selectors/protocol';
-import { actionCreators as networkActions } from '../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -37,6 +37,7 @@ class NodePanels extends PureComponent {
     prompt: PropTypes.object,
     newNodeAttributes: PropTypes.object.isRequired,
     removeNode: PropTypes.func.isRequired,
+    sessionId: PropTypes.string.isRequired,
     stage: PropTypes.object,
     toggleNodeAttributes: PropTypes.func.isRequired,
   };
@@ -51,9 +52,10 @@ class NodePanels extends PureComponent {
 
   onDrop = ({ meta }, dataSource) => {
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(meta.uid, { ...this.props.activePromptAttributes });
+      this.props.toggleNodeAttributes(this.props.sessionId, meta.uid,
+        { ...this.props.activePromptAttributes });
     } else {
-      this.props.removeNode(meta.uid);
+      this.props.removeNode(this.props.sessionId, meta.uid);
     }
   }
 
@@ -170,14 +172,15 @@ function makeMapStateToProps() {
       getLabel: getNodeLabelFunction(state),
       newNodeAttributes,
       panels,
+      sessionId: state.session,
     };
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
+    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

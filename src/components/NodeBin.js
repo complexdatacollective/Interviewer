@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { actionCreators as networkActions } from '../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
@@ -33,17 +33,23 @@ NodeBin.defaultProps = {
   willAccept: false,
 };
 
+function mapStateToProps(state) {
+  return {
+    sessionId: state.session,
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withProps(props => ({
     accepts: ({ meta }) => meta.itemType === 'EXISTING_NODE',
-    onDrop: ({ meta }) => props.removeNode(meta.uid),
+    onDrop: ({ meta }) => props.removeNode(props.sessionId, meta.uid),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
