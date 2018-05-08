@@ -38,7 +38,7 @@ const fromHex = hex => libsodium.from_hex(hex);
  * @param  {string} pairingCode read by user from GUI and entered into a client device
  * @param  {Uint8Array} salt
  * @return {Uint8Array} raw bytes of the secret key
- * @throws
+ * @throws {RangeError|TypeError} If input invalid
  */
 const deriveSecretKeyBytes = (pairingCode, saltBytes) => {
   if (!pairingCode) {

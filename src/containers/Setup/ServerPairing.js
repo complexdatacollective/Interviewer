@@ -4,10 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from '../../utils/cipher';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { Scroller } from '../../components';
 import { ProtocolCard, ServerCard, ServerPairingForm } from '../../components/Setup';
+import ApiClient from '../../utils/ApiClient';
+
+// TODO: user-friendly error messaging
+const handleApiError = err => console.error(err); // eslint-disable-line no-console
 
 class ServerPairing extends Component {
   constructor(props) {
@@ -16,75 +19,33 @@ class ServerPairing extends Component {
   }
 
   componentDidMount() {
+    this.apiClient = new ApiClient(this.props.server.apiUrl);
     this.requestPairingCode();
   }
 
-  get apiUrl() {
-    return this.props.server.apiUrl;
-  }
-
   requestPairingCode() {
-    fetch(`${this.apiUrl}/devices/new`)
-      .then((resp) => {
-        if (!resp.ok) { throw new Error('response not ok'); }
-        return resp.json();
-      })
-      .then((json) => {
-        console.log(json);
-        if (!json.data.pairingRequestId) { throw new Error('Unexpected response'); }
+    this.apiClient.requestPairing()
+      .then((data) => {
         this.setState({
-          pairingRequestId: json.data.pairingRequestId,
-          pairingRequestSalt: json.data.salt,
+          pairingRequestId: data.pairingRequestId,
+          pairingRequestSalt: data.salt,
         });
-        console.info('Enter the pairing code');
       })
-      .catch(console.error);
+      .catch(handleApiError);
   }
 
   // Pairing step 2: derive a secret, send (encrypted) to server
-  // TODO: higher-level API for pairing
   confirmPairing = () => {
     const { pairingCode, pairingRequestId, pairingRequestSalt } = this.state;
-    const saltBytes = fromHex(pairingRequestSalt);
-    const secretBytes = deriveSecretKeyBytes(pairingCode, saltBytes);
-    const secretHex = toHex(secretBytes);
-
-    const plaintext = JSON.stringify({
-      pairingRequestId,
-      pairingCode,
-    });
-
-    const encryptedMessage = encrypt(plaintext, secretHex);
-    console.log('encrypted payload', encryptedMessage);
-
-    fetch(`${this.apiUrl}/devices`,
-      {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: encryptedMessage,
-        }),
-      })
-      .then((resp) => {
-        if (!resp.ok) { throw new Error('response not ok'); }
-        return resp.json();
-      })
-      .then(json => decrypt(json.data.message, secretHex))
-      .then(JSON.parse)
-      .then((decryptedData) => {
-        console.log('device can be paired', decryptedData);
+    this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt)
+      .then((device) => {
         // TODO: Here's the point we'd want to persist ID + secret above
         this.setState({
-          pairedDeviceId: decryptedData.device.id,
+          pairedDeviceId: device.id,
         });
       })
-      .then(() => {
-        this.fetchProtocolList();
-      })
-      .catch(console.error)
+      .then(this.fetchProtocolList)
+      .catch(handleApiError)
       .then(() => {
         this.setState({
           loading: false,
@@ -95,21 +56,17 @@ class ServerPairing extends Component {
   }
 
   fetchProtocolList = () => {
-    fetch(`${this.apiUrl}/protocols`)
-      .then((resp) => {
-        if (!resp.ok) { throw new Error('response not ok'); }
-        return resp.json();
-      })
-      .then((json) => {
-        console.log('protocols response', json);
-        this.setState({ protocols: json.data });
-      })
-      .catch(console.error);
+    this.apiClient.getProtocols()
+      .then(protocols => this.setState({ protocols }))
+      .catch(handleApiError);
   }
 
   completePairing = (pairingCode) => {
     this.setState(
-      { loading: true, pairingCode },
+      {
+        loading: true,
+        pairingCode,
+      },
       () => setTimeout(this.confirmPairing, 0),
     );
   }
@@ -128,19 +85,26 @@ class ServerPairing extends Component {
         <ServerCard className="server-pairing__card" data={server}>{server.name}</ServerCard>
         {
           this.state.pairingRequestId &&
-          <ServerPairingForm className="server-pairing__form" completePairing={this.completePairing} loading={this.state.loading} />
+          <ServerPairingForm
+            className="server-pairing__form"
+            completePairing={this.completePairing}
+            disabled={this.state.loading}
+          />
         }
-        <Scroller className="server-pairing__protocol-list">
-          {
-            protocols && protocols.map(protocol => (
-              <ProtocolCard
-                key={protocol.downloadUrl}
-                download={this.props.downloadProtocol}
-                protocol={protocol}
-              />
-            ))
-          }
-        </Scroller>
+        {
+          protocols &&
+          <Scroller className="server-pairing__protocol-list">
+            {
+              protocols.map(protocol => (
+                <ProtocolCard
+                  key={protocol.downloadUrl}
+                  download={this.props.downloadProtocol}
+                  protocol={protocol}
+                />
+              ))
+            }
+          </Scroller>
+        }
       </div>
     );
   }

@@ -12,13 +12,7 @@ class ProtocolImport extends PureComponent {
   }
 
   selectServer = (server) => {
-    if (server.apiUrl) {
-      this.setState({ selectedServer: server });
-    } else {
-      // TODO: This happens occasionally. Deal with this in discovery util (don't emit) or
-      // list (make unclickable)
-      console.warn('Server has no apiUrl');
-    }
+    this.setState({ selectedServer: server });
   }
 
   render() {
