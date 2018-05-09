@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { map, orderBy, filter, has } from 'lodash';
-import { createSelector } from 'reselect';
-import { NodeList } from '../components';
-import { actionCreators as networkActions } from '../ducks/modules/network';
-import { makeNetworkNodesOfStageType } from '../selectors/interface';
+import { map, orderBy } from 'lodash';
 
-const OrdinalBins = ({ prompt, nodes, onDropNode }) => {
+const OrdinalBins = ({ prompt }) => {
   const binValues = orderBy(
-    map(prompt.bins.values,
+    map(prompt.bins,
       (value, title) => [title, value],
     ),
     titleValuePair => titleValuePair[1],
@@ -18,87 +12,34 @@ const OrdinalBins = ({ prompt, nodes, onDropNode }) => {
   );
 
   const bins = binValues.map(
-    (binValue, index) => (
+    binValue => (
       <Bin
         title={binValue[0]}
-        count={binValues.length}
-        index={index}
-        key={index}
         value={binValue[1]}
-        nodes={nodes}
-        onDropNode={onDropNode}
       />
     ),
   );
 
-  return ({ bins });
-};
-
-const Bin = ({ title, index, value, count, nodes, onDropNode }) => {
-  const keyWithValue = value > 0 ? index + 1 : 0;
-  const ordinalBinName = `ORDINAL_BIN-${index}`;
-  const binNodes = filter(nodes, node => node.bin === ordinalBinName);
-
   return (
-    <div className={`ordinal-bin__bin ordinal-bin__bin--${count}-${keyWithValue}`}>
-      <div className={`ordinal-bin__bin--title ordinal-bin__bin--title--${count}-${keyWithValue}`}>{title}</div>
-      <div className={`ordinal-bin__bin--content ordinal-bin__bin--content--${count}-${keyWithValue}`}>
-        <NodeList
-          nodes={binNodes}
-          droppableName={ordinalBinName}
-          acceptsDraggableType="POSITIONED_NODE"
-          draggableType="POSITIONED_NODE"
-          styled={false}
-          handleDropNode={(hits, node) => onDropNode(hits, null, node)}
-          label={node => `${node.nickname}`}
-        />
-      </div>
+    <div>
+      { bins }
     </div>
   );
 };
 
-Bin.propTypes = {
-  onDropNode: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-  count: PropTypes.number.isRequired,
-  nodes: PropTypes.array,
-};
+const Bin = ({ title }) => (
+  <div className="ordinal-bin__bin">
+    <div className="ordinal-bin__bin--title">{title}</div>
+    <div className="ordinal-bin__bin--content" />
+  </div>
+);
 
-Bin.defaultProps = {
-  nodes: [],
+Bin.propTypes = {
+  title: PropTypes.string.isRequired,
 };
 
 OrdinalBins.propTypes = {
-  nodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
-  onDropNode: PropTypes.func.isRequired,
 };
 
-const makeGetPlacedNodes = () => {
-  const networkNodesOfStageType = makeNetworkNodesOfStageType();
-
-  return createSelector(
-    [networkNodesOfStageType],
-    nodes => filter(nodes, node => has(node, 'bin')),
-  );
-};
-
-function makeMapStateToProps() {
-  const getPlacedNodes = makeGetPlacedNodes();
-
-  return function mapStateToProps(state, props) {
-    return {
-      nodes: getPlacedNodes(state, props),
-    };
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
-  };
-}
-
-export default connect(makeMapStateToProps, mapDispatchToProps)(OrdinalBins);
+export default OrdinalBins;

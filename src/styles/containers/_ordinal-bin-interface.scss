@@ -31,22 +31,6 @@
     }
   }
 
-  &__panels {
-    flex: 0 0 auto;
-    height: 100%;
-    max-height: 80vh; // Fix for Safari abs. positioned flex box child bug.
-    display: flex;
-  }
-
-  &__add-person {
-    @include svg-button('../images/add-a-person.svg');
-    position: absolute;
-    bottom: 35px;
-    right: 35px;
-    width: 140px;
-    height: 120px;
-    z-index: 1000;
-  }
 
   &__node-bin {
     position: absolute;

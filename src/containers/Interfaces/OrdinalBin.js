@@ -13,10 +13,10 @@ import { actionCreators as networkActions } from '../../ducks/modules/network';
 const label = node => `${node.nickname}`;
 
 /**
-  * OrdinalScale Interface
+  * OrdinalBin Interface
   * @extends Component
   */
-class OrdinalScale extends Component {
+class OrdinalBin extends Component {
   render() {
     const {
       promptForward,
@@ -52,7 +52,7 @@ class OrdinalScale extends Component {
             onSelect={this.onSelectNode}
           />
         </div>
-        <div className="ordinal-bin-interface__ordinalScale">
+        <div className="ordinal-bin-interface__OrdinalBin">
           <OrdinalBins stage={stage} prompt={prompt} />
         </div>
       </div>
@@ -60,7 +60,7 @@ class OrdinalScale extends Component {
   }
 }
 
-OrdinalScale.propTypes = {
+OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -87,5 +87,5 @@ function mapDispatchToProps(dispatch) {
 export default compose(
   withPrompt,
   connect(makeMapStateToProps, mapDispatchToProps),
-)(OrdinalScale);
+)(OrdinalBin);
 

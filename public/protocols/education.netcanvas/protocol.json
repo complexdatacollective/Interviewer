@@ -548,13 +548,11 @@
           "variable": "contact_freq",
           "//": "Ordinal variables have valid options defined in variable registry - following prop is for overriding",
           "bins": {
-            "values": {
-              "Last 24 hours": 4,
-              "Last week": 3,
-              "Last six months": 2,
-              "Last two years": 1,
-              "Over two years ago": -1
-            }
+            "Last 24 hours": 4,
+            "Last week": 3,
+            "Last six months": 2,
+            "Last two years": 1,
+            "Over two years ago": -1
           }
         }
       ]
