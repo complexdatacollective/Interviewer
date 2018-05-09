@@ -1,0 +1,45 @@
+.protocol-card-list {
+  --border-color: var(--color-neon-carrot--dark);
+  --card-height: 5rem;
+
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+
+  &__scroller {
+    position: relative;
+  }
+
+  &__prefix {
+    border-bottom: 2px solid var(--border-color);
+    height: 0;
+    margin-top: 80px;
+    width: 1rem;
+  }
+
+  &__left-border {
+    border-left: 2px solid var(--border-color);
+    height: calc(100% - var(--card-height));
+    margin: calc(.5 * var(--card-height)) 0;
+    position: absolute;
+  }
+
+  &__bordered-card {
+    display: flex;
+    flex-direction: row;
+    height: var(--card-height);
+    margin-bottom: spacing(medium);
+  }
+
+  &__card-border {
+    border-top: 2px solid var(--border-color);
+    flex: none;
+    margin-top: calc(.5 * var(--card-height));
+    top: 50%;
+    width: 2rem;
+  }
+
+  &__card {
+    flex: auto;
+  }
+}

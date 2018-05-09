@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button, Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
-import { ServerCard } from '../../components/Setup';
+import ServerCard from '../../components/Setup/ServerCard';
 
 class ServerList extends Component {
   constructor() {

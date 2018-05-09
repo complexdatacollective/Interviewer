@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { Scroller } from '../../components';
-import { ProtocolCard, ServerCard, ServerPairingForm } from '../../components/Setup';
+import { ProtocolCardList, ServerCard, ServerPairingForm } from '../../components/Setup';
 import ApiClient from '../../utils/ApiClient';
 
 // TODO: user-friendly error messaging
@@ -77,7 +76,7 @@ class ServerPairing extends Component {
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
-    const { server } = this.props;
+    const { server, downloadProtocol } = this.props;
     const { protocols } = this.state;
 
     return (
@@ -92,18 +91,9 @@ class ServerPairing extends Component {
           />
         }
         {
-          protocols &&
-          <Scroller className="server-pairing__protocol-list">
-            {
-              protocols.map(protocol => (
-                <ProtocolCard
-                  key={protocol.downloadUrl}
-                  download={this.props.downloadProtocol}
-                  protocol={protocol}
-                />
-              ))
-            }
-          </Scroller>
+          protocols && (
+            <ProtocolCardList protocols={protocols} download={downloadProtocol} />
+          )
         }
       </div>
     );

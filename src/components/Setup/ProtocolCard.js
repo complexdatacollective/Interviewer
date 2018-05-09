@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Icon } from '../../ui/components';
 
-const ProtocolCard = ({ protocol, download }) => (
-  <div className="protocol-card" onClick={() => download(protocol.downloadUrl)}>
-    <Icon className="protocol-card__icon" name="menu-default-interface" />
+const ProtocolCard = ({ protocol, download, className }) => (
+  <div className={`protocol-card ${className}`} onClick={() => download(protocol.downloadUrl)}>
+    <Icon className="protocol-card__icon" name="add-a-screen" />
     <div className="protocol-card__labels">
       <h3 className="protocol-card__name">{protocol.name}</h3>
       <p className="protocol-card__version">{protocol.version}</p>
@@ -14,10 +14,12 @@ const ProtocolCard = ({ protocol, download }) => (
 );
 
 ProtocolCard.defaultProps = {
+  className: '',
   download: () => {},
 };
 
 ProtocolCard.propTypes = {
+  className: PropTypes.string,
   download: PropTypes.func,
   protocol: PropTypes.shape({
     name: PropTypes.string.isRequired,

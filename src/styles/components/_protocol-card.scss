@@ -5,17 +5,24 @@
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  margin-bottom: spacing(medium);
   padding: spacing(large);
 
   &__icon {
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex: none;
+
+    // Override position & display of the 'add-a-screen' icon.
+    // TODO: does this deserve its own svg?
+    clip-path: circle(40px at 54px 74px);
+    margin: -6px -40px 0;
+
+    .cls-1,
+    .cls-2 {
+      display: none;
+    }
   }
 
   &__labels {
     flex: auto;
-    padding-left: spacing(large);
   }
 
   &__name {
