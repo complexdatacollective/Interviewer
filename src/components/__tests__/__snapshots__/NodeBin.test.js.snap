@@ -28,6 +28,7 @@ ShallowWrapper {
     "nodeType": "function",
     "props": Object {
       "removeNode": [Function],
+      "sessionId": undefined,
       "store": Object {
         "dispatch": [Function],
         "getState": [Function],
@@ -47,6 +48,7 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "removeNode": [Function],
+        "sessionId": undefined,
         "store": Object {
           "dispatch": [Function],
           "getState": [Function],
