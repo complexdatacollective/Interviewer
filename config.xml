@@ -37,6 +37,7 @@
         <icon height="144" src="www/icons/ios/NC-Square-144.png" width="144" />
         <icon height="152" src="www/icons/ios/NC-Square-152.png" width="152" />
         <icon height="167" src="www/icons/ios/NC-Square-167.png" width="167" />
+        <icon height="1024" src="www/icons/ios/NC-Square-1024.png" width="1024" />
         <splash src="www/icons/ios/Default@2x~universal~anyany.png" />
     </platform>
     <feature name="CDVWKWebViewEngine">

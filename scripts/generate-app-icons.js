@@ -8,30 +8,30 @@ const icongen = require('icon-gen');
 let jobs = [
   {
     type:'cordova',
-    inputFile: './assets/icons/round/NC-Round.svg',
+    inputFile: 'assets/icons/NC-Flat.svg',
     outputPath: './public/icons/android/',
-    sizes: [36,48,72,96,144,192],
+    sizes: [36, 48, 72, 96, 144, 192],
     fileName: 'NC-Round-',
     append: ['ldpi','mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']
   },
   {
     type:'cordova',
-    inputFile: './assets/icons/square/NC-Square.svg',
+    inputFile: './assets/icons/NC-iOS.svg',
     outputPath: './public/icons/ios/',
-    sizes: [76,152,40,80,72,144,50,100,167],
+    sizes: [76, 152, 40, 80, 72, 144, 50, 100, 167, 1024],
     fileName: 'NC-Square-',
     append: 'size'
 
   },
   {
     type:'electron',
-    inputFile: 'assets/icons/round/NC-Round.svg',
-    outputPath: 'assets/icons/round',
+    inputFile: 'assets/icons/NC-Desktop.svg',
+    outputPath: 'build-resources',
     options: {
       modes: ['ico', 'icns'], //all
       names: {
-        ico: 'round',
-        icns: 'round'
+        ico: 'icon',
+        icns: 'icon'
       },
       report: true,
     }
