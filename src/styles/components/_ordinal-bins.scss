@@ -1,36 +1,31 @@
-@mixin generate-bins($number) {
-  @for $number from 2 through 6 {
+// @mixin generate-bins($number) {
+//   @for $number from 2 through 6 {
 
-    &__bin {
-      flex-basis:
-      display: flex;
-      flex-direction: column;
-      margin: 0 0 100px;
-      overflow: hidden;
-      width: 100%;
-      border-bottom: 20px solid;
 
-      &--title {
-        height: 100px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+//   }
+// }
 
-      &--content {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-}
-
-.ordinal-bins {
-  @include generate-bins(5);
+.ordinal-bin {
   display: flex;
-  flex-direction: row;
-  width: 100%;
+  flex-direction: column;
   height: 100%;
+  border-bottom: 20px solid palette('primary');
+  flex: 1;
+
+  &--title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: palette('primary');
+  }
+
+  &--content {
+    display: flex;
+    flex: 1;
+    flex-grow: 5;
+    align-items: center;
+    justify-content: center;
+    background: palette('light-background');
+  }
 }

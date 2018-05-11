@@ -52,7 +52,7 @@ class OrdinalBin extends Component {
             onSelect={this.onSelectNode}
           />
         </div>
-        <div className="ordinal-bin-interface__OrdinalBin">
+        <div className="ordinal-bin-interface__bins">
           <OrdinalBins stage={stage} prompt={prompt} />
         </div>
       </div>

@@ -12,10 +12,12 @@
     @include interface-prompt;
   }
 
-  &__main {
-    flex: 1 auto;
+  &__bucket {
     display: flex;
-    justify-content: center;
+  }
+
+  &__bins {
+    display: flex;
     align-items: flex-start;
     height: 100%;
     position: relative;
@@ -32,11 +34,5 @@
   }
 
 
-  &__node-bin {
-    position: absolute;
-    bottom: 35px;
-    left: 35px;
-    z-index: 1000;
-  }
 
 }

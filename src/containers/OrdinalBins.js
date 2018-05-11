@@ -1,36 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { map, orderBy } from 'lodash';
+// import { map, orderBy } from 'lodash';
 
 const OrdinalBins = ({ prompt }) => {
-  const binValues = orderBy(
-    map(prompt.bins,
-      (value, title) => [title, value],
-    ),
-    titleValuePair => titleValuePair[1],
-    'desc',
-  );
-
-  const bins = binValues.map(
+  const bins = prompt.bins.map(
     binValue => (
       <Bin
-        title={binValue[0]}
-        value={binValue[1]}
+        title={binValue.label}
+        value={binValue.value}
       />
     ),
   );
 
+  console.log(bins);
   return (
-    <div>
-      { bins }
-    </div>
+    bins
   );
 };
 
 const Bin = ({ title }) => (
-  <div className="ordinal-bin__bin">
-    <div className="ordinal-bin__bin--title">{title}</div>
-    <div className="ordinal-bin__bin--content" />
+  <div className="ordinal-bin">
+    <div className="ordinal-bin--title">{title}</div>
+    <div className="ordinal-bin--content" />
   </div>
 );
 
