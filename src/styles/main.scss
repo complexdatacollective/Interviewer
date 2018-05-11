@@ -1,4 +1,6 @@
-@import '~network-canvas-ui/src/styles/all';
+$font-path: '../ui/assets/fonts';
+
+@import '../ui/styles/all';
 @import 'utils/all';
 @import 'helpers/all';
 @import 'components/all';
@@ -8,7 +10,7 @@
 // Remove touch and focus outlines
 * {
   outline-style: none;
-  -webkit-touch-callout: none;
+  -webkit-touch-callout: none; // sass-lint:disable-line no-vendor-prefixes
 
   &:focus {
     outline: none;
@@ -17,11 +19,12 @@
 
 // CSS variableoverrides for Network Canvas
 :root {
-  --body-font-family:#{$netcanvas-font-stack};
+  --body-font-family: #{$netcanvas-font-stack};
 }
 
 html,
 body {
+  cursor: default;
   overflow: hidden;
   user-select: none;
   color: palette('text');

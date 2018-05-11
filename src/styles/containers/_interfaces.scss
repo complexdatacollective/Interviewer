@@ -1,8 +1,8 @@
 // Shared mixins for interfaces.
 
 @mixin interface-prompt {
-  flex: 0 0 12vw;
+  flex: 0 0 200px;
   @include breakpoint('full') {
-    flex: 0 0 200px;
+    flex: 0 0 17vh;
   }
 }

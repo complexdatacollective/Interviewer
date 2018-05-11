@@ -17,16 +17,16 @@ ShallowWrapper {
     layout="foo"
     layoutVariable="foo"
     node={
-        Object {
-            "label": "some label",
-          }
+      Object {
+        "label": "some label",
+      }
     }
     nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
     sort={Object {}}
     updateNode={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -44,7 +44,7 @@ ShallowWrapper {
         label="some label"
         meta={[Function]}
         scrollDirection="NO_SCROLL"
-/>,
+      />,
       "className": "node-bucket",
     },
     "ref": null,
@@ -75,7 +75,7 @@ ShallowWrapper {
           label="some label"
           meta={[Function]}
           scrollDirection="NO_SCROLL"
-/>,
+        />,
         "className": "node-bucket",
       },
       "ref": null,

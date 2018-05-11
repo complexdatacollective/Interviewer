@@ -8,7 +8,7 @@ ShallowWrapper {
     acknowledgeError={[Function]}
     acknowledged={true}
     error={null}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

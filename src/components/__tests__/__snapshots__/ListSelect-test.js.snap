@@ -12,29 +12,29 @@ ShallowWrapper {
     labelKey=""
     name="foo"
     nodes={
-        Array [
-            Object {
-              "age": "22",
-              "name": "a name",
-              "uid": "a",
-            },
-            Object {
-              "age": "88",
-              "name": "b name",
-              "uid": "b",
-            },
-            Object {
-              "age": "33",
-              "name": "c name",
-              "uid": "c",
-            },
-          ]
+      Array [
+        Object {
+          "age": "22",
+          "name": "a name",
+          "uid": "a",
+        },
+        Object {
+          "age": "88",
+          "name": "b name",
+          "uid": "b",
+        },
+        Object {
+          "age": "33",
+          "name": "c name",
+          "uid": "c",
+        },
+      ]
     }
     onRemoveNode={[Function]}
     onSubmitNode={[Function]}
     selectedNodes={Array []}
     sortFields={Array []}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -50,21 +50,21 @@ ShallowWrapper {
       "children": Array [
         <div
           className="list-select__sort"
->
+        >
           <input
-                    onChange={[Function]}
-                    placeholder="Filter"
-                    type="search"
-                    value=""
+            onChange={[Function]}
+            placeholder="Filter"
+            type="search"
+            value=""
           />
-</div>,
+        </div>,
         <Scrollable
           details={[Function]}
           label={[Function]}
           nodes={Array []}
           onToggleCard={[Function]}
           selected={[Function]}
-/>,
+        />,
       ],
       "className": "list-select",
     },
@@ -82,7 +82,7 @@ ShallowWrapper {
               placeholder="Filter"
               type="search"
               value=""
-/>,
+            />,
           ],
           "className": "list-select__sort",
         },
@@ -132,21 +132,21 @@ ShallowWrapper {
         "children": Array [
           <div
             className="list-select__sort"
->
+          >
             <input
-                        onChange={[Function]}
-                        placeholder="Filter"
-                        type="search"
-                        value=""
+              onChange={[Function]}
+              placeholder="Filter"
+              type="search"
+              value=""
             />
-</div>,
+          </div>,
           <Scrollable
             details={[Function]}
             label={[Function]}
             nodes={Array []}
             onToggleCard={[Function]}
             selected={[Function]}
-/>,
+          />,
         ],
         "className": "list-select",
       },
@@ -164,7 +164,7 @@ ShallowWrapper {
                 placeholder="Filter"
                 type="search"
                 value=""
-/>,
+              />,
             ],
             "className": "list-select__sort",
           },

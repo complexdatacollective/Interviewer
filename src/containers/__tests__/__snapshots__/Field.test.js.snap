@@ -9,7 +9,7 @@ ShallowWrapper {
     label="Name"
     name="name"
     validation={Object {}}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -63,17 +63,17 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <renderInput
     input={
-        Object {
-            "name": "foo",
-            "value": "",
-          }
+      Object {
+        "name": "foo",
+        "value": "",
+      }
     }
     meta={
-        Object {
-            "invalid": false,
-          }
+      Object {
+        "invalid": false,
+      }
     }
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

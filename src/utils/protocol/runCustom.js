@@ -1,4 +1,4 @@
-/* eslint-disable no-new-func */
+/* eslint-disable */
 
 /* unused proof of concept for loading custom code */
 

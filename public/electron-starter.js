@@ -1,15 +1,11 @@
-const electron = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
-
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
 
 const isMacOS = () => os.platform() === 'darwin';
 
@@ -31,17 +27,30 @@ log.info('App starting...');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+const appUrl = (function getAppUrl() {
+  if (process.env.NODE_ENV === 'development' && process.env.NC_DEVSERVER_FILE) {
+    // NC_DEVSERVER_FILE contains the URL of a running webpack-dev-server, relative to app root
+    try {
+      const relativePath = path.join(__dirname, '..', process.env.NC_DEVSERVER_FILE);
+      return fs.readFileSync(relativePath, 'utf-8');
+    } catch (err) {
+      log.warn('Error loading dev server config -', err.message);
+      log.warn('Are you running dev server?');
+      log.warn('Continuing with index.html');
+    }
+  }
+  return url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:'
+  });
+}());
+
 function createWindow() {
   registerAssetsProtocol();
 
   // Create the browser window.
   mainWindow = new BrowserWindow(windowParameters);
-  // mainWindow.setFullScreen(true);npm run
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:'
-  }));
+  mainWindow.loadURL(appUrl);
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -52,10 +61,46 @@ function createWindow() {
   });
 }
 
+function createMenu() {
+  const template = [
+    {
+      submenu: [
+        { role: 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { type: 'separator' },
+        { role: 'selectall' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'toggledevtools' }
+      ]
+    }
+  ];
+  if (!isMacOS()) {
+    template[0].label = 'File';
+  }
+
+  const appMenu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(appMenu);
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createMenu();
+  createWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

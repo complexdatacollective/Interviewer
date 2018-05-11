@@ -672,6 +672,25 @@
       ]
     },
     {
+      "id": "info-sound",
+      "label": "InfoSound",
+      "type": "Information",
+      "title": "This interface has a video with sound",
+      "items": [
+        {
+          "type": "text",
+          "content":
+            "The video below has sound and is set to loop."
+        },
+        {
+          "type": "video",
+          "content": "withSound.mp4",
+          "description": "Click by clicking the thing",
+          "loop": true
+        }
+      ]
+    },
+    {
       "id": "markdown",
       "label": "Markdown",
       "type": "Information",
@@ -714,7 +733,7 @@
         },
         {
           "id": "6su",
-          "text": "Within the past 6 months, who has been supportive?",
+          "text": "This is a particularly long prompt, which will be discuraged in the Architect interface but might still be desired by a researcher. What does this look like rendered?",
           "additionalAttributes": {
             "support_friend": true
           }

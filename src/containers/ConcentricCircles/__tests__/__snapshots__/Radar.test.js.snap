@@ -7,7 +7,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <Radar
     n={5}
     skewed={true}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],
@@ -27,35 +27,35 @@ ShallowWrapper {
           cy="50"
           fill="#000000"
           r={50}
-/>,
+        />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={43.54101966249685}
-/>,
+        />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={36.547375096555626}
-/>,
+        />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={28.717082451262844}
-/>,
+        />,
         <circle
           className="sociogram-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={19.270509831248425}
-/>,
+        />,
       ],
       "className": "sociogram-radar",
       "viewBox": "0 0 100 100",
@@ -154,35 +154,35 @@ ShallowWrapper {
             cy="50"
             fill="#000000"
             r={50}
-/>,
+          />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={43.54101966249685}
-/>,
+          />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={36.547375096555626}
-/>,
+          />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={28.717082451262844}
-/>,
+          />,
           <circle
             className="sociogram-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={19.270509831248425}
-/>,
+          />,
         ],
         "className": "sociogram-radar",
         "viewBox": "0 0 100 100",

@@ -12,18 +12,18 @@ ShallowWrapper {
     newNodeAttributes={Object {}}
     panels={Array []}
     prompt={
-        Object {
-            "id": null,
-          }
+      Object {
+        "id": null,
+      }
     }
     removeNode={[Function]}
     stage={
-        Object {
-            "id": null,
-          }
+      Object {
+        "id": null,
+      }
     }
     toggleNodeAttributes={[Function]}
-/>,
+  />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
     "getNode": [Function],

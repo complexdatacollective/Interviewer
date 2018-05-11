@@ -6,13 +6,18 @@
     transform: translateX(-50%);
   }
 
-  .icon[name="form-arrow-left"], .icon[name="form-arrow-right"] {
-    height: 90px;
-    .cls-2 {
-      fill: palette('light-background');
-    }
-    .cls-3 {
-      fill: palette('primary');
+  .icon {
+    &[name='form-arrow-left'],
+    &[name='form-arrow-right'] {
+      height: 90px;
+
+      .cls-2 {
+        fill: palette('light-background');
+      }
+
+      .cls-3 {
+        fill: palette('primary');
+      }
     }
   }
 
@@ -56,8 +61,10 @@
     justify-content: center;
     align-items: flex-start;
 
-    div:not([class*='-hidden']) {
-      flex-basis: 50%;
+    div {
+      &:not([class*='-hidden']) {
+        flex-basis: 50%;
+      }
     }
   }
 }
