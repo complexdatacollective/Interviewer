@@ -46,9 +46,13 @@ CharInput.focusPrevious = (currentInput) => {
   }
 };
 
+CharInput.defaultProps = {
+  disabled: false,
+};
+
 CharInput.propTypes = {
   value: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
 };

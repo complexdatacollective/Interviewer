@@ -1,5 +1,4 @@
 /* eslint-env jest */
-
 import React from 'react';
 import { mount } from 'enzyme';
 
