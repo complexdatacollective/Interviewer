@@ -4,17 +4,21 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { ProtocolCardList, ServerCard, ServerPairingForm } from '../../components/Setup';
-import ApiClient from '../../utils/ApiClient';
+import { Spinner } from '../../ui/components';
 
-// TODO: user-friendly error messaging
-const handleApiError = err => console.error(err); // eslint-disable-line no-console
+const emptyState = Object.freeze({
+  loading: false,
+  pairingCode: null,
+  pairingRequestId: null,
+});
 
 class ServerPairing extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = emptyState;
   }
 
   componentDidMount() {
@@ -22,50 +26,50 @@ class ServerPairing extends Component {
     this.requestPairingCode();
   }
 
+  handleApiError(err) {
+    this.props.downloadProtocolFailed(err); // Show message to user
+    this.setState(emptyState);
+    this.props.onError(err); // Signal parent
+  }
+
   requestPairingCode() {
+    this.setState({ loading: true });
     this.apiClient.requestPairing()
       .then((data) => {
         this.setState({
+          loading: false,
           pairingRequestId: data.pairingRequestId,
           pairingRequestSalt: data.salt,
         });
       })
-      .catch(handleApiError);
+      .catch(err => this.handleApiError(err));
   }
 
   // Pairing step 2: derive a secret, send (encrypted) to server
+  // At this point, we have a known connection to LAN server. 'loading' state would only distract.
   confirmPairing = () => {
     const { pairingCode, pairingRequestId, pairingRequestSalt } = this.state;
     this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt)
       .then((device) => {
         // TODO: Here's the point we'd want to persist ID + secret above
         this.setState({
+          ...emptyState,
           pairedDeviceId: device.id,
         });
       })
       .then(this.fetchProtocolList)
-      .catch(handleApiError)
-      .then(() => {
-        this.setState({
-          loading: false,
-          pairingCode: null,
-          pairingRequestId: null,
-        });
-      });
+      .catch(err => this.handleApiError(err));
   }
 
   fetchProtocolList = () => {
     this.apiClient.getProtocols()
       .then(protocols => this.setState({ protocols }))
-      .catch(handleApiError);
+      .catch(err => this.handleApiError(err));
   }
 
   completePairing = (pairingCode) => {
     this.setState(
-      {
-        loading: true,
-        pairingCode,
-      },
+      { pairingCode },
       () => setTimeout(this.confirmPairing, 0),
     );
   }
@@ -77,7 +81,15 @@ class ServerPairing extends Component {
     }
 
     const { server, downloadProtocol } = this.props;
-    const { protocols } = this.state;
+    const { loading, protocols } = this.state;
+
+    if (loading) {
+      return (
+        <div className="server-pairing__loading">
+          <Spinner />
+        </div>
+      );
+    }
 
     return (
       <div className="server-pairing">
@@ -99,12 +111,15 @@ class ServerPairing extends Component {
 }
 
 ServerPairing.defaultProps = {
+  onError: () => {},
   protocolPath: '',
 };
 
 ServerPairing.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
+  downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
+  onError: PropTypes.func,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
@@ -124,6 +139,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    downloadProtocolFailed: bindActionCreators(protocolActions.downloadProtocolFailed, dispatch),
   };
 }
 

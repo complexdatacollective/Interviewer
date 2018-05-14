@@ -1,10 +1,28 @@
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './cipher';
 
 const Messages = {
+  PairingFailed: 'Pairing Failed — please try again',
   ErrorResponse: 'Response error',
   // Checking response shape (programming errors) for now. TODO: probably remove
   UnexpectedResponse: 'Unexpected Response',
 };
+
+const isRequestError = resp => (/^4/.test(resp.status));
+
+const respError = (resp, friendlyMessage) => {
+  const baseError = new Error(Messages.ErrorResponse);
+  if (isRequestError(resp)) {
+    // Create a user-friendly display error
+    baseError.friendlyMessage = friendlyMessage;
+    baseError.stack = null;
+    return baseError;
+  }
+  if (!resp.ok) {
+    return baseError;
+  }
+  return null;
+};
+
 
 /**
  *
@@ -72,7 +90,7 @@ class ApiClient {
         }),
       })
       .then((resp) => {
-        if (!resp.ok) { throw new Error(Messages.ErrorResponse); }
+        if (!resp.ok) { throw respError(resp, Messages.PairingFailed); }
         return resp.json();
       })
       .then(json => decrypt(json.data.message, secretHex))

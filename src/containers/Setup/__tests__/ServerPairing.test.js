@@ -21,13 +21,18 @@ describe('<ServerPairing>', () => {
     ));
   });
 
+  it('renders a spinner when first loading', () => {
+    expect(component.find('Spinner')).toHaveLength(1);
+  });
+
   it('renders a server card', () => {
+    component.setState({ loading: false });
     expect(component.find('ServerCard')).toHaveLength(1);
   });
 
   it('renders a form after request ID received', () => {
     expect(component.find('ServerPairingForm')).toHaveLength(0);
-    component.setState({ pairingRequestId: '1' });
+    component.setState({ loading: false, pairingRequestId: '1' });
     expect(component.find('ServerPairingForm')).toHaveLength(1);
   });
 });

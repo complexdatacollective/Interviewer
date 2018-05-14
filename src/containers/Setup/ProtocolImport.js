@@ -9,17 +9,32 @@ import { Button, Icon } from '../../ui/components';
 class ProtocolImport extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { selectedServer: null };
+    this.state = { previousSelectedServer: null, selectedServer: null };
+  }
+
+  onPairingError() {
+    this.setState({
+      // Make prev data available to repopulate manual form if needed
+      previousSelectedServer: this.state.selectedServer,
+      selectedServer: null,
+    });
   }
 
   contentArea = () => {
-    const { manualEntry, selectedServer } = this.state;
+    const { manualEntry, previousSelectedServer: prev, selectedServer } = this.state;
     let content;
     if (selectedServer && selectedServer.apiUrl) {
-      content = <ServerPairing server={selectedServer} />;
+      content = (
+        <ServerPairing
+          server={selectedServer}
+          onError={() => this.onPairingError()}
+        />
+      );
     } else if (manualEntry) {
       content = (
         <ServerAddressForm
+          address={prev && prev.addresses && prev.addresses[0]}
+          port={prev && prev.port}
           selectServer={this.selectServer}
           cancel={() => this.setState({ manualEntry: false })}
         />
@@ -35,6 +50,7 @@ class ProtocolImport extends PureComponent {
   }
 
   render() {
+    const { manualEntry, selectedServer } = this.state;
     return (
       <div className="protocol-import">
         <Link to="/" className="protocol-import__close">
@@ -51,7 +67,8 @@ class ProtocolImport extends PureComponent {
         </div>
         <div className="protocol-import__buttons">
           {
-            !this.state.manualEntry &&
+            !manualEntry &&
+            !(selectedServer && selectedServer.apiUrl) &&
             <Button
               size="small"
               color="platinum"

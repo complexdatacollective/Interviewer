@@ -9,8 +9,8 @@ class ServerAddressForm extends PureComponent {
     super(props);
     this.state = {
       error: {},
-      address: '',
-      port: '',
+      address: props.address || '',
+      port: props.port || '',
     };
   }
 
@@ -22,14 +22,23 @@ class ServerAddressForm extends PureComponent {
     });
     if (server.apiUrl) {
       this.props.selectServer(server);
+    } else {
+      this.setState({
+        error: {
+          address: !isValidAddress(this.state.address),
+          port: !isValidPort(this.state.port),
+        },
+      });
     }
   }
 
   setAddress(address) {
+    this.clearError('address');
     this.setState({ address });
   }
 
   setPort(port) {
+    this.clearError('port');
     this.setState({ port });
   }
 
@@ -56,8 +65,9 @@ class ServerAddressForm extends PureComponent {
     const { cancel } = this.props;
     const { error } = this.state;
     const inputClass = 'server-address-form__input';
-    const addrClass = error.address ? `${inputClass} ${inputClass}--error` : inputClass;
-    const portClass = error.port ? `${inputClass} ${inputClass}--error` : inputClass;
+    const inputErrorClass = `${inputClass} ${inputClass}--error`;
+    const labelClass = 'server-address-form__label';
+    const labelErrorClass = `${labelClass} ${labelClass}--error`;
 
     return (
       <form className="server-address-form" onSubmit={this.onSubmit}>
@@ -75,15 +85,17 @@ class ServerAddressForm extends PureComponent {
               type="text"
               autoComplete="off"
               autoCorrect="off"
-              className={addrClass}
+              className={error.address ? inputErrorClass : inputClass}
               id="server-address-form-input-ip"
               placeholder="192.168.99.99"
               value={this.state.address}
               onChange={evt => this.setAddress(evt.target.value)}
-              onFocus={() => this.clearError('address')}
               onBlur={evt => this.validateAddress(evt.target.value)}
             />
-            <label className="server-address-form__label" htmlFor="server-address-form-input-ip">
+            <label
+              className={error.address ? labelErrorClass : labelClass}
+              htmlFor="server-address-form-input-ip"
+            >
               Address
             </label>
           </div>
@@ -92,7 +104,7 @@ class ServerAddressForm extends PureComponent {
           </div>
           <div className="server-address-form__field">
             <input
-              className={portClass}
+              className={error.port ? inputErrorClass : inputClass}
               id="server-address-form-input-port"
               autoComplete="off"
               autoCorrect="off"
@@ -103,10 +115,12 @@ class ServerAddressForm extends PureComponent {
               size="5"
               value={this.state.port}
               onChange={evt => this.setPort(evt.target.value)}
-              onFocus={() => this.clearError('port')}
               onBlur={evt => this.validatePort(evt.target.value)}
             />
-            <label className="server-address-form__label" htmlFor="server-address-form-input-port">
+            <label
+              className={error.port ? labelErrorClass : labelClass}
+              htmlFor="server-address-form-input-port"
+            >
               Port
             </label>
           </div>
@@ -127,11 +141,15 @@ class ServerAddressForm extends PureComponent {
 }
 
 ServerAddressForm.defaultProps = {
+  address: '',
   cancel: null,
+  port: '',
 };
 
 ServerAddressForm.propTypes = {
+  address: PropTypes.string,
   cancel: PropTypes.func.isRequired,
+  port: PropTypes.string,
   selectServer: PropTypes.func.isRequired,
 };
 
