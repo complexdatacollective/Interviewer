@@ -81,7 +81,7 @@ class ServerPairing extends Component {
 
     return (
       <div className="server-pairing">
-        <ServerCard className="server-pairing__card" data={server}>{server.name}</ServerCard>
+        <ServerCard className="server-pairing__card" data={server}>{server.host}</ServerCard>
         {
           this.state.pairingRequestId &&
           <ServerPairingForm

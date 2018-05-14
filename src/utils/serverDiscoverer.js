@@ -3,6 +3,7 @@ import { isElectron, isCordova } from '../utils/Environment';
 
 const DeviceApiProtocol = 'http';
 
+const AllowIPv6 = false;
 const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
 const isIpv6 = addr => /^[a-zA-Z0-9]{1,4}:/.test(addr); // TODO: good enough?
 
@@ -12,7 +13,11 @@ const validDeviceUrl = (address, port) => {
   }
   let normalizedAddress = address;
   if (isIpv6(address)) {
-    normalizedAddress = `[${address}]`;
+    if (AllowIPv6) {
+      normalizedAddress = `[${address}]`;
+    } else {
+      return null;
+    }
   }
   const a = document.createElement('a');
   a.href = `${DeviceApiProtocol}://${normalizedAddress}:${port}`;

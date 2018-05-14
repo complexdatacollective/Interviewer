@@ -80,7 +80,7 @@ class ServerList extends Component {
         <div>
           {this.state.servers.map(server => (
             <ServerCard key={server.apiUrl} data={server} selectServer={this.props.selectServer}>
-              {server.name}
+              {server.host}
             </ServerCard>
           ))}
         </div>
