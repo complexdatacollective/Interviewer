@@ -71,7 +71,10 @@ class PairingCodeInput extends Component {
             ))
           }
         </div>
-        <a onClick={() => !disabled && this.clearForm()} className="pairing-code-input__clear">
+        <a
+          onClick={() => !disabled && this.clearForm()}
+          className="pairing-code-input__clear pairing-code-input__clear--small"
+        >
           Clear
         </a>
       </div>

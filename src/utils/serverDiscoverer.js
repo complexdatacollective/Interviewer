@@ -1,28 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
+
 import { isElectron, isCordova } from '../utils/Environment';
-
-const DeviceApiProtocol = 'http';
-
-const AllowIPv6 = false;
-const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
-const isIpv6 = addr => /^[a-zA-Z0-9]{1,4}:/.test(addr); // TODO: good enough?
-
-const validDeviceUrl = (address, port) => {
-  if (!address || isLinkLocal(address) || !port) {
-    return null;
-  }
-  let normalizedAddress = address;
-  if (isIpv6(address)) {
-    if (AllowIPv6) {
-      normalizedAddress = `[${address}]`;
-    } else {
-      return null;
-    }
-  }
-  const a = document.createElement('a');
-  a.href = `${DeviceApiProtocol}://${normalizedAddress}:${port}`;
-  return a.hostname && a.port && a.href;
-};
+import { addApiUrlToService } from './serverAddressing';
 
 class ServerDiscoverer {
   constructor() {
@@ -124,29 +103,14 @@ class ServerDiscoverer {
   }
 
   /**
-   * @typedef {Object} Server
-   * @property {string} name
-   * @property {string} host
-   * @property {string} port
-   * @property {Array} addresses
-   * @property {string} apiUrl
-   */
-
-  /**
    * Emits a {@link Server} object
    */
   emitAnnouncement(normalizedService) {
-    let apiUrl;
-    const service = normalizedService;
-    service.addresses.some((addr) => {
-      apiUrl = validDeviceUrl(addr, service.port);
-      return !!apiUrl;
-    });
-    if (!apiUrl) {
+    const service = addApiUrlToService(normalizedService);
+    if (!service.apiUrl) {
       console.warn('No apiUrl found', service); // eslint-disable-line no-console
       return;
     }
-    service.apiUrl = apiUrl;
     this.events.emit('SERVER_ANNOUNCED', service);
   }
 

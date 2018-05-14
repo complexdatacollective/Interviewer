@@ -15,7 +15,11 @@ $side-menu-width: 130px;
     display: flex;
     flex-direction: column;
     height: 400px;
-    margin-right: 40px;
+    margin-bottom: spacing(large);
     padding: spacing(large);
+  }
+
+  &__buttons {
+    text-align: right;
   }
 }

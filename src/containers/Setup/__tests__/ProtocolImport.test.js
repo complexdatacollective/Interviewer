@@ -16,7 +16,7 @@ describe('<ProtocolImport>', () => {
   });
 
   it('displays a connected pairing component after a server is selected', () => {
-    component.setState({ selectedServer: {} });
+    component.setState({ selectedServer: { apiUrl: 'http://a.local:80' } });
     expect(component.find('Connect(ServerPairing)')).toHaveLength(1);
   });
 });

@@ -1,0 +1,41 @@
+@include text-input('server-address-form__input');
+
+.server-address-form {
+  &__field {
+    display: inline-block;
+    margin-right: .2rem;
+    vertical-align: top;
+  }
+
+  &__text {
+    @include default-input-type;
+  }
+
+  &__label {
+    @include typography(copy-small);
+  }
+
+  &__input {
+    display: block;
+
+    &--error {
+      color: var(--color-tomato);
+    }
+  }
+
+  &__submit {
+    float: right;
+  }
+
+  &__cancel {
+    @include text-button;
+  }
+
+  &__cancel-button {
+    &[name='close'] { // specificity needed to override NC-UI
+      height: .5rem;
+      margin-right: .5rem;
+      width: .5rem;
+    }
+  }
+}

@@ -25,17 +25,6 @@
   }
 
   &__clear {
-    color: var(--color-platinum--dark);
-    cursor: pointer;
-    display: block;
-    float: left;
-    font-size: 12px; // match button--small
-    letter-spacing: 3px; // match button
-    margin: 1.35rem 0; // match button padding
-    text-transform: uppercase;
-
-    &:hover {
-      color: var(--color-white);
-    }
+    @include text-button;
   }
 }

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 
 import ServerList from './ServerList';
 import ServerPairing from './ServerPairing';
-import { Icon } from '../../ui/components';
+import ServerAddressForm from '../../components/Setup/ServerAddressForm';
+import { Button, Icon } from '../../ui/components';
 
 class ProtocolImport extends PureComponent {
   constructor(props) {
@@ -11,12 +12,29 @@ class ProtocolImport extends PureComponent {
     this.state = { selectedServer: null };
   }
 
+  contentArea = () => {
+    const { manualEntry, selectedServer } = this.state;
+    let content;
+    if (selectedServer && selectedServer.apiUrl) {
+      content = <ServerPairing server={selectedServer} />;
+    } else if (manualEntry) {
+      content = (
+        <ServerAddressForm
+          selectServer={this.selectServer}
+          cancel={() => this.setState({ manualEntry: false })}
+        />
+      );
+    } else {
+      content = <ServerList selectServer={this.selectServer} />;
+    }
+    return content;
+  }
+
   selectServer = (server) => {
     this.setState({ selectedServer: server });
   }
 
   render() {
-    const { selectedServer } = this.state;
     return (
       <div className="protocol-import">
         <Link to="/" className="protocol-import__close">
@@ -29,11 +47,17 @@ class ProtocolImport extends PureComponent {
         </p>
         <p>For information about using this feature, see our documentation.</p>
         <div className="protocol-import__content">
+          {this.contentArea()}
+        </div>
+        <div className="protocol-import__buttons">
           {
-            !selectedServer && <ServerList selectServer={this.selectServer} />
-          }
-          {
-            selectedServer && <ServerPairing server={selectedServer} />
+            !this.state.manualEntry &&
+            <Button
+              size="small"
+              color="platinum"
+              content="Enter manually"
+              onClick={() => this.setState({ manualEntry: true })}
+            />
           }
         </div>
       </div>
