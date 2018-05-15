@@ -5,6 +5,7 @@ import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, A
 
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
+const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 
 const initialState = {};
@@ -32,6 +33,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         [action.sessionId]: {
           path: action.path,
+          promptIndex: 0,
           network: network(state.network, action),
         },
       };
@@ -41,6 +43,15 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: {
           ...state[action.sessionId],
           path: action.path,
+          promptIndex: 0,
+        },
+      };
+    case UPDATE_PROMPT:
+      return {
+        ...state,
+        [action.sessionId]: {
+          ...state[action.sessionId],
+          promptIndex: action.promptIndex,
         },
       };
     case REMOVE_SESSION:
@@ -139,6 +150,14 @@ function updateSession(id, path) {
   };
 }
 
+function updatePrompt(id, promptIndex) {
+  return {
+    type: UPDATE_PROMPT,
+    sessionId: id,
+    promptIndex,
+  };
+}
+
 function removeSession(id) {
   return {
     type: REMOVE_SESSION,
@@ -156,6 +175,7 @@ const actionCreators = {
   toggleNodeAttributes,
   addSession,
   updateSession,
+  updatePrompt,
   removeSession,
 };
 
@@ -171,6 +191,7 @@ const actionTypes = {
   UNSET_EGO,
   ADD_SESSION,
   UPDATE_SESSION,
+  UPDATE_PROMPT,
   REMOVE_SESSION,
 };
 

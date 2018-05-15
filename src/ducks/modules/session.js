@@ -13,10 +13,11 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function setSession(id) {
+function setSession(id, protocolType) {
   return {
     type: SET_SESSION,
     sessionId: id,
+    protocolType,
   };
 }
 

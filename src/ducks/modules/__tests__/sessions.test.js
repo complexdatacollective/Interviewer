@@ -23,6 +23,7 @@ describe('network reducer', () => {
       undefined: {
         path: 'path/to/session',
         network: { ego: {}, nodes: [], edges: [] },
+        promptIndex: 0,
       },
     });
   });
@@ -46,6 +47,31 @@ describe('network reducer', () => {
     expect(newState.session1).toEqual({
       path: 'new/path/to/session',
       network: {},
+      promptIndex: 0,
+    });
+  });
+
+
+  it('should handle UPDATE_PROMPT', () => {
+    const newState = reducer(
+      {
+        ...mockState,
+        session1: {
+          path: 'path/to/session',
+          network: {},
+        },
+      },
+      {
+        type: actionTypes.UPDATE_PROMPT,
+        sessionId: 'session1',
+        promptIndex: 2,
+      },
+    );
+
+    expect(newState.session1).toEqual({
+      path: 'path/to/session',
+      network: {},
+      promptIndex: 2,
     });
   });
 
@@ -164,6 +190,16 @@ describe('sessions actions', () => {
     };
 
     expect(actionCreators.updateSession('a', '/updated/path')).toEqual(expectedAction);
+  });
+
+  it('should add create an UPDATE_PROMPT action', () => {
+    const expectedAction = {
+      type: actionTypes.UPDATE_PROMPT,
+      sessionId: 'a',
+      promptIndex: 2,
+    };
+
+    expect(actionCreators.updatePrompt('a', 2)).toEqual(expectedAction);
   });
 
   it('should add create a REMOVE_SESSION action', () => {

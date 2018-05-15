@@ -21,7 +21,9 @@ class LoadParamsRoute extends Component {
 
     if (params && params.sessionId) {
       if (this.props.sessionId !== params.sessionId) {
-        this.props.setSession(params.sessionId);
+        const protocolType = (params.protocolId && params.protocolId !== this.props.protocolPath) ?
+          params.protocolType : '';
+        this.props.setSession(params.sessionId, protocolType);
       }
       this.props.updateSession(params.sessionId, url);
     }
@@ -46,10 +48,11 @@ class LoadParamsRoute extends Component {
 
     if (nextParams && nextParams.sessionId) {
       if (this.props.sessionId !== nextParams.sessionId) {
-        this.props.setSession(nextParams.sessionId);
-      }
-
-      if (nextUrl && nextUrl !== this.props.sessionUrl) {
+        const protocolType =
+          (nextParams.protocolId && nextParams.protocolId !== this.props.protocolPath) ?
+            nextParams.protocolType : '';
+        this.props.setSession(nextParams.sessionId, protocolType);
+      } else if (nextUrl && nextUrl !== this.props.sessionUrl) {
         this.props.updateSession(nextParams.sessionId, nextUrl);
       }
     }
@@ -68,8 +71,8 @@ class LoadParamsRoute extends Component {
     const {
       backParam,
       component: RenderComponent,
+      isProtocolLoaded,
       isSkipped,
-      sessionId,
       shouldReset,
       skipToIndex,
       ...rest
@@ -78,7 +81,11 @@ class LoadParamsRoute extends Component {
     const {
       protocolId,
       protocolType,
+      sessionId,
     } = this.props.computedMatch.params;
+
+    // not finished loading
+    if (!isProtocolLoaded || this.props.sessionId !== sessionId) { return null; }
 
     return (
       isSkipped ?
