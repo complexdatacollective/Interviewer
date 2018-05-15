@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // TODO: Share with Server
-const charSet = '#%&+/23456789:?@ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.split('');
+const charSet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
 const CharInput = ({ value, disabled, index, onChange }) => {
   let className = 'pairing-code-input__character';

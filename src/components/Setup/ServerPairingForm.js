@@ -5,7 +5,7 @@ import PairingCodeInput from './PairingCodeInput';
 import { Button } from '../../ui/components';
 
 // TODO: Share with Server
-const charCount = 12;
+const charCount = 16;
 
 class ServerPairingForm extends Component {
   constructor(props) {

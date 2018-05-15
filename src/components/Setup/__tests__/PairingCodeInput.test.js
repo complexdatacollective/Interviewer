@@ -5,7 +5,8 @@ import { shallow } from 'enzyme';
 import PairingCodeInput from '../PairingCodeInput';
 
 describe('<PairingCodeInput>', () => {
-  const charCount = 12;
+  // TODO: Shared with Server
+  const charCount = 16;
   let component;
   let changeHandler;
 
