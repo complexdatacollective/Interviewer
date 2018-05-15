@@ -75,7 +75,7 @@ const deriveSecretKeyBytes = (pairingCode, salt) => {
   // The mem limit is lower than MEM_LIMIT_INTERACTIVE because of supported environments, but should
   // suffice (passcodes are single-use).
   const DerivationMemLimit = 2 ** 23;
-  const DerivationOpsLimit = libsodium.crypto_pwhash_OPSLIMIT_INTERACTIVE;
+  const DerivationOpsLimit = libsodium.crypto_pwhash_OPSLIMIT_SENSITIVE;
   const DerivationAlgo = libsodium.crypto_pwhash_ALG_ARGON2ID13;
   const DerivedKeyLength = libsodium.crypto_box_SECRETKEYBYTES;
 
