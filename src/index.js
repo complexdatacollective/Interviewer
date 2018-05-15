@@ -5,11 +5,16 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
 import { history, store } from './ducks/store';
+import { actionCreators as deviceActions } from './ducks/modules/device';
 import App from './containers/App';
+import deviceDescription from './utils/DeviceInfo';
 import { isCordova } from './utils/Environment';
 import AppRouter from './routes';
 
 const startApp = () => {
+  const deviceDesc = deviceDescription();
+  store.dispatch(deviceActions.setDescription(deviceDesc));
+
   ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
