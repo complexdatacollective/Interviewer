@@ -5,14 +5,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
 import { history, store } from './ducks/store';
-import { actionCreators as mockActions } from './ducks/modules/mock';
 import App from './containers/App';
 import { isCordova } from './utils/Environment';
 import AppRouter from './routes';
-
-window.populateNodes = (howMany = 0) => {
-  store.dispatch(mockActions.generateNodes(howMany));
-};
 
 const startApp = () => {
   ReactDOM.render(
