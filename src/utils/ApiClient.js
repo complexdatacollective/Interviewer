@@ -1,4 +1,4 @@
-import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './cipher';
+import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 
 const Messages = {
   PairingFailed: 'Pairing Failed — please try again',

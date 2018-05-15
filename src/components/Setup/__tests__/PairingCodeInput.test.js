@@ -3,10 +3,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import PairingCodeInput from '../PairingCodeInput';
+import { PairingCodeLength } from '../../../utils/shared-api/pairingCodeConfig';
 
 describe('<PairingCodeInput>', () => {
-  // TODO: Shared with Server
-  const charCount = 16;
+  const charCount = PairingCodeLength;
   let component;
   let changeHandler;
 

@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import PairingCodeInput from './PairingCodeInput';
 import { Button } from '../../ui/components';
-
-// TODO: Share with Server
-const charCount = 16;
+import { PairingCodeLength } from '../../utils/shared-api/pairingCodeConfig';
 
 class ServerPairingForm extends Component {
   constructor(props) {
@@ -16,7 +14,7 @@ class ServerPairingForm extends Component {
   setPairingCode = (pairingCode) => {
     this.setState({
       pairingCode,
-      submittable: pairingCode.length === charCount,
+      submittable: pairingCode.length === PairingCodeLength,
     });
   }
 
@@ -41,7 +39,7 @@ class ServerPairingForm extends Component {
 
         <fieldset className="pairing-form__fields">
           <PairingCodeInput
-            charCount={charCount}
+            charCount={PairingCodeLength}
             disabled={disabled}
             setPairingCode={this.setPairingCode}
           />
