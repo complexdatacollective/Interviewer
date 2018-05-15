@@ -49,7 +49,8 @@ class ServerPairing extends Component {
   // At this point, we have a known connection to LAN server. 'loading' state would only distract.
   confirmPairing = () => {
     const { pairingCode, pairingRequestId, pairingRequestSalt } = this.state;
-    this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt)
+    const { deviceName } = this.props;
+    this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
       .then((device) => {
         // TODO: Here's the point we'd want to persist ID + secret above
         this.setState({
@@ -111,11 +112,13 @@ class ServerPairing extends Component {
 }
 
 ServerPairing.defaultProps = {
+  deviceName: '',
   onError: () => {},
   protocolPath: '',
 };
 
 ServerPairing.propTypes = {
+  deviceName: PropTypes.string,
   downloadProtocol: PropTypes.func.isRequired,
   downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
@@ -129,6 +132,7 @@ ServerPairing.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    deviceName: state.device.description,
     isFactory: state.protocol.isFactory,
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,

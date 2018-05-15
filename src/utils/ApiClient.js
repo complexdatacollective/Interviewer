@@ -66,7 +66,7 @@ class ApiClient {
    * @return {string} device.id
    * @throws {Error}
    */
-  confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt) {
+  confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName = '') {
     const saltBytes = fromHex(pairingRequestSalt);
     const secretBytes = deriveSecretKeyBytes(pairingCode, saltBytes);
     const secretHex = toHex(secretBytes);
@@ -74,6 +74,7 @@ class ApiClient {
     const plaintext = JSON.stringify({
       pairingRequestId,
       pairingCode,
+      deviceName,
     });
 
     const encryptedMessage = encrypt(plaintext, secretHex);
