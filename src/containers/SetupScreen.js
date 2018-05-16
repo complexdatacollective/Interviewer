@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
-// import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
 import { Button } from '../ui/components';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-// import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -40,10 +38,6 @@ class Setup extends Component {
   onClickLoadFactoryProtocol = (protocolName) => {
     this.props.addSession();
     this.props.loadFactoryProtocol(protocolName);
-    // TODO: to load a session looks like:
-    // const pathname = this.props.getSessionPath('somethingelse');
-    // this.props.setSession('somethingelse');
-    // this.props.loadSession(pathname);
   }
 
   onClickImportRemoteProtocol = (fields) => {
@@ -100,14 +94,11 @@ class Setup extends Component {
 Setup.propTypes = {
   addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
-  // getSessionPath: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
-  // loadSession: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
-  // setSession: PropTypes.func.isRequired,
   stageIndex: PropTypes.number,
 };
 
@@ -118,7 +109,6 @@ Setup.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    // getSessionPath: sessionId => state.sessions[sessionId].path,
     isFactory: state.protocol.isFactory,
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
@@ -132,8 +122,6 @@ function mapDispatchToProps(dispatch) {
     addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    // loadSession: path => dispatch(push(path)),
-    // setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }
 
