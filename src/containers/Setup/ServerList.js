@@ -77,13 +77,13 @@ class ServerList extends Component {
   renderServerList() {
     if (this.state.servers.length > 0) {
       return (
-        <div>
+        <React.Fragment>
           {this.state.servers.map(server => (
             <ServerCard key={server.apiUrl} data={server} selectServer={this.props.selectServer}>
               {server.host}
             </ServerCard>
           ))}
-        </div>
+        </React.Fragment>
       );
     }
 

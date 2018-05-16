@@ -1,10 +1,14 @@
 .server-card {
+  height: calc(130px + 1rem); // icon + text
   margin: 15px;
   width: 130px;
-  height: 130px;
 
   &__label {
     text-align: center;
     margin: 0;
+  }
+
+  &--clickable {
+    cursor: pointer;
   }
 }
