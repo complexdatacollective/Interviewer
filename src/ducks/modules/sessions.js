@@ -70,68 +70,82 @@ export default function reducer(state = initialState, action = {}) {
  *
  * @memberof! NetworkActionCreators
  */
-function addNodes(sessionId, nodes, additionalAttributes) {
+const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
+  const { session } = getState();
+
   let nodeOrNodes = nodes;
   if (!isArray(nodeOrNodes)) {
     nodeOrNodes = [nodeOrNodes];
   }
-  return {
+  dispatch({
     type: ADD_NODES,
-    sessionId,
+    sessionId: session,
     nodes: nodeOrNodes,
     additionalAttributes,
-  };
-}
+  });
+};
 
-function updateNode(sessionId, node, full = false) {
-  return {
+const updateNode = (node, full = false) => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: UPDATE_NODE,
-    sessionId,
+    sessionId: session,
     node,
     full,
-  };
-}
+  });
+};
 
-function toggleNodeAttributes(sessionId, uid, attributes) {
-  return {
+const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: TOGGLE_NODE_ATTRIBUTES,
-    sessionId,
+    sessionId: session,
     uid,
     attributes,
-  };
-}
+  });
+};
 
-function removeNode(sessionId, uid) {
-  return {
+const removeNode = uid => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: REMOVE_NODE,
-    sessionId,
+    sessionId: session,
     uid,
-  };
-}
+  });
+};
 
-function addEdge(sessionId, edge) {
-  return {
+const addEdge = edge => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: ADD_EDGE,
-    sessionId,
+    sessionId: session,
     edge,
-  };
-}
+  });
+};
 
-function toggleEdge(sessionId, edge) {
-  return {
+const toggleEdge = edge => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: TOGGLE_EDGE,
-    sessionId,
+    sessionId: session,
     edge,
-  };
-}
+  });
+};
 
-function removeEdge(sessionId, edge) {
-  return {
+const removeEdge = edge => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: REMOVE_EDGE,
-    sessionId,
+    sessionId: session,
     edge,
-  };
-}
+  });
+};
 
 function addSession() {
   const id = uuidv4();
@@ -150,13 +164,15 @@ function updateSession(id, path) {
   };
 }
 
-function updatePrompt(id, promptIndex) {
-  return {
+const updatePrompt = promptIndex => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
     type: UPDATE_PROMPT,
-    sessionId: id,
+    sessionId: session,
     promptIndex,
-  };
-}
+  });
+};
 
 function removeSession(id) {
   return {

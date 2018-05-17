@@ -33,7 +33,7 @@ class NameGeneratorAutoComplete extends Component {
   }
 
   onSearchComplete(selectedResults) {
-    this.props.addNodes(this.props.sessionId, selectedResults, this.props.newNodeAttributes);
+    this.props.addNodes(selectedResults, this.props.newNodeAttributes);
     this.props.closeSearch();
   }
 
@@ -135,7 +135,6 @@ NameGeneratorAutoComplete.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
   searchIsOpen: PropTypes.bool.isRequired,
-  sessionId: PropTypes.string.isRequired,
   stage: PropTypes.object.isRequired,
   toggleSearch: PropTypes.func.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
@@ -160,7 +159,6 @@ function makeMapStateToProps() {
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
-      sessionId: state.session,
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };

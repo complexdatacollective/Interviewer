@@ -21,13 +21,13 @@ export default function withPrompt(WrappedComponent) {
     }
 
     promptForward = () => {
-      this.props.updatePrompt(this.props.sessionId,
+      this.props.updatePrompt(
         (this.promptsCount() + this.props.promptIndex + 1) % this.promptsCount(),
       );
     }
 
     promptBackward = () => {
-      this.props.updatePrompt(this.props.sessionId,
+      this.props.updatePrompt(
         (this.promptsCount() + this.props.promptIndex - 1) % this.promptsCount(),
       );
     }
@@ -48,7 +48,6 @@ export default function withPrompt(WrappedComponent) {
   WithPrompt.propTypes = {
     stage: PropTypes.object.isRequired,
     promptIndex: PropTypes.number,
-    sessionId: PropTypes.string.isRequired,
     updatePrompt: PropTypes.func.isRequired,
   };
 
@@ -59,7 +58,6 @@ export default function withPrompt(WrappedComponent) {
   function mapStateToProps(state) {
     return {
       promptIndex: getPromptForCurrentSession(state),
-      sessionId: state.session,
     };
   }
 

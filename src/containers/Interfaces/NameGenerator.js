@@ -35,7 +35,7 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNodes(this.props.sessionId, { ...formData, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...formData, ...this.props.newNodeAttributes });
     }
   }
 
@@ -45,7 +45,7 @@ class NameGenerator extends Component {
    */
   onSubmitEditNode = (formData) => {
     if (formData) {
-      this.props.updateNode(this.props.sessionId, { ...this.state.selectedNode, ...formData });
+      this.props.updateNode({ ...this.state.selectedNode, ...formData });
     }
   }
 
@@ -71,10 +71,9 @@ class NameGenerator extends Component {
     const node = { ...item.meta };
 
     if (has(node, 'promptId') || has(node, 'stageId')) {
-      this.props.updateNode(this.props.sessionId,
-        { ...node, ...this.props.activePromptAttributes });
+      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
     } else {
-      this.props.addNodes(this.props.sessionId, { ...node, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...node, ...this.props.newNodeAttributes });
     }
   }
 
@@ -171,7 +170,6 @@ NameGenerator.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
-  sessionId: PropTypes.string.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
 };
@@ -188,7 +186,6 @@ function makeMapStateToProps() {
       getLabel: getNodeLabelFunction(state),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
-      sessionId: state.session,
     };
   };
 }

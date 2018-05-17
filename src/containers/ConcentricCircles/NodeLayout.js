@@ -28,7 +28,7 @@ const dropHandlers = compose(
   withHandlers({
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
-      props.updateNode(props.sessionId, {
+      props.updateNode({
         uid: item.meta.uid,
         [props.layoutVariable]: relativeCoords(props, item),
       });
@@ -39,7 +39,7 @@ const dropHandlers = compose(
     onDrag: props => (item) => {
       if (!has(item.meta, props.layoutVariable)) { return; }
 
-      props.updateNode(props.sessionId, {
+      props.updateNode({
         uid: item.meta.uid,
         [props.layoutVariable]: relativeCoords(props, item),
       });
@@ -50,7 +50,6 @@ const dropHandlers = compose(
 class NodeLayout extends Component {
   static propTypes = {
     nodes: PropTypes.array,
-    sessionId: PropTypes.string.isRequired,
     toggleEdge: PropTypes.func.isRequired,
     toggleHighlight: PropTypes.func.isRequired,
     ...sociogramOptionsProps,
@@ -103,7 +102,7 @@ class NodeLayout extends Component {
     }
 
     if (connectFrom !== nodeId) {
-      this.props.toggleEdge(this.props.sessionId, {
+      this.props.toggleEdge({
         from: connectFrom,
         to: nodeId,
         type: createEdge,
@@ -117,7 +116,6 @@ class NodeLayout extends Component {
     if (!this.props.allowHighlighting) { return; }
 
     this.props.toggleHighlight(
-      this.props.sessionId,
       nodeId,
       { ...this.props.highlightAttributes },
     );
@@ -174,7 +172,6 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       nodes: getPlacedNodes(state, props),
-      sessionId: state.session,
       ...getSociogramOptions(state, props),
     };
   };

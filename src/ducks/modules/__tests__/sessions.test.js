@@ -1,6 +1,11 @@
 /* eslint-env jest */
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
 import reducer, { actionCreators, actionTypes } from '../sessions';
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 const mockState = {};
 
@@ -96,27 +101,35 @@ describe('network reducer', () => {
 
 describe('sessions actions', () => {
   it('should create an ADD_NODES action with a single node', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.ADD_NODES,
       sessionId: 'a',
       nodes: [{ name: 'foo' }],
     };
 
-    expect(actionCreators.addNodes('a', { name: 'foo' })).toMatchObject(expectedAction);
+    store.dispatch(actionCreators.addNodes({ name: 'foo' }));
+
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should create an ADD_NODES action for batch adding', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.ADD_NODES,
       sessionId: 'a',
       nodes: [{ name: 'foo' }, { name: 'bar' }],
     };
 
-    const action = actionCreators.addNodes('a', [{ name: 'foo' }, { name: 'bar' }]);
-    expect(action).toEqual(expectedAction);
+    store.dispatch(actionCreators.addNodes([{ name: 'foo' }, { name: 'bar' }]));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should create an UPDATE_NODE action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.UPDATE_NODE,
       sessionId: 'a',
@@ -124,10 +137,13 @@ describe('sessions actions', () => {
       full: false,
     };
 
-    expect(actionCreators.updateNode('a', {})).toEqual(expectedAction);
+    store.dispatch(actionCreators.updateNode({}));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should create a TOGGLE_NODE_ATTRIBUTES action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
       sessionId: 'a',
@@ -135,20 +151,26 @@ describe('sessions actions', () => {
       attributes: {},
     };
 
-    expect(actionCreators.toggleNodeAttributes('a', 2, {})).toEqual(expectedAction);
+    store.dispatch(actionCreators.toggleNodeAttributes(2, {}));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should create a REMOVE_NODE action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.REMOVE_NODE,
       sessionId: 'a',
       uid: 2,
     };
 
-    expect(actionCreators.removeNode('a', 2)).toEqual(expectedAction);
+    store.dispatch(actionCreators.removeNode(2));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should add create an ADD_EDGE action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const edge = { from: 'foo', to: 'bar', type: 'friend' };
     const expectedAction = {
       type: actionTypes.ADD_EDGE,
@@ -156,10 +178,13 @@ describe('sessions actions', () => {
       edge,
     };
 
-    expect(actionCreators.addEdge('a', edge)).toEqual(expectedAction);
+    store.dispatch(actionCreators.addEdge(edge));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should add create a REMOVE_EDGE action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const edge = { from: 'foo', to: 'bar', type: 'friend' };
     const expectedAction = {
       type: actionTypes.REMOVE_EDGE,
@@ -167,7 +192,8 @@ describe('sessions actions', () => {
       edge,
     };
 
-    expect(actionCreators.removeEdge('a', edge)).toEqual(expectedAction);
+    store.dispatch(actionCreators.removeEdge(edge));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should add create an ADD_SESSION action', () => {
@@ -193,13 +219,16 @@ describe('sessions actions', () => {
   });
 
   it('should add create an UPDATE_PROMPT action', () => {
+    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+
     const expectedAction = {
       type: actionTypes.UPDATE_PROMPT,
       sessionId: 'a',
       promptIndex: 2,
     };
 
-    expect(actionCreators.updatePrompt('a', 2)).toEqual(expectedAction);
+    store.dispatch(actionCreators.updatePrompt(2));
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should add create a REMOVE_SESSION action', () => {

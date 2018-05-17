@@ -33,12 +33,6 @@ NodeBin.defaultProps = {
   willAccept: false,
 };
 
-function mapStateToProps(state) {
-  return {
-    sessionId: state.session,
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
@@ -46,10 +40,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   withProps(props => ({
     accepts: ({ meta }) => meta.itemType === 'EXISTING_NODE',
-    onDrop: ({ meta }) => props.removeNode(props.sessionId, meta.uid),
+    onDrop: ({ meta }) => props.removeNode(meta.uid),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),

@@ -10,7 +10,7 @@ const resetPropertyForAllNodes = property =>
     const { sessions: { [session]: { network: { nodes } } } } = getState();
 
     nodes.forEach(node => dispatch(
-      sessionsActions.updateNode(session, omit(node, property), true)));
+      sessionsActions.updateNode(omit(node, property), true)));
   };
 
 export const resetEdgesOfType = edgeType =>
@@ -20,7 +20,7 @@ export const resetEdgesOfType = edgeType =>
 
     edges.forEach((edge) => {
       if (edge.type !== edgeType) {
-        dispatch(sessionsActions.removeEdge(session, edge));
+        dispatch(sessionsActions.removeEdge(edge));
       }
     });
   };

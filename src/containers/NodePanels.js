@@ -37,7 +37,6 @@ class NodePanels extends PureComponent {
     prompt: PropTypes.object,
     newNodeAttributes: PropTypes.object.isRequired,
     removeNode: PropTypes.func.isRequired,
-    sessionId: PropTypes.string.isRequired,
     stage: PropTypes.object,
     toggleNodeAttributes: PropTypes.func.isRequired,
   };
@@ -52,10 +51,9 @@ class NodePanels extends PureComponent {
 
   onDrop = ({ meta }, dataSource) => {
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(this.props.sessionId, meta.uid,
-        { ...this.props.activePromptAttributes });
+      this.props.toggleNodeAttributes(meta.uid, { ...this.props.activePromptAttributes });
     } else {
-      this.props.removeNode(this.props.sessionId, meta.uid);
+      this.props.removeNode(meta.uid);
     }
   }
 
@@ -172,7 +170,6 @@ function makeMapStateToProps() {
       getLabel: getNodeLabelFunction(state),
       newNodeAttributes,
       panels,
-      sessionId: state.session,
     };
   };
 }

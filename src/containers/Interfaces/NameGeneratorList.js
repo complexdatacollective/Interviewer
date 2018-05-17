@@ -28,11 +28,11 @@ class NameGeneratorList extends Component {
    * New node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addNode(this.props.sessionId, { ...node, ...this.props.newNodeAttributes });
+    this.props.addNode({ ...node, ...this.props.newNodeAttributes });
   }
 
   onRemoveNode = (item) => {
-    this.props.removeNode(this.props.sessionId, item.uid);
+    this.props.removeNode(item.uid);
   }
 
   label = node => `${node[this.props.labelKey]}`;
@@ -97,7 +97,6 @@ NameGeneratorList.propTypes = {
   promptBackward: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
   selectedNodes: PropTypes.array.isRequired,
-  sessionId: PropTypes.string.isRequired,
   sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
@@ -125,7 +124,6 @@ function makeMapStateToProps() {
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
       selectedNodes: networkNodes(state),
-      sessionId: state.session,
       sortFields: getSortFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
