@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { Button, Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerCard from '../../components/Setup/ServerCard';
+
+const loadingPlaceholder = (
+  <div className="server-list__placeholder">
+    <Spinner />
+    <h4>Listening for nearby Servers...</h4>
+  </div>
+);
 
 class ServerList extends Component {
   constructor() {
@@ -75,40 +83,41 @@ class ServerList extends Component {
   }
 
   renderServerList() {
-    if (this.state.servers.length > 0) {
-      return (
-        <React.Fragment>
-          {this.state.servers.map(server => (
-            <ServerCard key={server.apiUrl} data={server} selectServer={this.props.selectServer}>
-              {server.host}
-            </ServerCard>
-          ))}
-        </React.Fragment>
-      );
-    }
+    return (
+      <div className="server-list__content">
+        {this.state.servers.map(server => (
+          <ServerCard key={server.apiUrl} data={server} selectServer={this.props.selectServer}>
+            {server.host}
+          </ServerCard>
+        ))}
+      </div>
+    );
+  }
 
-    return (<div className="server-list__placeholder"><Spinner /><h4>Listening for nearby Servers...</h4></div>);
+  renderError() {
+    return (
+      <div className="server-list__placeholder">
+        <Icon name="error" />
+        <h4>Automatic server discovery unavailable</h4>
+        { // eslint-disable-next-line no-alert
+        }<Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
+      </div>
+    );
   }
 
   render() {
-    return (
-      <div className="server-list">
-        <div className="server-list__content">
-          {this.state.error ?
-            (
-              <div className="server-list__placeholder">
-                <Icon name="error" />
-                <h4>Automatic server discovery unavailable</h4>
-                { // eslint-disable-next-line no-alert
-                }<Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
-              </div>
-            )
-            :
-            this.renderServerList()
-          }
-        </div>
-      </div>
-    );
+    const serversAvailable = !this.state.error && this.state.servers.length > 0;
+    const className = classNames('server-list', { 'server-list--available': serversAvailable });
+
+    if (this.state.error) {
+      return (<div className={className}>{this.renderError()}</div>);
+    }
+
+    if (serversAvailable) {
+      return (<div className={className}>{this.renderServerList()}</div>);
+    }
+
+    return (<div className={className}>{loadingPlaceholder}</div>);
   }
 }
 
