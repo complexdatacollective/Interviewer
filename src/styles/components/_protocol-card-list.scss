@@ -1,5 +1,6 @@
 .protocol-card-list {
   --border-color: var(--color-neon-carrot--dark);
+  --border-width: 2px;
   --card-height: 5rem;
 
   display: flex;
@@ -13,15 +14,20 @@
   &__prefix {
     border-bottom: 2px solid var(--border-color);
     height: 0;
-    margin-top: 80px;
+    margin-top: calc(var(--card-height) - var(--border-width));
     width: 1rem;
   }
 
   &__left-border {
-    border-left: 2px solid var(--border-color);
+    border-left: var(--border-width) solid var(--border-color);
     height: calc(100% - var(--card-height));
     margin: calc(.5 * var(--card-height)) 0;
     position: absolute;
+
+    &--single-protocol {
+      // If there's only one protocol card, extend height to meet 'prefix' line
+      height: calc(100% - var(--card-height) / 2);
+    }
   }
 
   &__bordered-card {
@@ -32,7 +38,7 @@
   }
 
   &__card-border {
-    border-top: 2px solid var(--border-color);
+    border-top: var(--border-width) solid var(--border-color);
     flex: none;
     margin-top: calc(.5 * var(--card-height));
     top: 50%;
