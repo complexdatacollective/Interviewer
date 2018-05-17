@@ -19,6 +19,14 @@
     text-align: center;
     width: calc(1rem + var(--character-padding) * 2);
 
+    &:nth-of-type(4n) {
+      margin-right: 1rem;
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+
     &--error {
       background-color: var(--color-tomato);
     }
