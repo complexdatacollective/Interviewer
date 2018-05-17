@@ -8,6 +8,7 @@ describe('<SetupScreen>', () => {
   it('links to protocol import screen', () => {
     const component = shallow((
       <SetupScreen
+        setDeviceDescription={jest.fn()}
         downloadProtocol={jest.fn()}
         loadFactoryProtocol={jest.fn()}
         protocolType=""
