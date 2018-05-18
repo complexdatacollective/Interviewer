@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { getPromptForCurrentSession } from '../selectors/session';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
-    constructor(props) {
-      super(props);
-
-      this.state = {
-        promptIndex: props.promptIndex,
-      };
-    }
-
     prompts() {
       return this.props.stage.prompts;
     }
@@ -20,19 +17,19 @@ export default function withPrompt(WrappedComponent) {
     }
 
     prompt() {
-      return this.prompts()[this.state.promptIndex];
+      return this.prompts()[this.props.promptIndex];
     }
 
     promptForward = () => {
-      this.setState({
-        promptIndex: (this.promptsCount() + this.state.promptIndex + 1) % this.promptsCount(),
-      });
+      this.props.updatePrompt(
+        (this.promptsCount() + this.props.promptIndex + 1) % this.promptsCount(),
+      );
     }
 
     promptBackward = () => {
-      this.setState({
-        promptIndex: (this.promptsCount() + this.state.promptIndex - 1) % this.promptsCount(),
-      });
+      this.props.updatePrompt(
+        (this.promptsCount() + this.props.promptIndex - 1) % this.promptsCount(),
+      );
     }
 
     render() {
@@ -51,11 +48,24 @@ export default function withPrompt(WrappedComponent) {
   WithPrompt.propTypes = {
     stage: PropTypes.object.isRequired,
     promptIndex: PropTypes.number,
+    updatePrompt: PropTypes.func.isRequired,
   };
 
   WithPrompt.defaultProps = {
     promptIndex: 0,
   };
 
-  return WithPrompt;
+  function mapStateToProps(state) {
+    return {
+      promptIndex: getPromptForCurrentSession(state),
+    };
+  }
+
+  function mapDispatchToProps(dispatch) {
+    return {
+      updatePrompt: bindActionCreators(sessionsActions.updatePrompt, dispatch),
+    };
+  }
+
+  return connect(mapStateToProps, mapDispatchToProps)(WithPrompt);
 }

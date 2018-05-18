@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionCreators, actionTypes } from '../network';
+import reducer, { actionTypes } from '../network';
 
 const mockState = {
   ego: {},
@@ -93,88 +93,94 @@ describe('network reducer', () => {
       nodes: [{ uid: 1, name: 'foo' }, { uid: 3, name: 'baz' }],
     });
   });
-});
 
-describe('session actions', () => {
-  it('should create an ADD_NODES action with a single node', () => {
-    const expectedAction = {
-      type: actionTypes.ADD_NODES,
-      nodes: [{ name: 'foo' }],
-    };
-
-    expect(actionCreators.addNodes({ name: 'foo' })).toMatchObject(expectedAction);
+  it('should handle UPDATE_NODE', () => {
+    const newState = reducer(
+      {
+        ...mockState,
+        nodes: [{ uid: 1, id: 1, name: 'baz' }],
+      },
+      {
+        type: actionTypes.UPDATE_NODE,
+        node: { uid: 1, name: 'foo' },
+      },
+    );
+    expect(newState.nodes[0]).toEqual({ uid: 1, id: 1, name: 'foo' });
   });
 
-  it('should create an ADD_NODES action for batch adding', () => {
-    const expectedAction = {
-      type: actionTypes.ADD_NODES,
-      nodes: [{ name: 'foo' }, { name: 'bar' }],
-    };
+  it('should handle TOGGLE_NODE_ATTRIBUTES', () => {
+    const newState = reducer(
+      {
+        ...mockState,
+        nodes: [{ uid: 1, name: 'foo' }, { uid: 2, name: 'bar' }],
+      },
+      {
+        type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
+        uid: 1,
+        attributes: { stage: 1 },
+      },
+    );
 
-    const action = actionCreators.addNodes([{ name: 'foo' }, { name: 'bar' }]);
-    expect(action).toEqual(expectedAction);
+    expect(newState.nodes[0].stage).toEqual(1);
+    expect(newState.nodes[1].stage).toEqual(undefined);
+
+    const secondState = reducer(
+      {
+        ...mockState,
+        nodes: [{ uid: 1, stage: 1, name: 'foo' }, { uid: 2, stage: 1, name: 'bar' }],
+      },
+      {
+        type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
+        uid: 2,
+        attributes: { stage: 1 },
+      },
+    );
+
+    expect(secondState.nodes[0].stage).toEqual(1);
+    expect(secondState.nodes[1].stage).toEqual(undefined);
   });
 
-  it('should create a REMOVE_NODE action', () => {
-    const expectedAction = {
-      type: actionTypes.REMOVE_NODE,
-      uid: 2,
-    };
-
-    expect(actionCreators.removeNode(2)).toEqual(expectedAction);
-  });
-
-  it('should add edges', () => {
+  it('should handle ADD_EDGE', () => {
     const edge = { from: 'foo', to: 'bar', type: 'friend' };
-    expect(reducer(mockState, actionCreators.addEdge(edge))).toEqual({
-      ...mockState,
-      edges: [edge],
-    });
+    expect(reducer(mockState, { type: actionTypes.ADD_EDGE, edge })).toEqual(
+      {
+        ...mockState,
+        edges: [edge],
+      },
+    );
   });
 
-  it('should toggle edges, adding if not there and removing if it is', () => {
+  it('should handle TOGGLE_EDGE', () => {
     const edgeA = { from: 'foo', to: 'bar', type: 'friend' };
     const edgeB = { from: 'asdf', to: 'qwerty', type: 'friend' };
-    expect(
-      reducer(
-        {
-          ...mockState,
-          edges: [edgeA, edgeB],
-        },
-        actionCreators.toggleEdge(edgeA),
-      ),
-    ).toEqual({
-      ...mockState,
-      edges: [edgeB],
-    });
-    expect(
-      reducer(
-        {
-          ...mockState,
-          edges: [edgeB],
-        },
-        actionCreators.toggleEdge(edgeA),
-      ),
-    ).toEqual({
-      ...mockState,
-      edges: [edgeB, edgeA],
-    });
+    expect(reducer(
+      { ...mockState, edges: [edgeA, edgeB] },
+      { type: actionTypes.TOGGLE_EDGE, edge: edgeA })).toEqual(
+      {
+        ...mockState,
+        edges: [edgeB],
+      },
+    );
+    expect(reducer(
+      { ...mockState, edges: [edgeB] },
+      { type: actionTypes.TOGGLE_EDGE, edge: edgeA })).toEqual(
+      {
+        ...mockState,
+        edges: [edgeB, edgeA],
+      },
+    );
   });
 
-  it('should remove edges', () => {
+  it('should handle REMOVE_EDGE', () => {
     const edgeA = { from: 'foo', to: 'bar', type: 'friend' };
     const edgeB = { from: 'asdf', to: 'qwerty', type: 'friend' };
-    expect(
-      reducer(
-        {
-          ...mockState,
-          edges: [edgeA, edgeB],
-        },
-        actionCreators.removeEdge(edgeA),
-      ),
-    ).toEqual({
-      ...mockState,
-      edges: [edgeB],
-    });
+    expect(reducer(
+      { ...mockState, edges: [edgeA, edgeB] },
+      { type: actionTypes.REMOVE_EDGE, edge: edgeA })).toEqual(
+      {
+        ...mockState,
+        edges: [edgeB],
+      },
+    );
   });
 });

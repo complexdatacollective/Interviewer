@@ -7,7 +7,7 @@ import { isEqual, isEmpty, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 
 const watchProps = ['width', 'height', 'dropCount'];
@@ -179,9 +179,9 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleHighlight: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
-    toggleEdge: bindActionCreators(networkActions.toggleEdge, dispatch),
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    toggleHighlight: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    toggleEdge: bindActionCreators(sessionsActions.toggleEdge, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

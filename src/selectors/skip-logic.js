@@ -3,8 +3,7 @@ import { createSelector } from 'reselect';
 import * as query from '../utils/networkQuery/query';
 import predicate from '../utils/networkQuery/predicate';
 import { stages as getStages } from './session';
-
-const getNetwork = state => state.network;
+import { getNetwork } from './interface';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const maxLength = state => getStages(state).length;

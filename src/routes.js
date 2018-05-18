@@ -18,12 +18,15 @@ function mapStateToProps(state) {
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
+    sessionId: state.session,
   };
 }
 
-let SetupRequiredRoute = ({ component: Component, protocolPath, protocolType, ...rest }) => (
+let SetupRequiredRoute = (
+  { component: Component, protocolPath, protocolType, sessionId, ...rest },
+) => (
   rest.isProtocolLoaded ? (
-    <Redirect to={{ pathname: `/protocol/${protocolType}/${protocolPath}/0` }} {...rest} />
+    <Redirect to={{ pathname: `/session/${sessionId}/${protocolType}/${protocolPath}/0` }} {...rest} />
   ) : (
     <Redirect to={{ pathname: '/setup' }} />
   )
@@ -33,6 +36,7 @@ SetupRequiredRoute.propTypes = {
   component: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
+  sessionId: PropTypes.string.isRequired,
 };
 
 SetupRequiredRoute.defaultProps = {
@@ -43,9 +47,9 @@ SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 
 export default () => (
   <Switch>
-    <SetupRequiredRoute exact path="/protocol" component={ProtocolScreen} />
-    <LoadParamsRoute path="/protocol/:protocolType/:protocolId/:stageIndex" component={ProtocolScreen} />
-    <LoadParamsRoute path="/protocol/:protocolType/:protocolId" component={ProtocolScreen} />
+    <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId/:protocolType/:protocolId/:stageIndex" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId/:protocolType/:protocolId" component={ProtocolScreen} />
     <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/setup' }} />
     <Route path="/setup" component={SetupScreen} />
     <Redirect to={{ pathname: '/setup' }} />

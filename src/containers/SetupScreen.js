@@ -4,8 +4,10 @@ import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+
 import { Button } from '../ui/components';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { ServerList } from '../components/';
 import { Form } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
@@ -34,11 +36,13 @@ const initialValues = {
   */
 class Setup extends Component {
   onClickLoadFactoryProtocol = (protocolName) => {
+    this.props.addSession();
     this.props.loadFactoryProtocol(protocolName);
   }
 
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
+      this.props.addSession();
       this.props.downloadProtocol(fields.protocol_url);
     }
   }
@@ -64,7 +68,8 @@ class Setup extends Component {
 
   render() {
     if (this.props.isProtocolLoaded) {
-      const pathname = `/protocol/${this.props.protocolType}/${this.props.protocolPath}/0`;
+      const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
+      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/${stageIndex}`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -87,15 +92,19 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
+  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
+  sessionId: PropTypes.string.isRequired,
+  stageIndex: PropTypes.number,
 };
 
 Setup.defaultProps = {
   protocolPath: '',
+  stageIndex: 0,
 };
 
 function mapStateToProps(state) {
@@ -104,11 +113,13 @@ function mapStateToProps(state) {
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
+    sessionId: state.session,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
   };

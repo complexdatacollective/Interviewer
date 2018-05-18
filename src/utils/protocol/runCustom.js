@@ -6,13 +6,13 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { PromptSwiper } from '../../containers/';
 import { NodeList, DropZone } from '../../components/';
 
 const actions = {
-  network: networkActions,
+  network: sessionsActions,
   modal: modalActions,
 };
 

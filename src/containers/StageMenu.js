@@ -36,6 +36,7 @@ class StageMenu extends Component {
       protocolPath,
       protocolType,
       searchValue,
+      sessionId,
       toggleMenu,
     } = this.props;
 
@@ -45,7 +46,7 @@ class StageMenu extends Component {
         icon: filteredStage.icon,
         label: filteredStage.label,
         interfaceType: filteredStage.type,
-        to: protocolPath ? `/protocol/${protocolType}/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
+        to: protocolPath ? `/session/${sessionId}/${protocolType}/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
       }));
 
     const search = (
@@ -75,6 +76,7 @@ StageMenu.propTypes = {
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   searchValue: PropTypes.string,
+  sessionId: PropTypes.string.isRequired,
   toggleMenu: PropTypes.func.isRequired,
   updateSearch: PropTypes.func,
 };
@@ -98,6 +100,7 @@ function mapStateToProps(state) {
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     searchValue: stageSearchTerm(state),
+    sessionId: state.session,
   };
 }
 

@@ -96,7 +96,12 @@ const nodes = [
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 
 const mockState = {
-  network: { nodes, edges },
+  sessions: {
+    a: {
+      network: { nodes, edges },
+    },
+  },
+  session: 'a',
   protocol: mockProtocol,
 };
 
