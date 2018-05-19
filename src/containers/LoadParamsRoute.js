@@ -84,8 +84,8 @@ class LoadParamsRoute extends Component {
       sessionId,
     } = this.props.computedMatch.params;
 
-    // not finished loading
-    if (!isProtocolLoaded || this.props.sessionId !== sessionId) { return null; }
+    const finishedLoading = isProtocolLoaded && this.props.sessionId === sessionId;
+    if (!shouldReset && !finishedLoading) { return null; }
 
     return (
       isSkipped ?
