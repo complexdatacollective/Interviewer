@@ -3,13 +3,34 @@ import { Link } from 'react-router-dom';
 
 import ServerList from './ServerList';
 import ServerPairing from './ServerPairing';
+import ServerProtocols from './ServerProtocols';
 import ServerAddressForm from '../../components/Setup/ServerAddressForm';
 import { Button, Icon } from '../../ui/components';
 
+/**
+ * This component is the top-level interface for protocol importing, wrapping
+ * dependent tasks such as server discovery and pairing.
+ *
+ * - A user selects (or manually enters the connection info of) an available server.
+ * - If pairing is required, then the pairing form is shown.
+ * - If or once a server is paired, a selectable list of protocols is shown.
+ */
 class ProtocolImport extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { previousSelectedServer: null, selectedServer: null };
+    this.state = {
+      selectedServer: null, // set when user selects/enters a server to pair with
+      previousSelectedServer: null, // selectedServer clone to populate manual inputs
+      pairedServer: null, // set once pairing complete
+    };
+  }
+
+  onPairingComplete(server) {
+    this.setState({
+      pairedServer: server,
+      previousSelectedServer: null,
+      selectedServer: null,
+    });
   }
 
   onPairingError() {
@@ -21,12 +42,17 @@ class ProtocolImport extends PureComponent {
   }
 
   contentArea = () => {
-    const { manualEntry, previousSelectedServer: prev, selectedServer } = this.state;
+    const { manualEntry, pairedServer, previousSelectedServer: prev, selectedServer } = this.state;
     let content;
-    if (selectedServer && selectedServer.apiUrl) {
+    if (pairedServer) {
+      content = (
+        <ServerProtocols server={pairedServer} />
+      );
+    } else if (selectedServer && selectedServer.apiUrl) {
       content = (
         <ServerPairing
           server={selectedServer}
+          onComplete={() => this.onPairingComplete(selectedServer)}
           onError={() => this.onPairingError()}
         />
       );
@@ -35,17 +61,17 @@ class ProtocolImport extends PureComponent {
         <ServerAddressForm
           address={prev && prev.addresses && prev.addresses[0]}
           port={prev && prev.port}
-          selectServer={this.selectServer}
+          selectServer={this.pairWithServer}
           cancel={() => this.setState({ manualEntry: false })}
         />
       );
     } else {
-      content = <ServerList selectServer={this.selectServer} />;
+      content = <ServerList selectServer={this.pairWithServer} />;
     }
     return content;
   }
 
-  selectServer = (server) => {
+  pairWithServer = (server) => {
     this.setState({ selectedServer: server });
   }
 

@@ -1,4 +1,4 @@
-.server-pairing {
+.server-setup {
   display: flex;
   flex-direction: row;
 
@@ -12,7 +12,7 @@
     padding-left: spacing(large);
   }
 
-  &__loading {
+  &--loading {
     margin: 5rem auto;
   }
 }

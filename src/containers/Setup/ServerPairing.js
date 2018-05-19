@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
 import ApiClient from '../../utils/ApiClient';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { ProtocolCardList, ServerCard, ServerPairingForm } from '../../components/Setup';
+import { ServerSetup, ServerPairingForm } from '../../components/Setup';
+import { actionCreators } from '../../ducks/modules/servers';
 import { Spinner } from '../../ui/components';
 
 const emptyState = Object.freeze({
@@ -15,6 +14,9 @@ const emptyState = Object.freeze({
   pairingRequestId: null,
 });
 
+/**
+ * This component is responsible for pairing with a server selected or entered by the user
+ */
 class ServerPairing extends Component {
   constructor(props) {
     super(props);
@@ -27,9 +29,8 @@ class ServerPairing extends Component {
   }
 
   handleApiError(err) {
-    this.props.downloadProtocolFailed(err); // Show message to user
     this.setState(emptyState);
-    this.props.onError(err); // Signal parent
+    this.props.onError(err);
   }
 
   requestPairingCode() {
@@ -58,13 +59,7 @@ class ServerPairing extends Component {
           pairedDeviceId: device.id,
         });
       })
-      .then(this.fetchProtocolList)
-      .catch(err => this.handleApiError(err));
-  }
-
-  fetchProtocolList = () => {
-    this.apiClient.getProtocols()
-      .then(protocols => this.setState({ protocols }))
+      .then(() => this.props.onComplete())
       .catch(err => this.handleApiError(err));
   }
 
@@ -76,57 +71,44 @@ class ServerPairing extends Component {
   }
 
   render() {
-    if (this.props.isProtocolLoaded) {
-      const pathname = `/protocol/${this.props.protocolType}/${this.props.protocolPath}/0`;
-      return (<Redirect to={{ pathname: `${pathname}` }} />);
-    }
-
-    const { server, downloadProtocol } = this.props;
-    const { loading, protocols } = this.state;
+    const { server } = this.props;
+    const { loading } = this.state;
 
     if (loading) {
       return (
-        <div className="server-pairing__loading">
+        <div className="server-setup--loading">
           <Spinner />
         </div>
       );
     }
 
     return (
-      <div className="server-pairing">
-        <ServerCard className="server-pairing__card" data={server}>{server.host}</ServerCard>
+      <ServerSetup server={server}>
         {
-          this.state.pairingRequestId &&
-          <ServerPairingForm
+          this.state.pairingRequestId && <ServerPairingForm
             className="server-pairing__form"
             completePairing={this.completePairing}
             disabled={this.state.loading}
           />
         }
-        {
-          protocols && <ProtocolCardList protocols={protocols} download={downloadProtocol} />
-        }
-      </div>
+      </ServerSetup>
     );
   }
 }
 
 ServerPairing.defaultProps = {
   deviceName: '',
+  onComplete: () => {},
   onError: () => {},
-  protocolPath: '',
 };
 
 ServerPairing.propTypes = {
   deviceName: PropTypes.string,
-  downloadProtocol: PropTypes.func.isRequired,
-  downloadProtocolFailed: PropTypes.func.isRequired,
-  isProtocolLoaded: PropTypes.bool.isRequired,
+  onComplete: PropTypes.func,
   onError: PropTypes.func,
-  protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
     apiUrl: PropTypes.string.isRequired,
+    host: PropTypes.string,
   }).isRequired,
 };
 
@@ -134,16 +116,12 @@ function mapStateToProps(state) {
   return {
     deviceName: state.device.description,
     isFactory: state.protocol.isFactory,
-    isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    downloadProtocolFailed: bindActionCreators(protocolActions.downloadProtocolFailed, dispatch),
+    addServer: bindActionCreators(actionCreators.addServer, dispatch),
   };
 }
 

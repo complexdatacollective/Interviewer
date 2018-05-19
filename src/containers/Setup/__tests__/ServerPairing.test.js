@@ -27,7 +27,7 @@ describe('<ServerPairing>', () => {
 
   it('renders a server card', () => {
     component.setState({ loading: false });
-    expect(component.find('ServerCard')).toHaveLength(1);
+    expect(component.find('ServerSetup')).toHaveLength(1);
   });
 
   it('renders a form after request ID received', () => {
