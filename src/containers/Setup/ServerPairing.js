@@ -54,6 +54,7 @@ class ServerPairing extends Component {
     this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
       .then((device) => {
         // TODO: Here's the point we'd want to persist ID + secret above
+        this.props.addServer(this.props.server);
         this.setState({
           ...emptyState,
           pairedDeviceId: device.id,
@@ -103,6 +104,7 @@ ServerPairing.defaultProps = {
 };
 
 ServerPairing.propTypes = {
+  addServer: PropTypes.func.isRequired,
   deviceName: PropTypes.string,
   onComplete: PropTypes.func,
   onError: PropTypes.func,

@@ -25,7 +25,15 @@ class ProtocolImport extends PureComponent {
     };
   }
 
-  onPairingComplete(server) {
+  onPairingError() {
+    this.setState({
+      // Make prev data available to repopulate manual form if needed
+      previousSelectedServer: this.state.selectedServer,
+      selectedServer: null,
+    });
+  }
+
+  setPairedServer = (server) => {
     this.setState({
       pairedServer: server,
       previousSelectedServer: null,
@@ -33,12 +41,8 @@ class ProtocolImport extends PureComponent {
     });
   }
 
-  onPairingError() {
-    this.setState({
-      // Make prev data available to repopulate manual form if needed
-      previousSelectedServer: this.state.selectedServer,
-      selectedServer: null,
-    });
+  pairWithServer = (server) => {
+    this.setState({ selectedServer: server });
   }
 
   contentArea = () => {
@@ -52,7 +56,7 @@ class ProtocolImport extends PureComponent {
       content = (
         <ServerPairing
           server={selectedServer}
-          onComplete={() => this.onPairingComplete(selectedServer)}
+          onComplete={() => this.setPairedServer(selectedServer)}
           onError={() => this.onPairingError()}
         />
       );
@@ -66,13 +70,14 @@ class ProtocolImport extends PureComponent {
         />
       );
     } else {
-      content = <ServerList selectServer={this.pairWithServer} />;
+      content = (
+        <ServerList
+          selectPairedServer={this.setPairedServer}
+          selectServer={this.pairWithServer}
+        />
+      );
     }
     return content;
-  }
-
-  pairWithServer = (server) => {
-    this.setState({ selectedServer: server });
   }
 
   render() {

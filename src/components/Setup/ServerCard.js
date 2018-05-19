@@ -6,9 +6,10 @@ import logo from '../../images/Srv-Flat.svg';
 
 const noClick = () => {};
 
-const ServerCard = ({ children, data, selectServer, className, ...props }) => {
+const ServerCard = ({ children, data, selectServer, isPaired, className, ...props }) => {
   const cssClass = classNames(
     'server-card',
+    { 'server-card--paired': isPaired },
     { 'server-card--clickable': selectServer !== noClick },
     className,
   );
@@ -24,6 +25,7 @@ ServerCard.propTypes = {
   data: PropTypes.object,
   children: PropTypes.any,
   className: PropTypes.string,
+  isPaired: PropTypes.bool,
   selectServer: PropTypes.func,
 };
 
@@ -31,6 +33,7 @@ ServerCard.defaultProps = {
   data: {},
   children: null,
   className: '',
+  isPaired: false,
   selectServer: noClick,
 };
 

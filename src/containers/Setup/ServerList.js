@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
 import { Button, Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
@@ -83,13 +84,26 @@ class ServerList extends Component {
   }
 
   renderServerList() {
+    const { pairedServers } = this.props;
     return (
       <div className="server-list__content">
-        {this.state.servers.map(server => (
-          <ServerCard key={server.apiUrl} data={server} selectServer={this.props.selectServer}>
-            {server.host}
-          </ServerCard>
-        ))}
+        {
+          this.state.servers.map((server) => {
+            // Review: Single server may have two apiUrls; should this be treated as two servers?
+            const isPaired = pairedServers.some(s => s.apiUrl === server.apiUrl);
+            const onSelect = isPaired ? this.props.selectPairedServer : this.props.selectServer;
+            return (
+              <ServerCard
+                key={server.apiUrl}
+                data={server}
+                selectServer={onSelect}
+              >
+                {server.host}
+                {isPaired && ' (paired)'}
+              </ServerCard>
+            );
+          })
+        }
       </div>
     );
   }
@@ -122,11 +136,21 @@ class ServerList extends Component {
 }
 
 ServerList.defaultProps = {
+  pairedServers: [],
+  selectPairedServer: () => {},
   selectServer: () => {},
 };
 
 ServerList.propTypes = {
+  pairedServers: PropTypes.array,
+  selectPairedServer: PropTypes.func,
   selectServer: PropTypes.func,
 };
 
-export default ServerList;
+const mapStateToProps = state => ({
+  pairedServers: state.servers.paired,
+});
+
+export default connect(mapStateToProps)(ServerList);
+
+export { ServerList as UnconnectedServerList };

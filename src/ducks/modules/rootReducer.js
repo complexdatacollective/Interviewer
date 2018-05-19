@@ -10,6 +10,7 @@ import modals from './modals';
 import menu from './menu';
 import errors from './errors';
 import search from './search';
+import servers from './servers';
 
 const appReducer = combineReducers({
   router: routerReducer,
@@ -22,6 +23,7 @@ const appReducer = combineReducers({
   menu,
   errors,
   search,
+  servers,
 });
 
 const rootReducer = (state, action) => {
