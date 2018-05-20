@@ -29,6 +29,7 @@ class ServerPairing extends Component {
   }
 
   handleApiError(err) {
+    this.props.pairingFailed(err);
     this.setState(emptyState);
     this.props.onError(err);
   }
@@ -109,6 +110,7 @@ ServerPairing.propTypes = {
   deviceName: PropTypes.string,
   onComplete: PropTypes.func,
   onError: PropTypes.func,
+  pairingFailed: PropTypes.func.isRequired,
   server: PropTypes.shape({
     apiUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
@@ -125,6 +127,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addServer: bindActionCreators(actionCreators.addServer, dispatch),
+    pairingFailed: bindActionCreators(actionCreators.pairingFailed, dispatch),
   };
 }
 

@@ -1,28 +1,21 @@
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 
-const Messages = {
-  PairingFailed: 'Pairing Failed — please try again',
-  ErrorResponse: 'Response error',
-  // Checking response shape (programming errors) for now. TODO: probably remove
-  UnexpectedResponse: 'Unexpected Response',
-};
+const ApiErrorStatus = 'error';
 
-const isRequestError = resp => (/^4/.test(resp.status));
+// Error message to display when there's no usable message from server
+const UnexpectedResponseMessage = 'Unexpected Response';
 
-const respError = (resp, friendlyMessage) => {
-  const baseError = new Error(Messages.ErrorResponse);
-  if (isRequestError(resp)) {
-    // Create a user-friendly display error
-    baseError.friendlyMessage = friendlyMessage;
-    baseError.stack = null;
-    return baseError;
+const isErrorJson = json => !json || !json.data || json.status === ApiErrorStatus;
+
+// A throwable 'friendly' error containing message from server
+const apiError = (respJson) => {
+  const error = new Error('API error');
+  if (respJson.message) {
+    error.friendlyMessage = respJson.message;
+    error.stack = null;
   }
-  if (!resp.ok) {
-    return baseError;
-  }
-  return null;
+  return error;
 };
-
 
 /**
  *
@@ -42,15 +35,10 @@ class ApiClient {
    */
   requestPairing() {
     return fetch(`${this.apiUrl}/devices/new`)
-      .then((resp) => {
-        if (!resp.ok) {
-          throw new Error(Messages.ErrorResponse);
-        }
-        return resp.json();
-      })
+      .then(resp => resp.json())
       .then((json) => {
-        if (!json.data || !json.data.pairingRequestId || !json.data.salt) {
-          throw new Error(Messages.UnexpectedResponse);
+        if (isErrorJson(json) || !json.data.pairingRequestId || !json.data.salt) {
+          throw apiError(json);
         }
         return json.data;
       });
@@ -90,15 +78,17 @@ class ApiClient {
           message: encryptedMessage,
         }),
       })
-      .then((resp) => {
-        if (!resp.ok) { throw respError(resp, Messages.PairingFailed); }
-        return resp.json();
+      .then(resp => resp.json())
+      .then((json) => {
+        if (isErrorJson(json)) {
+          throw apiError(json);
+        }
+        return decrypt(json.data.message, secretHex);
       })
-      .then(json => decrypt(json.data.message, secretHex))
       .then(JSON.parse)
       .then((decryptedData) => {
         if (!decryptedData.device || !decryptedData.device.id) {
-          throw new Error(Messages.UnexpectedResponse);
+          throw new Error(UnexpectedResponseMessage);
         }
         return decryptedData.device;
       });
@@ -111,13 +101,10 @@ class ApiClient {
    */
   getProtocols() {
     return fetch(`${this.apiUrl}/protocols`)
-      .then((resp) => {
-        if (!resp.ok) { throw new Error(Messages.ErrorResponse); }
-        return resp.json();
-      })
+      .then(resp => resp.json())
       .then((json) => {
-        if (!json || !Array.isArray(json.data)) {
-          throw new Error(Messages.UnexpectedResponse);
+        if (isErrorJson(json) || !Array.isArray(json.data)) {
+          throw apiError(UnexpectedResponseMessage);
         }
         return json.data;
       });
