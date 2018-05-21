@@ -39,7 +39,7 @@ class ServerPairingForm extends Component {
         {
           loading &&
           <React.Fragment>
-            <p>Please acknowledge the pairing request on the Server</p>
+            <p>Please acknowledge the pairing request on the Server...</p>
             <div className="pairing-form__loading">
               <Spinner />
             </div>

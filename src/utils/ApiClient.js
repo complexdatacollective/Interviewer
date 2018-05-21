@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 
+const ApiErrorStatus = 'error';
+
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
 const NoResponseMessage = 'Unexpected Response';
@@ -17,8 +19,13 @@ const apiError = (respJson) => {
 };
 
 const handleError = (err) => {
+  if (axios.isCancel(err)) {
+    return;
+  }
   if (err.response) {
-    throw apiError(err.response.data);
+    if (err.response.data.status === ApiErrorStatus) {
+      throw apiError(err.response.data);
+    }
   }
   if (err.request) {
     throw new Error(NoResponseMessage);
@@ -27,6 +34,10 @@ const handleError = (err) => {
 };
 
 /**
+ * @class ApiClient
+ *
+ * ## Format
+ *
  * See server documentation for API requests & responses.
  *
  * In general, error responses take the shape:
@@ -39,12 +50,22 @@ const handleError = (err) => {
  * Successful responses have a `data` key. With axios, responses also have a `data` property
  * representing the (JSON) response body, so parsing looks a little strange: `resp.data.data`.
  *
+ * ## Cancellation
+ *
+ * All pending requests can be cancelled by calling cancelAll(). This will not reject the promised
+ * response; rather, it will resolve with empty data.
+ *
  */
 class ApiClient {
   constructor(apiUrl) {
+    this.cancelTokenSource = axios.CancelToken.source();
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
     });
+  }
+
+  cancelAll() {
+    this.cancelTokenSource.cancel();
   }
 
   /**
@@ -56,7 +77,7 @@ class ApiClient {
    * @throws {Error}
    */
   requestPairing() {
-    return this.client.get('/devices/new')
+    return this.client.get('/devices/new', { cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);
@@ -88,6 +109,9 @@ class ApiClient {
     return this.client.post('/devices',
       {
         message: encryptedMessage,
+      },
+      {
+        cancelToken: this.cancelTokenSource.token,
       })
       .then(resp => resp.data)
       .then(json => decrypt(json.data.message, secretHex))
@@ -107,7 +131,7 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return this.client.get('/protocols')
+    return this.client.get('/protocols', { cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

@@ -27,6 +27,10 @@ class ServerPairing extends Component {
     this.requestPairingCode();
   }
 
+  componentWillUnmount() {
+    this.apiClient.cancelAll();
+  }
+
   handleApiError(err) {
     this.props.pairingFailed(err);
     this.setState(emptyState);
@@ -37,6 +41,10 @@ class ServerPairing extends Component {
     this.setState({ loading: true });
     this.apiClient.requestPairing()
       .then((data) => {
+        if (!data) {
+          // we aborted the request during unmount
+          return;
+        }
         this.setState({
           loading: false,
           pairingRequestId: data.pairingRequestId,
