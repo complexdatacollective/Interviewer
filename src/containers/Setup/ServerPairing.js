@@ -86,7 +86,8 @@ class ServerPairing extends Component {
     return (
       <ServerSetup server={server}>
         {
-          this.state.pairingRequestId && <ServerPairingForm
+          this.state.pairingRequestId &&
+          <ServerPairingForm
             className="server-pairing__form"
             completePairing={this.completePairing}
             disabled={this.state.loading}

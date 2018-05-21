@@ -1,8 +1,10 @@
 .pairing-form {
   &__submit {
     float: right;
+  }
 
-    .button[disabled] {
+  .button {
+    &[disabled] {
       cursor: default;
       opacity: .5;
     }

@@ -19,11 +19,11 @@ class ServerPairingForm extends Component {
   }
 
   render() {
-    const { completePairing, disabled, ...props } = this.props;
+    const { className, completePairing, disabled, ...props } = this.props;
     const { submittable } = this.state;
     return (
       <form
-        className="pairing-form"
+        className={`pairing-form ${className}`}
         onSubmit={(evt) => {
           evt.preventDefault();
           completePairing(this.state.pairingCode);
@@ -56,10 +56,12 @@ class ServerPairingForm extends Component {
 }
 
 ServerPairingForm.defaultProps = {
+  className: '',
   disabled: false,
 };
 
 ServerPairingForm.propTypes = {
+  className: PropTypes.string,
   completePairing: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };
