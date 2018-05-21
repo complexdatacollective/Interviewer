@@ -9,4 +9,10 @@
       opacity: .5;
     }
   }
+
+  &__loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
 }

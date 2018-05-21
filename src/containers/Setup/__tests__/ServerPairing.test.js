@@ -21,18 +21,20 @@ describe('<ServerPairing>', () => {
     ));
   });
 
-  it('renders a spinner when first loading', () => {
-    expect(component.find('Spinner')).toHaveLength(1);
-  });
-
   it('renders a server card', () => {
-    component.setState({ loading: false });
     expect(component.find('ServerSetup')).toHaveLength(1);
   });
 
-  it('renders a form after request ID received', () => {
-    expect(component.find('ServerPairingForm')).toHaveLength(0);
-    component.setState({ loading: false, pairingRequestId: '1' });
+  it('renders a pairing form', () => {
     expect(component.find('ServerPairingForm')).toHaveLength(1);
+  });
+
+  it('sets a loading state on the form', () => {
+    expect(component.find('ServerPairingForm').prop('loading')).toBe(true);
+  });
+
+  it('tells form to stop loading', () => {
+    component.setState({ loading: false, pairingRequestId: '1' });
+    expect(component.find('ServerPairingForm').prop('loading')).toBe(false);
   });
 });

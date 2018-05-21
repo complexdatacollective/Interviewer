@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import PairingCodeInput from './PairingCodeInput';
-import { Button } from '../../ui/components';
+import { Button, Spinner } from '../../ui/components';
 import { PairingCodeLength } from '../../utils/shared-api/pairingCodeConfig';
 
 class ServerPairingForm extends Component {
@@ -19,7 +19,7 @@ class ServerPairingForm extends Component {
   }
 
   render() {
-    const { className, completePairing, disabled, ...props } = this.props;
+    const { className, completePairing, loading, ...props } = this.props;
     const { submittable } = this.state;
     return (
       <form
@@ -35,21 +35,34 @@ class ServerPairingForm extends Component {
           You must pair this device with this instance of Server. This is a one-off process that
           allows your devices to securely identify each other.
         </p>
-        <p>Please type the number shown on the Server setup screen into the box below.</p>
 
-        <fieldset className="pairing-form__fields">
-          <PairingCodeInput
-            charCount={PairingCodeLength}
-            disabled={disabled}
-            setPairingCode={this.setPairingCode}
-          />
+        {
+          loading &&
+          <React.Fragment>
+            <p>Please acknowledge the pairing request on the Server</p>
+            <div className="pairing-form__loading">
+              <Spinner />
+            </div>
+          </React.Fragment>
+        }
 
-          <div className="pairing-form__submit">
-            <Button disabled={disabled || !submittable} size="small">
-              Pair
-            </Button>
-          </div>
-        </fieldset>
+        { !loading &&
+          <React.Fragment>
+            <p>Please type the number shown on the Server setup screen into the box below.</p>
+            <fieldset className="pairing-form__fields">
+              <PairingCodeInput
+                charCount={PairingCodeLength}
+                setPairingCode={this.setPairingCode}
+              />
+
+              <div className="pairing-form__submit">
+                <Button disabled={!submittable} size="small">
+                  Pair
+                </Button>
+              </div>
+            </fieldset>
+          </React.Fragment>
+        }
       </form>
     );
   }
@@ -57,13 +70,13 @@ class ServerPairingForm extends Component {
 
 ServerPairingForm.defaultProps = {
   className: '',
-  disabled: false,
+  loading: false,
 };
 
 ServerPairingForm.propTypes = {
   className: PropTypes.string,
   completePairing: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 export default ServerPairingForm;

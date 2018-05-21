@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
 import { ServerSetup, ServerPairingForm } from '../../components/Setup';
 import { actionCreators } from '../../ducks/modules/servers';
-import { Spinner } from '../../ui/components';
 
 const emptyState = Object.freeze({
   loading: false,
@@ -76,22 +75,13 @@ class ServerPairing extends Component {
     const { server } = this.props;
     const { loading } = this.state;
 
-    if (loading) {
-      return (
-        <div className="server-setup--loading">
-          <Spinner />
-        </div>
-      );
-    }
-
     return (
       <ServerSetup server={server}>
         {
-          this.state.pairingRequestId &&
           <ServerPairingForm
             className="server-pairing__form"
             completePairing={this.completePairing}
-            disabled={this.state.loading}
+            loading={loading}
           />
         }
       </ServerSetup>
