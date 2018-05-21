@@ -40,7 +40,6 @@
     "devDependencies": {
         "animejs": "^2.2.0",
         "autoprefixer": "7.1.2",
-        "axios": "^0.16.1",
         "babel-core": "6.25.0",
         "babel-eslint": "7.2.3",
         "babel-jest": "20.0.3",
@@ -146,6 +145,7 @@
         "xss": "^0.3.4"
     },
     "dependencies": {
+        "axios": "^0.18.0",
         "cordova-android": "^7.1.0",
         "cordova-ios": "^4.5.4",
         "cordova-plugin-app-version": "^0.1.9",

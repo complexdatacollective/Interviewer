@@ -1,11 +1,10 @@
-import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
+import axios from 'axios';
 
-const ApiErrorStatus = 'error';
+import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
-
-const isErrorJson = json => !json || !json.data || json.status === ApiErrorStatus;
+const NoResponseMessage = 'Unexpected Response';
 
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {
@@ -17,12 +16,35 @@ const apiError = (respJson) => {
   return error;
 };
 
+const handleError = (err) => {
+  if (err.response) {
+    throw apiError(err.response.data);
+  }
+  if (err.request) {
+    throw new Error(NoResponseMessage);
+  }
+  throw err;
+};
+
 /**
+ * See server documentation for API requests & responses.
+ *
+ * In general, error responses take the shape:
+ *
+ * {
+ *   "status": "error",
+ *   "message": "..."
+ * }
+ *
+ * Successful responses have a `data` key. With axios, responses also have a `data` property
+ * representing the (JSON) response body, so parsing looks a little strange: `resp.data.data`.
  *
  */
 class ApiClient {
   constructor(apiUrl) {
-    this.apiUrl = apiUrl.replace(/\/$/, '');
+    this.client = axios.create({
+      baseURL: apiUrl.replace(/\/$/, ''),
+    });
   }
 
   /**
@@ -34,14 +56,10 @@ class ApiClient {
    * @throws {Error}
    */
   requestPairing() {
-    return fetch(`${this.apiUrl}/devices/new`)
-      .then(resp => resp.json())
-      .then((json) => {
-        if (isErrorJson(json) || !json.data.pairingRequestId || !json.data.salt) {
-          throw apiError(json);
-        }
-        return json.data;
-      });
+    return this.client.get('/devices/new')
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(handleError);
   }
 
   /**
@@ -67,31 +85,20 @@ class ApiClient {
 
     const encryptedMessage = encrypt(plaintext, secretHex);
 
-    return fetch(`${this.apiUrl}/devices`,
+    return this.client.post('/devices',
       {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: encryptedMessage,
-        }),
+        message: encryptedMessage,
       })
-      .then(resp => resp.json())
-      .then((json) => {
-        if (isErrorJson(json)) {
-          throw apiError(json);
-        }
-        return decrypt(json.data.message, secretHex);
-      })
+      .then(resp => resp.data)
+      .then(json => decrypt(json.data.message, secretHex))
       .then(JSON.parse)
       .then((decryptedData) => {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(UnexpectedResponseMessage);
         }
         return decryptedData.device;
-      });
+      })
+      .catch(handleError);
   }
 
   /**
@@ -100,14 +107,10 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return fetch(`${this.apiUrl}/protocols`)
-      .then(resp => resp.json())
-      .then((json) => {
-        if (isErrorJson(json) || !Array.isArray(json.data)) {
-          throw apiError(UnexpectedResponseMessage);
-        }
-        return json.data;
-      });
+    return this.client.get('/protocols')
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(handleError);
   }
 }
 
