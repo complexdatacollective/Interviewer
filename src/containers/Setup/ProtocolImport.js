@@ -45,13 +45,12 @@ class ProtocolImport extends PureComponent {
     this.setState({ selectedServer: server });
   }
 
-  contentArea = () => {
+  contentAreas() {
     const { manualEntry, pairedServer, previousSelectedServer: prev, selectedServer } = this.state;
     let content;
+    let buttonContent = null;
     if (pairedServer) {
-      content = (
-        <ServerProtocols server={pairedServer} />
-      );
+      content = <ServerProtocols server={pairedServer} />;
     } else if (selectedServer && selectedServer.apiUrl) {
       content = (
         <ServerPairing
@@ -76,12 +75,20 @@ class ProtocolImport extends PureComponent {
           selectServer={this.pairWithServer}
         />
       );
+      buttonContent = (
+        <Button
+          size="small"
+          color="platinum"
+          content="Enter manually"
+          onClick={() => this.setState({ manualEntry: true })}
+        />
+      );
     }
-    return content;
+    return { buttonContent, mainContent: content };
   }
 
   render() {
-    const { manualEntry, selectedServer } = this.state;
+    const { mainContent, buttonContent } = this.contentAreas();
     return (
       <div className="protocol-import">
         <Link to="/" className="protocol-import__close">
@@ -94,19 +101,10 @@ class ProtocolImport extends PureComponent {
         </p>
         <p>For information about using this feature, see our documentation.</p>
         <div className="protocol-import__content">
-          {this.contentArea()}
+          {mainContent}
         </div>
         <div className="protocol-import__buttons">
-          {
-            !manualEntry &&
-            !(selectedServer && selectedServer.apiUrl) &&
-            <Button
-              size="small"
-              color="platinum"
-              content="Enter manually"
-              onClick={() => this.setState({ manualEntry: true })}
-            />
-          }
+          {buttonContent}
         </div>
       </div>
     );
