@@ -7,7 +7,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { Node } from '../ui/components/';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
-import { scrollable, selectable } from '../behaviours';
+import { selectable } from '../behaviours';
 import {
   DragSource,
   DropTarget,
@@ -160,5 +160,4 @@ export default compose(
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
-  scrollable,
 )(OrdinalBinBucket);

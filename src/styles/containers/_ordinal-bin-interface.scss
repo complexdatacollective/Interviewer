@@ -10,10 +10,18 @@
 
   &__prompt {
     @include interface-prompt;
+    flex: 0 0 170px;
   }
 
   &__bucket {
     display: flex;
+    flex: 0 0 150px;
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
+      margin: 2px;
+    }
   }
 
   &__bins {
@@ -21,6 +29,8 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
+    border-radius: 15px;
+    overflow: hidden;
   }
 
   &__nodes {

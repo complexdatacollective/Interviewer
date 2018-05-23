@@ -1,15 +1,7 @@
-// @mixin generate-bins($number) {
-//   @for $number from 2 through 6 {
-
-
-//   }
-// }
-
 .ordinal-bin {
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-bottom: 20px solid palette('primary');
   flex: 1;
 
   &--title {
@@ -17,7 +9,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: palette('primary');
+
+    h3 {
+      margin: 0;
+    }
+
   }
 
   &--content {
@@ -26,6 +22,17 @@
     flex-grow: 5;
     align-items: center;
     justify-content: center;
-    background: palette('light-background');
+    border-bottom: 15px solid;
+
+    .scrollable {
+      height: 100%;
+    }
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
+      margin: 2px;
+    }
+
   }
 }

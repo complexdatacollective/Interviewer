@@ -1,7 +1,6 @@
 export { default as App } from './App';
 export { default as SessionMenu } from './SessionMenu';
 export { default as StageMenu } from './StageMenu';
-export { default as OrdinalBinItem } from './OrdinalBinItem';
 export { default as OrdinalBins } from './OrdinalBins';
 export { default as Stage } from './Stage';
 export { default as ProtocolScreen } from './ProtocolScreen';

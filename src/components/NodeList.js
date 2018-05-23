@@ -18,7 +18,7 @@ import {
 const EnhancedNode = DragSource(selectable(Node));
 
 /**
-  * Renders a list of Node.
+  * Renders a list of Nodes.
   */
 class NodeList extends Component {
   constructor(props) {
@@ -82,6 +82,7 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
+      hoverColor,
     } = this.props;
 
     const {
@@ -99,9 +100,7 @@ class NodeList extends Component {
       { 'node-list--drag': isValidTarget },
     );
 
-    const backgroundColor = getCSSVariableAsString('--light-background');
-
-    const styles = isHovering ? { backgroundColor } : {};
+    const styles = isHovering ? { backgroundColor: hoverColor } : {};
 
     return (
       <TransitionGroup
@@ -135,6 +134,7 @@ class NodeList extends Component {
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
+  hoverColor: PropTypes.string,
   onSelect: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
@@ -149,6 +149,7 @@ NodeList.propTypes = {
 NodeList.defaultProps = {
   nodes: [],
   nodeColor: '',
+  hoverColor: getCSSVariableAsString('--light-background'),
   label: () => (''),
   selected: () => false,
   onSelect: () => {},

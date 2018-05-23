@@ -77,6 +77,30 @@ export const makeGetDisplayVariable = () => createDeepEqualSelector(
   },
 );
 
+export const makeGetNodeVariables = () => createDeepEqualSelector(
+  protocolRegistry,
+  makeGetNodeType(),
+  (variableRegistry, nodeType) => {
+    const nodeInfo = variableRegistry && variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType].variables;
+  },
+);
+
+export const makeGetPromptVariable = () =>
+  createSelector(
+    propPrompt,
+    prompt => prompt.variable,
+  );
+
+export const makeGetOrdinalValues = () =>
+  createSelector(
+    makeGetNodeVariables(), makeGetPromptVariable(),
+    (nodeVariables, promptVariable) => {
+      const ordinalValues = nodeVariables[promptVariable].values;
+      return ordinalValues;
+    },
+  );
+
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
   variableRegistry => (node) => {

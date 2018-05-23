@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { getNodeLabelFunction, makeGetPromptVariable, makeNetworkNodesForSubject } from '../../selectors/interface';
 import { OrdinalBinBucket } from '../../components';
 import { actionCreators as networkActions } from '../../ducks/modules/network';
-
-
-const label = node => `${node.nickname}`;
 
 /**
   * OrdinalBin Interface
@@ -22,6 +18,7 @@ class OrdinalBin extends Component {
       promptForward,
       promptBackward,
       prompt,
+      getLabel,
       nodesForPrompt,
       stage,
     } = this.props;
@@ -43,10 +40,9 @@ class OrdinalBin extends Component {
         <div className="ordinal-bin-interface__bucket">
           <OrdinalBinBucket
             nodes={nodesForPrompt}
-            label={label}
             listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
+            label={getLabel}
             id={'MAIN_NODE_LIST'}
-            accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
             itemType="EXISTING_NODE"
             onDrop={this.onDrop}
             onSelect={this.onSelectNode}
@@ -63,17 +59,25 @@ class OrdinalBin extends Component {
 OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
+  getLabel: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
 };
 
 function makeMapStateToProps() {
-  const networkNodesForPrompt = makeNetworkNodesForPrompt();
+  const getStageNodes = makeNetworkNodesForSubject();
+  const getPromptVariable = makeGetPromptVariable();
 
   return function mapStateToProps(state, props) {
+    const stageNodes = getStageNodes(state, props);
+    const activePromptVariable = getPromptVariable(state, props);
+
     return {
-      nodesForPrompt: networkNodesForPrompt(state, props),
+      nodesForPrompt: stageNodes.filter(
+        node => !node[activePromptVariable],
+      ),
+      getLabel: getNodeLabelFunction(state),
     };
   };
 }

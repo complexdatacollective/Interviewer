@@ -583,29 +583,7 @@
           "id": "contactFreq",
           "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
           "variable": "contact_freq",
-          "//": "Ordinal variables have valid options defined in variable registry - following prop is for overriding",
-          "bins": [
-            {
-              "label": "Last 24 hours",
-              "value": 4
-            },
-            {
-              "label": "Last week",
-              "value": 3
-            },
-            {
-              "label": "Last six months",
-              "value": 2
-            },
-            {
-              "label": "Last two years",
-              "value": 1
-            },
-            {
-              "label": "Over two years ago",
-              "value": -1
-            }
-          ]
+          "//": "Ordinal variables have valid options defined in variable registry."
         }
       ]
     },

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getCSSVariableAsString } from '../../utils/CSSVariables';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
-const color = getCSSVariableAsString('--edge-base');
+const color = getCSSVariableAsString('--edge-color-seq-1');
 
 export class EdgeLayout extends PureComponent {
   static propTypes = {
