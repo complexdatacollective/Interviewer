@@ -93,7 +93,7 @@ class ServerDiscoverer {
           } else {
             this.events.emit('SERVER_REMOVED', normalizeService(result.service));
           }
-        }, error => this.emit('SERVER_ERROR', error));
+        }, error => this.events.emit('SERVER_ERROR', error));
       } catch (error) {
         this.events.emit('SERVER_ERROR', error);
       }
