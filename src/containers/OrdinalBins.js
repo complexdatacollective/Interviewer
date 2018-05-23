@@ -28,42 +28,46 @@ class OrdinalBins extends PureComponent {
     const stageId = this.props.stage.id;
     const promptId = this.props.prompt.id;
     const promptColor = getCSSVariableAsString(`--${this.props.prompt.color}`) ? color(getCSSVariableAsString(`--${this.props.prompt.color}`)) : color(getCSSVariableAsString('--ord-color-seq-1'));
-    const nodes = bin.nodes;
-    const accepts = () => true;
     const backgroundColor = color(getCSSVariableAsString('--background'));
+    const missingValue = bin.value < 0;
+    const accepts = () => true;
 
-    const getAccentColor = () => {
-      if (bin.value < 0) {
+    const calculateAccentColor = () => {
+      if (missingValue) {
         return color(getCSSVariableAsString('--color-rich-black')).mix(backgroundColor, 0.8).toString();
       }
       const blendRatio = 1 / (this.props.bins.length) * index;
       return promptColor.mix(backgroundColor, blendRatio).toString();
     };
 
-    const getPanelColor = () => {
-      if (bin.value < 0) {
+    const calculatePanelColor = () => {
+      if (missingValue) {
         return color(getCSSVariableAsString('--color-rich-black')).mix(backgroundColor, 0.9).toString();
       }
       const blendRatio = 1 / (this.props.bins.length) * index;
       return color(getCSSVariableAsString('--panel-bg-muted')).mix(backgroundColor, blendRatio).toString();
     };
 
-    const getPanelHighlightColor = () => {
-      if (bin.value < 0) {
+    const calculatePanelHighlightColor = () => {
+      if (missingValue) {
         return backgroundColor.toString();
       }
       return color(getCSSVariableAsString('--panel-bg-muted')).mix(promptColor, 0.2).toString();
     };
 
     const onDrop = ({ meta }) => {
+      if (meta[this.props.activePromptVariable] === bin.value) {
+        return;
+      }
+
       const newValue = {};
       newValue[this.props.activePromptVariable] = bin.value;
       this.props.toggleNodeAttributes(meta.uid, newValue);
     };
 
-    const accentColor = getAccentColor();
-    const highlightColor = getPanelHighlightColor();
-    const panelColor = getPanelColor();
+    const accentColor = calculateAccentColor();
+    const highlightColor = calculatePanelHighlightColor();
+    const panelColor = calculatePanelColor();
 
     return (
       <div className="ordinal-bin" key={index}>
@@ -74,7 +78,7 @@ class OrdinalBins extends PureComponent {
           <NodeList
             listId={`ORDBIN_NODE_LIST_${stageId}_${promptId}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
-            nodes={nodes}
+            nodes={bin.nodes}
             label={this.props.getLabel}
             itemType="NEW_NODE"
             onDrop={item => onDrop(item)}
