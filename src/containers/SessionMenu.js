@@ -187,7 +187,7 @@ class SessionMenu extends Component {
 
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
-      { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
+      { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
     ];
