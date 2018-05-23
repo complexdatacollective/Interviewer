@@ -27,7 +27,7 @@ class OrdinalBins extends PureComponent {
   renderOrdinalBin = (bin, index) => {
     const stageId = this.props.stage.id;
     const promptId = this.props.prompt.id;
-    const promptColor = this.props.prompt.color;
+    const promptColor = getCSSVariableAsString(`--${this.props.prompt.color}`) ? color(getCSSVariableAsString(`--${this.props.prompt.color}`)) : color(getCSSVariableAsString('--ord-color-seq-1'));
     const nodes = bin.nodes;
     const accepts = () => true;
     const backgroundColor = color(getCSSVariableAsString('--background'));
@@ -37,7 +37,7 @@ class OrdinalBins extends PureComponent {
         return color(getCSSVariableAsString('--color-rich-black')).mix(backgroundColor, 0.8).toString();
       }
       const blendRatio = 1 / (this.props.bins.length) * index;
-      return color(getCSSVariableAsString(`--${promptColor}`)).mix(backgroundColor, blendRatio).toString();
+      return promptColor.mix(backgroundColor, blendRatio).toString();
     };
 
     const getPanelColor = () => {
@@ -52,7 +52,7 @@ class OrdinalBins extends PureComponent {
       if (bin.value < 0) {
         return backgroundColor.toString();
       }
-      return color(getCSSVariableAsString('--panel-bg-muted')).mix(color(getCSSVariableAsString(`--${promptColor}`)), 0.2).toString();
+      return color(getCSSVariableAsString('--panel-bg-muted')).mix(promptColor, 0.2).toString();
     };
 
     const onDrop = ({ meta }) => {

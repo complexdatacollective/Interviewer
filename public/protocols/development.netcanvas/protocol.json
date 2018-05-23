@@ -825,12 +825,11 @@
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
           "variable": "contactFreq",
-          "color": "ord-color-seq-1",
           "//": "Ordinal variables have valid options defined in variable registry."
         },
         {
           "id": "discussFreq",
-          "text": "Discussion Frequency",
+          "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also node that this prompt uses the color override to style these bins differently than the main prompt.",
           "variable": "discussFreq",
           "color": "ord-color-seq-2"
         }

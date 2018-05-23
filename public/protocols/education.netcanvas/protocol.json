@@ -6,7 +6,7 @@
     "node": {
       "person": {
         "label": "Person",
-        "color": "coral",
+        "color": "node-color-seq-1",
         "displayVariable": "nickname",
         "iconVariant": "add-a-person",
         "variables": {
@@ -85,10 +85,10 @@
     "edge": {
       "friend": {
         "label": "Friend",
-        "color": "mustard",
+        "color": "edge-color-seq-1",
         "variables": {
-          "contact_freq": {
-            "label": "contact_freq",
+          "contactFreq": {
+            "label": "contactFreq",
             "description": "Contact frequency.",
             "type": "ordinal",
             "values": [
@@ -118,7 +118,7 @@
       },
       "professional": {
         "label": "Professional",
-        "color": "kiwi",
+        "color": "node-color-seq-2",
         "variables": {
         }
       }
@@ -582,7 +582,7 @@
         {
           "id": "contactFreq",
           "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
-          "variable": "contact_freq",
+          "variable": "contactFreq",
           "//": "Ordinal variables have valid options defined in variable registry."
         }
       ]
