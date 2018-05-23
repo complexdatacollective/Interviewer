@@ -106,20 +106,23 @@ class OrdinalBinBucket extends Component {
       >
         {
           nodes.map((node, index) => (
-            <NodeTransition
-              key={`${node.uid}`}
-              index={index}
-              stagger={stagger}
-            >
-              <EnhancedNode
-                color={nodeColor}
-                label={`${label(node)}`}
-                selected={selected(node)}
-                onSelected={() => onSelect(node)}
-                meta={() => ({ ...node, itemType })}
-                {...node}
-              />
-            </NodeTransition>
+            index < 3 && (
+              <NodeTransition
+                key={`${node.uid}`}
+                index={index}
+                stagger={stagger}
+              >
+                <EnhancedNode
+                  color={nodeColor}
+                  inactive={index !== 0}
+                  label={`${label(node)}`}
+                  selected={selected(node)}
+                  onSelected={() => onSelect(node)}
+                  meta={() => ({ ...node, itemType })}
+                  {...node}
+                />
+              </NodeTransition>
+            )
           ))
         }
       </TransitionGroup>

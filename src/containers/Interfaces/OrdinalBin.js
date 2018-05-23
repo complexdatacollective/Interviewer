@@ -40,12 +40,11 @@ class OrdinalBin extends Component {
         <div className="ordinal-bin-interface__bucket">
           <OrdinalBinBucket
             nodes={nodesForPrompt}
-            listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
+            listId={`${stage.id}_${prompt.id}_NODE_BUCKET`}
             label={getLabel}
-            id={'MAIN_NODE_LIST'}
+            id={'NODE_BUCKET'}
             itemType="EXISTING_NODE"
             onDrop={this.onDrop}
-            onSelect={this.onSelectNode}
           />
         </div>
         <div className="ordinal-bin-interface__bins">
