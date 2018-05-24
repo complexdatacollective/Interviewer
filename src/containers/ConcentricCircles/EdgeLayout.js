@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Edge } from './Edge';
+import { Edge } from '../../components';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
 export class EdgeLayout extends PureComponent {

@@ -181,7 +181,7 @@
     "edge": {
       "friend": {
         "label": "Friend",
-        "color": "node-edge-seq-4",
+        "color": "edge-color-seq-4",
         "variables": {
           "contactFreq": {
             "label": "Contact frequency ordinal variable.",
@@ -214,7 +214,7 @@
       },
       "professional": {
         "label": "Professional",
-        "color": "node-edge-seq-2",
+        "color": "edge-color-seq-2",
         "variables": {}
       }
     }
@@ -1005,8 +1005,8 @@
             "allowPositioning": true
           },
           "edges": {
-            "display": ["friends", "professional"],
-            "create": "friends"
+            "display": ["friend", "professional"],
+            "create": "friend"
           },
           "highlight": {
             "variable": "has_given_advice",
