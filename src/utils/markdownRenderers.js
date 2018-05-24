@@ -12,7 +12,7 @@ const externalLinkRenderer = ({ href, children }) => (
 
 externalLinkRenderer.propTypes = {
   href: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType(PropTypes.element, PropTypes.array).isRequired,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired,
 };
 
 const defaultMarkdownRenderers = {
