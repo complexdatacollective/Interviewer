@@ -6,7 +6,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
 import { getNodeLabelFunction, makeGetPromptVariable, makeNetworkNodesForSubject } from '../../selectors/interface';
 import { OrdinalBinBucket } from '../../components';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 
 /**
   * OrdinalBin Interface
@@ -84,7 +84,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 
