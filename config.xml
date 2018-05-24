@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="40006" id="org.codaco.networkCanvas" version="4.0.0-alpha.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="40006" id="org.codaco.networkCanvas" version="4.0.0-alpha.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NetworkCanvas</name>
     <description>
         Simplifying complex network data collection.
@@ -7,6 +7,9 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
+    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/supports-screens">
+        <supports-screens android:anyDensity="false" android:largeScreens="true" android:normalScreens="false" android:requiresSmallestWidthDp="600" android:resizeable="false" android:smallScreens="false" android:xlargeScreens="true" />
+    </edit-config>
     <content src="index.html" />
     <access origin="*" />
     <access origin="cdvfile://*" />
@@ -37,6 +40,7 @@
         <icon height="144" src="www/icons/ios/NC-Square-144.png" width="144" />
         <icon height="152" src="www/icons/ios/NC-Square-152.png" width="152" />
         <icon height="167" src="www/icons/ios/NC-Square-167.png" width="167" />
+        <icon height="1024" src="www/icons/ios/NC-Square-1024.png" width="1024" />
         <splash src="www/icons/ios/Default@2x~universal~anyany.png" />
     </platform>
     <feature name="CDVWKWebViewEngine">

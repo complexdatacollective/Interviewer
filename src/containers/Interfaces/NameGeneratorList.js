@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
 import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
@@ -132,8 +132,8 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(networkActions.addNodes, dispatch),
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
+    addNode: bindActionCreators(sessionsActions.addNodes, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

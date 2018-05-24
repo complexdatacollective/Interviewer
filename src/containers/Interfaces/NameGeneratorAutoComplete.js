@@ -7,7 +7,7 @@ import { Icon } from '../../ui/components';
 
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { getNodeLabelFunction, makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
@@ -142,7 +142,7 @@ NameGeneratorAutoComplete.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodes: bindActionCreators(networkActions.addNodes, dispatch),
+    addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };

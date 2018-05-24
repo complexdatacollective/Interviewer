@@ -10,6 +10,7 @@ const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_FACTORY_PROTOCOL = 'LOAD_FACTORY_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
+const SET_SESSION = 'SET_SESSION';
 
 const initialState = {
   isLoaded: false,
@@ -32,6 +33,16 @@ export default function reducer(state = initialState, action = {}) {
         isLoaded: true,
         isLoading: false,
       };
+    case SET_SESSION:
+      if (action.protocolType) {
+        return {
+          ...state,
+          isLoaded: false,
+          isLoading: false,
+          type: action.protocolType,
+        };
+      }
+      return state;
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
     case LOAD_PROTOCOL:

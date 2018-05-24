@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { actionCreators as networkActions } from '../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
@@ -35,7 +35,7 @@ NodeBin.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeNode: bindActionCreators(networkActions.removeNode, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

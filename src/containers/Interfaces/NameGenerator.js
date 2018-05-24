@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
-import { actionCreators as networkActions } from '../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { getNodeLabelFunction, makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
@@ -192,10 +192,10 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodes: bindActionCreators(networkActions.addNodes, dispatch),
+    addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
     closeModal: bindActionCreators(modalActions.closeModal, dispatch),
     openModal: bindActionCreators(modalActions.openModal, dispatch),
-    updateNode: bindActionCreators(networkActions.updateNode, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

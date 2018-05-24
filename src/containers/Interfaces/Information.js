@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
-import emoji from 'emoji-dictionary';
 import { Audio, Image, Video } from '../../components';
+import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 
 const TAGS = [
   'break',
@@ -16,8 +16,6 @@ const TAGS = [
   'thematicBreak',
 ];
 
-const emojiSupport = text => text.replace(/:\w+:/gi, name => emoji.getUnicode(name));
-
 const renderItem = (item) => {
   switch (item.type) {
     case 'text':
@@ -25,7 +23,7 @@ const renderItem = (item) => {
         <ReactMarkdown
           source={item.content}
           allowedTypes={TAGS}
-          renderers={{ text: emojiSupport }}
+          renderers={defaultMarkdownRenderers}
         />
       );
     case 'image':

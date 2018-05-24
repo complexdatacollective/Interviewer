@@ -1,14 +1,14 @@
-import { maxBy, reject, findIndex, isMatch, isArray, omit } from 'lodash';
+import { maxBy, reject, findIndex, isMatch, omit } from 'lodash';
 
-const ADD_NODES = 'ADD_NODES';
-const REMOVE_NODE = 'REMOVE_NODE';
-const UPDATE_NODE = 'UPDATE_NODE';
-const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
-const ADD_EDGE = 'ADD_EDGE';
-const TOGGLE_EDGE = 'TOGGLE_EDGE';
-const REMOVE_EDGE = 'REMOVE_EDGE';
-const SET_EGO = 'SET_EGO';
-const UNSET_EGO = 'UNSET_EGO';
+export const ADD_NODES = 'ADD_NODES';
+export const REMOVE_NODE = 'REMOVE_NODE';
+export const UPDATE_NODE = 'UPDATE_NODE';
+export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
+export const ADD_EDGE = 'ADD_EDGE';
+export const TOGGLE_EDGE = 'TOGGLE_EDGE';
+export const REMOVE_EDGE = 'REMOVE_EDGE';
+export const SET_EGO = 'SET_EGO';
+export const UNSET_EGO = 'UNSET_EGO';
 
 const initialState = {
   ego: {},
@@ -145,82 +145,9 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 /**
- * Add a node or nodes to the state.
- *
- * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalAttributes] shared attributes to apply to every
- *  new node
- *
- * @memberof! NetworkActionCreators
- */
-function addNodes(nodes, additionalAttributes) {
-  let nodeOrNodes = nodes;
-  if (!isArray(nodeOrNodes)) {
-    nodeOrNodes = [nodeOrNodes];
-  }
-  return {
-    type: ADD_NODES,
-    nodes: nodeOrNodes,
-    additionalAttributes,
-  };
-}
-
-function updateNode(node, full = false) {
-  return {
-    type: UPDATE_NODE,
-    node,
-    full,
-  };
-}
-
-function toggleNodeAttributes(uid, attributes) {
-  return {
-    type: TOGGLE_NODE_ATTRIBUTES,
-    uid,
-    attributes,
-  };
-}
-
-function removeNode(uid) {
-  return {
-    type: REMOVE_NODE,
-    uid,
-  };
-}
-
-function addEdge(edge) {
-  return {
-    type: ADD_EDGE,
-    edge,
-  };
-}
-
-function toggleEdge(edge) {
-  return {
-    type: TOGGLE_EDGE,
-    edge,
-  };
-}
-
-function removeEdge(edge) {
-  return {
-    type: REMOVE_EDGE,
-    edge,
-  };
-}
-
-/**
  * @namespace NetworkActionCreators
  */
-const actionCreators = {
-  addNodes,
-  updateNode,
-  removeNode,
-  addEdge,
-  toggleEdge,
-  removeEdge,
-  toggleNodeAttributes,
-};
+const actionCreators = {};
 
 const actionTypes = {
   ADD_NODES,

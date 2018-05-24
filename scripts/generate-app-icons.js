@@ -18,7 +18,7 @@ let jobs = [
     type:'cordova',
     inputFile: './assets/icons/NC-iOS.svg',
     outputPath: './public/icons/ios/',
-    sizes: [76, 152, 40, 80, 72, 144, 50, 100, 167],
+    sizes: [76, 152, 40, 80, 72, 144, 50, 100, 167, 1024],
     fileName: 'NC-Square-',
     append: 'size'
 
@@ -26,12 +26,12 @@ let jobs = [
   {
     type:'electron',
     inputFile: 'assets/icons/NC-Desktop.svg',
-    outputPath: 'assets/icons/round',
+    outputPath: 'build-resources',
     options: {
       modes: ['ico', 'icns'], //all
       names: {
-        ico: 'round',
-        icns: 'round'
+        ico: 'icon',
+        icns: 'icon'
       },
       report: true,
     }

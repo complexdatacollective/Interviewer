@@ -3,16 +3,21 @@
 import { getNextIndex, isStageSkipped } from '../skip-logic';
 
 const mockState = {
-  network: {
-    edges: [
-      { id: 1, type: 'friend', to: 1, from: 2 },
-    ],
-    edgo: {},
-    nodes: [
-      { id: 1, type: 'person', name: 'soAndSo' },
-      { id: 2, type: 'person', name: 'whoDunnit' },
-      { id: 3, type: 'person', name: 'whatsErName' },
-    ],
+  session: 'a',
+  sessions: {
+    a: {
+      network: {
+        edges: [
+          { id: 1, type: 'friend', to: 1, from: 2 },
+        ],
+        edgo: {},
+        nodes: [
+          { id: 1, type: 'person', name: 'soAndSo' },
+          { id: 2, type: 'person', name: 'whoDunnit' },
+          { id: 3, type: 'person', name: 'whatsErName' },
+        ],
+      },
+    },
   },
   protocol: {
     stages: [
