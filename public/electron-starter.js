@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, shell } = require('electron');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -58,6 +58,12 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
+  });
+
+  // Open any new windows in default browser (not electron)
+  mainWindow.webContents.on('new-window', (evt, newUrl) => {
+    evt.preventDefault();
+    shell.openExternal(newUrl);
   });
 }
 
