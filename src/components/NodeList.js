@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
+import sorty from '@zippytech/sorty';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
-import { Node } from '../ui/components';
+import { Node } from '../components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -83,6 +84,7 @@ class NodeList extends Component {
       willAccept,
       meta,
       hoverColor,
+      sortOrder,
     } = this.props;
 
     const {
@@ -101,6 +103,8 @@ class NodeList extends Component {
     );
 
     const styles = isHovering ? { backgroundColor: hoverColor } : {};
+
+    sorty(sortOrder, nodes);
 
     return (
       <TransitionGroup
@@ -144,6 +148,7 @@ NodeList.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
+  sortOrder: PropTypes.array,
 };
 
 NodeList.defaultProps = {
@@ -160,6 +165,7 @@ NodeList.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
+  sortOrder: [],
 };
 
 export default compose(

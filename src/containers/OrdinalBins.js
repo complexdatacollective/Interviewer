@@ -84,6 +84,7 @@ class OrdinalBins extends PureComponent {
             onDrop={item => onDrop(item)}
             accepts={accepts}
             hoverColor={highlightColor}
+            sortOrder={this.props.prompt.binSortOrder}
           />
         </div>
       </div>

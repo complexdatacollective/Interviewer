@@ -147,6 +147,33 @@
             "label": "Location",
             "description": "Human readable description",
             "type": "coordinates"
+          },
+          "visitFreq": {
+            "label": "Visit frequency ordinal variable.",
+            "description": "Visit frequency ordinal variable",
+            "type": "ordinal",
+            "values": [
+              {
+                "label": "Every day",
+                "value": 4
+              },
+              {
+                "label": "Every other day",
+                "value": 3
+              },
+              {
+                "label": "Every week",
+                "value": 2
+              },
+              {
+                "label": "Sometimes",
+                "value": 1
+              },
+              {
+                "label": "Never",
+                "value": -1
+              }
+            ]
           }
         }
       }
@@ -154,7 +181,7 @@
     "edge": {
       "friend": {
         "label": "Friend",
-        "color": "node-edge-seq-1",
+        "color": "node-edge-seq-4",
         "variables": {
           "contactFreq": {
             "label": "Contact frequency ordinal variable.",
@@ -825,13 +852,47 @@
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
           "variable": "contactFreq",
-          "//": "Ordinal variables have valid options defined in variable registry."
+          "//": "Ordinal variables have valid options defined in variable registry.",
+          "bucketSortOrder": [
+            {
+              "name": "nickname",
+              "dir": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "name": "nickname",
+              "dir": "desc"
+            },
+            {
+              "name": "age",
+              "dir": "desc",
+              "type": "number"
+            }
+          ]
         },
         {
           "id": "discussFreq",
           "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also node that this prompt uses the color override to style these bins differently than the main prompt.",
           "variable": "discussFreq",
           "color": "ord-color-seq-2"
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin2",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "venue"
+      },
+      "prompts": [
+        {
+          "id": "visitFreq",
+          "text": "Showing an ordinalbin interface with a node type other than person.",
+          "variable": "visitFreq",
+          "color": "ord-color-seq-4"
         }
       ]
     },

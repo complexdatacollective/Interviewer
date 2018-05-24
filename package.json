@@ -38,6 +38,7 @@
         "type": "git"
     },
     "devDependencies": {
+        "@zippytech/sorty": "^2.0.0",
         "animejs": "^2.2.0",
         "autoprefixer": "7.1.2",
         "axios": "^0.16.1",

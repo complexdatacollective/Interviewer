@@ -3,8 +3,9 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
+import sorty from '@zippytech/sorty';
 import { TransitionGroup } from 'react-transition-group';
-import { Node } from '../ui/components/';
+import { Node } from '../components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { selectable } from '../behaviours';
@@ -77,6 +78,7 @@ class OrdinalBinBucket extends Component {
       isOver,
       willAccept,
       meta,
+      sortOptions,
     } = this.props;
 
     const {
@@ -97,6 +99,8 @@ class OrdinalBinBucket extends Component {
     const backgroundColor = getCSSVariableAsString('--light-background');
 
     const styles = isHovering ? { backgroundColor } : {};
+
+    sorty(sortOptions, nodes);
 
     return (
       <TransitionGroup
@@ -142,6 +146,7 @@ OrdinalBinBucket.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
+  sortOptions: PropTypes.array,
 };
 
 OrdinalBinBucket.defaultProps = {
@@ -157,6 +162,7 @@ OrdinalBinBucket.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
+  sortOptions: [],
 };
 
 export default compose(

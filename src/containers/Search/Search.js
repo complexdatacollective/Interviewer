@@ -9,7 +9,6 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { makeGetNodeColor } from '../../selectors/protocol';
 import { makeGetFuse } from '../../selectors/search';
 
 /**
@@ -33,8 +32,6 @@ const InitialState = {
   searchTerm: '',
   selectedResults: [],
 };
-
-const getNodeColor = makeGetNodeColor();
 
 /**
   * @class Search
@@ -237,7 +234,6 @@ Search.defaultProps = {
   className: '',
   clearResultsOnClose: true,
   nodeColor: '',
-  nodeType: '',
   options: {},
 };
 
@@ -257,9 +253,6 @@ Search.propTypes = {
   // These props are required by the fuse selector
   dataSourceKey: PropTypes.string.isRequired,
   options: PropTypes.object,
-  // This prop used by the nodeColor selector
-  nodeType: PropTypes.string,
-  /* eslint-enable react/no-unused-prop-types */
 };
 
 function mapDispatchToProps(dispatch) {
@@ -272,7 +265,6 @@ function mapStateToProps(state, props) {
   return {
     collapsed: state.search.collapsed,
     fuse: FuseSelector(state, props),
-    nodeColor: getNodeColor(state, props),
   };
 }
 
