@@ -2,7 +2,7 @@
 
 import faker from 'faker';
 import { times } from 'lodash';
-import { actionCreators as networkActions } from './network';
+import { actionCreators as sessionsActions } from './sessions';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
@@ -13,7 +13,7 @@ const generateNodes = (howMany = 0) =>
       const lastName = faker.name.lastName();
       const age = faker.random.number({ min: 16, max: 99 });
 
-      return dispatch(networkActions.addNodes({
+      return dispatch(sessionsActions.addNodes({
         type: 'person',
         promptId: 'mock',
         stageId: 'mock',
