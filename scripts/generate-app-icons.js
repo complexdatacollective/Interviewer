@@ -1,111 +1,111 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-const svg2png = require("svg2png");
+const fs = require('fs');
+const svg2png = require('svg2png');
 const path = require('path');
 const icongen = require('icon-gen');
 
-let jobs = [
+const jobs = [
   {
-    type:'cordova',
+    type: 'cordova',
     inputFile: 'assets/icons/NC-Flat.svg',
     outputPath: './public/icons/android/',
     sizes: [36, 48, 72, 96, 144, 192],
     fileName: 'NC-Round-',
-    append: ['ldpi','mdpi','hdpi','xhdpi','xxhdpi','xxxhdpi']
+    append: ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'],
   },
   {
-    type:'cordova',
+    type: 'cordova',
     inputFile: './assets/icons/NC-iOS.svg',
     outputPath: './public/icons/ios/',
     sizes: [76, 152, 40, 80, 72, 144, 50, 100, 167, 1024],
     fileName: 'NC-Square-',
-    append: 'size'
+    append: 'size',
 
   },
   {
-    type:'electron',
+    type: 'electron',
     inputFile: 'assets/icons/NC-Desktop.svg',
     outputPath: 'build-resources',
     options: {
-      modes: ['ico', 'icns'], //all
+      modes: ['ico', 'icns'],
       names: {
         ico: 'icon',
-        icns: 'icon'
+        icns: 'icon',
       },
       report: true,
-    }
-  }
+    },
+  },
 ];
 
-parseJobs(jobs);
-
-function parseJobs(jobs) {
-  for (let job of jobs) {
-    if (job.type === "electron") {
-      generateElectronIcons(job);
-    } else if (job.type === "cordova") {
-      generateCordovaIcons(job);
-    }
-  }
-
-}
-
 function generateElectronIcons(job) {
-  icongen ( job.inputFile, job.outputPath, job.options )
-  .then( (results)=> {
+  icongen(job.inputFile, job.outputPath, job.options).then((results) => {
     console.log(results);
-  })
-  .catch( (err)=> {
+  }).catch((err) => {
     console.log(err);
-  })
+  });
 }
 
 const createDir = (dir) => {
   // This will create a dir given a path such as './folder/subfolder'
   const splitPath = dir.split('/');
-  splitPath.reduce((path, subPath) => {
+  splitPath.reduce((dirPath, subPath) => {
     let currentPath;
-    if(subPath != '.'){
-      currentPath = path + '/' + subPath;
-      if (!fs.existsSync(currentPath)){
+    if (subPath !== '.') {
+      currentPath = `${dirPath}/${subPath}`;
+      if (!fs.existsSync(currentPath)) {
         fs.mkdirSync(currentPath);
       }
-    }
-    else{
+    } else {
       currentPath = subPath;
     }
-    return currentPath
-  }, '')
-}
+    return currentPath;
+  }, '');
+};
 
 function generateCordovaIcons(job) {
   const buffer = fs.readFileSync(job.inputFile);
-  for (let size of job.sizes) {
-
+  job.sizes.forEach((size) => {
     if (!buffer) {
-      new Error('Faild to write the image, ' + job.size + 'x' + job.size);
-      return;
+      throw new Error(`Faild to write the image, ${job.size}`);
     }
 
     let dest = job.fileName;
 
     if (job.append === 'size') {
-      dest = dest + size
+      dest += size;
     } else if (job.append.length) {
-      dest = dest + job.append[job.sizes.indexOf(size)];
+      dest += job.append[job.sizes.indexOf(size)];
     }
 
-    dest = dest + '.png';
+    dest = `${dest}.png`;
 
     dest = path.join(job.outputPath + dest);
 
-    svg2png(buffer, { width: size, height: size }).then(output => {
+    svg2png(buffer, { width: size, height: size }).then((output) => {
       createDir(job.outputPath);
-      fs.writeFile(dest, output, function (err) {
+      fs.writeFile(dest, output, (err) => {
         if (err) {
           console.log(err);
-          return;
+        }
+      });
+    });
+  });
+}
+
+function parseJobs(jobList) {
+  jobList.forEach((job) => {
+    if (job.type === 'electron') {
+      generateElectronIcons(job);
+    } else if (job.type === 'cordova') {
+      generateCordovaIcons(job);
+    }
+  });
+}
+
+
+parseJobs(jobs);
+
         }
       });
     });

@@ -33,7 +33,6 @@ const mockState = {
   protocol: mockProtocol,
 };
 
-const emptyProps = {};
 const emptyState = {
   protocol: {},
 };
