@@ -20,8 +20,14 @@ describe('<ServerPairingForm>', () => {
   });
 
   it('calls the completion handler', () => {
+    component.setState({ submittable: true });
     component.find('form').simulate('submit', mockSubmitEvt);
     expect(completeHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it('will not call the completion handler unless submittable', () => {
+    component.find('form').simulate('submit', mockSubmitEvt);
+    expect(completeHandler).not.toHaveBeenCalled();
   });
 
   it('prevents default form submit', () => {

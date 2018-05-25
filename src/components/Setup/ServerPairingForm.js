@@ -26,7 +26,11 @@ class ServerPairingForm extends Component {
         className={`pairing-form ${className}`}
         onSubmit={(evt) => {
           evt.preventDefault();
-          completePairing(this.state.pairingCode);
+          if (submittable) {
+            document.activeElement.blur(); // attempt to hide soft keyboard on tablet
+            this.setState({ submittable: false });
+            completePairing(this.state.pairingCode);
+          }
         }}
         {...props}
       >
