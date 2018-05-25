@@ -24,36 +24,37 @@ class OrdinalBins extends PureComponent {
     meta: {},
   };
 
+  promptColor = () => (getCSSVariableAsString(`--${this.props.prompt.color}`) ?
+    color(getCSSVariableAsString(`--${this.props.prompt.color}`)) :
+    color(getCSSVariableAsString('--ord-color-seq-1'))
+  );
+
+  backgroundColor = () => color(getCSSVariableAsString('--background'));
+  calculateAccentColor = (index, missingValue) => {
+    if (missingValue) {
+      return color(getCSSVariableAsString('--color-rich-black')).mix(this.backgroundColor(), 0.8).toString();
+    }
+    const blendRatio = 1 / (this.props.bins.length) * index;
+    return this.promptColor().mix(this.backgroundColor(), blendRatio).toString();
+  };
+
+  calculatePanelColor = (index, missingValue) => {
+    if (missingValue) {
+      return color(getCSSVariableAsString('--color-rich-black')).mix(this.backgroundColor(), 0.9).toString();
+    }
+    const blendRatio = 1 / (this.props.bins.length) * index;
+    return color(getCSSVariableAsString('--panel-bg-muted')).mix(this.backgroundColor(), blendRatio).toString();
+  };
+
+  calculatePanelHighlightColor = (missingValue) => {
+    if (missingValue) {
+      return this.backgroundColor().toString();
+    }
+    return color(getCSSVariableAsString('--panel-bg-muted')).mix(this.promptColor(), 0.2).toString();
+  };
+
   renderOrdinalBin = (bin, index) => {
-    const stageId = this.props.stage.id;
-    const promptId = this.props.prompt.id;
-    const promptColor = getCSSVariableAsString(`--${this.props.prompt.color}`) ? color(getCSSVariableAsString(`--${this.props.prompt.color}`)) : color(getCSSVariableAsString('--ord-color-seq-1'));
-    const backgroundColor = color(getCSSVariableAsString('--background'));
     const missingValue = bin.value < 0;
-    const accepts = () => true;
-
-    const calculateAccentColor = () => {
-      if (missingValue) {
-        return color(getCSSVariableAsString('--color-rich-black')).mix(backgroundColor, 0.8).toString();
-      }
-      const blendRatio = 1 / (this.props.bins.length) * index;
-      return promptColor.mix(backgroundColor, blendRatio).toString();
-    };
-
-    const calculatePanelColor = () => {
-      if (missingValue) {
-        return color(getCSSVariableAsString('--color-rich-black')).mix(backgroundColor, 0.9).toString();
-      }
-      const blendRatio = 1 / (this.props.bins.length) * index;
-      return color(getCSSVariableAsString('--panel-bg-muted')).mix(backgroundColor, blendRatio).toString();
-    };
-
-    const calculatePanelHighlightColor = () => {
-      if (missingValue) {
-        return backgroundColor.toString();
-      }
-      return color(getCSSVariableAsString('--panel-bg-muted')).mix(promptColor, 0.2).toString();
-    };
 
     const onDrop = ({ meta }) => {
       if (meta[this.props.activePromptVariable] === bin.value) {
@@ -65,9 +66,9 @@ class OrdinalBins extends PureComponent {
       this.props.toggleNodeAttributes(meta.uid, newValue);
     };
 
-    const accentColor = calculateAccentColor();
-    const highlightColor = calculatePanelHighlightColor();
-    const panelColor = calculatePanelColor();
+    const accentColor = this.calculateAccentColor(index, missingValue);
+    const highlightColor = this.calculatePanelHighlightColor(missingValue);
+    const panelColor = this.calculatePanelColor(index, missingValue);
 
     return (
       <div className="ordinal-bin" key={index}>
@@ -76,13 +77,13 @@ class OrdinalBins extends PureComponent {
         </div>
         <div className="ordinal-bin--content" style={{ borderBottomColor: accentColor, background: panelColor }}>
           <NodeList
-            listId={`ORDBIN_NODE_LIST_${stageId}_${promptId}_${index}`}
+            listId={`ORDBIN_NODE_LIST_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
             nodes={bin.nodes}
             label={this.props.getLabel}
             itemType="NEW_NODE"
             onDrop={item => onDrop(item)}
-            accepts={accepts}
+            accepts={() => true}
             hoverColor={highlightColor}
             sortOrder={this.props.prompt.binSortOrder}
           />
@@ -131,8 +132,6 @@ function mapDispatchToProps(dispatch) {
     toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
   };
 }
-
-export { OrdinalBins };
 
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),

@@ -105,9 +105,3 @@ function parseJobs(jobList) {
 
 
 parseJobs(jobs);
-
-        }
-      });
-    });
-  }
-}
