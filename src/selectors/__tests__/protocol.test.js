@@ -5,7 +5,7 @@ import * as Protocol from '../protocol';
 const nodeVariables = {
   person: {
     iconVariant: 'add-a-person',
-    color: 'coral',
+    color: 'node-color-seq-2',
   },
 };
 
@@ -26,7 +26,7 @@ const mockProtocol = {
 };
 
 const mockProps = {
-  nodeType: 'person',
+  type: 'person',
 };
 
 const mockState = {
@@ -41,23 +41,24 @@ const emptyState = {
 describe('protocol selector', () => {
   describe('memoed selectors', () => {
     it('should get protocol variable registery', () => {
-      expect(Protocol.protocolRegistry(mockState, mockProps)).toEqual({ node: nodeVariables });
-      expect(Protocol.protocolRegistry(emptyState, emptyProps)).toEqual(undefined);
+      expect(Protocol.protocolRegistry(mockState)).toEqual({ node: nodeVariables });
+      expect(Protocol.protocolRegistry(emptyState)).toEqual(undefined);
     });
 
     it('should get protocol forms', () => {
-      expect(Protocol.protocolForms(mockState, mockProps)).toEqual(protocolForm);
-      expect(Protocol.protocolForms(emptyState, emptyProps)).toEqual(undefined);
+      expect(Protocol.protocolForms(mockState)).toEqual(protocolForm);
+      expect(Protocol.protocolForms(emptyState)).toEqual(undefined);
     });
 
     it('should get external data', () => {
-      expect(Protocol.getExternalData(mockState, mockProps)).toEqual(externalData);
-      expect(Protocol.getExternalData(emptyState, emptyProps)).toEqual(undefined);
+      expect(Protocol.getExternalData(mockState)).toEqual(externalData);
+      expect(Protocol.getExternalData(emptyState)).toEqual(undefined);
     });
 
     it('should get node color', () => {
       const selected = Protocol.makeGetNodeColor();
-      expect(selected(mockState, mockProps)).toEqual('coral');
+      expect(selected(mockState, mockProps)).toEqual('node-color-seq-2');
     });
   });
 });
+
