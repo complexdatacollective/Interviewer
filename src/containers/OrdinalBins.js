@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import color from 'color';
 import { getNodeLabelFunction, makeNetworkNodesForSubject, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
-import { actionCreators as networkActions } from '../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -128,7 +128,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(networkActions.toggleNodeAttributes, dispatch),
+    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
   };
 }
 
