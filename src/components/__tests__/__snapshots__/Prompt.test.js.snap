@@ -21,28 +21,49 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": <h1
+      "children": <ReactMarkdown
+        allowedTypes={
+          Array [
+            "paragraph",
+            "emphasis",
+            "strong",
+          ]
+        }
         className="prompts__prompt-header"
-      >
-        <ReactMarkdown
-          allowedTypes={
-            Array [
-              "paragraph",
-              "emphasis",
-              "strong",
-            ]
-          }
-          escapeHtml={true}
-          renderers={Object {}}
-          skipHtml={false}
-          source="_prompt_ containing **markdown**"
-          transformLinkUri={[Function]}
-        />
-      </h1>,
+        escapeHtml={true}
+        renderers={Object {}}
+        skipHtml={false}
+        source="_prompt_ containing **markdown**"
+        transformLinkUri={[Function]}
+      />,
       "className": "prompts__prompt",
     },
     "ref": null,
     "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "allowedTypes": Array [
+          "paragraph",
+          "emphasis",
+          "strong",
+        ],
+        "className": "prompts__prompt-header",
+        "escapeHtml": true,
+        "renderers": Object {},
+        "skipHtml": false,
+        "source": "_prompt_ containing **markdown**",
+        "transformLinkUri": [Function],
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
       "instance": null,
       "key": undefined,
       "nodeType": "host",
@@ -55,13 +76,14 @@ ShallowWrapper {
               "strong",
             ]
           }
+          className="prompts__prompt-header"
           escapeHtml={true}
           renderers={Object {}}
           skipHtml={false}
           source="_prompt_ containing **markdown**"
           transformLinkUri={[Function]}
         />,
-        "className": "prompts__prompt-header",
+        "className": "prompts__prompt",
       },
       "ref": null,
       "rendered": Object {
@@ -74,6 +96,7 @@ ShallowWrapper {
             "emphasis",
             "strong",
           ],
+          "className": "prompts__prompt-header",
           "escapeHtml": true,
           "renderers": Object {},
           "skipHtml": false,
@@ -83,81 +106,6 @@ ShallowWrapper {
         "ref": null,
         "rendered": null,
         "type": [Function],
-      },
-      "type": "h1",
-    },
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": <h1
-          className="prompts__prompt-header"
-        >
-          <ReactMarkdown
-            allowedTypes={
-              Array [
-                "paragraph",
-                "emphasis",
-                "strong",
-              ]
-            }
-            escapeHtml={true}
-            renderers={Object {}}
-            skipHtml={false}
-            source="_prompt_ containing **markdown**"
-            transformLinkUri={[Function]}
-          />
-        </h1>,
-        "className": "prompts__prompt",
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": <ReactMarkdown
-            allowedTypes={
-              Array [
-                "paragraph",
-                "emphasis",
-                "strong",
-              ]
-            }
-            escapeHtml={true}
-            renderers={Object {}}
-            skipHtml={false}
-            source="_prompt_ containing **markdown**"
-            transformLinkUri={[Function]}
-          />,
-          "className": "prompts__prompt-header",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "function",
-          "props": Object {
-            "allowedTypes": Array [
-              "paragraph",
-              "emphasis",
-              "strong",
-            ],
-            "escapeHtml": true,
-            "renderers": Object {},
-            "skipHtml": false,
-            "source": "_prompt_ containing **markdown**",
-            "transformLinkUri": [Function],
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        "type": "h1",
       },
       "type": "div",
     },

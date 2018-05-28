@@ -6,7 +6,7 @@
     "node": {
       "person": {
         "label": "Person",
-        "color": "coral",
+        "color": "node-color-seq-1",
         "displayVariable": "nickname",
         "iconVariant": "add-a-person",
         "variables": {
@@ -23,7 +23,29 @@
           "contactFreq": {
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
-            "type": "ordinal"
+            "type": "ordinal",
+            "values": [
+              {
+                "label": "Last 24 hours",
+                "value": 4
+              },
+              {
+                "label": "Last week",
+                "value": 3
+              },
+              {
+                "label": "Last six months",
+                "value": 2
+              },
+              {
+                "label": "Last two years",
+                "value": 1
+              },
+              {
+                "label": "Over two years ago",
+                "value": -1
+              }
+            ]
           },
           "outsideOfSchool": {
             "label": "Have you contacted this person outside of school in the past 7 days?",
@@ -63,25 +85,40 @@
     "edge": {
       "friend": {
         "label": "Friend",
-        "color": "mustard",
+        "color": "edge-color-seq-1",
         "variables": {
-          "contact_freq": {
-            "label": "contact_freq",
+          "contactFreq": {
+            "label": "contactFreq",
             "description": "Contact frequency.",
             "type": "ordinal",
-            "values": {
-              "Very Often": 4,
-              "Often": 3,
-              "Sometimes": 2,
-              "Rarely": 1,
-              "Never": -1
-            }
+            "values": [
+              {
+                "label": "Last 24 hours",
+                "value": 4
+              },
+              {
+                "label": "Last week",
+                "value": 3
+              },
+              {
+                "label": "Last six months",
+                "value": 2
+              },
+              {
+                "label": "Last two years",
+                "value": 1
+              },
+              {
+                "label": "Over two years ago",
+                "value": -1
+              }
+            ]
           }
         }
       },
       "professional": {
         "label": "Professional",
-        "color": "kiwi",
+        "color": "node-color-seq-2",
         "variables": {
         }
       }
@@ -544,17 +581,9 @@
       "prompts": [
         {
           "id": "contactFreq",
-          "title": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
-          "variable": "contact_freq",
-          "bins": {
-            "values": {
-              "Last 24 hours": 4,
-              "Last week": 3,
-              "Last six months": 2,
-              "Last two years": 1,
-              "Over two years ago": -1
-            }
-          }
+          "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
+          "variable": "contactFreq",
+          "//": "Ordinal variables have valid options defined in variable registry."
         }
       ]
     },

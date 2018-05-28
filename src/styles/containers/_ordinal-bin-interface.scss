@@ -1,0 +1,48 @@
+.ordinal-bin-interface {
+  height: 100vh;
+  padding: 20px 50px 60px;
+  @include breakpoint('full') {
+    padding: 20px 80px 80px;
+  }
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    @include interface-prompt;
+    flex: 0 0 170px;
+  }
+
+  &__bucket {
+    display: flex;
+    flex: 0 0 150px;
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
+      margin: 2px;
+    }
+  }
+
+  &__bins {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  &__nodes {
+    flex: 3 1 auto;
+    height: 100%;
+    display: flex;
+    padding-left: 30px;
+    @include breakpoint('full') {
+      padding-left: 0;
+    }
+  }
+
+
+
+}

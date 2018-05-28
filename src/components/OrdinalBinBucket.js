@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
-import sorty from '@zippytech/sorty';
 import cx from 'classnames';
+import sorty from '@zippytech/sorty';
 import { TransitionGroup } from 'react-transition-group';
 import { Node } from '../components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
-import { scrollable, selectable } from '../behaviours';
+import { selectable } from '../behaviours';
 import {
   DragSource,
   DropTarget,
@@ -19,9 +19,9 @@ import {
 const EnhancedNode = DragSource(selectable(Node));
 
 /**
-  * Renders a list of Nodes.
+  * Renders a list of Node.
   */
-class NodeList extends Component {
+class OrdinalBinBucket extends Component {
   constructor(props) {
     super(props);
 
@@ -35,8 +35,6 @@ class NodeList extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
-
     // Don't update if nodes are the same
     if (isEqual(newProps.nodes, this.state.nodes)) {
       return;
@@ -57,6 +55,7 @@ class NodeList extends Component {
       this.setState(
         { nodes: [], stagger: true },
         () => {
+          if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
           this.refreshTimer = setTimeout(
             () => this.setState({
               nodes: newProps.nodes,
@@ -69,10 +68,6 @@ class NodeList extends Component {
     });
   }
 
-  componentWillUnmount() {
-    if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
-  }
-
   render() {
     const {
       nodeColor,
@@ -83,8 +78,7 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
-      hoverColor,
-      sortOrder,
+      sortOptions,
     } = this.props;
 
     const {
@@ -102,9 +96,11 @@ class NodeList extends Component {
       { 'node-list--drag': isValidTarget },
     );
 
-    const styles = isHovering ? { backgroundColor: hoverColor } : {};
+    const backgroundColor = getCSSVariableAsString('--light-background');
 
-    sorty(sortOrder, nodes);
+    const styles = isHovering ? { backgroundColor } : {};
+
+    sorty(sortOptions, nodes);
 
     return (
       <TransitionGroup
@@ -114,20 +110,23 @@ class NodeList extends Component {
       >
         {
           nodes.map((node, index) => (
-            <NodeTransition
-              key={`${node.uid}`}
-              index={index}
-              stagger={stagger}
-            >
-              <EnhancedNode
-                color={nodeColor}
-                label={`${label(node)}`}
-                selected={selected(node)}
-                onSelected={() => onSelect(node)}
-                meta={() => ({ ...node, itemType })}
-                {...node}
-              />
-            </NodeTransition>
+            index < 3 && (
+              <NodeTransition
+                key={`${node.uid}`}
+                index={index}
+                stagger={stagger}
+              >
+                <EnhancedNode
+                  color={nodeColor}
+                  inactive={index !== 0}
+                  label={`${label(node)}`}
+                  selected={selected(node)}
+                  onSelected={() => onSelect(node)}
+                  meta={() => ({ ...node, itemType })}
+                  {...node}
+                />
+              </NodeTransition>
+            )
           ))
         }
       </TransitionGroup>
@@ -135,10 +134,9 @@ class NodeList extends Component {
   }
 }
 
-NodeList.propTypes = {
+OrdinalBinBucket.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  hoverColor: PropTypes.string,
   onSelect: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
@@ -148,13 +146,12 @@ NodeList.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
-  sortOrder: PropTypes.array,
+  sortOptions: PropTypes.array,
 };
 
-NodeList.defaultProps = {
+OrdinalBinBucket.defaultProps = {
   nodes: [],
   nodeColor: '',
-  hoverColor: getCSSVariableAsString('--light-background'),
   label: () => (''),
   selected: () => false,
   onSelect: () => {},
@@ -165,12 +162,11 @@ NodeList.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
-  sortOrder: [],
+  sortOptions: [],
 };
 
 export default compose(
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
-  scrollable,
-)(NodeList);
+)(OrdinalBinBucket);

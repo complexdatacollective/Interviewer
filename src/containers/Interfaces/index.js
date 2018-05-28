@@ -4,7 +4,7 @@ import { has } from 'lodash';
 import { Icon } from '../../ui/components';
 import NameGenerator from './NameGenerator';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
-
+import OrdinalBin from './OrdinalBin';
 import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
@@ -17,6 +17,7 @@ const interfaces = {
   Sociogram,
   Quiz,
   Information,
+  OrdinalBin,
 };
 
 const getInterface = (interfaceConfig) => {
@@ -39,6 +40,7 @@ export {
   Sociogram,
   Quiz,
   Information,
+  OrdinalBin,
 };
 
 export default getInterface;
