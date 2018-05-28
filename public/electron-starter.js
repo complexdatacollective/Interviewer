@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -85,10 +85,26 @@ function createMenu() {
       ]
     },
     {
-      label: 'View',
+      label: 'Develop',
       submenu: [
         { role: 'reload' },
-        { role: 'toggledevtools' }
+        { role: 'toggledevtools' },
+        { type: 'separator' },
+        {
+          label: 'Reset All Data...',
+          click: () => {
+            dialog.showMessageBox({
+              message: 'This will reset all app data, are you sure?',
+              buttons: ['OK', 'Cancel']
+            }, (response) => {
+              if (response === 0) {
+                mainWindow.webContents.session.clearStorageData({}, () => {
+                  mainWindow.loadURL(appUrl);
+                });
+              }
+            });
+          }
+        }
       ]
     }
   ];
