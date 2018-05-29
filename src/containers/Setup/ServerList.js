@@ -98,7 +98,7 @@ class ServerList extends Component {
                 data={server}
                 selectServer={onSelect}
               >
-                {server.host}
+                {server.host || server.addresses[0]}
                 {isPaired && ' (paired)'}
               </ServerCard>
             );

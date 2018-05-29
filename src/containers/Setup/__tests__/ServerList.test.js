@@ -26,7 +26,7 @@ describe('ServerList component', () => {
   });
 
   it('displays servers', () => {
-    component.setState({ servers: [{ name: 'nc' }] });
+    component.setState({ servers: [{ name: 'nc', addresses: [] }] });
     expect(component.find('ServerCard')).toHaveLength(1);
   });
 });

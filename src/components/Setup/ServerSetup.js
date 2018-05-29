@@ -9,7 +9,9 @@ import { ServerCard } from '../../components/Setup';
  */
 const ServerSetup = ({ children, server }) => (
   <div className="server-setup">
-    <ServerCard className="server-setup__card" data={server}>{server.host}</ServerCard>
+    <ServerCard className="server-setup__card" data={server}>
+      {server.host || server.addresses[0]}
+    </ServerCard>
     <React.Fragment>
       { children }
     </React.Fragment>
@@ -23,6 +25,7 @@ ServerSetup.defaultProps = {
 ServerSetup.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
   server: PropTypes.shape({
+    addresses: PropTypes.array.isRequired,
     apiUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
   }).isRequired,
