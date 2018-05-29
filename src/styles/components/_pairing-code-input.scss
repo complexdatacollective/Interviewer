@@ -1,0 +1,38 @@
+.pairing-code-input {
+  &__characters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__character {
+    --character-padding: .25rem;
+    appearance: none;
+    border-color: var(--color-navy-taupe);
+    border-radius: .25rem;
+    flex-basis: 6%; // balanced spacing/width for ~16 chars
+    font-family: var(--code-font);
+    font-size: 2rem;
+    font-weight: medium;
+    padding: var(--character-padding) 0;
+    text-align: center;
+    width: calc(1rem + var(--character-padding) * 2);
+
+    &:nth-of-type(4n) {
+      margin-right: 1rem;
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    &--error {
+      background-color: var(--color-tomato);
+    }
+  }
+
+  &__clear {
+    @include text-button;
+  }
+}

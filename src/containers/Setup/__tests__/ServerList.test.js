@@ -1,16 +1,15 @@
 /* eslint-env jest */
-
 import React from 'react';
 import { mount } from 'enzyme';
 
-import ServerList from '../ServerList';
+import { UnconnectedServerList as ServerList } from '../ServerList';
 
-jest.mock('../../utils/serverDiscoverer', () => jest.fn().mockImplementation(() => ({
+jest.mock('../../../utils/serverDiscoverer', () => jest.fn().mockImplementation(() => ({
   init: jest.fn(),
   on: jest.fn(),
 })));
 
-jest.mock('../../utils/Environment', () => ({
+jest.mock('../../../utils/Environment', () => ({
   isCordova: () => false,
   isElectron: () => true,
 }));

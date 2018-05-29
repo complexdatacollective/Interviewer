@@ -1,0 +1,18 @@
+.pairing-form {
+  &__submit {
+    float: right;
+  }
+
+  .button {
+    &[disabled] {
+      cursor: default;
+      opacity: .5;
+    }
+  }
+
+  &__loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+}
