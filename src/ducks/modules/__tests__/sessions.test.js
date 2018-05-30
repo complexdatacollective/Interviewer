@@ -24,7 +24,7 @@ describe('network reducer', () => {
       },
     );
 
-    expect(newState).toEqual({
+    expect(newState).toMatchObject({
       undefined: {
         path: 'path/to/session',
         network: { ego: {}, nodes: [], edges: [] },
@@ -49,7 +49,7 @@ describe('network reducer', () => {
       },
     );
 
-    expect(newState.session1).toEqual({
+    expect(newState.session1).toMatchObject({
       path: 'new/path/to/session',
       network: {},
       promptIndex: 0,
@@ -73,7 +73,7 @@ describe('network reducer', () => {
       },
     );
 
-    expect(newState.session1).toEqual({
+    expect(newState.session1).toMatchObject({
       path: 'path/to/session',
       network: {},
       promptIndex: 2,
