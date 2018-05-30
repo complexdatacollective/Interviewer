@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 
-import ProtocolCard from '../components/Setup/ProtocolCard';
-import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import ProtocolCard from '../../components/Setup/ProtocolCard';
+import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 
 /**
   * Display available protocols
@@ -14,8 +14,6 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 class ProtocolList extends Component {
   onClickNewProtocol = (protocol) => {
     if (!(protocol.type || protocol.path)) {
-      console.log('protocol type and path not valid for:');
-      console.log(protocol);
       return;
     }
 

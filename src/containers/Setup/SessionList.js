@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 
-import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { CardList } from '../components';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import { CardList } from '../../components';
 
 /**
   * Display stored sessions

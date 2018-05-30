@@ -7,29 +7,9 @@ import { connect } from 'react-redux';
 
 import deviceDescription from '../../utils/DeviceInfo';
 import logo from '../../images/NC-Round.svg';
-import { Button, Icon } from '../../ui/components';
+import { Icon } from '../../ui/components';
 import { actionCreators as deviceActions } from '../../ducks/modules/device';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { Form, ProtocolList, SessionList } from '../../containers/';
-import { isElectron, isCordova } from '../../utils/Environment';
-
-const formConfig = {
-  formName: 'setup',
-  fields: [
-    {
-      label: 'Protocol URL',
-      name: 'protocol_url',
-      component: 'TextInput',
-      placeholder: 'Protocol URL',
-      required: true,
-    },
-  ],
-};
-
-const initialValues = {
-  protocol_url: 'https://github.com/codaco/example-protocols/raw/master/packaged/demo.netcanvas',
-};
+import { ProtocolList, SessionList } from '.';
 
 /**
   * Setup screen
@@ -48,18 +28,6 @@ class Setup extends Component {
     this.props.setDeviceDescription(this.deviceDescription);
   }
 
-  onClickLoadFactoryProtocol = (protocolName) => {
-    this.props.addSession();
-    this.props.loadFactoryProtocol(protocolName);
-  }
-
-  onClickImportRemoteProtocol = (fields) => {
-    if (fields) {
-      this.props.addSession();
-      this.props.downloadProtocol(fields.protocol_url);
-    }
-  }
-
   setOptions = (option) => {
     this.setState({
       showOptions: option,
@@ -69,25 +37,6 @@ class Setup extends Component {
   isShowProtocols = () => this.state.showOptions === 'protocol';
 
   isShowSessions = () => this.state.showOptions === 'session';
-
-  renderImportButtons() {
-    if (isElectron() || isCordova()) {
-      return (
-        <div>
-          <Form
-            className="setup__custom-protocol"
-            form={formConfig.formName}
-            onSubmit={this.onClickImportRemoteProtocol}
-            initialValues={initialValues}
-            controls={[<Button size="small" key="submit" aria-label="Import remote protocol">Import remote protocol</Button>]}
-            {...formConfig}
-          />
-        </div>
-      );
-    }
-
-    return null;
-  }
 
   render() {
     if (this.props.isProtocolLoaded) {
@@ -128,10 +77,7 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  addSession: PropTypes.func.isRequired,
-  downloadProtocol: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
-  loadFactoryProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
@@ -156,9 +102,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
-    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     setDeviceDescription: bindActionCreators(deviceActions.setDescription, dispatch),
   };
 }
