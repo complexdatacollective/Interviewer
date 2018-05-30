@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 
+import ProtocolCard from '../components/Setup/ProtocolCard';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 
@@ -41,8 +42,9 @@ class ProtocolList extends Component {
   render() {
     const { protocols } = this.props;
     const params = {
+      containerClass: 'protocol-list swiper-container',
       pagination: {
-        el: '.swiper-pagination',
+        el: '.swiper-pagination.protocol-list__pagination',
         type: 'bullets',
         clickable: true,
       },
@@ -55,12 +57,13 @@ class ProtocolList extends Component {
 
     return (
       <Swiper {...params}>
-        { protocols.map((protocol, index) => (
-          <div
-            key={index}
-            onClick={() => this.onClickNewProtocol(protocol)}
-          >
-            {protocol.name}
+        { protocols.map(protocol => (
+          <div key={protocol.path}>
+            <ProtocolCard
+              size="large"
+              protocol={protocol}
+              selectProtocol={() => this.onClickNewProtocol(protocol)}
+            />
           </div>
         )) }
       </Swiper>

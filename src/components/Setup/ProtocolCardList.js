@@ -30,7 +30,7 @@ const ProtocolCardList = ({ protocols, download }) => {
               <div className="protocol-card-list__card-border" />
               <ProtocolCard
                 className="protocol-card-list__card"
-                download={download}
+                selectProtocol={p => download(p.downloadUrl)}
                 protocol={protocol}
               />
             </div>

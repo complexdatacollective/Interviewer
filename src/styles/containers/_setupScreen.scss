@@ -1,13 +1,39 @@
 .setup {
+  --setup-header-height: 300px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 80vw;
 
   &__header {
+    align-items: center;
+    display: flex;
+    flex: 0 1 auto;
+    height: var(--setup-header-height);
+    justify-content: center;
     text-align: center;
+  }
 
-    .logo {
-      width: 180px;
-      margin-right: 20px;
+  &__logo {
+    margin-right: 20px;
+    width: 180px;
+  }
+
+  &__link {
+    border-bottom: 1px solid transparent;
+    margin: 0 1rem;
+    padding-bottom: .5rem;
+
+    &--active {
+      border-color: var(--text);
     }
+  }
+
+  &__main {
+    // note: preprocessor can't handle shorthand + calc + custom prop
+    flex-basis: calc(100vh - var(--setup-header-height));
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 
   &__start {
