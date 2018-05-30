@@ -2,6 +2,7 @@
 
 import { ActionsObservable } from 'redux-observable';
 import reducer, { actionCreators, epics } from '../protocol';
+import { actionTypes as SessionActionTypes } from '../session';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
 
@@ -105,6 +106,19 @@ describe('protocol module', () => {
         isLoaded: false,
         isLoading: true,
       });
+    });
+
+    it('should clear protocol state when session ends', () => {
+      const newState = reducer(
+        initialState,
+        actionCreators.setProtocol(
+          '/tmp/foo/mockPath.protocol',
+          { stages: [{ foo: 'bar' }] },
+        ),
+      );
+      expect(
+        reducer(newState, { type: SessionActionTypes.END_SESSION }),
+      ).toEqual(initialState);
     });
   });
 
