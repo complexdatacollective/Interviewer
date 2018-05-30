@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCSSVariableAsString } from '../../utils/CSSVariables';
+import { Edge } from '../../components';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
-
-const color = getCSSVariableAsString('--edge-base');
 
 export class EdgeLayout extends PureComponent {
   static propTypes = {
@@ -15,24 +13,10 @@ export class EdgeLayout extends PureComponent {
     displayEdges: [],
   };
 
-  renderEdge = ({ key, from, to }) => {
-    if (!from || !to) { return null; }
-
-    return (
-      <line
-        key={key}
-        x1={from.x}
-        y1={from.y}
-        x2={to.x}
-        y2={to.y}
-        stroke={color}
-      />
-    );
-  }
+  renderEdge = ({ key, from, to, type }) => (<Edge key={key} from={from} to={to} type={type} />);
 
   render() {
     const { displayEdges } = this.props;
-
     return (
       <div className="edge-layout">
         <svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">

@@ -158,7 +158,7 @@ class SessionMenu extends Component {
   };
 
   onReset = () => {
-    this.props.resetState();
+    this.props.openModal('CONFIRM_DELETE_DATA');
   };
 
   confirmUpdateDownload = () => {
@@ -187,7 +187,7 @@ class SessionMenu extends Component {
 
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
-      { id: 'reset', label: 'Reset Session', icon: 'menu-purge-data', onClick: this.onReset },
+      { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
     ];
@@ -235,6 +235,18 @@ class SessionMenu extends Component {
           onConfirm={() => {}}
         >
           <p>There was a problem exporting your data.</p>
+        </Dialog>
+        <Dialog
+          name="CONFIRM_DELETE_DATA"
+          title="Delete ALL data?"
+          type="warning"
+          confirmLabel="Yes, delete data"
+          onConfirm={this.props.resetState}
+        >
+          <p>
+            This will remove <strong>all</strong> data from the app.
+            Are you sure you want to continue?
+          </p>
         </Dialog>
         <Dialog
           name="UPDATE_DIALOG"

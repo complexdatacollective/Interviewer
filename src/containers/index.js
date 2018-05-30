@@ -1,9 +1,9 @@
 export { default as App } from './App';
 export { default as SessionMenu } from './SessionMenu';
 export { default as StageMenu } from './StageMenu';
+export { default as OrdinalBins } from './OrdinalBins';
 export { default as Stage } from './Stage';
 export { default as ProtocolScreen } from './ProtocolScreen';
-export { default as SetupScreen } from './SetupScreen';
 export { default as Dialog } from './Dialog';
 export { default as PromptSwiper } from './PromptSwiper';
 export { default as Form } from './Form';

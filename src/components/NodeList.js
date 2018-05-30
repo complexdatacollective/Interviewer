@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
+import sorty from '@zippytech/sorty';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
-import { Node } from '../ui/components';
+import { Node } from '../components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
@@ -18,7 +19,7 @@ import {
 const EnhancedNode = DragSource(selectable(Node));
 
 /**
-  * Renders a list of Node.
+  * Renders a list of Nodes.
   */
 class NodeList extends Component {
   constructor(props) {
@@ -82,6 +83,8 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
+      hoverColor,
+      sortOrder,
     } = this.props;
 
     const {
@@ -99,9 +102,9 @@ class NodeList extends Component {
       { 'node-list--drag': isValidTarget },
     );
 
-    const backgroundColor = getCSSVariableAsString('--light-background');
+    const styles = isHovering ? { backgroundColor: hoverColor } : {};
 
-    const styles = isHovering ? { backgroundColor } : {};
+    sorty(sortOrder, nodes);
 
     return (
       <TransitionGroup
@@ -135,6 +138,7 @@ class NodeList extends Component {
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
+  hoverColor: PropTypes.string,
   onSelect: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
@@ -144,11 +148,13 @@ NodeList.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
+  sortOrder: PropTypes.array,
 };
 
 NodeList.defaultProps = {
   nodes: [],
   nodeColor: '',
+  hoverColor: getCSSVariableAsString('--light-background'),
   label: () => (''),
   selected: () => false,
   onSelect: () => {},
@@ -159,6 +165,7 @@ NodeList.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
+  sortOrder: [],
 };
 
 export default compose(

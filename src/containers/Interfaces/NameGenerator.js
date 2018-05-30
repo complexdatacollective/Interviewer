@@ -8,7 +8,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { getNodeLabelFunction, makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '../../containers/';
+import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
 

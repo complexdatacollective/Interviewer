@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Node } from '../../ui/components';
+import { Node } from '../../components';
 import { getNodeLabelFunction } from '../../selectors/interface';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';

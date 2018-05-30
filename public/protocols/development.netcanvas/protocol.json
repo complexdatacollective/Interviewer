@@ -6,7 +6,7 @@
     "node": {
       "person": {
         "label": "Person",
-        "color": "coral",
+        "color": "node-color-seq-3",
         "displayVariable": "nickname",
         "iconVariant": "add-a-person",
         "variables": {
@@ -74,13 +74,63 @@
             "label": "Has given advice?",
             "description": "Human readable description",
             "type": "boolean"
+          },
+          "contactFreq": {
+            "label": "Contact frequency ordinal variable.",
+            "description": "Contact frequency ordinal variable",
+            "type": "ordinal",
+            "values": [
+              {
+                "label": "Last 24 hours",
+                "value": 4
+              },
+              {
+                "label": "Last week",
+                "value": 3
+              },
+              {
+                "label": "Last six months",
+                "value": 2
+              },
+              {
+                "label": "Last two years",
+                "value": 1
+              },
+              {
+                "label": "Over two years ago",
+                "value": -1
+              }
+            ]
+          },
+          "discussFreq": {
+            "label": "Discussion frequency ordinal variable.",
+            "description": "Discussion  frequency ordinal variable",
+            "type": "ordinal",
+            "values": [
+              {
+                "label": "Three",
+                "value": 3
+              },
+              {
+                "label": "Two",
+                "value": 2
+              },
+              {
+                "label": "One",
+                "value": 1
+              },
+              {
+                "label": "Missing",
+                "value": -1
+              }
+            ]
           }
         }
       },
       "venue": {
         "label": "Venue",
         "displayVariable": "Abbreviated Name",
-        "color": "kiwi",
+        "color": "node-color-seq-4",
         "iconVariant": "add-a-place",
         "variables": {
           "name": {
@@ -97,6 +147,33 @@
             "label": "Location",
             "description": "Human readable description",
             "type": "coordinates"
+          },
+          "visitFreq": {
+            "label": "Visit frequency ordinal variable.",
+            "description": "Visit frequency ordinal variable",
+            "type": "ordinal",
+            "values": [
+              {
+                "label": "Every day",
+                "value": 4
+              },
+              {
+                "label": "Every other day",
+                "value": 3
+              },
+              {
+                "label": "Every week",
+                "value": 2
+              },
+              {
+                "label": "Sometimes",
+                "value": 1
+              },
+              {
+                "label": "Never",
+                "value": -1
+              }
+            ]
           }
         }
       }
@@ -104,25 +181,40 @@
     "edge": {
       "friend": {
         "label": "Friend",
-        "color": "mustard",
+        "color": "edge-color-seq-4",
         "variables": {
-          "contact_freq": {
-            "label": "contact_freq",
-            "description": "Contact frequency.",
+          "contactFreq": {
+            "label": "Contact frequency ordinal variable.",
+            "description": "Contact frequency ordinal variable",
             "type": "ordinal",
-            "values": {
-              "Very Often": 4,
-              "Often": 3,
-              "Sometimes": 2,
-              "Rarely": 1,
-              "Never": -1
-            }
+            "values": [
+              {
+                "label": "Last 24 hours",
+                "value": 4
+              },
+              {
+                "label": "Last week",
+                "value": 3
+              },
+              {
+                "label": "Last six months",
+                "value": 2
+              },
+              {
+                "label": "Last two years",
+                "value": 1
+              },
+              {
+                "label": "Over two years ago",
+                "value": -1
+              }
+            ]
           }
         }
       },
       "professional": {
         "label": "Professional",
-        "color": "kiwi",
+        "color": "edge-color-seq-2",
         "variables": {}
       }
     }
@@ -748,6 +840,63 @@
       ]
     },
     {
+      "id": "ordinalBin1",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
+        {
+          "id": "contactFreq",
+          "text": "Contact frequency ordinal variable",
+          "variable": "contactFreq",
+          "//": "Ordinal variables have valid options defined in variable registry.",
+          "bucketSortOrder": [
+            {
+              "name": "nickname",
+              "dir": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "name": "nickname",
+              "dir": "desc"
+            },
+            {
+              "name": "age",
+              "dir": "desc",
+              "type": "number"
+            }
+          ]
+        },
+        {
+          "id": "discussFreq",
+          "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also node that this prompt uses the color override to style these bins differently than the main prompt.",
+          "variable": "discussFreq",
+          "color": "ord-color-seq-2"
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin2",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "venue"
+      },
+      "prompts": [
+        {
+          "id": "visitFreq",
+          "text": "Showing an ordinalbin interface with a node type other than person.",
+          "variable": "visitFreq",
+          "color": "ord-color-seq-4"
+        }
+      ]
+    },
+    {
       "id": "namegenroster2",
       "type": "NameGeneratorList",
       "label": "NG Classmates",
@@ -856,8 +1005,8 @@
             "allowPositioning": true
           },
           "edges": {
-            "display": ["friends", "professional"],
-            "create": "friends"
+            "display": ["friend", "professional"],
+            "create": "friend"
           },
           "highlight": {
             "variable": "has_given_advice",
