@@ -22,7 +22,7 @@ class SessionList extends Component {
 
     return (
       <CardList
-        label={sessionInfo => sessionInfo.key}
+        label={sessionInfo => sessionInfo.uid}
         nodes={Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }))}
         onToggleCard={this.onClickLoadSession}
         details={sessionInfo => [
