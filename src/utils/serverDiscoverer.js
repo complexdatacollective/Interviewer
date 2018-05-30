@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
-import { isElectron, isCordova } from '../utils/Environment';
 
+import { isElectron, isCordova } from '../utils/Environment';
+import { addApiUrlToService } from './serverAddressing';
 
 class ServerDiscoverer {
   constructor() {
@@ -20,7 +21,7 @@ class ServerDiscoverer {
       this.browser.stop();
     }
 
-    if (isCordova()) {
+    if (isCordova() && this.zeroconf) {
       this.zeroconf.unwatch('_network-canvas._tcp.', 'local.');
     }
   }
@@ -34,12 +35,12 @@ class ServerDiscoverer {
 
   checkEnvironment = () => {
     if (!isElectron() && !isCordova()) {
-      this.events.emit('SERVER_ERROR', 'Automatic server discovery is not supported in the browser.');
+      this.emitErrorMessage('Automatic server discovery is not supported in the browser.');
       return;
     }
 
     if (!window.navigator.onLine) {
-      this.events.emit('SERVER_ERROR', 'The Server Discovery service requires a network connection.');
+      this.emitErrorMessage('The Server Discovery service requires a network connection.');
     }
   }
 
@@ -51,6 +52,7 @@ class ServerDiscoverer {
         const mdns = window.require('mdns');
 
         // Pick the properties we want from the service object
+        // and provide a valid URL for the API if one is available
         const normalizeService = (service) => {
           const { name, host, port, addresses } = service;
           return {
@@ -62,12 +64,12 @@ class ServerDiscoverer {
         };
 
         this.browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
-        this.browser.on('serviceUp', service => this.events.emit('SERVER_ANNOUNCED', normalizeService(service)));
-        this.browser.on('serviceDown', service => this.events.emit('SERVER_REMOVED', normalizeService(service)));
-        this.browser.on('error', error => this.events.emit('SERVER_ERROR', error));
+        this.browser.on('serviceUp', service => this.emitAnnouncement(normalizeService(service)));
+        this.browser.on('serviceDown', service => this.emitRemoval(normalizeService(service)));
+        this.browser.on('error', error => this.emitErrorMessage(error));
         this.browser.start();
       } catch (error) {
-        this.events.emit('SERVER_ERROR', error);
+        this.emitErrorMessage(error);
       }
     }
 
@@ -89,15 +91,45 @@ class ServerDiscoverer {
           if (action === 'added') {
             // Do nothing - we need a resolution which provides an IP address.
           } else if (action === 'resolved') {
-            this.events.emit('SERVER_ANNOUNCED', normalizeService(result.service));
+            this.emitAnnouncement(normalizeService(result.service));
           } else {
-            this.events.emit('SERVER_REMOVED', normalizeService(result.service));
+            this.emitRemoval(normalizeService(result.service));
           }
-        }, error => this.emit('SERVER_ERROR', error));
+        }, error => this.emitErrorMessage(error));
       } catch (error) {
-        this.events.emit('SERVER_ERROR', error);
+        this.emitErrorMessage(error);
       }
     }
+  }
+
+  /**
+   * Emits a {@link Server} object
+   */
+  emitAnnouncement(normalizedService) {
+    const service = addApiUrlToService(normalizedService);
+    if (!service.apiUrl) {
+      console.warn('No apiUrl found', service); // eslint-disable-line no-console
+      return;
+    }
+    this.events.emit('SERVER_ANNOUNCED', service);
+  }
+
+  emitRemoval(normalizedService) {
+    this.events.emit('SERVER_REMOVED', normalizedService);
+  }
+
+  emitErrorMessage(error) {
+    // Electron emits/throws Error objects, Android uses strings, iOS is null...
+    // Normalize to a string, which is what consumer wants.
+    let errorMessage;
+    if (!error) {
+      errorMessage = 'An unknown error occurred';
+    } else if (errorMessage instanceof Error) {
+      errorMessage = errorMessage.message;
+    } else {
+      errorMessage = error.toString();
+    }
+    this.events.emit('SERVER_ERROR', errorMessage);
   }
 }
 

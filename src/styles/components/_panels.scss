@@ -14,6 +14,7 @@
   }
 
   &--minimise {
+    display: block; // Override flex to fix Safari layout issue (#407)
     margin-right: 0;
     width: 0;
     opacity: 0;

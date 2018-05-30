@@ -19,7 +19,7 @@ const Prompt = (props) => {
     { 'prompts__prompt--leaving': isLeaving }, // TODO: rename class
   );
 
-  const TAGS = [
+  const allowedTags = [
     'paragraph',
     'emphasis',
     'strong',
@@ -27,12 +27,11 @@ const Prompt = (props) => {
 
   return (
     <div className={classNames}>
-      <h1 className="prompts__prompt-header">
-        <ReactMarkdown
-          source={label}
-          allowedTypes={TAGS}
-        />
-      </h1>
+      <ReactMarkdown
+        className="prompts__prompt-header"
+        source={label}
+        allowedTypes={allowedTags}
+      />
     </div>
   );
 };

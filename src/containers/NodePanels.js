@@ -12,11 +12,11 @@ import { getCSSVariableAsString } from '../utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 
 const colorPresets = [
-  getCSSVariableAsString('--edge-alt-1'),
-  getCSSVariableAsString('--edge-alt-2'),
-  getCSSVariableAsString('--edge-alt-3'),
-  getCSSVariableAsString('--edge-alt-4'),
-  getCSSVariableAsString('--edge-alt-5'),
+  getCSSVariableAsString('--primary-color-seq-1'),
+  getCSSVariableAsString('--primary-color-seq-2'),
+  getCSSVariableAsString('--primary-color-seq-3'),
+  getCSSVariableAsString('--primary-color-seq-4'),
+  getCSSVariableAsString('--primary-color-seq-5'),
 ];
 
 const getHighlight = (highlight, panelNumber) => {

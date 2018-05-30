@@ -19,9 +19,18 @@ export const getExternalData = createDeepEqualSelector(
 
 export const makeGetNodeColor = () => createDeepEqualSelector(
   protocolRegistry,
-  (state, props) => props.nodeType,
+  (state, props) => props.type,
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color;
+  },
+);
+
+export const makeGetEdgeColor = () => createDeepEqualSelector(
+  protocolRegistry,
+  (state, props) => props.type,
+  (variableRegistry, edgeType) => {
+    const edgeInfo = variableRegistry.edge;
+    return edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color;
   },
 );

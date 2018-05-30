@@ -1,0 +1,17 @@
+@mixin text-button {
+  color: var(--color-platinum--dark);
+  cursor: pointer;
+  display: block;
+  float: left;
+  letter-spacing: 3px; // match button
+  text-transform: uppercase;
+
+  &--small {
+    font-size: 12px; // match button--small
+    margin: 1.35rem 0; // match button padding
+  }
+
+  &:hover {
+    color: var(--color-white);
+  }
+}

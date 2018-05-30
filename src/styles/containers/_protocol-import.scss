@@ -1,0 +1,24 @@
+.protocol-import {
+  position: relative;
+  margin: 0 130px;
+  max-width: 48rem;
+
+  &__close {
+    position: absolute;
+    right: 0;
+  }
+
+  &__content {
+    background: var(--light-background);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    margin-bottom: spacing(large);
+    padding: spacing(large);
+  }
+
+  &__buttons {
+    text-align: right;
+  }
+}

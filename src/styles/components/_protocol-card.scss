@@ -1,0 +1,36 @@
+.protocol-card {
+  align-items: center;
+  background-color: var(--background);
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  padding: spacing(large);
+
+  &__icon {
+    flex: none;
+
+    // Override position & display of the 'add-a-screen' icon.
+    // TODO: does this deserve its own svg?
+    margin: -6px -40px 0;
+
+    .cls-1,
+    .cls-2 {
+      display: none;
+    }
+  }
+
+  &__labels {
+    flex: auto;
+  }
+
+  &__name {
+    @include typography(title-4);
+    margin-bottom: 0;
+  }
+
+  &__version {
+    @include typography(copy-small);
+    margin-bottom: 0;
+  }
+}

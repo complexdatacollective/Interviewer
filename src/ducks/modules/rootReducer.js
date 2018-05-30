@@ -4,24 +4,28 @@ import { reducer as formReducer } from 'redux-form';
 
 import session from './session';
 import sessions from './sessions';
+import device from './device';
 import protocol from './protocol';
 import protocols from './protocols';
 import modals from './modals';
 import menu from './menu';
 import errors from './errors';
 import search from './search';
+import servers from './servers';
 
 const appReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
   session,
   sessions,
+  device,
   protocol,
   protocols,
   modals,
   menu,
   errors,
   search,
+  servers,
 });
 
 const rootReducer = (state, action) => {

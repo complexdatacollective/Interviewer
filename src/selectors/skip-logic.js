@@ -53,13 +53,10 @@ const convertRules = index => createSelector(
   ),
 );
 
-const functionize = method => new Function('query', `${method}`)(query); // eslint-disable-line no-new-func
-
 const getFilterFunction = index => createSelector(
-  getFilter(index),
   getJoinType(index),
   convertRules(index),
-  (filter, join, rules) => ((typeof filter === 'string') ? functionize(filter) : join(rules)),
+  (join, rules) => join(rules),
 );
 
 const filterNetwork = index => createSelector(

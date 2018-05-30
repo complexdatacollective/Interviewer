@@ -1,0 +1,14 @@
+.server-setup {
+  display: flex;
+  flex-direction: row;
+
+  &__card {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  &__form {
+    flex: auto;
+    padding-left: spacing(large);
+  }
+}
