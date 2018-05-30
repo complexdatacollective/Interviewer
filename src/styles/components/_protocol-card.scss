@@ -7,6 +7,15 @@
   flex-direction: row;
   padding: spacing(large);
 
+  &--large {
+    background-color: var(--light-background);
+    flex-direction: column;
+    height: 200px;
+    margin: 0 auto;
+    text-align: center;
+    width: 400px;
+  }
+
   &__icon {
     flex: none;
 
@@ -27,6 +36,10 @@
   &__name {
     @include typography(title-4);
     margin-bottom: 0;
+
+    &--large {
+      @include typography(title-2);
+    }
   }
 
   &__version {

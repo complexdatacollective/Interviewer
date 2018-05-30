@@ -105,11 +105,20 @@ class Setup extends Component {
     return (
       <div className="setup">
         <div className="setup__header">
-          <h1 className="type--title-1"><img src={logo} className="logo" alt="Network Canvas" /> Network Canvas Alpha 4 - Gresley</h1>
-          <span role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>Start new interview</span>
-          <span role="button" tabIndex="0" onClick={() => this.setOptions('session')}>Resume interview</span>
+          <img src={logo} className="logo setup__logo" alt="Network Canvas" />
+          <nav>
+            <h1 className="type--title-1">Network Canvas Alpha 4 - Gresley</h1>
+            <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
+              Start new interview
+            </span>
+            <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
+              Resume interview
+            </span>
+          </nav>
         </div>
-        {currentTab}
+        <main className="setup__main">
+          {currentTab}
+        </main>
         <Link to="/protocol-import">
           <Icon name="add-a-screen" className="setup__server-button" />
         </Link>
