@@ -5,6 +5,7 @@ import { reducer as formReducer } from 'redux-form';
 import session from './session';
 import sessions from './sessions';
 import protocol from './protocol';
+import protocols from './protocols';
 import modals from './modals';
 import menu from './menu';
 import errors from './errors';
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   session,
   sessions,
   protocol,
+  protocols,
   modals,
   menu,
   errors,

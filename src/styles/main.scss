@@ -6,6 +6,7 @@ $font-path: '../ui/assets/fonts';
 @import 'components/all';
 @import 'containers/all';
 @import 'transitions';
+@import '../../node_modules/swiper/dist/css/swiper.min.css';
 
 // Remove touch and focus outlines
 * {

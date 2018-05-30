@@ -9,7 +9,7 @@ import { Button } from '../ui/components';
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { ServerList } from '../components/';
-import { Form } from '../containers/';
+import { Form, ProtocolList, SessionList } from '../containers/';
 import { isElectron, isCordova } from '../utils/Environment';
 import logo from '../images/NC-Round.svg';
 
@@ -35,6 +35,13 @@ const initialValues = {
   * @extends Component
   */
 class Setup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOptions: 'protocol',
+    };
+  }
+
   onClickLoadFactoryProtocol = (protocolName) => {
     this.props.addSession();
     this.props.loadFactoryProtocol(protocolName);
@@ -46,6 +53,18 @@ class Setup extends Component {
       this.props.downloadProtocol(fields.protocol_url);
     }
   }
+
+  setOptions = (option) => {
+    this.setState({
+      showOptions: option,
+    });
+  }
+
+  isShowProtocols = () => this.state.showOptions === 'protocol';
+
+  isShowServerOptions = () => this.state.showOptions === 'server';
+
+  isShowSessions = () => this.state.showOptions === 'session';
 
   renderImportButtons() {
     if (isElectron() || isCordova()) {
@@ -73,19 +92,22 @@ class Setup extends Component {
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
+    let currentTab = <ProtocolList />;
+
+    if (this.isShowServerOptions()) {
+      currentTab = <ServerList />;
+    } else if (this.isShowSessions()) {
+      currentTab = <SessionList />;
+    }
+
     return (
       <div className="setup">
         <div className="setup__header">
           <h1 className="type--title-1"><img src={logo} className="logo" alt="Network Canvas" /> Network Canvas Alpha 4 - Gresley</h1>
+          <span role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>Start new interview</span>
+          <span role="button" tabIndex="0" onClick={() => this.setOptions('session')}>Resume interview</span>
         </div>
-        {this.renderImportButtons()}
-        <div className="setup__start">
-          <ServerList />
-          <div className="setup__factory-protocol">
-            <Button size="small" onClick={() => this.onClickLoadFactoryProtocol('education.netcanvas')} content="Load teaching protocol" />&nbsp;
-            <Button size="small" color="platinum" onClick={() => this.onClickLoadFactoryProtocol('development.netcanvas')} content="Load dev protocol" />
-          </div>
-        </div>
+        {currentTab}
       </div>
     );
   }
