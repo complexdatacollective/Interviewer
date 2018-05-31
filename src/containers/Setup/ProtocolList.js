@@ -20,7 +20,7 @@ class ProtocolList extends Component {
     if (protocol.type === 'factory') {
       this.loadFactoryProtocol(protocol.path);
     } else {
-      this.importRemoteProtocol(protocol.path);
+      this.loadRemoteProtocol(protocol.path);
     }
   }
 
@@ -31,7 +31,6 @@ class ProtocolList extends Component {
 
   loadRemoteProtocol = (protocolPath) => {
     if (protocolPath) {
-      this.props.addSession();
       this.props.loadProtocol(protocolPath);
     }
   }
@@ -51,6 +50,8 @@ class ProtocolList extends Component {
         prevEl: '.swiper-button-prev',
       },
       loop: true,
+      shouldSwiperUpdate: true,
+      rebuildOnUpdate: true,
     };
 
     return (

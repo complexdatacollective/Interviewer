@@ -1,5 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import uuidv4 from 'uuid/v4';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 import { actionTypes as SessionActionTypes } from './session';
 
@@ -95,11 +96,16 @@ function importProtocolAction(path) {
   };
 }
 
-function loadProtocolAction(path) {
+function loadProtocolAction(path, id) {
+  let sessionId = id;
+  if (!id) {
+    sessionId = uuidv4();
+  }
   return {
     type: LOAD_PROTOCOL,
     protocolType: 'download',
     path,
+    sessionId,
   };
 }
 

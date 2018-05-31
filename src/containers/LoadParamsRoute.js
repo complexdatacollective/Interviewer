@@ -32,7 +32,7 @@ class LoadParamsRoute extends Component {
       if (params.protocolType === 'factory') {
         this.props.loadFactoryProtocol(params.protocolId);
       } else {
-        this.props.loadProtocol(params.protocolId);
+        this.props.loadProtocol(params.protocolId, params.sessionId);
       }
     }
   }

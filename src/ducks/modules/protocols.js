@@ -1,3 +1,9 @@
+import { some } from 'lodash';
+
+import { actionTypes as ProtocolActionTypes } from './protocol';
+
+const LOAD_PROTOCOL = ProtocolActionTypes.LOAD_PROTOCOL;
+
 const ADD_PROTOCOL = 'ADD_PROTOCOL';
 
 const initialState = [
@@ -19,6 +25,14 @@ const initialState = [
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case LOAD_PROTOCOL:
+      if (some(state, { path: action.path, type: action.type })) {
+        return state;
+      }
+      return [
+        ...state,
+        { name: action.path, path: action.path, type: action.type },
+      ];
     case ADD_PROTOCOL:
       return [
         ...state,
