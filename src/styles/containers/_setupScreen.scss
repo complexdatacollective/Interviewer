@@ -1,4 +1,6 @@
 .setup {
+  $active-border-color: rgba(255, 255, 255, .5);
+  --active-border-color: $active-border-color;
   --setup-header-height: 30vh;
   display: flex;
   flex-direction: column;
@@ -36,7 +38,7 @@
     transition: border-color var(--animation-duration-fast) var(--animation-easing);
 
     &--active {
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: var(--active-border-color);
       font-weight: 600;
     }
   }
