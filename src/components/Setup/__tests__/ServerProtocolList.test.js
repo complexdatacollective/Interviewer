@@ -2,9 +2,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ProtocolCardList from '../ProtocolCardList';
+import ServerProtocolList from '../ServerProtocolList';
 
-describe('<ProtocolCardList>', () => {
+describe('<ServerProtocolList>', () => {
   let component;
   let mockProtocols;
   let downloadHandler;
@@ -12,7 +12,9 @@ describe('<ProtocolCardList>', () => {
   beforeEach(() => {
     downloadHandler = jest.fn();
     mockProtocols = [{ name: 'my-mock-protocol', version: '1.0.1' }];
-    component = shallow(<ProtocolCardList download={downloadHandler} protocols={mockProtocols} />);
+    component = shallow((
+      <ServerProtocolList download={downloadHandler} protocols={mockProtocols} />
+    ));
   });
 
   it('renders a card for each protocol', () => {

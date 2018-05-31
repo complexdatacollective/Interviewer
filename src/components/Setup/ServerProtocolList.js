@@ -10,7 +10,7 @@ const EmptyProtocolList = (
   </div>
 );
 
-const ProtocolCardList = ({ protocols, download }) => {
+const ServerProtocolList = ({ protocols, download }) => {
   let leftBorderClass = 'protocol-card-list__left-border';
   if (!protocols.length) {
     return EmptyProtocolList;
@@ -41,9 +41,9 @@ const ProtocolCardList = ({ protocols, download }) => {
   );
 };
 
-ProtocolCardList.propTypes = {
+ServerProtocolList.propTypes = {
   download: PropTypes.func.isRequired,
   protocols: PropTypes.array.isRequired,
 };
 
-export default ProtocolCardList;
+export default ServerProtocolList;
