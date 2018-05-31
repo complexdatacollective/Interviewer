@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
-import { matchPath } from 'react-router-dom';
+import { Link, matchPath } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { CardList } from '../../components';
@@ -26,6 +27,17 @@ const pathInfo = (sessionPath) => {
   return info;
 };
 
+const emptyView = (
+  <div className="session-list--empty">
+    <h1 className="session-list__header">No previous interviews found</h1>
+    <p>
+      To begin one, select a protocol from <Link to="/">Start new interview</Link>,
+      or import a protocol from Network Canvas Server by using the
+      button in the lower-right corner of this screen.
+    </p>
+  </div>
+);
+
 /**
   * Display stored sessions
   */
@@ -38,6 +50,10 @@ class SessionList extends Component {
 
   render() {
     const { sessions } = this.props;
+
+    if (isEmpty(sessions)) {
+      return emptyView;
+    }
 
     // Display most recent first
     const sessionList = Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }));

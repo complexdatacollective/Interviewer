@@ -28,6 +28,7 @@ class Card extends PureComponent {
 
     const classes = cx({
       card: true,
+      'card--multiselect': multiselect,
       'card--selected': selected,
     });
 

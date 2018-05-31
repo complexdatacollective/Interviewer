@@ -74,7 +74,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "card card--selected",
+      "className": "card card--multiselect card--selected",
     },
     "ref": null,
     "rendered": Array [
@@ -293,7 +293,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "card card--selected",
+        "className": "card card--multiselect card--selected",
       },
       "ref": null,
       "rendered": Array [
@@ -539,7 +539,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "card",
+      "className": "card card--multiselect",
     },
     "ref": null,
     "rendered": Array [
@@ -717,7 +717,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "card",
+        "className": "card card--multiselect",
       },
       "ref": null,
       "rendered": Array [

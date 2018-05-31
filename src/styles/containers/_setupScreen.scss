@@ -14,8 +14,6 @@
     height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
-
-
   }
 
   .header-content {
@@ -33,6 +31,7 @@
 
   &__link {
     border-bottom: 3px solid transparent;
+    cursor: pointer;
     margin: 0 1rem;
     padding-bottom: .5rem;
     transition: border-color var(--animation-duration-fast) var(--animation-easing);
