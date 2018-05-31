@@ -104,7 +104,10 @@ class NodeList extends Component {
 
     const styles = isHovering ? { backgroundColor: hoverColor } : {};
 
-    sorty(sortOrder, nodes);
+    if (sortOrder && sortOrder.length) {
+      // TODO: review; may need to use a stable sort
+      sorty(sortOrder, nodes);
+    }
 
     return (
       <TransitionGroup
