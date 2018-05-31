@@ -28,6 +28,13 @@ function modal(WrappedComponent) {
       this.props.registerModal(this.props.name);
     }
 
+    componentDidUpdate(prevProps) {
+      if (prevProps.isRegistered && !this.props.isRegistered) {
+        // registration was removed (e.g., from app reset), but component is still mounted
+        this.props.registerModal(this.props.name);
+      }
+    }
+
     componentWillUnmount() {
       this.props.unregisterModal(this.props.name);
     }
@@ -55,6 +62,7 @@ function modal(WrappedComponent) {
   }
 
   Modal.propTypes = {
+    isRegistered: PropTypes.bool.isRequired,
     registerModal: PropTypes.func.isRequired,
     unregisterModal: PropTypes.func.isRequired,
     name: PropTypes.oneOfType([
@@ -79,6 +87,7 @@ function modal(WrappedComponent) {
     return function mapStateToProps(state, props) {
       return {
         show: modalIsOpen(state, props),
+        isRegistered: state.modals.some(m => m.name === props.name),
       };
     };
   }

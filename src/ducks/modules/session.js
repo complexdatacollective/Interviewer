@@ -32,4 +32,5 @@ const actionTypes = {
 export {
   actionCreators,
   actionTypes,
+  initialState,
 };

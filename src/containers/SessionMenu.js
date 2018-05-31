@@ -9,7 +9,7 @@ import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { getNetwork } from '../selectors/interface';
-import { sessionMenuIsOpen } from '../selectors/session';
+import { anySessionIsActive, sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
@@ -177,20 +177,24 @@ class SessionMenu extends Component {
 
   render() {
     const {
-      customItems, hideButton, isOpen, toggleMenu, addMockNodes,
+      sessionExists, customItems, hideButton, isOpen, toggleMenu, addMockNodes,
     } = this.props;
 
     const { version } = this.state;
 
     const menuType = 'settings';
 
-
     const items = [
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
-      { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
       ...customItems,
     ];
+
+    if (sessionExists) {
+      items.push(
+        { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
+      );
+    }
 
     if (isElectron()) {
       items.push({
@@ -272,10 +276,12 @@ SessionMenu.propTypes = {
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
+  sessionExists: PropTypes.bool,
   toggleMenu: PropTypes.func.isRequired,
 };
 
 SessionMenu.defaultProps = {
+  sessionExists: false,
   hideButton: false,
   isOpen: false,
 };
@@ -285,6 +291,7 @@ function mapStateToProps(state) {
     customItems: state.menu.customMenuItems,
     isOpen: sessionMenuIsOpen(state),
     currentNetwork: getNetwork(state),
+    sessionExists: anySessionIsActive(state),
   };
 }
 
