@@ -66,6 +66,7 @@ ShallowWrapper {
             },
           ]
         }
+        onDeleteCard={null}
         onToggleCard={[Function]}
         scrollTop={[Function]}
         selected={[Function]}
@@ -101,6 +102,7 @@ ShallowWrapper {
             "uid": "c",
           },
         ],
+        "onDeleteCard": null,
         "onToggleCard": [Function],
         "scrollTop": [Function],
         "selected": [Function],
@@ -143,6 +145,7 @@ ShallowWrapper {
               },
             ]
           }
+          onDeleteCard={null}
           onToggleCard={[Function]}
           scrollTop={[Function]}
           selected={[Function]}
@@ -178,6 +181,7 @@ ShallowWrapper {
               "uid": "c",
             },
           ],
+          "onDeleteCard": null,
           "onToggleCard": [Function],
           "scrollTop": [Function],
           "selected": [Function],
