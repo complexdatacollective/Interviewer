@@ -1,3 +1,9 @@
 .protocol-list {
-  padding: 0 0 3rem;
+  height: 100%;
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

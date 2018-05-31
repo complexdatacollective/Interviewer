@@ -54,16 +54,20 @@ class Setup extends Component {
     return (
       <div className="setup">
         <div className="setup__header">
-          <img src={logo} className="logo setup__logo" alt="Network Canvas" />
-          <nav>
-            <h1 className="type--title-1">Network Canvas Alpha 4 - Gresley</h1>
-            <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
-              Start new interview
-            </span>
-            <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-              Resume interview
-            </span>
-          </nav>
+          <div className="header-content">
+            <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
+            <div className="header-content__nav">
+              <h1 className="type--title-1">Network Canvas Alpha 4 - Gresley</h1>
+              <nav>
+                <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
+                  Start new interview
+                </span>
+                <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
+                  Resume interview
+                </span>
+              </nav>
+            </div>
+          </div>
         </div>
         <main className="setup__main">
           {currentTab}
