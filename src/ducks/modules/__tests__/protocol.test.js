@@ -2,6 +2,7 @@
 
 import { ActionsObservable } from 'redux-observable';
 import reducer, { actionCreators, epics } from '../protocol';
+import { omit } from 'lodash';
 import { actionTypes as SessionActionTypes } from '../session';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
@@ -145,7 +146,8 @@ describe('protocol module', () => {
 
       const expectedActions = [actionCreators.loadProtocol('/app/data/protocol/path')];
       return epics(action$).toArray().toPromise().then((result) => {
-        expect(result).toEqual(expectedActions);
+        expect(result.map(element => omit(element, 'sessionId'))).toEqual(
+          expectedActions.map(action => omit(action, 'sessionId')));
       });
     });
 
