@@ -103,9 +103,9 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platform
 
 Starting the web app: If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
-Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run android:dev -- --emulator`, or `npm run ios:dev -- --target="iPad-Pro, 11.3"`. Changes will be picked up from the dev server.
+Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run android:dev -- --emulator`, or `npm run ios:dev -- --target="iPad-Pro, 11.4"`. Changes will be picked up from the dev server.
 
-This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.3"), try `xcrun simctl list`.
+This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.4"), try `xcrun simctl list`.
 
 *Known issue & caveat*: this requires temporarily changing `config.xml` contents to build a development app; if everything goes well, the changes are cleaned up upon completion. However, a Cordova build error (for example) can leave config.xml in this 'development' state.
 

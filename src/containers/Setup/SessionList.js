@@ -7,6 +7,7 @@ import { Link, matchPath } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { CardList } from '../../components';
 
 const shortUid = uid => (uid || '').replace(/-.*/, '');
@@ -49,7 +50,7 @@ class SessionList extends Component {
   }
 
   render() {
-    const { sessions } = this.props;
+    const { removeSession, sessions } = this.props;
 
     if (isEmpty(sessions)) {
       return emptyView;
@@ -60,24 +61,32 @@ class SessionList extends Component {
     sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
     return (
-      <CardList
-        compact
-        multiselect={false}
-        label={sessionInfo => shortUid(sessionInfo.uid)}
-        nodes={sessionList}
-        onToggleCard={this.onClickLoadSession}
-        details={(sessionInfo) => {
-          const info = pathInfo(sessionInfo.value.path);
-          return [
-            { Protocol: info.protocol },
-            { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
-            { Stage: oneBasedIndex(info.stageIndex) },
-            { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
-            { 'Number of Nodes': sessionInfo.value.network.nodes.length },
-            { 'Number of Edges': sessionInfo.value.network.edges.length },
-          ];
-        }}
-      />
+      <React.Fragment>
+        <CardList
+          compact
+          multiselect={false}
+          onDeleteCard={(data) => {
+            // eslint-disable-next-line no-alert
+            if (confirm('Delete this interview?')) {
+              removeSession(data.uid);
+            }
+          }}
+          label={sessionInfo => shortUid(sessionInfo.uid)}
+          nodes={sessionList}
+          onToggleCard={this.onClickLoadSession}
+          details={(sessionInfo) => {
+            const info = pathInfo(sessionInfo.value.path);
+            return [
+              { Protocol: info.protocol },
+              { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
+              { Stage: oneBasedIndex(info.stageIndex) },
+              { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
+              { 'Number of Nodes': sessionInfo.value.network.nodes.length },
+              { 'Number of Edges': sessionInfo.value.network.edges.length },
+            ];
+          }}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -85,6 +94,7 @@ class SessionList extends Component {
 SessionList.propTypes = {
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
+  removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   setSession: PropTypes.func.isRequired,
 };
@@ -102,6 +112,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadSession: path => dispatch(push(path)),
+    removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }
