@@ -1,13 +1,13 @@
 const REGISTER_MENU_ITEM = 'REGISTER_MENU_ITEM';
 const RESET_STATE = 'RESET_STATE';
-const TOGGLE_SESSION_MENU = 'TOGGLE_SESSION_MENU';
+const TOGGLE_SETTINGS_MENU = 'TOGGLE_SETTINGS_MENU';
 const TOGGLE_STAGE_MENU = 'TOGGLE_STAGE_MENU';
 const UPDATE_STAGE_SEARCH = 'UPDATE_STAGE_SEARCH';
 const UNREGISTER_MENU_ITEM = 'UNREGISTER_MENU_ITEM';
 
 const initialState = {
   customMenuItems: [],
-  sessionMenuIsOpen: false,
+  settingsMenuIsOpen: false,
   stageMenuIsOpen: false,
   stageSearchTerm: '',
 };
@@ -20,10 +20,10 @@ export default function reducer(state = initialState, action = {}) {
         customMenuItems: state.customMenuItems.concat(action.menuItem),
       };
     }
-    case TOGGLE_SESSION_MENU: {
+    case TOGGLE_SETTINGS_MENU: {
       return {
         ...state,
-        sessionMenuIsOpen: !state.sessionMenuIsOpen,
+        settingsMenuIsOpen: !state.settingsMenuIsOpen,
       };
     }
     case TOGGLE_STAGE_MENU: {
@@ -62,9 +62,9 @@ function resetState() {
   };
 }
 
-function toggleSessionMenu() {
+function toggleSettingsMenu() {
   return {
-    type: TOGGLE_SESSION_MENU,
+    type: TOGGLE_SETTINGS_MENU,
   };
 }
 
@@ -91,7 +91,7 @@ function unregisterMenuItem(id) {
 const actionCreators = {
   registerMenuItem,
   resetState,
-  toggleSessionMenu,
+  toggleSettingsMenu,
   toggleStageMenu,
   updateStageSearch,
   unregisterMenuItem,
@@ -100,7 +100,7 @@ const actionCreators = {
 const actionTypes = {
   REGISTER_MENU_ITEM,
   RESET_STATE,
-  TOGGLE_SESSION_MENU,
+  TOGGLE_SETTINGS_MENU,
   TOGGLE_STAGE_MENU,
   UPDATE_STAGE_SEARCH,
   UNREGISTER_MENU_ITEM,
