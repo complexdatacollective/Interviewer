@@ -11,7 +11,7 @@ import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { getNetwork } from '../selectors/interface';
-import { sessionMenuIsOpen } from '../selectors/session';
+import { settingsMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
@@ -67,7 +67,7 @@ function createMarkup(htmlString) {
   * Renders a Menu using stages to construct items in the menu
   * @extends Component
   */
-class SessionMenu extends Component {
+class SettingsMenu extends Component {
   constructor() {
     super();
 
@@ -225,7 +225,7 @@ class SessionMenu extends Component {
         icon={menuType}
         isOpen={isOpen}
         items={items}
-        title="Session"
+        title="Settings"
         toggleMenu={toggleMenu}
       >
         <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
@@ -267,7 +267,7 @@ class SessionMenu extends Component {
   }
 }
 
-SessionMenu.propTypes = {
+SettingsMenu.propTypes = {
   addMockNodes: PropTypes.func.isRequired,
   currentNetwork: PropTypes.object.isRequired,
   customItems: PropTypes.array.isRequired,
@@ -279,7 +279,7 @@ SessionMenu.propTypes = {
   toggleMenu: PropTypes.func.isRequired,
 };
 
-SessionMenu.defaultProps = {
+SettingsMenu.defaultProps = {
   hideButton: false,
   isOpen: false,
 };
@@ -287,7 +287,7 @@ SessionMenu.defaultProps = {
 function mapStateToProps(state) {
   return {
     customItems: state.menu.customMenuItems,
-    isOpen: sessionMenuIsOpen(state),
+    isOpen: settingsMenuIsOpen(state),
     currentNetwork: getNetwork(state),
   };
 }
@@ -300,7 +300,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(push('/'));
   },
   resetState: () => dispatch(push('/reset')),
-  toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
+  toggleMenu: bindActionCreators(menuActions.toggleSettingsMenu, dispatch),
 });
 
 export default compose(
@@ -310,4 +310,4 @@ export default compose(
       props.generateNodes(20);
     },
   }),
-)(SessionMenu);
+)(SettingsMenu);

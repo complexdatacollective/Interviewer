@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 
 const protocol = state => state.protocol;
 
-export const sessionMenuIsOpen = state => state.menu.sessionMenuIsOpen;
+export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
 export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;
 export const stageSearchTerm = state => state.menu.stageSearchTerm;
 

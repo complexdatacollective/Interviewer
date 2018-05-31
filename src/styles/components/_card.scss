@@ -2,9 +2,14 @@
   align-items: center;
   border: 2px solid palette('text-dark');
   border-radius: .5rem;
+  cursor: pointer;
   display: flex;
   margin: 1rem;
   padding: 1rem;
+
+  &--multiselect {
+    cursor: default;
+  }
 
   &__indicator {
     box-sizing: content-box;

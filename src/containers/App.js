@@ -5,9 +5,9 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
 import '../styles/main.scss';
-import { sessionMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
+import { settingsMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
-import { SessionMenu, StageMenu, LoadScreen } from '../containers';
+import { SettingsMenu, StageMenu, LoadScreen } from '../containers';
 import { ErrorMessage } from '../components';
 
 /**
@@ -21,11 +21,11 @@ const App = props => (
     'app--windows': isWindows(),
     'app--macos': isMacOS(),
     'app--linux': isLinux(),
-    'app--session': props.isSessionMenu,
+    'app--settings-open': props.isSettingsMenuOpen,
   })}
   >
     <div className="electron-titlebar" />
-    <SessionMenu hideButton={props.isMenuOpen} />
+    <SettingsMenu hideButton={props.isMenuOpen} />
     <StageMenu hideButton={props.isMenuOpen} />
     <div
       id="page-wrap"
@@ -45,19 +45,19 @@ const App = props => (
 App.propTypes = {
   children: PropTypes.any,
   isMenuOpen: PropTypes.bool,
-  isSessionMenu: PropTypes.bool,
+  isSettingsMenuOpen: PropTypes.bool,
 };
 
 App.defaultProps = {
   children: null,
   isMenuOpen: false,
-  isSessionMenu: false,
+  isSettingsMenuOpen: false,
 };
 
 function mapStateToProps(state) {
   return {
-    isMenuOpen: sessionMenuIsOpen(state) || stageMenuIsOpen(state),
-    isSessionMenu: sessionMenuIsOpen(state),
+    isMenuOpen: settingsMenuIsOpen(state) || stageMenuIsOpen(state),
+    isSettingsMenuOpen: settingsMenuIsOpen(state),
   };
 }
 

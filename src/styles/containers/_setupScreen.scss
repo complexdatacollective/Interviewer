@@ -1,4 +1,6 @@
 .setup {
+  $active-border-color: rgba(255, 255, 255, .5);
+  --active-border-color: $active-border-color;
   --setup-header-height: 30vh;
   display: flex;
   flex-direction: column;
@@ -12,8 +14,6 @@
     height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
-
-
   }
 
   .header-content {
@@ -31,12 +31,13 @@
 
   &__link {
     border-bottom: 3px solid transparent;
+    cursor: pointer;
     margin: 0 1rem;
     padding-bottom: .5rem;
     transition: border-color var(--animation-duration-fast) var(--animation-easing);
 
     &--active {
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: var(--active-border-color);
       font-weight: 600;
     }
   }
