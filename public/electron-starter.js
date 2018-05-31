@@ -85,9 +85,18 @@ function createMenu() {
       ]
     },
     {
-      label: 'Develop',
+      label: 'View',
       submenu: [
         { role: 'reload' },
+        { type: 'separator' },
+        { role: 'resetzoom' },
+        { role: 'zoomin' },
+        { role: 'zoomout' }
+      ]
+    },
+    {
+      label: 'Develop',
+      submenu: [
         { role: 'toggledevtools' },
         { type: 'separator' },
         {
