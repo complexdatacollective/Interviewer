@@ -10,6 +10,11 @@ const REMOVE_SESSION = 'REMOVE_SESSION';
 
 const initialState = {};
 
+const withTimestamp = session => ({
+  ...session,
+  updatedAt: Date.now(),
+});
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODES:
@@ -23,36 +28,36 @@ export default function reducer(state = initialState, action = {}) {
     case UNSET_EGO:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           network: network(state[action.sessionId].network, action),
-        },
+        }),
       };
     case ADD_SESSION:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           path: action.path,
           promptIndex: 0,
           network: network(state.network, action),
-        },
+        }),
       };
     case UPDATE_SESSION:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           path: action.path,
           promptIndex: 0,
-        },
+        }),
       };
     case UPDATE_PROMPT:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           promptIndex: action.promptIndex,
-        },
+        }),
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);

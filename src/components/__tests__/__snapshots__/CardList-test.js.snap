@@ -43,8 +43,10 @@ ShallowWrapper {
     "props": Object {
       "children": <CardList
         className=""
+        compact={false}
         details={[Function]}
         label={[Function]}
+        multiselect={true}
         nodes={
           Array [
             Object {
@@ -78,8 +80,10 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "className": "",
+        "compact": false,
         "details": [Function],
         "label": [Function],
+        "multiselect": true,
         "nodes": Array [
           Object {
             "age": "22",
@@ -116,8 +120,10 @@ ShallowWrapper {
       "props": Object {
         "children": <CardList
           className=""
+          compact={false}
           details={[Function]}
           label={[Function]}
+          multiselect={true}
           nodes={
             Array [
               Object {
@@ -151,8 +157,10 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "className": "",
+          "compact": false,
           "details": [Function],
           "label": [Function],
+          "multiselect": true,
           "nodes": Array [
             Object {
               "age": "22",

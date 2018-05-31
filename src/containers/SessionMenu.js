@@ -5,9 +5,11 @@ import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
 import xss from 'xss';
+
 import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { getNetwork } from '../selectors/interface';
 import { sessionMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
@@ -186,6 +188,7 @@ class SessionMenu extends Component {
 
 
     const items = [
+      { id: 'main-menu', label: 'Return to Start', icon: 'menu-quit', onClick: this.props.endSession },
       { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
       { id: 'mock-data', label: 'Add mock nodes', icon: 'menu-custom-interface', onClick: addMockNodes },
@@ -268,6 +271,7 @@ SessionMenu.propTypes = {
   addMockNodes: PropTypes.func.isRequired,
   currentNetwork: PropTypes.object.isRequired,
   customItems: PropTypes.array.isRequired,
+  endSession: PropTypes.func.isRequired,
   hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
@@ -291,6 +295,10 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
   openModal: bindActionCreators(modalActions.openModal, dispatch),
+  endSession: () => {
+    dispatch(sessionActions.endSession());
+    dispatch(push('/'));
+  },
   resetState: () => dispatch(push('/reset')),
   toggleMenu: bindActionCreators(menuActions.toggleSessionMenu, dispatch),
 });

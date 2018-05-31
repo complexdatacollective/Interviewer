@@ -38,5 +38,9 @@
 
   &__attribute {
     font-weight: 300;
+
+    &--compact {
+      margin-bottom: .5rem;
+    }
   }
 }

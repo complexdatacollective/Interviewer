@@ -3,9 +3,28 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
+import { matchPath } from 'react-router-dom';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { CardList } from '../../components';
+
+const shortUid = uid => (uid || '').replace(/-.*/, '');
+
+const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString();
+
+const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+
+const pathInfo = (sessionPath) => {
+  const info = { path: sessionPath };
+  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolPath/:stageIndex' });
+  if (matchedPath) {
+    info.sessionId = matchedPath.params.sessionId;
+    info.protocol = matchedPath.params.protocolPath;
+    info.protocolType = matchedPath.params.protocolType;
+    info.stageIndex = matchedPath.params.stageIndex;
+  }
+  return info;
+};
 
 /**
   * Display stored sessions
@@ -20,17 +39,28 @@ class SessionList extends Component {
   render() {
     const { sessions } = this.props;
 
+    // Display most recent first
+    const sessionList = Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }));
+    sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
+
     return (
       <CardList
-        label={sessionInfo => sessionInfo.uid}
-        nodes={Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }))}
+        compact
+        multiselect={false}
+        label={sessionInfo => shortUid(sessionInfo.uid)}
+        nodes={sessionList}
         onToggleCard={this.onClickLoadSession}
-        details={sessionInfo => [
-          { Path: sessionInfo.value.path },
-          { Prompt: sessionInfo.value.promptIndex },
-          { 'Number of Nodes': sessionInfo.value.network.nodes.length },
-          { 'Number of Edges': sessionInfo.value.network.edges.length },
-        ]}
+        details={(sessionInfo) => {
+          const info = pathInfo(sessionInfo.value.path);
+          return [
+            { Protocol: info.protocol },
+            { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
+            { Stage: oneBasedIndex(info.stageIndex) },
+            { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
+            { 'Number of Nodes': sessionInfo.value.network.nodes.length },
+            { 'Number of Edges': sessionInfo.value.network.edges.length },
+          ];
+        }}
       />
     );
   }
