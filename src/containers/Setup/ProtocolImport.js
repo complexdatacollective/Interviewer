@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 
+import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerList from './ServerList';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
@@ -46,7 +47,13 @@ class ProtocolImport extends PureComponent {
   }
 
   contentAreas() {
-    const { manualEntry, pairedServer, previousSelectedServer: prev, selectedServer } = this.state;
+    const {
+      manualEntry,
+      pairedServer,
+      previousSelectedServer: prev,
+      selectedServer,
+      showUrlForm,
+    } = this.state;
     let content;
     let buttonContent = null;
     if (pairedServer) {
@@ -68,6 +75,12 @@ class ProtocolImport extends PureComponent {
           cancel={() => this.setState({ manualEntry: false })}
         />
       );
+    } else if (showUrlForm) {
+      content = (
+        <ProtocolUrlForm
+          onCancel={() => this.setState({ showUrlForm: false })}
+        />
+      );
     } else {
       content = (
         <ServerList
@@ -76,12 +89,20 @@ class ProtocolImport extends PureComponent {
         />
       );
       buttonContent = (
-        <Button
-          size="small"
-          color="platinum"
-          content="Enter manually"
-          onClick={() => this.setState({ manualEntry: true })}
-        />
+        <React.Fragment>
+          <Button
+            size="small"
+            color="platinum"
+            content="Import from URL"
+            onClick={() => this.setState({ showUrlForm: true })}
+          />
+          <Button
+            size="small"
+            color="platinum"
+            content="Enter manually"
+            onClick={() => this.setState({ manualEntry: true })}
+          />
+        </React.Fragment>
       );
     }
     return { buttonContent, mainContent: content };

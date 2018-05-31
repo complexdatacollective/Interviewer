@@ -66,22 +66,6 @@
     justify-content: center;
   }
 
-  &__custom-protocol {
-    display: flex;
-    flex-direction: row;
-
-    .input__container {
-      flex-basis: 65%;
-      margin-right: 40px;
-    }
-
-    .form__button-container {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-  }
-
   &__server-button {
     @include floating-action-button;
   }

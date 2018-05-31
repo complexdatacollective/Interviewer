@@ -20,5 +20,9 @@
 
   &__buttons {
     text-align: right;
+
+    .button {
+      margin-left: spacing(small);
+    }
   }
 }
