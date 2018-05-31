@@ -9,9 +9,19 @@ const mockStore = configureMockStore(middlewares);
 
 const mockState = {};
 
+const mockSessionId = 'session1';
+
+const mockStateWithSession = {
+  ...mockState,
+  [mockSessionId]: {
+    path: 'path/to/session',
+    network: { ego: {}, nodes: [], edges: [] },
+  },
+};
+
 const UIDPattern = /([A-Za-z0-9]+-[A-Za-z0-9]*)+/;
 
-describe('network reducer', () => {
+describe('sessions reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(mockState);
   });
@@ -34,14 +44,7 @@ describe('network reducer', () => {
   });
 
   it('should handle UPDATE_SESSION', () => {
-    const newState = reducer(
-      {
-        ...mockState,
-        session1: {
-          path: 'path/to/session',
-          network: {},
-        },
-      },
+    const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.UPDATE_SESSION,
         sessionId: 'session1',
@@ -58,14 +61,7 @@ describe('network reducer', () => {
 
 
   it('should handle UPDATE_PROMPT', () => {
-    const newState = reducer(
-      {
-        ...mockState,
-        session1: {
-          path: 'path/to/session',
-          network: {},
-        },
-      },
+    const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.UPDATE_PROMPT,
         sessionId: 'session1',
@@ -81,14 +77,7 @@ describe('network reducer', () => {
   });
 
   it('should handle REMOVE_SESSION', () => {
-    const newState = reducer(
-      {
-        ...mockState,
-        session1: {
-          path: 'path/to/session',
-          network: {},
-        },
-      },
+    const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.REMOVE_SESSION,
         sessionId: 'session1',
@@ -96,6 +85,27 @@ describe('network reducer', () => {
     );
 
     expect(newState.session1).toEqual(undefined);
+  });
+
+  it('should handle ADD_NODES', () => {
+    const newState = reducer(mockStateWithSession,
+      {
+        type: actionTypes.ADD_NODES,
+        sessionId: mockSessionId,
+        nodes: [{}],
+      },
+    );
+    expect(newState[mockSessionId].network.nodes).toHaveLength(1);
+  });
+
+  it('should throw if ADD_NODES called without an active session', () => {
+    expect(() => reducer(mockState,
+      {
+        type: actionTypes.ADD_NODES,
+        sessionId: 'a',
+        nodes: [{}],
+      },
+    )).toThrowError(/property.*undefined/);
   });
 });
 
