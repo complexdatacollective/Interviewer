@@ -1,11 +1,12 @@
 .setup {
   $active-border-color: rgba(255, 255, 255, .5);
   --active-border-color: $active-border-color;
-  --setup-header-height: 23vh;
+  --setup-header-height: 25vh;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 80vw;
+  min-height: 200px;
 
   &__header {
     align-items: flex-end;
