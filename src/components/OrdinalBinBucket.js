@@ -40,10 +40,16 @@ class OrdinalBinBucket extends Component {
       return;
     }
 
+    const newSortedNodes = newProps.nodes;
+
+    if (newProps.sortOrder && newProps.sortOrder.length) {
+      sorty(newProps.sortOrder, newSortedNodes);
+    }
+
     // if we provided the same id, then just update normally
     if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
-        this.setState({ nodes: newProps.nodes, stagger: false });
+        this.setState({ nodes: newSortedNodes, stagger: false });
       });
       return;
     }
@@ -58,7 +64,7 @@ class OrdinalBinBucket extends Component {
           if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
           this.refreshTimer = setTimeout(
             () => this.setState({
-              nodes: newProps.nodes,
+              nodes: newSortedNodes,
               stagger: true,
             }),
             getCSSVariableAsNumber('--animation-duration-slow-ms'),
@@ -78,7 +84,6 @@ class OrdinalBinBucket extends Component {
       isOver,
       willAccept,
       meta,
-      sortOptions,
     } = this.props;
 
     const {
@@ -99,8 +104,6 @@ class OrdinalBinBucket extends Component {
     const backgroundColor = getCSSVariableAsString('--light-background');
 
     const styles = isHovering ? { backgroundColor } : {};
-
-    sorty(sortOptions, nodes);
 
     return (
       <TransitionGroup
@@ -146,7 +149,7 @@ OrdinalBinBucket.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
-  sortOptions: PropTypes.array,
+  sortOrder: PropTypes.array,
 };
 
 OrdinalBinBucket.defaultProps = {
@@ -162,7 +165,7 @@ OrdinalBinBucket.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
-  sortOptions: [],
+  sortOrder: [],
 };
 
 export default compose(

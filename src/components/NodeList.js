@@ -42,10 +42,16 @@ class NodeList extends Component {
       return;
     }
 
+    const newSortedNodes = newProps.nodes;
+
+    if (newProps.sortOrder && newProps.sortOrder.length) {
+      sorty(newProps.sortOrder, newSortedNodes);
+    }
+
     // if we provided the same id, then just update normally
     if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
-        this.setState({ nodes: newProps.nodes, stagger: false });
+        this.setState({ nodes: newSortedNodes, stagger: false });
       });
       return;
     }
@@ -59,7 +65,7 @@ class NodeList extends Component {
         () => {
           this.refreshTimer = setTimeout(
             () => this.setState({
-              nodes: newProps.nodes,
+              nodes: newSortedNodes,
               stagger: true,
             }),
             getCSSVariableAsNumber('--animation-duration-slow-ms'),
@@ -84,7 +90,6 @@ class NodeList extends Component {
       willAccept,
       meta,
       hoverColor,
-      sortOrder,
     } = this.props;
 
     const {
@@ -103,11 +108,6 @@ class NodeList extends Component {
     );
 
     const styles = isHovering ? { backgroundColor: hoverColor } : {};
-
-    if (sortOrder && sortOrder.length) {
-      // TODO: review; may need to use a stable sort
-      sorty(sortOrder, nodes);
-    }
 
     return (
       <TransitionGroup
