@@ -34,7 +34,7 @@ describe('sessions reducer', () => {
       },
     );
 
-    expect(newState).toEqual({
+    expect(newState).toMatchObject({
       undefined: {
         path: 'path/to/session',
         network: { ego: {}, nodes: [], edges: [] },

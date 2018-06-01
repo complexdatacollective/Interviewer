@@ -5,6 +5,7 @@ import cx from 'classnames';
 
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
+import { Icon } from '../ui/components';
 
 const EnhancedCard = selectable(Card);
 
@@ -14,9 +15,12 @@ const EnhancedCard = selectable(Card);
 const CardList = (props) => {
   const {
     className,
+    compact,
     details,
     label,
+    multiselect,
     nodes,
+    onDeleteCard,
     onToggleCard,
     selected,
     uid,
@@ -28,13 +32,19 @@ const CardList = (props) => {
     <div className={classNames}>
       {
         nodes.map(node => (
-          <span key={uid(node)}>
+          <span className="card-list__content" key={uid(node)}>
             <EnhancedCard
               label={label(node)}
+              multiselect={multiselect}
+              compact={compact}
               selected={selected(node)}
               details={details(node)}
               onSelected={() => onToggleCard(node)}
             />
+            {
+              onDeleteCard &&
+              <Icon className="card-list__delete-button" name="close" onClick={() => onDeleteCard(node)} />
+            }
           </span>
         ))
       }
@@ -44,9 +54,12 @@ const CardList = (props) => {
 
 CardList.propTypes = {
   className: PropTypes.string,
+  compact: PropTypes.bool,
   details: PropTypes.func,
   label: PropTypes.func,
+  multiselect: PropTypes.bool,
   nodes: PropTypes.array.isRequired,
+  onDeleteCard: PropTypes.func,
   onToggleCard: PropTypes.func,
   selected: PropTypes.func,
   uid: PropTypes.func,
@@ -54,9 +67,12 @@ CardList.propTypes = {
 
 CardList.defaultProps = {
   className: '',
+  compact: false,
   details: () => (''),
   label: () => (''),
+  multiselect: true,
   nodes: [],
+  onDeleteCard: null,
   onToggleCard: () => {},
   selected: () => false,
   uid: node => node.uid,

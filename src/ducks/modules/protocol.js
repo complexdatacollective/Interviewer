@@ -1,6 +1,11 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import uuidv4 from 'uuid/v4';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
+import { actionTypes as SessionActionTypes } from './session';
+
+const END_SESSION = SessionActionTypes.END_SESSION;
+const SET_SESSION = SessionActionTypes.SET_SESSION;
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
@@ -10,7 +15,6 @@ const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_FACTORY_PROTOCOL = 'LOAD_FACTORY_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
-const SET_SESSION = 'SET_SESSION';
 
 const initialState = {
   isLoaded: false,
@@ -43,6 +47,8 @@ export default function reducer(state = initialState, action = {}) {
         };
       }
       return state;
+    case END_SESSION:
+      return initialState;
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
     case LOAD_PROTOCOL:
@@ -90,11 +96,16 @@ function importProtocolAction(path) {
   };
 }
 
-function loadProtocolAction(path) {
+function loadProtocolAction(path, id) {
+  let sessionId = id;
+  if (!id) {
+    sessionId = uuidv4();
+  }
   return {
     type: LOAD_PROTOCOL,
     protocolType: 'download',
     path,
+    sessionId,
   };
 }
 

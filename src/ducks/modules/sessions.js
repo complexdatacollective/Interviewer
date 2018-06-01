@@ -1,14 +1,20 @@
-import { isArray, omit } from 'lodash';
+import { hasIn, isArray, omit } from 'lodash';
 import uuidv4 from 'uuid/v4';
 
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 
+const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 
 const initialState = {};
+
+const withTimestamp = session => ({
+  ...session,
+  updatedAt: Date.now(),
+});
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -23,36 +29,49 @@ export default function reducer(state = initialState, action = {}) {
     case UNSET_EGO:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           network: network(state[action.sessionId].network, action),
-        },
+        }),
       };
+    case LOAD_PROTOCOL: {
+      if (hasIn(state, action.sessionId)) {
+        return state;
+      }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          path: `/session/${action.sessionId}`,
+          promptIndex: 0,
+          network: network(state.network, action),
+        }),
+      };
+    }
     case ADD_SESSION:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           path: action.path,
           promptIndex: 0,
           network: network(state.network, action),
-        },
+        }),
       };
     case UPDATE_SESSION:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           path: action.path,
           promptIndex: 0,
-        },
+        }),
       };
     case UPDATE_PROMPT:
       return {
         ...state,
-        [action.sessionId]: {
+        [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           promptIndex: action.promptIndex,
-        },
+        }),
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);

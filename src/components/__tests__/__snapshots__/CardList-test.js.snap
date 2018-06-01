@@ -43,8 +43,10 @@ ShallowWrapper {
     "props": Object {
       "children": <CardList
         className=""
+        compact={false}
         details={[Function]}
         label={[Function]}
+        multiselect={true}
         nodes={
           Array [
             Object {
@@ -64,6 +66,7 @@ ShallowWrapper {
             },
           ]
         }
+        onDeleteCard={null}
         onToggleCard={[Function]}
         scrollTop={[Function]}
         selected={[Function]}
@@ -78,8 +81,10 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "className": "",
+        "compact": false,
         "details": [Function],
         "label": [Function],
+        "multiselect": true,
         "nodes": Array [
           Object {
             "age": "22",
@@ -97,6 +102,7 @@ ShallowWrapper {
             "uid": "c",
           },
         ],
+        "onDeleteCard": null,
         "onToggleCard": [Function],
         "scrollTop": [Function],
         "selected": [Function],
@@ -116,8 +122,10 @@ ShallowWrapper {
       "props": Object {
         "children": <CardList
           className=""
+          compact={false}
           details={[Function]}
           label={[Function]}
+          multiselect={true}
           nodes={
             Array [
               Object {
@@ -137,6 +145,7 @@ ShallowWrapper {
               },
             ]
           }
+          onDeleteCard={null}
           onToggleCard={[Function]}
           scrollTop={[Function]}
           selected={[Function]}
@@ -151,8 +160,10 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "className": "",
+          "compact": false,
           "details": [Function],
           "label": [Function],
+          "multiselect": true,
           "nodes": Array [
             Object {
               "age": "22",
@@ -170,6 +181,7 @@ ShallowWrapper {
               "uid": "c",
             },
           ],
+          "onDeleteCard": null,
           "onToggleCard": [Function],
           "scrollTop": [Function],
           "selected": [Function],

@@ -1,0 +1,9 @@
+.session-list {
+  &--empty {
+    padding: spacing(huge) 0;
+
+    .session-list__header {
+      text-align: center;
+    }
+  }
+}

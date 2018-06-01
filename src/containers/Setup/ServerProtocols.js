@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { ProtocolCardList, ServerSetup } from '../../components/Setup';
+import { ServerProtocolList, ServerSetup } from '../../components/Setup';
 
 class ServerProtocols extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class ServerProtocols extends Component {
 
   render() {
     if (this.props.isProtocolLoaded) {
-      const pathname = `/protocol/${this.props.protocolType}/${this.props.protocolPath}/0`;
+      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/0`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -43,7 +43,7 @@ class ServerProtocols extends Component {
     return (
       <ServerSetup server={server}>
         {
-          protocols && <ProtocolCardList protocols={protocols} download={downloadProtocol} />
+          protocols && <ServerProtocolList protocols={protocols} download={downloadProtocol} />
         }
       </ServerSetup>
     );
@@ -65,6 +65,7 @@ ServerProtocols.propTypes = {
   server: PropTypes.shape({
     apiUrl: PropTypes.string.isRequired,
   }).isRequired,
+  sessionId: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -72,6 +73,7 @@ function mapStateToProps(state) {
     isProtocolLoaded: state.protocol.isLoaded,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
+    sessionId: state.session,
   };
 }
 

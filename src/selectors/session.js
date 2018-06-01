@@ -6,7 +6,7 @@ import { initialState } from '../ducks/modules/session';
 const protocol = state => state.protocol;
 
 export const anySessionIsActive = state => state.session && state.session !== initialState;
-export const sessionMenuIsOpen = state => state.menu.sessionMenuIsOpen;
+export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
 export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;
 export const stageSearchTerm = state => state.menu.stageSearchTerm;
 

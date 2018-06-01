@@ -7,12 +7,12 @@ import ProtocolCard from '../ProtocolCard';
 describe('<ProtocolCard>', () => {
   let component;
   let mockProtocol;
-  let downloadHandler;
+  let selectHandler;
 
   beforeEach(() => {
-    downloadHandler = jest.fn();
+    selectHandler = jest.fn();
     mockProtocol = { name: 'my-mock-protocol', version: '1.0.1' };
-    component = shallow(<ProtocolCard download={downloadHandler} protocol={mockProtocol} />);
+    component = shallow(<ProtocolCard selectProtocol={selectHandler} protocol={mockProtocol} />);
   });
 
   it('renders an icon', () => {
@@ -26,6 +26,6 @@ describe('<ProtocolCard>', () => {
 
   it('downloads on click', () => {
     component.simulate('click');
-    expect(downloadHandler).toHaveBeenCalledTimes(1);
+    expect(selectHandler).toHaveBeenCalledTimes(1);
   });
 });

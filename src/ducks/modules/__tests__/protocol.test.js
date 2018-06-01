@@ -1,7 +1,10 @@
 /* eslint-env jest */
 
 import { ActionsObservable } from 'redux-observable';
+import { omit } from 'lodash';
+
 import reducer, { actionCreators, epics } from '../protocol';
+import { actionTypes as SessionActionTypes } from '../session';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
 
@@ -106,6 +109,19 @@ describe('protocol module', () => {
         isLoading: true,
       });
     });
+
+    it('should clear protocol state when session ends', () => {
+      const newState = reducer(
+        initialState,
+        actionCreators.setProtocol(
+          '/tmp/foo/mockPath.protocol',
+          { stages: [{ foo: 'bar' }] },
+        ),
+      );
+      expect(
+        reducer(newState, { type: SessionActionTypes.END_SESSION }),
+      ).toEqual(initialState);
+    });
   });
 
   describe('epics', () => {
@@ -131,7 +147,8 @@ describe('protocol module', () => {
 
       const expectedActions = [actionCreators.loadProtocol('/app/data/protocol/path')];
       return epics(action$).toArray().toPromise().then((result) => {
-        expect(result).toEqual(expectedActions);
+        expect(result.map(element => omit(element, 'sessionId'))).toEqual(
+          expectedActions.map(action => omit(action, 'sessionId')));
       });
     });
 

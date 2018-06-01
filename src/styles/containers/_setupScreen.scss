@@ -1,12 +1,54 @@
 .setup {
+  $active-border-color: rgba(255, 255, 255, .5);
+  --active-border-color: $active-border-color;
+  --setup-header-height: 30vh;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 80vw;
 
   &__header {
+    align-items: flex-end;
+    display: flex;
+    flex: 0 1 auto;
+    height: var(--setup-header-height);
+    justify-content: center;
     text-align: center;
+  }
 
-    .logo {
-      width: 180px;
+  .header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    &__logo {
+
       margin-right: 20px;
+      width: 180px;
+    }
+  }
+
+  &__link {
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    margin: 0 1rem;
+    padding-bottom: .5rem;
+    transition: border-color var(--animation-duration-fast) var(--animation-easing);
+
+    &--active {
+      border-color: var(--active-border-color);
+      font-weight: 600;
+    }
+  }
+
+  &__main {
+    flex: 1 1 auto;
+    height: calc(100vh - var(--setup-header-height));
+    padding-bottom: 20vh;
+
+    .scrollable {
+      height: 100%; // TODO: should this be on component?
     }
   }
 
@@ -22,22 +64,6 @@
     flex-direction: column;
     flex-grow: 0;
     justify-content: center;
-  }
-
-  &__custom-protocol {
-    display: flex;
-    flex-direction: row;
-
-    .input__container {
-      flex-basis: 65%;
-      margin-right: 40px;
-    }
-
-    .form__button-container {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
   }
 
   &__server-button {

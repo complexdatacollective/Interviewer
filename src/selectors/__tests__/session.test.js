@@ -11,7 +11,7 @@ const mockStage = {
 
 const mockState = {
   menu: {
-    sessionMenuIsOpen: false,
+    settingsMenuIsOpen: false,
     stageMenuIsOpen: true,
     stageSearchTerm: 'elc',
   },
@@ -25,7 +25,7 @@ const mockState = {
 describe('session selector', () => {
   describe('memoed selectors', () => {
     it('should get session menu is open', () => {
-      expect(Session.sessionMenuIsOpen(mockState)).toEqual(false);
+      expect(Session.settingsMenuIsOpen(mockState)).toEqual(false);
     });
 
     it('should get stage menu is open', () => {

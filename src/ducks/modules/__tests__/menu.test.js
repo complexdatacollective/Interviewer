@@ -4,7 +4,7 @@ import reducer, { actionCreators } from '../menu';
 
 const initialState = {
   customMenuItems: [],
-  sessionMenuIsOpen: false,
+  settingsMenuIsOpen: false,
   stageMenuIsOpen: false,
   stageSearchTerm: '',
 };
@@ -27,22 +27,22 @@ describe('menu reducer', () => {
   });
 
   it('should toggle the session menu', () => {
-    expect(reducer(initialState, actionCreators.toggleSessionMenu())).toEqual({
+    expect(reducer(initialState, actionCreators.toggleSettingsMenu())).toEqual({
       ...initialState,
-      sessionMenuIsOpen: true,
+      settingsMenuIsOpen: true,
     });
 
     expect(
       reducer(
         {
           ...initialState,
-          sessionMenuIsOpen: true,
+          settingsMenuIsOpen: true,
         },
-        actionCreators.toggleSessionMenu(),
+        actionCreators.toggleSettingsMenu(),
       ),
     ).toEqual({
       ...initialState,
-      sessionMenuIsOpen: false,
+      settingsMenuIsOpen: false,
     });
   });
 
