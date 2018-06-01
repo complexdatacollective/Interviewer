@@ -1,7 +1,7 @@
 .setup {
   $active-border-color: rgba(255, 255, 255, .5);
   --active-border-color: $active-border-color;
-  --setup-header-height: 30vh;
+  --setup-header-height: 23vh;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -14,6 +14,7 @@
     height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
+    margin-bottom: 20px;
   }
 
   .header-content {
@@ -46,6 +47,8 @@
     flex: 1 1 auto;
     height: calc(100vh - var(--setup-header-height));
     padding-bottom: 20vh;
+    display: flex;
+    align-items: center;
 
     .scrollable {
       height: 100%; // TODO: should this be on component?

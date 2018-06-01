@@ -19,7 +19,7 @@ const ProtocolCard = ({ protocol, selectProtocol, className, size }) => {
     <div className={`${sized('protocol-card')} ${className}`} onClick={() => selectProtocol(protocol)}>
       <Icon className="protocol-card__icon" name="add-a-screen" />
       <div className="protocol-card__labels">
-        <h3 className={sized('protocol-card__name')}>{protocol.name}</h3>
+        <h2 className={sized('protocol-card__name')}>{protocol.name}</h2>
         <p className="protocol-card__version">{protocol.version}</p>
       </div>
     </div>

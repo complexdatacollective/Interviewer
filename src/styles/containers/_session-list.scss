@@ -1,6 +1,10 @@
 .session-list {
   &--empty {
-    padding: spacing(huge) 0;
+    padding: spacing(huge);
+    border-radius: 15px;
+    background: palette('modal-main-panel');
+    width: 80%;
+    margin: 0 auto;
 
     .session-list__header {
       text-align: center;

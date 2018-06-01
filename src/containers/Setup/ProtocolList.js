@@ -46,8 +46,8 @@ class ProtocolList extends Component {
         clickable: true,
       },
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: '.swiper-button-next.swiper-button-white',
+        prevEl: '.swiper-button-prev.swiper-button-white',
       },
       loop: true,
       shouldSwiperUpdate: true,
