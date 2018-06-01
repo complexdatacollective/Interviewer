@@ -78,7 +78,7 @@ class OrdinalBinBucket extends Component {
       isOver,
       willAccept,
       meta,
-      sortOptions,
+      sortOrder,
     } = this.props;
 
     const {
@@ -100,7 +100,10 @@ class OrdinalBinBucket extends Component {
 
     const styles = isHovering ? { backgroundColor } : {};
 
-    sorty(sortOptions, nodes);
+    if (sortOrder && sortOrder.length) {
+      // TODO: review; may need to use a stable sort
+      sorty(sortOrder, nodes);
+    }
 
     return (
       <TransitionGroup
@@ -146,7 +149,7 @@ OrdinalBinBucket.propTypes = {
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   scrollTop: PropTypes.func,
-  sortOptions: PropTypes.array,
+  sortOrder: PropTypes.array,
 };
 
 OrdinalBinBucket.defaultProps = {
@@ -162,7 +165,7 @@ OrdinalBinBucket.defaultProps = {
   isDragging: false,
   meta: {},
   scrollTop: () => {},
-  sortOptions: [],
+  sortOrder: [],
 };
 
 export default compose(

@@ -45,7 +45,7 @@ class OrdinalBin extends Component {
             id={'NODE_BUCKET'}
             itemType="EXISTING_NODE"
             onDrop={this.onDrop}
-            sortOptions={prompt.bucketSortOrder}
+            sortOrder={prompt.bucketSortOrder}
           />
         </div>
         <div className="ordinal-bin-interface__bins">
