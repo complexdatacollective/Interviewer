@@ -25,7 +25,9 @@ class LoadParamsRoute extends Component {
           params.protocolType : '';
         this.props.setSession(params.sessionId, protocolType);
       }
-      this.props.updateSession(params.sessionId, url);
+      if (url !== this.props.sessionUrl) {
+        this.props.updateSession(params.sessionId, url);
+      }
     }
 
     if (params && params.protocolId && params.protocolId !== this.props.protocolPath) {
