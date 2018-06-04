@@ -18,7 +18,7 @@ const getURL = uri =>
 const getProtocolNameFromUrl = (url) => {
   const protocolName = url.pathname.split('/').pop();
   if (isEmpty(protocolName)) { throw Error('Protocol name cannot be empty'); }
-  return protocolName;
+  return decodeURIComponent(protocolName);
 };
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");

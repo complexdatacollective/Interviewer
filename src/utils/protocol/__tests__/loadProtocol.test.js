@@ -19,7 +19,7 @@ describe('loadProtocol', () => {
     it('returns the parsed protocol object', () => {
       expect(loadProtocol('bazz.protocol')).resolves.toEqual({
         foo: 'bar',
-      });
+      }); // TODO: This should return in order to work...
 
       expect(protocolPath.mock.calls[0]).toEqual(['bazz.protocol', 'protocol.json']);
       expect(readFile.mock.calls[0]).toEqual(['tmp/mock/path/protocols/bazz.protocol/protocol.json']);
