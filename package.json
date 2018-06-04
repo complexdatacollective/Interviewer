@@ -12,9 +12,9 @@
     "scripts": {
         "pack": "electron-builder --dir",
         "start": "node scripts/start.js",
-        "start:android": "cross-env NC_DEV_PLATFORM=android npm start",
-        "start:electron": "cross-env NC_DEV_PLATFORM=electron npm start",
-        "start:ios": "cross-env NC_DEV_PLATFORM=ios npm start",
+        "start:android": "cross-env NC_TARGET_PLATFORM=android npm start",
+        "start:electron": "cross-env NC_TARGET_PLATFORM=electron npm start",
+        "start:ios": "cross-env NC_TARGET_PLATFORM=ios npm start",
         "build": "node scripts/build.js",
         "lint": "eslint src",
         "sass-lint": "sass-lint -vc .sass-lint.yml",
