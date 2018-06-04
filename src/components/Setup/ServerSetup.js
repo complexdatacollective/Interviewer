@@ -9,9 +9,7 @@ import { ServerCard } from '../../components/Setup';
  */
 const ServerSetup = ({ children, server }) => (
   <div className="server-setup">
-    <ServerCard className="server-setup__card" data={server}>
-      {server.host || server.addresses[0]}
-    </ServerCard>
+    <ServerCard className="server-setup__card" data={server} />
     <React.Fragment>
       { children }
     </React.Fragment>
