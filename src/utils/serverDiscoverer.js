@@ -22,7 +22,8 @@ class ServerDiscoverer {
     }
 
     if (isCordova() && this.zeroconf) {
-      this.zeroconf.unwatch('_network-canvas._tcp.', 'local.');
+      // 'zeroconf.unwatch' is insufficient for cleanup
+      this.zeroconf.close();
     }
   }
 
