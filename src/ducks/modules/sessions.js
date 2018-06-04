@@ -1,5 +1,5 @@
 import { hasIn, isArray, omit } from 'lodash';
-import uuidv4 from 'uuid/v4';
+import uuidv4 from '../../utils/uuid';
 
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 
