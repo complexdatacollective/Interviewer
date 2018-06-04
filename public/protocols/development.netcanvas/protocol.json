@@ -176,6 +176,27 @@
             ]
           }
         }
+      },
+      "country": {
+        "label": "Country Visited",
+        "displayVariable": "name",
+        "variables": {
+          "name": {
+            "label": "Name",
+            "description": "Name of the country",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 24
+            }
+          },
+          "location": {
+            "label": "Location",
+            "description": "Human readable description",
+            "type": "coordinates"
+          }
+        }
       }
     },
     "edge": {
@@ -982,6 +1003,21 @@
               }
             ]
           }
+        }
+      ]
+    },
+    {
+      "id": "namegen3",
+      "type": "NameGenerator",
+      "label": "NG Country",
+      "subject": {
+        "entity": "node",
+        "type": "country"
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "This is a NG with a node type that has no default form"
         }
       ]
     },
