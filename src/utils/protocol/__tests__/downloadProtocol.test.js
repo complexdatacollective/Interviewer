@@ -15,9 +15,11 @@ describe('downloadProtocol', () => {
       getEnvironment.mockReturnValue(environments.ELECTRON);
     });
 
-    it('returns a correct local path', () =>
-      expect(downloadProtocol('https://networkcanvas.com//foo bar.protocol')).resolves
-        .toEqual(`${electron.app.getPath()}/foo bar.protocol`),
-    );
+    it('returns a correct local path', () => {
+      const localPath = new RegExp(`${electron.app.getPath()}/[a-zA-Z0-9-]+$`);
+
+      return expect(downloadProtocol('https://networkcanvas.com//foo bar.protocol')).resolves
+        .toMatch(localPath);
+    });
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 /* global window, FileTransfer */
-import { isEmpty } from 'lodash';
+import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
@@ -15,11 +15,7 @@ const getURL = uri =>
     }
   });
 
-const getProtocolNameFromUrl = (url) => {
-  const protocolName = url.pathname.split('/').pop();
-  if (isEmpty(protocolName)) { throw Error('Protocol name cannot be empty'); }
-  return decodeURIComponent(protocolName);
-};
+const getProtocolName = () => uuid(); // generate a filename
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection - connect to a network, and try again.");
@@ -36,7 +32,7 @@ const downloadProtocol = inEnvironment((environment) => {
 
       return getURL(uri)
         .then((url) => {
-          const destination = path.join(tempPath, getProtocolNameFromUrl(url));
+          const destination = path.join(tempPath, getProtocolName());
 
           return request({ method: 'GET', encoding: null, uri: url.href })
             .catch(networkError)
@@ -53,7 +49,7 @@ const downloadProtocol = inEnvironment((environment) => {
       getURL(uri)
         .then(url => [
           url.href,
-          `cdvfile://localhost/temporary/${getProtocolNameFromUrl(url)}`,
+          `cdvfile://localhost/temporary/${getProtocolName()}`,
         ])
         .catch(urlError)
         .then(([url, destination]) =>
