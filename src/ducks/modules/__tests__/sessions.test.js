@@ -22,7 +22,7 @@ const mockStateWithSession = {
 
 const UIDPattern = /([A-Za-z0-9]+-[A-Za-z0-9]*)+/;
 
-jest.mock('../../../utils/uuid')
+jest.mock('../../../utils/uuid');
 uuidv4.mockImplementation(() => mockSessionId);
 
 describe('sessions reducer', () => {
