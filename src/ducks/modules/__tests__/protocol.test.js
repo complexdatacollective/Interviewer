@@ -9,6 +9,7 @@ import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
 
 jest.mock('../../../utils/protocol/index');
+jest.mock('../../../utils/uuid');
 
 const initialState = {
   isLoaded: false,

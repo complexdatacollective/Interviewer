@@ -3,13 +3,14 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer, { actionCreators, actionTypes } from '../sessions';
+import uuidv4 from '../../../utils/uuid';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const mockState = {};
 
-const mockSessionId = 'session1';
+const mockSessionId = 'session-1';
 
 const mockStateWithSession = {
   ...mockState,
@@ -20,6 +21,9 @@ const mockStateWithSession = {
 };
 
 const UIDPattern = /([A-Za-z0-9]+-[A-Za-z0-9]*)+/;
+
+jest.mock('../../../utils/uuid')
+uuidv4.mockImplementation(() => mockSessionId);
 
 describe('sessions reducer', () => {
   it('should return the initial state', () => {
@@ -47,12 +51,12 @@ describe('sessions reducer', () => {
     const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.UPDATE_SESSION,
-        sessionId: 'session1',
+        sessionId: mockSessionId,
         path: 'new/path/to/session',
       },
     );
 
-    expect(newState.session1).toMatchObject({
+    expect(newState[mockSessionId]).toMatchObject({
       path: 'new/path/to/session',
       network: {},
       promptIndex: 0,
@@ -64,12 +68,12 @@ describe('sessions reducer', () => {
     const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.UPDATE_PROMPT,
-        sessionId: 'session1',
+        sessionId: mockSessionId,
         promptIndex: 2,
       },
     );
 
-    expect(newState.session1).toMatchObject({
+    expect(newState[mockSessionId]).toMatchObject({
       path: 'path/to/session',
       network: {},
       promptIndex: 2,
@@ -80,11 +84,11 @@ describe('sessions reducer', () => {
     const newState = reducer(mockStateWithSession,
       {
         type: actionTypes.REMOVE_SESSION,
-        sessionId: 'session1',
+        sessionId: mockSessionId,
       },
     );
 
-    expect(newState.session1).toEqual(undefined);
+    expect(newState[mockSessionId]).toEqual(undefined);
   });
 
   it('should handle ADD_NODES', () => {
