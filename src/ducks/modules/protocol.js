@@ -1,8 +1,9 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import uuidv4 from 'uuid/v4';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
+import uuidv4 from '../../utils/uuid';
 import { actionTypes as SessionActionTypes } from './session';
+
 
 const END_SESSION = SessionActionTypes.END_SESSION;
 const SET_SESSION = SessionActionTypes.SET_SESSION;
