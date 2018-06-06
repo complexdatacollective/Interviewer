@@ -24,6 +24,7 @@ const UIDPattern = /([A-Za-z0-9]+-[A-Za-z0-9]*)+/;
 
 jest.mock('../../../utils/uuid');
 uuidv4.mockImplementation(() => mockSessionId);
+Date.now = jest.fn(() => 1487076708000);
 
 describe('sessions reducer', () => {
   it('should return the initial state', () => {
@@ -43,6 +44,7 @@ describe('sessions reducer', () => {
         path: 'path/to/session',
         network: { ego: {}, nodes: [], edges: [] },
         promptIndex: 0,
+        updatedAt: 1487076708000,
       },
     });
   });
@@ -60,6 +62,7 @@ describe('sessions reducer', () => {
       path: 'new/path/to/session',
       network: {},
       promptIndex: 0,
+      updatedAt: 1487076708000,
     });
   });
 
@@ -77,6 +80,7 @@ describe('sessions reducer', () => {
       path: 'path/to/session',
       network: {},
       promptIndex: 2,
+      updatedAt: 1487076708000,
     });
   });
 
