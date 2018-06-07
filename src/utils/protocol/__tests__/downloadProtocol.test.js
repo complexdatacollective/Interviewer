@@ -22,7 +22,7 @@ describe('downloadProtocol', () => {
       // separator gets lost in the regex for windows
       if (path.sep === '\\') {
         const replaceSep = new RegExp(/\\/, 'g');
-        localPath = localPath.replace(replaceSep, `\\\\`);
+        localPath = localPath.replace(replaceSep, '\\\\');
       }
 
       return expect(downloadProtocol('https://networkcanvas.com//foo bar.protocol')).resolves
