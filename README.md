@@ -68,19 +68,20 @@ node-gyp rebuild --target=2.0.0 --arch=x64 --dist-url=https://atom.io/download/e
 |`npm run <script>`|Description|
 |------------------|-----------|
 |`start`|Serves your app at `localhost:3000`.|
-|`build`|Compiles assets and prepares app for production in the /build directory.|
+|`build:android`|Compiles assets and prepares app for production.|
+|`build:ios`|Compiles assets and prepares app for production.|
+|`build:electron`|Compiles assets and prepares app for production.|
 |`test`|Runs testing suite.|
 |`build-docs`|Builds HTML API docs into the docs-build directory.|
-|`electron`|Runs the current code in electron, for testing.|
+|`electron`|Runs the built code (`./www`) in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
 |`android:dev`|Run a live-reloading build of the Android app. Requires dev server to be running.|
 |`ios:dev`|Run a live-reloading build of the iOS app. Requires dev server to be running.|
+|`dist:linux`|Uses electron-packager to package a Linux release.|
 |`dist:mac`|Uses electron-packager to package an OSX release.|
 |`dist:win`|Uses electron-packager to package a Windows release.|
 |`dist:ios`|Builds iOS cordova project|
 |`dist:android`|Builds Android cordova project|
-|`dist:cordova`|Builds Android and iOS cordova projects|
-|`create-installer-mac`|Creates a DMG based installer for OSX.|
 
 ## Quick development reference
 
@@ -135,7 +136,6 @@ Troubleshooting:
 
 ```
 .
-├── build                    # Prod assets
 ├── config                   # Project and build configurations (webpack, env config)
 ├── public                   # Static public assets
 │   └── index.html           # Static entry point
@@ -144,7 +144,7 @@ Troubleshooting:
 │   ├── routes.js            # App Route Definitions
 │   ├── components           # Contains directories for components
 │   ├── containers           # Contains directories for containers for native and base classes
-│   ├── reducers             # Reducers for data stores
 │   ├── ducks                # Middleware, modules (ducks-style with actions, reducers, and action creators), and store
 │   └── utils                # Helpers and utils
+├── www                      # Build output from webpack
 ```

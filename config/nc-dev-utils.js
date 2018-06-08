@@ -14,15 +14,15 @@ const devUrlFile = paths.dotdevserver;
 // When set to `ios` or `android`, this env var will cause the development server
 // to serve (platform-specific) cordova dependencies to the iOS or Android client.
 // (Currently, you must make your choice at server startup time.)
-const isTargetingCordova = cordovaPlatformMatch.test(process.env.NC_DEV_PLATFORM);
+const isTargetingCordova = cordovaPlatformMatch.test(process.env.NC_TARGET_PLATFORM);
 
-const isTargetingElectron = process.env.NC_DEV_PLATFORM === 'electron';
+const isTargetingElectron = process.env.NC_TARGET_PLATFORM === 'electron';
 
 const logPlatformInfo = () => {
   if (isTargetingCordova) {
-    console.log(chalk.green('Targeting Cordova platform', process.env.NC_DEV_PLATFORM));
-    console.log(chalk.green(`Live mobile dev available: \`npm run ${process.env.NC_DEV_PLATFORM}:dev\``));
-    console.log(chalk.yellow('Content will only run in an', process.env.NC_DEV_PLATFORM, 'device or emulator'));
+    console.log(chalk.green('Targeting Cordova platform', process.env.NC_TARGET_PLATFORM));
+    console.log(chalk.green(`Live mobile dev available: \`npm run ${process.env.NC_TARGET_PLATFORM}:dev\``));
+    console.log(chalk.yellow('Content will only run in an', process.env.NC_TARGET_PLATFORM, 'device or emulator'));
   } else if (isTargetingElectron) {
     console.log(chalk.green('Targeting Electron'));
     console.log(chalk.yellow('Content will only run in electron: `npm run electron:dev`'));
@@ -50,7 +50,7 @@ const makeDevUrlFile = (serverUrl) => {
 };
 
 const devServerContentBase = () => {
-  const platform = process.env.NC_DEV_PLATFORM;
+  const platform = process.env.NC_TARGET_PLATFORM;
   let cordovaBase;
   switch (platform) {
     case 'android':
@@ -64,7 +64,7 @@ const devServerContentBase = () => {
       return paths.appPublic;
   }
   if (!fs.existsSync(cordovaBase)) {
-    throw new Error(`Cordova platform unavailable: ${process.env.NC_DEV_PLATFORM} (tried ${cordovaBase})`);
+    throw new Error(`Cordova platform unavailable: ${process.env.NC_TARGET_PLATFORM} (tried ${cordovaBase})`);
   }
   return cordovaBase;
 };
