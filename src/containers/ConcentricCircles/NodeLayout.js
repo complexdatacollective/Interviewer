@@ -30,7 +30,7 @@ const dropHandlers = compose(
     onDrop: props => (item) => {
       props.updateNode({
         uid: item.meta.uid,
-        [props.layoutVariable]: relativeCoords(props, item),
+        [props.layoutVariable]: { type: 'layout', ...relativeCoords(props, item) },
       });
 
       // Horrible hack for performance (only re-render nodes on drop, not on drag)
@@ -41,7 +41,7 @@ const dropHandlers = compose(
 
       props.updateNode({
         uid: item.meta.uid,
-        [props.layoutVariable]: relativeCoords(props, item),
+        [props.layoutVariable]: { type: 'layout', ...relativeCoords(props, item) },
       });
     },
   }),
