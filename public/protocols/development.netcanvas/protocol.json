@@ -156,12 +156,7 @@
           "booleanVariable": {
             "label": "Boolean Variable",
             "description": "Human readable description",
-            "type": "boolean",
-            "validation": {
-              "required": true,
-              "minLength": 1,
-              "maxLength": 8
-            }
+            "type": "boolean"
           },
           "special_category": {
             "label": "Special category",
@@ -211,24 +206,24 @@
             "type": "categorical",
             "values": [
               {
-                "label": "Value Four",
-                "value": "Value Four"
+                "label": "Value A",
+                "value": "Value A"
               },
               {
-                "label": "Value Three",
-                "value": "Value Three"
+                "label": "Value B",
+                "value": "Value B"
               },
               {
-                "label": "Value Two",
-                "value": "Value Two"
+                "label": "Value C",
+                "value": "Value C"
               },
               {
-                "label": "Value One",
-                "value": "Value One"
+                "label": "Value D",
+                "value": "Value D"
               },
               {
-                "label": "Missing Value",
-                "value": "Missing Value"
+                "label": "Value E",
+                "value": "Value E"
               }
             ]
           }
@@ -859,6 +854,18 @@
         {
           "variable": "numberVariable",
           "component": "TextInput"
+        },
+        {
+          "variable": "booleanVariable",
+          "component": "ToggleInput"
+        },
+        {
+          "variable": "ordinalVariable",
+          "component": "RadioGroup"
+        },
+        {
+          "variable": "categoricalVariable",
+          "component": "CheckboxGroup"
         }
       ]
     },

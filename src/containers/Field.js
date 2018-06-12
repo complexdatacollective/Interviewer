@@ -27,7 +27,7 @@ export const makeRenderInput = (componentType) => {
       input,
       meta,
       label,
-      options,
+      values,
       optionsSelector,
       isNumericOnly,
       toggleComponent,
@@ -55,7 +55,7 @@ export const makeRenderInput = (componentType) => {
       InputComponent = RadioGroup;
       inputProps = {
         ...inputProps,
-        options,
+        values,
         onRadioClick: input.onChange,
       };
     }
@@ -66,7 +66,7 @@ export const makeRenderInput = (componentType) => {
       inputProps = {
         ...inputProps,
         toggleComponent,
-        options,
+        values,
         colors,
         onOptionClick: (e, checked, optionVal) => input.onChange({
           ...input.value,
