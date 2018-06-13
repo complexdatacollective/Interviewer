@@ -860,6 +860,10 @@
           "component": "ToggleInput"
         },
         {
+          "variable": "booleanVariable",
+          "component": "Checkbox"
+        },
+        {
           "variable": "ordinalVariable",
           "component": "RadioGroup"
         },

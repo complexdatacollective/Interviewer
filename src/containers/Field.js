@@ -10,6 +10,9 @@ import {
   ToggleGroup,
   ToggleInput,
 } from '../ui/components';
+import {
+  Checkbox,
+} from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
 
@@ -27,6 +30,7 @@ export const makeRenderInput = (componentType) => {
       input,
       meta,
       label,
+      options,
       values,
       optionsSelector,
       isNumericOnly,
@@ -42,6 +46,7 @@ export const makeRenderInput = (componentType) => {
     let inputProps = {
       name: input.name,
       value: input.value,
+      input,
       errorText: meta.invalid && meta.touched && meta.error,
       label,
       autoFocus,
@@ -55,7 +60,7 @@ export const makeRenderInput = (componentType) => {
       InputComponent = RadioGroup;
       inputProps = {
         ...inputProps,
-        values,
+        options,
         onRadioClick: input.onChange,
       };
     }
@@ -66,7 +71,7 @@ export const makeRenderInput = (componentType) => {
       inputProps = {
         ...inputProps,
         toggleComponent,
-        values,
+        options: values,
         colors,
         onOptionClick: (e, checked, optionVal) => input.onChange({
           ...input.value,
@@ -84,6 +89,10 @@ export const makeRenderInput = (componentType) => {
           [optionVal]: checked,
         }),
       };
+    }
+
+    if (componentType === 'Checkbox') {
+      InputComponent = Checkbox;
     }
 
     if (optionsSelector) {
