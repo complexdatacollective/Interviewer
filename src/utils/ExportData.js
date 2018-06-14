@@ -31,7 +31,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
         const knownTypes = ['boolean', 'text', 'number', 'categorical', 'ordinal', 'checkbox',
           'layout', 'enumerable', 'options'];
         const variableInfo = variableRegistry[type] && variableRegistry[type][element.type] &&
-        variableRegistry[type][element.type].variables &&
+          variableRegistry[type][element.type].variables &&
           variableRegistry[type][element.type].variables[key];
         const inVariableRegistry = variableInfo && variableInfo.type &&
           knownTypes.includes(variableInfo.type);
