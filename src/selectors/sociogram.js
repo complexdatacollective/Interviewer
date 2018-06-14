@@ -112,7 +112,8 @@ const makeGetUnplacedNodes = () => {
   );
 };
 
-// TODO
+const fifo = (node, index) => index;
+
 export const makeGetNextUnplacedNode = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
@@ -120,7 +121,11 @@ export const makeGetNextUnplacedNode = () => {
     getUnplacedNodes, getSortOptions,
     (nodes, sortOptions) => {
       const [properties, orders] = unzip(toPairs(sortOptions.nodeBinSortOrder));
-      const sortedNodes = orderBy([...nodes], properties, orders.map(lowerCase));
+      const sortedNodes = orderBy(
+        [...nodes],
+        properties.map(property => (property === '*' ? fifo : property)),
+        orders.map(lowerCase),
+      );
       return first(sortedNodes);
     },
   );

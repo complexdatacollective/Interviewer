@@ -481,7 +481,7 @@
             "allowPositioning": true
           },
           "nodeBinSortOrder": {
-            "nickname": "DESC"
+            "*": "ASC"
           }
         }
       ]
@@ -515,7 +515,7 @@
             "allowPositioning": true
           },
           "nodeBinSortOrder": {
-            "nickname": "DESC"
+            "*": "ASC"
           },
           "edges": {
             "display": ["friends"],
@@ -534,7 +534,7 @@
             "allowPositioning": true
           },
           "nodeBinSortOrder": {
-            "nickname": "DESC"
+            "*": "ASC"
           },
           "edges": {
             "display": ["friends"]
@@ -557,7 +557,7 @@
             "allowPositioning": true
           },
           "nodeBinSortOrder": {
-            "nickname": "DESC"
+            "*": "ASC"
           },
           "edges": {
             "display": ["friends"]
