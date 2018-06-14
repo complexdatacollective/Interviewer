@@ -17,7 +17,7 @@ const setUpXml = () => {
   return xml;
 };
 
-const generateKeys = (graph, graphML, elements, type, excludeList) => {
+const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry) => {
 // generate keys for attributes
   const done = [];
   elements.forEach((element) => {
@@ -26,10 +26,22 @@ const generateKeys = (graph, graphML, elements, type, excludeList) => {
         const keyElement = document.createElementNS(graphML.namespaceURI, 'key');
         keyElement.setAttribute('id', key);
         keyElement.setAttribute('attr.name', key);
-        switch (typeof element[key]) {
+
+        // look up type in variableRegistry
+        const knownTypes = ['boolean', 'text', 'number', 'categorical', 'ordinal', 'checkbox',
+          'layout', 'enumerable', 'options'];
+        const variableInfo = variableRegistry[type] && variableRegistry[type][element.type] &&
+        variableRegistry[type][element.type].variables &&
+          variableRegistry[type][element.type].variables[key];
+        const inVariableRegistry = variableInfo && variableInfo.type &&
+          knownTypes.includes(variableInfo.type);
+
+        switch (inVariableRegistry ? variableInfo.type : typeof element[key]) {
+          case 'checkbox':
           case 'boolean':
             keyElement.setAttribute('attr.type', 'boolean');
             break;
+          case 'ordinal':
           case 'number':
             if (Number.isInteger(element[key])) {
               keyElement.setAttribute('attr.type', 'int');
@@ -37,9 +49,11 @@ const generateKeys = (graph, graphML, elements, type, excludeList) => {
               keyElement.setAttribute('attr.type', 'double');
             }
             break;
+          case 'layout':
           case 'object':
             // special handling for locations
-            if (element[key].type && element[key].type === 'layout') {
+            if ((element[key].type && element[key].type === 'layout') ||
+              (variableInfo && variableInfo.type === 'layout')) {
               keyElement.setAttribute('attr.name', `${key}Y`);
               keyElement.setAttribute('id', `${key}Y`);
               keyElement.setAttribute('attr.type', 'double');
@@ -53,6 +67,10 @@ const generateKeys = (graph, graphML, elements, type, excludeList) => {
               keyElement.setAttribute('attr.type', 'string');
             }
             break;
+          case 'text':
+          case 'categorical':
+          case 'enumerable':
+          case 'options':
           default:
             keyElement.setAttribute('attr.type', 'string');
         }
@@ -179,15 +197,15 @@ const saveFile = (data, openErrorDialog) => {
   }
 };
 
-const createGraphML = (networkData, openErrorDialog) => {
+const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   // default graph structure
   const xml = setUpXml();
   const graph = xml.getElementsByTagName('graph')[0];
   const graphML = xml.getElementsByTagName('graphml')[0];
 
   // generate keys for attributes
-  generateKeys(graph, graphML, networkData.nodes, 'node', ['id']);
-  generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id']);
+  generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry);
+  generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry);
 
   // add nodes and edges to graph
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id']);

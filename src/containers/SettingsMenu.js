@@ -12,6 +12,7 @@ import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { getNetwork } from '../selectors/interface';
 import { anySessionIsActive, settingsMenuIsOpen } from '../selectors/session';
+import { protocolRegistry } from '../selectors/protocol';
 import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
 import createGraphML from '../utils/ExportData';
@@ -146,7 +147,8 @@ class SettingsMenu extends Component {
   }
 
   onExport = () => {
-    createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
+    createGraphML(this.props.currentNetwork, this.props.variableRegistry,
+      () => this.props.openModal('EXPORT_DATA'));
   };
 
   onQuit = () => {
@@ -282,12 +284,14 @@ SettingsMenu.propTypes = {
   resetState: PropTypes.func.isRequired,
   sessionExists: PropTypes.bool,
   toggleMenu: PropTypes.func.isRequired,
+  variableRegistry: PropTypes.object,
 };
 
 SettingsMenu.defaultProps = {
   sessionExists: false,
   hideButton: false,
   isOpen: false,
+  variableRegistry: {},
 };
 
 function mapStateToProps(state) {
@@ -296,6 +300,7 @@ function mapStateToProps(state) {
     isOpen: settingsMenuIsOpen(state),
     currentNetwork: getNetwork(state),
     sessionExists: anySessionIsActive(state),
+    variableRegistry: protocolRegistry(state),
   };
 }
 
