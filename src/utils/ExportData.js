@@ -1,3 +1,5 @@
+import { isNil } from 'lodash';
+
 import { isElectron, isCordova } from './Environment';
 
 const setUpXml = () => {
@@ -17,6 +19,44 @@ const setUpXml = () => {
   return xml;
 };
 
+const getVariableInfo = (variableRegistry, type, element, key) => (
+  variableRegistry[type] && variableRegistry[type][element.type] &&
+  variableRegistry[type][element.type].variables &&
+  variableRegistry[type][element.type].variables[key]
+);
+
+const isVariableRegistryExists = (variableRegistry, type, element, key) => {
+  const knownTypes = ['boolean', 'text', 'number', 'categorical', 'ordinal', 'checkbox',
+    'layout', 'enumerable', 'options'];
+  const variableInfo = getVariableInfo(variableRegistry, type, element, key);
+  return variableInfo && variableInfo.type && knownTypes.includes(variableInfo.type);
+};
+
+const getTypeFromVariableRegistry = (variableRegistry, type, element, key) => {
+  const variableInfo = getVariableInfo(variableRegistry, type, element, key);
+  return variableInfo && variableInfo.type;
+};
+
+const getTypeForKey = (data, key) => (
+  data.reduce((result, value) => {
+    if (isNil(value[key])) return result;
+    let currentType = typeof value[key];
+    if (currentType === 'number') {
+      currentType = Number.isInteger(value[key]) ? 'integer' : 'double';
+      if (result && currentType !== result) return 'double';
+    }
+    if (String(Number.parseInt(value[key], 10)) === value[key]) {
+      currentType = 'integer';
+      if (result === 'double') return 'double';
+    } else if (String(Number.parseFloat(value[key], 10)) === value[key]) {
+      currentType = 'double';
+      if (result === 'integer') return 'double';
+    }
+    if (isNil(currentType)) return result;
+    if (currentType === result || result === '') return currentType;
+    return 'string';
+  }, ''));
+
 const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry) => {
 // generate keys for attributes
   const done = [];
@@ -27,33 +67,30 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
         keyElement.setAttribute('id', key);
         keyElement.setAttribute('attr.name', key);
 
-        // look up type in variableRegistry
-        const knownTypes = ['boolean', 'text', 'number', 'categorical', 'ordinal', 'checkbox',
-          'layout', 'enumerable', 'options'];
-        const variableInfo = variableRegistry[type] && variableRegistry[type][element.type] &&
-          variableRegistry[type][element.type].variables &&
-          variableRegistry[type][element.type].variables[key];
-        const inVariableRegistry = variableInfo && variableInfo.type &&
-          knownTypes.includes(variableInfo.type);
-
-        switch (inVariableRegistry ? variableInfo.type : typeof element[key]) {
+        switch (isVariableRegistryExists(variableRegistry, type, element, key) ?
+          getTypeFromVariableRegistry(variableRegistry, type, element, key) :
+          getTypeForKey(elements, key)) {
           case 'checkbox':
           case 'boolean':
             keyElement.setAttribute('attr.type', 'boolean');
             break;
-          case 'ordinal':
-          case 'number':
-            if (Number.isInteger(element[key])) {
-              keyElement.setAttribute('attr.type', 'int');
-            } else {
-              keyElement.setAttribute('attr.type', 'double');
-            }
+          case 'integer':
+            keyElement.setAttribute('attr.type', 'integer');
             break;
+          case 'double':
+            keyElement.setAttribute('attr.type', 'double');
+            break;
+          case 'ordinal':
+          case 'number': {
+            const keyType = getTypeForKey(elements, key);
+            keyElement.setAttribute('attr.type', keyType);
+            break;
+          }
           case 'layout':
           case 'object':
             // special handling for locations
             if ((element[key].type && element[key].type === 'layout') ||
-              (variableInfo && variableInfo.type === 'layout')) {
+              (getTypeFromVariableRegistry(variableRegistry, type, element, key) === 'layout')) {
               keyElement.setAttribute('attr.name', `${key}Y`);
               keyElement.setAttribute('id', `${key}Y`);
               keyElement.setAttribute('attr.type', 'double');
@@ -89,7 +126,7 @@ const getDataElement = (uri, key, text) => {
   return data;
 };
 
-const addElements = (graph, uri, dataList, type, excludeList, extra: false) => {
+const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, extra: false) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
     if (dataElement.id) {
@@ -105,7 +142,8 @@ const addElements = (graph, uri, dataList, type, excludeList, extra: false) => {
       if (!excludeList.includes(key)) {
         if (typeof dataElement[key] !== 'object') {
           domElement.appendChild(getDataElement(uri, key, dataElement[key]));
-        } else if (dataElement[key].type && dataElement[key].type === 'layout') {
+        } else if ((dataElement[key].type && dataElement[key].type === 'layout') ||
+          ((getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout'))) {
           domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[key].x));
           domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[key].y));
         } else {
@@ -208,8 +246,8 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry);
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id']);
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], true);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id'], variableRegistry);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry, true);
 
   saveFile(xmlToString(xml), openErrorDialog);
 };
