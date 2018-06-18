@@ -876,17 +876,17 @@
           "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
-              "variable": "nickname",
+              "property": "nickname",
               "direction": "desc"
             }
           ],
           "binSortOrder": [
             {
-              "variable": "nickname",
+              "property": "nickname",
               "direction": "desc"
             },
             {
-              "variable": "age",
+              "property": "age",
               "direction": "desc"
             }
           ]
@@ -949,7 +949,7 @@
           "sortOptions": {
             "sortOrder": [
               {
-                "variable": "name",
+                "property": "name",
                 "direction": "asc"
               }
             ],
@@ -993,7 +993,7 @@
           "sortOptions": {
             "sortOrder": [
               {
-                "variable": "nickname",
+                "property": "nickname",
                 "direction": "desc"
               }
             ],
@@ -1058,8 +1058,8 @@
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "nodeBinSortOrder": [
             {
-              "variable": "nickname",
-              "order": "desc"
+              "property": "nickname",
+              "direction": "desc"
             }
           ],
           "background": {
