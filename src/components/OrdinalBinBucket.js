@@ -25,8 +25,11 @@ class OrdinalBinBucket extends Component {
   constructor(props) {
     super(props);
 
+    const sorter = sortOrder(props.sortOrder);
+    const sortedNodes = sorter(props.nodes);
+
     this.state = {
-      nodes: props.nodes,
+      nodes: sortedNodes,
       stagger: true,
       exit: true,
     };
