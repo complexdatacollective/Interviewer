@@ -26,8 +26,8 @@ const getVariableInfo = (variableRegistry, type, element, key) => (
 );
 
 const isVariableRegistryExists = (variableRegistry, type, element, key) => {
-  const knownTypes = ['boolean', 'text', 'number', 'categorical', 'ordinal', 'checkbox',
-    'layout', 'enumerable', 'options'];
+  const knownTypes = ['boolean', 'text', 'number', 'datetime', 'categorical', 'ordinal', 'layout',
+    'location'];
   const variableInfo = getVariableInfo(variableRegistry, type, element, key);
   return variableInfo && variableInfo.type && knownTypes.includes(variableInfo.type);
 };
@@ -67,10 +67,11 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
         keyElement.setAttribute('id', key);
         keyElement.setAttribute('attr.name', key);
 
-        switch (isVariableRegistryExists(variableRegistry, type, element, key) ?
-          getTypeFromVariableRegistry(variableRegistry, type, element, key) :
-          getTypeForKey(elements, key)) {
-          case 'checkbox':
+        if (!isVariableRegistryExists(variableRegistry, type, element, key)) {
+          // TODO hard fail
+        }
+
+        switch (getTypeFromVariableRegistry(variableRegistry, type, element, key)) {
           case 'boolean':
             keyElement.setAttribute('attr.type', 'boolean');
             break;
@@ -86,28 +87,23 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
             keyElement.setAttribute('attr.type', keyType);
             break;
           }
-          case 'layout':
-          case 'object':
+          case 'layout': {
             // special handling for locations
-            if ((element[key].type && element[key].type === 'layout') ||
-              (getTypeFromVariableRegistry(variableRegistry, type, element, key) === 'layout')) {
-              keyElement.setAttribute('attr.name', `${key}Y`);
-              keyElement.setAttribute('id', `${key}Y`);
-              keyElement.setAttribute('attr.type', 'double');
-              const keyElement2 = document.createElementNS(graphML.namespaceURI, 'key');
-              keyElement2.setAttribute('id', `${key}X`);
-              keyElement2.setAttribute('attr.name', `${key}X`);
-              keyElement2.setAttribute('attr.type', 'double');
-              keyElement2.setAttribute('for', type);
-              graphML.insertBefore(keyElement2, graph);
-            } else {
-              keyElement.setAttribute('attr.type', 'string');
-            }
+            keyElement.setAttribute('attr.name', `${key}Y`);
+            keyElement.setAttribute('id', `${key}Y`);
+            keyElement.setAttribute('attr.type', 'double');
+            const keyElement2 = document.createElementNS(graphML.namespaceURI, 'key');
+            keyElement2.setAttribute('id', `${key}X`);
+            keyElement2.setAttribute('attr.name', `${key}X`);
+            keyElement2.setAttribute('attr.type', 'double');
+            keyElement2.setAttribute('for', type);
+            graphML.insertBefore(keyElement2, graph);
             break;
+          }
           case 'text':
+          case 'datetime':
           case 'categorical':
-          case 'enumerable':
-          case 'options':
+          case 'location':
           default:
             keyElement.setAttribute('attr.type', 'string');
         }
@@ -142,8 +138,7 @@ const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, 
       if (!excludeList.includes(key)) {
         if (typeof dataElement[key] !== 'object') {
           domElement.appendChild(getDataElement(uri, key, dataElement[key]));
-        } else if ((dataElement[key].type && dataElement[key].type === 'layout') ||
-          ((getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout'))) {
+        } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
           domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[key].x));
           domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[key].y));
         } else {
