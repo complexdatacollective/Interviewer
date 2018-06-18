@@ -12,7 +12,8 @@ const mockPrompt = {
   sortOptions: {
     sortableProperties: ['age'],
     sortOrder: {
-      name: 'asc',
+      property: 'name',
+      direction: 'asc',
     },
   },
   dataSource: 'schoolPupils',

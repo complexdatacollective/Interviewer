@@ -3,7 +3,8 @@ import { orderBy } from 'lodash';
 const fifo = (node, index) => index;
 
 // TODO: Use variable registry to respect variable type?
-const sortOrder = (sortConfiguration, variableRegistry) => {
+// eslint-disable-next-line
+const sortOrder = (sortConfiguration, variableRegistry = {}) => {
   const iteratees = sortConfiguration.map(rule => rule.property)
     .map(property => (property === '*' ? fifo : property));
 
