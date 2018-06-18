@@ -40,21 +40,6 @@
               "maxLength": 8
             }
           },
-          "special_category": {
-            "label": "Special category",
-            "description": "Human readable description",
-            "type": "enumerable",
-            "options": [46]
-          },
-          "some_options": {
-            "label": "Some possible options",
-            "description": "Human readable description",
-            "type": "options",
-            "options": [46],
-            "validation": {
-              "max": 1
-            }
-          },
           "close_friend": {
             "label": "Close Friend",
             "description": "Human readable description",
@@ -79,7 +64,7 @@
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Last 24 hours",
                 "value": 4
@@ -106,7 +91,7 @@
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion  frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Three",
                 "value": 3
@@ -158,32 +143,17 @@
             "description": "Human readable description",
             "type": "boolean"
           },
-          "special_category": {
-            "label": "Special category",
-            "description": "Human readable description",
-            "type": "enumerable",
-            "options": [46]
-          },
-          "some_options": {
-            "label": "Some possible options",
-            "description": "Human readable description",
-            "type": "options",
-            "options": [46],
-            "validation": {
-              "max": 1
-            }
-          },
           "ordinalVariable": {
             "label": "Ordinal Variable",
             "description": "Huam readable description",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Value Four",
                 "value": 4
               },
               {
-                "label": "Value Three",
+                "label": "Value Three is quite long",
                 "value": 3
               },
               {
@@ -191,7 +161,7 @@
                 "value": 2
               },
               {
-                "label": "Value One",
+                "label": "Value One is also long, with break",
                 "value": 1
               },
               {
@@ -204,7 +174,7 @@
             "label": "Categorical Variable",
             "description": "Huam readable description",
             "type": "categorical",
-            "values": [
+            "options": [
               {
                 "label": "Value A",
                 "value": "Value A"
@@ -254,7 +224,7 @@
             "label": "Visit frequency ordinal variable.",
             "description": "Visit frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Every day",
                 "value": 4
@@ -310,7 +280,7 @@
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Last 24 hours",
                 "value": 4
@@ -856,20 +826,12 @@
           "component": "TextInput"
         },
         {
-          "variable": "booleanVariable",
-          "component": "ToggleInput"
-        },
-        {
-          "variable": "booleanVariable",
-          "component": "Checkbox"
-        },
-        {
           "variable": "ordinalVariable",
           "component": "RadioGroup"
         },
         {
-          "variable": "categoricalVariable",
-          "component": "CheckboxGroup"
+          "variable": "booleanVariable",
+          "component": "Checkbox"
         }
       ]
     },

@@ -1,22 +1,14 @@
-/* eslint-disable jsx-a11y/label-has-for */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import {
-  TextInput,
-  RadioGroup,
-  ToggleGroup,
-  ToggleInput,
-} from '../ui/components';
-import {
   Checkbox,
+  RadioGroup,
+  Text,
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
-
-import { withOptionsFromSelector } from '../behaviours';
 
 /*
   * Returns the named field compontent, if no matching one is found
@@ -26,84 +18,32 @@ import { withOptionsFromSelector } from '../behaviours';
 
 export const makeRenderInput = (componentType) => {
   const renderInput = (field) => {
-    const {
-      input,
-      meta,
-      label,
-      options,
-      values,
-      optionsSelector,
-      isNumericOnly,
-      toggleComponent,
-      autoFocus,
-      className,
-      tooltip,
-      type: inputType,
-    } = field;
+    if (componentType === 'Checkbox') {
+      const inputProps = {
+        ...field,
+        // input: {
+        //   ...field.input,
+        //   onChange: () => alert('yo'),
+        // },
+      };
 
-    let InputComponent = TextInput;
-
-    let inputProps = {
-      name: input.name,
-      value: input.value,
-      input,
-      errorText: meta.invalid && meta.touched && meta.error,
-      label,
-      autoFocus,
-      isNumericOnly,
-      className,
-      tooltip,
-      type: componentType === 'hidden' ? 'hidden' : inputType,
-    };
+      console.log(inputProps);
+      return (
+        <Checkbox
+          {...inputProps}
+        />
+      );
+    }
 
     if (componentType === 'RadioGroup') {
-      InputComponent = RadioGroup;
-      inputProps = {
-        ...inputProps,
-        options,
-        onRadioClick: input.onChange,
-      };
+      return (
+        <RadioGroup
+          {...field}
+        />
+      );
     }
 
-    if (componentType === 'CheckboxGroup') {
-      const { colors } = field;
-      InputComponent = ToggleGroup;
-      inputProps = {
-        ...inputProps,
-        toggleComponent,
-        options: values,
-        colors,
-        onOptionClick: (e, checked, optionVal) => input.onChange({
-          ...input.value,
-          [optionVal]: checked,
-        }),
-      };
-    }
-
-    if (componentType === 'ToggleInput') {
-      InputComponent = ToggleInput;
-      inputProps = {
-        ...inputProps,
-        onCheck: (e, checked, optionVal) => input.onCheck({
-          ...input.value,
-          [optionVal]: checked,
-        }),
-      };
-    }
-
-    if (componentType === 'Checkbox') {
-      InputComponent = Checkbox;
-    }
-
-    if (optionsSelector) {
-      InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
-    }
-
-    if (['ToggleInput', 'CheckboxGroup', 'RadioGroup'].includes(componentType)) {
-      delete inputProps.isNumericOnly;
-    }
-
-    return <InputComponent {...inputProps} {...input} />;
+    return <Text {...field} />;
   };
 
   return renderInput;

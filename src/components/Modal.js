@@ -32,9 +32,7 @@ function Modal(props) {
               {children}
             </div>
           </div>
-          <button className="modal__close" onClick={() => close()}>
-            Cancel
-          </button>
+          <button className="modal__close" onClick={() => close()} />
         </div>
       </div>
     </ModalTransition>

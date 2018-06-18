@@ -102,7 +102,7 @@ export const makeGetOrdinalValues = () =>
   createSelector(
     makeGetNodeVariables(), makeGetPromptVariable(),
     (nodeVariables, promptVariable) => {
-      const ordinalValues = nodeVariables[promptVariable].values;
+      const ordinalValues = nodeVariables[promptVariable].options;
       return ordinalValues;
     },
   );

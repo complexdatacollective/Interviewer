@@ -50,7 +50,7 @@
           "outsideOfSchool": {
             "label": "Have you contacted this person outside of school in the past 7 days?",
             "description": "If the participant has contacted the alter outside of school in the past 7 days.",
-            "type": "checkbox"
+            "type": "boolean"
           },
           "yearsKnown": {
             "label": "How many years have you known this person for?",
