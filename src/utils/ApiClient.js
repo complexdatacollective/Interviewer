@@ -61,6 +61,9 @@ class ApiClient {
     this.cancelTokenSource = axios.CancelToken.source();
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 
@@ -132,6 +135,21 @@ class ApiClient {
    */
   getProtocols() {
     return this.client.get('/protocols', { cancelToken: this.cancelTokenSource.token })
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(handleError);
+  }
+
+  /**
+   * @async
+   * @param {string} protocolId ID of the protocol this session belongs to
+   * @param {Object} sessionData
+   * @param {String} sessionData.uuid (required)
+   * @return {Object}
+   * @throws {Error}
+   */
+  exportSession(protocolId, sessionData) {
+    return this.client.post(`/protocols/${protocolId}/sessions`, sessionData)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

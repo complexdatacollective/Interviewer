@@ -50,7 +50,7 @@ class SessionList extends Component {
   }
 
   render() {
-    const { removeSession, sessions } = this.props;
+    const { defaultServer, exportSession, removeSession, sessions } = this.props;
 
     if (isEmpty(sessions)) {
       return emptyView;
@@ -66,8 +66,13 @@ class SessionList extends Component {
           compact
           multiselect={false}
           onDeleteCard={(data) => {
+            const serverApiUrl = defaultServer && defaultServer.apiUrl;
             // eslint-disable-next-line no-alert
-            if (confirm('Delete this interview?')) {
+            if (serverApiUrl && confirm('Export & delete this interview?')) {
+              const sessionData = sessions[data.uid].network;
+              const protocolId = 't9aiIsVrRY2PUFub'; // FIXME: placeholder
+              exportSession(serverApiUrl, protocolId, data.uid, sessionData);
+            } else if (confirm('Delete this interview?')) { // eslint-disable-line no-alert
               removeSession(data.uid);
             }
           }}
@@ -92,6 +97,8 @@ class SessionList extends Component {
 }
 
 SessionList.propTypes = {
+  defaultServer: PropTypes.shape({ apiUrl: PropTypes.string.isRequired }),
+  exportSession: PropTypes.func.isRequired,
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
   removeSession: PropTypes.func.isRequired,
@@ -100,12 +107,14 @@ SessionList.propTypes = {
 };
 
 SessionList.defaultProps = {
+  defaultServer: null,
 };
 
 function mapStateToProps(state) {
   return {
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
+    defaultServer: state.servers && state.servers.paired[0],
   };
 }
 
@@ -114,6 +123,7 @@ function mapDispatchToProps(dispatch) {
     loadSession: path => dispatch(push(path)),
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
+    exportSession: bindActionCreators(sessionsActions.exportSession, dispatch),
   };
 }
 
