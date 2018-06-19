@@ -480,9 +480,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "*": "ASC"
-          }
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ]
         }
       ]
     },
@@ -514,9 +517,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "*": "ASC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"],
             "create": "friends"
@@ -533,9 +539,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "*": "ASC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"]
           },
@@ -556,9 +565,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "*": "ASC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"]
           },
