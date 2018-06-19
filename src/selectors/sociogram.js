@@ -15,7 +15,6 @@ import {
   flow,
   isEmpty,
 } from 'lodash';
-import { PropTypes } from 'prop-types';
 import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -178,17 +177,4 @@ export const makeGetPlacedNodes = () => {
     (nodes, { layoutVariable }) =>
       filter(nodes, node => has(node, layoutVariable)),
   );
-};
-
-// PropTypes
-
-export const sociogramOptionsProps = {
-  layoutVariable: PropTypes.string.isRequired,
-  allowPositioning: PropTypes.bool.isRequired,
-  createEdge: PropTypes.string,
-  displayEdges: PropTypes.array.isRequired,
-  canCreateEdge: PropTypes.bool.isRequired,
-  allowHighlighting: PropTypes.bool.isRequired,
-  highlightAttributes: PropTypes.object,
-  nodeBinSortOrder: PropTypes.object.isRequired,
 };

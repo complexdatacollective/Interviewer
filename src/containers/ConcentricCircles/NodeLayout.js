@@ -6,9 +6,10 @@ import { compose, withHandlers, withState } from 'recompose';
 import { isEqual, isEmpty, pick, isMatch, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
-import { makeGetSociogramOptions, makeGetPlacedNodes, sociogramOptionsProps } from '../../selectors/sociogram';
+import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { DropTarget } from '../../behaviours/DragAndDrop';
+import sociogramOptionsProps from './propTypes';
 
 const watchProps = ['width', 'height', 'dropCount'];
 
