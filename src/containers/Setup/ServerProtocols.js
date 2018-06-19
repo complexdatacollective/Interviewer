@@ -43,7 +43,11 @@ class ServerProtocols extends Component {
     return (
       <ServerSetup server={server}>
         {
-          protocols && <ServerProtocolList protocols={protocols} download={downloadProtocol} />
+          protocols &&
+          <ServerProtocolList
+            protocols={protocols}
+            selectProtocol={p => downloadProtocol(p.downloadUrl, p.id)}
+          />
         }
       </ServerSetup>
     );

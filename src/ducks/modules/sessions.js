@@ -49,9 +49,11 @@ export default function reducer(state = initialState, action = {}) {
           path: `/session/${action.sessionId}`,
           promptIndex: 0,
           network: network(state.network, action),
+          protocolIdentifier: action.remoteId,
         }),
       };
     }
+    // ADD_SESSION is needed for factory protocols (where LOAD_PROTOCOL is never created)
     case ADD_SESSION:
       return {
         ...state,
@@ -205,24 +207,22 @@ function removeSession(id) {
   };
 }
 
-const sessionExportFailed = (error, protocolId) => ({
+const sessionExportFailed = error => ({
   type: EXPORT_SESSION_FAILED,
-  protocolId,
   error,
 });
 
-const exportSession = (apiUrl, protocolId, sessionUuid, sessionData) => ({
+const exportSession = (apiUrl, protocolIdentifier, sessionUuid, sessionData) => ({
   type: EXPORT_SESSION,
   apiUrl,
-  protocolId,
+  protocolIdentifier,
   sessionUuid,
   sessionData,
 });
 
-const sessionExportPromise = ({ apiUrl, protocolId, sessionUuid, sessionData }) => {
+const sessionExportPromise = ({ apiUrl, protocolIdentifier, sessionUuid, sessionData }) => {
   const session = { ...sessionData, uuid: sessionUuid };
-  // console.log()
-  return new ApiClient(apiUrl).exportSession(protocolId, session);
+  return new ApiClient(apiUrl).exportSession(protocolIdentifier, session);
 };
 
 const exportSessionEpic = action$ => (
@@ -231,7 +231,7 @@ const exportSessionEpic = action$ => (
       Observable
         .fromPromise(sessionExportPromise(action))
         .map(() => removeSession(action.sessionUuid))
-        .catch(error => Observable.of(sessionExportFailed(error, action.protocolId))),
+        .catch(error => Observable.of(sessionExportFailed(error))),
     )
 );
 
@@ -264,6 +264,8 @@ const actionTypes = {
   UPDATE_SESSION,
   UPDATE_PROMPT,
   REMOVE_SESSION,
+  EXPORT_SESSION,
+  EXPORT_SESSION_FAILED,
 };
 
 const epics = combineEpics(

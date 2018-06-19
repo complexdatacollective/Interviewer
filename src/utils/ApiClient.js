@@ -143,6 +143,7 @@ class ApiClient {
   /**
    * @async
    * @param {string} protocolId ID of the protocol this session belongs to
+   *                            (a sha256 digest of the protocol name, as hex)
    * @param {Object} sessionData
    * @param {String} sessionData.uuid (required)
    * @return {Object}

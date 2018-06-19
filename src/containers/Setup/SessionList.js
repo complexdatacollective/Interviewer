@@ -66,13 +66,23 @@ class SessionList extends Component {
           compact
           multiselect={false}
           onDeleteCard={(data) => {
+            // Example session export:
+            // - For now, export to the first (or only) paired server
+            // - Session must have been created with a protocolIdentifier
+            // Otherwise, prompt to delete.
             const serverApiUrl = defaultServer && defaultServer.apiUrl;
+            const sessionData = sessions[data.uid].network;
+            const protocolIdentifier = sessions[data.uid].protocolIdentifier;
+            if (serverApiUrl && protocolIdentifier) {
+              // eslint-disable-next-line no-alert
+              if (confirm('Export & delete this interview?')) {
+                exportSession(serverApiUrl, protocolIdentifier, data.uid, sessionData);
+              }
+              return;
+            }
+
             // eslint-disable-next-line no-alert
-            if (serverApiUrl && confirm('Export & delete this interview?')) {
-              const sessionData = sessions[data.uid].network;
-              const protocolId = 't9aiIsVrRY2PUFub'; // FIXME: placeholder
-              exportSession(serverApiUrl, protocolId, data.uid, sessionData);
-            } else if (confirm('Delete this interview?')) { // eslint-disable-line no-alert
+            if (confirm('Delete this interview?')) {
               removeSession(data.uid);
             }
           }}
