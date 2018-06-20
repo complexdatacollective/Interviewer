@@ -6,6 +6,7 @@ import {
   Checkbox,
   RadioGroup,
   Text,
+  Toggle,
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
@@ -19,18 +20,9 @@ import validations from '../utils/Validations';
 export const makeRenderInput = (componentType) => {
   const renderInput = (field) => {
     if (componentType === 'Checkbox') {
-      const inputProps = {
-        ...field,
-        // input: {
-        //   ...field.input,
-        //   onChange: () => alert('yo'),
-        // },
-      };
-
-      console.log(inputProps);
       return (
         <Checkbox
-          {...inputProps}
+          {...field}
         />
       );
     }
@@ -38,6 +30,14 @@ export const makeRenderInput = (componentType) => {
     if (componentType === 'RadioGroup') {
       return (
         <RadioGroup
+          {...field}
+        />
+      );
+    }
+
+    if (componentType === 'Toggle') {
+      return (
+        <Toggle
           {...field}
         />
       );

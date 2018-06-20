@@ -143,6 +143,11 @@
             "description": "Human readable description",
             "type": "boolean"
           },
+          "booleanVariable2": {
+            "label": "Boolean  2",
+            "description": "Human readable description",
+            "type": "boolean"
+          },
           "ordinalVariable": {
             "label": "Ordinal Variable",
             "description": "Huam readable description",
@@ -832,6 +837,10 @@
         {
           "variable": "booleanVariable",
           "component": "Checkbox"
+        },
+        {
+          "variable": "booleanVariable2",
+          "component": "Toggle"
         }
       ]
     },
