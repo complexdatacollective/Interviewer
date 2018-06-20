@@ -8,10 +8,6 @@ import {
   get,
   reject,
   first,
-  toPairs,
-  unzip,
-  orderBy,
-  lowerCase,
   groupBy,
   pick,
   values,
@@ -19,9 +15,9 @@ import {
   flow,
   isEmpty,
 } from 'lodash';
-import { PropTypes } from 'prop-types';
 import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
+import sortOrder from '../utils/sortOrder';
 
 // Selectors that are specific to the name generator
 
@@ -112,21 +108,14 @@ const makeGetUnplacedNodes = () => {
   );
 };
 
-const fifo = (node, index) => index;
-
 export const makeGetNextUnplacedNode = () => {
   const getUnplacedNodes = makeGetUnplacedNodes();
 
   return createSelector(
     getUnplacedNodes, getSortOptions,
     (nodes, sortOptions) => {
-      const [properties, orders] = unzip(toPairs(sortOptions.nodeBinSortOrder));
-      const sortedNodes = orderBy(
-        [...nodes],
-        properties.map(property => (property === '*' ? fifo : property)),
-        orders.map(lowerCase),
-      );
-      return first(sortedNodes);
+      const sorter = sortOrder(sortOptions.nodeBinSortOrder);
+      return first(sorter(nodes));
     },
   );
 };
@@ -188,17 +177,4 @@ export const makeGetPlacedNodes = () => {
     (nodes, { layoutVariable }) =>
       filter(nodes, node => has(node, layoutVariable)),
   );
-};
-
-// PropTypes
-
-export const sociogramOptionsProps = {
-  layoutVariable: PropTypes.string.isRequired,
-  allowPositioning: PropTypes.bool.isRequired,
-  createEdge: PropTypes.string,
-  displayEdges: PropTypes.array.isRequired,
-  canCreateEdge: PropTypes.bool.isRequired,
-  allowHighlighting: PropTypes.bool.isRequired,
-  highlightAttributes: PropTypes.object,
-  nodeBinSortOrder: PropTypes.object.isRequired,
 };
