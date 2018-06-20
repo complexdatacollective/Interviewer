@@ -149,8 +149,12 @@ class ApiClient {
    * @return {Object}
    * @throws {Error}
    */
-  exportSession(protocolId, sessionData) {
-    return this.client.post(`/protocols/${protocolId}/sessions`, sessionData)
+  exportSession(protocolId, sessionId, sessionData) {
+    const payload = {
+      uuid: sessionId,
+      data: sessionData,
+    };
+    return this.client.post(`/protocols/${protocolId}/sessions`, payload)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

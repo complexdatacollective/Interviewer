@@ -220,10 +220,8 @@ const exportSession = (apiUrl, protocolIdentifier, sessionUuid, sessionData) => 
   sessionData,
 });
 
-const sessionExportPromise = ({ apiUrl, protocolIdentifier, sessionUuid, sessionData }) => {
-  const session = { ...sessionData, uuid: sessionUuid };
-  return new ApiClient(apiUrl).exportSession(protocolIdentifier, session);
-};
+const sessionExportPromise = ({ apiUrl, protocolIdentifier, sessionUuid, sessionData }) =>
+  new ApiClient(apiUrl).exportSession(protocolIdentifier, sessionUuid, sessionData);
 
 const exportSessionEpic = action$ => (
   action$.ofType(EXPORT_SESSION)
