@@ -61,14 +61,18 @@ export const getSortFields = createSelector(
   sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
 
+// TODO: hard coded to select the first sortOrder rule,
+// until we add support for multi-property sorting
 export const getSortOrderDefault = createSelector(
   propSortOptions,
-  sortOptions => get(sortOptions, 'sortOrder.property', ''),
+  sortOptions => get(sortOptions, ['sortOrder', 0, 'property'], ''),
 );
 
+// TODO: hard coded to select the first sortOrder rule,
+// until we add support for multi-property sorting
 export const getSortDirectionDefault = createSelector(
   propSortOptions,
-  sortOptions => get(sortOptions, 'sortOrder.direction', ''),
+  sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
 );
 
 export const getDataByPrompt = createSelector(

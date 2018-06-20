@@ -947,10 +947,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
+            "sortOrder": [{
               "property": "name",
               "direction": "asc"
-            },
+            }],
             "sortableProperties": [
               {
                 "label": "Pupil Name",
@@ -989,10 +989,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
+            "sortOrder": [{
               "property": "nickname",
               "direction": "desc"
-            },
+            }],
             "sortableProperties": [
               {
                 "label": "Nickname",
