@@ -1,6 +1,6 @@
 import { isNil } from 'lodash';
 
-import { isElectron, isCordova } from './Environment';
+import saveFile from './SaveFile';
 
 const setUpXml = () => {
   const xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -159,77 +159,6 @@ const xmlToString = (xmlData) => {
   return xmlString;
 };
 
-const saveFile = (data, openErrorDialog) => {
-  if (isElectron()) { // electron save dialog
-    const fs = window.require('fs');
-    const { dialog } = window.require('electron').remote;
-    dialog.showSaveDialog({ filters: [{ name: 'graphml', extensions: ['graphml'] }] }, (filename) => {
-      if (filename === undefined) return;
-      fs.writeFile(filename, data, (err) => {
-        if (err) {
-          dialog.showErrorBox('Error Saving File.', err.message);
-        }
-      });
-    });
-  } else if (isCordova()) { // cordova save temp file and then share
-    const getFileSystem = () => new Promise((resolve, reject) => {
-      window.requestFileSystem(
-        window.LocalFileSystem.TEMPORARY,
-        5 * 1024 * 1024,
-        fileSystem => resolve(fileSystem),
-        err => reject(err),
-      );
-    });
-
-    const getFile = fileSystem => new Promise((resolve, reject) => {
-      fileSystem.root.getFile('networkcanvas.graphml', { create: true, exclusive: false },
-        fileEntry => resolve(fileEntry),
-        err => reject(err),
-      );
-    });
-
-    const createWriter = fileEntry => new Promise((resolve, reject) => {
-      fileEntry.createWriter(
-        fileWriter => resolve({ fileWriter, filename: fileEntry.toURL() }),
-        err => reject(err),
-      );
-    });
-
-    const writeFile = ({ fileWriter, filename }) => new Promise((resolve, reject) => {
-      const blob = new Blob([data], { type: 'text/xml' });
-      fileWriter.seek(0);
-      fileWriter.onwrite = () => resolve(filename); // eslint-disable-line no-param-reassign
-      fileWriter.onerror = err => reject(err); // eslint-disable-line no-param-reassign
-      fileWriter.write(blob);
-    });
-
-    getFileSystem()
-      .then(getFile)
-      .then(createWriter)
-      .then(writeFile)
-      .then((filename) => {
-        const options = {
-          message: 'Your network canvas graphml file.', // not supported on some apps
-          subject: 'network canvas export',
-          files: [filename],
-          chooserTitle: 'Share file via', // Android only
-        };
-        window.plugins.socialsharing.shareWithOptions(options);
-      })
-      .catch(() => { openErrorDialog(); });
-  } else { // browser save to downloads
-    const blob = new Blob([data], { type: 'text/xml' });
-    const element = document.createElement('a');
-    element.setAttribute('href', window.URL.createObjectURL(blob));
-    element.setAttribute('download', 'networkcanvas.graphml');
-    element.style.display = 'none';
-    document.getElementById('root').appendChild(element);
-    element.click();
-    document.getElementById('root').removeChild(element);
-    window.URL.revokeObjectURL(blob);
-  }
-};
-
 const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   // default graph structure
   const xml = setUpXml();
@@ -244,7 +173,8 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id'], variableRegistry);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry, true);
 
-  saveFile(xmlToString(xml), openErrorDialog);
+  saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
+    { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
 };
 
 export default createGraphML;
