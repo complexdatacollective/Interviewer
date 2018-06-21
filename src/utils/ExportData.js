@@ -59,6 +59,7 @@ const getTypeForKey = (data, key) => (
 
 const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry) => {
 // generate keys for attributes
+  let valid = true;
   const done = [];
   elements.forEach((element) => {
     Object.keys(element).forEach((key) => {
@@ -68,7 +69,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
         keyElement.setAttribute('attr.name', key);
 
         if (!isVariableRegistryExists(variableRegistry, type, element, key)) {
-          // TODO hard fail
+          valid = false;
         }
 
         switch (getTypeFromVariableRegistry(variableRegistry, type, element, key)) {
@@ -113,6 +114,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
       }
     });
   });
+  return valid;
 };
 
 const getDataElement = (uri, key, text) => {
@@ -154,7 +156,7 @@ const xmlToString = (xmlData) => {
   if (window.ActiveXObject) { // IE
     xmlString = xmlData.xml;
   } else { // code for Mozilla, Firefox, Opera, etc.
-    xmlString = (new XMLSerializer()).serializeToString(xmlData);
+    xmlString = (new window.XMLSerializer()).serializeToString(xmlData);
   }
   return xmlString;
 };
@@ -166,14 +168,22 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   const graphML = xml.getElementsByTagName('graphml')[0];
 
   // generate keys for attributes
-  generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry);
-  generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry);
+  if (!generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry)) {
+    // this would be where we hard fail if checking the registry fails for nodes
+    // openErrorDialog();
+    // return null;
+  }
+  if (!generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry)) {
+    // this would be where we hard fail if checking the registry fails for edges
+    // openErrorDialog();
+    // return null;
+  }
 
   // add nodes and edges to graph
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id'], variableRegistry);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry, true);
 
-  saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
+  return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
 };
 
