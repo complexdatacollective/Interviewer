@@ -31,7 +31,12 @@ export default function reducer(state = initialState, action = {}) {
       }
       return [
         ...state,
-        { name: action.path, path: action.path, type: action.type },
+        {
+          name: action.path,
+          path: action.path,
+          type: action.protocolType,
+          remoteId: action.remoteId,
+        },
       ];
     case ADD_PROTOCOL:
       return [
