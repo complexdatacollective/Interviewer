@@ -181,7 +181,7 @@
             "type": "categorical",
             "options": [
               {
-                "label": "Value A",
+                "label": "Value A has additional text to go along with it",
                 "value": "Value A"
               },
               {
@@ -189,7 +189,7 @@
                 "value": "Value B"
               },
               {
-                "label": "Value C",
+                "label": "Value C is a label that has too much text - shorten it",
                 "value": "Value C"
               },
               {
@@ -835,8 +835,8 @@
           "component": "RadioGroup"
         },
         {
-          "variable": "booleanVariable",
-          "component": "Checkbox"
+          "variable": "categoricalVariable",
+          "component": "CheckboxGroup"
         },
         {
           "variable": "booleanVariable2",

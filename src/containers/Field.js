@@ -4,6 +4,7 @@ import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
 import {
   Checkbox,
+  CheckboxGroup,
   RadioGroup,
   Text,
   Toggle,
@@ -30,6 +31,14 @@ export const makeRenderInput = (componentType) => {
     if (componentType === 'RadioGroup') {
       return (
         <RadioGroup
+          {...field}
+        />
+      );
+    }
+
+    if (componentType === 'CheckboxGroup') {
+      return (
+        <CheckboxGroup
           {...field}
         />
       );
