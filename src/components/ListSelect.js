@@ -9,7 +9,7 @@ class ListSelect extends Component {
     super(props);
 
     this.state = {
-      ascending: this.props.initialSortDirection === 'ASC',
+      ascending: this.props.initialSortDirection === 'asc',
       filterValue: '',
       property: this.props.initialSortOrder || this.props.labelKey,
     };
@@ -23,7 +23,7 @@ class ListSelect extends Component {
     }
     if (nextProps.initialSortDirection !== this.props.initialSortDirection) {
       this.setState({
-        ascending: nextProps.initialSortDirection === 'ASC',
+        ascending: nextProps.initialSortDirection === 'asc',
       });
     }
   }

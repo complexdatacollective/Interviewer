@@ -876,19 +876,18 @@
           "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
-              "name": "nickname",
-              "dir": "desc"
+              "property": "nickname",
+              "direction": "desc"
             }
           ],
           "binSortOrder": [
             {
-              "name": "nickname",
-              "dir": "desc"
+              "property": "nickname",
+              "direction": "desc"
             },
             {
-              "name": "age",
-              "dir": "desc",
-              "type": "number"
+              "property": "age",
+              "direction": "desc"
             }
           ]
         },
@@ -948,9 +947,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
-              "name": "ASC"
-            },
+            "sortOrder": [{
+              "property": "name",
+              "direction": "asc"
+            }],
             "sortableProperties": [
               {
                 "label": "Pupil Name",
@@ -989,9 +989,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
-              "nickname": "DESC"
-            },
+            "sortOrder": [{
+              "property": "nickname",
+              "direction": "desc"
+            }],
             "sortableProperties": [
               {
                 "label": "Nickname",
@@ -1051,9 +1052,12 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            }
+          ],
           "background": {
             "image": "rubberduck.jpg",
             "concentricCircles": 4,
