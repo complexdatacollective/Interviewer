@@ -20,7 +20,7 @@ class ProtocolList extends Component {
     if (protocol.type === 'factory') {
       this.loadFactoryProtocol(protocol.path);
     } else {
-      this.loadRemoteProtocol(protocol.path);
+      this.loadRemoteProtocol(protocol.path, protocol.remoteId);
     }
   }
 
@@ -29,12 +29,11 @@ class ProtocolList extends Component {
     this.props.loadFactoryProtocol(protocolPath);
   }
 
-  loadRemoteProtocol = (protocolPath) => {
+  loadRemoteProtocol = (protocolPath, remoteId) => {
     if (protocolPath) {
-      this.props.loadProtocol(protocolPath);
+      this.props.loadProtocol(protocolPath, null, remoteId);
     }
   }
-
 
   render() {
     const { protocols } = this.props;
@@ -95,3 +94,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolList);
+
+export { ProtocolList as UnconnectedProtocolList };
