@@ -13,6 +13,7 @@ const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSION = 'EXPORT_SESSION';
 const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
+const EXPORT_SESSION_SUCCEEDED = 'EXPORT_SESSION_SUCCEEDED';
 
 const initialState = {};
 
@@ -82,6 +83,14 @@ export default function reducer(state = initialState, action = {}) {
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);
+    case EXPORT_SESSION_SUCCEEDED:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          lastExportedAt: Date.now(),
+        }),
+      };
     default:
       return state;
   }
@@ -207,6 +216,11 @@ function removeSession(id) {
   };
 }
 
+const sessionExportSucceeded = id => ({
+  type: EXPORT_SESSION_SUCCEEDED,
+  sessionId: id,
+});
+
 const sessionExportFailed = error => ({
   type: EXPORT_SESSION_FAILED,
   error,
@@ -228,7 +242,7 @@ const exportSessionEpic = action$ => (
     .exhaustMap(action =>
       Observable
         .fromPromise(sessionExportPromise(action))
-        .map(() => removeSession(action.sessionUuid))
+        .mapTo(sessionExportSucceeded(action.sessionUuid))
         .catch(error => Observable.of(sessionExportFailed(error))),
     )
 );

@@ -27,8 +27,6 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
-      "defaultServer": null,
-      "exportSession": [Function],
       "getSessionPath": [Function],
       "loadSession": [Function],
       "removeSession": [Function],
@@ -97,8 +95,6 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
-        "defaultServer": null,
-        "exportSession": [Function],
         "getSessionPath": [Function],
         "loadSession": [Function],
         "removeSession": [Function],

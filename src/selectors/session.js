@@ -3,6 +3,11 @@ import { createSelector } from 'reselect';
 
 import { initialState } from '../ducks/modules/session';
 
+const DefaultFinishStage = {
+  type: 'FinishSession',
+  label: 'Finish Interview',
+};
+
 const protocol = state => state.protocol;
 
 export const anySessionIsActive = state => state.session && state.session !== initialState;
@@ -17,7 +22,7 @@ export const getPromptForCurrentSession = createSelector(
 
 export const stages = createSelector(
   protocol,
-  protocol => protocol.stages,
+  protocol => [...protocol.stages, DefaultFinishStage],
 );
 
 export const filteredStages = createSelector(
