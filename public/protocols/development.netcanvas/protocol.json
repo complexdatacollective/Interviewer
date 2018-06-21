@@ -141,7 +141,10 @@
           "booleanVariable": {
             "label": "Boolean Variable",
             "description": "Human readable description",
-            "type": "boolean"
+            "type": "boolean",
+            "validation": {
+              "required": true
+            }
           },
           "booleanVariable2": {
             "label": "Boolean  2",
@@ -236,7 +239,7 @@
                 "value": "Value G"
               },
               {
-                "label": "Neighborhood",
+                "label": "Neighbors",
                 "value": "Value H"
               },
               {
@@ -871,27 +874,33 @@
       "fields": [
         {
           "variable": "label",
-          "component": "TextInput"
+          "component": "TextInput",
+          "label": "What is this person's name?"
         },
         {
           "variable": "numberVariable",
-          "component": "TextInput"
+          "component": "TextInput",
+          "label": "What is this person's age?"
         },
         {
           "variable": "ordinalVariable",
-          "component": "RadioGroup"
+          "component": "RadioGroup",
+          "label": "How much do you like likert scales?"
         },
         {
           "variable": "categoricalVariable",
-          "component": "CheckboxGroup"
+          "component": "CheckboxGroup",
+          "label": "Which of these things do you like?"
         },
         {
           "variable": "categoricalVariable2",
-          "component": "ToggleButtonGroup"
+          "component": "ToggleButtonGroup",
+          "label": "Which of these other things do you like?"
         },
         {
           "variable": "booleanVariable2",
-          "component": "Toggle"
+          "component": "Toggle",
+          "label": "Is the switch below not turned on?"
         }
       ]
     },
