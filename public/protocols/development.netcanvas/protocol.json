@@ -201,6 +201,53 @@
                 "value": "Value E"
               }
             ]
+          },
+          "categoricalVariable2": {
+            "label": "Categorical Variable2",
+            "description": "Huam readable description",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "Friends",
+                "value": "Value A"
+              },
+              {
+                "label": "Family",
+                "value": "Value B"
+              },
+              {
+                "label": "Work",
+                "value": "Value C"
+              },
+              {
+                "label": "Church",
+                "value": "Value D"
+              },
+              {
+                "label": "Vikings",
+                "value": "Value E"
+              },
+              {
+                "label": "German Course",
+                "value": "Value F"
+              },
+              {
+                "label": "Gardening Club",
+                "value": "Value G"
+              },
+              {
+                "label": "Neighborhood",
+                "value": "Value H"
+              },
+              {
+                "label": "Oxford Friends",
+                "value": "Value I"
+              },
+              {
+                "label": "Band",
+                "value": "Value J"
+              }
+            ]
           }
         }
       },
@@ -839,6 +886,10 @@
           "component": "CheckboxGroup"
         },
         {
+          "variable": "categoricalVariable2",
+          "component": "ToggleButtonGroup"
+        },
+        {
           "variable": "booleanVariable2",
           "component": "Toggle"
         }
@@ -1179,6 +1230,39 @@
             "image": "rubberduck.jpg",
             "concentricCircles": 4,
             "skewedTowardCenter": true
+          }
+        },
+        {
+          "id": "closeness2",
+          "text":
+            "This is a prompt showing no background.",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "filter":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["friend", "professional"],
+            "create": "friend"
+          },
+          "highlight": {
+            "variable": "has_given_advice",
+            "value": true,
+            "allowHighlighting": true
+          },
+          "disable":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "background": {
+            "concentricCircles": 0,
+            "skewedTowardCenter": false
           }
         }
       ]

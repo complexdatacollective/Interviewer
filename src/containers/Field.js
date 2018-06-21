@@ -5,6 +5,7 @@ import { map, toPairs } from 'lodash';
 import {
   Checkbox,
   CheckboxGroup,
+  ToggleButtonGroup,
   RadioGroup,
   Text,
   Toggle,
@@ -39,6 +40,14 @@ export const makeRenderInput = (componentType) => {
     if (componentType === 'CheckboxGroup') {
       return (
         <CheckboxGroup
+          {...field}
+        />
+      );
+    }
+
+    if (componentType === 'ToggleButtonGroup') {
+      return (
+        <ToggleButtonGroup
           {...field}
         />
       );
