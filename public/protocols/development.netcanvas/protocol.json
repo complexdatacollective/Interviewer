@@ -1210,7 +1210,7 @@
         {
           "id": "closeness1",
           "text":
-            "Position the nodes amongst the concentric circles. Place people you are closer to towards the middle",
+            "This prompt uses a background image containing quadrants.",
           "subject": {
             "entity": "node",
             "type": "person"
@@ -1236,7 +1236,7 @@
             "nickname": "DESC"
           },
           "background": {
-            "image": "rubberduck.jpg",
+            "image": "quadrant.svg",
             "concentricCircles": 4,
             "skewedTowardCenter": true
           }
@@ -1272,6 +1272,39 @@
           "background": {
             "concentricCircles": 0,
             "skewedTowardCenter": false
+          }
+        },
+        {
+          "id": "closeness3",
+          "text":
+            "This prompt shows 3 concentric circles",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "filter":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["friend", "professional"],
+            "create": "friend"
+          },
+          "highlight": {
+            "variable": "has_given_advice",
+            "value": true,
+            "allowHighlighting": true
+          },
+          "disable":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "background": {
+            "concentricCircles": 3,
+            "skewedTowardCenter": true
           }
         }
       ]

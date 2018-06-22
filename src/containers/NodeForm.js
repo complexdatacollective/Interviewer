@@ -77,7 +77,7 @@ class NodeForm extends Component {
 
     const formProps = {
       ...this.props,
-      autoFocus: true,
+      autoFocus: false,
       controls: [
         (showAddAnotherToggle && <ToggleInput
           key="toggleInput"

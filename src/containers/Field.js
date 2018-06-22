@@ -96,13 +96,10 @@ class Field extends PureComponent {
 
   componentWillMount() {
     this.validate = getValidation(this.props.validation);
-    console.log('componentwillmount');
-    console.log(this.props);
   }
 
   render() {
     const { label, name, validation, ...rest } = this.props;
-
     return (
       <ReduxFormField
         {...rest}
