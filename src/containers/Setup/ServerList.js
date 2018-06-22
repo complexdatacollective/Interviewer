@@ -97,7 +97,7 @@ class ServerList extends Component {
                 key={server.apiUrl}
                 data={server}
                 selectServer={onSelect}
-                secondaryLabel={isPaired && '(paired)'}
+                secondaryLabel={isPaired ? '(paired)' : ''}
               />
             );
           })

@@ -81,23 +81,33 @@ function setProtocol(path, protocol) {
   };
 }
 
-function downloadProtocolAction(uri) {
+// TODO: Simplify.
+// A "name" (in protocol.json) uniquely identifies a protocol.
+// The remoteId is a URL-safe version (digest) of this used by Servers.
+// This is different than the other identifier for a protocol: the filepath (aka path, aka id).
+// It's passed through the action chain just so it can be set on a session, which is
+// created before protocol is loaded/parsed.
+// i.e., Session export needs the protocol's remoteId (or protocol name).
+
+function downloadProtocolAction(uri, remoteId) {
   return {
     type: DOWNLOAD_PROTOCOL,
     protocolType: 'download',
+    remoteId,
     uri,
   };
 }
 
-function importProtocolAction(path) {
+function importProtocolAction(path, remoteId) {
   return {
     type: IMPORT_PROTOCOL,
     protocolType: 'download',
+    remoteId,
     path,
   };
 }
 
-function loadProtocolAction(path, id) {
+function loadProtocolAction(path, id, remoteId) {
   let sessionId = id;
   if (!id) {
     sessionId = uuidv4();
@@ -105,6 +115,7 @@ function loadProtocolAction(path, id) {
   return {
     type: LOAD_PROTOCOL,
     protocolType: 'download',
+    remoteId,
     path,
     sessionId,
   };
@@ -144,7 +155,7 @@ const downloadProtocolEpic = action$ =>
     .switchMap(action =>
       Observable
         .fromPromise(downloadProtocol(action.uri))
-        .map(protocolPath => importProtocolAction(protocolPath))
+        .map(protocolPath => importProtocolAction(protocolPath, action.remoteId))
         .catch(error => Observable.of(downloadProtocolFailed(error))),
     );
 
@@ -153,7 +164,7 @@ const importProtocolEpic = action$ =>
     .switchMap(action =>
       Observable
         .fromPromise(importProtocol(action.path))
-        .map(protocolName => loadProtocolAction(protocolName))
+        .map(protocolFile => loadProtocolAction(protocolFile, null, action.remoteId))
         .catch(error => Observable.of(importProtocolFailed(error))),
     );
 

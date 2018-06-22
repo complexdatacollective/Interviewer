@@ -20,7 +20,7 @@ const ProtocolCard = ({ protocol, selectProtocol, className, size }) => {
       <Icon className="protocol-card__icon" name="add-a-screen" />
       <div className="protocol-card__labels">
         <h2 className={sized('protocol-card__name')}>{protocol.name}</h2>
-        <p className="protocol-card__version">{protocol.version}</p>
+        <p className="protocol-card__description">{protocol.description}</p>
       </div>
     </div>
   );
@@ -30,6 +30,7 @@ ProtocolCard.defaultProps = {
   className: '',
   selectProtocol: () => {},
   size: '',
+  description: '',
 };
 
 ProtocolCard.propTypes = {
@@ -37,9 +38,9 @@ ProtocolCard.propTypes = {
   selectProtocol: PropTypes.func,
   protocol: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    version: PropTypes.string.isRequired,
+    description: PropTypes.string,
   }).isRequired,
-  size: PropTypes.oneOf([largeVariant]),
+  size: PropTypes.oneOf([largeVariant, '']),
 };
 
 export default ProtocolCard;

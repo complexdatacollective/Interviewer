@@ -50,7 +50,7 @@ class SessionList extends Component {
   }
 
   render() {
-    const { removeSession, sessions } = this.props;
+    const { defaultServer, exportSession, removeSession, sessions } = this.props;
 
     if (isEmpty(sessions)) {
       return emptyView;
@@ -66,6 +66,21 @@ class SessionList extends Component {
           compact
           multiselect={false}
           onDeleteCard={(data) => {
+            // Example session export:
+            // - For now, export to the first (or only) paired server
+            // - Session must have been created with a protocolIdentifier
+            // Otherwise, prompt to delete.
+            const serverApiUrl = defaultServer && defaultServer.apiUrl;
+            const sessionData = sessions[data.uid].network;
+            const protocolIdentifier = sessions[data.uid].protocolIdentifier;
+            if (serverApiUrl && protocolIdentifier) {
+              // eslint-disable-next-line no-alert
+              if (confirm('Export & delete this interview?')) {
+                exportSession(serverApiUrl, protocolIdentifier, data.uid, sessionData);
+              }
+              return;
+            }
+
             // eslint-disable-next-line no-alert
             if (confirm('Delete this interview?')) {
               removeSession(data.uid);
@@ -92,6 +107,8 @@ class SessionList extends Component {
 }
 
 SessionList.propTypes = {
+  defaultServer: PropTypes.shape({ apiUrl: PropTypes.string.isRequired }),
+  exportSession: PropTypes.func.isRequired,
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
   removeSession: PropTypes.func.isRequired,
@@ -100,12 +117,14 @@ SessionList.propTypes = {
 };
 
 SessionList.defaultProps = {
+  defaultServer: null,
 };
 
 function mapStateToProps(state) {
   return {
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
+    defaultServer: state.servers && state.servers.paired[0],
   };
 }
 
@@ -114,6 +133,7 @@ function mapDispatchToProps(dispatch) {
     loadSession: path => dispatch(push(path)),
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
+    exportSession: bindActionCreators(sessionsActions.exportSession, dispatch),
   };
 }
 
