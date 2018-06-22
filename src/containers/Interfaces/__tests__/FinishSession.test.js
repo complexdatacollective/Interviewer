@@ -4,6 +4,8 @@ import { render, shallow } from 'enzyme';
 
 import { UnconnectedFinishSession as FinishSession } from '../FinishSession';
 
+jest.mock('../../../behaviours/modal', () => wrapped => wrapped);
+
 const findButtonMatching = (text, container) => (
   container.find('Button').filterWhere(b => b.prop('children') === text)
 );

@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 
+import createGraphML from '../../utils/ExportData';
+import Dialog from '../../containers/Dialog';
 import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import { getCurrentSession, getNetwork } from '../../selectors/interface';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -87,6 +91,28 @@ class FinishSession extends Component {
 
           { this.exportSection }
 
+          <div className="finish-session-interface__section finish-session-interface__section--download">
+            <div>
+              <h2>Data Download</h2>
+              <p>Download network as a <code>.graphml</code> file</p>
+            </div>
+            <div>
+              <Button size="small" onClick={() => createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'))}>
+                Download
+              </Button>
+            </div>
+            <Dialog
+              name="EXPORT_DATA"
+              title="Export Error"
+              type="error"
+              hasCancelButton={false}
+              confirmLabel="Okay"
+              onConfirm={() => {}}
+            >
+              <p>There was a problem exporting your data.</p>
+            </Dialog>
+          </div>
+
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
             <Button onClick={this.props.endSession}>
               Finish
@@ -99,10 +125,12 @@ class FinishSession extends Component {
 }
 
 FinishSession.propTypes = {
+  currentNetwork: PropTypes.object.isRequired,
   currentSession: PropTypes.object.isRequired,
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   exportSession: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
 };
 
@@ -117,7 +145,8 @@ ExportSection.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentSession: state.sessions[state.session],
+    currentNetwork: getNetwork(state),
+    currentSession: getCurrentSession(state),
     sessionId: state.session,
     defaultServer: state.servers && state.servers.paired[0],
   };
@@ -130,6 +159,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(sessionActions.endSession());
       dispatch(push('/'));
     },
+    openModal: bindActionCreators(modalActions.openModal, dispatch),
   };
 }
 
