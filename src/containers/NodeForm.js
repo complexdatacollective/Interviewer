@@ -77,7 +77,7 @@ class NodeForm extends Component {
 
     const formProps = {
       ...this.props,
-      autoFocus: false,
+      autoFocus: true,
       controls: [
         (showAddAnotherToggle && <ToggleInput
           key="toggleInput"
@@ -91,7 +91,6 @@ class NodeForm extends Component {
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,
-      tooltip: this.isLarge() ? 'right' : 'bottom',
     };
 
     const formElement = this.isLarge() ?
