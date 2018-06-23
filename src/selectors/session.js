@@ -1,9 +1,12 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
 
+import uuidv4 from '../utils/uuid';
 import { initialState } from '../ducks/modules/session';
 
 const DefaultFinishStage = {
+  // `id` is used as component key; must be unique from user input
+  id: uuidv4(),
   type: 'FinishSession',
   label: 'Finish Interview',
 };
