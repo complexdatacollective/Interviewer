@@ -607,16 +607,16 @@
       "items": [
         { "type": "text", "content": "This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire." },
         { "type": "text", "content": "Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning." },
-        { "type": "text", "content": "To export this data and continue with some further analysis, please use the \"Download Data\" option in the settings menu." }
+        { "type": "text", "content": "To export this data and continue with some further analysis, please use the \"Download\" option on the final stage before finishing." }
       ]
     },
     {
       "id": "finalInstruction",
-      "label": "Finished",
+      "label": "Learn More",
       "type": "Information",
       "title": "Thank you!",
       "items": [
-        { "type": "text", "content": "To learn more about Network Canvas, please visit our website at <http://www.networkcanvas.com/>." }
+        { "type": "text", "content": "To learn more about Network Canvas, please visit our website at <https://networkcanvas.com>." }
       ]
     }
   ]
