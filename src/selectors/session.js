@@ -9,6 +9,7 @@ const DefaultFinishStage = {
 };
 
 const protocol = state => state.protocol;
+const withFinishStage = stages => (stages.length ? [...stages, DefaultFinishStage] : []);
 
 export const anySessionIsActive = state => state.session && state.session !== initialState;
 export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
@@ -22,7 +23,7 @@ export const getPromptForCurrentSession = createSelector(
 
 export const stages = createSelector(
   protocol,
-  protocol => [...protocol.stages, DefaultFinishStage],
+  protocol => withFinishStage(protocol.stages),
 );
 
 export const filteredStages = createSelector(
