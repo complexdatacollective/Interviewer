@@ -67,6 +67,12 @@ function createWindow() {
   });
 }
 
+function reopenMainWindow() {
+  if (mainWindow === null) {
+    createWindow();
+  }
+}
+
 function createMenu() {
   const template = [
     {
@@ -117,7 +123,20 @@ function createMenu() {
       ]
     }
   ];
-  if (!isMacOS()) {
+  if (isMacOS()) {
+    template.push({
+      role: 'window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'close' },
+        { type: 'separator' },
+        {
+          label: 'Main Window',
+          click: reopenMainWindow
+        }
+      ]
+    });
+  } else {
     template[0].label = 'File';
   }
 
@@ -142,10 +161,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+// On OS X it's common to re-create a window in the app when the
+// dock icon is clicked and there are no other windows open.
+app.on('activate', reopenMainWindow);
