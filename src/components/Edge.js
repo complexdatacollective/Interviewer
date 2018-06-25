@@ -7,15 +7,15 @@ const getEdgeColor = makeGetEdgeColor();
 
 export class Edge extends PureComponent {
   render() {
-    const { from, to, color } = this.props;
+    const { from, to, color, viewBoxScale } = this.props;
     if (!from || !to) { return null; }
 
     return (
       <line
-        x1={from.x}
-        y1={from.y}
-        x2={to.x}
-        y2={to.y}
+        x1={from.x * viewBoxScale}
+        y1={from.y * viewBoxScale}
+        x2={to.x * viewBoxScale}
+        y2={to.y * viewBoxScale}
         stroke={`var(--${color})`}
       />
     );
@@ -32,6 +32,7 @@ Edge.propTypes = {
   color: PropTypes.string,
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
+  viewBoxScale: PropTypes.number.isRequired,
   /* eslint-disable react/no-unused-prop-types */
   type: PropTypes.string.isRequired,
 };
