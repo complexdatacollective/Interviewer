@@ -151,8 +151,10 @@ class SettingsMenu extends Component {
 
   onQuit = () => {
     if (isCordova()) {
-      // cordova
-      navigator.app.exitApp();
+      // Android supports exiting
+      if (navigator.app && navigator.app.exitApp) {
+        navigator.app.exitApp();
+      }
     } else {
       // note: this will only close windows opened by the app, not a new tab the user opened
       window.close();
@@ -210,7 +212,9 @@ class SettingsMenu extends Component {
       items.push({ id: 'toggle-dev-tools', label: 'Toggle DevTools', onClick: this.toggleDevTools });
     }
 
-    items.push({ id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit });
+    if (isElectron() || (navigator.app && navigator.app.exitApp)) {
+      items.push({ id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit });
+    }
 
     items.map((item) => {
       const temp = item;
