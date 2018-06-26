@@ -47,7 +47,7 @@ class Form extends Component {
           const isFirst = autoFocus && index === 0;
           return (
             <Field
-              key={index}
+              key={`${field.name} ${index}`}
               {...field}
               autoFocus={isFirst}
               onBlur={() => { this.handleFieldBlur(); }}

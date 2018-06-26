@@ -92,10 +92,7 @@ class Field extends PureComponent {
   constructor(props) {
     super(props);
     this.component = (typeof props.component === 'string') ? makeRenderInput(props.component) : props.component;
-  }
-
-  componentWillMount() {
-    this.validate = getValidation(this.props.validation);
+    this.validate = getValidation(props.validation);
   }
 
   render() {
