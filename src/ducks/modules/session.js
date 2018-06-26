@@ -4,7 +4,6 @@ const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
 
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
-const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 
 const initialState = 'CREATE_NEW';
 
@@ -12,7 +11,6 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case SET_SESSION:
     case ADD_SESSION:
-    case LOAD_PROTOCOL:
       return action.sessionId;
     case END_SESSION:
       return initialState;
@@ -21,6 +19,9 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+/**
+ * setSession can be used to resume an interview (e.g. from GUI, or URL on load)
+ */
 function setSession(id, protocolType) {
   return {
     type: SET_SESSION,

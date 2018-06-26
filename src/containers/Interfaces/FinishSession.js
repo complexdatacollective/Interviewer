@@ -10,7 +10,9 @@ import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { getCurrentSession, getNetwork } from '../../selectors/interface';
+import { getNetwork } from '../../selectors/interface';
+import { getCurrentSession } from '../../selectors/session';
+import { getRemoteProtocolId } from '../../selectors/protocol';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -59,7 +61,7 @@ class FinishSession extends Component {
   }
 
   get currentSessionBelongsToProtocol() {
-    return !!this.props.currentSession.protocolIdentifier;
+    return !!this.props.remoteProtocolId;
   }
 
   get currentSessionisExportable() {
@@ -67,11 +69,10 @@ class FinishSession extends Component {
   }
 
   export(currentSession) {
-    const { sessionId } = this.props;
+    const { remoteProtocolId, sessionId } = this.props;
     const sessionData = currentSession.network;
-    const protocolIdentifier = currentSession.protocolIdentifier;
     if (this.serverApiUrl) {
-      this.props.exportSession(this.serverApiUrl, protocolIdentifier, sessionId, sessionData);
+      this.props.exportSession(this.serverApiUrl, remoteProtocolId, sessionId, sessionData);
     }
   }
 
@@ -131,11 +132,13 @@ FinishSession.propTypes = {
   endSession: PropTypes.func.isRequired,
   exportSession: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
+  remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
 };
 
 FinishSession.defaultProps = {
   defaultServer: null,
+  remoteProtocolId: null,
 };
 
 ExportSection.propTypes = {
@@ -147,6 +150,7 @@ function mapStateToProps(state) {
   return {
     currentNetwork: getNetwork(state),
     currentSession: getCurrentSession(state),
+    remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.session,
     defaultServer: state.servers && state.servers.paired[0],
   };

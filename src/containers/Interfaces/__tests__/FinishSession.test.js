@@ -15,8 +15,9 @@ describe('the Finish Interface', () => {
 
   beforeEach(() => {
     mockProps = {
-      currentSession: { protocolIdentifier: '1' },
+      currentSession: {},
       defaultServer: { apiUrl: 'x.x.x.x' },
+      remoteProtocolId: 'mockProtocolId',
     };
   });
 
@@ -37,7 +38,7 @@ describe('the Finish Interface', () => {
   });
 
   it('Skips the export button when session is not exportable', () => {
-    mockProps.currentSession.protocolIdentifier = null;
+    mockProps.remoteProtocolId = null;
     const elem = shallow(<FinishSession {...mockProps} />);
     expect(elem.find('Button').filterWhere(b => b.prop('children') === 'Export')).toHaveLength(0);
   });

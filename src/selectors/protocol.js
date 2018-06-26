@@ -1,6 +1,13 @@
 /* eslint-disable import/prefer-default-export */
+import crypto from 'crypto';
 
 import { createDeepEqualSelector } from './utils';
+
+/**
+ * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
+ * Server will need to know this ID when we export/import session data.
+ */
+const nameDigest = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
 export const protocolRegistry = createDeepEqualSelector(
   state => state.protocol && state.protocol.variableRegistry,
@@ -15,6 +22,11 @@ export const protocolForms = createDeepEqualSelector(
 export const getExternalData = createDeepEqualSelector(
   state => state.protocol.externalData,
   protocolData => protocolData,
+);
+
+export const getRemoteProtocolId = createDeepEqualSelector(
+  state => state.protocol && state.protocol.type !== 'factory' && state.protocol.name,
+  remoteName => nameDigest(remoteName) || null,
 );
 
 export const makeGetNodeColor = () => createDeepEqualSelector(

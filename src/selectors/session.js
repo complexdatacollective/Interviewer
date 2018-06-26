@@ -14,6 +14,7 @@ const DefaultFinishStage = {
 const protocol = state => state.protocol;
 const withFinishStage = stages => (stages.length ? [...stages, DefaultFinishStage] : []);
 
+export const getCurrentSession = state => state.sessions[state.session];
 export const anySessionIsActive = state => state.session && state.session !== initialState;
 export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
 export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;

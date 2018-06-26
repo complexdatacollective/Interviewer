@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
-import { Link, matchPath } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { CardList } from '../../components';
+import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const shortUid = uid => (uid || '').replace(/-.*/, '');
 
@@ -18,7 +19,7 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const pathInfo = (sessionPath) => {
   const info = { path: sessionPath };
-  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolId/:stageIndex' });
+  const matchedPath = matchSessionPath(sessionPath);
   if (matchedPath) {
     info.sessionId = matchedPath.params.sessionId;
     info.protocol = matchedPath.params.protocolId;
