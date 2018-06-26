@@ -32,22 +32,26 @@ export default function reducer(state = initialState, action = {}) {
       // TODO: Protocol should be validated before import; this check shouldn't be needed
       if (!action.protocol.name) { return state; }
 
-      const exists = action.isFactoryProtocol ||
-        state.some(protocol => protocol.name === action.protocol.name);
+      // Do not allow updates to factory protocols
+      if (action.isFactoryProtocol) { return state; }
 
-      // FIXME: should update description if that changes (for non-factory).
-      // FIXME: should update path if that changes (for non-factory).
-      if (exists) {
-        return state;
+      const newProtocol = {
+        name: action.protocol.name,
+        description: action.protocol.description,
+        path: action.path,
+      };
+
+      const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
+
+      if (existingIndex > -1) {
+        const updatedState = [...state];
+        updatedState.splice(existingIndex, 1, newProtocol);
+        return updatedState;
       }
 
       return [
         ...state,
-        {
-          name: action.protocol.name,
-          description: action.protocol.description,
-          path: action.path,
-        },
+        newProtocol,
       ];
     }
     default:
