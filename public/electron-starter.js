@@ -144,12 +144,21 @@ function createMenu() {
   Menu.setApplicationMenu(appMenu);
 }
 
+function loadDevToolsExtensions() {
+  const extensions = process.env.NC_DEVTOOLS_EXENSION_PATH;
+  if (process.env.NODE_ENV !== 'development' || !extensions) {
+    return;
+  }
+  extensions.split(';').forEach(filepath => BrowserWindow.addDevToolsExtension(filepath));
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createMenu();
   createWindow();
+  loadDevToolsExtensions();
 });
 
 // Quit when all windows are closed.
