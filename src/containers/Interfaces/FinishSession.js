@@ -84,7 +84,7 @@ class FinishSession extends Component {
           </h1>
           <div className="finish-session-interface__section finish-session-interface__section--instructions">
             <p>
-              You have reached all stages of this interview.
+              You have reached the end of the interview.
               If you’ve completed all input, you may finish the interview now.
             </p>
           </div>
