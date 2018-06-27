@@ -212,7 +212,7 @@ class SettingsMenu extends Component {
       items.push({ id: 'toggle-dev-tools', label: 'Toggle DevTools', onClick: this.toggleDevTools });
     }
 
-    if (isElectron() || (navigator.app && navigator.app.exitApp)) {
+    if (!isCordova() || (navigator.app && navigator.app.exitApp)) {
       items.push({ id: 'quit', label: 'Quit Network Canvas', icon: 'menu-quit', onClick: this.onQuit });
     }
 
