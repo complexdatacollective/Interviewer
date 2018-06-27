@@ -169,14 +169,16 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
 
   // generate keys for attributes
   if (!generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry)) {
-    // this would be where we hard fail if checking the registry fails for nodes
-    // openErrorDialog();
-    // return null;
+    // hard fail if checking the registry fails for nodes
+    // remove this to fall back to using "text" for unknowns
+    openErrorDialog();
+    return null;
   }
   if (!generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry)) {
-    // this would be where we hard fail if checking the registry fails for edges
-    // openErrorDialog();
-    // return null;
+    // hard fail if checking the registry fails for edge
+    // remove this to fall back to using "text" for unknowns
+    openErrorDialog();
+    return null;
   }
 
   // add nodes and edges to graph

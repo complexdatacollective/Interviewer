@@ -50,7 +50,7 @@
           "outsideOfSchool": {
             "label": "Have you contacted this person outside of school in the past 7 days?",
             "description": "If the participant has contacted the alter outside of school in the past 7 days.",
-            "type": "checkbox"
+            "type": "boolean"
           },
           "yearsKnown": {
             "label": "How many years have you known this person for?",
@@ -78,15 +78,95 @@
               "minLength": 1,
               "maxLength": 10
             }
+          },
+          "uid": {
+            "label": "Unique id",
+            "description": "Unique id",
+            "type": "text"
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
+          "age": {
+            "label": "Age",
+            "description": "Age",
+            "type": "number"
+          },
+          "createdIndex": {
+            "label": "Created Index",
+            "description": "Created Index",
+            "type": "number"
+          },
+          "itemType": {
+            "label": "Item type",
+            "description": "Item type",
+            "type": "text"
+          },
+          "stageId": {
+            "label": "Stage id",
+            "description": "Stage id",
+            "type": "text"
+          },
+          "promptId": {
+            "label": "Prompt id",
+            "description": "Prompt id",
+            "type": "text"
+          },
+          "closenessLayout": {
+            "label": "Closeness layout",
+            "description": "Closeness layout",
+            "type": "layout"
+          },
+          "school_important": {
+            "label": "School important",
+            "description": "School important",
+            "type": "boolean"
+          },
+          "lives_nearby": {
+            "label": "Lives nearby",
+            "description": "Lives nearby",
+            "type": "boolean"
+          },
+          "family_important": {
+            "label": "Family important",
+            "description": "Family important",
+            "type": "boolean"
+          },
+          "facebook_friend": {
+            "label": "Facebook friend",
+            "description": "Facebook friend",
+            "type": "boolean"
+          },
+          "community_important": {
+            "label": "Community important",
+            "description": "Community important",
+            "type": "boolean"
+          },
+          "online_important": {
+            "label": "Online important",
+            "description": "Online important",
+            "type": "boolean"
+          },
+          "other_important": {
+            "label": "Other important",
+            "description": "Other important",
+            "type": "boolean"
           }
         }
       }
     },
     "edge": {
-      "friend": {
-        "label": "Friend",
+      "friends": {
+        "label": "Friends",
         "color": "edge-color-seq-1",
         "variables": {
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
           "contactFreq": {
             "label": "contactFreq",
             "description": "Contact frequency.",
