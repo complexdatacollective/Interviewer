@@ -6,4 +6,8 @@
     align-items: center;
     justify-content: center;
   }
+
+  &.swiper-container {
+    width: 100%; // ensure Swiper plugin initializes layout correctly
+  }
 }
