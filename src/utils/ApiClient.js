@@ -92,7 +92,7 @@ class ApiClient {
    * @param  {string} pairingRequestId from the requestPairing() response
    * @param  {string} pairingRequestSalt from the requestPairing() response
    * @async
-   * @return {Object} device
+   * @return {Object} device, decorated with the generated secret
    * @return {string} device.id
    * @throws {Error}
    */
@@ -123,7 +123,9 @@ class ApiClient {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(UnexpectedResponseMessage);
         }
-        return decryptedData.device;
+        const device = decryptedData.device;
+        device.secret = secretHex;
+        return device;
       })
       .catch(handleError);
   }
