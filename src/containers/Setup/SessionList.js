@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
 import { matchSessionPath } from '../../utils/matchSessionPath';
 
@@ -51,7 +52,7 @@ class SessionList extends Component {
   }
 
   render() {
-    const { removeSession, sessions } = this.props;
+    const { protocolData, removeSession, sessions } = this.props;
 
     if (isEmpty(sessions)) {
       return emptyView;
@@ -76,16 +77,18 @@ class SessionList extends Component {
           nodes={sessionList}
           onToggleCard={this.onClickLoadSession}
           details={(sessionInfo) => {
-            const info = pathInfo(sessionInfo.value.path);
-            const exportedAt = sessionInfo.value.lastExportedAt;
+            const session = sessionInfo.value;
+            const info = pathInfo(session.path);
+            const exportedAt = session.lastExportedAt;
             const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
+            const proto = protocolData[session.protocolPath] || {};
             return [
-              { Protocol: shortUid(info.protocol) },
-              { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
+              { Protocol: proto.name },
+              { 'Last Changed': displayDate(session.updatedAt) },
               { Stage: oneBasedIndex(info.stageIndex) },
-              { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
-              { 'Number of Nodes': sessionInfo.value.network.nodes.length },
-              { 'Number of Edges': sessionInfo.value.network.edges.length },
+              { Prompt: oneBasedIndex(session.promptIndex) },
+              { 'Number of Nodes': session.network.nodes.length },
+              { 'Number of Edges': session.network.edges.length },
               { Exported: exportedDisplay },
             ];
           }}
@@ -98,6 +101,7 @@ class SessionList extends Component {
 SessionList.propTypes = {
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
+  protocolData: PropTypes.object.isRequired,
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   setSession: PropTypes.func.isRequired,
@@ -105,6 +109,7 @@ SessionList.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    protocolData: protocolsByPath(state),
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
   };

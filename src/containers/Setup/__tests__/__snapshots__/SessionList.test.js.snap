@@ -29,6 +29,7 @@ ShallowWrapper {
     "props": Object {
       "getSessionPath": [Function],
       "loadSession": [Function],
+      "protocolData": Object {},
       "removeSession": [Function],
       "sessions": Object {
         "a": Object {
@@ -97,6 +98,7 @@ ShallowWrapper {
       "props": Object {
         "getSessionPath": [Function],
         "loadSession": [Function],
+        "protocolData": Object {},
         "removeSession": [Function],
         "sessions": Object {
           "a": Object {
