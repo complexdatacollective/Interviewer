@@ -48,7 +48,7 @@ class ProtocolList extends Component {
         nextEl: '.swiper-button-next.swiper-button-white',
         prevEl: '.swiper-button-prev.swiper-button-white',
       },
-      loop: true,
+      loop: false,
       shouldSwiperUpdate: true,
       rebuildOnUpdate: true,
     };
