@@ -1,5 +1,6 @@
 import { actionTypes as errorActionTypes } from './protocol';
-import { actionTypes as pairingErrorTypes } from './servers';
+import { actionTypes as serverActionTypes } from './servers';
+import { actionTypes as sessionsActionTypes } from './sessions';
 
 const ERROR = 'ERRORS/ERROR';
 const ACKNOWLEDGE_ERROR = 'ERRORS/ACKNOWLEDGE_ERROR';
@@ -15,7 +16,8 @@ export default function reducer(state = initialState, action = {}) {
     case errorActionTypes.DOWNLOAD_PROTOCOL_FAILED:
     case errorActionTypes.IMPORT_PROTOCOL_FAILED:
     case errorActionTypes.LOAD_PROTOCOL_FAILED:
-    case pairingErrorTypes.SERVER_PAIRING_FAILED:
+    case serverActionTypes.SERVER_PAIRING_FAILED:
+    case sessionsActionTypes.EXPORT_SESSION_FAILED:
       // eslint-disable-next-line no-console
       console.error(action.error);
       return {

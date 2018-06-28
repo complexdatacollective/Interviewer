@@ -1,9 +1,18 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
 
+import uuidv4 from '../utils/uuid';
 import { initialState } from '../ducks/modules/session';
 
+const DefaultFinishStage = {
+  // `id` is used as component key; must be unique from user input
+  id: uuidv4(),
+  type: 'FinishSession',
+  label: 'Finish Interview',
+};
+
 const protocol = state => state.protocol;
+const withFinishStage = stages => (stages.length ? [...stages, DefaultFinishStage] : []);
 
 export const anySessionIsActive = state => state.session && state.session !== initialState;
 export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
@@ -17,7 +26,7 @@ export const getPromptForCurrentSession = createSelector(
 
 export const stages = createSelector(
   protocol,
-  protocol => protocol.stages,
+  protocol => withFinishStage(protocol.stages),
 );
 
 export const filteredStages = createSelector(

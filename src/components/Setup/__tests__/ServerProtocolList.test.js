@@ -13,7 +13,7 @@ describe('<ServerProtocolList>', () => {
     downloadHandler = jest.fn();
     mockProtocols = [{ name: 'my-mock-protocol', version: '1.0.1' }];
     component = shallow((
-      <ServerProtocolList download={downloadHandler} protocols={mockProtocols} />
+      <ServerProtocolList selectProtocol={downloadHandler} protocols={mockProtocols} />
     ));
   });
 

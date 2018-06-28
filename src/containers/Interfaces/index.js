@@ -9,6 +9,7 @@ import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
 import Information from './Information';
+import FinishSession from './FinishSession';
 
 const interfaces = {
   NameGenerator,
@@ -18,6 +19,7 @@ const interfaces = {
   Quiz,
   Information,
   OrdinalBin,
+  FinishSession,
 };
 
 const getInterface = (interfaceConfig) => {

@@ -10,7 +10,7 @@ const EmptyProtocolList = (
   </div>
 );
 
-const ServerProtocolList = ({ protocols, download }) => {
+const ServerProtocolList = ({ protocols, selectProtocol }) => {
   let leftBorderClass = 'protocol-card-list__left-border';
   if (!protocols.length) {
     return EmptyProtocolList;
@@ -26,11 +26,11 @@ const ServerProtocolList = ({ protocols, download }) => {
         <div key="left-border" className={leftBorderClass} />
         {
           protocols.map(protocol => (
-            <div className="protocol-card-list__bordered-card" key={protocol.downloadUrl}>
+            <div className="protocol-card-list__bordered-card" key={protocol.id}>
               <div className="protocol-card-list__card-border" />
               <ProtocolCard
                 className="protocol-card-list__card"
-                selectProtocol={p => download(p.downloadUrl)}
+                selectProtocol={p => selectProtocol(p)}
                 protocol={protocol}
               />
             </div>
@@ -42,7 +42,7 @@ const ServerProtocolList = ({ protocols, download }) => {
 };
 
 ServerProtocolList.propTypes = {
-  download: PropTypes.func.isRequired,
+  selectProtocol: PropTypes.func.isRequired,
   protocols: PropTypes.array.isRequired,
 };
 

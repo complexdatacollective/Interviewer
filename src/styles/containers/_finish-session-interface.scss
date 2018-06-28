@@ -1,0 +1,31 @@
+.finish-session-interface {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+
+  &__frame {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__section {
+    margin-top: spacing(medium);
+    padding-bottom: spacing(small);
+    padding-top: spacing(small);
+
+    &--export,
+    &--download {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &--buttons {
+      text-align: center;
+    }
+  }
+}

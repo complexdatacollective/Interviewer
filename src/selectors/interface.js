@@ -21,13 +21,12 @@ const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
 
 // State selectors
+export const getCurrentSession = state => state.sessions[state.session];
 
 // MemoedSelectors
-
 export const getNetwork = createDeepEqualSelector(
-  state => (state.sessions[state.session] && state.sessions[state.session].network) ||
-    { nodes: [], edges: [] },
-  network => network,
+  getCurrentSession,
+  session => (session && session.network) || { nodes: [], edges: [] },
 );
 
 export const networkNodes = createDeepEqualSelector(
