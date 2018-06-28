@@ -81,9 +81,10 @@ class SessionList extends Component {
             const info = pathInfo(session.path);
             const exportedAt = session.lastExportedAt;
             const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
-            const proto = protocolData[session.protocolPath] || {};
+            const protocol = protocolData[session.protocolPath] || {};
+            const protocolLabel = protocol.name || '[version out of date]';
             return [
-              { Protocol: proto.name },
+              { Protocol: protocolLabel },
               { 'Last Changed': displayDate(session.updatedAt) },
               { Stage: oneBasedIndex(info.stageIndex) },
               { Prompt: oneBasedIndex(session.promptIndex) },
