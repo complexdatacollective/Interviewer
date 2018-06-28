@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Edge } from '../../components';
 import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
 
+const viewBoxScale = 100;
+
 export class EdgeLayout extends PureComponent {
   static propTypes = {
     displayEdges: PropTypes.array,
@@ -13,13 +15,15 @@ export class EdgeLayout extends PureComponent {
     displayEdges: [],
   };
 
-  renderEdge = ({ key, from, to, type }) => (<Edge key={key} from={from} to={to} type={type} />);
+  renderEdge = ({ key, from, to, type }) => (
+    <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />
+  );
 
   render() {
     const { displayEdges } = this.props;
     return (
       <div className="edge-layout">
-        <svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <svg viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
           { displayEdges.map(this.renderEdge) }
         </svg>
       </div>
