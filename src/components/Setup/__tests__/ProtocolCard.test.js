@@ -11,7 +11,7 @@ describe('<ProtocolCard>', () => {
 
   beforeEach(() => {
     selectHandler = jest.fn();
-    mockProtocol = { name: 'my-mock-protocol', version: '1.0.1' };
+    mockProtocol = { name: 'my-mock-protocol', description: '1.0.1' };
     component = shallow(<ProtocolCard selectProtocol={selectHandler} protocol={mockProtocol} />);
   });
 
@@ -19,9 +19,9 @@ describe('<ProtocolCard>', () => {
     expect(component.find('Icon')).toHaveLength(1);
   });
 
-  it('renders name & version', () => {
+  it('renders name & description', () => {
     expect(component.text()).toMatch(mockProtocol.name);
-    expect(component.text()).toMatch(mockProtocol.version);
+    expect(component.text()).toMatch(mockProtocol.description);
   });
 
   it('downloads on click', () => {

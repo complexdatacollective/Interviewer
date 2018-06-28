@@ -1,5 +1,3 @@
-import { some } from 'lodash';
-
 import { actionTypes as ProtocolActionTypes } from './protocol';
 
 const LOAD_PROTOCOL = ProtocolActionTypes.LOAD_PROTOCOL;
@@ -25,14 +23,25 @@ const initialState = [
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case LOAD_PROTOCOL:
-      if (some(state, { path: action.path, type: action.type })) {
+    case LOAD_PROTOCOL: {
+      // Downloaded protocols always have unique paths, so check remote ID as well.
+      const matchesCurrentAction = protocol => protocol.type === action.protocolType &&
+        (protocol.path === action.path ||
+          (protocol.remoteId && protocol.remoteId === action.remoteId));
+
+      if (state.some(matchesCurrentAction)) {
         return state;
       }
       return [
         ...state,
-        { name: action.path, path: action.path, type: action.type },
+        {
+          name: action.path,
+          path: action.path,
+          type: action.protocolType,
+          remoteId: action.remoteId,
+        },
       ];
+    }
     case ADD_PROTOCOL:
       return [
         ...state,

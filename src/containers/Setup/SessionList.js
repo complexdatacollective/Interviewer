@@ -18,10 +18,10 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const pathInfo = (sessionPath) => {
   const info = { path: sessionPath };
-  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolPath/:stageIndex' });
+  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolId/:stageIndex' });
   if (matchedPath) {
     info.sessionId = matchedPath.params.sessionId;
-    info.protocol = matchedPath.params.protocolPath;
+    info.protocol = matchedPath.params.protocolId;
     info.protocolType = matchedPath.params.protocolType;
     info.stageIndex = matchedPath.params.stageIndex;
   }
@@ -76,13 +76,16 @@ class SessionList extends Component {
           onToggleCard={this.onClickLoadSession}
           details={(sessionInfo) => {
             const info = pathInfo(sessionInfo.value.path);
+            const exportedAt = sessionInfo.value.lastExportedAt;
+            const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
             return [
-              { Protocol: info.protocol },
+              { Protocol: shortUid(info.protocol) },
               { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
               { Stage: oneBasedIndex(info.stageIndex) },
               { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
               { 'Number of Nodes': sessionInfo.value.network.nodes.length },
               { 'Number of Edges': sessionInfo.value.network.edges.length },
+              { Exported: exportedDisplay },
             ];
           }}
         />
@@ -97,9 +100,6 @@ SessionList.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   setSession: PropTypes.func.isRequired,
-};
-
-SessionList.defaultProps = {
 };
 
 function mapStateToProps(state) {

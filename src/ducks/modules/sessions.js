@@ -1,13 +1,19 @@
 import { hasIn, isArray, omit } from 'lodash';
-import uuidv4 from '../../utils/uuid';
+import { Observable } from 'rxjs';
+import { combineEpics } from 'redux-observable';
 
+import uuidv4 from '../../utils/uuid';
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import ApiClient from '../../utils/ApiClient';
 
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
+const EXPORT_SESSION = 'EXPORT_SESSION';
+const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
+const EXPORT_SESSION_SUCCEEDED = 'EXPORT_SESSION_SUCCEEDED';
 
 const initialState = {};
 
@@ -44,9 +50,11 @@ export default function reducer(state = initialState, action = {}) {
           path: `/session/${action.sessionId}`,
           promptIndex: 0,
           network: network(state.network, action),
+          protocolIdentifier: action.remoteId,
         }),
       };
     }
+    // ADD_SESSION is needed for factory protocols (where LOAD_PROTOCOL is never created)
     case ADD_SESSION:
       return {
         ...state,
@@ -75,6 +83,14 @@ export default function reducer(state = initialState, action = {}) {
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);
+    case EXPORT_SESSION_SUCCEEDED:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          lastExportedAt: Date.now(),
+        }),
+      };
     default:
       return state;
   }
@@ -200,6 +216,37 @@ function removeSession(id) {
   };
 }
 
+const sessionExportSucceeded = id => ({
+  type: EXPORT_SESSION_SUCCEEDED,
+  sessionId: id,
+});
+
+const sessionExportFailed = error => ({
+  type: EXPORT_SESSION_FAILED,
+  error,
+});
+
+const exportSession = (apiUrl, protocolIdentifier, sessionUuid, sessionData) => ({
+  type: EXPORT_SESSION,
+  apiUrl,
+  protocolIdentifier,
+  sessionUuid,
+  sessionData,
+});
+
+const sessionExportPromise = ({ apiUrl, protocolIdentifier, sessionUuid, sessionData }) =>
+  new ApiClient(apiUrl).exportSession(protocolIdentifier, sessionUuid, sessionData);
+
+const exportSessionEpic = action$ => (
+  action$.ofType(EXPORT_SESSION)
+    .exhaustMap(action =>
+      Observable
+        .fromPromise(sessionExportPromise(action))
+        .mapTo(sessionExportSucceeded(action.sessionUuid))
+        .catch(error => Observable.of(sessionExportFailed(error))),
+    )
+);
+
 const actionCreators = {
   addNodes,
   updateNode,
@@ -212,6 +259,7 @@ const actionCreators = {
   updateSession,
   updatePrompt,
   removeSession,
+  exportSession,
 };
 
 const actionTypes = {
@@ -228,9 +276,16 @@ const actionTypes = {
   UPDATE_SESSION,
   UPDATE_PROMPT,
   REMOVE_SESSION,
+  EXPORT_SESSION,
+  EXPORT_SESSION_FAILED,
 };
+
+const epics = combineEpics(
+  exportSessionEpic,
+);
 
 export {
   actionCreators,
   actionTypes,
+  epics,
 };
