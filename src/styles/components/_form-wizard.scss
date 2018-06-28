@@ -62,9 +62,7 @@
     align-items: flex-start;
 
     div {
-      &:not([class*='-hidden']) {
-        flex-basis: 50%;
-      }
+      flex-basis: 50%;
     }
   }
 }

@@ -153,7 +153,7 @@
           },
           "ordinalVariable": {
             "label": "Ordinal Variable",
-            "description": "Huam readable description",
+            "description": "Human readable description",
             "type": "ordinal",
             "options": [
               {
@@ -176,7 +176,10 @@
                 "label": "Missing Value",
                 "value": -1
               }
-            ]
+            ],
+            "validation": {
+              "required": true
+            }
           },
           "categoricalVariable": {
             "label": "Categorical Variable",
@@ -203,7 +206,10 @@
                 "label": "Value E",
                 "value": "Value E"
               }
-            ]
+            ],
+            "validation": {
+              "minSelected": 1
+            }
           },
           "categoricalVariable2": {
             "label": "Categorical Variable2",
@@ -250,7 +256,11 @@
                 "label": "Band",
                 "value": "Value J"
               }
-            ]
+            ],
+            "validation": {
+              "minSelected": 1,
+              "maxSelected": 4
+            }
           }
         }
       },
@@ -898,7 +908,7 @@
           "label": "Which of these other things do you like?"
         },
         {
-          "variable": "booleanVariable2",
+          "variable": "booleanVariable",
           "component": "Toggle",
           "label": "Is the switch below not turned on?"
         }
