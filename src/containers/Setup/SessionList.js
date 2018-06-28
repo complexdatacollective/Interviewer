@@ -54,13 +54,15 @@ class SessionList extends Component {
   render() {
     const { protocolData, removeSession, sessions } = this.props;
 
-    if (isEmpty(sessions)) {
+    // Display most recent first, and filter out any session that doesn't have a protocol
+    const sessionList = Object.keys(sessions)
+      .map(key => ({ uid: key, value: sessions[key] }))
+      .filter(s => s.value.protocolPath);
+    sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
+
+    if (isEmpty(sessionList)) {
       return emptyView;
     }
-
-    // Display most recent first
-    const sessionList = Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }));
-    sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
     return (
       <React.Fragment>

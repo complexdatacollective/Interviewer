@@ -46,6 +46,7 @@ ShallowWrapper {
           },
           "path": "/path/to/a",
           "promptIndex": 2,
+          "protocolPath": "p",
           "updatedAt": 1528213062793,
         },
         "b": Object {
@@ -56,6 +57,7 @@ ShallowWrapper {
           },
           "path": "/path/to/b",
           "promptIndex": 1,
+          "protocolPath": "p",
           "updatedAt": 1528218451710,
         },
       },
@@ -115,6 +117,7 @@ ShallowWrapper {
             },
             "path": "/path/to/a",
             "promptIndex": 2,
+            "protocolPath": "p",
             "updatedAt": 1528213062793,
           },
           "b": Object {
@@ -125,6 +128,7 @@ ShallowWrapper {
             },
             "path": "/path/to/b",
             "promptIndex": 1,
+            "protocolPath": "p",
             "updatedAt": 1528218451710,
           },
         },
