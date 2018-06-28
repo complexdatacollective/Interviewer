@@ -6,7 +6,7 @@ const ApiErrorStatus = 'error';
 
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
-const NoResponseMessage = 'Unexpected Response';
+const NoResponseMessage = 'Server could not be reached';
 
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {

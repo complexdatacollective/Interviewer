@@ -10,11 +10,9 @@ import { actionCreators as mockActions } from '../ducks/modules/mock';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { getNetwork } from '../selectors/interface';
 import { anySessionIsActive, settingsMenuIsOpen } from '../selectors/session';
 import { isCordova, isElectron } from '../utils/Environment';
 import { Menu } from '../components';
-import createGraphML from '../utils/ExportData';
 import { Dialog } from '../containers/';
 import Updater from '../utils/Updater';
 import getVersion from '../utils/getVersion';
@@ -145,10 +143,6 @@ class SettingsMenu extends Component {
     });
   }
 
-  onExport = () => {
-    createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'));
-  };
-
   onQuit = () => {
     if (isCordova()) {
       // Android supports exiting
@@ -190,7 +184,6 @@ class SettingsMenu extends Component {
 
     const items = [
       { id: 'main-menu', label: 'Return to Start', icon: 'menu-quit', onClick: this.props.endSession },
-      { id: 'export', label: 'Download Data', icon: 'menu-download-data', onClick: this.onExport },
       { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
       ...customItems,
     ];
@@ -238,16 +231,6 @@ class SettingsMenu extends Component {
       >
         <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
         <Dialog
-          name="EXPORT_DATA"
-          title="Export Error"
-          type="error"
-          hasCancelButton={false}
-          confirmLabel="Okay"
-          onConfirm={() => {}}
-        >
-          <p>There was a problem exporting your data.</p>
-        </Dialog>
-        <Dialog
           name="CONFIRM_DELETE_DATA"
           title="Delete ALL data?"
           type="warning"
@@ -277,7 +260,6 @@ class SettingsMenu extends Component {
 
 SettingsMenu.propTypes = {
   addMockNodes: PropTypes.func.isRequired,
-  currentNetwork: PropTypes.object.isRequired,
   customItems: PropTypes.array.isRequired,
   endSession: PropTypes.func.isRequired,
   hideButton: PropTypes.bool,
@@ -298,7 +280,6 @@ function mapStateToProps(state) {
   return {
     customItems: state.menu.customMenuItems,
     isOpen: settingsMenuIsOpen(state),
-    currentNetwork: getNetwork(state),
     sessionExists: anySessionIsActive(state),
   };
 }

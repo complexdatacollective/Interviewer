@@ -18,10 +18,10 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const pathInfo = (sessionPath) => {
   const info = { path: sessionPath };
-  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolPath/:stageIndex' });
+  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolId/:stageIndex' });
   if (matchedPath) {
     info.sessionId = matchedPath.params.sessionId;
-    info.protocol = matchedPath.params.protocolPath;
+    info.protocol = matchedPath.params.protocolId;
     info.protocolType = matchedPath.params.protocolType;
     info.stageIndex = matchedPath.params.stageIndex;
   }
@@ -50,7 +50,7 @@ class SessionList extends Component {
   }
 
   render() {
-    const { defaultServer, exportSession, removeSession, sessions } = this.props;
+    const { removeSession, sessions } = this.props;
 
     if (isEmpty(sessions)) {
       return emptyView;
@@ -66,21 +66,6 @@ class SessionList extends Component {
           compact
           multiselect={false}
           onDeleteCard={(data) => {
-            // Example session export:
-            // - For now, export to the first (or only) paired server
-            // - Session must have been created with a protocolIdentifier
-            // Otherwise, prompt to delete.
-            const serverApiUrl = defaultServer && defaultServer.apiUrl;
-            const sessionData = sessions[data.uid].network;
-            const protocolIdentifier = sessions[data.uid].protocolIdentifier;
-            if (serverApiUrl && protocolIdentifier) {
-              // eslint-disable-next-line no-alert
-              if (confirm('Export & delete this interview?')) {
-                exportSession(serverApiUrl, protocolIdentifier, data.uid, sessionData);
-              }
-              return;
-            }
-
             // eslint-disable-next-line no-alert
             if (confirm('Delete this interview?')) {
               removeSession(data.uid);
@@ -91,13 +76,16 @@ class SessionList extends Component {
           onToggleCard={this.onClickLoadSession}
           details={(sessionInfo) => {
             const info = pathInfo(sessionInfo.value.path);
+            const exportedAt = sessionInfo.value.lastExportedAt;
+            const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
             return [
-              { Protocol: info.protocol },
+              { Protocol: shortUid(info.protocol) },
               { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
               { Stage: oneBasedIndex(info.stageIndex) },
               { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
               { 'Number of Nodes': sessionInfo.value.network.nodes.length },
               { 'Number of Edges': sessionInfo.value.network.edges.length },
+              { Exported: exportedDisplay },
             ];
           }}
         />
@@ -107,8 +95,6 @@ class SessionList extends Component {
 }
 
 SessionList.propTypes = {
-  defaultServer: PropTypes.shape({ apiUrl: PropTypes.string.isRequired }),
-  exportSession: PropTypes.func.isRequired,
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
   removeSession: PropTypes.func.isRequired,
@@ -116,15 +102,10 @@ SessionList.propTypes = {
   setSession: PropTypes.func.isRequired,
 };
 
-SessionList.defaultProps = {
-  defaultServer: null,
-};
-
 function mapStateToProps(state) {
   return {
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
-    defaultServer: state.servers && state.servers.paired[0],
   };
 }
 
@@ -133,7 +114,6 @@ function mapDispatchToProps(dispatch) {
     loadSession: path => dispatch(push(path)),
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
-    exportSession: bindActionCreators(sessionsActions.exportSession, dispatch),
   };
 }
 

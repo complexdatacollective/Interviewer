@@ -2,6 +2,10 @@
 
 import { getNextIndex, isStageSkipped } from '../skip-logic';
 
+import { stages as getStages } from '../session';
+
+jest.mock('../session');
+
 const mockState = {
   session: 'a',
   sessions: {
@@ -172,6 +176,10 @@ const mockState = {
 };
 
 describe('skip-logic selector', () => {
+  beforeAll(() => {
+    getStages.mockImplementation(() => mockState.protocol.stages);
+  });
+
   describe('getNextIndex()', () => {
     it('returns the index if valid', () => {
       const index = getNextIndex(1)(mockState);
