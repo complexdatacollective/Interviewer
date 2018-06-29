@@ -1,12 +1,12 @@
-import { hasIn, isArray, omit } from 'lodash';
+import { isArray, omit } from 'lodash';
 import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
+import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
-const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
@@ -40,21 +40,6 @@ export default function reducer(state = initialState, action = {}) {
           network: network(state[action.sessionId].network, action),
         }),
       };
-    case LOAD_PROTOCOL: {
-      if (hasIn(state, action.sessionId)) {
-        return state;
-      }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          path: `/session/${action.sessionId}`,
-          promptIndex: 0,
-          network: network(state.network, action),
-          protocolIdentifier: action.remoteId,
-        }),
-      };
-    }
-    // ADD_SESSION is needed for factory protocols (where LOAD_PROTOCOL is never created)
     case ADD_SESSION:
       return {
         ...state,
@@ -70,6 +55,7 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           path: action.path,
+          protocolPath: protocolIdFromSessionPath(action.path),
           promptIndex: 0,
         }),
       };
@@ -191,6 +177,7 @@ function addSession() {
   };
 }
 
+// This specifically updates the path/URL
 function updateSession(id, path) {
   return {
     type: UPDATE_SESSION,
@@ -226,16 +213,17 @@ const sessionExportFailed = error => ({
   error,
 });
 
-const exportSession = (apiUrl, protocolIdentifier, sessionUuid, sessionData) => ({
+const exportSession = (apiUrl, remoteProtocolId, sessionUuid, sessionData) => ({
   type: EXPORT_SESSION,
   apiUrl,
-  protocolIdentifier,
+  remoteProtocolId,
   sessionUuid,
   sessionData,
 });
 
-const sessionExportPromise = ({ apiUrl, protocolIdentifier, sessionUuid, sessionData }) =>
-  new ApiClient(apiUrl).exportSession(protocolIdentifier, sessionUuid, sessionData);
+const sessionExportPromise = ({ apiUrl, remoteProtocolId, sessionUuid, sessionData }) => (
+  new ApiClient(apiUrl).exportSession(remoteProtocolId, sessionUuid, sessionData)
+);
 
 const exportSessionEpic = action$ => (
   action$.ofType(EXPORT_SESSION)

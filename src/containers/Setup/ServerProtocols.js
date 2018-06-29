@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { ServerProtocolList, ServerSetup } from '../../components/Setup';
 
 class ServerProtocols extends Component {
@@ -38,7 +39,7 @@ class ServerProtocols extends Component {
     }
 
     const { protocols } = this.state;
-    const { server, downloadProtocol } = this.props;
+    const { addSession, server, downloadProtocol } = this.props;
 
     return (
       <ServerSetup server={server}>
@@ -46,7 +47,10 @@ class ServerProtocols extends Component {
           protocols &&
           <ServerProtocolList
             protocols={protocols}
-            selectProtocol={p => downloadProtocol(p.downloadUrl, p.id)}
+            selectProtocol={(p) => {
+              addSession();
+              downloadProtocol(p.downloadUrl);
+            }}
           />
         }
       </ServerSetup>
@@ -60,6 +64,7 @@ ServerProtocols.defaultProps = {
 };
 
 ServerProtocols.propTypes = {
+  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
@@ -83,6 +88,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     downloadProtocolFailed: bindActionCreators(protocolActions.downloadProtocolFailed, dispatch),
   };

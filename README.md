@@ -132,6 +132,17 @@ Troubleshooting:
 - If a dev cordova build is interrupted, you may find that `config.xml` has changes, and that there's a `config.xml.original` file (ignored by git). You may restore the contents of `config.xml` from git or the original, and delete the '.original' file.
 - The webpack dev server writes a `.devserver` file on startup, which is removed when it exits. The file is used by the cordova dev build; it should contain the LAN URL of the running dev server.
 
+### Dev tools
+
+Electron supports [extensions to Chrome devtools](https://electronjs.org/docs/tutorial/devtools-extension) such as Redux DevTools.
+
+In the development environment, these will be loaded if you provide one or more paths to your extensions (semicolon-separated) in the `NC_DEVTOOLS_EXENSION_PATH` environment variable. The electron docs describe how to find the filepath for an extension once installed.
+
+Example: enabling Redux Devtools on macOS:
+```bash
+NC_DEVTOOLS_EXENSION_PATH=~/Library/Application\ Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.15.2_0 npm run electron:dev
+```
+
 ## Application Structure
 
 ```

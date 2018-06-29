@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { findKey, filter, has, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
+import { getCurrentSession } from './session';
 
 // Selectors that are generic between interfaces
 
@@ -21,7 +22,6 @@ const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
 
 // State selectors
-export const getCurrentSession = state => state.sessions[state.session];
 
 // MemoedSelectors
 export const getNetwork = createDeepEqualSelector(
