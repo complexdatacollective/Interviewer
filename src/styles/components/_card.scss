@@ -1,11 +1,12 @@
 .card {
   align-items: center;
-  border: 2px solid palette('text-dark');
-  border-radius: .5rem;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  background: var(--light-background);
   cursor: pointer;
   display: flex;
   margin: 1rem;
-  padding: 1rem;
+  padding: 2rem;
 
   &--multiselect {
     cursor: default;
@@ -13,11 +14,11 @@
 
   &__indicator {
     box-sizing: content-box;
-    fill: palette('text-dark');
-    height: 40px;
+    fill: palette('selected');
+    height: 0;
+    width: 0;
     margin-right: 10px;
-    width: 40px;
-    transition: fill var(--animation-duration-fast) var(--animation-easing);
+    transition: all var(--animation-duration-fast) var(--animation-easing);
 
     .tick {
       fill: transparent;
