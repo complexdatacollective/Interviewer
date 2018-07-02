@@ -13,12 +13,14 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
   */
 class ProtocolList extends Component {
   onClickNewProtocol = (protocol) => {
-    if (!(protocol.isFactoryProtocol || protocol.path)) {
+    const isFactoryProtocol = protocol.isFactoryProtocol || protocol.type === 'factory'; // `.type` used in alpha.4
+
+    if (!(isFactoryProtocol || protocol.path)) {
       return;
     }
 
     this.props.addSession();
-    if (protocol.isFactoryProtocol) {
+    if (isFactoryProtocol) {
       this.props.loadFactoryProtocol(protocol.path);
     } else if (protocol.path) {
       this.props.loadProtocol(protocol.path);
