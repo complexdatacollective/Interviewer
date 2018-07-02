@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Field, { makeRenderInput } from '../Field';
+import Field, { getInputComponent  } from '../Field';
 
 const attributes = {
   label: 'Name',
@@ -17,9 +17,9 @@ const validation = {
 
 const reduxFormFieldProperties = { input: { name: 'foo', value: '' }, meta: { invalid: false } };
 
-describe('makeRenderInput()', () => {
+describe('getInputComponent()', () => {
   it('should return renderable component', () => {
-    const Input = makeRenderInput('Alphanumeric');
+    const Input = getInputComponent('Alphanumeric');
 
     const subject = shallow((
       <Input {...reduxFormFieldProperties} />
