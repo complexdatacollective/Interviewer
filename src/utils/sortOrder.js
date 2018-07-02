@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash';
+import { isArray, orderBy } from 'lodash';
 
 /* Maps a `createdIndex` index value to all items in an array */
 const withCreatedIndex = items => items.map((item, createdIndex) => ({ ...item, createdIndex }));
@@ -14,6 +14,10 @@ const fifo = ({ createdIndex }) => createdIndex;
  * TODO: Use variable registry to respect variable type?
  */
 const sortOrder = (sortConfiguration = [], variableRegistry = {}) => { // eslint-disable-line
+  if (!isArray(sortConfiguration)) {
+    return items => items; // ignore sort from old protocol format
+  }
+
   const iteratees = sortConfiguration.map(rule => rule.property)
     .map(property => (property === '*' ? fifo : property));
 
