@@ -12,7 +12,7 @@ const mockProps = {
   loadProtocol: jest.fn(),
 };
 
-const mockProtocols = [{ name: 'Sample', path: 'sample.netcanvas', type: 'factory' }];
+const mockProtocols = [{ name: 'Sample', path: 'sample.netcanvas', isFactoryProtocol: true }];
 
 const mockStore = () =>
   createStore(() => ({
@@ -35,16 +35,16 @@ describe('<ProtocolList />', () => {
       mockProps.loadProtocol.mockClear();
     });
 
-    it('loads a remote protocol', () => {
+    it('loads a factory protocol', () => {
       wrapper.instance().onClickNewProtocol(mockProtocols[0]);
       expect(mockProps.loadFactoryProtocol).toHaveBeenCalled();
     });
 
     it('loads a remote protocol', () => {
-      const protocol = { ...mockProtocols[0], type: 'download', remoteId: '1' };
+      const protocol = { ...mockProtocols[0], isFactoryProtocol: undefined };
       wrapper.instance().onClickNewProtocol(protocol);
       expect(mockProps.loadFactoryProtocol).not.toHaveBeenCalled();
-      expect(mockProps.loadProtocol).toHaveBeenCalledWith(protocol.path, null, protocol.remoteId);
+      expect(mockProps.loadProtocol).toHaveBeenCalledWith(protocol.path);
     });
   });
 });
