@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
 
@@ -57,10 +57,28 @@ const getTypeForKey = (data, key) => (
     return 'string';
   }, ''));
 
-const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry) => {
-// generate keys for attributes
+const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry,
+  layoutVariable) => {
+  // generate keys for attributes
   let valid = true;
   const done = [];
+
+  // add keys for gephi positions
+  if (layoutVariable) {
+    const xElement = document.createElementNS(graphML.namespaceURI, 'key');
+    xElement.setAttribute('id', 'x');
+    xElement.setAttribute('attr.name', 'x');
+    xElement.setAttribute('attr.type', 'double');
+    xElement.setAttribute('for', type);
+    graphML.insertBefore(xElement, graph);
+    const yElement = document.createElementNS(graphML.namespaceURI, 'key');
+    yElement.setAttribute('id', 'y');
+    yElement.setAttribute('attr.name', 'y');
+    yElement.setAttribute('attr.type', 'double');
+    yElement.setAttribute('for', type);
+    graphML.insertBefore(yElement, graph);
+  }
+
   elements.forEach((element) => {
     Object.keys(element).forEach((key) => {
       if (done.indexOf(key) === -1 && !excludeList.includes(key)) {
@@ -124,7 +142,8 @@ const getDataElement = (uri, key, text) => {
   return data;
 };
 
-const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, extra: false) => {
+const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, layoutVariable,
+  extra: false) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
     if (dataElement.id) {
@@ -148,6 +167,12 @@ const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, 
         }
       }
     });
+
+    // add positions for gephi
+    if (layoutVariable && dataElement[layoutVariable]) {
+      domElement.appendChild(getDataElement(uri, 'x', dataElement[layoutVariable].x * window.innerWidth));
+      domElement.appendChild(getDataElement(uri, 'y', (1.0 - dataElement[layoutVariable].y) * window.innerHeight));
+    }
   });
 };
 
@@ -167,8 +192,14 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   const graph = xml.getElementsByTagName('graph')[0];
   const graphML = xml.getElementsByTagName('graphml')[0];
 
+  // find the first variable of type layout
+  let layoutVariable;
+  forInRight(variableRegistry.node, (value) => {
+    layoutVariable = findKey(value.variables, { type: 'layout' });
+  });
+
   // generate keys for attributes
-  if (!generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry)) {
+  if (!generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry, layoutVariable)) {
     // hard fail if checking the registry fails for nodes
     // remove this to fall back to using "text" for unknowns
     openErrorDialog();
@@ -182,8 +213,8 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id'], variableRegistry);
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry, true);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', ['id'], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
