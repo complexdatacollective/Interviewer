@@ -167,7 +167,7 @@ describe('interface selector', () => {
       expect(selected(mockState, mockProps)).toEqual([
         closeFriendNode,
       ]);
-      expect(selected(mockState, emptyProps).length).toEqual(3);
+      expect(selected(mockState, emptyProps).length).toEqual(0);
     });
 
     it('makeNetworkNodesForOtherPrompts()', () => {
