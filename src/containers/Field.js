@@ -26,7 +26,7 @@ const fieldTypes = {
   RadioGroup,
   Text,
   Toggle,
-  hidden: (...props) => (<input type="hidden" {...props} />),
+  hidden: props => <input type="hidden" {...props} />,
 };
 
 export const getInputComponent = componentType =>
