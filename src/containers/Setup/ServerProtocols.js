@@ -16,7 +16,9 @@ class ServerProtocols extends Component {
   }
 
   componentDidMount() {
-    this.apiClient = new ApiClient(this.props.server.apiUrl);
+    const { server, pairedServers } = this.props;
+    const pairedServer = pairedServers && pairedServers.find(s => s.apiUrl === server.apiUrl);
+    this.apiClient = new ApiClient(server.apiUrl, pairedServer);
     this.fetchProtocolList();
   }
 
@@ -60,6 +62,7 @@ class ServerProtocols extends Component {
 
 ServerProtocols.defaultProps = {
   onError: () => {},
+  pairedServers: [],
   protocolPath: '',
 };
 
@@ -69,6 +72,7 @@ ServerProtocols.propTypes = {
   downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   onError: PropTypes.func,
+  pairedServers: PropTypes.array,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
@@ -83,6 +87,7 @@ function mapStateToProps(state) {
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     sessionId: state.session,
+    pairedServers: state.servers.paired,
   };
 }
 

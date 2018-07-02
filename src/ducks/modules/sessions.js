@@ -221,18 +221,26 @@ const exportSession = (apiUrl, remoteProtocolId, sessionUuid, sessionData) => ({
   sessionData,
 });
 
-const sessionExportPromise = ({ apiUrl, remoteProtocolId, sessionUuid, sessionData }) => (
-  new ApiClient(apiUrl).exportSession(remoteProtocolId, sessionUuid, sessionData)
-);
+const sessionExportPromise = (pairedServers, action) => {
+  const { apiUrl, remoteProtocolId, sessionUuid, sessionData } = action;
+  // TODO: Move to selector?
+  const pairedServer = pairedServers.find(s => s.apiUrl === apiUrl);
+  if (pairedServer) {
+    const client = new ApiClient(apiUrl, pairedServer);
+    return client.exportSession(remoteProtocolId, sessionUuid, sessionData);
+  }
+  return Promise.reject(new Error('No paired server available'));
+};
 
-const exportSessionEpic = action$ => (
+const exportSessionEpic = (action$, store) => (
   action$.ofType(EXPORT_SESSION)
-    .exhaustMap(action =>
-      Observable
-        .fromPromise(sessionExportPromise(action))
+    .exhaustMap((action) => {
+      const pairedServers = store.getState().servers.paired;
+      return Observable
+        .fromPromise(sessionExportPromise(pairedServers, action))
         .mapTo(sessionExportSucceeded(action.sessionUuid))
-        .catch(error => Observable.of(sessionExportFailed(error))),
-    )
+        .catch(error => Observable.of(sessionExportFailed(error)));
+    })
 );
 
 const actionCreators = {

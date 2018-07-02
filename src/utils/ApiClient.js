@@ -57,8 +57,9 @@ const handleError = (err) => {
  *
  */
 class ApiClient {
-  constructor(apiUrl) {
+  constructor(apiUrl, pairedServer) {
     this.cancelTokenSource = axios.CancelToken.source();
+    this.pairedServer = pairedServer;
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
       headers: {
@@ -69,6 +70,13 @@ class ApiClient {
 
   cancelAll() {
     this.cancelTokenSource.cancel();
+  }
+
+  get authHeader() {
+    if (!this.pairedServer) {
+      return null;
+    }
+    return { auth: { username: this.pairedServer.deviceId } };
   }
 
   /**
@@ -136,7 +144,7 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return this.client.get('/protocols', { cancelToken: this.cancelTokenSource.token })
+    return this.client.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);
@@ -156,7 +164,7 @@ class ApiClient {
       uuid: sessionId,
       data: sessionData,
     };
-    return this.client.post(`/protocols/${protocolId}/sessions`, payload)
+    return this.client.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);
