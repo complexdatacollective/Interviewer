@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
-import { map, toPairs } from 'lodash';
+import { map, get, toPairs } from 'lodash';
 import {
   Checkbox,
   CheckboxGroup,
@@ -19,62 +19,18 @@ import validations from '../utils/Validations';
   * @param {object} field The properties handed down from the protocol form
   */
 
-export const makeRenderInput = (componentType) => {
-  const renderInput = (field) => {
-    if (componentType === 'Checkbox') {
-      return (
-        <Checkbox
-          {...field}
-        />
-      );
-    }
-
-    if (componentType === 'RadioGroup') {
-      return (
-        <RadioGroup
-          {...field}
-        />
-      );
-    }
-
-    if (componentType === 'CheckboxGroup') {
-      return (
-        <CheckboxGroup
-          {...field}
-        />
-      );
-    }
-
-    if (componentType === 'ToggleButtonGroup') {
-      return (
-        <ToggleButtonGroup
-          {...field}
-        />
-      );
-    }
-
-    if (componentType === 'Toggle') {
-      return (
-        <Toggle
-          {...field}
-        />
-      );
-    }
-
-    if (componentType === 'hidden') {
-      return (
-        <input
-          type="hidden"
-          {...field}
-        />
-      );
-    }
-
-    return <Text {...field} />;
-  };
-
-  return renderInput;
+const fieldTypes = {
+  Checkbox,
+  CheckboxGroup,
+  ToggleButtonGroup,
+  RadioGroup,
+  Text,
+  Toggle,
+  hidden: (...props) => (<input type="hidden" {...props} />),
 };
+
+export const getInputComponent = componentType =>
+  get(fieldTypes, componentType, Text);
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
@@ -100,7 +56,7 @@ const getValidation = validation =>
 class Field extends PureComponent {
   constructor(props) {
     super(props);
-    this.component = (typeof props.component === 'string') ? makeRenderInput(props.component) : props.component;
+    this.component = (typeof props.component === 'string') ? getInputComponent(props.component) : props.component;
     this.validate = getValidation(props.validation);
   }
 

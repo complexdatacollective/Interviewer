@@ -57,22 +57,29 @@ ShallowWrapper {
 }
 `;
 
-exports[`makeRenderInput() should return renderable component 1`] = `
+exports[`getInputComponent() should return renderable component 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <renderInput
+  Symbol(enzyme.__unrendered__): <TextInput
+    autoFocus={false}
+    className=""
+    fieldLabel={null}
+    hidden={false}
     input={
       Object {
         "name": "foo",
         "value": "",
       }
     }
+    label={null}
     meta={
       Object {
         "invalid": false,
       }
     }
+    placeholder=""
+    type="text"
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -84,41 +91,171 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "host",
     "props": Object {
-      "autoFocus": undefined,
-      "className": undefined,
-      "errorText": false,
-      "isNumericOnly": undefined,
-      "label": undefined,
-      "name": "foo",
-      "tooltip": undefined,
-      "type": undefined,
-      "value": "",
+      "children": Array [
+        <h4>
+          
+        </h4>,
+        <div
+          className="form-field form-field-text"
+        >
+          <input
+            autoFocus={false}
+            className="form-field-text__input"
+            id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+            name="foo"
+            placeholder={null}
+            type="text"
+            value=""
+          />
+        </div>,
+      ],
+      "className": "form-field-container",
+      "hidden": false,
     },
     "ref": null,
-    "rendered": null,
-    "type": [Function],
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "",
+        },
+        "ref": null,
+        "rendered": "",
+        "type": "h4",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <input
+              autoFocus={false}
+              className="form-field-text__input"
+              id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+              name="foo"
+              placeholder={null}
+              type="text"
+              value=""
+            />,
+            false,
+          ],
+          "className": "form-field form-field-text",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "autoFocus": false,
+              "className": "form-field-text__input",
+              "id": "9aa300c9-96a8-4231-83e5-b188a0f8a72d",
+              "name": "foo",
+              "placeholder": null,
+              "type": "text",
+              "value": "",
+            },
+            "ref": null,
+            "rendered": null,
+            "type": "input",
+          },
+          false,
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "div",
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "host",
       "props": Object {
-        "autoFocus": undefined,
-        "className": undefined,
-        "errorText": false,
-        "isNumericOnly": undefined,
-        "label": undefined,
-        "name": "foo",
-        "tooltip": undefined,
-        "type": undefined,
-        "value": "",
+        "children": Array [
+          <h4>
+            
+          </h4>,
+          <div
+            className="form-field form-field-text"
+          >
+            <input
+              autoFocus={false}
+              className="form-field-text__input"
+              id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+              name="foo"
+              placeholder={null}
+              type="text"
+              value=""
+            />
+          </div>,
+        ],
+        "className": "form-field-container",
+        "hidden": false,
       },
       "ref": null,
-      "rendered": null,
-      "type": [Function],
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "",
+          },
+          "ref": null,
+          "rendered": "",
+          "type": "h4",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <input
+                autoFocus={false}
+                className="form-field-text__input"
+                id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+                name="foo"
+                placeholder={null}
+                type="text"
+                value=""
+              />,
+              false,
+            ],
+            "className": "form-field form-field-text",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "autoFocus": false,
+                "className": "form-field-text__input",
+                "id": "9aa300c9-96a8-4231-83e5-b188a0f8a72d",
+                "name": "foo",
+                "placeholder": null,
+                "type": "text",
+                "value": "",
+              },
+              "ref": null,
+              "rendered": null,
+              "type": "input",
+            },
+            false,
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
     },
   ],
   Symbol(enzyme.__options__): Object {
