@@ -61,7 +61,16 @@ export const makeRenderInput = (componentType) => {
       );
     }
 
-    return <Text hidden={componentType === 'hidden'} {...field} />;
+    if (componentType === 'hidden') {
+      return (
+        <input
+          type="hidden"
+          {...field}
+        />
+      );
+    }
+
+    return <Text {...field} />;
   };
 
   return renderInput;
