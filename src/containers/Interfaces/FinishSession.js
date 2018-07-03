@@ -30,6 +30,13 @@ const ExportSection = ({ defaultServer, children }) => (
 );
 
 class FinishSession extends Component {
+  constructor() {
+    super();
+    this.state = {
+      downloadDataAdditionalInfo: '',
+    };
+  }
+
   get exportSection() {
     const { currentSession, defaultServer } = this.props;
     if (currentSession.lastExportedAt) {
@@ -76,6 +83,12 @@ class FinishSession extends Component {
     }
   }
 
+  downloadData = (additionalInformation) => {
+    this.setState({
+      downloadDataAdditionalInfo: additionalInformation,
+    }, () => this.props.openModal('DOWNLOAD_DATA'));
+  }
+
   render() {
     return (
       <div className="interface finish-session-interface">
@@ -100,23 +113,22 @@ class FinishSession extends Component {
             <div>
               <Button
                 size="small"
-                onClick={() => {
-                  const onError = () => this.props.openModal('EXPORT_DATA');
-                  createGraphML(this.props.currentNetwork, this.props.variableRegistry, onError);
-                }}
+                onClick={() => createGraphML(this.props.currentNetwork,
+                  this.props.variableRegistry, this.downloadData)}
               >
                 Download
               </Button>
             </div>
             <Dialog
-              name="EXPORT_DATA"
-              title="Export Error"
+              name="DOWNLOAD_DATA"
+              title="Download Error"
               type="error"
               hasCancelButton={false}
               confirmLabel="Okay"
+              additionalInformation={this.state.downloadDataAdditionalInfo}
               onConfirm={() => {}}
             >
-              <p>There was a problem exporting your data.</p>
+              <p>There was a problem downloading your data.</p>
             </Dialog>
           </div>
 

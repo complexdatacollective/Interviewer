@@ -1,4 +1,4 @@
-import { findKey, forInRight, isNil } from 'lodash';
+import { findKey, forInRight, isNil, join } from 'lodash';
 
 import saveFile from './SaveFile';
 
@@ -60,7 +60,7 @@ const getTypeForKey = (data, key) => (
 const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry,
   layoutVariable) => {
   // generate keys for attributes
-  let valid = true;
+  const missingVariables = [];
   const done = [];
 
   // add keys for gephi positions
@@ -87,7 +87,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
         keyElement.setAttribute('attr.name', key);
 
         if (!isVariableRegistryExists(variableRegistry, type, element, key)) {
-          valid = false;
+          missingVariables.push(`"${key}" in ${type}.${element.type}`);
         }
 
         switch (getTypeFromVariableRegistry(variableRegistry, type, element, key)) {
@@ -132,7 +132,7 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
       }
     });
   });
-  return valid;
+  return missingVariables;
 };
 
 const getDataElement = (uri, key, text) => {
@@ -199,16 +199,12 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   });
 
   // generate keys for attributes
-  if (!generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry, layoutVariable)) {
-    // hard fail if checking the registry fails for nodes
+  let missingVariables = generateKeys(graph, graphML, networkData.nodes, 'node', ['id'], variableRegistry, layoutVariable);
+  missingVariables = missingVariables.concat(generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry));
+  if (missingVariables.length > 0) {
+    // hard fail if checking the registry fails
     // remove this to fall back to using "text" for unknowns
-    openErrorDialog();
-    return null;
-  }
-  if (!generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to', 'id'], variableRegistry)) {
-    // hard fail if checking the registry fails for edge
-    // remove this to fall back to using "text" for unknowns
-    openErrorDialog();
+    openErrorDialog(`The variable registry seems to be missing "type" of: ${join(missingVariables, ', ')}.`);
     return null;
   }
 
