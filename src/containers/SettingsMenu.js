@@ -229,7 +229,7 @@ class SettingsMenu extends Component {
         title="Settings"
         toggleMenu={toggleMenu}
       >
-        <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', zIndex: 1000 }}>{ version }</div>
+        <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '10px', whiteSpace: 'nowrap', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="CONFIRM_DELETE_DATA"
           title="Delete ALL data?"
