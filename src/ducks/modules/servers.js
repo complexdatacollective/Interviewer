@@ -9,7 +9,12 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_SERVER:
       if (action.server) {
-        return { ...state, paired: [...state.paired, action.server] };
+        const pairingInfo = {
+          ...action.server,
+          deviceId: action.deviceId,
+          deviceSecret: action.deviceSecret,
+        };
+        return { ...state, paired: [...state.paired, pairingInfo] };
       }
       return state;
     default:
@@ -17,8 +22,10 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const addServer = server => ({
+const addServer = (server, deviceId, deviceSecret) => ({
   type: ADD_SERVER,
+  deviceId,
+  deviceSecret,
   server,
 });
 

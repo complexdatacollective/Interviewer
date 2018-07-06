@@ -8,6 +8,7 @@ import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { ServerProtocolList, ServerSetup } from '../../components/Setup';
+import { getPairedServerFactory } from '../../selectors/servers';
 
 class ServerProtocols extends Component {
   constructor(props) {
@@ -16,7 +17,9 @@ class ServerProtocols extends Component {
   }
 
   componentDidMount() {
-    this.apiClient = new ApiClient(this.props.server.apiUrl);
+    const { server, getPairedServer } = this.props;
+    const pairedServer = getPairedServer(server.apiUrl);
+    this.apiClient = new ApiClient(server.apiUrl, pairedServer);
     this.fetchProtocolList();
   }
 
@@ -60,6 +63,7 @@ class ServerProtocols extends Component {
 
 ServerProtocols.defaultProps = {
   onError: () => {},
+  getPairedServer: () => {},
   protocolPath: '',
 };
 
@@ -69,6 +73,7 @@ ServerProtocols.propTypes = {
   downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   onError: PropTypes.func,
+  getPairedServer: PropTypes.func,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
@@ -83,6 +88,7 @@ function mapStateToProps(state) {
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     sessionId: state.session,
+    getPairedServer: getPairedServerFactory(state),
   };
 }
 

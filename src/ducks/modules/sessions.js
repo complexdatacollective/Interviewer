@@ -6,6 +6,7 @@ import uuidv4 from '../../utils/uuid';
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
+import { getPairedServerFactory } from '../../selectors/servers';
 
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
@@ -221,18 +222,24 @@ const exportSession = (apiUrl, remoteProtocolId, sessionUuid, sessionData) => ({
   sessionData,
 });
 
-const sessionExportPromise = ({ apiUrl, remoteProtocolId, sessionUuid, sessionData }) => (
-  new ApiClient(apiUrl).exportSession(remoteProtocolId, sessionUuid, sessionData)
-);
+const sessionExportPromise = (pairedServer, action) => {
+  const { apiUrl, remoteProtocolId, sessionUuid, sessionData } = action;
+  if (pairedServer) {
+    const client = new ApiClient(apiUrl, pairedServer);
+    return client.exportSession(remoteProtocolId, sessionUuid, sessionData);
+  }
+  return Promise.reject(new Error('No paired server available'));
+};
 
-const exportSessionEpic = action$ => (
+const exportSessionEpic = (action$, store) => (
   action$.ofType(EXPORT_SESSION)
-    .exhaustMap(action =>
-      Observable
-        .fromPromise(sessionExportPromise(action))
+    .exhaustMap((action) => {
+      const pairedServer = getPairedServerFactory(store.getState())(action.apiUrl);
+      return Observable
+        .fromPromise(sessionExportPromise(pairedServer, action))
         .mapTo(sessionExportSucceeded(action.sessionUuid))
-        .catch(error => Observable.of(sessionExportFailed(error))),
-    )
+        .catch(error => Observable.of(sessionExportFailed(error)));
+    })
 );
 
 const actionCreators = {
