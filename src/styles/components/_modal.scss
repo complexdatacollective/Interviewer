@@ -33,7 +33,6 @@ $component-name: modal;
 
     &-content {
       height: inherit;
-      max-height: 80vh;
     }
 
     &-title {
@@ -70,17 +69,30 @@ $component-name: modal;
   }
 
   &--fullscreen {
-    .#{$component-name} {
+    display: block;
 
+    .#{$component-name} {
       &__background {
         background-color: palette('background');
       }
 
       &__window {
-        display: flex;
-        flex: 1 1 auto;
         height: 100vh;
       }
+
+      &__layout {
+        display: block;
+
+        &-title {
+          display: block;
+          padding-top: 5rem;
+          text-align: center;
+        }
+      }
+    }
+
+    .input__container--hidden {
+      position: absolute;
     }
 
     .form {

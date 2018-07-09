@@ -73,15 +73,95 @@
               "minLength": 1,
               "maxLength": 10
             }
+          },
+          "uid": {
+            "label": "Unique id",
+            "description": "Unique id",
+            "type": "text"
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
+          "age": {
+            "label": "Age",
+            "description": "Age",
+            "type": "number"
+          },
+          "createdIndex": {
+            "label": "Created Index",
+            "description": "Created Index",
+            "type": "number"
+          },
+          "itemType": {
+            "label": "Item type",
+            "description": "Item type",
+            "type": "text"
+          },
+          "stageId": {
+            "label": "Stage id",
+            "description": "Stage id",
+            "type": "text"
+          },
+          "promptId": {
+            "label": "Prompt id",
+            "description": "Prompt id",
+            "type": "text"
+          },
+          "closenessLayout": {
+            "label": "Closeness layout",
+            "description": "Closeness layout",
+            "type": "layout"
+          },
+          "school_important": {
+            "label": "School important",
+            "description": "School important",
+            "type": "boolean"
+          },
+          "lives_nearby": {
+            "label": "Lives nearby",
+            "description": "Lives nearby",
+            "type": "boolean"
+          },
+          "family_important": {
+            "label": "Family important",
+            "description": "Family important",
+            "type": "boolean"
+          },
+          "facebook_friend": {
+            "label": "Facebook friend",
+            "description": "Facebook friend",
+            "type": "boolean"
+          },
+          "community_important": {
+            "label": "Community important",
+            "description": "Community important",
+            "type": "boolean"
+          },
+          "online_important": {
+            "label": "Online important",
+            "description": "Online important",
+            "type": "boolean"
+          },
+          "other_important": {
+            "label": "Other important",
+            "description": "Other important",
+            "type": "boolean"
           }
         }
       }
     },
     "edge": {
-      "friend": {
-        "label": "Friend",
+      "friends": {
+        "label": "Friends",
         "color": "edge-color-seq-1",
         "variables": {
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
           "contactFreq": {
             "label": "contactFreq",
             "description": "Contact frequency.",
@@ -475,9 +555,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          }
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ]
         }
       ]
     },
@@ -509,9 +592,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"],
             "create": "friends"
@@ -528,9 +614,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"]
           },
@@ -551,9 +640,12 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "edges": {
             "display": ["friends"]
           },
@@ -590,16 +682,16 @@
       "items": [
         { "type": "text", "content": "This is the end of the data collection stage. As you can imagine there are many more possible kinds of data that you can add to such a questionnaire." },
         { "type": "text", "content": "Network Canvas is currently adding many new screens to capture a variety of data types. This example was just the beginning." },
-        { "type": "text", "content": "To export this data and continue with some further analysis, please use the \"Download Data\" option in the settings menu." }
+        { "type": "text", "content": "To export this data and continue with some further analysis, please use the \"Download\" option on the final stage before finishing." }
       ]
     },
     {
       "id": "finalInstruction",
-      "label": "Finished",
+      "label": "Learn More",
       "type": "Information",
       "title": "Thank you!",
       "items": [
-        { "type": "text", "content": "To learn more about Network Canvas, please visit our website at <http://www.networkcanvas.com/>." }
+        { "type": "text", "content": "To learn more about Network Canvas, please visit our website at <https://networkcanvas.com>." }
       ]
     }
   ]

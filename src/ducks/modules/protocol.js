@@ -1,19 +1,33 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
-import uuidv4 from '../../utils/uuid';
 import { actionTypes as SessionActionTypes } from './session';
 
+/**
+ * `protocol` maintains information about the currently-loaded protocol for session, and
+ * provides actions for downloading, importing, etc. It does a reference to data in `./protocols`.
+ *
+ * Typical action flow:
+ *
+ * 1. Download: Fetch a remote .netcanvas file from network, save to tmp dir
+ * 2. Import: extract .netcanvas contents & move files to user data dir
+ * 3. Load: Read & parse protocol.json from imported files
+ * 4. Set Protocol: store parsed protocol JSON in state
+ *   - Side effect: if this is a new protocol, persist data & metadata (see ./protocols)
+ *
+ * Notes:
+ * - As a side effect of END_SESSION, clear out the current protocol contents here
+ * - Typically, an interface will call addSession() to begin a new session before a protocol
+ *   is loaded; loading state is maintained here.
+ */
 
 const END_SESSION = SessionActionTypes.END_SESSION;
-const SET_SESSION = SessionActionTypes.SET_SESSION;
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL = 'PROTOCOL/IMPORT_PROTOCOL';
 const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
-const LOAD_FACTORY_PROTOCOL = 'LOAD_FACTORY_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
 
@@ -38,22 +52,16 @@ export default function reducer(state = initialState, action = {}) {
         isLoaded: true,
         isLoading: false,
       };
-    case SET_SESSION:
-      if (action.protocolType) {
-        return {
-          ...state,
-          isLoaded: false,
-          isLoading: false,
-          type: action.protocolType,
-        };
-      }
-      return state;
     case END_SESSION:
       return initialState;
     case DOWNLOAD_PROTOCOL:
     case IMPORT_PROTOCOL:
+      return {
+        ...state,
+        isLoaded: false,
+        isLoading: true,
+      };
     case LOAD_PROTOCOL:
-    case LOAD_FACTORY_PROTOCOL:
       return {
         ...state,
         isLoaded: false,
@@ -73,18 +81,9 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function setProtocol(path, protocol) {
-  return {
-    type: SET_PROTOCOL,
-    path,
-    protocol,
-  };
-}
-
 function downloadProtocolAction(uri) {
   return {
     type: DOWNLOAD_PROTOCOL,
-    protocolType: 'download',
     uri,
   };
 }
@@ -92,27 +91,21 @@ function downloadProtocolAction(uri) {
 function importProtocolAction(path) {
   return {
     type: IMPORT_PROTOCOL,
-    protocolType: 'download',
     path,
   };
 }
 
-function loadProtocolAction(path, id) {
-  let sessionId = id;
-  if (!id) {
-    sessionId = uuidv4();
-  }
+function loadProtocolAction(path) {
   return {
     type: LOAD_PROTOCOL,
     protocolType: 'download',
     path,
-    sessionId,
   };
 }
 
 function loadFactoryProtocolAction(path) {
   return {
-    type: LOAD_FACTORY_PROTOCOL,
+    type: LOAD_PROTOCOL,
     protocolType: 'factory',
     path,
   };
@@ -139,6 +132,15 @@ function downloadProtocolFailed(error) {
   };
 }
 
+function setProtocol(path, protocol, isFactoryProtocol) {
+  return {
+    type: SET_PROTOCOL,
+    path,
+    protocol,
+    isFactoryProtocol,
+  };
+}
+
 const downloadProtocolEpic = action$ =>
   action$.ofType(DOWNLOAD_PROTOCOL)
     .switchMap(action =>
@@ -153,25 +155,27 @@ const importProtocolEpic = action$ =>
     .switchMap(action =>
       Observable
         .fromPromise(importProtocol(action.path))
-        .map(protocolName => loadProtocolAction(protocolName))
+        .map(protocolFile => loadProtocolAction(protocolFile, null))
         .catch(error => Observable.of(importProtocolFailed(error))),
     );
 
 const loadProtocolEpic = action$ =>
-  action$.ofType(LOAD_PROTOCOL) // Filter for load protocol action
+  action$
+    .filter(action => action.type === LOAD_PROTOCOL && action.protocolType !== 'factory')
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
         .fromPromise(loadProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(action.path, response)) // Parse and save
+        .map(response => setProtocol(action.path, response, false)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
 const loadFactoryProtocolEpic = action$ =>
-  action$.ofType(LOAD_FACTORY_PROTOCOL) // Filter for load protocol action
+  action$
+    .filter(action => action.type === LOAD_PROTOCOL && action.protocolType === 'factory')
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
         .fromPromise(loadFactoryProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(action.path, response)) // Parse and save
+        .map(response => setProtocol(action.path, response, true)) // Parse and save
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
@@ -193,7 +197,6 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   LOAD_PROTOCOL,
   LOAD_PROTOCOL_FAILED,
-  LOAD_FACTORY_PROTOCOL,
   SET_PROTOCOL,
 };
 

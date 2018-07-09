@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
-import sorty from '@zippytech/sorty';
 import { TransitionGroup } from 'react-transition-group';
 import { Node } from '../components';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
@@ -15,6 +14,7 @@ import {
   MonitorDropTarget,
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
+import sortOrder from '../utils/sortOrder';
 
 const EnhancedNode = DragSource(selectable(Node));
 
@@ -25,8 +25,11 @@ class OrdinalBinBucket extends Component {
   constructor(props) {
     super(props);
 
+    const sorter = sortOrder(props.sortOrder);
+    const sortedNodes = sorter(props.nodes);
+
     this.state = {
-      nodes: props.nodes,
+      nodes: sortedNodes,
       stagger: true,
       exit: true,
     };
@@ -40,16 +43,13 @@ class OrdinalBinBucket extends Component {
       return;
     }
 
-    const newSortedNodes = newProps.nodes;
-
-    if (newProps.sortOrder && newProps.sortOrder.length) {
-      sorty(newProps.sortOrder, newSortedNodes);
-    }
+    const sorter = sortOrder(newProps.sortOrder);
+    const sortedNodes = sorter(newProps.nodes);
 
     // if we provided the same id, then just update normally
     if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
-        this.setState({ nodes: newSortedNodes, stagger: false });
+        this.setState({ nodes: sortedNodes, stagger: false });
       });
       return;
     }
@@ -64,7 +64,7 @@ class OrdinalBinBucket extends Component {
           if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
           this.refreshTimer = setTimeout(
             () => this.setState({
-              nodes: newSortedNodes,
+              nodes: sortedNodes,
               stagger: true,
             }),
             getCSSVariableAsNumber('--animation-duration-slow-ms'),

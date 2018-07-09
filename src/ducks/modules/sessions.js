@@ -1,13 +1,20 @@
-import { hasIn, isArray, omit } from 'lodash';
+import { isArray, omit } from 'lodash';
+import { Observable } from 'rxjs';
+import { combineEpics } from 'redux-observable';
+
 import uuidv4 from '../../utils/uuid';
-
 import network, { ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import ApiClient from '../../utils/ApiClient';
+import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
+import { getPairedServerFactory } from '../../selectors/servers';
 
-const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
+const EXPORT_SESSION = 'EXPORT_SESSION';
+const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
+const EXPORT_SESSION_SUCCEEDED = 'EXPORT_SESSION_SUCCEEDED';
 
 const initialState = {};
 
@@ -34,19 +41,6 @@ export default function reducer(state = initialState, action = {}) {
           network: network(state[action.sessionId].network, action),
         }),
       };
-    case LOAD_PROTOCOL: {
-      if (hasIn(state, action.sessionId)) {
-        return state;
-      }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          path: `/session/${action.sessionId}`,
-          promptIndex: 0,
-          network: network(state.network, action),
-        }),
-      };
-    }
     case ADD_SESSION:
       return {
         ...state,
@@ -62,6 +56,7 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           path: action.path,
+          protocolPath: protocolIdFromSessionPath(action.path),
           promptIndex: 0,
         }),
       };
@@ -75,6 +70,14 @@ export default function reducer(state = initialState, action = {}) {
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);
+    case EXPORT_SESSION_SUCCEEDED:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          lastExportedAt: Date.now(),
+        }),
+      };
     default:
       return state;
   }
@@ -175,6 +178,7 @@ function addSession() {
   };
 }
 
+// This specifically updates the path/URL
 function updateSession(id, path) {
   return {
     type: UPDATE_SESSION,
@@ -200,6 +204,44 @@ function removeSession(id) {
   };
 }
 
+const sessionExportSucceeded = id => ({
+  type: EXPORT_SESSION_SUCCEEDED,
+  sessionId: id,
+});
+
+const sessionExportFailed = error => ({
+  type: EXPORT_SESSION_FAILED,
+  error,
+});
+
+const exportSession = (apiUrl, remoteProtocolId, sessionUuid, sessionData) => ({
+  type: EXPORT_SESSION,
+  apiUrl,
+  remoteProtocolId,
+  sessionUuid,
+  sessionData,
+});
+
+const sessionExportPromise = (pairedServer, action) => {
+  const { apiUrl, remoteProtocolId, sessionUuid, sessionData } = action;
+  if (pairedServer) {
+    const client = new ApiClient(apiUrl, pairedServer);
+    return client.exportSession(remoteProtocolId, sessionUuid, sessionData);
+  }
+  return Promise.reject(new Error('No paired server available'));
+};
+
+const exportSessionEpic = (action$, store) => (
+  action$.ofType(EXPORT_SESSION)
+    .exhaustMap((action) => {
+      const pairedServer = getPairedServerFactory(store.getState())(action.apiUrl);
+      return Observable
+        .fromPromise(sessionExportPromise(pairedServer, action))
+        .mapTo(sessionExportSucceeded(action.sessionUuid))
+        .catch(error => Observable.of(sessionExportFailed(error)));
+    })
+);
+
 const actionCreators = {
   addNodes,
   updateNode,
@@ -212,6 +254,7 @@ const actionCreators = {
   updateSession,
   updatePrompt,
   removeSession,
+  exportSession,
 };
 
 const actionTypes = {
@@ -228,9 +271,16 @@ const actionTypes = {
   UPDATE_SESSION,
   UPDATE_PROMPT,
   REMOVE_SESSION,
+  EXPORT_SESSION,
+  EXPORT_SESSION_FAILED,
 };
+
+const epics = combineEpics(
+  exportSessionEpic,
+);
 
 export {
   actionCreators,
   actionTypes,
+  epics,
 };

@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { findKey, filter, has, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
+import { getCurrentSession } from './session';
 
 // Selectors that are generic between interfaces
 
@@ -23,11 +24,9 @@ const propPromptId = (_, props) => props.prompt.id;
 // State selectors
 
 // MemoedSelectors
-
 export const getNetwork = createDeepEqualSelector(
-  state => (state.sessions[state.session] && state.sessions[state.session].network) ||
-    { nodes: [], edges: [] },
-  network => network,
+  getCurrentSession,
+  session => (session && session.network) || { nodes: [], edges: [] },
 );
 
 export const networkNodes = createDeepEqualSelector(

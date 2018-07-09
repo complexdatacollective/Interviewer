@@ -6,7 +6,7 @@ const ApiErrorStatus = 'error';
 
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
-const NoResponseMessage = 'Unexpected Response';
+const NoResponseMessage = 'Server could not be reached';
 
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {
@@ -57,15 +57,26 @@ const handleError = (err) => {
  *
  */
 class ApiClient {
-  constructor(apiUrl) {
+  constructor(apiUrl, pairedServer) {
     this.cancelTokenSource = axios.CancelToken.source();
+    this.pairedServer = pairedServer;
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   }
 
   cancelAll() {
     this.cancelTokenSource.cancel();
+  }
+
+  get authHeader() {
+    if (!this.pairedServer) {
+      return null;
+    }
+    return { auth: { username: this.pairedServer.deviceId } };
   }
 
   /**
@@ -89,7 +100,7 @@ class ApiClient {
    * @param  {string} pairingRequestId from the requestPairing() response
    * @param  {string} pairingRequestSalt from the requestPairing() response
    * @async
-   * @return {Object} device
+   * @return {Object} device, decorated with the generated secret
    * @return {string} device.id
    * @throws {Error}
    */
@@ -120,7 +131,9 @@ class ApiClient {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(UnexpectedResponseMessage);
         }
-        return decryptedData.device;
+        const device = decryptedData.device;
+        device.secret = secretHex;
+        return device;
       })
       .catch(handleError);
   }
@@ -131,7 +144,27 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return this.client.get('/protocols', { cancelToken: this.cancelTokenSource.token })
+    return this.client.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(handleError);
+  }
+
+  /**
+   * @async
+   * @param {string} protocolId ID of the protocol this session belongs to
+   *                            (a sha256 digest of the protocol name, as hex)
+   * @param {Object} sessionData
+   * @param {String} sessionData.uuid (required)
+   * @return {Object}
+   * @throws {Error}
+   */
+  exportSession(protocolId, sessionId, sessionData) {
+    const payload = {
+      uuid: sessionId,
+      data: sessionData,
+    };
+    return this.client.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

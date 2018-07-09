@@ -89,7 +89,7 @@
           },
           "discussFreq": {
             "label": "Discussion frequency ordinal variable.",
-            "description": "Discussion  frequency ordinal variable",
+            "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
             "options": [
               {
@@ -109,6 +109,51 @@
                 "value": -1
               }
             ]
+          },
+          "closenessLayout": {
+            "label": "Closeness layout",
+            "description": "Closeness layout",
+            "type": "layout"
+          },
+          "talk_friend": {
+            "label": "Talk friend",
+            "description": "Talk friend",
+            "type": "boolean"
+          },
+          "timeCreated": {
+            "label": "Time created",
+            "description": "Time created",
+            "type": "datetime"
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
+          "uid": {
+            "label": "Unique id",
+            "description": "Unique id",
+            "type": "text"
+          },
+          "createdIndex": {
+            "label": "Created index",
+            "description": "Created index",
+            "type": "number"
+          },
+          "itemType": {
+            "label": "Item type",
+            "description": "Item type",
+            "type": "text"
+          },
+          "stageId": {
+            "label": "Stage id",
+            "description": "Stage id",
+            "type": "text"
+          },
+          "promptId": {
+            "label": "Prompt id",
+            "description": "Prompt id",
+            "type": "text"
           }
         }
       },
@@ -311,6 +356,51 @@
                 "value": -1
               }
             ]
+          },
+          "primary_venue": {
+            "label": "Primary venue",
+            "description": "Primary venue",
+            "type": "boolean"
+          },
+          "Main/Parent Organization": {
+            "label": "Main/Parent Organization",
+            "description": "Main/Parent Organization",
+            "type": "text"
+          },
+          "Subsidiary/Program/Project": {
+            "label": "Subsidiary/Program/Project",
+            "description": "Subsidiary/Program/Project",
+            "type": "text"
+          },
+          "Abbreviated Name": {
+            "label": "Abbreviated Name",
+            "description": "Abbreviated Name",
+            "type": "text"
+          },
+          "Standard Word Abbreviations": {
+            "label": "Standard Word Abbreviations",
+            "description": "Standard Word Abbreviations",
+            "type": "text"
+          },
+          "Geocoded Address": {
+            "label": "Geocoded Address",
+            "description": "Geocoded Address",
+            "type": "text"
+          },
+          "Latitude": {
+            "label": "Latitude",
+            "description": "Latitude",
+            "type": "number"
+          },
+          "Longitude": {
+            "label": "Longitude",
+            "description": "Longitude",
+            "type": "number"
+          },
+          "Raw Address": {
+            "label": "Raw Address",
+            "description": "Raw Address",
+            "type": "text"
           }
         }
       },
@@ -367,6 +457,11 @@
                 "value": -1
               }
             ]
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
           }
         }
       },
@@ -1051,19 +1146,18 @@
           "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
-              "name": "nickname",
-              "dir": "desc"
+              "property": "nickname",
+              "direction": "desc"
             }
           ],
           "binSortOrder": [
             {
-              "name": "nickname",
-              "dir": "desc"
+              "property": "nickname",
+              "direction": "desc"
             },
             {
-              "name": "age",
-              "dir": "desc",
-              "type": "number"
+              "property": "age",
+              "direction": "desc"
             }
           ]
         },
@@ -1123,9 +1217,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
-              "name": "ASC"
-            },
+            "sortOrder": [{
+              "property": "name",
+              "direction": "asc"
+            }],
             "sortableProperties": [
               {
                 "label": "Pupil Name",
@@ -1164,9 +1259,10 @@
             ]
           },
           "sortOptions": {
-            "sortOrder": {
-              "nickname": "DESC"
-            },
+            "sortOrder": [{
+              "property": "nickname",
+              "direction": "desc"
+            }],
             "sortableProperties": [
               {
                 "label": "Nickname",
@@ -1242,9 +1338,12 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "nodeBinSortOrder": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            }
+          ],
           "background": {
             "image": "quadrant.svg",
             "concentricCircles": 4,

@@ -13,28 +13,17 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
   */
 class ProtocolList extends Component {
   onClickNewProtocol = (protocol) => {
-    if (!(protocol.type || protocol.path)) {
+    if (!(protocol.isFactoryProtocol || protocol.path)) {
       return;
     }
 
-    if (protocol.type === 'factory') {
-      this.loadFactoryProtocol(protocol.path);
-    } else {
-      this.loadRemoteProtocol(protocol.path);
-    }
-  }
-
-  loadFactoryProtocol = (protocolPath) => {
     this.props.addSession();
-    this.props.loadFactoryProtocol(protocolPath);
-  }
-
-  loadRemoteProtocol = (protocolPath) => {
-    if (protocolPath) {
-      this.props.loadProtocol(protocolPath);
+    if (protocol.isFactoryProtocol) {
+      this.props.loadFactoryProtocol(protocol.path);
+    } else if (protocol.path) {
+      this.props.loadProtocol(protocol.path);
     }
   }
-
 
   render() {
     const { protocols } = this.props;
@@ -49,7 +38,7 @@ class ProtocolList extends Component {
         nextEl: '.swiper-button-next.swiper-button-white',
         prevEl: '.swiper-button-prev.swiper-button-white',
       },
-      loop: true,
+      loop: false,
       shouldSwiperUpdate: true,
       rebuildOnUpdate: true,
     };
@@ -95,3 +84,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolList);
+
+export { ProtocolList as UnconnectedProtocolList };

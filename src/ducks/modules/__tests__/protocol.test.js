@@ -9,7 +9,6 @@ import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
 
 jest.mock('../../../utils/protocol/index');
-jest.mock('../../../utils/uuid');
 
 const initialState = {
   isLoaded: false,
@@ -60,7 +59,6 @@ describe('protocol module', () => {
         ...initialState,
         isLoaded: false,
         isLoading: true,
-        type: 'download',
       });
     });
 
@@ -76,7 +74,6 @@ describe('protocol module', () => {
         ...initialState,
         isLoaded: false,
         isLoading: true,
-        type: 'download',
       });
     });
 
@@ -161,6 +158,7 @@ describe('protocol module', () => {
       const expectedActions = [actionCreators.setProtocol(
         '/app/data/protocol/path',
         { fake: { protocol: { json: true } } },
+        false,
       )];
       return epics(action$).toArray().toPromise().then((result) => {
         expect(result).toEqual(expectedActions);
@@ -175,6 +173,7 @@ describe('protocol module', () => {
       const expectedActions = [actionCreators.setProtocol(
         'factory_protocol_name',
         { fake: { factory: { protocol: { json: true } } } },
+        true,
       )];
       return epics(action$).toArray().toPromise().then((result) => {
         expect(result).toEqual(expectedActions);

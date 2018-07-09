@@ -104,7 +104,7 @@ NameGeneratorList.propTypes = {
 
 NameGeneratorList.defaultProps = {
   initialSortOrder: '',
-  initialSortDirection: 'ASC',
+  initialSortDirection: 'asc',
 };
 
 function makeMapStateToProps() {

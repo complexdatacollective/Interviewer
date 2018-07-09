@@ -2,6 +2,8 @@
 
 import { getNextIndex, isStageSkipped } from '../skip-logic';
 
+import { stages as getStages } from '../session';
+
 const mockState = {
   session: 'a',
   sessions: {
@@ -10,7 +12,7 @@ const mockState = {
         edges: [
           { id: 1, type: 'friend', to: 1, from: 2 },
         ],
-        edgo: {},
+        ego: {},
         nodes: [
           { id: 1, type: 'person', name: 'soAndSo' },
           { id: 2, type: 'person', name: 'whoDunnit' },
@@ -179,7 +181,8 @@ describe('skip-logic selector', () => {
     });
 
     it('rotates the index if out of bounds', () => {
-      const index = getNextIndex(7)(mockState);
+      const stageCount = getStages(mockState).length;
+      const index = getNextIndex(stageCount)(mockState);
       expect(index).toEqual(0);
     });
   });

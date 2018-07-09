@@ -7,8 +7,11 @@ import { createStore } from 'redux';
 import SessionList from '../SessionList';
 
 const mockReduxState = {
-  sessions: { a: { name: 'a name', network: { nodes: [0, 1, 2], edges: [0] }, path: '/path/to/a', promptIndex: 2, updatedAt: 1528213062793 },
-    b: { name: 'b name', network: { nodes: [], edges: [] }, path: '/path/to/b', promptIndex: 1, updatedAt: 1528218451710 } },
+  protocols: [],
+  sessions: {
+    a: { protocolPath: 'p', name: 'a name', network: { nodes: [0, 1, 2], edges: [0] }, path: '/path/to/a', promptIndex: 2, updatedAt: 1528213062793 },
+    b: { protocolPath: 'p', name: 'b name', network: { nodes: [], edges: [] }, path: '/path/to/b', promptIndex: 1, updatedAt: 1528218451710 },
+  },
 };
 
 describe('<SessionList />', () => {
@@ -17,9 +20,16 @@ describe('<SessionList />', () => {
     expect(component).toMatchSnapshot();
   });
 
-  const somestore = createStore(() => mockReduxState);
-  const component = mount(<SessionList store={somestore} />);
   it('shows sessions as cards', () => {
+    const component = mount(<SessionList store={createStore(() => mockReduxState)} />);
     expect(component.find('.card').length).toBe(2);
+  });
+
+  it('hides sessions without protocols', () => {
+    const validSessions = mockReduxState.sessions;
+    const invalidSession = { name: 'no-protocol' };
+    const state = { protocols: [], sessions: { ...validSessions, invalidSession } };
+    const component = mount(<SessionList store={createStore(() => state)} />);
+    expect(component.find('.card').length).toBe(Object.values(validSessions).length);
   });
 });
