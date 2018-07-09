@@ -103,7 +103,7 @@ ShallowWrapper {
           <input
             autoFocus={false}
             className="form-field-text__input"
-            id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+            id={undefined}
             name="foo"
             placeholder={null}
             type="text"
@@ -136,7 +136,7 @@ ShallowWrapper {
             <input
               autoFocus={false}
               className="form-field-text__input"
-              id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+              id={undefined}
               name="foo"
               placeholder={null}
               type="text"
@@ -155,7 +155,7 @@ ShallowWrapper {
             "props": Object {
               "autoFocus": false,
               "className": "form-field-text__input",
-              "id": "9aa300c9-96a8-4231-83e5-b188a0f8a72d",
+              "id": undefined,
               "name": "foo",
               "placeholder": null,
               "type": "text",
@@ -188,7 +188,7 @@ ShallowWrapper {
             <input
               autoFocus={false}
               className="form-field-text__input"
-              id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+              id={undefined}
               name="foo"
               placeholder={null}
               type="text"
@@ -221,7 +221,7 @@ ShallowWrapper {
               <input
                 autoFocus={false}
                 className="form-field-text__input"
-                id="9aa300c9-96a8-4231-83e5-b188a0f8a72d"
+                id={undefined}
                 name="foo"
                 placeholder={null}
                 type="text"
@@ -240,7 +240,7 @@ ShallowWrapper {
               "props": Object {
                 "autoFocus": false,
                 "className": "form-field-text__input",
-                "id": "9aa300c9-96a8-4231-83e5-b188a0f8a72d",
+                "id": undefined,
                 "name": "foo",
                 "placeholder": null,
                 "type": "text",

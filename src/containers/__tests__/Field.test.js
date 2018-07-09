@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Field, { getInputComponent  } from '../Field';
+import Field, { getInputComponent } from '../Field';
 
 const attributes = {
   label: 'Name',
@@ -14,6 +14,8 @@ const validation = {
   required: true,
   minLength: 2,
 };
+
+jest.mock('uuid');
 
 const reduxFormFieldProperties = { input: { name: 'foo', value: '' }, meta: { invalid: false } };
 

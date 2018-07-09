@@ -74,7 +74,6 @@ ShallowWrapper {
         resetValues={[Function]}
         showAddAnotherToggle={false}
         title="The form title"
-        tooltip="bottom"
         type="person"
       />,
       "className": "modal--fullscreen",
@@ -119,7 +118,6 @@ ShallowWrapper {
         "resetValues": [Function],
         "showAddAnotherToggle": false,
         "title": "The form title",
-        "tooltip": "bottom",
         "type": "person",
       },
       "ref": null,
@@ -171,7 +169,6 @@ ShallowWrapper {
           resetValues={[Function]}
           showAddAnotherToggle={false}
           title="The form title"
-          tooltip="bottom"
           type="person"
         />,
         "className": "modal--fullscreen",
@@ -216,7 +213,6 @@ ShallowWrapper {
           "resetValues": [Function],
           "showAddAnotherToggle": false,
           "title": "The form title",
-          "tooltip": "bottom",
           "type": "person",
         },
         "ref": null,
