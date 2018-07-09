@@ -12,7 +12,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
-import { getRemoteProtocolId } from '../../selectors/protocol';
+import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -30,6 +30,13 @@ const ExportSection = ({ defaultServer, children }) => (
 );
 
 class FinishSession extends Component {
+  constructor() {
+    super();
+    this.state = {
+      downloadDataAdditionalInfo: '',
+    };
+  }
+
   get exportSection() {
     const { currentSession, defaultServer } = this.props;
     if (currentSession.lastExportedAt) {
@@ -76,6 +83,12 @@ class FinishSession extends Component {
     }
   }
 
+  downloadData = (additionalInformation) => {
+    this.setState({
+      downloadDataAdditionalInfo: additionalInformation,
+    }, () => this.props.openModal('DOWNLOAD_DATA'));
+  }
+
   render() {
     return (
       <div className="interface finish-session-interface">
@@ -98,19 +111,24 @@ class FinishSession extends Component {
               <p>Download network as a <code>.graphml</code> file</p>
             </div>
             <div>
-              <Button size="small" onClick={() => createGraphML(this.props.currentNetwork, () => this.props.openModal('EXPORT_DATA'))}>
+              <Button
+                size="small"
+                onClick={() => createGraphML(this.props.currentNetwork,
+                  this.props.variableRegistry, this.downloadData)}
+              >
                 Download
               </Button>
             </div>
             <Dialog
-              name="EXPORT_DATA"
-              title="Export Error"
+              name="DOWNLOAD_DATA"
+              title="Download Error"
               type="error"
               hasCancelButton={false}
               confirmLabel="Okay"
+              additionalInformation={this.state.downloadDataAdditionalInfo}
               onConfirm={() => {}}
             >
-              <p>There was a problem exporting your data.</p>
+              <p>There was a problem downloading your data.</p>
             </Dialog>
           </div>
 
@@ -134,10 +152,12 @@ FinishSession.propTypes = {
   openModal: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
+  variableRegistry: PropTypes.object,
 };
 
 FinishSession.defaultProps = {
   defaultServer: null,
+  variableRegistry: {},
   remoteProtocolId: null,
 };
 
@@ -153,6 +173,7 @@ function mapStateToProps(state) {
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.session,
     defaultServer: state.servers && state.servers.paired[0],
+    variableRegistry: protocolRegistry(state),
   };
 }
 

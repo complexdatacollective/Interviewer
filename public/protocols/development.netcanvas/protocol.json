@@ -43,13 +43,13 @@
           "special_category": {
             "label": "Special category",
             "description": "Human readable description",
-            "type": "enumerable",
-            "options": [46]
+            "type": "ordinal",
+            "options": [46, 56]
           },
           "some_options": {
             "label": "Some possible options",
             "description": "Human readable description",
-            "type": "options",
+            "type": "categorical",
             "options": [46],
             "validation": {
               "max": 1
@@ -104,7 +104,7 @@
           },
           "discussFreq": {
             "label": "Discussion frequency ordinal variable.",
-            "description": "Discussion  frequency ordinal variable",
+            "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
             "values": [
               {
@@ -124,6 +124,51 @@
                 "value": -1
               }
             ]
+          },
+          "closenessLayout": {
+            "label": "Closeness layout",
+            "description": "Closeness layout",
+            "type": "layout"
+          },
+          "talk_friend": {
+            "label": "Talk friend",
+            "description": "Talk friend",
+            "type": "boolean"
+          },
+          "timeCreated": {
+            "label": "Time created",
+            "description": "Time created",
+            "type": "datetime"
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
+          },
+          "uid": {
+            "label": "Unique id",
+            "description": "Unique id",
+            "type": "text"
+          },
+          "createdIndex": {
+            "label": "Created index",
+            "description": "Created index",
+            "type": "number"
+          },
+          "itemType": {
+            "label": "Item type",
+            "description": "Item type",
+            "type": "text"
+          },
+          "stageId": {
+            "label": "Stage id",
+            "description": "Stage id",
+            "type": "text"
+          },
+          "promptId": {
+            "label": "Prompt id",
+            "description": "Prompt id",
+            "type": "text"
           }
         }
       },
@@ -174,6 +219,51 @@
                 "value": -1
               }
             ]
+          },
+          "primary_venue": {
+            "label": "Primary venue",
+            "description": "Primary venue",
+            "type": "boolean"
+          },
+          "Main/Parent Organization": {
+            "label": "Main/Parent Organization",
+            "description": "Main/Parent Organization",
+            "type": "text"
+          },
+          "Subsidiary/Program/Project": {
+            "label": "Subsidiary/Program/Project",
+            "description": "Subsidiary/Program/Project",
+            "type": "text"
+          },
+          "Abbreviated Name": {
+            "label": "Abbreviated Name",
+            "description": "Abbreviated Name",
+            "type": "text"
+          },
+          "Standard Word Abbreviations": {
+            "label": "Standard Word Abbreviations",
+            "description": "Standard Word Abbreviations",
+            "type": "text"
+          },
+          "Geocoded Address": {
+            "label": "Geocoded Address",
+            "description": "Geocoded Address",
+            "type": "text"
+          },
+          "Latitude": {
+            "label": "Latitude",
+            "description": "Latitude",
+            "type": "number"
+          },
+          "Longitude": {
+            "label": "Longitude",
+            "description": "Longitude",
+            "type": "number"
+          },
+          "Raw Address": {
+            "label": "Raw Address",
+            "description": "Raw Address",
+            "type": "text"
           }
         }
       },
@@ -230,6 +320,11 @@
                 "value": -1
               }
             ]
+          },
+          "type": {
+            "label": "Type",
+            "description": "Type",
+            "type": "text"
           }
         }
       },
