@@ -1,19 +1,17 @@
-/* eslint-disable jsx-a11y/label-has-for */
-
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
-import { map, toPairs } from 'lodash';
+import { map, get, toPairs } from 'lodash';
 import {
-  TextInput,
+  Checkbox,
+  CheckboxGroup,
+  ToggleButtonGroup,
   RadioGroup,
-  ToggleGroup,
-  ToggleInput,
-} from '../ui/components';
+  Text,
+  Toggle,
+} from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
-
-import { withOptionsFromSelector } from '../behaviours';
 
 /*
   * Returns the named field compontent, if no matching one is found
@@ -21,84 +19,18 @@ import { withOptionsFromSelector } from '../behaviours';
   * @param {object} field The properties handed down from the protocol form
   */
 
-export const makeRenderInput = (componentType) => {
-  const renderInput = (field) => {
-    const {
-      input,
-      meta,
-      label,
-      options,
-      optionsSelector,
-      isNumericOnly,
-      toggleComponent,
-      autoFocus,
-      className,
-      tooltip,
-      type: inputType,
-    } = field;
-
-    let InputComponent = TextInput;
-
-    let inputProps = {
-      name: input.name,
-      value: input.value,
-      errorText: meta.invalid && meta.touched && meta.error,
-      label,
-      autoFocus,
-      isNumericOnly,
-      className,
-      tooltip,
-      type: componentType === 'hidden' ? 'hidden' : inputType,
-    };
-
-    if (componentType === 'RadioGroup') {
-      InputComponent = RadioGroup;
-      inputProps = {
-        ...inputProps,
-        options,
-        onRadioClick: input.onChange,
-      };
-    }
-
-    if (componentType === 'CheckboxGroup') {
-      const { colors } = field;
-      InputComponent = ToggleGroup;
-      inputProps = {
-        ...inputProps,
-        toggleComponent,
-        options,
-        colors,
-        onOptionClick: (e, checked, optionVal) => input.onChange({
-          ...input.value,
-          [optionVal]: checked,
-        }),
-      };
-    }
-
-    if (componentType === 'ToggleInput') {
-      InputComponent = ToggleInput;
-      inputProps = {
-        ...inputProps,
-        onCheck: (e, checked, optionVal) => input.onCheck({
-          ...input.value,
-          [optionVal]: checked,
-        }),
-      };
-    }
-
-    if (optionsSelector) {
-      InputComponent = withOptionsFromSelector(InputComponent, optionsSelector);
-    }
-
-    if (['ToggleInput', 'CheckboxGroup', 'RadioGroup'].includes(componentType)) {
-      delete inputProps.isNumericOnly;
-    }
-
-    return <InputComponent {...inputProps} {...input} />;
-  };
-
-  return renderInput;
+const fieldTypes = {
+  Checkbox,
+  CheckboxGroup,
+  ToggleButtonGroup,
+  RadioGroup,
+  Text,
+  Toggle,
+  hidden: props => <input type="hidden" {...props} />,
 };
+
+export const getInputComponent = componentType =>
+  get(fieldTypes, componentType, Text);
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
@@ -124,16 +56,12 @@ const getValidation = validation =>
 class Field extends PureComponent {
   constructor(props) {
     super(props);
-    this.component = (typeof props.component === 'string') ? makeRenderInput(props.component) : props.component;
-  }
-
-  componentWillMount() {
-    this.validate = getValidation(this.props.validation);
+    this.component = (typeof props.component === 'string') ? getInputComponent(props.component) : props.component;
+    this.validate = getValidation(props.validation);
   }
 
   render() {
     const { label, name, validation, ...rest } = this.props;
-
     return (
       <ReduxFormField
         {...rest}

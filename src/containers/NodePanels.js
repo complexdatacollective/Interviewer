@@ -29,7 +29,7 @@ const getHighlight = (highlight, panelNumber) => {
   */
 class NodePanels extends PureComponent {
   static propTypes = {
-    activePromptAttributes: PropTypes.object.isRequired,
+    activePromptAttributes: PropTypes.object,
     getLabel: PropTypes.func.isRequired,
     isDragging: PropTypes.bool,
     meta: PropTypes.object,
@@ -42,6 +42,7 @@ class NodePanels extends PureComponent {
   };
 
   static defaultProps = {
+    activePromptAttributes: {},
     isDragging: false,
     meta: {},
     panels: [],

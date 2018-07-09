@@ -91,7 +91,6 @@ class NodeForm extends Component {
       ],
       form: name.toString(),
       onSubmit: this.onSubmit,
-      tooltip: this.isLarge() ? 'right' : 'bottom',
     };
 
     const formElement = this.isLarge() ?

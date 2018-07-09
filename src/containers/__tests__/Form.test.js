@@ -85,9 +85,7 @@ describe('<Form />', () => {
     ));
 
     expect(subject.find(Field).length).toBe(3);
-
-    expect(subject.find('.input__container--hidden').length).toBe(1);
-    expect(subject.find('.input__container--hidden').children().find('input').props().type).toEqual('hidden');
+    expect(subject.find('input[type="hidden"]').length).toBe(1);
   });
   it('Calls autoPopulate on Field blur');
 });

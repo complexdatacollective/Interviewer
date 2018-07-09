@@ -21,13 +21,15 @@ const nodeFormKey = createSelector(
 
 const rehydrateField = ({ registry, entity, type, field }) => {
   if (!field.variable) { return field; }
-
-  return {
+  const returnObject = {
     name: field.variable,
     component: field.component,
+    fieldLabel: field.label,
     value: field.value,
     ...registry[entity][type].variables[field.variable],
   };
+
+  return returnObject;
 };
 
 export const makeRehydrateFields = () =>

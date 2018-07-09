@@ -40,21 +40,6 @@
               "maxLength": 8
             }
           },
-          "special_category": {
-            "label": "Special category",
-            "description": "Human readable description",
-            "type": "ordinal",
-            "options": [46, 56]
-          },
-          "some_options": {
-            "label": "Some possible options",
-            "description": "Human readable description",
-            "type": "categorical",
-            "options": [46],
-            "validation": {
-              "max": 1
-            }
-          },
           "close_friend": {
             "label": "Close Friend",
             "description": "Human readable description",
@@ -79,7 +64,7 @@
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Last 24 hours",
                 "value": 4
@@ -106,7 +91,7 @@
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Three",
                 "value": 3
@@ -172,6 +157,158 @@
           }
         }
       },
+      "dummyNodeType": {
+        "label": "Dummy Type",
+        "color": "node-color-seq-6",
+        "displayVariable": "label",
+        "iconVariant": "add-a-person",
+        "variables": {
+          "label": {
+            "label": "Label",
+            "description": "Human readable description",
+            "type": "text",
+            "validation": {
+              "required": true,
+              "minLength": 1,
+              "maxLength": 10
+            }
+          },
+          "numberVariable": {
+            "label": "Number Variable",
+            "description": "Human readable description",
+            "type": "number",
+            "validation": {
+              "required": true,
+              "minValue": 16,
+              "maxValue": 100
+            }
+          },
+          "booleanVariable": {
+            "label": "Boolean Variable",
+            "description": "Human readable description",
+            "type": "boolean",
+            "validation": {
+              "required": true
+            }
+          },
+          "booleanVariable2": {
+            "label": "Boolean  2",
+            "description": "Human readable description",
+            "type": "boolean"
+          },
+          "ordinalVariable": {
+            "label": "Ordinal Variable",
+            "description": "Human readable description",
+            "type": "ordinal",
+            "options": [
+              {
+                "label": "Value Four",
+                "value": 4
+              },
+              {
+                "label": "Value Three is quite long",
+                "value": 3
+              },
+              {
+                "label": "Value Two",
+                "value": 2
+              },
+              {
+                "label": "Value One is also long, with break",
+                "value": 1
+              },
+              {
+                "label": "Missing Value",
+                "value": -1
+              }
+            ],
+            "validation": {
+              "required": true
+            }
+          },
+          "categoricalVariable": {
+            "label": "Categorical Variable",
+            "description": "Huam readable description",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "Value A has additional text to go along with it",
+                "value": "Value A"
+              },
+              {
+                "label": "Value B",
+                "value": "Value B"
+              },
+              {
+                "label": "Value C is a label that has too much text - shorten it",
+                "value": "Value C"
+              },
+              {
+                "label": "Value D",
+                "value": "Value D"
+              },
+              {
+                "label": "Value E",
+                "value": "Value E"
+              }
+            ],
+            "validation": {
+              "minSelected": 1
+            }
+          },
+          "categoricalVariable2": {
+            "label": "Categorical Variable2",
+            "description": "Huam readable description",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "Friends",
+                "value": "Value A"
+              },
+              {
+                "label": "Family",
+                "value": "Value B"
+              },
+              {
+                "label": "Work",
+                "value": "Value C"
+              },
+              {
+                "label": "Church",
+                "value": "Value D"
+              },
+              {
+                "label": "Vikings",
+                "value": "Value E"
+              },
+              {
+                "label": "German Course",
+                "value": "Value F"
+              },
+              {
+                "label": "Gardening Club",
+                "value": "Value G"
+              },
+              {
+                "label": "Neighbors",
+                "value": "Value H"
+              },
+              {
+                "label": "Oxford Friends",
+                "value": "Value I"
+              },
+              {
+                "label": "Band",
+                "value": "Value J"
+              }
+            ],
+            "validation": {
+              "minSelected": 1,
+              "maxSelected": 4
+            }
+          }
+        }
+      },
       "venue": {
         "label": "Venue",
         "displayVariable": "Abbreviated Name",
@@ -197,7 +334,7 @@
             "label": "Visit frequency ordinal variable.",
             "description": "Visit frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Every day",
                 "value": 4
@@ -298,7 +435,7 @@
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
-            "values": [
+            "options": [
               {
                 "label": "Last 24 hours",
                 "value": 4
@@ -834,6 +971,44 @@
         }
       ]
     },
+    "allInputsForm": {
+      "title": "Test for form input controls",
+      "entity": "node",
+      "type": "dummyNodeType",
+      "optionToAddAnother": true,
+      "fields": [
+        {
+          "variable": "label",
+          "component": "TextInput",
+          "label": "What is this person's name?"
+        },
+        {
+          "variable": "numberVariable",
+          "component": "TextInput",
+          "label": "What is this person's age?"
+        },
+        {
+          "variable": "ordinalVariable",
+          "component": "RadioGroup",
+          "label": "How much do you like likert scales?"
+        },
+        {
+          "variable": "categoricalVariable",
+          "component": "CheckboxGroup",
+          "label": "Which of these things do you like?"
+        },
+        {
+          "variable": "categoricalVariable2",
+          "component": "ToggleButtonGroup",
+          "label": "Which of these other things do you like?"
+        },
+        {
+          "variable": "booleanVariable",
+          "component": "Toggle",
+          "label": "Is the switch below not turned on?"
+        }
+      ]
+    },
     "myCustomForm": {
       "title": "Add A Person",
       "entity": "node",
@@ -915,7 +1090,7 @@
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
-      "form": "myCustomForm",
+      "form": "person",
       "subject": {
         "entity": "node",
         "type": "person"
@@ -1118,6 +1293,22 @@
       ]
     },
     {
+      "id": "namegen4",
+      "type": "NameGenerator",
+      "label": "NG Inputs",
+      "form": "allInputsForm",
+      "subject": {
+        "entity": "node",
+        "type": "dummyNodeType"
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "This name generator is designed to test input types"
+        }
+      ]
+    },
+    {
       "id": "sociogram",
       "type": "Sociogram",
       "label": "Sociogram",
@@ -1125,7 +1316,7 @@
         {
           "id": "closeness1",
           "text":
-            "Position the nodes amongst the concentric circles. Place people you are closer to towards the middle",
+            "This prompt uses a background image containing quadrants.",
           "subject": {
             "entity": "node",
             "type": "person"
@@ -1154,8 +1345,74 @@
             }
           ],
           "background": {
-            "image": "rubberduck.jpg",
+            "image": "quadrant.svg",
             "concentricCircles": 4,
+            "skewedTowardCenter": true
+          }
+        },
+        {
+          "id": "closeness2",
+          "text":
+            "This is a prompt showing no background.",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "filter":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["friend", "professional"],
+            "create": "friend"
+          },
+          "highlight": {
+            "variable": "has_given_advice",
+            "value": true,
+            "allowHighlighting": true
+          },
+          "disable":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "background": {
+            "concentricCircles": 0,
+            "skewedTowardCenter": false
+          }
+        },
+        {
+          "id": "closeness3",
+          "text":
+            "This prompt shows 3 concentric circles",
+          "subject": {
+            "entity": "node",
+            "type": "person"
+          },
+          "filter":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
+          "layout": {
+            "layoutVariable": "closenessLayout",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["friend", "professional"],
+            "create": "friend"
+          },
+          "highlight": {
+            "variable": "has_given_advice",
+            "value": true,
+            "allowHighlighting": true
+          },
+          "disable":
+            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
+          "nodeBinSortOrder": {
+            "nickname": "DESC"
+          },
+          "background": {
+            "concentricCircles": 3,
             "skewedTowardCenter": true
           }
         }

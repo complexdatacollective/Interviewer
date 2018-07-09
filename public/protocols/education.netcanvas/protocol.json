@@ -47,13 +47,8 @@
               }
             ]
           },
-          "outsideOfSchool": {
-            "label": "Have you contacted this person outside of school in the past 7 days?",
-            "description": "If the participant has contacted the alter outside of school in the past 7 days.",
-            "type": "boolean"
-          },
           "yearsKnown": {
-            "label": "How many years have you known this person for?",
+            "label": "Years known",
             "description": "How many years the participant has known the alter.",
             "type": "number",
             "validation": {
@@ -429,23 +424,23 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput"
+          "component": "TextInput",
+          "label": "What is the person's name?"
         },
         {
           "variable": "nickname",
-          "component": "TextInput"
-        },
-        {
-          "variable": "outsideOfSchool",
-          "component": "ToggleInput"
+          "component": "TextInput",
+          "label": "What is their nickname?"
         },
         {
           "variable": "gender",
-          "component": "RadioGroup"
+          "component": "RadioGroup",
+          "label": "What is this person's gender?"
         },
         {
           "variable": "yearsKnown",
-          "component": "TextInput"
+          "component": "TextInput",
+          "label": "How many years have you known this person?"
         }
       ]
     }

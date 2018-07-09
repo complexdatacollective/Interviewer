@@ -101,7 +101,7 @@ export const makeGetOrdinalValues = () =>
   createSelector(
     makeGetNodeVariables(), makeGetPromptVariable(),
     (nodeVariables, promptVariable) => {
-      const ordinalValues = nodeVariables[promptVariable].values;
+      const ordinalValues = nodeVariables[promptVariable].options;
       return ordinalValues;
     },
   );
@@ -123,7 +123,6 @@ export const getNodeLabelFunction = createDeepEqualSelector(
 
 export const makeNetworkNodesForSubject = () => {
   const getSubject = makeGetSubject();
-
   return createSelector(
     networkNodes, getSubject,
     (nodes, subject) => filter(nodes, ['type', subject.type]),
@@ -133,9 +132,10 @@ export const makeNetworkNodesForSubject = () => {
 export const makeNetworkNodesForPrompt = () => {
   // used to check prompt ids
   const getAttributes = makeGetAdditionalAttributes();
+  const networkNodesForSubject = makeNetworkNodesForSubject();
 
   return createSelector(
-    networkNodes, getAttributes,
+    networkNodesForSubject, getAttributes,
     (nodes, attributes) => filter(nodes, attributes),
   );
 };
