@@ -1,8 +1,9 @@
 .card {
   align-items: center;
-  border: 2px solid transparent;
+  border: 5px solid transparent;
   border-radius: 15px;
   background: var(--light-background);
+  transition: border-color var(--animation-duration-fast) var(--animation-easing);
   cursor: pointer;
   display: flex;
   margin: 1rem;
@@ -14,11 +15,14 @@
 
   &__indicator {
     box-sizing: content-box;
-    fill: palette('selected');
-    height: 0;
-    width: 0;
+    fill: transparent;
+    height: 60px;
+    width: 60px;
     margin-right: 10px;
     transition: all var(--animation-duration-fast) var(--animation-easing);
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
 
     .tick {
       fill: transparent;
@@ -26,13 +30,10 @@
   }
 
   &--selected {
-    transform: scale(1);
     border-color: palette('primary');
 
     .card__indicator {
-      height: 60px;
       padding: 0;
-      width: 60px;
       animation: bounce var(--animation-duration-standard) var(--animation-easing);
       fill: palette('primary');
 
