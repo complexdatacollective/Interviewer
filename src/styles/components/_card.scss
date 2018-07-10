@@ -1,13 +1,13 @@
 .card {
   align-items: center;
-  border: 5px solid transparent;
+  border: 3px solid transparent;
   border-radius: 15px;
   background: var(--light-background);
   transition: border-color var(--animation-duration-fast) var(--animation-easing);
   cursor: pointer;
   display: flex;
   margin: 1rem;
-  padding: 2rem;
+  padding: 1.5rem;
 
   &--multiselect {
     cursor: default;
@@ -19,7 +19,7 @@
     height: 60px;
     width: 60px;
     margin-right: 10px;
-    transition: all var(--animation-duration-fast) var(--animation-easing);
+    transition: fill var(--animation-duration-fast) var(--animation-easing);
     position: absolute;
     bottom: 2rem;
     right: 2rem;
