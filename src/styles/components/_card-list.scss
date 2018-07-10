@@ -1,5 +1,6 @@
 .card-list {
   flex-wrap: wrap;
+  margin-bottom: 10em;
   display: grid;
   grid-template-columns: 1fr 1fr;
   @media screen and (min-width: 1200px) {
@@ -22,7 +23,7 @@
   &__delete-button {
     --button-size: 1rem;
     --button-padding: #{spacing(small)};
-    --card-margin: 1rem;
+    --card-margin: 1.5rem;
 
     cursor: pointer;
     position: absolute;
@@ -33,6 +34,10 @@
     &[name='close'] {
       height: calc(var(--button-size) + 2 * var(--button-padding));
       width: calc(var(--button-size) + 2 * var(--button-padding));
+
+      .cls-1 {
+        fill: var(--transparent-light);
+      }
     }
   }
 }
