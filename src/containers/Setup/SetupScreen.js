@@ -57,7 +57,7 @@ class Setup extends Component {
           <div className="header-content">
             <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
             <div className="header-content__nav">
-              <h1 className="type--title-1">Network Canvas Alpha 4 - Gresley</h1>
+              <h1 className="type--title-1">Network Canvas Alpha 5 - Anning</h1>
               <nav>
                 <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
                   Start new interview
