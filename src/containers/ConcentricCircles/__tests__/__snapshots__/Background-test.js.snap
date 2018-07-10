@@ -15,9 +15,9 @@ ShallowWrapper {
     highlightAttributes={Object {}}
     image="map.png"
     layoutVariable="foo"
-    nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
+    sortOrderBy={Array []}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -105,9 +105,9 @@ ShallowWrapper {
     highlightAttributes={Object {}}
     image={null}
     layoutVariable="foo"
-    nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={true}
+    sortOrderBy={Array []}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
