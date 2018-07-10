@@ -10,24 +10,6 @@ import { makeRehydrateFields } from '../selectors/forms';
 
 /**
   * Renders a redux form that contains fields according to a `fields` config.
-  *
-  * @param {func} autoPopulate(fields, values, autofill) Enables prepopulation of fields
-  * based on field value changes. Called on change with current field values and meta,
-  * and a callback to allow the setting of otherfields
-  * @param {array} fields Contains an array of field definitions
-  * see Field for detailed format of definitions:
-  * {
-  *   label: 'Name',
-  *   name: 'name',
-  *   type: 'Alphanumeric',
-  *   placeholder: 'Name',
-  *   validation: {
-  *     required: true,
-  *   }
-  * }
-  * @param {string} form The name of the form
-  * @param {func} handleSubmit(data) Recieves data as jsonfrom a sucessful form submission
-  *
   */
 class Form extends Component {
   handleFieldBlur = () => {
@@ -65,7 +47,7 @@ class Form extends Component {
           const isFirst = autoFocus && index === 0;
           return (
             <Field
-              key={field.name}
+              key={`${field.name} ${index}`}
               {...field}
               autoFocus={isFirst}
               onBlur={() => { this.handleFieldBlur(); }}

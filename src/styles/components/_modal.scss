@@ -33,30 +33,31 @@ $component-name: modal;
 
     &-content {
       height: inherit;
-      max-height: 80vh;
     }
 
     &-title {
-      flex: 0 165px;
+      flex: 0 130px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       max-height: 20vh;
-      padding: 65px 0 0;
     }
   }
+
+  $button-size: 25px;
 
   &__close {
     background: transparent;
     background-image: url('../images/close.svg');
     background-repeat: no-repeat;
-    background-size: 15px;
+    background-size: 100%;
     background-position: 0 50%;
-    padding-left: 25px;
     text-transform: uppercase;
     border: 0;
     position: absolute;
+    height: $button-size;
+    width: $button-size;
     right: 35px;
     top: 35px;
     color: palette('text');
@@ -68,17 +69,30 @@ $component-name: modal;
   }
 
   &--fullscreen {
-    .#{$component-name} {
+    display: block;
 
+    .#{$component-name} {
       &__background {
         background-color: palette('background');
       }
 
       &__window {
-        display: flex;
-        flex: 1 1 auto;
         height: 100vh;
       }
+
+      &__layout {
+        display: block;
+
+        &-title {
+          display: block;
+          padding-top: 5rem;
+          text-align: center;
+        }
+      }
+    }
+
+    .input__container--hidden {
+      position: absolute;
     }
 
     .form {

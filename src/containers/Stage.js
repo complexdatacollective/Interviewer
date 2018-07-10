@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import getInterface from '../containers/Interfaces';
+import getInterface from './Interfaces';
+import StageErrorBoundary from '../components/StageErrorBoundary';
 import { stages } from '../selectors/session';
 
 /**
@@ -36,9 +37,11 @@ class Stage extends Component {
           </button>
         </div>
         <div className="stage__interface">
-          { CurrentInterface &&
-            <CurrentInterface stage={config} />
-          }
+          <StageErrorBoundary>
+            { CurrentInterface &&
+              <CurrentInterface stage={config} />
+            }
+          </StageErrorBoundary>
         </div>
         <div className="stage__control">
           <button

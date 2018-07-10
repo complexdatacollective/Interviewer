@@ -35,9 +35,9 @@ ShallowWrapper {
       "loadProtocol": [Function],
       "protocols": Array [
         Object {
+          "isFactoryProtocol": true,
           "name": "Sample",
           "path": "sample.netcanvas",
-          "type": "factory",
         },
       ],
       "store": Object {
@@ -81,9 +81,9 @@ ShallowWrapper {
         "loadProtocol": [Function],
         "protocols": Array [
           Object {
+            "isFactoryProtocol": true,
             "name": "Sample",
             "path": "sample.netcanvas",
-            "type": "factory",
           },
         ],
         "store": Object {

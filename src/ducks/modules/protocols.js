@@ -1,73 +1,60 @@
 import { actionTypes as ProtocolActionTypes } from './protocol';
 
-const LOAD_PROTOCOL = ProtocolActionTypes.LOAD_PROTOCOL;
+/**
+ * `protocols` maintains some cached data and metadata about the protocol files available on disk.
+ *
+ * For downloaded protocols, `name` is the unique ID.
+ *
+ * As a side effect for SET_PROTOCOL (from `./protocol`), which provides the parsed protocol JSON,
+ * the store is updated.
+ */
 
-const ADD_PROTOCOL = 'ADD_PROTOCOL';
+const SET_PROTOCOL = ProtocolActionTypes.SET_PROTOCOL;
 
 const initialState = [
   {
-    name: 'Education Protocol',
-    version: '4.0.0',
-    description: 'This is the education protocol.',
-    type: 'factory',
+    name: 'Teaching Protocol',
+    description: 'version 4.0.0',
     path: 'education.netcanvas',
+    isFactoryProtocol: true,
   },
   {
     name: 'Development Protocol',
-    version: '4.0.0',
-    description: 'This is the development protocol.',
-    type: 'factory',
+    description: 'version 4.0.0',
     path: 'development.netcanvas',
+    isFactoryProtocol: true,
   },
 ];
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case LOAD_PROTOCOL: {
-      // Downloaded protocols always have unique paths, so check remote ID as well.
-      const matchesCurrentAction = protocol => protocol.type === action.protocolType &&
-        (protocol.path === action.path ||
-          (protocol.remoteId && protocol.remoteId === action.remoteId));
+    case SET_PROTOCOL: {
+      // TODO: Protocol should be validated before import; this check shouldn't be needed
+      if (!action.protocol.name) { return state; }
 
-      if (state.some(matchesCurrentAction)) {
-        return state;
+      // Do not allow updates to factory protocols
+      if (action.isFactoryProtocol) { return state; }
+
+      const newProtocol = {
+        name: action.protocol.name,
+        description: action.protocol.description,
+        path: action.path,
+      };
+
+      const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
+
+      if (existingIndex > -1) {
+        const updatedState = [...state];
+        updatedState.splice(existingIndex, 1, newProtocol);
+        return updatedState;
       }
+
       return [
         ...state,
-        {
-          name: action.path,
-          path: action.path,
-          type: action.protocolType,
-          remoteId: action.remoteId,
-        },
+        newProtocol,
       ];
     }
-    case ADD_PROTOCOL:
-      return [
-        ...state,
-        action.protocol,
-      ];
     default:
       return state;
   }
 }
-
-function addProtocol(protocol) {
-  return {
-    type: ADD_PROTOCOL,
-    protocol,
-  };
-}
-
-const actionCreators = {
-  addProtocol,
-};
-
-const actionTypes = {
-  ADD_PROTOCOL,
-};
-
-export {
-  actionCreators,
-  actionTypes,
-};

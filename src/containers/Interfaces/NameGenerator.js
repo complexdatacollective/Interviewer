@@ -159,8 +159,12 @@ class NameGenerator extends Component {
   }
 }
 
+NameGenerator.defaultProps = {
+  activePromptAttributes: {},
+};
+
 NameGenerator.propTypes = {
-  activePromptAttributes: PropTypes.object.isRequired,
+  activePromptAttributes: PropTypes.object,
   addNodes: PropTypes.func.isRequired,
   form: PropTypes.object.isRequired,
   getLabel: PropTypes.func.isRequired,

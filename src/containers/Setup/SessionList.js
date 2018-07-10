@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
-import { Link, matchPath } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
+import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const shortUid = uid => (uid || '').replace(/-.*/, '');
 
@@ -18,7 +20,7 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const pathInfo = (sessionPath) => {
   const info = { path: sessionPath };
-  const matchedPath = matchPath(sessionPath, { path: '/session/:sessionId/:protocolType/:protocolId/:stageIndex' });
+  const matchedPath = matchSessionPath(sessionPath);
   if (matchedPath) {
     info.sessionId = matchedPath.params.sessionId;
     info.protocol = matchedPath.params.protocolId;
@@ -50,15 +52,17 @@ class SessionList extends Component {
   }
 
   render() {
-    const { removeSession, sessions } = this.props;
+    const { protocolData, removeSession, sessions } = this.props;
 
-    if (isEmpty(sessions)) {
+    // Display most recent first, and filter out any session that doesn't have a protocol
+    const sessionList = Object.keys(sessions)
+      .map(key => ({ uid: key, value: sessions[key] }))
+      .filter(s => s.value.protocolPath);
+    sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
+
+    if (isEmpty(sessionList)) {
       return emptyView;
     }
-
-    // Display most recent first
-    const sessionList = Object.keys(sessions).map(key => ({ uid: key, value: sessions[key] }));
-    sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
     return (
       <React.Fragment>
@@ -75,16 +79,19 @@ class SessionList extends Component {
           nodes={sessionList}
           onToggleCard={this.onClickLoadSession}
           details={(sessionInfo) => {
-            const info = pathInfo(sessionInfo.value.path);
-            const exportedAt = sessionInfo.value.lastExportedAt;
+            const session = sessionInfo.value;
+            const info = pathInfo(session.path);
+            const exportedAt = session.lastExportedAt;
             const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
+            const protocol = protocolData[session.protocolPath] || {};
+            const protocolLabel = protocol.name || '[version out of date]';
             return [
-              { Protocol: shortUid(info.protocol) },
-              { 'Last Changed': displayDate(sessionInfo.value.updatedAt) },
+              { Protocol: protocolLabel },
+              { 'Last Changed': displayDate(session.updatedAt) },
               { Stage: oneBasedIndex(info.stageIndex) },
-              { Prompt: oneBasedIndex(sessionInfo.value.promptIndex) },
-              { 'Number of Nodes': sessionInfo.value.network.nodes.length },
-              { 'Number of Edges': sessionInfo.value.network.edges.length },
+              { Prompt: oneBasedIndex(session.promptIndex) },
+              { 'Number of Nodes': session.network.nodes.length },
+              { 'Number of Edges': session.network.edges.length },
               { Exported: exportedDisplay },
             ];
           }}
@@ -97,6 +104,7 @@ class SessionList extends Component {
 SessionList.propTypes = {
   getSessionPath: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
+  protocolData: PropTypes.object.isRequired,
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   setSession: PropTypes.func.isRequired,
@@ -104,6 +112,7 @@ SessionList.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    protocolData: protocolsByPath(state),
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
   };
