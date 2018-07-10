@@ -1338,7 +1338,7 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "nodeBinSortOrder": [
+          "sortOrderBy": [
             {
               "property": "nickname",
               "direction": "desc"
@@ -1375,9 +1375,12 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "sortOrderBy": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            }
+          ],
           "background": {
             "concentricCircles": 0,
             "skewedTowardCenter": false
@@ -1408,9 +1411,12 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "nodeBinSortOrder": {
-            "nickname": "DESC"
-          },
+          "sortOrderBy": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            }
+          ],
           "background": {
             "concentricCircles": 3,
             "skewedTowardCenter": true

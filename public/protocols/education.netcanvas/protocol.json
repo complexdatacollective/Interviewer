@@ -555,7 +555,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": [
+          "sortOrderBy": [
             {
               "property": "*",
               "direction": "asc"
@@ -592,7 +592,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": [
+          "sortOrderBy": [
             {
               "property": "*",
               "direction": "asc"
@@ -614,7 +614,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": [
+          "sortOrderBy": [
             {
               "property": "*",
               "direction": "asc"
@@ -640,7 +640,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "nodeBinSortOrder": [
+          "sortOrderBy": [
             {
               "property": "*",
               "direction": "asc"
