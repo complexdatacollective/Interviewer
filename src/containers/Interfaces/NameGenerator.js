@@ -161,12 +161,13 @@ class NameGenerator extends Component {
 
 NameGenerator.defaultProps = {
   activePromptAttributes: {},
+  form: null,
 };
 
 NameGenerator.propTypes = {
   activePromptAttributes: PropTypes.object,
   addNodes: PropTypes.func.isRequired,
-  form: PropTypes.object.isRequired,
+  form: PropTypes.object,
   getLabel: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
@@ -207,3 +208,7 @@ export default compose(
   withPrompt,
   connect(makeMapStateToProps, mapDispatchToProps),
 )(NameGenerator);
+
+export {
+  NameGenerator as UnconnectedNameGenerator,
+};
