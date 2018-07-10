@@ -21,10 +21,10 @@ ShallowWrapper {
         "label": "some label",
       }
     }
-    nodeBinSortOrder={Object {}}
     selectMode=""
     skewedTowardCenter={false}
     sort={Object {}}
+    sortOrderBy={Array []}
     updateNode={[Function]}
   />,
   Symbol(enzyme.__renderer__): Object {

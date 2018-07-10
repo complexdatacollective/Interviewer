@@ -16,7 +16,6 @@ ShallowWrapper {
     height={456}
     highlightAttributes={Object {}}
     layoutVariable="foo"
-    nodeBinSortOrder={Object {}}
     nodes={
       Array [
         Object {
@@ -31,6 +30,7 @@ ShallowWrapper {
     }
     selectMode=""
     skewedTowardCenter={false}
+    sortOrderBy={Array []}
     toggleEdge={[Function]}
     toggleHighlight={[Function]}
     updateNode={[Function]}
