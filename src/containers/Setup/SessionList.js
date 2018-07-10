@@ -14,7 +14,7 @@ import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const shortUid = uid => (uid || '').replace(/-.*/, '');
 
-const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString();
+const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
@@ -86,10 +86,9 @@ class SessionList extends Component {
             const protocol = protocolData[session.protocolPath] || {};
             const protocolLabel = protocol.name || '[version out of date]';
             return [
-              { Protocol: protocolLabel },
               { 'Last Changed': displayDate(session.updatedAt) },
+              { Protocol: protocolLabel },
               { Stage: oneBasedIndex(info.stageIndex) },
-              { Prompt: oneBasedIndex(session.promptIndex) },
               { 'Number of Nodes': session.network.nodes.length },
               { 'Number of Edges': session.network.edges.length },
               { Exported: exportedDisplay },
