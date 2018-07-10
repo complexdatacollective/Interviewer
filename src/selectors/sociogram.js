@@ -33,7 +33,7 @@ const propPromptLayout = (_, props) => props.prompt.layout;
 const propPromptEdges = (_, props) => props.prompt.edges;
 const propPromptHighlight = (_, props) => props.prompt.highlight;
 const propPromptBackground = (_, props) => props.prompt.background;
-const propPromptSort = (_, props) => props.prompt.nodeBinSortOrder;
+const propPromptSort = (_, props) => props.prompt.sortOrderBy;
 
 // MemoedSelectors
 
@@ -70,7 +70,7 @@ const getLayoutOptions = createDeepEqualSelector(
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
   makeGetDisplayVariable(),
-  (sort, displayVariable) => (sort && !isEmpty(sort) ? { nodeBinSortOrder: sort } : { nodeBinSortOrder: { [displayVariable]: 'ASC' } }),
+  (sort, displayVariable) => (sort && !isEmpty(sort) ? { sortOrderBy: sort } : { sortOrderBy: [{ property: displayVariable, direction: 'asc' }] }),
 );
 
 const getBackgroundOptions = createDeepEqualSelector(
@@ -114,7 +114,7 @@ export const makeGetNextUnplacedNode = () => {
   return createSelector(
     getUnplacedNodes, getSortOptions,
     (nodes, sortOptions) => {
-      const sorter = sortOrder(sortOptions.nodeBinSortOrder);
+      const sorter = sortOrder(sortOptions.sortOrderBy);
       return first(sorter(nodes));
     },
   );
