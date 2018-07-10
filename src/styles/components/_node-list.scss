@@ -7,7 +7,7 @@
   align-content: flex-start;
   min-height: 100%;
   width: 100%;
-  margin-bottom: var(--base-node-size);
+  padding-bottom: var(--base-node-size);
 
   &--hover,
   &--drag {
