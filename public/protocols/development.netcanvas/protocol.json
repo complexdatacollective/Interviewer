@@ -963,11 +963,6 @@
         {
           "variable": "age",
           "component": "TextInput"
-        },
-        {
-          "variable": "timeCreated",
-          "component": "hidden",
-          "value": "return Date.now().toString();"
         }
       ]
     },
@@ -1025,11 +1020,6 @@
         {
           "variable": "age",
           "component": "TextInput"
-        },
-        {
-          "variable": "timeCreated",
-          "component": "hidden",
-          "value": "return Date.now().toString();"
         }
       ]
     }
