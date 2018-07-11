@@ -154,6 +154,11 @@
             "label": "Prompt id",
             "description": "Prompt id",
             "type": "text"
+          },
+          "special_category": {
+            "label": "Special Category",
+            "description": "Special Category",
+            "type": "categorical"
           }
         }
       },
