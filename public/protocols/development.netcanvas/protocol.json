@@ -156,9 +156,10 @@
             "type": "text"
           },
           "special_category": {
-            "label": "Special Category",
-            "description": "Special Category",
-            "type": "categorical"
+            "label": "Special category",
+            "description": "A special category",
+            "type": "ordinal",
+            "options": [46,56]
           }
         }
       },
