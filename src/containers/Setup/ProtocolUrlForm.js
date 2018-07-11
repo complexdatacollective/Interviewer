@@ -23,7 +23,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://github.com/codaco/example-protocols/raw/957429a/packaged/demo.netcanvas',
+  protocol_url: 'https://',
 };
 
 class ProtocolUrlForm extends Component {
