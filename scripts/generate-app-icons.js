@@ -105,3 +105,9 @@ function parseJobs(jobList) {
 
 
 parseJobs(jobs);
+
+// TODO: remove once underlying issue fixed: https://github.com/akabekobeko/npm-icon-gen/issues/86
+const warn = (msg) => { console.warn(require('chalk').yellow(msg)); }; // eslint-disable-line
+warn('Warning: *.ico output for Windows may be corrupted.');
+warn('You should re-export from another editor.');
+warn('Issue: https://github.com/codaco/Network-Canvas/issues/602');
