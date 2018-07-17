@@ -1,11 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<NodeBucket /> renders ok 1`] = `
+exports[`<NodeBucket /> does not display bucket when positioning is disabled 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <NodeBucket
     allowPositioning={false}
+    allowSelect={false}
+    canCreateEdge={false}
+    canHighlight={false}
+    concentricCircles={0}
+    createEdge="bar"
+    displayEdges={Array []}
+    getLabel={[Function]}
+    highlightAttributes={Object {}}
+    layout="foo"
+    layoutVariable="foo"
+    node={
+      Object {
+        "label": "some label",
+      }
+    }
+    selectMode=""
+    skewedTowardCenter={false}
+    sort={Object {}}
+    sortOrderBy={Array []}
+    updateNode={[Function]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): null,
+  Symbol(enzyme.__nodes__): Array [
+    null,
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`<NodeBucket /> renders ok 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <NodeBucket
+    allowPositioning={true}
     allowSelect={false}
     canCreateEdge={false}
     canHighlight={false}
