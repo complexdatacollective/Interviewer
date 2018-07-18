@@ -5,7 +5,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <NodeBucket
-    allowPositioning={false}
+    allowPositioning={true}
     allowSelect={false}
     canCreateEdge={false}
     canHighlight={false}
