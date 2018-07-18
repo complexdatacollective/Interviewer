@@ -37,6 +37,6 @@ describe('<NodeBucket />', () => {
   it('does not display bucket when positioning is disabled', () => {
     const component = shallow(<NodeBucket {...mockProps} allowPositioning={false} />);
 
-    expect(component).toMatchSnapshot();
+    expect(component.children()).toHaveLength(0);
   });
 });
