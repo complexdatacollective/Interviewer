@@ -155,13 +155,13 @@ describe('protocol module', () => {
         actionCreators.loadProtocol('/app/data/protocol/path'),
       );
 
-      const expectedActions = [actionCreators.setProtocol(
+      const expectedAction = actionCreators.setProtocol(
         '/app/data/protocol/path',
         { fake: { protocol: { json: true } } },
         false,
-      )];
+      );
       return epics(action$).toArray().toPromise().then((result) => {
-        expect(result).toEqual(expectedActions);
+        expect(result).toContainEqual(expectedAction);
       });
     });
 
@@ -170,13 +170,13 @@ describe('protocol module', () => {
         actionCreators.loadFactoryProtocol('factory_protocol_name'),
       );
 
-      const expectedActions = [actionCreators.setProtocol(
+      const expectedAction = actionCreators.setProtocol(
         'factory_protocol_name',
         { fake: { factory: { protocol: { json: true } } } },
         true,
-      )];
+      );
       return epics(action$).toArray().toPromise().then((result) => {
-        expect(result).toEqual(expectedActions);
+        expect(result).toContainEqual(expectedAction);
       });
     });
   });

@@ -1,6 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
+import { loadWorker, loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 import { actionTypes as SessionActionTypes } from './session';
 
 /**
@@ -30,6 +30,7 @@ const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
+const SET_WORKER = 'SET_WORKER';
 
 const initialState = {
   isLoaded: false,
@@ -40,6 +41,7 @@ const initialState = {
   required: '',
   stages: [],
   type: 'factory',
+  workerUrl: undefined,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -51,6 +53,11 @@ export default function reducer(state = initialState, action = {}) {
         path: action.path,
         isLoaded: true,
         isLoading: false,
+      };
+    case SET_WORKER:
+      return {
+        ...state,
+        workerUrl: action.workerUrl,
       };
     case END_SESSION:
       return initialState;
@@ -141,6 +148,14 @@ function setProtocol(path, protocol, isFactoryProtocol) {
   };
 }
 
+// If there's no custom worker, the set false so we won't expect one later
+function setWorkerContent(workerUrl = false) {
+  return {
+    type: SET_WORKER,
+    workerUrl,
+  };
+}
+
 const downloadProtocolEpic = action$ =>
   action$.ofType(DOWNLOAD_PROTOCOL)
     .switchMap(action =>
@@ -179,6 +194,20 @@ const loadFactoryProtocolEpic = action$ =>
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
+const loadProtocolWorkerEpic = action$ =>
+  action$
+    .ofType(LOAD_PROTOCOL)
+    .switchMap(action => // Favour subsequent load actions over earlier ones
+      Observable
+        .fromPromise(
+          loadWorker(
+            action.path,
+            'node-label-worker',
+            action.protocolType === 'factory',
+          ))
+        .map(workerUrl => setWorkerContent(workerUrl)),
+    );
+
 const actionCreators = {
   loadProtocol: loadProtocolAction,
   importProtocol: importProtocolAction,
@@ -205,6 +234,7 @@ const epics = combineEpics(
   importProtocolEpic,
   loadProtocolEpic,
   loadFactoryProtocolEpic,
+  loadProtocolWorkerEpic,
 );
 
 export {

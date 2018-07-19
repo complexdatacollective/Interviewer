@@ -515,6 +515,13 @@
           "name": "Eugine",
           "nickname": "Eu",
           "age": "23"
+        },
+        {
+          "uid": "previous_6",
+          "type": "person",
+          "name": "Eustace",
+          "nickname": "Eu",
+          "age": "24"
         }
       ]
     },
@@ -1114,7 +1121,7 @@
       "prompts": [
         {
           "id": "6cl",
-          "text": "This is a _prompt_ containing **markdown**",
+          "text": "Who would _you_ consider to be a **close friend**?",
           "additionalAttributes": {
             "special_category": 46,
             "close_friend": true
