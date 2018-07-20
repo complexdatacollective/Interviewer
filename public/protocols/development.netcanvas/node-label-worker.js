@@ -1,32 +1,34 @@
 /**
  * Map an array of nodes to an array of labels (one for each node)
- * // TODO: just a single node? Can we support counter use cases with that?
- * @param  {[Object]} options.data: { nodes, network, variableRegistry }
- * @return {[string]} a label for each input node
+ * @param  {Object} options.data: { nodes, network, variableRegistry }
+ * @return {string} a label for each input node
  */
-function createNodeLabels({ data: { nodes, network, variableRegistry } }) {
-  console.log('[WORKER] Message received from main script', nodes, network, variableRegistry);
-
-  // Here we'll give our nodes labels
+function createNodeLabel({ data: { node, network, externalData } }) {
   //
+  // Goal: define a label for the given node.
+  // We can use information about the node itself, the network, or external data.
   // Examples:
   //
   // 1. Given name, surname initial
-  // const labels = nodes.map(node => `${node.firstName} ${node.last_name && node.last_name[0]}.`);
+  // const label = `${node.name} ${(node.last_name && `${node.last_name[0]}.`) || ''}`;
   //
-  // 2. Add incrementing counter
-  // const labels = nodes.map((node, i) => `${node.name} ${i + 1}`);
+  // 2. Counter based on data set or subset (here, previousInterview)
+  // const index = externalData.previousInterview.nodes.findIndex(n => n.uid === node.uid);
+  // const label = index > -1 ? `${node.name} ${index + 1}` : node.name;
+
+  // 3. Counter, based on network as well (assumes UIDs added)
+  // const networkNodeIds = {};
+  // network.nodes.forEach((n) => { networkNodeIds[n.uid] = 1; });
+  // const externalNodes = externalData.previousInterview.nodes.filter(n => !networkNodeIds[n.uid]);
+  // const nodes = [...network.nodes, ...externalNodes].sort((a, b) => a.uid.localeCompare(b.uid));
+  // const index = nodes.findIndex(n => n.uid === node.uid);
+  // const label = index > -1 ? `${node.name} ${index + 1}` : node.name;
   //
-  // 3. Add counter to duplicate nicknames
-  // const dupe = {}, labels = nodes.map(({ nickname: name }) => {
-  //   if (dupe[name] === undefined) { dupe[name] = 0; }
-  //   return dupe[name]++ ? `${name} ${dupe[name]}` : name;
-  // });
-  //
-  // 4. Add emoji suffix based on node properties
-  const labels = nodes.map(node => `${node.name} ${node.close_friend ? '😇' : '😡'}`);
-  postMessage(labels);
+  // 4. Add emoji suffix based on a node property
+  const label = `${node.name} ${node.close_friend ? '😇' : '😡'}`;
+
+  postMessage(label);
 }
 
 // Assign handler to this worker (global)
-onmessage = createNodeLabels;
+onmessage = createNodeLabel;

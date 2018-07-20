@@ -8,7 +8,6 @@ const loadWorker = (environment) => {
   if (environment !== environments.WEB) {
     return (protocolName, workerName, isFactory) =>
       readFile((isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`))
-        // .then(buf => new Blob(buf, { type: 'text/plain' }))
         /**
          * Load from blob so that script inherits CSP
          */
