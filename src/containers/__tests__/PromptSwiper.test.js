@@ -23,6 +23,15 @@ describe('<PromptSwiper />', () => {
     expect(component.find('.prompts__pips').exists()).toBe(true);
     expect(component).toMatchSnapshot();
   });
+
+  it('shows minimize button', () => {
+    const component = shallow(<PromptSwiper {...mockProps} minimizable />);
+
+    expect(component.find('.prompts__minimizer').exists()).toBe(true);
+    expect(component.find('.prompts--minimized').exists()).toBe(false);
+    component.find('.prompts__minimizer').simulate('click');
+    expect(component.find('.prompts--minimized').exists()).toBe(true);
+  });
 });
 
 describe("when only one prompt, don't show pips", () => {
