@@ -81,13 +81,22 @@ class PromptSwiper extends Component {
         'prompts--minimized': this.state.minimized },
     );
 
+    const minimizeButton = (
+      <span className="prompts__minimizer" onClick={this.handleMinimize}>
+        {this.state.minimized ? '?' : '—'}
+      </span>
+    );
+
     if (prompts.length <= 1) {
       return (
-        <div className={classes}>
-          <div className="prompts__prompts">
-            {promptsRender}
+        <React.Fragment>
+          <div className={classes}>
+            <div className="prompts__prompts">
+              {promptsRender}
+            </div>
           </div>
-        </div>
+          {minimizable && minimizeButton}
+        </React.Fragment>
       );
     }
 
@@ -103,11 +112,7 @@ class PromptSwiper extends Component {
             </div>)}
           </div>
         </Touch>
-        {minimizable &&
-          <span className="prompts__minimizer" onClick={this.handleMinimize}>
-            {this.state.minimized ? '?' : '—'}
-          </span>
-        }
+        {minimizable && minimizeButton}
       </React.Fragment>
     );
   }
