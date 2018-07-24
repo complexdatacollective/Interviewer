@@ -2,6 +2,8 @@ import { reject, findIndex, isMatch, omit } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
+export const NodePK = 'uid';
+
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
 export const UPDATE_NODE = 'UPDATE_NODE';
@@ -18,18 +20,6 @@ const initialState = {
   edges: [],
 };
 
-// We use these internally to uniquely identify nodes accross previous data / network data
-export function nextUid(nodes, index = 1) {
-  return `${Date.now()}_${nodes.length + index}`;
-}
-
-// We use these internally to uniquely identify nodes accross network data only
-// (previous data is immutable)
-// function nextId(nodes) {
-//   if (nodes.length === 0) { return 1; }
-//   return maxBy(nodes, 'id').id + 1;
-// }
-
 function flipEdge(edge) {
   return { from: edge.to, to: edge.from, type: edge.type };
 }
@@ -42,26 +32,25 @@ function edgeExists(edges, edge) {
 }
 
 function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
-  const withAttrs = newNode => ({ ...additionalAttributes, uid: uuidv4(), ...newNode });
+  const withAttrs = newNode => ({ ...additionalAttributes, [NodePK]: uuidv4(), ...newNode });
   return oldNodes.concat(newNodes.map(withAttrs));
 }
 
 function getUpdatedNodes(nodes, updatedNode, full) {
-  // TODO: uid is unique; just find.
   const updatedNodes = nodes.map((node) => {
-    if (node.uid !== updatedNode.uid) { return node; }
+    if (node[NodePK] !== updatedNode[NodePK]) { return node; }
 
     if (full) {
       return {
         ...updatedNode,
-        uid: node.uid,
+        [NodePK]: node[NodePK],
       };
     }
 
     return {
       ...node,
       ...updatedNode,
-      uid: node.uid,
+      [NodePK]: node[NodePK],
     };
   });
   return updatedNodes;
@@ -78,9 +67,8 @@ export default function reducer(state = initialState, action = {}) {
     case TOGGLE_NODE_ATTRIBUTES: {
       const attributes = omit(action.attributes, ['uid']);
 
-      // TODO: uid is unique; just find.
       const updatedNodes = state.nodes.map((node) => {
-        if (node.uid !== action.uid) { return node; }
+        if (node[NodePK] !== action.uid) { return node; }
 
         if (isMatch(node, attributes)) {
           return omit(node, Object.getOwnPropertyNames(attributes));
@@ -106,7 +94,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: reject(state.nodes, node => node.uid === action.uid),
+        nodes: reject(state.nodes, node => node[NodePK] === action.uid),
       };
     case ADD_EDGE:
       if (edgeExists(state.edges, action.edge)) { return state; }

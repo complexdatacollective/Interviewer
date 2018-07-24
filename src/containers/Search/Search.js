@@ -121,6 +121,7 @@ class Search extends Component {
    * @param  {object} result A search result
    * @return {string} a unique identifier for the result
    */
+  // FIXME: Get rid of this once externalData sorted.
   uniqueKeyForResult(result) {
     const displayFields = [
       result[this.props.primaryDisplayField],

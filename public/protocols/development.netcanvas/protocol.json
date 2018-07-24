@@ -482,35 +482,35 @@
     "previousInterview": {
       "nodes": [
         {
-          "uid": "previous_1",
+          "uid": "person_1",
           "type": "person",
           "name": "Anita",
           "nickname": "Annie",
           "age": "23"
         },
         {
-          "uid": "previous_2",
+          "uid": "person_2",
           "type": "person",
           "name": "Barry",
           "nickname": "Baz",
           "age": "23"
         },
         {
-          "uid": "previous_3",
+          "uid": "person_3",
           "type": "person",
           "name": "Carlito",
           "nickname": "Carl",
           "age": "23"
         },
         {
-          "uid": "previous_4",
+          "uid": "person_4",
           "type": "person",
           "name": "Dee",
           "nickname": "Dee",
           "age": "23"
         },
         {
-          "uid": "previous_5",
+          "uid": "person_5",
           "type": "person",
           "name": "Eugine",
           "nickname": "Eu",

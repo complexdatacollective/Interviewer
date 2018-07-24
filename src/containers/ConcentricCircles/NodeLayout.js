@@ -8,6 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { NodePK } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -30,7 +31,7 @@ const dropHandlers = compose(
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
       props.updateNode({
-        uid: item.meta.uid,
+        [NodePK]: item.meta[NodePK],
         [props.layoutVariable]: relativeCoords(props, item),
       });
 
@@ -41,7 +42,7 @@ const dropHandlers = compose(
       if (!has(item.meta, props.layoutVariable)) { return; }
 
       props.updateNode({
-        uid: item.meta.uid,
+        [NodePK]: item.meta[NodePK],
         [props.layoutVariable]: relativeCoords(props, item),
       });
     },
@@ -84,9 +85,9 @@ class NodeLayout extends Component {
 
     if (!allowSelect) { return; }
 
-    this.connectNode(node.uid);
+    this.connectNode(node[NodePK]);
 
-    this.toggleHighlightAttributes(node.uid);
+    this.toggleHighlightAttributes(node[NodePK]);
 
     this.forceUpdate();
   }
@@ -130,7 +131,7 @@ class NodeLayout extends Component {
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node.uid === this.state.connectFrom;
+      node[NodePK] === this.state.connectFrom;
   }
 
   render() {
@@ -148,7 +149,7 @@ class NodeLayout extends Component {
 
           return (
             <LayoutNode
-              key={node.uid}
+              key={node[NodePK]}
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}

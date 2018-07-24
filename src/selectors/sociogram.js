@@ -2,7 +2,6 @@
 
 import { createSelector } from 'reselect';
 import {
-  find,
   filter,
   has,
   get,
@@ -18,6 +17,7 @@ import {
 import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
+import { NodePK } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -121,8 +121,8 @@ export const makeGetNextUnplacedNode = () => {
 };
 
 const edgeCoords = (edge, { nodes, layoutVariable }) => {
-  const from = find(nodes, ['uid', edge.from]);
-  const to = find(nodes, ['uid', edge.to]);
+  const from = nodes.find(n => n[NodePK] === edge.from);
+  const to = nodes.find(n => n[NodePK] === edge.to);
 
   if (!from || !to) { return { from: null, to: null }; }
 

@@ -4,8 +4,6 @@ import { createSelector } from 'reselect';
 import { has, get } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
 import { getExternalData, protocolRegistry } from './protocol';
-import { nextUid } from '../ducks/modules/network';
-
 
 // Selectors that are specific to the name generator
 
@@ -75,11 +73,11 @@ export const getSortDirectionDefault = createSelector(
   sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
 );
 
+// FIXME: add back uid to all external data
 export const getDataByPrompt = createSelector(
   getExternalData,
   getDatasourceKey,
-  (externalData, key) => externalData[key].nodes.map(
-    (node, index) => ({ uid: nextUid(externalData[key].nodes, index), ...node })),
+  (externalData, key) => externalData[key].nodes,
 );
 
 export const makeGetNodeIconName = () => createSelector(
