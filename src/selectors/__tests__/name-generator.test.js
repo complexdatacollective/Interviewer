@@ -45,11 +45,6 @@ const externalNode = {
 };
 
 const mockProtocol = {
-  externalData: {
-    schoolPupils: {
-      nodes: [externalNode],
-    },
-  },
   variableRegistry: {
     node: {
       person: {
@@ -82,6 +77,11 @@ const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 const mockState = {
   network: { nodes, edges },
   protocol: mockProtocol,
+  externalData: {
+    schoolPupils: {
+      nodes: [externalNode],
+    },
+  },
 };
 
 describe('name generator selector', () => {

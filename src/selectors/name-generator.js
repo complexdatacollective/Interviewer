@@ -3,7 +3,8 @@
 import { createSelector } from 'reselect';
 import { has, get } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
-import { getExternalData, protocolRegistry } from './protocol';
+import { protocolRegistry } from './protocol';
+import { getExternalData } from './externalData';
 
 // Selectors that are specific to the name generator
 
@@ -73,7 +74,6 @@ export const getSortDirectionDefault = createSelector(
   sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
 );
 
-// FIXME: add back uid to all external data
 export const getDataByPrompt = createSelector(
   getExternalData,
   getDatasourceKey,

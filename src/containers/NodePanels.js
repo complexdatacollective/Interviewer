@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { includes, map, differenceBy } from 'lodash';
 import { getNodeLabelFunction, networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
-import { getExternalData } from '../selectors/protocol';
+import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';

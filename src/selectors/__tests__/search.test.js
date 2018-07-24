@@ -16,7 +16,12 @@ const externalNode = {
   age: 23,
 };
 
-const mockProtocol = {
+const mockProps = {
+  options: {},
+  dataSource: 'schoolPupils',
+};
+
+const mockState = {
   externalData: {
     schoolPupils: {
       nodes: [externalNode, {
@@ -24,15 +29,6 @@ const mockProtocol = {
       }],
     },
   },
-};
-
-const mockProps = {
-  options: {},
-  dataSource: 'schoolPupils',
-};
-
-const mockState = {
-  protocol: mockProtocol,
 };
 
 describe('search', () => {

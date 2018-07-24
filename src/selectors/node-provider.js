@@ -3,7 +3,7 @@
 import { createSelector } from 'reselect';
 import { differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from './interface';
-import { getExternalData } from './protocol';
+import { getExternalData } from './externalData';
 
 const propDataSource = (_, props) => props.dataSource;
 
