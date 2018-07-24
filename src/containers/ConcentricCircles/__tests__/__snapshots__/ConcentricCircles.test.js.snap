@@ -4,7 +4,7 @@ exports[`<ConcentricCircles /> renders ok 1`] = `
 ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Sociogram
+  Symbol(enzyme.__unrendered__): <ConcentricCircles
     prompt={
       Object {
         "sociogram": Object {

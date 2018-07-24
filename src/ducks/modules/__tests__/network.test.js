@@ -8,7 +8,7 @@ const mockState = {
   edges: [],
 };
 
-const UIDPattern = /[0-9]+_[0-9]+/;
+const UIDPattern = /[a-f\d]+-/;
 
 describe('network reducer', () => {
   it('should return the initial state', () => {
@@ -31,7 +31,7 @@ describe('network reducer', () => {
     expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
 
     const newNode = newState.nodes[1];
-    expect(newNode.id).toEqual(2);
+    // expect(newNode.id).toEqual(2);
     expect(newNode.name).toEqual('foo');
     expect(newNode.uid).toMatch(UIDPattern);
   });
@@ -40,7 +40,7 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ id: 1, name: 'baz' }],
+        nodes: [{ uid: 1, name: 'baz' }],
       },
       {
         type: actionTypes.ADD_NODES,
@@ -49,14 +49,20 @@ describe('network reducer', () => {
     );
 
     expect(newState.nodes.length).toBe(3);
-    expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
+    expect(newState.nodes[0]).toEqual({ uid: 1, name: 'baz' });
+    expect(newState.nodes[1]).toMatchObject({ name: 'foo', uid: expect.stringMatching(UIDPattern) });
+    expect(newState.nodes[2]).toMatchObject({ name: 'bar', uid: expect.stringMatching(UIDPattern) });
+  });
 
-    const node1 = newState.nodes[1];
-    const node2 = newState.nodes[2];
-    expect(node1).toMatchObject({ name: 'foo', id: 2 });
-    expect(node1.uid).toMatch(UIDPattern);
-    expect(node2).toMatchObject({ name: 'bar', id: 3 });
-    expect(node2.uid).toMatch(UIDPattern);
+  it('preserves UID when adding a node', () => {
+    const newState = reducer(
+      mockState,
+      {
+        type: actionTypes.ADD_NODES,
+        nodes: [{ name: 'foo', uid: '22' }],
+      },
+    );
+    expect(newState.nodes[0].uid).toEqual('22');
   });
 
   it('should support additionalAttributes for ADD_NODES', () => {

@@ -121,8 +121,8 @@ export const makeGetNextUnplacedNode = () => {
 };
 
 const edgeCoords = (edge, { nodes, layoutVariable }) => {
-  const from = find(nodes, ['id', edge.from]);
-  const to = find(nodes, ['id', edge.to]);
+  const from = find(nodes, ['uid', edge.from]);
+  const to = find(nodes, ['uid', edge.to]);
 
   if (!from || !to) { return { from: null, to: null }; }
 

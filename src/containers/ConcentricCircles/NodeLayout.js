@@ -84,7 +84,7 @@ class NodeLayout extends Component {
 
     if (!allowSelect) { return; }
 
-    this.connectNode(node.id);
+    this.connectNode(node.uid);
 
     this.toggleHighlightAttributes(node.uid);
 
@@ -130,7 +130,7 @@ class NodeLayout extends Component {
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node.id === this.state.connectFrom;
+      node.uid === this.state.connectFrom;
   }
 
   render() {
