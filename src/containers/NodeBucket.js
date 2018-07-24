@@ -12,21 +12,24 @@ const EnhancedNode = DragSource(Node);
 
 class NodeBucket extends PureComponent {
   static propTypes = {
+    allowPositioning: PropTypes.bool,
     getLabel: PropTypes.func.isRequired,
     node: PropTypes.object,
   };
 
   static defaultProps = {
+    allowPositioning: true,
     node: null,
   };
 
   render() {
     const {
+      allowPositioning,
       getLabel,
       node,
     } = this.props;
 
-    if (!node) { return null; }
+    if (!allowPositioning || !node) { return null; }
 
     return (
       <div className="node-bucket">

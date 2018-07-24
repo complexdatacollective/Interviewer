@@ -12,7 +12,6 @@ const sociogramOptionsDefault = {
   canHighlight: false,
   highlightAttributes: {},
   allowSelect: false,
-  allowPositioning: false,
   selectMode: '',
   sortOrderBy: [],
   concentricCircles: 0,
@@ -33,5 +32,11 @@ describe('<NodeBucket />', () => {
     const component = shallow(<NodeBucket {...mockProps} />);
 
     expect(component).toMatchSnapshot();
+  });
+
+  it('does not display bucket when positioning is disabled', () => {
+    const component = shallow(<NodeBucket {...mockProps} allowPositioning={false} />);
+
+    expect(component.children()).toHaveLength(0);
   });
 });
