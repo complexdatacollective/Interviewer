@@ -1,0 +1,54 @@
+/* eslint-env jest */
+import reducer from '../externalData';
+
+const initialState = null;
+
+const actionWithData = externalData => ({
+  type: 'SET_PROTOCOL',
+  protocol: {
+    externalData,
+  },
+});
+
+describe('the externalData reducer', () => {
+  it('returns the initial state', () => {
+    expect(reducer(undefined, {})).toEqual(initialState);
+  });
+
+  it('sets the state after protocol import', () => {
+    const data = { students: { nodes: [] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState).toEqual(data);
+  });
+
+  it('assigns a UID to new data', () => {
+    const data = { students: { nodes: [{ name: 'a' }] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState.students.nodes[0]).toMatchObject({ uid: expect.any(String) });
+  });
+
+  it('uses consistent hashing for IDs', () => {
+    const data = { students: { nodes: [{ name: 'a' }, { name: 'a' }] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState.students.nodes[0].uid).toBeDefined();
+    expect(newState.students.nodes[0]).toEqual(newState.students.nodes[1]);
+  });
+
+  it('preserves existing UIDs', () => {
+    const data = { students: { nodes: [{ name: 'a', uid: 54321 }] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState.students.nodes[0]).toMatchObject({ uid: 54321 });
+  });
+
+  it('Copies from existing PKs if available', () => {
+    const data = { students: { nodes_primary_key: 'studentId', nodes: [{ name: 'a', studentId: 98765 }] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState.students.nodes[0]).toMatchObject({ uid: 98765, studentId: 98765 });
+  });
+
+  it('Generates UID if custom PK missing', () => {
+    const data = { students: { nodes_primary_key: 'studentId', nodes: [{ name: 'a' }] } };
+    const newState = reducer(initialState, actionWithData(data));
+    expect(newState.students.nodes[0]).toMatchObject({ uid: expect.any(String) });
+  });
+});
