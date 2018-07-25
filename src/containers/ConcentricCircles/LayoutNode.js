@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Node } from '../../components';
-import { getNodeLabelFunction } from '../../selectors/interface';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
@@ -18,7 +16,6 @@ class LayoutNode extends PureComponent {
     const {
       allowPositioning,
       allowSelect,
-      getLabel,
       layoutVariable,
       linking,
       node,
@@ -39,7 +36,6 @@ class LayoutNode extends PureComponent {
         style={styles}
       >
         <EnhancedNode
-          label={getLabel(node)}
           onSelected={this.props.onSelected}
           selected={selected}
           linking={linking}
@@ -60,7 +56,6 @@ LayoutNode.propTypes = {
   allowSelect: PropTypes.bool,
   areaHeight: PropTypes.number,
   areaWidth: PropTypes.number,
-  getLabel: PropTypes.func.isRequired,
   layoutVariable: PropTypes.string.isRequired,
   linking: PropTypes.bool,
   node: PropTypes.object.isRequired,
@@ -78,14 +73,6 @@ LayoutNode.defaultProps = {
   selected: false,
 };
 
-function mapStateToProps(state) {
-  return {
-    getLabel: getNodeLabelFunction(state),
-  };
-}
-
 export { LayoutNode };
 
-export default compose(
-  connect(mapStateToProps),
-)(LayoutNode);
+export default LayoutNode;

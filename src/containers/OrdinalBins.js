@@ -3,7 +3,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import color from 'color';
-import { getNodeLabelFunction, makeNetworkNodesForSubject, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
+import { makeNetworkNodesForSubject, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -12,7 +12,6 @@ import { getCSSVariableAsString } from '../utils/CSSVariables';
 class OrdinalBins extends PureComponent {
   static propTypes = {
     activePromptVariable: PropTypes.string.isRequired,
-    getLabel: PropTypes.func.isRequired,
     bins: PropTypes.array.isRequired,
     prompt: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
@@ -80,7 +79,6 @@ class OrdinalBins extends PureComponent {
             listId={`ORDBIN_NODE_LIST_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
             nodes={bin.nodes}
-            label={this.props.getLabel}
             itemType="NEW_NODE"
             onDrop={item => onDrop(item)}
             accepts={() => true}
@@ -107,11 +105,9 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
-    const getLabel = getNodeLabelFunction(state);
 
     return {
       activePromptVariable,
-      getLabel,
       bins: getOrdinalValues(state, props)
         .map((bin) => {
           const nodes = stageNodes.filter(

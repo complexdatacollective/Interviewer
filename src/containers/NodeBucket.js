@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Node } from '../components';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
-import { getNodeLabelFunction } from '../selectors/interface';
 import { DragSource } from '../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 
@@ -13,7 +12,6 @@ const EnhancedNode = DragSource(Node);
 class NodeBucket extends PureComponent {
   static propTypes = {
     allowPositioning: PropTypes.bool,
-    getLabel: PropTypes.func.isRequired,
     node: PropTypes.object,
   };
 
@@ -25,7 +23,6 @@ class NodeBucket extends PureComponent {
   render() {
     const {
       allowPositioning,
-      getLabel,
       node,
     } = this.props;
 
@@ -35,7 +32,7 @@ class NodeBucket extends PureComponent {
       <div className="node-bucket">
         { node &&
           <EnhancedNode
-            label={getLabel(node)}
+            key={node.uid}
             meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
             scrollDirection={NO_SCROLL}
             {...node}
@@ -52,7 +49,6 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
-      getLabel: getNodeLabelFunction(state),
       node: getNextUnplacedNode(state, props),
       ...getSociogramOptions(state, props),
     };

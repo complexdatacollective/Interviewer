@@ -202,7 +202,7 @@ const loadProtocolWorkerEpic = action$ =>
         .fromPromise(
           loadWorker(
             action.path,
-            'node-label-worker',
+            'nodeLabelWorker',
             action.protocolType === 'factory',
           ))
         .map(workerUrl => setWorkerContent(workerUrl)),

@@ -6,7 +6,7 @@ import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
-import { getNodeLabelFunction, makeNetworkNodesForPrompt } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
@@ -80,7 +80,6 @@ class NameGenerator extends Component {
   render() {
     const {
       form,
-      getLabel,
       nodesForPrompt,
       openModal,
       prompt,
@@ -138,7 +137,6 @@ class NameGenerator extends Component {
           <div className="name-generator-interface__nodes">
             <NodeList
               nodes={nodesForPrompt}
-              label={getLabel}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -168,7 +166,6 @@ NameGenerator.propTypes = {
   activePromptAttributes: PropTypes.object,
   addNodes: PropTypes.func.isRequired,
   form: PropTypes.object,
-  getLabel: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   openModal: PropTypes.func.isRequired,
@@ -188,7 +185,6 @@ function makeMapStateToProps() {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       form: rehydrateForm(state, props),
-      getLabel: getNodeLabelFunction(state),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
     };
