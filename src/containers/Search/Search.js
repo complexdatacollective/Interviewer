@@ -9,6 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
+import { NodePK } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 
 /**
@@ -110,36 +111,13 @@ class Search extends Component {
     });
   }
 
-  /**
-   * A result is considered unique only if it presents some disambiguating
-   * information to the user (i.e., its combination of display attributes is unique).
-   *
-   * The `uid` attribute cannot be used to determine uniqueness: once an item
-   * from external data (having no `uid`) is added to the network, it will have
-   * a `uid`.
-   *
-   * @param  {object} result A search result
-   * @return {string} a unique identifier for the result
-   */
-  // FIXME: Get rid of this once externalData sorted.
-  uniqueKeyForResult(result) {
-    const displayFields = [
-      result[this.props.primaryDisplayField],
-      ...this.props.additionalAttributes.map(prop => prop.variable),
-    ];
-    return displayFields.map(field => result[field]).join('.');
-  }
-
-  // See uniqueness discussion at uniqueKeyForResult.
   // If false, suppress candidate from appearing in search results —
   // for example, if the node has already been selected.
   // Assumption:
   //   `excludedNodes` size is small, but search set may be large,
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
-    const uid = this.uniqueKeyForResult.bind(this);
-    const candidateUid = uid(candidate);
-    return this.props.excludedNodes.every(excluded => uid(excluded) !== candidateUid);
+    return this.props.excludedNodes.every(excluded => excluded[NodePK] !== candidate[NodePK]);
   }
 
   render() {
@@ -182,7 +160,6 @@ class Search extends Component {
     const getLabel = result => result[primaryDisplayField];
     const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
     const getDetails = result => additionalAttributes.map(attr => toDetail(result, attr));
-    const getUid = result => this.uniqueKeyForResult(result);
 
     return (
       <SearchTransition
@@ -198,8 +175,6 @@ class Search extends Component {
           <SearchResults
             hasInput={hasInput}
             results={this.state.searchResults}
-
-            uid={getUid}
             label={getLabel}
             details={getDetails}
             selected={getSelected}

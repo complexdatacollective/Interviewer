@@ -12,7 +12,7 @@ import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
 import { matchSessionPath } from '../../utils/matchSessionPath';
 
-const shortUid = uid => (uid || '').replace(/-.*/, '');
+const shortId = uuid => (uuid || '').replace(/-.*/, '');
 
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
 
@@ -46,8 +46,8 @@ const emptyView = (
   */
 class SessionList extends Component {
   onClickLoadSession = (session) => {
-    const pathname = this.props.getSessionPath(session.uid);
-    this.props.setSession(session.uid);
+    const pathname = this.props.getSessionPath(session.uuid);
+    this.props.setSession(session.uuid);
     this.props.loadSession(pathname);
   }
 
@@ -56,7 +56,7 @@ class SessionList extends Component {
 
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
-      .map(key => ({ uid: key, value: sessions[key] }))
+      .map(key => ({ uuid: key, value: sessions[key] }))
       .filter(s => s.value.protocolPath);
     sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
@@ -72,12 +72,13 @@ class SessionList extends Component {
           onDeleteCard={(data) => {
             // eslint-disable-next-line no-alert
             if (confirm('Delete this interview?')) {
-              removeSession(data.uid);
+              removeSession(data.uuid);
             }
           }}
-          label={sessionInfo => shortUid(sessionInfo.uid)}
+          label={sessionInfo => shortId(sessionInfo.uuid)}
           nodes={sessionList}
           onToggleCard={this.onClickLoadSession}
+          getKey={sessionInfo => sessionInfo.uuid}
           details={(sessionInfo) => {
             const session = sessionInfo.value;
             const info = pathInfo(session.path);
