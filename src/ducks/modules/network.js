@@ -2,6 +2,7 @@ import { reject, findIndex, isMatch, omit } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
+// Primary key used on node data
 export const NodePK = 'uid';
 
 export const ADD_NODES = 'ADD_NODES';

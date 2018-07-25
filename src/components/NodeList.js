@@ -99,7 +99,7 @@ class NodeList extends Component {
       exit,
     } = this.state;
 
-    const isSource = !!find(nodes, [NodePK, get(meta, 'uid', null)]);
+    const isSource = !!find(nodes, [NodePK, get(meta, NodePK, null)]);
     const isValidTarget = !isSource && willAccept;
     const isHovering = isValidTarget && isOver;
 
