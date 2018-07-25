@@ -4,6 +4,7 @@ const os = require('os');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
+const chalk = require('chalk');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
 
@@ -149,7 +150,15 @@ function loadDevToolsExtensions() {
   if (process.env.NODE_ENV !== 'development' || !extensions) {
     return;
   }
-  extensions.split(';').forEach(filepath => BrowserWindow.addDevToolsExtension(filepath));
+  try {
+    extensions.split(';').forEach(filepath => BrowserWindow.addDevToolsExtension(filepath));
+  } catch (err) {
+    /* eslint-disable no-console */
+    console.warn(err);
+    console.warn(chalk.yellow('A Chrome dev tools extension failed to load. If the extension has upgraded, update your NC_DEVTOOLS_EXENSION_PATH:'));
+    console.warn(chalk.yellow(process.env.NC_DEVTOOLS_EXENSION_PATH));
+    /* eslint-enable */
+  }
 }
 
 // This method will be called when Electron has finished
