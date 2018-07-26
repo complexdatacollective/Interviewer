@@ -1,7 +1,15 @@
 import uuidv4 from './uuid';
 
+export const NodeLabelWorkerName = 'nodeLabelWorker';
+export const supportedWorkers = [NodeLabelWorkerName];
+
+// Create an object URL from worker contents.
+// We own the URL and can release it when no longer needed.
+export const urlForWorkerSource = blob => URL.createObjectURL(blob);
+
 const workers = {};
 
+// Maintain one worker per source URL
 const getSharedWorker = (url) => {
   if (!workers[url]) {
     const worker = new Worker(url);
@@ -22,6 +30,7 @@ const getSharedWorker = (url) => {
       delete worker.workMap[evt.data.messageId];
     };
     workers[url] = worker;
+    URL.revokeObjectURL(url);
   }
   return workers[url];
 };
@@ -32,7 +41,6 @@ const getSharedWorker = (url) => {
  */
 class WorkerAgent {
   constructor(url) {
-    this.workerUrl = url;
     try {
       this.worker = getSharedWorker(url);
     } catch (e) {
@@ -71,7 +79,7 @@ class WorkerAgent {
    */
   sendMessageAsync(msg) {
     if (!this.worker) {
-      return Promise.reject(new Error(`Worker unavailable at ${this.workerUrl}`));
+      return Promise.reject(new Error('Worker unavailable'));
     }
     const messageId = uuidv4();
     const taggedMsg = { ...msg, messageId };

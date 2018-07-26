@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { makeGetNodeColor } from '../selectors/protocol';
-import { Node as UINode } from '../ui/components';
 
 import WorkerAgent from '../utils/WorkerAgent';
+import { Node as UINode } from '../ui/components';
 import { getNetwork, getNodeLabelFunction } from '../selectors/interface';
+import { getNodeLabelWorkerUrl, makeGetNodeColor } from '../selectors/protocol';
 
 const getNodeColor = makeGetNodeColor();
 
@@ -73,8 +73,8 @@ function mapStateToProps(state, props) {
   return {
     color: getNodeColor(state, props),
     getLabel: getNodeLabelFunction(state),
-    workerUrl: state.protocol.workerUrl,
-    workerNetwork: (state.protocol.workerUrl && getNetwork(state)) || null,
+    workerUrl: getNodeLabelWorkerUrl(state),
+    workerNetwork: (getNodeLabelWorkerUrl(state) && getNetwork(state)) || null,
   };
 }
 

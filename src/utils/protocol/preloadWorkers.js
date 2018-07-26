@@ -4,7 +4,7 @@ import inEnvironment from '../Environment';
 import factoryProtocolPath from './factoryProtocolPath';
 import protocolPath from './protocolPath';
 
-const supportedWorkers = ['nodeLabelWorker'];
+import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
 
 /**
  * Builds source code for a Web Worker based on the protocol's
@@ -61,25 +61,28 @@ const compileWorker = (src, funcName) => {
   /* eslint-enable */
 };
 
-const loadWorker = (environment) => {
+/**
+ * preloadWorkers
+ * @description Read custom worker scripts from the protocol package, if any.
+ * By preloading any existing, we can bootstrap before protocol.json is parsed.
+ */
+const preloadWorkers = (environment) => {
   if (environment !== environments.WEB) {
-    return (protocolName, workerName, isFactory) =>
-      readFile((isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`))
-        /**
-         * Load from blob so that script inherits CSP
-         */
-        .then(buf => new TextDecoder().decode(buf))
-        .then(str => compileWorker(str, workerName))
-        .then(source => new Blob([source], { type: 'text/plain' }))
-        // FIXME: need to release (revokeObjectURL) (make each consumer responsible
-        //    for releasing after worker created, instead of caching?)
-        .then(blob => URL.createObjectURL(blob))
-        // TODO: could try to use a shared worker... (but see above about URL)
-        // .then(url => new Worker(url))
-        .catch(err => console.warn(err)); // eslint-disable-line no-console
+    return (protocolName, isFactory) =>
+      Promise.all(supportedWorkers.map(workerName =>
+        readFile((isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`))
+          /**
+           * Load from blob so that script inherits CSP
+           */
+          .then(buf => new TextDecoder().decode(buf))
+          .then(str => compileWorker(str, workerName))
+          .then(source => new Blob([source], { type: 'text/plain' }))
+          .then(blob => urlForWorkerSource(blob))
+          .catch(() => {})),
+      );
   }
 
   return () => Promise.reject(new Error('loadProtocol() not supported on this platform'));
 };
 
-export default inEnvironment(loadWorker);
+export default inEnvironment(preloadWorkers);

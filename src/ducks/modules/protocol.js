@@ -1,7 +1,15 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { loadWorker, loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 import { actionTypes as SessionActionTypes } from './session';
+import {
+  loadProtocol,
+  importProtocol,
+  downloadProtocol,
+  loadFactoryProtocol,
+  preloadWorkers,
+} from '../../utils/protocol';
+
+import { supportedWorkers } from '../../utils/WorkerAgent';
 
 /**
  * `protocol` maintains information about the currently-loaded protocol for session, and
@@ -32,7 +40,7 @@ const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
 const SET_WORKER = 'SET_WORKER';
 
-const initialState = {
+export const initialState = {
   isLoaded: false,
   isLoading: false,
   error: null,
@@ -41,7 +49,7 @@ const initialState = {
   required: '',
   stages: [],
   type: 'factory',
-  workerUrl: undefined,
+  workerUrlMap: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -57,7 +65,7 @@ export default function reducer(state = initialState, action = {}) {
     case SET_WORKER:
       return {
         ...state,
-        workerUrl: action.workerUrl,
+        workerUrlMap: action.workerUrlMap,
       };
     case END_SESSION:
       return initialState;
@@ -148,11 +156,11 @@ function setProtocol(path, protocol, isFactoryProtocol) {
   };
 }
 
-// If there's no custom worker, the set false so we won't expect one later
-function setWorkerContent(workerUrl = false) {
+// If there's no custom worker, set to empty so we won't expect one later
+function setWorkerContent(workerUrlMap = {}) {
   return {
     type: SET_WORKER,
-    workerUrl,
+    workerUrlMap,
   };
 }
 
@@ -199,13 +207,16 @@ const loadProtocolWorkerEpic = action$ =>
     .ofType(LOAD_PROTOCOL)
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
-        .fromPromise(
-          loadWorker(
-            action.path,
-            'nodeLabelWorker',
-            action.protocolType === 'factory',
-          ))
-        .map(workerUrl => setWorkerContent(workerUrl)),
+        .fromPromise(preloadWorkers(action.path, action.protocolType === 'factory'))
+        .mergeMap(urls => urls)
+        .reduce((urlMap, workerUrl, i) => {
+          if (workerUrl) {
+            // eslint-disable-next-line no-param-reassign
+            urlMap[supportedWorkers[i]] = workerUrl;
+          }
+          return urlMap;
+        }, {})
+        .map(workerUrlMap => setWorkerContent(workerUrlMap)),
     );
 
 const actionCreators = {

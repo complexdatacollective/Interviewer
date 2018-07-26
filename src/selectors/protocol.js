@@ -1,6 +1,8 @@
 import crypto from 'crypto';
+import { createSelector } from 'reselect';
 
 import { createDeepEqualSelector } from './utils';
+import { NodeLabelWorkerName } from '../utils/WorkerAgent';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -44,4 +46,11 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
     const edgeInfo = variableRegistry.edge;
     return edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color;
   },
+);
+
+export const getNodeLabelWorkerUrl = createSelector(
+  // null if URLs haven't yet loaded; false if worker does not exist
+  state => state.protocol.workerUrlMap &&
+    (state.protocol.workerUrlMap[NodeLabelWorkerName] || false),
+  url => url,
 );

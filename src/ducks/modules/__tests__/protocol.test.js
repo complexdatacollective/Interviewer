@@ -3,23 +3,12 @@
 import { ActionsObservable } from 'redux-observable';
 import { omit } from 'lodash';
 
-import reducer, { actionCreators, epics } from '../protocol';
+import reducer, { actionCreators, epics, initialState } from '../protocol';
 import { actionTypes as SessionActionTypes } from '../session';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';
 
 jest.mock('../../../utils/protocol/index');
-
-const initialState = {
-  isLoaded: false,
-  isLoading: false,
-  error: null,
-  name: '',
-  version: '',
-  required: '',
-  type: 'factory',
-  stages: [],
-};
 
 describe('protocol module', () => {
   describe('reducer', () => {
