@@ -24,7 +24,7 @@ class MenuFactory extends Component {
     * adds listener for key events to close Menu
     */
   componentDidMount() {
-    window.onkeydown = this.listenForClose;
+    document.addEventListener('keydown', this.listenForClose, true);
   }
 
   componentDidUpdate() {
@@ -41,7 +41,7 @@ class MenuFactory extends Component {
     * removes listener for key events and click events to close Menu
     */
   componentWillUnmount() {
-    window.onkeydown = null;
+    document.removeEventListener('keydown', this.listenForClose);
     this.outsideClick.cancel();
   }
 
@@ -50,6 +50,7 @@ class MenuFactory extends Component {
 
     if (this.props.isOpen && (event.key === 'Escape' || event.keyCode === 27)) {
       this.props.toggleMenu();
+      e.stopPropagation();
     }
   }
 
