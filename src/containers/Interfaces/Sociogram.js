@@ -27,6 +27,7 @@ const Sociogram = ({
         prompts={stage.prompts}
         prompt={prompt}
         floating
+        minimizable
       />
     </div>
     <div className="sociogram-interface__sociogram">

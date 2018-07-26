@@ -8,6 +8,7 @@ ShallowWrapper {
     backward={[Function]}
     floating={false}
     forward={[Function]}
+    minimizable={false}
     promptIndex={0}
     prompts={
       Array [
@@ -30,194 +31,16 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
-      "children": <div
-        className="prompts"
-      >
-        <div
-          className="prompts__pips"
-        >
-          <Pips
-            count={2}
-            currentIndex={0}
-          />
-        </div>
-        <div
-          className="prompts__prompts"
-        >
-          <Prompt
-            isActive={true}
-            isLeaving={false}
-            label="bar"
-          />
-          <Prompt
-            isActive={false}
-            isLeaving={true}
-            label="foo"
-          />
-        </div>
-      </div>,
-      "onSwipe": [Function],
-      "onTap": [Function],
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <div
-            className="prompts__pips"
-          >
-            <Pips
-              count={2}
-              currentIndex={0}
-            />
-          </div>,
-          <div
-            className="prompts__prompts"
-          >
-            <Prompt
-              isActive={true}
-              isLeaving={false}
-              label="bar"
-            />
-            <Prompt
-              isActive={false}
-              isLeaving={true}
-              label="foo"
-            />
-          </div>,
-        ],
-        "className": "prompts",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <Pips
-              count={2}
-              currentIndex={0}
-            />,
-            "className": "prompts__pips",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "function",
-            "props": Object {
-              "count": 2,
-              "currentIndex": 0,
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          "type": "div",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <Prompt
-                isActive={true}
-                isLeaving={false}
-                label="bar"
-              />,
-              <Prompt
-                isActive={false}
-                isLeaving={true}
-                label="foo"
-              />,
-            ],
-            "className": "prompts__prompts",
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
-              "instance": null,
-              "key": "0",
-              "nodeType": "function",
-              "props": Object {
-                "isActive": true,
-                "isLeaving": false,
-                "label": "bar",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            Object {
-              "instance": null,
-              "key": "1",
-              "nodeType": "function",
-              "props": Object {
-                "isActive": false,
-                "isLeaving": true,
-                "label": "foo",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-          ],
-          "type": "div",
-        },
-      ],
-      "type": "div",
-    },
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "children": <div
-          className="prompts"
+      "children": Array [
+        <Hammer
+          onSwipe={[Function]}
+          onTap={[Function]}
         >
           <div
-            className="prompts__pips"
+            className="prompts"
           >
-            <Pips
-              count={2}
-              currentIndex={0}
-            />
-          </div>
-          <div
-            className="prompts__prompts"
-          >
-            <Prompt
-              isActive={true}
-              isLeaving={false}
-              label="bar"
-            />
-            <Prompt
-              isActive={false}
-              isLeaving={true}
-              label="foo"
-            />
-          </div>
-        </div>,
-        "onSwipe": [Function],
-        "onTap": [Function],
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
             <div
               className="prompts__pips"
             >
@@ -225,7 +48,7 @@ ShallowWrapper {
                 count={2}
                 currentIndex={0}
               />
-            </div>,
+            </div>
             <div
               className="prompts__prompts"
             >
@@ -239,92 +62,362 @@ ShallowWrapper {
                 isLeaving={true}
                 label="foo"
               />
-            </div>,
-          ],
-          "className": "prompts",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <Pips
+            </div>
+          </div>
+        </Hammer>,
+        false,
+      ],
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": <div
+            className="prompts"
+          >
+            <div
+              className="prompts__pips"
+            >
+              <Pips
                 count={2}
                 currentIndex={0}
-              />,
-              "className": "prompts__pips",
-            },
-            "ref": null,
-            "rendered": Object {
+              />
+            </div>
+            <div
+              className="prompts__prompts"
+            >
+              <Prompt
+                isActive={true}
+                isLeaving={false}
+                label="bar"
+              />
+              <Prompt
+                isActive={false}
+                isLeaving={true}
+                label="foo"
+              />
+            </div>
+          </div>,
+          "onSwipe": [Function],
+          "onTap": [Function],
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="prompts__pips"
+              >
+                <Pips
+                  count={2}
+                  currentIndex={0}
+                />
+              </div>,
+              <div
+                className="prompts__prompts"
+              >
+                <Prompt
+                  isActive={true}
+                  isLeaving={false}
+                  label="bar"
+                />
+                <Prompt
+                  isActive={false}
+                  isLeaving={true}
+                  label="foo"
+                />
+              </div>,
+            ],
+            "className": "prompts",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
               "instance": null,
               "key": undefined,
-              "nodeType": "function",
+              "nodeType": "host",
               "props": Object {
-                "count": 2,
-                "currentIndex": 0,
+                "children": <Pips
+                  count={2}
+                  currentIndex={0}
+                />,
+                "className": "prompts__pips",
               },
               "ref": null,
-              "rendered": null,
-              "type": [Function],
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "count": 2,
+                  "currentIndex": 0,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": "div",
             },
-            "type": "div",
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <Prompt
+                    isActive={true}
+                    isLeaving={false}
+                    label="bar"
+                  />,
+                  <Prompt
+                    isActive={false}
+                    isLeaving={true}
+                    label="foo"
+                  />,
+                ],
+                "className": "prompts__prompts",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "0",
+                  "nodeType": "function",
+                  "props": Object {
+                    "isActive": true,
+                    "isLeaving": false,
+                    "label": "bar",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "1",
+                  "nodeType": "function",
+                  "props": Object {
+                    "isActive": false,
+                    "isLeaving": true,
+                    "label": "foo",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+        "type": [Function],
+      },
+      false,
+    ],
+    "type": Symbol(react.fragment),
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "children": Array [
+          <Hammer
+            onSwipe={[Function]}
+            onTap={[Function]}
+          >
+            <div
+              className="prompts"
+            >
+              <div
+                className="prompts__pips"
+              >
+                <Pips
+                  count={2}
+                  currentIndex={0}
+                />
+              </div>
+              <div
+                className="prompts__prompts"
+              >
+                <Prompt
+                  isActive={true}
+                  isLeaving={false}
+                  label="bar"
+                />
+                <Prompt
+                  isActive={false}
+                  isLeaving={true}
+                  label="foo"
+                />
+              </div>
+            </div>
+          </Hammer>,
+          false,
+        ],
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": <div
+              className="prompts"
+            >
+              <div
+                className="prompts__pips"
+              >
+                <Pips
+                  count={2}
+                  currentIndex={0}
+                />
+              </div>
+              <div
+                className="prompts__prompts"
+              >
+                <Prompt
+                  isActive={true}
+                  isLeaving={false}
+                  label="bar"
+                />
+                <Prompt
+                  isActive={false}
+                  isLeaving={true}
+                  label="foo"
+                />
+              </div>
+            </div>,
+            "onSwipe": [Function],
+            "onTap": [Function],
           },
-          Object {
+          "ref": null,
+          "rendered": Object {
             "instance": null,
             "key": undefined,
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <Prompt
-                  isActive={true}
-                  isLeaving={false}
-                  label="bar"
-                />,
-                <Prompt
-                  isActive={false}
-                  isLeaving={true}
-                  label="foo"
-                />,
+                <div
+                  className="prompts__pips"
+                >
+                  <Pips
+                    count={2}
+                    currentIndex={0}
+                  />
+                </div>,
+                <div
+                  className="prompts__prompts"
+                >
+                  <Prompt
+                    isActive={true}
+                    isLeaving={false}
+                    label="bar"
+                  />
+                  <Prompt
+                    isActive={false}
+                    isLeaving={true}
+                    label="foo"
+                  />
+                </div>,
               ],
-              "className": "prompts__prompts",
+              "className": "prompts",
             },
             "ref": null,
             "rendered": Array [
               Object {
                 "instance": null,
-                "key": "0",
-                "nodeType": "function",
+                "key": undefined,
+                "nodeType": "host",
                 "props": Object {
-                  "isActive": true,
-                  "isLeaving": false,
-                  "label": "bar",
+                  "children": <Pips
+                    count={2}
+                    currentIndex={0}
+                  />,
+                  "className": "prompts__pips",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": [Function],
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "count": 2,
+                    "currentIndex": 0,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "div",
               },
               Object {
                 "instance": null,
-                "key": "1",
-                "nodeType": "function",
+                "key": undefined,
+                "nodeType": "host",
                 "props": Object {
-                  "isActive": false,
-                  "isLeaving": true,
-                  "label": "foo",
+                  "children": Array [
+                    <Prompt
+                      isActive={true}
+                      isLeaving={false}
+                      label="bar"
+                    />,
+                    <Prompt
+                      isActive={false}
+                      isLeaving={true}
+                      label="foo"
+                    />,
+                  ],
+                  "className": "prompts__prompts",
                 },
                 "ref": null,
-                "rendered": null,
-                "type": [Function],
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": "0",
+                    "nodeType": "function",
+                    "props": Object {
+                      "isActive": true,
+                      "isLeaving": false,
+                      "label": "bar",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": "1",
+                    "nodeType": "function",
+                    "props": Object {
+                      "isActive": false,
+                      "isLeaving": true,
+                      "label": "foo",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "div",
               },
             ],
             "type": "div",
           },
-        ],
-        "type": "div",
-      },
-      "type": [Function],
+          "type": [Function],
+        },
+        false,
+      ],
+      "type": Symbol(react.fragment),
     },
   ],
   Symbol(enzyme.__options__): Object {

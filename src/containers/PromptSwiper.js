@@ -17,15 +17,20 @@ class PromptSwiper extends Component {
     prompts: PropTypes.any.isRequired,
     promptIndex: PropTypes.number.isRequired,
     floating: PropTypes.bool,
+    minimizable: PropTypes.bool,
   };
 
   static defaultProps = {
     floating: false,
+    minimizable: false,
   };
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      minimized: false,
+    };
     this.handleTap = this.handleTap.bind(this);
     this.handleSwipe = this.handleSwipe.bind(this);
   }
@@ -48,8 +53,15 @@ class PromptSwiper extends Component {
     this.props.forward();
   }
 
+  handleMinimize = () => {
+    this.setState({
+      minimized: !this.state.minimized,
+    });
+  };
+
   render() {
     const {
+      minimizable,
       promptIndex,
       prompts,
     } = this.props;
@@ -65,31 +77,43 @@ class PromptSwiper extends Component {
 
     const classes = cx(
       'prompts',
-      { 'prompts--floating': this.props.floating },
+      { 'prompts--floating': this.props.floating,
+        'prompts--minimized': this.state.minimized },
+    );
+
+    const minimizeButton = (
+      <span className="prompts__minimizer" onClick={this.handleMinimize}>
+        {this.state.minimized ? '?' : '—'}
+      </span>
     );
 
     if (prompts.length <= 1) {
       return (
-        <div className={classes}>
-          <div className="prompts__prompts">
-            {promptsRender}
+        <React.Fragment>
+          <div className={classes}>
+            <div className="prompts__prompts">
+              {promptsRender}
+            </div>
           </div>
-        </div>
+          {minimizable && minimizeButton}
+        </React.Fragment>
       );
     }
 
     return (
-      <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
-        <div className={classes}>
-          <div className="prompts__pips">
-            <Pips count={prompts.length} currentIndex={promptIndex} />
+      <React.Fragment>
+        <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
+          <div className={classes}>
+            <div className="prompts__pips">
+              <Pips count={prompts.length} currentIndex={promptIndex} />
+            </div>
+            {!this.state.minimized && (<div className="prompts__prompts">
+              {promptsRender}
+            </div>)}
           </div>
-
-          <div className="prompts__prompts">
-            {promptsRender}
-          </div>
-        </div>
-      </Touch>
+        </Touch>
+        {minimizable && minimizeButton}
+      </React.Fragment>
     );
   }
 }
