@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Node } from '../components';
+
+import Node from './Node';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
 import { DragSource } from '../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
