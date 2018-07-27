@@ -41,13 +41,13 @@ describe('the externalData reducer', () => {
   });
 
   it('Copies from existing PKs if available', () => {
-    const data = { students: { nodes_primary_key: 'studentId', nodes: [{ name: 'a', studentId: 98765 }] } };
+    const data = { students: { nodesPrimaryKey: 'studentId', nodes: [{ name: 'a', studentId: 98765 }] } };
     const newState = reducer(initialState, actionWithData(data));
     expect(newState.students.nodes[0]).toMatchObject({ uid: 98765, studentId: 98765 });
   });
 
   it('Generates UID if custom PK missing', () => {
-    const data = { students: { nodes_primary_key: 'studentId', nodes: [{ name: 'a' }] } };
+    const data = { students: { nodesPrimaryKey: 'studentId', nodes: [{ name: 'a' }] } };
     const newState = reducer(initialState, actionWithData(data));
     expect(newState.students.nodes[0]).toMatchObject({ uid: expect.any(String) });
   });

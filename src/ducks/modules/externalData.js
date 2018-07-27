@@ -7,8 +7,8 @@ const initialState = null;
 
 // Name of the property a protocol uses to define a PK field on external data
 // Example:
-//   "schoolPupils": { "nodes_primary_key": "studentId", "nodes": [...] }
-const customPKProp = 'nodes_primary_key';
+//   "schoolPupils": { "nodesPrimaryKey": "studentId", "nodes": [...] }
+const customPKProp = 'nodesPrimaryKey';
 
 /**
  * @private

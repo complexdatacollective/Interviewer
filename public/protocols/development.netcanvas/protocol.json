@@ -742,7 +742,7 @@
       ]
     },
     "schoolPupils": {
-      "nodes_primary_key": "studentId",
+      "nodesPrimaryKey": "studentId",
       "nodes": [
         {
           "studentId": "person_1",
