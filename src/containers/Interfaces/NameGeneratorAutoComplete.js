@@ -24,23 +24,9 @@ const getNodeIconName = makeGetNodeIconName();
   * @extends Component
   */
 class NameGeneratorAutoComplete extends Component {
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown);
-  }
-
   onSearchComplete(selectedResults) {
     this.props.addNodes(selectedResults, this.props.newNodeAttributes);
     this.props.closeSearch();
-  }
-
-  onKeyDown = (evt) => {
-    if (this.props.searchIsOpen && (evt.key === 'Escape' || evt.keyCode === 27)) {
-      this.props.closeSearch();
-    }
   }
 
   render() {
