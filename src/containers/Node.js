@@ -90,7 +90,8 @@ Node.defaultProps = {
   color: 'node-color-seq-1',
   workerUrl: undefined,
   workerNetwork: null,
-  workerVariableRegistry: null,
 };
 
 export default connect(mapStateToProps)(Node);
+
+export { Node };

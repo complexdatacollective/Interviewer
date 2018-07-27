@@ -78,7 +78,7 @@ const preloadWorkers = (environment) => {
           .then(str => compileWorker(str, workerName))
           .then(source => new Blob([source], { type: 'text/plain' }))
           .then(blob => urlForWorkerSource(blob))
-          .catch(() => {})),
+          .catch(() => null)),
       );
   }
 
