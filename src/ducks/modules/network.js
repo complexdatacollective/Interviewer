@@ -92,11 +92,14 @@ export default function reducer(state = initialState, action = {}) {
         nodes: getUpdatedNodes(state.nodes, action.node, action.full),
       };
     }
-    case REMOVE_NODE:
+    case REMOVE_NODE: {
+      const removeNodePK = action[NodePK];
       return {
         ...state,
-        nodes: reject(state.nodes, node => node[NodePK] === action[NodePK]),
+        nodes: reject(state.nodes, node => node[NodePK] === removeNodePK),
+        edges: reject(state.edges, edge => edge.from === removeNodePK || edge.to === removeNodePK),
       };
+    }
     case ADD_EDGE:
       if (edgeExists(state.edges, action.edge)) { return state; }
       return {
