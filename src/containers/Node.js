@@ -47,7 +47,13 @@ class Node extends PureComponent {
     });
     this.outstandingMessage = msgPromise.cancellationId;
     msgPromise
-      .then(label => this.setState({ label }))
+      .then((label) => {
+        if (!label) {
+          console.warn('Empty label returned for node', this.props); // eslint-disable-line no-console
+          throw new Error('Empty label');
+        }
+        this.setState({ label });
+      })
       .catch(workerError => this.setState({ workerError }));
   }
 
