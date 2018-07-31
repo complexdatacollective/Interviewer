@@ -66,23 +66,32 @@ const compileWorker = (src, funcName) => {
  * @description Read custom worker scripts from the protocol package, if any.
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
-const preloadWorkers = (environment) => {
-  if (environment !== environments.WEB) {
-    return (protocolName, isFactory) =>
-      Promise.all(supportedWorkers.map(workerName =>
-        readFile((isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`))
-          /**
-           * Load from blob so that script inherits CSP
-           */
-          .then(buf => new TextDecoder().decode(buf))
-          .then(str => compileWorker(str, workerName))
-          .then(source => new Blob([source], { type: 'text/plain' }))
-          .then(blob => urlForWorkerSource(blob))
-          .catch(() => null)),
-      );
-  }
+const preloadWorkers = environment =>
+  (protocolName, isFactory) => {
+    if (environment === environments.WEB && !isFactory) {
+      return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
+    }
 
-  return () => Promise.reject(new Error('loadProtocol() not supported on this platform'));
-};
+    return Promise.all(supportedWorkers.map((workerName) => {
+      let workerFile;
+      let promise;
+      if (environment === environments.WEB) {
+        workerFile = `/protocols/${protocolName}/${workerName}.js`;
+        promise = fetch(workerFile).then(resp => resp.arrayBuffer());
+      } else {
+        workerFile = (isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`);
+        promise = readFile(workerFile);
+      }
+      return promise
+        /**
+         * Load from blob so that script inherits CSP
+         */
+        .then(buf => new TextDecoder().decode(buf))
+        .then(str => compileWorker(str, workerName))
+        .then(source => new Blob([source], { type: 'text/plain' }))
+        .then(blob => urlForWorkerSource(blob))
+        .catch(() => null);
+    }));
+  };
 
 export default inEnvironment(preloadWorkers);
