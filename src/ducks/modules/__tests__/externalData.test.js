@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import reducer from '../externalData';
+import { NodePK } from '../network';
 
 const initialState = null;
 
@@ -24,31 +25,13 @@ describe('the externalData reducer', () => {
   it('assigns a UID to new data', () => {
     const data = { students: { nodes: [{ name: 'a' }] } };
     const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0]).toMatchObject({ uid: expect.any(String) });
+    expect(newState.students.nodes[0]).toMatchObject({ [NodePK]: expect.any(String) });
   });
 
   it('uses consistent hashing for IDs', () => {
     const data = { students: { nodes: [{ name: 'a' }, { name: 'a' }] } };
     const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0].uid).toBeDefined();
+    expect(newState.students.nodes[0][NodePK]).toBeDefined();
     expect(newState.students.nodes[0]).toEqual(newState.students.nodes[1]);
-  });
-
-  it('preserves existing UIDs', () => {
-    const data = { students: { nodes: [{ name: 'a', uid: 54321 }] } };
-    const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0]).toMatchObject({ uid: 54321 });
-  });
-
-  it('Copies from existing PKs if available', () => {
-    const data = { students: { nodesPrimaryKey: 'studentId', nodes: [{ name: 'a', studentId: 98765 }] } };
-    const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0]).toMatchObject({ uid: 98765, studentId: 98765 });
-  });
-
-  it('Generates UID if custom PK missing', () => {
-    const data = { students: { nodesPrimaryKey: 'studentId', nodes: [{ name: 'a' }] } };
-    const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0]).toMatchObject({ uid: expect.any(String) });
   });
 });
