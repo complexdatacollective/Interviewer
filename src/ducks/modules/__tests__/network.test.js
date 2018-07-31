@@ -90,7 +90,7 @@ describe('network reducer', () => {
         },
         {
           type: actionTypes.REMOVE_NODE,
-          uid: 2,
+          [PK]: 2,
         },
       ),
     ).toEqual({
@@ -121,7 +121,7 @@ describe('network reducer', () => {
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
-        uid: 1,
+        [PK]: 1,
         attributes: { stage: 1 },
       },
     );
@@ -136,7 +136,7 @@ describe('network reducer', () => {
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
-        uid: 2,
+        [PK]: 2,
         attributes: { stage: 1 },
       },
     );

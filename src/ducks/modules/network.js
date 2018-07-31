@@ -66,10 +66,10 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
-      const attributes = omit(action.attributes, ['uid']);
+      const attributes = omit(action.attributes, [NodePK]);
 
       const updatedNodes = state.nodes.map((node) => {
-        if (node[NodePK] !== action.uid) { return node; }
+        if (node[NodePK] !== action[NodePK]) { return node; }
 
         if (isMatch(node, attributes)) {
           return omit(node, Object.getOwnPropertyNames(attributes));
@@ -95,7 +95,7 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE:
       return {
         ...state,
-        nodes: reject(state.nodes, node => node[NodePK] === action.uid),
+        nodes: reject(state.nodes, node => node[NodePK] === action[NodePK]),
       };
     case ADD_EDGE:
       if (edgeExists(state.edges, action.edge)) { return state; }
