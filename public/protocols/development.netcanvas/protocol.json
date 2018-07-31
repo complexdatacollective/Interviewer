@@ -20,6 +20,11 @@
               "maxLength": 24
             }
           },
+          "last_name": {
+            "label": "Last Name",
+            "description": "Human readable description",
+            "type": "text"
+          },
           "age": {
             "label": "Age",
             "description": "Human readable description",
