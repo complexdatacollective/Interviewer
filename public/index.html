@@ -5,7 +5,7 @@
     <!-- default-src contains `blob:` as worker-src fallback for Android <= 8.0 -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src gap://ready file://* blob:;
-      connect-src 'self' data: http://localhost:* https://localhost:*;
+      connect-src 'self' data: http://localhost:* https://localhost:* ws://localhost:*;
       img-src asset: 'self' android-webview-video-poster: data: cdvfile: file:;
       media-src 'self' asset: cdvfile: file: data:;
       style-src 'self' 'unsafe-inline';
