@@ -1,5 +1,8 @@
-.pips {
+$block: pips;
+
+.#{$block} {
   $pip-size: 10px;
+  $large-pip-size: 15px;
 
   &__pips {
     height: $pip-size;
@@ -25,6 +28,18 @@
 
     &--active {
       background-color: palette('light-background');
+    }
+  }
+
+  &--large {
+    .#{$block}__pip {
+      border: 1px solid var(--primary);
+      height: $large-pip-size;
+      width: $large-pip-size;
+
+      &--active {
+        background-color: var(--primary);
+      }
     }
   }
 }

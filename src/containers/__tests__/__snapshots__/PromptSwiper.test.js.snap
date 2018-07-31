@@ -47,6 +47,7 @@ ShallowWrapper {
               <Pips
                 count={2}
                 currentIndex={0}
+                large={false}
               />
             </div>
             <div
@@ -84,6 +85,7 @@ ShallowWrapper {
               <Pips
                 count={2}
                 currentIndex={0}
+                large={false}
               />
             </div>
             <div
@@ -117,6 +119,7 @@ ShallowWrapper {
                 <Pips
                   count={2}
                   currentIndex={0}
+                  large={false}
                 />
               </div>,
               <div
@@ -146,6 +149,7 @@ ShallowWrapper {
                 "children": <Pips
                   count={2}
                   currentIndex={0}
+                  large={false}
                 />,
                 "className": "prompts__pips",
               },
@@ -157,6 +161,7 @@ ShallowWrapper {
                 "props": Object {
                   "count": 2,
                   "currentIndex": 0,
+                  "large": false,
                 },
                 "ref": null,
                 "rendered": null,
@@ -243,6 +248,7 @@ ShallowWrapper {
                 <Pips
                   count={2}
                   currentIndex={0}
+                  large={false}
                 />
               </div>
               <div
@@ -280,6 +286,7 @@ ShallowWrapper {
                 <Pips
                   count={2}
                   currentIndex={0}
+                  large={false}
                 />
               </div>
               <div
@@ -313,6 +320,7 @@ ShallowWrapper {
                   <Pips
                     count={2}
                     currentIndex={0}
+                    large={false}
                   />
                 </div>,
                 <div
@@ -342,6 +350,7 @@ ShallowWrapper {
                   "children": <Pips
                     count={2}
                     currentIndex={0}
+                    large={false}
                   />,
                   "className": "prompts__pips",
                 },
@@ -353,6 +362,7 @@ ShallowWrapper {
                   "props": Object {
                     "count": 2,
                     "currentIndex": 0,
+                    "large": false,
                   },
                   "ref": null,
                   "rendered": null,
