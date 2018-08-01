@@ -5,6 +5,7 @@ import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { NodePK } from '../ducks/modules/network';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
@@ -43,7 +44,7 @@ export default compose(
   connect(null, mapDispatchToProps),
   withProps(props => ({
     accepts: ({ meta }) => meta.itemType === 'EXISTING_NODE',
-    onDrop: ({ meta }) => props.removeNode(meta.uid),
+    onDrop: ({ meta }) => props.removeNode(meta[NodePK]),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),

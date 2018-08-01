@@ -2,7 +2,7 @@
 import Fuse from 'fuse.js';
 import { createSelector } from 'reselect';
 
-import { getExternalData } from './protocol';
+import { getExternalData } from './externalData';
 
 // The value of this key should point to an attribute in the protocol's externalData.
 const getDatasourceKey = (_, props) => props.dataSourceKey;

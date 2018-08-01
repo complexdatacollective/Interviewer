@@ -1,5 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import { omit } from 'lodash';
 import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
 import { actionTypes as SessionActionTypes } from './session';
 
@@ -47,7 +48,7 @@ export default function reducer(state = initialState, action = {}) {
     case SET_PROTOCOL:
       return {
         ...state,
-        ...action.protocol,
+        ...omit(action.protocol, 'externalData'),
         path: action.path,
         isLoaded: true,
         isLoading: false,

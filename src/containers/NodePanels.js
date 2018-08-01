@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { includes, map, differenceBy } from 'lodash';
 import { getNodeLabelFunction, networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
-import { getExternalData } from '../selectors/protocol';
+import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { NodePK } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -52,9 +53,9 @@ class NodePanels extends PureComponent {
 
   onDrop = ({ meta }, dataSource) => {
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(meta.uid, { ...this.props.activePromptAttributes });
+      this.props.toggleNodeAttributes(meta[NodePK], { ...this.props.activePromptAttributes });
     } else {
-      this.props.removeNode(meta.uid);
+      this.props.removeNode(meta[NodePK]);
     }
   }
 
@@ -112,13 +113,13 @@ class NodePanels extends PureComponent {
 const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
     existingNodes :
-    differenceBy(externalData[dataSource].nodes, nodes, 'uid')
+    differenceBy(externalData[dataSource].nodes, nodes, NodePK)
 );
 
 const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
-    map(existingNodes, 'uid') :
-    map(externalData[dataSource].nodes, 'uid')
+    map(existingNodes, NodePK) :
+    map(externalData[dataSource].nodes, NodePK)
 );
 
 function makeMapStateToProps() {
@@ -155,7 +156,7 @@ function makeMapStateToProps() {
           ) :
           ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
-            includes(originNodeIds, meta.uid)
+            includes(originNodeIds, meta[NodePK])
           );
 
         return {

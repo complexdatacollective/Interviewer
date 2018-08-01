@@ -49,11 +49,6 @@ describe('protocol selector', () => {
       expect(Protocol.protocolForms(emptyState)).toEqual(undefined);
     });
 
-    it('should get external data', () => {
-      expect(Protocol.getExternalData(mockState)).toEqual(externalData);
-      expect(Protocol.getExternalData(emptyState)).toEqual(undefined);
-    });
-
     it('should get node color', () => {
       const selected = Protocol.makeGetNodeColor();
       expect(selected(mockState, mockProps)).toEqual('node-color-seq-2');

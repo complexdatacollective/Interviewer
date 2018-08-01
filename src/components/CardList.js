@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
 import { Icon } from '../ui/components';
+import { NodePK } from '../ducks/modules/network';
 
 const EnhancedCard = selectable(Card);
 
@@ -23,7 +24,7 @@ const CardList = (props) => {
     onDeleteCard,
     onToggleCard,
     selected,
-    uid,
+    getKey,
   } = props;
 
   const classNames = cx('card-list', className);
@@ -32,7 +33,7 @@ const CardList = (props) => {
     <div className={classNames}>
       {
         nodes.map(node => (
-          <span className="card-list__content" key={uid(node)}>
+          <span className="card-list__content" key={getKey(node)}>
             <EnhancedCard
               label={label(node)}
               multiselect={multiselect}
@@ -62,7 +63,7 @@ CardList.propTypes = {
   onDeleteCard: PropTypes.func,
   onToggleCard: PropTypes.func,
   selected: PropTypes.func,
-  uid: PropTypes.func,
+  getKey: PropTypes.func,
 };
 
 CardList.defaultProps = {
@@ -75,7 +76,7 @@ CardList.defaultProps = {
   onDeleteCard: null,
   onToggleCard: () => {},
   selected: () => false,
-  uid: node => node.uid,
+  getKey: node => node[NodePK],
 };
 
 export default compose(

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
+import externalData from './externalData';
 import sessions from './sessions';
 import session from './session';
 import device from './device';
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   session,
   sessions,
   device,
+  externalData,
   protocol,
   protocols,
   modals,

@@ -15,19 +15,13 @@ const validation = {
   minLength: 2,
 };
 
-jest.mock('uuid');
-
 const reduxFormFieldProperties = { input: { name: 'foo', value: '' }, meta: { invalid: false } };
 
 describe('getInputComponent()', () => {
-  it('should return renderable component', () => {
-    const Input = getInputComponent('Alphanumeric');
-
-    const subject = shallow((
-      <Input {...reduxFormFieldProperties} />
-    ));
-
-    expect(subject).toMatchSnapshot();
+  it('should return a dom input', () => {
+    const Input = getInputComponent();
+    const subject = shallow(<Input {...reduxFormFieldProperties} />);
+    expect(subject.find('input')).toHaveLength(1);
   });
 });
 

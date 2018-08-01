@@ -45,6 +45,7 @@ ShallowWrapper {
         className=""
         compact={false}
         details={[Function]}
+        getKey={[Function]}
         label={[Function]}
         multiselect={true}
         nodes={
@@ -70,7 +71,6 @@ ShallowWrapper {
         onToggleCard={[Function]}
         scrollTop={[Function]}
         selected={[Function]}
-        uid={[Function]}
       />,
       "className": "scrollable",
     },
@@ -83,6 +83,7 @@ ShallowWrapper {
         "className": "",
         "compact": false,
         "details": [Function],
+        "getKey": [Function],
         "label": [Function],
         "multiselect": true,
         "nodes": Array [
@@ -106,7 +107,6 @@ ShallowWrapper {
         "onToggleCard": [Function],
         "scrollTop": [Function],
         "selected": [Function],
-        "uid": [Function],
       },
       "ref": null,
       "rendered": null,
@@ -124,6 +124,7 @@ ShallowWrapper {
           className=""
           compact={false}
           details={[Function]}
+          getKey={[Function]}
           label={[Function]}
           multiselect={true}
           nodes={
@@ -149,7 +150,6 @@ ShallowWrapper {
           onToggleCard={[Function]}
           scrollTop={[Function]}
           selected={[Function]}
-          uid={[Function]}
         />,
         "className": "scrollable",
       },
@@ -162,6 +162,7 @@ ShallowWrapper {
           "className": "",
           "compact": false,
           "details": [Function],
+          "getKey": [Function],
           "label": [Function],
           "multiselect": true,
           "nodes": Array [
@@ -185,7 +186,6 @@ ShallowWrapper {
           "onToggleCard": [Function],
           "scrollTop": [Function],
           "selected": [Function],
-          "uid": [Function],
         },
         "ref": null,
         "rendered": null,

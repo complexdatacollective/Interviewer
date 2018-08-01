@@ -6,6 +6,7 @@ import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { NodePK } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
 import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
@@ -32,7 +33,7 @@ class NameGeneratorList extends Component {
   }
 
   onRemoveNode = (item) => {
-    this.props.removeNode(item.uid);
+    this.props.removeNode(item[NodePK]);
   }
 
   label = node => `${node[this.props.labelKey]}`;
@@ -114,7 +115,10 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     let nodesForList = getDataByPrompt(state, props);
     if (!props.stage.showExistingNodes) {
-      nodesForList = differenceBy(getDataByPrompt(state, props), networkNodesForOtherPrompts(state, props), 'uid');
+      nodesForList = differenceBy(
+        getDataByPrompt(state, props),
+        networkNodesForOtherPrompts(state, props),
+        NodePK);
     }
 
     return {

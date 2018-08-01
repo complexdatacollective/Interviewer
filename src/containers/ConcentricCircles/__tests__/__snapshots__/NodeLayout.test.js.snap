@@ -19,12 +19,12 @@ ShallowWrapper {
     nodes={
       Array [
         Object {
+          "_uid": 123,
           "bar": "buzz",
           "foo": Object {
             "x": 0,
             "y": 0,
           },
-          "uid": 123,
         },
       ]
     }
@@ -58,12 +58,12 @@ ShallowWrapper {
           linking={false}
           node={
             Object {
+              "_uid": 123,
               "bar": "buzz",
               "foo": Object {
                 "x": 0,
                 "y": 0,
               },
-              "uid": 123,
             }
           }
           onSelected={[Function]}
@@ -86,12 +86,12 @@ ShallowWrapper {
           "layoutVariable": "foo",
           "linking": false,
           "node": Object {
+            "_uid": 123,
             "bar": "buzz",
             "foo": Object {
               "x": 0,
               "y": 0,
             },
-            "uid": 123,
           },
           "onSelected": [Function],
           "selected": false,
@@ -119,12 +119,12 @@ ShallowWrapper {
             linking={false}
             node={
               Object {
+                "_uid": 123,
                 "bar": "buzz",
                 "foo": Object {
                   "x": 0,
                   "y": 0,
                 },
-                "uid": 123,
               }
             }
             onSelected={[Function]}
@@ -147,12 +147,12 @@ ShallowWrapper {
             "layoutVariable": "foo",
             "linking": false,
             "node": Object {
+              "_uid": 123,
               "bar": "buzz",
               "foo": Object {
                 "x": 0,
                 "y": 0,
               },
-              "uid": 123,
             },
             "onSelected": [Function],
             "selected": false,
