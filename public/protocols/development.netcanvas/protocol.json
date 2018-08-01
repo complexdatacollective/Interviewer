@@ -20,6 +20,11 @@
               "maxLength": 24
             }
           },
+          "last_name": {
+            "label": "Last Name",
+            "description": "Human readable description",
+            "type": "text"
+          },
           "age": {
             "label": "Age",
             "description": "Human readable description",
@@ -485,6 +490,7 @@
           "uid": "person_1",
           "type": "person",
           "name": "Anita",
+          "last_name": "Li",
           "nickname": "Annie",
           "age": "23"
         },
@@ -492,6 +498,7 @@
           "uid": "person_2",
           "type": "person",
           "name": "Barry",
+          "last_name": "Smith",
           "nickname": "Baz",
           "age": "23"
         },
@@ -499,6 +506,7 @@
           "uid": "person_3",
           "type": "person",
           "name": "Carlito",
+          "last_name": "González",
           "nickname": "Carl",
           "age": "23"
         },
@@ -506,6 +514,7 @@
           "uid": "person_4",
           "type": "person",
           "name": "Dee",
+          "last_name": "Zhang",
           "nickname": "Dee",
           "age": "23"
         },
@@ -513,8 +522,17 @@
           "uid": "person_5",
           "type": "person",
           "name": "Eugine",
+          "last_name": "Müller",
           "nickname": "Eu",
           "age": "23"
+        },
+        {
+          "uid": "previous_6",
+          "type": "person",
+          "name": "Eustace",
+          "last_name": "Nguyễn",
+          "nickname": "Eu",
+          "age": "24"
         }
       ]
     },
@@ -1063,7 +1081,7 @@
       "prompts": [
         {
           "id": "6cl",
-          "text": "This is a _prompt_ containing **markdown**",
+          "text": "Who would _you_ consider to be a **close friend**?",
           "additionalAttributes": {
             "special_category": 46,
             "close_friend": true

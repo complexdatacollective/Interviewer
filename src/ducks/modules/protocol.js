@@ -1,8 +1,16 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
 import { omit } from 'lodash';
-import { loadProtocol, importProtocol, downloadProtocol, loadFactoryProtocol } from '../../utils/protocol';
+
 import { actionTypes as SessionActionTypes } from './session';
+import { supportedWorkers } from '../../utils/WorkerAgent';
+import {
+  loadProtocol,
+  importProtocol,
+  downloadProtocol,
+  loadFactoryProtocol,
+  preloadWorkers,
+} from '../../utils/protocol';
 
 /**
  * `protocol` maintains information about the currently-loaded protocol for session, and
@@ -31,8 +39,9 @@ const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
 const SET_PROTOCOL = 'SET_PROTOCOL';
+const SET_WORKER = 'SET_WORKER';
 
-const initialState = {
+export const initialState = {
   isLoaded: false,
   isLoading: false,
   error: null,
@@ -41,6 +50,7 @@ const initialState = {
   required: '',
   stages: [],
   type: 'factory',
+  workerUrlMap: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -52,6 +62,11 @@ export default function reducer(state = initialState, action = {}) {
         path: action.path,
         isLoaded: true,
         isLoading: false,
+      };
+    case SET_WORKER:
+      return {
+        ...state,
+        workerUrlMap: action.workerUrlMap,
       };
     case END_SESSION:
       return initialState;
@@ -142,6 +157,14 @@ function setProtocol(path, protocol, isFactoryProtocol) {
   };
 }
 
+// If there's no custom worker, set to empty so we won't expect one later
+function setWorkerContent(workerUrlMap = {}) {
+  return {
+    type: SET_WORKER,
+    workerUrlMap,
+  };
+}
+
 const downloadProtocolEpic = action$ =>
   action$.ofType(DOWNLOAD_PROTOCOL)
     .switchMap(action =>
@@ -180,6 +203,23 @@ const loadFactoryProtocolEpic = action$ =>
         .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
     );
 
+const loadProtocolWorkerEpic = action$ =>
+  action$
+    .ofType(LOAD_PROTOCOL)
+    .switchMap(action => // Favour subsequent load actions over earlier ones
+      Observable
+        .fromPromise(preloadWorkers(action.path, action.protocolType === 'factory'))
+        .mergeMap(urls => urls)
+        .reduce((urlMap, workerUrl, i) => {
+          if (workerUrl) {
+            // eslint-disable-next-line no-param-reassign
+            urlMap[supportedWorkers[i]] = workerUrl;
+          }
+          return urlMap;
+        }, {})
+        .map(workerUrlMap => setWorkerContent(workerUrlMap)),
+    );
+
 const actionCreators = {
   loadProtocol: loadProtocolAction,
   importProtocol: importProtocolAction,
@@ -206,6 +246,7 @@ const epics = combineEpics(
   importProtocolEpic,
   loadProtocolEpic,
   loadFactoryProtocolEpic,
+  loadProtocolWorkerEpic,
 );
 
 export {

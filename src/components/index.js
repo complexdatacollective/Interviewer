@@ -7,7 +7,6 @@ export { default as Pips } from './Pips';
 export { default as Prompt } from './Prompt';
 export { default as Dialog } from './Dialog';
 export { default as Modal } from './Modal';
-export { default as Node } from './Node';
 export { default as Edge } from './Edge';
 export { default as MenuItem } from './MenuItem';
 export { default as NodeList } from './NodeList';

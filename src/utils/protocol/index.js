@@ -7,3 +7,4 @@ export { default as loadProtocol } from './loadProtocol';
 export { default as loadFactoryProtocol } from './loadFactoryProtocol';
 export { default as importProtocol } from './importProtocol';
 export { default as downloadProtocol } from './downloadProtocol';
+export { default as preloadWorkers } from './preloadWorkers';
