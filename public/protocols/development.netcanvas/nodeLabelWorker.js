@@ -43,7 +43,7 @@ function nodeLabelWorker({ node, network }) {
 
   // 5. Add emoji based on an edge or node property
   let label = node.name;
-  if (network.edges.some(e => e.from === node.id || e.to === node.id)) {
+  if (network.edges.some(e => e.from === node._uid || e.to === node._uid)) {
     label += '😎';
   } else if (node.close_friend) {
     label += '😇';
