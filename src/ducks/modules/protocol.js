@@ -1,6 +1,9 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
+import { omit } from 'lodash';
+
 import { actionTypes as SessionActionTypes } from './session';
+import { supportedWorkers } from '../../utils/WorkerAgent';
 import {
   loadProtocol,
   importProtocol,
@@ -8,8 +11,6 @@ import {
   loadFactoryProtocol,
   preloadWorkers,
 } from '../../utils/protocol';
-
-import { supportedWorkers } from '../../utils/WorkerAgent';
 
 /**
  * `protocol` maintains information about the currently-loaded protocol for session, and
@@ -57,7 +58,7 @@ export default function reducer(state = initialState, action = {}) {
     case SET_PROTOCOL:
       return {
         ...state,
-        ...action.protocol,
+        ...omit(action.protocol, 'externalData'),
         path: action.path,
         isLoaded: true,
         isLoading: false,

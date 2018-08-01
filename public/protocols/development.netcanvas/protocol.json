@@ -487,7 +487,7 @@
     "previousInterview": {
       "nodes": [
         {
-          "uid": "previous_1",
+          "uid": "person_1",
           "type": "person",
           "name": "Anita",
           "last_name": "Li",
@@ -495,7 +495,7 @@
           "age": "23"
         },
         {
-          "uid": "previous_2",
+          "uid": "person_2",
           "type": "person",
           "name": "Barry",
           "last_name": "Smith",
@@ -503,7 +503,7 @@
           "age": "23"
         },
         {
-          "uid": "previous_3",
+          "uid": "person_3",
           "type": "person",
           "name": "Carlito",
           "last_name": "González",
@@ -511,7 +511,7 @@
           "age": "23"
         },
         {
-          "uid": "previous_4",
+          "uid": "person_4",
           "type": "person",
           "name": "Dee",
           "last_name": "Zhang",
@@ -519,7 +519,7 @@
           "age": "23"
         },
         {
-          "uid": "previous_5",
+          "uid": "person_5",
           "type": "person",
           "name": "Eugine",
           "last_name": "Müller",
@@ -1060,57 +1060,6 @@
   },
   "stages": [
     {
-      "id": "welcome",
-      "label": "Welcome",
-      "type": "Information",
-      "title": "Title for the screen",
-      "items": [
-        {
-          "type": "text",
-          "content":
-            "Some arbitrary text content that can _contain_ **formatting**."
-        },
-        {
-          "type": "audio",
-          "content": "click_the_thing.mp3",
-          "description": "Click by clicking the thing"
-        },
-        { "type": "image", "content": "rubberduck.jpg" }
-      ]
-    },
-    {
-      "id": "info-sound",
-      "label": "InfoSound",
-      "type": "Information",
-      "title": "This interface has a video with sound",
-      "items": [
-        {
-          "type": "text",
-          "content":
-            "The video below has sound and is set to loop."
-        },
-        {
-          "type": "video",
-          "content": "withSound.mp4",
-          "description": "Click by clicking the thing",
-          "loop": true
-        }
-      ]
-    },
-    {
-      "id": "markdown",
-      "label": "Markdown",
-      "type": "Information",
-      "title": "Testing markdown",
-      "items": [
-        {
-          "type": "text",
-          "content":
-            "# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n___\n\n---\n\n***\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text* \n\n_This is italic text_ \n# Emoji \n:blush: :heartpulse: :wave:"
-        }
-      ]
-    },
-    {
       "id": "namegen1",
       "type": "NameGenerator",
       "label": "NG Closeness",
@@ -1544,6 +1493,57 @@
             "entity": "node",
             "type": "venue"
           }
+        }
+      ]
+    },
+    {
+      "id": "rubberduck",
+      "label": "Audio test",
+      "type": "Information",
+      "title": "Title for the screen",
+      "items": [
+        {
+          "type": "text",
+          "content":
+            "Some arbitrary text content that can _contain_ **formatting**."
+        },
+        {
+          "type": "audio",
+          "content": "click_the_thing.mp3",
+          "description": "Click by clicking the thing"
+        },
+        { "type": "image", "content": "rubberduck.jpg" }
+      ]
+    },
+    {
+      "id": "info-sound",
+      "label": "InfoSound",
+      "type": "Information",
+      "title": "This interface has a video with sound",
+      "items": [
+        {
+          "type": "text",
+          "content":
+            "The video below has sound and is set to loop."
+        },
+        {
+          "type": "video",
+          "content": "withSound.mp4",
+          "description": "Click by clicking the thing",
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "markdown",
+      "label": "Markdown",
+      "type": "Information",
+      "title": "Testing markdown",
+      "items": [
+        {
+          "type": "text",
+          "content":
+            "# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n___\n\n---\n\n***\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text* \n\n_This is italic text_ \n# Emoji \n:blush: :heartpulse: :wave:"
         }
       ]
     },

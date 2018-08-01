@@ -5,7 +5,7 @@ import NodeLayout from './NodeLayout';
 import EdgeLayout from './EdgeLayout';
 import Background from './Background';
 
-const Sociogram = ({ stage, prompt }) => (
+const ConcentricCircles = ({ stage, prompt }) => (
   <div className="sociogram">
     <Background stage={stage} prompt={prompt} />
     {
@@ -27,11 +27,11 @@ const Sociogram = ({ stage, prompt }) => (
   </div>
 );
 
-Sociogram.propTypes = {
+ConcentricCircles.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
 };
 
-export { Sociogram };
+export { ConcentricCircles };
 
-export default Sociogram;
+export default ConcentricCircles;

@@ -3,12 +3,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NodeLayout } from '../NodeLayout';
+import { NodePK } from '../../../ducks/modules/network';
 
 const layout = 'foo';
 
 const mockProps = {
   nodes: [
-    { bar: 'buzz', uid: 123, [layout]: { x: 0, y: 0 } },
+    { bar: 'buzz', [NodePK]: 123, [layout]: { x: 0, y: 0 } },
   ],
   updateNode: () => {},
   toggleEdge: () => {},
@@ -47,12 +48,12 @@ describe('<NodeLayout />', () => {
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', uid: 123 }],
+      nodes: [{ bar: 'buzz', [NodePK]: 123 }],
     });
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', uid: 123 }, { bar: 'bing', uid: 456 }],
+      nodes: [{ bar: 'buzz', [NodePK]: 123 }, { bar: 'bing', [NodePK]: 456 }],
     });
 
     expect(componentDidUpdate.mock.calls.length).toEqual(1);
@@ -69,7 +70,7 @@ describe('<NodeLayout />', () => {
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', uid: 123 }],
+      nodes: [{ bar: 'buzz', [NodePK]: 123 }],
     });
 
     component.setProps({

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionTypes } from '../network';
+import reducer, { actionTypes, NodePK as PK } from '../network';
 
 const mockState = {
   ego: {},
@@ -8,7 +8,7 @@ const mockState = {
   edges: [],
 };
 
-const UIDPattern = /[0-9]+_[0-9]+/;
+const UIDPattern = /[a-f\d]+-/;
 
 describe('network reducer', () => {
   it('should return the initial state', () => {
@@ -31,16 +31,15 @@ describe('network reducer', () => {
     expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
 
     const newNode = newState.nodes[1];
-    expect(newNode.id).toEqual(2);
     expect(newNode.name).toEqual('foo');
-    expect(newNode.uid).toMatch(UIDPattern);
+    expect(newNode[PK]).toMatch(UIDPattern);
   });
 
   it('should handle ADD_NODES', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ id: 1, name: 'baz' }],
+        nodes: [{ [PK]: 1, name: 'baz' }],
       },
       {
         type: actionTypes.ADD_NODES,
@@ -49,14 +48,20 @@ describe('network reducer', () => {
     );
 
     expect(newState.nodes.length).toBe(3);
-    expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, name: 'baz' });
+    expect(newState.nodes[1]).toMatchObject({ name: 'foo', [PK]: expect.stringMatching(UIDPattern) });
+    expect(newState.nodes[2]).toMatchObject({ name: 'bar', [PK]: expect.stringMatching(UIDPattern) });
+  });
 
-    const node1 = newState.nodes[1];
-    const node2 = newState.nodes[2];
-    expect(node1).toMatchObject({ name: 'foo', id: 2 });
-    expect(node1.uid).toMatch(UIDPattern);
-    expect(node2).toMatchObject({ name: 'bar', id: 3 });
-    expect(node2.uid).toMatch(UIDPattern);
+  it('preserves UID when adding a node', () => {
+    const newState = reducer(
+      mockState,
+      {
+        type: actionTypes.ADD_NODES,
+        nodes: [{ name: 'foo', [PK]: '22' }],
+      },
+    );
+    expect(newState.nodes[0][PK]).toEqual('22');
   });
 
   it('should support additionalAttributes for ADD_NODES', () => {
@@ -81,16 +86,16 @@ describe('network reducer', () => {
       reducer(
         {
           ...mockState,
-          nodes: [{ uid: 1, name: 'foo' }, { uid: 2, name: 'bar' }, { uid: 3, name: 'baz' }],
+          nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 2, name: 'bar' }, { [PK]: 3, name: 'baz' }],
         },
         {
           type: actionTypes.REMOVE_NODE,
-          uid: 2,
+          [PK]: 2,
         },
       ),
     ).toEqual({
       ...mockState,
-      nodes: [{ uid: 1, name: 'foo' }, { uid: 3, name: 'baz' }],
+      nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 3, name: 'baz' }],
     });
   });
 
@@ -98,25 +103,25 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ uid: 1, id: 1, name: 'baz' }],
+        nodes: [{ [PK]: 1, id: 1, name: 'baz' }],
       },
       {
         type: actionTypes.UPDATE_NODE,
-        node: { uid: 1, name: 'foo' },
+        node: { [PK]: 1, name: 'foo' },
       },
     );
-    expect(newState.nodes[0]).toEqual({ uid: 1, id: 1, name: 'foo' });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, name: 'foo' });
   });
 
   it('should handle TOGGLE_NODE_ATTRIBUTES', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ uid: 1, name: 'foo' }, { uid: 2, name: 'bar' }],
+        nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 2, name: 'bar' }],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
-        uid: 1,
+        [PK]: 1,
         attributes: { stage: 1 },
       },
     );
@@ -127,11 +132,11 @@ describe('network reducer', () => {
     const secondState = reducer(
       {
         ...mockState,
-        nodes: [{ uid: 1, stage: 1, name: 'foo' }, { uid: 2, stage: 1, name: 'bar' }],
+        nodes: [{ [PK]: 1, stage: 1, name: 'foo' }, { [PK]: 2, stage: 1, name: 'bar' }],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
-        uid: 2,
+        [PK]: 2,
         attributes: { stage: 1 },
       },
     );

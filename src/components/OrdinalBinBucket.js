@@ -16,6 +16,7 @@ import {
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
 import sortOrder from '../utils/sortOrder';
+import { NodePK } from '../ducks/modules/network';
 
 const EnhancedNode = DragSource(selectable(Node));
 
@@ -93,7 +94,7 @@ class OrdinalBinBucket extends Component {
       exit,
     } = this.state;
 
-    const isSource = !!find(nodes, ['uid', get(meta, 'uid', null)]);
+    const isSource = !!find(nodes, [NodePK, get(meta, NodePK, null)]);
     const isValidTarget = !isSource && willAccept;
     const isHovering = isValidTarget && isOver;
 
@@ -116,7 +117,7 @@ class OrdinalBinBucket extends Component {
           nodes.map((node, index) => (
             index < 3 && (
               <NodeTransition
-                key={`${node.uid}`}
+                key={`${node[NodePK]}`}
                 index={index}
                 stagger={stagger}
               >
