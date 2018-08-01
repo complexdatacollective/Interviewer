@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
   */
 const Pips = (props) => {
   const {
+    large,
     count,
     currentIndex,
   } = props;
@@ -17,8 +18,10 @@ const Pips = (props) => {
     pips.push(<div key={index} className={classes} />);
   }
 
+  const className = `pips ${large ? 'pips--large' : ''}`;
+
   return (
-    <div className="pips">
+    <div className={className}>
       <div className="pips__pips">
         { pips }
       </div>
@@ -27,6 +30,7 @@ const Pips = (props) => {
 };
 
 Pips.propTypes = {
+  large: PropTypes.bool,
   count: PropTypes.number,
   currentIndex: PropTypes.number,
 };
@@ -34,6 +38,7 @@ Pips.propTypes = {
 Pips.defaultProps = {
   count: 0,
   currentIndex: 0,
+  large: false,
 };
 
 export default Pips;

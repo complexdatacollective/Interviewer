@@ -69,7 +69,7 @@ class FormWizard extends Component {
     return (
       <div className="form-wizard">
         <div className="form-wizard__pips">
-          <Pips count={this.shownFields().length} currentIndex={this.state.fieldIndex} />
+          <Pips count={this.shownFields().length} currentIndex={this.state.fieldIndex} large />
         </div>
         <div className="form-wizard__previous">
           {this.state.fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
