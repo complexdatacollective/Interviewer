@@ -35,6 +35,12 @@ class Stage extends Component {
           >
             Back
           </button>
+          <button
+            className="stage__control-button stage__control-button--next"
+            onClick={this.onClickNext}
+          >
+            Next
+          </button>
         </div>
         <div className="stage__interface">
           <StageErrorBoundary>
@@ -42,14 +48,6 @@ class Stage extends Component {
               <CurrentInterface stage={config} />
             }
           </StageErrorBoundary>
-        </div>
-        <div className="stage__control">
-          <button
-            className="stage__control-button stage__control-button--next"
-            onClick={this.onClickNext}
-          >
-            Next
-          </button>
         </div>
       </div>
     );

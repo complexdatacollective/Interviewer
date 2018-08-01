@@ -19,7 +19,9 @@
   &__control {
     flex: 0 0 80px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
     align-items: center;
     @include breakpoint('full') {
       flex: 0 0 100px;
@@ -29,6 +31,7 @@
       @include svg-button('../images/arrow-back.svg');
       width: 30px;
       height: 80px;
+      margin-top: spacing(medium);
       @include breakpoint('full') {
         width: 45px;
         height: 90px;
