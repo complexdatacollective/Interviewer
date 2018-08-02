@@ -3,18 +3,17 @@
 }
 
 .scrollable {
-  // sass-lint:disable no-color-literals no-vendor-prefixes no-transition-all
+  $gradient-height-top: 35px;
+  $gradient-height-bottom: 50px;
+  $opaque: rgba(0, 0, 0, 1);
+  // sass-lint:disable no-vendor-prefixes
   flex: 1;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 1) 75px, rgba(0, 0, 0, 1) 100%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(180deg, transparent, $opaque $gradient-height-top, $opaque calc(100% - #{$gradient-height-bottom}), transparent 100%);
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  &--is-scrolling {
-    mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 1) 75px, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
   }
 }
