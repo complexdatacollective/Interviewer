@@ -99,6 +99,17 @@ describe('network reducer', () => {
     });
   });
 
+  it('removes any edges containing a removed node', () => {
+    const state = {
+      nodes: [{ [PK]: 1 }, { [PK]: 2 }, { [PK]: 3 }],
+      edges: [{ from: 1, to: 2 }, { from: 1, to: 3 }, { from: 2, to: 3 }],
+    };
+    const newState = reducer(state, { type: actionTypes.REMOVE_NODE, [PK]: 1 });
+    expect(newState.edges).not.toContainEqual(state.edges[0]);
+    expect(newState.edges).not.toContainEqual(state.edges[1]);
+    expect(newState.edges).toContainEqual(state.edges[2]);
+  });
+
   it('should handle UPDATE_NODE', () => {
     const newState = reducer(
       {
