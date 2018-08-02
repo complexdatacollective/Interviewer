@@ -36,6 +36,11 @@ describe('sortOrder', () => {
     expect(sorter(mockItems)).toMatchObject(mockItems);
   });
 
+  it('it does not add any properties to items', () => {
+    const sorter = sortOrder();
+    expect(sorter(mockItems)[0]).toEqual(mockItems[0]);
+  });
+
   describe('order direction', () => {
     it('orders ascending with "asc"', () => {
       const sorter = sortOrder([{

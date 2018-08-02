@@ -1,10 +1,10 @@
-import { omit, orderBy } from 'lodash';
+import { orderBy } from 'lodash';
 
 /* Maps a `createdIndex` index value to all items in an array */
 const withCreatedIndex = items => items.map((item, createdIndex) => ({ ...item, createdIndex }));
 
 /* all items without the 'createdIndex' prop */
-const withoutCreatedIndex = items => items.map(item => omit(item, 'createdIndex'));
+const withoutCreatedIndex = items => items.map(({ createdIndex, ...originalItem }) => originalItem);
 
 /* property iteratee for the special case "*" property, which sorts by `createdIndex` */
 const fifo = ({ createdIndex }) => createdIndex;
@@ -24,13 +24,14 @@ const sortOrder = (sortConfig = [], variableRegistry = {}) => { // eslint-disabl
   const sortRules = sortConfig.filter(rule => !(isFifoLifo(rule) && rule.direction === 'asc'));
   const orders = sortRules.map(rule => rule.direction);
 
-  // If sort involves LIFO ordering (*.desc), we need to add our own index
+  // If sort involves LIFO ordering (*.desc), we need to add our own index during the sort
   if (sortRules.some(isFifoLifo)) {
-    return items => orderBy(
-      withCreatedIndex(items),
-      sortRules.map(rule => (isFifoLifo(rule) ? fifo : rule.property)),
-      orders,
-    ).map(withoutCreatedIndex);
+    return items => withoutCreatedIndex(
+      orderBy(
+        withCreatedIndex(items),
+        sortRules.map(rule => (isFifoLifo(rule) ? fifo : rule.property)),
+        orders,
+      ));
   }
 
   /**
