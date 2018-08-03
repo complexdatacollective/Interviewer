@@ -46,7 +46,8 @@
   &__node-bin {
     position: absolute;
     bottom: spacing(large);
-    left: spacing(huge);
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1000;
   }
 

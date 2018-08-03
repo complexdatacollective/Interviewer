@@ -1,6 +1,6 @@
 @keyframes menu-button-move {
-  0%    { transform: translateY(-150px); }
-  100%  { transform: translateY(0); }
+  0%    { transform: translateX(-150px); }
+  100%  { transform: translate(0, -50%); }
 }
 
 .menu {
@@ -149,17 +149,17 @@
     cursor: pointer;
     left: 70px;
     position: absolute;
-    top: 40px;
+    transform: translateY(-50%);
     z-index: 3;
 
     &[name='settings'] {
-      margin-top: 195px;
+      top: calc(50vh + 30px);
       height: 55px;
       width: 55px;
     }
 
     &[name='menu'] {
-      margin-top: 295px;
+      top: calc(50vh - 30px);
       height: 40px;
       width: 40px;
     }
