@@ -17,28 +17,28 @@
   }
 
   &__control {
-    flex: 0 0 80px;
-    display: flex;
-    flex-direction: column;
+    flex: 0 0 180px;
     height: 100vh;
-    justify-content: space-between;
-    align-items: center;
     @include breakpoint('full') {
       flex: 0 0 100px;
     }
 
     &-button {
-      @include svg-button('../images/arrow-back.svg');
-      width: 30px;
-      height: 80px;
-      margin-top: spacing(medium);
-      @include breakpoint('full') {
-        width: 45px;
-        height: 90px;
-      }
+      width: 120px;
+      height: 120px;
 
       &--next {
-        @include svg-button('../images/arrow-next.svg');
+        @include svg-button('../images/next-button.svg');
+        position: absolute;
+        bottom: 1.8rem;
+        left: 1.8rem;
+      }
+
+      &--back {
+        @include svg-button('../images/arrow-back.svg');
+        position: absolute;
+        top: 1.8rem;
+        left: 1.8rem;
       }
     }
   }
