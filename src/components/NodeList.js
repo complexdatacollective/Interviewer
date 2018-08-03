@@ -43,7 +43,7 @@ class NodeList extends Component {
     if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
 
     // Don't update if nodes are the same
-    if (isEqual(newProps.nodes, this.state.nodes)) {
+    if (isEqual(newProps.nodes, this.props.nodes)) {
       return;
     }
 

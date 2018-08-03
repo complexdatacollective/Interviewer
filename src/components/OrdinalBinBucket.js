@@ -41,7 +41,7 @@ class OrdinalBinBucket extends Component {
 
   componentWillReceiveProps(newProps) {
     // Don't update if nodes are the same
-    if (isEqual(newProps.nodes, this.state.nodes)) {
+    if (isEqual(newProps.nodes, this.props.nodes)) {
       return;
     }
 

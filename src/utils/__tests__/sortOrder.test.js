@@ -36,6 +36,11 @@ describe('sortOrder', () => {
     expect(sorter(mockItems)).toMatchObject(mockItems);
   });
 
+  it('it does not add any properties to items', () => {
+    const sorter = sortOrder();
+    expect(sorter(mockItems)[0]).toEqual(mockItems[0]);
+  });
+
   describe('order direction', () => {
     it('orders ascending with "asc"', () => {
       const sorter = sortOrder([{
@@ -92,15 +97,18 @@ describe('sortOrder', () => {
   it('treats "*" property as fifo ordering', () => {
     const sorter = sortOrder([{
       property: '*',
+      direction: 'asc',
+    }]);
+
+    expect(sorter(mockItems)).toMatchObject(mockItems);
+  });
+
+  it('treats "*" ("desc") as lifo ordering', () => {
+    const sorter = sortOrder([{
+      property: '*',
       direction: 'desc',
     }]);
 
-    expect(sorter(mockItems)).toMatchObject([
-      { name: 'dave' },
-      { name: 'eugine' },
-      { name: 'carolyn' },
-      { name: 'benjamin' },
-      { name: 'abigail' },
-    ]);
+    expect(sorter(mockItems)).toMatchObject([...mockItems].reverse());
   });
 });
