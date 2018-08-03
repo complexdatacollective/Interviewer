@@ -1,17 +1,16 @@
-@function fade-to($fade-to: palette('background'), $direction: 0deg) {
-  @return linear-gradient($direction, $fade-to 0%, transparentize($fade-to, 1) 100%);
+@mixin scroller-mask($top-height: $scroller-top-padding) {
+  $bottom-height: 50px;
+  $opaque: rgba(0, 0, 0, 1);
+  mask-image: linear-gradient(180deg, transparent, $opaque $top-height, $opaque calc(100% - #{$bottom-height}), transparent 100%);
 }
 
 .scrollable {
-  $gradient-height-top: 35px;
-  $gradient-height-bottom: 50px;
-  $opaque: rgba(0, 0, 0, 1);
-  // sass-lint:disable no-vendor-prefixes
+  @include scroller-mask;
   flex: 1;
   overflow-x: hidden;
   overflow-y: scroll;
+  // sass-lint:disable no-vendor-prefixes
   -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(180deg, transparent, $opaque $gradient-height-top, $opaque calc(100% - #{$gradient-height-bottom}), transparent 100%);
 
   &::-webkit-scrollbar {
     display: none;

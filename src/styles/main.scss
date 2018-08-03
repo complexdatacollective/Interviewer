@@ -1,5 +1,8 @@
 $font-path: '../ui/assets/fonts';
 
+$scroller-top-padding: 30px;
+$scroller-top-padding-small: 15px;
+
 @import '../ui/styles/all';
 @import 'utils/all';
 @import 'helpers/all';

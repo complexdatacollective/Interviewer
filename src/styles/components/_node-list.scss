@@ -1,3 +1,5 @@
+$node-inset: 14px;  // approximate scaled margin + 'outer-trim' of a node
+
 .node-list {
   @include gpu;
   display: flex;
@@ -8,6 +10,8 @@
   min-height: 100%;
   width: 100%;
   padding-bottom: var(--base-node-size);
+
+  padding-top: $scroller-top-padding - $node-inset;
 
   &--hover,
   &--drag {

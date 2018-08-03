@@ -1,7 +1,9 @@
 // Shared mixins for interfaces.
 
+$interface-prompt-flex-basis: 200px;
+
 @mixin interface-prompt {
-  flex: 0 0 200px;
+  flex: 0 0 $interface-prompt-flex-basis;
   @include breakpoint('full') {
     flex: 0 0 17vh;
   }

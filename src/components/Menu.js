@@ -94,7 +94,7 @@ class MenuFactory extends Component {
       <div className="menu" ref={(node) => { this.domNode = node; }}>
         {children}
         <div className={isOpen ? 'menu__wrap menu__content menu__wrap--open' : 'menu__wrap menu__content'}>
-          <Scroller>
+          <Scroller className="menu__scroller">
             <Icon name="close" size="40px" className="menu__cross" onClick={this.menuClick} />
             <header>
               <h1 className="menu__title">{title}</h1>
