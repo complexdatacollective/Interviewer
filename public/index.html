@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <!-- default-src contains `blob:` as worker-src fallback for Android <= 8.0 -->
+    <!-- connect-src includes '*' to allow pairing with arbitrary Servers -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src gap://ready file://* blob:;
-      connect-src 'self' data: http://localhost:* https://localhost:* ws://localhost:*;
+      connect-src data: *;
       img-src asset: 'self' android-webview-video-poster: data: cdvfile: file:;
       media-src 'self' asset: cdvfile: file: data:;
       style-src 'self' 'unsafe-inline';
