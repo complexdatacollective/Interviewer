@@ -16,8 +16,12 @@ export default function withPrompt(WrappedComponent) {
       return this.prompts().length;
     }
 
+    isFirstPrompt = () => this.props.promptIndex === 0;
+
+    isLastPrompt = () => this.props.promptIndex === (this.promptsCount() - 1);
+
     prompt() {
-      return this.prompts()[this.props.promptIndex];
+      return this.prompts() && this.prompts()[this.props.promptIndex];
     }
 
     promptForward = () => {
@@ -40,6 +44,8 @@ export default function withPrompt(WrappedComponent) {
           prompt={this.prompt()}
           promptForward={this.promptForward}
           promptBackward={this.promptBackward}
+          isLastPrompt={this.isLastPrompt}
+          isFirstPrompt={this.isFirstPrompt}
           {...rest}
         />
       );

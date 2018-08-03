@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import withPrompt from '../behaviours/withPrompt';
 import getInterface from './Interfaces';
 import StageErrorBoundary from '../components/StageErrorBoundary';
 import { stages } from '../selectors/session';
@@ -14,17 +16,25 @@ import { stages } from '../selectors/session';
 class Stage extends Component {
   // change the stage to the next
   onClickNext = () => {
-    this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
+    if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+      this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
+    } else {
+      this.props.promptForward();
+    }
   }
 
   // change the stage to the previous
   onClickBack = () => {
-    this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
+    if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+      this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
+    } else {
+      this.props.promptBackward();
+    }
   }
 
   render() {
-    const { config } = this.props;
-    const CurrentInterface = getInterface(config.type);
+    const { stage } = this.props;
+    const CurrentInterface = getInterface(stage.type);
 
     return (
       <div className="stage">
@@ -45,7 +55,7 @@ class Stage extends Component {
         <div className="stage__interface">
           <StageErrorBoundary>
             { CurrentInterface &&
-              <CurrentInterface stage={config} />
+              <CurrentInterface stage={stage} />
             }
           </StageErrorBoundary>
         </div>
@@ -56,10 +66,14 @@ class Stage extends Component {
 
 Stage.propTypes = {
   changeStage: PropTypes.func.isRequired,
-  config: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   previousIndex: PropTypes.number.isRequired,
+  isLastPrompt: PropTypes.func.isRequired,
+  isFirstPrompt: PropTypes.func.isRequired,
+  promptBackward: PropTypes.func.isRequired,
+  promptForward: PropTypes.func.isRequired,
 };
 
 Stage.defaultProps = {
@@ -82,4 +96,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stage);
+export default compose(
+  withPrompt,
+  connect(mapStateToProps, mapDispatchToProps),
+)(Stage);
