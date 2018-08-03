@@ -35,7 +35,7 @@
       }
 
       &--back {
-        @include svg-button('../images/arrow-back.svg');
+        @include svg-button('../images/back-button.svg');
         position: absolute;
         top: 1.8rem;
         left: 1.8rem;
