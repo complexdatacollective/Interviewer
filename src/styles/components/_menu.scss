@@ -153,13 +153,13 @@
     z-index: 3;
 
     &[name='settings'] {
-      top: calc(50vh + 30px);
+      top: calc(50vh - 30px);
       height: 55px;
       width: 55px;
     }
 
     &[name='menu'] {
-      top: calc(50vh - 30px);
+      top: calc(50vh + 30px);
       height: 40px;
       width: 40px;
     }
