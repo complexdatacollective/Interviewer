@@ -153,11 +153,13 @@
     z-index: 3;
 
     &[name='settings'] {
+      margin-top: 195px;
       height: 55px;
       width: 55px;
     }
 
     &[name='menu'] {
+      margin-top: 295px;
       height: 40px;
       width: 40px;
     }
@@ -165,7 +167,6 @@
 
   ~ .menu {
     .menu__burger {
-      margin-top: 95px;
     }
   }
 }
