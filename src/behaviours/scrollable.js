@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-const scrollable = WrappedComponent =>
-  class Scrollable extends Component {
-    render() {
-      return (
-        <div className="scrollable">
-          <WrappedComponent {...this.props} scrollTop={this.scrollTop} />
-        </div>
-      );
-    }
-  };
+const scrollable = (WrappedComponent) => {
+  const Scrollable = props => (
+    <div className="scrollable">
+      <WrappedComponent {...props} />
+    </div>
+  );
+  return Scrollable;
+};
 
 export default scrollable;

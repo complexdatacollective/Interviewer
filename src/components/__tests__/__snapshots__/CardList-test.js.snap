@@ -69,12 +69,11 @@ ShallowWrapper {
         }
         onDeleteCard={null}
         onToggleCard={[Function]}
-        scrollTop={[Function]}
         selected={[Function]}
       />,
       "className": "scrollable",
     },
-    "ref": [Function],
+    "ref": null,
     "rendered": Object {
       "instance": null,
       "key": undefined,
@@ -105,7 +104,6 @@ ShallowWrapper {
         ],
         "onDeleteCard": null,
         "onToggleCard": [Function],
-        "scrollTop": [Function],
         "selected": [Function],
       },
       "ref": null,
@@ -148,12 +146,11 @@ ShallowWrapper {
           }
           onDeleteCard={null}
           onToggleCard={[Function]}
-          scrollTop={[Function]}
           selected={[Function]}
         />,
         "className": "scrollable",
       },
-      "ref": [Function],
+      "ref": null,
       "rendered": Object {
         "instance": null,
         "key": undefined,
@@ -184,7 +181,6 @@ ShallowWrapper {
           ],
           "onDeleteCard": null,
           "onToggleCard": [Function],
-          "scrollTop": [Function],
           "selected": [Function],
         },
         "ref": null,
