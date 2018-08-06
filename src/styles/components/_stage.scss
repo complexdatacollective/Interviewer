@@ -17,15 +17,16 @@
   }
 
   &__control {
-    flex: 0 0 180px;
+    flex: 0 0 0px;
     height: 100vh;
     @include breakpoint('full') {
-      flex: 0 0 100px;
+      flex: 0 0 0px;
     }
 
     &-button {
       width: 120px;
       height: 120px;
+      z-index: 999;
 
       &--next {
         @include svg-button('../images/next-button.svg');
