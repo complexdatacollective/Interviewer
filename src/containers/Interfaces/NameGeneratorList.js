@@ -59,8 +59,8 @@ class NameGeneratorList extends Component {
     } = this.props.stage;
 
     return (
-      <div className="name-generator-interface">
-        <div className="name-generator-interface__prompt">
+      <div className="name-generator-list-interface">
+        <div className="name-generator-list-interface__prompt">
           <PromptSwiper
             forward={promptForward}
             backward={promptBackward}

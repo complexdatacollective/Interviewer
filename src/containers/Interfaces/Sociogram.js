@@ -37,7 +37,7 @@ const Sociogram = ({
         key={prompt.id}
       />
     </div>
-    <div style={{ position: 'absolute', right: 0, bottom: '20px' }}>
+    <div style={{ position: 'absolute', right: '50px', bottom: '50px' }}>
       <Button
         size="small"
         onClick={() => { resetInterface(stage.prompts); }}

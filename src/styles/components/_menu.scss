@@ -1,6 +1,6 @@
 @keyframes menu-button-move {
-  0%    { transform: translateY(-150px); }
-  100%  { transform: translateY(0); }
+  0%    { transform: translateX(-150px); }
+  100%  { transform: translate(0, -50%); }
 }
 
 .menu {
@@ -149,21 +149,23 @@
 
   &__burger {
     animation-delay: 0;
-    animation-duration: var(--animation-duration-slow);
-    animation-name: menu-button-move;
-    animation-timing-function: var(--animation-easing);
+    // animation-duration: var(--animation-duration-slow);
+    // animation-name: menu-button-move;
+    // animation-timing-function: var(--animation-easing);
     cursor: pointer;
-    left: 40px;
+    left: 4rem;
     position: absolute;
-    top: 40px;
+    // transform: translateY(-50%);
     z-index: 3;
 
     &[name='settings'] {
-      height: 55px;
+      top: 78vh;
+      height: 35px;
       width: 55px;
     }
 
     &[name='menu'] {
+      top: calc(50vh - 20px);
       height: 40px;
       width: 40px;
     }
@@ -171,7 +173,6 @@
 
   ~ .menu {
     .menu__burger {
-      margin-top: 95px;
     }
   }
 }

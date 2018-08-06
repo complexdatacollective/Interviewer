@@ -51,6 +51,13 @@ class Search extends Component {
       },
     };
 
+    // Search may be positioned by parent; animate horizontal centering
+    const rightCollapsed = getCssProp(elStyle, '--right-collapsed');
+    const rightExpanded = getCssProp(elStyle, '--right-offset');
+    if (rightCollapsed && rightExpanded) {
+      wrapperAnimation.right = [rightCollapsed, rightExpanded];
+    }
+
     const contentAnimation = {
       opacity: [0, 1],
     };
@@ -83,6 +90,14 @@ class Search extends Component {
       maxHeight: [el.getBoundingClientRect().height, collapsedSize],
       width: collapsedSize,
     };
+
+    // Search may be positioned by parent; animate horizontal centering
+    const rightCollapsed = getCssProp(elStyle, '--right-collapsed');
+    const rightExpanded = getCssProp(elStyle, '--right-offset');
+    if (rightCollapsed && rightExpanded) {
+      inverseWrapperAnimation.right = [rightExpanded, rightCollapsed];
+    }
+
 
     const inverseContentAnimation = {
       opacity: 0,

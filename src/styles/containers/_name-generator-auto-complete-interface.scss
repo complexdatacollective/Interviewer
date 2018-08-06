@@ -1,5 +1,5 @@
 $search-icon-offset-x: 0;
-$search-icon-offset-y: 35px;
+$search-icon-offset-y: 1.8rem; // match stage menu button
 $search-z-index: 1000;
 
 .name-generator-auto-complete-interface {
@@ -15,17 +15,21 @@ $search-z-index: 1000;
   }
 
   &__search {
+    --right-collapsed: 50px; // align with 'core' of button
+    --right-offset: 180px; // margin equal to left menu width
+
     // Position collapsed search element around the 'core' of the icon
     bottom: $search-icon-offset-y;
-    right: $search-icon-offset-x;
+    right: var(--right-offset);
+    width: calc(100% - 2 * var(--right-offset));
     z-index: $search-z-index;
   }
 
   &__search-button {
-    bottom: $search-icon-offset-y - 8px;
+    bottom: calc(#{$search-icon-offset-y} - 8px);
     cursor: pointer;
     position: absolute;
-    right: $search-icon-offset-x - 27px;
+    right: $search-icon-offset-x + 27px;
     transition: opacity var(--animation-duration-standard) var(--animation-easing);
     z-index: $search-z-index + 1;
 
@@ -51,7 +55,8 @@ $search-z-index: 1000;
   &__node-bin {
     position: absolute;
     bottom: 35px;
-    left: 35px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
 }

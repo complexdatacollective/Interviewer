@@ -22,7 +22,7 @@
     position: absolute;
     z-index: 100;
     bottom: 0;
-    left: spacing(large);
+    right: 0;
 
     .prompts:not(.prompts--minimized) {
       @include transition-properties((width, height, visibility, padding), var(--animation-easing), var(--animation-duration-fast));

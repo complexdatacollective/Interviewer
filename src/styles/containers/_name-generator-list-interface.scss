@@ -1,4 +1,4 @@
-.name-generator-interface {
+.name-generator-list-interface {
   height: 100vh;
   padding: 20px 0 60px;
   @include breakpoint('full') {
@@ -7,6 +7,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
+  .list-select {
+    margin: 0 180px;
+  }
 
   &__prompt {
     @include interface-prompt;
