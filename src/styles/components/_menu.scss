@@ -143,23 +143,23 @@
 
   &__burger {
     animation-delay: 0;
-    animation-duration: var(--animation-duration-slow);
-    animation-name: menu-button-move;
-    animation-timing-function: var(--animation-easing);
+    // animation-duration: var(--animation-duration-slow);
+    // animation-name: menu-button-move;
+    // animation-timing-function: var(--animation-easing);
     cursor: pointer;
-    left: 70px;
+    left: 4rem;
     position: absolute;
-    transform: translateY(-50%);
+    // transform: translateY(-50%);
     z-index: 3;
 
     &[name='settings'] {
-      top: calc(50vh - 30px);
-      height: 55px;
+      top: 78vh;
+      height: 35px;
       width: 55px;
     }
 
     &[name='menu'] {
-      top: calc(50vh + 30px);
+      top: calc(50vh - 20px);
       height: 40px;
       width: 40px;
     }
