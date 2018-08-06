@@ -21,6 +21,12 @@ describe('WorkerAgent', () => {
     agent = new WorkerAgent(mockUrl);
   });
 
+  afterEach(() => {
+    if (agent.worker) {
+      agent.worker.workMap = {}; // Clear out shared jobs
+    }
+  });
+
   it('creates a web worker', () => {
     expect(agent.worker).toBeInstanceOf(Worker);
   });
@@ -37,6 +43,18 @@ describe('WorkerAgent', () => {
     expect(agent.sendMessageAsync()).toHaveProperty('cancellationId');
   });
 
+  it('rejects when unavailable', () => {
+    agent.worker = null;
+    expect(agent.sendMessageAsync()).rejects.toMatchObject({ message: 'Worker unavailable' });
+  });
+
+  it('rejects when a shared worker has errored', () => {
+    agent.worker.globalError = new Error('mock syntax error');
+    expect(agent.sendMessageAsync()).rejects.toMatchObject({
+      message: expect.stringMatching(agent.worker.globalError.message),
+    });
+  });
+
   describe('worker', () => {
     const mockMessageId = 'abc';
     const mockError = new Error('mockError');
@@ -46,7 +64,7 @@ describe('WorkerAgent', () => {
       mockJob = {
         msg: { mockMessageId },
         resolve: jest.fn().mockResolvedValue({}),
-        reject: jest.fn().mockImplementation(() => mockError),
+        reject: jest.fn(),
       };
       agent.worker.workMap[mockMessageId] = mockJob;
     });
@@ -67,6 +85,15 @@ describe('WorkerAgent', () => {
       expect(mockJob.cancelled).not.toBe(true);
       agent.cancelMessage(mockMessageId);
       expect(mockJob.cancelled).toBe(true);
+    });
+
+    it('rejects all when worker has a syntax error', () => {
+      const mockJob2 = { ...mockJob };
+      const syntaxError = new SyntaxError();
+      agent.worker.workMap.mockJobId2 = mockJob2;
+      agent.worker.onerror(syntaxError);
+      expect(mockJob.reject).toHaveBeenCalledWith(syntaxError);
+      expect(mockJob2.reject).toHaveBeenCalledWith(syntaxError);
     });
   });
 });
