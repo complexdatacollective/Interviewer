@@ -9,7 +9,7 @@
   "main": "electron-starter.js",
   "dependencies": {
     "electron-log": "^2.2.7",
-    "electron-updater": "^2.20.2",
+    "electron-updater": "^3.0.3",
     "mdns": "^2.3.4"
   }
 }
