@@ -59,8 +59,6 @@ class NodeList extends Component {
     }
 
     // Otherwise, transition out and in again
-    this.props.scrollTop(0);
-
     this.setState({ exit: true }, () => {
       this.setState(
         { nodes: [], stagger: true },
@@ -152,7 +150,6 @@ NodeList.propTypes = {
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
-  scrollTop: PropTypes.func,
   sortOrder: PropTypes.array,
 };
 
@@ -169,7 +166,6 @@ NodeList.defaultProps = {
   willAccept: false,
   isDragging: false,
   meta: {},
-  scrollTop: () => {},
   sortOrder: [],
 };
 

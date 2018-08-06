@@ -1,20 +1,18 @@
-@function fade-to($fade-to: palette('background'), $direction: 0deg) {
-  @return linear-gradient($direction, $fade-to 0%, transparentize($fade-to, 1) 100%);
+@mixin scroller-mask($top-height: $scroller-top-padding) {
+  $bottom-height: 50px;
+  $opaque: rgba(0, 0, 0, 1);
+  mask-image: linear-gradient(180deg, transparent, $opaque $top-height, $opaque calc(100% - #{$bottom-height}), transparent 100%);
 }
 
 .scrollable {
-  // sass-lint:disable no-color-literals no-vendor-prefixes no-transition-all
+  @include scroller-mask;
   flex: 1;
   overflow-x: hidden;
   overflow-y: scroll;
+  // sass-lint:disable no-vendor-prefixes
   -webkit-overflow-scrolling: touch;
-  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 1) 75px, rgba(0, 0, 0, 1) 100%, rgba(0, 0, 0, 0) 100%);
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  &--is-scrolling {
-    mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 20px, rgba(0, 0, 0, 1) 75px, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
   }
 }

@@ -1,6 +1,9 @@
 .card-list {
+  --card-margin: 1rem;
+
   flex-wrap: wrap;
   padding-bottom: 10em;
+  padding-top: calc(#{$scroller-top-padding} - var(--card-margin));
   display: grid;
   grid-template-columns: 1fr 1fr;
   @media screen and (min-width: 1200px) {
@@ -23,7 +26,6 @@
   &__delete-button {
     --button-size: 1rem;
     --button-padding: #{spacing(small)};
-    --card-margin: 1.5rem;
 
     cursor: pointer;
     position: absolute;

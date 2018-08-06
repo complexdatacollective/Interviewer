@@ -6,8 +6,10 @@
   display: flex;
   flex: auto;
   flex-direction: row;
+  margin-top: -1 * $scroller-top-padding;
 
   &__scroller {
+    padding-top: $scroller-top-padding;
     position: relative;
   }
 
@@ -20,7 +22,7 @@
 
   &__left-border {
     border-left: var(--border-width) solid var(--border-color);
-    height: calc(100% - var(--card-height));
+    height: calc(100% - var(--card-height) - #{$scroller-top-padding});
     margin: calc(.5 * var(--card-height)) 0;
     position: absolute;
 

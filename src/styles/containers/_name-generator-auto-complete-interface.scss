@@ -36,7 +36,12 @@ $search-z-index: 1000;
   }
 
   &__nodes {
+    height: calc(100% - #{$interface-prompt-flex-basis});
     text-align: left;
+
+    .scrollable {
+      height: 100%;
+    }
 
     .node__label {
       line-height: 1; // tighter fit for longer text (e.g., venues)

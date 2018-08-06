@@ -37,10 +37,6 @@
     display: flex;
   }
 
-  .node-list {
-    padding-top: 20px;
-  }
-
   .node {
     font-size: calc(var(--base-node-size) * .66);
     filter: drop-shadow(0 3px 0 var(--drop-shadow-color));

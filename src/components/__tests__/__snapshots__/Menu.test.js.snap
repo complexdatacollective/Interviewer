@@ -48,7 +48,9 @@ ShallowWrapper {
         <div
           className="menu__wrap menu__content"
         >
-          <Scrollable>
+          <Scrollable
+            className="menu__scroller"
+          >
             <Icon
               className="menu__cross"
               color=""
@@ -113,7 +115,9 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "host",
         "props": Object {
-          "children": <Scrollable>
+          "children": <Scrollable
+            className="menu__scroller"
+          >
             <Icon
               className="menu__cross"
               color=""
@@ -165,7 +169,7 @@ ShallowWrapper {
         "rendered": Object {
           "instance": null,
           "key": undefined,
-          "nodeType": "class",
+          "nodeType": "function",
           "props": Object {
             "children": Array [
               <Icon
@@ -214,6 +218,7 @@ ShallowWrapper {
                 />
               </nav>,
             ],
+            "className": "menu__scroller",
           },
           "ref": null,
           "rendered": Array [
@@ -385,7 +390,9 @@ ShallowWrapper {
           <div
             className="menu__wrap menu__content"
           >
-            <Scrollable>
+            <Scrollable
+              className="menu__scroller"
+            >
               <Icon
                 className="menu__cross"
                 color=""
@@ -450,7 +457,9 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <Scrollable>
+            "children": <Scrollable
+              className="menu__scroller"
+            >
               <Icon
                 className="menu__cross"
                 color=""
@@ -502,7 +511,7 @@ ShallowWrapper {
           "rendered": Object {
             "instance": null,
             "key": undefined,
-            "nodeType": "class",
+            "nodeType": "function",
             "props": Object {
               "children": Array [
                 <Icon
@@ -551,6 +560,7 @@ ShallowWrapper {
                   />
                 </nav>,
               ],
+              "className": "menu__scroller",
             },
             "ref": null,
             "rendered": Array [

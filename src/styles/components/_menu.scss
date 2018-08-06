@@ -6,6 +6,12 @@
 .menu {
   position: absolute;
 
+  &__scroller {
+    .menu__cross {
+      margin-top: $scroller-top-padding;
+    }
+  }
+
   &__wrap {
     // General sidebar styles
     height: 100%;
