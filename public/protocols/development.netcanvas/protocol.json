@@ -207,6 +207,11 @@
             "description": "Human readable description",
             "type": "boolean"
           },
+          "checkboxVariable": {
+            "label": "A Checkbox",
+            "description": "Human readable description",
+            "type": "boolean"
+          },
           "ordinalVariable": {
             "label": "Ordinal Variable",
             "description": "Human readable description",
@@ -1015,6 +1020,10 @@
           "variable": "ordinalVariable",
           "component": "RadioGroup",
           "label": "How much do you like likert scales?"
+        },
+        {
+          "variable": "checkboxVariable",
+          "component": "Checkbox"
         },
         {
           "variable": "categoricalVariable",
