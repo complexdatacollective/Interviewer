@@ -1594,8 +1594,9 @@
               "type": "edge",
               "id": "15218241565624",
               "options": {
-                "type": "friends",
-                "operator": "EXISTS"
+                "type": "friend",
+                "operator": "EXISTS",
+                "attribute": "contactFreq"
               }
             }
           ]
