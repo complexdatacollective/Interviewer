@@ -27,15 +27,20 @@ const weightedAverage = (a, b, factor = 1) =>
   zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
 
 const Radar = ({ n, skewed }) => {
+  const num = parseInt(n, 10);
+  if (isNaN(num) || !num) {
+    return null;
+  }
+
   const radii = skewed ?
-    weightedAverage(equalByArea(50, n), equalByIncrement(50, n), 3) :
-    equalByIncrement(50, n);
+    weightedAverage(equalByArea(50, num), equalByIncrement(50, num), 3) :
+    equalByIncrement(50, num);
 
   const colorRing = color(getCSSVariableAsString('--ring'));
   const colorBackground = color(getCSSVariableAsString('--background'));
 
   const ringFill = (ring) => {
-    const mix = (ring + 1) / n;
+    const mix = (ring + 1) / num;
     const colorMix = color(colorBackground).mix(colorRing, mix);
     const hexColorMix = colorMix.hex();
     return hexColorMix;
