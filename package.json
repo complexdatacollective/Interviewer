@@ -34,13 +34,16 @@
         "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
         "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
         "dist:win": "npm run build:electron && electron-builder -w --publish=always",
-        "bump": "sh scripts/bump"
+        "bump": "sh scripts/bump",
+        "generate-schema": "quicktype -o protocol.schema public/protocols/development.netcanvas/protocol.json",
+        "validate-protocol": "node scripts/validate-protocol.js"
     },
     "repository": {
         "type": "git"
     },
     "devDependencies": {
         "@zippytech/sorty": "^2.0.0",
+        "ajv": "^6.5.2",
         "animejs": "^2.2.0",
         "autoprefixer": "7.1.2",
         "babel-core": "6.25.0",
@@ -107,6 +110,7 @@
         "postcss-loader": "2.0.6",
         "promise": "7.1.1",
         "prop-types": "^15.6.1",
+        "quicktype": "^15.0.100",
         "react": "^16.3.2",
         "react-dev-utils": "^5.0.1",
         "react-dom": "^16.3.2",
