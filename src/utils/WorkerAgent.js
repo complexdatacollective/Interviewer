@@ -14,7 +14,12 @@ const getSharedWorker = (url) => {
   if (!workers[url]) {
     const worker = new Worker(url);
     worker.workMap = {};
-    worker.onerror = () => {};
+    worker.onerror = (err) => {
+      // Runtime errors are caught by the worker script wrapper; a syntax error (here) is
+      // only issued once, and should indicate that all requests for this URL should fail.
+      worker.globalError = err;
+      Object.values(worker.workMap).forEach(job => job.reject(err));
+    };
     worker.onmessage = (evt) => {
       const job = worker.workMap[evt.data.messageId];
       if (!job) {
@@ -80,6 +85,9 @@ class WorkerAgent {
   sendMessageAsync(msg) {
     if (!this.worker) {
       return Promise.reject(new Error('Worker unavailable'));
+    }
+    if (this.worker.globalError) {
+      return Promise.reject(new Error(`Worker has global error: ${this.worker.globalError.message}`));
     }
     const messageId = uuidv4();
     const taggedMsg = { ...msg, messageId };
