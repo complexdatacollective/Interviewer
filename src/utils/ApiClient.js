@@ -1,6 +1,9 @@
+/* globals cordova */
 import axios from 'axios';
 
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
+import { isCordova, isElectron } from '../utils/Environment';
+import { parseUrl } from '../utils/serverAddressing';
 
 const ApiErrorStatus = 'error';
 
@@ -60,12 +63,50 @@ class ApiClient {
   constructor(apiUrl, pairedServer) {
     this.cancelTokenSource = axios.CancelToken.source();
     this.pairedServer = pairedServer;
+    this.apiUrl = apiUrl;
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    if (pairedServer && pairedServer.secureUrl) {
+      const baseURL = pairedServer.secureUrl.replace(/\/$/, '');
+      if (isCordova()) {
+        const deviceId = pairedServer.deviceId;
+        const cert = pairedServer.serverCert;
+        this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, baseURL);
+      } else if (isElectron()) {
+        this.httpsClient = axios.create({
+          baseURL,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
+  }
+
+  /**
+   * @async
+   * @return {Promise} resolves if cert has been trusted;
+   *                   rejects if there is no paired Server, or trust cannot be established
+   */
+  addTrustedCert() {
+    if (isCordova()) {
+      return this.httpsClient.acceptCertificate();
+    } else if (isElectron()) {
+      return new Promise((resolve, reject) => {
+        if (!this.pairedServer || !this.pairedServer.serverCert) {
+          reject(new Error('No paired Server'));
+          return;
+        }
+        const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
+        ipcRenderer.once('add-cert-complete', resolve);
+        ipcRenderer.send('add-cert', this.pairedServer.serverCert);
+      });
+    }
+    return Promise.reject(new Error('SSL connections are not supported on this platform'));
   }
 
   cancelAll() {
@@ -102,6 +143,8 @@ class ApiClient {
    * @async
    * @return {Object} device, decorated with the generated secret
    * @return {string} device.id
+   * @return {string} device.secret
+   * @return {string} device.serverCert
    * @throws {Error}
    */
   confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName = '') {
@@ -131,8 +174,14 @@ class ApiClient {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(UnexpectedResponseMessage);
         }
+        // FIXME: this should return { pairingInfo .device, .cert, etc. }
         const device = decryptedData.device;
         device.secret = secretHex;
+        device.serverCert = decryptedData.cert;
+        // FIXME: Revise state shape so this isn't needed; take IP addr from MDNS / apiUrl?
+        const httpPort = parseUrl(this.apiUrl).port;
+        const httpsPort = parseUrl(decryptedData.secureUrl).port;
+        device.secureUrl = this.apiUrl.replace(httpPort, httpsPort).replace(/^http:/, 'https:');
         return device;
       })
       .catch(handleError);
@@ -144,10 +193,10 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return this.client.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+    return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
-      .catch(handleError);
+      .catch(err => handleError(err));
   }
 
   /**
@@ -164,7 +213,7 @@ class ApiClient {
       uuid: sessionId,
       data: sessionData,
     };
-    return this.client.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
+    return this.httpsClient.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

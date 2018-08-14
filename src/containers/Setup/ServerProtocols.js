@@ -30,7 +30,9 @@ class ServerProtocols extends Component {
   }
 
   fetchProtocolList = () => {
-    this.apiClient.getProtocols()
+    this.apiClient
+      .addTrustedCert()
+      .then(() => this.apiClient.getProtocols())
       .then(protocols => this.setState({ protocols }))
       .catch(err => this.handleApiError(err));
   }

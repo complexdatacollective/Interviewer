@@ -68,4 +68,5 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <engine name="android" spec="^7.1.0" />
     <engine name="ios" spec="^4.5.4" />
+    <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
 </widget>

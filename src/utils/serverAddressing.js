@@ -9,6 +9,13 @@ const AllowIPv6 = false;
 const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
 const isIpv6 = addr => /^[a-zA-Z0-9]{1,4}:/.test(addr); // good enough for needs here
 
+const parseUrl = (url) => {
+  const a = document.createElement('a');
+  a.href = url;
+  const { protocol, username, password, hostname, port, pathname, hash, href } = a;
+  return { protocol, username, password, hostname, port, pathname, hash, href };
+};
+
 // Performs basic escaping & checks using native (anchor) parsing.
 const validApiUrl = (address, port) => {
   if (!address || isLinkLocal(address) || !port) {
@@ -34,9 +41,8 @@ const validApiUrl = (address, port) => {
       return null;
     }
   }
-  const a = document.createElement('a');
-  a.href = `${apiProtocol}://${normalizedAddress}:${portNum}`;
 
+  const a = parseUrl(`${apiProtocol}://${normalizedAddress}:${portNum}`);
   // Disallow URLs if parsed to contain certain fields
   if (a.pathname && a.pathname !== '/') { return null; }
   if (a.hash || a.username || a.password) { return null; }
@@ -92,4 +98,5 @@ export {
   isValidPort,
   maxPort,
   minPort,
+  parseUrl,
 };

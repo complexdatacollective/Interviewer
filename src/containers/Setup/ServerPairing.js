@@ -61,7 +61,8 @@ class ServerPairing extends Component {
     const { deviceName } = this.props;
     this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
       .then((device) => {
-        this.props.addServer(this.props.server, device.id, device.secret);
+        const server = { ...this.props.server, secureUrl: device.secureUrl };
+        this.props.addServer(server, device.serverCert, device.id, device.secret);
         this.setState({
           ...emptyState,
           pairedDeviceId: device.id,

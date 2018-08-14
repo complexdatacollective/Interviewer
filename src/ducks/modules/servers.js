@@ -11,6 +11,7 @@ export default function reducer(state = initialState, action = {}) {
       if (action.server) {
         const pairingInfo = {
           ...action.server,
+          serverCert: action.serverCert,
           deviceId: action.deviceId,
           deviceSecret: action.deviceSecret,
         };
@@ -22,11 +23,12 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const addServer = (server, deviceId, deviceSecret) => ({
+const addServer = (server, serverCert, deviceId, deviceSecret) => ({
   type: ADD_SERVER,
   deviceId,
   deviceSecret,
   server,
+  serverCert,
 });
 
 const pairingFailed = error => ({
