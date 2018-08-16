@@ -143,10 +143,15 @@ module.exports = {
           {
             test: /\.(js|jsx)$/,
             include: paths.appSrc,
-            loader: require.resolve('babel-loader'),
-            options: {
-              compact: false,
-            },
+            use: [
+              require.resolve('thread-loader'),
+              {
+                loader: require.resolve('babel-loader'),
+                options: {
+                  compact: false,
+                },
+              },
+            ],
           },
           {
             test: /\.woff2?$|\.woff$/,
