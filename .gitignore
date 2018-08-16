@@ -21,3 +21,6 @@ Icon^M^M
 
 .devserver
 config.xml.original
+
+# Ignore auto-generated schema
+protocol.schema
