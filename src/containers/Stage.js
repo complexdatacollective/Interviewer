@@ -3,9 +3,12 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { findIndex } from 'lodash';
 
+import { Icon } from '../ui/components';
 import withPrompt from '../behaviours/withPrompt';
 import getInterface from './Interfaces';
+import { ProgressBar } from '../components';
 import StageErrorBoundary from '../components/StageErrorBoundary';
 import { stages } from '../selectors/session';
 
@@ -33,24 +36,19 @@ class Stage extends Component {
   }
 
   render() {
-    const { stage } = this.props;
+    const { stage, percentProgress } = this.props;
     const CurrentInterface = getInterface(stage.type);
 
     return (
       <div className="stage">
         <div className="stage__control">
-          <button
-            className="stage__control-button stage__control-button--back"
-            onClick={this.onClickBack}
-          >
-            Back
-          </button>
-          <button
-            className="stage__control-button stage__control-button--next"
-            onClick={this.onClickNext}
-          >
-            Next
-          </button>
+          <div className="stage__control-nav stage__control-nav--back">
+            <Icon onClick={this.onClickBack} name="chevron-up" />
+          </div>
+          <ProgressBar percentProgress={percentProgress} />
+          <div className="stage__control-nav stage__control-nav--next">
+            <Icon onClick={this.onClickNext} name="chevron-down" />
+          </div>
         </div>
         <div className="stage__interface">
           <StageErrorBoundary>
@@ -74,9 +72,11 @@ Stage.propTypes = {
   isFirstPrompt: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
+  percentProgress: PropTypes.number,
 };
 
 Stage.defaultProps = {
+  percentProgress: 0,
   pathPrefix: '',
 };
 
@@ -84,9 +84,14 @@ function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
   const maxLength = stages(state).length;
 
+  const stageProgress = ownProps.stageIndex / maxLength;
+  const promptProgress = ownProps.stage.prompts ?
+    (findIndex(ownProps.stage.prompts, ownProps.prompt) / ownProps.stage.prompts.length) : 0;
+
   return {
     nextIndex: rotateIndex(maxLength, ownProps.stageIndex + 1),
     previousIndex: rotateIndex(maxLength, ownProps.stageIndex - 1),
+    percentProgress: (stageProgress + (promptProgress / maxLength)) * 100,
   };
 }
 

@@ -15,13 +15,13 @@ $search-z-index: 1000;
   }
 
   &__search {
-    --right-collapsed: 50px; // align with 'core' of button
-    --right-offset: 180px; // margin equal to left menu width
+    --right-collapsed: 2rem; // align with 'core' of button
+    --right-offset: 4rem; // margin equal to left menu width
 
     // Position collapsed search element around the 'core' of the icon
     bottom: $search-icon-offset-y;
     right: var(--right-offset);
-    width: calc(100% - 2 * var(--right-offset));
+    width: calc(100% - var(--right-offset));
     z-index: $search-z-index;
   }
 
