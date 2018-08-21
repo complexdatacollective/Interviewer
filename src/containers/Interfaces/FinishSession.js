@@ -20,7 +20,7 @@ const ExportSection = ({ defaultServer, children }) => (
       <h2>Data Export</h2>
       <p>
         Export this interview to {defaultServer.name} <br />
-        <small>{defaultServer.apiUrl}</small>
+        <small>{defaultServer.secureServiceUrl}</small>
       </p>
     </div>
     <div>
@@ -62,9 +62,9 @@ class FinishSession extends Component {
     return <p>This session is not exportable: it is not associated with any Server.</p>;
   }
 
-  get serverApiUrl() {
+  get exportUrl() {
     const { defaultServer } = this.props;
-    return defaultServer && defaultServer.apiUrl;
+    return defaultServer && defaultServer.secureServiceUrl;
   }
 
   get currentSessionBelongsToProtocol() {
@@ -72,7 +72,7 @@ class FinishSession extends Component {
   }
 
   get currentSessionisExportable() {
-    return this.currentSessionBelongsToProtocol && this.serverApiUrl;
+    return this.currentSessionBelongsToProtocol && this.exportUrl;
   }
 
   export(currentSession) {

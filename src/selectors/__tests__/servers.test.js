@@ -1,8 +1,7 @@
 /* eslint-env jest */
 import { getPairedServer } from '../servers';
 
-const apiUrl = 'http://0.0.0.0';
-const mockServer = { apiUrl };
+const mockServer = { pairingServiceUrl: 'http://0.0.0.0' };
 
 const mockState = {
   servers: {

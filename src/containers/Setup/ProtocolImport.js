@@ -58,7 +58,7 @@ class ProtocolImport extends PureComponent {
     let buttonContent = null;
     if (pairedServer) {
       content = <ServerProtocols server={pairedServer} />;
-    } else if (selectedServer && selectedServer.apiUrl) {
+    } else if (selectedServer && selectedServer.pairingServiceUrl) {
       content = (
         <ServerPairing
           server={selectedServer}

@@ -69,7 +69,6 @@ const isValidPort = port => !!validApiUrl('0.0.0.0', port);
  * @property {string} host
  * @property {string} port
  * @property {Array} addresses
- * @property {string} apiUrl
  */
 
 /**
@@ -78,15 +77,13 @@ const isValidPort = port => !!validApiUrl('0.0.0.0', port);
  * @param {Service} service discovered (via MDNS) or manually created server info
  * @memberOf serverAddressing
  */
-// TODO: fix name; remove apiUrl
-const addApiUrlToService = (service) => {
+const addPairingUrlToService = (service) => {
   const apiService = { ...service };
   let apiInfo = null;
   apiService.addresses.some((addr) => {
     apiInfo = validApiUrl(addr, service.port);
     return !!apiInfo;
   });
-  apiService.apiUrl = apiInfo.toString();
   apiService.pairingServiceUrl = apiInfo.toString();
   return apiService;
 };
@@ -114,7 +111,7 @@ const addSecureApiUrlToServer = (server, securePort = server.securePort) => {
 };
 
 export {
-  addApiUrlToService,
+  addPairingUrlToService,
   addSecureApiUrlToServer,
   pairingApiProtocol,
   isValidAddress,

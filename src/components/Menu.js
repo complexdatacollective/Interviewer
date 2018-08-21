@@ -16,7 +16,7 @@ import ApiClient from '../utils/ApiClient';
 const serverAddr = '192.168.1.4';
 
 const testPlugin = () => {
-  const apiUrl = `https://${serverAddr}:51002`;
+  const pairingServiceUrl = `https://${serverAddr}:51002`;
   // TODO: this is available from redux: servers.paired[].deviceId
   const deviceId = '5b1ac0e7-c896-405f-bab0-8b778ab1b6eb';
   // TODO: from redux
@@ -50,9 +50,9 @@ B2cJveDofiZPxFlJfSQGG/LCQAH/NVreP7y6s6kayQXy9zVO7S0fHxnkiIO5o+zh
       host: 'mb18.local.',
       port: 51001,
       addresses: [serverAddr],
-      apiUrl,
-      secureUrl: apiUrl.replace('51001', '51002').replace('http:', 'https:'),
-      serverCert: cert,
+      pairingServiceUrl,
+      secureUrl: pairingServiceUrl.replace('51001', '51002').replace('http:', 'https:'),
+      sslCertificate: cert,
       deviceId,
       deviceSecret: 'fe8f7b86c1749ce5471f4764c0c2e05846cc4539fb439dc07c5658e494e720b2',
     });
@@ -64,7 +64,7 @@ B2cJveDofiZPxFlJfSQGG/LCQAH/NVreP7y6s6kayQXy9zVO7S0fHxnkiIO5o+zh
     return;
   }
 
-  const client = new cordova.plugins.NetworkCanvasClient(deviceId, cert, apiUrl);
+  const client = new cordova.plugins.NetworkCanvasClient(deviceId, cert, pairingServiceUrl);
   client.acceptCertificate(cert)
     .then(res => console.log('acceptCertificate response', res))
     .then(() => client.send(endpointUrl))

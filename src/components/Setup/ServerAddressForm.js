@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { addApiUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
+import { addPairingUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
 import { Button, Icon } from '../../ui/components';
 
 class ServerAddressForm extends PureComponent {
@@ -16,11 +16,11 @@ class ServerAddressForm extends PureComponent {
 
   onSubmit = (evt) => {
     evt.preventDefault();
-    const server = addApiUrlToService({
+    const server = addPairingUrlToService({
       addresses: [this.state.address],
       port: this.state.port,
     });
-    if (server.apiUrl) {
+    if (server.pairingServiceUrl) {
       this.props.selectServer(server);
     } else {
       this.setState({

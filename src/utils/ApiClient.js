@@ -64,24 +64,24 @@ const handleError = (err) => {
  * All pending requests can be cancelled by calling cancelAll(). This will not reject the promised
  * response; rather, it will resolve with empty data.
  *
- * @param  {string|Object} apiUrlOrPairedServer Either a pairing API URL (http), or an
- *                                              already-paired Server
- * @param  {string} [apiUrlOrPairedServer.secureServiceUrl] HTTPS url for secure endpoints,
- *                                                          if a paired server is provied
+ * @param  {string|Object} pairingUrlOrPairedServer Either a pairing API URL (http), or an
+ *                                                  already-paired Server
+ * @param  {string} [pairingUrlOrPairedServer.secureServiceUrl] HTTPS url for secure endpoints,
+ *                                                              if a paired server is provied
  */
 class ApiClient {
   constructor(pairingUrlOrPairedServer) {
-    let apiUrl;
+    let pairingUrl;
     let pairedServer;
     if (isString(pairingUrlOrPairedServer)) {
-      apiUrl = pairingUrlOrPairedServer;
+      pairingUrl = pairingUrlOrPairedServer;
     } else if (pairingUrlOrPairedServer) {
       pairedServer = pairingUrlOrPairedServer;
     }
 
     this.cancelTokenSource = axios.CancelToken.source();
     this.pairedServer = pairedServer;
-    this.pairingServiceUrl = apiUrl || pairedServer.pairingServiceUrl;
+    this.pairingServiceUrl = pairingUrl || pairedServer.pairingServiceUrl;
     this.client = axios.create({
       baseURL: this.pairingServiceUrl.replace(/\/$/, ''),
       headers: defaultHeaders,

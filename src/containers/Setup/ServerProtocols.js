@@ -77,7 +77,7 @@ ServerProtocols.propTypes = {
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
-    apiUrl: PropTypes.string.isRequired,
+    pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
   sessionId: PropTypes.string.isRequired,
 };

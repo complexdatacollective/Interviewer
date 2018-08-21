@@ -24,7 +24,7 @@ class ServerPairing extends Component {
   }
 
   componentDidMount() {
-    this.apiClient = new ApiClient(this.props.server.apiUrl);
+    this.apiClient = new ApiClient(this.props.server.pairingServiceUrl);
     this.requestPairingCode();
   }
 
@@ -116,7 +116,7 @@ ServerPairing.propTypes = {
   onError: PropTypes.func,
   pairingFailed: PropTypes.func.isRequired,
   server: PropTypes.shape({
-    apiUrl: PropTypes.string.isRequired,
+    pairingServiceUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
   }).isRequired,
 };
