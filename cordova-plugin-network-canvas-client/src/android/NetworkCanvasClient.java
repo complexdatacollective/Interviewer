@@ -37,6 +37,73 @@ public class NetworkCanvasClient extends CordovaPlugin {
 
     private KeyStore keyStore = null;
 
+    class ApiRequest implements Runnable {
+        private final String deviceId;
+        private final URL url;
+        private final String method;
+        private final String body;
+        private final CallbackContext callbackContext;
+
+        public ApiRequest(String deviceId, URL url, String method, String body, CallbackContext callbackContext) {
+            this.deviceId = deviceId;
+            this.url = url;
+            this.method = method;
+            this.body = body;
+            this.callbackContext = callbackContext;
+        }
+
+        /**
+         * Adapted from https://developer.android.com/training/articles/security-ssl#java
+         * Apache-2.0: https://developer.android.com/license
+         */
+        @Override
+        public void run() {
+            try {
+                String algo = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(algo);
+                trustManagerFactory.init(keyStore);
+
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+
+                HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+                urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+                urlConnection.setHostnameVerifier(localhostVerifier);
+
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestMethod(method);
+
+                // Basic Auth
+                String creds = deviceId + ":";
+                String auth = Base64.encodeToString(creds.getBytes(UTF_8), Base64.DEFAULT);
+                urlConnection.setRequestProperty("Authorization", "Basic " + auth);
+
+                if (body != null) {
+                    urlConnection.setDoOutput(true);
+                    OutputStream out = urlConnection.getOutputStream();
+                    out.write(body.getBytes(UTF_8));
+                    out.close();
+                }
+
+                int code = urlConnection.getResponseCode();
+                if (code >= HttpsURLConnection.HTTP_BAD_REQUEST) {
+                    JSONObject resp = inputStreamAsJSONObject(urlConnection.getErrorStream());
+                    callbackContext.error(resp);
+                } else {
+                    JSONObject resp = inputStreamAsJSONObject(urlConnection.getInputStream());
+                    callbackContext.success(resp);
+                }
+            } catch (NoSuchAlgorithmException e) {
+                // Fatal. No device support for default algo.
+                e.printStackTrace();
+                callbackContext.error(jsonError("SSL not supported on this device."));
+            } catch (IOException | KeyStoreException | KeyManagementException e) {
+                e.printStackTrace();
+                callbackContext.error(jsonError(e));
+            }
+        }
+    }
+
     HostnameVerifier localhostVerifier = new HostnameVerifier() {
         @Override
         public boolean verify(String hostname, SSLSession session) {
@@ -46,18 +113,29 @@ public class NetworkCanvasClient extends CordovaPlugin {
     };
 
     @Override
+    public void onReset() {
+    }
+
+    @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         switch (action) {
             case "send":
                 String deviceId = args.getString(0);
-                String url = args.getString(1);
+                URL url = null;
+                try {
+                    url = new URL(args.getString(1));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    callbackContext.error(jsonError("Invalid URL"));
+                    return true;
+                }
                 String method = args.getString(2);
                 String body = null;
                 if (args.length() > 3) {
                     body = args.getString(3);
-                    System.out.println("BODY LENGTH" + body.length());
                 }
-                this.send(deviceId, url, method, body, callbackContext);
+                ApiRequest req = new ApiRequest(deviceId, url, method, body, callbackContext);
+                cordova.getThreadPool().execute(req);
                 return true;
             case "acceptCertificate":
                 String cert = args.getString(0);
@@ -74,8 +152,8 @@ public class NetworkCanvasClient extends CordovaPlugin {
      Arguments to the cordova command:
      1. {string} The PEM-formatted certificate
 
-     // Adapted from https://developer.android.com/training/articles/security-ssl#java
-     // Apache-2.0: https://developer.android.com/license
+     Adapted from https://developer.android.com/training/articles/security-ssl#java
+     Apache-2.0: https://developer.android.com/license
      */
     private void acceptCertificate(String cert, CallbackContext callbackContext) {
         System.out.println(cert);
@@ -131,68 +209,6 @@ public class NetworkCanvasClient extends CordovaPlugin {
             return jsonError("Error parsing Server response");
         }
         return obj;
-    }
-
-    /**
-     *
-     * @param deviceId
-     * @param toUrl
-     * @param method
-     * @param body
-     * @param callbackContext
-     *
-     * Adapted from https://developer.android.com/training/articles/security-ssl#java
-     * Apache-2.0: https://developer.android.com/license
-     */
-    private void send(String deviceId, String toUrl, String method, String body, CallbackContext callbackContext) {
-        try {
-            String algo = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(algo);
-            trustManagerFactory.init(keyStore);
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-
-
-            URL url = new URL(toUrl);
-
-            HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
-            urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-            urlConnection.setHostnameVerifier(localhostVerifier);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestMethod(method);
-
-            // Basic Auth
-            String creds = deviceId + ":";
-            String auth = Base64.encodeToString(creds.getBytes(UTF_8), Base64.DEFAULT);
-            urlConnection.setRequestProperty("Authorization", "Basic " + auth);
-
-            if (body != null) {
-                urlConnection.setDoOutput(true);
-                OutputStream out = urlConnection.getOutputStream();
-                out.write(body.getBytes(UTF_8));
-                out.close();
-            }
-
-            int code = urlConnection.getResponseCode();
-
-//            InputStream in = urlConnection.getInputStream();
-            if (code >= HttpsURLConnection.HTTP_BAD_REQUEST) {
-                JSONObject resp = inputStreamAsJSONObject(urlConnection.getErrorStream());
-                callbackContext.error(resp);
-            } else {
-                JSONObject resp = inputStreamAsJSONObject(urlConnection.getInputStream());
-                callbackContext.success(resp);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            // Fatal. No device support for default algo.
-            e.printStackTrace();
-            callbackContext.error(jsonError("SSL not supported on this device."));
-        } catch (IOException | KeyStoreException | KeyManagementException e) {
-            e.printStackTrace();
-            callbackContext.error(jsonError(e));
-        }
     }
 
     /**
