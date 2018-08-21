@@ -1,15 +1,14 @@
-import { memoize } from 'lodash';
-
 import { createDeepEqualSelector } from './utils';
 
 const pairedServers = state => state.servers.paired;
 
 // Servers are considered equal if they use the same URL
-const getPairedServerFactory = createDeepEqualSelector(
+const getPairedServer = createDeepEqualSelector(
   pairedServers,
-  servers => memoize(apiUrl => servers.find(s => s.apiUrl === apiUrl) || null),
+  // TODO: shape will change to storing only a single server; pick first for now
+  servers => servers[0] || null,
 );
 
 export {
-  getPairedServerFactory, // eslint-disable-line import/prefer-default-export
+  getPairedServer, // eslint-disable-line import/prefer-default-export
 };

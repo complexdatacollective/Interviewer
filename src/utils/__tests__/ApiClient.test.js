@@ -11,6 +11,8 @@ jest.mock('../shared-api/cipher');
 describe('ApiClient', () => {
   const respData = { device: { id: '1' }, certificate: 'CERTIFICATE', securePort: 443 };
   const axiosResp = { data: { data: respData } };
+  const url = 'http://example.com:123';
+  let client;
 
   beforeAll(() => {
     axios.post.mockResolvedValue(axiosResp);
@@ -22,6 +24,13 @@ describe('ApiClient', () => {
 
   beforeEach(() => {
     axios.post.mockClear();
+    client = new ApiClient(url);
+  });
+
+  describe('constructor', () => {
+    it('accepts a pairingUrl', () => {
+      expect(client.pairingServiceUrl).toEqual(url);
+    });
   });
 
   describe('pairing confirmation', () => {
@@ -29,7 +38,6 @@ describe('ApiClient', () => {
     beforeEach(async () => {
       // data payload is encrypted; mock it on cipher
       decrypt.mockReturnValue(JSON.stringify(respData));
-      const client = new ApiClient('');
       pairingInfo = await client.confirmPairing();
     });
 

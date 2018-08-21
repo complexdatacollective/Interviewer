@@ -45,7 +45,7 @@ B2cJveDofiZPxFlJfSQGG/LCQAH/NVreP7y6s6kayQXy9zVO7S0fHxnkiIO5o+zh
 
   if (!isCordova()) {
     console.log('Electron test');
-    const apiClient = new ApiClient(apiUrl, {
+    const apiClient = new ApiClient({
       name: 'mb18.local',
       host: 'mb18.local.',
       port: 51001,

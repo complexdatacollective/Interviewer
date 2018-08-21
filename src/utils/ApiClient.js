@@ -1,5 +1,6 @@
 /* globals cordova */
 import axios from 'axios';
+import { isString } from 'lodash';
 
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 import { isCordova, isElectron } from '../utils/Environment';
@@ -42,6 +43,8 @@ const handleError = (err) => {
 /**
  * @class ApiClient
  *
+ * Provides both a pairing client (http) and a secure client (https) once paired.
+ *
  * ## Format
  *
  * See server documentation for API requests & responses.
@@ -61,14 +64,26 @@ const handleError = (err) => {
  * All pending requests can be cancelled by calling cancelAll(). This will not reject the promised
  * response; rather, it will resolve with empty data.
  *
+ * @param  {string|Object} apiUrlOrPairedServer Either a pairing API URL (http), or an
+ *                                              already-paired Server
+ * @param  {string} [apiUrlOrPairedServer.secureServiceUrl] HTTPS url for secure endpoints,
+ *                                                          if a paired server is provied
  */
 class ApiClient {
-  constructor(apiUrl, pairedServer) {
+  constructor(pairingUrlOrPairedServer) {
+    let apiUrl;
+    let pairedServer;
+    if (isString(pairingUrlOrPairedServer)) {
+      apiUrl = pairingUrlOrPairedServer;
+    } else if (pairingUrlOrPairedServer) {
+      pairedServer = pairingUrlOrPairedServer;
+    }
+
     this.cancelTokenSource = axios.CancelToken.source();
     this.pairedServer = pairedServer;
-    this.apiUrl = apiUrl;
+    this.pairingServiceUrl = apiUrl || pairedServer.pairingServiceUrl;
     this.client = axios.create({
-      baseURL: apiUrl.replace(/\/$/, ''),
+      baseURL: this.pairingServiceUrl.replace(/\/$/, ''),
       headers: defaultHeaders,
     });
     if (pairedServer && pairedServer.secureServiceUrl) {

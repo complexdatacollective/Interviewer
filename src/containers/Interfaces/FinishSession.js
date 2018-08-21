@@ -78,9 +78,7 @@ class FinishSession extends Component {
   export(currentSession) {
     const { remoteProtocolId, sessionId } = this.props;
     const sessionData = currentSession.network;
-    if (this.serverApiUrl) {
-      this.props.exportSession(this.serverApiUrl, remoteProtocolId, sessionId, sessionData);
-    }
+    this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 
   downloadData = (additionalInformation) => {
