@@ -8,6 +8,8 @@ const log = require('electron-log');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
 
+const { commonName } = require('../src/utils/shared-api/sslConfig.js');
+
 const isMacOS = () => os.platform() === 'darwin';
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : {};
@@ -183,8 +185,9 @@ ipcMain.on('add-cert', (evt, cert) => {
 
 app.on('certificate-error', (event, webContents, requestedUrl, error, certificate, callback) => {
   const protocolMatch = requestedUrl.startsWith('https:');
+  const nameMatch = certificate.subject.commonName === commonName;
   const rawCert = normalizeEol(certificate.data);
-  if (protocolMatch && pretrustedCertificates.has(rawCert)) {
+  if (nameMatch && protocolMatch && pretrustedCertificates.has(rawCert)) {
     event.preventDefault();
     callback(true);
   } else {
