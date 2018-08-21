@@ -9,7 +9,7 @@ jest.mock('axios');
 jest.mock('../shared-api/cipher');
 
 describe('ApiClient', () => {
-  const respData = { device: { id: '1' } };
+  const respData = { device: { id: '1' }, certificate: 'CERTIFICATE', securePort: 443 };
   const axiosResp = { data: { data: respData } };
 
   beforeAll(() => {
@@ -25,16 +25,25 @@ describe('ApiClient', () => {
   });
 
   describe('pairing confirmation', () => {
-    beforeEach(() => {
+    let pairingInfo;
+    beforeEach(async () => {
       // data payload is encrypted; mock it on cipher
       decrypt.mockReturnValue(JSON.stringify(respData));
+      const client = new ApiClient('');
+      pairingInfo = await client.confirmPairing();
     });
 
-    it('returns device ID and secret', async () => {
-      const client = new ApiClient('');
-      const device = await client.confirmPairing();
-      expect(device.id).toEqual(respData.device.id);
-      expect(device).toHaveProperty('secret');
+    it('returns device ID and secret', () => {
+      expect(pairingInfo.device.id).toEqual(respData.device.id);
+      expect(pairingInfo.device).toHaveProperty('secret');
+    });
+
+    it('returns an SSL cert for Server', () => {
+      expect(pairingInfo.sslCertificate).toEqual(respData.certificate);
+    });
+
+    it('returns the secure port for SSL', () => {
+      expect(pairingInfo.securePort).toEqual(respData.securePort);
     });
   });
 });

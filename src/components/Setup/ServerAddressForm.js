@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { addApiUrlToService, apiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
+import { addApiUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
 import { Button, Icon } from '../../ui/components';
 
 class ServerAddressForm extends PureComponent {
@@ -78,7 +78,7 @@ class ServerAddressForm extends PureComponent {
         </p>
         <fieldset className="server-address-form__fields">
           <div className="server-address-form__field">
-            <p className="server-address-form__text">{apiProtocol}://</p>
+            <p className="server-address-form__text">{pairingApiProtocol}://</p>
           </div>
           <div className="server-address-form__field">
             <input

@@ -3,13 +3,16 @@ import axios from 'axios';
 
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 import { isCordova, isElectron } from '../utils/Environment';
-import { parseUrl } from '../utils/serverAddressing';
 
 const ApiErrorStatus = 'error';
 
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
 const NoResponseMessage = 'Server could not be reached';
+
+const defaultHeaders = {
+  'Content-Type': 'application/json',
+};
 
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {
@@ -66,22 +69,18 @@ class ApiClient {
     this.apiUrl = apiUrl;
     this.client = axios.create({
       baseURL: apiUrl.replace(/\/$/, ''),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: defaultHeaders,
     });
-    if (pairedServer && pairedServer.secureUrl) {
-      const baseURL = pairedServer.secureUrl.replace(/\/$/, '');
+    if (pairedServer && pairedServer.secureServiceUrl) {
+      const secureURL = pairedServer.secureServiceUrl.replace(/\/$/, '');
       if (isCordova()) {
         const deviceId = pairedServer.deviceId;
-        const cert = pairedServer.serverCert;
-        this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, baseURL);
+        const cert = pairedServer.sslCertificate;
+        this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, secureURL);
       } else if (isElectron()) {
         this.httpsClient = axios.create({
-          baseURL,
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          baseURL: secureURL,
+          headers: defaultHeaders,
         });
       }
     }
@@ -97,16 +96,16 @@ class ApiClient {
       return this.httpsClient.acceptCertificate();
     } else if (isElectron()) {
       return new Promise((resolve, reject) => {
-        if (!this.pairedServer || !this.pairedServer.serverCert) {
-          reject(new Error('No paired Server'));
+        if (!this.pairedServer || !this.pairedServer.sslCertificate) {
+          reject(new Error('No trusted Server cert available'));
           return;
         }
         const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
         ipcRenderer.once('add-cert-complete', resolve);
-        ipcRenderer.send('add-cert', this.pairedServer.serverCert);
+        ipcRenderer.send('add-cert', this.pairedServer.sslCertificate);
       });
     }
-    return Promise.reject(new Error('SSL connections are not supported on this platform'));
+    return Promise.reject(new Error('SSL connections to Server are not supported on this platform'));
   }
 
   cancelAll() {
@@ -141,10 +140,10 @@ class ApiClient {
    * @param  {string} pairingRequestId from the requestPairing() response
    * @param  {string} pairingRequestSalt from the requestPairing() response
    * @async
-   * @return {Object} device, decorated with the generated secret
-   * @return {string} device.id
-   * @return {string} device.secret
-   * @return {string} device.serverCert
+   * @return {Object} pairingInfo.device - decorated with the generated secret
+   * @return {string} pairingInfo.device.id
+   * @return {string} pairingInfo.device.secret
+   * @return {string} pairingInfo.sslCertificate
    * @throws {Error}
    */
   confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName = '') {
@@ -174,15 +173,13 @@ class ApiClient {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(UnexpectedResponseMessage);
         }
-        // FIXME: this should return { pairingInfo .device, .cert, etc. }
         const device = decryptedData.device;
         device.secret = secretHex;
-        device.serverCert = decryptedData.cert;
-        // FIXME: Revise state shape so this isn't needed; take IP addr from MDNS / apiUrl?
-        const httpPort = parseUrl(this.apiUrl).port;
-        const httpsPort = parseUrl(decryptedData.secureUrl).port;
-        device.secureUrl = this.apiUrl.replace(httpPort, httpsPort).replace(/^http:/, 'https:');
-        return device;
+        return {
+          device,
+          sslCertificate: decryptedData.certificate,
+          securePort: decryptedData.securePort,
+        };
       })
       .catch(handleError);
   }

@@ -23,12 +23,11 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const addServer = (server, serverCert, deviceId, deviceSecret) => ({
+const addServer = (server, deviceId, deviceSecret) => ({
   type: ADD_SERVER,
   deviceId,
   deviceSecret,
   server,
-  serverCert,
 });
 
 const pairingFailed = error => ({

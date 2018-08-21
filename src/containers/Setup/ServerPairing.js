@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ApiClient from '../../utils/ApiClient';
+import { addSecureApiUrlToServer } from '../../utils/serverAddressing';
 import { ServerSetup, ServerPairingForm } from '../../components/Setup';
 import { actionCreators } from '../../ducks/modules/servers';
 
@@ -60,9 +61,14 @@ class ServerPairing extends Component {
     const { pairingCode, pairingRequestId, pairingRequestSalt } = this.state;
     const { deviceName } = this.props;
     this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
-      .then((device) => {
-        const server = { ...this.props.server, secureUrl: device.secureUrl };
-        this.props.addServer(server, device.serverCert, device.id, device.secret);
+      .then((pairingInfo) => {
+        const device = pairingInfo.device;
+        const server = addSecureApiUrlToServer({
+          ...this.props.server,
+          securePort: pairingInfo.securePort,
+          sslCertificate: pairingInfo.sslCertificate,
+        });
+        this.props.addServer(server, device.id, device.secret);
         this.setState({
           ...emptyState,
           pairedDeviceId: device.id,

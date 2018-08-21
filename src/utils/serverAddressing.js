@@ -1,6 +1,6 @@
 /** @namespace serverAddressing */
 
-const apiProtocol = 'http';
+const pairingApiProtocol = 'http';
 
 const minPort = 1;
 const maxPort = 65535;
@@ -9,11 +9,12 @@ const AllowIPv6 = false;
 const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
 const isIpv6 = addr => /^[a-zA-Z0-9]{1,4}:/.test(addr); // good enough for needs here
 
-const parseUrl = (url) => {
-  const a = document.createElement('a');
-  a.href = url;
-  const { protocol, username, password, hostname, port, pathname, hash, href } = a;
-  return { protocol, username, password, hostname, port, pathname, hash, href };
+const parseUrl = (urlStr) => {
+  try {
+    return new URL(urlStr);
+  } catch (err) {
+    return null;
+  }
 };
 
 // Performs basic escaping & checks using native (anchor) parsing.
@@ -42,11 +43,8 @@ const validApiUrl = (address, port) => {
     }
   }
 
-  const a = parseUrl(`${apiProtocol}://${normalizedAddress}:${portNum}`);
-  // Disallow URLs if parsed to contain certain fields
-  if (a.pathname && a.pathname !== '/') { return null; }
-  if (a.hash || a.username || a.password) { return null; }
-  return a.hostname && a.href;
+  const url = parseUrl(`${pairingApiProtocol}://${normalizedAddress}:${portNum}`);
+  return url && url.hostname && url.port && url;
 };
 
 /**
@@ -80,20 +78,45 @@ const isValidPort = port => !!validApiUrl('0.0.0.0', port);
  * @param {Service} service discovered (via MDNS) or manually created server info
  * @memberOf serverAddressing
  */
+// TODO: fix name; remove apiUrl
 const addApiUrlToService = (service) => {
   const apiService = { ...service };
-  let apiUrl = null;
+  let apiInfo = null;
   apiService.addresses.some((addr) => {
-    apiUrl = validApiUrl(addr, service.port);
-    return !!apiUrl;
+    apiInfo = validApiUrl(addr, service.port);
+    return !!apiInfo;
   });
-  apiService.apiUrl = apiUrl;
+  apiService.apiUrl = apiInfo.toString();
+  apiService.pairingServiceUrl = apiInfo.toString();
   return apiService;
+};
+
+/**
+ * Augments an existing server, which has a pairingServiceUrl, with a secureServiceUrl.
+ * Secure URLs are not available until the end of the pairing handshake.
+ * @param  {Object} server
+ * @param  {string} server.pairingServiceUrl
+ * @param  {Number} securePort
+ * @return {Object} the server, decorated with .secureServiceUrl
+ */
+const addSecureApiUrlToServer = (server, securePort = server.securePort) => {
+  const secureUrl = new URL(server.pairingServiceUrl);
+  if (!secureUrl) {
+    console.warn('Missing pairingServiceUrl', server); // eslint-disable-line no-console
+    return server;
+  }
+  secureUrl.protocol = 'https:';
+  secureUrl.port = securePort;
+  return {
+    ...server,
+    secureServiceUrl: secureUrl.toString(),
+  };
 };
 
 export {
   addApiUrlToService,
-  apiProtocol,
+  addSecureApiUrlToServer,
+  pairingApiProtocol,
   isValidAddress,
   isValidPort,
   maxPort,
