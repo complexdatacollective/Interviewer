@@ -3,7 +3,7 @@ import { reject, findIndex, isMatch, omit } from 'lodash';
 import uuidv4 from '../../utils/uuid';
 
 // Primary key used on node data
-export const NodePK = '_uid';
+export const NodePrimaryKeyProperty = '_uid';
 
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
@@ -32,26 +32,29 @@ function edgeExists(edges, edge) {
   );
 }
 
+// Generates test alters for development,
 function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
-  const withAttrs = newNode => ({ ...additionalAttributes, [NodePK]: uuidv4(), ...newNode });
+  const withAttrs = newNode =>
+    ({ ...additionalAttributes, [NodePrimaryKeyProperty]: uuidv4(), ...newNode });
   return oldNodes.concat(newNodes.map(withAttrs));
 }
 
+
 function getUpdatedNodes(nodes, updatedNode, full) {
   const updatedNodes = nodes.map((node) => {
-    if (node[NodePK] !== updatedNode[NodePK]) { return node; }
+    if (node[NodePrimaryKeyProperty] !== updatedNode[NodePrimaryKeyProperty]) { return node; }
 
     if (full) {
       return {
         ...updatedNode,
-        [NodePK]: node[NodePK],
+        [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
       };
     }
 
     return {
       ...node,
       ...updatedNode,
-      [NodePK]: node[NodePK],
+      [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
     };
   });
   return updatedNodes;
@@ -66,10 +69,10 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
-      const attributes = omit(action.attributes, [NodePK]);
+      const attributes = omit(action.attributes, [NodePrimaryKeyProperty]);
 
       const updatedNodes = state.nodes.map((node) => {
-        if (node[NodePK] !== action[NodePK]) { return node; }
+        if (node[NodePrimaryKeyProperty] !== action[NodePrimaryKeyProperty]) { return node; }
 
         if (isMatch(node, attributes)) {
           return omit(node, Object.getOwnPropertyNames(attributes));
@@ -93,11 +96,13 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case REMOVE_NODE: {
-      const removeNodePK = action[NodePK];
+      const removeNodePrimaryKeyProperty = action[NodePrimaryKeyProperty];
       return {
         ...state,
-        nodes: reject(state.nodes, node => node[NodePK] === removeNodePK),
-        edges: reject(state.edges, edge => edge.from === removeNodePK || edge.to === removeNodePK),
+        nodes: reject(state.nodes, node =>
+          node[NodePrimaryKeyProperty] === removeNodePrimaryKeyProperty),
+        edges: reject(state.edges, edge =>
+          edge.from === removeNodePrimaryKeyProperty || edge.to === removeNodePrimaryKeyProperty),
       };
     }
     case ADD_EDGE:
