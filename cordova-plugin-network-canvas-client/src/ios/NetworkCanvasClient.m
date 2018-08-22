@@ -112,12 +112,19 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 - (void)acceptCertificate:(CDVInvokedUrlCommand*)command
 {
-    NSString *fullCert = [command.arguments objectAtIndex:0];
+    if (command.arguments.count < 1) {
+        [self sendErrorMessage:@"Missing certificate" toCallbackId:command.callbackId];
+        return;
+    }
 
-    // TODO: more robust
     // Strip first line & last 2 lines (e.g. "-----END CERTIFICATE-----\n\n")
-    NSArray *arr = [fullCert componentsSeparatedByString:@"\n"];
-    NSString *certificate = [[arr subarrayWithRange:NSMakeRange(1, arr.count - 3)] componentsJoinedByString:@"\n"];
+    NSString *fullCert = [command.arguments objectAtIndex:0];
+    NSArray *lines = [fullCert componentsSeparatedByString:@"\n"];
+    if (lines.count < 4) {
+        [self sendErrorMessage:@"Invalid certificate" toCallbackId:command.callbackId];
+        return;
+    }
+    NSString *certificate = [[lines subarrayWithRange:NSMakeRange(1,lines.count - 3)] componentsJoinedByString:@"\n"];
 
     self.acceptableCert = [[NSData alloc] initWithBase64EncodedString:certificate
                                                               options:NSDataBase64DecodingIgnoreUnknownCharacters];
@@ -128,7 +135,11 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 - (void)send:(CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult *pluginResult = nil;
+    if (command.arguments.count < 2) {
+        [self sendErrorMessage:@"DeviceID, URL, and method are required" toCallbackId:command.callbackId];
+        return;
+    }
+
     NSString *deviceId = [command.arguments objectAtIndex:0];
     NSString *urlStr = [command.arguments objectAtIndex:1];
     NSString *method = [command.arguments objectAtIndex:2];
@@ -138,23 +149,16 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         body = [command.arguments objectAtIndex:3];
     }
 
-    if (deviceId && urlStr) {
-        NSURL *url = [NSURL URLWithString:urlStr];
-        NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
-        req.HTTPMethod = method;
-        [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        if (body) {
-            [req setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-        }
-        [self fulfillRequestWithDeviceId: deviceId
-                                 request:req
-                              callbackId:command.callbackId];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                     messageAsDictionary:[self errorDictWithMessage:@"Arg required"]];
-        [self.commandDelegate sendPluginResult:pluginResult
-                                    callbackId:command.callbackId];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
+    req.HTTPMethod = method;
+    [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    if (body) {
+        [req setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     }
+    [self fulfillRequestWithDeviceId: deviceId
+                             request:req
+                          callbackId:command.callbackId];
 }
 
 - (void)onReset
@@ -164,6 +168,18 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 }
 
 #pragma mark - private
+
+- (void)sendErrorMessage:(NSString *)message toCallbackId:(NSString *)callbackId
+{
+    [self.commandDelegate sendPluginResult:[self errorResult:message]
+                                callbackId:callbackId];
+}
+
+- (CDVPluginResult *)errorResult:(NSString *)message
+{
+    return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                         messageAsDictionary:[self errorDictWithMessage:message]];
+}
 
 // Error object matching server format
 - (NSDictionary *)errorDictWithMessage:(NSString *)message
@@ -190,8 +206,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
         if (error) {
             NSLog(@"Network Error: %@", error);
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                         messageAsDictionary:[self errorDictWithMessage:error.localizedDescription]];
+            pluginResult = [self errorResult:error.localizedDescription];
         } else {
             NSString *resp = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             CDVCommandStatus cdvStatus = (httpResponse.statusCode >= 400) ? CDVCommandStatus_ERROR : CDVCommandStatus_OK;
