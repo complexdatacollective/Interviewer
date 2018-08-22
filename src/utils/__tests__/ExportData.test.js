@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import saveFile from '../SaveFile';
 import ExportData from '../ExportData';
-import { NodePK } from '../../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../../ducks/modules/network';
 
 function mockSerializeToString() {
   return { serializeToString: xmlData => xmlData.documentElement.outerHTML };
@@ -47,7 +47,7 @@ const sessionA = {
     ],
     edgo: {},
     nodes: [
-      { [NodePK]: 1,
+      { [NodePrimaryKeyProperty]: 1,
         type: 'person',
         name: 'soAndSo',
         aString: 'content',
@@ -61,7 +61,7 @@ const sessionA = {
         aLayout: { x: 0.4134, y: 0.2356 },
         aLocation: { latitude: 41.799756, longitude: -87.66443 },
       },
-      { [NodePK]: 2,
+      { [NodePrimaryKeyProperty]: 2,
         type: 'person',
         name: 'whoDunnit',
         aString: 'Another Content',
@@ -75,7 +75,7 @@ const sessionA = {
         aLayout: { x: 0.3434, y: 0.3156 },
         aLocation: { latitude: 44.9756, longitude: 18.443 },
       },
-      { [NodePK]: 3,
+      { [NodePrimaryKeyProperty]: 3,
         type: 'person',
         name: 'whatsErName',
         aString: 'More Content',
@@ -103,7 +103,7 @@ describe('export data function', () => {
     const xml = ExportData(sessionA.network, variableRegistry, () => {});
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     const node = doc.querySelector('graph node:first-child');
-    expect(node.id).toEqual(`${sessionA.network.nodes[0][NodePK]}`);
-    expect(node.querySelector(`[key="${NodePK}"]`)).toBe(null);
+    expect(node.id).toEqual(`${sessionA.network.nodes[0][NodePrimaryKeyProperty]}`);
+    expect(node.querySelector(`[key="${NodePrimaryKeyProperty}"]`)).toBe(null);
   });
 });

@@ -6,7 +6,7 @@ import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodePK } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -52,9 +52,12 @@ class NodePanels extends PureComponent {
 
   onDrop = ({ meta }, dataSource) => {
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(meta[NodePK], { ...this.props.activePromptAttributes });
+      this.props.toggleNodeAttributes(
+        meta[NodePrimaryKeyProperty],
+        { ...this.props.activePromptAttributes },
+      );
     } else {
-      this.props.removeNode(meta[NodePK]);
+      this.props.removeNode(meta[NodePrimaryKeyProperty]);
     }
   }
 
@@ -111,13 +114,13 @@ class NodePanels extends PureComponent {
 const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
     existingNodes :
-    differenceBy(externalData[dataSource].nodes, nodes, NodePK)
+    differenceBy(externalData[dataSource].nodes, nodes, NodePrimaryKeyProperty)
 );
 
 const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
-    map(existingNodes, NodePK) :
-    map(externalData[dataSource].nodes, NodePK)
+    map(existingNodes, NodePrimaryKeyProperty) :
+    map(externalData[dataSource].nodes, NodePrimaryKeyProperty)
 );
 
 function makeMapStateToProps() {
@@ -154,7 +157,7 @@ function makeMapStateToProps() {
           ) :
           ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
-            includes(originNodeIds, meta[NodePK])
+            includes(originNodeIds, meta[NodePrimaryKeyProperty])
           );
 
         return {

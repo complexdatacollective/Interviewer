@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NodePK } from '../../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -31,7 +31,7 @@ const dropHandlers = compose(
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
       props.updateNode({
-        [NodePK]: item.meta[NodePK],
+        [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
         [props.layoutVariable]: relativeCoords(props, item),
       });
 
@@ -42,7 +42,7 @@ const dropHandlers = compose(
       if (!has(item.meta, props.layoutVariable)) { return; }
 
       props.updateNode({
-        [NodePK]: item.meta[NodePK],
+        [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
         [props.layoutVariable]: relativeCoords(props, item),
       });
     },
@@ -85,9 +85,9 @@ class NodeLayout extends Component {
 
     if (!allowSelect) { return; }
 
-    this.connectNode(node[NodePK]);
+    this.connectNode(node[NodePrimaryKeyProperty]);
 
-    this.toggleHighlightAttributes(node[NodePK]);
+    this.toggleHighlightAttributes(node[NodePrimaryKeyProperty]);
 
     this.forceUpdate();
   }
@@ -131,7 +131,7 @@ class NodeLayout extends Component {
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node[NodePK] === this.state.connectFrom;
+      node[NodePrimaryKeyProperty] === this.state.connectFrom;
   }
 
   render() {
@@ -149,7 +149,7 @@ class NodeLayout extends Component {
 
           return (
             <LayoutNode
-              key={node[NodePK]}
+              key={node[NodePrimaryKeyProperty]}
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}

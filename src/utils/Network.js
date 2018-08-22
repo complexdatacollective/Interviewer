@@ -1,5 +1,5 @@
 import { filter, differenceBy } from 'lodash';
-import { NodePK } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const nodeIncludesAttributes = (network, attributes) => {
   const nodes = filter(network.nodes, attributes);
@@ -11,7 +11,7 @@ const nodeIncludesAttributes = (network, attributes) => {
 };
 
 const difference = (source, target) => {
-  const nodes = differenceBy(source.nodes, target.nodes, NodePK);
+  const nodes = differenceBy(source.nodes, target.nodes, NodePrimaryKeyProperty);
 
   return {
     ...source, // TODO: filter edge etc.

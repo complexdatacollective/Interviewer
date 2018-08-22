@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer, { actionCreators, actionTypes } from '../sessions';
-import { NodePK } from '../network';
+import { NodePrimaryKeyProperty } from '../network';
 import uuidv4 from '../../../utils/uuid';
 
 const middlewares = [thunk];
@@ -162,7 +162,7 @@ describe('sessions actions', () => {
     const expectedAction = {
       type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
       sessionId: 'a',
-      [NodePK]: 2,
+      [NodePrimaryKeyProperty]: 2,
       attributes: {},
     };
 
@@ -176,7 +176,7 @@ describe('sessions actions', () => {
     const expectedAction = {
       type: actionTypes.REMOVE_NODE,
       sessionId: 'a',
-      [NodePK]: 2,
+      [NodePrimaryKeyProperty]: 2,
     };
 
     store.dispatch(actionCreators.removeNode(2));

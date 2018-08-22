@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
 import { Icon } from '../ui/components';
-import { NodePK } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedCard = selectable(Card);
 
@@ -76,7 +76,7 @@ CardList.defaultProps = {
   onDeleteCard: null,
   onToggleCard: () => {},
   selected: () => false,
-  getKey: node => node[NodePK],
+  getKey: node => node[NodePrimaryKeyProperty],
 };
 
 export default compose(

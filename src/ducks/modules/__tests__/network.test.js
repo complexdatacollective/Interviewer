@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionTypes, NodePK as PK } from '../network';
+import reducer, { actionTypes, NodePrimaryKeyProperty as PK } from '../network';
 
 const mockState = {
   ego: {},

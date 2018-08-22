@@ -1,7 +1,7 @@
 import { findKey, forInRight, isNil, join } from 'lodash';
 
 import saveFile from './SaveFile';
-import { NodePK } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const setUpXml = () => {
   const xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -143,12 +143,19 @@ const getDataElement = (uri, key, text) => {
   return data;
 };
 
-const addElements = (graph, uri, dataList, type, excludeList, variableRegistry, layoutVariable,
-  extra: false) => {
+const addElements = (
+  graph,
+  uri,
+  dataList,
+  type,
+  excludeList,
+  variableRegistry,
+  layoutVariable,
+  extra = false) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
-    if (dataElement[NodePK]) {
-      domElement.setAttribute('id', dataElement[NodePK]);
+    if (dataElement[NodePrimaryKeyProperty]) {
+      domElement.setAttribute('id', dataElement[NodePrimaryKeyProperty]);
     } else {
       domElement.setAttribute('id', index);
     }
@@ -200,7 +207,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   });
 
   // generate keys for attributes
-  let missingVariables = generateKeys(graph, graphML, networkData.nodes, 'node', [NodePK], variableRegistry, layoutVariable);
+  let missingVariables = generateKeys(graph, graphML, networkData.nodes, 'node', [NodePrimaryKeyProperty], variableRegistry, layoutVariable);
   missingVariables = missingVariables.concat(generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to'], variableRegistry));
   if (missingVariables.length > 0) {
     // hard fail if checking the registry fails
@@ -210,7 +217,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePK], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',

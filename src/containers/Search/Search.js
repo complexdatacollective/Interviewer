@@ -9,7 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { NodePK } from '../../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 
 /**
@@ -117,7 +117,8 @@ class Search extends Component {
   //   `excludedNodes` size is small, but search set may be large,
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
-    return this.props.excludedNodes.every(excluded => excluded[NodePK] !== candidate[NodePK]);
+    return this.props.excludedNodes.every(excluded =>
+      excluded[NodePrimaryKeyProperty] !== candidate[NodePrimaryKeyProperty]);
   }
 
   render() {

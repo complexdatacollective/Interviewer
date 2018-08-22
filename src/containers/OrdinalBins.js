@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import color from 'color';
 import { makeNetworkNodesForSubject, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodePK } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty } from '../ducks/modules/network';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -63,7 +63,7 @@ class OrdinalBins extends PureComponent {
 
       const newValue = {};
       newValue[this.props.activePromptVariable] = bin.value;
-      this.props.toggleNodeAttributes(meta[NodePK], newValue);
+      this.props.toggleNodeAttributes(meta[NodePrimaryKeyProperty], newValue);
     };
 
     const accentColor = this.calculateAccentColor(index, missingValue);
