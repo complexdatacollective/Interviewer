@@ -1,76 +1,8 @@
-/* globals cordova */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import { Icon } from '../ui/components';
 import { MenuItem, Scroller } from './';
-
-import { isCordova } from '../utils/Environment';
-
-import ApiClient from '../utils/ApiClient';
-
-// const b64EncodeUnicode = str => btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-//   (match, p1) => String.fromCharCode(`0x${p1}`),
-// ));
-
-const serverAddr = '192.168.1.4';
-
-const testPlugin = () => {
-  const pairingServiceUrl = `https://${serverAddr}:51002`;
-  // TODO: this is available from redux: servers.paired[].deviceId
-  const deviceId = '5b1ac0e7-c896-405f-bab0-8b778ab1b6eb';
-  // TODO: from redux
-  const endpointUrl = '/protocols';
-  // TODO: this is available from redux: servers.paired[].publicCert
-  const cert = `-----BEGIN CERTIFICATE-----
-MIIDBjCCAe6gAwIBAgIJb4Mq75vZ4WcqMA0GCSqGSIb3DQEBCwUAMCUxIzAhBgNV
-BAMTGk5ldHdvcmsgQ2FudmFzIChsb2NhbGhvc3QpMB4XDTE4MDgwNjE1NTQzMFoX
-DTI4MDgwMzE1NTQzMFowJTEjMCEGA1UEAxMaTmV0d29yayBDYW52YXMgKGxvY2Fs
-aG9zdCkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCCLNWb6Fpu+Ggs
-5sixcLB5c5nIBSj/OBjaSTps8h5JNOll2AZWQ1WDWNDIRwej8/uh6K20WWO3nvK2
-9w/EodnH09+tBWHkFy/pGBAZCtJi6hzG9ED9FlcBMetfa8azh39fdvqDneKxc6fc
-ppanYqThb6WVxm0Ghk5rnFKjEaVBpkGaxcbfFXJGZqmb5pSPH7eSv0A4wqBN92nY
-K3Qvr2sbf1iB7OKwTcsN0H0NSPn2NDG6TIGgu3meEf+gfbWwKFuuP6FZQIDM4I4N
-6r9ZIyoOvbgTutmOgFU9lXET8biH3W/1mZ9TJZgQT6NRCNLMWGOGIPlswpmv0xRg
-X+/TV/yzAgMBAAGjOTA3MAwGA1UdEwQFMAMBAf8wCwYDVR0PBAQDAgL0MBoGA1Ud
-EQQTMBGCCWxvY2FsaG9zdIcEfwAAATANBgkqhkiG9w0BAQsFAAOCAQEAJqI9TKX5
-4SGjCmpLtttPeVYDjkXwx24v/JmaXoT6cl7Q65AYsVdRQbw8rl36qNkLbRi0Uc5C
-suTPxrhXBfKQ6GgxaINaPnk7jBKjM84BOjFD1jPMh9pio7rfE7VCvvy7ODZwqWFV
-KwtjoL1ya83a25CeZScTZbvOnJ+O3Pisbiy2mscv9zcgppRYJJf+oJnt1PbhN/P+
-9DrG/wIxSUYQy7vmdN61mfVylvahL2hZqPkwVzJwS+n4i+pPRoNP57ErcvnimvCm
-B2cJveDofiZPxFlJfSQGG/LCQAH/NVreP7y6s6kayQXy9zVO7S0fHxnkiIO5o+zh
-40wpQ+77K/jLdw==
------END CERTIFICATE-----
-`;
-
-  if (!isCordova()) {
-    console.log('Electron test');
-    const apiClient = new ApiClient({
-      name: 'mb18.local',
-      host: 'mb18.local.',
-      port: 51001,
-      addresses: [serverAddr],
-      pairingServiceUrl,
-      secureUrl: pairingServiceUrl.replace('51001', '51002').replace('http:', 'https:'),
-      sslCertificate: cert,
-      deviceId,
-      deviceSecret: 'fe8f7b86c1749ce5471f4764c0c2e05846cc4539fb439dc07c5658e494e720b2',
-    });
-    apiClient
-      .addTrustedCert()
-      .then(() => apiClient.getProtocols())
-      .then(protocols => console.log('Protocols', protocols))
-      .catch(console.error);
-    return;
-  }
-
-  const client = new cordova.plugins.NetworkCanvasClient(deviceId, cert, pairingServiceUrl);
-  client.acceptCertificate(cert)
-    .then(res => console.log('acceptCertificate response', res))
-    .then(() => client.send(endpointUrl))
-    .then(res => console.log('server response', res))
-    .catch(err => console.error('promise chain err', err));
-};
 
 const closeEvents = [
   'click',
@@ -157,12 +89,6 @@ class MenuFactory extends Component {
         menuType={item.menuType}
       />),
     );
-
-    menuItems.unshift(<MenuItem
-      key={'test-plugin'}
-      onClick={() => testPlugin()}
-      label="API Send test"
-    />);
 
     return (
       <div className="menu" ref={(node) => { this.domNode = node; }}>
