@@ -15,37 +15,63 @@ const getURL = uri =>
     }
   });
 
+// Browser http request to support downloads from NC Server
+// Matches interface from request-promise-native, which is needed
+// to support URL imports from servers without lenient CORS support.
+const xhrRequest = ({ method, uri }) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open(method, uri);
+  xhr.responseType = 'arraybuffer';
+  const promise = new Promise((resolve, reject) => {
+    xhr.addEventListener('load', function onLoad() {
+      resolve(new Uint8Array(this.response));
+    });
+    xhr.addEventListener('error', (err) => {
+      reject(err);
+    });
+  });
+  xhr.send();
+  return promise;
+};
+
 const getProtocolName = () => uuid(); // generate a filename
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection - connect to a network, and try again.");
 const fileError = friendlyErrorMessage('The protocol could not be saved to your device.');
 
+/**
+ * Download a protocol from a remote server.
+ *
+ * If the URL points to an instance of a Network Canvas Server, then the caller must ensure
+ * that the SSL certificate has been trusted. See {@link ApiClient#addTrustedCert}.
+ *
+ * @param {string} uri
+ * @return {string} output filepath
+ */
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
     const path = require('path');
     const electron = require('electron');
+    const tempPath = (electron.app || electron.remote.app).getPath('temp');
 
-    return (uri) => {
-      const tempPath = (electron.app || electron.remote.app).getPath('temp');
-
-      return getURL(uri)
+    return (uri, fromNCServer) =>
+      getURL(uri)
         .then((url) => {
           const destination = path.join(tempPath, getProtocolName());
-
-          return request({ method: 'GET', encoding: null, uri: url.href })
+          const req = fromNCServer ? xhrRequest : request;
+          return req({ method: 'GET', encoding: null, uri: url.href })
             .catch(networkError)
             .then(data => writeFile(destination, data))
             .catch(fileError)
             .then(() => destination);
         })
         .catch(urlError);
-    };
   }
 
   if (environment === environments.CORDOVA) {
-    return uri =>
+    return (uri, fromNCServer) =>
       getURL(uri)
         .then(url => [
           url.href,
@@ -55,11 +81,15 @@ const downloadProtocol = inEnvironment((environment) => {
         .then(([url, destination]) =>
           new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
+            // TODO: replace `trustAllHosts` (insecure) with either custom file transfer or
+            //       webview cert handling
+            const trustAllHosts = fromNCServer === true;
             fileTransfer.download(
               url,
               destination,
               () => resolve(destination),
               error => reject(error),
+              trustAllHosts,
             );
           }),
         )

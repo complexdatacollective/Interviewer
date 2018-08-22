@@ -97,10 +97,11 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function downloadProtocolAction(uri) {
+function downloadProtocolAction(uri, forNCServer) {
   return {
     type: DOWNLOAD_PROTOCOL,
     uri,
+    forNCServer,
   };
 }
 
@@ -169,7 +170,7 @@ const downloadProtocolEpic = action$ =>
   action$.ofType(DOWNLOAD_PROTOCOL)
     .switchMap(action =>
       Observable
-        .fromPromise(downloadProtocol(action.uri))
+        .fromPromise(downloadProtocol(action.uri, action.forNCServer))
         .map(protocolPath => importProtocolAction(protocolPath))
         .catch(error => Observable.of(downloadProtocolFailed(error))),
     );

@@ -41,7 +41,7 @@ const handleError = (err) => {
 };
 
 /**
- * @class ApiClient
+ * @class
  *
  * Provides both a pairing client (http) and a secure client (https) once paired.
  *
@@ -102,6 +102,10 @@ class ApiClient {
   }
 
   /**
+   * @description Call this to add add the paired server's SSL certificate to the trust store.
+   * Calling this method without initializing the client with a paired server is an error.
+   *
+   * @method ApiClient#addTrustedCert
    * @async
    * @return {Promise} resolves if cert has been trusted;
    *                   rejects if there is no paired Server, or trust cannot be established

@@ -10,6 +10,10 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { ServerProtocolList, ServerSetup } from '../../components/Setup';
 import { getPairedServer } from '../../selectors/servers';
 
+/**
+ * @class
+ * Renders a list of protocols, from which a user can choose to download.
+ */
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +57,8 @@ class ServerProtocols extends Component {
             protocols={protocols}
             selectProtocol={(p) => {
               addSession();
-              downloadProtocol(p.downloadUrl);
+              this.apiClient.addTrustedCert()
+                .then(() => downloadProtocol(p.downloadUrl, true));
             }}
           />
         }
