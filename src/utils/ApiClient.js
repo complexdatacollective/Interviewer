@@ -112,7 +112,7 @@ class ApiClient {
    */
   addTrustedCert() {
     if (isCordova()) {
-      return this.httpsClient.acceptCertificate();
+      return this.httpsClient.acceptCertificate().catch(handleError);
     } else if (isElectron()) {
       return new Promise((resolve, reject) => {
         if (!this.pairedServer || !this.pairedServer.sslCertificate) {

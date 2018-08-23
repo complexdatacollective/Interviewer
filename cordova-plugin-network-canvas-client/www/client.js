@@ -9,7 +9,6 @@ const Actions = {
 
 const respObject = (resp) => {
   let data;
-  // TODO: can ever be Error type? (not clear from cordova docs)
   if (typeof resp === 'string') {
     data = JSON.parse(resp);
   } else {
@@ -35,14 +34,24 @@ class NetworkCanvasClient {
   }
 
   buildUrl(path) {
-    // TODO: robustness; use existing helpers?
     return `${this.baseURL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
   }
 
+  /**
+   * @param  {string} cert PEM-formatted cert
+   * @return {Promise} Resolves with undefined if accepted.
+   *                   Rejects with error otherwise.
+   */
   acceptCertificate(cert = this.serverCert) {
     return new Promise((resolve, reject) => {
       const sendArgs = [cert];
-      exec(resolve, reject, ServiceName, Actions.acceptCertificate, sendArgs);
+      exec(
+        resolve,
+        resp => reject(respError(resp)),
+        ServiceName,
+        Actions.acceptCertificate,
+        sendArgs,
+      );
     });
   }
 
@@ -54,6 +63,14 @@ class NetworkCanvasClient {
     return this.send(path, 'POST', data);
   }
 
+  /**
+   * @async
+   * @param  {string} path
+   * @param  {string} method='GET'
+   * @param  {Object} data serializable as JSON
+   * @return {Promise} Resolves with the response object.
+   *                   Rejects with an error object if any error occurs.
+   */
   send(path, method = 'GET', data = null) {
     return new Promise((resolve, reject) => {
       const sendArgs = [this.deviceId, this.buildUrl(path), method];
