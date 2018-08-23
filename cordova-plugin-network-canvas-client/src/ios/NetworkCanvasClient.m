@@ -10,11 +10,16 @@
 
 typedef void(^DataTaskCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
+NSString const *kDeviceIdKey = @"deviceId";
+
 @interface NetworkCanvasClient()
-    @property NSMutableDictionary *taskMetadata;
-    @property NSOperationQueue *operationQueue;
-    @property NSData *acceptableCert;
+
+@property NSMutableDictionary *taskMetadata;
+@property NSOperationQueue *operationQueue;
+@property NSData *acceptableCert;
+
 @end
+
 
 @implementation NetworkCanvasClient
 
@@ -40,7 +45,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         [protectionSpace.protocol isEqualToString:NSURLProtectionSpaceHTTPS]
         ) {
         NSDictionary *meta = [self.taskMetadata objectForKey:task.taskDescription];
-        NSString *deviceId = [meta objectForKey:@"deviceId"];
+        NSString *deviceId = [meta objectForKey:kDeviceIdKey];
         NSURLCredential *cred = [NSURLCredential credentialWithUser:deviceId
                                                            password:@""
                                                         persistence:NSURLCredentialPersistenceForSession];
@@ -119,7 +124,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     // Strip first line & last 2 lines (e.g. "-----END CERTIFICATE-----\n\n")
     NSString *fullCert = [command.arguments objectAtIndex:0];
-    NSArray *lines = [fullCert componentsSeparatedByString:@"\n"];
+    NSString *normalizedCert = [fullCert stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+    NSArray *lines = [normalizedCert componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     if (lines.count < 4) {
         [self sendErrorMessage:@"Invalid certificate" toCallbackId:command.callbackId];
         return;
@@ -131,7 +137,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsString:@"OK"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-};
+}
 
 - (void)send:(CDVInvokedUrlCommand*)command
 {
@@ -177,24 +183,17 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 - (CDVPluginResult *)errorResult:(NSString *)message
 {
-    return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                         messageAsDictionary:[self errorDictWithMessage:message]];
-}
-
-// Error object matching server format
-- (NSDictionary *)errorDictWithMessage:(NSString *)message
-{
-    return @{
-             @"status": @"error",
-             @"message": message,
-            };
+    // Matches server Error object format
+    NSDictionary *errorDict = @{
+                                @"status": @"error",
+                                @"message": message,
+                                };
+    return [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorDict];
 }
 
 - (void)fulfillRequestWithDeviceId:(NSString *)deviceId request:(NSURLRequest *)req callbackId:(NSString *)callbackId
 {
-    NSDictionary *meta = @{
-                           @"deviceId": deviceId,
-                           };
+    NSDictionary *meta = @{ kDeviceIdKey: deviceId };
     [self.taskMetadata setObject:meta forKey:callbackId];
 
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -221,10 +220,10 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [reqTask setTaskDescription:callbackId];
 
     // TODO: Cancel token support. (Send a cancellation ID, but keep result open for normal resolution.)
-//    CDVPluginResult *cancelToken = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:callbackId];
-//    // API accepts NSNumber, but is converted to bool internally
-//    cancelToken.keepCallback = @1;
-//    [self.commandDelegate sendPluginResult:cancelToken callbackId:callbackId];
+    //    CDVPluginResult *cancelToken = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:callbackId];
+    //    // API accepts NSNumber, but is converted to bool internally
+    //    cancelToken.keepCallback = @1;
+    //    [self.commandDelegate sendPluginResult:cancelToken callbackId:callbackId];
     [reqTask resume];
 }
 
