@@ -14,5 +14,10 @@
     "canvas"
   ],
   "author": "codaco",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "cordovaDependencies": {
+        "0.0.1": { "cordova-plugin-file": "^5.0.0"}
+    }
+  }
 }

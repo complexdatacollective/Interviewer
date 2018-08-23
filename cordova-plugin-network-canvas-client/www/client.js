@@ -4,13 +4,19 @@ const ServiceName = 'NetworkCanvasClient';
 
 const Actions = {
   acceptCertificate: 'acceptCertificate',
+  download: 'download',
   send: 'send',
 };
 
 const respObject = (resp) => {
   let data;
   if (typeof resp === 'string') {
-    data = JSON.parse(resp);
+    try {
+      data = JSON.parse(resp);
+    } catch (err) {
+      // Not JSON; likely a message coming from CordovaLib
+      data = { message: resp, status: undefined };
+    }
   } else {
     data = resp;
   }
@@ -21,7 +27,7 @@ const respObject = (resp) => {
 // Match axios interface: errors have an additional response prop
 const respError = (resp) => {
   const response = respObject(resp);
-  const err = new Error(response.message);
+  const err = new Error(response.data.message);
   err.response = response;
   return err;
 };
@@ -76,12 +82,19 @@ class NetworkCanvasClient {
       const sendArgs = [this.deviceId, this.buildUrl(path), method];
       if (data) { sendArgs.push(JSON.stringify(data)); }
 
-      return exec(
+      exec(
         resp => resolve(respObject(resp)),
         resp => reject(respError(resp)),
         ServiceName,
         Actions.send,
         sendArgs);
+    });
+  }
+
+  download(url, destination) {
+    const sendArgs = [this.deviceId, url, destination];
+    return new Promise((resolve, reject) => {
+      exec(resolve, reject, ServiceName, Actions.download, sendArgs);
     });
   }
 }

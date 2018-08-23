@@ -215,6 +215,13 @@ class ApiClient {
       .catch(err => handleError(err));
   }
 
+  downloadProtocol(url, destination) {
+    if (isCordova()) {
+      return this.httpsClient.download(url, destination).catch(handleError);
+    }
+    return Promise.reject(new Error('Downloads not supported on this platform'));
+  }
+
   /**
    * @async
    * @param {string} protocolId ID of the protocol this session belongs to

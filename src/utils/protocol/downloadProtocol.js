@@ -1,10 +1,11 @@
 /* eslint-disable global-require */
-/* global window, FileTransfer */
+/* global FileTransfer */
 import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
+import ApiClient from '../../utils/ApiClient';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -71,28 +72,30 @@ const downloadProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return (uri, fromNCServer) =>
+    return (uri, pairedServer) =>
       getURL(uri)
         .then(url => [
           url.href,
           `cdvfile://localhost/temporary/${getProtocolName()}`,
         ])
         .catch(urlError)
-        .then(([url, destination]) =>
-          new Promise((resolve, reject) => {
+        .then(([url, destination]) => {
+          if (pairedServer) {
+            return new ApiClient(pairedServer)
+              // .addTrustedCert() is not required, assuming we've just fetched the protocol list
+              .downloadProtocol(url, destination)
+              .then(() => destination);
+          }
+          return new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
-            // TODO: replace `trustAllHosts` (insecure) with either custom file transfer or
-            //       webview cert handling
-            const trustAllHosts = fromNCServer === true;
             fileTransfer.download(
               url,
               destination,
               () => resolve(destination),
               error => reject(error),
-              trustAllHosts,
             );
-          }),
-        )
+          });
+        })
         .catch((error) => {
           const getErrorMessage = ({ code }) => {
             if (code === 3) return networkError;

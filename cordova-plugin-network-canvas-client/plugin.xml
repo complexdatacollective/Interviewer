@@ -5,6 +5,7 @@
     <description>Cordova Plugin for Network Canvas API clients</description>
     <license>GPL-3.0-or-later</license>
     <keywords>social network,sna,visualization,research,public health,network canvas</keywords>
+    <dependency id="cordova-plugin-file" version="^5.0.0" />
     <js-module src="www/client.js" name="client">
         <clobbers target="cordova.plugins.NetworkCanvasClient" />
     </js-module>

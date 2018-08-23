@@ -31,4 +31,15 @@
  */
 - (void)send:(CDVInvokedUrlCommand*)command;
 
+/**
+ Send a request to a Server and save the response data to the specifed local file URL.
+ Async.
+
+ Arguments to the cordova command:
+ 1. {string} deviceId, used for auth
+ 2. {string} sourceURL of data to download
+ 3. {string} targetURL local filesystem URL to save file
+ */
+- (void)download:(CDVInvokedUrlCommand*)command;
+
 @end
