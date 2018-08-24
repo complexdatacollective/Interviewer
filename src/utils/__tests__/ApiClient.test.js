@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ApiClient from '../ApiClient';
 import { decrypt } from '../shared-api/cipher';
+import * as Environment from '../../utils/Environment';
 
 jest.mock('axios');
 jest.mock('../shared-api/cipher');
@@ -23,13 +24,20 @@ describe('ApiClient', () => {
   });
 
   beforeEach(() => {
+    Environment.isElectron = jest.fn().mockReturnValue(true);
     axios.post.mockClear();
     client = new ApiClient(url);
   });
 
   describe('constructor', () => {
-    it('accepts a pairingUrl', () => {
-      expect(client.pairingServiceUrl).toEqual(url);
+    it('creates a pairing client from a pairingUrl', () => {
+      expect(client.pairingClient).toBeDefined();
+      expect(client.httpsClient).not.toBeDefined();
+    });
+    it('creates an https client from a pairedServer', () => {
+      const pairedClient = new ApiClient({ secureServiceUrl: 'https://example.com:1234' });
+      expect(pairedClient.httpsClient).toBeDefined();
+      expect(pairedClient.pairingClient).not.toBeDefined();
     });
   });
 
