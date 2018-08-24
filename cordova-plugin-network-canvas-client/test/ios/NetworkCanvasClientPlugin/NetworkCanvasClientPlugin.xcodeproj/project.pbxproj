@@ -13,6 +13,11 @@
 		0F9C8937212DFFCC005324ED /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9C8936212DFFCC005324ED /* libCordova.a */; };
 		0F9C893B212E0026005324ED /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9C893A212E0026005324ED /* libCordova.a */; };
 		0F9C893D212E1CBE005324ED /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F9C893C212E1CBE005324ED /* Info.plist */; };
+		0FA5ED6F212F99AC0031A040 /* CDVFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 0FA5ED6E212F99AC0031A040 /* CDVFile.h */; };
+		0FA5ED75212F9A100031A040 /* CDVLocalFilesystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 0FA5ED74212F9A100031A040 /* CDVLocalFilesystem.h */; };
+		0FA5ED77212F9A3F0031A040 /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA5ED70212F99E70031A040 /* CDVFile.m */; };
+		0FA5ED78212F9A500031A040 /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA5ED71212F99E70031A040 /* CDVLocalFilesystem.m */; };
+		0FA5ED7A212F9A660031A040 /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA5ED79212F9A660031A040 /* CDVAssetLibraryFilesystem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,11 @@
 		0F9C8938212E0015005324ED /* Cordova.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Cordova.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F9C893A212E0026005324ED /* libCordova.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCordova.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F9C893C212E1CBE005324ED /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0FA5ED6E212F99AC0031A040 /* CDVFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CDVFile.h; path = "../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file/CDVFile.h"; sourceTree = "<group>"; };
+		0FA5ED70212F99E70031A040 /* CDVFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CDVFile.m; path = "../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file/CDVFile.m"; sourceTree = "<group>"; };
+		0FA5ED71212F99E70031A040 /* CDVLocalFilesystem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CDVLocalFilesystem.m; path = "../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file/CDVLocalFilesystem.m"; sourceTree = "<group>"; };
+		0FA5ED74212F9A100031A040 /* CDVLocalFilesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CDVLocalFilesystem.h; path = "../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file/CDVLocalFilesystem.h"; sourceTree = "<group>"; };
+		0FA5ED79212F9A660031A040 /* CDVAssetLibraryFilesystem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CDVAssetLibraryFilesystem.m; path = "../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file/CDVAssetLibraryFilesystem.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +72,11 @@
 		0F9C890A212DFCF2005324ED = {
 			isa = PBXGroup;
 			children = (
+				0FA5ED79212F9A660031A040 /* CDVAssetLibraryFilesystem.m */,
+				0FA5ED74212F9A100031A040 /* CDVLocalFilesystem.h */,
+				0FA5ED70212F99E70031A040 /* CDVFile.m */,
+				0FA5ED71212F99E70031A040 /* CDVLocalFilesystem.m */,
+				0FA5ED6E212F99AC0031A040 /* CDVFile.h */,
 				0F9C8933212DFD73005324ED /* NetworkCanvasClient.h */,
 				0F9C8932212DFD73005324ED /* NetworkCanvasClient.m */,
 				0F9C8916212DFCF2005324ED /* NetworkCanvasClientPlugin */,
@@ -114,6 +129,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FA5ED75212F9A100031A040 /* CDVLocalFilesystem.h in Headers */,
+				0FA5ED6F212F99AC0031A040 /* CDVFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +238,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FA5ED7A212F9A660031A040 /* CDVAssetLibraryFilesystem.m in Sources */,
+				0FA5ED78212F9A500031A040 /* CDVLocalFilesystem.m in Sources */,
+				0FA5ED77212F9A3F0031A040 /* CDVFile.m in Sources */,
 				0F9C8923212DFCF3005324ED /* NetworkCanvasClientPluginTests.m in Sources */,
 				0F9C8934212DFD73005324ED /* NetworkCanvasClient.m in Sources */,
 			);
@@ -289,6 +309,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_ROOT)/../../../../../platforms/ios/CordovaLib/Classes/Public";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -344,6 +365,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_ROOT)/../../../../../platforms/ios/CordovaLib/Classes/Public";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
@@ -362,6 +384,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_ROOT)/../../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file",
+					"$(PROJECT_ROOT)/../../../../../platforms/ios/CordovaLib/Classes/Public",
+				);
 				INFOPLIST_FILE = NetworkCanvasClientPlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -385,6 +411,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_ROOT)/../../../../../platforms/ios/NetworkCanvas/Plugins/cordova-plugin-file",
+					"$(PROJECT_ROOT)/../../../../../platforms/ios/CordovaLib/Classes/Public",
+				);
 				INFOPLIST_FILE = NetworkCanvasClientPlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
