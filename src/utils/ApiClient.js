@@ -215,12 +215,12 @@ class ApiClient {
       .catch(err => handleError(err));
   }
 
-  downloadProtocol(url, destination) {
+  downloadProtocol(path, destination) {
     if (isCordova()) {
-      return this.httpsClient.download(url, destination).catch(handleError);
+      return this.httpsClient.download(path, destination).catch(handleError);
     } else if (isElectron()) {
       return this.httpsClient
-        .get(url, { ...this.authHeader, responseType: 'arraybuffer' })
+        .get(path, { ...this.authHeader, responseType: 'arraybuffer' })
         .then(resp => new Uint8Array(resp.data));
     }
     return Promise.reject(new Error('Downloads not supported on this platform'));

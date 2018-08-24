@@ -105,22 +105,41 @@ class ProtocolImport extends PureComponent {
         </React.Fragment>
       );
     }
-    return { buttonContent, mainContent: content };
+
+    let headerContent;
+    if (showUrlForm) {
+      headerContent = (
+        <React.Fragment>
+          <h1>Fetch a protocol from another location</h1>
+          <p>
+            To import a protocol not on Server, enter its URL below.
+          </p>
+        </React.Fragment>
+      );
+    } else {
+      headerContent = (
+        <React.Fragment>
+          <h1>Fetch a protocol from Server</h1>
+          <p>
+            To use this feature, open Server on a computer connected to the same network as
+            this device.
+          </p>
+          <p>For information about using this feature, see our documentation.</p>
+        </React.Fragment>
+      );
+    }
+
+    return { buttonContent, headerContent, mainContent: content };
   }
 
   render() {
-    const { mainContent, buttonContent } = this.contentAreas();
+    const { headerContent, mainContent, buttonContent } = this.contentAreas();
     return (
       <div className="protocol-import">
         <Link to="/" className="protocol-import__close">
           <Icon name="close" />
         </Link>
-        <h1>Fetch a protocol from Server</h1>
-        <p>
-          To use this feature, open Server on a computer connected to the same network as
-          this device.
-        </p>
-        <p>For information about using this feature, see our documentation.</p>
+        { headerContent }
         <div className="protocol-import__content">
           {mainContent}
         </div>

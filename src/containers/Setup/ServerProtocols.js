@@ -58,7 +58,7 @@ class ServerProtocols extends Component {
             selectProtocol={(p) => {
               addSession();
               this.apiClient.addTrustedCert()
-                .then(() => downloadProtocol(p.downloadUrl, true));
+                .then(() => downloadProtocol(p.downloadPath, true));
             }}
           />
         }

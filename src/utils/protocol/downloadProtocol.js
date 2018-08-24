@@ -37,51 +37,50 @@ const downloadProtocol = inEnvironment((environment) => {
     const path = require('path');
     const electron = require('electron');
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
+    const destination = path.join(tempPath, getProtocolName());
 
-    return (uri, pairedServer) =>
-      getURL(uri)
-        .then((url) => {
-          const destination = path.join(tempPath, getProtocolName());
-          let promisedResponse;
-          if (pairedServer) {
-            promisedResponse = new ApiClient(pairedServer).downloadProtocol(url);
-          } else {
-            promisedResponse = request({ method: 'GET', encoding: null, uri: url.href });
-          }
-          return promisedResponse
-            .catch(networkError)
-            .then(data => writeFile(destination, data))
-            .catch(fileError)
-            .then(() => destination);
-        })
-        .catch(urlError);
+    return (uri, pairedServer) => {
+      let promisedResponse;
+      if (pairedServer) {
+        promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
+      } else {
+        promisedResponse = getURL(uri)
+          .catch(urlError)
+          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+      }
+
+      return promisedResponse
+        .catch(networkError)
+        .then(data => writeFile(destination, data))
+        .catch(fileError)
+        .then(() => destination);
+    };
   }
 
   if (environment === environments.CORDOVA) {
-    return (uri, pairedServer) =>
-      getURL(uri)
-        .then(url => [
-          url.href,
-          `cdvfile://localhost/temporary/${getProtocolName()}`,
-        ])
-        .catch(urlError)
-        .then(([url, destination]) => {
-          if (pairedServer) {
-            return new ApiClient(pairedServer)
-              // .addTrustedCert() is not required, assuming we've just fetched the protocol list
-              .downloadProtocol(url, destination)
-              .then(() => destination);
-          }
-          return new Promise((resolve, reject) => {
+    const destination = `cdvfile://localhost/temporary/${getProtocolName()}`;
+    return (uri, pairedServer) => {
+      let promisedResponse;
+      if (pairedServer) {
+        promisedResponse = new ApiClient(pairedServer)
+          // .addTrustedCert() is not required, assuming we've just fetched the protocol list
+          .downloadProtocol(uri, destination)
+          .then(() => destination);
+      } else {
+        promisedResponse = getURL(uri)
+          .then(url => url.href)
+          .catch(urlError)
+          .then(href => new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
             fileTransfer.download(
-              url,
+              href,
               destination,
               () => resolve(destination),
               error => reject(error),
             );
-          });
-        })
+          }));
+      }
+      return promisedResponse
         .catch((error) => {
           const getErrorMessage = ({ code }) => {
             if (code === 3) return networkError;
@@ -90,6 +89,7 @@ const downloadProtocol = inEnvironment((environment) => {
 
           getErrorMessage(error)(error);
         });
+    };
   }
 
   return () => Promise.reject(new Error('downloadProtocol() not available on platform'));

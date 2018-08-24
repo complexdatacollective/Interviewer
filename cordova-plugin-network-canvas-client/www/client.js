@@ -39,8 +39,9 @@ class NetworkCanvasClient {
     this.baseURL = baseURL;
   }
 
+  // @throws
   buildUrl(path) {
-    return `${this.baseURL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+    return new URL(path, this.baseURL).href;
   }
 
   /**
@@ -91,9 +92,9 @@ class NetworkCanvasClient {
     });
   }
 
-  download(url, destination) {
-    const sendArgs = [this.deviceId, url, destination];
+  download(path, destination) {
     return new Promise((resolve, reject) => {
+      const sendArgs = [this.deviceId, this.buildUrl(path), destination];
       exec(resolve, reject, ServiceName, Actions.download, sendArgs);
     });
   }
