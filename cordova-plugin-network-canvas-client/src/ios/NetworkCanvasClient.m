@@ -5,8 +5,7 @@
 //  This plugin requires the Cordova File Plugin:
 //  https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-file/
 //
-//  Created by Bryan Fox on 8/13/18.
-//  Copyright © 2018 Codaco. All rights reserved.
+//  See LICENSE file at project root or https://github.com/codaco/Network-Canvas/blob/master/LICENSE
 //
 
 #import "NetworkCanvasClient.h"

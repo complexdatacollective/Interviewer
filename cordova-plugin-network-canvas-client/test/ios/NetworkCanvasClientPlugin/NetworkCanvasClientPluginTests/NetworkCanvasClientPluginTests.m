@@ -2,8 +2,7 @@
 //  NetworkCanvasClientPluginTests.m
 //  NetworkCanvasClientPluginTests
 //
-//  Created by Bryan Fox on 8/22/18.
-//  Copyright © 2018 Codaco. All rights reserved.
+//  See LICENSE file at project root or https://github.com/codaco/Network-Canvas/blob/master/LICENSE
 //
 
 #import <XCTest/XCTest.h>

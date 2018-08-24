@@ -2,8 +2,7 @@
 //  NetworkCanvasClient.h
 //  NetworkCanvas
 //
-//  Created by Bryan Fox on 8/13/18.
-//  Copyright © 2018 Codaco. All rights reserved.
+//  See LICENSE file at project root or https://github.com/codaco/Network-Canvas/blob/master/LICENSE
 //
 
 #import <Cordova/CDV.h>
