@@ -11,7 +11,6 @@ export default function reducer(state = initialState, action = {}) {
       if (action.server) {
         const pairingInfo = {
           ...action.server,
-          serverCert: action.serverCert,
           deviceId: action.deviceId,
           deviceSecret: action.deviceSecret,
         };

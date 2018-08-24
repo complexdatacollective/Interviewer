@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { addPairingUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
 import { Button, Icon } from '../../ui/components';
 
+/**
+ * @class Renders a form for user to manually enter Server connection info.
+ */
 class ServerAddressForm extends PureComponent {
   constructor(props) {
     super(props);
