@@ -16,25 +16,6 @@ const getURL = uri =>
     }
   });
 
-// Browser http request to support downloads from NC Server
-// Matches interface from request-promise-native, which is needed
-// to support URL imports from servers without lenient CORS support.
-const xhrRequest = ({ method, uri }) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open(method, uri);
-  xhr.responseType = 'arraybuffer';
-  const promise = new Promise((resolve, reject) => {
-    xhr.addEventListener('load', function onLoad() {
-      resolve(new Uint8Array(this.response));
-    });
-    xhr.addEventListener('error', (err) => {
-      reject(err);
-    });
-  });
-  xhr.send();
-  return promise;
-};
-
 const getProtocolName = () => uuid(); // generate a filename
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
@@ -57,12 +38,17 @@ const downloadProtocol = inEnvironment((environment) => {
     const electron = require('electron');
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
 
-    return (uri, fromNCServer) =>
+    return (uri, pairedServer) =>
       getURL(uri)
         .then((url) => {
           const destination = path.join(tempPath, getProtocolName());
-          const req = fromNCServer ? xhrRequest : request;
-          return req({ method: 'GET', encoding: null, uri: url.href })
+          let promisedResponse;
+          if (pairedServer) {
+            promisedResponse = new ApiClient(pairedServer).downloadProtocol(url);
+          } else {
+            promisedResponse = request({ method: 'GET', encoding: null, uri: url.href });
+          }
+          return promisedResponse
             .catch(networkError)
             .then(data => writeFile(destination, data))
             .catch(fileError)
