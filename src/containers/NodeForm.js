@@ -43,18 +43,20 @@ const makeGetInitialValuesFromProps = () =>
 class NodeForm extends Component {
   constructor(props) {
     super(props);
+    this.modalRef = React.createRef();
     this.state = {
       addAnotherNode: false,
     };
   }
 
   onSubmit = (formData, dispatch, form) => {
-    this.props.closeModal(this.props.name);
     this.props.onSubmit(formData, dispatch, form);
 
     if (this.state.addAnotherNode) {
       this.props.resetValues(form.form);
-      this.props.openModal(this.props.name);
+      this.modalRef.current.scrollContentsToTop();
+    } else {
+      this.props.closeModal(this.props.name);
     }
   };
 
@@ -102,7 +104,7 @@ class NodeForm extends Component {
       />);
 
     return (
-      <Modal name={name} title={title} className={modalClassNames}>
+      <Modal name={name} title={title} className={modalClassNames} ref={this.modalRef}>
         {formElement}
       </Modal>
     );
