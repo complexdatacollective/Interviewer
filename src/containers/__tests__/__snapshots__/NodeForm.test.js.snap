@@ -2,7 +2,6 @@
 
 exports[`<NodeForm /> should render 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <NodeForm
     closeModal={[Function]}
@@ -35,7 +34,7 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
       "children": <FormWizard
         autoFocus={true}
@@ -80,7 +79,9 @@ ShallowWrapper {
       "name": "baz",
       "title": "The form title",
     },
-    "ref": null,
+    "ref": Object {
+      "current": null,
+    },
     "rendered": Object {
       "instance": null,
       "key": undefined,
@@ -124,13 +125,16 @@ ShallowWrapper {
       "rendered": null,
       "type": [Function],
     },
-    "type": [Function],
+    "type": Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "class",
+      "nodeType": "function",
       "props": Object {
         "children": <FormWizard
           autoFocus={true}
@@ -175,7 +179,9 @@ ShallowWrapper {
         "name": "baz",
         "title": "The form title",
       },
-      "ref": null,
+      "ref": Object {
+        "current": null,
+      },
       "rendered": Object {
         "instance": null,
         "key": undefined,
@@ -219,15 +225,30 @@ ShallowWrapper {
         "rendered": null,
         "type": [Function],
       },
-      "type": [Function],
+      "type": Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
     },
   ],
   Symbol(enzyme.__options__): Object {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
       },
     },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
   },
 }
 `;
