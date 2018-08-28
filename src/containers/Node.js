@@ -6,6 +6,7 @@ import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
 import { getNetwork, getNodeLabelFunction } from '../selectors/interface';
 import { getNodeLabelWorkerUrl, makeGetNodeColor } from '../selectors/protocol';
+import { NodeModelDataProperty } from '../ducks/modules/network';
 
 const getNodeColor = makeGetNodeColor();
 
@@ -39,8 +40,11 @@ class Node extends PureComponent {
     if (!this.webWorker) {
       this.webWorker = new WorkerAgent(url);
     }
-    // TODO: fix prop commingling (#596); this shouldn't be needed
-    const node = { ...this.props, dispatch: null, getLabel: null, workerUrl: null };
+
+    // Create an object containing the node's model properties
+    const node = { ...this.props[NodeModelDataProperty] };
+
+    // Send the worker the node model properties along with the network
     const msgPromise = this.webWorker.sendMessageAsync({
       node,
       network: this.props.workerNetwork || {},

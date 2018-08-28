@@ -14,7 +14,7 @@ import {
   flow,
   isEmpty,
 } from 'lodash';
-import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
+import { networkEdges, makeGetNodeDisplayVariable, makeNetworkNodesForType } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
 import { NodePrimaryKeyProperty } from '../ducks/modules/network';
@@ -69,7 +69,7 @@ const getLayoutOptions = createDeepEqualSelector(
 
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
-  makeGetDisplayVariable(),
+  makeGetNodeDisplayVariable(),
   (sort, displayVariable) => (sort && !isEmpty(sort) ? { sortOrderBy: sort } : { sortOrderBy: [{ property: displayVariable, direction: 'asc' }] }),
 );
 
@@ -100,7 +100,7 @@ export const makeGetSociogramOptions = () =>
   );
 
 const makeGetUnplacedNodes = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject, getLayoutOptions,
@@ -151,7 +151,7 @@ const edgesOfTypes = (edges, types) =>
   )(edges);
 
 export const makeDisplayEdgesForPrompt = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject,
@@ -169,7 +169,7 @@ export const makeDisplayEdgesForPrompt = () => {
 };
 
 export const makeGetPlacedNodes = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject,

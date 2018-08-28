@@ -1,9 +1,12 @@
-import { reject, findIndex, isMatch, omit } from 'lodash';
+import { reject, findIndex, isMatch, omit, merge } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
-// Primary key used on node data
+// Property name for the primary key for nodes
 export const NodePrimaryKeyProperty = '_uid';
+
+// Property name for node "model" properties
+export const NodeModelDataProperty = 'properties';
 
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
@@ -15,6 +18,8 @@ export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
 export const UNSET_EGO = 'UNSET_EGO';
 
+
+// Initial network model structure
 const initialState = {
   ego: {},
   nodes: [],
@@ -32,18 +37,36 @@ function edgeExists(edges, edge) {
   );
 }
 
-// Generates test alters for development,
-function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
-  const withAttrs = newNode =>
-    ({ ...additionalAttributes, [NodePrimaryKeyProperty]: uuidv4(), ...newNode });
-  return oldNodes.concat(newNodes.map(withAttrs));
+/**
+ * existingNodes - Existing network.nodes
+ * netNodes - nodes to be added to the network
+ * additionalAttributes - node model properties
+*/
+function getNodesWithBatchAdd(existingNodes, newNodes, nodeModelData) {
+  // Create a function to add additional attributes to the proto-node
+  const withModelData = (newNode) => {
+    const withUUID = {
+      [NodePrimaryKeyProperty]: uuidv4(),
+      ...newNode,
+    };
+
+    return merge(withUUID, nodeModelData);
+  };
+
+  return existingNodes.concat(newNodes.map(withModelData));
 }
 
-
+/**
+ * @param {array} nodes - an array of objects representing nodes
+ * @param {object} updatedNode - object representing the node to be updated and its new properties
+ * @param {boolean} full - if the entire node should be overwritten
+ */
 function getUpdatedNodes(nodes, updatedNode, full) {
   const updatedNodes = nodes.map((node) => {
+    // Skip nodes where the primary key doesn't match
     if (node[NodePrimaryKeyProperty] !== updatedNode[NodePrimaryKeyProperty]) { return node; }
 
+    // if we are overwriting the entire node
     if (full) {
       return {
         ...updatedNode,
@@ -51,12 +74,15 @@ function getUpdatedNodes(nodes, updatedNode, full) {
       };
     }
 
+    // Else return the node properties overriden by properties present in updatedNode
     return {
       ...node,
       ...updatedNode,
       [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
     };
   });
+
+  // Return the modified array of nodes
   return updatedNodes;
 }
 
@@ -68,12 +94,20 @@ export default function reducer(state = initialState, action = {}) {
         nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
       };
     }
+    /**
+     * TOGGLE_NODE_ATTRIBUTES
+     * Used to toggle the value of a boolean variable between states when the node is tapped.
+     */
     case TOGGLE_NODE_ATTRIBUTES: {
+      // attributes = object containing node properties, minus _uid
       const attributes = omit(action.attributes, [NodePrimaryKeyProperty]);
 
+      // Map over the nodes
       const updatedNodes = state.nodes.map((node) => {
+        // Skip nodes with different primary keys
         if (node[NodePrimaryKeyProperty] !== action[NodePrimaryKeyProperty]) { return node; }
 
+        //
         if (isMatch(node, attributes)) {
           return omit(node, Object.getOwnPropertyNames(attributes));
         }

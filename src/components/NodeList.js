@@ -98,7 +98,10 @@ class NodeList extends Component {
       exit,
     } = this.state;
 
-    const isSource = !!find(nodes, [NodePrimaryKeyProperty, get(meta, NodePrimaryKeyProperty, null)]);
+    const isSource = !!find(
+      nodes,
+      [NodePrimaryKeyProperty, get(meta, NodePrimaryKeyProperty, null)],
+    );
     const isValidTarget = !isSource && willAccept;
     const isHovering = isValidTarget && isOver;
 

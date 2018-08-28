@@ -83,7 +83,9 @@ class ListSelect extends Component {
   /**
     * @param {object} node
     */
-  selected = node => !!this.props.selectedNodes.find(current => current[NodePrimaryKeyProperty] === node[NodePrimaryKeyProperty]);
+  selected = node =>
+    !!this.props.selectedNodes
+      .find(current => current[NodePrimaryKeyProperty] === node[NodePrimaryKeyProperty]);
 
   /**
     * @param property to sort by

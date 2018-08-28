@@ -141,7 +141,7 @@ describe('interface selector', () => {
     });
 
     it('should get displayVariable', () => {
-      const selected = Interface.makeGetDisplayVariable();
+      const selected = Interface.makeGetNodeDisplayVariable();
       expect(selected(mockState, mockProps)).toEqual('name');
     });
 
@@ -153,8 +153,8 @@ describe('interface selector', () => {
       expect(getLabel(externalNode4)).toEqual('4');
     });
 
-    it('makeNetworkNodesForSubject()', () => {
-      const selected = Interface.makeNetworkNodesForSubject();
+    it('makeNetworkNodesForType()', () => {
+      const selected = Interface.makeNetworkNodesForType();
       expect(selected(mockState, mockProps)).toEqual([
         personNode,
         closeFriendNode,

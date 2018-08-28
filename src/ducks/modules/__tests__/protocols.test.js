@@ -7,7 +7,7 @@ const initialState = [
   {
     name: 'Teaching Protocol',
     description: 'version 4.0.0',
-    path: 'education.netcanvas',
+    path: 'teaching-protocol.netcanvas',
     isFactoryProtocol: true,
   },
   {

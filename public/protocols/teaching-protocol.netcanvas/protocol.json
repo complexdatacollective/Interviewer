@@ -74,40 +74,10 @@
               "maxLength": 10
             }
           },
-          "uid": {
-            "label": "Unique id",
-            "description": "Unique id",
-            "type": "text"
-          },
-          "type": {
-            "label": "Type",
-            "description": "Type",
-            "type": "text"
-          },
           "age": {
             "label": "Age",
             "description": "Age",
             "type": "number"
-          },
-          "createdIndex": {
-            "label": "Created Index",
-            "description": "Created Index",
-            "type": "number"
-          },
-          "itemType": {
-            "label": "Item type",
-            "description": "Item type",
-            "type": "text"
-          },
-          "stageId": {
-            "label": "Stage id",
-            "description": "Stage id",
-            "type": "text"
-          },
-          "promptId": {
-            "label": "Prompt id",
-            "description": "Prompt id",
-            "type": "text"
           },
           "closenessLayout": {
             "label": "Closeness layout",
@@ -176,214 +146,244 @@
     "schoolPupils": {
       "nodes": [
         {
-          "uid": "person_1",
           "type": "person",
-          "name": "F. Anita",
-          "nickname": "Annie",
-          "age": "23"
+          "properties": {
+            "name": "F. Anita",
+            "nickname": "Annie",
+            "age": "23"
+          }
         },
         {
-          "uid": "person_2",
           "type": "person",
-          "name": "H. Barry",
-          "nickname": "Baz",
-          "age": "31"
+          "properties": {
+            "name": "H. Barry",
+            "nickname": "Baz",
+            "age": "31"
+          }
         },
         {
-          "uid": "person_3",
           "type": "person",
-          "name": "Carlito",
-          "nickname": "Carl",
-          "age": "25"
+          "properties": {
+            "name": "Carlito",
+            "nickname": "Carl",
+            "age": "25"
+          }
         },
         {
-          "uid": "person_4",
           "type": "person",
-          "name": "Dee",
-          "nickname": "Dee",
-          "age": "72"
+          "properties": {
+            "name": "Dee",
+            "nickname": "Dee",
+            "age": "72"
+          }
         },
         {
-          "uid": "person_5",
           "type": "person",
-          "name": "A. Eugine",
-          "nickname": "Eu",
-          "age": "27"
+          "properties": {
+            "name": "A. Eugine",
+            "nickname": "Eu",
+            "age": "27"
+          }
         },
         {
-          "uid": "person_6",
           "type": "person",
-          "name": "Gerald",
-          "nickname": "Gary",
-          "age": "33"
+          "properties": {
+            "name": "Gerald",
+            "nickname": "Gary",
+            "age": "33"
+          }
         },
         {
-          "uid": "person_7",
           "type": "person",
-          "name": "Hannah L.",
-          "nickname": "Hannah",
-          "age": "81"
+          "properties": {
+            "name": "Hannah L.",
+            "nickname": "Hannah",
+            "age": "81"
+          }
         },
         {
-          "uid": "person_8",
           "type": "person",
-          "name": "Isabella",
-          "nickname": "Izzy",
-          "age": "25"
+          "properties": {
+            "name": "Isabella",
+            "nickname": "Izzy",
+            "age": "25"
+          }
         },
         {
-          "uid": "person_9",
           "type": "person",
-          "name": "Jacob",
-          "nickname": "Jake",
-          "age": "52"
+          "properties": {
+            "name": "Jacob",
+            "nickname": "Jake",
+            "age": "52"
+          }
         },
         {
-          "uid": "person_10",
           "type": "person",
-          "name": "Kaylee",
-          "nickname": "Lee",
-          "age": "57"
+          "properties": {
+            "name": "Kaylee",
+            "nickname": "Lee",
+            "age": "57"
+          }
         },
         {
-          "uid": "person_11",
           "type": "person",
-          "name": "Lily",
-          "nickname": "Lil",
-          "age": "93"
+          "properties": {
+            "name": "Lily",
+            "nickname": "Lil",
+            "age": "93"
+          }
         },
         {
-          "uid": "person_12",
           "type": "person",
-          "name": "Michael",
-          "nickname": "Mike",
-          "age": "91"
+          "properties": {
+            "name": "Michael",
+            "nickname": "Mike",
+            "age": "91"
+          }
         },
         {
-          "uid": "person_13",
           "type": "person",
-          "name": "Noah",
-          "nickname": "Nole",
-          "age": "65"
+          "properties": {
+            "name": "Noah",
+            "nickname": "Nole",
+            "age": "65"
+          }
         },
         {
-          "uid": "person_14",
           "type": "person",
-          "name": "K. Olivia",
-          "nickname": "Olivia",
-          "age": "42"
+          "properties": {
+            "name": "K. Olivia",
+            "nickname": "Olivia",
+            "age": "42"
+          }
         },
         {
-          "uid": "person_15",
           "type": "person",
-          "name": "Penelope",
-          "nickname": "Nellie",
-          "age": "47"
+          "properties": {
+            "name": "Penelope",
+            "nickname": "Nellie",
+            "age": "47"
+          }
         },
         {
-          "uid": "person_16",
           "type": "person",
-          "name": "Quentin",
-          "nickname": "Quinn",
-          "age": "33"
+          "properties": {
+            "name": "Quentin",
+            "nickname": "Quinn",
+            "age": "33"
+          }
         },
         {
-          "uid": "person_17",
           "type": "person",
-          "name": "Y. Randall",
-          "nickname": "Randy",
-          "age": "51"
+          "properties": {
+            "name": "Y. Randall",
+            "nickname": "Randy",
+            "age": "51"
+          }
         },
         {
-          "uid": "person_18",
           "type": "person",
-          "name": "Sophia",
-          "nickname": "Fia",
-          "age": "85"
+          "properties": {
+            "name": "Sophia",
+            "nickname": "Fia",
+            "age": "85"
+          }
         },
         {
-          "uid": "person_19",
           "type": "person",
-          "name": "Tatiana",
-          "nickname": "Ana",
-          "age": "72"
+          "properties": {
+            "name": "Tatiana",
+            "nickname": "Ana",
+            "age": "72"
+          }
         },
         {
-          "uid": "person_20",
           "type": "person",
-          "name": "Uriel",
-          "nickname": "Uri",
-          "age": "17"
+          "properties": {
+            "name": "Uriel",
+            "nickname": "Uri",
+            "age": "17"
+          }
         },
         {
-          "uid": "person_21",
           "type": "person",
-          "name": "Vanessa",
-          "nickname": "Ness",
-          "age": "56"
+          "properties": {
+            "name": "Vanessa",
+            "nickname": "Ness",
+            "age": "56"
+          }
         },
         {
-          "uid": "person_22",
           "type": "person",
-          "name": "William",
-          "nickname": "Bill",
-          "age": "61"
+          "properties": {
+            "name": "William",
+            "nickname": "Bill",
+            "age": "61"
+          }
         },
         {
-          "uid": "person_23",
           "type": "person",
-          "name": "Xavier",
-          "nickname": "X",
-          "age": "65"
+          "properties": {
+            "name": "Xavier",
+            "nickname": "X",
+            "age": "65"
+          }
         },
         {
-          "uid": "person_24",
           "type": "person",
-          "name": "Yolanda",
-          "nickname": "Landa",
-          "age": "29"
+          "properties": {
+            "name": "Yolanda",
+            "nickname": "Landa",
+            "age": "29"
+          }
         },
         {
-          "uid": "person_25",
           "type": "person",
-          "name": "T. Zoe",
-          "nickname": "Zoe",
-          "age": "87"
+          "properties": {
+            "name": "T. Zoe",
+            "nickname": "Zoe",
+            "age": "87"
+          }
         },
         {
-          "uid": "person_26",
           "type": "person",
-          "name": "Fernando",
-          "nickname": "Finn",
-          "age": "63"
+          "properties": {
+            "name": "Fernando",
+            "nickname": "Finn",
+            "age": "63"
+          }
         },
         {
-          "uid": "person_27",
           "type": "person",
-          "name": "Daniella",
-          "nickname": "Dani",
-          "age": "71"
+          "properties": {
+            "name": "Daniella",
+            "nickname": "Dani",
+            "age": "71"
+          }
         },
         {
-          "uid": "person_28",
           "type": "person",
-          "name": "P. Samuel",
-          "nickname": "Sammy",
-          "age": "20"
+          "properties": {
+            "name": "P. Samuel",
+            "nickname": "Sammy",
+            "age": "20"
+          }
         },
         {
-          "uid": "person_29",
           "type": "person",
-          "name": "Brooklyn",
-          "nickname": "Brook",
-          "age": "24"
+          "properties": {
+            "name": "Brooklyn",
+            "nickname": "Brook",
+            "age": "24"
+          }
         },
         {
-          "uid": "person_30",
           "type": "person",
-          "name": "Christopher",
-          "nickname": "Topher",
-          "age": "66"
+          "properties": {
+            "name": "Christopher",
+            "nickname": "Topher",
+            "age": "66"
+          }
         }
       ]
     }

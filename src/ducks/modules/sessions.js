@@ -88,8 +88,7 @@ export default function reducer(state = initialState, action = {}) {
  * Add a node or nodes to the state.
  *
  * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalAttributes] shared attributes to apply to every
- *  new node
+ * @param {Object} [additionalAttributes] shared attributes to apply to every new node
  *
  * @memberof! NetworkActionCreators
  */

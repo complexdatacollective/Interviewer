@@ -35,7 +35,7 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNodes({ ...formData, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...formData }, { ...this.props.newNodeAttributes });
     }
   }
 
@@ -70,10 +70,11 @@ class NameGenerator extends Component {
   onDrop = (item) => {
     const node = { ...item.meta };
 
+    // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptId') || has(node, 'stageId')) {
       this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
     } else {
-      this.props.addNodes({ ...node, ...this.props.newNodeAttributes });
+      this.props.addNodes({ ...node }, { ...this.props.newNodeAttributes });
     }
   }
 
