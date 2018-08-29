@@ -35,7 +35,9 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNodes({ ...formData }, { ...this.props.newNodeAttributes });
+      console.log(formData);
+      console.log(this.props.newNodeAttributes);
+      this.props.addNodes({ ...this.props.newNodeAttributes }, { ...formData });
     }
   }
 

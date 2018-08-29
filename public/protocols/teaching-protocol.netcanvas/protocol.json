@@ -147,7 +147,7 @@
       "nodes": [
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "F. Anita",
             "nickname": "Annie",
             "age": "23"
@@ -155,7 +155,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "H. Barry",
             "nickname": "Baz",
             "age": "31"
@@ -163,7 +163,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Carlito",
             "nickname": "Carl",
             "age": "25"
@@ -171,7 +171,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Dee",
             "nickname": "Dee",
             "age": "72"
@@ -179,7 +179,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "A. Eugine",
             "nickname": "Eu",
             "age": "27"
@@ -187,7 +187,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Gerald",
             "nickname": "Gary",
             "age": "33"
@@ -195,7 +195,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Hannah L.",
             "nickname": "Hannah",
             "age": "81"
@@ -203,7 +203,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Isabella",
             "nickname": "Izzy",
             "age": "25"
@@ -211,7 +211,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Jacob",
             "nickname": "Jake",
             "age": "52"
@@ -219,7 +219,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Kaylee",
             "nickname": "Lee",
             "age": "57"
@@ -227,7 +227,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Lily",
             "nickname": "Lil",
             "age": "93"
@@ -235,7 +235,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Michael",
             "nickname": "Mike",
             "age": "91"
@@ -243,7 +243,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Noah",
             "nickname": "Nole",
             "age": "65"
@@ -251,7 +251,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "K. Olivia",
             "nickname": "Olivia",
             "age": "42"
@@ -259,7 +259,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Penelope",
             "nickname": "Nellie",
             "age": "47"
@@ -267,7 +267,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Quentin",
             "nickname": "Quinn",
             "age": "33"
@@ -275,7 +275,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Y. Randall",
             "nickname": "Randy",
             "age": "51"
@@ -283,7 +283,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Sophia",
             "nickname": "Fia",
             "age": "85"
@@ -291,7 +291,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Tatiana",
             "nickname": "Ana",
             "age": "72"
@@ -299,7 +299,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Uriel",
             "nickname": "Uri",
             "age": "17"
@@ -307,7 +307,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Vanessa",
             "nickname": "Ness",
             "age": "56"
@@ -315,7 +315,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "William",
             "nickname": "Bill",
             "age": "61"
@@ -323,7 +323,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Xavier",
             "nickname": "X",
             "age": "65"
@@ -331,7 +331,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Yolanda",
             "nickname": "Landa",
             "age": "29"
@@ -339,7 +339,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "T. Zoe",
             "nickname": "Zoe",
             "age": "87"
@@ -347,7 +347,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Fernando",
             "nickname": "Finn",
             "age": "63"
@@ -355,7 +355,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Daniella",
             "nickname": "Dani",
             "age": "71"
@@ -363,7 +363,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "P. Samuel",
             "nickname": "Sammy",
             "age": "20"
@@ -371,7 +371,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Brooklyn",
             "nickname": "Brook",
             "age": "24"
@@ -379,7 +379,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Christopher",
             "nickname": "Topher",
             "age": "66"

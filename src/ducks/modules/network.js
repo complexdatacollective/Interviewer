@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, merge } from 'lodash';
+import { reject, findIndex, isMatch, omit } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -6,7 +6,7 @@ import uuidv4 from '../../utils/uuid';
 export const NodePrimaryKeyProperty = '_uid';
 
 // Property name for node "model" properties
-export const NodeModelDataProperty = 'properties';
+export const NodeAttributesProperty = 'attributes';
 
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
@@ -42,18 +42,18 @@ function edgeExists(edges, edge) {
  * netNodes - nodes to be added to the network
  * additionalAttributes - node model properties
 */
-function getNodesWithBatchAdd(existingNodes, newNodes, nodeModelData) {
-  // Create a function to add additional attributes to the proto-node
-  const withModelData = (newNode) => {
-    const withUUID = {
-      [NodePrimaryKeyProperty]: uuidv4(),
-      ...newNode,
-    };
+function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
+  // Create a function to create a UUID and merge node attributes
+  const withModelandAttributeData = newNode => ({
+    [NodePrimaryKeyProperty]: uuidv4(),
+    ...newNode,
+    [NodeAttributesProperty]: {
+      ...newNode[NodeAttributesProperty],
+      ...nodeAttributeData,
+    },
+  });
 
-    return merge(withUUID, nodeModelData);
-  };
-
-  return existingNodes.concat(newNodes.map(withModelData));
+  return existingNodes.concat(newNodes.map(withModelandAttributeData));
 }
 
 /**

@@ -94,6 +94,8 @@ export default function reducer(state = initialState, action = {}) {
  */
 const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
   const { session } = getState();
+  console.log('session.addNodes');
+  console.log(nodes, additionalAttributes);
 
   let nodeOrNodes = nodes;
   if (!isArray(nodeOrNodes)) {
