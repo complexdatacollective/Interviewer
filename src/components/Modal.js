@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import animejs from 'animejs';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import modal from '../behaviours/modal';
 import { Modal as ModalTransition } from '../components/Transition';
+import { getCSSVariableAsNumber } from '../utils/CSSVariables';
 
 /**
   * Renders a modal window.
@@ -15,7 +17,11 @@ class Modal extends Component {
 
   scrollContentsToTop() {
     if (this.contentRef.current) {
-      this.contentRef.current.scrollTop = 0;
+      animejs({
+        targets: this.contentRef.current,
+        scrollTop: 0,
+        duration: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+      });
     }
   }
 
