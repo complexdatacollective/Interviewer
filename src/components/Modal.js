@@ -4,7 +4,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import modal from '../behaviours/modal';
 import { Modal as ModalTransition } from '../components/Transition';
-import { getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../utils/CSSVariables';
 
 /**
   * Renders a modal window.
@@ -21,6 +21,7 @@ class Modal extends Component {
         targets: this.contentRef.current,
         scrollTop: 0,
         duration: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+        easing: getCSSVariableAsObject('--animation-easing-js'),
       });
     }
   }
