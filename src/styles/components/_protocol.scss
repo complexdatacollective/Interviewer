@@ -3,4 +3,9 @@
   background-color: palette('dark-background');
   width: 100vw;
   height: 100vh;
+
+  &__content {
+    background-color: palette('background');
+    height: 100vh;
+  }
 }

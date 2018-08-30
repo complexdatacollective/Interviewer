@@ -16,7 +16,7 @@ const Protocol = (
 
   return (
     <div className="protocol">
-      <TransitionGroup>
+      <TransitionGroup className="protocol__content">
         <StageTransition key={stage.id}>
           <Stage stage={stage} promptId={promptId} pathPrefix={`/session/${sessionId}/${protocolType}/${protocolPath}`} stageIndex={stageIndex} />
         </StageTransition>

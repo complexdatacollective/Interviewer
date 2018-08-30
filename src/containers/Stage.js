@@ -46,8 +46,8 @@ class Stage extends Component {
             <Icon onClick={this.onClickBack} name="chevron-up" />
           </div>
           <ProgressBar percentProgress={percentProgress} />
-          <div className="stage__control-nav stage__control-nav--next">
-            <Icon onClick={this.onClickNext} name="chevron-down" />
+          <div className="stage__control-nav stage__control-nav--next" onClick={this.onClickNext} >
+            <Icon name="chevron-down" />
           </div>
         </div>
         <div className="stage__interface">

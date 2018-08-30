@@ -40,6 +40,11 @@
         background-color: var(--light-background);
         height: 6rem;
         width: 6rem;
+        transition: background-color, var(--animation-duration-standard), var(--animation-duration-standard);
+
+        &:hover {
+          background-color: var(--primary);
+        }
       }
 
       &--back {

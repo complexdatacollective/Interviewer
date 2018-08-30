@@ -13,6 +13,7 @@ const enterAnimation = {
   opacity: [0, 1],
   zIndex: [2, 2],
   elasticity: 0,
+  translateY: ['200%', 0],
   easing: getCSSVariableAsObject('--animation-easing-js'),
   duration: duration.enter,
   delay: duration.exit,
@@ -22,6 +23,7 @@ const exitAnimation = {
   opacity: [1, 0],
   zIndex: [1, 1],
   elasticity: 0,
+  translateY: [0, '-200%'],
   easing: getCSSVariableAsObject('--animation-easing-js'),
   duration: duration.exit,
 };
