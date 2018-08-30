@@ -13,6 +13,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { getPairedServer } from '../../selectors/servers';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -170,7 +171,7 @@ function mapStateToProps(state) {
     currentSession: getCurrentSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.session,
-    defaultServer: state.servers && state.servers.paired[0],
+    defaultServer: getPairedServer(state),
     variableRegistry: protocolRegistry(state),
   };
 }

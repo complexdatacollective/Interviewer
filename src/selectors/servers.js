@@ -5,8 +5,8 @@ const pairedServers = state => state.servers.paired;
 // Servers are considered equal if they use the same URL
 const getPairedServer = createDeepEqualSelector(
   pairedServers,
-  // TODO: shape will change to storing only a single server; pick first for now
-  servers => servers[0] || null,
+  // TODO: shape will change to storing only a single server; pick last for now
+  servers => servers[servers.length - 1] || null,
 );
 
 export {
