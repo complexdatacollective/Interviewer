@@ -36,7 +36,7 @@ class Stage extends Component {
   }
 
   render() {
-    const { stage, percentProgress } = this.props;
+    const { stage, percentProgress, promptId } = this.props;
     const CurrentInterface = getInterface(stage.type);
 
     return (
@@ -53,7 +53,7 @@ class Stage extends Component {
         <div className="stage__interface">
           <StageErrorBoundary>
             { CurrentInterface &&
-              <CurrentInterface stage={stage} />
+              <CurrentInterface stage={stage} promptId={promptId} />
             }
           </StageErrorBoundary>
         </div>
@@ -72,12 +72,14 @@ Stage.propTypes = {
   isFirstPrompt: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
+  promptId: ProgressBar.number,
   percentProgress: PropTypes.number,
 };
 
 Stage.defaultProps = {
   percentProgress: 0,
   pathPrefix: '',
+  promptId: 0,
 };
 
 function mapStateToProps(state, ownProps) {

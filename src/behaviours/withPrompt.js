@@ -61,9 +61,9 @@ export default function withPrompt(WrappedComponent) {
     promptIndex: 0,
   };
 
-  function mapStateToProps(state) {
+  function mapStateToProps(state, ownProps) {
     return {
-      promptIndex: getPromptForCurrentSession(state),
+      promptIndex: ownProps.promptId || getPromptForCurrentSession(state),
     };
   }
 
