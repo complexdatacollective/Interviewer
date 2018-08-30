@@ -9,11 +9,12 @@ import cx from 'classnames';
 
 import { Button, ToggleInput } from '../ui/components';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { NodeAttributesProperty } from '../ducks/modules/network';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
 import { makeRehydrateFields } from '../selectors/forms';
 
-const propNode = (_, props) => props.node;
+const propNodeAttributes = (_, props) => props.node && props.node[NodeAttributesProperty];
 
 const makePropFieldVariables = () =>
   createSelector(
@@ -32,8 +33,8 @@ const makeGetInitialValuesFromProps = () =>
   createSelector(
     makePropFieldVariables(),
     makeGetPropFieldValues(),
-    propNode,
-    (fields, values, node) => ({ ...values, ...pick(node, fields) }),
+    propNodeAttributes,
+    (fields, values, nodeAttributes) => ({ ...values, ...pick(nodeAttributes, fields) }),
   );
 
 /**
@@ -121,7 +122,7 @@ NodeForm.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   entity: PropTypes.string.isRequired,
-  node: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
+  node: PropTypes.Object,
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
   showAddAnotherToggle: PropTypes.bool,

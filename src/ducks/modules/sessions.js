@@ -94,8 +94,6 @@ export default function reducer(state = initialState, action = {}) {
  */
 const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
   const { session } = getState();
-  console.log('session.addNodes');
-  console.log(nodes, additionalAttributes);
 
   let nodeOrNodes = nodes;
   if (!isArray(nodeOrNodes)) {
@@ -109,14 +107,14 @@ const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
   });
 };
 
-const updateNode = (node, full = false) => (dispatch, getState) => {
+const updateNode = (node, additionalAttributes = false) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({
     type: UPDATE_NODE,
     sessionId: session,
     node,
-    full,
+    additionalAttributes,
   });
 };
 

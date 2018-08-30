@@ -35,8 +35,6 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      console.log(formData);
-      console.log(this.props.newNodeAttributes);
       this.props.addNodes({ ...this.props.newNodeAttributes }, { ...formData });
     }
   }
@@ -47,7 +45,7 @@ class NameGenerator extends Component {
    */
   onSubmitEditNode = (formData) => {
     if (formData) {
-      this.props.updateNode({ ...this.state.selectedNode, ...formData });
+      this.props.updateNode({ ...this.state.selectedNode }, { ...formData });
     }
   }
 

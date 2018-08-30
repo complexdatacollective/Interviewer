@@ -61,20 +61,23 @@ function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
  * @param {object} updatedNode - object representing the node to be updated and its new properties
  * @param {boolean} full - if the entire node should be overwritten
  */
-function getUpdatedNodes(nodes, updatedNode, full) {
+function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
+  // Iterate over the nodes list
   const updatedNodes = nodes.map((node) => {
     // Skip nodes where the primary key doesn't match
     if (node[NodePrimaryKeyProperty] !== updatedNode[NodePrimaryKeyProperty]) { return node; }
 
-    // if we are overwriting the entire node
-    if (full) {
+    // if we have an attributes payload, merge with any existing attributes
+    if (nodeAttributeData) {
       return {
+        ...node,
         ...updatedNode,
+        [NodeAttributesProperty]: nodeAttributeData,
         [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
       };
     }
 
-    // Else return the node properties overriden by properties present in updatedNode
+    // If no attribute payload, just merge the new node data with the existing
     return {
       ...node,
       ...updatedNode,
