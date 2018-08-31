@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, has, reject } from 'lodash';
+import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
@@ -147,7 +147,6 @@ export const makeNetworkNodesForType = () => {
   );
 };
 
-
 /**
  * makeNetworkNodesForPrompt
  * Take the "additional attributes" specified by the current prompt, and filter nodes of the current
@@ -155,12 +154,14 @@ export const makeNetworkNodesForType = () => {
 */
 
 export const makeNetworkNodesForPrompt = () => {
+  console.log('makeNetworkNodesForPrompt()');
   const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject, getAttributes,
-    (nodes, attributes) => filter(nodes, node => !node[NodeAttributesProperty][attributes]),
+    (nodes, attributes) =>
+      filter(nodes, node => isMatch(node[NodeAttributesProperty], attributes)),
   );
 };
 
@@ -176,6 +177,7 @@ export const makeNetworkNodesForOtherPrompts = () => {
 
   return createSelector(
     networkNodesForSubject, getAttributes,
-    (nodes, attributes) => reject(nodes, node => node[NodeAttributesProperty][attributes]),
+    (nodes, attributes) =>
+      reject(nodes, node => isMatch(node[NodeAttributesProperty], attributes)),
   );
 };

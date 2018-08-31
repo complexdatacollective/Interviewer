@@ -463,7 +463,7 @@
       "nodes": [
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Anita",
             "last_name": "Li",
             "nickname": "Annie",
@@ -472,7 +472,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Barry",
             "last_name": "Smith",
             "nickname": "Baz",
@@ -481,7 +481,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Carlito",
             "last_name": "González",
             "nickname": "Carl",
@@ -490,7 +490,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Dee",
             "last_name": "Zhang",
             "nickname": "Dee",
@@ -499,7 +499,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Eugine",
             "last_name": "Müller",
             "nickname": "Eu",
@@ -508,7 +508,7 @@
         },
         {
           "type": "person",
-          "properties": {
+          "attributes": {
             "name": "Eustace",
             "last_name": "Nguyễn",
             "nickname": "Eu",
@@ -520,7 +520,7 @@
     "HIVServices": {
       "nodes": [
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "About My Health",
             "Subsidiary/Program/Project": "",
             "Abbreviated Name": "About My Health",
@@ -533,7 +533,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "Access Anixter Center",
             "Abbreviated Name": "Access - Anixter",
@@ -546,7 +546,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Ashland Family Health Center",
             "Abbreviated Name": "Access - Ashland Family Health Center",
@@ -559,7 +559,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Auburn-Gresham Family Health Center",
             "Abbreviated Name": "Access - Auburn-Gresham Family Health Center",
@@ -572,7 +572,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Booker Family Health Center",
             "Abbreviated Name": "Access - Booker Family Health Center",
@@ -585,7 +585,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Brandon Family Health Center",
             "Abbreviated Name": "Access - Brandon Family Health Center",
@@ -598,7 +598,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Cabrini Family Health Center",
             "Abbreviated Name": "Access - Cabrini Family Health Center",
@@ -611,7 +611,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Centro Medico",
             "Abbreviated Name": "Access - Centro Medico",
@@ -624,7 +624,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Centro Medico San Rafael",
             "Abbreviated Name": "Access - Centro Medico San Rafael",
@@ -637,7 +637,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Doctors Medical Center",
             "Abbreviated Name": "Access - Doctors Medical Center",
@@ -650,7 +650,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Evanston-Rogers Park Family Health Center",
             "Abbreviated Name": "Access - Evanston-Rogers Park Family Health Center",
@@ -663,7 +663,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS at Gary Comer Youth Center",
             "Abbreviated Name": "Access - Gary Comer Youth Center",
@@ -676,7 +676,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "Grand Boulevard Health and Specialty Center",
             "Abbreviated Name": "Access - Grand Boulevard",
@@ -689,7 +689,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Humboldt Park Family Health Center",
             "Abbreviated Name": "Access - Humboldt Park Family Health Center",
@@ -702,7 +702,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS at the Illinois Eye Institute",
             "Abbreviated Name": "Access - Illinois Eye Institute",
@@ -715,7 +715,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Kedzie Family Health Center",
             "Abbreviated Name": "Access - Kedzie Family Health Center",
@@ -728,7 +728,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "Servicios Medicos La Villita",
             "Abbreviated Name": "Access - La Villita",
@@ -741,7 +741,7 @@
           }
         },
         {
-          "properties": {
+          "attributes": {
             "Main/Parent Organization": "Access Community Health Network",
             "Subsidiary/Program/Project": "ACCESS Madison Family Health Center",
             "Abbreviated Name": "Access - Madison Family Health Center",

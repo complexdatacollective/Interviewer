@@ -46,7 +46,7 @@ function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
   // Create a function to create a UUID and merge node attributes
   const withModelandAttributeData = newNode => ({
     [NodePrimaryKeyProperty]: uuidv4(),
-    ...newNode,
+    ...newNode, // second to allow existing UUID to be overwritten
     [NodeAttributesProperty]: {
       ...newNode[NodeAttributesProperty],
       ...nodeAttributeData,
@@ -66,13 +66,18 @@ function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
   const updatedNodes = nodes.map((node) => {
     // Skip nodes where the primary key doesn't match
     if (node[NodePrimaryKeyProperty] !== updatedNode[NodePrimaryKeyProperty]) { return node; }
-
+    console.log('getUpdatedNodes');
     // if we have an attributes payload, merge with any existing attributes
     if (nodeAttributeData) {
+      console.log('nodeAttributedata found');
+      console.log(updatedNode, nodeAttributeData);
       return {
         ...node,
         ...updatedNode,
-        [NodeAttributesProperty]: nodeAttributeData,
+        [NodeAttributesProperty]: {
+          ...node[NodeAttributesProperty],
+          ...nodeAttributeData,
+        },
         [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
       };
     }
@@ -129,7 +134,7 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(state.nodes, action.node, action.full),
+        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalAttributes),
       };
     }
     case REMOVE_NODE: {

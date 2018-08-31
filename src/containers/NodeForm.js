@@ -122,7 +122,7 @@ NodeForm.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   entity: PropTypes.string.isRequired,
-  node: PropTypes.Object,
+  node: PropTypes.object,
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
   showAddAnotherToggle: PropTypes.bool,
