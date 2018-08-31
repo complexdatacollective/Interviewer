@@ -4,12 +4,12 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { getPromptForCurrentSession } from '../selectors/session';
+import { stages, getPromptForCurrentSession } from '../selectors/session';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
     prompts() {
-      return this.props.stage.prompts;
+      return this.props.stage && this.props.stage.prompts;
     }
 
     promptsCount() {
@@ -64,6 +64,7 @@ export default function withPrompt(WrappedComponent) {
   function mapStateToProps(state, ownProps) {
     return {
       promptIndex: ownProps.promptId || getPromptForCurrentSession(state),
+      stage: ownProps.stage || stages(state)[ownProps.stageIndex],
     };
   }
 

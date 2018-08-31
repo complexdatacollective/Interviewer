@@ -1,11 +1,11 @@
 .protocol {
-  position: relative;
-  background-color: palette('dark-background');
+  display: flex;
   width: 100vw;
   height: 100vh;
 
   &__content {
     background-color: palette('background');
+    flex: 1 1 auto;
     height: 100vh;
   }
 }

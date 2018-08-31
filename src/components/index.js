@@ -21,3 +21,4 @@ export { default as Video } from './Video';
 export { default as BackgroundImage } from './BackgroundImage';
 export { default as ErrorMessage } from './ErrorMessage';
 export { default as ProgressBar } from './ProgressBar';
+export { default as Timeline } from './Timeline';

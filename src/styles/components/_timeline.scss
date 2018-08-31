@@ -1,0 +1,41 @@
+.timeline {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  &-nav {
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin: 1.8rem;
+    z-index: 999;
+
+    svg {
+      height: 2rem;
+      width: 2rem;
+    }
+
+    &--next {
+      background-color: var(--light-background);
+      height: 6rem;
+      width: 6rem;
+      transition: background-color, var(--animation-duration-standard), var(--animation-duration-standard);
+
+      &:hover {
+        background-color: var(--primary);
+      }
+    }
+
+    &--back {
+      height: 2rem;
+      width: 2rem;
+
+      .cls-2 {
+        fill: var(--transparent-light);
+      }
+    }
+  }
+}
