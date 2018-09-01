@@ -15,9 +15,19 @@ import { stages, getPromptForCurrentSession } from '../selectors/session';
   * Check protocol is loaded, and render the stage
   */
 class Protocol extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stageBackward: false,
+    };
+  }
+
   // change the stage to the next
   onClickNext = () => {
     if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+      this.setState({
+        stageBackward: false,
+      });
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
       this.props.promptForward();
@@ -27,6 +37,9 @@ class Protocol extends Component {
   // change the stage to the previous
   onClickBack = () => {
     if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+      this.setState({
+        stageBackward: true,
+      });
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
       this.props.promptBackward();
@@ -45,6 +58,8 @@ class Protocol extends Component {
 
     if (!isProtocolLoaded) { return null; }
 
+    console.log(this.state.stageBackward);
+
     return (
       <div className="protocol">
         <Timeline
@@ -53,7 +68,7 @@ class Protocol extends Component {
           percentProgress={percentProgress}
         />
         <TransitionGroup className="protocol__content">
-          <StageTransition key={stage.id}>
+          <StageTransition key={stage.id} stageBackward={this.state.stageBackward}>
             <Stage
               stage={stage}
               promptId={promptId}

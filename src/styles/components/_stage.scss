@@ -1,10 +1,11 @@
 .stage {
   background-color: palette('background');
-  opacity: 0;
+  height: 1rem;
 
   &__interface {
     flex: 1 auto;
     height: 100vh;
+    position: relative;
   }
 
   &--transition {
