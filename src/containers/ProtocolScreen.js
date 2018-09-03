@@ -46,6 +46,10 @@ class Protocol extends Component {
     }
   }
 
+  childFactoryCreator = stageBackward => (
+    child => (React.cloneElement(child, { stageBackward }))
+  );
+
   render() {
     const {
       isProtocolLoaded,
@@ -67,7 +71,10 @@ class Protocol extends Component {
           onClickNext={this.onClickNext}
           percentProgress={percentProgress}
         />
-        <TransitionGroup className="protocol__content">
+        <TransitionGroup
+          className="protocol__content"
+          childFactory={this.childFactoryCreator(this.state.stageBackward)}
+        >
           <StageTransition key={stage.id} stageBackward={this.state.stageBackward}>
             <Stage
               stage={stage}
