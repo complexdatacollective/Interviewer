@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 import { push } from 'react-router-redux';
 
+import { actionCreators as menuActions } from '../ducks/modules/menu';
 import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
@@ -46,6 +47,7 @@ class Protocol extends Component {
       stage,
       stageBackward,
       stageIndex,
+      toggleMenu,
     } = this.props;
 
     if (!isProtocolLoaded) { return null; }
@@ -56,6 +58,7 @@ class Protocol extends Component {
           onClickBack={this.onClickBack}
           onClickNext={this.onClickNext}
           percentProgress={percentProgress}
+          toggleMenu={toggleMenu}
         />
         <TransitionGroup
           className="protocol__content"
@@ -90,6 +93,7 @@ Protocol.propTypes = {
   stage: PropTypes.object.isRequired,
   stageBackward: PropTypes.bool,
   stageIndex: PropTypes.number,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 Protocol.defaultProps = {
@@ -127,6 +131,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     changeStage: path => dispatch(push(path)),
+    toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
   };
 }
 
