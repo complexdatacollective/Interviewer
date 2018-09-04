@@ -15,19 +15,9 @@ import { stages, getPromptForCurrentSession } from '../selectors/session';
   * Check protocol is loaded, and render the stage
   */
 class Protocol extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stageBackward: false,
-    };
-  }
-
   // change the stage to the next
   onClickNext = () => {
     if (!this.props.stage.prompts || this.props.isLastPrompt()) {
-      this.setState({
-        stageBackward: false,
-      });
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
       this.props.promptForward();
@@ -37,9 +27,6 @@ class Protocol extends Component {
   // change the stage to the previous
   onClickBack = () => {
     if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
-      this.setState({
-        stageBackward: true,
-      });
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
       this.props.promptBackward();
@@ -57,12 +44,11 @@ class Protocol extends Component {
       percentProgress,
       promptId,
       stage,
+      stageBackward,
       stageIndex,
     } = this.props;
 
     if (!isProtocolLoaded) { return null; }
-
-    console.log(this.state.stageBackward);
 
     return (
       <div className="protocol">
@@ -73,9 +59,9 @@ class Protocol extends Component {
         />
         <TransitionGroup
           className="protocol__content"
-          childFactory={this.childFactoryCreator(this.state.stageBackward)}
+          childFactory={this.childFactoryCreator(stageBackward)}
         >
-          <StageTransition key={stage.id} stageBackward={this.state.stageBackward}>
+          <StageTransition key={stage.id} stageBackward={stageBackward}>
             <Stage
               stage={stage}
               promptId={promptId}
@@ -102,6 +88,7 @@ Protocol.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptId: PropTypes.number,
   stage: PropTypes.object.isRequired,
+  stageBackward: PropTypes.bool,
   stageIndex: PropTypes.number,
 };
 
@@ -109,6 +96,7 @@ Protocol.defaultProps = {
   pathPrefix: '',
   percentProgress: 0,
   promptId: 0,
+  stageBackward: false,
   stageIndex: 0,
 };
 

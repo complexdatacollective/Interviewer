@@ -97,7 +97,11 @@ class LoadParamsRoute extends Component {
             search: backParam,
           }}
         />) :
-        (<RenderComponent {...rest} stageIndex={this.props.computedMatch.params.stageIndex || 0} />)
+        (<RenderComponent
+          {...rest}
+          stageIndex={this.props.computedMatch.params.stageIndex || 0}
+          stageBackward={!!backParam}
+        />)
     );
   }
 }
