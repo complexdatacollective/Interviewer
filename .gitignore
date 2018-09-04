@@ -16,8 +16,12 @@ yarn.lock
 build.json
 
 *.zip
-*.pbxproj
+plugins/**/*.pbxproj
 Icon^M^M
 
 .devserver
 config.xml.original
+
+# Xcode (Cordova plugin)
+xcuserdata/
+IDEWorkspaceChecks.plist

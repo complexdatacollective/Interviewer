@@ -24,7 +24,7 @@ ServerSetup.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
   server: PropTypes.shape({
     addresses: PropTypes.array.isRequired,
-    apiUrl: PropTypes.string.isRequired,
+    pairingServiceUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
   }).isRequired,
 };

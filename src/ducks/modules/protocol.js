@@ -4,6 +4,7 @@ import { omit } from 'lodash';
 
 import { actionTypes as SessionActionTypes } from './session';
 import { supportedWorkers } from '../../utils/WorkerAgent';
+import { getPairedServer } from '../../selectors/servers';
 import {
   loadProtocol,
   importProtocol,
@@ -97,10 +98,11 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function downloadProtocolAction(uri) {
+function downloadProtocolAction(uri, forNCServer) {
   return {
     type: DOWNLOAD_PROTOCOL,
     uri,
+    forNCServer,
   };
 }
 
@@ -165,14 +167,18 @@ function setWorkerContent(workerUrlMap = {}) {
   };
 }
 
-const downloadProtocolEpic = action$ =>
+const downloadProtocolEpic = (action$, store) =>
   action$.ofType(DOWNLOAD_PROTOCOL)
-    .switchMap(action =>
-      Observable
-        .fromPromise(downloadProtocol(action.uri))
+    .switchMap((action) => {
+      let pairedServer;
+      if (action.forNCServer) {
+        pairedServer = getPairedServer(store.getState());
+      }
+      return Observable
+        .fromPromise(downloadProtocol(action.uri, pairedServer))
         .map(protocolPath => importProtocolAction(protocolPath))
-        .catch(error => Observable.of(downloadProtocolFailed(error))),
-    );
+        .catch(error => Observable.of(downloadProtocolFailed(error)));
+    });
 
 const importProtocolEpic = action$ =>
   action$.ofType(IMPORT_PROTOCOL)

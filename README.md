@@ -16,7 +16,7 @@ React Scripts
 
 This project currently requires version `8.11.1` of node, and version `5.8.0` of npm. These are the only supported versions for this project.
 
-** NOTE: ** npm 5.8.0 is not installed by default with node 8.11.1. You will need to use `npm install -g npm` to do this. Test which version of npm you are using by typing `npm --version`.
+** NOTE: ** npm 5.8.0 is not installed by default with node 8.11.1. You will need to use `npm install -g npm@5.8.0` to do this. Test which version of npm you are using by typing `npm --version`.
 
 As a convenience, the repository contains a `.node-version` file that enables convinient use of a node environment manager.
 

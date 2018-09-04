@@ -13,6 +13,7 @@ import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { getPairedServer } from '../../selectors/servers';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -20,7 +21,7 @@ const ExportSection = ({ defaultServer, children }) => (
       <h2>Data Export</h2>
       <p>
         Export this interview to {defaultServer.name} <br />
-        <small>{defaultServer.apiUrl}</small>
+        <small>{defaultServer.secureServiceUrl}</small>
       </p>
     </div>
     <div>
@@ -62,9 +63,9 @@ class FinishSession extends Component {
     return <p>This session is not exportable: it is not associated with any Server.</p>;
   }
 
-  get serverApiUrl() {
+  get exportUrl() {
     const { defaultServer } = this.props;
-    return defaultServer && defaultServer.apiUrl;
+    return defaultServer && defaultServer.secureServiceUrl;
   }
 
   get currentSessionBelongsToProtocol() {
@@ -72,15 +73,13 @@ class FinishSession extends Component {
   }
 
   get currentSessionisExportable() {
-    return this.currentSessionBelongsToProtocol && this.serverApiUrl;
+    return this.currentSessionBelongsToProtocol && this.exportUrl;
   }
 
   export(currentSession) {
     const { remoteProtocolId, sessionId } = this.props;
     const sessionData = currentSession.network;
-    if (this.serverApiUrl) {
-      this.props.exportSession(this.serverApiUrl, remoteProtocolId, sessionId, sessionData);
-    }
+    this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 
   downloadData = (additionalInformation) => {
@@ -172,7 +171,7 @@ function mapStateToProps(state) {
     currentSession: getCurrentSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.session,
-    defaultServer: state.servers && state.servers.paired[0],
+    defaultServer: getPairedServer(state),
     variableRegistry: protocolRegistry(state),
   };
 }

@@ -1,0 +1,23 @@
+{
+  "name": "cordova-plugin-network-canvas-client",
+  "version": "0.0.1",
+  "description": "Cordova Plugin for Network Canvas API clients",
+  "keywords": [
+    "social",
+    "network",
+    "sna",
+    "visualization",
+    "research",
+    "public",
+    "health",
+    "network",
+    "canvas"
+  ],
+  "author": "codaco",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "cordovaDependencies": {
+        "0.0.1": { "cordova-plugin-file": "^5.0.0"}
+    }
+  }
+}
