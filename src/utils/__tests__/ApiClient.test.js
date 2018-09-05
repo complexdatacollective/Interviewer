@@ -1,13 +1,13 @@
 /* eslint-env jest */
 
 import axios from 'axios';
+import { decrypt } from 'secure-comms-api/cipher';
 
 import ApiClient from '../ApiClient';
-import { decrypt } from '../shared-api/cipher';
 import * as Environment from '../../utils/Environment';
 
 jest.mock('axios');
-jest.mock('../shared-api/cipher');
+jest.mock('secure-comms-api/cipher');
 
 describe('ApiClient', () => {
   const respData = { device: { id: '1' }, certificate: 'CERTIFICATE', securePort: 443 };

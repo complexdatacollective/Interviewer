@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import libsodium from 'libsodium-wrappers';
+import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
@@ -27,7 +27,7 @@ if (isElectron()) {
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
 }
 
-libsodium.ready.then(() => {
+secureCommsReady.then(() => {
   if (isCordova()) {
     document.addEventListener('deviceready', startApp, false);
   } else {

@@ -10,6 +10,7 @@
   "dependencies": {
     "electron-log": "^2.2.7",
     "electron-updater": "^3.0.3",
-    "mdns": "^2.3.4"
+    "mdns": "^2.3.4",
+    "secure-comms-api": "git+https://github.com/codaco/secure-comms-api.git"
   }
 }

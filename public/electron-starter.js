@@ -8,7 +8,7 @@ const log = require('electron-log');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
 
-const { commonName } = require('../src/utils/shared-api/sslConfig.js');
+const { commonName } = require('secure-comms-api/sslConfig.js');
 
 const isMacOS = () => os.platform() === 'darwin';
 
