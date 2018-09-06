@@ -154,7 +154,6 @@ export const makeNetworkNodesForType = () => {
 */
 
 export const makeNetworkNodesForPrompt = () => {
-  console.log('makeNetworkNodesForPrompt()');
   const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
 

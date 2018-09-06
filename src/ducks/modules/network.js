@@ -66,11 +66,8 @@ function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
   const updatedNodes = nodes.map((node) => {
     // Skip nodes where the primary key doesn't match
     if (node[NodePrimaryKeyProperty] !== updatedNode[NodePrimaryKeyProperty]) { return node; }
-    console.log('getUpdatedNodes');
     // if we have an attributes payload, merge with any existing attributes
     if (nodeAttributeData) {
-      console.log('nodeAttributedata found');
-      console.log(updatedNode, nodeAttributeData);
       return {
         ...node,
         ...updatedNode,
@@ -104,24 +101,29 @@ export default function reducer(state = initialState, action = {}) {
     }
     /**
      * TOGGLE_NODE_ATTRIBUTES
-     * Used to toggle the value of a boolean variable between states when the node is tapped.
      */
     case TOGGLE_NODE_ATTRIBUTES: {
-      // attributes = object containing node properties, minus _uid
-      const attributes = omit(action.attributes, [NodePrimaryKeyProperty]);
+      // attributes = object containing the attributes to remove, minus _uid
+      const attributesToToggle = omit(action.attributes, [NodePrimaryKeyProperty]);
 
       // Map over the nodes
       const updatedNodes = state.nodes.map((node) => {
         // Skip nodes with different primary keys
         if (node[NodePrimaryKeyProperty] !== action[NodePrimaryKeyProperty]) { return node; }
 
-        //
-        if (isMatch(node, attributes)) {
-          return omit(node, Object.getOwnPropertyNames(attributes));
+
+        const newNode = Object.assign({}, node);
+
+        // When we find the node that matches the primary key, remove the properties
+        if (isMatch(newNode[NodeAttributesProperty], attributesToToggle)) {
+          newNode[NodeAttributesProperty] =
+            omit(node[NodeAttributesProperty], Object.getOwnPropertyNames(attributesToToggle));
         }
 
+        console.log(newNode);
+
         return {
-          ...node,
+          ...newNode,
           ...action.attributes,
         };
       });

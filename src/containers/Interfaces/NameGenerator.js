@@ -78,14 +78,11 @@ class NameGenerator extends Component {
 
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptId') || has(node, 'stageId')) {
-      console.log('first');
-      console.log(this.props.activePromptAttributes);
       this.props.updateNode(
         { ...merge(nodeModelData, promptModelData) },
         { ...this.props.activePromptAttributes },
       );
     } else {
-      console.log('second');
       this.props.addNodes(
         { ...merge(nodeModelData, promptModelData) },
         { ...merge(nodeAttributeData, promptAttributeData) },

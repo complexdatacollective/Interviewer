@@ -51,6 +51,11 @@ class NodePanels extends PureComponent {
   };
 
   onDrop = ({ meta }, dataSource) => {
+    /**
+     * Handle a node being dropped into a panel
+     *
+     * If
+    */
     if (dataSource === 'existing') {
       this.props.toggleNodeAttributes(
         meta[NodePrimaryKeyProperty],
@@ -154,8 +159,7 @@ function makeMapStateToProps() {
             meta.itemType === 'EXISTING_NODE' &&
             (meta.stageId !== newNodeAttributes.stageId ||
               meta.promptId !== newNodeAttributes.promptId)
-          ) :
-          ({ meta }) => (
+          ) : ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
             includes(originNodeIds, meta[NodePrimaryKeyProperty])
           );

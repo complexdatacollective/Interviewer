@@ -131,6 +131,7 @@ class NodeList extends Component {
                 selected={selected(node)}
                 onSelected={() => onSelect(node)}
                 meta={() => ({ ...node, itemType })}
+                itemType={itemType}
                 {...node}
               />
             </NodeTransition>
