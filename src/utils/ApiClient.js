@@ -1,12 +1,19 @@
+/* globals cordova */
 import axios from 'axios';
+import { isString } from 'lodash';
 
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
+import { isCordova, isElectron } from '../utils/Environment';
 
 const ApiErrorStatus = 'error';
 
 // Error message to display when there's no usable message from server
 const UnexpectedResponseMessage = 'Unexpected Response';
 const NoResponseMessage = 'Server could not be reached';
+
+const defaultHeaders = {
+  'Content-Type': 'application/json',
+};
 
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {
@@ -34,7 +41,9 @@ const handleError = (err) => {
 };
 
 /**
- * @class ApiClient
+ * @class
+ *
+ * Provides both a pairing client (http) and a secure client (https) once paired.
  *
  * ## Format
  *
@@ -55,17 +64,73 @@ const handleError = (err) => {
  * All pending requests can be cancelled by calling cancelAll(). This will not reject the promised
  * response; rather, it will resolve with empty data.
  *
+ * @param  {string|Object} pairingUrlOrPairedServer Either a pairing API URL (http), or an
+ *                                                  already-paired Server
+ * @param  {string} [pairingUrlOrPairedServer.secureServiceUrl] HTTPS url for secure endpoints,
+ *                                                              if a paired server is provied
  */
 class ApiClient {
-  constructor(apiUrl, pairedServer) {
+  constructor(pairingUrlOrPairedServer) {
+    let pairingUrl;
+    let pairedServer;
+    if (isString(pairingUrlOrPairedServer)) {
+      pairingUrl = pairingUrlOrPairedServer;
+    } else if (pairingUrlOrPairedServer) {
+      pairedServer = pairingUrlOrPairedServer;
+    }
+
     this.cancelTokenSource = axios.CancelToken.source();
     this.pairedServer = pairedServer;
-    this.client = axios.create({
-      baseURL: apiUrl.replace(/\/$/, ''),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    if (pairingUrl) {
+      this.pairingClient = axios.create({
+        baseURL: pairingUrl.replace(/\/$/, ''),
+        headers: defaultHeaders,
+      });
+    }
+
+    if (pairedServer && pairedServer.secureServiceUrl) {
+      const secureURL = pairedServer.secureServiceUrl.replace(/\/$/, '');
+      if (isCordova()) {
+        const deviceId = pairedServer.deviceId;
+        const cert = pairedServer.sslCertificate;
+        this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, secureURL);
+      } else if (isElectron()) {
+        this.httpsClient = axios.create({
+          baseURL: secureURL,
+          headers: defaultHeaders,
+        });
+      }
+    }
+  }
+
+  /**
+   * @description Call this to add add the paired server's SSL certificate to the trust store.
+   * Calling this method without initializing the ApiClient with a paired server is an error.
+   *
+   * @method ApiClient#addTrustedCert
+   * @async
+   * @return {Promise} resolves if cert has been trusted;
+   *                   rejects if there is no paired Server, or trust cannot be established
+   */
+  addTrustedCert() {
+    if (!this.httpsClient) {
+      return Promise.reject('No secure client available');
+    }
+
+    if (isCordova()) {
+      return this.httpsClient.acceptCertificate().catch(handleError);
+    } else if (isElectron()) {
+      return new Promise((resolve, reject) => {
+        if (!this.pairedServer || !this.pairedServer.sslCertificate) {
+          reject(new Error('No trusted Server cert available'));
+          return;
+        }
+        const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
+        ipcRenderer.once('add-cert-complete', resolve);
+        ipcRenderer.send('add-cert', this.pairedServer.sslCertificate);
+      });
+    }
+    return Promise.reject(new Error('SSL connections to Server are not supported on this platform'));
   }
 
   cancelAll() {
@@ -88,7 +153,10 @@ class ApiClient {
    * @throws {Error}
    */
   requestPairing() {
-    return this.client.get('/devices/new', { cancelToken: this.cancelTokenSource.token })
+    if (!this.pairingClient) {
+      return Promise.reject('No pairing client available');
+    }
+    return this.pairingClient.get('/devices/new', { cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);
@@ -100,11 +168,17 @@ class ApiClient {
    * @param  {string} pairingRequestId from the requestPairing() response
    * @param  {string} pairingRequestSalt from the requestPairing() response
    * @async
-   * @return {Object} device, decorated with the generated secret
-   * @return {string} device.id
+   * @return {Object} pairingInfo.device - decorated with the generated secret
+   * @return {string} pairingInfo.device.id
+   * @return {string} pairingInfo.device.secret
+   * @return {string} pairingInfo.sslCertificate
    * @throws {Error}
    */
   confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName = '') {
+    if (!this.pairingClient) {
+      return Promise.reject('No pairing client available');
+    }
+
     const saltBytes = fromHex(pairingRequestSalt);
     const secretBytes = deriveSecretKeyBytes(pairingCode, saltBytes);
     const secretHex = toHex(secretBytes);
@@ -117,7 +191,7 @@ class ApiClient {
 
     const encryptedMessage = encrypt(plaintext, secretHex);
 
-    return this.client.post('/devices',
+    return this.pairingClient.post('/devices',
       {
         message: encryptedMessage,
       },
@@ -133,7 +207,11 @@ class ApiClient {
         }
         const device = decryptedData.device;
         device.secret = secretHex;
-        return device;
+        return {
+          device,
+          sslCertificate: decryptedData.certificate,
+          securePort: decryptedData.securePort,
+        };
       })
       .catch(handleError);
   }
@@ -144,10 +222,29 @@ class ApiClient {
    * @throws {Error}
    */
   getProtocols() {
-    return this.client.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+    if (!this.httpsClient) {
+      return Promise.reject('No secure client available');
+    }
+
+    return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
-      .catch(handleError);
+      .catch(err => handleError(err));
+  }
+
+  downloadProtocol(path, destination) {
+    if (!this.httpsClient) {
+      return Promise.reject('No secure client available');
+    }
+
+    if (isCordova()) {
+      return this.httpsClient.download(path, destination).catch(handleError);
+    } else if (isElectron()) {
+      return this.httpsClient
+        .get(path, { ...this.authHeader, responseType: 'arraybuffer' })
+        .then(resp => new Uint8Array(resp.data));
+    }
+    return Promise.reject(new Error('Downloads not supported on this platform'));
   }
 
   /**
@@ -164,7 +261,7 @@ class ApiClient {
       uuid: sessionId,
       data: sessionData,
     };
-    return this.client.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
+    return this.httpsClient.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

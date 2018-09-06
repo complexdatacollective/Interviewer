@@ -5,6 +5,9 @@ import PairingCodeInput from './PairingCodeInput';
 import { Button, Spinner } from '../../ui/components';
 import { PairingCodeLength } from '../../utils/shared-api/pairingCodeConfig';
 
+/**
+ * @class Renders a form for user to enter the out-of-band pairing code presented by Server.
+ */
 class ServerPairingForm extends Component {
   constructor(props) {
     super(props);

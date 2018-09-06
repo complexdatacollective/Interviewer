@@ -7,6 +7,7 @@ const initialState = null;
 
 /**
  * @private
+ * @description
  * All external data nodes must be identified in the app with a primary key (== NodePK).
  *
  * For each object in an external data set's collection of nodes:

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="40010" id="org.codaco.networkCanvas" ios-CFBundleVersion="40010" version="4.0.0-alpha.6" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="40011" id="org.codaco.networkCanvas" ios-CFBundleVersion="40011" version="4.0.0-alpha.6" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NetworkCanvas</name>
     <description>
         Simplifying complex network data collection.
@@ -66,6 +66,7 @@
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.1" />
     <plugin name="cordova-plugin-zeroconf" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
+    <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
     <engine name="android" spec="^7.1.0" />
     <engine name="ios" spec="^4.5.4" />
 </widget>

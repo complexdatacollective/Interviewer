@@ -6,7 +6,7 @@ import uuidv4 from '../../utils/uuid';
 import network, { NodePK, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
-import { getPairedServerFactory } from '../../selectors/servers';
+import { getPairedServer } from '../../selectors/servers';
 
 
 const ADD_SESSION = 'ADD_SESSION';
@@ -215,18 +215,17 @@ const sessionExportFailed = error => ({
   error,
 });
 
-const exportSession = (apiUrl, remoteProtocolId, sessionUuid, sessionData) => ({
+const exportSession = (remoteProtocolId, sessionUuid, sessionData) => ({
   type: EXPORT_SESSION,
-  apiUrl,
   remoteProtocolId,
   sessionUuid,
   sessionData,
 });
 
 const sessionExportPromise = (pairedServer, action) => {
-  const { apiUrl, remoteProtocolId, sessionUuid, sessionData } = action;
+  const { remoteProtocolId, sessionUuid, sessionData } = action;
   if (pairedServer) {
-    const client = new ApiClient(apiUrl, pairedServer);
+    const client = new ApiClient(pairedServer);
     return client.exportSession(remoteProtocolId, sessionUuid, sessionData);
   }
   return Promise.reject(new Error('No paired server available'));
@@ -235,7 +234,7 @@ const sessionExportPromise = (pairedServer, action) => {
 const exportSessionEpic = (action$, store) => (
   action$.ofType(EXPORT_SESSION)
     .exhaustMap((action) => {
-      const pairedServer = getPairedServerFactory(store.getState())(action.apiUrl);
+      const pairedServer = getPairedServer(store.getState());
       return Observable
         .fromPromise(sessionExportPromise(pairedServer, action))
         .mapTo(sessionExportSucceeded(action.sessionUuid))

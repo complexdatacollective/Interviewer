@@ -4,10 +4,10 @@ import * as util from '../serverAddressing';
 describe('the serverAddressing util', () => {
   it('augments a service with the API URL', () => {
     const mockService = { port: 123, addresses: ['127.0.0.1'] };
-    const augmented = util.addApiUrlToService(mockService);
+    const augmented = util.addPairingUrlToService(mockService);
     expect(augmented).toMatchObject(mockService);
-    expect(augmented).toHaveProperty('apiUrl');
-    expect(augmented.apiUrl).toMatch('127.0.0.1:123');
+    expect(augmented).toHaveProperty('pairingServiceUrl');
+    expect(augmented.pairingServiceUrl).toMatch('127.0.0.1:123');
   });
 
   describe('port validation', () => {

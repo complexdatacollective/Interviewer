@@ -16,7 +16,7 @@ describe('the Finish Interface', () => {
   beforeEach(() => {
     mockProps = {
       currentSession: {},
-      defaultServer: { apiUrl: 'x.x.x.x' },
+      defaultServer: { secureServiceUrl: 'x.x.x.x' },
       remoteProtocolId: 'mockProtocolId',
     };
   });

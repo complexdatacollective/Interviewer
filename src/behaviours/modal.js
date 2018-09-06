@@ -55,6 +55,7 @@ function modal(WrappedComponent) {
           toggle={this.toggle}
           open={this.close}
           close={this.close}
+          ref={this.props.forwardedRef}
           {...this.props}
         />
       );
@@ -62,6 +63,7 @@ function modal(WrappedComponent) {
   }
 
   Modal.propTypes = {
+    forwardedRef: PropTypes.object,
     isRegistered: PropTypes.bool.isRequired,
     registerModal: PropTypes.func.isRequired,
     unregisterModal: PropTypes.func.isRequired,
@@ -77,6 +79,7 @@ function modal(WrappedComponent) {
   };
 
   Modal.defaultProps = {
+    forwardedRef: null,
     show: false,
     onCloseModal: null,
   };
@@ -102,7 +105,8 @@ function modal(WrappedComponent) {
     };
   }
 
-  return connect(makeMapStateToProps, mapDispatchToProps)(Modal);
+  const ConnectedModal = connect(makeMapStateToProps, mapDispatchToProps)(Modal);
+  return React.forwardRef((props, ref) => <ConnectedModal {...props} forwardedRef={ref} />);
 }
 
 export default modal;
