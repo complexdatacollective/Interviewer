@@ -12,9 +12,7 @@ import {
   getDataByPrompt,
   getCardDisplayLabel,
   getCardAdditionalProperties,
-  getSortDirectionDefault,
-  getSortFields,
-  getSortOrderDefault,
+  getSortableFields,
   makeGetPromptNodeAttributes,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
@@ -53,7 +51,6 @@ class NameGeneratorList extends Component {
   render() {
     const {
       initialSortOrder,
-      initialSortDirection,
       labelKey,
       nodesForList,
       prompt,
@@ -66,8 +63,6 @@ class NameGeneratorList extends Component {
     const {
       prompts,
     } = this.props.stage;
-
-    console.log(nodesForList);
 
     return (
       <div className="name-generator-list-interface">
@@ -82,7 +77,6 @@ class NameGeneratorList extends Component {
         <ListSelect
           details={this.details}
           initialSortOrder={initialSortOrder}
-          initialSortDirection={initialSortDirection}
           label={this.label}
           labelKey={labelKey}
           nodes={nodesForList}
@@ -99,8 +93,7 @@ class NameGeneratorList extends Component {
 
 NameGeneratorList.propTypes = {
   addNode: PropTypes.func.isRequired,
-  initialSortOrder: PropTypes.string,
-  initialSortDirection: PropTypes.string,
+  initialSortOrder: PropTypes.object,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
@@ -115,8 +108,10 @@ NameGeneratorList.propTypes = {
 };
 
 NameGeneratorList.defaultProps = {
-  initialSortOrder: '',
-  initialSortDirection: 'asc',
+  initialSortOrder: {
+    property: '',
+    direction: 'asc',
+  },
 };
 
 function makeMapStateToProps() {
@@ -133,13 +128,11 @@ function makeMapStateToProps() {
     }
 
     return {
-      initialSortOrder: getSortOrderDefault(state, props),
-      initialSortDirection: getSortDirectionDefault(state, props),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
       selectedNodes: networkNodes(state),
-      sortFields: getSortFields(state, props),
+      sortFields: getSortableFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };

@@ -13,7 +13,7 @@ const sociogramOptionsDefault = {
   highlightAttributes: {},
   allowSelect: false,
   selectMode: '',
-  sortOrderBy: [],
+  sortOrder: [],
   concentricCircles: 0,
   skewedTowardCenter: false,
 };

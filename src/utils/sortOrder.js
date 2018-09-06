@@ -1,4 +1,5 @@
 import { orderBy } from 'lodash';
+import { NodeAttributesProperty } from '../ducks/modules/network';
 
 /* Maps a `createdIndex` index value to all items in an array */
 const withCreatedIndex = items => items.map((item, createdIndex) => ({ ...item, createdIndex }));
@@ -11,7 +12,8 @@ const fifo = ({ createdIndex }) => createdIndex;
 
 /**
  * Returns a configured sorting function
- * @param {Array} sortConfig - list of rules to sort by
+ * @param {Array} sortConfig - list of rules to sort by, as an array of objects where each object
+ * has two properties ("property", and "direction"), and direction can be either "asc" or "desc".
  * @param {Object} variableRegistry - an object containing variables for the node type as specified
  * at: `variableRegistry.node[nodeType]variables`
  * TODO: Use variable registry to respect variable type?
@@ -40,7 +42,10 @@ const sortOrder = (sortConfig = [], variableRegistry = {}) => { // eslint-disabl
    */
   return items => orderBy(
     items,
-    sortRules.map(rule => rule.property),
+    sortRules.map((rule) => {
+      console.log(rule);
+      return `${NodeAttributesProperty}.${rule.property}`;
+    }),
     orders,
   );
 };

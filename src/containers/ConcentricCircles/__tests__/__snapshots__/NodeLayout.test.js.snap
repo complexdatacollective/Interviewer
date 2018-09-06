@@ -30,7 +30,7 @@ ShallowWrapper {
     }
     selectMode=""
     skewedTowardCenter={false}
-    sortOrderBy={Array []}
+    sortOrder={Array []}
     toggleEdge={[Function]}
     toggleHighlight={[Function]}
     updateNode={[Function]}

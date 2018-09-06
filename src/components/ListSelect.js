@@ -4,29 +4,19 @@ import PropTypes from 'prop-types';
 import { Button } from '../ui/components';
 import { CardList } from '.';
 import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
+import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ascending: this.props.initialSortDirection === 'asc',
+      activeSortOrder: {
+        property: this.props.initialSortOrder.direction || 'asc',
+        direction: this.props.initialSortOrder.property || this.props.labelKey,
+      },
       filterValue: '',
-      filterProperty: this.props.initialSortOrder || this.props.labelKey,
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.initialSortOrder !== this.props.initialSortOrder) {
-      this.setState({
-        filterProperty: nextProps.initialSortOrder,
-      });
-    }
-    if (nextProps.initialSortDirection !== this.props.initialSortDirection) {
-      this.setState({
-        ascending: nextProps.initialSortDirection === 'asc',
-      });
-    }
   }
 
   /**
@@ -43,8 +33,8 @@ class ListSelect extends Component {
     * @return character to indicate sort direction (if applicable)
     */
   getDirection = (property) => {
-    if (property === this.state.filterProperty) {
-      return this.state.ascending ? ' \u25B2' : ' \u25BC';
+    if (property === this.state.activeSortOrder.property) {
+      return this.state.direction ? ' \u25B2' : ' \u25BC';
     }
     return '';
   };
@@ -53,7 +43,7 @@ class ListSelect extends Component {
     * @return sorted list
     */
   getSortedList = () =>
-    this.props.nodes.sort(this.compare(this.state.filterProperty, this.state.ascending));
+    this.sorter(this.props.nodes);
 
   /**
     * @return filtered list
@@ -64,6 +54,7 @@ class ListSelect extends Component {
     * TODO: Expand filtering to look at all node properties, not just ones passed as card details.
     */
   getFilteredList = (list) => {
+    console.log(list);
     const filteredList = list.filter(
       (node) => {
         // Node attributes are stored in a specific named property
@@ -91,17 +82,18 @@ class ListSelect extends Component {
     return filteredList;
   }
 
-
   /**
     * @param property to sort by
     */
   setSortBy = (property) => {
-    if (this.state.filterProperty === property) {
+    if (this.state.activeSortOrder.property === property) {
       this.toggleSortDirection();
     } else {
       this.setState({
-        ascending: true,
-        filterProperty: property,
+        activeSortOrder: {
+          property,
+          direction: 'asc',
+        },
       });
     }
   };
@@ -114,42 +106,16 @@ class ListSelect extends Component {
       .find(current => current[NodePrimaryKeyProperty] === node[NodePrimaryKeyProperty]);
 
   /**
-    * @param property to sort by
-    * @param {boolean} ascending
-    */
-  compare = (property, ascending = true) => {
-    let sortOrder = 1;
-    if (!ascending) {
-      sortOrder = -1;
-    }
-
-    return (a, b) => {
-      if (!Object.hasOwnProperty.call(a, property) || !Object.hasOwnProperty.call(b, property)) {
-        return 0;
-      }
-
-      let result = 0;
-
-      const varA = (typeof a[property] === 'string') ?
-        a[property].toUpperCase() : a[property];
-      const varB = (typeof b[property] === 'string') ?
-        b[property].toUpperCase() : b[property];
-
-      if (varA < varB) {
-        result = -1;
-      } else if (varA > varB) {
-        result = 1;
-      }
-      return result * sortOrder;
-    };
-  };
-
-  /**
     * changes direction of current sort
     */
   toggleSortDirection = () => {
+    const currentDirection = this.state.activeSortOrder.direction === 'asc' ? 'desc' : 'asc';
+    console.log(currentDirection);
     this.setState({
-      ascending: !this.state.ascending,
+      activeSortOrder: {
+        direction: currentDirection,
+        property: this.state.activeSortOrder.property,
+      },
     });
   };
 
@@ -167,6 +133,7 @@ class ListSelect extends Component {
     }
   };
 
+
   render() {
     const {
       details,
@@ -174,8 +141,11 @@ class ListSelect extends Component {
       sortFields,
     } = this.props;
 
-    const nodes = this.getFilteredList(this.getSortedList());
-
+    const sorter = sortOrder([this.state.activeSortOrder]);
+    const sorted = sorter(this.props.nodes);
+    console.log(sorted);
+    const nodes = this.getFilteredList(sorted);
+    console.log('render');
     return (
       <div className="list-select">
         <div className="list-select__sort">
@@ -205,8 +175,7 @@ class ListSelect extends Component {
 
 ListSelect.propTypes = {
   details: PropTypes.func,
-  initialSortOrder: PropTypes.string,
-  initialSortDirection: PropTypes.string,
+  initialSortOrder: PropTypes.object,
   label: PropTypes.func,
   labelKey: PropTypes.string,
   nodes: PropTypes.array.isRequired,
@@ -218,8 +187,10 @@ ListSelect.propTypes = {
 
 ListSelect.defaultProps = {
   details: () => {},
-  initialSortOrder: '',
-  initialSortDirection: '',
+  initialSortOrder: {
+    property: '',
+    direction: 'asc',
+  },
   label: () => {},
   labelKey: '',
   nodes: [],

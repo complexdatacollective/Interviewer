@@ -528,7 +528,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "*",
               "direction": "asc"
@@ -565,7 +565,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "*",
               "direction": "asc"
@@ -587,7 +587,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "*",
               "direction": "asc"
@@ -613,7 +613,7 @@
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
           },
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "*",
               "direction": "asc"

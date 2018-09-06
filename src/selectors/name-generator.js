@@ -55,31 +55,29 @@ export const getCardDisplayLabel = createSelector(
 );
 
 // Returns any additional properties to be displayed on cards.
-// Returns an empty array is no options are found
-// Returns an empty array is no options are found
+// Returns an empty array if no additional properties are specified in the protocol.
 export const getCardAdditionalProperties = createSelector(
   propCardOptions,
   cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
 );
 
-export const getSortFields = createSelector(
+// Returns the properties that are specified as sortable in sortOptions
+export const getSortableFields = createSelector(
   propSortOptions,
   sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
 
-// TODO: hard coded to select the first sortOrder rule,
-// until we add support for multi-property sorting
+
 export const getSortOrderDefault = createSelector(
-  propSortOptions,
   sortOptions => get(sortOptions, ['sortOrder', 0, 'property'], ''),
 );
 
 // TODO: hard coded to select the first sortOrder rule,
 // until we add support for multi-property sorting
 export const getSortDirectionDefault = createSelector(
-  propSortOptions,
   sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
 );
+
 
 export const getDataByPrompt = createSelector(
   getExternalData,

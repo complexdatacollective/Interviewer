@@ -1102,7 +1102,7 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "nickname",
               "direction": "desc"
@@ -1139,7 +1139,7 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "nickname",
               "direction": "desc"
@@ -1175,7 +1175,7 @@
           },
           "disable":
             "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
-          "sortOrderBy": [
+          "sortOrder": [
             {
               "property": "nickname",
               "direction": "desc"

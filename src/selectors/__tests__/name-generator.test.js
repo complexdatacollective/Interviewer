@@ -134,8 +134,8 @@ describe('name generator selector', () => {
     });
 
     it('should get sortable properties', () => {
-      expect(NameGen.getSortFields(mockState, mockProps)).toEqual(['age']);
-      expect(NameGen.getSortFields(null, emptyProps)).toEqual([]);
+      expect(NameGen.getSortableFields(mockState, mockProps)).toEqual(['age']);
+      expect(NameGen.getSortableFields(null, emptyProps)).toEqual([]);
     });
 
     it('should get sort order default', () => {

@@ -15,8 +15,6 @@ class Card extends PureComponent {
       selected,
     } = this.props;
 
-    console.log(this.props);
-
     const attributes = details.map(
       (detail, index) => {
         const key = Object.keys(detail)[0];
