@@ -8,8 +8,6 @@ import { getNetwork, getNodeLabelFunction } from '../selectors/interface';
 import { getNodeLabelWorkerUrl, makeGetNodeColor } from '../selectors/protocol';
 import { NodeAttributesProperty } from '../ducks/modules/network';
 
-const getNodeColor = makeGetNodeColor();
-
 /**
   * Renders a Node.
   */
@@ -80,6 +78,8 @@ class Node extends PureComponent {
 }
 
 function mapStateToProps(state, props) {
+  const getNodeColor = makeGetNodeColor();
+
   return {
     color: getNodeColor(state, props),
     getLabel: getNodeLabelFunction(state),

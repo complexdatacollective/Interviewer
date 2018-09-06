@@ -65,7 +65,7 @@ class NameGenerator extends Component {
 
   /**
    * Drop node handler
-   * Deletes node from network whe  n dropped on bin
+   * Adds prompt attributes to existing nodes, or adds new nodes to the network.
    * @param {object} node - key/value object containing node object from the network store
    */
   onDrop = (item) => {

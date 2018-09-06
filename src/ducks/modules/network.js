@@ -111,19 +111,19 @@ export default function reducer(state = initialState, action = {}) {
         // Skip nodes with different primary keys
         if (node[NodePrimaryKeyProperty] !== action[NodePrimaryKeyProperty]) { return node; }
 
-
-        const newNode = Object.assign({}, node);
-
         // When we find the node that matches the primary key, remove the properties
-        if (isMatch(newNode[NodeAttributesProperty], attributesToToggle)) {
-          newNode[NodeAttributesProperty] =
-            omit(node[NodeAttributesProperty], Object.getOwnPropertyNames(attributesToToggle));
+        if (isMatch(node[NodeAttributesProperty], attributesToToggle)) {
+          // Object.assign is much slower than the following safe mutation
+          // eslint-disable-next-line no-param-reassign
+          node[NodeAttributesProperty] =
+            omit(
+              node[NodeAttributesProperty],
+              Object.getOwnPropertyNames(attributesToToggle),
+            );
         }
 
-        console.log(newNode);
-
         return {
-          ...newNode,
+          ...node,
           ...action.attributes,
         };
       });

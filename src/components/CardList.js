@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
 import { Icon } from '../ui/components';
-import { NodePrimaryKeyProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
 
 const EnhancedCard = selectable(Card);
 
@@ -29,17 +29,19 @@ const CardList = (props) => {
 
   const classNames = cx('card-list', className);
 
+  const nodeAttributes = node => node[NodeAttributesProperty] || {};
+
   return (
     <div className={classNames}>
       {
         nodes.map(node => (
           <span className="card-list__content" key={getKey(node)}>
             <EnhancedCard
-              label={label(node)}
+              label={label(nodeAttributes(node))}
               multiselect={multiselect}
               compact={compact}
               selected={selected(node)}
-              details={details(node)}
+              details={details(nodeAttributes(node))}
               onSelected={() => onToggleCard(node)}
             />
             {

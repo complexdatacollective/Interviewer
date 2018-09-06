@@ -8,9 +8,18 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { NodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
-import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import {
+  getDataByPrompt,
+  getCardDisplayLabel,
+  getCardAdditionalProperties,
+  getSortDirectionDefault,
+  getSortFields,
+  getSortOrderDefault,
+  makeGetPromptNodeAttributes,
+} from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
+
 
 /**
   * Name Generator List Interface
@@ -26,17 +35,17 @@ class NameGeneratorList extends Component {
   }
 
   /**
-   * New node submit handler
+   * Select node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+    this.props.addNode({ ...node }, { ...this.props.newNodeAttributes });
   }
 
-  onRemoveNode = (item) => {
-    this.props.removeNode(item[NodePrimaryKeyProperty]);
+  onRemoveNode = (node) => {
+    this.props.removeNode(node[NodePrimaryKeyProperty]);
   }
 
-  label = node => `${node[this.props.labelKey]}`;
+  label = node => node[this.props.labelKey];
 
   details = node => this.props.visibleSupplementaryFields.map(
     field => ({ [field.label]: node[field.variable] }));
@@ -57,6 +66,8 @@ class NameGeneratorList extends Component {
     const {
       prompts,
     } = this.props.stage;
+
+    console.log(nodesForList);
 
     return (
       <div className="name-generator-list-interface">

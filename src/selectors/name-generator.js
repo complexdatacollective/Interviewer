@@ -48,11 +48,15 @@ export const makeGetPromptNodeAttributes = () => {
   );
 };
 
+// Returns the displayLabel property of the card options configuration API
 export const getCardDisplayLabel = createSelector(
   propCardOptions,
   cardOptions => cardOptions.displayLabel,
 );
 
+// Returns any additional properties to be displayed on cards.
+// Returns an empty array is no options are found
+// Returns an empty array is no options are found
 export const getCardAdditionalProperties = createSelector(
   propCardOptions,
   cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
