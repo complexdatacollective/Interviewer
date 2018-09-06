@@ -133,6 +133,11 @@
 
     .icon {
       padding-right: 10px;
+
+      &[name='settings'] {
+        height: 35px;
+        width: 35px;
+      }
     }
   }
 
