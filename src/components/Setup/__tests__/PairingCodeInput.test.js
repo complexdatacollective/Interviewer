@@ -1,9 +1,9 @@
 /* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { PairingCodeLength } from 'secure-comms-api/pairingCodeConfig';
 
 import PairingCodeInput from '../PairingCodeInput';
-import { PairingCodeLength } from '../../../utils/shared-api/pairingCodeConfig';
 
 describe('<PairingCodeInput>', () => {
   const charCount = PairingCodeLength;

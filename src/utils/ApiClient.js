@@ -1,8 +1,8 @@
 /* globals cordova */
 import axios from 'axios';
 import { isString } from 'lodash';
+import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
 
-import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from './shared-api/cipher';
 import { isCordova, isElectron } from '../utils/Environment';
 
 const ApiErrorStatus = 'error';
