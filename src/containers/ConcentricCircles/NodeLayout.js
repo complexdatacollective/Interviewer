@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -30,10 +30,14 @@ const dropHandlers = compose(
   withHandlers({
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
-      props.updateNode({
-        [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
-        [props.layoutVariable]: relativeCoords(props, item),
-      });
+      props.updateNode(
+        {
+          [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
+        },
+        {
+          [props.layoutVariable]: relativeCoords(props, item),
+        },
+      );
 
       // Horrible hack for performance (only re-render nodes on drop, not on drag)
       props.setDropCount(props.dropCount + 1);
@@ -41,10 +45,14 @@ const dropHandlers = compose(
     onDrag: props => (item) => {
       if (!has(item.meta, props.layoutVariable)) { return; }
 
-      props.updateNode({
-        [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
-        [props.layoutVariable]: relativeCoords(props, item),
-      });
+      props.updateNode(
+        {
+          [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
+        },
+        {
+          [props.layoutVariable]: relativeCoords(props, item),
+        },
+      );
     },
   }),
 );
@@ -145,7 +153,7 @@ class NodeLayout extends Component {
     return (
       <div className="node-layout">
         { nodes.map((node) => {
-          if (!has(node, layoutVariable)) { return null; }
+          if (!has(node[NodeAttributesProperty], layoutVariable)) { return null; }
 
           return (
             <LayoutNode

@@ -6,6 +6,7 @@ import Node from '../Node';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
+import { NodeAttributesProperty } from '../../ducks/modules/network';
 
 const EnhancedNode = compose(
   DragSource,
@@ -23,7 +24,8 @@ class LayoutNode extends PureComponent {
       selected,
     } = this.props;
 
-    const { x, y } = node[layoutVariable];
+    console.log(node);
+    const { x, y } = node[NodeAttributesProperty][layoutVariable];
 
     const styles = {
       left: `${100 * x}%`,

@@ -14,10 +14,14 @@ import {
   flow,
   isEmpty,
 } from 'lodash';
-import { networkEdges, makeGetNodeDisplayVariable, makeNetworkNodesForType } from './interface';
+import {
+  networkEdges,
+  makeGetNodeDisplayVariable,
+  makeNetworkNodesForType,
+} from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { NodePrimaryKeyProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -104,7 +108,8 @@ const makeGetUnplacedNodes = () => {
 
   return createSelector(
     networkNodesForSubject, getLayoutOptions,
-    (nodes, { layoutVariable }) => reject(nodes, node => has(node, layoutVariable)),
+    (nodes, { layoutVariable }) =>
+      reject(nodes, node => has(node[NodeAttributesProperty], layoutVariable)),
   );
 };
 
@@ -175,6 +180,6 @@ export const makeGetPlacedNodes = () => {
     networkNodesForSubject,
     getLayoutOptions,
     (nodes, { layoutVariable }) =>
-      filter(nodes, node => has(node, layoutVariable)),
+      filter(nodes, node => has(node[NodeAttributesProperty], layoutVariable)),
   );
 };
