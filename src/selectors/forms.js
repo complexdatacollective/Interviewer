@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { makeGetNodeType } from './interface';
 import { protocolRegistry, protocolForms } from './protocol';
 
 // Prop selectors
@@ -7,14 +6,6 @@ import { protocolRegistry, protocolForms } from './protocol';
 const propFields = (_, props) => props.fields;
 const propStageForm = (_, props) => props.stage.form;
 const propForm = (_, { entity, type }) => ({ entity, type });
-
-// Use the node type (e.g. "person") as the fallback form name —
-// this should always be present and will be created by architect.
-const nodeFormKey = createSelector(
-  propStageForm,
-  makeGetNodeType(),
-  (stageForm, nodeType) => stageForm || nodeType,
-);
 
 // MemoedSelectors
 
@@ -43,6 +34,6 @@ export const makeRehydrateFields = () =>
 
 export const makeRehydrateForm = () =>
   createSelector(
-    [nodeFormKey, protocolForms],
-    (form, forms) => forms[form],
+    [propStageForm, protocolForms],
+    (form, forms) => forms[form] || null,
   );
