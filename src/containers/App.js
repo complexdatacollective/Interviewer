@@ -26,8 +26,8 @@ const App = props => (
   })}
   >
     <div className="electron-titlebar" />
-    <SettingsMenu hideButton />
-    <StageMenu hideButton />
+    <SettingsMenu />
+    <StageMenu />
     <div
       id="page-wrap"
       className={cx({

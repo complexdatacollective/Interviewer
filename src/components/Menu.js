@@ -75,7 +75,7 @@ class MenuFactory extends Component {
   }
 
   render() {
-    const { hideButton, icon, isOpen, items, searchField, title, children } = this.props;
+    const { isOpen, items, searchField, title, children } = this.props;
 
     const menuItems = items.map(item =>
       (<MenuItem
@@ -105,15 +105,12 @@ class MenuFactory extends Component {
             </nav>
           </Scroller>
         </div>
-        {!hideButton && <Icon name={icon} className="menu__burger" onClick={this.menuClick} />}
       </div>
     );
   } // end render
 } // end class
 
 MenuFactory.propTypes = {
-  hideButton: PropTypes.bool,
-  icon: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array,
   title: PropTypes.string,
@@ -123,8 +120,6 @@ MenuFactory.propTypes = {
 };
 
 MenuFactory.defaultProps = {
-  hideButton: false,
-  icon: 'menu',
   items: [],
   searchField: null,
   title: 'Options',

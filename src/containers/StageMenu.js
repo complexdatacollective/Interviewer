@@ -31,7 +31,6 @@ class StageMenu extends Component {
     const {
       currentStages,
       filteredList,
-      hideButton,
       isOpen,
       protocolPath,
       protocolType,
@@ -65,7 +64,6 @@ class StageMenu extends Component {
 
     return (
       <Menu
-        hideButton={hideButton}
         isOpen={isOpen}
         items={items.concat(settingsMenuItem)}
         searchField={search}
@@ -79,7 +77,6 @@ class StageMenu extends Component {
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   filteredList: PropTypes.array.isRequired,
-  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
@@ -91,7 +88,6 @@ StageMenu.propTypes = {
 };
 
 StageMenu.defaultProps = {
-  hideButton: false,
   isOpen: false,
   protocolPath: '',
   searchValue: '',
