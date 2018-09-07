@@ -14,6 +14,7 @@ import {
   getCardAdditionalProperties,
   getSortableFields,
   makeGetPromptNodeAttributes,
+  getInitialSortOrder,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
@@ -93,7 +94,7 @@ class NameGeneratorList extends Component {
 
 NameGeneratorList.propTypes = {
   addNode: PropTypes.func.isRequired,
-  initialSortOrder: PropTypes.object,
+  initialSortOrder: PropTypes.array.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
@@ -107,12 +108,12 @@ NameGeneratorList.propTypes = {
   visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
-NameGeneratorList.defaultProps = {
-  initialSortOrder: {
-    property: '',
-    direction: 'asc',
-  },
-};
+// NameGeneratorList.defaultProps = {
+//   initialSortOrder: [{
+//     property: '',
+//     direction: 'asc',
+//   }],
+// };
 
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
@@ -131,6 +132,7 @@ function makeMapStateToProps() {
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
+      initialSortOrder: getInitialSortOrder(state, props),
       selectedNodes: networkNodes(state),
       sortFields: getSortableFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),

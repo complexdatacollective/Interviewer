@@ -42,10 +42,7 @@ const sortOrder = (sortConfig = [], variableRegistry = {}) => { // eslint-disabl
    */
   return items => orderBy(
     items,
-    sortRules.map((rule) => {
-      console.log(rule);
-      return `${NodeAttributesProperty}.${rule.property}`;
-    }),
+    sortRules.map(rule => `${NodeAttributesProperty}.${rule.property}`),
     orders,
   );
 };

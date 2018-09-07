@@ -7,15 +7,25 @@ import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules
 import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
+  static getDerivedStateFromProps(nextProps) {
+    const sorter = sortOrder(nextProps.initialSortOrder);
+    const sortedNodes = sorter(nextProps.nodes);
+    return {
+      activeSortOrder: {
+        ...nextProps.initialSortOrder[0],
+      },
+      nodes: sortedNodes,
+    };
+  }
   constructor(props) {
     super(props);
 
     this.state = {
       activeSortOrder: {
-        property: this.props.initialSortOrder.direction || 'asc',
-        direction: this.props.initialSortOrder.property || this.props.labelKey,
+        ...this.props.initialSortOrder[0], // For now, just respect the first default sort rule
       },
       filterValue: '',
+      nodes: this.props.nodes,
     };
   }
 
@@ -34,16 +44,10 @@ class ListSelect extends Component {
     */
   getDirection = (property) => {
     if (property === this.state.activeSortOrder.property) {
-      return this.state.direction ? ' \u25B2' : ' \u25BC';
+      return this.state.activeSortOrder.direction === 'asc' ? ' \u25B2' : ' \u25BC';
     }
     return '';
   };
-
-  /**
-    * @return sorted list
-    */
-  getSortedList = () =>
-    this.sorter(this.props.nodes);
 
   /**
     * @return filtered list
@@ -54,10 +58,9 @@ class ListSelect extends Component {
     * TODO: Expand filtering to look at all node properties, not just ones passed as card details.
     */
   getFilteredList = (list) => {
-    console.log(list);
     const filteredList = list.filter(
       (node) => {
-        // Node attributes are stored in a specific named property
+        // Node data model attributes are stored in a specific named property
         const nodeAttributes = node[NodeAttributesProperty] || {};
 
         // Lowercase for comparison
@@ -66,6 +69,9 @@ class ListSelect extends Component {
 
         const nodeDetails = this.props.details(nodeAttributes);
 
+        // Include in filtered list if:
+        // - The label includes the filter value, OR
+        // - Any of the detail property values include the filter value
         return (
           nodeLabel.includes(filterValue) ||
           nodeDetails.some((detail) => {
@@ -109,11 +115,9 @@ class ListSelect extends Component {
     * changes direction of current sort
     */
   toggleSortDirection = () => {
-    const currentDirection = this.state.activeSortOrder.direction === 'asc' ? 'desc' : 'asc';
-    console.log(currentDirection);
     this.setState({
       activeSortOrder: {
-        direction: currentDirection,
+        direction: this.state.activeSortOrder.direction === 'asc' ? 'desc' : 'asc',
         property: this.state.activeSortOrder.property,
       },
     });
@@ -133,7 +137,6 @@ class ListSelect extends Component {
     }
   };
 
-
   render() {
     const {
       details,
@@ -142,16 +145,14 @@ class ListSelect extends Component {
     } = this.props;
 
     const sorter = sortOrder([this.state.activeSortOrder]);
-    const sorted = sorter(this.props.nodes);
-    console.log(sorted);
-    const nodes = this.getFilteredList(sorted);
-    console.log('render');
+    const nodes = sorter(this.state.nodes);
+
     return (
       <div className="list-select">
         <div className="list-select__sort">
           { sortFields && sortFields.map(sortField => (
             <Button
-              color={this.state.filterProperty === sortField.variable ? 'primary' : 'white'}
+              color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
               key={sortField.variable}
               onClick={() => this.setSortBy(sortField.variable)}
               size="small"
@@ -175,9 +176,8 @@ class ListSelect extends Component {
 
 ListSelect.propTypes = {
   details: PropTypes.func,
-  initialSortOrder: PropTypes.object,
+  initialSortOrder: PropTypes.array,
   label: PropTypes.func,
-  labelKey: PropTypes.string,
   nodes: PropTypes.array.isRequired,
   onRemoveNode: PropTypes.func,
   onSubmitNode: PropTypes.func,
@@ -187,12 +187,11 @@ ListSelect.propTypes = {
 
 ListSelect.defaultProps = {
   details: () => {},
-  initialSortOrder: {
+  initialSortOrder: [{
     property: '',
     direction: 'asc',
-  },
+  }],
   label: () => {},
-  labelKey: '',
   nodes: [],
   onRemoveNode: () => {},
   onSubmitNode: () => {},

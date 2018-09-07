@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { has, get } from 'lodash';
+import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
 import { NodeAttributesProperty } from '../ducks/modules/network';
 import { protocolRegistry } from './protocol';
@@ -68,16 +68,10 @@ export const getSortableFields = createSelector(
 );
 
 
-export const getSortOrderDefault = createSelector(
-  sortOptions => get(sortOptions, ['sortOrder', 0, 'property'], ''),
+export const getInitialSortOrder = createSelector(
+  propSortOptions,
+  sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
-
-// TODO: hard coded to select the first sortOrder rule,
-// until we add support for multi-property sorting
-export const getSortDirectionDefault = createSelector(
-  sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
-);
-
 
 export const getDataByPrompt = createSelector(
   getExternalData,

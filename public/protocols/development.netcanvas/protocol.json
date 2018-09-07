@@ -1024,7 +1024,7 @@
           },
           "sortOptions": {
             "sortOrder": [{
-              "property": "nickname",
+              "property": "age",
               "direction": "desc"
             }],
             "sortableProperties": [
