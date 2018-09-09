@@ -110,7 +110,7 @@ export const makeGetOrdinalValues = () =>
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
   variableRegistry => (node) => {
-    // Get the node eneity section of the variable registry
+    // Get the node entity section of the variable registry
     const nodeInfo = variableRegistry && variableRegistry.node;
 
     // Get the display variable by looking up the node type in the variable registry

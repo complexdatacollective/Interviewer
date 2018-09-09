@@ -1,10 +1,10 @@
-import { findKey, forInRight, isNil, join } from 'lodash';
+import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
-import { NodePrimaryKeyProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
 
 const setUpXml = () => {
-  const xmlDoc = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+  const graphMLOutline = '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"\n' +
     'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
     'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns\n' +
@@ -13,11 +13,7 @@ const setUpXml = () => {
     ' </graph>\n' +
     ' </graphml>\n';
 
-  let xml = '';
-  if (window.DOMParser) { // Standard
-    xml = (new DOMParser()).parseFromString(xmlDoc, 'text/xml');
-  }
-  return xml;
+  return (new DOMParser()).parseFromString(graphMLOutline, 'text/xml');
 };
 
 const getVariableInfo = (variableRegistry, type, element, key) => (
@@ -58,8 +54,15 @@ const getTypeForKey = (data, key) => (
     return 'string';
   }, ''));
 
-const generateKeys = (graph, graphML, elements, type, excludeList, variableRegistry,
-  layoutVariable) => {
+const generateKeys = (
+  graph, // <Graph> Element
+  graphML, // <GraphML> Element
+  elements, // networkData.nodes
+  type, // 'node' - node type?
+  excludeList, // Variables to exlude
+  variableRegistry, // variable registry
+  layoutVariable, // boolean value uses for edges?
+) => {
   // generate keys for attributes
   const missingVariables = [];
   const done = [];
@@ -81,7 +84,13 @@ const generateKeys = (graph, graphML, elements, type, excludeList, variableRegis
   }
 
   elements.forEach((element) => {
-    Object.keys(element).forEach((key) => {
+    let iterableElement = element;
+    if (type === 'node') {
+      iterableElement = element[NodeAttributesProperty];
+    }
+    // Node data model attributes are now stored under a specific propertyy
+
+    Object.keys(iterableElement).forEach((key) => {
       if (done.indexOf(key) === -1 && !excludeList.includes(key)) {
         const keyElement = document.createElementNS(graphML.namespaceURI, 'key');
         keyElement.setAttribute('id', key);
@@ -144,14 +153,15 @@ const getDataElement = (uri, key, text) => {
 };
 
 const addElements = (
-  graph,
-  uri,
-  dataList,
-  type,
-  excludeList,
-  variableRegistry,
-  layoutVariable,
-  extra = false) => {
+  graph, // <Graph> XML Element
+  uri, // the xmlns attribute from <GraphML>
+  dataList, // List of nodes or edges
+  type, // Element type to be created. "node" or "egde"
+  excludeList, // Attributes to exclude lookup of in variable registry
+  variableRegistry, // Copy of variable registry
+  layoutVariable, // Primary layout variable. Null for edges
+  extra = false, // ???
+) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
     if (dataElement[NodePrimaryKeyProperty]) {
@@ -175,6 +185,24 @@ const addElements = (
         }
       }
     });
+
+    // Add node attributes
+    if (type === 'node') {
+      Object.keys(dataElement[NodeAttributesProperty]).forEach((key) => {
+        if (!excludeList.includes(key)) {
+          if (typeof dataElement[NodeAttributesProperty][key] !== 'object') {
+            domElement.appendChild(
+              getDataElement(uri, key, dataElement[NodeAttributesProperty][key]));
+          } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
+            domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[NodeAttributesProperty][key].x));
+            domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[NodeAttributesProperty][key].y));
+          } else {
+            domElement.appendChild(
+              getDataElement(uri, key, JSON.stringify(dataElement[NodeAttributesProperty][key])));
+          }
+        }
+      });
+    }
 
     // add positions for gephi
     if (layoutVariable && dataElement[layoutVariable]) {
@@ -206,18 +234,37 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
     layoutVariable = findKey(value.variables, { type: 'layout' });
   });
 
-  // generate keys for attributes
-  let missingVariables = generateKeys(graph, graphML, networkData.nodes, 'node', [NodePrimaryKeyProperty], variableRegistry, layoutVariable);
-  missingVariables = missingVariables.concat(generateKeys(graph, graphML, networkData.edges, 'edge', ['from', 'to'], variableRegistry));
+  // generate keys for nodes
+  let missingVariables = generateKeys(
+    graph,
+    graphML,
+    networkData.nodes,
+    'node',
+    [NodePrimaryKeyProperty],
+    variableRegistry,
+    layoutVariable,
+  );
+
+  // generate keys for edges and add to keys for nodes
+  missingVariables = missingVariables.concat(generateKeys(
+    graph,
+    graphML,
+    networkData.edges,
+    'edge',
+    ['from', 'to'],
+    variableRegistry,
+  ));
+
   if (missingVariables.length > 0) {
     // hard fail if checking the registry fails
     // remove this to fall back to using "text" for unknowns
-    openErrorDialog(`The variable registry seems to be missing "type" of: ${join(missingVariables, ', ')}.`);
+    // openErrorDialog(`The variable registry seems to be missing
+    // "type" of: ${join(missingVariables, ', ')}.`);
     return null;
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty, NodeAttributesProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
