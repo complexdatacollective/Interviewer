@@ -21,6 +21,7 @@ export class EdgeLayout extends PureComponent {
 
   render() {
     const { displayEdges } = this.props;
+
     return (
       <div className="edge-layout">
         <svg viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -33,7 +34,6 @@ export class EdgeLayout extends PureComponent {
 
 function makeMapStateToProps() {
   const displayEdgesForPrompt = makeDisplayEdgesForPrompt();
-
   return function mapStateToProps(state, props) {
     return {
       displayEdges: displayEdgesForPrompt(state, props),

@@ -24,7 +24,6 @@ class LayoutNode extends PureComponent {
       selected,
     } = this.props;
 
-    console.log(node);
     const { x, y } = node[NodeAttributesProperty][layoutVariable];
 
     const styles = {

@@ -134,8 +134,8 @@ const edgeCoords = (edge, { nodes, layoutVariable }) => {
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
     type: edge.type,
-    from: from[layoutVariable],
-    to: to[layoutVariable],
+    from: from[NodeAttributesProperty][layoutVariable],
+    to: to[NodeAttributesProperty][layoutVariable],
   };
 };
 
