@@ -8,7 +8,7 @@ describe('<ServerPairing>', () => {
   let component;
   const mockDownloadFn = jest.fn();
   const protocolType = '';
-  const mockServer = { apiUrl: '' };
+  const mockServer = { pairingServiceUrl: 'http://example.com:1234' };
 
   beforeEach(() => {
     component = shallow((

@@ -28,7 +28,7 @@
 
     &--single-protocol {
       // If there's only one protocol card, extend height to meet 'prefix' line
-      height: calc(100% - var(--card-height) / 2);
+      height: calc((5rem / 2) - #{$scroller-top-padding});
     }
   }
 

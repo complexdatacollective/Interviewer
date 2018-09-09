@@ -1,4 +1,5 @@
-const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
+const logger = require('electron-log');
+const { app, BrowserWindow, dialog, Menu, shell, ipcMain } = require('electron');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -6,6 +7,8 @@ const url = require('url');
 const log = require('electron-log');
 const registerAssetsProtocol = require('./components/assetsProtocol').registerAssetsProtocol;
 require('./components/updater');
+
+const { commonName } = require('secure-comms-api/sslConfig.js');
 
 const isMacOS = () => os.platform() === 'darwin';
 
@@ -168,6 +171,32 @@ app.on('ready', () => {
   createMenu();
   createWindow();
   loadDevToolsExtensions();
+});
+
+const normalizeEol = str => str.replace(/\r\n|\r|\n/g, '\r\n');
+
+// App must only add a certificate known to be from a trusted, paired Server.
+// Cert will be considered when making https calls; see the 'certificate-error' handler.
+const pretrustedCertificates = new Set();
+ipcMain.on('add-cert', (evt, cert) => {
+  pretrustedCertificates.add(normalizeEol(cert));
+  evt.sender.send('add-cert-complete');
+});
+
+app.on('certificate-error', (event, webContents, requestedUrl, error, certificate, callback) => {
+  const protocolMatch = requestedUrl.startsWith('https:');
+  const nameMatch = certificate.subject.commonName === commonName;
+  const rawCert = normalizeEol(certificate.data);
+  if (nameMatch && protocolMatch && pretrustedCertificates.has(rawCert)) {
+    event.preventDefault();
+    callback(true);
+  } else {
+    logger.warn('Unexpected certificate error', requestedUrl);
+    logger.error(error);
+    // Calling `callback(false)` will cancel the request and prevent the error
+    // from being given to XHR. With axios, this results in a silent failure.
+    // Instead, allow the error to occur by not calling back.
+  }
 });
 
 // Quit when all windows are closed.

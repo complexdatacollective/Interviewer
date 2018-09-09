@@ -6,7 +6,7 @@ import { NodePrimaryKeyProperty } from './network';
 const initialState = null;
 
 /**
- * @private
+ * @description
  * All nodes from external data must be identified in the app
  * with a primary key (== NodePrimaryKeyProperty).
  *

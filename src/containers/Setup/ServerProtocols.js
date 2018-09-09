@@ -8,8 +8,12 @@ import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { ServerProtocolList, ServerSetup } from '../../components/Setup';
-import { getPairedServerFactory } from '../../selectors/servers';
+import { getPairedServer } from '../../selectors/servers';
 
+/**
+ * @class
+ * Renders a list of protocols, from which a user can choose to download.
+ */
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
@@ -17,9 +21,8 @@ class ServerProtocols extends Component {
   }
 
   componentDidMount() {
-    const { server, getPairedServer } = this.props;
-    const pairedServer = getPairedServer(server.apiUrl);
-    this.apiClient = new ApiClient(server.apiUrl, pairedServer);
+    const { pairedServer } = this.props;
+    this.apiClient = new ApiClient(pairedServer);
     this.fetchProtocolList();
   }
 
@@ -30,7 +33,9 @@ class ServerProtocols extends Component {
   }
 
   fetchProtocolList = () => {
-    this.apiClient.getProtocols()
+    this.apiClient
+      .addTrustedCert()
+      .then(() => this.apiClient.getProtocols())
       .then(protocols => this.setState({ protocols }))
       .catch(err => this.handleApiError(err));
   }
@@ -52,7 +57,8 @@ class ServerProtocols extends Component {
             protocols={protocols}
             selectProtocol={(p) => {
               addSession();
-              downloadProtocol(p.downloadUrl);
+              this.apiClient.addTrustedCert()
+                .then(() => downloadProtocol(p.downloadPath, true));
             }}
           />
         }
@@ -63,7 +69,6 @@ class ServerProtocols extends Component {
 
 ServerProtocols.defaultProps = {
   onError: () => {},
-  getPairedServer: () => {},
   protocolPath: '',
 };
 
@@ -73,11 +78,11 @@ ServerProtocols.propTypes = {
   downloadProtocolFailed: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   onError: PropTypes.func,
-  getPairedServer: PropTypes.func,
+  pairedServer: PropTypes.object.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
-    apiUrl: PropTypes.string.isRequired,
+    pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
   sessionId: PropTypes.string.isRequired,
 };
@@ -88,7 +93,7 @@ function mapStateToProps(state) {
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     sessionId: state.session,
-    getPairedServer: getPairedServerFactory(state),
+    pairedServer: getPairedServer(state),
   };
 }
 

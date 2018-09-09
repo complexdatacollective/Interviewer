@@ -51,7 +51,10 @@ const ErrorMessage = ({
 
 ErrorMessage.propTypes = {
   acknowledged: PropTypes.bool,
-  error: PropTypes.instanceOf(Error),
+  error: PropTypes.oneOfType([
+    PropTypes.instanceOf(Error),
+    PropTypes.shape({ friendlyMessage: PropTypes.string }),
+  ]),
   acknowledgeError: PropTypes.func.isRequired,
 };
 

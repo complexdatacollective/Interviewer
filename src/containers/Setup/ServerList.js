@@ -89,12 +89,14 @@ class ServerList extends Component {
       <div className="server-list__content">
         {
           this.state.servers.map((server) => {
-            // Review: Single server may have two apiUrls; should this be treated as two servers?
-            const isPaired = pairedServers.some(s => s.apiUrl === server.apiUrl);
+            // Review: Single server may have two pairingServiceUrls;
+            // should this be treated as two servers?
+            const isPaired = pairedServers.some(s => (
+              s.pairingServiceUrl === server.pairingServiceUrl));
             const onSelect = isPaired ? this.props.selectPairedServer : this.props.selectServer;
             return (
               <ServerCard
-                key={server.apiUrl}
+                key={server.pairingServiceUrl}
                 data={server}
                 selectServer={onSelect}
                 secondaryLabel={isPaired ? '(paired)' : ''}

@@ -1,10 +1,11 @@
 /* eslint-disable global-require */
-/* global window, FileTransfer */
+/* global FileTransfer */
 import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
+import ApiClient from '../../utils/ApiClient';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -21,48 +22,65 @@ const urlError = friendlyErrorMessage("The location you gave us doesn't seem to 
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection - connect to a network, and try again.");
 const fileError = friendlyErrorMessage('The protocol could not be saved to your device.');
 
+/**
+ * Download a protocol from a remote server.
+ *
+ * If the URL points to an instance of a Network Canvas Server, then the caller must ensure
+ * that the SSL certificate has been trusted. See {@link ApiClient#addTrustedCert}.
+ *
+ * @param {string} uri
+ * @return {string} output filepath
+ */
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
     const path = require('path');
     const electron = require('electron');
+    const tempPath = (electron.app || electron.remote.app).getPath('temp');
+    const destination = path.join(tempPath, getProtocolName());
 
-    return (uri) => {
-      const tempPath = (electron.app || electron.remote.app).getPath('temp');
+    return (uri, pairedServer) => {
+      let promisedResponse;
+      if (pairedServer) {
+        promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
+      } else {
+        promisedResponse = getURL(uri)
+          .catch(urlError)
+          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+      }
 
-      return getURL(uri)
-        .then((url) => {
-          const destination = path.join(tempPath, getProtocolName());
-
-          return request({ method: 'GET', encoding: null, uri: url.href })
-            .catch(networkError)
-            .then(data => writeFile(destination, data))
-            .catch(fileError)
-            .then(() => destination);
-        })
-        .catch(urlError);
+      return promisedResponse
+        .catch(networkError)
+        .then(data => writeFile(destination, data))
+        .catch(fileError)
+        .then(() => destination);
     };
   }
 
   if (environment === environments.CORDOVA) {
-    return uri =>
-      getURL(uri)
-        .then(url => [
-          url.href,
-          `cdvfile://localhost/temporary/${getProtocolName()}`,
-        ])
-        .catch(urlError)
-        .then(([url, destination]) =>
-          new Promise((resolve, reject) => {
+    const destination = `cdvfile://localhost/temporary/${getProtocolName()}`;
+    return (uri, pairedServer) => {
+      let promisedResponse;
+      if (pairedServer) {
+        promisedResponse = new ApiClient(pairedServer)
+          // .addTrustedCert() is not required, assuming we've just fetched the protocol list
+          .downloadProtocol(uri, destination)
+          .then(() => destination);
+      } else {
+        promisedResponse = getURL(uri)
+          .then(url => url.href)
+          .catch(urlError)
+          .then(href => new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
             fileTransfer.download(
-              url,
+              href,
               destination,
               () => resolve(destination),
               error => reject(error),
             );
-          }),
-        )
+          }));
+      }
+      return promisedResponse
         .catch((error) => {
           const getErrorMessage = ({ code }) => {
             if (code === 3) return networkError;
@@ -71,6 +89,7 @@ const downloadProtocol = inEnvironment((environment) => {
 
           getErrorMessage(error)(error);
         });
+    };
   }
 
   return () => Promise.reject(new Error('downloadProtocol() not available on platform'));

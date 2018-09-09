@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ApiClient from '../../utils/ApiClient';
+import { addSecureApiUrlToServer } from '../../utils/serverAddressing';
 import { ServerSetup, ServerPairingForm } from '../../components/Setup';
 import { actionCreators } from '../../ducks/modules/servers';
 
@@ -23,7 +24,7 @@ class ServerPairing extends Component {
   }
 
   componentDidMount() {
-    this.apiClient = new ApiClient(this.props.server.apiUrl);
+    this.apiClient = new ApiClient(this.props.server.pairingServiceUrl);
     this.requestPairingCode();
   }
 
@@ -60,8 +61,14 @@ class ServerPairing extends Component {
     const { pairingCode, pairingRequestId, pairingRequestSalt } = this.state;
     const { deviceName } = this.props;
     this.apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
-      .then((device) => {
-        this.props.addServer(this.props.server, device.id, device.secret);
+      .then((pairingInfo) => {
+        const device = pairingInfo.device;
+        const server = addSecureApiUrlToServer({
+          ...this.props.server,
+          securePort: pairingInfo.securePort,
+          sslCertificate: pairingInfo.sslCertificate,
+        });
+        this.props.addServer(server, device.id, device.secret);
         this.setState({
           ...emptyState,
           pairedDeviceId: device.id,
@@ -109,7 +116,7 @@ ServerPairing.propTypes = {
   onError: PropTypes.func,
   pairingFailed: PropTypes.func.isRequired,
   server: PropTypes.shape({
-    apiUrl: PropTypes.string.isRequired,
+    pairingServiceUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
   }).isRequired,
 };

@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { addApiUrlToService, apiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
+import { addPairingUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
 import { Button, Icon } from '../../ui/components';
 
+/**
+ * @class Renders a form for user to manually enter Server connection info.
+ */
 class ServerAddressForm extends PureComponent {
   constructor(props) {
     super(props);
@@ -16,11 +19,11 @@ class ServerAddressForm extends PureComponent {
 
   onSubmit = (evt) => {
     evt.preventDefault();
-    const server = addApiUrlToService({
+    const server = addPairingUrlToService({
       addresses: [this.state.address],
       port: this.state.port,
     });
-    if (server.apiUrl) {
+    if (server.pairingServiceUrl) {
       this.props.selectServer(server);
     } else {
       this.setState({
@@ -78,7 +81,7 @@ class ServerAddressForm extends PureComponent {
         </p>
         <fieldset className="server-address-form__fields">
           <div className="server-address-form__field">
-            <p className="server-address-form__text">{apiProtocol}://</p>
+            <p className="server-address-form__text">{pairingApiProtocol}://</p>
           </div>
           <div className="server-address-form__field">
             <input

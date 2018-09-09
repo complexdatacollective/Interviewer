@@ -9,8 +9,6 @@ describe('<SetupScreen>', () => {
     const component = shallow((
       <SetupScreen
         setDeviceDescription={jest.fn()}
-        downloadProtocol={jest.fn()}
-        loadFactoryProtocol={jest.fn()}
         protocolType=""
         isProtocolLoaded={false}
       />
@@ -25,8 +23,6 @@ describe('<SetupScreen>', () => {
     const component = shallow((
       <SetupScreen
         setDeviceDescription={jest.fn()}
-        downloadProtocol={jest.fn()}
-        loadFactoryProtocol={jest.fn()}
         protocolType=""
         isProtocolLoaded={false}
       />

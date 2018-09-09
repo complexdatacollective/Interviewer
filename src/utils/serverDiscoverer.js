@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 
 import { isElectron, isCordova } from '../utils/Environment';
-import { addApiUrlToService } from './serverAddressing';
+import { addPairingUrlToService } from './serverAddressing';
 
 class ServerDiscoverer {
   constructor() {
@@ -107,9 +107,9 @@ class ServerDiscoverer {
    * Emits a {@link Server} object
    */
   emitAnnouncement(normalizedService) {
-    const service = addApiUrlToService(normalizedService);
-    if (!service.apiUrl) {
-      console.warn('No apiUrl found', service); // eslint-disable-line no-console
+    const service = addPairingUrlToService(normalizedService);
+    if (!service.pairingServiceUrl) {
+      console.warn('No pairing URL found', service); // eslint-disable-line no-console
       return;
     }
     this.events.emit('SERVER_ANNOUNCED', service);
