@@ -10,6 +10,6 @@
     width: 100%;
     position: absolute;
     border-radius: inherit;
-    transition: height var(--animation-duration-standard) var(--animation-easing);
+    transition: height calc(var(--animation-duration-standard)*3) var(--animation-easing);
   }
 }
