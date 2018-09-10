@@ -9,11 +9,12 @@
   flex-direction: column;
 
   .list-select {
-    margin-right: 180px;
+    margin-left: var(--timeline-width);
   }
 
   &__prompt {
     @include interface-prompt;
+    margin: 0 var(--timeline-width);
   }
 
   &__main {

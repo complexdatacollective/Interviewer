@@ -4,6 +4,10 @@
   flex-direction: column;
   height: 100vh;
   width: var(--timeline-width);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2000;
 
   &-nav {
     align-items: center;
