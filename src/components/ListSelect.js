@@ -50,7 +50,7 @@ class ListSelect extends Component {
     const filteredList = list.filter(
       (node) => {
         // Lowercase for comparison
-        const nodeLabel = this.props.label(node).toLowerCase();
+        const nodeLabel = (this.props.label(node) || '').toLowerCase();
         const filterValue = this.state.filterValue.toLowerCase();
 
         const nodeDetails = this.props.details(node);

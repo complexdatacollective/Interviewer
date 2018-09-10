@@ -18,18 +18,24 @@ ShallowWrapper {
     nodes={
       Array [
         Object {
-          "age": "22",
-          "name": "a name",
+          "attributes": Object {
+            "age": "22",
+            "name": "a name",
+          },
           "uid": "a",
         },
         Object {
-          "age": "88",
-          "name": "b name",
+          "attributes": Object {
+            "age": "88",
+            "name": "b name",
+          },
           "uid": "b",
         },
         Object {
-          "age": "33",
-          "name": "c name",
+          "attributes": Object {
+            "age": "33",
+            "name": "c name",
+          },
           "uid": "c",
         },
       ]
@@ -68,18 +74,24 @@ ShallowWrapper {
           nodes={
             Array [
               Object {
-                "age": "22",
-                "name": "a name",
+                "attributes": Object {
+                  "age": "22",
+                  "name": "a name",
+                },
                 "uid": "a",
               },
               Object {
-                "age": "88",
-                "name": "b name",
+                "attributes": Object {
+                  "age": "88",
+                  "name": "b name",
+                },
                 "uid": "b",
               },
               Object {
-                "age": "33",
-                "name": "c name",
+                "attributes": Object {
+                  "age": "33",
+                  "name": "c name",
+                },
                 "uid": "c",
               },
             ]
@@ -136,18 +148,24 @@ ShallowWrapper {
           "label": [Function],
           "nodes": Array [
             Object {
-              "age": "22",
-              "name": "a name",
+              "attributes": Object {
+                "age": "22",
+                "name": "a name",
+              },
               "uid": "a",
             },
             Object {
-              "age": "88",
-              "name": "b name",
+              "attributes": Object {
+                "age": "88",
+                "name": "b name",
+              },
               "uid": "b",
             },
             Object {
-              "age": "33",
-              "name": "c name",
+              "attributes": Object {
+                "age": "33",
+                "name": "c name",
+              },
               "uid": "c",
             },
           ],
@@ -184,18 +202,24 @@ ShallowWrapper {
             nodes={
               Array [
                 Object {
-                  "age": "22",
-                  "name": "a name",
+                  "attributes": Object {
+                    "age": "22",
+                    "name": "a name",
+                  },
                   "uid": "a",
                 },
                 Object {
-                  "age": "88",
-                  "name": "b name",
+                  "attributes": Object {
+                    "age": "88",
+                    "name": "b name",
+                  },
                   "uid": "b",
                 },
                 Object {
-                  "age": "33",
-                  "name": "c name",
+                  "attributes": Object {
+                    "age": "33",
+                    "name": "c name",
+                  },
                   "uid": "c",
                 },
               ]
@@ -252,18 +276,24 @@ ShallowWrapper {
             "label": [Function],
             "nodes": Array [
               Object {
-                "age": "22",
-                "name": "a name",
+                "attributes": Object {
+                  "age": "22",
+                  "name": "a name",
+                },
                 "uid": "a",
               },
               Object {
-                "age": "88",
-                "name": "b name",
+                "attributes": Object {
+                  "age": "88",
+                  "name": "b name",
+                },
                 "uid": "b",
               },
               Object {
-                "age": "33",
-                "name": "c name",
+                "attributes": Object {
+                  "age": "33",
+                  "name": "c name",
+                },
                 "uid": "c",
               },
             ],
