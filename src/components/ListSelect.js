@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../ui/components';
 import { CardList } from '.';
-import { nodePrimaryKeyProperty, getNodeAttributes } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
@@ -60,14 +60,11 @@ class ListSelect extends Component {
   getFilteredList = (list) => {
     const filteredList = list.filter(
       (node) => {
-        // Node data model attributes are stored in a specific named property
-        const nodeAttributes = getNodeAttributes(node);
-
         // Lowercase for comparison
-        const nodeLabel = this.props.label(nodeAttributes).toLowerCase();
+        const nodeLabel = this.props.label(node).toLowerCase();
         const filterValue = this.state.filterValue.toLowerCase();
 
-        const nodeDetails = this.props.details(nodeAttributes);
+        const nodeDetails = this.props.details(node);
 
         // Include in filtered list if:
         // - The label includes the filter value, OR
@@ -165,7 +162,7 @@ class ListSelect extends Component {
         <CardList
           details={details}
           label={label}
-          nodes={nodes}
+          nodes={this.getFilteredList(nodes)}
           onToggleCard={this.toggleCard}
           selected={this.isNodeSelected}
         />
