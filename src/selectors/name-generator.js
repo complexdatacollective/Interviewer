@@ -28,6 +28,8 @@ const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
 
+// Static props that will be added to any created/edited node on the prompt
+// Any protocol-specific props will exist in the [nodeAttributesProperty] object
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
   const getIds = makeGetIds();

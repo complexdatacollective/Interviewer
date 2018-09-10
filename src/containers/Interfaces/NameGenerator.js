@@ -11,7 +11,7 @@ import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
-import { getNodeAttributes, nodeAttributesProperty, getNodeWithoutAttributes } from '../../ducks/modules/network';
+import { getNodeWithoutAttributes } from '../../ducks/modules/network';
 
 /**
   * Name Generator Interface
@@ -36,7 +36,7 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNodes({ ...this.props.newNodeAttributes }, { ...formData });
+      this.props.addNodes({ attributes: { ...formData } }, this.props.newNodeAttributes);
     }
   }
 
@@ -71,10 +71,8 @@ class NameGenerator extends Component {
   onDrop = (item) => {
     const node = { ...item.meta };
     const nodeModelData = getNodeWithoutAttributes(node);
-    const nodeAttributeData = getNodeAttributes(node);
 
     const promptModelData = omit(this.props.newNodeAttributes);
-    const promptAttributeData = this.props.newNodeAttributes[nodeAttributesProperty];
 
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptId') || has(node, 'stageId')) {
@@ -83,10 +81,7 @@ class NameGenerator extends Component {
         { ...this.props.activePromptAttributes },
       );
     } else {
-      this.props.addNodes(
-        { ...merge(nodeModelData, promptModelData) },
-        { ...merge(nodeAttributeData, promptAttributeData) },
-      );
+      this.props.addNodes(node, this.props.newNodeAttributes);
     }
   }
 

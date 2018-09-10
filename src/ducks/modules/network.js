@@ -44,16 +44,17 @@ export const getNodeWithoutAttributes = node => omit(node, nodeAttributesPropert
 /**
  * existingNodes - Existing network.nodes
  * netNodes - nodes to be added to the network
- * additionalAttributes - node model properties
+ * additionalAttributes - static props shared to add to each member of newNodes
 */
-function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
+function getNodesWithBatchAdd(existingNodes, newNodes, additionalAttributes = {}) {
   // Create a function to create a UUID and merge node attributes
   const withModelandAttributeData = newNode => ({
+    ...additionalAttributes,
     [nodePrimaryKeyProperty]: uuidv4(),
-    ...newNode, // second to allow existing UUID to be overwritten
+    ...newNode, // second to prevent overwriting existing node UUID (e.g., assigned to externalData)
     [nodeAttributesProperty]: {
+      ...additionalAttributes[nodeAttributesProperty],
       ...newNode[nodeAttributesProperty],
-      ...nodeAttributeData,
     },
   });
 
