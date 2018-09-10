@@ -104,10 +104,10 @@ export const makeGetSociogramOptions = () =>
   );
 
 const makeGetUnplacedNodes = () => {
-  const networkNodesForSubject = makeNetworkNodesForType();
+  const networkNodesForType = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getLayoutOptions,
+    networkNodesForType, getLayoutOptions,
     (nodes, { layoutVariable }) =>
       reject(nodes, node => has(node[nodeAttributesProperty], layoutVariable)),
   );

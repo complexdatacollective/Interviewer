@@ -5,7 +5,7 @@ import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
-import { getNodeAttributes } from '../ducks/modules/network';
+import { getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are generic between interfaces
 
@@ -160,7 +160,7 @@ export const makeNetworkNodesForPrompt = () => {
   return createSelector(
     networkNodesForSubject, getAttributes,
     (nodes, attributes) =>
-      filter(nodes, node => isMatch(getNodeAttributes(node), attributes)),
+      filter(nodes, { [nodeAttributesProperty]: attributes }),
   );
 };
 

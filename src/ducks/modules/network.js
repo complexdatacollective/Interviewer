@@ -63,7 +63,6 @@ function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
 /**
  * @param {array} nodes - an array of objects representing nodes
  * @param {object} updatedNode - object representing the node to be updated and its new properties
- * @param {boolean} full - if the entire node should be overwritten
  */
 function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
   // Iterate over the nodes list

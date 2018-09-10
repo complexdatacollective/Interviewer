@@ -15,7 +15,7 @@ const initialState = null;
  *   + The assigned PK is equal to the hash of the object contents, so is consistent across imports
  *   + A PK is missing if it is falsy, and not equal to 0. (`0` is allowed as an identifier.)
  */
-const dataWithnodePrimaryKeyPropertys = (externalData) => {
+const dataWithnodePrimaryKeyProperties = (externalData) => {
   const cleanedData = {};
   if (!externalData) {
     return externalData;
@@ -37,7 +37,7 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case actionTypes.SET_PROTOCOL:
       return {
-        ...dataWithnodePrimaryKeyPropertys(action.protocol.externalData) || {},
+        ...dataWithnodePrimaryKeyProperties(action.protocol.externalData) || {},
       };
     default:
       return state;

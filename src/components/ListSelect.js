@@ -107,7 +107,7 @@ class ListSelect extends Component {
   /**
     * @param {object} node
     */
-  selected = node =>
+  isNodeSelected = node =>
     !!this.props.selectedNodes
       .find(current => current[nodePrimaryKeyProperty] === node[nodePrimaryKeyProperty]);
 
@@ -167,7 +167,7 @@ class ListSelect extends Component {
           label={label}
           nodes={nodes}
           onToggleCard={this.toggleCard}
-          selected={this.selected}
+          selected={this.isNodeSelected}
         />
       </div>
     );

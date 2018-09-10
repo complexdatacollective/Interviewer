@@ -102,6 +102,7 @@ class NodeList extends Component {
       nodes,
       [nodePrimaryKeyProperty, get(meta, nodePrimaryKeyProperty, null)],
     );
+
     const isValidTarget = !isSource && willAccept;
     const isHovering = isValidTarget && isOver;
 
