@@ -115,8 +115,6 @@ export default function reducer(state = initialState, action = {}) {
 
         // When we find the node that matches the primary key, toggle the properties
         if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
-          // Object.assign is much slower than the following safe mutation
-          // eslint-disable-next-line no-param-reassign
           const withoutAttributes = omit(
             node[nodeAttributesProperty],
             Object.getOwnPropertyNames(attributesToToggle),

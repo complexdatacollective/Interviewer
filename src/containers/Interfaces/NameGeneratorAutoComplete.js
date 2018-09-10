@@ -9,6 +9,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 import { getNodeLabelFunction, makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
@@ -58,6 +59,10 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
+    const searchOptions = { matchProperties: [], ...prompt.searchOptions };
+    searchOptions.matchProperties = searchOptions.matchProperties.map(prop => (
+      `${nodeAttributesProperty}.${prop}`));
+
     return (
       <div className={baseClass}>
         <div className={`${baseClass}__prompt`}>
@@ -95,7 +100,7 @@ class NameGeneratorAutoComplete extends Component {
           nodeType={nodeType}
           onClick={closeSearch}
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
-          options={prompt.searchOptions}
+          options={searchOptions}
         />
 
         <div className="name-generator-auto-complete-interface__node-bin">
