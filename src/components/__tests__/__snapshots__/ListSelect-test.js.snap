@@ -5,10 +5,15 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ListSelect
     details={[Function]}
-    initialSortDirection=""
-    initialSortOrder=""
+    initialSortOrder={
+      Array [
+        Object {
+          "direction": "asc",
+          "property": "",
+        },
+      ]
+    }
     label={[Function]}
-    labelKey=""
     name="foo"
     nodes={
       Array [
@@ -60,7 +65,25 @@ ShallowWrapper {
         <Scrollable
           details={[Function]}
           label={[Function]}
-          nodes={Array []}
+          nodes={
+            Array [
+              Object {
+                "age": "22",
+                "name": "a name",
+                "uid": "a",
+              },
+              Object {
+                "age": "88",
+                "name": "b name",
+                "uid": "b",
+              },
+              Object {
+                "age": "33",
+                "name": "c name",
+                "uid": "c",
+              },
+            ]
+          }
           onToggleCard={[Function]}
           selected={[Function]}
         />,
@@ -111,7 +134,23 @@ ShallowWrapper {
         "props": Object {
           "details": [Function],
           "label": [Function],
-          "nodes": Array [],
+          "nodes": Array [
+            Object {
+              "age": "22",
+              "name": "a name",
+              "uid": "a",
+            },
+            Object {
+              "age": "88",
+              "name": "b name",
+              "uid": "b",
+            },
+            Object {
+              "age": "33",
+              "name": "c name",
+              "uid": "c",
+            },
+          ],
           "onToggleCard": [Function],
           "selected": [Function],
         },
@@ -142,7 +181,25 @@ ShallowWrapper {
           <Scrollable
             details={[Function]}
             label={[Function]}
-            nodes={Array []}
+            nodes={
+              Array [
+                Object {
+                  "age": "22",
+                  "name": "a name",
+                  "uid": "a",
+                },
+                Object {
+                  "age": "88",
+                  "name": "b name",
+                  "uid": "b",
+                },
+                Object {
+                  "age": "33",
+                  "name": "c name",
+                  "uid": "c",
+                },
+              ]
+            }
             onToggleCard={[Function]}
             selected={[Function]}
           />,
@@ -193,7 +250,23 @@ ShallowWrapper {
           "props": Object {
             "details": [Function],
             "label": [Function],
-            "nodes": Array [],
+            "nodes": Array [
+              Object {
+                "age": "22",
+                "name": "a name",
+                "uid": "a",
+              },
+              Object {
+                "age": "88",
+                "name": "b name",
+                "uid": "b",
+              },
+              Object {
+                "age": "33",
+                "name": "c name",
+                "uid": "c",
+              },
+            ],
             "onToggleCard": [Function],
             "selected": [Function],
           },

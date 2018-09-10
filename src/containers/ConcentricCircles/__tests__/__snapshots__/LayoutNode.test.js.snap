@@ -14,11 +14,13 @@ ShallowWrapper {
     linking={false}
     node={
       Object {
-        "foo": Object {
-          "x": 0.77,
-          "y": 0.2,
+        "attributes": Object {
+          "foo": Object {
+            "x": 0.77,
+            "y": 0.2,
+          },
+          "label": "some content",
         },
-        "label": "some content",
       }
     }
     onDropped={[Function]}
@@ -42,13 +44,15 @@ ShallowWrapper {
         allowDrag={false}
         allowSelect={false}
         animate={false}
-        foo={
+        attributes={
           Object {
-            "x": 0.77,
-            "y": 0.2,
+            "foo": Object {
+              "x": 0.77,
+              "y": 0.2,
+            },
+            "label": "some content",
           }
         }
-        label="some content"
         linking={false}
         meta={[Function]}
         onSelected={[Function]}
@@ -71,11 +75,13 @@ ShallowWrapper {
         "allowDrag": false,
         "allowSelect": false,
         "animate": false,
-        "foo": Object {
-          "x": 0.77,
-          "y": 0.2,
+        "attributes": Object {
+          "foo": Object {
+            "x": 0.77,
+            "y": 0.2,
+          },
+          "label": "some content",
         },
-        "label": "some content",
         "linking": false,
         "meta": [Function],
         "onSelected": [Function],
@@ -98,13 +104,15 @@ ShallowWrapper {
           allowDrag={false}
           allowSelect={false}
           animate={false}
-          foo={
+          attributes={
             Object {
-              "x": 0.77,
-              "y": 0.2,
+              "foo": Object {
+                "x": 0.77,
+                "y": 0.2,
+              },
+              "label": "some content",
             }
           }
-          label="some content"
           linking={false}
           meta={[Function]}
           onSelected={[Function]}
@@ -127,11 +135,13 @@ ShallowWrapper {
           "allowDrag": false,
           "allowSelect": false,
           "animate": false,
-          "foo": Object {
-            "x": 0.77,
-            "y": 0.2,
+          "attributes": Object {
+            "foo": Object {
+              "x": 0.77,
+              "y": 0.2,
+            },
+            "label": "some content",
           },
-          "label": "some content",
           "linking": false,
           "meta": [Function],
           "onSelected": [Function],

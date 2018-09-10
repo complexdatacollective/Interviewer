@@ -11,7 +11,15 @@ const mockProps = {
   updateNode: () => {},
   onSelected: () => {},
   layoutVariable: layout,
-  node: { [layout]: { x: 0.77, y: 0.2 }, label: 'some content' },
+  node: {
+    attributes: {
+      [layout]: {
+        x: 0.77,
+        y: 0.2,
+      },
+      label: 'some content',
+    },
+  },
   areaWidth: 100,
   areaHeight: 40,
   draggableType: 'bar',

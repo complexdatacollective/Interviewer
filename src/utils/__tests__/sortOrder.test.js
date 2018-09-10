@@ -3,29 +3,39 @@ import sortOrder from '../sortOrder';
 
 const mockItems = [
   {
-    name: 'abigail',
-    age: 20,
-    favouriteColor: 'red',
+    attributes: {
+      name: 'abigail',
+      age: 20,
+      favouriteColor: 'red',
+    },
   },
   {
-    name: 'benjamin',
-    age: 50,
-    favouriteColor: 'green',
+    attributes: {
+      name: 'benjamin',
+      age: 50,
+      favouriteColor: 'green',
+    },
   },
   {
-    name: 'carolyn',
-    age: 30,
-    favouriteColor: 'blue',
+    attributes: {
+      name: 'carolyn',
+      age: 30,
+      favouriteColor: 'blue',
+    },
   },
   {
-    name: 'eugine',
-    age: 20,
-    favouriteColor: 'green',
+    attributes: {
+      name: 'eugine',
+      age: 20,
+      favouriteColor: 'green',
+    },
   },
   {
-    name: 'dave',
-    age: 20,
-    favouriteColor: 'blue',
+    attributes: {
+      name: 'dave',
+      age: 20,
+      favouriteColor: 'blue',
+    },
   },
 ];
 
@@ -49,11 +59,11 @@ describe('sortOrder', () => {
       }]);
 
       expect(sorter(mockItems)).toMatchObject([
-        { name: 'abigail' },
-        { name: 'eugine' },
-        { name: 'dave' },
-        { name: 'carolyn' },
-        { name: 'benjamin' },
+        { attributes: { name: 'abigail' } },
+        { attributes: { name: 'eugine' } },
+        { attributes: { name: 'dave' } },
+        { attributes: { name: 'carolyn' } },
+        { attributes: { name: 'benjamin' } },
       ]);
     });
 
@@ -64,11 +74,11 @@ describe('sortOrder', () => {
       }]);
 
       expect(sorter(mockItems)).toMatchObject([
-        { name: 'benjamin' },
-        { name: 'carolyn' },
-        { name: 'abigail' },
-        { name: 'eugine' },
-        { name: 'dave' },
+        { attributes: { name: 'benjamin' } },
+        { attributes: { name: 'carolyn' } },
+        { attributes: { name: 'abigail' } },
+        { attributes: { name: 'eugine' } },
+        { attributes: { name: 'dave' } },
       ]);
     });
   });
@@ -86,11 +96,11 @@ describe('sortOrder', () => {
     ]);
 
     expect(sorter(mockItems)).toMatchObject([
-      { name: 'eugine' },
-      { name: 'dave' },
-      { name: 'abigail' },
-      { name: 'carolyn' },
-      { name: 'benjamin' },
+      { attributes: { name: 'eugine' } },
+      { attributes: { name: 'dave' } },
+      { attributes: { name: 'abigail' } },
+      { attributes: { name: 'carolyn' } },
+      { attributes: { name: 'benjamin' } },
     ]);
   });
 
