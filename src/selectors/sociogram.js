@@ -21,7 +21,7 @@ import {
 } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -109,7 +109,7 @@ const makeGetUnplacedNodes = () => {
   return createSelector(
     networkNodesForSubject, getLayoutOptions,
     (nodes, { layoutVariable }) =>
-      reject(nodes, node => has(node[NodeAttributesProperty], layoutVariable)),
+      reject(nodes, node => has(node[nodeAttributesProperty], layoutVariable)),
   );
 };
 
@@ -134,8 +134,8 @@ const edgeCoords = (edge, { nodes, layoutVariable }) => {
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
     type: edge.type,
-    from: from[NodeAttributesProperty][layoutVariable],
-    to: to[NodeAttributesProperty][layoutVariable],
+    from: from[nodeAttributesProperty][layoutVariable],
+    to: to[nodeAttributesProperty][layoutVariable],
   };
 };
 
@@ -180,6 +180,6 @@ export const makeGetPlacedNodes = () => {
     networkNodesForSubject,
     getLayoutOptions,
     (nodes, { layoutVariable }) =>
-      filter(nodes, node => has(node[NodeAttributesProperty], layoutVariable)),
+      filter(nodes, node => has(node[nodeAttributesProperty], layoutVariable)),
   );
 };

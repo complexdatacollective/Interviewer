@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
 import { Icon } from '../ui/components';
-import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 
 const EnhancedCard = selectable(Card);
 
@@ -29,7 +29,7 @@ const CardList = (props) => {
 
   const classNames = cx('card-list', className);
 
-  const nodeAttributes = node => node[NodeAttributesProperty] || {};
+  const nodeAttributes = node => node[nodeAttributesProperty] || {};
 
   return (
     <div className={classNames}>

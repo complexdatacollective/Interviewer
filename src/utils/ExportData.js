@@ -1,7 +1,7 @@
 import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
-import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 
 const setUpXml = () => {
   const graphMLOutline = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -86,7 +86,7 @@ const generateKeys = (
   elements.forEach((element) => {
     let iterableElement = element;
     if (type === 'node') {
-      iterableElement = element[NodeAttributesProperty];
+      iterableElement = element[nodeAttributesProperty];
     }
     // Node data model attributes are now stored under a specific propertyy
 
@@ -188,17 +188,17 @@ const addElements = (
 
     // Add node attributes
     if (type === 'node') {
-      Object.keys(dataElement[NodeAttributesProperty]).forEach((key) => {
+      Object.keys(dataElement[nodeAttributesProperty]).forEach((key) => {
         if (!excludeList.includes(key)) {
-          if (typeof dataElement[NodeAttributesProperty][key] !== 'object') {
+          if (typeof dataElement[nodeAttributesProperty][key] !== 'object') {
             domElement.appendChild(
-              getDataElement(uri, key, dataElement[NodeAttributesProperty][key]));
+              getDataElement(uri, key, dataElement[nodeAttributesProperty][key]));
           } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-            domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[NodeAttributesProperty][key].x));
-            domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[NodeAttributesProperty][key].y));
+            domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[nodeAttributesProperty][key].x));
+            domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[nodeAttributesProperty][key].y));
           } else {
             domElement.appendChild(
-              getDataElement(uri, key, JSON.stringify(dataElement[NodeAttributesProperty][key])));
+              getDataElement(uri, key, JSON.stringify(dataElement[nodeAttributesProperty][key])));
           }
         }
       });
@@ -264,7 +264,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty, NodeAttributesProperty], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',

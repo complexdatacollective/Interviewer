@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../ui/components';
 import { CardList } from '.';
-import { NodePrimaryKeyProperty, NodeAttributesProperty } from '../ducks/modules/network';
+import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
@@ -61,7 +61,7 @@ class ListSelect extends Component {
     const filteredList = list.filter(
       (node) => {
         // Node data model attributes are stored in a specific named property
-        const nodeAttributes = node[NodeAttributesProperty] || {};
+        const nodeAttributes = node[nodeAttributesProperty] || {};
 
         // Lowercase for comparison
         const nodeLabel = this.props.label(nodeAttributes).toLowerCase();

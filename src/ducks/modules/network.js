@@ -6,7 +6,7 @@ import uuidv4 from '../../utils/uuid';
 export const NodePrimaryKeyProperty = '_uid';
 
 // Property name for node "model" properties
-export const NodeAttributesProperty = 'attributes';
+export const nodeAttributesProperty = 'attributes';
 
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
@@ -37,6 +37,8 @@ function edgeExists(edges, edge) {
   );
 }
 
+const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+
 /**
  * existingNodes - Existing network.nodes
  * netNodes - nodes to be added to the network
@@ -47,8 +49,8 @@ function getNodesWithBatchAdd(existingNodes, newNodes, nodeAttributeData) {
   const withModelandAttributeData = newNode => ({
     [NodePrimaryKeyProperty]: uuidv4(),
     ...newNode, // second to allow existing UUID to be overwritten
-    [NodeAttributesProperty]: {
-      ...newNode[NodeAttributesProperty],
+    [nodeAttributesProperty]: {
+      ...newNode[nodeAttributesProperty],
       ...nodeAttributeData,
     },
   });
@@ -71,8 +73,8 @@ function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
       return {
         ...node,
         ...updatedNode,
-        [NodeAttributesProperty]: {
-          ...node[NodeAttributesProperty],
+        [nodeAttributesProperty]: {
+          ...node[nodeAttributesProperty],
           ...nodeAttributeData,
         },
         [NodePrimaryKeyProperty]: node[NodePrimaryKeyProperty],
@@ -112,12 +114,12 @@ export default function reducer(state = initialState, action = {}) {
         if (node[NodePrimaryKeyProperty] !== action[NodePrimaryKeyProperty]) { return node; }
 
         // When we find the node that matches the primary key, remove the properties
-        if (isMatch(node[NodeAttributesProperty], attributesToToggle)) {
+        if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
           // Object.assign is much slower than the following safe mutation
           // eslint-disable-next-line no-param-reassign
-          node[NodeAttributesProperty] =
+          node[nodeAttributesProperty] =
             omit(
-              node[NodeAttributesProperty],
+              node[nodeAttributesProperty],
               Object.getOwnPropertyNames(attributesToToggle),
             );
         }

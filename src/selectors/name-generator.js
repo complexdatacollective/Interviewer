@@ -3,7 +3,7 @@
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
-import { NodeAttributesProperty } from '../ducks/modules/network';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 import { protocolRegistry } from './protocol';
 import { getExternalData } from './externalData';
 
@@ -41,7 +41,7 @@ export const makeGetPromptNodeAttributes = () => {
     ({ type }, ids, additionalAttributes) => ({
       type,
       ...ids,
-      [NodeAttributesProperty]: {
+      [nodeAttributesProperty]: {
         ...additionalAttributes,
       },
     }),

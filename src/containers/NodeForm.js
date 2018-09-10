@@ -9,12 +9,12 @@ import cx from 'classnames';
 
 import { Button, ToggleInput } from '../ui/components';
 import { actionCreators as modalActions } from '../ducks/modules/modals';
-import { NodeAttributesProperty } from '../ducks/modules/network';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 import { Form, FormWizard } from '../containers/';
 import { Modal } from '../components/';
 import { makeRehydrateFields } from '../selectors/forms';
 
-const propNodeAttributes = (_, props) => props.node && props.node[NodeAttributesProperty];
+const propNodeAttributes = (_, props) => props.node && props.node[nodeAttributesProperty];
 
 const makePropFieldVariables = () =>
   createSelector(
