@@ -7,15 +7,6 @@ import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
-  static getDerivedStateFromProps(nextProps) {
-    return {
-      activeSortOrder: {
-        ...nextProps.initialSortOrder[0],
-      },
-      nodes: nextProps.nodes,
-    };
-  }
-
   constructor(props) {
     super(props);
 
@@ -24,7 +15,6 @@ class ListSelect extends Component {
         ...this.props.initialSortOrder[0], // For now, just respect the first default sort rule
       },
       filterValue: '',
-      nodes: this.props.nodes,
     };
   }
 
@@ -137,11 +127,12 @@ class ListSelect extends Component {
     const {
       details,
       label,
+      nodes,
       sortFields,
     } = this.props;
 
     const sorter = sortOrder([this.state.activeSortOrder]);
-    const nodes = sorter(this.state.nodes);
+    const sortedNodes = sorter(nodes);
 
     return (
       <div className="list-select">
@@ -161,7 +152,7 @@ class ListSelect extends Component {
         <CardList
           details={details}
           label={label}
-          nodes={this.getFilteredList(nodes)}
+          nodes={this.getFilteredList(sortedNodes)}
           onToggleCard={this.toggleCard}
           selected={this.isNodeSelected}
         />

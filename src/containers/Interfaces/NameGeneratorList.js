@@ -79,6 +79,7 @@ class NameGeneratorList extends Component {
           />
         </div>
         <ListSelect
+          key={`select-${prompt.id}`}
           details={this.details}
           initialSortOrder={initialSortOrder}
           label={this.label}
