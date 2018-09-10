@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -133,7 +133,7 @@ class NodeLayout extends Component {
 
   isHighlighted(node) {
     return !isEmpty(this.props.highlightAttributes) &&
-      isMatch(node, this.props.highlightAttributes);
+      isMatch(node[nodeAttributesProperty], this.props.highlightAttributes);
   }
 
   isLinking(node) {

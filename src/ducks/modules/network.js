@@ -117,17 +117,23 @@ export default function reducer(state = initialState, action = {}) {
         if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
           // Object.assign is much slower than the following safe mutation
           // eslint-disable-next-line no-param-reassign
-          node[nodeAttributesProperty] =
-            omit(
-              node[nodeAttributesProperty],
-              Object.getOwnPropertyNames(attributesToToggle),
-            );
-          return node;
+          const withoutAttributes = omit(
+            node[nodeAttributesProperty],
+            Object.getOwnPropertyNames(attributesToToggle),
+          );
+
+          return {
+            ...node,
+            [nodeAttributesProperty]: withoutAttributes,
+          };
         }
 
         return {
           ...node,
-          ...action.attributes,
+          [nodeAttributesProperty]: {
+            ...node[nodeAttributesProperty],
+            ...action.attributes,
+          },
         };
       });
 
