@@ -8,15 +8,14 @@ import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
   static getDerivedStateFromProps(nextProps) {
-    const sorter = sortOrder(nextProps.initialSortOrder);
-    const sortedNodes = sorter(nextProps.nodes);
     return {
       activeSortOrder: {
         ...nextProps.initialSortOrder[0],
       },
-      nodes: sortedNodes,
+      nodes: nextProps.nodes,
     };
   }
+
   constructor(props) {
     super(props);
 
