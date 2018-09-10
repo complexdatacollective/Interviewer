@@ -6,7 +6,7 @@ import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
 import {
   getDataByPrompt,
@@ -44,10 +44,13 @@ class NameGeneratorList extends Component {
     this.props.removeNode(node[nodePrimaryKeyProperty]);
   }
 
-  label = node => node[this.props.labelKey];
+  label = node => getNodeAttributes(node)[this.props.labelKey];
 
-  details = node => this.props.visibleSupplementaryFields.map(
-    field => ({ [field.label]: node[field.variable] }));
+  details = (node) => {
+    const attrs = getNodeAttributes(node);
+    const fields = this.props.visibleSupplementaryFields;
+    return fields.map(field => ({ [field.label]: attrs[field.variable] }));
+  }
 
   render() {
     const {
