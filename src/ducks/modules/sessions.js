@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { NodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 import { getPairedServer } from '../../selectors/servers';
@@ -124,7 +124,7 @@ const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   dispatch({
     type: TOGGLE_NODE_ATTRIBUTES,
     sessionId: session,
-    [NodePrimaryKeyProperty]: uid,
+    [nodePrimaryKeyProperty]: uid,
     attributes,
   });
 };
@@ -135,7 +135,7 @@ const removeNode = uid => (dispatch, getState) => {
   dispatch({
     type: REMOVE_NODE,
     sessionId: session,
-    [NodePrimaryKeyProperty]: uid,
+    [nodePrimaryKeyProperty]: uid,
   });
 };
 

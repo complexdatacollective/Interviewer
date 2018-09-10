@@ -3,13 +3,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NodeLayout } from '../NodeLayout';
-import { NodePrimaryKeyProperty } from '../../../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../../../ducks/modules/network';
 
 const layout = 'foo';
 
 const mockProps = {
   nodes: [
-    { bar: 'buzz', [NodePrimaryKeyProperty]: 123, [layout]: { x: 0, y: 0 } },
+    { bar: 'buzz', [nodePrimaryKeyProperty]: 123, [layout]: { x: 0, y: 0 } },
   ],
   updateNode: () => {},
   toggleEdge: () => {},
@@ -48,12 +48,12 @@ describe('<NodeLayout />', () => {
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', [NodePrimaryKeyProperty]: 123 }],
+      nodes: [{ bar: 'buzz', [nodePrimaryKeyProperty]: 123 }],
     });
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', [NodePrimaryKeyProperty]: 123 }, { bar: 'bing', [NodePrimaryKeyProperty]: 456 }],
+      nodes: [{ bar: 'buzz', [nodePrimaryKeyProperty]: 123 }, { bar: 'bing', [nodePrimaryKeyProperty]: 456 }],
     });
 
     expect(componentDidUpdate.mock.calls.length).toEqual(1);
@@ -70,7 +70,7 @@ describe('<NodeLayout />', () => {
 
     component.setProps({
       ...mockProps,
-      nodes: [{ bar: 'buzz', [NodePrimaryKeyProperty]: 123 }],
+      nodes: [{ bar: 'buzz', [nodePrimaryKeyProperty]: 123 }],
     });
 
     component.setProps({

@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -32,7 +32,7 @@ const dropHandlers = compose(
     onDrop: props => (item) => {
       props.updateNode(
         {
-          [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
+          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
         },
         {
           [props.layoutVariable]: relativeCoords(props, item),
@@ -47,7 +47,7 @@ const dropHandlers = compose(
 
       props.updateNode(
         {
-          [NodePrimaryKeyProperty]: item.meta[NodePrimaryKeyProperty],
+          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
         },
         {
           [props.layoutVariable]: relativeCoords(props, item),
@@ -93,9 +93,9 @@ class NodeLayout extends Component {
 
     if (!allowSelect) { return; }
 
-    this.connectNode(node[NodePrimaryKeyProperty]);
+    this.connectNode(node[nodePrimaryKeyProperty]);
 
-    this.toggleHighlightAttributes(node[NodePrimaryKeyProperty]);
+    this.toggleHighlightAttributes(node[nodePrimaryKeyProperty]);
 
     this.forceUpdate();
   }
@@ -139,7 +139,7 @@ class NodeLayout extends Component {
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node[NodePrimaryKeyProperty] === this.state.connectFrom;
+      node[nodePrimaryKeyProperty] === this.state.connectFrom;
   }
 
   render() {
@@ -157,7 +157,7 @@ class NodeLayout extends Component {
 
           return (
             <LayoutNode
-              key={node[NodePrimaryKeyProperty]}
+              key={node[nodePrimaryKeyProperty]}
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}

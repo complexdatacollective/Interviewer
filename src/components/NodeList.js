@@ -16,7 +16,7 @@ import {
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
 import sortOrder from '../utils/sortOrder';
-import { NodePrimaryKeyProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedNode = DragSource(selectable(Node));
 
@@ -100,7 +100,7 @@ class NodeList extends Component {
 
     const isSource = !!find(
       nodes,
-      [NodePrimaryKeyProperty, get(meta, NodePrimaryKeyProperty, null)],
+      [nodePrimaryKeyProperty, get(meta, nodePrimaryKeyProperty, null)],
     );
     const isValidTarget = !isSource && willAccept;
     const isHovering = isValidTarget && isOver;
@@ -121,7 +121,7 @@ class NodeList extends Component {
         {
           nodes.map((node, index) => (
             <NodeTransition
-              key={`${node[NodePrimaryKeyProperty]}`}
+              key={`${node[nodePrimaryKeyProperty]}`}
               index={index}
               stagger={stagger}
             >

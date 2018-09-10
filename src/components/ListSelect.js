@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../ui/components';
 import { CardList } from '.';
-import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
@@ -109,7 +109,7 @@ class ListSelect extends Component {
     */
   selected = node =>
     !!this.props.selectedNodes
-      .find(current => current[NodePrimaryKeyProperty] === node[NodePrimaryKeyProperty]);
+      .find(current => current[nodePrimaryKeyProperty] === node[nodePrimaryKeyProperty]);
 
   /**
     * changes direction of current sort
@@ -128,7 +128,7 @@ class ListSelect extends Component {
     * @param {object} node
     */
   toggleCard = (node) => {
-    const matchingPK = n => n[NodePrimaryKeyProperty] === node[NodePrimaryKeyProperty];
+    const matchingPK = n => n[nodePrimaryKeyProperty] === node[nodePrimaryKeyProperty];
     const index = this.props.selectedNodes.findIndex(matchingPK);
     if (index !== -1) {
       this.props.onRemoveNode(this.props.nodes.find(matchingPK));

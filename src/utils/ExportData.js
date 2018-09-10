@@ -1,7 +1,7 @@
 import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
-import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 
 const setUpXml = () => {
   const graphMLOutline = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -164,8 +164,8 @@ const addElements = (
 ) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
-    if (dataElement[NodePrimaryKeyProperty]) {
-      domElement.setAttribute('id', dataElement[NodePrimaryKeyProperty]);
+    if (dataElement[nodePrimaryKeyProperty]) {
+      domElement.setAttribute('id', dataElement[nodePrimaryKeyProperty]);
     } else {
       domElement.setAttribute('id', index);
     }
@@ -240,7 +240,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
     graphML,
     networkData.nodes,
     'node',
-    [NodePrimaryKeyProperty],
+    [nodePrimaryKeyProperty],
     variableRegistry,
     layoutVariable,
   );
@@ -264,7 +264,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [NodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [nodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',

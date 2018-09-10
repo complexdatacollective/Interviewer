@@ -21,7 +21,7 @@ import {
 } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { NodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -126,8 +126,8 @@ export const makeGetNextUnplacedNode = () => {
 };
 
 const edgeCoords = (edge, { nodes, layoutVariable }) => {
-  const from = nodes.find(n => n[NodePrimaryKeyProperty] === edge.from);
-  const to = nodes.find(n => n[NodePrimaryKeyProperty] === edge.to);
+  const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
+  const to = nodes.find(n => n[nodePrimaryKeyProperty] === edge.to);
 
   if (!from || !to) { return { from: null, to: null }; }
 
