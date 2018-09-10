@@ -108,13 +108,12 @@ export default function reducer(state = initialState, action = {}) {
     case TOGGLE_NODE_ATTRIBUTES: {
       // attributes = object containing the attributes to remove, minus _uid
       const attributesToToggle = omit(action.attributes, [nodePrimaryKeyProperty]);
-
       // Map over the nodes
       const updatedNodes = state.nodes.map((node) => {
         // Skip nodes with different primary keys
         if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
 
-        // When we find the node that matches the primary key, remove the properties
+        // When we find the node that matches the primary key, toggle the properties
         if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
           // Object.assign is much slower than the following safe mutation
           // eslint-disable-next-line no-param-reassign
@@ -123,6 +122,7 @@ export default function reducer(state = initialState, action = {}) {
               node[nodeAttributesProperty],
               Object.getOwnPropertyNames(attributesToToggle),
             );
+          return node;
         }
 
         return {

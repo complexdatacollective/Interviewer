@@ -7,6 +7,7 @@ import { PromptSwiper, OrdinalBins } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { OrdinalBinBucket } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * OrdinalBin Interface
@@ -72,7 +73,7 @@ function makeMapStateToProps() {
 
     return {
       nodesForPrompt: stageNodes.filter(
-        node => !node[activePromptVariable],
+        node => !node[nodeAttributesProperty][activePromptVariable],
       ),
     };
   };
