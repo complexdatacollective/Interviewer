@@ -5,28 +5,32 @@ import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
 const duration = {
-  enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
-  exit: getCSSVariableAsNumber('--animation-duration-standard-ms'),
+  enter: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+  exit: getCSSVariableAsNumber('--animation-duration-slow-ms'),
 };
 
-const enterAnimation = {
-  opacity: [0, 1],
-  zIndex: [2, 2],
-  elasticity: 0,
-  easing: getCSSVariableAsObject('--animation-easing-js'),
-  duration: duration.enter,
-  delay: duration.exit,
+const enterAnimation = (backward) => {
+  const translateDistance = backward ? '-200vh' : '200vh';
+  return {
+    elasticity: 0,
+    translateY: [translateDistance, 0],
+    easing: getCSSVariableAsObject('--animation-easing-js'),
+    duration: duration.enter,
+    delay: duration.exit,
+  };
 };
 
-const exitAnimation = {
-  opacity: [1, 0],
-  zIndex: [1, 1],
-  elasticity: 0,
-  easing: getCSSVariableAsObject('--animation-easing-js'),
-  duration: duration.exit,
+const exitAnimation = (backward) => {
+  const translateDistance = backward ? '200vh' : '-200vh';
+  return {
+    elasticity: 0,
+    translateY: [0, translateDistance],
+    easing: getCSSVariableAsObject('--animation-easing-js'),
+    duration: duration.exit,
+  };
 };
 
-const Stage = ({ children, ...props }) => (
+const Stage = ({ children, stageBackward, ...props }) => (
   <Transition
     {...props}
     timeout={duration}
@@ -34,7 +38,7 @@ const Stage = ({ children, ...props }) => (
       (el) => {
         anime({
           targets: el,
-          ...enterAnimation,
+          ...enterAnimation(stageBackward),
         });
       }
     }
@@ -42,7 +46,7 @@ const Stage = ({ children, ...props }) => (
       (el) => {
         anime({
           targets: el,
-          ...exitAnimation,
+          ...exitAnimation(stageBackward),
         });
       }
     }
@@ -55,10 +59,12 @@ const Stage = ({ children, ...props }) => (
 
 Stage.propTypes = {
   children: PropTypes.any.isRequired,
+  stageBackward: PropTypes.bool,
 };
 
 Stage.defaultProps = {
   children: null,
+  stageBackward: false,
 };
 
 export default Stage;

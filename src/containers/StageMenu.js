@@ -31,13 +31,13 @@ class StageMenu extends Component {
     const {
       currentStages,
       filteredList,
-      hideButton,
       isOpen,
       protocolPath,
       protocolType,
       searchValue,
       sessionId,
       toggleMenu,
+      toggleSettingsMenu,
     } = this.props;
 
     const items = filteredList.map(filteredStage =>
@@ -49,6 +49,13 @@ class StageMenu extends Component {
         to: protocolPath ? `/session/${sessionId}/${protocolType}/${protocolPath}/${currentStages.indexOf(filteredStage)}` : '/',
       }));
 
+    const settingsMenuItem = {
+      id: 'settings',
+      icon: 'settings',
+      label: 'Settings',
+      onClick: toggleSettingsMenu,
+    };
+
     const search = (
       <div className={`menu__search ${isOpen ? '' : 'menu__search--closed'}`}>
         <input ref={(input) => { this.search = input; }} type="search" placeholder="Filter" onChange={this.onInputChange} value={searchValue} />
@@ -57,9 +64,8 @@ class StageMenu extends Component {
 
     return (
       <Menu
-        hideButton={hideButton}
         isOpen={isOpen}
-        items={items}
+        items={items.concat(settingsMenuItem)}
         searchField={search}
         title="Stages"
         toggleMenu={toggleMenu}
@@ -71,18 +77,17 @@ class StageMenu extends Component {
 StageMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   filteredList: PropTypes.array.isRequired,
-  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   searchValue: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
   toggleMenu: PropTypes.func.isRequired,
+  toggleSettingsMenu: PropTypes.func.isRequired,
   updateSearch: PropTypes.func,
 };
 
 StageMenu.defaultProps = {
-  hideButton: false,
   isOpen: false,
   protocolPath: '',
   searchValue: '',
@@ -106,6 +111,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
+  toggleSettingsMenu: bindActionCreators(menuActions.toggleSettingsMenu, dispatch),
   updateSearch: bindActionCreators(menuActions.updateStageSearch, dispatch),
 });
 

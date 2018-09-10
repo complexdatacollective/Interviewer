@@ -1145,7 +1145,7 @@
         },
         {
           "id": "discussFreq",
-          "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also node that this prompt uses the color override to style these bins differently than the main prompt.",
+          "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the color override to style these bins differently than the main prompt.",
           "variable": "discussFreq",
           "color": "ord-color-seq-2"
         }

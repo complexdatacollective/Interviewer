@@ -40,16 +40,11 @@
     transition: var(--animation-duration-standard) var(--animation-easing);
     width: 100vw;
     display: flex;
+    will-change: transform;
 
     // content being pushed e.g. by menu
     &--pushed {
-      transform-origin: 100%;
-      transform-style: preserve-3d;
-      transform: translate3d(295px, 0, -870px);
-
-      @include breakpoint(full) {
-        transform: translate3d(335px, 0, -870px);
-      }
+      transform: translateX(370px);
     }
   }
 }

@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
+
 import '../styles/main.scss';
 import { settingsMenuIsOpen, stageMenuIsOpen } from '../selectors/session';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
-import { SettingsMenu, StageMenu, LoadScreen } from '../containers';
+import { LoadScreen, SettingsMenu, StageMenu } from '../containers';
 import { ErrorMessage } from '../components';
 
 /**
@@ -25,8 +26,8 @@ const App = props => (
   })}
   >
     <div className="electron-titlebar" />
-    <SettingsMenu hideButton={props.isMenuOpen} />
-    <StageMenu hideButton={props.isMenuOpen} />
+    <SettingsMenu />
+    <StageMenu />
     <div
       id="page-wrap"
       className={cx({

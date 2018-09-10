@@ -1,0 +1,15 @@
+.progress-bar {
+  width: .6rem;
+  background-color: var(--light-background);
+  flex-grow: 1;
+  position: relative;
+  border-radius: 4rem;
+
+  &__filler {
+    background-color: var(--transparent-light);
+    width: 100%;
+    position: absolute;
+    border-radius: inherit;
+    transition: height calc(var(--animation-duration-standard)*3) var(--animation-easing);
+  }
+}

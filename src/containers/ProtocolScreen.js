@@ -1,54 +1,141 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
+import { push } from 'react-router-redux';
+
+import { actionCreators as menuActions } from '../ducks/modules/menu';
+import withPrompt from '../behaviours/withPrompt';
+import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
-import { stages } from '../selectors/session';
+import { stages, getPromptForCurrentSession } from '../selectors/session';
 
 /**
   * Check protocol is loaded, and render the stage
   */
-const Protocol = (
-  { isProtocolLoaded, protocolPath, protocolType, sessionId, stage, stageIndex },
-) => {
-  if (!isProtocolLoaded) { return null; }
+class Protocol extends Component {
+  // change the stage to the next
+  onClickNext = () => {
+    if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+      this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
+    } else {
+      this.props.promptForward();
+    }
+  }
 
-  return (
-    <div className="protocol">
-      <TransitionGroup>
-        <StageTransition key={stage.id}>
-          <Stage stage={stage} pathPrefix={`/session/${sessionId}/${protocolType}/${protocolPath}`} stageIndex={stageIndex} />
-        </StageTransition>
-      </TransitionGroup>
-    </div>
+  // change the stage to the previous
+  onClickBack = () => {
+    if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+      this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
+    } else {
+      this.props.promptBackward();
+    }
+  }
+
+  childFactoryCreator = stageBackward => (
+    child => (React.cloneElement(child, { stageBackward }))
   );
-};
+
+  render() {
+    const {
+      isProtocolLoaded,
+      pathPrefix,
+      percentProgress,
+      promptId,
+      stage,
+      stageBackward,
+      stageIndex,
+      toggleMenu,
+    } = this.props;
+
+    if (!isProtocolLoaded) { return null; }
+
+    return (
+      <div className="protocol">
+        <Timeline
+          onClickBack={this.onClickBack}
+          onClickNext={this.onClickNext}
+          percentProgress={percentProgress}
+          toggleMenu={toggleMenu}
+        />
+        <TransitionGroup
+          className="protocol__content"
+          childFactory={this.childFactoryCreator(stageBackward)}
+        >
+          <StageTransition key={stage.id} stageBackward={stageBackward}>
+            <Stage
+              stage={stage}
+              promptId={promptId}
+              pathPrefix={pathPrefix}
+              stageIndex={stageIndex}
+            />
+          </StageTransition>
+        </TransitionGroup>
+      </div>
+    );
+  }
+}
 
 Protocol.propTypes = {
+  changeStage: PropTypes.func.isRequired,
+  isFirstPrompt: PropTypes.func.isRequired,
+  isLastPrompt: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
-  protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
-  sessionId: PropTypes.string.isRequired,
+  nextIndex: PropTypes.number.isRequired,
+  pathPrefix: PropTypes.string,
+  percentProgress: PropTypes.number,
+  previousIndex: PropTypes.number.isRequired,
+  promptBackward: PropTypes.func.isRequired,
+  promptForward: PropTypes.func.isRequired,
+  promptId: PropTypes.number,
   stage: PropTypes.object.isRequired,
+  stageBackward: PropTypes.bool,
   stageIndex: PropTypes.number,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 Protocol.defaultProps = {
-  protocolPath: '',
+  pathPrefix: '',
+  percentProgress: 0,
+  promptId: 0,
+  stageBackward: false,
   stageIndex: 0,
 };
 
 function mapStateToProps(state, ownProps) {
+  const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
+  const maxLength = stages(state).length;
+  const sessionId = state.session;
+  const protocolPath = state.protocol.path;
+  const protocolType = state.protocol.type;
+  const stage = stages(state)[ownProps.stageIndex] || {};
+  const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
+  const promptId = getPromptForCurrentSession(state);
+  const stageProgress = stageIndex / (maxLength - 1);
+  const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
+
   return {
     isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
-    stage: stages(state)[ownProps.stageIndex] || {},
-    stageIndex: Math.trunc(ownProps.stageIndex) || 0,
+    nextIndex: rotateIndex(maxLength, stageIndex + 1),
+    pathPrefix: `/session/${sessionId}/${protocolType}/${protocolPath}`,
+    percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
+    previousIndex: rotateIndex(maxLength, stageIndex - 1),
+    promptId,
+    stage,
+    stageIndex,
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    changeStage: path => dispatch(push(path)),
+    toggleMenu: bindActionCreators(menuActions.toggleStageMenu, dispatch),
+  };
+}
 
-export default connect(mapStateToProps)(Protocol);
+export default compose(
+  withPrompt,
+  connect(mapStateToProps, mapDispatchToProps),
+)(Protocol);

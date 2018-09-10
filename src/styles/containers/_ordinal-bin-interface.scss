@@ -1,6 +1,6 @@
 .ordinal-bin-interface {
   height: 100vh;
-  padding: 20px 50px 60px;
+  padding: 20px 0 60px;
   @include breakpoint('full') {
     padding: 20px 80px 80px;
   }
@@ -11,6 +11,7 @@
   &__prompt {
     @include interface-prompt;
     flex: 0 0 170px;
+    margin: 0 var(--timeline-width);
   }
 
   &__bucket {
@@ -31,7 +32,8 @@
     position: relative;
     border-radius: 15px;
     overflow: hidden;
-    margin: 0 130px;
+    margin-left: var(--timeline-width);
+    margin-right: 60px;
   }
 
   &__nodes {

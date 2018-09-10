@@ -4,8 +4,6 @@ exports[`Menu component renders menu with list 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <MenuFactory
-    hideButton={false}
-    icon="menu"
     isOpen={false}
     items={
       Array [
@@ -96,13 +94,6 @@ ShallowWrapper {
             </nav>
           </Scrollable>
         </div>,
-        <Icon
-          className="menu__burger"
-          color=""
-          name="menu"
-          onClick={[Function]}
-          style={Object {}}
-        />,
       ],
       "className": "menu",
     },
@@ -360,21 +351,6 @@ ShallowWrapper {
         },
         "type": "div",
       },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "className": "menu__burger",
-          "color": "",
-          "name": "menu",
-          "onClick": [Function],
-          "style": Object {},
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
     ],
     "type": "div",
   },
@@ -438,13 +414,6 @@ ShallowWrapper {
               </nav>
             </Scrollable>
           </div>,
-          <Icon
-            className="menu__burger"
-            color=""
-            name="menu"
-            onClick={[Function]}
-            style={Object {}}
-          />,
         ],
         "className": "menu",
       },
@@ -701,21 +670,6 @@ ShallowWrapper {
             "type": [Function],
           },
           "type": "div",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "className": "menu__burger",
-            "color": "",
-            "name": "menu",
-            "onClick": [Function],
-            "style": Object {},
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
         },
       ],
       "type": "div",

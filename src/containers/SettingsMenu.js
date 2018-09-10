@@ -175,12 +175,10 @@ class SettingsMenu extends Component {
 
   render() {
     const {
-      sessionExists, customItems, hideButton, isOpen, toggleMenu, addMockNodes,
+      sessionExists, customItems, isOpen, toggleMenu, addMockNodes,
     } = this.props;
 
     const { version } = this.state;
-
-    const menuType = 'settings';
 
     const items = [
       { id: 'main-menu', label: 'Return to Start', icon: 'menu-quit', onClick: this.props.endSession },
@@ -222,8 +220,6 @@ class SettingsMenu extends Component {
 
     return (
       <Menu
-        hideButton={hideButton}
-        icon={menuType}
         isOpen={isOpen}
         items={items}
         title="Settings"
@@ -262,7 +258,6 @@ SettingsMenu.propTypes = {
   addMockNodes: PropTypes.func.isRequired,
   customItems: PropTypes.array.isRequired,
   endSession: PropTypes.func.isRequired,
-  hideButton: PropTypes.bool,
   isOpen: PropTypes.bool,
   openModal: PropTypes.func.isRequired,
   resetState: PropTypes.func.isRequired,
@@ -272,7 +267,6 @@ SettingsMenu.propTypes = {
 
 SettingsMenu.defaultProps = {
   sessionExists: false,
-  hideButton: false,
   isOpen: false,
 };
 
