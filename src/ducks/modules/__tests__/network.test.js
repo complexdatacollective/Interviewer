@@ -73,12 +73,31 @@ describe('network reducer', () => {
       {
         type: actionTypes.ADD_NODES,
         nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
-        additionalAttributes: { stage: 1 },
+        additionalAttributes: { stageId: '2', attributes: { isFriend: true } },
       },
     );
 
-    expect(newState.nodes[0].attributes.stage).toEqual(1);
-    expect(newState.nodes[1].attributes.stage).toEqual(1);
+    expect(newState.nodes[0].stageId).toBe('2');
+    expect(newState.nodes[1].stageId).toBe('2');
+    expect(newState.nodes[0].attributes.isFriend).toBe(true);
+    expect(newState.nodes[1].attributes.isFriend).toBe(true);
+    expect(newState.nodes[0].attributes.name).toEqual('foo');
+    expect(newState.nodes[1].attributes.name).toEqual('bar');
+  });
+
+  it('should prefer node.attributes to additionalAttributes.attributes ', () => {
+    const newState = reducer(
+      {
+        ...mockState,
+        nodes: [],
+      },
+      {
+        type: actionTypes.ADD_NODES,
+        nodes: [{ attributes: { name: 'foo' } }],
+        additionalAttributes: { attributes: { name: 'defaultName' } },
+      },
+    );
+    expect(newState.nodes[0].attributes.name).toEqual('foo');
   });
 
   it('should handle REMOVE_NODE', () => {
