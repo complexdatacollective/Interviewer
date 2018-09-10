@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -153,7 +153,8 @@ class NodeLayout extends Component {
     return (
       <div className="node-layout">
         { nodes.map((node) => {
-          if (!has(node[nodeAttributesProperty], layoutVariable)) { return null; }
+          const nodeAttributes = getNodeAttributes(node);
+          if (!has(nodeAttributes, layoutVariable)) { return null; }
 
           return (
             <LayoutNode

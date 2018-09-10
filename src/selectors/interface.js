@@ -5,7 +5,7 @@ import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { getNodeAttributes } from '../ducks/modules/network';
 
 // Selectors that are generic between interfaces
 
@@ -122,7 +122,7 @@ export const getNodeLabelFunction = createDeepEqualSelector(
       nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
 
     // Get the data model properties from the node
-    const nodeDataModelProps = node[nodeAttributesProperty];
+    const nodeDataModelProps = getNodeAttributes(node);
     // Try to return the label prop
     // else try to use the displayVariable
     // else try to use the first text variable
@@ -160,7 +160,7 @@ export const makeNetworkNodesForPrompt = () => {
   return createSelector(
     networkNodesForSubject, getAttributes,
     (nodes, attributes) =>
-      filter(nodes, node => isMatch(node[nodeAttributesProperty], attributes)),
+      filter(nodes, node => isMatch(getNodeAttributes(node), attributes)),
   );
 };
 
@@ -177,6 +177,6 @@ export const makeNetworkNodesForOtherPrompts = () => {
   return createSelector(
     networkNodesForSubject, getAttributes,
     (nodes, attributes) =>
-      reject(nodes, node => isMatch(node[nodeAttributesProperty], attributes)),
+      reject(nodes, node => isMatch(getNodeAttributes(node), attributes)),
   );
 };

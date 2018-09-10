@@ -37,7 +37,9 @@ function edgeExists(edges, edge) {
   );
 }
 
-const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+
+export const getNodeWithoutAttributes = node => omit(node, nodeAttributesProperty);
 
 /**
  * existingNodes - Existing network.nodes

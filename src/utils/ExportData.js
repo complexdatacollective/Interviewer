@@ -1,7 +1,7 @@
 import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
-import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty, getNodeAttributes } from '../ducks/modules/network';
 
 const setUpXml = () => {
   const graphMLOutline = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -86,7 +86,7 @@ const generateKeys = (
   elements.forEach((element) => {
     let iterableElement = element;
     if (type === 'node') {
-      iterableElement = element[nodeAttributesProperty];
+      iterableElement = getNodeAttributes(element);
     }
     // Node data model attributes are now stored under a specific propertyy
 

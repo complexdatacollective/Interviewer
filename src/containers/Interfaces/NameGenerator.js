@@ -11,7 +11,7 @@ import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { getNodeAttributes, nodeAttributesProperty, getNodeWithoutAttributes } from '../../ducks/modules/network';
 
 /**
   * Name Generator Interface
@@ -70,8 +70,8 @@ class NameGenerator extends Component {
    */
   onDrop = (item) => {
     const node = { ...item.meta };
-    const nodeModelData = omit(node, nodeAttributesProperty);
-    const nodeAttributeData = node[nodeAttributesProperty];
+    const nodeModelData = getNodeWithoutAttributes(node);
+    const nodeAttributeData = getNodeAttributes(node);
 
     const promptModelData = omit(this.props.newNodeAttributes);
     const promptAttributeData = this.props.newNodeAttributes[nodeAttributesProperty];

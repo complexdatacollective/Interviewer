@@ -21,7 +21,7 @@ import {
 } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -180,6 +180,6 @@ export const makeGetPlacedNodes = () => {
     networkNodesForSubject,
     getLayoutOptions,
     (nodes, { layoutVariable }) =>
-      filter(nodes, node => has(node[nodeAttributesProperty], layoutVariable)),
+      filter(nodes, node => has(getNodeAttributes(node), layoutVariable)),
   );
 };
