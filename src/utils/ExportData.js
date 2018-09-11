@@ -260,7 +260,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
     // remove this to fall back to using "text" for unknowns
     // openErrorDialog(`The variable registry seems to be missing
     // "type" of: ${join(missingVariables, ', ')}.`);
-    return null;
+    // return null;
   }
 
   // add nodes and edges to graph
