@@ -2,8 +2,11 @@ import { reject, findIndex, isMatch, omit } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
-// Primary key used on node data
-export const NodePK = '_uid';
+// Property name for the primary key for nodes
+export const nodePrimaryKeyProperty = '_uid';
+
+// Property name for node "model" properties
+export const nodeAttributesProperty = 'attributes';
 
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
@@ -15,6 +18,8 @@ export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
 export const UNSET_EGO = 'UNSET_EGO';
 
+
+// Initial network model structure
 const initialState = {
   ego: {},
   nodes: [],
@@ -32,28 +37,61 @@ function edgeExists(edges, edge) {
   );
 }
 
-function getNodesWithBatchAdd(oldNodes, newNodes, additionalAttributes) {
-  const withAttrs = newNode => ({ ...additionalAttributes, [NodePK]: uuidv4(), ...newNode });
-  return oldNodes.concat(newNodes.map(withAttrs));
+export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+
+export const getNodeWithoutAttributes = node => omit(node, nodeAttributesProperty);
+
+/**
+ * existingNodes - Existing network.nodes
+ * netNodes - nodes to be added to the network
+ * additionalAttributes - static props shared to add to each member of newNodes
+*/
+function getNodesWithBatchAdd(existingNodes, newNodes, additionalAttributes = {}) {
+  // Create a function to create a UUID and merge node attributes
+  const withModelandAttributeData = newNode => ({
+    ...additionalAttributes,
+    [nodePrimaryKeyProperty]: uuidv4(),
+    ...newNode, // second to prevent overwriting existing node UUID (e.g., assigned to externalData)
+    [nodeAttributesProperty]: {
+      ...additionalAttributes[nodeAttributesProperty],
+      ...newNode[nodeAttributesProperty],
+    },
+  });
+
+  return existingNodes.concat(newNodes.map(withModelandAttributeData));
 }
 
-function getUpdatedNodes(nodes, updatedNode, full) {
+/**
+ * @param {array} nodes - an array of objects representing nodes
+ * @param {object} updatedNode - object representing the node to be updated and its new properties
+ */
+function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
+  // Iterate over the nodes list
   const updatedNodes = nodes.map((node) => {
-    if (node[NodePK] !== updatedNode[NodePK]) { return node; }
-
-    if (full) {
+    // Skip nodes where the primary key doesn't match
+    if (node[nodePrimaryKeyProperty] !== updatedNode[nodePrimaryKeyProperty]) { return node; }
+    // if we have an attributes payload, merge with any existing attributes
+    if (nodeAttributeData) {
       return {
+        ...node,
         ...updatedNode,
-        [NodePK]: node[NodePK],
+        [nodeAttributesProperty]: {
+          ...node[nodeAttributesProperty],
+          ...nodeAttributeData,
+        },
+        [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
       };
     }
 
+    // If no attribute payload, just merge the new node data with the existing
     return {
       ...node,
       ...updatedNode,
-      [NodePK]: node[NodePK],
+      [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
     };
   });
+
+  // Return the modified array of nodes
   return updatedNodes;
 }
 
@@ -65,19 +103,36 @@ export default function reducer(state = initialState, action = {}) {
         nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
       };
     }
+    /**
+     * TOGGLE_NODE_ATTRIBUTES
+     */
     case TOGGLE_NODE_ATTRIBUTES: {
-      const attributes = omit(action.attributes, [NodePK]);
-
+      // attributes = object containing the attributes to remove, minus _uid
+      const attributesToToggle = omit(action.attributes, [nodePrimaryKeyProperty]);
+      // Map over the nodes
       const updatedNodes = state.nodes.map((node) => {
-        if (node[NodePK] !== action[NodePK]) { return node; }
+        // Skip nodes with different primary keys
+        if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
 
-        if (isMatch(node, attributes)) {
-          return omit(node, Object.getOwnPropertyNames(attributes));
+        // When we find the node that matches the primary key, toggle the properties
+        if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
+          const withoutAttributes = omit(
+            node[nodeAttributesProperty],
+            Object.getOwnPropertyNames(attributesToToggle),
+          );
+
+          return {
+            ...node,
+            [nodeAttributesProperty]: withoutAttributes,
+          };
         }
 
         return {
           ...node,
-          ...action.attributes,
+          [nodeAttributesProperty]: {
+            ...node[nodeAttributesProperty],
+            ...action.attributes,
+          },
         };
       });
 
@@ -89,15 +144,17 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(state.nodes, action.node, action.full),
+        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalAttributes),
       };
     }
     case REMOVE_NODE: {
-      const removeNodePK = action[NodePK];
+      const removenodePrimaryKeyProperty = action[nodePrimaryKeyProperty];
       return {
         ...state,
-        nodes: reject(state.nodes, node => node[NodePK] === removeNodePK),
-        edges: reject(state.edges, edge => edge.from === removeNodePK || edge.to === removeNodePK),
+        nodes: reject(state.nodes, node =>
+          node[nodePrimaryKeyProperty] === removenodePrimaryKeyProperty),
+        edges: reject(state.edges, edge =>
+          edge.from === removenodePrimaryKeyProperty || edge.to === removenodePrimaryKeyProperty),
       };
     }
     case ADD_EDGE:

@@ -6,7 +6,7 @@ import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodePK } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
@@ -51,10 +51,18 @@ class NodePanels extends PureComponent {
   };
 
   onDrop = ({ meta }, dataSource) => {
+    /**
+     * Handle a node being dropped into a panel
+     *
+     * If
+    */
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(meta[NodePK], { ...this.props.activePromptAttributes });
+      this.props.toggleNodeAttributes(
+        meta[nodePrimaryKeyProperty],
+        { ...this.props.activePromptAttributes },
+      );
     } else {
-      this.props.removeNode(meta[NodePK]);
+      this.props.removeNode(meta[nodePrimaryKeyProperty]);
     }
   }
 
@@ -111,13 +119,13 @@ class NodePanels extends PureComponent {
 const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
     existingNodes :
-    differenceBy(externalData[dataSource].nodes, nodes, NodePK)
+    differenceBy(externalData[dataSource].nodes, nodes, nodePrimaryKeyProperty)
 );
 
 const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
-    map(existingNodes, NodePK) :
-    map(externalData[dataSource].nodes, NodePK)
+    map(existingNodes, nodePrimaryKeyProperty) :
+    map(externalData[dataSource].nodes, nodePrimaryKeyProperty)
 );
 
 function makeMapStateToProps() {
@@ -151,10 +159,9 @@ function makeMapStateToProps() {
             meta.itemType === 'EXISTING_NODE' &&
             (meta.stageId !== newNodeAttributes.stageId ||
               meta.promptId !== newNodeAttributes.promptId)
-          ) :
-          ({ meta }) => (
+          ) : ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
-            includes(originNodeIds, meta[NodePK])
+            includes(originNodeIds, meta[nodePrimaryKeyProperty])
           );
 
         return {

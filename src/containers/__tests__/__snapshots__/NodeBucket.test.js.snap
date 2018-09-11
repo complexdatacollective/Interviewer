@@ -23,7 +23,7 @@ ShallowWrapper {
     selectMode=""
     skewedTowardCenter={false}
     sort={Object {}}
-    sortOrderBy={Array []}
+    sortOrder={Array []}
     updateNode={[Function]}
   />,
   Symbol(enzyme.__renderer__): Object {

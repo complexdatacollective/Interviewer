@@ -16,7 +16,7 @@ const sociogramOptionsDefault = {
   allowHighlighting: false,
   allowPositioning: false,
   selectMode: '',
-  sortOrderBy: [],
+  sortOrder: [],
   concentricCircles: 0,
   skewedTowardCenter: false,
 };

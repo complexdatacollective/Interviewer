@@ -17,7 +17,9 @@ window.matchMedia =
   }));
 
 const node = {
-  foo: 'bar',
+  attributes: {
+    foo: 'bar',
+  },
 };
 
 const variableRegistry = {

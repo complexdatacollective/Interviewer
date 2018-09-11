@@ -6,11 +6,19 @@ import { differenceBy } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NodePK } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
-import { getDataByPrompt, getCardDisplayLabel, getCardAdditionalProperties, getSortDirectionDefault, getSortFields, getSortOrderDefault, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import {
+  getDataByPrompt,
+  getCardDisplayLabel,
+  getCardAdditionalProperties,
+  getSortableFields,
+  makeGetPromptNodeAttributes,
+  getInitialSortOrder,
+} from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
+
 
 /**
   * Name Generator List Interface
@@ -26,25 +34,27 @@ class NameGeneratorList extends Component {
   }
 
   /**
-   * New node submit handler
+   * Select node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addNode({ ...node, ...this.props.newNodeAttributes });
+    this.props.addNode({ ...node }, { ...this.props.newNodeAttributes });
   }
 
-  onRemoveNode = (item) => {
-    this.props.removeNode(item[NodePK]);
+  onRemoveNode = (node) => {
+    this.props.removeNode(node[nodePrimaryKeyProperty]);
   }
 
-  label = node => `${node[this.props.labelKey]}`;
+  label = node => getNodeAttributes(node)[this.props.labelKey];
 
-  details = node => this.props.visibleSupplementaryFields.map(
-    field => ({ [field.label]: node[field.variable] }));
+  details = (node) => {
+    const attrs = getNodeAttributes(node);
+    const fields = this.props.visibleSupplementaryFields;
+    return fields.map(field => ({ [field.label]: attrs[field.variable] }));
+  }
 
   render() {
     const {
       initialSortOrder,
-      initialSortDirection,
       labelKey,
       nodesForList,
       prompt,
@@ -69,9 +79,9 @@ class NameGeneratorList extends Component {
           />
         </div>
         <ListSelect
+          key={`select-${prompt.id}`}
           details={this.details}
           initialSortOrder={initialSortOrder}
-          initialSortDirection={initialSortDirection}
           label={this.label}
           labelKey={labelKey}
           nodes={nodesForList}
@@ -88,8 +98,7 @@ class NameGeneratorList extends Component {
 
 NameGeneratorList.propTypes = {
   addNode: PropTypes.func.isRequired,
-  initialSortOrder: PropTypes.string,
-  initialSortDirection: PropTypes.string,
+  initialSortOrder: PropTypes.array.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
@@ -103,10 +112,12 @@ NameGeneratorList.propTypes = {
   visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
-NameGeneratorList.defaultProps = {
-  initialSortOrder: '',
-  initialSortDirection: 'asc',
-};
+// NameGeneratorList.defaultProps = {
+//   initialSortOrder: [{
+//     property: '',
+//     direction: 'asc',
+//   }],
+// };
 
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
@@ -118,17 +129,16 @@ function makeMapStateToProps() {
       nodesForList = differenceBy(
         getDataByPrompt(state, props),
         networkNodesForOtherPrompts(state, props),
-        NodePK);
+        nodePrimaryKeyProperty);
     }
 
     return {
-      initialSortOrder: getSortOrderDefault(state, props),
-      initialSortDirection: getSortDirectionDefault(state, props),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForList,
+      initialSortOrder: getInitialSortOrder(state, props),
       selectedNodes: networkNodes(state),
-      sortFields: getSortFields(state, props),
+      sortFields: getSortableFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
   };

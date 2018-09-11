@@ -24,32 +24,40 @@ const mockStage = {
 const externalNode1 = {
   uid: 'person_1',
   type: 'person',
-  name: 'F. Anita',
-  nickname: 'Annie',
-  age: 23,
-  label: 'Custom Label',
+  attributes: {
+    name: 'F. Anita',
+    nickname: 'Annie',
+    age: 23,
+    label: 'Custom Label',
+  },
 };
 
 const externalNode2 = {
   uid: 'person_2',
   type: 'person',
-  name: 'H. Barry',
-  nickname: 'Baz',
-  age: 31,
+  attributes: {
+    name: 'H. Barry',
+    nickname: 'Baz',
+    age: 31,
+  },
 };
 
 const externalNode3 = {
   uid: 'person_3',
   type: 'person',
-  nickname: 'Carl',
-  age: 25,
+  attributes: {
+    nickname: 'Carl',
+    age: 25,
+  },
 };
 
 const externalNode4 = {
   id: 4,
   uid: 'person_3',
   type: 'person',
-  age: 25,
+  attributes: {
+    age: 25,
+  },
 };
 
 const mockProtocol = {
@@ -85,12 +93,12 @@ const emptyProps = {
   stage: {},
 };
 
-const personNode = { uid: 1, name: 'foo', type: 'person' };
-const closeFriendNode = { uid: 2, name: 'bar', type: 'person', close_friend: true };
+const personNode = { uid: 1, type: 'person', attributes: { name: 'foo' } };
+const closeFriendNode = { uid: 2, type: 'person', attributes: { name: 'bar', close_friend: true } };
 const nodes = [
   personNode,
   closeFriendNode,
-  { uid: 3, name: 'baz', type: 'venue' },
+  { uid: 3, attributes: { name: 'baz' }, type: 'venue' },
 ];
 
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
@@ -141,7 +149,7 @@ describe('interface selector', () => {
     });
 
     it('should get displayVariable', () => {
-      const selected = Interface.makeGetDisplayVariable();
+      const selected = Interface.makeGetNodeDisplayVariable();
       expect(selected(mockState, mockProps)).toEqual('name');
     });
 
@@ -150,11 +158,11 @@ describe('interface selector', () => {
       expect(getLabel(externalNode1)).toEqual('Custom Label');
       expect(getLabel(externalNode2)).toEqual('H. Barry');
       expect(getLabel(externalNode3)).toEqual('Carl');
-      expect(getLabel(externalNode4)).toEqual('4');
+      expect(getLabel(externalNode4)).toEqual('No label');
     });
 
-    it('makeNetworkNodesForSubject()', () => {
-      const selected = Interface.makeNetworkNodesForSubject();
+    it('makeNetworkNodesForType()', () => {
+      const selected = Interface.makeNetworkNodesForType();
       expect(selected(mockState, mockProps)).toEqual([
         personNode,
         closeFriendNode,

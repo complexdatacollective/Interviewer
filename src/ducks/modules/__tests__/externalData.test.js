@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import reducer from '../externalData';
-import { NodePK } from '../network';
+import { nodePrimaryKeyProperty } from '../network';
 
 const initialState = null;
 
@@ -25,13 +25,14 @@ describe('the externalData reducer', () => {
   it('assigns a UID to new data', () => {
     const data = { students: { nodes: [{ name: 'a' }] } };
     const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0]).toMatchObject({ [NodePK]: expect.any(String) });
+    expect(newState.students.nodes[0])
+      .toMatchObject({ [nodePrimaryKeyProperty]: expect.any(String) });
   });
 
   it('uses consistent hashing for IDs', () => {
     const data = { students: { nodes: [{ name: 'a' }, { name: 'a' }] } };
     const newState = reducer(initialState, actionWithData(data));
-    expect(newState.students.nodes[0][NodePK]).toBeDefined();
+    expect(newState.students.nodes[0][nodePrimaryKeyProperty]).toBeDefined();
     expect(newState.students.nodes[0]).toEqual(newState.students.nodes[1]);
   });
 });

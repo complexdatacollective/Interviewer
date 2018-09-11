@@ -14,10 +14,14 @@ import {
   flow,
   isEmpty,
 } from 'lodash';
-import { networkEdges, makeGetDisplayVariable, makeNetworkNodesForSubject } from './interface';
+import {
+  networkEdges,
+  makeGetNodeDisplayVariable,
+  makeNetworkNodesForType,
+} from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { NodePK } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -33,7 +37,7 @@ const propPromptLayout = (_, props) => props.prompt.layout;
 const propPromptEdges = (_, props) => props.prompt.edges;
 const propPromptHighlight = (_, props) => props.prompt.highlight;
 const propPromptBackground = (_, props) => props.prompt.background;
-const propPromptSort = (_, props) => props.prompt.sortOrderBy;
+const propPromptSort = (_, props) => props.prompt.sortOrder;
 
 // MemoedSelectors
 
@@ -69,8 +73,8 @@ const getLayoutOptions = createDeepEqualSelector(
 
 const getSortOptions = createDeepEqualSelector(
   propPromptSort,
-  makeGetDisplayVariable(),
-  (sort, displayVariable) => (sort && !isEmpty(sort) ? { sortOrderBy: sort } : { sortOrderBy: [{ property: displayVariable, direction: 'asc' }] }),
+  makeGetNodeDisplayVariable(),
+  (sort, displayVariable) => (sort && !isEmpty(sort) ? { sortOrder: sort } : { sortOrder: [{ property: displayVariable, direction: 'asc' }] }),
 );
 
 const getBackgroundOptions = createDeepEqualSelector(
@@ -100,11 +104,12 @@ export const makeGetSociogramOptions = () =>
   );
 
 const makeGetUnplacedNodes = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForType = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getLayoutOptions,
-    (nodes, { layoutVariable }) => reject(nodes, node => has(node, layoutVariable)),
+    networkNodesForType, getLayoutOptions,
+    (nodes, { layoutVariable }) =>
+      reject(nodes, node => has(node[nodeAttributesProperty], layoutVariable)),
   );
 };
 
@@ -114,23 +119,23 @@ export const makeGetNextUnplacedNode = () => {
   return createSelector(
     getUnplacedNodes, getSortOptions,
     (nodes, sortOptions) => {
-      const sorter = sortOrder(sortOptions.sortOrderBy);
+      const sorter = sortOrder(sortOptions.sortOrder);
       return first(sorter(nodes));
     },
   );
 };
 
 const edgeCoords = (edge, { nodes, layoutVariable }) => {
-  const from = nodes.find(n => n[NodePK] === edge.from);
-  const to = nodes.find(n => n[NodePK] === edge.to);
+  const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
+  const to = nodes.find(n => n[nodePrimaryKeyProperty] === edge.to);
 
   if (!from || !to) { return { from: null, to: null }; }
 
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
     type: edge.type,
-    from: from[layoutVariable],
-    to: to[layoutVariable],
+    from: from[nodeAttributesProperty][layoutVariable],
+    to: to[nodeAttributesProperty][layoutVariable],
   };
 };
 
@@ -151,7 +156,7 @@ const edgesOfTypes = (edges, types) =>
   )(edges);
 
 export const makeDisplayEdgesForPrompt = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject,
@@ -169,12 +174,12 @@ export const makeDisplayEdgesForPrompt = () => {
 };
 
 export const makeGetPlacedNodes = () => {
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject,
     getLayoutOptions,
     (nodes, { layoutVariable }) =>
-      filter(nodes, node => has(node, layoutVariable)),
+      filter(nodes, node => has(getNodeAttributes(node), layoutVariable)),
   );
 };

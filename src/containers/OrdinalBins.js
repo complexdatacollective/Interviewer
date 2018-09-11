@@ -3,12 +3,12 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import color from 'color';
-import { makeNetworkNodesForSubject, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
+import { makeNetworkNodesForType, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodePK } from '../ducks/modules/network';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
   static propTypes = {
@@ -16,7 +16,7 @@ class OrdinalBins extends PureComponent {
     bins: PropTypes.array.isRequired,
     prompt: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
-    toggleNodeAttributes: PropTypes.func.isRequired,
+    updateNode: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +63,7 @@ class OrdinalBins extends PureComponent {
 
       const newValue = {};
       newValue[this.props.activePromptVariable] = bin.value;
-      this.props.toggleNodeAttributes(meta[NodePK], newValue);
+      this.props.updateNode(meta, newValue);
     };
 
     const accentColor = this.calculateAccentColor(index, missingValue);
@@ -101,7 +101,7 @@ class OrdinalBins extends PureComponent {
 function makeMapStateToProps() {
   const getOrdinalValues = makeGetOrdinalValues();
   const getPromptVariable = makeGetPromptVariable();
-  const getStageNodes = makeNetworkNodesForSubject();
+  const getStageNodes = makeNetworkNodesForType();
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
@@ -112,7 +112,9 @@ function makeMapStateToProps() {
       bins: getOrdinalValues(state, props)
         .map((bin) => {
           const nodes = stageNodes.filter(
-            node => node[activePromptVariable] && node[activePromptVariable] === bin.value,
+            node =>
+              node[nodeAttributesProperty][activePromptVariable] &&
+              node[nodeAttributesProperty][activePromptVariable] === bin.value,
           );
 
           return {
@@ -126,7 +128,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

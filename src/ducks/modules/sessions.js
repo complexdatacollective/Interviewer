@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { NodePK, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 import { getPairedServer } from '../../selectors/servers';
@@ -88,8 +88,7 @@ export default function reducer(state = initialState, action = {}) {
  * Add a node or nodes to the state.
  *
  * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalAttributes] shared attributes to apply to every
- *  new node
+ * @param {Object} [additionalAttributes] shared attributes to apply to every new node
  *
  * @memberof! NetworkActionCreators
  */
@@ -108,14 +107,14 @@ const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
   });
 };
 
-const updateNode = (node, full = false) => (dispatch, getState) => {
+const updateNode = (node, additionalAttributes = false) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({
     type: UPDATE_NODE,
     sessionId: session,
     node,
-    full,
+    additionalAttributes,
   });
 };
 
@@ -125,7 +124,7 @@ const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   dispatch({
     type: TOGGLE_NODE_ATTRIBUTES,
     sessionId: session,
-    [NodePK]: uid,
+    [nodePrimaryKeyProperty]: uid,
     attributes,
   });
 };
@@ -136,7 +135,7 @@ const removeNode = uid => (dispatch, getState) => {
   dispatch({
     type: REMOVE_NODE,
     sessionId: session,
-    [NodePK]: uid,
+    [nodePrimaryKeyProperty]: uid,
   });
 };
 

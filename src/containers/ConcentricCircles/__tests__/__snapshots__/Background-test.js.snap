@@ -16,7 +16,7 @@ ShallowWrapper {
     layoutVariable="foo"
     selectMode=""
     skewedTowardCenter={false}
-    sortOrderBy={Array []}
+    sortOrder={Array []}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -117,7 +117,7 @@ ShallowWrapper {
     layoutVariable="foo"
     selectMode=""
     skewedTowardCenter={true}
-    sortOrderBy={Array []}
+    sortOrder={Array []}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],

@@ -8,7 +8,7 @@ import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NodePK } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import sociogramOptionsProps from './propTypes';
 
@@ -30,10 +30,14 @@ const dropHandlers = compose(
   withHandlers({
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
-      props.updateNode({
-        [NodePK]: item.meta[NodePK],
-        [props.layoutVariable]: relativeCoords(props, item),
-      });
+      props.updateNode(
+        {
+          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
+        },
+        {
+          [props.layoutVariable]: relativeCoords(props, item),
+        },
+      );
 
       // Horrible hack for performance (only re-render nodes on drop, not on drag)
       props.setDropCount(props.dropCount + 1);
@@ -41,10 +45,14 @@ const dropHandlers = compose(
     onDrag: props => (item) => {
       if (!has(item.meta, props.layoutVariable)) { return; }
 
-      props.updateNode({
-        [NodePK]: item.meta[NodePK],
-        [props.layoutVariable]: relativeCoords(props, item),
-      });
+      props.updateNode(
+        {
+          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
+        },
+        {
+          [props.layoutVariable]: relativeCoords(props, item),
+        },
+      );
     },
   }),
 );
@@ -85,9 +93,9 @@ class NodeLayout extends Component {
 
     if (!allowSelect) { return; }
 
-    this.connectNode(node[NodePK]);
+    this.connectNode(node[nodePrimaryKeyProperty]);
 
-    this.toggleHighlightAttributes(node[NodePK]);
+    this.toggleHighlightAttributes(node[nodePrimaryKeyProperty]);
 
     this.forceUpdate();
   }
@@ -125,13 +133,13 @@ class NodeLayout extends Component {
 
   isHighlighted(node) {
     return !isEmpty(this.props.highlightAttributes) &&
-      isMatch(node, this.props.highlightAttributes);
+      isMatch(node[nodeAttributesProperty], this.props.highlightAttributes);
   }
 
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node[NodePK] === this.state.connectFrom;
+      node[nodePrimaryKeyProperty] === this.state.connectFrom;
   }
 
   render() {
@@ -145,11 +153,12 @@ class NodeLayout extends Component {
     return (
       <div className="node-layout">
         { nodes.map((node) => {
-          if (!has(node, layoutVariable)) { return null; }
+          const nodeAttributes = getNodeAttributes(node);
+          if (!has(nodeAttributes, layoutVariable)) { return null; }
 
           return (
             <LayoutNode
-              key={node[NodePK]}
+              key={node[nodePrimaryKeyProperty]}
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.onSelected(node)}

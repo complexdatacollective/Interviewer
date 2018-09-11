@@ -1,8 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { has, get } from 'lodash';
+import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 import { protocolRegistry } from './protocol';
 import { getExternalData } from './externalData';
 
@@ -27,6 +28,8 @@ const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
 
+// Static props that will be added to any created/edited node on the prompt
+// Any protocol-specific props will exist in the [nodeAttributesProperty] object
 export const makeGetPromptNodeAttributes = () => {
   const getSubject = makeGetSubject();
   const getIds = makeGetIds();
@@ -40,38 +43,36 @@ export const makeGetPromptNodeAttributes = () => {
     ({ type }, ids, additionalAttributes) => ({
       type,
       ...ids,
-      ...additionalAttributes,
+      [nodeAttributesProperty]: {
+        ...additionalAttributes,
+      },
     }),
   );
 };
 
+// Returns the displayLabel property of the card options configuration API
 export const getCardDisplayLabel = createSelector(
   propCardOptions,
   cardOptions => cardOptions.displayLabel,
 );
 
+// Returns any additional properties to be displayed on cards.
+// Returns an empty array if no additional properties are specified in the protocol.
 export const getCardAdditionalProperties = createSelector(
   propCardOptions,
   cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
 );
 
-export const getSortFields = createSelector(
+// Returns the properties that are specified as sortable in sortOptions
+export const getSortableFields = createSelector(
   propSortOptions,
   sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
 
-// TODO: hard coded to select the first sortOrder rule,
-// until we add support for multi-property sorting
-export const getSortOrderDefault = createSelector(
-  propSortOptions,
-  sortOptions => get(sortOptions, ['sortOrder', 0, 'property'], ''),
-);
 
-// TODO: hard coded to select the first sortOrder rule,
-// until we add support for multi-property sorting
-export const getSortDirectionDefault = createSelector(
+export const getInitialSortOrder = createSelector(
   propSortOptions,
-  sortOptions => get(sortOptions, ['sortOrder', 0, 'direction'], ''),
+  sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
 
 export const getDataByPrompt = createSelector(

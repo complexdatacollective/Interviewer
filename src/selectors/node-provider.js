@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts } from './interface';
 import { getExternalData } from './externalData';
-import { NodePK } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const propDataSource = (_, props) => props.dataSource;
 
@@ -24,6 +24,6 @@ export const makeGetProviderNodes = () => {
     networkNodesForOtherPrompts,
     getExternalData,
     (dataSource, nodes, existingNodes, externalData) =>
-      (dataSource === 'existing' ? existingNodes : differenceBy(externalData[dataSource].nodes, nodes, NodePK)),
+      (dataSource === 'existing' ? existingNodes : differenceBy(externalData[dataSource].nodes, nodes, nodePrimaryKeyProperty)),
   );
 };

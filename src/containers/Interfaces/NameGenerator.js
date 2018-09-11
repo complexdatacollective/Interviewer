@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has } from 'lodash';
+import { get, has, merge, omit } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as modalActions } from '../../ducks/modules/modals';
@@ -11,6 +11,7 @@ import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { makeRehydrateForm } from '../../selectors/forms';
+import { getNodeWithoutAttributes } from '../../ducks/modules/network';
 
 /**
   * Name Generator Interface
@@ -35,7 +36,7 @@ class NameGenerator extends Component {
    */
   onSubmitNewNode = (formData) => {
     if (formData) {
-      this.props.addNodes({ ...formData, ...this.props.newNodeAttributes });
+      this.props.addNodes({ attributes: { ...formData } }, this.props.newNodeAttributes);
     }
   }
 
@@ -45,7 +46,7 @@ class NameGenerator extends Component {
    */
   onSubmitEditNode = (formData) => {
     if (formData) {
-      this.props.updateNode({ ...this.state.selectedNode, ...formData });
+      this.props.updateNode({ ...this.state.selectedNode }, { ...formData });
     }
   }
 
@@ -64,16 +65,23 @@ class NameGenerator extends Component {
 
   /**
    * Drop node handler
-   * Deletes node from network whe  n dropped on bin
+   * Adds prompt attributes to existing nodes, or adds new nodes to the network.
    * @param {object} node - key/value object containing node object from the network store
    */
   onDrop = (item) => {
     const node = { ...item.meta };
+    const nodeModelData = getNodeWithoutAttributes(node);
 
+    const promptModelData = omit(this.props.newNodeAttributes);
+
+    // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptId') || has(node, 'stageId')) {
-      this.props.updateNode({ ...node, ...this.props.activePromptAttributes });
+      this.props.updateNode(
+        { ...merge(nodeModelData, promptModelData) },
+        { ...this.props.activePromptAttributes },
+      );
     } else {
-      this.props.addNodes({ ...node, ...this.props.newNodeAttributes });
+      this.props.addNodes(node, this.props.newNodeAttributes);
     }
   }
 

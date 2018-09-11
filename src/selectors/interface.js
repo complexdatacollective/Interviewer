@@ -1,10 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, has, reject } from 'lodash';
+import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
+import { getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are generic between interfaces
 
@@ -73,7 +74,7 @@ export const makeGetNodeType = () => (createSelector(
   subject => subject && subject.type,
 ));
 
-export const makeGetDisplayVariable = () => createDeepEqualSelector(
+export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
@@ -109,19 +110,36 @@ export const makeGetOrdinalValues = () =>
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
   variableRegistry => (node) => {
+    // Get the node entity section of the variable registry
     const nodeInfo = variableRegistry && variableRegistry.node;
+
+    // Get the display variable by looking up the node type in the variable registry
     const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
       nodeInfo[node.type].displayVariable;
+
+    // For fallback: get the first variable of type 'text'
     const firstTextVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
       nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
-    return node.label ||
-      (displayVariable && node[displayVariable]) ||
-      (firstTextVariable && node[firstTextVariable]) ||
-      String(node.id);
+
+    // Get the data model properties from the node
+    const nodeDataModelProps = getNodeAttributes(node);
+    // Try to return the label prop
+    // else try to use the displayVariable
+    // else try to use the first text variable
+    // else return the string "No label"
+    return nodeDataModelProps.label ||
+      (displayVariable && nodeDataModelProps[displayVariable]) ||
+      (firstTextVariable && nodeDataModelProps[firstTextVariable]) ||
+      'No label';
   },
 );
 
-export const makeNetworkNodesForSubject = () => {
+/**
+ * makeNetworkNodesForType()
+ * Get the current prompt/stage subject, and filter the network by this node type.
+*/
+
+export const makeNetworkNodesForType = () => {
   const getSubject = makeGetSubject();
   return createSelector(
     networkNodes, getSubject,
@@ -129,28 +147,36 @@ export const makeNetworkNodesForSubject = () => {
   );
 };
 
+/**
+ * makeNetworkNodesForPrompt
+ * Take the "additional attributes" specified by the current prompt, and filter nodes of the current
+ * prompt type
+*/
+
 export const makeNetworkNodesForPrompt = () => {
-  // used to check prompt ids
   const getAttributes = makeGetAdditionalAttributes();
-  const networkNodesForSubject = makeNetworkNodesForSubject();
-
-  return createSelector(
-    networkNodesForSubject, getAttributes,
-    (nodes, attributes) => filter(nodes, attributes),
-  );
-};
-
-export const makeNetworkNodesForOtherPrompts = () => {
-  // used to check prompt ids
-  const getAttributes = makeGetAdditionalAttributes();
-  const networkNodesForSubject = makeNetworkNodesForSubject();
+  const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
     networkNodesForSubject, getAttributes,
     (nodes, attributes) =>
-      reject(
-        nodes,
-        attributes,
-      ),
+      filter(nodes, { [nodeAttributesProperty]: attributes }),
+  );
+};
+
+/**
+ * makeNetworkNodesForOtherPrompts()
+ * Same as above, except returns a filtered node list that **excludes** nodes that match.
+*/
+
+export const makeNetworkNodesForOtherPrompts = () => {
+  // used to check prompt ids
+  const getAttributes = makeGetAdditionalAttributes();
+  const networkNodesForSubject = makeNetworkNodesForType();
+
+  return createSelector(
+    networkNodesForSubject, getAttributes,
+    (nodes, attributes) =>
+      reject(nodes, node => isMatch(getNodeAttributes(node), attributes)),
   );
 };

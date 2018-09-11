@@ -9,7 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { NodePK } from '../../ducks/modules/network';
+import { getNodeAttributes, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 
 /**
@@ -53,7 +53,10 @@ const InitialState = {
   *     `{label: '', variable: ''}` in each search set object.
   * @param props.options {object}
   * @param props.options.matchProperties {array} - one or more key names to search
-  *     in the dataset
+  *     in the dataset. Supports nested properties using dot notation.
+  *     Example:
+  *       data = [{ id: '', attribtues: { name: '' }}];
+  *       matchProperties = ['attributes.name'];
   * @param [props.options.fuzziness=0.5] {number} -
   *     How inexact search results may be, in the range [0,1].
   *     A value of zero requires an exact match. Large search sets may do better
@@ -117,7 +120,8 @@ class Search extends Component {
   //   `excludedNodes` size is small, but search set may be large,
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
-    return this.props.excludedNodes.every(excluded => excluded[NodePK] !== candidate[NodePK]);
+    return this.props.excludedNodes.every(excluded =>
+      excluded[nodePrimaryKeyProperty] !== candidate[nodePrimaryKeyProperty]);
   }
 
   render() {
@@ -156,17 +160,16 @@ class Search extends Component {
 
 
     // Result formatters:
-    const toDetail = (result, field) => ({ [field.label]: result[field.variable] });
-    const getLabel = result => result[primaryDisplayField];
-    const getSelected = result => this.state.selectedResults.indexOf(result) > -1;
-    const getDetails = result => additionalAttributes.map(attr => toDetail(result, attr));
+    const toDetail = (node, field) => ({ [field.label]: getNodeAttributes(node)[field.variable] });
+    const getLabel = node => getNodeAttributes(node)[primaryDisplayField];
+    const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
+    const getDetails = node => additionalAttributes.map(attr => toDetail(node, attr));
 
     return (
       <SearchTransition
         className={searchClasses}
         in={!collapsed}
       >
-
         <form>
           <Icon name="close" size="40px" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
 
@@ -197,9 +200,7 @@ class Search extends Component {
             value={this.state.searchTerm}
             type="search"
           />
-
         </form>
-
       </SearchTransition>
     );
   }

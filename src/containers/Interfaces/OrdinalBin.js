@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
-import { makeGetPromptVariable, makeNetworkNodesForSubject } from '../../selectors/interface';
+import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { OrdinalBinBucket } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * OrdinalBin Interface
@@ -63,7 +64,7 @@ OrdinalBin.propTypes = {
 };
 
 function makeMapStateToProps() {
-  const getStageNodes = makeNetworkNodesForSubject();
+  const getStageNodes = makeNetworkNodesForType();
   const getPromptVariable = makeGetPromptVariable();
 
   return function mapStateToProps(state, props) {
@@ -72,7 +73,7 @@ function makeMapStateToProps() {
 
     return {
       nodesForPrompt: stageNodes.filter(
-        node => !node[activePromptVariable],
+        node => !node[nodeAttributesProperty][activePromptVariable],
       ),
     };
   };

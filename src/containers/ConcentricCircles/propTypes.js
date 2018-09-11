@@ -8,5 +8,5 @@ export default {
   canCreateEdge: PropTypes.bool.isRequired,
   allowHighlighting: PropTypes.bool.isRequired,
   highlightAttributes: PropTypes.object,
-  sortOrderBy: PropTypes.array.isRequired,
+  sortOrder: PropTypes.array.isRequired,
 };

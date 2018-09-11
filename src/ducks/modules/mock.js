@@ -3,6 +3,7 @@
 import faker from 'faker';
 import { times } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
+import { nodeAttributesProperty } from './network';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
@@ -17,9 +18,11 @@ const generateNodes = (howMany = 0) =>
         type: 'person',
         promptId: 'mock',
         stageId: 'mock',
-        name: `${firstName} ${lastName}`,
-        nickname: lastName,
-        age,
+        [nodeAttributesProperty]: {
+          name: `${firstName} ${lastName}`,
+          nickname: lastName,
+          age,
+        },
         timeCreated: Date.now().toString(),
       }));
     });

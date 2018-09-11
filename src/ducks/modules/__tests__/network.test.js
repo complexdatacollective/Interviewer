@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionTypes, NodePK as PK } from '../network';
+import reducer, { actionTypes, nodePrimaryKeyProperty as PK } from '../network';
 
 const mockState = {
   ego: {},
@@ -19,19 +19,19 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ id: 1, name: 'baz' }],
+        nodes: [{ id: 1, attributes: { name: 'baz' } }],
       },
       {
         type: actionTypes.ADD_NODES,
-        nodes: [{ name: 'foo' }],
+        nodes: [{ attributes: { name: 'foo' } }],
       },
     );
 
     expect(newState.nodes.length).toBe(2);
-    expect(newState.nodes[0]).toEqual({ id: 1, name: 'baz' });
+    expect(newState.nodes[0]).toEqual({ id: 1, attributes: { name: 'baz' } });
 
     const newNode = newState.nodes[1];
-    expect(newNode.name).toEqual('foo');
+    expect(newNode.attributes.name).toEqual('foo');
     expect(newNode[PK]).toMatch(UIDPattern);
   });
 
@@ -39,18 +39,18 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, name: 'baz' }],
+        nodes: [{ [PK]: 1, attributes: { name: 'baz' } }],
       },
       {
         type: actionTypes.ADD_NODES,
-        nodes: [{ name: 'foo' }, { name: 'bar' }],
+        nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
       },
     );
 
     expect(newState.nodes.length).toBe(3);
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, name: 'baz' });
-    expect(newState.nodes[1]).toMatchObject({ name: 'foo', [PK]: expect.stringMatching(UIDPattern) });
-    expect(newState.nodes[2]).toMatchObject({ name: 'bar', [PK]: expect.stringMatching(UIDPattern) });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, attributes: { name: 'baz' } });
+    expect(newState.nodes[1]).toMatchObject({ attributes: { name: 'foo' }, [PK]: expect.stringMatching(UIDPattern) });
+    expect(newState.nodes[2]).toMatchObject({ attributes: { name: 'bar' }, [PK]: expect.stringMatching(UIDPattern) });
   });
 
   it('preserves UID when adding a node', () => {
@@ -58,7 +58,7 @@ describe('network reducer', () => {
       mockState,
       {
         type: actionTypes.ADD_NODES,
-        nodes: [{ name: 'foo', [PK]: '22' }],
+        nodes: [{ attributes: { name: 'foo' }, [PK]: '22' }],
       },
     );
     expect(newState.nodes[0][PK]).toEqual('22');
@@ -72,13 +72,32 @@ describe('network reducer', () => {
       },
       {
         type: actionTypes.ADD_NODES,
-        nodes: [{ name: 'foo' }, { name: 'bar' }],
-        additionalAttributes: { stage: 1 },
+        nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
+        additionalAttributes: { stageId: '2', attributes: { isFriend: true } },
       },
     );
 
-    expect(newState.nodes[0].stage).toEqual(1);
-    expect(newState.nodes[1].stage).toEqual(1);
+    expect(newState.nodes[0].stageId).toBe('2');
+    expect(newState.nodes[1].stageId).toBe('2');
+    expect(newState.nodes[0].attributes.isFriend).toBe(true);
+    expect(newState.nodes[1].attributes.isFriend).toBe(true);
+    expect(newState.nodes[0].attributes.name).toEqual('foo');
+    expect(newState.nodes[1].attributes.name).toEqual('bar');
+  });
+
+  it('should prefer node.attributes to additionalAttributes.attributes ', () => {
+    const newState = reducer(
+      {
+        ...mockState,
+        nodes: [],
+      },
+      {
+        type: actionTypes.ADD_NODES,
+        nodes: [{ attributes: { name: 'foo' } }],
+        additionalAttributes: { attributes: { name: 'defaultName' } },
+      },
+    );
+    expect(newState.nodes[0].attributes.name).toEqual('foo');
   });
 
   it('should handle REMOVE_NODE', () => {
@@ -86,7 +105,7 @@ describe('network reducer', () => {
       reducer(
         {
           ...mockState,
-          nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 2, name: 'bar' }, { [PK]: 3, name: 'baz' }],
+          nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 2, attributes: { name: 'bar' } }, { [PK]: 3, attributes: { name: 'baz' } }],
         },
         {
           type: actionTypes.REMOVE_NODE,
@@ -95,7 +114,7 @@ describe('network reducer', () => {
       ),
     ).toEqual({
       ...mockState,
-      nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 3, name: 'baz' }],
+      nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 3, attributes: { name: 'baz' } }],
     });
   });
 
@@ -128,7 +147,7 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, name: 'foo' }, { [PK]: 2, name: 'bar' }],
+        nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 2, attributes: { name: 'bar' } }],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
@@ -137,13 +156,13 @@ describe('network reducer', () => {
       },
     );
 
-    expect(newState.nodes[0].stage).toEqual(1);
-    expect(newState.nodes[1].stage).toEqual(undefined);
+    expect(newState.nodes[0].attributes.stage).toEqual(1);
+    expect(newState.nodes[1].attributes.stage).toEqual(undefined);
 
     const secondState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, stage: 1, name: 'foo' }, { [PK]: 2, stage: 1, name: 'bar' }],
+        nodes: [{ [PK]: 1, attributes: { stage: 1, name: 'foo' } }, { [PK]: 2, attributes: { stage: 1, name: 'bar' } }],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
@@ -152,8 +171,8 @@ describe('network reducer', () => {
       },
     );
 
-    expect(secondState.nodes[0].stage).toEqual(1);
-    expect(secondState.nodes[1].stage).toEqual(undefined);
+    expect(secondState.nodes[0].attributes.stage).toEqual(1);
+    expect(secondState.nodes[1].attributes.stage).toEqual(undefined);
   });
 
   it('should handle ADD_EDGE', () => {

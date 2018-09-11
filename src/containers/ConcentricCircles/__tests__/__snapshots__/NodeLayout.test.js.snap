@@ -29,7 +29,7 @@ ShallowWrapper {
     }
     selectMode=""
     skewedTowardCenter={false}
-    sortOrderBy={Array []}
+    sortOrder={Array []}
     toggleEdge={[Function]}
     toggleHighlight={[Function]}
     updateNode={[Function]}
@@ -48,57 +48,13 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": Array [
-        <LayoutNode
-          allowPositioning={false}
-          allowSelect={true}
-          areaHeight={456}
-          areaWidth={123}
-          layoutVariable="foo"
-          linking={false}
-          node={
-            Object {
-              "_uid": 123,
-              "bar": "buzz",
-              "foo": Object {
-                "x": 0,
-                "y": 0,
-              },
-            }
-          }
-          onSelected={[Function]}
-          selected={false}
-        />,
+        null,
       ],
       "className": "node-layout",
     },
     "ref": null,
     "rendered": Array [
-      Object {
-        "instance": null,
-        "key": "123",
-        "nodeType": "class",
-        "props": Object {
-          "allowPositioning": false,
-          "allowSelect": true,
-          "areaHeight": 456,
-          "areaWidth": 123,
-          "layoutVariable": "foo",
-          "linking": false,
-          "node": Object {
-            "_uid": 123,
-            "bar": "buzz",
-            "foo": Object {
-              "x": 0,
-              "y": 0,
-            },
-          },
-          "onSelected": [Function],
-          "selected": false,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
+      null,
     ],
     "type": "div",
   },
@@ -109,57 +65,13 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": Array [
-          <LayoutNode
-            allowPositioning={false}
-            allowSelect={true}
-            areaHeight={456}
-            areaWidth={123}
-            layoutVariable="foo"
-            linking={false}
-            node={
-              Object {
-                "_uid": 123,
-                "bar": "buzz",
-                "foo": Object {
-                  "x": 0,
-                  "y": 0,
-                },
-              }
-            }
-            onSelected={[Function]}
-            selected={false}
-          />,
+          null,
         ],
         "className": "node-layout",
       },
       "ref": null,
       "rendered": Array [
-        Object {
-          "instance": null,
-          "key": "123",
-          "nodeType": "class",
-          "props": Object {
-            "allowPositioning": false,
-            "allowSelect": true,
-            "areaHeight": 456,
-            "areaWidth": 123,
-            "layoutVariable": "foo",
-            "linking": false,
-            "node": Object {
-              "_uid": 123,
-              "bar": "buzz",
-              "foo": Object {
-                "x": 0,
-                "y": 0,
-              },
-            },
-            "onSelected": [Function],
-            "selected": false,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
+        null,
       ],
       "type": "div",
     },

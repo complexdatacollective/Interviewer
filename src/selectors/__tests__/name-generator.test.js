@@ -39,9 +39,11 @@ const mockStage = {
 const externalNode = {
   uid: 'person_1',
   type: 'person',
-  name: 'F. Anita',
-  nickname: 'Annie',
-  age: 23,
+  attributes: {
+    name: 'F. Anita',
+    nickname: 'Annie',
+    age: 23,
+  },
 };
 
 const mockProtocol = {
@@ -67,10 +69,10 @@ const emptyProps = {
   stage: {},
 };
 
-const personNode = { uid: 1, name: 'foo', type: 'person' };
-const closeFriendNode = { uid: 2, name: 'bar', type: 'person', close_friend: true };
+const personNode = { uid: 1, attributes: { name: 'foo', type: 'person' } };
+const closeFriendNode = { uid: 2, attributes: { name: 'bar', type: 'person', close_friend: true } };
 
-const nodes = [personNode, closeFriendNode, { uid: 3, name: 'baz', type: 'venue' }];
+const nodes = [personNode, closeFriendNode, { uid: 3, attributes: { name: 'baz', type: 'venue' } }];
 
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 
@@ -116,7 +118,7 @@ describe('name generator selector', () => {
     it('should get node attributes for the prompt', () => {
       const selected = NameGen.makeGetPromptNodeAttributes();
       expect(selected(mockState, mockProps)).toEqual({
-        close_friend: true,
+        attributes: { close_friend: true },
         type: 'person',
         promptId: 'promptId123',
         stageId: 'stageId123',
@@ -134,18 +136,13 @@ describe('name generator selector', () => {
     });
 
     it('should get sortable properties', () => {
-      expect(NameGen.getSortFields(mockState, mockProps)).toEqual(['age']);
-      expect(NameGen.getSortFields(null, emptyProps)).toEqual([]);
+      expect(NameGen.getSortableFields(mockState, mockProps)).toEqual(['age']);
+      expect(NameGen.getSortableFields(null, emptyProps)).toEqual([]);
     });
 
-    it('should get sort order default', () => {
-      expect(NameGen.getSortOrderDefault(mockState, mockProps)).toEqual('name');
-      expect(NameGen.getSortOrderDefault(null, emptyProps)).toEqual('');
-    });
-
-    it('should get sort direction default', () => {
-      expect(NameGen.getSortDirectionDefault(mockState, mockProps)).toEqual('asc');
-      expect(NameGen.getSortDirectionDefault(null, emptyProps)).toEqual('');
+    it('should get sort defaults', () => {
+      expect(NameGen.getInitialSortOrder(mockState, mockProps)).toEqual([{ property: 'name', direction: 'asc' }]);
+      expect(NameGen.getInitialSortOrder(null, emptyProps)).toEqual([]);
     });
 
     it('should get data by prompt', () => {

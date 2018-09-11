@@ -3,30 +3,19 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../ui/components';
 import { CardList } from '.';
-import { NodePK } from '../ducks/modules/network';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import sortOrder from '../utils/sortOrder';
 
 class ListSelect extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ascending: this.props.initialSortDirection === 'asc',
+      activeSortOrder: {
+        ...this.props.initialSortOrder[0], // For now, just respect the first default sort rule
+      },
       filterValue: '',
-      property: this.props.initialSortOrder || this.props.labelKey,
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.initialSortOrder !== this.props.initialSortOrder) {
-      this.setState({
-        property: nextProps.initialSortOrder,
-      });
-    }
-    if (nextProps.initialSortDirection !== this.props.initialSortDirection) {
-      this.setState({
-        ascending: nextProps.initialSortDirection === 'asc',
-      });
-    }
   }
 
   /**
@@ -43,39 +32,60 @@ class ListSelect extends Component {
     * @return character to indicate sort direction (if applicable)
     */
   getDirection = (property) => {
-    if (property === this.state.property) {
-      return this.state.ascending ? ' \u25B2' : ' \u25BC';
+    if (property === this.state.activeSortOrder.property) {
+      return this.state.activeSortOrder.direction === 'asc' ? ' \u25B2' : ' \u25BC';
     }
     return '';
   };
 
   /**
-    * @return sorted list
-    */
-  getSortedList = () =>
-    this.props.nodes.sort(this.compare(this.state.property, this.state.ascending));
-
-  /**
     * @return filtered list
+    * This filter works by testing if the filterValue is present in either:
+    *  - The node label
+    *  - Or one of the details passed to the node
+    *
+    * TODO: Expand filtering to look at all node properties, not just ones passed as card details.
     */
-  getFilteredList = list => list.filter(node => (
-    this.props.label(node) && this.props.details(node) &&
-    (this.props.label(node).toLowerCase().includes(this.state.filterValue.toLowerCase()) ||
-    this.props.details(node).some(detail => Object.values(detail).some(
-      item => item.toLowerCase().includes(this.state.filterValue.toLowerCase()),
-    )))
-  ));
+  getFilteredList = (list) => {
+    const filteredList = list.filter(
+      (node) => {
+        // Lowercase for comparison
+        const nodeLabel = (this.props.label(node) || '').toLowerCase();
+        const filterValue = this.state.filterValue.toLowerCase();
+
+        const nodeDetails = this.props.details(node);
+
+        // Include in filtered list if:
+        // - The label includes the filter value, OR
+        // - Any of the detail property values include the filter value
+        return (
+          nodeLabel.includes(filterValue) ||
+          nodeDetails.some((detail) => {
+            const detailProperties = Object.values(detail);
+
+            return detailProperties.some(
+              item => item.toLowerCase().includes(filterValue),
+            );
+          })
+        );
+      },
+    );
+
+    return filteredList;
+  }
 
   /**
     * @param property to sort by
     */
   setSortBy = (property) => {
-    if (this.state.property === property) {
+    if (this.state.activeSortOrder.property === property) {
       this.toggleSortDirection();
     } else {
       this.setState({
-        ascending: true,
-        property,
+        activeSortOrder: {
+          property,
+          direction: 'asc',
+        },
       });
     }
   };
@@ -83,45 +93,19 @@ class ListSelect extends Component {
   /**
     * @param {object} node
     */
-  selected = node => !!this.props.selectedNodes.find(current => current[NodePK] === node[NodePK]);
-
-  /**
-    * @param property to sort by
-    * @param {boolean} ascending
-    */
-  compare = (property, ascending = true) => {
-    let sortOrder = 1;
-    if (!ascending) {
-      sortOrder = -1;
-    }
-
-    return (a, b) => {
-      if (!Object.hasOwnProperty.call(a, property) || !Object.hasOwnProperty.call(b, property)) {
-        return 0;
-      }
-
-      let result = 0;
-
-      const varA = (typeof a[property] === 'string') ?
-        a[property].toUpperCase() : a[property];
-      const varB = (typeof b[property] === 'string') ?
-        b[property].toUpperCase() : b[property];
-
-      if (varA < varB) {
-        result = -1;
-      } else if (varA > varB) {
-        result = 1;
-      }
-      return result * sortOrder;
-    };
-  };
+  isNodeSelected = node =>
+    !!this.props.selectedNodes
+      .find(current => current[nodePrimaryKeyProperty] === node[nodePrimaryKeyProperty]);
 
   /**
     * changes direction of current sort
     */
   toggleSortDirection = () => {
     this.setState({
-      ascending: !this.state.ascending,
+      activeSortOrder: {
+        direction: this.state.activeSortOrder.direction === 'asc' ? 'desc' : 'asc',
+        property: this.state.activeSortOrder.property,
+      },
     });
   };
 
@@ -130,7 +114,7 @@ class ListSelect extends Component {
     * @param {object} node
     */
   toggleCard = (node) => {
-    const matchingPK = n => n[NodePK] === node[NodePK];
+    const matchingPK = n => n[nodePrimaryKeyProperty] === node[nodePrimaryKeyProperty];
     const index = this.props.selectedNodes.findIndex(matchingPK);
     if (index !== -1) {
       this.props.onRemoveNode(this.props.nodes.find(matchingPK));
@@ -143,15 +127,19 @@ class ListSelect extends Component {
     const {
       details,
       label,
+      nodes,
       sortFields,
     } = this.props;
+
+    const sorter = sortOrder([this.state.activeSortOrder]);
+    const sortedNodes = sorter(nodes);
 
     return (
       <div className="list-select">
         <div className="list-select__sort">
           { sortFields && sortFields.map(sortField => (
             <Button
-              color={this.state.property === sortField.variable ? 'primary' : 'white'}
+              color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
               key={sortField.variable}
               onClick={() => this.setSortBy(sortField.variable)}
               size="small"
@@ -164,9 +152,9 @@ class ListSelect extends Component {
         <CardList
           details={details}
           label={label}
-          nodes={this.getFilteredList(this.getSortedList())}
+          nodes={this.getFilteredList(sortedNodes)}
           onToggleCard={this.toggleCard}
-          selected={this.selected}
+          selected={this.isNodeSelected}
         />
       </div>
     );
@@ -175,10 +163,8 @@ class ListSelect extends Component {
 
 ListSelect.propTypes = {
   details: PropTypes.func,
-  initialSortOrder: PropTypes.string,
-  initialSortDirection: PropTypes.string,
+  initialSortOrder: PropTypes.array,
   label: PropTypes.func,
-  labelKey: PropTypes.string,
   nodes: PropTypes.array.isRequired,
   onRemoveNode: PropTypes.func,
   onSubmitNode: PropTypes.func,
@@ -188,10 +174,11 @@ ListSelect.propTypes = {
 
 ListSelect.defaultProps = {
   details: () => {},
-  initialSortOrder: '',
-  initialSortDirection: '',
+  initialSortOrder: [{
+    property: '',
+    direction: 'asc',
+  }],
   label: () => {},
-  labelKey: '',
   nodes: [],
   onRemoveNode: () => {},
   onSubmitNode: () => {},
