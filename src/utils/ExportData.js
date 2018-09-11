@@ -165,6 +165,8 @@ const addElements = (
 ) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
+    const nodeAttrs = getNodeAttributes(dataElement);
+
     if (dataElement[nodePrimaryKeyProperty]) {
       domElement.setAttribute('id', dataElement[nodePrimaryKeyProperty]);
     } else {
@@ -189,26 +191,26 @@ const addElements = (
 
     // Add node attributes
     if (type === 'node') {
-      Object.keys(dataElement[nodeAttributesProperty]).forEach((key) => {
+      Object.keys(nodeAttrs).forEach((key) => {
         if (!excludeList.includes(key)) {
-          if (typeof dataElement[nodeAttributesProperty][key] !== 'object') {
+          if (typeof nodeAttrs[key] !== 'object') {
             domElement.appendChild(
-              getDataElement(uri, key, dataElement[nodeAttributesProperty][key]));
+              getDataElement(uri, key, nodeAttrs[key]));
           } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-            domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[nodeAttributesProperty][key].x));
-            domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[nodeAttributesProperty][key].y));
+            domElement.appendChild(getDataElement(uri, `${key}X`, nodeAttrs[key].x));
+            domElement.appendChild(getDataElement(uri, `${key}Y`, nodeAttrs[key].y));
           } else {
             domElement.appendChild(
-              getDataElement(uri, key, JSON.stringify(dataElement[nodeAttributesProperty][key])));
+              getDataElement(uri, key, JSON.stringify(nodeAttrs[key])));
           }
         }
       });
     }
 
     // add positions for gephi
-    if (layoutVariable && dataElement[layoutVariable]) {
-      domElement.appendChild(getDataElement(uri, 'x', dataElement[layoutVariable].x * window.innerWidth));
-      domElement.appendChild(getDataElement(uri, 'y', (1.0 - dataElement[layoutVariable].y) * window.innerHeight));
+    if (layoutVariable && nodeAttrs[layoutVariable]) {
+      domElement.appendChild(getDataElement(uri, 'x', nodeAttrs[layoutVariable].x * window.innerWidth));
+      domElement.appendChild(getDataElement(uri, 'y', (1.0 - nodeAttrs[layoutVariable].y) * window.innerHeight));
     }
   });
 };
