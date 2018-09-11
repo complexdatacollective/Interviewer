@@ -8,7 +8,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
   static propTypes = {
@@ -16,7 +16,7 @@ class OrdinalBins extends PureComponent {
     bins: PropTypes.array.isRequired,
     prompt: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
-    updateNode: PropTypes.func.isRequired,
+    toggleNodeAttributes: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +63,7 @@ class OrdinalBins extends PureComponent {
 
       const newValue = {};
       newValue[this.props.activePromptVariable] = bin.value;
-      this.props.updateNode(meta, newValue);
+      this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty], newValue);
     };
 
     const accentColor = this.calculateAccentColor(index, missingValue);
@@ -128,7 +128,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
+    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
   };
 }
 

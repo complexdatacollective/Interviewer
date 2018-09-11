@@ -102,26 +102,19 @@ export default function reducer(state = initialState, action = {}) {
      * TOGGLE_NODE_ATTRIBUTES
      */
     case TOGGLE_NODE_ATTRIBUTES: {
-      // attributes = object containing the attributes to remove, minus _uid
-      const attributesToToggle = omit(action.attributes, [nodePrimaryKeyProperty]);
-      // Map over the nodes
       const updatedNodes = state.nodes.map((node) => {
-        // Skip nodes with different primary keys
-        if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
-
-        // When we find the node that matches the primary key, toggle the properties
-        if (isMatch(node[nodeAttributesProperty], attributesToToggle)) {
-          const withoutAttributes = omit(
-            node[nodeAttributesProperty],
-            Object.getOwnPropertyNames(attributesToToggle),
-          );
-
-          return {
-            ...node,
-            [nodeAttributesProperty]: withoutAttributes,
-          };
+        if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) {
+          return node;
         }
 
+        // If the node's attrs contain the same key/vals, remove them
+        if (isMatch(node[nodeAttributesProperty], action.attributes)) {
+          const omittedKeys = Object.keys(action.attributes);
+          const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
+          return omit(node, nestedProps);
+        }
+
+        // Otherwise, add/update
         return {
           ...node,
           [nodeAttributesProperty]: {

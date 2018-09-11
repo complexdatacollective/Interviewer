@@ -143,7 +143,7 @@ describe('network reducer', () => {
     expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, name: 'foo' });
   });
 
-  it('should handle TOGGLE_NODE_ATTRIBUTES', () => {
+  it('toggles node attributes on', () => {
     const newState = reducer(
       {
         ...mockState,
@@ -158,7 +158,9 @@ describe('network reducer', () => {
 
     expect(newState.nodes[0].attributes.stage).toEqual(1);
     expect(newState.nodes[1].attributes.stage).toEqual(undefined);
+  });
 
+  it('toggles node attributes off', () => {
     const secondState = reducer(
       {
         ...mockState,
