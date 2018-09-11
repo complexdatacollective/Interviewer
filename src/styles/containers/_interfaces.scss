@@ -4,7 +4,6 @@ $interface-prompt-flex-basis: 200px;
 
 @mixin interface-prompt {
   flex: 0 0 $interface-prompt-flex-basis;
-  margin: 0 var(--timeline-width);
 
   @include breakpoint('full') {
     flex: 0 0 17vh;
