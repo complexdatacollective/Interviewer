@@ -62,8 +62,12 @@ export default function withPrompt(WrappedComponent) {
   };
 
   function mapStateToProps(state, ownProps) {
+    let promptIndex = ownProps.promptId;
+    if (promptIndex === undefined) {
+      promptIndex = getPromptForCurrentSession(state);
+    }
     return {
-      promptIndex: ownProps.promptId || getPromptForCurrentSession(state),
+      promptIndex,
       stage: ownProps.stage || stages(state)[ownProps.stageIndex],
     };
   }
