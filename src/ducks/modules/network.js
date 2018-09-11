@@ -39,8 +39,6 @@ function edgeExists(edges, edge) {
 
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 
-export const getNodeWithoutAttributes = node => omit(node, nodeAttributesProperty);
-
 /**
  * existingNodes - Existing network.nodes
  * netNodes - nodes to be added to the network
@@ -62,37 +60,34 @@ function getNodesWithBatchAdd(existingNodes, newNodes, additionalAttributes = {}
 }
 
 /**
- * @param {array} nodes - an array of objects representing nodes
- * @param {object} updatedNode - object representing the node to be updated and its new properties
+ * @param {Array} nodes - the current state.nodes
+ * @param {Object} updatingNode - the node to be updated. Will match on _uid.
+ * @param {Object} nodeAttributeData - additional attributes to update the node with.
+ *                                   If null, then the updatingNode's `attributes` property
+ *                                   will overwrite the original node's. Use this to perform
+ *                                   a 'full' update, but ensure the entire updated node is
+ *                                   passed as `updatingNode`.
  */
-function getUpdatedNodes(nodes, updatedNode, nodeAttributeData) {
-  // Iterate over the nodes list
-  const updatedNodes = nodes.map((node) => {
-    // Skip nodes where the primary key doesn't match
-    if (node[nodePrimaryKeyProperty] !== updatedNode[nodePrimaryKeyProperty]) { return node; }
-    // if we have an attributes payload, merge with any existing attributes
+function getUpdatedNodes(nodes, updatingNode, nodeAttributeData = null) {
+  return nodes.map((node) => {
+    if (node[nodePrimaryKeyProperty] !== updatingNode[nodePrimaryKeyProperty]) { return node; }
+
+    const updatedNode = {
+      ...node,
+      ...updatingNode,
+      [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
+    };
+
     if (nodeAttributeData) {
-      return {
-        ...node,
-        ...updatedNode,
-        [nodeAttributesProperty]: {
-          ...node[nodeAttributesProperty],
-          ...nodeAttributeData,
-        },
-        [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
+      updatedNode[nodeAttributesProperty] = {
+        ...node[nodeAttributesProperty],
+        ...updatingNode[nodeAttributesProperty],
+        ...nodeAttributeData,
       };
     }
 
-    // If no attribute payload, just merge the new node data with the existing
-    return {
-      ...node,
-      ...updatedNode,
-      [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
-    };
+    return updatedNode;
   });
-
-  // Return the modified array of nodes
-  return updatedNodes;
 }
 
 export default function reducer(state = initialState, action = {}) {
