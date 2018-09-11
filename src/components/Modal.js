@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import animejs from 'animejs';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
@@ -13,6 +14,7 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     this.contentRef = React.createRef();
+    this.modalRoot = document.getElementById('page-wrap');
   }
 
   scrollContentsToTop() {
@@ -36,8 +38,7 @@ class Modal extends Component {
     } = this.props;
 
     const classnames = cx('modal', className);
-
-    return (
+    const modalElement = (
       <ModalTransition in={show}>
         <div key="modal" className={classnames} onClick={() => close()}>
           <div className="modal__background" transition-role="background" />
@@ -55,6 +56,8 @@ class Modal extends Component {
         </div>
       </ModalTransition>
     );
+
+    return (this.modalRoot ? ReactDOM.createPortal(modalElement, this.modalRoot) : modalElement);
   }
 }
 
