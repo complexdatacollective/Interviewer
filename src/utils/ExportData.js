@@ -36,16 +36,17 @@ const getTypeFromVariableRegistry = (variableRegistry, type, element, key) => {
 
 const getTypeForKey = (data, key) => (
   data.reduce((result, value) => {
-    if (isNil(value[key])) return result;
-    let currentType = typeof value[key];
+    const attrs = getNodeAttributes(value);
+    if (isNil(attrs[key])) return result;
+    let currentType = typeof attrs[key];
     if (currentType === 'number') {
-      currentType = Number.isInteger(value[key]) ? 'integer' : 'double';
+      currentType = Number.isInteger(attrs[key]) ? 'integer' : 'double';
       if (result && currentType !== result) return 'double';
     }
-    if (String(Number.parseInt(value[key], 10)) === value[key]) {
+    if (String(Number.parseInt(attrs[key], 10)) === attrs[key]) {
       currentType = 'integer';
       if (result === 'double') return 'double';
-    } else if (String(Number.parseFloat(value[key], 10)) === value[key]) {
+    } else if (String(Number.parseFloat(attrs[key], 10)) === attrs[key]) {
       currentType = 'double';
       if (result === 'integer') return 'double';
     }
