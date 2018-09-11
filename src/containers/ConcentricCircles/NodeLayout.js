@@ -43,7 +43,7 @@ const dropHandlers = compose(
       props.setDropCount(props.dropCount + 1);
     },
     onDrag: props => (item) => {
-      if (!has(item.meta, props.layoutVariable)) { return; }
+      if (!has(item.meta[nodeAttributesProperty], props.layoutVariable)) { return; }
 
       props.updateNode(
         {
