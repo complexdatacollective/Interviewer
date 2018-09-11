@@ -1,4 +1,5 @@
 .sociogram-interface {
+  --vertical-margin: var(--interface-right-margin);
   @include interface-centering;
 
   align-items: center;
@@ -11,11 +12,13 @@
   &__sociogram {
     flex: 1 1 auto;
     width: 100%;
-    height: 100%;
+    height: calc(100% - var(--vertical-margin));
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-bottom: calc(var(--vertical-margin) / 2);
+    margin-top: calc(var(--vertical-margin) / 2);
   }
 
   &__prompts {
