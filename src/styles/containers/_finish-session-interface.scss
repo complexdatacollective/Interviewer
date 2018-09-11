@@ -1,4 +1,6 @@
 .finish-session-interface {
+  @include interface-centering;
+
   align-items: center;
   display: flex;
   height: 100vh;

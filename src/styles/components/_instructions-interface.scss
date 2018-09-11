@@ -1,4 +1,6 @@
 .instructions-interface {
+  @include interface-centering;
+
   height: 100vh;
   display: flex;
   justify-content: center;

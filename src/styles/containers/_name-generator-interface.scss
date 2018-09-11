@@ -1,4 +1,6 @@
 .name-generator-interface {
+  @include interface-centering;
+
   height: 100vh;
   padding: 20px 0 60px;
   @include breakpoint('full') {
@@ -10,7 +12,6 @@
 
   &__prompt {
     @include interface-prompt;
-    margin: 0 var(--timeline-width);
   }
 
   &__main {
@@ -20,7 +21,6 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
-    margin-left: var(--timeline-width);
   }
 
   &__nodes {
@@ -52,5 +52,4 @@
     transform: translateX(-50%);
     z-index: 1000;
   }
-
 }
