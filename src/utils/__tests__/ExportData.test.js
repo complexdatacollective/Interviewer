@@ -112,4 +112,12 @@ describe('export data function', () => {
     expect(node.id).toEqual(`${sessionA.network.nodes[0][nodePrimaryKeyProperty]}`);
     expect(node.querySelector(`[key="${nodePrimaryKeyProperty}"]`)).toBe(null);
   });
+
+  it('adds layout attrs', () => {
+    const xml = ExportData(sessionA.network, variableRegistry, () => {});
+    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+    const node = doc.querySelector('graph node:first-child');
+    expect(node.querySelector('[key=aLayoutX]').innerHTML).toEqual(sessionA.network.nodes[0].attributes.aLayout.x.toString());
+    expect(node.querySelector('[key=aLayoutY]').innerHTML).toEqual(sessionA.network.nodes[0].attributes.aLayout.y.toString());
+  });
 });
