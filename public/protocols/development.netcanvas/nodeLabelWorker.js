@@ -11,9 +11,14 @@
  *
  * @param  {Object} data
  * @param  {Object} data.node All props for the node requiring a label
+ * @param  {string} data.node.networkCanvasId Unique ID for the node. Note that if your data
+ *                                            happens to already contain a property named
+ *                                            "networkCanvasId", your prop will take precedence,
+ *                                            and this cannot be used to identify edge connections.
  * @param  {Object} data.network The current state of the network in this session
- * @param  {Array} data.network.nodes
- * @param  {Array} data.network.edges
+ * @param  {Array} data.network.nodes Each node has a unique `networkCanvasId` prop
+ * @param  {Array} data.network.edges Edges contain `to` and `from` props which
+ *                                    correspond to nodes' `networkCanvasId` values
  *
  * @return {string|Promise} a label for the input node, or
  *                          a promise that resolves to the label
@@ -25,15 +30,17 @@ function nodeLabelWorker({ node, network }) {
   // const label = `${node.name} ${(node.last_name && `${node.last_name[0]}.`) || ''}`;
   //
   // 2. Counter based on data set or subset (here, the network nodes)
-  // const index = network.nodes.findIndex(n => n.uid === node.uid);
+  // const index = network.nodes.findIndex(n => n.networkCanvasId === node.networkCanvasId);
   // const label = index > -1 ? `${node.name} ${index + 1}` : node.name;
   //
   // 3. Counter, based on network as well. Access to `externalData` TBD.
   // const networkNodeIds = {};
-  // network.nodes.forEach((n) => { networkNodeIds[n.uid] = 1; });
-  // const externalNodes = externalData.previousInterview.nodes.filter(n => !networkNodeIds[n.uid]);
-  // const nodes = [...network.nodes, ...externalNodes].sort((a, b) => a.uid.localeCompare(b.uid));
-  // const index = nodes.findIndex(n => n.uid === node.uid);
+  // network.nodes.forEach((n) => { networkNodeIds[n.networkCanvasId] = 1; });
+  // const externalNodes = externalData.previousInterview.nodes
+  //    .filter(n => !networkNodeIds[n.networkCanvasId]);
+  // const nodes = [...network.nodes, ...externalNodes]
+  //    .sort((a, b) => a.networkCanvasId.localeCompare(b.networkCanvasId));
+  // const index = nodes.findIndex(n => n.networkCanvasId === node.networkCanvasId);
   // const label = index > -1 ? `${node.name} ${index + 1}` : node.name;
   //
   // 4. Add emoji suffix based on a node property
@@ -43,7 +50,7 @@ function nodeLabelWorker({ node, network }) {
 
   // 5. Add emoji based on an edge or node property
   let label = node.name;
-  if (network.edges.some(e => e.from === node._uid || e.to === node._uid)) {
+  if (network.edges.some(e => e.from === node.networkCanvasId || e.to === node.networkCanvasId)) {
     label += '😎';
   } else if (node.close_friend) {
     label += '😇';
