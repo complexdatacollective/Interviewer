@@ -8,6 +8,7 @@ import { TransitionGroup } from 'react-transition-group';
 import Node from '../containers/Node';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
+import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { selectable } from '../behaviours';
 import {
   DragSource,
@@ -129,6 +130,7 @@ class OrdinalBinBucket extends Component {
                   selected={selected(node)}
                   onSelected={() => onSelect(node)}
                   meta={() => ({ ...node, itemType })}
+                  scrollDirection={NO_SCROLL}
                   {...node}
                 />
               </NodeTransition>
@@ -174,3 +176,7 @@ export default compose(
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
 )(OrdinalBinBucket);
+
+export {
+  OrdinalBinBucket as UnconnectedOrdinalBinBucket,
+};
