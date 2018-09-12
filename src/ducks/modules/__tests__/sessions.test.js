@@ -149,7 +149,7 @@ describe('sessions actions', () => {
       type: actionTypes.UPDATE_NODE,
       sessionId: 'a',
       node: {},
-      additionalAttributes: false,
+      additionalAttributes: null,
     };
 
     store.dispatch(actionCreators.updateNode({}));

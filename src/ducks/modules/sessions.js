@@ -107,7 +107,7 @@ const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
   });
 };
 
-const updateNode = (node, additionalAttributes = false) => (dispatch, getState) => {
+const updateNode = (node, additionalAttributes = null) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({

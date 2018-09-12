@@ -31,9 +31,7 @@ const dropHandlers = compose(
     accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
     onDrop: props => (item) => {
       props.updateNode(
-        {
-          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
-        },
+        item.meta,
         {
           [props.layoutVariable]: relativeCoords(props, item),
         },
@@ -46,9 +44,7 @@ const dropHandlers = compose(
       if (!has(item.meta[nodeAttributesProperty], props.layoutVariable)) { return; }
 
       props.updateNode(
-        {
-          [nodePrimaryKeyProperty]: item.meta[nodePrimaryKeyProperty],
-        },
+        item.meta,
         {
           [props.layoutVariable]: relativeCoords(props, item),
         },
