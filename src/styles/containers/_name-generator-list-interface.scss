@@ -1,4 +1,6 @@
 .name-generator-list-interface {
+  @include interface-centering;
+
   height: 100vh;
   padding: 20px 0 60px;
   @include breakpoint('full') {
@@ -8,13 +10,8 @@
   display: flex;
   flex-direction: column;
 
-  .list-select {
-    margin-left: var(--timeline-width);
-  }
-
   &__prompt {
     @include interface-prompt;
-    margin: 0 var(--timeline-width);
   }
 
   &__main {

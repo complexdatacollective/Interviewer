@@ -1,4 +1,6 @@
 .ordinal-bin-interface {
+  @include interface-centering;
+
   height: 100vh;
   padding: 20px 0 60px;
   @include breakpoint('full') {
@@ -11,7 +13,6 @@
   &__prompt {
     @include interface-prompt;
     flex: 0 0 170px;
-    margin: 0 var(--timeline-width);
   }
 
   &__bucket {
@@ -32,7 +33,6 @@
     position: relative;
     border-radius: 15px;
     overflow: hidden;
-    margin-left: var(--timeline-width);
     margin-right: 60px;
   }
 
@@ -45,7 +45,4 @@
       padding-left: 0;
     }
   }
-
-
-
 }

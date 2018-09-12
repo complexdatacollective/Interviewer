@@ -3,19 +3,19 @@ $search-icon-offset-y: 1.8rem; // match stage menu button
 $search-z-index: 1000;
 
 .name-generator-auto-complete-interface {
+  @include interface-centering;
+
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 1rem 0;
-  position: relative;
-  width: 100%;
 
   &__prompt {
     @include interface-prompt;
   }
 
   &__search {
-    --right-collapsed: 2rem; // align with 'core' of button
+    --right-collapsed: 3rem; // align with 'core' of button
     --right-offset: var(--timeline-width); // margin equal to left menu width
 
     // Position collapsed search element around the 'core' of the icon
