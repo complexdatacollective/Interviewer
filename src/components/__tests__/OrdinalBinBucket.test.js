@@ -6,7 +6,6 @@ import { UnconnectedOrdinalBinBucket as OrdinalBinBucket } from '../OrdinalBinBu
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 jest.mock('../../containers/Node');
-jest.mock('../../behaviours/selectable', () => el => el);
 
 describe('OrdinalBinBucket', () => {
   let bucket;
