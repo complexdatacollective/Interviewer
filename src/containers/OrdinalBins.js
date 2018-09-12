@@ -8,7 +8,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
-import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
   static propTypes = {
@@ -57,7 +57,7 @@ class OrdinalBins extends PureComponent {
     const missingValue = bin.value < 0;
 
     const onDrop = ({ meta }) => {
-      if (meta[this.props.activePromptVariable] === bin.value) {
+      if (getNodeAttributes(meta)[this.props.activePromptVariable] === bin.value) {
         return;
       }
 
