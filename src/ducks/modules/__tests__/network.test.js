@@ -1,6 +1,11 @@
 /* eslint-env jest */
 
-import reducer, { actionTypes, nodePrimaryKeyProperty as PK } from '../network';
+import reducer,
+{ actionTypes,
+  asWorkerAgentNode,
+  nodePrimaryKeyProperty as PK,
+  primaryKeyPropertyForWorker,
+} from '../network';
 
 const mockState = {
   ego: {},
@@ -219,5 +224,27 @@ describe('network reducer', () => {
         edges: [edgeB],
       },
     );
+  });
+});
+
+describe('asWorkerAgentNode', () => {
+  const nodeInNetwork = {
+    attributes: {
+      userProp1: 'userProp1',
+    },
+    [PK]: 'node1',
+    stageId: 42,
+  };
+
+  it('returns a node’s attributes', () => {
+    expect(asWorkerAgentNode(nodeInNetwork).userProp1).toEqual('userProp1');
+  });
+
+  it('returns a unique ID for the node', () => {
+    expect(asWorkerAgentNode(nodeInNetwork)[primaryKeyPropertyForWorker]).toEqual('node1');
+  });
+
+  it('does not contain other private attrs props', () => {
+    expect(asWorkerAgentNode(nodeInNetwork)).not.toHaveProperty('stageId');
   });
 });

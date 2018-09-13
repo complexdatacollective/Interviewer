@@ -18,6 +18,7 @@ export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
 export const UNSET_EGO = 'UNSET_EGO';
 
+export const primaryKeyPropertyForWorker = 'networkCanvasId';
 
 // Initial network model structure
 const initialState = {
@@ -38,6 +39,14 @@ function edgeExists(edges, edge) {
 }
 
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+
+// Returns node data safe to supply to user-defined workers.
+// Contains all user attributes flattened with the node's unique ID.
+// `primaryKeyPropertyForWorker` is used to minimize conflicts, but user data is always preserved.
+export const asWorkerAgentNode = node => ({
+  [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
+  ...getNodeAttributes(node),
+});
 
 /**
  * existingNodes - Existing network.nodes

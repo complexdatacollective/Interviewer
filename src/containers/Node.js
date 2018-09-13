@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 
 import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
-import { getNetwork, getNodeLabelFunction } from '../selectors/interface';
+import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/interface';
 import { getNodeLabelWorkerUrl, makeGetNodeColor } from '../selectors/protocol';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { asWorkerAgentNode } from '../ducks/modules/network';
 
 /**
   * Renders a Node.
@@ -40,7 +40,7 @@ class Node extends PureComponent {
     }
 
     // Create an object containing the node's model properties
-    const node = { ...this.props[nodeAttributesProperty] };
+    const node = asWorkerAgentNode(this.props);
 
     // Send the worker the node model properties along with the network
     const msgPromise = this.webWorker.sendMessageAsync({
@@ -84,7 +84,7 @@ function mapStateToProps(state, props) {
     color: getNodeColor(state, props),
     getLabel: getNodeLabelFunction(state),
     workerUrl: getNodeLabelWorkerUrl(state),
-    workerNetwork: (getNodeLabelWorkerUrl(state) && getNetwork(state)) || null,
+    workerNetwork: (getNodeLabelWorkerUrl(state) && getWorkerNetwork(state)) || null,
   };
 }
 
