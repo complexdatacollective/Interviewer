@@ -8,7 +8,7 @@ import { TransitionGroup } from 'react-transition-group';
 import Node from '../containers/Node';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
-import { selectable } from '../behaviours';
+import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import {
   DragSource,
   DropTarget,
@@ -18,7 +18,7 @@ import {
 import sortOrder from '../utils/sortOrder';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
-const EnhancedNode = DragSource(selectable(Node));
+const EnhancedNode = DragSource(Node);
 
 /**
   * Renders a list of Node.
@@ -78,8 +78,6 @@ class OrdinalBinBucket extends Component {
     const {
       nodeColor,
       label,
-      selected,
-      onSelect,
       itemType,
       isOver,
       willAccept,
@@ -126,9 +124,8 @@ class OrdinalBinBucket extends Component {
                   color={nodeColor}
                   inactive={index !== 0}
                   label={`${label(node)}`}
-                  selected={selected(node)}
-                  onSelected={() => onSelect(node)}
                   meta={() => ({ ...node, itemType })}
+                  scrollDirection={NO_SCROLL}
                   {...node}
                 />
               </NodeTransition>
@@ -143,10 +140,8 @@ class OrdinalBinBucket extends Component {
 OrdinalBinBucket.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
-  onSelect: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  selected: PropTypes.func,
   isOver: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
@@ -158,8 +153,6 @@ OrdinalBinBucket.defaultProps = {
   nodes: [],
   nodeColor: '',
   label: () => (''),
-  selected: () => false,
-  onSelect: () => {},
   onDrop: () => {},
   itemType: 'NODE',
   isOver: false,
@@ -174,3 +167,7 @@ export default compose(
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
 )(OrdinalBinBucket);
+
+export {
+  OrdinalBinBucket as UnconnectedOrdinalBinBucket,
+};
