@@ -7,6 +7,7 @@ import Node from './Node';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
 import { DragSource } from '../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
+import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedNode = DragSource(Node);
 
@@ -33,7 +34,7 @@ class NodeBucket extends PureComponent {
       <div className="node-bucket">
         { node &&
           <EnhancedNode
-            key={node.uid}
+            key={node[nodePrimaryKeyProperty]}
             meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
             scrollDirection={NO_SCROLL}
             {...node}
