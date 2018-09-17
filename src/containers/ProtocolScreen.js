@@ -8,7 +8,7 @@ import { push } from 'react-router-redux';
 import { actionCreators as menuActions } from '../ducks/modules/menu';
 import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
-import { Stage as StageTransition } from '../components/Transition';
+import { Fade, Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
 import { stages, getPromptForCurrentSession } from '../selectors/session';
 
@@ -54,12 +54,14 @@ class Protocol extends Component {
 
     return (
       <div className="protocol">
-        <Timeline
-          onClickBack={this.onClickBack}
-          onClickNext={this.onClickNext}
-          percentProgress={percentProgress}
-          toggleMenu={toggleMenu}
-        />
+        <Fade in={isProtocolLoaded} isSlow>
+          <Timeline
+            onClickBack={this.onClickBack}
+            onClickNext={this.onClickNext}
+            percentProgress={percentProgress}
+            toggleMenu={toggleMenu}
+          />
+        </Fade>
         <TransitionGroup
           className="protocol__content"
           childFactory={this.childFactoryCreator(stageBackward)}
