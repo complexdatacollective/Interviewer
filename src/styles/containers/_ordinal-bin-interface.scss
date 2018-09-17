@@ -12,12 +12,12 @@
 
   &__prompt {
     @include interface-prompt;
-    flex: 0 0 170px;
+    flex: 0 0 10rem;
   }
 
   &__bucket {
     display: flex;
-    flex: 0 0 150px;
+    flex: 0 0 10rem;
 
     .node {
       font-size: calc(var(--base-node-size) * .66);
@@ -31,7 +31,7 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     margin-right: 60px;
   }

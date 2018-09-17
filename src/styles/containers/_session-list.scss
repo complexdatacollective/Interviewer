@@ -1,7 +1,7 @@
 .session-list {
   &--empty {
     padding: spacing(huge);
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     background: palette('modal-main-panel');
     width: 80%;
     margin: 0 auto;

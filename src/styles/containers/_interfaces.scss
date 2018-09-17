@@ -1,6 +1,6 @@
 // Shared mixins for interfaces.
 
-$interface-prompt-flex-basis: 200px;
+$interface-prompt-flex-basis: 10rem;
 
 @mixin interface-prompt {
   flex: 0 0 $interface-prompt-flex-basis;

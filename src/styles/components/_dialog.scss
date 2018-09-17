@@ -26,7 +26,7 @@ $component-name: dialog;
     box-shadow: 0 0 4px 0 var(--modal-window-box-shadow);
     position: relative;
     border-left: 15px solid palette('primary');
-    border-radius: 15px;
+    border-radius: var(--border-radius);
 
     &--info {
       border-color: palette('info');

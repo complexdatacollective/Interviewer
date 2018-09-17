@@ -112,8 +112,8 @@ $component-name: modal;
       &__window {
         background: palette('modal-main-panel');
         box-shadow: 0 0 4px 0 var(--modal-window-box-shadow);
-        width: 750px;
-        border-radius: 15px;
+        width: 30rem;
+        border-radius: var(--border-radius);
       }
 
       &__layout {
