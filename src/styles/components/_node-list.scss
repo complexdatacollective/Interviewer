@@ -1,4 +1,4 @@
-$node-inset: 14px;  // approximate scaled margin + 'outer-trim' of a node
+$node-inset: 1rem;  // approximate scaled margin + 'outer-trim' of a node
 
 .node-list {
   @include gpu;

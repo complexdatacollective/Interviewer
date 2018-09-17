@@ -79,14 +79,11 @@ $module-name: prompts;
   }
 
   &__pips {
-    flex: 0 0 30px;
+    flex: 0 0 1.5rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    @include breakpoint('full') {
-      flex: 0 0 45px;
-    }
   }
 }
 
@@ -94,7 +91,7 @@ $module-name: prompts;
   background: palette('light-background');
   overflow: hidden;
   padding: spacing(medium);
-  border-left: 10px solid palette('primary');
+  border-left: 1rem solid palette('primary');
 
   .#{$module-name}__prompt {
     padding-bottom: 0;
@@ -110,7 +107,7 @@ $module-name: prompts;
     & + .prompts__minimizer {
       display: flex;
       background: palette('light-background');
-      border-left: 10px solid palette('primary');
+      border-left: 1rem solid palette('primary');
     }
   }
 

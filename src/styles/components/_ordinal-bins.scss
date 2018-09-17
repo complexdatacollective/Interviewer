@@ -7,9 +7,6 @@
   .scrollable {
     @include scroller-mask($scroller-top-padding-small);
 
-    .node-list {
-      padding-top: max(0, $scroller-top-padding-small - $node-inset);
-    }
   }
 
   &--title {
