@@ -54,7 +54,7 @@ $search-z-index: 1000;
 
   &__node-bin {
     position: absolute;
-    bottom: 35px;
+    bottom: spacing(large);
     left: 50%;
     transform: translateX(-50%);
   }
