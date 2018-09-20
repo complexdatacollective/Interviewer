@@ -63,11 +63,12 @@
   // Wrapper for item list
   &__menuitem {
     align-items: center;
-    border-top: .1rem solid palette('divider');
+    border-top: .05rem solid palette('divider');
     color: palette('menu-headings');
     cursor: pointer;
     display: flex;
-    font-weight: 500;
+    font-weight: 700;
+    letter-spacing: .15rem;
     padding: 1rem 2rem;
     text-decoration: none;
     text-transform: uppercase;

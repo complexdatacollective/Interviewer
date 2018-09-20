@@ -35,11 +35,8 @@ $component-name: modal;
     }
 
     &-title {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      max-height: 20vh;
+      padding: 1rem 0;
+      text-align: center;
     }
   }
 
@@ -56,8 +53,8 @@ $component-name: modal;
     position: absolute;
     height: $button-size;
     width: $button-size;
-    right: .5rem;
-    top: .5rem;
+    right: 2rem;
+    top: 2rem;
     color: palette('text');
     cursor: pointer;
 
@@ -109,7 +106,7 @@ $component-name: modal;
     .#{$component-name} {
       &__window {
         background: palette('modal-main-panel');
-        width: 30rem;
+        width: 40rem;
         border-radius: var(--border-radius);
       }
 

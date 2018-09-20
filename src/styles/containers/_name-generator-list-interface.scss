@@ -25,9 +25,6 @@
     height: 100%;
     display: flex;
     padding-left: spacing(large);
-    @include breakpoint('full') {
-      padding-left: 0;
-    }
   }
 
   &__panels {

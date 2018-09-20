@@ -1,6 +1,6 @@
 .card {
   align-items: center;
-  border: 3px solid transparent;
+  border: .2rem solid transparent;
   border-radius: var(--border-radius);
   background: var(--light-background);
   transition: border-color var(--animation-duration-fast) var(--animation-easing);
@@ -16,9 +16,9 @@
   &__indicator {
     box-sizing: content-box;
     fill: transparent;
-    height: 60px;
-    width: 60px;
-    margin-right: 10px;
+    height: 2rem;
+    width: 2rem;
+    margin-right: .5rem;
     transition: fill var(--animation-duration-fast) var(--animation-easing);
     position: absolute;
     bottom: 2rem;
