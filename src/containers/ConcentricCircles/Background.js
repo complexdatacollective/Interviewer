@@ -11,7 +11,7 @@ class Background extends PureComponent {
   };
 
   static defaultProps = {
-    concentricCircles: 4,
+    concentricCircles: 3,
     skewedTowardCenter: true,
     image: null,
   };

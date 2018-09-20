@@ -533,7 +533,11 @@
               "property": "*",
               "direction": "asc"
             }
-          ]
+          ],
+          "background": {
+            "concentricCircles": 3,
+            "skewedTowardCenter": true
+          }
         }
       ]
     },
@@ -571,6 +575,10 @@
               "direction": "asc"
             }
           ],
+          "background": {
+            "concentricCircles": 3,
+            "skewedTowardCenter": true
+          },
           "edges": {
             "display": ["friends"],
             "create": "friends"
@@ -593,6 +601,10 @@
               "direction": "asc"
             }
           ],
+          "background": {
+            "concentricCircles": 3,
+            "skewedTowardCenter": true
+          },
           "edges": {
             "display": ["friends"]
           },
@@ -619,6 +631,10 @@
               "direction": "asc"
             }
           ],
+          "background": {
+            "concentricCircles": 3,
+            "skewedTowardCenter": true
+          },
           "edges": {
             "display": ["friends"]
           },

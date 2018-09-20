@@ -13,10 +13,14 @@
 
   &__bucket {
     display: flex;
-    flex: 0 0 10rem;
+    flex: 0 0 8rem;
 
     .node {
       font-size: calc(var(--base-node-size) * .66);
+    }
+
+    .node-list {
+      padding: 0;
     }
   }
 

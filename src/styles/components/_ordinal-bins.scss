@@ -14,6 +14,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 0 spacing(1);
 
     h3 {
       margin: 0;
@@ -41,9 +43,7 @@
     }
 
     .node {
-      font-size: calc(var(--base-node-size) * .66);
-      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
-      margin: 2px;
+      font-size: calc(var(--base-node-size) * .5);
     }
 
   }
