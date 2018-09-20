@@ -95,6 +95,11 @@ const triggerDrop = (state, source) => {
     },
   });
 
+  filter(hits.targets, { willAccept: true })
+    .forEach((target) => {
+      target.onDragEnd(hits.source);
+    });
+
   filter(hits.targets, { isOver: true, willAccept: true })
     .forEach((target) => {
       target.onDrop(hits.source);

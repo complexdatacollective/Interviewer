@@ -15,6 +15,7 @@ const dropTarget = WrappedComponent =>
       id: PropTypes.string.isRequired,
       onDrop: PropTypes.func,
       onDrag: PropTypes.func,
+      onDragEnd: PropTypes.func,
       accepts: PropTypes.func,
       meta: PropTypes.func,
     }
@@ -24,6 +25,7 @@ const dropTarget = WrappedComponent =>
       accepts: () => false,
       onDrop: () => {},
       onDrag: () => {},
+      onDragEnd: () => {},
     }
 
     componentDidMount() {
@@ -65,6 +67,7 @@ const dropTarget = WrappedComponent =>
           id: this.props.id,
           onDrop: this.props.onDrop,
           onDrag: this.props.onDrag,
+          onDragEnd: this.props.onDragEnd,
           accepts: this.props.accepts,
           meta: this.props.meta(),
           width: boundingClientRect.width,
