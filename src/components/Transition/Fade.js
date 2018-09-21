@@ -4,14 +4,9 @@ import { Transition } from 'react-transition-group';
 import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../utils/CSSVariables';
 
-const durationFast = {
+const defaultDuration = {
   enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
   exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-};
-
-const durationSlow = {
-  enter: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-  exit: getCSSVariableAsNumber('--animation-duration-slow-ms'),
 };
 
 const enterAnimation = duration => ({
@@ -28,15 +23,15 @@ const exitAnimation = duration => ({
   duration: duration.exit,
 });
 
-const Fade = ({ children, isSlow, ...props }) => (
+const Fade = ({ children, duration, ...props }) => (
   <Transition
     {...props}
-    timeout={isSlow ? durationSlow : durationFast}
+    timeout={duration}
     onEnter={
       (el) => {
         anime({
           targets: el,
-          ...enterAnimation(isSlow ? durationSlow : durationFast),
+          ...enterAnimation(duration),
         });
       }
     }
@@ -44,7 +39,7 @@ const Fade = ({ children, isSlow, ...props }) => (
       (el) => {
         anime({
           targets: el,
-          ...exitAnimation(isSlow ? durationSlow : durationFast),
+          ...exitAnimation(duration),
         });
       }
     }
@@ -57,12 +52,12 @@ const Fade = ({ children, isSlow, ...props }) => (
 
 Fade.propTypes = {
   children: PropTypes.any.isRequired,
-  isSlow: PropTypes.bool,
+  duration: PropTypes.object,
 };
 
 Fade.defaultProps = {
   children: null,
-  isSlow: false,
+  duration: defaultDuration,
 };
 
 export default Fade;
