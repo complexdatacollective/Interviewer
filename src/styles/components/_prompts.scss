@@ -61,7 +61,8 @@ $module-name: prompts;
 
     &-header {
       font-weight: 400;
-      max-width: 80vw;
+      width: 80vw;
+      max-width: 50em;
       line-height: 1.3;
       font-size: 1.5rem;
       font-family: var(--heading-font-family);
