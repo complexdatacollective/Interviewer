@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
+
 import { Button } from '../../ui/components';
 import withPrompt from '../../behaviours/withPrompt';
+import { withBounds } from '../../behaviours';
+import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { PromptSwiper, ConcentricCircles } from '../../containers/';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
+
+class PromptSwipable extends PureComponent {
+  render() {
+    return (
+      <div className="sociogram-interface__prompts" component="sociogram-interface__prompts">
+        <PromptSwiper {...this.props} />
+      </div>
+    );
+  }
+}
+
+PromptSwipable.propTypes = {
+  prompt: PropTypes.object.isRequired,
+};
+
+const PromptObstacle = compose(
+  withBounds,
+  withHandlers({
+    accepts: () => () => true,
+  }),
+  DropObstacle,
+)(PromptSwipable);
 
 /**
   * Sociogram Interface
@@ -20,16 +45,15 @@ const Sociogram = ({
   resetInterface,
 }) => (
   <div className="sociogram-interface">
-    <div className="sociogram-interface__prompts">
-      <PromptSwiper
-        forward={promptForward}
-        backward={promptBackward}
-        prompts={stage.prompts}
-        prompt={prompt}
-        floating
-        minimizable
-      />
-    </div>
+    <PromptObstacle
+      id="PROMPTS_OBSTACLE"
+      forward={promptForward}
+      backward={promptBackward}
+      prompts={stage.prompts}
+      prompt={prompt}
+      floating
+      minimizable
+    />
     <div className="sociogram-interface__sociogram">
       <ConcentricCircles
         stage={stage}

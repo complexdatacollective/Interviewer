@@ -1,14 +1,17 @@
-import { filter, reject, omit, isEmpty, thru } from 'lodash';
+import { filter, reject, omit, isEmpty, thru, some } from 'lodash';
 
 const UPSERT_TARGET = Symbol('DRAG_AND_DROP/UPSERT_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
 const REMOVE_TARGET = Symbol('DRAG_AND_DROP/REMOVE_TARGET');
+const UPSERT_OBSTACLE = Symbol('DRAG_AND_DROP/UPSERT_OBSTACLE');
+const REMOVE_OBSTACLE = Symbol('DRAG_AND_DROP/REMOVE_OBSTACLE');
 const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
 const DRAG_MOVE = Symbol('DRAG_AND_DROP/DRAG_MOVE');
 const DRAG_END = Symbol('DRAG_AND_DROP/DRAG_END');
 
 const initialState = {
   targets: [],
+  obstacles: [],
   source: null,
 };
 
@@ -55,13 +58,15 @@ const markHitSource = ({ targets, source }) =>
     };
   });
 
-const markHitAll = ({ targets, source, ...rest }) => {
+const markHitAll = ({ targets, obstacles, source, ...rest }) => {
   const targetsWithHits = markHitTargets({ targets, source });
+  const obstaclesWithHits = markHitTargets({ targets: obstacles, source });
   const sourceWithHits = markHitSource({ targets: targetsWithHits, source });
 
   return {
     ...rest,
     targets: targetsWithHits,
+    obstacles: obstaclesWithHits,
     source: sourceWithHits,
   };
 };
@@ -79,6 +84,10 @@ const triggerDrag = (state, source) => {
       ...source,
     },
   });
+
+  if (some(hits.obstacles, { isOver: true, willAccept: true })) {
+    return;
+  }
 
   filter(hits.targets, { isOver: true, willAccept: true })
     .forEach((target) => {
@@ -99,6 +108,10 @@ const triggerDrop = (state, source) => {
     .forEach((target) => {
       target.onDragEnd(hits.source);
     });
+
+  if (some(hits.obstacles, { isOver: true, willAccept: true })) {
+    return;
+  }
 
   filter(hits.targets, { isOver: true, willAccept: true })
     .forEach((target) => {
@@ -143,6 +156,33 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         targets,
+        source,
+      };
+    }
+    case UPSERT_OBSTACLE: {
+      const obstacles = [
+        ...reject(state.obstacles, ['id', action.obstacle.id]),
+        markHitTarget({ target: action.obstacle, source: state.source }),
+      ];
+
+      const source = markHitSource({
+        targets: obstacles,
+        source: state.source,
+      });
+
+      return {
+        ...state,
+        obstacles,
+        source,
+      };
+    }
+    case REMOVE_OBSTACLE: {
+      const obstacles = reject(state.obstacles, ['id', action.id]);
+      const source = markHitSource({ targets: obstacles, source: state.source });
+
+      return {
+        ...state,
+        obstacles,
         source,
       };
     }
@@ -194,6 +234,20 @@ function removeTarget(id) {
   };
 }
 
+function upsertObstacle(data) {
+  return {
+    type: UPSERT_OBSTACLE,
+    obstacle: data,
+  };
+}
+
+function removeObstacle(id) {
+  return {
+    type: REMOVE_OBSTACLE,
+    id,
+  };
+}
+
 function dragStart(data) {
   return {
     type: DRAG_START,
@@ -227,6 +281,8 @@ const actionCreators = {
   upsertTarget,
   renameTarget,
   removeTarget,
+  upsertObstacle,
+  removeObstacle,
   dragStart,
   dragMove,
   dragEnd,
@@ -236,6 +292,8 @@ const actionTypes = {
   UPSERT_TARGET,
   RENAME_TARGET,
   REMOVE_TARGET,
+  UPSERT_OBSTACLE,
+  REMOVE_OBSTACLE,
   DRAG_START,
   DRAG_MOVE,
   DRAG_END,
