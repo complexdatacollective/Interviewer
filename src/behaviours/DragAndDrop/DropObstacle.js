@@ -14,7 +14,7 @@ const dropObstacle = WrappedComponent =>
     static propTypes = {
       id: PropTypes.string.isRequired,
       accepts: PropTypes.func,
-      watchProps: PropTypes.arr,
+      watchProps: PropTypes.array,
     }
 
     static defaultProps = {
@@ -74,10 +74,11 @@ const dropObstacle = WrappedComponent =>
     }
 
     render() {
+      const { watchProps, ...rest } = this.props;
       return (
         <WrappedComponent
           ref={(component) => { this.component = component; }}
-          {...this.props}
+          {...rest}
         />
       );
     }

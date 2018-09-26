@@ -20,6 +20,7 @@ describe('reducer', () => {
     expect(
       reducer(undefined, { action: null }),
     ).toEqual({
+      obstacles: [],
       targets: [],
       source: null,
     });
@@ -119,6 +120,7 @@ describe('reducer', () => {
     describe('dragMove', () => {
       it('triggers DRAG_MOVE', () => {
         const store = mockStore({
+          obstacles: [],
           targets: [],
           source: null,
         });
@@ -161,6 +163,7 @@ describe('reducer', () => {
             },
           ],
           source: null,
+          obstacles: [],
         });
 
         store.dispatch(actions.dragMove({
@@ -213,6 +216,7 @@ describe('reducer', () => {
   describe('DRAG_END', () => {
     it('triggers DRAG_MOVE', () => {
       const store = mockStore({
+        obstacles: [],
         targets: [],
         source: null,
       });
@@ -229,6 +233,7 @@ describe('reducer', () => {
     it('calls onDrop on targets', () => {
       const onDrop = jest.fn();
       const onDrag = jest.fn();
+      const onDragEnd = jest.fn();
       const missedTargetOnDrop = jest.fn();
 
       const store = mockStore({
@@ -241,6 +246,7 @@ describe('reducer', () => {
             accepts: () => true,
             onDrag,
             onDrop,
+            onDragEnd,
           },
           {
             x: 100,
@@ -249,9 +255,11 @@ describe('reducer', () => {
             height: 100,
             accepts: () => true,
             onDrop: missedTargetOnDrop,
+            onDragEnd,
           },
         ],
         source: null,
+        obstacles: [],
       });
 
       store.dispatch(actions.dragEnd({
@@ -272,6 +280,21 @@ describe('reducer', () => {
       expect(onDrag.mock.calls).toEqual([]);
 
       expect(missedTargetOnDrop.mock.calls).toEqual([]);
+
+      expect(onDragEnd.mock.calls).toEqual([
+        [{
+          foo: 'bar',
+          isOver: true,
+          x: 50,
+          y: 50,
+        }],
+        [{
+          foo: 'bar',
+          isOver: true,
+          x: 50,
+          y: 50,
+        }],
+      ]);
     });
 
     it('set source to null', () => {

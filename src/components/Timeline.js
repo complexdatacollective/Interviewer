@@ -62,6 +62,8 @@ Timeline.defaultProps = {
   toggleMenu: () => {},
 };
 
+export { Timeline };
+
 export default compose(
   withBounds,
   withHandlers({
