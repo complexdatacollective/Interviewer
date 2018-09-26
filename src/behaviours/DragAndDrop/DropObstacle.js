@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
-import { isEqual, pick } from 'lodash';
 
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
@@ -16,12 +15,10 @@ const dropObstacle = WrappedComponent =>
     static propTypes = {
       id: PropTypes.string.isRequired,
       accepts: PropTypes.func,
-      watchProps: PropTypes.array,
     }
 
     static defaultProps = {
       accepts: () => false,
-      watchProps: [],
     }
 
     componentDidMount() {
@@ -30,25 +27,11 @@ const dropObstacle = WrappedComponent =>
       this.update();
     }
 
-    shouldComponentUpdate(nextProps) {
-      if (this.propsChangedExcludingNodes(nextProps, this.props)) {
-        this.update();
-        return true;
-      }
-
-      return false;
-    }
-
     componentWillUnmount() {
       this.removeObstacle();
       clearTimeout(this.interval);
       cancelAnimationFrame(this.animationFrame);
     }
-
-    watchProps = ['width', 'height', 'x', 'y', ...this.props.watchProps];
-
-    propsChangedExcludingNodes = (nextProps, props) =>
-      !isEqual(pick(nextProps, this.watchProps), pick(props, this.watchProps));
 
     removeObstacle = () => {
       store.dispatch(
@@ -85,11 +68,10 @@ const dropObstacle = WrappedComponent =>
     }
 
     render() {
-      const { watchProps, ...rest } = this.props;
       return (
         <WrappedComponent
           ref={(component) => { this.component = component; }}
-          {...rest}
+          {...this.props}
         />
       );
     }

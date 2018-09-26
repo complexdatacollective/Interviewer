@@ -31,7 +31,6 @@ const Sociogram = ({
       prompt={prompt}
       floating
       minimizable
-      watchProps={['prompt']}
     />
     <div className="sociogram-interface__sociogram">
       <ConcentricCircles
