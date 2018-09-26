@@ -1,37 +1,14 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 
-import { Button } from '../../ui/components';
 import withPrompt from '../../behaviours/withPrompt';
-import { withBounds } from '../../behaviours';
-import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { PromptSwiper, ConcentricCircles } from '../../containers/';
+import { ConcentricCircles } from '../../containers/';
+import PromptObstacle from '../../containers/ConcentricCircles/PromptObstacle';
+import ButtonObstacle from '../../containers/ConcentricCircles/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
-
-class PromptSwipable extends PureComponent {
-  render() {
-    return (
-      <div className="sociogram-interface__prompts" component="sociogram-interface__prompts">
-        <PromptSwiper {...this.props} />
-      </div>
-    );
-  }
-}
-
-PromptSwipable.propTypes = {
-  prompt: PropTypes.object.isRequired,
-};
-
-const PromptObstacle = compose(
-  withBounds,
-  withHandlers({
-    accepts: () => () => true,
-  }),
-  DropObstacle,
-)(PromptSwipable);
 
 /**
   * Sociogram Interface
@@ -47,12 +24,14 @@ const Sociogram = ({
   <div className="sociogram-interface">
     <PromptObstacle
       id="PROMPTS_OBSTACLE"
+      className="sociogram-interface__prompts"
       forward={promptForward}
       backward={promptBackward}
       prompts={stage.prompts}
       prompt={prompt}
       floating
       minimizable
+      watchProps={['prompt']}
     />
     <div className="sociogram-interface__sociogram">
       <ConcentricCircles
@@ -62,12 +41,12 @@ const Sociogram = ({
       />
     </div>
     <div style={{ position: 'absolute', right: '50px', bottom: '50px' }}>
-      <Button
+      <ButtonObstacle
+        id="RESET_BUTTON_OBSTACLE"
+        label="RESET"
         size="small"
         onClick={() => { resetInterface(stage.prompts); }}
-      >
-        Reset
-      </Button>
+      />
     </div>
   </div>
 );

@@ -9,20 +9,17 @@ import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
-const watchProps = ['width', 'height', 'x', 'y'];
-
-const propsChangedExcludingNodes = (nextProps, props) =>
-  !isEqual(pick(nextProps, watchProps), pick(props, watchProps));
-
 const dropObstacle = WrappedComponent =>
   class DropObstacle extends Component {
     static propTypes = {
       id: PropTypes.string.isRequired,
       accepts: PropTypes.func,
+      watchProps: PropTypes.arr,
     }
 
     static defaultProps = {
       accepts: () => false,
+      watchProps: [],
     }
 
     componentDidMount() {
@@ -32,7 +29,7 @@ const dropObstacle = WrappedComponent =>
     }
 
     shouldComponentUpdate(nextProps) {
-      if (propsChangedExcludingNodes(nextProps, this.props)) {
+      if (this.propsChangedExcludingNodes(nextProps, this.props)) {
         this.update();
         return true;
       }
@@ -43,6 +40,11 @@ const dropObstacle = WrappedComponent =>
     componentWillUnmount() {
       this.removeObstacle();
     }
+
+    watchProps = ['width', 'height', 'x', 'y', ...this.props.watchProps];
+
+    propsChangedExcludingNodes = (nextProps, props) =>
+      !isEqual(pick(nextProps, this.watchProps), pick(props, this.watchProps));
 
     removeObstacle = () => {
       store.dispatch(

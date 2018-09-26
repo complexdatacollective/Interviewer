@@ -55,6 +55,7 @@ class Protocol extends Component {
     return (
       <div className="protocol">
         <Timeline
+          id="TIMELINE"
           onClickBack={this.onClickBack}
           onClickNext={this.onClickNext}
           percentProgress={percentProgress}
