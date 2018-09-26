@@ -9,6 +9,8 @@ import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
+const maxFramesPerSecond = 10;
+
 const dropObstacle = WrappedComponent =>
   class DropObstacle extends Component {
     static propTypes = {
@@ -39,6 +41,8 @@ const dropObstacle = WrappedComponent =>
 
     componentWillUnmount() {
       this.removeObstacle();
+      clearTimeout(this.interval);
+      cancelAnimationFrame(this.animationFrame);
     }
 
     watchProps = ['width', 'height', 'x', 'y', ...this.props.watchProps];
@@ -54,6 +58,13 @@ const dropObstacle = WrappedComponent =>
 
     update = () => {
       this.updateObstacle();
+
+      this.interval = setTimeout(
+        () => {
+          this.animationFrame = requestAnimationFrame(this.update);
+        },
+        1000 / maxFramesPerSecond,
+      );
     }
 
     updateObstacle = () => {
