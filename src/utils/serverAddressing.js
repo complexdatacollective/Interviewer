@@ -84,7 +84,7 @@ const addPairingUrlToService = (service) => {
     apiInfo = validApiUrl(addr, service.port);
     return !!apiInfo;
   });
-  apiService.pairingServiceUrl = apiInfo.toString();
+  apiService.pairingServiceUrl = apiInfo && apiInfo.toString();
   return apiService;
 };
 
