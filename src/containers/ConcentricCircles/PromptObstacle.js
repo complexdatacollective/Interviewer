@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
-import { withHandlers, compose } from 'recompose';
+import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { PromptSwiper } from '../../containers';
-import { withBounds } from '../../behaviours';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 
 class PromptObstacle extends PureComponent {
@@ -30,9 +29,5 @@ PromptObstacle.defaultProps = {
 };
 
 export default compose(
-  withBounds,
-  withHandlers({
-    accepts: () => () => true,
-  }),
   DropObstacle,
 )(PromptObstacle);

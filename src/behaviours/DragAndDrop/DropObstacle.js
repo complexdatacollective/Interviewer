@@ -7,18 +7,12 @@ import PropTypes from 'prop-types';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
 import store from './store';
-
-const maxFramesPerSecond = 10;
+import { maxFramesPerSecond } from './DropTarget';
 
 const dropObstacle = WrappedComponent =>
   class DropObstacle extends Component {
     static propTypes = {
       id: PropTypes.string.isRequired,
-      accepts: PropTypes.func,
-    }
-
-    static defaultProps = {
-      accepts: () => false,
     }
 
     componentDidMount() {
@@ -58,7 +52,6 @@ const dropObstacle = WrappedComponent =>
       store.dispatch(
         actions.upsertObstacle({
           id: this.props.id,
-          accepts: this.props.accepts,
           width: boundingClientRect.width,
           height: boundingClientRect.height,
           y: boundingClientRect.top,

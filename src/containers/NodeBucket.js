@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose } from 'recompose';
 
 import Node from './Node';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
 import { DragSource, DropObstacle } from '../behaviours/DragAndDrop';
-import { withBounds } from '../behaviours';
 
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
@@ -62,10 +61,6 @@ function makeMapStateToProps() {
 export { NodeBucket };
 
 export default compose(
-  withBounds,
-  withHandlers({
-    accepts: () => () => true,
-  }),
   DropObstacle,
   connect(makeMapStateToProps),
 )(NodeBucket);

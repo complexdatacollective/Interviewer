@@ -48,7 +48,7 @@ ShallowWrapper {
           }
           stage={Object {}}
         />,
-        <Component
+        <DropObstacle
           id="NODE_BUCKET"
           prompt={
             Object {
@@ -147,7 +147,7 @@ ShallowWrapper {
             }
             stage={Object {}}
           />,
-          <Component
+          <DropObstacle
             id="NODE_BUCKET"
             prompt={
               Object {

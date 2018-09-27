@@ -42,7 +42,11 @@ const markHitTarget = ({ target, source }) => {
     source.y < target.y + target.height
   );
 
-  return { ...target, isOver, willAccept: willAccept(target.accepts, source) };
+  return {
+    ...target,
+    isOver,
+    willAccept: target.accepts ? willAccept(target.accepts, source) : false,
+  };
 };
 
 const markHitTargets = ({ targets, source }) =>
@@ -85,7 +89,7 @@ const triggerDrag = (state, source) => {
     },
   });
 
-  if (some(hits.obstacles, { isOver: true, willAccept: true })) {
+  if (some(hits.obstacles, { isOver: true })) {
     return;
   }
 
@@ -109,7 +113,7 @@ const triggerDrop = (state, source) => {
       target.onDragEnd(hits.source);
     });
 
-  if (some(hits.obstacles, { isOver: true, willAccept: true })) {
+  if (some(hits.obstacles, { isOver: true })) {
     return;
   }
 

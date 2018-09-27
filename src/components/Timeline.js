@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
-import { withHandlers, compose } from 'recompose';
+import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { Icon } from '../ui/components';
 import { ProgressBar } from '../components';
-import { withBounds } from '../behaviours';
 import { DropObstacle } from '../behaviours/DragAndDrop';
 
 class Timeline extends PureComponent {
@@ -65,9 +64,5 @@ Timeline.defaultProps = {
 export { Timeline };
 
 export default compose(
-  withBounds,
-  withHandlers({
-    accepts: () => () => true,
-  }),
   DropObstacle,
 )(Timeline);

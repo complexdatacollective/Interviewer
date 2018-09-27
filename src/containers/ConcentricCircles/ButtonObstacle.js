@@ -1,16 +1,14 @@
 import React, { PureComponent } from 'react';
-import { withHandlers, compose } from 'recompose';
+import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { Button } from '../../ui/components';
-import { withBounds } from '../../behaviours';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 
 class ButtonObstacle extends PureComponent {
   render() {
     const {
       label,
-      accepts,
       ...rest
     } = this.props;
 
@@ -25,7 +23,6 @@ class ButtonObstacle extends PureComponent {
 }
 
 ButtonObstacle.propTypes = {
-  accepts: PropTypes.func.isRequired,
   label: PropTypes.string,
 };
 
@@ -34,9 +31,5 @@ ButtonObstacle.defaultProps = {
 };
 
 export default compose(
-  withBounds,
-  withHandlers({
-    accepts: () => () => true,
-  }),
   DropObstacle,
 )(ButtonObstacle);

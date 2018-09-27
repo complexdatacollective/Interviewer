@@ -95,3 +95,5 @@ const dropTarget = WrappedComponent =>
   };
 
 export default dropTarget;
+
+export { maxFramesPerSecond };
