@@ -10,6 +10,13 @@ describe('the serverAddressing util', () => {
     expect(augmented.pairingServiceUrl).toMatch('127.0.0.1:123');
   });
 
+  it('contains a null pairingServiceUrl if none can be created', () => {
+    const linkLocal = 'fe80::';
+    const unusableService = { port: 123, addresses: [linkLocal] };
+    const augmented = util.addPairingUrlToService(unusableService);
+    expect(augmented.pairingServiceUrl).toBe(null);
+  });
+
   describe('port validation', () => {
     it('validates 9999', () => expect(util.isValidPort(9999)).toBe(true));
     it('validates a string port', () => expect(util.isValidPort('9999')).toBe(true));
