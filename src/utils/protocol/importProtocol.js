@@ -3,7 +3,7 @@
 import Zip from 'jszip';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import { removeDirectory, ensurePathExists, readFile, writeStream, writeFile, inSequence } from '../filesystem';
+import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
 import { protocolPath } from './';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
@@ -52,9 +52,7 @@ const extractZipFile = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return (zipObject, destination) => {
       const extractPath = `${destination}${zipObject.name}`;
-
-      return zipObject.async('blob')
-        .then(data => writeFile(extractPath, data));
+      return writeStream(extractPath, zipObject.internalStream('uint8array'));
     };
   }
 

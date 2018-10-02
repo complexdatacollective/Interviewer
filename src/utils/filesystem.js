@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-/* global FileReader, window, cordova */
+/* global FileReader, FileWriter, window, cordova */
 
 import { trimChars } from 'lodash/fp';
 import environments from './environments';
@@ -124,18 +124,25 @@ const readFileAsDataUrl = inEnvironment((environment) => {
   throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
+const makeFileWriter = fileEntry =>
+  new Promise((resolve, reject) => {
+    fileEntry.createWriter(resolve, reject);
+  });
+
+const newFile = (directoryEntry, filename) =>
+  new Promise((resolve, reject) => {
+    directoryEntry.getFile(filename, { create: true }, resolve, reject);
+  });
+
+const concatTypedArrays = (a, b) => {
+  const combined = new Uint8Array(a.byteLength + b.byteLength);
+  combined.set(a);
+  combined.set(b, a.length);
+  return combined;
+};
+
 const writeFile = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
-    const makeFileWriter = fileEntry =>
-      new Promise((resolve, reject) => {
-        fileEntry.createWriter(resolve, reject);
-      });
-
-    const newFile = (directoryEntry, filename) =>
-      new Promise((resolve, reject) => {
-        directoryEntry.getFile(filename, { create: true }, resolve, reject);
-      });
-
     return (fileUrl, data) => {
       const [baseDirectory, filename] = splitUrl(fileUrl);
 
@@ -302,6 +309,110 @@ const writeStream = inEnvironment((environment) => {
           reject(error);
         }
       });
+  }
+
+  if (environment === environments.CORDOVA) {
+    /**
+     * Provides a pseudo-streaming mechanism for writing files.
+     * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
+     * The goal here is to reduce the memory footprint on mobile as much as possible, so we
+     * provide as much backpressure to JSZip as possible and only buffer when necessary.
+     * @param  {string} destUrl filePath to write to
+     * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
+     *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
+     * @private
+     */
+    return (destUrl, stream) => {
+      const [baseDirectory, filename] = splitUrl(destUrl);
+      return new Promise((resolve, reject) => {
+        resolveFileSystemUrl(baseDirectory)
+          .then(directoryEntry => newFile(directoryEntry, filename))
+          .then(makeFileWriter)
+          .then((fileWriter) => {
+            // Track chunk counts written, since we don't get actual bytes written from response
+            let pendingChunksToWrite = 0; // This doesn't work if any writes fail (TODO: abort)
+            let bufferedChunk = null; // Buffer for incoming Uint8Array when needed
+
+            // We won't know how many bytes we need to write until we're done
+            let reachedEndOfInputStream = false;
+
+            const handleError = (err) => {
+              console.error(err); // eslint-disable-line no-console
+              if (stream) {
+                stream.pause();
+              }
+              if (fileWriter && fileWriter.readyState === FileWriter.WRITING) {
+                fileWriter.abort();
+              }
+              reject(err);
+            };
+
+            const writeChunk = (chunkByteArray) => {
+              const byteLength = chunkByteArray.byteLength;
+              const data = chunkByteArray.slice(0, byteLength);
+              try {
+                // fileWriter.position should already equal fileWriter.length
+                if (fileWriter.length) { // first write; fileWriter.readyState === FileWriter.INIT
+                  // On subsequent writes, set FP
+                  // fileWriter.seek(fileWriter.length);
+                }
+                pendingChunksToWrite += 1;
+                // fileWriter.write documents a blob arg, but called with a blob,
+                // it will read the blob to an arraybuffer and then re-call itself.
+                fileWriter.write(data.buffer);
+              } catch (err) {
+                handleError(err);
+              }
+            };
+
+            /**
+             * We can 'stream' chunks by seeking the fileWriter before each subsequent write.
+             *
+             * The stream can be written to (or seeked) as long as its readyState is not WRITING.
+             */
+            fileWriter.onwriteend = () => { // eslint-disable-line no-param-reassign
+              pendingChunksToWrite -= 1;
+              if (fileWriter.error) {
+                // already handled by onerror; ignore here
+              } else if (reachedEndOfInputStream) {
+                resolve(destUrl);
+              } else if (bufferedChunk) {
+                writeChunk(bufferedChunk);
+                bufferedChunk = null;
+              } else {
+                stream.resume();
+              }
+            };
+
+            fileWriter.onerror = (error) => { // eslint-disable-line no-param-reassign
+              handleError(error);
+            };
+
+            stream
+              .on('error', handleError)
+              .on('data', (data) => {
+                // Immediate backpressure: we can only write one chunk at a time
+                stream.pause();
+
+                // Despite pausing, we may receive additional chunks before previous has completed
+                // Otherwise, process without buffering.
+                if (fileWriter.readyState === FileWriter.WRITING) {
+                  bufferedChunk = bufferedChunk ? concatTypedArrays(bufferedChunk, data) : data;
+                } else {
+                  writeChunk(data);
+                }
+              })
+              .on('end', () => {
+                if (pendingChunksToWrite === 0) {
+                  resolve(destUrl);
+                } else {
+                  reachedEndOfInputStream = true;
+                }
+              })
+              .resume();
+          });
+      });
+    };
   }
 
   throw new Error(`writeStream() not available on platform ${environment}`);
