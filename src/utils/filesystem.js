@@ -315,8 +315,12 @@ const writeStream = inEnvironment((environment) => {
     /**
      * Provides a pseudo-streaming mechanism for writing files.
      * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
-     * The goal here is to reduce the memory footprint on mobile as much as possible, so we
-     * provide as much backpressure to JSZip as possible and only buffer when necessary.
+     * The file can be written to as long as its readyState is not WRITING.
+     *
+     * The goal here is to reduce the memory footprint on mobile as much as possible, but we
+     * have to buffer each chunk sent temporarily, since the native stream may not write all bytes.
+     * Still, we provide as much backpressure to JSZip's stream as possible (with `pause`).
+     *
      * @param  {string} destUrl filePath to write to
      * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
      *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
@@ -329,11 +333,11 @@ const writeStream = inEnvironment((environment) => {
           .then(directoryEntry => newFile(directoryEntry, filename))
           .then(makeFileWriter)
           .then((fileWriter) => {
-            // Track chunk counts written, since we don't get actual bytes written from response
-            let pendingChunksToWrite = 0; // This doesn't work if any writes fail (TODO: abort)
-            let bufferedChunk = null; // Buffer for incoming Uint8Array when needed
-
+            let bufferedChunkBytes = new Uint8Array();
+            // Needed to calculate bytesWritten since not provided by Cordova
+            let previousFileWriterLength = 0;
             // We won't know how many bytes we need to write until we're done
+            // This flag lets writeend handler know not to expect any more
             let reachedEndOfInputStream = false;
 
             const handleError = (err) => {
@@ -348,15 +352,10 @@ const writeStream = inEnvironment((environment) => {
             };
 
             const writeChunk = (chunkByteArray) => {
+              previousFileWriterLength = fileWriter.length;
               const byteLength = chunkByteArray.byteLength;
               const data = chunkByteArray.slice(0, byteLength);
               try {
-                // fileWriter.position should already equal fileWriter.length
-                if (fileWriter.length) { // first write; fileWriter.readyState === FileWriter.INIT
-                  // On subsequent writes, set FP
-                  // fileWriter.seek(fileWriter.length);
-                }
-                pendingChunksToWrite += 1;
                 // fileWriter.write documents a blob arg, but called with a blob,
                 // it will read the blob to an arraybuffer and then re-call itself.
                 fileWriter.write(data.buffer);
@@ -365,45 +364,38 @@ const writeStream = inEnvironment((environment) => {
               }
             };
 
-            /**
-             * We can 'stream' chunks by seeking the fileWriter before each subsequent write.
-             *
-             * The stream can be written to (or seeked) as long as its readyState is not WRITING.
-             */
-            fileWriter.onwriteend = () => { // eslint-disable-line no-param-reassign
-              pendingChunksToWrite -= 1;
+            const onChunkWritten = () => {
+              const bytesWritten = fileWriter.length - previousFileWriterLength;
+              bufferedChunkBytes = bufferedChunkBytes.slice(bytesWritten);
               if (fileWriter.error) {
                 // already handled by onerror; ignore here
+              } else if (bufferedChunkBytes.length) {
+                writeChunk(bufferedChunkBytes);
               } else if (reachedEndOfInputStream) {
                 resolve(destUrl);
-              } else if (bufferedChunk) {
-                writeChunk(bufferedChunk);
-                bufferedChunk = null;
               } else {
                 stream.resume();
               }
             };
 
-            fileWriter.onerror = (error) => { // eslint-disable-line no-param-reassign
-              handleError(error);
+            const onChunkReceived = (chunkByteArray) => {
+              stream.pause();
+              bufferedChunkBytes = concatTypedArrays(bufferedChunkBytes, chunkByteArray);
+              // Despite pausing, we may receive additional chunks before previous has completed,
+              // in which case we wait until the current write ends.
+              if (fileWriter.readyState !== FileWriter.WRITING) {
+                writeChunk(chunkByteArray);
+              }
             };
+
+            fileWriter.onwriteend = onChunkWritten; // eslint-disable-line no-param-reassign
+            fileWriter.onerror = handleError; // eslint-disable-line no-param-reassign
 
             stream
               .on('error', handleError)
-              .on('data', (data) => {
-                // Immediate backpressure: we can only write one chunk at a time
-                stream.pause();
-
-                // Despite pausing, we may receive additional chunks before previous has completed
-                // Otherwise, process without buffering.
-                if (fileWriter.readyState === FileWriter.WRITING) {
-                  bufferedChunk = bufferedChunk ? concatTypedArrays(bufferedChunk, data) : data;
-                } else {
-                  writeChunk(data);
-                }
-              })
+              .on('data', onChunkReceived)
               .on('end', () => {
-                if (pendingChunksToWrite === 0) {
+                if (bufferedChunkBytes.length === 0) {
                   resolve(destUrl);
                 } else {
                   reachedEndOfInputStream = true;
