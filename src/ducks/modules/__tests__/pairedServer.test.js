@@ -21,11 +21,21 @@ describe('pairedServer reducer', () => {
     const reduced = reducer(initialState, action);
     expect(reduced).toEqual({ ...mockServer, deviceId, deviceSecret });
   });
+
+  it('unpairs a server', () => {
+    const reduced = reducer(mockServer, { type: actionTypes.UNPAIR_SERVER });
+    expect(reduced).toEqual(initialState);
+  });
 });
 
 describe('pairedServer action creator', () => {
   it('supports setting a paired server', () => {
     const expectedAction = { type: actionTypes.SET_SERVER, server: mockServer };
     expect(actionCreators.setPairedServer(mockServer)).toEqual(expectedAction);
+  });
+
+  it('supports unpairing a server', () => {
+    const expectedAction = { type: actionTypes.UNPAIR_SERVER };
+    expect(actionCreators.unpairServer(mockServer)).toEqual(expectedAction);
   });
 });

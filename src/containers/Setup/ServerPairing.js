@@ -68,11 +68,8 @@ class ServerPairing extends Component {
           securePort: pairingInfo.securePort,
           sslCertificate: pairingInfo.sslCertificate,
         });
+        this.setState(emptyState);
         this.props.setPairedServer(server, device.id, device.secret);
-        this.setState({
-          ...emptyState,
-          pairedDeviceId: device.id,
-        });
       })
       .then(() => this.props.onComplete())
       .catch(err => this.handleApiError(err));

@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { UnconnectedServerList as ServerList } from '../ServerList';
+import ServerList from '../ServerList';
 
 jest.mock('../../../utils/serverDiscoverer', () => jest.fn().mockImplementation(() => ({
   init: jest.fn(),

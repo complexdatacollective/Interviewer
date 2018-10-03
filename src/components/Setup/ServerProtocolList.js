@@ -5,7 +5,7 @@ import { Scroller } from '../../components';
 import ProtocolCard from './ProtocolCard';
 
 const EmptyProtocolList = (
-  <div className="protocol-card-list">
+  <div className="protocol-card-list protocol-card-list--empty">
     <h4>No protocols available</h4>
   </div>
 );

@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ProtocolImport from '../ProtocolImport';
+import { UnconnectedProtocolImport as ProtocolImport } from '../ProtocolImport';
 
 describe('<ProtocolImport>', () => {
   let component;
@@ -12,7 +12,7 @@ describe('<ProtocolImport>', () => {
   });
 
   it('displays a list of servers', () => {
-    expect(component.find('Connect(ServerList)')).toHaveLength(1);
+    expect(component.find('ServerList')).toHaveLength(1);
   });
 
   it('displays a connected pairing component after a server is selected', () => {

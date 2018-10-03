@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
 
 import { Button, Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
@@ -14,6 +13,10 @@ const loadingPlaceholder = (
   </div>
 );
 
+// TODO: rename to DiscoveredServerList
+/**
+ * Displays a list of available servers discovered via MDNS.
+ */
 class ServerList extends Component {
   constructor() {
     super();
@@ -84,37 +87,32 @@ class ServerList extends Component {
   }
 
   renderServerList() {
-    const { pairedServer } = this.props;
+    const { selectServer } = this.props;
     return (
       <div className="server-list__content">
         {
-          this.state.servers.map((server) => {
-            // TODO: show paired server separately & allow unpairing
-            // (This solves problem of identifying unique)
-            const onSelect = pairedServer ? this.props.selectPairedServer : this.props.selectServer;
-            return (
-              <ServerCard
-                key={server.pairingServiceUrl}
-                data={server}
-                selectServer={onSelect}
-                secondaryLabel={pairedServer ? '(paired)' : ''}
-              />
-            );
-          })
+          this.state.servers.map(server => (
+            <ServerCard
+              key={server.pairingServiceUrl}
+              data={server}
+              selectServer={selectServer}
+            />
+          ))
         }
       </div>
     );
   }
 
   renderError() {
+    /* eslint-disable no-alert */
     return (
       <div className="server-list__placeholder">
         <Icon name="error" />
         <h4>Automatic server discovery unavailable</h4>
-        { // eslint-disable-next-line no-alert
-        }<Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
+        <Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
       </div>
     );
+    /* eslint-enable no-alert */
   }
 
   render() {
@@ -134,21 +132,12 @@ class ServerList extends Component {
 }
 
 ServerList.defaultProps = {
-  pairedServer: {},
   selectPairedServer: () => {},
   selectServer: () => {},
 };
 
 ServerList.propTypes = {
-  pairedServer: PropTypes.object,
-  selectPairedServer: PropTypes.func,
   selectServer: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  pairedServer: state.pairedServer,
-});
-
-export default connect(mapStateToProps)(ServerList);
-
-export { ServerList as UnconnectedServerList };
+export default ServerList;
