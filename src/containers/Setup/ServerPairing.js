@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
 import { addSecureApiUrlToServer } from '../../utils/serverAddressing';
 import { ServerSetup, ServerPairingForm } from '../../components/Setup';
-import { actionCreators } from '../../ducks/modules/servers';
+import { actionCreators } from '../../ducks/modules/pairedServer';
 
 const emptyState = Object.freeze({
   loading: false,
@@ -68,7 +68,7 @@ class ServerPairing extends Component {
           securePort: pairingInfo.securePort,
           sslCertificate: pairingInfo.sslCertificate,
         });
-        this.props.addServer(server, device.id, device.secret);
+        this.props.setPairedServer(server, device.id, device.secret);
         this.setState({
           ...emptyState,
           pairedDeviceId: device.id,
@@ -110,7 +110,6 @@ ServerPairing.defaultProps = {
 };
 
 ServerPairing.propTypes = {
-  addServer: PropTypes.func.isRequired,
   deviceName: PropTypes.string,
   onComplete: PropTypes.func,
   onError: PropTypes.func,
@@ -119,6 +118,7 @@ ServerPairing.propTypes = {
     pairingServiceUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
   }).isRequired,
+  setPairedServer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -130,7 +130,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addServer: bindActionCreators(actionCreators.addServer, dispatch),
+    setPairedServer: bindActionCreators(actionCreators.setPairedServer, dispatch),
     pairingFailed: bindActionCreators(actionCreators.pairingFailed, dispatch),
   };
 }

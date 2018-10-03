@@ -84,22 +84,20 @@ class ServerList extends Component {
   }
 
   renderServerList() {
-    const { pairedServers } = this.props;
+    const { pairedServer } = this.props;
     return (
       <div className="server-list__content">
         {
           this.state.servers.map((server) => {
-            // Review: Single server may have two pairingServiceUrls;
-            // should this be treated as two servers?
-            const isPaired = pairedServers.some(s => (
-              s.pairingServiceUrl === server.pairingServiceUrl));
-            const onSelect = isPaired ? this.props.selectPairedServer : this.props.selectServer;
+            // TODO: show paired server separately & allow unpairing
+            // (This solves problem of identifying unique)
+            const onSelect = pairedServer ? this.props.selectPairedServer : this.props.selectServer;
             return (
               <ServerCard
                 key={server.pairingServiceUrl}
                 data={server}
                 selectServer={onSelect}
-                secondaryLabel={isPaired ? '(paired)' : ''}
+                secondaryLabel={pairedServer ? '(paired)' : ''}
               />
             );
           })
@@ -136,19 +134,19 @@ class ServerList extends Component {
 }
 
 ServerList.defaultProps = {
-  pairedServers: [],
+  pairedServer: {},
   selectPairedServer: () => {},
   selectServer: () => {},
 };
 
 ServerList.propTypes = {
-  pairedServers: PropTypes.array,
+  pairedServer: PropTypes.object,
   selectPairedServer: PropTypes.func,
   selectServer: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
-  pairedServers: state.servers.paired,
+  pairedServer: state.pairedServer,
 });
 
 export default connect(mapStateToProps)(ServerList);

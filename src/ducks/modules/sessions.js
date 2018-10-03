@@ -6,7 +6,6 @@ import uuidv4 from '../../utils/uuid';
 import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
-import { getPairedServer } from '../../selectors/servers';
 
 
 const ADD_SESSION = 'ADD_SESSION';
@@ -233,7 +232,7 @@ const sessionExportPromise = (pairedServer, action) => {
 const exportSessionEpic = (action$, store) => (
   action$.ofType(EXPORT_SESSION)
     .exhaustMap((action) => {
-      const pairedServer = getPairedServer(store.getState());
+      const pairedServer = store.getState().pairedServer;
       return Observable
         .fromPromise(sessionExportPromise(pairedServer, action))
         .mapTo(sessionExportSucceeded(action.sessionUuid))

@@ -8,7 +8,6 @@ import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { ServerProtocolList, ServerSetup } from '../../components/Setup';
-import { getPairedServer } from '../../selectors/servers';
 
 /**
  * @class
@@ -93,7 +92,7 @@ function mapStateToProps(state) {
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     sessionId: state.session,
-    pairedServer: getPairedServer(state),
+    pairedServer: state.pairedServer,
   };
 }
 

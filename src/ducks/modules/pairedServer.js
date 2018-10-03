@@ -1,20 +1,17 @@
-const ADD_SERVER = 'ADD_SERVER';
+const SET_SERVER = 'SET_SERVER';
 const SERVER_PAIRING_FAILED = 'SERVER_PAIRING_FAILED';
 
-const initialState = {
-  paired: [],
-};
+const initialState = null;
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_SERVER:
+    case SET_SERVER:
       if (action.server) {
-        const pairingInfo = {
+        return {
           ...action.server,
           deviceId: action.deviceId,
           deviceSecret: action.deviceSecret,
         };
-        return { ...state, paired: [...state.paired, pairingInfo] };
       }
       return state;
     default:
@@ -22,8 +19,8 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const addServer = (server, deviceId, deviceSecret) => ({
-  type: ADD_SERVER,
+const setPairedServer = (server, deviceId, deviceSecret) => ({
+  type: SET_SERVER,
   deviceId,
   deviceSecret,
   server,
@@ -35,12 +32,12 @@ const pairingFailed = error => ({
 });
 
 const actionCreators = {
-  addServer,
+  setPairedServer,
   pairingFailed,
 };
 
 const actionTypes = {
-  ADD_SERVER,
+  SET_SERVER,
   SERVER_PAIRING_FAILED,
 };
 
