@@ -1,3 +1,4 @@
+export { default as DiscoveredServerList } from './DiscoveredServerList';
 export { default as PairingCodeInput } from './PairingCodeInput';
 export { default as ProtocolCard } from './ProtocolCard';
 export { default as ServerProtocolList } from './ServerProtocolList';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import ServerList from '../ServerList';
+import DiscoveredServerList from '../DiscoveredServerList';
 
 jest.mock('../../../utils/serverDiscoverer', () => jest.fn().mockImplementation(() => ({
   init: jest.fn(),
@@ -14,10 +14,10 @@ jest.mock('../../../utils/Environment', () => ({
   isElectron: () => true,
 }));
 
-describe('ServerList component', () => {
+describe('<DiscoveredServerList />', () => {
   let component;
   beforeEach(() => {
-    component = mount(<ServerList />);
+    component = mount(<DiscoveredServerList />);
   });
 
   it('displays listening state', () => {

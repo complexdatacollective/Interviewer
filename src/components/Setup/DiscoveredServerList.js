@@ -13,11 +13,10 @@ const loadingPlaceholder = (
   </div>
 );
 
-// TODO: rename to DiscoveredServerList
 /**
  * Displays a list of available servers discovered via MDNS.
  */
-class ServerList extends Component {
+class DiscoveredServerList extends Component {
   constructor() {
     super();
 
@@ -131,13 +130,13 @@ class ServerList extends Component {
   }
 }
 
-ServerList.defaultProps = {
+DiscoveredServerList.defaultProps = {
   selectPairedServer: () => {},
   selectServer: () => {},
 };
 
-ServerList.propTypes = {
+DiscoveredServerList.propTypes = {
   selectServer: PropTypes.func,
 };
 
-export default ServerList;
+export default DiscoveredServerList;

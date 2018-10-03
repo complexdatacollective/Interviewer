@@ -12,7 +12,7 @@ describe('<ProtocolImport>', () => {
   });
 
   it('displays a list of servers', () => {
-    expect(component.find('ServerList')).toHaveLength(1);
+    expect(component.find('DiscoveredServerList')).toHaveLength(1);
   });
 
   it('displays a connected pairing component after a server is selected', () => {

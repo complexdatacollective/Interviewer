@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import ProtocolUrlForm from './ProtocolUrlForm';
-import ServerList from './ServerList';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
-import ServerAddressForm from '../../components/Setup/ServerAddressForm';
+import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
 import { Button, Icon } from '../../ui/components';
 
 /**
@@ -87,7 +86,7 @@ class ProtocolImport extends PureComponent {
       );
     } else {
       content = (
-        <ServerList selectServer={this.pairWithServer} />
+        <DiscoveredServerList selectServer={this.pairWithServer} />
       );
       buttonContent = (
         <React.Fragment>
