@@ -1086,8 +1086,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1100,8 +1098,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1122,8 +1118,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1136,8 +1130,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1157,8 +1149,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1171,8 +1161,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
