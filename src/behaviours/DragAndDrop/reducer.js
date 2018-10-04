@@ -32,14 +32,25 @@ const willAccept = (accepts, source) => {
   }
 };
 
+const markOutOfBounds = (source) => {
+  const isOutOfBounds = (
+    source.x > window.innerWidth ||
+    source.x < 0 ||
+    source.y > window.innerHeight ||
+    source.y < 0
+  );
+
+  return isOutOfBounds;
+};
+
 const markHitTarget = ({ target, source }) => {
   if (!source) { return { ...target, isOver: false, willAccept: false }; }
 
   const isOver = (
-    source.x > target.x &&
-    source.x < target.x + target.width &&
-    source.y > target.y &&
-    source.y < target.y + target.height
+    source.x >= target.x &&
+    source.x <= target.x + target.width &&
+    source.y >= target.y &&
+    source.y <= target.y + target.height
   );
 
   return {
@@ -59,6 +70,7 @@ const markHitSource = ({ targets, source }) =>
     return {
       ...s,
       isOver: filter(targets, 'isOver').length > 0,
+      isOutOfBounds: markOutOfBounds(s),
     };
   });
 
@@ -89,12 +101,16 @@ const triggerDrag = (state, source) => {
     },
   });
 
-  if (some(hits.obstacles, { isOver: true })) {
+  source.setValidMove(true);
+
+  if (some(hits.obstacles, { isOver: true }) || hits.source.isOutOfBounds) {
+    source.setValidMove(false);
     return;
   }
 
   filter(hits.targets, { isOver: true, willAccept: true })
     .forEach((target) => {
+      source.setValidMove(true);
       target.onDrag(hits.source);
     });
 };

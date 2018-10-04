@@ -164,6 +164,7 @@ describe('reducer', () => {
       expect(result.source).toEqual({
         bazz: 'buzz',
         isOver: false,
+        isOutOfBounds: false,
       });
     });
   });
@@ -177,15 +178,19 @@ describe('reducer', () => {
           source: null,
         });
 
+        const setValidMove = jest.fn();
         store.dispatch(actions.dragMove({
           bazz: 'buzz',
+          setValidMove,
         }));
 
+        expect(setValidMove.mock.calls.length).toBe(1);
         expect(store.getActions()).toEqual([
           {
             type: actionTypes.DRAG_MOVE,
             source: {
               bazz: 'buzz',
+              setValidMove,
             },
           },
         ]);
@@ -194,6 +199,7 @@ describe('reducer', () => {
       it('calls onDrag on targets', () => {
         const onDrag = jest.fn();
         const missedTargetOnDrag = jest.fn();
+        const setValidMove = jest.fn();
 
         const store = mockStore({
           targets: [
@@ -222,17 +228,21 @@ describe('reducer', () => {
           foo: 'bar',
           x: 50,
           y: 50,
+          setValidMove,
         }));
 
         expect(onDrag.mock.calls).toEqual([
           [{
             foo: 'bar',
             isOver: true,
+            isOutOfBounds: false,
             x: 50,
             y: 50,
+            setValidMove,
           }],
         ]);
 
+        expect(setValidMove.mock.calls.length).toBe(2);
         expect(missedTargetOnDrag.mock.calls).toEqual([]);
       });
     });
@@ -261,6 +271,7 @@ describe('reducer', () => {
         y: 50,
         z: 200,
         isOver: false,
+        isOutOfBounds: false,
       });
     });
   });
@@ -324,6 +335,7 @@ describe('reducer', () => {
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
@@ -337,12 +349,14 @@ describe('reducer', () => {
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
@@ -405,12 +419,14 @@ describe('reducer', () => {
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
@@ -426,6 +442,7 @@ describe('reducer', () => {
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 90,
           y: 90,
         }],

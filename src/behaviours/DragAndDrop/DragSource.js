@@ -73,6 +73,10 @@ const dragSource = WrappedComponent =>
       }
     }
 
+    setValidMove = (valid) => {
+      this.preview.setValidMove(valid);
+    }
+
     onDragStart = (movement) => {
       this.createPreview();
 
@@ -91,7 +95,7 @@ const dragSource = WrappedComponent =>
 
       store.dispatch(
         actions.dragMove({
-          x, y, ...rest,
+          x, y, setValidMove: this.setValidMove, ...rest,
         }),
       );
     }
