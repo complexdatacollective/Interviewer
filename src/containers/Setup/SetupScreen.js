@@ -73,7 +73,7 @@ class Setup extends Component {
           {currentTab}
         </main>
         <Link to="/protocol-import">
-          <Icon name="add-a-protocol" className="setup__server-button" />
+          <Icon name="pair-a-server" className="setup__server-button" />
         </Link>
       </div>
     );

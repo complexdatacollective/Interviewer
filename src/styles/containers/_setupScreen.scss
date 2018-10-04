@@ -54,6 +54,35 @@
     .scrollable {
       height: 100%; // TODO: should this be on component?
     }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 2rem;
+      height: 4rem;
+      margin-top: -2rem;
+      background-size: 2rem 4rem;
+    }
+
+    .swiper-container-horizontal>.swiper-pagination-bullets,
+    .swiper-pagination-custom,
+    .swiper-pagination-fraction {
+      bottom: 1rem;
+    }
+
+    .swiper-container-horizontal>.swiper-pagination-bullets
+    .swiper-pagination-bullet {
+      margin: 0 .35rem;
+    }
+
+    .swiper-pagination-bullet {
+      width: .7rem;
+      height: .7rem;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--light-background);
+    }
+
   }
 
   &__start {
