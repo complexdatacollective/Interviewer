@@ -8,7 +8,8 @@ const path = require('path');
 const Ajv = require('ajv');
 const v6Schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
-const defaultProtocol = path.join(__dirname, '..', 'public', 'protocols', 'development.netcanvas', 'protocol.json');
+const projectDir = path.join(__dirname, '..', '..');
+const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const protocolFilepath = process.argv[2] || defaultProtocol;
 const protocolName = path.basename(path.dirname(protocolFilepath));
 
@@ -16,7 +17,7 @@ let schema;
 let data;
 
 try {
-  schema = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'protocol.schema')));
+  schema = JSON.parse(fs.readFileSync(path.join(projectDir, 'protocol.schema')));
 } catch (e) {
   console.error(chalk.red('Invalid schema'));
   console.error(e);

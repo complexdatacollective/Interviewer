@@ -36,7 +36,7 @@
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
     "generate-schema": "quicktype -o protocol.schema public/protocols/development.netcanvas/protocol.json",
-    "validate-protocol": "node scripts/validate-protocol.js"
+    "validate-protocol": "node scripts/schema/validate-protocol.js"
   },
   "repository": {
     "type": "git"
