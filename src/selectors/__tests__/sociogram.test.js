@@ -4,6 +4,9 @@ import { makeGetSociogramOptions } from '../sociogram';
 
 const mockPrompt = {
   layout: {},
+  subject: {
+    type: 'foo',
+  },
 };
 
 const mockProps = {
@@ -11,6 +14,9 @@ const mockProps = {
 };
 
 const mockState = {
+  protocol: {
+    variableRegistry: { node: { foo: {} } },
+  },
 };
 
 describe('sociogram selector', () => {

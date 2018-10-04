@@ -19,9 +19,10 @@ import {
   makeGetNodeDisplayVariable,
   makeNetworkNodesForType,
 } from './interface';
-import { createDeepEqualSelector } from './utils';
+import { assert, createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
 import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
+import { protocolRegistry } from './protocol';
 
 // Selectors that are specific to the name generator
 
@@ -155,15 +156,25 @@ const edgesOfTypes = (edges, types) =>
     selectedEdges => flatten(selectedEdges),
   )(edges);
 
+const edgeTypeIsDefined = (variableRegistry, edgeType) =>
+  variableRegistry &&
+  variableRegistry.edge &&
+  !!variableRegistry.edge[edgeType];
+
 export const makeDisplayEdgesForPrompt = () => {
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
+    protocolRegistry,
     networkNodesForSubject,
     networkEdges,
     makeGetEdgeOptions(),
     getLayoutOptions,
-    (nodes, edges, edgeOptions, { layoutVariable }) => {
+    (variableRegistry, nodes, edges, edgeOptions, { layoutVariable }) => {
+      const edgeType = edgeOptions.createEdge;
+      if (edgeOptions.canCreateEdge) {
+        assert(edgeTypeIsDefined(variableRegistry, edgeType), `Edge type "${edgeType}" is not defined in the registry`);
+      }
       const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);
       return edgesToCoords(
         selectedEdges,
