@@ -7,7 +7,7 @@ $component: 'protocol-card';
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding: spacing(large);
+  padding: spacing(huge);
 
   &__icon {
     height: 10rem;
@@ -21,7 +21,7 @@ $component: 'protocol-card';
     flex-direction: column;
     height: 30vh;
     max-height: 20rem;
-    max-width: 40rem;
+    max-width: 25rem;
     margin: 0 auto;
     text-align: center;
     width: 45vw;

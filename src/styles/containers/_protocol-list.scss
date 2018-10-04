@@ -5,9 +5,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: flex-start;
+    margin-top: 5rem;
+    width: 50%;
+
+    &:not(.swiper-slide-active) {
+      opacity: .5;
+      pointer-events: none;
+    }
   }
 
   &.swiper-container {
     width: 100%; // ensure Swiper plugin initializes layout correctly
+    mask-image: linear-gradient(90deg, transparent, black 20rem, black calc(100% - 20rem), transparent 100%);
   }
 }

@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 80vw;
+  width: 100%;
   min-height: 200px;
 
   &__header {
@@ -47,7 +47,6 @@
   &__main {
     flex: 1 1 auto;
     height: calc(100vh - var(--setup-header-height));
-    padding-bottom: 20vh;
     display: flex;
     align-items: center;
 
@@ -55,18 +54,30 @@
       height: 100%; // TODO: should this be on component?
     }
 
+    .swiper-wrapper {
+      height: auto;
+    }
+
+    .swiper-button-prev {
+      left: 10rem;
+    }
+
+    .swiper-button-next {
+      right: 10rem;
+    }
+
     .swiper-button-next,
     .swiper-button-prev {
       width: 2rem;
       height: 4rem;
-      margin-top: -2rem;
+      margin-top: -6rem;
       background-size: 2rem 4rem;
     }
 
     .swiper-container-horizontal>.swiper-pagination-bullets,
     .swiper-pagination-custom,
     .swiper-pagination-fraction {
-      bottom: 1rem;
+      bottom: 5rem;
     }
 
     .swiper-container-horizontal>.swiper-pagination-bullets
