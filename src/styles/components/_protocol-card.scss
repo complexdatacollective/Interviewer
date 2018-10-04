@@ -9,25 +9,10 @@ $component: 'protocol-card';
   flex-direction: row;
   padding: spacing(large);
 
-  &__icon-wrapper {
-    flex: none;
-    height: 50px;
-    margin-right: 10px;
-    position: relative;
-    width: 50px;
-  }
-
   &__icon {
-    // Override position & display of the 'add-a-screen' icon
-    // TODO: does this deserve its own svg?
-    left: -31px;
-    position: absolute;
-    top: -49px;
-
-    .cls-1,
-    .cls-2 {
-      display: none;
-    }
+    height: 10rem;
+    width: 10rem;
+    margin-bottom: 1.5rem;
   }
 
   // Large variant displayed on the startup screen
@@ -35,17 +20,12 @@ $component: 'protocol-card';
     background-color: var(--light-background);
     flex-direction: column;
     height: 30vh;
-    max-height: 350px;
-    max-width: 650px;
+    max-height: 20rem;
+    max-width: 40rem;
     margin: 0 auto;
     text-align: center;
     width: 45vw;
     justify-content: center;
-
-    .#{$component}__icon-wrapper {
-      margin-bottom: 40px;
-      margin-right: 0;
-    }
   }
 
   &__name {

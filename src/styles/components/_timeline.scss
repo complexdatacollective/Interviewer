@@ -28,6 +28,7 @@ $timeline-button-size: 6rem;
     &--next {
       height: $timeline-button-size;
       width: $timeline-button-size;
+      background: var(--light-background);
 
       svg {
         height: 2.5rem;
