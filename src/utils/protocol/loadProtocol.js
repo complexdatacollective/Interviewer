@@ -14,6 +14,11 @@ const verifyProtocol = (protocol) => {
     noStagesError.friendlyMessage = 'Invalid protocol: no stages defined';
     throw noStagesError;
   }
+  if (!protocol.variableRegistry) {
+    const noRegistryError = new Error('Invalid protocol');
+    noRegistryError.friendlyMessage = 'Invalid protocol: missing variableRegistry';
+    throw noRegistryError;
+  }
   return protocol;
 };
 

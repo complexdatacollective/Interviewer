@@ -9,11 +9,13 @@ import { readFile } from '../../filesystem';
 jest.mock('../../filesystem');
 jest.mock('../protocolPath');
 
+const validProtocol = { foo: 'bar', stages: [{}], variableRegistry: {} };
+
 describe('loadProtocol', () => {
   describe('Electron', () => {
     let mockProtocol;
     beforeAll(() => {
-      mockProtocol = { foo: 'bar', stages: [{}] };
+      mockProtocol = validProtocol;
       getEnvironment.mockReturnValue(environments.ELECTRON);
     });
 
@@ -29,7 +31,17 @@ describe('loadProtocol', () => {
 
     describe('when protocol has no stages', () => {
       beforeAll(() => {
-        mockProtocol = { foo: 'bar' };
+        mockProtocol = { ...validProtocol, stages: undefined };
+      });
+
+      it('rejects loading', async () => {
+        await expect(loadProtocol('bazz.protocol')).rejects.toMatchObject({ message: 'Invalid protocol' });
+      });
+    });
+
+    describe('when protocol has no variableRegistry', () => {
+      beforeAll(() => {
+        mockProtocol = { ...validProtocol, variableRegistry: undefined };
       });
 
       it('rejects loading', async () => {

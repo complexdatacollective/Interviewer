@@ -78,7 +78,6 @@ export const makeGetSubject = () =>
   );
 
 const nodeTypeIsDefined = (variableRegistry, nodeType) =>
-  variableRegistry &&
   variableRegistry.node &&
   !!variableRegistry.node[nodeType];
 
@@ -96,7 +95,7 @@ export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
+    const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
   },
 );
@@ -105,7 +104,7 @@ export const makeGetNodeVariables = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
+    const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
   },
 );
@@ -128,8 +127,7 @@ export const makeGetOrdinalValues = () =>
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
   variableRegistry => (node) => {
-    // Get the node entity section of the variable registry
-    const nodeInfo = variableRegistry && variableRegistry.node;
+    const nodeInfo = variableRegistry.node;
 
     // Get the display variable by looking up the node type in the variable registry
     const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&

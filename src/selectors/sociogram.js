@@ -157,7 +157,6 @@ const edgesOfTypes = (edges, types) =>
   )(edges);
 
 const edgeTypeIsDefined = (variableRegistry, edgeType) =>
-  variableRegistry &&
   variableRegistry.edge &&
   !!variableRegistry.edge[edgeType];
 
