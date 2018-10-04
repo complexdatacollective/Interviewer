@@ -1,8 +1,13 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 
+/**
+ * Usage:
+ * npm run validate-protocol [protocol-path]
+ */
 const chalk = require('chalk');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 
 const Ajv = require('ajv');
@@ -45,5 +50,14 @@ if (isValid) {
   console.log(`The ${protocolName} protocol is valid.`);
 } else {
   console.error(chalk.red(`${protocolName} has errors:`));
-  console.log('-', ajv.errorsText(validate.errors, { separator: '\n- ' }));
+  console.log('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
+
+  const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
+  if (addlPropErrors.length) {
+    console.log('');
+    console.log('additionalProperty error details:');
+    addlPropErrors.forEach((err) => {
+      console.log('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
+    });
+  }
 }
