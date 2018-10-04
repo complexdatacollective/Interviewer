@@ -91,13 +91,11 @@ class ProtocolImport extends PureComponent {
       buttonContent = (
         <React.Fragment>
           <Button
-            size="small"
             color="platinum"
             content="Import from URL"
             onClick={() => this.setState({ showUrlForm: true })}
           />
           <Button
-            size="small"
             color="platinum"
             content="Enter manually"
             onClick={() => this.setState({ manualEntry: true })}

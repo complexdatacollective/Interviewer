@@ -1,33 +1,45 @@
 .setup {
   $active-border-color: rgba(255, 255, 255, .5);
   --active-border-color: $active-border-color;
-  --setup-header-height: 25vh;
+  --setup-header-height: 20vh;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  min-height: 200px;
+  min-height: 15rem;
 
   &__header {
-    align-items: flex-end;
+    align-items: center;
     display: flex;
     flex: 0 1 auto;
     height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 1.5rem 0;
   }
 
   .header-content {
-    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 
-    &__logo {
+    &__title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem;
 
-      margin-right: 2rem;
+      h1 {
+        display: inline-block;
+        width: auto;
+        margin: 0;
+        font-size: 3rem;
+      }
+    }
+
+    &__logo {
       width: 10rem;
+      margin-right: 1.5rem;
     }
   }
 
@@ -59,18 +71,18 @@
     }
 
     .swiper-button-prev {
-      left: 10rem;
+      left: 8rem;
     }
 
     .swiper-button-next {
-      right: 10rem;
+      right: 8rem;
     }
 
     .swiper-button-next,
     .swiper-button-prev {
       width: 2rem;
       height: 4rem;
-      margin-top: -6rem;
+      margin-top: -8rem;
       background-size: 2rem 4rem;
     }
 
@@ -112,5 +124,7 @@
 
   &__server-button {
     @include floating-action-button;
+    width: 10rem;
+    height: 10rem;
   }
 }

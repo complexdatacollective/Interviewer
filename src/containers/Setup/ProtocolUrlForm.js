@@ -44,11 +44,14 @@ class ProtocolUrlForm extends Component {
         onSubmit={this.onClickImportRemoteProtocol}
         initialValues={initialValues}
         controls={[
-          <a onClick={onCancel} key="cancel" className="protocol-url-form__cancel protocol-url-form__cancel--small">
-            <Icon name="close" className="protocol-url-form__cancel-button" />
-            Cancel
-          </a>,
-          <Button size="small" key="submit">Import remote protocol</Button>,
+          <Button
+            onClick={onCancel}
+            key="cancel"
+            color="platinum"
+            icon={<Icon name="close" />}
+            content="Cancel"
+          />,
+          <Button key="submit">Import remote protocol</Button>,
         ]}
         {...formConfig}
       />

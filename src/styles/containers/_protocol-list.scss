@@ -8,10 +8,11 @@
     align-self: flex-start;
     margin-top: 5rem;
     width: 50%;
+    transition: opacity var(--animation-duration-slow) var(--animation-easing);
 
     &:not(.swiper-slide-active) {
-      opacity: .5;
       pointer-events: none;
+      opacity: .3;
     }
   }
 

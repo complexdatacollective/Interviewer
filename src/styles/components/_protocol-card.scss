@@ -10,21 +10,19 @@ $component: 'protocol-card';
   padding: spacing(huge);
 
   &__icon {
-    height: 10rem;
-    width: 10rem;
-    margin-bottom: 1.5rem;
+    height: 7rem;
+    width: 7rem;
+    margin-bottom: 1rem;
   }
 
   // Large variant displayed on the startup screen
   &--large {
     background-color: var(--light-background);
     flex-direction: column;
-    height: 30vh;
-    max-height: 20rem;
-    max-width: 25rem;
+    max-width: 25vw;
+    height: 25vh;
     margin: 0 auto;
     text-align: center;
-    width: 45vw;
     justify-content: center;
   }
 
