@@ -656,8 +656,7 @@
         {
           "id": "contactFreq",
           "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
-          "variable": "contactFreq",
-          "//": "Ordinal variables have valid options defined in variable registry."
+          "variable": "contactFreq"
         }
       ]
     },

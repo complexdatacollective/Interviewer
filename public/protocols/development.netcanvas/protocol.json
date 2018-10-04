@@ -907,7 +907,6 @@
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
           "variable": "contactFreq",
-          "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
               "property": "nickname",
