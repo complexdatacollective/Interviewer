@@ -2,7 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { findKey, filter, has, isMatch, reject } from 'lodash';
-import { createDeepEqualSelector } from './utils';
+import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
 import { getNodeAttributes, nodeAttributesProperty, asWorkerAgentNode } from '../ducks/modules/network';
@@ -77,9 +77,19 @@ export const makeGetSubject = () =>
     },
   );
 
+const nodeTypeIsDefined = (variableRegistry, nodeType) =>
+  variableRegistry &&
+  variableRegistry.node &&
+  !!variableRegistry.node[nodeType];
+
 export const makeGetNodeType = () => (createSelector(
+  protocolRegistry,
   makeGetSubject(),
-  subject => subject && subject.type,
+  (variableRegistry, subject) => {
+    assert(subject, 'The "subject" property is not defined for this prompt');
+    assert(nodeTypeIsDefined(variableRegistry, subject.type), `Node type "${subject.type}" is not defined in the registry`);
+    return subject && subject.type;
+  },
 ));
 
 export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
@@ -96,7 +106,7 @@ export const makeGetNodeVariables = () => createDeepEqualSelector(
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry && variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType].variables;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
   },
 );
 
