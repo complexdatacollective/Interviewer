@@ -35,7 +35,7 @@
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
-    "generate-schema": "quicktype -o protocol.schema public/protocols/development.netcanvas/protocol.json",
+    "generate-schema": "node scripts/schema/generate-abstract-protocol.js",
     "validate-protocol": "node scripts/schema/validate-protocol.js"
   },
   "repository": {
