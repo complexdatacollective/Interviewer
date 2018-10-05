@@ -1,4 +1,4 @@
-.protocol-card-list {
+.server-protocol-list {
   --border-color: var(--color-neon-carrot--dark);
   --border-width: 2px;
   --card-height: 5rem;
@@ -7,6 +7,10 @@
   flex: auto;
   flex-direction: row;
   margin-top: -1 * $scroller-top-padding;
+
+  &--empty {
+    padding-top: $scroller-top-padding;
+  }
 
   &__scroller {
     padding-top: $scroller-top-padding;

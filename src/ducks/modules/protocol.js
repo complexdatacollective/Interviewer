@@ -4,7 +4,6 @@ import { omit } from 'lodash';
 
 import { actionTypes as SessionActionTypes } from './session';
 import { supportedWorkers } from '../../utils/WorkerAgent';
-import { getPairedServer } from '../../selectors/servers';
 import {
   loadProtocol,
   importProtocol,
@@ -172,7 +171,7 @@ const downloadProtocolEpic = (action$, store) =>
     .switchMap((action) => {
       let pairedServer;
       if (action.forNCServer) {
-        pairedServer = getPairedServer(store.getState());
+        pairedServer = store.getState().pairedServer;
       }
       return Observable
         .fromPromise(downloadProtocol(action.uri, pairedServer))

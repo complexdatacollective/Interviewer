@@ -1,5 +1,5 @@
 import { actionTypes as errorActionTypes } from './protocol';
-import { actionTypes as serverActionTypes } from './servers';
+import { actionTypes as serverActionTypes } from './pairedServer';
 import { actionTypes as sessionsActionTypes } from './sessions';
 
 const ERROR = 'ERRORS/ERROR';

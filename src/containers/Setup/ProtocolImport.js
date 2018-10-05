@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import ProtocolUrlForm from './ProtocolUrlForm';
-import ServerList from './ServerList';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
-import ServerAddressForm from '../../components/Setup/ServerAddressForm';
+import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
 import { Button, Icon } from '../../ui/components';
 
 /**
@@ -22,7 +23,6 @@ class ProtocolImport extends PureComponent {
     this.state = {
       selectedServer: null, // set when user selects/enters a server to pair with
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
-      pairedServer: null, // set once pairing complete
     };
   }
 
@@ -34,9 +34,8 @@ class ProtocolImport extends PureComponent {
     });
   }
 
-  setPairedServer = (server) => {
+  onPairingComplete = () => {
     this.setState({
-      pairedServer: server,
       previousSelectedServer: null,
       selectedServer: null,
     });
@@ -49,11 +48,15 @@ class ProtocolImport extends PureComponent {
   contentAreas() {
     const {
       manualEntry,
-      pairedServer,
       previousSelectedServer: prev,
       selectedServer,
       showUrlForm,
     } = this.state;
+
+    const {
+      pairedServer,
+    } = this.props;
+
     let content;
     let buttonContent = null;
     if (pairedServer) {
@@ -62,7 +65,7 @@ class ProtocolImport extends PureComponent {
       content = (
         <ServerPairing
           server={selectedServer}
-          onComplete={() => this.setPairedServer(selectedServer)}
+          onComplete={this.onPairingComplete}
           onError={() => this.onPairingError()}
         />
       );
@@ -83,10 +86,7 @@ class ProtocolImport extends PureComponent {
       );
     } else {
       content = (
-        <ServerList
-          selectPairedServer={this.setPairedServer}
-          selectServer={this.pairWithServer}
-        />
+        <DiscoveredServerList selectServer={this.pairWithServer} />
       );
       buttonContent = (
         <React.Fragment>
@@ -151,4 +151,20 @@ class ProtocolImport extends PureComponent {
   }
 }
 
-export default ProtocolImport;
+ProtocolImport.defaultProps = {
+  pairedServer: null,
+};
+
+ProtocolImport.propTypes = {
+  pairedServer: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  pairedServer: state.pairedServer,
+});
+
+export default connect(mapStateToProps)(ProtocolImport);
+
+export {
+  ProtocolImport as UnconnectedProtocolImport,
+};
