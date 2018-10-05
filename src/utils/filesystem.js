@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-/* global FileReader, window, cordova */
+/* global FileReader, FileWriter, window, cordova */
 
 import { trimChars } from 'lodash/fp';
 import environments from './environments';
@@ -124,18 +124,25 @@ const readFileAsDataUrl = inEnvironment((environment) => {
   throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
+const makeFileWriter = fileEntry =>
+  new Promise((resolve, reject) => {
+    fileEntry.createWriter(resolve, reject);
+  });
+
+const newFile = (directoryEntry, filename) =>
+  new Promise((resolve, reject) => {
+    directoryEntry.getFile(filename, { create: true }, resolve, reject);
+  });
+
+const concatTypedArrays = (a, b) => {
+  const combined = new Uint8Array(a.byteLength + b.byteLength);
+  combined.set(a);
+  combined.set(b, a.length);
+  return combined;
+};
+
 const writeFile = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
-    const makeFileWriter = fileEntry =>
-      new Promise((resolve, reject) => {
-        fileEntry.createWriter(resolve, reject);
-      });
-
-    const newFile = (directoryEntry, filename) =>
-      new Promise((resolve, reject) => {
-        directoryEntry.getFile(filename, { create: true }, resolve, reject);
-      });
-
     return (fileUrl, data) => {
       const [baseDirectory, filename] = splitUrl(fileUrl);
 
@@ -302,6 +309,102 @@ const writeStream = inEnvironment((environment) => {
           reject(error);
         }
       });
+  }
+
+  if (environment === environments.CORDOVA) {
+    /**
+     * Provides a pseudo-streaming mechanism for writing files.
+     * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
+     * The file can be written to as long as its readyState is not WRITING.
+     *
+     * The goal here is to reduce the memory footprint on mobile as much as possible, but we
+     * have to buffer each chunk sent temporarily, since the native stream may not write all bytes.
+     * Still, we provide as much backpressure to JSZip's stream as possible (with `pause`).
+     *
+     * @param  {string} destUrl filePath to write to
+     * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
+     *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
+     * @private
+     */
+    return (destUrl, stream) => {
+      const [baseDirectory, filename] = splitUrl(destUrl);
+      return new Promise((resolve, reject) => {
+        resolveFileSystemUrl(baseDirectory)
+          .then(directoryEntry => newFile(directoryEntry, filename))
+          .then(makeFileWriter)
+          .then((fileWriter) => {
+            let bufferedChunkBytes = new Uint8Array();
+            // Needed to calculate bytesWritten since not provided by Cordova
+            let previousFileWriterLength = 0;
+            // We won't know how many bytes we need to write until we're done
+            // This flag lets writeend handler know not to expect any more
+            let reachedEndOfInputStream = false;
+
+            const handleError = (err) => {
+              console.error(err); // eslint-disable-line no-console
+              if (stream) {
+                stream.pause();
+              }
+              if (fileWriter && fileWriter.readyState === FileWriter.WRITING) {
+                fileWriter.abort();
+              }
+              reject(err);
+            };
+
+            const writeChunk = (chunkByteArray) => {
+              previousFileWriterLength = fileWriter.length;
+              const byteLength = chunkByteArray.byteLength;
+              const data = chunkByteArray.slice(0, byteLength);
+              try {
+                // fileWriter.write documents a blob arg, but called with a blob,
+                // it will read the blob to an arraybuffer and then re-call itself.
+                fileWriter.write(data.buffer);
+              } catch (err) {
+                handleError(err);
+              }
+            };
+
+            const onChunkWritten = () => {
+              const bytesWritten = fileWriter.length - previousFileWriterLength;
+              bufferedChunkBytes = bufferedChunkBytes.slice(bytesWritten);
+              if (fileWriter.error) {
+                // already handled by onerror; ignore here
+              } else if (bufferedChunkBytes.length) {
+                writeChunk(bufferedChunkBytes);
+              } else if (reachedEndOfInputStream) {
+                resolve(destUrl);
+              } else {
+                stream.resume();
+              }
+            };
+
+            const onChunkReceived = (chunkByteArray) => {
+              stream.pause();
+              bufferedChunkBytes = concatTypedArrays(bufferedChunkBytes, chunkByteArray);
+              // Despite pausing, we may receive additional chunks before previous has completed,
+              // in which case we wait until the current write ends.
+              if (fileWriter.readyState !== FileWriter.WRITING) {
+                writeChunk(chunkByteArray);
+              }
+            };
+
+            fileWriter.onwriteend = onChunkWritten; // eslint-disable-line no-param-reassign
+            fileWriter.onerror = handleError; // eslint-disable-line no-param-reassign
+
+            stream
+              .on('error', handleError)
+              .on('data', onChunkReceived)
+              .on('end', () => {
+                if (bufferedChunkBytes.length === 0) {
+                  resolve(destUrl);
+                } else {
+                  reachedEndOfInputStream = true;
+                }
+              })
+              .resume();
+          });
+      });
+    };
   }
 
   throw new Error(`writeStream() not available on platform ${environment}`);
