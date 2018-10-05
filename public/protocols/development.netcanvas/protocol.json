@@ -1294,33 +1294,32 @@
       "title": "Title for the screen",
       "items": [
         {
-          "type": "text",
-          "content":
-            "Some arbitrary text content that can _contain_ **formatting**."
-        },
-        {
           "type": "audio",
           "content": "click_the_thing.mp3",
-          "description": "Click by clicking the thing"
+          "description": "Click by clicking the thing",
+          "size": "SMALL"
         },
-        { "type": "image", "content": "rubberduck.jpg" }
+        { "type": "image", "content": "rubberduck.jpg", "size": "SMALL" },
+        { "type": "image", "content": "rubberduck.jpg", "size": "MEDIUM" }
       ]
     },
     {
       "id": "info-sound",
       "label": "InfoSound",
       "type": "Information",
-      "title": "This interface has a video with sound",
+      "title": "This interface has a video with sound.",
       "items": [
         {
           "type": "text",
           "content":
-            "The video below has sound and is set to loop."
+            "The video below has sound and is set to loop. Some arbitrary text content that can _contain_ **formatting**.",
+          "size": "SMALL"
         },
         {
           "type": "video",
           "content": "withSound.mp4",
           "description": "Click by clicking the thing",
+          "size": "MEDIUM",
           "loop": true
         }
       ]
@@ -1333,6 +1332,7 @@
       "items": [
         {
           "type": "text",
+          "size": "LARGE",
           "content":
             "# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n\n## Horizontal Rules\n\n___\n\n---\n\n***\n\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text* \n\n_This is italic text_ \n# Emoji \n:blush: :heartpulse: :wave:"
         }
@@ -1344,7 +1344,7 @@
       "type": "Information",
       "title": "To skip or not to skip...",
       "items": [
-        { "type": "text", "content": "...that is the question." }
+        { "type": "text", "content": "...that is the question.", "size": "LARGE" }
       ],
       "skipLogic": {
         "action": "SHOW",
