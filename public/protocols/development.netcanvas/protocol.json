@@ -863,10 +863,12 @@
       },
       "panels": [
         {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
           "title": "Already mentioned",
           "dataSource": "existing"
         },
         {
+          "id": "another-unique-id",
           "title": "People from your previous visit",
           "dataSource": "previousInterview"
         }
@@ -1280,13 +1282,24 @@
       "title": "Title for the screen",
       "items": [
         {
+          "id": "a",
           "type": "audio",
           "content": "click_the_thing.mp3",
           "description": "Click by clicking the thing",
           "size": "SMALL"
         },
-        { "type": "image", "content": "rubberduck.jpg", "size": "SMALL" },
-        { "type": "image", "content": "rubberduck.jpg", "size": "MEDIUM" }
+        {
+          "id": "b",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "SMALL"
+        },
+        {
+          "id": "c",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "MEDIUM"
+        }
       ]
     },
     {
@@ -1296,12 +1309,14 @@
       "title": "This interface has a video with sound.",
       "items": [
         {
+          "id": "65192318-0ef0-454d-91b7-bbaf51380069",
           "type": "text",
           "content":
             "The video below has sound and is set to loop. Some arbitrary text content that can _contain_ **formatting**.",
           "size": "SMALL"
         },
         {
+          "id": "27eee84a-52c0-440d-951c-5ac35bc75168",
           "type": "video",
           "content": "withSound.mp4",
           "description": "Click by clicking the thing",
@@ -1317,6 +1332,7 @@
       "title": "Testing markdown",
       "items": [
         {
+          "id": "d3e52e4b-0d22-42e3-a82f-7a150daf7b6b",
           "type": "text",
           "size": "LARGE",
           "content":
@@ -1330,7 +1346,12 @@
       "type": "Information",
       "title": "To skip or not to skip...",
       "items": [
-        { "type": "text", "content": "...that is the question.", "size": "LARGE" }
+        {
+          "id": "ffaf2249-00e7-4fdb-99fc-5757a24f5605",
+          "type": "text",
+          "content": "...that is the question.",
+          "size": "LARGE"
+        }
       ],
       "skipLogic": {
         "action": "SHOW",
