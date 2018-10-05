@@ -12,8 +12,9 @@
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
+    max-height: 50vh;
     margin-bottom: spacing(large);
-    padding: spacing(large);
+    padding: spacing(large) spacing(huge);
   }
 
   &__buttons {

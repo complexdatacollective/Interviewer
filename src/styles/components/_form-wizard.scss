@@ -2,14 +2,14 @@
   &__pips {
     left: 50%;
     position: absolute;
-    top: 35px;
+    top: 2rem;
     transform: translateX(-50%);
   }
 
   .icon {
     &[name='form-arrow-left'],
     &[name='form-arrow-right'] {
-      height: 90px;
+      height: 5rem;
 
       .cls-2 {
         fill: palette('light-background');
@@ -41,10 +41,11 @@
     right: 0;
 
     .button {
+      border-radius: 5rem;
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
       margin-bottom: 1em;
-      min-width: 150px;
+      min-height: 5rem;
       width: 90%;
     }
 

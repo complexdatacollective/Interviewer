@@ -57,7 +57,10 @@ class Setup extends Component {
           <div className="header-content">
             <div className="header-content__title">
               <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
-              <h1 className="type--title-1">Network Canvas</h1>
+              <div className="header-content__title-text">
+                <h1 className="type--title-1">Network Canvas</h1>
+                <h4>Alpha 8 - Lochs & Glens</h4>
+              </div>
             </div>
             <div className="header-content__nav">
               <nav>
@@ -74,9 +77,11 @@ class Setup extends Component {
         <main className="setup__main">
           {currentTab}
         </main>
-        <Link to="/protocol-import">
-          <Icon name="pair-a-server" className="setup__server-button" />
-        </Link>
+        { this.isShowProtocols() &&
+          <Link to="/protocol-import">
+            <Icon name="pair-a-server" className="setup__server-button" />
+          </Link>
+        }
       </div>
     );
   }

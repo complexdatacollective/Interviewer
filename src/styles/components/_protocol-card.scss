@@ -3,27 +3,40 @@ $component: 'protocol-card';
 .#{$component} {
   align-items: center;
   background-color: var(--background);
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding: spacing(huge);
+  padding: spacing(medium);
+
+  &__icon-wrapper {
+    margin-right: 1rem;
+  }
 
   &__icon {
-    height: 7rem;
-    width: 7rem;
-    margin-bottom: 1rem;
+    height: 5rem;
+    width: 5rem;
   }
 
   // Large variant displayed on the startup screen
   &--large {
     background-color: var(--light-background);
     flex-direction: column;
-    max-width: 25vw;
+    width: 25vw;
     height: 25vh;
     margin: 0 auto;
     text-align: center;
-    justify-content: center;
+    padding: spacing(huge);
+
+    .#{$component}__icon-wrapper {
+      margin-bottom: 1rem;
+    }
+
+    .#{$component}__icon {
+      height: 7rem;
+      width: 7rem;
+      margin-bottom: 1rem;
+    }
   }
 
 }

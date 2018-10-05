@@ -26,9 +26,9 @@ const ServerCard = ({ data, secondaryLabel, selectServer, isPaired, className, .
   return (
     <div className={cssClass} onClick={() => selectServer(data)} {...props} >
       <img src={logo} className="server-card__icon" alt="Available Server" />
-      <h6 className="server-card__label">
+      <h4 className="server-card__label">
         {label}
-      </h6>
+      </h4>
     </div>
   );
 };

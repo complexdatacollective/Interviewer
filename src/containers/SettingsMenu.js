@@ -178,8 +178,6 @@ class SettingsMenu extends Component {
       sessionExists, customItems, isOpen, toggleMenu, addMockNodes,
     } = this.props;
 
-    const { version } = this.state;
-
     const items = [
       { id: 'main-menu', label: 'Return to Start', icon: 'menu-quit', onClick: this.props.endSession },
       { id: 'reset', label: 'Reset All Data', icon: 'menu-purge-data', onClick: this.onReset },
@@ -225,7 +223,6 @@ class SettingsMenu extends Component {
         title="Settings"
         toggleMenu={toggleMenu}
       >
-        <div style={{ position: 'fixed', top: 0, right: 0, display: 'inline', padding: '1rem', whiteSpace: 'nowrap', zIndex: 1000 }}>{ version }</div>
         <Dialog
           name="CONFIRM_DELETE_DATA"
           title="Delete ALL data?"

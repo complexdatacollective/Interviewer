@@ -111,7 +111,7 @@ class FinishSession extends Component {
             </div>
             <div>
               <Button
-                size="small"
+                color="platinum"
                 onClick={() => createGraphML(this.props.currentNetwork,
                   this.props.variableRegistry, this.downloadData)}
               >

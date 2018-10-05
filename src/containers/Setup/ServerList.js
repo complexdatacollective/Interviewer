@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 
-import { Button, Icon, Spinner } from '../../ui/components';
+import { Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerCard from '../../components/Setup/ServerCard';
 
@@ -114,7 +114,7 @@ class ServerList extends Component {
         <Icon name="error" />
         <h4>Automatic server discovery unavailable</h4>
         { // eslint-disable-next-line no-alert
-        }<Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
+        }<p>{this.state.error}</p>
       </div>
     );
   }

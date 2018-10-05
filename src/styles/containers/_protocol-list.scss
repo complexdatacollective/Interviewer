@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    margin-top: 5rem;
+    margin-top: 3rem;
     width: 50%;
     transition: opacity var(--animation-duration-slow) var(--animation-easing);
 
@@ -18,6 +18,7 @@
 
   &.swiper-container {
     width: 100%; // ensure Swiper plugin initializes layout correctly
-    mask-image: linear-gradient(90deg, transparent, black 20rem, black calc(100% - 20rem), transparent 100%);
+    //sass-lint:disable no-color-keywords, no-color-literals
+    mask-image: linear-gradient(90deg, transparent, black 10rem, black calc(100% - 10rem), transparent 100%);
   }
 }
