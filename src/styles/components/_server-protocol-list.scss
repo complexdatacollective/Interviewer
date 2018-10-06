@@ -8,6 +8,10 @@
   flex-direction: row;
   margin-top: -1 * $scroller-top-padding;
 
+  &--empty {
+    padding-top: $scroller-top-padding;
+  }
+
   &__scroller {
     padding-top: $scroller-top-padding;
     position: relative;

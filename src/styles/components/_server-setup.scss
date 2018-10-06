@@ -1,6 +1,14 @@
 .server-setup {
   display: flex;
   flex-direction: row;
+  height: 100%;
+
+  &__server {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
   &__card {
     flex-grow: 0;

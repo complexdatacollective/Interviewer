@@ -5,13 +5,13 @@ import { Scroller } from '../../components';
 import ProtocolCard from './ProtocolCard';
 
 const EmptyProtocolList = (
-  <div className="protocol-card-list">
+  <div className="server-protocol-list server-protocol-list--empty">
     <h4>No protocols available</h4>
   </div>
 );
 
 const ServerProtocolList = ({ protocols, selectProtocol }) => {
-  let leftBorderClass = 'protocol-card-list__left-border';
+  let leftBorderClass = 'server-protocol-list__left-border';
   if (!protocols.length) {
     return EmptyProtocolList;
   }
@@ -20,16 +20,16 @@ const ServerProtocolList = ({ protocols, selectProtocol }) => {
     leftBorderClass += ` ${leftBorderClass}--single-protocol`;
   }
   return (
-    <div className="protocol-card-list">
-      <div className="protocol-card-list__prefix" />
-      <Scroller className="protocol-card-list__scroller">
+    <div className="server-protocol-list">
+      <div className="server-protocol-list__prefix" />
+      <Scroller className="server-protocol-list__scroller">
         <div key="left-border" className={leftBorderClass} />
         {
           protocols.map(protocol => (
-            <div className="protocol-card-list__bordered-card" key={protocol.id}>
-              <div className="protocol-card-list__card-border" />
+            <div className="server-protocol-list__bordered-card" key={protocol.id}>
+              <div className="server-protocol-list__card-border" />
               <ProtocolCard
-                className="protocol-card-list__card"
+                className="server-protocol-list__card"
                 selectProtocol={p => selectProtocol(p)}
                 protocol={protocol}
               />
