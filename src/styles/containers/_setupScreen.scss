@@ -92,10 +92,12 @@
       bottom: 5rem;
     }
 
-    .swiper-container-horizontal>.swiper-pagination-bullets
-    .swiper-pagination-bullet {
-      margin: 0 .35rem;
+    .swiper-container-horizontal>.swiper-pagination-bullets {
+      .swiper-pagination-bullet {
+        margin: 0 .35rem;
+      }
     }
+
 
     .swiper-pagination-bullet {
       width: .7rem;

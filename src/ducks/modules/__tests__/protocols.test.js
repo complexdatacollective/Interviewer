@@ -6,13 +6,13 @@ import { actionTypes as ProtocolActionTypes } from '../protocol';
 const initialState = [
   {
     name: 'Teaching Protocol',
-    description: 'version 4.0.0',
+    description: 'A built-in protocol that demonstrates some typical network capture techniques.',
     path: 'teaching-protocol.netcanvas',
     isFactoryProtocol: true,
   },
   {
     name: 'Development Protocol',
-    description: 'version 4.0.0',
+    description: 'A built-in protocol for developers to test Network Canvas functionality.',
     path: 'development.netcanvas',
     isFactoryProtocol: true,
   },
