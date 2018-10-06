@@ -48,7 +48,8 @@ ShallowWrapper {
           }
           stage={Object {}}
         />,
-        <Connect(NodeBucket)
+        <DropObstacle
+          id="NODE_BUCKET"
           prompt={
             Object {
               "sociogram": Object {
@@ -102,6 +103,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
+          "id": "NODE_BUCKET",
           "prompt": Object {
             "sociogram": Object {
               "background": Object {},
@@ -145,7 +147,8 @@ ShallowWrapper {
             }
             stage={Object {}}
           />,
-          <Connect(NodeBucket)
+          <DropObstacle
+            id="NODE_BUCKET"
             prompt={
               Object {
                 "sociogram": Object {
@@ -199,6 +202,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
+            "id": "NODE_BUCKET",
             "prompt": Object {
               "sociogram": Object {
                 "background": Object {},

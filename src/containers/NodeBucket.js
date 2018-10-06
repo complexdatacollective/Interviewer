@@ -5,7 +5,8 @@ import { compose } from 'recompose';
 
 import Node from './Node';
 import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
-import { DragSource } from '../behaviours/DragAndDrop';
+import { DragSource, DropObstacle } from '../behaviours/DragAndDrop';
+
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
@@ -28,7 +29,7 @@ class NodeBucket extends PureComponent {
       node,
     } = this.props;
 
-    if (!allowPositioning || !node) { return null; }
+    if (!allowPositioning || !node) { return (<div />); }
 
     return (
       <div className="node-bucket">
@@ -60,5 +61,6 @@ function makeMapStateToProps() {
 export { NodeBucket };
 
 export default compose(
+  DropObstacle,
   connect(makeMapStateToProps),
 )(NodeBucket);

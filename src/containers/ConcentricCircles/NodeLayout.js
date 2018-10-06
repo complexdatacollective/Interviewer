@@ -50,6 +50,12 @@ const dropHandlers = compose(
         },
       );
     },
+    onDragEnd: props => (item) => {
+      if (!has(item.meta[nodeAttributesProperty], props.layoutVariable)) { return; }
+
+      // make sure to also re-render nodes that were updated on drag end
+      props.setDropCount(props.dropCount + 1);
+    },
   }),
 );
 

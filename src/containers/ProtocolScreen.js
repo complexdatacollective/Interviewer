@@ -62,6 +62,7 @@ class Protocol extends Component {
       <div className="protocol">
         <Fade in={isProtocolLoaded} duration={duration}>
           <Timeline
+            id="TIMELINE"
             onClickBack={this.onClickBack}
             onClickNext={this.onClickNext}
             percentProgress={percentProgress}
