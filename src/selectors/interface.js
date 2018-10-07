@@ -2,7 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { findKey, filter, has, isMatch, reject } from 'lodash';
-import { createDeepEqualSelector } from './utils';
+import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
 import { getNodeAttributes, nodeAttributesProperty, asWorkerAgentNode } from '../ducks/modules/network';
@@ -77,16 +77,25 @@ export const makeGetSubject = () =>
     },
   );
 
+const nodeTypeIsDefined = (variableRegistry, nodeType) =>
+  variableRegistry.node &&
+  !!variableRegistry.node[nodeType];
+
 export const makeGetNodeType = () => (createSelector(
+  protocolRegistry,
   makeGetSubject(),
-  subject => subject && subject.type,
+  (variableRegistry, subject) => {
+    assert(subject, 'The "subject" property is not defined for this prompt');
+    assert(nodeTypeIsDefined(variableRegistry, subject.type), `Node type "${subject.type}" is not defined in the registry`);
+    return subject && subject.type;
+  },
 ));
 
 export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
+    const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
   },
 );
@@ -95,8 +104,8 @@ export const makeGetNodeVariables = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetNodeType(),
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType].variables;
+    const nodeInfo = variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
   },
 );
 
@@ -118,8 +127,7 @@ export const makeGetOrdinalValues = () =>
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
   variableRegistry => (node) => {
-    // Get the node entity section of the variable registry
-    const nodeInfo = variableRegistry && variableRegistry.node;
+    const nodeInfo = variableRegistry.node;
 
     // Get the display variable by looking up the node type in the variable registry
     const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&

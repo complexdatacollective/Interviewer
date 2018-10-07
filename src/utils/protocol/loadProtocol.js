@@ -6,11 +6,28 @@ import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 
 const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 
+// Basic validation on protocol format;
+// any error will halt loading and display a message to the user.
+const verifyProtocol = (protocol) => {
+  if (!protocol.stages || !protocol.stages.length) {
+    const noStagesError = new Error('Invalid protocol');
+    noStagesError.friendlyMessage = 'Invalid protocol: no stages defined';
+    throw noStagesError;
+  }
+  if (!protocol.variableRegistry) {
+    const noRegistryError = new Error('Invalid protocol');
+    noRegistryError.friendlyMessage = 'Invalid protocol: missing variableRegistry';
+    throw noRegistryError;
+  }
+  return protocol;
+};
+
 const loadProtocol = (environment) => {
   if (environment !== environments.WEB) {
     return protocolName =>
       readFile(protocolPath(protocolName, 'protocol.json'))
         .then(data => JSON.parse(data))
+        .then(verifyProtocol)
         .catch(openError);
   }
 
