@@ -12,6 +12,7 @@ ShallowWrapper {
     "batchedUpdates": [Function],
     "getNode": [Function],
     "render": [Function],
+    "simulateError": [Function],
     "simulateEvent": [Function],
     "unmount": [Function],
   },
@@ -28,11 +29,15 @@ ShallowWrapper {
             "strong",
           ]
         }
+        astPlugins={Array []}
         className="prompts__prompt-header"
         escapeHtml={true}
+        plugins={Array []}
+        rawSourcePos={false}
         renderers={Object {}}
         skipHtml={false}
         source="_prompt_ containing **markdown**"
+        sourcePos={false}
         transformLinkUri={[Function]}
       />,
       "className": "prompts__prompt",
@@ -48,11 +53,15 @@ ShallowWrapper {
           "emphasis",
           "strong",
         ],
+        "astPlugins": Array [],
         "className": "prompts__prompt-header",
         "escapeHtml": true,
+        "plugins": Array [],
+        "rawSourcePos": false,
         "renderers": Object {},
         "skipHtml": false,
         "source": "_prompt_ containing **markdown**",
+        "sourcePos": false,
         "transformLinkUri": [Function],
       },
       "ref": null,
@@ -75,11 +84,15 @@ ShallowWrapper {
               "strong",
             ]
           }
+          astPlugins={Array []}
           className="prompts__prompt-header"
           escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
           renderers={Object {}}
           skipHtml={false}
           source="_prompt_ containing **markdown**"
+          sourcePos={false}
           transformLinkUri={[Function]}
         />,
         "className": "prompts__prompt",
@@ -95,11 +108,15 @@ ShallowWrapper {
             "emphasis",
             "strong",
           ],
+          "astPlugins": Array [],
           "className": "prompts__prompt-header",
           "escapeHtml": true,
+          "plugins": Array [],
+          "rawSourcePos": false,
           "renderers": Object {},
           "skipHtml": false,
           "source": "_prompt_ containing **markdown**",
+          "sourcePos": false,
           "transformLinkUri": [Function],
         },
         "ref": null,
@@ -125,8 +142,6 @@ ShallowWrapper {
         },
       },
     },
-    "attachTo": undefined,
-    "hydrateIn": undefined,
   },
 }
 `;
