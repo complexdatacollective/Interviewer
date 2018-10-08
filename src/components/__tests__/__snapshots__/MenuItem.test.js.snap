@@ -17,6 +17,7 @@ ShallowWrapper {
     "batchedUpdates": [Function],
     "getNode": [Function],
     "render": [Function],
+    "simulateError": [Function],
     "simulateEvent": [Function],
     "unmount": [Function],
   },
@@ -26,7 +27,7 @@ ShallowWrapper {
     "nodeType": "function",
     "props": Object {
       "activeClassName": "menu__menuitem--active",
-      "ariaCurrent": "true",
+      "aria-current": "page",
       "children": Array [
         <Icon
           className=""
@@ -67,7 +68,7 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "activeClassName": "menu__menuitem--active",
-        "ariaCurrent": "true",
+        "aria-current": "page",
         "children": Array [
           <Icon
             className=""
@@ -118,8 +119,6 @@ ShallowWrapper {
         },
       },
     },
-    "attachTo": undefined,
-    "hydrateIn": undefined,
   },
 }
 `;
@@ -140,6 +139,7 @@ ShallowWrapper {
     "batchedUpdates": [Function],
     "getNode": [Function],
     "render": [Function],
+    "simulateError": [Function],
     "simulateEvent": [Function],
     "unmount": [Function],
   },
@@ -149,7 +149,7 @@ ShallowWrapper {
     "nodeType": "function",
     "props": Object {
       "activeClassName": "menu__menuitem--active",
-      "ariaCurrent": "true",
+      "aria-current": "page",
       "children": Array [
         <Icon
           className=""
@@ -190,7 +190,7 @@ ShallowWrapper {
       "nodeType": "function",
       "props": Object {
         "activeClassName": "menu__menuitem--active",
-        "ariaCurrent": "true",
+        "aria-current": "page",
         "children": Array [
           <Icon
             className=""
@@ -241,8 +241,6 @@ ShallowWrapper {
         },
       },
     },
-    "attachTo": undefined,
-    "hydrateIn": undefined,
   },
 }
 `;
