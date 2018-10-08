@@ -6,7 +6,7 @@
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
-    "node": "10.11.0",
+    "node": "8.11.1",
     "npm": "6.4.1"
   },
   "scripts": {
