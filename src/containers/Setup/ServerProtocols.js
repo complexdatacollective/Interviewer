@@ -64,7 +64,7 @@ class ServerProtocols extends Component {
     if (error) {
       content = (
         <ServerUnavailable
-          errorMessage={error.message}
+          errorMessage={error.friendlyMessage || error.message}
           handleRetry={this.handleRetry}
         />
       );

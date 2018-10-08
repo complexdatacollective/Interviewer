@@ -4,7 +4,7 @@ import { Button } from '../../ui/components/';
 
 const ServerUnavailable = ({ errorMessage, handleRetry }) => (
   <div className="server-unavailable">
-    <h1>Currently unavailable</h1>
+    <h1>Server unavailable</h1>
     <p>{errorMessage}</p>
     <Button
       size="small"
