@@ -1,8 +1,8 @@
 $block: pips;
 
 .#{$block} {
-  $pip-size: 10px;
-  $large-pip-size: 15px;
+  $pip-size: .7rem;
+  $large-pip-size: 1rem;
 
   &__pips {
     height: $pip-size;
@@ -15,12 +15,12 @@ $block: pips;
   &__pip {
     width: $pip-size;
     height: $pip-size;
-    margin-left: 5px;
+    margin-left: .3rem;
     border-radius: $pip-size;
     line-height: $pip-size;
     background-color: transparent;
-    border: 1px solid palette('light-background');
-    transition: background-color 250ms ease-in;
+    border: .1rem solid palette('light-background');
+    transition: background-color var(--animation-duration-fast) ease-in;
 
     &:first-child {
       margin-left: 0;
@@ -33,7 +33,7 @@ $block: pips;
 
   &--large {
     .#{$block}__pip {
-      border: 1px solid var(--primary);
+      border: .1rem solid var(--primary);
       height: $large-pip-size;
       width: $large-pip-size;
 

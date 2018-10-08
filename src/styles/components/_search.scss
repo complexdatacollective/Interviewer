@@ -1,14 +1,12 @@
 $content-padding: 1rem;
 $module-name: search;
-$min-content-height: 114px;
-$results-height: calc(100vh - 350px);
+$results-height: calc(100vh - 23rem);
 
 // Base input on global styling; override as needed below.
 @include text-input('#{$module-name}__input');
 
 .#{$module-name} {
-  --collapsed-square-size: 114px;
-  --border-radius: 10px;
+  --border-radius: var(--border-radius);
   --content-padding: 1rem;
 
   background-color: color('cyber-grape');
@@ -18,7 +16,7 @@ $results-height: calc(100vh - 350px);
   transform-origin: right bottom;
 
   &__header {
-    padding: 2rem 0;
+    padding: 1rem 0;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -40,7 +38,6 @@ $results-height: calc(100vh - 350px);
 
   &__content {
     height: 100%;
-    min-height: $min-content-height;
     overflow: visible;
     padding: $content-padding;
     position: relative;

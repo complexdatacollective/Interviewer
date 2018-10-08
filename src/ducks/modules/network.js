@@ -19,6 +19,7 @@ export const SET_EGO = 'SET_EGO';
 export const UNSET_EGO = 'UNSET_EGO';
 
 export const primaryKeyPropertyForWorker = 'networkCanvasId';
+export const nodeTypePropertyForWorker = 'networkCanvasType';
 
 // Initial network model structure
 const initialState = {
@@ -45,6 +46,7 @@ export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 // `primaryKeyPropertyForWorker` is used to minimize conflicts, but user data is always preserved.
 export const asWorkerAgentNode = node => ({
   [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
+  [nodeTypePropertyForWorker]: node.type,
   ...getNodeAttributes(node),
 });
 

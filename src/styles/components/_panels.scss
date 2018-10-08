@@ -4,14 +4,9 @@
   flex-direction: column;
   opacity: 1;
   margin-right: 0;
-  width: 425px;
+  width: 23rem;
   transform: translateZ(0);
   will-change: transform;
-
-  @include breakpoint('full') {
-    margin-right: 35px;
-    width: 475px;
-  }
 
   &--minimise {
     display: block; // Override flex to fix Safari layout issue (#407)

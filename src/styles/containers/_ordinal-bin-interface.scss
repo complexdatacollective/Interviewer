@@ -2,27 +2,25 @@
   @include interface-centering;
 
   height: 100vh;
-  padding: 20px 0 60px;
-  @include breakpoint('full') {
-    padding: 20px 80px 80px;
-  }
+  padding: 1rem 0 4rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 
   &__prompt {
     @include interface-prompt;
-    flex: 0 0 170px;
   }
 
   &__bucket {
     display: flex;
-    flex: 0 0 150px;
+    flex: 0 0 8rem;
 
     .node {
       font-size: calc(var(--base-node-size) * .66);
-      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
-      margin: 2px;
+    }
+
+    .node-list {
+      padding: 0;
     }
   }
 
@@ -31,18 +29,15 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
-    border-radius: 15px;
+    border-radius: var(--border-radius);
     overflow: hidden;
-    margin-right: 60px;
+    margin-right: spacing(large);
   }
 
   &__nodes {
     flex: 3 1 auto;
     height: 100%;
     display: flex;
-    padding-left: 30px;
-    @include breakpoint('full') {
-      padding-left: 0;
-    }
+    padding-left: spacing(large);
   }
 }

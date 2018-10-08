@@ -7,9 +7,6 @@
   .scrollable {
     @include scroller-mask($scroller-top-padding-small);
 
-    .node-list {
-      padding-top: max(0, $scroller-top-padding-small - $node-inset);
-    }
   }
 
   &--title {
@@ -17,6 +14,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 0 spacing(1);
 
     h3 {
       margin: 0;
@@ -30,7 +29,7 @@
     flex-grow: 5;
     align-items: center;
     justify-content: center;
-    border-bottom: 15px solid;
+    border-bottom: 1.5rem solid;
 
     .node-list {
       &--hover,
@@ -45,8 +44,6 @@
 
     .node {
       font-size: calc(var(--base-node-size) * .66);
-      filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
-      margin: 2px;
     }
 
   }

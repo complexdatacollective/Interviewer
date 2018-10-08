@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { addPairingUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
-import { Button, Icon } from '../../ui/components';
+import { Button } from '../../ui/components';
 
 /**
  * @class Renders a form for user to manually enter Server connection info.
@@ -130,13 +130,12 @@ class ServerAddressForm extends PureComponent {
         </fieldset>
         {
           cancel &&
-          <a onClick={() => cancel()} className="server-address-form__cancel server-address-form__cancel--small">
-            <Icon name="close" className="server-address-form__cancel-button" />
+          <Button color="platinum" onClick={() => cancel()} icon="close">
             Cancel
-          </a>
+          </Button>
         }
         <span className="server-address-form__submit">
-          <Button size="small" content="Pair" />
+          <Button content="Pair" />
         </span>
       </form>
     );

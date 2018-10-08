@@ -39,7 +39,7 @@ const Sociogram = ({
         key={prompt.id}
       />
     </div>
-    <div style={{ position: 'absolute', right: '50px', bottom: '50px' }}>
+    <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
       <ButtonObstacle
         id="RESET_BUTTON_OBSTACLE"
         label="RESET"
