@@ -14,7 +14,11 @@
  * @param  {string} data.node.networkCanvasId Unique ID for the node. Note that if your data
  *                                            happens to already contain a property named
  *                                            "networkCanvasId", your prop will take precedence,
- *                                            and this cannot be used to identify edge connections.
+ *                                            and identifying edge connections will fail.
+ * @param  {string} data.node.networkCanvasType The node type as specified in network canvas. As
+ *                                            above, if the happens to already contain a property \
+ *                                            named "networkCanvasType", your prop will take
+ *                                            precedence.
  * @param  {Object} data.network The current state of the network in this session
  * @param  {Array} data.network.nodes Each node has a unique `networkCanvasId` prop
  * @param  {Array} data.network.edges Edges contain `to` and `from` props which
@@ -24,6 +28,7 @@
  *                          a promise that resolves to the label
  */
 function nodeLabelWorker({ node, network }) {
+
   // Examples:
   //
   // 1. Given name, surname initial
@@ -49,12 +54,12 @@ function nodeLabelWorker({ node, network }) {
   // setTimeout(() => postMessage({ node, label }), 1000 * Math.random());
 
   // 5. Add emoji based on an edge or node property
-  let label = node.name;
-  if (network.edges.some(e => e.from === node.networkCanvasId || e.to === node.networkCanvasId)) {
-    label += '😎';
-  } else if (node.close_friend) {
-    label += '😇';
-  }
+  // let label = node.name;
+  // if (network.edges.some(e => e.from === node.networkCanvasId || e.to === node.networkCanvasId)) {
+  //   label += '😎';
+  // } else if (node.close_friend) {
+  //   label += '😇';
+  // }
 
   // To perform async work, return a promise instead.
   // Use this with care; the most recent response to the client will be used.
@@ -63,6 +68,29 @@ function nodeLabelWorker({ node, network }) {
   //     resolve(label);
   //   }, 100);
   // });
+
+
+  // For our example worker we will return a different label dependant on the node type.
+  let label = node.name;
+
+  switch (node.networkCanvasType) {
+    case 'person':
+      if (network.edges.some(
+        edge => edge.from === node.networkCanvasId || edge.to === node.networkCanvasId
+      )) {
+        label += '😎';
+      } else if (node.close_friend) {
+        label += '😇';
+      }
+      break;
+    case 'venue':
+      label = `🏥 ${node.name.split(' ')
+        .map(word => `${word.charAt(0).toUpperCase()}. `)
+        .join(' ')}`;
+      break;
+    default:
+      break;
+  }
 
   return label;
 }

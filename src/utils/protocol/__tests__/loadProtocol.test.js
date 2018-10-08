@@ -9,20 +9,44 @@ import { readFile } from '../../filesystem';
 jest.mock('../../filesystem');
 jest.mock('../protocolPath');
 
+const validProtocol = { foo: 'bar', stages: [{}], variableRegistry: {} };
+
 describe('loadProtocol', () => {
   describe('Electron', () => {
+    let mockProtocol;
     beforeAll(() => {
+      mockProtocol = validProtocol;
       getEnvironment.mockReturnValue(environments.ELECTRON);
-      readFile.mockReturnValue(Promise.resolve('{ "foo": "bar" }'));
     });
 
-    it('returns the parsed protocol object', () => {
-      expect(loadProtocol('bazz.protocol')).resolves.toEqual({
-        foo: 'bar',
-      }); // TODO: This should return in order to work...
+    beforeEach(() => {
+      readFile.mockReturnValue(Promise.resolve(JSON.stringify(mockProtocol)));
+    });
 
+    it('returns the parsed protocol object', async () => {
+      await expect(loadProtocol('bazz.protocol')).resolves.toEqual(mockProtocol);
       expect(protocolPath.mock.calls[0]).toEqual(['bazz.protocol', 'protocol.json']);
       expect(readFile.mock.calls[0]).toEqual(['tmp/mock/path/protocols/bazz.protocol/protocol.json']);
+    });
+
+    describe('when protocol has no stages', () => {
+      beforeAll(() => {
+        mockProtocol = { ...validProtocol, stages: undefined };
+      });
+
+      it('rejects loading', async () => {
+        await expect(loadProtocol('bazz.protocol')).rejects.toMatchObject({ message: 'Invalid protocol' });
+      });
+    });
+
+    describe('when protocol has no variableRegistry', () => {
+      beforeAll(() => {
+        mockProtocol = { ...validProtocol, variableRegistry: undefined };
+      });
+
+      it('rejects loading', async () => {
+        await expect(loadProtocol('bazz.protocol')).rejects.toMatchObject({ message: 'Invalid protocol' });
+      });
     });
   });
 });

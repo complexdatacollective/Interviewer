@@ -65,7 +65,7 @@ class SessionList extends Component {
     }
 
     return (
-      <React.Fragment>
+      <div className="session-list__wrapper">
         <CardList
           compact
           multiselect={false}
@@ -96,7 +96,7 @@ class SessionList extends Component {
             ];
           }}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }

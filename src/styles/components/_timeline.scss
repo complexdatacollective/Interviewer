@@ -1,3 +1,6 @@
+
+$timeline-button-size: 6rem;
+
 .timeline {
   align-items: center;
   display: flex;
@@ -9,6 +12,11 @@
   left: 0;
   z-index: 2000;
 
+  svg {
+    height: 2rem;
+    width: 2rem;
+  }
+
   &-nav {
     align-items: center;
     border-radius: 100%;
@@ -17,28 +25,68 @@
     justify-content: center;
     margin: 1.8rem;
 
-    svg {
-      height: 2rem;
-      width: 2rem;
-    }
-
     &--next {
-      background-color: var(--light-background);
-      height: 6rem;
-      width: 6rem;
-      transition: background-color, var(--animation-duration-standard), var(--animation-duration-standard);
+      height: $timeline-button-size;
+      width: $timeline-button-size;
+      background: var(--light-background);
 
-      &:hover {
-        background-color: var(--primary);
+      svg {
+        height: 2.5rem;
+        width: 2.5rem;
+      }
+
+      &::after {
+        content: '';
+        opacity: 0;
+        transition: transform var(--animation-duration-fast) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
+        display: block;
+        position: absolute;
+        height: $timeline-button-size * 2;
+        width: $timeline-button-size * 2;
+        border-radius: 50%;
+        z-index: -1;
+        background: var(--primary);
+      }
+
+      &:active {
+        background: var(--primary);
+
+        &::after {
+          transform: scale(.5);
+          opacity: 1;
+          transition: 0s;
+        }
       }
     }
 
     &--back {
-      height: 2rem;
-      width: 2rem;
 
       .cls-2 {
         fill: var(--transparent-light);
+      }
+
+      &::after {
+        content: '';
+        opacity: 0;
+        transition: transform var(--animation-duration-fast) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
+        display: block;
+        position: absolute;
+        height: $timeline-button-size * 2;
+        width: $timeline-button-size * 2;
+        border-radius: 50%;
+        z-index: -1;
+        background: var(--light-background);
+      }
+
+      &:active {
+        background: var(--light-background);
+
+        &::after {
+          transform: scale(.5);
+          opacity: 1;
+          transition: 0s;
+
+        }
       }
     }
   }

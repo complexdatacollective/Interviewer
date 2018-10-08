@@ -8,6 +8,7 @@ ShallowWrapper {
     id="foo"
     meta={[Function]}
     onDrag={[Function]}
+    onDragEnd={[Function]}
     onDrop={[Function]}
     store={
       Object {
@@ -35,6 +36,7 @@ ShallowWrapper {
       "children": null,
       "id": "foo",
       "onDrag": [Function],
+      "onDragEnd": [Function],
       "onDrop": [Function],
       "store": Object {
         "dispatch": [Function],
@@ -57,6 +59,7 @@ ShallowWrapper {
         "children": null,
         "id": "foo",
         "onDrag": [Function],
+        "onDragEnd": [Function],
         "onDrop": [Function],
         "store": Object {
           "dispatch": [Function],

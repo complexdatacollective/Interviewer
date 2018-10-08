@@ -21,6 +21,7 @@ const ConcentricCircles = ({ stage, prompt }) => (
       prompt={prompt}
     />
     <NodeBucket
+      id="NODE_BUCKET"
       stage={stage}
       prompt={prompt}
     />

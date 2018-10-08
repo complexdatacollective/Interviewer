@@ -63,7 +63,7 @@ class ServerPairingForm extends Component {
               />
 
               <div className="pairing-form__submit">
-                <Button disabled={!submittable} size="small">
+                <Button disabled={!submittable}>
                   Pair
                 </Button>
               </div>

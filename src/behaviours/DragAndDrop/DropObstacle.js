@@ -3,29 +3,16 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
+
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { actionCreators as actions } from './reducer';
 import store from './store';
+import { maxFramesPerSecond } from './DropTarget';
 
-const maxFramesPerSecond = 10;
-
-const dropTarget = WrappedComponent =>
-  class DropTarget extends Component {
+const dropObstacle = WrappedComponent =>
+  class DropObstacle extends Component {
     static propTypes = {
       id: PropTypes.string.isRequired,
-      onDrop: PropTypes.func,
-      onDrag: PropTypes.func,
-      onDragEnd: PropTypes.func,
-      accepts: PropTypes.func,
-      meta: PropTypes.func,
-    }
-
-    static defaultProps = {
-      meta: () => ({}),
-      accepts: () => false,
-      onDrop: () => {},
-      onDrag: () => {},
-      onDragEnd: () => {},
     }
 
     componentDidMount() {
@@ -35,19 +22,19 @@ const dropTarget = WrappedComponent =>
     }
 
     componentWillUnmount() {
-      this.removeTarget();
+      this.removeObstacle();
       clearTimeout(this.interval);
       cancelAnimationFrame(this.animationFrame);
     }
 
-    removeTarget = () => {
+    removeObstacle = () => {
       store.dispatch(
-        actions.removeTarget(this.props.id),
+        actions.removeObstacle(this.props.id),
       );
     }
 
     update = () => {
-      this.updateTarget();
+      this.updateObstacle();
 
       this.interval = setTimeout(
         () => {
@@ -57,19 +44,14 @@ const dropTarget = WrappedComponent =>
       );
     }
 
-    updateTarget = () => {
+    updateObstacle = () => {
       if (!this.node) { return; }
 
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
       store.dispatch(
-        actions.upsertTarget({
+        actions.upsertObstacle({
           id: this.props.id,
-          onDrop: this.props.onDrop,
-          onDrag: this.props.onDrag,
-          onDragEnd: this.props.onDragEnd,
-          accepts: this.props.accepts,
-          meta: this.props.meta(),
           width: boundingClientRect.width,
           height: boundingClientRect.height,
           y: boundingClientRect.top,
@@ -79,21 +61,13 @@ const dropTarget = WrappedComponent =>
     }
 
     render() {
-      const {
-        accepts,
-        meta,
-        ...props
-      } = this.props;
-
       return (
         <WrappedComponent
           ref={(component) => { this.component = component; }}
-          {...props}
+          {...this.props}
         />
       );
     }
   };
 
-export default dropTarget;
-
-export { maxFramesPerSecond };
+export default dropObstacle;

@@ -1,7 +1,6 @@
 .protocol-import {
   position: relative;
-  margin: 0 130px;
-  width: 48rem;
+  width: 50rem;
 
   &__close {
     position: absolute;
@@ -10,12 +9,12 @@
 
   &__content {
     background: var(--light-background);
-    border-radius: 10px;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    height: 400px;
+    max-height: 50vh;
     margin-bottom: spacing(large);
-    padding: spacing(large);
+    padding: spacing(large) spacing(huge);
   }
 
   &__buttons {

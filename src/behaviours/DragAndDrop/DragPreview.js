@@ -22,6 +22,7 @@ export default class DraggablePreview {
     this.node.setAttribute('class', 'draggable-preview');
     this.x = -1000;
     this.y = -1000;
+    this.validMove = true;
 
     this.update();
 
@@ -55,11 +56,21 @@ export default class DraggablePreview {
 
   render() {
     this.node.setAttribute('style', styles(this.x, this.y));
+
+    if (this.validMove) {
+      this.node.setAttribute('class', 'draggable-preview');
+    } else {
+      this.node.setAttribute('class', 'draggable-preview node--inactive');
+    }
   }
 
   position(coords) {
     this.x = coords.x - this.center().x;
     this.y = coords.y - this.center().y;
+  }
+
+  setValidMove(valid) {
+    this.validMove = valid;
   }
 
   cleanup() {

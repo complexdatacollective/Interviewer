@@ -119,13 +119,17 @@ class NodePanels extends PureComponent {
 const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
     existingNodes :
-    differenceBy(externalData[dataSource].nodes, nodes, nodePrimaryKeyProperty)
+    differenceBy(
+      externalData[dataSource] && externalData[dataSource].nodes,
+      nodes,
+      nodePrimaryKeyProperty,
+    )
 );
 
 const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
     map(existingNodes, nodePrimaryKeyProperty) :
-    map(externalData[dataSource].nodes, nodePrimaryKeyProperty)
+    map(externalData[dataSource] && externalData[dataSource].nodes, nodePrimaryKeyProperty)
 );
 
 function makeMapStateToProps() {

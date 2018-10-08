@@ -2,7 +2,6 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import { readFileAsDataUrl } from '../filesystem';
 import protocolPath from './protocolPath';
-import factoryProtocolPath from './factoryProtocolPath';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -11,6 +10,7 @@ const assetUrl = (environment) => {
     return (
       protocolName = isRequired('protocolName'),
       assetPath = isRequired('assetPath'),
+      /* protocolType, */
     ) =>
       Promise.resolve(`asset://${protocolName}/assets/${assetPath}`);
   }
@@ -19,11 +19,15 @@ const assetUrl = (environment) => {
     return (
       protocolName = isRequired('protocolName'),
       assetPath = isRequired('assetPath'),
+      protocolType,
     ) => {
-      const factoryFilename = factoryProtocolPath(protocolName, `assets/${assetPath}`);
+      if (protocolType === 'factory') {
+        return Promise.resolve(`protocols/${protocolName}/assets/${assetPath}`);
+      }
+
+      // FIXME: this will fail on large assets [#681]
       const filename = protocolPath(protocolName, `assets/${assetPath}`);
-      return readFileAsDataUrl(factoryFilename)
-        .catch(() => readFileAsDataUrl(filename));
+      return readFileAsDataUrl(filename);
     };
   }
 

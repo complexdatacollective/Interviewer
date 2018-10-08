@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { Button, Icon, Spinner } from '../../ui/components';
+import { Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerCard from '../../components/Setup/ServerCard';
 
@@ -103,15 +103,14 @@ class DiscoveredServerList extends Component {
   }
 
   renderError() {
-    /* eslint-disable no-alert */
     return (
       <div className="server-list__placeholder">
         <Icon name="error" />
         <h4>Automatic server discovery unavailable</h4>
-        <Button size="small" onClick={() => alert(this.state.error)}>why?</Button>
+        {
+        }<p>{this.state.error}</p>
       </div>
     );
-    /* eslint-enable no-alert */
   }
 
   render() {

@@ -142,7 +142,6 @@ class ListSelect extends Component {
               color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
               key={sortField.variable}
               onClick={() => this.setSortBy(sortField.variable)}
-              size="small"
             >
               {(sortField.label || sortField.variable) + this.getDirection(sortField.variable)}
             </Button>

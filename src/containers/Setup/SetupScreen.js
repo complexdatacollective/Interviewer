@@ -55,9 +55,14 @@ class Setup extends Component {
       <div className="setup">
         <div className="setup__header">
           <div className="header-content">
-            <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
+            <div className="header-content__title">
+              <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
+              <div className="header-content__title-text">
+                <h1 className="type--title-1">Network Canvas</h1>
+                <h4>Alpha 8 - Lochs & Glens</h4>
+              </div>
+            </div>
             <div className="header-content__nav">
-              <h1 className="type--title-1">Network Canvas Alpha 7 - Gold-Bug</h1>
               <nav>
                 <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
                   Start new interview
@@ -72,9 +77,11 @@ class Setup extends Component {
         <main className="setup__main">
           {currentTab}
         </main>
-        <Link to="/protocol-import">
-          <Icon name="add-a-screen" className="setup__server-button" />
-        </Link>
+        { this.isShowProtocols() &&
+          <Link to="/protocol-import">
+            <Icon name="pair-a-server" className="setup__server-button" />
+          </Link>
+        }
       </div>
     );
   }

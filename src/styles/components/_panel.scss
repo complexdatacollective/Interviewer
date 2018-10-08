@@ -1,15 +1,15 @@
 .panel {
   @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-easing), var(--animation-duration-standard));
-  flex: 1 0 100px;
+  flex: 1 0 5rem;
   display: flex;
   flex-direction: column;
   background-color: var(--panel-bg-muted); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
   border-color: palette('primary');
   border-style: solid;
   border-width: 0;
-  border-bottom-width: 15px;
-  border-radius: 15px;
-  margin: 0 0 30px;
+  border-bottom-width: .5rem;
+  border-radius: var(--border-radius);
+  margin: 0 0 1rem;
   overflow: hidden;
   opacity: 1;
 
@@ -18,9 +18,9 @@
   }
 
   &__heading {
-    flex: 0 0 100px;
-    padding: 20px;
-    border-bottom: 2px solid palette('background');
+    flex: 0 0 5rem;
+    padding: var(--padding-unit);
+    border-bottom: .1rem solid palette('background');
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -39,8 +39,6 @@
 
   .node {
     font-size: calc(var(--base-node-size) * .66);
-    filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
-    margin: 2px;
   }
 
   &--minimise {

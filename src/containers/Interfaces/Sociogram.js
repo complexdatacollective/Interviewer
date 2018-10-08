@@ -3,9 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
-import { Button } from '../../ui/components';
+
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper, ConcentricCircles } from '../../containers/';
+import { ConcentricCircles } from '../../containers/';
+import PromptObstacle from '../../containers/ConcentricCircles/PromptObstacle';
+import ButtonObstacle from '../../containers/ConcentricCircles/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 
 /**
@@ -20,16 +22,16 @@ const Sociogram = ({
   resetInterface,
 }) => (
   <div className="sociogram-interface">
-    <div className="sociogram-interface__prompts">
-      <PromptSwiper
-        forward={promptForward}
-        backward={promptBackward}
-        prompts={stage.prompts}
-        prompt={prompt}
-        floating
-        minimizable
-      />
-    </div>
+    <PromptObstacle
+      id="PROMPTS_OBSTACLE"
+      className="sociogram-interface__prompts"
+      forward={promptForward}
+      backward={promptBackward}
+      prompts={stage.prompts}
+      prompt={prompt}
+      floating
+      minimizable
+    />
     <div className="sociogram-interface__sociogram">
       <ConcentricCircles
         stage={stage}
@@ -37,13 +39,13 @@ const Sociogram = ({
         key={prompt.id}
       />
     </div>
-    <div style={{ position: 'absolute', right: '50px', bottom: '50px' }}>
-      <Button
+    <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
+      <ButtonObstacle
+        id="RESET_BUTTON_OBSTACLE"
+        label="RESET"
         size="small"
         onClick={() => { resetInterface(stage.prompts); }}
-      >
-        Reset
-      </Button>
+      />
     </div>
   </div>
 );

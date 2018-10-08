@@ -54,7 +54,7 @@ const devServerContentBase = () => {
   let cordovaBase;
   switch (platform) {
     case 'android':
-      cordovaBase = path.resolve(paths.cordovaPlatforms, platform, 'platform_www');
+      cordovaBase = path.resolve(paths.cordovaPlatforms, platform, 'app', 'src', 'main', 'assets', 'www');
       break;
     case 'ios':
       cordovaBase = path.resolve(paths.cordovaPlatforms, platform, 'www');

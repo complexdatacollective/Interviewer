@@ -1,38 +1,50 @@
 .setup {
   $active-border-color: rgba(255, 255, 255, .5);
   --active-border-color: $active-border-color;
-  --setup-header-height: 25vh;
+  --setup-header-height: 30vh;
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 80vw;
-  min-height: 200px;
+  width: 100%;
+  min-height: 15rem;
 
   &__header {
-    align-items: flex-end;
+    align-items: center;
     display: flex;
     flex: 0 1 auto;
     height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
-    margin-bottom: 20px;
+    margin: 1.5rem 0;
   }
 
   .header-content {
-    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 
-    &__logo {
+    &__title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem;
 
-      margin-right: 20px;
-      width: 180px;
+      h1 {
+        display: inline-block;
+        width: auto;
+        margin: 0;
+        font-size: 3rem;
+      }
+    }
+
+    &__logo {
+      width: 10rem;
+      margin-right: 1.5rem;
     }
   }
 
   &__link {
-    border-bottom: 3px solid transparent;
+    border-bottom: .25rem solid transparent;
     cursor: pointer;
     margin: 0 1rem;
     padding-bottom: .5rem;
@@ -47,20 +59,62 @@
   &__main {
     flex: 1 1 auto;
     height: calc(100vh - var(--setup-header-height));
-    padding-bottom: 20vh;
     display: flex;
     align-items: center;
 
     .scrollable {
       height: 100%; // TODO: should this be on component?
     }
+
+    .swiper-wrapper {
+      height: auto;
+    }
+
+    .swiper-button-prev {
+      left: 8rem;
+    }
+
+    .swiper-button-next {
+      right: 8rem;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 2rem;
+      height: 4rem;
+      margin-top: -8rem;
+      background-size: 2rem 4rem;
+    }
+
+    .swiper-container-horizontal>.swiper-pagination-bullets,
+    .swiper-pagination-custom,
+    .swiper-pagination-fraction {
+      bottom: 5rem;
+    }
+
+    .swiper-container-horizontal>.swiper-pagination-bullets {
+      .swiper-pagination-bullet {
+        margin: 0 .35rem;
+      }
+    }
+
+
+    .swiper-pagination-bullet {
+      width: .7rem;
+      height: .7rem;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--light-background);
+    }
+
   }
 
   &__start {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 35px;
+    margin-top: 3rem;
   }
 
   &__factory-protocol {
@@ -72,5 +126,7 @@
 
   &__server-button {
     @include floating-action-button;
+    width: 10rem;
+    height: 10rem;
   }
 }

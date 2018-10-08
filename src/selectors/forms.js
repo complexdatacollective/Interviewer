@@ -12,12 +12,13 @@ const propForm = (_, { entity, type }) => ({ entity, type });
 
 const rehydrateField = ({ registry, entity, type, field }) => {
   if (!field.variable) { return field; }
+  const entityVars = registry[entity][type] ? registry[entity][type].variables[field.variable] : {};
   const returnObject = {
     name: field.variable,
     component: field.component,
     fieldLabel: field.label,
     value: field.value,
-    ...registry[entity][type].variables[field.variable],
+    ...entityVars,
   };
 
   return returnObject;

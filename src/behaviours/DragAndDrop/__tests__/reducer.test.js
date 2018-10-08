@@ -20,6 +20,7 @@ describe('reducer', () => {
     expect(
       reducer(undefined, { action: null }),
     ).toEqual({
+      obstacles: [],
       targets: [],
       source: null,
     });
@@ -96,6 +97,58 @@ describe('reducer', () => {
     });
   });
 
+  describe('UPSERT_OBSTACLE', () => {
+    it('when new add to list', () => {
+      const result = getResult([
+        actions.upsertObstacle({
+          id: 'foo',
+          count: 3,
+        }),
+      ]);
+
+      expect(result.obstacles).toEqual([
+        { id: 'foo', count: 3, ...hitAttributes() },
+      ]);
+    });
+
+    it('when existing replace previous instance', () => {
+      const result = getResult([
+        actions.upsertObstacle({
+          id: 'foo',
+          count: 3,
+        }),
+        actions.upsertObstacle({
+          id: 'bar',
+          count: 7,
+        }),
+        actions.upsertObstacle({
+          id: 'foo',
+          count: 5,
+        }),
+      ]);
+
+      expect(result.obstacles).toEqual([
+        { id: 'bar', count: 7, ...hitAttributes() },
+        { id: 'foo', count: 5, ...hitAttributes() },
+      ]);
+    });
+  });
+
+  describe('REMOVE_OBSTACLE', () => {
+    it('remove obstacle from list', () => {
+      const result = getResult([
+        actions.upsertObstacle({
+          id: 'foo',
+          count: 8,
+        }),
+        actions.removeObstacle('foo'),
+      ]);
+
+      expect(result.obstacles).toEqual([
+      ]);
+    });
+  });
+
   describe('DRAG_START', () => {
     it('add source to the state', () => {
       const result = getResult([
@@ -111,6 +164,7 @@ describe('reducer', () => {
       expect(result.source).toEqual({
         bazz: 'buzz',
         isOver: false,
+        isOutOfBounds: false,
       });
     });
   });
@@ -119,19 +173,24 @@ describe('reducer', () => {
     describe('dragMove', () => {
       it('triggers DRAG_MOVE', () => {
         const store = mockStore({
+          obstacles: [],
           targets: [],
           source: null,
         });
 
+        const setValidMove = jest.fn();
         store.dispatch(actions.dragMove({
           bazz: 'buzz',
+          setValidMove,
         }));
 
+        expect(setValidMove.mock.calls.length).toBe(1);
         expect(store.getActions()).toEqual([
           {
             type: actionTypes.DRAG_MOVE,
             source: {
               bazz: 'buzz',
+              setValidMove,
             },
           },
         ]);
@@ -140,6 +199,7 @@ describe('reducer', () => {
       it('calls onDrag on targets', () => {
         const onDrag = jest.fn();
         const missedTargetOnDrag = jest.fn();
+        const setValidMove = jest.fn();
 
         const store = mockStore({
           targets: [
@@ -161,23 +221,28 @@ describe('reducer', () => {
             },
           ],
           source: null,
+          obstacles: [],
         });
 
         store.dispatch(actions.dragMove({
           foo: 'bar',
           x: 50,
           y: 50,
+          setValidMove,
         }));
 
         expect(onDrag.mock.calls).toEqual([
           [{
             foo: 'bar',
             isOver: true,
+            isOutOfBounds: false,
             x: 50,
             y: 50,
+            setValidMove,
           }],
         ]);
 
+        expect(setValidMove.mock.calls.length).toBe(2);
         expect(missedTargetOnDrag.mock.calls).toEqual([]);
       });
     });
@@ -206,6 +271,7 @@ describe('reducer', () => {
         y: 50,
         z: 200,
         isOver: false,
+        isOutOfBounds: false,
       });
     });
   });
@@ -213,6 +279,7 @@ describe('reducer', () => {
   describe('DRAG_END', () => {
     it('triggers DRAG_MOVE', () => {
       const store = mockStore({
+        obstacles: [],
         targets: [],
         source: null,
       });
@@ -229,6 +296,7 @@ describe('reducer', () => {
     it('calls onDrop on targets', () => {
       const onDrop = jest.fn();
       const onDrag = jest.fn();
+      const onDragEnd = jest.fn();
       const missedTargetOnDrop = jest.fn();
 
       const store = mockStore({
@@ -241,6 +309,7 @@ describe('reducer', () => {
             accepts: () => true,
             onDrag,
             onDrop,
+            onDragEnd,
           },
           {
             x: 100,
@@ -249,9 +318,11 @@ describe('reducer', () => {
             height: 100,
             accepts: () => true,
             onDrop: missedTargetOnDrop,
+            onDragEnd,
           },
         ],
         source: null,
+        obstacles: [],
       });
 
       store.dispatch(actions.dragEnd({
@@ -264,6 +335,7 @@ describe('reducer', () => {
         [{
           foo: 'bar',
           isOver: true,
+          isOutOfBounds: false,
           x: 50,
           y: 50,
         }],
@@ -272,6 +344,109 @@ describe('reducer', () => {
       expect(onDrag.mock.calls).toEqual([]);
 
       expect(missedTargetOnDrop.mock.calls).toEqual([]);
+
+      expect(onDragEnd.mock.calls).toEqual([
+        [{
+          foo: 'bar',
+          isOver: true,
+          isOutOfBounds: false,
+          x: 50,
+          y: 50,
+        }],
+        [{
+          foo: 'bar',
+          isOver: true,
+          isOutOfBounds: false,
+          x: 50,
+          y: 50,
+        }],
+      ]);
+    });
+
+    it('only calls onDrop on targets if no obstacles overlap', () => {
+      const onDrop = jest.fn();
+      const onDrag = jest.fn();
+      const onDragEnd = jest.fn();
+      const missedTargetOnDrop = jest.fn();
+
+      const store = mockStore({
+        targets: [
+          {
+            x: 0,
+            y: 0,
+            width: 100,
+            height: 100,
+            accepts: () => true,
+            onDrag,
+            onDrop,
+            onDragEnd,
+          },
+          {
+            x: 100,
+            y: 100,
+            width: 100,
+            height: 100,
+            accepts: () => true,
+            onDrop: missedTargetOnDrop,
+            onDragEnd,
+          },
+        ],
+        source: null,
+        obstacles: [
+          {
+            x: 30,
+            y: 30,
+            width: 50,
+            height: 50,
+            accepts: () => true,
+          },
+        ],
+      });
+
+      store.dispatch(actions.dragEnd({
+        foo: 'bar',
+        x: 50,
+        y: 50,
+      }));
+
+      expect(onDrop.mock.calls).toEqual([]);
+
+      expect(onDrag.mock.calls).toEqual([]);
+
+      expect(missedTargetOnDrop.mock.calls).toEqual([]);
+
+      expect(onDragEnd.mock.calls).toEqual([
+        [{
+          foo: 'bar',
+          isOver: true,
+          isOutOfBounds: false,
+          x: 50,
+          y: 50,
+        }],
+        [{
+          foo: 'bar',
+          isOver: true,
+          isOutOfBounds: false,
+          x: 50,
+          y: 50,
+        }],
+      ]);
+
+      store.dispatch(actions.dragEnd({
+        foo: 'bar',
+        x: 90,
+        y: 90,
+      }));
+
+      expect(onDrop.mock.calls).toEqual([
+        [{
+          foo: 'bar',
+          isOver: true,
+          isOutOfBounds: false,
+          x: 90,
+          y: 90,
+        }],
+      ]);
     });
 
     it('set source to null', () => {

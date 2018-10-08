@@ -3,62 +3,40 @@ $component: 'protocol-card';
 .#{$component} {
   align-items: center;
   background-color: var(--background);
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding: spacing(large);
+  padding: spacing(medium);
 
   &__icon-wrapper {
-    flex: none;
-    height: 50px;
-    margin-right: 10px;
-    position: relative;
-    width: 50px;
+    margin-right: 1rem;
   }
 
   &__icon {
-    // Override position & display of the 'add-a-screen' icon
-    // TODO: does this deserve its own svg?
-    left: -31px;
-    position: absolute;
-    top: -49px;
-
-    .cls-1,
-    .cls-2 {
-      display: none;
-    }
+    height: 5rem;
+    width: 5rem;
   }
 
   // Large variant displayed on the startup screen
   &--large {
     background-color: var(--light-background);
     flex-direction: column;
-    height: 30vh;
-    max-height: 350px;
-    max-width: 650px;
+    width: 25vw;
+    height: 25vh;
     margin: 0 auto;
     text-align: center;
-    width: 45vw;
-    justify-content: center;
+    padding: spacing(huge);
 
     .#{$component}__icon-wrapper {
-      margin-bottom: 40px;
-      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+
+    .#{$component}__icon {
+      height: 7rem;
+      width: 7rem;
+      margin-bottom: 1rem;
     }
   }
 
-  &__name {
-    @include typography(title-4);
-    margin-bottom: 0;
-
-    &--large {
-      @include typography(title-2);
-    }
-  }
-
-  &__description {
-    @include typography(copy-small);
-    margin-bottom: 0;
-  }
 }

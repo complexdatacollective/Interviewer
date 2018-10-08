@@ -29,23 +29,18 @@ $component-name: modal;
     display: flex;
     flex-direction: column;
     height: inherit;
-    width: 100%;
 
     &-content {
       height: inherit;
     }
 
     &-title {
-      flex: 0 130px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      max-height: 20vh;
+      padding: 1rem 0;
+      text-align: center;
     }
   }
 
-  $button-size: 25px;
+  $button-size: 1rem;
 
   &__close {
     background: transparent;
@@ -58,8 +53,8 @@ $component-name: modal;
     position: absolute;
     height: $button-size;
     width: $button-size;
-    right: 35px;
-    top: 35px;
+    right: 2rem;
+    top: 2rem;
     color: palette('text');
     cursor: pointer;
 
@@ -111,15 +106,13 @@ $component-name: modal;
     .#{$component-name} {
       &__window {
         background: palette('modal-main-panel');
-        box-shadow: 0 0 4px 0 var(--modal-window-box-shadow);
-        width: 750px;
-        border-radius: 15px;
+        width: 40rem;
+        border-radius: var(--border-radius);
       }
 
       &__layout {
         max-height: 80vh;
-        max-width: 650px;
-        margin: 0 50px 50px;
+        margin: 2rem;
 
         &-content {
           overflow-x: hidden;

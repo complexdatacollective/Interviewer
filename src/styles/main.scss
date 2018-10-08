@@ -1,7 +1,7 @@
 $font-path: '../ui/assets/fonts';
 
-$scroller-top-padding: 30px;
-$scroller-top-padding-small: 15px;
+$scroller-top-padding: 2rem;
+$scroller-top-padding-small: 1rem;
 
 @import '../ui/styles/all';
 @import 'utils/all';
@@ -26,6 +26,9 @@ $scroller-top-padding-small: 15px;
   --code-font: courier;
   --timeline-width: 9rem;
   --interface-right-margin: 2rem;
+  --base-font-size: 1.75vmin;
+  --border-radius: .75rem;
+  --padding-unit: 1rem;
 }
 
 html,

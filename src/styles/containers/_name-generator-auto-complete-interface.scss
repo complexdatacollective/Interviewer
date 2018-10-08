@@ -26,17 +26,23 @@ $search-z-index: 1000;
   }
 
   &__search-button {
-    bottom: calc(#{$search-icon-offset-y} - 8px);
     cursor: pointer;
-    position: absolute;
-    right: $search-icon-offset-x + 27px;
     transition: opacity var(--animation-duration-standard) var(--animation-easing);
     z-index: $search-z-index + 1;
+
+    &.icon {
+      position: absolute;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      width: 7rem;
+      height: 7rem;
+    }
 
     &--hidden {
       opacity: 0;
       z-index: -1;
     }
+
   }
 
   &__nodes {
@@ -54,7 +60,7 @@ $search-z-index: 1000;
 
   &__node-bin {
     position: absolute;
-    bottom: 35px;
+    bottom: spacing(large);
     left: 50%;
     transform: translateX(-50%);
   }
