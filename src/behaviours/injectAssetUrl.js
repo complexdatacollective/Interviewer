@@ -5,7 +5,7 @@ import { assetUrl } from '../utils/protocol';
 
 // curry asset fetcher with protocol path from state
 const mapStateToProps = state => ({
-  getAssetUrl: url => assetUrl(state.protocol.path, url),
+  getAssetUrl: url => assetUrl(state.protocol.path, url, state.protocol.type),
 });
 
 const injectAssetUrl = compose(
