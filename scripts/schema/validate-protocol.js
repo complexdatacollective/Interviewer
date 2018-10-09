@@ -10,6 +10,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+const JSZip = require('jszip');
 const Ajv = require('ajv');
 const v6Schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
@@ -18,46 +19,71 @@ const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'developmen
 const protocolFilepath = process.argv[2] || defaultProtocol;
 const protocolName = path.basename(path.dirname(protocolFilepath));
 
+let protocolContents;
+
 let schema;
 let data;
 
+const extractProtocolSource = async (zippedProtocol) => {
+  const zip = new JSZip();
+  const zipObject = await zip.loadAsync(zippedProtocol);
+  const contents = await zipObject.file('protocol.json').async('string');
+  return contents;
+};
+
+const validateJson = (jsonString) => {
+  try {
+    schema = JSON.parse(fs.readFileSync(path.join(projectDir, 'protocol.schema')));
+  } catch (e) {
+    console.error(chalk.red('Invalid schema'));
+    console.error(e);
+    process.exit(1);
+  }
+
+  try {
+    data = JSON.parse(jsonString);
+  } catch (e) {
+    console.error(chalk.red('Invalid protocol file'));
+    console.error(e);
+    process.exit(0);
+  }
+
+  const ajv = new Ajv({
+    allErrors: true,
+  });
+  ajv.addMetaSchema(v6Schema);
+  ajv.addFormat('integer', /\d+/);
+
+  const validate = ajv.compile(schema);
+  const isValid = validate(data, 'Protocol');
+
+  if (isValid) {
+    console.log(`The ${protocolName} protocol is valid.`);
+  } else {
+    console.error(chalk.red(`${protocolName} has errors:`));
+    console.log('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
+
+    const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
+    if (addlPropErrors.length) {
+      console.log('');
+      console.log('additionalProperty error details:');
+      addlPropErrors.forEach((err) => {
+        console.log('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
+      });
+    }
+  }
+};
+
 try {
-  schema = JSON.parse(fs.readFileSync(path.join(projectDir, 'protocol.schema')));
-} catch (e) {
-  console.error(chalk.red('Invalid schema'));
-  console.error(e);
+  protocolContents = fs.readFileSync(protocolFilepath);
+} catch (err) {
+  console.error(err);
   process.exit(1);
 }
 
-try {
-  data = JSON.parse(fs.readFileSync(protocolFilepath));
-} catch (e) {
-  console.error(chalk.red('Invalid protocol file'));
-  console.error(e);
-  process.exit(0);
-}
-
-const ajv = new Ajv({
-  allErrors: true,
-});
-ajv.addMetaSchema(v6Schema);
-ajv.addFormat('integer', /\d+/);
-
-const validate = ajv.compile(schema);
-const isValid = validate(data, 'Protocol');
-
-if (isValid) {
-  console.log(`The ${protocolName} protocol is valid.`);
+if (protocolFilepath.match(/\.netcanvas$/)) {
+  extractProtocolSource(protocolContents)
+    .then(jsonString => validateJson(jsonString));
 } else {
-  console.error(chalk.red(`${protocolName} has errors:`));
-  console.log('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
-
-  const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
-  if (addlPropErrors.length) {
-    console.log('');
-    console.log('additionalProperty error details:');
-    addlPropErrors.forEach((err) => {
-      console.log('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
-    });
-  }
+  validateJson(fs.readFileSync(protocolFilepath));
 }
