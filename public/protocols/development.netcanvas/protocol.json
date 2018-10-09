@@ -870,7 +870,40 @@
         {
           "id": "another-unique-id",
           "title": "People from your previous visit",
-          "dataSource": "previousInterview"
+          "dataSource": "previousInterview",
+          "filter": {
+            "join": "OR",
+            "rules": [
+              {
+                "type": "alter",
+                "id": "15218241538622",
+                "options": {
+                  "type": "person",
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Dee"
+                }
+              },
+              {
+                "type": "ego",
+                "id": "15218241553253",
+                "options": {
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Bob"
+                }
+              },
+              {
+                "type": "edge",
+                "id": "15218241565624",
+                "options": {
+                  "type": "friend",
+                  "operator": "EXISTS",
+                  "attribute": "contactFreq"
+                }
+              }
+            ]
+          }
         }
       ],
       "prompts": [
