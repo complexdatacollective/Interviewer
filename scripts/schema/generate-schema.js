@@ -106,6 +106,9 @@ const generateSchema = async () => {
   delete defs.Forms.properties;
   delete defs.Forms.required;
 
+  // subject.entity
+  defs.Entity.enum = ['node', 'edge'];
+
   // Most props are treated by NC as optional; this will
   // need actual review...
   pull(defs.Item.required, 'size');
