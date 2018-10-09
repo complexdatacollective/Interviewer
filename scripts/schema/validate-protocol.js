@@ -61,14 +61,14 @@ const validateJson = (jsonString) => {
     console.log(`The ${protocolName} protocol is valid.`);
   } else {
     console.error(chalk.red(`${protocolName} has errors:`));
-    console.log('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
+    console.warn('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
 
     const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
     if (addlPropErrors.length) {
-      console.log('');
-      console.log('additionalProperty error details:');
+      console.warn('');
+      console.warn('additionalProperty error details:');
       addlPropErrors.forEach((err) => {
-        console.log('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
+        console.warn('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
       });
     }
   }
