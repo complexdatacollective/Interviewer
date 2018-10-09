@@ -6,7 +6,7 @@
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
-    "node": "10.11.0",
+    "node": "8.11.1",
     "npm": "6.4.1"
   },
   "scripts": {
@@ -63,7 +63,7 @@
     "css-loader": "0.28.4",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "^3.0.3",
+    "electron": "^2.0.11",
     "electron-builder": "^20.28.4",
     "electron-installer-dmg": "^2.0.0",
     "electron-log": "^2.2.17",
