@@ -144,6 +144,10 @@ class NodeLayout extends Component {
       node[nodePrimaryKeyProperty] === this.state.connectFrom;
   }
 
+  resetLinking() {
+    this.setState({ connectFrom: null });
+  }
+
   render() {
     const {
       nodes,
@@ -201,7 +205,7 @@ function mapDispatchToProps(dispatch) {
 export { NodeLayout };
 
 export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps),
+  connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true }),
   withBounds,
   dropHandlers,
   DropTarget,

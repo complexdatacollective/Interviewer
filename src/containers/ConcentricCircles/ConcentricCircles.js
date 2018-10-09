@@ -5,7 +5,7 @@ import NodeLayout from './NodeLayout';
 import EdgeLayout from './EdgeLayout';
 import Background from './Background';
 
-const ConcentricCircles = ({ stage, prompt }) => (
+const ConcentricCircles = React.forwardRef(({ stage, prompt }, ref) => (
   <div className="sociogram">
     <Background stage={stage} prompt={prompt} />
     {
@@ -19,6 +19,7 @@ const ConcentricCircles = ({ stage, prompt }) => (
       id="NODE_LAYOUT"
       stage={stage}
       prompt={prompt}
+      ref={ref}
     />
     <NodeBucket
       id="NODE_BUCKET"
@@ -26,7 +27,7 @@ const ConcentricCircles = ({ stage, prompt }) => (
       prompt={prompt}
     />
   </div>
-);
+));
 
 ConcentricCircles.propTypes = {
   stage: PropTypes.object.isRequired,
