@@ -12,11 +12,10 @@ class Timeline extends PureComponent {
       onClickBack,
       onClickNext,
       percentProgress,
-      toggleMenu,
     } = this.props;
 
     return (
-      <div className="timeline" onClick={toggleMenu}>
+      <div className="timeline">
         <div className="timeline-nav timeline-nav--back">
           <Icon
             onClick={(e) => {
@@ -51,14 +50,12 @@ Timeline.propTypes = {
   onClickBack: PropTypes.func,
   onClickNext: PropTypes.func,
   percentProgress: PropTypes.number,
-  toggleMenu: PropTypes.func,
 };
 
 Timeline.defaultProps = {
   onClickBack: () => {},
   onClickNext: () => {},
   percentProgress: 0,
-  toggleMenu: () => {},
 };
 
 export { Timeline };
