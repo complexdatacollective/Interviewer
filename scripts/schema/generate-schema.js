@@ -98,8 +98,12 @@ const generateSchema = async () => {
   delete defs.Variables.properties;
   delete defs.Variables.required;
 
-  // On each variable, all props are optional
-  delete defs.Variable.required;
+  // Variable Type must be one of the valid types, and is the only required field
+  // https://github.com/codaco/Network-Canvas/wiki/Variable-Types
+  defs.Variable.required = ['type'];
+  defs.Variable.properties.type.enum = [
+    'text', 'number', 'datetime', 'boolean', 'ordinal', 'categorical', 'layout', 'location',
+  ];
 
   // Forms: like variableRegistry, an object with arbitrary keys and well-defined values
   defs.Forms.patternProperties = { '.+': { properties: defs.Forms.properties } };
