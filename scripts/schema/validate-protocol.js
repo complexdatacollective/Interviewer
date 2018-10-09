@@ -17,6 +17,7 @@ const Ajv = require('ajv');
 const v6Schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
 const projectDir = path.join(__dirname, '..', '..');
+const schemaDir = path.join(projectDir, 'schema');
 const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const protocolArg = process.argv[2];
 const protocolFilepath = protocolArg || defaultProtocol;
@@ -38,7 +39,7 @@ const extractProtocolSource = async (zippedProtocol) => {
 
 const validateJson = (jsonString) => {
   try {
-    schema = JSON.parse(fs.readFileSync(path.join(projectDir, 'protocol.schema')));
+    schema = JSON.parse(fs.readFileSync(path.join(schemaDir, 'protocol.schema')));
   } catch (e) {
     console.error(chalk.red('Invalid schema'));
     console.error(chalk.red('Have you run `npm run generate-schema`?'));

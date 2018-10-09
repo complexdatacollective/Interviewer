@@ -8,7 +8,7 @@ const {
 } = require('quicktype');
 
 const projectDir = path.join(__dirname, '..', '..');
-const outputDir = projectDir; // TODO: store somewhere & unignore
+const outputDir = path.join(projectDir, 'schema'); // TODO: unignore
 
 const input = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const devProtocol = JSON.parse(fs.readFileSync(input));
@@ -16,6 +16,16 @@ const protocol = { ...devProtocol };
 
 const protocolFile = path.join(outputDir, 'abstract-protocol.json');
 const schemaFile = path.join(outputDir, 'protocol.schema');
+
+const ensureOutputDir = () => {
+  try {
+    fs.mkdirSync(outputDir);
+  } catch (err) {
+    if (err.code !== 'EEXIST') {
+      throw err;
+    }
+  }
+};
 
 /**
  * Build a generic/abstract protocol based on one of the factory protocols.
@@ -123,5 +133,6 @@ const generateSchema = async () => {
   console.log('Created schema', schemaFile);
 };
 
+ensureOutputDir();
 generateAbstractProtocol();
 generateSchema();
