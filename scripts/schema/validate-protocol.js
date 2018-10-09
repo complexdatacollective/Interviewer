@@ -4,8 +4,10 @@
 /**
  * Usage:
  * npm run validate-protocol [protocol-path]
+ *
+ * Errors & Validation failures are written to stderr.
  */
-const chalk = require('chalk');
+const Chalk = require('chalk').constructor;
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -16,13 +18,16 @@ const v6Schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
 const projectDir = path.join(__dirname, '..', '..');
 const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
-const protocolFilepath = process.argv[2] || defaultProtocol;
-const protocolName = path.basename(path.dirname(protocolFilepath));
+const protocolArg = process.argv[2];
+const protocolFilepath = protocolArg || defaultProtocol;
+const protocolName = protocolArg ? path.basename(protocolFilepath) : 'development.netcanvas';
 
 let protocolContents;
 
 let schema;
 let data;
+
+const chalk = new Chalk({ enabled: !!process.stderr.isTTY });
 
 const extractProtocolSource = async (zippedProtocol) => {
   const zip = new JSZip();
@@ -36,6 +41,8 @@ const validateJson = (jsonString) => {
     schema = JSON.parse(fs.readFileSync(path.join(projectDir, 'protocol.schema')));
   } catch (e) {
     console.error(chalk.red('Invalid schema'));
+    console.error(chalk.red('Have you run `npm run generate-schema`?'));
+    console.error();
     console.error(e);
     process.exit(1);
   }
@@ -58,7 +65,7 @@ const validateJson = (jsonString) => {
   const isValid = validate(data, 'Protocol');
 
   if (isValid) {
-    console.log(`The ${protocolName} protocol is valid.`);
+    console.log(`${protocolName} is valid`);
   } else {
     console.error(chalk.red(`${protocolName} has errors:`));
     console.warn('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
