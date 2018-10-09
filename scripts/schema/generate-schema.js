@@ -41,7 +41,17 @@ const generateAbstractProtocol = () => {
     label: '', // A human readable short label for this variable.
     description: '', // A human readable description for this variable
     type: '', // A valid variable type. For types, see below.
-    validation: {}, // Validation rules, using redux-form compatible syntax.
+    validation: {
+      // See https://github.com/codaco/Architect/blob/v4.0.0-alpha.4/src/utils/validations.js
+      required: true,
+      requiredAcceptsNull: true,
+      minLength: 1,
+      maxLength: 24,
+      minValue: 0,
+      maxValue: 10,
+      minSelected: 1,
+      maxSelected: 10,
+    }, // Validation rules, using redux-form compatible syntax.
     options: [{ label: '1', value: '1' }],
   };
 
@@ -122,6 +132,9 @@ const generateSchema = async () => {
 
   // subject.entity
   defs.Entity.enum = ['node', 'edge'];
+
+  // All validations are optional
+  delete defs.Validation.required;
 
   // Most props are treated by NC as optional; this will
   // need actual review...
