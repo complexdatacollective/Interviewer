@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import { Button, Icon } from '../../ui/components';
-import { Scroller } from '../../components';
+import { StagesMenu, SettingsMenu } from '.';
 
 
 class MenuContainer extends Component {
@@ -36,7 +36,7 @@ class MenuContainer extends Component {
                 })}
                 onClick={this.toggleActivePanel}
               >
-                <Icon name="settings" />
+                <SettingsMenu />
               </div>
               <div
                 className={cx({
@@ -46,42 +46,12 @@ class MenuContainer extends Component {
                 })}
                 onClick={this.toggleActivePanel}
               >
-                <div className="stages-menu">
-                  <div className="stages-menu__timeline">
-                    <div className="stages-timeline__header">
-                      <h1>Interview Stages</h1>
-                      <input type="text" placeholder="yo" />
-                    </div>
-                    <div className="stages-timeline__timeline">
-                      <Scroller>
-                        <div className="timeline-stage">
-                          <div className="timeline-stage__notch" />
-                          <div className="timeline-stage__edit-stage">
-                            <div className="timeline-stage__edit-stage-title">Namegen1</div>
-                            <div className="timeline-stage__screen">
-                              <div className="timeline-stage__screen-preview">
-                                <img
-                                  src="./static/media/stage--NameGenerator.bf159d05.png"
-                                  alt="NameGenerator Interface"
-                                  title="NameGenerator Interface"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Scroller>
-                    </div>
-                  </div>
-                  <div className="stages-menu__stats">
-                    <h4>Session Information</h4>
-                    <Button>Finish Interview</Button>
-                  </div>
-                </div>
+                <StagesMenu />
               </div>
             </div>
           </div>
           <div className="menu-container__footer">
-            <Button>Return to start screen</Button>
+            <Button color="neon-coral">Return to start screen</Button>
           </div>
         </div>
       </div>
