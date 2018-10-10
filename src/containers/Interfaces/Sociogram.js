@@ -17,7 +17,7 @@ import { actionCreators as resetActions } from '../../ducks/modules/reset';
 class Sociogram extends Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef();
+    this.linkingRef = React.createRef();
   }
 
   render() {
@@ -46,7 +46,7 @@ class Sociogram extends Component {
             stage={stage}
             prompt={prompt}
             key={prompt.id}
-            ref={this.myRef}
+            ref={this.linkingRef}
           />
         </div>
         <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
@@ -54,7 +54,7 @@ class Sociogram extends Component {
             id="RESET_BUTTON_OBSTACLE"
             label="RESET"
             size="small"
-            onClick={() => { resetInterface(stage.prompts, this.myRef); }}
+            onClick={() => { resetInterface(stage.prompts, this.linkingRef); }}
           />
         </div>
       </div>
@@ -78,15 +78,14 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(null, mapDispatchToProps),
   withHandlers({
-    resetInterface: props => (prompts, nodeLayout) => {
+    resetInterface: props => (prompts, linkingRef) => {
+      linkingRef.current.resetLinking();
       prompts.forEach((prompt) => {
         props.resetPropertyForAllNodes(prompt.layout.layoutVariable);
         if (prompt.edges) {
           props.resetEdgesOfType(prompt.edges.creates);
         }
       });
-      console.log(nodeLayout.current.getWrappedInstance());
-      // nodeLayout.current.getWrappedInstance().resetLinking();
     },
   }),
   withPrompt,

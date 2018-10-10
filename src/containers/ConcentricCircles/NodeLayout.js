@@ -64,22 +64,16 @@ class NodeLayout extends Component {
     nodes: PropTypes.array,
     toggleEdge: PropTypes.func.isRequired,
     toggleHighlight: PropTypes.func.isRequired,
+    connectFrom: PropTypes.string,
     ...sociogramOptionsProps,
   };
 
   static defaultProps = {
+    connectFrom: null,
     nodes: [],
     allowPositioning: true,
     allowSelect: true,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      connectFrom: null,
-    };
-  }
 
   shouldComponentUpdate(nextProps) {
     if (nodesLengthChanged(nextProps, this.props)) { return true; }
@@ -103,13 +97,12 @@ class NodeLayout extends Component {
   }
 
   connectNode(nodeId) {
-    const { createEdge, canCreateEdge } = this.props;
-    const { connectFrom } = this.state;
+    const { createEdge, canCreateEdge, connectFrom } = this.props;
 
     if (!canCreateEdge) { return; }
 
     if (!connectFrom) {
-      this.setState({ connectFrom: nodeId });
+      this.props.updateLinkFrom(nodeId);
       return;
     }
 
@@ -121,7 +114,7 @@ class NodeLayout extends Component {
       });
     }
 
-    this.setState({ connectFrom: null });
+    this.props.updateLinkFrom(null);
   }
 
   toggleHighlightAttributes(nodeId) {
@@ -141,11 +134,7 @@ class NodeLayout extends Component {
   isLinking(node) {
     return this.props.allowSelect &&
       this.props.canCreateEdge &&
-      node[nodePrimaryKeyProperty] === this.state.connectFrom;
-  }
-
-  resetLinking() {
-    this.setState({ connectFrom: null });
+      node[nodePrimaryKeyProperty] === this.props.connectFrom;
   }
 
   render() {
@@ -205,7 +194,7 @@ function mapDispatchToProps(dispatch) {
 export { NodeLayout };
 
 export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true }),
+  connect(makeMapStateToProps, mapDispatchToProps),
   withBounds,
   dropHandlers,
   DropTarget,
