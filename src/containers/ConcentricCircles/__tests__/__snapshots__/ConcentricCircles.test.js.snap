@@ -39,6 +39,7 @@ ShallowWrapper {
         />,
         undefined,
         <Connect(Component)
+          connectFrom={null}
           id="NODE_LAYOUT"
           prompt={
             Object {
@@ -48,6 +49,7 @@ ShallowWrapper {
             }
           }
           stage={Object {}}
+          updateLinkFrom={[Function]}
         />,
         <DropObstacle
           id="NODE_BUCKET"
@@ -87,6 +89,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
+          "connectFrom": null,
           "id": "NODE_LAYOUT",
           "prompt": Object {
             "sociogram": Object {
@@ -94,6 +97,7 @@ ShallowWrapper {
             },
           },
           "stage": Object {},
+          "updateLinkFrom": [Function],
         },
         "ref": null,
         "rendered": null,
@@ -138,6 +142,7 @@ ShallowWrapper {
           />,
           undefined,
           <Connect(Component)
+            connectFrom={null}
             id="NODE_LAYOUT"
             prompt={
               Object {
@@ -147,6 +152,7 @@ ShallowWrapper {
               }
             }
             stage={Object {}}
+            updateLinkFrom={[Function]}
           />,
           <DropObstacle
             id="NODE_BUCKET"
@@ -186,6 +192,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "class",
           "props": Object {
+            "connectFrom": null,
             "id": "NODE_LAYOUT",
             "prompt": Object {
               "sociogram": Object {
@@ -193,6 +200,7 @@ ShallowWrapper {
               },
             },
             "stage": Object {},
+            "updateLinkFrom": [Function],
           },
           "ref": null,
           "rendered": null,
