@@ -175,7 +175,6 @@
     flex: 1 1 auto;
     overflow: hidden;
     display: flex;
-
     .scrollable {
       padding: 1.5rem 0;
     }
@@ -185,20 +184,39 @@
 .timeline-stage {
   --timeline-color: var(--color-neon-coral);
   display: flex;
-  padding: 1rem 0;
-  align-items: center;
+  align-items: stretch;
 
   &__notch {
-    flex: 0 0 auto;
-    background: var(--timeline-color);
-    height: 1.5rem;
-    width: 1.5rem;
-    border-radius: 50%;
+    flex: 0 0 1.5rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      height: 100%;
+      display: block;
+      left: 50%;
+      position: absolute;
+      border-left: var(--timeline-color) .2rem solid;
+      transform: translateX(-.1rem);
+    }
+
+    &::after {
+      content: '';
+      background: var(--timeline-color);
+      height: 1.5rem;
+      width: 1.5rem;
+      border-radius: 50%;
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-.75rem);
+    }
   }
 
   &__preview {
     flex: 0 0 10rem;
-    margin: 0 2rem;
+    margin: 1rem 2rem;
 
     img {
       max-width: 100%;
@@ -207,6 +225,25 @@
 
   &__label {
     flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &:first-child {
+    .timeline-stage__notch {
+      &::before {
+        height: 50%;
+        top: 50%;
+      }
+    }
+  }
+
+  &:last-child {
+    .timeline-stage__notch {
+      &::before {
+        height: 50%;
+      }
+    }
   }
 }
 

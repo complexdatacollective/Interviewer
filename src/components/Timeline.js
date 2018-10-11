@@ -52,7 +52,7 @@ Timeline.propTypes = {
   onClickBack: PropTypes.func,
   onClickNext: PropTypes.func,
   percentProgress: PropTypes.number,
-  toggleMenu: PropTypes.bool.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
 };
 
 Timeline.defaultProps = {
