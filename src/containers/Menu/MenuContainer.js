@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+// import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
 import { Button, Icon } from '../../ui/components';
 import { StagesMenu, SettingsMenu } from '.';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
+// import { actionCreators as mockActions } from '../../ducks/modules/mock';
+// import { actionCreators as menuActions } from '../../ducks/modules/menu';
+// import { actionCreators as modalActions } from '../../ducks/modules/modals';
+
 
 class MenuContainer extends Component {
   constructor(props) {
@@ -13,8 +20,13 @@ class MenuContainer extends Component {
     };
   }
 
-  toggleActivePanel = (activePanel) => {
+  handleToggleActivePanel = (activePanel) => {
     this.setState({ activePanel });
+  }
+
+  handleClickReturnToStart = () => {
+    this.props.endSession();
+    this.props.closeMenu();
   }
 
   render() {
@@ -35,7 +47,7 @@ class MenuContainer extends Component {
               >
                 <SettingsMenu
                   active={this.state.activePanel === 'settings'}
-                  onClickInactive={() => this.toggleActivePanel('settings')}
+                  onClickInactive={() => this.handleToggleActivePanel('settings')}
                 />
               </div>
               <div
@@ -47,13 +59,13 @@ class MenuContainer extends Component {
               >
                 <StagesMenu
                   active={this.state.activePanel === 'stages'}
-                  onClickInactive={() => this.toggleActivePanel('stages')}
+                  onClickInactive={() => this.handleToggleActivePanel('stages')}
                 />
               </div>
             </div>
           </div>
           <div className="menu-container__footer">
-            <Button color="neon-coral">Return to start screen</Button>
+            <Button color="neon-coral" onClick={this.handleClickReturnToStart}>Return to start screen</Button>
           </div>
         </div>
       </div>
@@ -67,6 +79,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),
+  endSession: () => {
+    dispatch(sessionActions.endSession());
+    dispatch(push('/'));
+  },
 });
 
 export { MenuContainer };

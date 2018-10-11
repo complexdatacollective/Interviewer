@@ -10,7 +10,7 @@ class StagesMenu extends Component {
 
   render() {
     const { active, onClickInactive } = this.props;
-    const handleClickInactive = active ? onClickInactive : null;
+    const handleClickInactive = !active ? onClickInactive : null;
 
     return (
       <React.Fragment>
