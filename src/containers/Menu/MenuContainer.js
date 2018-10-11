@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import { Button, Icon } from '../../ui/components';
 import { StagesMenu, SettingsMenu } from '.';
-
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 class MenuContainer extends Component {
   constructor(props) {
@@ -10,21 +11,19 @@ class MenuContainer extends Component {
     this.state = {
       activePanel: 'stages',
     };
-
-    this.toggleActivePanel = this.toggleActivePanel.bind(this);
   }
 
-  toggleActivePanel() {
+  toggleActivePanel = () => {
     const activePanel = this.state.activePanel === 'settings' ? 'stages' : 'settings';
     this.setState({ activePanel });
   }
 
   render() {
     return (
-      <div className="menu-container">
+      <div className={cx('menu-container', { 'menu-container--show': this.props.isOpen })}>
         <div className="menu-container__content">
           <div className="menu-container__header">
-            <Icon name="close" />
+            <Icon name="close" onClick={this.props.closeMenu} />
           </div>
           <div className="menu-container__panels">
             <div className="menu-panels">
@@ -59,4 +58,14 @@ class MenuContainer extends Component {
   }
 }
 
-export default MenuContainer;
+const mapStateToProps = state => ({
+  isOpen: state.ui.isMenuOpen,
+});
+
+const mapDispatchToProps = dispatch => ({
+  closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),
+});
+
+export { MenuContainer };
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);

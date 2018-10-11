@@ -45,7 +45,6 @@ App.propTypes = {
 
 App.defaultProps = {
   children: null,
-  isMenuOpen: false,
   isSettingsMenuOpen: false,
 };
 

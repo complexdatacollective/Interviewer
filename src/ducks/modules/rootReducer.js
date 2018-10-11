@@ -11,6 +11,7 @@ import protocols from './protocols';
 import modals from './modals';
 import errors from './errors';
 import search from './search';
+import ui from './ui';
 import pairedServer from './pairedServer';
 
 const appReducer = combineReducers({
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   modals,
   errors,
   search,
+  ui,
   pairedServer,
 });
 

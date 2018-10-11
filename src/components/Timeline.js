@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-
 import { Icon } from '../ui/components';
 import { ProgressBar } from '../components';
 import { DropObstacle } from '../behaviours/DragAndDrop';
+import { actionCreators as uiActions } from '../ducks/modules/ui';
 
 class Timeline extends PureComponent {
   render() {
@@ -12,10 +13,11 @@ class Timeline extends PureComponent {
       onClickBack,
       onClickNext,
       percentProgress,
+      toggleMenu,
     } = this.props;
 
     return (
-      <div className="timeline">
+      <div className="timeline" onClick={toggleMenu}>
         <div className="timeline-nav timeline-nav--back">
           <Icon
             onClick={(e) => {
@@ -50,6 +52,7 @@ Timeline.propTypes = {
   onClickBack: PropTypes.func,
   onClickNext: PropTypes.func,
   percentProgress: PropTypes.number,
+  toggleMenu: PropTypes.bool.isRequired,
 };
 
 Timeline.defaultProps = {
@@ -58,8 +61,13 @@ Timeline.defaultProps = {
   percentProgress: 0,
 };
 
+const mapDispatchToProps = dispatch => ({
+  toggleMenu: () => dispatch(uiActions.toggle('isMenuOpen')),
+});
+
 export { Timeline };
 
 export default compose(
+  connect(null, mapDispatchToProps),
   DropObstacle,
 )(Timeline);

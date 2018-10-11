@@ -2,6 +2,7 @@
   // todo: replace z-index references with z-index system
   --z-index-overlay: 2000;
   position: absolute;
+  display: none;
   top: 0;
   left: 0;
   height: 100%;
@@ -13,6 +14,10 @@
   }
   z-index: var(--z-index-overlay);
   padding: 0 8vw;
+
+  &--show {
+    display: block;
+  }
 
   &__content {
     width: 100%;
