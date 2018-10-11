@@ -5,9 +5,7 @@ import { Timeline, StatsPanel } from '../../components/Menu';
 import { Icon } from '../../ui/components';
 import { stages } from '../../selectors/session';
 
-// eslint-disable-next-line
 class StagesMenu extends Component {
-
   render() {
     const { active, onClickInactive } = this.props;
     const handleClickInactive = !active ? onClickInactive : null;

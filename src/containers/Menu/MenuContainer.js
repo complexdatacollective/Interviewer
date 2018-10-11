@@ -42,7 +42,7 @@ class MenuContainer extends Component {
                 className={cx(
                   'menu-panel',
                   'menu-panel__settings',
-                  { 'menu-panel--active': this.state.activePanel === 'settings' }
+                  { 'menu-panel--active': this.state.activePanel === 'settings' },
                 )}
               >
                 <SettingsMenu
@@ -54,7 +54,7 @@ class MenuContainer extends Component {
                 className={cx(
                   'menu-panel',
                   'menu-panel__stages',
-                  { 'menu-panel--active': this.state.activePanel === 'stages' }
+                  { 'menu-panel--active': this.state.activePanel === 'stages' },
                 )}
               >
                 <StagesMenu
