@@ -85,7 +85,7 @@
       align-items: center;
       justify-content: center;
 
-      &:not(.active) {
+      &:not(.menu-panel--active) {
         .settings-menu {
           transition-delay: unset;
           opacity: 0;
@@ -100,7 +100,7 @@
       align-items: center;
       justify-content: center;
 
-      &:not(.active) {
+      &:not(.menu-panel--active) {
         .stages-menu {
           transition-delay: unset;
           opacity: 0;
@@ -108,7 +108,7 @@
       }
     }
 
-    &.active {
+    &.menu-panel--active {
       flex-grow: 3;
       background: var(--menu-panel--active);
 
@@ -117,7 +117,7 @@
       }
     }
 
-    &:not(.active) {
+    &:not(.menu-panel--active) {
       .icon {
         opacity: 1
       }

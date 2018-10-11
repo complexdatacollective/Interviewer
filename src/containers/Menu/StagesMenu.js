@@ -9,10 +9,13 @@ import { stages } from '../../selectors/session';
 class StagesMenu extends Component {
 
   render() {
+    const { active, onClickInactive } = this.props;
+    const handleClickInactive = active ? onClickInactive : null;
+
     return (
       <React.Fragment>
         <Icon name="menu-default-interface" />
-        <div className="stages-menu">
+        <div className="stages-menu" onClick={handleClickInactive}>
           <div className="stages-menu__timeline">
             <div className="stages-timeline__header">
               <h1>Interview Stages</h1>
@@ -29,6 +32,13 @@ class StagesMenu extends Component {
 
 StagesMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
+  active: PropTypes.bool,
+  onClickInactive: PropTypes.func,
+};
+
+StagesMenu.defaultProps = {
+  active: false,
+  onClickInactive: () => {},
 };
 
 function mapStateToProps(state) {

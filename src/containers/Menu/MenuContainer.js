@@ -13,8 +13,7 @@ class MenuContainer extends Component {
     };
   }
 
-  toggleActivePanel = () => {
-    const activePanel = this.state.activePanel === 'settings' ? 'stages' : 'settings';
+  toggleActivePanel = (activePanel) => {
     this.setState({ activePanel });
   }
 
@@ -28,24 +27,28 @@ class MenuContainer extends Component {
           <div className="menu-container__panels">
             <div className="menu-panels">
               <div
-                className={cx({
-                  'menu-panel': true,
-                  'menu-panel__settings': true,
-                  active: this.state.activePanel === 'settings',
-                })}
-                onClick={this.toggleActivePanel}
+                className={cx(
+                  'menu-panel',
+                  'menu-panel__settings',
+                  { 'menu-panel--active': this.state.activePanel === 'settings' }
+                )}
               >
-                <SettingsMenu />
+                <SettingsMenu
+                  active={this.state.activePanel === 'settings'}
+                  onClickInactive={() => this.toggleActivePanel('settings')}
+                />
               </div>
               <div
-                className={cx({
-                  'menu-panel': true,
-                  'menu-panel__stages': true,
-                  active: this.state.activePanel === 'stages',
-                })}
-                onClick={this.toggleActivePanel}
+                className={cx(
+                  'menu-panel',
+                  'menu-panel__stages',
+                  { 'menu-panel--active': this.state.activePanel === 'stages' }
+                )}
               >
-                <StagesMenu />
+                <StagesMenu
+                  active={this.state.activePanel === 'stages'}
+                  onClickInactive={() => this.toggleActivePanel('stages')}
+                />
               </div>
             </div>
           </div>
