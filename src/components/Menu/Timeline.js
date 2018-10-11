@@ -10,11 +10,10 @@ import { TimelineStage } from '.';
 
 // eslint-disable-next-line
  class Timeline extends Component {
-
   render() {
     const { items } = this.props;
-    const menuItems = items.map(item =>
-      (<TimelineStage item={item} key={item.id} />),
+    const menuItems = items.map((item, index) =>
+      (<TimelineStage item={item} key={item.id} index={index} />),
     );
 
     return (
