@@ -8,7 +8,7 @@ import '../styles/main.scss';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 import { LoadScreen } from '../containers';
 import { ErrorMessage } from '../components';
-import { MenuContainer } from '../containers/Menu';
+import MainMenu from '../containers/MainMenu';
 
 /**
   * Main app container.
@@ -23,7 +23,7 @@ const App = props => (
     'app--linux': isLinux(),
   })}
   >
-    <MenuContainer />
+    <MainMenu />
     <div className="electron-titlebar" />
     <div
       id="page-wrap"

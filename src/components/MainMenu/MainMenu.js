@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
-// import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
 import { Button, Icon } from '../../ui/components';
-import { StagesMenu, SettingsMenu } from '.';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import { actionCreators as sessionActions } from '../../ducks/modules/session';
-// import { actionCreators as mockActions } from '../../ducks/modules/mock';
-// import { actionCreators as menuActions } from '../../ducks/modules/menu';
-// import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import StagesMenu from '../../containers/MainMenu/StagesMenu';
+import SettingsMenu from './SettingsMenu';
 
-
-class MenuContainer extends Component {
+class MainMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,17 +17,18 @@ class MenuContainer extends Component {
     this.setState({ activePanel });
   }
 
-  handleClickReturnToStart = () => {
-    this.props.endSession();
-    this.props.closeMenu();
-  }
-
   render() {
+    const {
+      isOpen,
+      handleCloseMenu,
+      handleReturnToStart,
+    } = this.props;
+
     return (
-      <div className={cx('menu-container', { 'menu-container--show': this.props.isOpen })}>
+      <div className={cx('menu-container', { 'menu-container--show': isOpen })}>
         <div className="menu-container__content">
           <div className="menu-container__header">
-            <Icon name="close" onClick={this.props.closeMenu} />
+            <Icon name="close" onClick={handleCloseMenu} />
           </div>
           <div className="menu-container__panels">
             <div className="menu-panels">
@@ -65,7 +59,7 @@ class MenuContainer extends Component {
             </div>
           </div>
           <div className="menu-container__footer">
-            <Button color="neon-coral" onClick={this.handleClickReturnToStart}>Return to start screen</Button>
+            <Button color="neon-coral" onClick={handleReturnToStart}>Return to start screen</Button>
           </div>
         </div>
       </div>
@@ -73,18 +67,10 @@ class MenuContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  isOpen: state.ui.isMenuOpen,
-});
+MainMenu.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleCloseMenu: PropTypes.func.isRequired,
+  handleReturnToStart: PropTypes.func.isRequired,
+};
 
-const mapDispatchToProps = dispatch => ({
-  closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),
-  endSession: () => {
-    dispatch(sessionActions.endSession());
-    dispatch(push('/'));
-  },
-});
-
-export { MenuContainer };
-
-export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);
+export default MainMenu;
