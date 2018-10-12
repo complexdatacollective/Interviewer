@@ -84,6 +84,15 @@ const generateKeys = (
     graphML.insertBefore(yElement, graph);
   }
 
+  if (type === 'edge') {
+    const label = document.createElementNS(graphML.namespaceURI, 'key');
+    label.setAttribute('id', 'label');
+    label.setAttribute('attr.name', 'label');
+    label.setAttribute('attr.type', 'string');
+    label.setAttribute('for', type);
+    graphML.insertBefore(label, graph);
+  }
+
   elements.forEach((element) => {
     let iterableElement = element;
     if (type === 'node') {
@@ -178,6 +187,13 @@ const addElements = (
     if (extra) domElement.setAttribute('target', dataElement.to);
     graph.appendChild(domElement);
 
+    if (extra) {
+      const label = variableRegistry && variableRegistry[type] &&
+        variableRegistry[type][dataElement.type] && (variableRegistry[type][dataElement.type].name
+          || variableRegistry[type][dataElement.type].label);
+      domElement.appendChild(getDataElement(uri, 'label', label));
+    }
+
     // Add node attributes
     if (type === 'node') {
       Object.keys(nodeAttrs).forEach((key) => {
@@ -258,7 +274,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
     graphML,
     networkData.edges,
     'edge',
-    ['from', 'to'],
+    ['from', 'to', 'type'],
     variableRegistry,
   ));
 
@@ -272,7 +288,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
 
   // add nodes and edges to graph
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [nodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to'], variableRegistry, null, true);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'type'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
