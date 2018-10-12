@@ -165,21 +165,6 @@ describe('<MainMenu />', () => {
       gotoStages(subject);
     });
 
-    it('Finish interview', () => {
-      subject.find('Button[children="Finish Interview"]').at(0).simulate('click');
-
-      const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
-
-      expect(redirectAction.payload).toMatchObject({
-        method: 'push',
-        args: ['/'],
-      });
-
-      expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
-
-      expect(isMenuOpen(subject)).toBe(false);
-    });
-
     it('Mock data button', () => {
       subject.find('TimelineStage').at(0).simulate('click');
 
