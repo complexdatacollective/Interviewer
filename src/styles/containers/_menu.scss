@@ -14,13 +14,13 @@
   z-index: var(--z-index-overlay);
   padding: 0 8vw;
   opacity: 0;
-  transition: opacity var(--animation-duration-fast) var(--animation-easing);
+  transition: opacity var(--animation-duration-standard) var(--animation-easing);
 
   &--show {
     top: 0;
     opacity: 1;
 
-    .menu-container__content {
+    .menu-container__panels {
       opacity: 1;
       transform: translateY(0);
     }
@@ -32,10 +32,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    opacity: 0;
-    transform: translateY(-5rem);
-    transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
-    transition-delay: var(--animation-duration-standard);
   }
 
   &__header {
@@ -53,6 +49,10 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
+    opacity: 0;
+    transform: translateY(-5rem);
+    transition: opacity var(--animation-duration-slow) var(--animation-easing), transform var(--animation-duration-slow) var(--animation-easing);
+    transition-delay: var(--animation-duration-fast);
   }
 
   &__footer {
@@ -78,6 +78,7 @@
     border-radius: .75rem;
     width: 10vw;
     transition: flex var(--animation-duration-slow) var(--animation-easing), background var(--animation-duration-slow) var(--animation-easing);
+    transition-delay: var(--animation-duration-standard);
     border-style: solid;
     color: var(--text-dark);
     border-width: 0;
@@ -88,6 +89,7 @@
     .icon {
       position: absolute;
       transition: opacity var(--animation-duration-fast) var(--animation-easing);
+      transition-delay: var(--animation-duration-standard);
     }
 
     &__settings {
