@@ -131,6 +131,7 @@ describe('<MainMenu />', () => {
     beforeEach(() => {
       const mockStore = getMockStore({
         protocol: {
+          isLoaded: true,
           path: 'foo',
           type: 'bar',
           stages: [
