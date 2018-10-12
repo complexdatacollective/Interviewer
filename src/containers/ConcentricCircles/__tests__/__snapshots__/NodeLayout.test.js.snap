@@ -10,6 +10,7 @@ ShallowWrapper {
     canCreateEdge={false}
     canHighlight={false}
     concentricCircles={0}
+    connectFrom={null}
     createEdge="bar"
     displayEdges={Array []}
     height={456}

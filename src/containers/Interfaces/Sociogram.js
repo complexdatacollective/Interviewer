@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
@@ -14,41 +14,53 @@ import { actionCreators as resetActions } from '../../ducks/modules/reset';
   * Sociogram Interface
   * @extends Component
   */
-const Sociogram = ({
-  promptForward,
-  promptBackward,
-  prompt,
-  stage,
-  resetInterface,
-}) => (
-  <div className="sociogram-interface">
-    <PromptObstacle
-      id="PROMPTS_OBSTACLE"
-      className="sociogram-interface__prompts"
-      forward={promptForward}
-      backward={promptBackward}
-      prompts={stage.prompts}
-      prompt={prompt}
-      floating
-      minimizable
-    />
-    <div className="sociogram-interface__sociogram">
-      <ConcentricCircles
-        stage={stage}
-        prompt={prompt}
-        key={prompt.id}
-      />
-    </div>
-    <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
-      <ButtonObstacle
-        id="RESET_BUTTON_OBSTACLE"
-        label="RESET"
-        size="small"
-        onClick={() => { resetInterface(stage.prompts); }}
-      />
-    </div>
-  </div>
-);
+class Sociogram extends Component {
+  constructor(props) {
+    super(props);
+    this.linkingRef = React.createRef();
+  }
+
+  render() {
+    const {
+      promptForward,
+      promptBackward,
+      prompt,
+      stage,
+      resetInterface,
+    } = this.props;
+
+    return (
+      <div className="sociogram-interface">
+        <PromptObstacle
+          id="PROMPTS_OBSTACLE"
+          className="sociogram-interface__prompts"
+          forward={promptForward}
+          backward={promptBackward}
+          prompts={stage.prompts}
+          prompt={prompt}
+          floating
+          minimizable
+        />
+        <div className="sociogram-interface__sociogram">
+          <ConcentricCircles
+            stage={stage}
+            prompt={prompt}
+            key={prompt.id}
+            ref={this.linkingRef}
+          />
+        </div>
+        <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
+          <ButtonObstacle
+            id="RESET_BUTTON_OBSTACLE"
+            label="RESET"
+            size="small"
+            onClick={() => { resetInterface(stage.prompts, this.linkingRef); }}
+          />
+        </div>
+      </div>
+    );
+  }
+}
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
@@ -66,7 +78,8 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(null, mapDispatchToProps),
   withHandlers({
-    resetInterface: props => (prompts) => {
+    resetInterface: props => (prompts, linkingRef) => {
+      linkingRef.current.resetLinking();
       prompts.forEach((prompt) => {
         props.resetPropertyForAllNodes(prompt.layout.layoutVariable);
         if (prompt.edges) {
