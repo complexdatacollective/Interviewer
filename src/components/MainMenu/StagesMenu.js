@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Timeline from '../../components/MainMenu/Timeline';
-import StatsPanel from './StatsPanel';
+import StatsPanel from '../../containers/MainMenu/StatsPanel';
 import { Icon } from '../../ui/components';
 import MenuPanel from './MenuPanel';
 
