@@ -33,30 +33,30 @@ const Dialog = (props) => {
     error: 'neon-coral',
   };
 
-  const dialogClasses = cx(`dialog__window dialog__window--${type}`);
+  const dialogClasses = cx(`legacy-dialog__window legacy-dialog__window--${type}`);
 
   return (
     <ModalTransition in={show}>
-      <div key="dialog" className="dialog">
-        <div className="dialog__background" transition-role="background" />
+      <div key="dialog" className="legacy-dialog">
+        <div className="legacy-dialog__background" transition-role="background" />
         <div className={dialogClasses} transition-role="window" onClick={e => e.stopPropagation()}>
-          <div className="dialog__main">
-            <div className="dialog__main-icon">
+          <div className="legacy-dialog__main">
+            <div className="legacy-dialog__main-icon">
               <Icon name={type} />
             </div>
-            <div className="dialog__main-content">
-              <h2 className="dialog__main-title">{title}</h2>
+            <div className="legacy-dialog__main-content">
+              <h2 className="legacy-dialog__main-title">{title}</h2>
               {children}
             </div>
           </div>
           { additionalInformation &&
-            <div className="dialog__additional-content">
-              <div className="dialog__additional-box">
+            <div className="legacy-dialog__additional-content">
+              <div className="legacy-dialog__additional-box">
                 {additionalInformation}
               </div>
             </div>
           }
-          <footer className="dialog__footer">
+          <footer className="legacy-dialog__footer">
             { cancelButton }
             <Button onClick={onConfirm} color={typeColor[type]} content={confirmLabel} />
           </footer>
