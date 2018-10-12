@@ -8,7 +8,7 @@
   width: 100%;
   background: var(--color-navy-taupe);
   @supports (backdrop-filter: blur(10px)) {
-    background: rgba(0, 0, 0, .25);
+    background: rgba(0, 0, 0, .25); //sass-lint:disable-line no-color-literals
     backdrop-filter: blur(20px);
   }
   z-index: var(--z-index-overlay);
@@ -134,7 +134,7 @@
 
     &:not(.menu-panel--active) {
       .icon {
-        opacity: 1
+        opacity: 1;
       }
     }
   }
@@ -190,6 +190,7 @@
     flex: 1 1 auto;
     overflow: hidden;
     display: flex;
+
     .scrollable {
       padding: 1.5rem 0;
     }
@@ -271,4 +272,11 @@
   opacity: 1;
   transition: opacity var(--animation-duration-slow) var(--animation-easing);
   transition-delay: var(--animation-duration-slow);
+
+  fieldset {
+    border: .1rem solid var(--color-platinum--dark);
+    border-radius: .75rem;
+    padding: spacing(large);
+    margin-bottom: spacing(medium);
+  }
 }

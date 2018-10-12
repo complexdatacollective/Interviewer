@@ -20,20 +20,26 @@ const SettingsMenu = ({
         <h1>Settings</h1>
       </div>
       <div className="settings-menu__form">
-        <p>
+        <fieldset>
+          <legend>Developer Options</legend>
+          <p>Clicking this button will mock nodes for testing purposes.</p>
           <Button
+            color="mustard"
             onClick={handleAddMockNodes}
           >
             Add mock nodes
           </Button>
-        </p>
-        <p>
+        </fieldset>
+        <fieldset>
+          <legend>Global App Settings</legend>
+          <p>Click the button below to reset all app data.</p>
           <Button
+            color="mustard"
             onClick={handleResetAppData}
           >
             Reset Network Canvas data
           </Button>
-        </p>
+        </fieldset>
       </div>
     </div>
   </MenuPanel>

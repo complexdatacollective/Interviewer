@@ -33,13 +33,16 @@ class MainMenu extends Component {
           <div className="menu-container__panels">
             <div className="menu-panels">
               <SettingsMenu
-                active={this.state.activePanel === 'settings'}
+                active={this.state.activePanel === 'settings' || !(this.props.sessionLoaded && this.state.activePanel === 'stages')}
                 onClickInactive={() => this.handleToggleActivePanel('settings')}
               />
-              <StagesMenu
-                active={this.state.activePanel === 'stages'}
-                onClickInactive={() => this.handleToggleActivePanel('stages')}
-              />
+              { this.props.sessionLoaded && (
+                <StagesMenu
+                  active={this.props.sessionLoaded && this.state.activePanel === 'stages'}
+                  onClickInactive={() => this.handleToggleActivePanel('stages')}
+                />
+              )}
+
             </div>
           </div>
           <div className="menu-container__footer">
@@ -53,6 +56,7 @@ class MainMenu extends Component {
 
 MainMenu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  sessionLoaded: PropTypes.bool.isRequired,
   handleCloseMenu: PropTypes.func.isRequired,
   handleReturnToStart: PropTypes.func.isRequired,
 };
