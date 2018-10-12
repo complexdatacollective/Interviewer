@@ -16,6 +16,7 @@ const timelineStageHandlers = withHandlers({
       } = props;
 
       const path = protocolPath ? `/session/${sessionId}/${protocolType}/${protocolPath}/${stageIndex}` : '/';
+
       openStage(path);
     },
 });

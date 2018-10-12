@@ -7,10 +7,7 @@ import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
 import epics from '../../../ducks/middleware/epics';
 import rootReducer from '../../../ducks/modules/rootReducer';
-import { actionCreators as uiActions } from '../../../ducks/modules/ui';
 import MainMenu from '../MainMenu';
-
-jest.mock('../../../ui/utils/CSSVariables');
 
 const actionLogger = actions =>
   () =>
@@ -20,7 +17,7 @@ const actionLogger = actions =>
         return next(action);
       };
 
-const mockStore = (initialState = undefined) => {
+const getMockStore = (initialState = undefined) => {
   const actions = [];
 
   const store = createStore(
@@ -30,8 +27,6 @@ const mockStore = (initialState = undefined) => {
       applyMiddleware(thunk, epics, actionLogger(actions)),
     ),
   );
-
-  store.dispatch(uiActions.update({ isMenuOpen: true }));
 
   return { store, actions };
 };
@@ -56,7 +51,7 @@ const gotoStages = subject =>
 
 describe('<MainMenu />', () => {
   it('Close button', () => {
-    const { store } = mockStore();
+    const { store } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
     expect(isMenuOpen(subject)).toBe(true);
@@ -65,7 +60,7 @@ describe('<MainMenu />', () => {
   });
 
   it('Menu panel active state', () => {
-    const { store } = mockStore();
+    const { store } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
     gotoStages(subject);
@@ -81,27 +76,50 @@ describe('<MainMenu />', () => {
   });
 
   it('Return to start screen button', () => {
-    const { store, actions } = mockStore();
+    const { store, actions } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
     subject.find('Button[children="Return to start screen"]').at(0).simulate('click');
 
     const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
 
-    expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
     expect(redirectAction.payload).toMatchObject({
       method: 'push',
       args: ['/'],
     });
+
+    expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
+
+    expect(isMenuOpen(subject)).toBe(false);
   });
 
   describe('Settings screen', () => {
-    it('Reset state button', () => {
-      const { store, actions } = mockStore();
-      const subject = getSubject(store);
+    let store;
+    let actions;
+    let subject;
+
+    beforeEach(() => {
+      const mockStore = getMockStore({
+        ui: { isMenuOpen: true },
+        session: '1234-5678',
+        sessions: {
+          '1234-5678': {
+            network: {
+              nodes: [],
+            },
+          },
+        },
+      });
+
+      store = mockStore.store;
+      actions = mockStore.actions;
+
+      subject = getSubject(store);
 
       gotoSettings(subject);
+    });
 
+    it('Reset state button', () => {
       subject.find('Button[children="Reset Network Canvas data"]').at(0).simulate('click');
 
       const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
@@ -114,23 +132,64 @@ describe('<MainMenu />', () => {
     });
 
     it('Mock data button', () => {
-      const { store, actions } = mockStore({
-        session: '1234-5678',
-        sessions: {
-          '1234-5678': {
-            network: {
-              nodes: [],
-            },
-          },
-        },
-      });
-      const subject = getSubject(store);
-
-      gotoSettings(subject);
-
       subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
 
       expect(actions.filter(({ type }) => type === 'ADD_NODES').length).toBe(20);
+      expect(isMenuOpen(subject)).toBe(false);
+    });
+  });
+
+  describe('Stage screen', () => {
+    let store;
+    let actions;
+    let subject;
+
+    beforeEach(() => {
+      const mockStore = getMockStore({
+        protocol: {
+          path: 'foo',
+          type: 'bar',
+          stages: [
+            { id: '1234-5678-stage' },
+          ],
+        },
+        session: '1234-5678-session',
+        ui: { isMenuOpen: true },
+      });
+
+      store = mockStore.store;
+      actions = mockStore.actions;
+
+      subject = getSubject(store);
+
+      gotoStages(subject);
+    });
+
+    it('Finish interview', () => {
+      subject.find('Button[children="Finish Interview"]').at(0).simulate('click');
+
+      const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
+
+      expect(redirectAction.payload).toMatchObject({
+        method: 'push',
+        args: ['/'],
+      });
+
+      expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
+
+      expect(isMenuOpen(subject)).toBe(false);
+    });
+
+    it('Mock data button', () => {
+      subject.find('TimelineStage').at(0).simulate('click');
+
+      const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
+
+      expect(redirectAction.payload).toMatchObject({
+        method: 'push',
+        args: ['/session/1234-5678-session/bar/foo/0'],
+      });
+
       expect(isMenuOpen(subject)).toBe(false);
     });
   });
