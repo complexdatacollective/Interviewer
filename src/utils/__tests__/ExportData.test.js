@@ -32,6 +32,7 @@ const variableRegistry = {
   },
   edge: {
     friend: {
+      name: 'friend',
       variables: {
         type: { type: 'text' },
         connected: { type: 'boolean' },
@@ -45,7 +46,7 @@ const sessionA = {
     edges: [
       { type: 'friend', to: 1, from: 2, connected: true },
     ],
-    edgo: {},
+    ego: {},
     nodes: [
       { [nodePrimaryKeyProperty]: 1,
         type: 'person',

@@ -51,6 +51,8 @@ class Setup extends Component {
       currentTab = <SessionList />;
     }
 
+    const startScreenIcon = () => (this.props.isPairedWithServer ? 'add-a-protocol' : 'pair-a-server');
+
     return (
       <div className="setup">
         <div className="setup__header">
@@ -79,7 +81,7 @@ class Setup extends Component {
         </main>
         { this.isShowProtocols() &&
           <Link to="/protocol-import">
-            <Icon name="pair-a-server" className="setup__server-button" />
+            <Icon name={startScreenIcon()} className="setup__server-button" />
           </Link>
         }
       </div>
@@ -89,6 +91,7 @@ class Setup extends Component {
 
 Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
+  isPairedWithServer: PropTypes.bool.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
@@ -98,6 +101,7 @@ Setup.propTypes = {
 
 Setup.defaultProps = {
   protocolPath: '',
+  isPairedWithServer: false,
   stageIndex: 0,
 };
 
@@ -105,6 +109,7 @@ function mapStateToProps(state) {
   return {
     isFactory: state.protocol.isFactory,
     isProtocolLoaded: state.protocol.isLoaded,
+    isPairedWithServer: !!state.pairedServer,
     protocolPath: state.protocol.path,
     protocolType: state.protocol.type,
     sessionId: state.session,
