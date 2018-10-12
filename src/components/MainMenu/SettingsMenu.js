@@ -6,7 +6,7 @@ import MenuPanel from './MenuPanel';
 const SettingsMenu = ({
   active,
   onClickInactive,
-  handleAddMockData,
+  handleAddMockNodes,
   handleResetAppData,
 }) => (
   <MenuPanel
@@ -20,17 +20,20 @@ const SettingsMenu = ({
         <h1>Settings</h1>
       </div>
       <div className="settings-menu__form">
-        <Button
-          onClick={handleAddMockData}
-        >
-          Add mock nodes
-        </Button>
-
-        <Button
-          onClick={handleResetAppData}
-        >
-          Reset Network Canvas data
-        </Button>
+        <p>
+          <Button
+            onClick={handleAddMockNodes}
+          >
+            Add mock nodes
+          </Button>
+        </p>
+        <p>
+          <Button
+            onClick={handleResetAppData}
+          >
+            Reset Network Canvas data
+          </Button>
+        </p>
       </div>
     </div>
   </MenuPanel>
@@ -40,7 +43,7 @@ SettingsMenu.propTypes = {
   active: PropTypes.bool,
   onClickInactive: PropTypes.func,
   handleResetAppData: PropTypes.func.isRequired,
-  handleAddMockData: PropTypes.func.isRequired,
+  handleAddMockNodes: PropTypes.func.isRequired,
 };
 
 SettingsMenu.defaultProps = {

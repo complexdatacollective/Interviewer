@@ -5,12 +5,18 @@ import { bindActionCreators, compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { actionCreators as rootActions } from '../ducks/modules/rootReducer';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
+    if (this.props.shouldReset) {
+      this.props.resetState();
+      return;
+    }
+
     const { params, url } = this.props.computedMatch;
 
     if (params && params.sessionId) {
@@ -34,6 +40,11 @@ class LoadParamsRoute extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.shouldReset) {
+      nextProps.resetState();
+      return;
+    }
+
     const { params: nextParams, url: nextUrl } = nextProps.computedMatch;
     const { params } = this.props.computedMatch;
 
@@ -104,6 +115,7 @@ LoadParamsRoute.propTypes = {
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
+  resetState: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
   sessionUrl: PropTypes.string,
   setSession: PropTypes.func.isRequired,
@@ -140,6 +152,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+    resetState: bindActionCreators(rootActions.resetState, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
     updateSession: bindActionCreators(sessionsActions.updateSession, dispatch),
   };

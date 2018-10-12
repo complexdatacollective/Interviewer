@@ -14,6 +14,12 @@ import search from './search';
 import ui from './ui';
 import pairedServer from './pairedServer';
 
+const RESET_STATE = 'RESET_STATE';
+
+const resetState = () => ({
+  type: RESET_STATE,
+});
+
 const appReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
@@ -33,11 +39,19 @@ const appReducer = combineReducers({
 const rootReducer = (state, action) => {
   let currentState = state;
 
-  if (action.type === 'RESET_STATE') {
+  if (action.type === RESET_STATE) {
     currentState = undefined;
   }
 
   return appReducer(currentState, action);
+};
+
+export const actionCreators = {
+  resetState,
+};
+
+export const actionTypes = {
+  RESET_STATE,
 };
 
 export default rootReducer;
