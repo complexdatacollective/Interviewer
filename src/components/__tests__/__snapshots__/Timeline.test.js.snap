@@ -7,6 +7,7 @@ ShallowWrapper {
     onClickBack={[MockFunction]}
     onClickNext={[MockFunction]}
     percentProgress="40"
+    toggleMenu={[MockFunction]}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
