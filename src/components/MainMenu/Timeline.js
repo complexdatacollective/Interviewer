@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Scroller } from '../../components';
+import Scroller from '../../components/Scroller';
 import TimelineStage from '../../containers/MainMenu/TimelineStage';
 
 const Timeline = ({ items }) => {

@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '../../ui/components';
+import { Icon, Button } from '../../ui/components';
 import MenuPanel from './MenuPanel';
 
-const SettingsMenu = ({ active, onClickInactive }) => (
+const SettingsMenu = ({
+  active,
+  onClickInactive,
+  handleAddMockData,
+  handleResetAppData,
+}) => (
   <MenuPanel
     active={active}
     panel="settings"
@@ -15,7 +20,17 @@ const SettingsMenu = ({ active, onClickInactive }) => (
         <h1>Settings</h1>
       </div>
       <div className="settings-menu__form">
-        <p>Some settings and things will go here.</p>
+        <Button
+          onClick={handleAddMockData}
+        >
+          Add mock nodes
+        </Button>
+
+        <Button
+          onClick={handleResetAppData}
+        >
+          Reset Network Canvas data
+        </Button>
       </div>
     </div>
   </MenuPanel>
@@ -24,6 +39,8 @@ const SettingsMenu = ({ active, onClickInactive }) => (
 SettingsMenu.propTypes = {
   active: PropTypes.bool,
   onClickInactive: PropTypes.func,
+  handleResetAppData: PropTypes.func.isRequired,
+  handleAddMockData: PropTypes.func.isRequired,
 };
 
 SettingsMenu.defaultProps = {

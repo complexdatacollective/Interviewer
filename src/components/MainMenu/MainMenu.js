@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon } from '../../ui/components';
 import StagesMenu from '../../containers/MainMenu/StagesMenu';
-import SettingsMenu from './SettingsMenu';
+import SettingsMenu from '../../containers/MainMenu/SettingsMenu';
 
 class MainMenu extends Component {
   constructor(props) {
