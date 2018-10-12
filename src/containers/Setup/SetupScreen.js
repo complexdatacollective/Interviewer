@@ -52,8 +52,6 @@ class Setup extends Component {
     }
 
     const startScreenIcon = () => (this.props.isPairedWithServer ? 'add-a-protocol' : 'pair-a-server');
-    console.log(this.props.isPairedWithServer);
-    console.log(startScreenIcon());
 
     return (
       <div className="setup">
