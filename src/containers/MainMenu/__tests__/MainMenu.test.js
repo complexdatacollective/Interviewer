@@ -59,22 +59,6 @@ describe('<MainMenu />', () => {
     expect(isMenuOpen(subject)).toBe(false);
   });
 
-  it('Menu panel active state', () => {
-    const { store } = getMockStore({ ui: { isMenuOpen: true } });
-    const subject = getSubject(store);
-
-    gotoStages(subject);
-    gotoSettings(subject);
-
-    expect(subject.find('MenuPanel').at(0).prop('active')).toBe(true);
-    expect(subject.find('MenuPanel').at(1).prop('active')).toBe(false);
-
-    gotoStages(subject);
-
-    expect(subject.find('MenuPanel').at(0).prop('active')).toBe(false);
-    expect(subject.find('MenuPanel').at(1).prop('active')).toBe(true);
-  });
-
   it('Return to start screen button', () => {
     const { store, actions } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
