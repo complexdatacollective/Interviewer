@@ -2,8 +2,6 @@
 .app {
   background: palette('primary');
   height: 100vh;
-  perspective: 1500px;
-  transition: var(--animation-duration-slow) var(--animation-easing);
   width: 100vw;
 
   .electron-titlebar {
@@ -25,11 +23,6 @@
     }
   }
 
-  &--settings-open {
-    background: palette('settings');
-    transition: none;
-  }
-
   // page wrap for content
   &__content {
     @include vcjc; // vertical center, justify center
@@ -37,14 +30,8 @@
     box-sizing: border-box;
     height: 100vh;
     overflow: hidden;
-    transition: var(--animation-duration-standard) var(--animation-easing);
     width: 100vw;
     display: flex;
     will-change: transform;
-
-    // content being pushed e.g. by menu
-    &--pushed {
-      transform: translateX(20rem);
-    }
   }
 }

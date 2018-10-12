@@ -14,7 +14,6 @@ describe('Timeline component', () => {
       percentProgress="40"
       onClickBack={backMock}
       onClickNext={nextMock}
-      toggleMenu={toggleMock}
     />,
   );
 
