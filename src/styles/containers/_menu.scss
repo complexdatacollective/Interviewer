@@ -2,8 +2,7 @@
   // todo: replace z-index references with z-index system
   --z-index-overlay: 2000;
   position: absolute;
-  display: none;
-  top: 0;
+  top: -100vh;
   left: 0;
   height: 100%;
   width: 100%;
@@ -14,9 +13,17 @@
   }
   z-index: var(--z-index-overlay);
   padding: 0 8vw;
+  opacity: 0;
+  transition: opacity var(--animation-duration-fast) var(--animation-easing);
 
   &--show {
-    display: block;
+    top: 0;
+    opacity: 1;
+
+    .menu-container__content {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   &__content {
@@ -25,6 +32,10 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    transform: translateY(-5rem);
+    transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
+    transition-delay: var(--animation-duration-standard);
   }
 
   &__header {
@@ -89,6 +100,7 @@
         .settings-menu {
           transition-delay: unset;
           opacity: 0;
+          pointer-events: none;
         }
       }
     }
@@ -104,6 +116,7 @@
         .stages-menu {
           transition-delay: unset;
           opacity: 0;
+          pointer-events: none;
         }
       }
     }

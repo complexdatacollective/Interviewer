@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Timeline from '../../components/MainMenu/Timeline';
 import StatsPanel from './StatsPanel';
 import { Icon } from '../../ui/components';
@@ -8,9 +9,16 @@ const StagesMenu = ({ active, onClickInactive, currentStages }) => {
   const handleClickInactive = !active ? onClickInactive : null;
 
   return (
-    <React.Fragment>
+    <div
+      className={cx(
+        'menu-panel',
+        'menu-panel__stages',
+        { 'menu-panel--active': active },
+      )}
+      onClick={handleClickInactive}
+    >
       <Icon name="menu-default-interface" />
-      <div className="stages-menu" onClick={handleClickInactive}>
+      <div className="stages-menu" >
         <div className="stages-menu__timeline">
           <div className="stages-timeline__header">
             <h1>Interview Stages</h1>
@@ -20,7 +28,7 @@ const StagesMenu = ({ active, onClickInactive, currentStages }) => {
         </div>
         <StatsPanel />
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

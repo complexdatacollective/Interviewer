@@ -32,30 +32,14 @@ class MainMenu extends Component {
           </div>
           <div className="menu-container__panels">
             <div className="menu-panels">
-              <div
-                className={cx(
-                  'menu-panel',
-                  'menu-panel__settings',
-                  { 'menu-panel--active': this.state.activePanel === 'settings' },
-                )}
-              >
-                <SettingsMenu
-                  active={this.state.activePanel === 'settings'}
-                  onClickInactive={() => this.handleToggleActivePanel('settings')}
-                />
-              </div>
-              <div
-                className={cx(
-                  'menu-panel',
-                  'menu-panel__stages',
-                  { 'menu-panel--active': this.state.activePanel === 'stages' },
-                )}
-              >
-                <StagesMenu
-                  active={this.state.activePanel === 'stages'}
-                  onClickInactive={() => this.handleToggleActivePanel('stages')}
-                />
-              </div>
+              <SettingsMenu
+                active={this.state.activePanel === 'settings'}
+                onClickInactive={() => this.handleToggleActivePanel('settings')}
+              />
+              <StagesMenu
+                active={this.state.activePanel === 'stages'}
+                onClickInactive={() => this.handleToggleActivePanel('stages')}
+              />
             </div>
           </div>
           <div className="menu-container__footer">
