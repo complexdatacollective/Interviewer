@@ -29,9 +29,9 @@ const isVariableRegistryExists = (variableRegistry, type, element, key) => {
   return variableInfo && variableInfo.type && knownTypes.includes(variableInfo.type);
 };
 
-const getTypeFromVariableRegistry = (variableRegistry, type, element, key) => {
+const getTypeFromVariableRegistry = (variableRegistry, type, element, key, variableAttribute = 'type') => {
   const variableInfo = getVariableInfo(variableRegistry, type, element, key);
-  return variableInfo && variableInfo.type;
+  return variableInfo && variableInfo[variableAttribute];
 };
 
 const getTypeForKey = (data, key) => (
@@ -92,10 +92,12 @@ const generateKeys = (
     // Node data model attributes are now stored under a specific propertyy
 
     Object.keys(iterableElement).forEach((key) => {
-      if (done.indexOf(key) === -1 && !excludeList.includes(key)) {
+      // transpose ids to names based on registry
+      const keyName = getTypeFromVariableRegistry(variableRegistry, type, element, key, 'name') || key;
+      if (done.indexOf(keyName) === -1 && !excludeList.includes(keyName)) {
         const keyElement = document.createElementNS(graphML.namespaceURI, 'key');
-        keyElement.setAttribute('id', key);
-        keyElement.setAttribute('attr.name', key);
+        keyElement.setAttribute('id', keyName);
+        keyElement.setAttribute('attr.name', keyName);
 
         if (!isVariableRegistryExists(variableRegistry, type, element, key)) {
           missingVariables.push(`"${key}" in ${type}.${element.type}`);
@@ -119,12 +121,12 @@ const generateKeys = (
           }
           case 'layout': {
             // special handling for locations
-            keyElement.setAttribute('attr.name', `${key}Y`);
-            keyElement.setAttribute('id', `${key}Y`);
+            keyElement.setAttribute('attr.name', `${keyName}Y`);
+            keyElement.setAttribute('id', `${keyName}Y`);
             keyElement.setAttribute('attr.type', 'double');
             const keyElement2 = document.createElementNS(graphML.namespaceURI, 'key');
-            keyElement2.setAttribute('id', `${key}X`);
-            keyElement2.setAttribute('attr.name', `${key}X`);
+            keyElement2.setAttribute('id', `${keyName}X`);
+            keyElement2.setAttribute('attr.name', `${keyName}X`);
             keyElement2.setAttribute('attr.type', 'double');
             keyElement2.setAttribute('for', type);
             graphML.insertBefore(keyElement2, graph);
@@ -139,7 +141,7 @@ const generateKeys = (
         }
         keyElement.setAttribute('for', type);
         graphML.insertBefore(keyElement, graph);
-        done.push(key);
+        done.push(keyName);
       }
     });
   });
@@ -176,32 +178,34 @@ const addElements = (
     if (extra) domElement.setAttribute('target', dataElement.to);
     graph.appendChild(domElement);
 
-    Object.keys(dataElement).forEach((key) => {
-      if (!excludeList.includes(key)) {
-        if (typeof dataElement[key] !== 'object') {
-          domElement.appendChild(getDataElement(uri, key, dataElement[key]));
-        } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-          domElement.appendChild(getDataElement(uri, `${key}X`, dataElement[key].x));
-          domElement.appendChild(getDataElement(uri, `${key}Y`, dataElement[key].y));
-        } else {
-          domElement.appendChild(getDataElement(uri, key, JSON.stringify(dataElement[key])));
-        }
-      }
-    });
-
     // Add node attributes
     if (type === 'node') {
       Object.keys(nodeAttrs).forEach((key) => {
-        if (!excludeList.includes(key)) {
+        const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
+        if (!excludeList.includes(keyName)) {
           if (typeof nodeAttrs[key] !== 'object') {
             domElement.appendChild(
-              getDataElement(uri, key, nodeAttrs[key]));
+              getDataElement(uri, keyName, nodeAttrs[key]));
           } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-            domElement.appendChild(getDataElement(uri, `${key}X`, nodeAttrs[key].x));
-            domElement.appendChild(getDataElement(uri, `${key}Y`, nodeAttrs[key].y));
+            domElement.appendChild(getDataElement(uri, `${keyName}X`, nodeAttrs[key].x));
+            domElement.appendChild(getDataElement(uri, `${keyName}Y`, nodeAttrs[key].y));
           } else {
             domElement.appendChild(
-              getDataElement(uri, key, JSON.stringify(nodeAttrs[key])));
+              getDataElement(uri, keyName, JSON.stringify(nodeAttrs[key])));
+          }
+        }
+      });
+    } else {
+      Object.keys(dataElement).forEach((key) => {
+        const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
+        if (!excludeList.includes(keyName)) {
+          if (typeof dataElement[key] !== 'object') {
+            domElement.appendChild(getDataElement(uri, keyName, dataElement[key]));
+          } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
+            domElement.appendChild(getDataElement(uri, `${keyName}X`, dataElement[key].x));
+            domElement.appendChild(getDataElement(uri, `${keyName}Y`, dataElement[key].y));
+          } else {
+            domElement.appendChild(getDataElement(uri, keyName, JSON.stringify(dataElement[key])));
           }
         }
       });

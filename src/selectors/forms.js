@@ -14,11 +14,11 @@ const rehydrateField = ({ registry, entity, type, field }) => {
   if (!field.variable) { return field; }
   const entityVars = registry[entity][type] ? registry[entity][type].variables[field.variable] : {};
   const returnObject = {
+    ...entityVars,
     name: field.variable,
     component: field.component,
     fieldLabel: field.label,
     value: field.value,
-    ...entityVars,
   };
 
   return returnObject;
