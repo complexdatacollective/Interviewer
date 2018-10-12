@@ -1,53 +1,51 @@
-/**
- * updater.js
- *
- * Please use manual update only when it is really required, otherwise please
- * use recommended non-intrusive auto update.
- *
- * Import steps:
- * 1. create `updater.js` for the code snippet
- * 2. require `updater.js` for menu implementation, and set `checkForUpdates`
- *    callback from `updater` for the click property of `Check Updates...` MenuItem.
- */
-
 const { autoUpdater } = require('electron-updater');
-const { ipcMain, BrowserWindow } = require('electron');
+const { dialog } = require('electron');
+const log = require('./log');
 
-function sendToRenderer(channel, message) {
-  const arr = BrowserWindow.getAllWindows();
-  for (let i = 0; i < arr.length; i += 1) {
-    const toWindow = arr[i];
-    toWindow.webContents.send(channel, message);
-  }
-}
+const releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
 
-ipcMain.on('CHECK_FOR_UPDATE', () => {
-  autoUpdater.checkForUpdates();
-});
+const onUpdateAvailable = (updateInfo) => {
+  dialog.showMessageBox({
+    type: 'question',
+    title: 'Update Available',
+    message: 'Do you want update now?',
+    detail: `Version ${updateInfo.releaseName} is available.\n\nRelease notes are available:\n${releasesUrl}`,
+    buttons: ['Update and Restart', 'Cancel'],
+  },
+  (buttonIndex) => {
+    if (buttonIndex === 0) {
+      autoUpdater.downloadUpdate();
+    }
+  });
+};
 
-ipcMain.on('DOWNLOAD_UPDATE', () => {
-  autoUpdater.downloadUpdate();
-});
+const onUpdateNotAvailable = () => {
+  dialog.showMessageBox({
+    title: 'No Updates Available',
+    message: 'Network Canvas is up-to-date.',
+  });
+};
 
-ipcMain.on('INSTALL_UPDATE', () => {
-  setImmediate(() => autoUpdater.quitAndInstall());
-});
+const onUpdateDownloaded = () => {
+  dialog.showMessageBox({
+    title: 'Install Update',
+    message: 'Download Complete',
+    detail: 'Your update is ready to install. Click this notification to restart the app and install the update.',
+    buttons: ['Restart'],
+  },
+  () => setImmediate(() => autoUpdater.quitAndInstall()));
+};
+
+const onError = (error) => {
+  const detail = error ? (error.stack || error).toString() : 'An unknown error occurred';
+  log.error(detail);
+  dialog.showErrorBox('Error', 'There was an error checking for updates. You may need to update this app manually.');
+};
 
 autoUpdater.autoDownload = false;
+autoUpdater.on('error', onError);
+autoUpdater.on('update-available', onUpdateAvailable);
+autoUpdater.on('update-downloaded', onUpdateDownloaded);
+autoUpdater.on('update-not-available', onUpdateNotAvailable);
 
-autoUpdater.on('error', (error) => {
-  sendToRenderer('ERROR', error.message);
-});
-
-autoUpdater.on('update-available', (info) => {
-  sendToRenderer('UPDATE_AVAILABLE', info);
-});
-
-
-autoUpdater.on('update-not-available', (info) => {
-  sendToRenderer('UPDATE_NOT_AVAILABLE', info);
-});
-
-autoUpdater.on('update-downloaded', (info) => {
-  sendToRenderer('UPDATE_DOWNLOADED', info);
-});
+module.exports = autoUpdater;
