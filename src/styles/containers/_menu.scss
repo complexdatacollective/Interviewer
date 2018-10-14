@@ -262,6 +262,14 @@
       }
     }
   }
+
+  &:only-child {
+    .timeline-stage__notch {
+      &::before {
+        display: none;
+      }
+    }
+  }
 }
 
 .settings-menu {

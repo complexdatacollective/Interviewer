@@ -10,9 +10,13 @@ const Timeline = ({ items }) => {
 
   return (
     <div className="stages-timeline__timeline">
-      <Scroller>
-        { menuItems }
-      </Scroller>
+      {menuItems.length > 0 ? (
+        <Scroller>
+          { menuItems }
+        </Scroller>
+      ) : (
+        <p>No stages to display.</p>
+      )}
     </div>
   );
 };

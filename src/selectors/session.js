@@ -16,9 +16,6 @@ const withFinishStage = stages => (stages.length ? [...stages, DefaultFinishStag
 
 export const getCurrentSession = state => state.sessions[state.session];
 export const anySessionIsActive = state => state.session && state.session !== initialState;
-export const settingsMenuIsOpen = state => state.menu.settingsMenuIsOpen;
-export const stageMenuIsOpen = state => state.menu.stageMenuIsOpen;
-export const stageSearchTerm = state => state.menu.stageSearchTerm;
 
 export const getPromptForCurrentSession = createSelector(
   state => (state.sessions[state.session] && state.sessions[state.session].promptIndex) || 0,
@@ -28,11 +25,4 @@ export const getPromptForCurrentSession = createSelector(
 export const stages = createSelector(
   protocol,
   protocol => withFinishStage(protocol.stages),
-);
-
-export const filteredStages = createSelector(
-  stageSearchTerm,
-  stages,
-  (stageSearchTerm, stages) =>
-    stages.filter(stage => stage.label.toLowerCase().includes(stageSearchTerm.toLowerCase())),
 );
