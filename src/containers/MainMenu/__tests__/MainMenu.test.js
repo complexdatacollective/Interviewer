@@ -59,22 +59,6 @@ describe('<MainMenu />', () => {
     expect(isMenuOpen(subject)).toBe(false);
   });
 
-  it('Menu panel active state', () => {
-    const { store } = getMockStore({ ui: { isMenuOpen: true } });
-    const subject = getSubject(store);
-
-    gotoStages(subject);
-    gotoSettings(subject);
-
-    expect(subject.find('MenuPanel').at(0).prop('active')).toBe(true);
-    expect(subject.find('MenuPanel').at(1).prop('active')).toBe(false);
-
-    gotoStages(subject);
-
-    expect(subject.find('MenuPanel').at(0).prop('active')).toBe(false);
-    expect(subject.find('MenuPanel').at(1).prop('active')).toBe(true);
-  });
-
   it('Return to start screen button', () => {
     const { store, actions } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
@@ -147,6 +131,7 @@ describe('<MainMenu />', () => {
     beforeEach(() => {
       const mockStore = getMockStore({
         protocol: {
+          isLoaded: true,
           path: 'foo',
           type: 'bar',
           stages: [
@@ -163,21 +148,6 @@ describe('<MainMenu />', () => {
       subject = getSubject(store);
 
       gotoStages(subject);
-    });
-
-    it('Finish interview', () => {
-      subject.find('Button[children="Finish Interview"]').at(0).simulate('click');
-
-      const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
-
-      expect(redirectAction.payload).toMatchObject({
-        method: 'push',
-        args: ['/'],
-      });
-
-      expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
-
-      expect(isMenuOpen(subject)).toBe(false);
     });
 
     it('Mock data button', () => {
