@@ -51,7 +51,7 @@
     position: relative;
     opacity: 0;
     transform: translateY(-5rem);
-    transition: opacity var(--animation-duration-slow) var(--animation-easing), transform var(--animation-duration-slow) var(--animation-easing);
+    transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
     transition-delay: var(--animation-duration-fast);
   }
 
@@ -77,8 +77,8 @@
     display: flex;
     border-radius: .75rem;
     width: 10vw;
-    transition: flex var(--animation-duration-slow) var(--animation-easing), background var(--animation-duration-slow) var(--animation-easing);
-    transition-delay: var(--animation-duration-standard);
+    transition: flex var(--animation-duration-standard) var(--animation-easing), background var(--animation-duration-standard) var(--animation-easing);
+    transition-delay: var(--animation-duration-fast);
     border-style: solid;
     color: var(--text-dark);
     border-width: 0;
@@ -89,7 +89,7 @@
     .icon {
       position: absolute;
       transition: opacity var(--animation-duration-fast) var(--animation-easing);
-      transition-delay: var(--animation-duration-standard);
+      transition-delay: var(--animation-duration-fast);
     }
 
     &__settings {
@@ -145,8 +145,8 @@
   height: 100%;
   display: flex;
   opacity: 1;
-  transition: opacity var(--animation-duration-slow) var(--animation-easing);
-  transition-delay: var(--animation-duration-slow);
+  transition: opacity var(--animation-duration-standard) var(--animation-easing);
+  transition-delay: var(--animation-duration-standard);
 
 
   &__timeline {
@@ -271,8 +271,8 @@
   flex-direction: column;
   padding: spacing(large) spacing(large) spacing(large) spacing(huge);
   opacity: 1;
-  transition: opacity var(--animation-duration-slow) var(--animation-easing);
-  transition-delay: var(--animation-duration-slow);
+  transition: opacity var(--animation-duration-standard) var(--animation-easing);
+  transition-delay: var(--animation-duration-standard);
 
   fieldset {
     border: .1rem solid var(--color-platinum--dark);
