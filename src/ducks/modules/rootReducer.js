@@ -9,6 +9,7 @@ import device from './device';
 import protocol from './protocol';
 import protocols from './protocols';
 import modals from './modals';
+import dialogs from './dialogs';
 import errors from './errors';
 import search from './search';
 import ui from './ui';
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   protocol,
   protocols,
   modals,
+  dialogs,
   errors,
   search,
   ui,

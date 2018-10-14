@@ -3,7 +3,7 @@ $component-name: modal;
 .#{$component-name} {
   opacity: 1;
   position: fixed;
-  z-index: 2000;
+  z-index: 4000;
   top: 0;
   left: 0;
   width: 100vw;

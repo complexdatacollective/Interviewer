@@ -8,6 +8,7 @@ import '../styles/main.scss';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 import { LoadScreen } from '../containers';
 import { ErrorMessage } from '../components';
+import DialogManager from '../components/DialogManager';
 import MainMenu from '../containers/MainMenu';
 
 /**
@@ -34,6 +35,7 @@ const App = props => (
       { props.children }
     </div>
     <LoadScreen />
+    <DialogManager />
     <ErrorMessage />
   </div>
 
