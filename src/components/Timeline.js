@@ -17,7 +17,7 @@ class Timeline extends PureComponent {
     } = this.props;
 
     return (
-      <div className="timeline" onClick={toggleMenu}>
+      <div className="timeline">
         <div className="timeline-nav timeline-nav--back">
           <Icon
             onClick={(e) => {
@@ -30,7 +30,7 @@ class Timeline extends PureComponent {
             name="chevron-up"
           />
         </div>
-        <ProgressBar percentProgress={percentProgress} />
+        <ProgressBar percentProgress={percentProgress} onClick={toggleMenu} />
         <div
           className="timeline-nav timeline-nav--next"
           onClick={(e) => {
