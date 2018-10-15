@@ -610,7 +610,6 @@
           },
           "highlight": {
             "variable": "lives_nearby",
-            "value": true,
             "allowHighlighting": true
           }
         },
@@ -640,7 +639,6 @@
           },
           "highlight": {
             "variable": "facebook_friend",
-            "value": true,
             "allowHighlighting": true
           }
         }
