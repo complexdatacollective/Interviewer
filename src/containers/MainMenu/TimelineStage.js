@@ -25,7 +25,10 @@ const timelineStageHandlers = withHandlers({
 const mapStateToProps = (state) => {
   const currentStageIndex = (path) => {
     const matchedPath = matchSessionPath(path);
-    return parseInt(matchedPath.params.stageIndex, 10);
+    if (matchedPath) {
+      return parseInt(matchedPath.params.stageIndex, 10);
+    }
+    return 0;
   };
 
   return ({
