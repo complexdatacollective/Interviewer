@@ -19,10 +19,6 @@ describe('Timeline component', () => {
     />,
   );
 
-  it('renders Timeline', () => {
-    expect(component).toMatchSnapshot();
-  });
-
   it('toggles menu on timeline click', () => {
     expect(toggleMock.mock.calls.length).toBe(0);
     component.find('.progress-bar').simulate('click');
