@@ -9,22 +9,22 @@ const getTimelineImage = type =>
 
 const TimelineStage = ({ item: { type, label, index }, handleOpenStage, currentStageIndex }) => {
   const classes = cx({
-    'timeline-stage': true,
-    'timeline-stage--current': currentStageIndex === index,
-    'timeline-stage-past': currentStageIndex > index,
+    'main-menu-timeline-stage': true,
+    'main-menu-timeline-stage--current': currentStageIndex === index,
+    'main-menu-timeline-stage-past': currentStageIndex > index,
   });
 
   return (
     <div onClick={handleOpenStage} className={classes}>
-      <div className="timeline-stage__notch" />
-      <div className="timeline-stage__preview">
+      <div className="main-menu-timeline-stage__notch" />
+      <div className="main-menu-timeline-stage__preview">
         <img
           src={getTimelineImage(type)}
           alt="NameGenerator Interface"
           title="NameGenerator Interface"
         />
       </div>
-      <div className="timeline-stage__label">{label}</div>
+      <div className="main-menu-timeline-stage__label">{label}</div>
     </div>
   );
 };

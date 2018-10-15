@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Scroller from '../../components/Scroller';
+import Scroller from '../Scroller';
 import TimelineStage from '../../containers/MainMenu/TimelineStage';
 
 const Timeline = ({ items }) => {
@@ -9,7 +9,7 @@ const Timeline = ({ items }) => {
   );
 
   return (
-    <div className="stages-timeline__timeline">
+    <div className="main-menu-timeline">
       {menuItems.length > 0 ? (
         <Scroller>
           { menuItems }
