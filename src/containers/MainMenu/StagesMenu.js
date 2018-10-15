@@ -5,8 +5,10 @@ import { stages } from '../../selectors/session';
 function mapStateToProps(state) {
   const currentStages = stages(state);
 
+  const withIndex = currentStages.map((stage, index) => ({ ...stage, index }));
+
   return {
-    currentStages,
+    currentStages: withIndex,
   };
 }
 

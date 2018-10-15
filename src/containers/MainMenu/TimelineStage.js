@@ -3,6 +3,7 @@ import { withHandlers, compose } from 'recompose';
 import { push } from 'react-router-redux';
 import TimelineStage from '../../components/MainMenu/TimelineStage';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const timelineStageHandlers = withHandlers({
   handleOpenStage: props =>
@@ -21,11 +22,19 @@ const timelineStageHandlers = withHandlers({
     },
 });
 
-const mapStateToProps = state => ({
-  protocolPath: state.protocol.path,
-  protocolType: state.protocol.type,
-  sessionId: state.session,
-});
+const mapStateToProps = (state) => {
+  const currentStageIndex = (path) => {
+    const matchedPath = matchSessionPath(path);
+    return parseInt(matchedPath.params.stageIndex, 10);
+  };
+
+  return ({
+    protocolPath: state.protocol.path,
+    currentStageIndex: currentStageIndex(state.router.location.pathname),
+    protocolType: state.protocol.type,
+    sessionId: state.session,
+  });
+};
 
 const mapDispatchToProps = dispatch => ({
   openStage: (path) => {

@@ -22,7 +22,8 @@ const SettingsMenu = ({
       <div className="settings-menu__form">
         <fieldset>
           <legend>Developer Options</legend>
-          <p>Clicking this button will mock nodes for testing purposes.</p>
+          <p>During an active interview session, clicking this button will create mock nodes for
+           testing purposes.</p>
           <Button
             color="mustard"
             onClick={handleAddMockNodes}
