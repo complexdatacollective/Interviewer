@@ -31,19 +31,16 @@ class MainMenu extends Component {
             <Icon name="close" onClick={handleCloseMenu} />
           </div>
           <div className="main-menu__panels">
-            <div className="menu-panels">
-              <SettingsMenu
-                active={this.state.activePanel === 'settings' || !(this.props.sessionLoaded && this.state.activePanel === 'stages')}
-                onClickInactive={() => this.handleToggleActivePanel('settings')}
+            <SettingsMenu
+              active={this.state.activePanel === 'settings' || !(this.props.sessionLoaded && this.state.activePanel === 'stages')}
+              onClickInactive={() => this.handleToggleActivePanel('settings')}
+            />
+            { this.props.sessionLoaded && (
+              <StagesMenu
+                active={this.props.sessionLoaded && this.state.activePanel === 'stages'}
+                onClickInactive={() => this.handleToggleActivePanel('stages')}
               />
-              { this.props.sessionLoaded && (
-                <StagesMenu
-                  active={this.props.sessionLoaded && this.state.activePanel === 'stages'}
-                  onClickInactive={() => this.handleToggleActivePanel('stages')}
-                />
-              )}
-
-            </div>
+            )}
           </div>
           <div className="main-menu__footer">
             <Button color="neon-coral" onClick={handleReturnToStart}>Return to start screen</Button>

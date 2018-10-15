@@ -8,10 +8,10 @@ const MenuPanel = ({ active, onClickInactive, panel, children }) => {
   return (
     <div
       className={cx(
-        'menu-panel',
+        'main-menu-menu-panel',
         {
-          [`menu-panel__${panel}`]: !!panel,
-          'menu-panel--active': active,
+          [`main-menu-menu-panel__${panel}`]: !!panel,
+          'main-menu-menu-panel--active': active,
         },
       )}
       onClick={handleClickInactive}
