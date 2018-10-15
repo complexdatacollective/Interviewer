@@ -1,4 +1,4 @@
-.menu-container {
+.main-menu {
   // todo: replace z-index references with z-index system
   --z-index-overlay: 3000;
   position: absolute;
@@ -20,7 +20,7 @@
     top: 0;
     opacity: 1;
 
-    .menu-container__panels {
+    .main-menu__panels {
       opacity: 1;
       transform: translateY(0);
     }

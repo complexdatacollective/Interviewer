@@ -25,12 +25,12 @@ class MainMenu extends Component {
     } = this.props;
 
     return (
-      <div className={cx('menu-container', { 'menu-container--show': isOpen })}>
-        <div className="menu-container__content">
-          <div className="menu-container__header">
+      <div className={cx('main-menu', { 'main-menu--show': isOpen })}>
+        <div className="main-menu__content">
+          <div className="main-menu__header">
             <Icon name="close" onClick={handleCloseMenu} />
           </div>
-          <div className="menu-container__panels">
+          <div className="main-menu__panels">
             <div className="menu-panels">
               <SettingsMenu
                 active={this.state.activePanel === 'settings' || !(this.props.sessionLoaded && this.state.activePanel === 'stages')}
@@ -45,7 +45,7 @@ class MainMenu extends Component {
 
             </div>
           </div>
-          <div className="menu-container__footer">
+          <div className="main-menu__footer">
             <Button color="neon-coral" onClick={handleReturnToStart}>Return to start screen</Button>
           </div>
         </div>
