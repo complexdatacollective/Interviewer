@@ -3,6 +3,7 @@ const url = require('url');
 const path = require('path');
 const mainMenu = require('./mainMenu');
 const registerAssetsProtocol = require('./assetsProtocol').registerAssetsProtocol;
+const log = require('./log');
 
 const isMacOS = () => process.platform === 'darwin';
 
@@ -10,19 +11,24 @@ const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false }
 
 let window;
 
-function getAppUrl() {
-  if (process.env.NODE_ENV === 'development' && process.env.WEBPACK_DEV_SERVER_PORT) {
-    return url.format({
-      host: `localhost:${process.env.WEBPACK_DEV_SERVER_PORT}/`,
-      protocol: 'http',
-    });
+const appUrl = (function getAppUrl() {
+  if (process.env.NODE_ENV === 'development' && process.env.NC_DEVSERVER_FILE) {
+    // This method is more robust than Architect & Server to support multiple platforms & devices
+    // NC_DEVSERVER_FILE contains the URL of a running webpack-dev-server, relative to app root
+    try {
+      const relativePath = path.join(__dirname, '..', '..', process.env.NC_DEVSERVER_FILE);
+      return require('fs').readFileSync(relativePath, 'utf-8'); // eslint-disable-line global-require
+    } catch (err) {
+      log.warn('Error loading dev server config -', err.message);
+      log.warn('Are you running dev server?');
+      log.warn('Continuing with index.html');
+    }
   }
-
   return url.format({
-    pathname: path.join(__dirname, '../', 'index.html'),
-    protocol: 'file:',
+    pathname: path.join(__dirname, '..', 'index.html'),
+    protocol: 'file:'
   });
-}
+}());
 
 function setApplicationMenu(appWindow) {
   const appMenu = Menu.buildFromTemplate(mainMenu(appWindow));
@@ -32,7 +38,7 @@ function setApplicationMenu(appWindow) {
 function loadApp(appWindow, cb) {
   appWindow.webContents.on('did-finish-load', cb);
 
-  appWindow.loadURL(getAppUrl());
+  appWindow.loadURL(appUrl);
 }
 
 function createWindow() {
@@ -40,7 +46,6 @@ function createWindow() {
 
   return new Promise((resolve) => {
     // Create the browser window.
-    console.log('make window');
 
     registerAssetsProtocol();
 
