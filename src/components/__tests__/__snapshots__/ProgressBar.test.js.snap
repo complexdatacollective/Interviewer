@@ -4,6 +4,7 @@ exports[`ProgressBar component renders ProgressBar 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <ProgressBar
+    onClick={[Function]}
     percentProgress="40"
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -28,6 +29,7 @@ ShallowWrapper {
         }
       />,
       "className": "progress-bar",
+      "onClick": [Function],
     },
     "ref": null,
     "rendered": Object {
@@ -61,6 +63,7 @@ ShallowWrapper {
           }
         />,
         "className": "progress-bar",
+        "onClick": [Function],
       },
       "ref": null,
       "rendered": Object {
