@@ -50,8 +50,9 @@ class ProtocolUrlForm extends Component {
             color="platinum"
             icon={<Icon name="close" />}
             content="Cancel"
+            type="button"
           />,
-          <Button key="submit">Import remote protocol</Button>,
+          <Button key="submit" type="submit">Import remote protocol</Button>,
         ]}
         {...formConfig}
       />
