@@ -11,5 +11,26 @@
     flex: 3 1 auto;
     display: flex;
     flex-direction: column;
+
+    &-header {
+      flex: 0 0 3rem;
+      align-items: flex-start;
+      display: flex;
+      justify-content: space-between;
+
+      h1 {
+        margin-bottom: 0;
+      }
+
+      .stages-input {
+        display: block;
+        border-radius: 10rem;
+        width: 13rem;
+        padding: .75rem 2rem;
+        border: 1px solid var(--color-platinum);
+        background-clip: padding-box;
+      }
+    }
   }
+
 }

@@ -35,7 +35,7 @@ class StagesMenu extends PureComponent {
         <Icon name="menu-default-interface" />
         <div className="main-menu-stages-menu" >
           <div className="main-menu-stages-menu__timeline">
-            <div className="stages-timeline__header">
+            <div className="main-menu-stages-menu__timeline-header">
               <h1>Interview Stages</h1>
               <input
                 className="stages-input"
