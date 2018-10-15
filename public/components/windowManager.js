@@ -1,4 +1,4 @@
-const { BrowserWindow, Menu } = require('electron');
+const { BrowserWindow, Menu, shell } = require('electron');
 const url = require('url');
 const path = require('path');
 const mainMenu = require('./mainMenu');
@@ -56,9 +56,11 @@ function createWindow() {
 
     const mainWindow = new BrowserWindow(windowParameters);
 
-    mainWindow.webContents.on('new-window', (evt) => {
-      // A user may have tried to open a new window (shift|cmd-click); ignore action
+    // Open any new windows in default browser (not electron)
+    // NOTE: This differs from Architect, which does not support opening links
+    mainWindow.webContents.on('new-window', (evt, newUrl) => {
       evt.preventDefault();
+      shell.openExternal(newUrl);
     });
 
     if (process.env.NODE_ENV === 'development') {
