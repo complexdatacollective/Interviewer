@@ -130,12 +130,12 @@ class ServerAddressForm extends PureComponent {
         </fieldset>
         {
           cancel &&
-          <Button color="platinum" onClick={() => cancel()} icon="close">
+          <Button color="platinum" onClick={() => cancel()} icon="close" type="button">
             Cancel
           </Button>
         }
         <span className="server-address-form__submit">
-          <Button content="Pair" />
+          <Button content="Pair" type="submit" />
         </span>
       </form>
     );
