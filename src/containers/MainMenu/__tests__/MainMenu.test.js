@@ -140,6 +140,7 @@ describe('<MainMenu />', () => {
           ],
         },
         session: '1234-5678-session',
+        router: { location: { pathname: '/session/1234-5678-session/bar/foo/0' } },
         ui: { isMenuOpen: true },
       });
 
@@ -151,7 +152,7 @@ describe('<MainMenu />', () => {
       gotoStages(subject);
     });
 
-    it('Mock data button', () => {
+    it('Click stage', () => {
       subject.find('TimelineStage').at(0).simulate('click');
 
       const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
