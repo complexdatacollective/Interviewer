@@ -1,0 +1,64 @@
+.main-menu {
+  // todo: replace z-index references with z-index system
+  --z-index-overlay: 3000;
+  position: absolute;
+  top: -100vh;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background: var(--color-navy-taupe);
+  @supports (backdrop-filter: blur(10px)) {
+    background: rgba(0, 0, 0, .25); //sass-lint:disable-line no-color-literals
+    backdrop-filter: blur(20px);
+  }
+  z-index: var(--z-index-overlay);
+  padding: 0 8vw;
+  opacity: 0;
+  transition: opacity var(--animation-duration-standard) var(--animation-easing);
+
+  &--show {
+    top: 0;
+    opacity: 1;
+
+    .main-menu__panels {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    flex: 0 0 10rem;
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+  }
+
+  &__panels {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+    opacity: 0;
+    transform: translateY(-5rem);
+    transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
+    transition-delay: var(--animation-duration-fast);
+  }
+
+  &__footer {
+    flex: 0 0 10rem;
+    align-items: center;
+    display: flex;
+  }
+}
+

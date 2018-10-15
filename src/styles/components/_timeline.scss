@@ -11,6 +11,7 @@ $timeline-button-size: 6rem;
   top: 0;
   left: 0;
   z-index: 2000;
+  overflow: hidden;
 
   svg {
     height: 2rem;

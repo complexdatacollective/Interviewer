@@ -1,0 +1,8 @@
+.main-menu-stats-panel {
+  flex: 0 0 auto;
+  padding: spacing(large);
+  background: var(--color-platinum);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

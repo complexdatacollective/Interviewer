@@ -1,0 +1,17 @@
+.main-menu-settings-menu {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: spacing(large) spacing(large) spacing(large) spacing(huge);
+  opacity: 1;
+  transition: opacity var(--animation-duration-standard) var(--animation-easing);
+  transition-delay: var(--animation-duration-standard);
+
+  fieldset {
+    border: .1rem solid var(--color-platinum--dark);
+    border-radius: .75rem;
+    padding: spacing(large);
+    margin-bottom: spacing(medium);
+  }
+}

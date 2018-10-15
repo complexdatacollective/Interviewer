@@ -97,7 +97,8 @@ class FinishSession extends Component {
           <div className="finish-session-interface__section finish-session-interface__section--instructions">
             <p>
               You have reached the end of the interview.
-              If you’ve completed all input, you may finish the interview now.
+              If you are satisfied with the information you have entered, you may finish the
+              interview now.
             </p>
           </div>
 
