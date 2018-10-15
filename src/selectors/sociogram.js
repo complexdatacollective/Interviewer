@@ -60,9 +60,9 @@ const makeGetHighlightOptions = () =>
       const allowHighlighting = highlight && !edges.canCreateEdge ? get(highlight, 'allowHighlighting', true) : false;
       return ({
         allowHighlighting,
-        highlightAttributes: has(highlight, 'variable') ?
-          { [highlight.variable]: highlight.value } :
-          undefined,
+        highlightAttribute: has(highlight, 'variable') ?
+          get(highlight, 'variable') :
+          false,
       });
     },
   );

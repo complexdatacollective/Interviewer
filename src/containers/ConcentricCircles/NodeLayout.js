@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { isEqual, isEmpty, pick, isMatch, has } from 'lodash';
+import { isEqual, isEmpty, pick, has } from 'lodash';
 import LayoutNode from './LayoutNode';
 import { withBounds } from '../../behaviours';
 import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
@@ -91,7 +91,7 @@ class NodeLayout extends Component {
 
     this.connectNode(node[nodePrimaryKeyProperty]);
 
-    this.toggleHighlightAttributes(node[nodePrimaryKeyProperty]);
+    this.toggleHighlightAttribute(node);
 
     this.forceUpdate();
   }
@@ -117,18 +117,18 @@ class NodeLayout extends Component {
     this.props.updateLinkFrom(null);
   }
 
-  toggleHighlightAttributes(nodeId) {
+  toggleHighlightAttribute(node) {
     if (!this.props.allowHighlighting) { return; }
-
+    const newVal = !node[nodeAttributesProperty][this.props.highlightAttribute];
     this.props.toggleHighlight(
-      nodeId,
-      { ...this.props.highlightAttributes },
+      node[nodePrimaryKeyProperty],
+      { [this.props.highlightAttribute]: newVal },
     );
   }
 
   isHighlighted(node) {
-    return !isEmpty(this.props.highlightAttributes) &&
-      isMatch(node[nodeAttributesProperty], this.props.highlightAttributes);
+    return !isEmpty(this.props.highlightAttribute) &&
+      node[nodeAttributesProperty][this.props.highlightAttribute] === true;
   }
 
   isLinking(node) {
