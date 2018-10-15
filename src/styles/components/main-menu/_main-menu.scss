@@ -99,7 +99,7 @@
       justify-content: center;
 
       &:not(.menu-panel--active) {
-        .settings-menu {
+        .main-menu-settings-menu {
           transition-delay: unset;
           opacity: 0;
           pointer-events: none;
@@ -115,7 +115,7 @@
       justify-content: center;
 
       &:not(.menu-panel--active) {
-        .stages-menu {
+        .main-menu-stages-menu {
           transition-delay: unset;
           opacity: 0;
           pointer-events: none;
@@ -140,7 +140,7 @@
   }
 }
 
-.stages-menu {
+.main-menu-stages-menu {
   width: 100%;
   height: 100%;
   display: flex;
@@ -278,7 +278,7 @@
   }
 }
 
-.settings-menu {
+.main-menu-settings-menu {
   width: 100%;
   height: 100%;
   display: flex;

@@ -15,11 +15,11 @@ const SettingsMenu = ({
     onClickInactive={onClickInactive}
   >
     <Icon name="settings" />
-    <div className="settings-menu">
-      <div className="settings-menu__header">
+    <div className="main-menu-settings-menu">
+      <div className="main-menu-settings-menu__header">
         <h1>Settings</h1>
       </div>
-      <div className="settings-menu__form">
+      <div className="main-menu-settings-menu__form">
         <fieldset>
           <legend>Developer Options</legend>
           <p>During an active interview session, clicking this button will create mock nodes for

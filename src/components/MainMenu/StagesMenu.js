@@ -33,8 +33,8 @@ class StagesMenu extends PureComponent {
         onClickInactive={onClickInactive}
       >
         <Icon name="menu-default-interface" />
-        <div className="stages-menu" >
-          <div className="stages-menu__timeline">
+        <div className="main-menu-stages-menu" >
+          <div className="main-menu-stages-menu__timeline">
             <div className="stages-timeline__header">
               <h1>Interview Stages</h1>
               <input
