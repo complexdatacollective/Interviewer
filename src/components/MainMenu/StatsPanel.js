@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '../../ui/components';
 
 const StatsPanel = ({ onFinishInterview }) => (
-  <div className="stages-menu__stats">
+  <div className="main-menu-stats-panel">
     <h4>Session Information</h4>
     <Button onClick={onFinishInterview}>Finish Interview</Button>
   </div>
