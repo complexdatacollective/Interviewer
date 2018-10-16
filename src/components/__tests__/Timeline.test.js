@@ -1,15 +1,16 @@
 /* eslint-env jest */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Timeline } from '../Timeline';
+
 
 describe('Timeline component', () => {
   const toggleMock = jest.fn();
   const backMock = jest.fn();
   const nextMock = jest.fn();
 
-  const component = shallow(
+  const component = mount(
     <Timeline
       percentProgress="40"
       onClickBack={backMock}
@@ -18,13 +19,9 @@ describe('Timeline component', () => {
     />,
   );
 
-  it('renders Timeline', () => {
-    expect(component).toMatchSnapshot();
-  });
-
   it('toggles menu on timeline click', () => {
     expect(toggleMock.mock.calls.length).toBe(0);
-    component.find('.timeline').simulate('click');
+    component.find('.progress-bar').simulate('click');
     expect(toggleMock.mock.calls.length).toBe(1);
   });
 

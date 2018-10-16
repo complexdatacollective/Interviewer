@@ -11,7 +11,6 @@ $timeline-button-size: 6rem;
   top: 0;
   left: 0;
   z-index: 2000;
-  overflow: hidden;
 
   svg {
     height: 2rem;
@@ -42,8 +41,8 @@ $timeline-button-size: 6rem;
         transition: transform var(--animation-duration-fast) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
         display: block;
         position: absolute;
-        height: $timeline-button-size * 2;
-        width: $timeline-button-size * 2;
+        height: 9rem;
+        width: 9rem;
         border-radius: 50%;
         z-index: -1;
         background: var(--primary);
