@@ -1,7 +1,12 @@
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 // container for menus and content
 .app {
   background: palette('primary');
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 
   .electron-titlebar {
@@ -28,7 +33,7 @@
     @include vcjc; // vertical center, justify center
     background: palette('background');
     box-sizing: border-box;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     width: 100vw;
     display: flex;
