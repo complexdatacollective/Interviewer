@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import { isEmpty } from 'lodash';
 import Overlay from '../components/Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
@@ -12,6 +13,8 @@ import { nodeAttributesProperty } from '../ducks/modules/network';
 import isLarge from '../utils/isLarge';
 
 const reduxFormName = 'NODE_FORM';
+
+const notEmpty = (...args) => !isEmpty(...args);
 
 class NodeForm extends Component {
   constructor(props) {
@@ -45,7 +48,7 @@ class NodeForm extends Component {
       onSubmit: this.handleSubmit,
       autoFocus: true,
       controls: [
-        (form.optionToAddAnother && <ToggleInput
+        (form && form.optionToAddAnother && <ToggleInput
           key="toggleInput"
           name="addAnother"
           label="Add another?"
@@ -54,7 +57,7 @@ class NodeForm extends Component {
           inline
         />),
         <Button key="submit" aria-label="Submit">Finished</Button>,
-      ],
+      ].filter(notEmpty),
       form: reduxFormName,
     };
 
