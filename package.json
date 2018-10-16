@@ -34,7 +34,8 @@
     "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
-    "bump": "sh scripts/bump"
+    "bump": "sh scripts/bump",
+    "preflight": "npm run lint && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
   },
   "repository": {
     "type": "git"
