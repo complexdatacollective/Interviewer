@@ -74,7 +74,7 @@ const checkZipPaths = inEnvironment((environment) => {
             reject(new Error('Invalid archive (absolute paths not allowed)'));
             return true;
           }
-          if ((/^\.\./.test(normalizedPath)) || normalizedPath.includes('../')) {
+          if (normalizedPath.startsWith('..')) {
             reject(new Error('Invalid archive (directory traversal not allowed)'));
             return true;
           }
@@ -92,7 +92,7 @@ const checkZipPaths = inEnvironment((environment) => {
         if (zipPaths.some(f => f.startsWith('/'))) {
           reject('Invalid archive (absolute paths not allowed)');
         }
-        if (zipPaths.some(f => f.includes('../'))) {
+        if (zipPaths.some(f => f.startsWith('..') || f.includes('../'))) {
           reject(new Error('Invalid archive (directory traversal not allowed)'));
         }
         resolve();
