@@ -59,10 +59,54 @@ const extractZipFile = inEnvironment((environment) => {
   return () => Promise.reject(new Error('extractZipFile() not available on platform'));
 });
 
+const checkZipPaths = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    return zipPaths =>
+      new Promise((resolve, reject) => {
+        const path = require('path');
+        zipPaths.some((zipPath) => {
+          const normalizedPath = path.normalize(zipPath);
+          if (!normalizedPath) {
+            reject(new Error('Invalid archive (empty paths not allowed)'));
+            return true;
+          }
+          if (path.isAbsolute(normalizedPath)) {
+            reject(new Error('Invalid archive (absolute paths not allowed)'));
+            return true;
+          }
+          if ((/^\.\./.test(normalizedPath)) || normalizedPath.includes('../')) {
+            reject(new Error('Invalid archive (directory traversal not allowed)'));
+            return true;
+          }
+          return false;
+        });
+        resolve();
+      });
+  }
+  if (environment === environments.CORDOVA) {
+    return zipPaths =>
+      new Promise((resolve, reject) => {
+        if (!zipPaths.every(f => f)) {
+          reject(new Error('Invalid archive (empty paths not allowed)'));
+        }
+        if (zipPaths.some(f => f.startsWith('/'))) {
+          reject('Invalid archive (absolute paths not allowed)');
+        }
+        if (zipPaths.some(f => f.includes('../'))) {
+          reject(new Error('Invalid archive (directory traversal not allowed)'));
+        }
+        resolve();
+      });
+  }
+
+  return () => Promise.reject(new Error('checkZipPaths() not available on platform'));
+});
+
 const extractZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
     return (zip, destination) =>
       prepareDestination(destination)
+        .then(() => checkZipPaths(Object.keys(zip.files)))
         .then(() =>
           inSequence(
             Object.values(zip.files),
