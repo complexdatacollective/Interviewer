@@ -66,7 +66,7 @@ const checkZipPaths = inEnvironment((environment) => {
         const path = require('path');
         zipPaths.some((zipPath) => {
           const normalizedPath = path.normalize(zipPath);
-          if (!normalizedPath) {
+          if (!zipPath) {
             reject(new Error('Invalid archive (empty paths not allowed)'));
             return true;
           }
@@ -90,7 +90,7 @@ const checkZipPaths = inEnvironment((environment) => {
           reject(new Error('Invalid archive (empty paths not allowed)'));
         }
         if (zipPaths.some(f => f.startsWith('/'))) {
-          reject('Invalid archive (absolute paths not allowed)');
+          reject(new Error('Invalid archive (absolute paths not allowed)'));
         }
         if (zipPaths.some(f => f.startsWith('..') || f.includes('../'))) {
           reject(new Error('Invalid archive (directory traversal not allowed)'));
@@ -170,3 +170,7 @@ const importProtocol = inEnvironment((environment) => {
 });
 
 export default importProtocol;
+
+export {
+  checkZipPaths,
+};
