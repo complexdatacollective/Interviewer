@@ -18,7 +18,7 @@
 
   &__prompts {
     position: absolute;
-    z-index: 100;
+    z-index: var(--z-panel);
     bottom: 0;
     right: 0;
 

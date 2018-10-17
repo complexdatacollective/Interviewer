@@ -1,6 +1,6 @@
 $search-icon-offset-x: 0;
 $search-icon-offset-y: 1.8rem; // match stage menu button
-$search-z-index: 1000;
+$search-z-index: var(--z-global-ui);
 
 .name-generator-auto-complete-interface {
   @include interface-centering;
