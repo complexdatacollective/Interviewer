@@ -410,6 +410,8 @@ const writeStream = inEnvironment((environment) => {
   throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
+// FIXME: this implies that it will recursively create directories, but if targetPath's parent
+//        doesn't already exist, this will error on both platforms
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
