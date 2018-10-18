@@ -14,9 +14,9 @@ const absolutePath = ['/example'];
 const emptyPath = [''];
 const mixedPaths = ['protocol.json', 'assets/example', '../example'];
 
-const traversalError = { message: /directory traversal not allowed/ };
-const absPathError = { message: /absolute paths not allowed/ };
-const emptyPathError = { message: /empty paths not allowed/ };
+const traversalError = /directory traversal not allowed/;
+const absPathError = /absolute paths not allowed/;
+const emptyPathError = /empty paths not allowed/;
 
 describe('importProtocol', () => {
   ([environments.CORDOVA, environments.ELECTRON]).forEach((platform) => {
@@ -38,22 +38,22 @@ describe('importProtocol', () => {
       });
 
       it('rejects traversing paths', async () => {
-        await expect(checkZipPaths(traversingPath)).rejects.toMatchObject(traversalError);
-        await expect(checkZipPaths(traversingInnerPath)).rejects.toMatchObject(traversalError);
+        await expect(checkZipPaths(traversingPath)).rejects.toThrow(traversalError);
+        await expect(checkZipPaths(traversingInnerPath)).rejects.toThrow(traversalError);
         // Technically only a problem on windows, but rejected outright anyway
-        await expect(checkZipPaths(traversingWindowsPath)).rejects.toMatchObject(traversalError);
+        await expect(checkZipPaths(traversingWindowsPath)).rejects.toThrow(traversalError);
       });
 
       it('rejects absolute paths', async () => {
-        await expect(checkZipPaths(absolutePath)).rejects.toMatchObject(absPathError);
+        await expect(checkZipPaths(absolutePath)).rejects.toThrow(absPathError);
       });
 
       it('rejects empty paths', async () => {
-        await expect(checkZipPaths(emptyPath)).rejects.toMatchObject(emptyPathError);
+        await expect(checkZipPaths(emptyPath)).rejects.toThrow(emptyPathError);
       });
 
       it('rejects when any path is invalid', async () => {
-        await expect(checkZipPaths(mixedPaths)).rejects.toMatchObject(traversalError);
+        await expect(checkZipPaths(mixedPaths)).rejects.toThrow(traversalError);
       });
     });
   });

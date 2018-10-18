@@ -3,9 +3,10 @@
 import Zip from 'jszip';
 import environments from '../environments';
 import inEnvironment from '../Environment';
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
 import { protocolPath } from './';
-import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
+import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './protocolValidation';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -60,40 +61,18 @@ const extractZipFile = inEnvironment((environment) => {
 });
 
 const checkZipPaths = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
+  if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
     return zipPaths =>
       new Promise((resolve, reject) => {
-        const path = require('path');
-        zipPaths.some((zipPath) => {
-          const normalizedPath = path.normalize(zipPath);
-          if (!zipPath) {
-            reject(new Error('Invalid archive (empty paths not allowed)'));
-            return true;
-          }
-          if (path.isAbsolute(normalizedPath)) {
-            reject(new Error('Invalid archive (absolute paths not allowed)'));
-            return true;
-          }
-          if (normalizedPath.startsWith('..')) {
-            reject(new Error('Invalid archive (directory traversal not allowed)'));
-            return true;
-          }
-          return false;
-        });
-        resolve();
-      });
-  }
-  if (environment === environments.CORDOVA) {
-    return zipPaths =>
-      new Promise((resolve, reject) => {
-        if (!zipPaths.every(f => f)) {
-          reject(new Error('Invalid archive (empty paths not allowed)'));
-        }
-        if (zipPaths.some(f => f.startsWith('/'))) {
-          reject(new Error('Invalid archive (absolute paths not allowed)'));
-        }
-        if (zipPaths.some(f => f.startsWith('..') || f.includes('../'))) {
-          reject(new Error('Invalid archive (directory traversal not allowed)'));
+        try {
+          zipPaths.forEach((pathname) => {
+            assertNonEmptyPath(pathname);
+            assertRelativePath(pathname);
+            assertNoTraversalInPath(pathname);
+          });
+        } catch (err) {
+          reject(err);
+          return;
         }
         resolve();
       });
