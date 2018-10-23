@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import deviceDescription from '../../utils/DeviceInfo';
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { actionCreators as deviceActions } from '../../ducks/modules/device';
+import { actionCreators as deviceActions } from '../../ducks/modules/deviceSettings';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { ProtocolList, SessionList } from '.';
 
@@ -63,7 +63,7 @@ class Setup extends Component {
               <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
               <div className="header-content__title-text">
                 <h1 className="type--title-1">Network Canvas</h1>
-                <h4>Alpha 8 - Lochs & Glens</h4>
+                <h4>Alpha 9</h4>
               </div>
             </div>
             <div className="header-content__nav">

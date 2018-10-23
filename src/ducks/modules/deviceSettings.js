@@ -1,11 +1,19 @@
 const SET_DESCRIPTION = 'SET_DESCRIPTION';
 
-const initialState = {};
+const initialState = {
+  description: 'Unknown device',
+  useFullScreenForms: true,
+  useDynamicScaling: true,
+  interfaceScale: 100,
+};
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case SET_DESCRIPTION:
-      return { ...state, description: action.description };
+      return {
+        ...state,
+        description: action.description,
+      };
     default:
       return state;
   }
