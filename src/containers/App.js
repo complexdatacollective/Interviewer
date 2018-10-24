@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
 
@@ -17,20 +16,6 @@ import MainMenu from '../containers/MainMenu';
   * @param props {object} - children
   */
 class App extends PureComponent {
-  componentDidMount() {
-    this.setFontSize();
-  }
-
-  componentDidUpdate() {
-    this.setFontSize();
-  }
-
-  setFontSize = () => {
-    const newFontSize = (1.75 * this.props.interfaceScale) / 100;
-    const root = document.documentElement;
-    root.style.setProperty('--base-font-size', `${newFontSize}vmin`);
-  }
-
   render() {
     const { children } = this.props;
     return (
@@ -62,18 +47,12 @@ class App extends PureComponent {
 
 App.propTypes = {
   children: PropTypes.any,
-  interfaceScale: PropTypes.number.isRequired,
 };
 
 App.defaultProps = {
   children: null,
 };
 
-const mapStateToProps = state => ({
-  interfaceScale: state.deviceSettings.interfaceScale,
-});
-
 export default compose(
   withRouter,
-  connect(mapStateToProps),
 )(App);
