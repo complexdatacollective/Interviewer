@@ -18,7 +18,7 @@ class SettingsMenu extends PureComponent {
     const root = document.documentElement;
     const newFontSize = this.props.useDynamicScaling ?
       `${(1.75 * this.props.interfaceScale) / 100}vmin` :
-      `${(16 * this.props.interfaceScale) / 100}px`;
+      `${(18 * this.props.interfaceScale) / 100}px`;
 
     root.style.setProperty('--base-font-size', newFontSize);
   }
@@ -93,17 +93,19 @@ class SettingsMenu extends PureComponent {
                 <legend>Display Settings</legend>
                 <section>
                   <p>
-                    The full screen node form is optomised for smaller devices, or devices with
-                    no physical keyboard.
+                    This setting allows you to control the size of the Network Canvas user
+                    interface. Increasing the interface size may limit the amount of information
+                    visible on each screen.
                   </p>
-                  <Toggle
-                    input={{
-                      checked: true,
-                      value: useFullScreenForms,
-                      onChange: toggleUseFullScreenForms,
-                    }}
-                    label="Use full screen node form?"
-                    fieldLabel=" "
+                  <label htmlFor="scaleFactor">Interface Scale</label>
+                  <input
+                    type="range"
+                    name="scaleFactor"
+                    min="80"
+                    max="120"
+                    value={interfaceScale}
+                    onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
+                    step="5"
                   />
                 </section>
                 <section>
@@ -123,19 +125,17 @@ class SettingsMenu extends PureComponent {
                 </section>
                 <section>
                   <p>
-                    This setting allows you to control the size of the Network Canvas user
-                    interface. Increasing the interface size may limit the amount of information
-                    visible on each screen.
+                    The full screen node form is optomised for smaller devices, or devices with
+                    no physical keyboard.
                   </p>
-                  <label htmlFor="scaleFactor">Interface Scale</label>
-                  <input
-                    type="range"
-                    name="scaleFactor"
-                    min="80"
-                    max="120"
-                    value={interfaceScale}
-                    onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
-                    step="5"
+                  <Toggle
+                    input={{
+                      checked: true,
+                      value: useFullScreenForms,
+                      onChange: toggleUseFullScreenForms,
+                    }}
+                    label="Use full screen node form?"
+                    fieldLabel=" "
                   />
                 </section>
               </fieldset>
