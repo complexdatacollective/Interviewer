@@ -40,7 +40,7 @@ class SettingsMenu extends PureComponent {
                   <p>The device name determines how your device appears to Server.</p>
                   <Text
                     input={{
-                      defaultValue: deviceDescription,
+                      value: deviceDescription,
                       onChange: e => setDeviceDescription(e.target.value),
                     }}
                     label="Device name"
