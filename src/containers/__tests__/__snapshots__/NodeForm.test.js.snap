@@ -37,7 +37,7 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "function",
     "props": Object {
-      "children": <FormWizard
+      "children": <Connect(AutoInitialisedForm)
         autoFocus={true}
         closeModal={[Function]}
         controls={
@@ -76,7 +76,7 @@ ShallowWrapper {
         title="The form title"
         type="person"
       />,
-      "className": "modal--fullscreen",
+      "className": "",
       "name": "baz",
       "title": "The form title",
     },
@@ -137,7 +137,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "function",
       "props": Object {
-        "children": <FormWizard
+        "children": <Connect(AutoInitialisedForm)
           autoFocus={true}
           closeModal={[Function]}
           controls={
@@ -176,7 +176,7 @@ ShallowWrapper {
           title="The form title"
           type="person"
         />,
-        "className": "modal--fullscreen",
+        "className": "",
         "name": "baz",
         "title": "The form title",
       },

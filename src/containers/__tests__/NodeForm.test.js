@@ -8,14 +8,6 @@ import NodeForm, { NodeForm as NodeFormPure } from '../NodeForm';
 
 jest.mock('../../utils/CSSVariables');
 
-window.matchMedia =
-  window.matchMedia ||
-  (() => ({
-    matches: false,
-    addListener: () => {},
-    removeListener: () => {},
-  }));
-
 const node = {
   attributes: {
     foo: 'bar',
@@ -58,6 +50,9 @@ const mockStore = () =>
   createStore(() => ({
     protocol: {
       variableRegistry,
+    },
+    deviceSettings: {
+      useFullScreenForms: false,
     },
     modals: [{ name: 'baz', open: true }],
   }));
