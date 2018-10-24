@@ -6,23 +6,6 @@ import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
 
 class SettingsMenu extends PureComponent {
-  componentDidMount() {
-    this.setFontSize();
-  }
-
-  componentDidUpdate() {
-    this.setFontSize();
-  }
-
-  setFontSize = () => {
-    const root = document.documentElement;
-    const newFontSize = this.props.useDynamicScaling ?
-      `${(1.75 * this.props.interfaceScale) / 100}vmin` :
-      `${(18 * this.props.interfaceScale) / 100}px`;
-
-    root.style.setProperty('--base-font-size', newFontSize);
-  }
-
   render() {
     const {
       active,
