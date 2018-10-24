@@ -67,16 +67,15 @@ class NodeForm extends Component {
     });
   }
 
-  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches;
-
   render() {
     const {
       name,
       title,
       showAddAnotherToggle,
+      useFullScreenForms,
     } = this.props;
 
-    const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
+    const modalClassNames = cx({ 'modal--fullscreen': useFullScreenForms });
 
     const formProps = {
       ...this.props,
@@ -96,11 +95,11 @@ class NodeForm extends Component {
       onSubmit: this.onSubmit,
     };
 
-    const formElement = this.isLarge() ?
-      (<Form
+    const formElement = useFullScreenForms ?
+      (<FormWizard
         {...formProps}
       />) :
-      (<FormWizard
+      (<Form
         {...formProps}
       />);
 
@@ -128,6 +127,7 @@ NodeForm.propTypes = {
   openModal: PropTypes.func.isRequired,
   resetValues: PropTypes.func.isRequired,
   showAddAnotherToggle: PropTypes.bool,
+  useFullScreenForms: PropTypes.bool.isRequired,
 };
 
 NodeForm.defaultProps = {
@@ -141,6 +141,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       initialValues: getInitialValuesFromProps(state, props),
+      useFullScreenForms: state.deviceSettings.useFullScreenForms,
     };
   };
 }
