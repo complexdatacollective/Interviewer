@@ -34,13 +34,16 @@
     "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
-    "bump": "sh scripts/bump"
+    "bump": "sh scripts/bump",
+    "generate-schema": "node scripts/schema/generate-schema.js",
+    "validate-protocol": "node scripts/schema/validate-protocol.js"
   },
   "repository": {
     "type": "git"
   },
   "devDependencies": {
     "@zippytech/sorty": "^2.0.0",
+    "ajv": "^6.5.4",
     "animejs": "^2.2.0",
     "autoprefixer": "7.1.2",
     "axios": "^0.18.0",
@@ -108,6 +111,7 @@
     "postcss-loader": "2.0.6",
     "promise": "7.1.1",
     "prop-types": "^15.6.2",
+    "quicktype": "^15.0.137",
     "react": "^16.5.2",
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.5.2",
