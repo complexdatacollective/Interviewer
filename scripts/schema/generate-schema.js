@@ -86,6 +86,8 @@ const generateSchema = async () => {
   const schema = JSON.parse(fs.readFileSync(schemaFile));
   const defs = schema.definitions;
 
+  schema.$schema = 'http://json-schema.org/draft-07/schema#';
+
   defs.Protocol.required = ['name', 'stages', 'variableRegistry'];
   defs.Protocol.properties.stages.minItems = 1;
   defs.Protocol.properties.lastModified.format = 'date-time';
