@@ -245,7 +245,7 @@ const xmlToString = (xmlData) => {
   return xmlString;
 };
 
-const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
+const createGraphML = (networkData, variableRegistry, onError) => {
   // default graph structure
   const xml = setUpXml();
   const graph = xml.getElementsByTagName('graph')[0];
@@ -281,7 +281,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   if (missingVariables.length > 0) {
     // hard fail if checking the registry fails
     // remove this to fall back to using "text" for unknowns
-    // openErrorDialog(`The variable registry seems to be missing
+    // onError(`The variable registry seems to be missing
     // "type" of: ${join(missingVariables, ', ')}.`);
     // return null;
   }
@@ -290,7 +290,7 @@ const createGraphML = (networkData, variableRegistry, openErrorDialog) => {
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [nodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'type'], variableRegistry, null, true);
 
-  return saveFile(xmlToString(xml), openErrorDialog, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
+  return saveFile(xmlToString(xml), onError, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
 };
 

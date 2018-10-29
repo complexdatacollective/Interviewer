@@ -11,9 +11,9 @@ const requiredProps = {
   nodesForPrompt: [],
   openModal: jest.fn(),
   prompt: {},
+  stage: {},
   promptBackward: jest.fn(),
   promptForward: jest.fn(),
-  stage: {},
   updateNode: jest.fn(),
 };
 
@@ -24,8 +24,11 @@ describe('NameGenerator', () => {
   });
 
   it('renders a node form if provided in props', () => {
-    const props = { ...requiredProps, form: {} };
-    const elem = shallow(<NameGenerator {...props} />);
+    const props = {
+      stage: { form: {} },
+    };
+    const elem = shallow(<NameGenerator {...requiredProps} {...props} />);
+    elem.find('.name-generator-interface__add-person').simulate('click');
     expect(elem.find('Connect(NodeForm)').length).toBeGreaterThan(0);
   });
 });

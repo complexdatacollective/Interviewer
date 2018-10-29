@@ -5,12 +5,10 @@ import PropTypes from 'prop-types';
 import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
-import { makeRehydrateForm } from '../../selectors/forms';
 
 /**
   * Name Generator Interface
@@ -20,46 +18,25 @@ class NameGenerator extends Component {
   constructor(props) {
     super(props);
 
-    this.forms = {
-      ADD_NODE: Symbol('ADD_NODE'),
-      EDIT_NODE: Symbol('EDIT_NODE'),
-    };
-
     this.state = {
       selectedNode: null,
+      showNodeForm: null,
     };
   }
 
   /**
-   * New node submit handler
+   * Node Form submit handler
    */
-  onSubmitNewNode = (formData) => {
-    if (formData) {
-      this.props.addNodes({ attributes: { ...formData } }, this.props.newNodeAttributes);
-    }
-  }
-
-  /**
-   * Edit node submit handler
-   * @param {object} formData - key/value object containing node fields
-   */
-  onSubmitEditNode = (formData) => {
-    if (formData) {
-      this.props.updateNode({ ...this.state.selectedNode }, { ...formData });
-    }
-  }
-
-  /**
-   * Click node handler
-   * Triggers the edit node form
-   * @param {object} node - key/value object containing node object from the network store
-   */
-  onSelectNode = (node) => {
-    this.setState({ selectedNode: node }, () => {
-      if (this.props.form) {
-        this.props.openModal(this.forms.EDIT_NODE);
+  handleSubmitForm = ({ form, addAnotherNode } = { addAnotherNode: false }) => {
+    if (form) {
+      if (!this.state.selectedNode) {
+        this.props.addNodes({ attributes: { ...form } }, this.props.newNodeAttributes);
+      } else {
+        this.props.updateNode({ ...this.state.selectedNode }, form);
       }
-    });
+    }
+
+    this.setState({ showNodeForm: addAnotherNode, selectedNode: null });
   }
 
   /**
@@ -67,7 +44,7 @@ class NameGenerator extends Component {
    * Adds prompt attributes to existing nodes, or adds new nodes to the network.
    * @param {object} node - key/value object containing node object from the network store
    */
-  onDrop = (item) => {
+  handleDropNode = (item) => {
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptId') || has(node, 'stageId')) {
@@ -77,11 +54,35 @@ class NameGenerator extends Component {
     }
   }
 
+  /**
+   * Click node handler
+   * Triggers the edit node form
+   * @param {object} node - key/value object containing node object from the network store
+   */
+  handleSelectNode = (node) => {
+    this.setState({
+      selectedNode: node,
+      showNodeForm: true,
+    });
+  }
+
+  handleClickAddNode = () => {
+    this.setState({
+      selectedNode: null,
+      showNodeForm: true,
+    });
+  }
+
+  handleCloseForm = () => {
+    this.setState({
+      selectedNode: null,
+      showNodeForm: false,
+    });
+  }
+
   render() {
     const {
-      form,
       nodesForPrompt,
-      openModal,
       prompt,
       promptBackward,
       promptForward,
@@ -90,35 +91,8 @@ class NameGenerator extends Component {
 
     const {
       prompts,
+      form,
     } = this.props.stage;
-
-    const nodeForms = form && (
-      <React.Fragment>
-        <NodeForm
-          node={this.state.selectedNode}
-          name={this.forms.EDIT_NODE}
-          title={form.title}
-          fields={form.fields}
-          entity={form.entity}
-          type={form.type}
-          autoPopulate={form.autoPopulate}
-          onSubmit={this.onSubmitEditNode}
-        />
-        <NodeForm
-          name={this.forms.ADD_NODE}
-          title={form.title}
-          fields={form.fields}
-          entity={form.entity}
-          type={form.type}
-          autoPopulate={form.autoPopulate}
-          onSubmit={this.onSubmitNewNode}
-          showAddAnotherToggle={form.optionToAddAnother}
-        />
-        <button className="name-generator-interface__add-person" onClick={() => openModal(this.forms.ADD_NODE)}>
-          Add a person
-        </button>
-      </React.Fragment>
-    );
 
     return (
       <div className="name-generator-interface">
@@ -141,13 +115,26 @@ class NameGenerator extends Component {
               id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
-              onDrop={this.onDrop}
-              onSelect={this.onSelectNode}
+              onDrop={this.handleDropNode}
+              onSelect={this.handleSelectNode}
             />
           </div>
         </div>
 
-        { nodeForms }
+        { form &&
+          <button className="name-generator-interface__add-person" onClick={this.handleClickAddNode}>
+            Add a person
+          </button>
+        }
+        { form &&
+          <NodeForm
+            node={this.state.selectedNode}
+            stage={this.props.stage}
+            onSubmit={this.handleSubmitForm}
+            onClose={this.handleCloseForm}
+            show={this.state.showNodeForm}
+          />
+        }
 
         <div className="name-generator-interface__node-bin">
           <NodeBin id="NODE_BIN" />
@@ -168,7 +155,6 @@ NameGenerator.propTypes = {
   form: PropTypes.object,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
-  openModal: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -179,12 +165,10 @@ NameGenerator.propTypes = {
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-  const rehydrateForm = makeRehydrateForm();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
-      form: rehydrateForm(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
     };
@@ -194,8 +178,6 @@ function makeMapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
-    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
     updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }

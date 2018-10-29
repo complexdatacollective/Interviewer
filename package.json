@@ -35,6 +35,7 @@
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
+    "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage",
     "generate-schema": "node scripts/schema/generate-schema.js",
     "validate-protocol": "node scripts/schema/validate-protocol.js"
   },

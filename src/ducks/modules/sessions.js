@@ -7,7 +7,6 @@ import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, T
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
-
 const ADD_SESSION = 'ADD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
@@ -253,6 +252,7 @@ const actionCreators = {
   updatePrompt,
   removeSession,
   exportSession,
+  sessionExportFailed,
 };
 
 const actionTypes = {

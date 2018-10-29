@@ -1,65 +1,31 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import PropTypes from 'prop-types';
-import { pick, map } from 'lodash';
-import { createSelector } from 'reselect';
-import cx from 'classnames';
-
+import { isEmpty } from 'lodash';
+import Overlay from '../components/Overlay';
+import Form from './Form';
+import FormWizard from './FormWizard';
 import { Button, ToggleInput } from '../ui/components';
-import { actionCreators as modalActions } from '../ducks/modules/modals';
+import { getDefaultFormValues } from '../selectors/forms';
+import { protocolForms } from '../selectors/protocol';
 import { nodeAttributesProperty } from '../ducks/modules/network';
-import { Form, FormWizard } from '../containers/';
-import { Modal } from '../components/';
-import { makeRehydrateFields } from '../selectors/forms';
+import isLarge from '../utils/isLarge';
 
-const propNodeAttributes = (_, props) => props.node && props.node[nodeAttributesProperty];
+const reduxFormName = 'NODE_FORM';
 
-const makePropFieldVariables = () =>
-  createSelector(
-    makeRehydrateFields(),
-    fields => map(fields, 'name'),
-  );
+const notEmpty = (...args) => !isEmpty(...args);
 
-const makeGetPropFieldValues = () =>
-  createSelector(
-    makeRehydrateFields(),
-    fields => Object.assign({}, ...fields.filter(field => field.value)
-      .map(field => ({ [field.name]: field.value }))),
-  );
-
-const makeGetInitialValuesFromProps = () =>
-  createSelector(
-    makePropFieldVariables(),
-    makeGetPropFieldValues(),
-    propNodeAttributes,
-    (fields, values, nodeAttributes) => ({ ...values, ...pick(nodeAttributes, fields) }),
-  );
-
-/**
-  * Modal Node Form, than can handle new/editing of nodes
-  * @extends Component
-  */
 class NodeForm extends Component {
   constructor(props) {
     super(props);
-    this.modalRef = React.createRef();
+
     this.state = {
       addAnotherNode: false,
     };
+
+    this.overlay = React.createRef();
   }
-
-  onSubmit = (formData, dispatch, form) => {
-    this.props.onSubmit(formData, dispatch, form);
-
-    if (this.state.addAnotherNode) {
-      this.props.resetValues(form.form);
-      this.modalRef.current.scrollContentsToTop();
-    } else {
-      this.props.closeModal(this.props.name);
-    }
-  };
 
   onToggleClick = () => {
     this.setState({
@@ -67,22 +33,22 @@ class NodeForm extends Component {
     });
   }
 
-  isLarge = () => window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches;
+  handleSubmit = (form) => {
+    this.props.onSubmit({ form, addAnotherNode: this.state.addAnotherNode });
+    this.overlay.current.scrollContentsToTop();
+    this.props.resetValues(reduxFormName);
+  }
 
   render() {
-    const {
-      name,
-      title,
-      showAddAnotherToggle,
-    } = this.props;
-
-    const modalClassNames = cx({ 'modal--fullscreen': !this.isLarge() });
+    const { show, form, initialValues } = this.props;
 
     const formProps = {
-      ...this.props,
+      ...form,
+      initialValues,
+      onSubmit: this.handleSubmit,
       autoFocus: true,
       controls: [
-        (showAddAnotherToggle && <ToggleInput
+        (form && form.optionToAddAnother && <ToggleInput
           key="toggleInput"
           name="addAnother"
           label="Add another?"
@@ -91,68 +57,52 @@ class NodeForm extends Component {
           inline
         />),
         <Button key="submit" aria-label="Submit">Finished</Button>,
-      ],
-      form: name.toString(),
-      onSubmit: this.onSubmit,
+      ].filter(notEmpty),
+      form: reduxFormName,
     };
 
-    const formElement = this.isLarge() ?
-      (<Form
-        {...formProps}
-      />) :
-      (<FormWizard
-        {...formProps}
-      />);
-
     return (
-      <Modal name={name} title={title} className={modalClassNames} ref={this.modalRef}>
-        {formElement}
-      </Modal>
+      <Overlay
+        show={show}
+        title={form.title}
+        ref={this.overlay}
+        onClose={this.props.onClose}
+      >
+        { isLarge() ?
+          <Form
+            {...formProps}
+          /> :
+          <FormWizard
+            {...formProps}
+          />
+        }
+      </Overlay>
     );
   }
 }
 
-NodeForm.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  fields: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.any.isRequired,
-  name: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.symbol,
-  ]).isRequired,
-  title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  entity: PropTypes.string.isRequired,
-  node: PropTypes.object,
-  openModal: PropTypes.func.isRequired,
-  resetValues: PropTypes.func.isRequired,
-  showAddAnotherToggle: PropTypes.bool,
-};
+const mapStateToProps = (state, props) => {
+  const forms = protocolForms(state);
+  const defaultFormValues = getDefaultFormValues(state);
+  const nodeAttributes = props.node ? props.node[nodeAttributesProperty] : {};
 
-NodeForm.defaultProps = {
-  showAddAnotherToggle: false,
-  node: {},
-};
-
-function makeMapStateToProps() {
-  const getInitialValuesFromProps = makeGetInitialValuesFromProps();
-
-  return function mapStateToProps(state, props) {
-    return {
-      initialValues: getInitialValuesFromProps(state, props),
-    };
+  const initialValues = {
+    ...defaultFormValues[props.stage.form],
+    ...nodeAttributes,
   };
-}
 
-function mapDispatchToProps(dispatch) {
   return {
-    closeModal: bindActionCreators(modalActions.closeModal, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
-    resetValues: bindActionCreators(reset, dispatch),
+    form: forms[props.stage.form],
+    initialValues,
   };
-}
+};
+
+const mapDispatchToProps = dispatch => ({
+  resetValues: bindActionCreators(reset, dispatch),
+});
 
 export { NodeForm };
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(NodeForm);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+)(NodeForm);

@@ -5,11 +5,10 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 
 import createGraphML from '../../utils/ExportData';
-import Dialog from '../../containers/Dialog';
 import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
@@ -81,10 +80,15 @@ class FinishSession extends Component {
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 
-  downloadData = (additionalInformation) => {
-    this.setState({
-      downloadDataAdditionalInfo: additionalInformation,
-    }, () => this.props.openModal('DOWNLOAD_DATA'));
+  handleExportError = (additionalInformation) => {
+    const error = new Error(additionalInformation);
+    error.friendlyMessage = 'There was a problem downloading your data.';
+
+    this.props.openDialog({
+      type: 'Error',
+      error,
+      confirmLabel: 'Okay',
+    });
   }
 
   render() {
@@ -113,22 +117,11 @@ class FinishSession extends Component {
               <Button
                 color="platinum"
                 onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.variableRegistry, this.downloadData)}
+                  this.props.variableRegistry, this.handleExportError)}
               >
                 Download
               </Button>
             </div>
-            <Dialog
-              name="DOWNLOAD_DATA"
-              title="Download Error"
-              type="error"
-              hasCancelButton={false}
-              confirmLabel="Okay"
-              additionalInformation={this.state.downloadDataAdditionalInfo}
-              onConfirm={() => {}}
-            >
-              <p>There was a problem downloading your data.</p>
-            </Dialog>
           </div>
 
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
@@ -148,7 +141,7 @@ FinishSession.propTypes = {
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   exportSession: PropTypes.func.isRequired,
-  openModal: PropTypes.func.isRequired,
+  openDialog: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
   variableRegistry: PropTypes.object,
@@ -183,7 +176,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(sessionActions.endSession());
       dispatch(push('/'));
     },
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
+    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }
 
