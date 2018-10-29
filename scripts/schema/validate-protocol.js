@@ -22,6 +22,7 @@ const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'developmen
 const protocolArg = process.argv[2];
 const protocolFilepath = protocolArg || defaultProtocol;
 const protocolName = protocolArg ? path.basename(protocolFilepath) : 'development.netcanvas';
+const exitOnValidationFailure = !!process.env.CI;
 
 let protocolContents;
 
@@ -53,7 +54,7 @@ const validateJson = (jsonString) => {
   } catch (e) {
     console.error(chalk.red('Invalid protocol file'));
     console.error(e);
-    process.exit(0);
+    process.exit(1);
   }
 
   const ajv = new Ajv({
@@ -78,6 +79,10 @@ const validateJson = (jsonString) => {
       addlPropErrors.forEach((err) => {
         console.warn('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
       });
+    }
+
+    if (exitOnValidationFailure) {
+      process.exit(1);
     }
   }
 };
