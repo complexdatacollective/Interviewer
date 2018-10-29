@@ -42,7 +42,7 @@ const generateAbstractProtocol = () => {
     description: '', // A human readable description for this variable
     type: '', // A valid variable type. For types, see below.
     validation: {
-      // See https://github.com/codaco/Architect/blob/v4.0.0-alpha.4/src/utils/validations.js
+      // See src/utils/Validations.js
       required: true,
       requiredAcceptsNull: true,
       minLength: 1,
@@ -89,7 +89,14 @@ const generateSchema = async () => {
   defs.Protocol.properties.stages.minItems = 1;
   defs.Protocol.properties.lastModified.format = 'date-time';
 
-  const stageTypeEnum = ['NameGenerator', 'NameGeneratorList', 'NameGeneratorAutoComplete', 'Sociogram', 'Information', 'OrdinalBin'];
+  const stageTypeEnum = [
+    'NameGenerator',
+    'NameGeneratorList',
+    'NameGeneratorAutoComplete',
+    'Sociogram',
+    'Information',
+    'OrdinalBin',
+  ];
   defs.Stage.title = 'Interface';
   defs.Stage.properties.type.enum = stageTypeEnum;
   defs.Stage.properties.prompts.minItems = 1;
@@ -146,6 +153,16 @@ const generateSchema = async () => {
   delete defs.Forms.properties;
   delete defs.Forms.required;
 
+  defs.Field.properties.component.enum = [
+    'Checkbox',
+    'CheckboxGroup',
+    'RadioGroup',
+    'Text',
+    'Toggle',
+    'ToggleButtonGroup',
+    'hidden',
+  ];
+
   // subject.entity
   defs.Entity.enum = ['node', 'edge'];
 
@@ -156,7 +173,16 @@ const generateSchema = async () => {
   defs.SkipLogic.properties.value.minimum = 1;
   defs.SkipLogic.properties.value.multipleOf = 1;
   defs.SkipLogic.properties.action.enum = ['SHOW', 'SKIP'];
-  defs.SkipLogic.properties.operator.enum = ['ANY', 'NONE', 'EXACTLY', 'NOT', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL'];
+  defs.SkipLogic.properties.operator.enum = [
+    'ANY',
+    'NONE',
+    'EXACTLY',
+    'NOT',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUAL',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUAL',
+  ];
   defs.SkipLogic.allOf = [
     {
       if: { properties: { operator: { enum: ['ANY', 'NONE'] } } },
@@ -168,7 +194,16 @@ const generateSchema = async () => {
 
   defs.Rule.type.enum = ['alter', 'ego', 'edge'];
 
-  const filterOptionsEnum = ['EXISTS', 'NOT_EXISTS', 'EXACTLY', 'NOT', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL'];
+  const filterOptionsEnum = [
+    'EXISTS',
+    'NOT_EXISTS',
+    'EXACTLY',
+    'NOT',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUAL',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUAL',
+  ];
   defs.Options.properties.operator.enum = filterOptionsEnum;
   defs.Options.allOf = [
     {

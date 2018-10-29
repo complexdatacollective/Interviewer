@@ -22,10 +22,10 @@ import validations from '../utils/Validations';
 const fieldTypes = {
   Checkbox,
   CheckboxGroup,
-  ToggleButtonGroup,
   RadioGroup,
   Text,
   Toggle,
+  ToggleButtonGroup,
   hidden: props => <input {...props} type="hidden" />,
 };
 
