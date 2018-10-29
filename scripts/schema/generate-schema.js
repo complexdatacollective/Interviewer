@@ -38,6 +38,7 @@ const ensureOutputDir = () => {
 const generateAbstractProtocol = () => {
   // See https://github.com/codaco/Network-Canvas/wiki/protocol.json#variable-registry
   const variable = {
+    name: '', // A field name that will be used (for example) when exporting data from the app
     label: '', // A human readable short label for this variable.
     description: '', // A human readable description for this variable
     type: '', // A valid variable type. For types, see below.

@@ -13,6 +13,7 @@
         "iconVariant": "add-a-person",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Human readable description",
             "type": "text",
@@ -23,11 +24,13 @@
             }
           },
           "last_name": {
+            "name": "last_name",
             "label": "Last Name",
             "description": "Human readable description",
             "type": "text"
           },
           "age": {
+            "name": "age",
             "label": "Age",
             "description": "Human readable description",
             "type": "number",
@@ -38,6 +41,7 @@
             }
           },
           "nickname": {
+            "name": "nickname",
             "label": "Nickname",
             "description": "Human readable description",
             "type": "text",
@@ -48,26 +52,31 @@
             }
           },
           "close_friend": {
+            "name": "close_friend",
             "label": "Close Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "support_friend": {
+            "name": "support_friend",
             "label": "Support Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "advice_friend": {
+            "name": "advice_friend",
             "label": "Advice Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "has_given_advice": {
+            "name": "has_given_advice",
             "label": "Has given advice?",
             "description": "Human readable description",
             "type": "boolean"
           },
           "contactFreq": {
+            "name": "contactFreq",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
@@ -95,6 +104,7 @@
             ]
           },
           "discussFreq": {
+            "name": "discussFreq",
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
@@ -118,21 +128,25 @@
             ]
           },
           "closenessLayout": {
+            "name": "closenessLayout",
             "label": "Closeness layout",
             "description": "Closeness layout",
             "type": "layout"
           },
           "talk_friend": {
+            "name": "talk_friend",
             "label": "Talk friend",
             "description": "Talk friend",
             "type": "boolean"
           },
           "type": {
+            "name": "type",
             "label": "Type",
             "description": "Type",
             "type": "text"
           },
           "special_category": {
+            "name": "special_category",
             "label": "Special category",
             "description": "A special category",
             "type": "ordinal",
@@ -148,6 +162,7 @@
         "iconVariant": "add-a-person",
         "variables": {
           "label": {
+            "name": "label",
             "label": "Label",
             "description": "Human readable description",
             "type": "text",
@@ -158,6 +173,7 @@
             }
           },
           "numberVariable": {
+            "name": "numberVariable",
             "label": "Number Variable",
             "description": "Human readable description",
             "type": "number",
@@ -168,6 +184,7 @@
             }
           },
           "booleanVariable": {
+            "name": "booleanVariable",
             "label": "Boolean Variable",
             "description": "Human readable description",
             "type": "boolean",
@@ -176,16 +193,19 @@
             }
           },
           "booleanVariable2": {
+            "name": "booleanVariable2",
             "label": "Boolean  2",
             "description": "Human readable description",
             "type": "boolean"
           },
           "checkboxVariable": {
+            "name": "checkboxVariable",
             "label": "A Checkbox",
             "description": "Human readable description",
             "type": "boolean"
           },
           "ordinalVariable": {
+            "name": "ordinalVariable",
             "label": "Ordinal Variable",
             "description": "Human readable description",
             "type": "ordinal",
@@ -216,6 +236,7 @@
             }
           },
           "categoricalVariable": {
+            "name": "categoricalVariable",
             "label": "Categorical Variable",
             "description": "Huam readable description",
             "type": "categorical",
@@ -246,6 +267,7 @@
             }
           },
           "categoricalVariable2": {
+            "name": "categoricalVariable2",
             "label": "Categorical Variable2",
             "description": "Huam readable description",
             "type": "categorical",
@@ -306,6 +328,7 @@
         "iconVariant": "add-a-place",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Human readable description",
             "type": "text",
@@ -316,11 +339,13 @@
             }
           },
           "location": {
+            "name": "location",
             "label": "Location",
             "description": "Human readable description",
             "type": "location"
           },
           "visitFreq": {
+            "name": "visitfreq",
             "label": "Visit frequency ordinal variable.",
             "description": "Visit frequency ordinal variable",
             "type": "ordinal",
@@ -348,46 +373,55 @@
             ]
           },
           "primary_venue": {
+            "name": "primary_venue",
             "label": "Primary venue",
             "description": "Primary venue",
             "type": "boolean"
           },
           "Main/Parent Organization": {
+            "name": "parentorg",
             "label": "Main/Parent Organization",
             "description": "Main/Parent Organization",
             "type": "text"
           },
           "Subsidiary/Program/Project": {
+            "name": "subsidiary",
             "label": "Subsidiary/Program/Project",
             "description": "Subsidiary/Program/Project",
             "type": "text"
           },
           "Abbreviated Name": {
+            "name": "abbrevname",
             "label": "Abbreviated Name",
             "description": "Abbreviated Name",
             "type": "text"
           },
           "Standard Word Abbreviations": {
+            "name": "standardwordabbrev",
             "label": "Standard Word Abbreviations",
             "description": "Standard Word Abbreviations",
             "type": "text"
           },
           "Geocoded Address": {
+            "name": "addr",
             "label": "Geocoded Address",
             "description": "Geocoded Address",
             "type": "text"
           },
           "Latitude": {
+            "name": "lat",
             "label": "Latitude",
             "description": "Latitude",
             "type": "number"
           },
           "Longitude": {
+            "name": "long",
             "label": "Longitude",
             "description": "Longitude",
             "type": "number"
           },
           "Raw Address": {
+            "name": "rawaddr",
             "label": "Raw Address",
             "description": "Raw Address",
             "type": "text"
@@ -400,6 +434,7 @@
         "displayVariable": "name",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Name of the country",
             "type": "text",
@@ -410,6 +445,7 @@
             }
           },
           "location": {
+            "name": "location",
             "label": "Location",
             "description": "Human readable description",
             "type": "location"
@@ -424,6 +460,7 @@
         "color": "edge-color-seq-4",
         "variables": {
           "contactFreq": {
+            "name": "contactfrequency",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
