@@ -2,7 +2,6 @@
   "name": "Development Protocol",
   "description": "",
   "lastModified": "2018-10-01T00:00:00.000Z",
-  "version": "1.0.0",
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {

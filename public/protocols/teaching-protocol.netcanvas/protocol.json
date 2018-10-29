@@ -1,6 +1,6 @@
 {
   "name": "Teaching Protocol",
-  "version": "1.0.0",
+  "lastModified": "2018-10-01T00:00:00.000Z",
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {

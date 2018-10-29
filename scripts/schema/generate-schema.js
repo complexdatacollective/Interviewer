@@ -87,6 +87,7 @@ const generateSchema = async () => {
 
   defs.Protocol.required = ['name', 'stages', 'variableRegistry'];
   defs.Protocol.properties.stages.minItems = 1;
+  defs.Protocol.properties.lastModified.format = 'date-time';
 
   const stageTypeEnum = ['NameGenerator', 'NameGeneratorList', 'NameGeneratorAutoComplete', 'Sociogram', 'Information', 'OrdinalBin'];
   defs.Stage.title = 'Interface';
