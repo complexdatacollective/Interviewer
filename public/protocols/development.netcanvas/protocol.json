@@ -391,7 +391,7 @@
             "type": "text"
           },
           "Abbreviated Name": {
-            "name": "abbrevname",
+            "name": "Abbreviated Name",
             "label": "Abbreviated Name",
             "description": "Abbreviated Name",
             "type": "text"

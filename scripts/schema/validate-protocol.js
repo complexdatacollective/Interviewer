@@ -11,9 +11,10 @@ const Chalk = require('chalk').constructor;
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-
 const JSZip = require('jszip');
 const Ajv = require('ajv');
+
+const { validateProtocol } = require('../../src/utils/protocol/jsonValidation');
 
 const projectDir = path.join(__dirname, '..', '..');
 const schemaDir = path.join(projectDir, 'schema');
@@ -62,21 +63,30 @@ const validateJson = (jsonString) => {
   ajv.addFormat('integer', /\d+/);
 
   const validate = ajv.compile(schema);
-  const isValid = validate(data, 'Protocol');
+  const schemaIsValid = validate(data, 'Protocol');
+  const dataErrors = validateProtocol(data);
+  const isValid = schemaIsValid && !dataErrors.length;
 
   if (isValid) {
     console.log(`${protocolName} is valid`);
   } else {
-    console.error(chalk.red(`${protocolName} has errors:`));
-    console.warn('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
+    if (!schemaIsValid) {
+      console.error(chalk.red(`${protocolName} has schema errors:`));
+      console.warn('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
 
-    const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
-    if (addlPropErrors.length) {
-      console.warn('');
-      console.warn('additionalProperty error details:');
-      addlPropErrors.forEach((err) => {
-        console.warn('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
-      });
+      const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
+      if (addlPropErrors.length) {
+        console.warn('');
+        console.warn('additionalProperty error details:');
+        addlPropErrors.forEach((err) => {
+          console.warn('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
+        });
+      }
+    }
+
+    if (dataErrors.length) {
+      console.error(chalk.red(`${protocolName} has data errors:`));
+      console.warn('-', dataErrors.join(`${os.EOL}- `));
     }
 
     if (exitOnValidationFailure) {
