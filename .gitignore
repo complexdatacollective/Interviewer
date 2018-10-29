@@ -26,5 +26,5 @@ config.xml.original
 xcuserdata/
 IDEWorkspaceChecks.plist
 
-# Ignore auto-generated schema & protocol template
-/schema
+# Ignore protocol template used for schema generation
+/schema/abstract-protocol.json
