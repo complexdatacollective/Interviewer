@@ -88,6 +88,21 @@ const generateSchema = async () => {
   defs.Protocol.required = ['name', 'stages', 'variableRegistry'];
   defs.Protocol.properties.stages.minItems = 1;
 
+  const stageTypeEnum = ['NameGenerator', 'NameGeneratorList', 'NameGeneratorAutoComplete', 'Sociogram', 'Information', 'OrdinalBin'];
+  defs.Stage.title = 'Interface';
+  defs.Stage.properties.type.enum = stageTypeEnum;
+  defs.Stage.properties.prompts.minItems = 1;
+  defs.Stage.anyOf = [
+    {
+      properties: { type: { const: 'Information' } },
+      required: [...defs.Stage.required, 'items'],
+    },
+    {
+      properties: { type: { enum: without(stageTypeEnum, 'Information') } },
+      required: [...defs.Stage.required, 'prompts'],
+    },
+  ];
+
   // AdditionalAttributes & ExternalData have no defined props and may contain anything
   delete defs.AdditionalAttributes.properties;
   delete defs.AdditionalAttributes.additionalProperties;
