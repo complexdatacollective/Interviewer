@@ -397,12 +397,12 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is the person's name?"
         },
         {
           "variable": "nickname",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is their nickname?"
         },
         {
@@ -412,7 +412,7 @@
         },
         {
           "variable": "yearsKnown",
-          "component": "TextInput",
+          "component": "Text",
           "label": "How many years have you known this person?"
         }
       ]

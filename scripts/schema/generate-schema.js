@@ -52,7 +52,7 @@ const generateAbstractProtocol = () => {
       minSelected: 1,
       maxSelected: 10,
     }, // Validation rules, using redux-form compatible syntax.
-    options: [{ label: '1', value: '1' }],
+    options: [{ label: 'foo', value: 'bar' }, { label: 'baz', value: 1 }, 2, 'aString'],
   };
 
   // From the VR, keep only the one definition for node & edge
@@ -129,7 +129,7 @@ const generateSchema = async () => {
   delete defs.NodeTypeDef.required; // TODO: is this true?
 
   // See comments on Node, above
-  defs.Edge.patternProperties = { '.+': { properties: defs.Edge.properties } };
+  defs.Edge.patternProperties = { '.+': { ...defs.Edge.properties.edge } };
   delete defs.Edge.properties;
   delete defs.Edge.required;
 
@@ -137,7 +137,7 @@ const generateSchema = async () => {
 
   // Variables: one of `variableRegistry.node[NODE_TYPE].variables[VARIABLE_NAME]`
   // Used for both nodes & edges
-  defs.Variables.patternProperties = { '.+': { properties: defs.Variables.properties } };
+  defs.Variables.patternProperties = { '.+': { ...defs.Variables.properties.variable } };
   delete defs.Variables.properties;
   delete defs.Variables.required;
 
@@ -148,10 +148,14 @@ const generateSchema = async () => {
     'text', 'number', 'datetime', 'boolean', 'ordinal', 'categorical', 'layout', 'location',
   ];
 
+  defs.OptionElement.title = 'Variable Option';
+
   // Forms: like variableRegistry, an object with arbitrary keys and well-defined values
-  defs.Forms.patternProperties = { '.+': { properties: defs.Forms.properties } };
+  defs.Forms.patternProperties = { '.+': { ...defs.Forms.properties.form } };
   delete defs.Forms.properties;
   delete defs.Forms.required;
+
+  pull(defs.Form.required, 'optionToAddAnother');
 
   defs.Field.properties.component.enum = [
     'Checkbox',
@@ -204,6 +208,7 @@ const generateSchema = async () => {
     'LESS_THAN',
     'LESS_THAN_OR_EQUAL',
   ];
+  defs.Options.title = 'Rule Options';
   defs.Options.properties.operator.enum = filterOptionsEnum;
   defs.Options.allOf = [
     {

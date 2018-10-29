@@ -318,7 +318,7 @@
           "location": {
             "label": "Location",
             "description": "Human readable description",
-            "type": "coordinates"
+            "type": "location"
           },
           "visitFreq": {
             "label": "Visit frequency ordinal variable.",
@@ -412,7 +412,7 @@
           "location": {
             "label": "Location",
             "description": "Human readable description",
-            "type": "coordinates"
+            "type": "location"
           }
         }
       }
@@ -772,15 +772,16 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput"
+          "component": "Text",
+          "label": "What is this person's name?"
         },
         {
           "variable": "nickname",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "age",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "timeCreated",
@@ -797,12 +798,12 @@
       "fields": [
         {
           "variable": "label",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is this person's name?"
         },
         {
           "variable": "numberVariable",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is this person's age?"
         },
         {
@@ -838,15 +839,15 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "nickname",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "age",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "timeCreated",
