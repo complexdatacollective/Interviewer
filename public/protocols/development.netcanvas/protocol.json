@@ -1395,7 +1395,7 @@
       "skipLogic": {
         "action": "SHOW",
         "operator": "EXACTLY",
-        "value": "3",
+        "value": 3,
         "filter": {
           "join": "OR",
           "rules": [

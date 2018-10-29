@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
-const { pull } = require('lodash');
+const { pull, without } = require('lodash');
 const {
   main: quicktypeCli,
 } = require('quicktype');
@@ -150,6 +150,31 @@ const generateSchema = async () => {
 
   // All validations are optional
   delete defs.Validation.required;
+
+  // SkipLogic & Filter rules
+  defs.SkipLogic.properties.value.minimum = 1;
+  defs.SkipLogic.properties.value.multipleOf = 1;
+  defs.SkipLogic.properties.action.enum = ['SHOW', 'SKIP'];
+  defs.SkipLogic.properties.operator.enum = ['ANY', 'NONE', 'EXACTLY', 'NOT', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL'];
+  defs.SkipLogic.allOf = [
+    {
+      if: { properties: { operator: { enum: ['ANY', 'NONE'] } } },
+      then: { required: without(defs.SkipLogic.required, 'value') },
+    },
+  ];
+
+  defs.Filter.properties.join.enum = ['OR', 'AND'];
+
+  defs.Rule.type.enum = ['alter', 'ego', 'edge'];
+
+  const filterOptionsEnum = ['EXISTS', 'NOT_EXISTS', 'EXACTLY', 'NOT', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL'];
+  defs.Options.properties.operator.enum = filterOptionsEnum;
+  defs.Options.allOf = [
+    {
+      if: { properties: { operator: { enum: without(filterOptionsEnum, 'EXISTS', 'NOT_EXISTS') } } },
+      then: { required: [...defs.Options.required, 'value'] },
+    },
+  ];
 
   // Most props are treated by NC as optional; this will
   // need actual review...
