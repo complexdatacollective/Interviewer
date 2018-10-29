@@ -1,13 +1,13 @@
 .main-menu {
   position: absolute;
-  top: -100vh;
+  top: -100%;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background: var(--color-navy-taupe);
-  @supports (backdrop-filter: blur(10px)) {
+  @supports (backdrop-filter: blur(.75rem)) {
     background: rgba(0, 0, 0, .25); //sass-lint:disable-line no-color-literals
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(.75rem);
   }
   z-index: var(--z-modal);
   padding: 0 8vw;

@@ -5,6 +5,8 @@ import { compose } from 'redux';
 import { Spinner } from '../ui/components';
 import Fade from '../components/Transition/Fade';
 
+const minimumTimeToDisplaySpinner = 1000;
+
 class LoadScreen extends Component {
   static getDerivedStateFromProps(props) {
     if (props.isWorking) {
@@ -22,14 +24,16 @@ class LoadScreen extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isWorking) {
-      setTimeout(() => this.setState({ minimumTimeMet: true }), 1000);
-    }
+    this.scheduleSpinnerExpiration();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isWorking !== this.props.isWorking && this.props.isWorking) {
-      setTimeout(() => this.setState({ minimumTimeMet: true }), 1000);
+  componentDidUpdate() {
+    this.scheduleSpinnerExpiration();
+  }
+
+  scheduleSpinnerExpiration() {
+    if (this.props.isWorking) {
+      setTimeout(() => this.setState({ minimumTimeMet: true }), minimumTimeToDisplaySpinner);
     }
   }
 
