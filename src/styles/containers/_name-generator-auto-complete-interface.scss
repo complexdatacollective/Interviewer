@@ -46,7 +46,7 @@ $search-z-index: 1000;
   }
 
   &__nodes {
-    height: calc(100% - #{$interface-prompt-flex-basis});
+    height: calc(100% - var(--interface-prompt-flex-basis));
     text-align: left;
 
     .scrollable {

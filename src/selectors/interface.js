@@ -115,12 +115,12 @@ export const makeGetPromptVariable = () =>
     prompt => prompt.variable,
   );
 
-export const makeGetOrdinalValues = () =>
+export const makeGetVariableOptions = () =>
   createSelector(
     makeGetNodeVariables(), makeGetPromptVariable(),
     (nodeVariables, promptVariable) => {
-      const ordinalValues = nodeVariables[promptVariable].options;
-      return ordinalValues;
+      const optionValues = nodeVariables[promptVariable].options;
+      return optionValues;
     },
   );
 

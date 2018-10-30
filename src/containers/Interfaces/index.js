@@ -9,6 +9,7 @@ import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
 import Information from './Information';
+import CategoricalBin from './CategoricalBin';
 import FinishSession from './FinishSession';
 
 const interfaces = {
@@ -19,6 +20,7 @@ const interfaces = {
   Quiz,
   Information,
   OrdinalBin,
+  CategoricalBin,
   FinishSession,
 };
 
@@ -42,6 +44,7 @@ export {
   Sociogram,
   Quiz,
   Information,
+  CategoricalBin,
   OrdinalBin,
 };
 

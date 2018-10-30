@@ -115,6 +115,72 @@
               }
             ]
           },
+          "contactType": {
+            "label": "Contact type categorical variable.",
+            "description": "Contact type categorical variable",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "In person",
+                "value": "person"
+              },
+              {
+                "label": "Phone call",
+                "value": "call"
+              },
+              {
+                "label": "Text",
+                "value": "text"
+              },
+              {
+                "label": "Email",
+                "value": "email"
+              },
+              {
+                "label": "Social media",
+                "value": "media"
+              }
+            ]
+          },
+          "discussType": {
+            "label": "Discuss type categorical variable.",
+            "description": "Discuss type categorical variable",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "Politics",
+                "value": "politics"
+              },
+              {
+                "label": "Weather",
+                "value": "weather"
+              },
+              {
+                "label": "Work",
+                "value": "work"
+              },
+              {
+                "label": "Current events",
+                "value": "current"
+              },
+              {
+                "label": "Entertainment",
+                "value": "entertainment"
+              },
+              {
+                "label": "School",
+                "value": "school"
+              },
+              {
+                "label": "Friends",
+                "value": "friends"
+              },
+              {
+                "label": "Money",
+                "value": "money"
+              }
+            ]
+          },
           "closenessLayout": {
             "label": "Closeness layout",
             "description": "Closeness layout",
@@ -1281,6 +1347,44 @@
             "entity": "node",
             "type": "venue"
           }
+        }
+      ]
+    },
+    {
+      "id": "catBin1",
+      "type": "CategoricalBin",
+      "label": "Contact Types",
+      "subject": {
+        "entity": "node",
+        "type": "person"
+      },
+      "prompts": [
+        {
+          "id": "contactType",
+          "text": "What is the most frequent type of contact you have?",
+          "variable": "contactType",
+          "//": "Categorical variables have valid options defined in variable registry.",
+          "bucketSortOrder": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "property": "nickname",
+              "direction": "desc"
+            },
+            {
+              "property": "age",
+              "direction": "desc"
+            }
+          ]
+        },
+        {
+          "id": "discussType",
+          "text": "Discussion type variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the max number of bins.",
+          "variable": "discussType"
         }
       ]
     },

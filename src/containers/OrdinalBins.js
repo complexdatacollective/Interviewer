@@ -3,7 +3,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import color from 'color';
-import { makeNetworkNodesForType, makeGetOrdinalValues, makeGetPromptVariable } from '../selectors/interface';
+import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -99,7 +99,7 @@ class OrdinalBins extends PureComponent {
 }
 
 function makeMapStateToProps() {
-  const getOrdinalValues = makeGetOrdinalValues();
+  const getOrdinalValues = makeGetVariableOptions();
   const getPromptVariable = makeGetPromptVariable();
   const getStageNodes = makeNetworkNodesForType();
 
