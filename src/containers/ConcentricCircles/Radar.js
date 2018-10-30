@@ -36,8 +36,8 @@ const Radar = ({ n, skewed }) => {
     weightedAverage(equalByArea(50, num), equalByIncrement(50, num), 3) :
     equalByIncrement(50, num);
 
-  const colorRing = color(getCSSVariableAsString('--ring'));
-  const colorBackground = color(getCSSVariableAsString('--background'));
+  const colorRing = color(getCSSVariableAsString('--ring--accent'));
+  const colorBackground = color(getCSSVariableAsString('--ring--background'));
 
   const ringFill = (ring) => {
     const mix = (ring + 1) / num;
