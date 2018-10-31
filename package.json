@@ -183,6 +183,7 @@
     },
     "win": {
       "target": "nsis",
+      "include": "build-resources/scripts/installer.nsh",
       "certificateSubjectName": "Complex Data Collective"
     },
     "publish": [
