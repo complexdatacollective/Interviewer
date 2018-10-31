@@ -14,7 +14,6 @@ const path = require('path');
 
 const JSZip = require('jszip');
 const Ajv = require('ajv');
-const v6Schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
 const projectDir = path.join(__dirname, '..', '..');
 const schemaDir = path.join(projectDir, 'schema');
@@ -60,7 +59,6 @@ const validateJson = (jsonString) => {
   const ajv = new Ajv({
     allErrors: true,
   });
-  ajv.addMetaSchema(v6Schema);
   ajv.addFormat('integer', /\d+/);
 
   const validate = ajv.compile(schema);

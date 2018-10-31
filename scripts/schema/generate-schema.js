@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
-const { pull } = require('lodash');
+const { pull, without } = require('lodash');
 const {
   main: quicktypeCli,
 } = require('quicktype');
@@ -38,11 +38,12 @@ const ensureOutputDir = () => {
 const generateAbstractProtocol = () => {
   // See https://github.com/codaco/Network-Canvas/wiki/protocol.json#variable-registry
   const variable = {
+    name: '', // A field name that will be used (for example) when exporting data from the app
     label: '', // A human readable short label for this variable.
     description: '', // A human readable description for this variable
     type: '', // A valid variable type. For types, see below.
     validation: {
-      // See https://github.com/codaco/Architect/blob/v4.0.0-alpha.4/src/utils/validations.js
+      // See src/utils/Validations.js
       required: true,
       requiredAcceptsNull: true,
       minLength: 1,
@@ -52,7 +53,7 @@ const generateAbstractProtocol = () => {
       minSelected: 1,
       maxSelected: 10,
     }, // Validation rules, using redux-form compatible syntax.
-    options: [{ label: '1', value: '1' }],
+    options: [{ label: 'foo', value: 'bar' }, { label: 'baz', value: 1 }, 2, 'aString'],
   };
 
   // From the VR, keep only the one definition for node & edge
@@ -85,8 +86,33 @@ const generateSchema = async () => {
   const schema = JSON.parse(fs.readFileSync(schemaFile));
   const defs = schema.definitions;
 
+  schema.$schema = 'http://json-schema.org/draft-07/schema#';
+
   defs.Protocol.required = ['name', 'stages', 'variableRegistry'];
   defs.Protocol.properties.stages.minItems = 1;
+  defs.Protocol.properties.lastModified.format = 'date-time';
+
+  const stageTypeEnum = [
+    'NameGenerator',
+    'NameGeneratorList',
+    'NameGeneratorAutoComplete',
+    'Sociogram',
+    'Information',
+    'OrdinalBin',
+  ];
+  defs.Stage.title = 'Interface';
+  defs.Stage.properties.type.enum = stageTypeEnum;
+  defs.Stage.properties.prompts.minItems = 1;
+  defs.Stage.anyOf = [
+    {
+      properties: { type: { const: 'Information' } },
+      required: [...defs.Stage.required, 'items'],
+    },
+    {
+      properties: { type: { enum: without(stageTypeEnum, 'Information') } },
+      required: [...defs.Stage.required, 'prompts'],
+    },
+  ];
 
   // AdditionalAttributes & ExternalData have no defined props and may contain anything
   delete defs.AdditionalAttributes.properties;
@@ -106,7 +132,7 @@ const generateSchema = async () => {
   delete defs.NodeTypeDef.required; // TODO: is this true?
 
   // See comments on Node, above
-  defs.Edge.patternProperties = { '.+': { properties: defs.Edge.properties } };
+  defs.Edge.patternProperties = { '.+': { ...defs.Edge.properties.edge } };
   delete defs.Edge.properties;
   delete defs.Edge.required;
 
@@ -114,7 +140,7 @@ const generateSchema = async () => {
 
   // Variables: one of `variableRegistry.node[NODE_TYPE].variables[VARIABLE_NAME]`
   // Used for both nodes & edges
-  defs.Variables.patternProperties = { '.+': { properties: defs.Variables.properties } };
+  defs.Variables.patternProperties = { '.+': { ...defs.Variables.properties.variable } };
   delete defs.Variables.properties;
   delete defs.Variables.required;
 
@@ -125,16 +151,74 @@ const generateSchema = async () => {
     'text', 'number', 'datetime', 'boolean', 'ordinal', 'categorical', 'layout', 'location',
   ];
 
+  defs.OptionElement.title = 'Variable Option';
+
   // Forms: like variableRegistry, an object with arbitrary keys and well-defined values
-  defs.Forms.patternProperties = { '.+': { properties: defs.Forms.properties } };
+  defs.Forms.patternProperties = { '.+': { ...defs.Forms.properties.form } };
   delete defs.Forms.properties;
   delete defs.Forms.required;
+
+  pull(defs.Form.required, 'optionToAddAnother');
+
+  defs.Field.properties.component.enum = [
+    'Checkbox',
+    'CheckboxGroup',
+    'RadioGroup',
+    'Text',
+    'Toggle',
+    'ToggleButtonGroup',
+    'hidden',
+  ];
 
   // subject.entity
   defs.Entity.enum = ['node', 'edge'];
 
   // All validations are optional
   delete defs.Validation.required;
+
+  // SkipLogic & Filter rules
+  defs.SkipLogic.properties.value.minimum = 1;
+  defs.SkipLogic.properties.value.multipleOf = 1;
+  defs.SkipLogic.properties.action.enum = ['SHOW', 'SKIP'];
+  defs.SkipLogic.properties.operator.enum = [
+    'ANY',
+    'NONE',
+    'EXACTLY',
+    'NOT',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUAL',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUAL',
+  ];
+  defs.SkipLogic.allOf = [
+    {
+      if: { properties: { operator: { enum: ['ANY', 'NONE'] } } },
+      then: { required: without(defs.SkipLogic.required, 'value') },
+    },
+  ];
+
+  defs.Filter.properties.join.enum = ['OR', 'AND'];
+
+  defs.Rule.type.enum = ['alter', 'ego', 'edge'];
+
+  const filterOptionsEnum = [
+    'EXISTS',
+    'NOT_EXISTS',
+    'EXACTLY',
+    'NOT',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUAL',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUAL',
+  ];
+  defs.Options.title = 'Rule Options';
+  defs.Options.properties.operator.enum = filterOptionsEnum;
+  defs.Options.allOf = [
+    {
+      if: { properties: { operator: { enum: without(filterOptionsEnum, 'EXISTS', 'NOT_EXISTS') } } },
+      then: { required: [...defs.Options.required, 'value'] },
+    },
+  ];
 
   // Most props are treated by NC as optional; this will
   // need actual review...

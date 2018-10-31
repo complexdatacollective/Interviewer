@@ -1,6 +1,6 @@
 {
   "name": "Teaching Protocol",
-  "version": "1.0.0",
+  "lastModified": "2018-10-01T00:00:00.000Z",
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {
@@ -11,6 +11,7 @@
         "iconVariant": "add-a-person",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "The alter's name.",
             "type": "text",
@@ -21,6 +22,7 @@
             }
           },
           "contactFreq": {
+            "name": "contactfrequency",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
@@ -48,6 +50,7 @@
             ]
           },
           "yearsKnown": {
+            "name": "yearsknown",
             "label": "Years known",
             "description": "How many years the participant has known the alter.",
             "type": "number",
@@ -56,6 +59,7 @@
             }
           },
           "gender": {
+            "name": "gender",
             "label": "What is this person's gender?",
             "description": "Percieved gender of the alter.",
             "type": "text",
@@ -65,6 +69,7 @@
             }
           },
           "nickname": {
+            "name": "nickname",
             "label": "Nickname",
             "description": "Participant Nickname",
             "type": "text",
@@ -75,46 +80,55 @@
             }
           },
           "age": {
+            "name": "age",
             "label": "Age",
             "description": "Age",
             "type": "number"
           },
           "closenessLayout": {
+            "name": "closenesslayout",
             "label": "Closeness layout",
             "description": "Closeness layout",
             "type": "layout"
           },
           "school_important": {
+            "name": "school_important",
             "label": "School important",
             "description": "School important",
             "type": "boolean"
           },
           "lives_nearby": {
+            "name": "livesnearby",
             "label": "Lives nearby",
             "description": "Lives nearby",
             "type": "boolean"
           },
           "family_important": {
+            "name": "family_important",
             "label": "Family important",
             "description": "Family important",
             "type": "boolean"
           },
           "facebook_friend": {
+            "name": "facebook_friend",
             "label": "Facebook friend",
             "description": "Facebook friend",
             "type": "boolean"
           },
           "community_important": {
+            "name": "community_important",
             "label": "Community important",
             "description": "Community important",
             "type": "boolean"
           },
           "online_important": {
+            "name": "online_important",
             "label": "Online important",
             "description": "Online important",
             "type": "boolean"
           },
           "other_important": {
+            "name": "other_important",
             "label": "Other important",
             "description": "Other important",
             "type": "boolean"
@@ -128,6 +142,7 @@
         "color": "edge-color-seq-1",
         "variables": {
           "type": {
+            "name": "type",
             "label": "Type",
             "description": "Type",
             "type": "text"
@@ -135,6 +150,7 @@
         }
       },
       "professional": {
+        "name": "professional",
         "label": "Professional",
         "color": "node-color-seq-2",
         "variables": {
@@ -397,12 +413,12 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is the person's name?"
         },
         {
           "variable": "nickname",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is their nickname?"
         },
         {
@@ -412,7 +428,7 @@
         },
         {
           "variable": "yearsKnown",
-          "component": "TextInput",
+          "component": "Text",
           "label": "How many years have you known this person?"
         }
       ]
