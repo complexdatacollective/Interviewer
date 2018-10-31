@@ -8,7 +8,6 @@ import cx from 'classnames';
 import '../styles/main.scss';
 import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
 import { LoadScreen } from '../containers';
-import { ErrorMessage } from '../components';
 import DialogManager from '../components/DialogManager';
 import MainMenu from '../containers/MainMenu';
 
@@ -56,7 +55,6 @@ class App extends PureComponent {
         </div>
         <LoadScreen />
         <DialogManager />
-        <ErrorMessage />
       </div>
     );
   }

@@ -6,5 +6,5 @@
   right: spacing(large);
   width: 7rem;
   height: 7rem;
-  z-index: 1000;
+  z-index: var(--z-global-ui);
 }

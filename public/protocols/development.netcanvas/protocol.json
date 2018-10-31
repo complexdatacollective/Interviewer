@@ -1,10 +1,13 @@
 {
   "name": "Development Protocol",
+  "description": "",
+  "lastModified": "2018-10-01T00:00:00.000Z",
   "version": "1.0.0",
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {
       "person": {
+        "name": "person",
         "label": "Person",
         "color": "node-color-seq-3",
         "displayVariable": "nickname",
@@ -139,6 +142,7 @@
         }
       },
       "dummyNodeType": {
+        "name": "dummytype",
         "label": "Dummy Type",
         "color": "node-color-seq-6",
         "displayVariable": "label",
@@ -296,6 +300,7 @@
         }
       },
       "venue": {
+        "name": "venue",
         "label": "Venue",
         "displayVariable": "Abbreviated Name",
         "color": "node-color-seq-4",
@@ -391,6 +396,7 @@
         }
       },
       "country": {
+        "name": "countryvisited",
         "label": "Country Visited",
         "displayVariable": "name",
         "variables": {
@@ -414,6 +420,7 @@
     },
     "edge": {
       "friend": {
+        "name": "friend",
         "label": "Friend",
         "color": "edge-color-seq-4",
         "variables": {
@@ -452,6 +459,7 @@
         }
       },
       "professional": {
+        "name": "professional",
         "label": "Professional",
         "color": "edge-color-seq-2",
         "variables": {}
@@ -861,12 +869,47 @@
       },
       "panels": [
         {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
           "title": "Already mentioned",
           "dataSource": "existing"
         },
         {
+          "id": "another-unique-id",
           "title": "People from your previous visit",
-          "dataSource": "previousInterview"
+          "dataSource": "previousInterview",
+          "filter": {
+            "join": "OR",
+            "rules": [
+              {
+                "type": "alter",
+                "id": "15218241538622",
+                "options": {
+                  "type": "person",
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Dee"
+                }
+              },
+              {
+                "type": "ego",
+                "id": "15218241553253",
+                "options": {
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Bob"
+                }
+              },
+              {
+                "type": "edge",
+                "id": "15218241565624",
+                "options": {
+                  "type": "friend",
+                  "operator": "EXISTS",
+                  "attribute": "contactFreq"
+                }
+              }
+            ]
+          }
         }
       ],
       "prompts": [
@@ -907,7 +950,6 @@
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
           "variable": "contactFreq",
-          "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
               "property": "nickname",
@@ -1085,8 +1127,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1099,8 +1139,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1121,8 +1159,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1135,8 +1171,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1156,8 +1190,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1170,8 +1202,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1291,13 +1321,24 @@
       "title": "Title for the screen",
       "items": [
         {
+          "id": "a",
           "type": "audio",
           "content": "click_the_thing.mp3",
           "description": "Click by clicking the thing",
           "size": "SMALL"
         },
-        { "type": "image", "content": "rubberduck.jpg", "size": "SMALL" },
-        { "type": "image", "content": "rubberduck.jpg", "size": "MEDIUM" }
+        {
+          "id": "b",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "SMALL"
+        },
+        {
+          "id": "c",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "MEDIUM"
+        }
       ]
     },
     {
@@ -1307,12 +1348,14 @@
       "title": "This interface has a video with sound.",
       "items": [
         {
+          "id": "65192318-0ef0-454d-91b7-bbaf51380069",
           "type": "text",
           "content":
             "The video below has sound and is set to loop. Some arbitrary text content that can _contain_ **formatting**.",
           "size": "SMALL"
         },
         {
+          "id": "27eee84a-52c0-440d-951c-5ac35bc75168",
           "type": "video",
           "content": "withSound.mp4",
           "description": "Click by clicking the thing",
@@ -1328,6 +1371,7 @@
       "title": "Testing markdown",
       "items": [
         {
+          "id": "d3e52e4b-0d22-42e3-a82f-7a150daf7b6b",
           "type": "text",
           "size": "LARGE",
           "content":
@@ -1341,7 +1385,12 @@
       "type": "Information",
       "title": "To skip or not to skip...",
       "items": [
-        { "type": "text", "content": "...that is the question.", "size": "LARGE" }
+        {
+          "id": "ffaf2249-00e7-4fdb-99fc-5757a24f5605",
+          "type": "text",
+          "content": "...that is the question.",
+          "size": "LARGE"
+        }
       ],
       "skipLogic": {
         "action": "SHOW",

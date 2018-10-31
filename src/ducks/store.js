@@ -26,4 +26,15 @@ if (window) {
   window.store = store; // TODO: remove in production.
 }
 
-export const persistor = persistStore(store, { blacklist: ['form', 'modals', 'protocol', 'errors', 'ui'] });
+const persistWhitelist = [
+  'deviceSettings',
+  'externalData',
+  'pairedServer',
+  'protocols',
+  'router',
+  'search',
+  'session',
+  'sessions',
+];
+
+export const persistor = persistStore(store, { whitelist: persistWhitelist });

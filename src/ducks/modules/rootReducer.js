@@ -8,9 +8,7 @@ import session from './session';
 import deviceSettings from './deviceSettings';
 import protocol from './protocol';
 import protocols from './protocols';
-import modals from './modals';
 import dialogs from './dialogs';
-import errors from './errors';
 import search from './search';
 import ui from './ui';
 import pairedServer from './pairedServer';
@@ -30,9 +28,7 @@ const appReducer = combineReducers({
   externalData,
   protocol,
   protocols,
-  modals,
   dialogs,
-  errors,
   search,
   ui,
   pairedServer,
