@@ -21,6 +21,7 @@ const mockProps = {
   resetValues: () => {},
   initialValues: {},
   show: true,
+  useFullScreenForms: true,
   form: {
     title: 'alpha',
   },
