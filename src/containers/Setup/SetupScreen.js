@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
-import deviceDescription from '../../utils/DeviceInfo';
+
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { actionCreators as deviceActions } from '../../ducks/modules/device';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { ProtocolList, SessionList } from '.';
 
@@ -22,11 +20,6 @@ class Setup extends Component {
     this.state = {
       showOptions: 'protocol',
     };
-    this.deviceDescription = deviceDescription();
-  }
-
-  componentDidMount() {
-    this.props.setDeviceDescription(this.deviceDescription);
   }
 
   setOptions = (option) => {
@@ -63,7 +56,7 @@ class Setup extends Component {
               <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
               <div className="header-content__title-text">
                 <h1 className="type--title-1">Network Canvas</h1>
-                <h4>Alpha 8 - Lochs & Glens</h4>
+                <h4>Alpha 9</h4>
               </div>
             </div>
             <div className="header-content__nav">
@@ -97,7 +90,6 @@ Setup.propTypes = {
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
-  setDeviceDescription: PropTypes.func.isRequired,
   stageIndex: PropTypes.number,
   toggleMenu: PropTypes.func.isRequired,
 };
@@ -121,7 +113,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setDeviceDescription: bindActionCreators(deviceActions.setDescription, dispatch),
     toggleMenu: () => dispatch(uiActions.toggle('isMenuOpen')),
   };
 }

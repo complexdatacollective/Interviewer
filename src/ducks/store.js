@@ -27,7 +27,7 @@ if (window) {
 }
 
 const persistWhitelist = [
-  'device',
+  'deviceSettings',
   'externalData',
   'pairedServer',
   'protocols',

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import animejs from 'animejs';
 import cx from 'classnames';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '../ui/components';
 import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../utils/CSSVariables';
-import isLarge from '../utils/isLarge';
 
 /**
   * Renders a modal window.
@@ -33,11 +33,12 @@ class Overlay extends Component {
       onBlur,
       show,
       title,
+      useFullScreenForms,
     } = this.props;
 
     return (
       <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': !isLarge() })}>
+        <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms })}>
           <div className="overlay__title">
             <h1>{title}</h1>
           </div>
@@ -57,6 +58,7 @@ Overlay.propTypes = {
   title: PropTypes.string.isRequired,
   show: PropTypes.bool,
   children: PropTypes.any,
+  useFullScreenForms: PropTypes.bool.isRequired,
 };
 
 Overlay.defaultProps = {
@@ -66,4 +68,7 @@ Overlay.defaultProps = {
   children: null,
 };
 
-export default Overlay;
+const mapStateToProps = state =>
+  ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
+
+export default connect(mapStateToProps, null)(Overlay);

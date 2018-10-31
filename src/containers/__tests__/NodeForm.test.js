@@ -4,14 +4,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { NodeForm } from '../NodeForm';
 
-window.matchMedia =
-  window.matchMedia ||
-  (() => ({
-    matches: false,
-    addListener: () => {},
-    removeListener: () => {},
-  }));
-
 const mockProps = {
   name: 'baz',
   title: 'The form title',
@@ -29,6 +21,7 @@ const mockProps = {
   resetValues: () => {},
   initialValues: {},
   show: true,
+  useFullScreenForms: true,
   form: {
     title: 'alpha',
   },

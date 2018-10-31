@@ -10,7 +10,6 @@ import { Button, ToggleInput } from '../ui/components';
 import { getDefaultFormValues } from '../selectors/forms';
 import { protocolForms } from '../selectors/protocol';
 import { nodeAttributesProperty } from '../ducks/modules/network';
-import isLarge from '../utils/isLarge';
 
 const reduxFormName = 'NODE_FORM';
 
@@ -68,11 +67,11 @@ class NodeForm extends Component {
         ref={this.overlay}
         onClose={this.props.onClose}
       >
-        { isLarge() ?
-          <Form
+        { this.props.useFullScreenForms ?
+          <FormWizard
             {...formProps}
           /> :
-          <FormWizard
+          <Form
             {...formProps}
           />
         }
@@ -93,6 +92,7 @@ const mapStateToProps = (state, props) => {
 
   return {
     form: forms[props.stage.form],
+    useFullScreenForms: state.deviceSettings.useFullScreenForms,
     initialValues,
   };
 };
