@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
-import { OrdinalBinBucket } from '../../components';
+import { MultiNodeBucket } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
 
@@ -38,7 +38,7 @@ class OrdinalBin extends Component {
           />
         </div>
         <div className="ordinal-bin-interface__bucket">
-          <OrdinalBinBucket
+          <MultiNodeBucket
             nodes={nodesForPrompt}
             listId={`${stage.id}_${prompt.id}_NODE_BUCKET`}
             id={'NODE_BUCKET'}

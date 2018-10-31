@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, CategoricalList } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
-import { OrdinalBinBucket } from '../../components';
+import { MultiNodeBucket } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 
@@ -44,7 +44,7 @@ class CategoricalBin extends Component {
           />
         </div>
         <div className="categorical-bin-interface__bucket">
-          <OrdinalBinBucket
+          <MultiNodeBucket
             nodes={nodesForPrompt}
             listId={`${stage.id}_${prompt.id}_CAT_BUCKET`}
             id={'CAT_BUCKET'}

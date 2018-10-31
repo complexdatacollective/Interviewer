@@ -23,7 +23,7 @@ const EnhancedNode = DragSource(Node);
 /**
   * Renders a list of Node.
   */
-class OrdinalBinBucket extends Component {
+class MultiNodeBucket extends Component {
   constructor(props) {
     super(props);
 
@@ -137,7 +137,7 @@ class OrdinalBinBucket extends Component {
   }
 }
 
-OrdinalBinBucket.propTypes = {
+MultiNodeBucket.propTypes = {
   nodes: PropTypes.array.isRequired,
   nodeColor: PropTypes.string,
   itemType: PropTypes.string,
@@ -149,7 +149,7 @@ OrdinalBinBucket.propTypes = {
   sortOrder: PropTypes.array,
 };
 
-OrdinalBinBucket.defaultProps = {
+MultiNodeBucket.defaultProps = {
   nodes: [],
   nodeColor: '',
   label: () => (''),
@@ -166,8 +166,8 @@ export default compose(
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
   MonitorDragSource(['meta', 'isDragging']),
-)(OrdinalBinBucket);
+)(MultiNodeBucket);
 
 export {
-  OrdinalBinBucket as UnconnectedOrdinalBinBucket,
+  MultiNodeBucket as UnconnectedMultiNodeBucket,
 };
