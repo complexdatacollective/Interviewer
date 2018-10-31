@@ -123,6 +123,7 @@ class MultiNodeBucket extends Component {
                 <EnhancedNode
                   color={nodeColor}
                   inactive={index !== 0}
+                  allowDrag={index === 0}
                   label={`${label(node)}`}
                   meta={() => ({ ...node, itemType })}
                   scrollDirection={NO_SCROLL}
