@@ -47,10 +47,7 @@ export const getWorkerNetwork = createDeepEqualSelector(
   (nodes = [], edges = [], registry) => {
     const nodeRegistry = registry.node || {};
     return ({
-      nodes: nodes.map((node) => {
-        const nodeType = nodeRegistry[node.type];
-        return asWorkerAgentNode(node, nodeType && nodeType.name);
-      }),
+      nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
       edges,
     });
   },

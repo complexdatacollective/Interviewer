@@ -39,15 +39,43 @@ function edgeExists(edges, edge) {
   );
 }
 
+/**
+ * All generated data is stored inside an 'attributes' property on the node
+ */
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 
-// Returns node data safe to supply to user-defined workers.
-// Contains all user attributes flattened with the node's unique ID.
-// `primaryKeyPropertyForWorker` is used to minimize conflicts, but user data is always preserved.
-export const asWorkerAgentNode = (node, nodeTypeName) => ({
+/**
+ * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
+ * This resolves those UUIDs to variable names based on the definitions in the variable registry,
+ * appropriate for user scripts and export.
+ */
+const getNodeAttribtuesWithNamesResolved = (node, nodeVariableDefs) => {
+  if (!nodeVariableDefs) {
+    return {};
+  }
+  const attrs = getNodeAttributes(node);
+  return Object.keys(attrs).reduce((acc, uuid) => {
+    if (nodeVariableDefs[uuid] && nodeVariableDefs[uuid].name) {
+      acc[nodeVariableDefs[uuid].name] = attrs[uuid];
+    }
+    return acc;
+  }, {});
+};
+
+/**
+ * Contains all user attributes flattened with the node's unique ID.
+ *
+ *`primaryKeyPropertyForWorker` and `nodeTypePropertyForWorker` are used to minimize conflicts,
+ * but user data is always preserved in the event of conflicts.
+ *
+ * @param  {Object} node
+ * @param  {Object} nodeTypeDefinition The variableRegistry entry for this node type
+ * @return {Object} node data safe to supply to user-defined workers.
+ */
+export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
   [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
-  [nodeTypePropertyForWorker]: nodeTypeName,
-  ...getNodeAttributes(node),
+  [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
+  ...getNodeAttribtuesWithNamesResolved(node, nodeTypeDefinition && nodeTypeDefinition.variables),
 });
 
 /**
