@@ -143,8 +143,8 @@ describe('interface selector', () => {
       expect(selected(null, emptyProps)).toEqual({});
     });
 
-    it('should get node type', () => {
-      const selected = Interface.makeGetNodeType();
+    it('should get subject type', () => {
+      const selected = Interface.makeGetSubjectType();
       expect(selected(mockState, mockProps)).toEqual('person');
     });
 

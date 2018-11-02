@@ -2,7 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
-import { makeGetSubject, makeGetIds, makeGetNodeType, makeGetAdditionalAttributes } from './interface';
+import { makeGetSubject, makeGetIds, makeGetSubjectType, makeGetAdditionalAttributes } from './interface';
 import { nodeAttributesProperty } from '../ducks/modules/network';
 import { protocolRegistry } from './protocol';
 import { getExternalData } from './externalData';
@@ -83,7 +83,7 @@ export const getDataByPrompt = createSelector(
 
 export const makeGetNodeIconName = () => createSelector(
   protocolRegistry,
-  makeGetNodeType(),
+  makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant;

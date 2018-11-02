@@ -25,6 +25,7 @@ export const getRemoteProtocolId = createDeepEqualSelector(
   remoteName => nameDigest(remoteName) || null,
 );
 
+// The user-defined name of a node type; e.g. `variableRegistry.node[uuid].name == 'person'`
 export const makeGetNodeTypeName = () => createDeepEqualSelector(
   protocolRegistry,
   (state, props) => props.type,

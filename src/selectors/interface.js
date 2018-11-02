@@ -89,8 +89,7 @@ const nodeTypeIsDefined = (variableRegistry, nodeType) =>
   variableRegistry.node &&
   !!variableRegistry.node[nodeType];
 
-// TODO: rename to subjectType?
-export const makeGetNodeType = () => (createSelector(
+export const makeGetSubjectType = () => (createSelector(
   protocolRegistry,
   makeGetSubject(),
   (variableRegistry, subject) => {
@@ -102,7 +101,7 @@ export const makeGetNodeType = () => (createSelector(
 
 export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
-  makeGetNodeType(),
+  makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
@@ -111,7 +110,7 @@ export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
 
 export const makeGetNodeVariables = () => createDeepEqualSelector(
   protocolRegistry,
-  makeGetNodeType(),
+  makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
