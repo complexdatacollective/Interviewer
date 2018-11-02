@@ -13,7 +13,8 @@ const debugLog = (...args) => {
  *
  * - keypath patterns are separated by dots, e.g. 'protocol.forms.myForm.fields'
  * - '*' is used to denote a wildcard key in the path
- * - '[]' is used to denote an array
+ * - '[]' is used to denote an array. If a trailing '[]' is included, the keypath matches on
+ *        each array element, and the validate function returns each item in turn.
  *
  * Examples:
  * - 'protocol.forms.*' is equivalent to /forms\.[^.]+$/ and will match any stage subject
@@ -89,16 +90,21 @@ class Validator {
    */
   validateSingle(keypath, fragment, { validate, makeFailureMessage }) {
     let result;
-    let failureMessage;
     try {
       result = validate(fragment);
-      failureMessage = makeFailureMessage(fragment);
     } catch (err) {
       this.errors.push(`Validation error during ${keypathString(keypath)}: ${err.toString()}`);
       debugLog(err);
       return false;
     }
     if (!result) {
+      let failureMessage;
+      try {
+        failureMessage = makeFailureMessage(fragment);
+      } catch (err) {
+        debugLog(err);
+        failureMessage = err.toString();
+      }
       this.errors.push(`${keypathString(keypath)}: ${failureMessage}`);
       return false;
     }

@@ -12,6 +12,33 @@ const nodeVarsIncludeDisplayVar = node =>
 const entityDefFromRule = (rule, variableRegistry) =>
   variableRegistry[rule.type === 'edge' ? 'edge' : 'node'][rule.options.type];
 
+const getVariableNames = registryVars => Object.values(registryVars).map(vari => vari.name);
+
+// @return the ID (or other unique prop) which is a duplicate, undefined otherwise
+const duplicateId = (elements, uniqueProp = 'id') => {
+  const map = {};
+  const dupe = elements.find((el) => {
+    if (map[el[uniqueProp]]) {
+      return true;
+    }
+    map[el[uniqueProp]] = 1;
+    return false;
+  });
+  return dupe && dupe[uniqueProp];
+};
+
+// @return the item which is a duplicate, undefined otherwise
+const duplicateInArray = (items) => {
+  const set = new Set();
+  const dupe = items.find((item) => {
+    if (set.has(item)) {
+      return true;
+    }
+    set.add(item);
+    return false;
+  });
+  return dupe;
+};
 
 /**
  * Define and run all dynamic validations (which aren't covered by the JSON Schema)
@@ -69,6 +96,43 @@ const validateProtocol = (protocol) => {
       rule => `"${rule.options.attribute}" is not a valid variable ID`,
     ],
   );
+
+  v.addValidation('protocol.stages',
+    stages => !duplicateId(stages),
+    stages => `Stages contain duplicate ID "${duplicateId(stages)}"`,
+  );
+
+  v.addValidation('stages[].panels',
+    panels => !duplicateId(panels),
+    panels => `Panels contain duplicate ID "${duplicateId(panels)}"`,
+  );
+
+  v.addValidation('.rules',
+    rules => !duplicateId(rules),
+    rules => `Rules contain duplicate ID "${duplicateId(rules)}"`,
+  );
+
+  v.addValidation('stages[].prompts',
+    prompts => !duplicateId(prompts),
+    prompts => `Prompts contain duplicate ID "${duplicateId(prompts)}"`,
+  );
+
+  v.addValidation('stages[].items',
+    items => !duplicateId(items),
+    items => `Items contain duplicate ID "${duplicateId(items)}"`,
+  );
+
+  v.addValidation('variableRegistry.*.*.variables',
+    variableMap => !duplicateInArray(getVariableNames(variableMap)),
+    variableMap => `Duplicate variable name "${duplicateInArray(getVariableNames(variableMap))}"`,
+  );
+
+  // TODO: make subject available to descendant fragments; many validations could use this
+  // - prompts[].variable
+  // - prompts[].cardOptions.additionalProperties[]
+  // - prompts[].sortOptions.sortOrder[].property
+  // - prompts[].sortOptions.sortableProperties[]
+  // - prompts[].additionalAttributes
 
   v.runValidations();
   return v.errors;
