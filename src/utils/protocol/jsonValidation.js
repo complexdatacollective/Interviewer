@@ -7,7 +7,7 @@ const undefinedFormVariables = (form, variableRegistry) =>
 
 const nodeVarsIncludeDisplayVar = node =>
   !node.displayVariable // displayVariable is optional
-    || Object.values(node.variables).some(variable => variable.name === node.displayVariable);
+    || Object.keys(node.variables).some(variableId => variableId === node.displayVariable);
 
 /**
  * Define and run all dynamic validations (which aren't covered by the JSON Schema)
