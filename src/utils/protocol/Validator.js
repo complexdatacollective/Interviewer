@@ -24,7 +24,10 @@ const debugLog = (...args) => {
  */
 const makePattern = (pattern) => {
   if (typeof pattern === 'string') {
-    const re = pattern.replace('.', '\\.').replace('*', '[^.]+').replace('[]', '.?\\[\\d+\\]');
+    const re = pattern
+      .replace(/\./g, '\\.')
+      .replace(/\*/g, '[^.]+')
+      .replace(/\[\]/g, '.?\\[\\d+\\]');
     return new RegExp(`${re}$`);
   }
   return pattern;
