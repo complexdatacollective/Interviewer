@@ -127,12 +127,32 @@ const validateProtocol = (protocol) => {
     variableMap => `Duplicate variable name "${duplicateInArray(getVariableNames(variableMap))}"`,
   );
 
-  // TODO: make subject available to descendant fragments; many validations could use this
-  // - prompts[].variable
-  // - prompts[].cardOptions.additionalProperties[]
-  // - prompts[].sortOptions.sortOrder[].property
-  // - prompts[].sortOptions.sortableProperties[]
-  // - prompts[].additionalAttributes
+  v.addValidation('prompts[].variable',
+    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+  );
+
+  v.addValidation('prompts[].cardOptions.additionalProperties[].variable',
+    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+  );
+
+  v.addValidation('prompts[].sortOptions.sortOrder[].property',
+    (prop, subject) => registry[subject.entity][subject.type].variables[prop],
+    (prop, subject) => `Sort order property "${prop}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+  );
+
+  v.addValidation('prompts[].sortOptions.sortableProperties[].variable',
+    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => `Sortable property "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+  );
+
+  v.addValidation('prompts[].additionalAttributes',
+    (attrMap, subject) => Object.keys(attrMap).every(attr =>
+      registry[subject.entity][subject.type].variables[attr],
+    ),
+    attrMap => `One or more sortable properties not defined in variableRegistry: ${Object.keys(attrMap)}`,
+  );
 
   v.runValidations();
   return v.errors;
