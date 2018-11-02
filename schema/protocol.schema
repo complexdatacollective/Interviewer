@@ -225,7 +225,13 @@
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ]
         },
         "content": {
           "type": "string"
@@ -300,7 +306,12 @@
       "additionalProperties": false,
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "alter",
+            "ego",
+            "edge"
+          ]
         },
         "id": {
           "type": "string"

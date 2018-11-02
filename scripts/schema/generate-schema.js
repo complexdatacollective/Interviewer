@@ -115,6 +115,7 @@ const generateSchema = async () => {
   ];
 
   delete defs.Subject.properties.type.format; // need not be UUID
+
   delete defs.Prompt.properties.variable.format; // need not be UUID
 
   // AdditionalAttributes & ExternalData have no defined props and may contain anything
@@ -206,7 +207,7 @@ const generateSchema = async () => {
 
   defs.Filter.properties.join.enum = ['OR', 'AND'];
 
-  defs.Rule.type.enum = ['alter', 'ego', 'edge'];
+  defs.Rule.properties.type.enum = ['alter', 'ego', 'edge'];
 
   const filterOptionsEnum = [
     'EXISTS',
@@ -235,6 +236,9 @@ const generateSchema = async () => {
   delete defs.Highlight.properties.variable.format;
   delete defs.CardOptions.properties.displayLabel.format;
   delete defs.SearchOptions.properties.matchProperties.items.format;
+
+  // Items in an information interface
+  defs.Item.properties.type.enum = ['text', 'image', 'audio', 'video'];
 
   // Most props are treated by NC as optional; this will
   // need actual review...

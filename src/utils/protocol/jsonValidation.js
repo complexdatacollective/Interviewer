@@ -12,6 +12,13 @@ const nodeVarsIncludeDisplayVar = node =>
 const entityDefFromRule = (rule, variableRegistry) =>
   variableRegistry[rule.type === 'edge' ? 'edge' : 'node'][rule.options.type];
 
+const getVariablesForSubject = (registry, subject = {}) =>
+  (
+    registry[subject.entity] &&
+    registry[subject.entity][subject.type] &&
+    registry[subject.entity][subject.type].variables
+  ) || {};
+
 const getVariableNames = registryVars => Object.values(registryVars).map(vari => vari.name);
 
 // @return the ID (or other unique prop) which is a duplicate, undefined otherwise
@@ -130,29 +137,29 @@ const validateProtocol = (protocol) => {
   );
 
   v.addValidation('prompts[].variable',
-    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => getVariablesForSubject(registry, subject)[variable],
     (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].cardOptions.additionalProperties[].variable',
-    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => getVariablesForSubject(registry, subject)[variable],
     (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].sortOptions.sortOrder[].property',
-    (prop, subject) => registry[subject.entity][subject.type].variables[prop],
+    (prop, subject) => getVariablesForSubject(registry, subject)[prop],
     (prop, subject) => `Sort order property "${prop}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].sortOptions.sortableProperties[].variable',
-    (variable, subject) => registry[subject.entity][subject.type].variables[variable],
+    (variable, subject) => getVariablesForSubject(registry, subject)[variable],
     (variable, subject) => `Sortable property "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].additionalAttributes',
-    (attrMap, subject) => Object.keys(attrMap).every(attr =>
-      registry[subject.entity][subject.type].variables[attr],
-    ),
+    (attrMap, subject) => Object.keys(attrMap).every(attr => (
+      getVariablesForSubject(registry, subject)[attr]
+    )),
     attrMap => `One or more sortable properties not defined in variableRegistry: ${Object.keys(attrMap)}`,
   );
 
