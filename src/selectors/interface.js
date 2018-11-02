@@ -41,11 +41,19 @@ export const networkEdges = createDeepEqualSelector(
 );
 
 export const getWorkerNetwork = createDeepEqualSelector(
-  networkNodes, networkEdges,
-  (nodes = [], edges = []) => ({
-    nodes: nodes.map(asWorkerAgentNode),
-    edges,
-  }),
+  networkNodes,
+  networkEdges,
+  protocolRegistry,
+  (nodes = [], edges = [], registry) => {
+    const nodeRegistry = registry.node || {};
+    return ({
+      nodes: nodes.map((node) => {
+        const nodeType = nodeRegistry[node.type];
+        return asWorkerAgentNode(node, nodeType && nodeType.name);
+      }),
+      edges,
+    });
+  },
 );
 
 export const makeGetIds = () =>
@@ -81,6 +89,7 @@ const nodeTypeIsDefined = (variableRegistry, nodeType) =>
   variableRegistry.node &&
   !!variableRegistry.node[nodeType];
 
+// TODO: rename to subjectType?
 export const makeGetNodeType = () => (createSelector(
   protocolRegistry,
   makeGetSubject(),

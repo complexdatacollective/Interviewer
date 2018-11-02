@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
 import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/interface';
-import { getNodeLabelWorkerUrl, makeGetNodeColor } from '../selectors/protocol';
+import { getNodeLabelWorkerUrl, makeGetNodeColor, makeGetNodeTypeName } from '../selectors/protocol';
 import { asWorkerAgentNode } from '../ducks/modules/network';
 
 /**
@@ -40,7 +40,7 @@ class Node extends PureComponent {
     }
 
     // Create an object containing the node's model properties
-    const node = asWorkerAgentNode(this.props);
+    const node = asWorkerAgentNode(this.props, this.props.nodeTypeName);
 
     // Send the worker the node model properties along with the network
     const msgPromise = this.webWorker.sendMessageAsync({
@@ -79,9 +79,11 @@ class Node extends PureComponent {
 
 function mapStateToProps(state, props) {
   const getNodeColor = makeGetNodeColor();
+  const getNodeTypeName = makeGetNodeTypeName();
 
   return {
     color: getNodeColor(state, props),
+    nodeTypeName: getNodeTypeName(state, props),
     getLabel: getNodeLabelFunction(state),
     workerUrl: getNodeLabelWorkerUrl(state),
     workerNetwork: (getNodeLabelWorkerUrl(state) && getWorkerNetwork(state)) || null,
@@ -92,12 +94,14 @@ Node.propTypes = {
   type: PropTypes.string.isRequired,
   color: PropTypes.string,
   getLabel: PropTypes.func.isRequired,
+  nodeTypeName: PropTypes.string,
   workerUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   workerNetwork: PropTypes.object,
 };
 
 Node.defaultProps = {
   color: 'node-color-seq-1',
+  nodeTypeName: null,
   workerUrl: undefined,
   workerNetwork: null,
 };

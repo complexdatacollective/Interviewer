@@ -25,6 +25,15 @@ export const getRemoteProtocolId = createDeepEqualSelector(
   remoteName => nameDigest(remoteName) || null,
 );
 
+export const makeGetNodeTypeName = () => createDeepEqualSelector(
+  protocolRegistry,
+  (state, props) => props.type,
+  (variableRegistry, nodeType) => {
+    const nodeInfo = variableRegistry.node;
+    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].name;
+  },
+);
+
 export const makeGetNodeColor = () => createDeepEqualSelector(
   protocolRegistry,
   (state, props) => props.type,
