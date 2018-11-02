@@ -345,7 +345,8 @@
       },
       "required": [
         "attribute",
-        "operator"
+        "operator",
+        "type"
       ],
       "title": "Rule Options",
       "allOf": [
@@ -368,6 +369,7 @@
             "required": [
               "attribute",
               "operator",
+              "type",
               "value"
             ]
           }

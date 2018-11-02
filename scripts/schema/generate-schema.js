@@ -114,6 +114,9 @@ const generateSchema = async () => {
     },
   ];
 
+  delete defs.Subject.properties.type.format; // need not be UUID
+  delete defs.Prompt.properties.variable.format; // need not be UUID
+
   // AdditionalAttributes & ExternalData have no defined props and may contain anything
   delete defs.AdditionalAttributes.properties;
   delete defs.AdditionalAttributes.additionalProperties;
@@ -129,6 +132,7 @@ const generateSchema = async () => {
   delete defs.Node.required;
 
   // NodeTypeDef: `variableRegistry.node[NODE_TYPE]`
+  delete defs.NodeTypeDef.properties.displayVariable.format;
   delete defs.NodeTypeDef.required; // TODO: is this true?
 
   // See comments on Node, above
@@ -136,6 +140,8 @@ const generateSchema = async () => {
   delete defs.Edge.properties;
   delete defs.Edge.required;
 
+  delete defs.Edges.properties.display.items.format;
+  delete defs.Edges.properties.create.format;
   pull(defs.Edges.required, 'create');
 
   // Variables: one of `variableRegistry.node[NODE_TYPE].variables[VARIABLE_NAME]`
@@ -158,6 +164,7 @@ const generateSchema = async () => {
   delete defs.Forms.properties;
   delete defs.Forms.required;
 
+  delete defs.Form.properties.type.format; // need not be a UUID
   pull(defs.Form.required, 'optionToAddAnother');
 
   defs.Field.properties.component.enum = [
@@ -219,6 +226,15 @@ const generateSchema = async () => {
       then: { required: [...defs.Options.required, 'value'] },
     },
   ];
+  // These need not be UUIDs
+  delete defs.Options.properties.type.format;
+  delete defs.Options.properties.attribute.format;
+
+  delete defs.SortOrder.properties.property.format;
+  delete defs.Property.properties.variable.format;
+  delete defs.Highlight.properties.variable.format;
+  delete defs.CardOptions.properties.displayLabel.format;
+  delete defs.SearchOptions.properties.matchProperties.items.format;
 
   // Most props are treated by NC as optional; this will
   // need actual review...

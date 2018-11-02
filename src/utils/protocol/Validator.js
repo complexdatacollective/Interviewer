@@ -92,6 +92,7 @@ class Validator {
       failureMessage = makeFailureMessage(fragment);
     } catch (err) {
       this.errors.push(`Validation error during ${keypathString(keypath)}: ${err.toString()}`);
+      debugLog(err);
       return false;
     }
     if (!result) {

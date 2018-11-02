@@ -9,6 +9,10 @@ const nodeVarsIncludeDisplayVar = node =>
   !node.displayVariable // displayVariable is optional
     || Object.keys(node.variables).some(variableId => variableId === node.displayVariable);
 
+const entityDefFromRule = (rule, variableRegistry) =>
+  variableRegistry[rule.type === 'edge' ? 'edge' : 'node'][rule.options.type];
+
+
 /**
  * Define and run all dynamic validations (which aren't covered by the JSON Schema)
  */
@@ -39,7 +43,7 @@ const validateProtocol = (protocol) => {
   v.addValidationSequence('forms.*',
     [
       form => registry[form.entity],
-      form => `form entity "${form.entity}" is not defined in the variableRegistry`,
+      form => `form entity "${form.entity}" is not defined in variableRegistry`,
     ],
     [
       form => registry[form.entity][form.type],
@@ -49,6 +53,20 @@ const validateProtocol = (protocol) => {
       form =>
         form.fields.every(field => registry[form.entity][form.type].variables[field.variable]),
       form => `Undefined form field variables in variableRegistry: ${undefinedFormVariables(form, registry)}`,
+    ],
+  );
+
+  v.addValidationSequence('filter.rules[]',
+    [
+      rule => entityDefFromRule(rule, registry),
+      rule => `Rule option type "${rule.options.type}" is not defined in variableRegistry`,
+    ],
+    [
+      (rule) => {
+        const variables = entityDefFromRule(rule, registry).variables;
+        return variables && variables[rule.options.attribute];
+      },
+      rule => `"${rule.options.attribute}" is not a valid variable ID`,
     ],
   );
 
