@@ -51,6 +51,7 @@ const keypathString = keypath => keypath.join('.');
 class Validator {
   constructor(protocol) {
     this.errors = [];
+    this.warnings = [];
     this.validations = [];
     this.protocol = protocol;
   }
@@ -87,18 +88,17 @@ class Validator {
    * @param  {Function} validation.validate
    * @param  {Function} validation.makeFailureMessage
    * @param  {Object} subject the entity & type (for stage fragments & descendants)
-   * @return {boolean} true if validation passed, false if there was an error
+   * @return {boolean} result false if there was an error,
+   *                          true if validation passed, or if validation couldn't be completed
    */
   validateSingle(keypath, fragment, { validate, makeFailureMessage }, subject) {
     let result;
-    // TODO: If error in validation, don't push error, just log error
-    // (don't want to fail at runtime). Or populate `warnings`?
     try {
       result = validate(fragment, subject);
     } catch (err) {
-      this.errors.push(`Validation error during ${keypathString(keypath)}: ${err.toString()}`);
       debugLog(err);
-      return false;
+      this.warnings.push(`Validation error for ${keypathString(keypath)}: ${err.toString()}`);
+      return true;
     }
     if (!result) {
       let failureMessage;
@@ -106,7 +106,8 @@ class Validator {
         failureMessage = makeFailureMessage(fragment, subject);
       } catch (err) {
         debugLog(err);
-        failureMessage = err.toString();
+        this.warnings.push(`makeFailureMessage error for ${keypathString(keypath)}: ${err.toString()}`);
+        return true;
       }
       this.errors.push(`${keypathString(keypath)}: ${failureMessage}`);
       return false;
@@ -143,7 +144,10 @@ class Validator {
   /**
    * Run all validations that have been added for this protocol.
    *
-   * When done, `validator.errors` will contain all errors uncovered.
+   * When done,
+   * - `validator.errors` will contain all errors uncovered.
+   * - `validator.warnings` will contain other warnings, including any errors with validation
+   * itself (which should not prevent a protocol from validating).
    */
   runValidations() {
     this.traverse(this.protocol);

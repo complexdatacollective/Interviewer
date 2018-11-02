@@ -41,7 +41,9 @@ const duplicateInArray = (items) => {
 };
 
 /**
- * Define and run all dynamic validations (which aren't covered by the JSON Schema)
+ * Define and run all dynamic validations (which aren't covered by the JSON Schema).
+ *
+ * @return {string[]} an array of failure messages from the validator
  */
 const validateProtocol = (protocol) => {
   const v = new Validator(protocol);
@@ -155,6 +157,9 @@ const validateProtocol = (protocol) => {
   );
 
   v.runValidations();
+
+  v.warnings.forEach(warning => console.error(warning)); // eslint-disable-line no-console
+
   return v.errors;
 };
 
