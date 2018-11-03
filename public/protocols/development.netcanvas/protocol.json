@@ -151,6 +151,12 @@
             "description": "A special category",
             "type": "ordinal",
             "options": [46,56]
+          },
+          "04298634-eb5f-450a-84dd-95d2708e10c1": {
+            "name": "dataSource",
+            "label": "Data source",
+            "description": "Data source",
+            "type": "text"
           }
         }
       },
@@ -822,9 +828,9 @@
           "component": "Text"
         },
         {
-          "variable": "timeCreated",
+          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
-          "value": "return Date.now().toString();"
+          "value": "network-canvas"
         }
       ]
     },
@@ -888,9 +894,9 @@
           "component": "Text"
         },
         {
-          "variable": "timeCreated",
+          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
-          "value": "return Date.now().toString();"
+          "value": "network-canvas"
         }
       ]
     }
