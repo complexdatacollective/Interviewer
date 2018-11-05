@@ -30,7 +30,6 @@ const getInterface = (interfaceConfig) => {
     justifyContent: 'center',
   };
 
-  if (has(interfaceConfig, 'custom')) { return interfaceConfig.custom; }
   if (has(interfaces, interfaceConfig)) { return interfaces[interfaceConfig]; }
   return () => (<div style={divStyle}><div style={{ textAlign: 'center' }}><Icon name="warning" /><h1 style={{ marginTop: '1rem' }}>No &quot;{interfaceConfig}&quot; interface found.</h1></div></div>);
 };
