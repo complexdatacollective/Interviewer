@@ -106,11 +106,11 @@ const generateSchema = async () => {
   defs.Stage.anyOf = [
     {
       properties: { type: { const: 'Information' } },
-      required: [...defs.Stage.required, 'items'],
+      required: ['items'],
     },
     {
       properties: { type: { enum: without(stageTypeEnum, 'Information') } },
-      required: [...defs.Stage.required, 'prompts'],
+      required: ['prompts'],
     },
   ];
 
@@ -177,6 +177,7 @@ const generateSchema = async () => {
     'ToggleButtonGroup',
     'hidden',
   ];
+  delete defs.Field.properties.variable.format; // need not be a UUID
 
   // subject.entity
   defs.Entity.enum = ['node', 'edge'];
@@ -198,10 +199,12 @@ const generateSchema = async () => {
     'LESS_THAN',
     'LESS_THAN_OR_EQUAL',
   ];
+  // value only required for some operators
+  pull(defs.SkipLogic.required, 'value');
   defs.SkipLogic.allOf = [
     {
-      if: { properties: { operator: { enum: ['ANY', 'NONE'] } } },
-      then: { required: without(defs.SkipLogic.required, 'value') },
+      if: { properties: { operator: { enum: without(defs.SkipLogic.properties.operator.enum, 'ANY', 'NONE') } } },
+      then: { required: ['value'] },
     },
   ];
 
@@ -224,7 +227,7 @@ const generateSchema = async () => {
   defs.Options.allOf = [
     {
       if: { properties: { operator: { enum: without(filterOptionsEnum, 'EXISTS', 'NOT_EXISTS') } } },
-      then: { required: [...defs.Options.required, 'value'] },
+      then: { required: ['value'] }, // in addition to props which are always required
     },
   ];
   // These need not be UUIDs

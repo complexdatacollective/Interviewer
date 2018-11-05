@@ -190,9 +190,6 @@
             }
           },
           "required": [
-            "id",
-            "label",
-            "type",
             "items"
           ]
         },
@@ -209,9 +206,6 @@
             }
           },
           "required": [
-            "id",
-            "label",
-            "type",
             "prompts"
           ]
         }
@@ -378,9 +372,6 @@
           },
           "then": {
             "required": [
-              "attribute",
-              "operator",
-              "type",
               "value"
             ]
           }
@@ -685,8 +676,7 @@
       "required": [
         "action",
         "filter",
-        "operator",
-        "value"
+        "operator"
       ],
       "title": "SkipLogic",
       "allOf": [
@@ -695,17 +685,19 @@
             "properties": {
               "operator": {
                 "enum": [
-                  "ANY",
-                  "NONE"
+                  "EXACTLY",
+                  "NOT",
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL"
                 ]
               }
             }
           },
           "then": {
             "required": [
-              "action",
-              "filter",
-              "operator"
+              "value"
             ]
           }
         }
