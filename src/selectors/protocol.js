@@ -30,7 +30,7 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   protocolRegistry,
   (state, props) => props.type,
   (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+    const nodeInfo = variableRegistry && variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType];
   },
 );
