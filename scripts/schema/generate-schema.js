@@ -10,14 +10,14 @@ const {
 const enums = require('../../src/protocol-consts');
 
 const projectDir = path.join(__dirname, '..', '..');
-const outputDir = path.join(projectDir, 'schema'); // TODO: unignore
+const outputDir = path.join(projectDir, 'src', 'schemas');
 
 const input = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const devProtocol = JSON.parse(fs.readFileSync(input));
 const protocol = { ...devProtocol };
 
 const protocolFile = path.join(outputDir, 'abstract-protocol.json');
-const schemaFile = path.join(outputDir, 'protocol.schema');
+const schemaFile = path.join(outputDir, 'protocol.schema.json');
 
 const ensureOutputDir = () => {
   try {
@@ -83,7 +83,7 @@ const generateAbstractProtocol = () => {
  */
 const generateSchema = async () => {
   // Write default based on abstract example protocol
-  await quicktypeCli(['--telemetry=disable', '-o', schemaFile, protocolFile]);
+  await quicktypeCli(['--telemetry=disable', '--lang', 'schema', '--top-level', 'Protocol', '-o', schemaFile, protocolFile]);
 
   const schema = JSON.parse(fs.readFileSync(schemaFile));
   const defs = schema.definitions;

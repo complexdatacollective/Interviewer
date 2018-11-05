@@ -9,15 +9,14 @@
  */
 const Chalk = require('chalk').constructor;
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 const JSZip = require('jszip');
-const Ajv = require('ajv');
 
-const { validateProtocol } = require('../../src/utils/protocol/jsonValidation');
+const { validateSchema, validateLogic } = require('../../src/utils/protocol/validation');
+const { errToString } = require('../../src/utils/protocol/validation/helpers');
 
 const projectDir = path.join(__dirname, '..', '..');
-const schemaDir = path.join(projectDir, 'schema');
+const schemaDir = path.join(projectDir, 'src', 'schemas');
 const defaultProtocol = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const protocolArg = process.argv[2];
 const protocolFilepath = protocolArg || defaultProtocol;
@@ -40,10 +39,9 @@ const extractProtocolSource = async (zippedProtocol) => {
 
 const validateJson = (jsonString) => {
   try {
-    schema = JSON.parse(fs.readFileSync(path.join(schemaDir, 'protocol.schema')));
+    schema = JSON.parse(fs.readFileSync(path.join(schemaDir, 'protocol.schema.json')));
   } catch (e) {
     console.error(chalk.red('Invalid schema'));
-    console.error(chalk.red('Have you run `npm run generate-schema`?'));
     console.error();
     console.error(e);
     process.exit(1);
@@ -57,36 +55,21 @@ const validateJson = (jsonString) => {
     process.exit(1);
   }
 
-  const ajv = new Ajv({
-    allErrors: true,
-  });
-  ajv.addFormat('integer', /\d+/);
-
-  const validate = ajv.compile(schema);
-  const schemaIsValid = validate(data, 'Protocol');
-  const dataErrors = validateProtocol(data);
-  const isValid = schemaIsValid && !dataErrors.length;
+  const schemaErrors = validateSchema(data, schema);
+  const dataErrors = validateLogic(data);
+  const isValid = !schemaErrors.length && !dataErrors.length;
 
   if (isValid) {
     console.log(`${protocolName} is valid`);
   } else {
-    if (!schemaIsValid) {
+    if (schemaErrors.length) {
       console.error(chalk.red(`${protocolName} has schema errors:`));
-      console.warn('-', ajv.errorsText(validate.errors, { separator: `${os.EOL}- ` }));
-
-      const addlPropErrors = validate.errors.filter(err => err.keyword === 'additionalProperties');
-      if (addlPropErrors.length) {
-        console.warn('');
-        console.warn('additionalProperty error details:');
-        addlPropErrors.forEach((err) => {
-          console.warn('-', `${err.dataPath} has "${err.params.additionalProperty}"`, os.EOL);
-        });
-      }
+      schemaErrors.forEach(err => console.warn('-', errToString(err)));
     }
 
     if (dataErrors.length) {
       console.error(chalk.red(`${protocolName} has data errors:`));
-      console.warn('-', dataErrors.join(`${os.EOL}- `));
+      dataErrors.forEach(err => console.warn('-', errToString(err)));
     }
 
     if (exitOnValidationFailure) {

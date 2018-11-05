@@ -6,7 +6,7 @@ import inEnvironment from '../Environment';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
 import { protocolPath } from './';
-import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './zipValidation';
+import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './validation/zipValidation';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
