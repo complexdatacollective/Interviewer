@@ -9,27 +9,4 @@
   height: 100%;
   justify-content: center;
   overflow: hidden;
-
-  &__expanded {
-    align-items: center;
-    border: solid .5rem;
-    border-radius: 50%;
-    display: flex;
-    height: var(--categorical-available-height);
-    justify-content: center;
-    margin: 0;
-    padding: calc(var(--categorical-available-height) * .1);
-    width: var(--categorical-available-height);
-
-    @media screen and (max-aspect-ratio: 4 / 5) {
-      height: var(--categorical-available-width);
-      padding: calc(var(--categorical-available-width) * .1);
-      width: var(--categorical-available-width);
-    }
-
-    .scrollable {
-      @include scroller-mask($scroller-top-padding-small);
-      height: 100%;
-    }
-  }
 }

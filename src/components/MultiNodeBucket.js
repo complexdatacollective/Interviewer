@@ -116,7 +116,7 @@ class MultiNodeBucket extends Component {
           nodes.map((node, index) => (
             index < 3 && (
               <NodeTransition
-                key={`${node[nodePrimaryKeyProperty]}`}
+                key={`${node[nodePrimaryKeyProperty]}_${index}`}
                 index={index}
                 stagger={stagger}
               >

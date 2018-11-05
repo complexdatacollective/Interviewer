@@ -6,7 +6,7 @@ import { find } from 'lodash';
 
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { CategoricalItem, NodeList } from '../components/';
+import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../utils/CSSVariables';
 import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
@@ -57,11 +57,22 @@ class CategoricalList extends Component {
         return;
       }
 
+      this.lastNode = meta[nodeAttributesProperty].name;
+
       this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
         { [this.props.activePromptVariable]: bin.value });
     };
 
     const accentColor = getCatColor(index);
+
+    let details = 'empty';
+    if (this.lastNode) {
+      if (bin.nodes.length > 0) {
+        details = `${this.lastNode}${bin.nodes.length > 1 ? ` and ${bin.nodes.length - 1} other${bin.nodes.length > 2 ? 's' : ''}` : ''}`;
+      }
+    } else if (bin.nodes.length > 0) {
+      details = `${bin.nodes.length} node${bin.nodes.length > 1 ? 's' : ''}`;
+    }
 
     return (
       <CategoricalItem
@@ -71,28 +82,18 @@ class CategoricalList extends Component {
         accentColor={accentColor}
         onDrop={item => onDrop(item)}
         onClick={e => this.expandBin(e, bin.value, accentColor)}
+        details={details}
+        isExpanded={this.state.expandedBinValue === bin.value}
+        nodes={bin.nodes}
+        sortOrder={this.props.prompt.binSortOrder}
       />
     );
   }
 
   render() {
-    const binDisplay = (
-      <div
-        className="categorical-list__expanded"
-        style={{ borderColor: this.state.accentColor }}
-      >
-        <NodeList
-          listId={`CATBIN_NODE_LIST_${this.props.stage.id}_${this.props.prompt.id}`}
-          id={'CATBIN_NODE_LIST'}
-          nodes={this.getCurrentBinNodes()}
-          sortOrder={this.props.prompt.binSortOrder}
-        />
-      </div>
-    );
-
     return (
       <div className="categorical-list" onClick={e => this.expandBin(e, '', '')}>
-        {this.state.expandedBinValue ? binDisplay : this.props.bins.map(this.renderCategoricalBin)}
+        {this.props.bins.map(this.renderCategoricalBin)}
       </div>
     );
   }
