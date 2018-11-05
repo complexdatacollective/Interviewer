@@ -8,6 +8,15 @@ import { actionCreators as mockActions } from '../../ducks/modules/mock';
 import { actionCreators as dialogsActions } from '../../ducks/modules/dialogs';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 
+const personEntry = (protocol) => {
+  const registry = protocol && protocol.variableRegistry;
+  const entry = registry && registry.node && Object.entries(registry.node).find(([, nodeType]) => nodeType.name === 'person');
+  if (!entry || entry.length !== 2) {
+    return null;
+  }
+  return entry;
+};
+
 const settingsMenuHandlers = withHandlers({
   handleResetAppData: props => () => {
     props.openDialog({
@@ -22,7 +31,12 @@ const settingsMenuHandlers = withHandlers({
     });
   },
   handleAddMockNodes: props => () => {
-    props.generateNodes(20);
+    const entry = personEntry(props.protocol);
+    if (!entry) {
+      return;
+    }
+    const [typeKey, personDef] = entry;
+    props.generateNodes(personDef.variables, typeKey, 20);
     props.closeMenu();
   },
 });
@@ -39,6 +53,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
+  protocol: state.protocol,
+  shouldShowMocksItem: !!personEntry(state.protocol),
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   deviceDescription: state.deviceSettings.description,

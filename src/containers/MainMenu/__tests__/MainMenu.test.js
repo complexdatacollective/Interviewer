@@ -85,6 +85,16 @@ describe('<MainMenu />', () => {
     beforeEach(() => {
       const mockStore = getMockStore({
         ui: { isMenuOpen: true },
+        protocol: {
+          variableRegistry: {
+            node: {
+              abcdef: {
+                name: 'person',
+                variables: {},
+              },
+            },
+          },
+        },
         session: '1234-5678',
         sessions: {
           '1234-5678': {

@@ -7,7 +7,12 @@ import { nodeAttributesProperty } from './network';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
-const generateNodes = (howMany = 0) =>
+const keyForVarName = (vars, name) => {
+  const entry = Object.entries(vars).find(([, val]) => val.name === name);
+  return entry && entry[0];
+};
+
+const generateNodes = (variableDefs, typeKey, howMany = 0) =>
   (dispatch) => {
     times(howMany, () => {
       const firstName = faker.name.firstName();
@@ -15,15 +20,14 @@ const generateNodes = (howMany = 0) =>
       const age = faker.random.number({ min: 16, max: 99 });
 
       return dispatch(sessionsActions.addNodes({
-        type: 'person',
+        type: typeKey,
         promptId: 'mock',
         stageId: 'mock',
         [nodeAttributesProperty]: {
-          name: `${firstName} ${lastName}`,
-          nickname: lastName,
-          age,
+          [keyForVarName(variableDefs, 'name')]: `${firstName} ${lastName}`,
+          [keyForVarName(variableDefs, 'nickname')]: lastName,
+          [keyForVarName(variableDefs, 'age')]: age,
         },
-        timeCreated: Date.now().toString(),
       }));
     });
   };
