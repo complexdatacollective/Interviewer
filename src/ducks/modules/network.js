@@ -78,6 +78,11 @@ export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
   ...getNodeAttribtuesWithNamesResolved(node, nodeTypeDefinition && nodeTypeDefinition.variables),
 });
 
+export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
+  ...edge,
+  type: edgeTypeDefinition && edgeTypeDefinition.name,
+});
+
 /**
  * existingNodes - Existing network.nodes
  * netNodes - nodes to be added to the network

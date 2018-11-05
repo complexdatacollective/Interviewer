@@ -2,6 +2,7 @@
 
 import reducer,
 { actionTypes,
+  asWorkerAgentEdge,
   asWorkerAgentNode,
   nodePrimaryKeyProperty as PK,
   nodeTypePropertyForWorker,
@@ -258,5 +259,27 @@ describe('asWorkerAgentNode', () => {
 
   it('does not contain other private attrs props', () => {
     expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
+  });
+});
+
+describe('asWorkerAgentEdge', () => {
+  const edgeInNetwork = {
+    from: 'node1',
+    to: 'node2',
+    type: '1234',
+  };
+
+  const edgeTypeDefinition = {
+    name: 'friend',
+  };
+
+  it('returns node IDs', () => {
+    const workerEdge = asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition);
+    expect(workerEdge.from).toEqual(edgeInNetwork.from);
+    expect(workerEdge.to).toEqual(edgeInNetwork.to);
+  });
+
+  it('returns a user-friendly edge type', () => {
+    expect(asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition).type).toEqual('friend');
   });
 });

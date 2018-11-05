@@ -5,7 +5,12 @@ import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getCurrentSession } from './session';
-import { getNodeAttributes, nodeAttributesProperty, asWorkerAgentNode } from '../ducks/modules/network';
+import {
+  asWorkerAgentEdge,
+  asWorkerAgentNode,
+  getNodeAttributes,
+  nodeAttributesProperty,
+} from '../ducks/modules/network';
 
 // Selectors that are generic between interfaces
 
@@ -46,9 +51,10 @@ export const getWorkerNetwork = createDeepEqualSelector(
   protocolRegistry,
   (nodes = [], edges = [], registry) => {
     const nodeRegistry = registry.node || {};
+    const edgeRegistry = registry.edge || {};
     return ({
       nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
-      edges,
+      edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
     });
   },
 );
