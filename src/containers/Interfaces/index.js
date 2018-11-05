@@ -11,14 +11,16 @@ import Quiz from './Quiz';
 import Information from './Information';
 import FinishSession from './FinishSession';
 
+import { StageType } from '../../protocol-consts';
+
 const interfaces = {
-  NameGenerator,
-  NameGeneratorAutoComplete,
-  NameGeneratorList,
-  Sociogram,
-  Quiz,
-  Information,
-  OrdinalBin,
+  [StageType.NameGenerator]: NameGenerator,
+  [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
+  [StageType.NameGeneratorList]: NameGeneratorList,
+  [StageType.Sociogram]: Sociogram,
+  [StageType.Quiz]: Quiz,
+  [StageType.Information]: Information,
+  [StageType.OrdinalBin]: OrdinalBin,
   FinishSession,
 };
 

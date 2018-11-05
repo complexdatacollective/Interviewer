@@ -7,6 +7,8 @@ const {
   main: quicktypeCli,
 } = require('quicktype');
 
+const enums = require('../../src/protocol-consts');
+
 const projectDir = path.join(__dirname, '..', '..');
 const outputDir = path.join(projectDir, 'schema'); // TODO: unignore
 
@@ -92,16 +94,8 @@ const generateSchema = async () => {
   defs.Protocol.properties.stages.minItems = 1;
   defs.Protocol.properties.lastModified.format = 'date-time';
 
-  const stageTypeEnum = [
-    'NameGenerator',
-    'NameGeneratorList',
-    'NameGeneratorAutoComplete',
-    'Sociogram',
-    'Information',
-    'OrdinalBin',
-  ];
   defs.Stage.title = 'Interface';
-  defs.Stage.properties.type.enum = stageTypeEnum;
+  defs.Stage.properties.type.enum = enums.StageTypeValues;
   defs.Stage.properties.prompts.minItems = 1;
   defs.Stage.anyOf = [
     {
@@ -109,7 +103,7 @@ const generateSchema = async () => {
       required: ['items'],
     },
     {
-      properties: { type: { enum: without(stageTypeEnum, 'Information') } },
+      properties: { type: { enum: without(enums.StageTypeValues, 'Information') } },
       required: ['prompts'],
     },
   ];
@@ -154,9 +148,7 @@ const generateSchema = async () => {
   // Variable Type must be one of the valid types, and is the only required field
   // https://github.com/codaco/Network-Canvas/wiki/Variable-Types
   defs.Variable.required = ['type'];
-  defs.Variable.properties.type.enum = [
-    'text', 'number', 'datetime', 'boolean', 'ordinal', 'categorical', 'layout', 'location',
-  ];
+  defs.Variable.properties.type.enum = enums.VariableTypeValues;
 
   defs.OptionElement.title = 'Variable Option';
 
@@ -168,19 +160,11 @@ const generateSchema = async () => {
   delete defs.Form.properties.type.format; // need not be a UUID
   pull(defs.Form.required, 'optionToAddAnother');
 
-  defs.Field.properties.component.enum = [
-    'Checkbox',
-    'CheckboxGroup',
-    'RadioGroup',
-    'Text',
-    'Toggle',
-    'ToggleButtonGroup',
-    'hidden',
-  ];
+  defs.Field.properties.component.enum = enums.FormComponentValues;
   delete defs.Field.properties.variable.format; // need not be a UUID
 
   // subject.entity
-  defs.Entity.enum = ['node', 'edge'];
+  defs.Entity.enum = enums.EntityValues;
 
   // All validations are optional
   delete defs.Validation.required;
@@ -188,17 +172,8 @@ const generateSchema = async () => {
   // SkipLogic & Filter rules
   defs.SkipLogic.properties.value.minimum = 1;
   defs.SkipLogic.properties.value.multipleOf = 1;
-  defs.SkipLogic.properties.action.enum = ['SHOW', 'SKIP'];
-  defs.SkipLogic.properties.operator.enum = [
-    'ANY',
-    'NONE',
-    'EXACTLY',
-    'NOT',
-    'GREATER_THAN',
-    'GREATER_THAN_OR_EQUAL',
-    'LESS_THAN',
-    'LESS_THAN_OR_EQUAL',
-  ];
+  defs.SkipLogic.properties.action.enum = enums.SkipLogicActionValues;
+  defs.SkipLogic.properties.operator.enum = enums.SkipLogicOperatorValues;
   // value only required for some operators
   pull(defs.SkipLogic.required, 'value');
   defs.SkipLogic.allOf = [
@@ -208,25 +183,15 @@ const generateSchema = async () => {
     },
   ];
 
-  defs.Filter.properties.join.enum = ['OR', 'AND'];
+  defs.Filter.properties.join.enum = enums.FilterJoinValues;
 
-  defs.Rule.properties.type.enum = ['alter', 'ego', 'edge'];
+  defs.Rule.properties.type.enum = enums.RuleTypeValues;
 
-  const filterOptionsEnum = [
-    'EXISTS',
-    'NOT_EXISTS',
-    'EXACTLY',
-    'NOT',
-    'GREATER_THAN',
-    'GREATER_THAN_OR_EQUAL',
-    'LESS_THAN',
-    'LESS_THAN_OR_EQUAL',
-  ];
   defs.Options.title = 'Rule Options';
-  defs.Options.properties.operator.enum = filterOptionsEnum;
+  defs.Options.properties.operator.enum = enums.FilterOptionsOperatorValues;
   defs.Options.allOf = [
     {
-      if: { properties: { operator: { enum: without(filterOptionsEnum, 'EXISTS', 'NOT_EXISTS') } } },
+      if: { properties: { operator: { enum: without(enums.FilterOptionsOperatorValues, 'EXISTS', 'NOT_EXISTS') } } },
       then: { required: ['value'] }, // in addition to props which are always required
     },
   ];
@@ -242,7 +207,7 @@ const generateSchema = async () => {
   delete defs.Layout.properties.layoutVariable.format;
 
   // Items in an information interface
-  defs.Item.properties.type.enum = ['text', 'image', 'audio', 'video'];
+  defs.Item.properties.type.enum = enums.InformationContentTypeValues;
 
   // Most props are treated by NC as optional; this will
   // need actual review...

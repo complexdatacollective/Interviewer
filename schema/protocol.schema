@@ -776,10 +776,10 @@
         "type": {
           "type": "string",
           "enum": [
+            "boolean",
             "text",
             "number",
             "datetime",
-            "boolean",
             "ordinal",
             "categorical",
             "layout",
@@ -912,8 +912,8 @@
     "Entity": {
       "type": "string",
       "enum": [
-        "node",
-        "edge"
+        "edge",
+        "node"
       ],
       "title": "Entity"
     }
