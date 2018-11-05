@@ -239,6 +239,7 @@ const generateSchema = async () => {
   delete defs.Highlight.properties.variable.format;
   delete defs.CardOptions.properties.displayLabel.format;
   delete defs.SearchOptions.properties.matchProperties.items.format;
+  delete defs.Layout.properties.layoutVariable.format;
 
   // Items in an information interface
   defs.Item.properties.type.enum = ['text', 'image', 'audio', 'video'];

@@ -156,6 +156,11 @@ const validateProtocol = (protocol) => {
     (variable, subject) => `Sortable property "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
   );
 
+  v.addValidation('prompts[].layout.layoutVariable',
+    (variable, subject) => getVariablesForSubject(registry, subject)[variable],
+    (variable, subject) => `Layout variable "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+  );
+
   v.addValidation('prompts[].additionalAttributes',
     (attrMap, subject) => Object.keys(attrMap).every(attr => (
       getVariablesForSubject(registry, subject)[attr]
