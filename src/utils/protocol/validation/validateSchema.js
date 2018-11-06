@@ -1,11 +1,11 @@
 const Ajv = require('ajv');
 
-const defaultSchema = require('../../../schemas/protocol.schema.json');
+const { v1 } = require('../../../schemas/');
 
 /**
  * Statically validate the protocol based on its JSON schema
  */
-const validateSchema = (protocol, schema = defaultSchema) => {
+const validateSchema = (protocol, schema = v1) => {
   const ajv = new Ajv({
     allErrors: true,
   });

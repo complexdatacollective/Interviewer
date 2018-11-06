@@ -16,8 +16,10 @@ const input = path.join(projectDir, 'public', 'protocols', 'development.netcanva
 const devProtocol = JSON.parse(fs.readFileSync(input));
 const protocol = { ...devProtocol };
 
+const schemaVersion = 1;
+
 const protocolFile = path.join(outputDir, 'abstract-protocol.json');
-const schemaFile = path.join(outputDir, 'protocol.schema.json');
+const schemaFile = path.join(outputDir, `protocol.schema.v${schemaVersion}.json`);
 
 const ensureOutputDir = () => {
   try {

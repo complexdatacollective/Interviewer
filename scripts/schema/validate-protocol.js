@@ -37,9 +37,11 @@ const extractProtocolSource = async (zippedProtocol) => {
   return contents;
 };
 
+const schemaVersion = 1;
+
 const validateJson = (jsonString) => {
   try {
-    schema = JSON.parse(fs.readFileSync(path.join(schemaDir, 'protocol.schema.json')));
+    schema = JSON.parse(fs.readFileSync(path.join(schemaDir, `protocol.schema.v${schemaVersion}.json`)));
   } catch (e) {
     console.error(chalk.red('Invalid schema'));
     console.error();
