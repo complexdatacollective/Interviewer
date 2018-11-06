@@ -1,13 +1,19 @@
+// For some error types, AJV returns info separate from message
+const additionalErrorInfo = (errorObj) => {
+  const params = errorObj.params || {};
+  return params.additionalProperty
+    || params.allowedValues
+    || params.allowedValue;
+};
+
 const errToString = (errorObj) => {
   if (typeof errorObj === 'string') {
     return errorObj;
   }
   let str = `${errorObj.dataPath} ${errorObj.message}`;
-  if (errorObj.params && errorObj.params.additionalProperty) {
-    str += ` (${errorObj.params.additionalProperty})`;
-  }
-  if (errorObj.params && errorObj.params.allowedValues) {
-    str += ` (${errorObj.params.allowedValues})`;
+  const addlInfo = additionalErrorInfo(errorObj);
+  if (addlInfo) {
+    str += ` '${addlInfo}'`;
   }
   return str;
 };
