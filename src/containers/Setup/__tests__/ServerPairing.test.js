@@ -1,8 +1,9 @@
 /* eslint-env jest */
 import React from 'react';
 import { shallow } from 'enzyme';
+import { createStore } from 'redux';
 
-import { UnconnectedServerPairing as ServerPairing } from '../ServerPairing';
+import ConnectedServerPairing, { UnconnectedServerPairing as ServerPairing } from '../ServerPairing';
 
 describe('<ServerPairing>', () => {
   let component;
@@ -36,5 +37,22 @@ describe('<ServerPairing>', () => {
   it('tells form to stop loading', () => {
     component.setState({ loading: false, pairingRequestId: '1' });
     expect(component.find('ServerPairingForm').prop('loading')).toBe(false);
+  });
+});
+
+describe('Connect(ServerPairing)', () => {
+  let mockStore;
+  let subject;
+  beforeEach(() => {
+    mockStore = createStore(() => ({ deviceSettings: { description: 'mockdevice' }, protocol: {} }));
+    subject = shallow(<ConnectedServerPairing store={mockStore} />);
+  });
+
+  it('renders the component', () => {
+    expect(subject.find('ServerPairing')).toHaveLength(1);
+  });
+
+  it('provides a device description', () => {
+    expect(subject.prop('deviceName')).toEqual('mockdevice');
   });
 });
