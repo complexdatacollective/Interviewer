@@ -166,7 +166,7 @@ class Validator {
       fragment.forEach((v, i) => {
         this.traverse(v, [...keypath, `[${i}]`], stageSubject);
       });
-    } else if (typeof fragment === 'object') {
+    } else if (fragment && typeof fragment === 'object') {
       Object.entries(fragment).forEach(([key, val]) => {
         this.traverse(val, [...keypath, key], stageSubject);
       });
