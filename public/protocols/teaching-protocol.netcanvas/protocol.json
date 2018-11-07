@@ -5,6 +5,7 @@
   "variableRegistry": {
     "node": {
       "person": {
+        "name": "person",
         "label": "Person",
         "color": "node-color-seq-1",
         "displayVariable": "nickname",
@@ -138,6 +139,7 @@
     },
     "edge": {
       "friends": {
+        "name": "friends",
         "label": "Friends",
         "color": "edge-color-seq-1",
         "variables": {

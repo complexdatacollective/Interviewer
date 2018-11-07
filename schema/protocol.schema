@@ -722,7 +722,9 @@
       "additionalProperties": false,
       "title": "Edge",
       "patternProperties": {
-        ".+": {}
+        ".+": {
+          "$ref": "#/definitions/EdgeTypeDef"
+        }
       }
     },
     "EdgeTypeDef": {
@@ -882,6 +884,11 @@
           "$ref": "#/definitions/Variables"
         }
       },
+      "required": [
+        "name",
+        "label",
+        "variables"
+      ],
       "title": "NodeTypeDef"
     },
     "OptionElement": {

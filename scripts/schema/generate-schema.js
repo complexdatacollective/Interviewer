@@ -128,10 +128,10 @@ const generateSchema = async () => {
 
   // NodeTypeDef: `variableRegistry.node[NODE_TYPE]`
   delete defs.NodeTypeDef.properties.displayVariable.format;
-  delete defs.NodeTypeDef.required; // TODO: is this true?
+  defs.NodeTypeDef.required = ['name', 'label', 'variables'];
 
   // See comments on Node, above
-  defs.Edge.patternProperties = { '.+': { ...defs.Edge.properties.edge } };
+  defs.Edge.patternProperties = { '.+': defs.Edge.properties.edgeTypeDef };
   delete defs.Edge.properties;
   delete defs.Edge.required;
 
