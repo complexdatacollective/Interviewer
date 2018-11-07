@@ -8,6 +8,10 @@ export const nodePrimaryKeyProperty = '_uid';
 // Property name for node "model" properties
 export const nodeAttributesProperty = 'attributes';
 
+// Property names passed to user worker scripts
+export const primaryKeyPropertyForWorker = 'networkCanvasId';
+export const nodeTypePropertyForWorker = 'networkCanvasType';
+
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
 export const UPDATE_NODE = 'UPDATE_NODE';
@@ -17,9 +21,6 @@ export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
 export const UNSET_EGO = 'UNSET_EGO';
-
-export const primaryKeyPropertyForWorker = 'networkCanvasId';
-export const nodeTypePropertyForWorker = 'networkCanvasType';
 
 // Initial network model structure
 const initialState = {
@@ -43,103 +44,6 @@ function edgeExists(edges, edge) {
  * All generated data is stored inside an 'attributes' property on the node
  */
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
-
-/**
- * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
- * This resolves those UUIDs to variable names based on the definitions in the variable registry,
- * appropriate for user scripts and export.
- */
-const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
-  if (!nodeVariableDefs) {
-    return {};
-  }
-  const attrs = getNodeAttributes(node);
-  return Object.keys(attrs).reduce((acc, uuid) => {
-    if (nodeVariableDefs[uuid] && nodeVariableDefs[uuid].name) {
-      acc[nodeVariableDefs[uuid].name] = attrs[uuid];
-    }
-    return acc;
-  }, {});
-};
-
-export const asExportableNode = (node, nodeTypeDefinition) => ({
-  ...node,
-  attributes: getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
-});
-
-export const asExportableEdge = (edge, edgeTypeDefinition) => ({
-  ...edge,
-  type: edgeTypeDefinition && edgeTypeDefinition.name,
-});
-
-// Also available as a memoized selector; see selectors/interface
-export const asExportableNetwork = (network = {}, registry = {}) => {
-  const { nodes = [], edges = [] } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
-  return ({
-    nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),
-  });
-};
-
-/**
- * Given a variable name ("age") and the relevant section of the variable registry, returns the
- * ID/key for that name.
- */
-const getVariableIdFromName = (variableName, variableDefs) => {
-  const entry = Object.entries(variableDefs).find(([, variable]) => variable.name === variableName);
-  return entry && entry[0];
-};
-
-/**
- * The inverse of getNodeAttributesWithNamesResolved
- */
-export const getNodeWithIdAttributes = (node, nodeVariableDefs) => {
-  if (!nodeVariableDefs) {
-    return {};
-  }
-  const attrs = getNodeAttributes(node);
-  const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
-    const variableId = getVariableIdFromName(varName, nodeVariableDefs);
-    if (variableId) {
-      acc[variableId] = attrs[varName];
-    }
-    return acc;
-  }, {});
-
-  return {
-    ...node,
-    [nodeAttributesProperty]: mappedAttrs,
-  };
-};
-
-/**
- * Contains all user attributes flattened with the node's unique ID.
- *
- *`primaryKeyPropertyForWorker` and `nodeTypePropertyForWorker` are used to minimize conflicts,
- * but user data is always preserved in the event of conflicts.
- *
- * @param  {Object} node
- * @param  {Object} nodeTypeDefinition The variableRegistry entry for this node type
- * @return {Object} node data safe to supply to user-defined workers.
- */
-export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
-  [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
-  [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
-  ...getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
-});
-
-export const asWorkerAgentEdge = asExportableEdge;
-
-// Also available as a memoized selector; see selectors/interface
-export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
-  const { nodes = [], edges = [] } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
-  return ({
-    nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
-  });
-};
 
 /**
  * existingNodes - Existing network.nodes

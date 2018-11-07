@@ -7,11 +7,13 @@ import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
-  asExportableNetwork,
-  asWorkerAgentNetwork,
   getNodeAttributes,
   nodeAttributesProperty,
 } from '../ducks/modules/network';
+import {
+  asExportableNetwork,
+  asWorkerAgentNetwork,
+} from '../utils/networkFormat';
 
 // Selectors that are generic between interfaces
 

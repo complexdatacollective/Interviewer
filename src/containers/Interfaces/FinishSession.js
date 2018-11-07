@@ -9,10 +9,10 @@ import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { asExportableNetwork } from '../../ducks/modules/network';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { asExportableNetwork } from '../../utils/networkFormat';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
