@@ -34,7 +34,7 @@ class NodeForm extends Component {
 
   handleSubmit = (form) => {
     this.props.onSubmit({ form, addAnotherNode: this.state.addAnotherNode });
-    this.overlay.current.scrollContentsToTop();
+    this.overlay.current.getWrappedInstance().scrollContentsToTop();
     this.props.resetValues(reduxFormName);
   }
 

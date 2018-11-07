@@ -7,8 +7,8 @@ import { Modal } from '../ui/components';
 import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../utils/CSSVariables';
 
 /**
-  * Renders a modal window.
-  */
+ * Renders a modal window.
+ */
 class Overlay extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +68,11 @@ Overlay.defaultProps = {
   children: null,
 };
 
+export {
+  Overlay,
+};
+
 const mapStateToProps = state =>
   ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
 
-export default connect(mapStateToProps, null)(Overlay);
+export default connect(mapStateToProps, null, null, { withRef: true })(Overlay);
