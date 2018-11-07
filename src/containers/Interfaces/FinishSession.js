@@ -9,6 +9,7 @@ import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { asExportableNetwork } from '../../ducks/modules/network';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
@@ -75,8 +76,8 @@ class FinishSession extends Component {
   }
 
   export(currentSession) {
-    const { remoteProtocolId, sessionId } = this.props;
-    const sessionData = currentSession.network;
+    const { remoteProtocolId, sessionId, variableRegistry } = this.props;
+    const sessionData = asExportableNetwork(currentSession.network, variableRegistry);
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 

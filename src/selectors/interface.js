@@ -7,8 +7,8 @@ import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
-  asWorkerAgentEdge,
-  asWorkerAgentNode,
+  asExportableNetwork,
+  asWorkerAgentNetwork,
   getNodeAttributes,
   nodeAttributesProperty,
 } from '../ducks/modules/network';
@@ -46,18 +46,16 @@ export const networkEdges = createDeepEqualSelector(
   network => network.edges,
 );
 
-export const getWorkerNetwork = createDeepEqualSelector(
-  networkNodes,
-  networkEdges,
+export const getExportableNetwork = createDeepEqualSelector(
+  getNetwork,
   protocolRegistry,
-  (nodes = [], edges = [], registry) => {
-    const nodeRegistry = registry.node || {};
-    const edgeRegistry = registry.edge || {};
-    return ({
-      nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
-      edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
-    });
-  },
+  (network, registry) => asExportableNetwork(network, registry),
+);
+
+export const getWorkerNetwork = createDeepEqualSelector(
+  getNetwork,
+  protocolRegistry,
+  (network, registry) => asWorkerAgentNetwork(network, registry),
 );
 
 export const makeGetIds = () =>

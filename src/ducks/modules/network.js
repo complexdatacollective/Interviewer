@@ -62,6 +62,26 @@ const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
   }, {});
 };
 
+export const asExportableNode = (node, nodeTypeDefinition) => ({
+  ...node,
+  attributes: getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
+});
+
+export const asExportableEdge = (edge, edgeTypeDefinition) => ({
+  ...edge,
+  type: edgeTypeDefinition && edgeTypeDefinition.name,
+});
+
+// Also available as a memoized selector; see selectors/interface
+export const asExportableNetwork = (network = {}, registry = {}) => {
+  const { nodes = [], edges = [] } = network;
+  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
+  return ({
+    nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
+    edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),
+  });
+};
+
 /**
  * Given a variable name ("age") and the relevant section of the variable registry, returns the
  * ID/key for that name.
@@ -106,13 +126,20 @@ export const getNodeWithIdAttributes = (node, nodeVariableDefs) => {
 export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
   [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
   [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
-  ...getNodeAttributesWithNamesResolved(node, nodeTypeDefinition && nodeTypeDefinition.variables),
+  ...getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
 });
 
-export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
-  ...edge,
-  type: edgeTypeDefinition && edgeTypeDefinition.name,
-});
+export const asWorkerAgentEdge = asExportableEdge;
+
+// Also available as a memoized selector; see selectors/interface
+export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
+  const { nodes = [], edges = [] } = network;
+  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
+  return ({
+    nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
+    edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+  });
+};
 
 /**
  * existingNodes - Existing network.nodes
