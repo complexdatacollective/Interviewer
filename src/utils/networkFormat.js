@@ -10,16 +10,22 @@ import {
  * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
  * This resolves those UUIDs to variable names based on the definitions in the variable registry,
  * appropriate for user scripts and export.
+ *
+ * If `ignoreExternalProps` is false (the default), and a key is not not found, the resulting node
+ * will contain the original key/val. (This may happen with imported external data.)
+ *
  * @private
  */
-const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
-  if (!nodeVariableDefs) {
+const getNodeAttributesWithNamesResolved = (node, nodeVariables, ignoreExternalProps = false) => {
+  if (!nodeVariables) {
     return {};
   }
   const attrs = getNodeAttributes(node);
   return Object.keys(attrs).reduce((acc, uuid) => {
-    if (nodeVariableDefs[uuid] && nodeVariableDefs[uuid].name) {
-      acc[nodeVariableDefs[uuid].name] = attrs[uuid];
+    if (nodeVariables[uuid] && nodeVariables[uuid].name) {
+      acc[nodeVariables[uuid].name] = attrs[uuid];
+    } else if (!ignoreExternalProps) {
+      acc[uuid] = attrs[uuid];
     }
     return acc;
   }, {});
@@ -29,21 +35,22 @@ const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
  * Given a variable name ("age") and the relevant section of the variable registry, returns the
  * ID/key for that name.
  */
-const getVariableIdFromName = (variableName, variableDefs) => {
-  const entry = Object.entries(variableDefs).find(([, variable]) => variable.name === variableName);
+const getVariableIdFromName = (variableName, variableDefinitions) => {
+  const entry = Object.entries(variableDefinitions).find(([, variable]) =>
+    variable.name === variableName);
   return entry && entry[0];
 };
 
 /**
  * The inverse of getNodeAttributesWithNamesResolved
  */
-export const getNodeWithIdAttributes = (node, nodeVariableDefs) => {
-  if (!nodeVariableDefs) {
+export const getNodeWithIdAttributes = (node, nodeVariables) => {
+  if (!nodeVariables) {
     return {};
   }
   const attrs = getNodeAttributes(node);
   const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
-    const variableId = getVariableIdFromName(varName, nodeVariableDefs);
+    const variableId = getVariableIdFromName(varName, nodeVariables);
     if (variableId) {
       acc[variableId] = attrs[varName];
     }

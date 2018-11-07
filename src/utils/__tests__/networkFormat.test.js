@@ -42,6 +42,12 @@ describe('asWorkerAgentNode', () => {
   it('does not contain other private attrs props', () => {
     expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
   });
+
+  it('allows pass-though props from external data', () => {
+    const externalNode = { ...nodeInNetwork, attributes: { ...nodeInNetwork.attributes, unknownProp: 'foo' } };
+    const node = asWorkerAgentNode(externalNode, nodeTypeDefinition);
+    expect(node.unknownProp).toEqual('foo');
+  });
 });
 
 describe('asWorkerAgentEdge', () => {
