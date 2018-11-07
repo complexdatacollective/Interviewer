@@ -1,19 +1,6 @@
 .categorical-item {
   --categorical-item-margin: 1.5rem;
 
-  $categorical-item-height: calc((var(--categorical-available-height) -
-      (4 * var(--categorical-item-margin))) / 2);
-  $categorical-item-width: calc((var(--categorical-available-width) -
-      (8 * var(--categorical-item-margin))) / 4);
-
-  height: $categorical-item-height;
-  width: $categorical-item-height;
-
-  @media screen and (max-aspect-ratio: 7 / 5) {
-    height: $categorical-item-width;
-    width: $categorical-item-width;
-  }
-
   display: flex;
   border: solid .5rem;
   border-radius: 50%;
@@ -43,17 +30,11 @@
     border-radius: 50%;
     display: flex;
     flex-direction: column;
-    height: var(--categorical-available-height);
+    grid-row: span var(--categorical-expanded-span);
+    grid-column: span var(--categorical-expanded-span);
     justify-content: center;
     margin: 0;
-    padding: calc(var(--categorical-available-height) * .1);
-    width: var(--categorical-available-height);
-
-    @media screen and (max-aspect-ratio: 4 / 5) {
-      height: var(--categorical-available-width);
-      padding: calc(var(--categorical-available-width) * .1);
-      width: var(--categorical-available-width);
-    }
+    padding: 5vh;
   }
 
   &__content {

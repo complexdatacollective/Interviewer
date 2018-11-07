@@ -3,6 +3,7 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { find } from 'lodash';
+import cx from 'classnames';
 
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -57,7 +58,7 @@ class CategoricalList extends Component {
         return;
       }
 
-      this.lastNode = meta[nodeAttributesProperty].name;
+      this.lastNode = meta[nodeAttributesProperty].name; // TODO make this a state variable
 
       this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
         { [this.props.activePromptVariable]: bin.value });
@@ -91,8 +92,17 @@ class CategoricalList extends Component {
   }
 
   render() {
+    const classNames = cx(
+      'categorical-list',
+      { 'categorical-list--expanded': this.state.expandedBinValue },
+    );
+
     return (
-      <div className="categorical-list" onClick={e => this.expandBin(e, '', '')}>
+      <div
+        className={classNames}
+        onClick={e => this.expandBin(e, '', '')}
+        style={{ '--num-categorical-items': this.props.bins.length }}
+      >
         {this.props.bins.map(this.renderCategoricalBin)}
       </div>
     );
