@@ -9,12 +9,12 @@ const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
 const generateNodes = (variableDefs, typeKey, howMany = 0) =>
   (dispatch) => {
-    times(howMany, () => {
+    const mockNodes = times(howMany, () => {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
       const age = faker.random.number({ min: 16, max: 99 });
 
-      const mockNode = getNodeWithIdAttributes({
+      return getNodeWithIdAttributes({
         type: typeKey,
         promptId: 'mock',
         stageId: 'mock',
@@ -24,9 +24,9 @@ const generateNodes = (variableDefs, typeKey, howMany = 0) =>
           age,
         },
       }, variableDefs);
-
-      return dispatch(sessionsActions.addNodes(mockNode));
     });
+
+    return dispatch(sessionsActions.addNodes(mockNodes));
   };
 
 const actionCreators = {
