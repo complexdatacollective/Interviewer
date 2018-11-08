@@ -6,7 +6,6 @@ $results-height: calc(100vh - 23rem);
 @include text-input('#{$module-name}__input');
 
 .#{$module-name} {
-  --border-radius: var(--border-radius);
   --collapsed-square-size-js: 6.5rem;
   --content-padding: 1rem;
 
