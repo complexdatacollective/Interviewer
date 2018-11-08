@@ -747,8 +747,7 @@
       "required": [
         "color",
         "label",
-        "name",
-        "variables"
+        "name"
       ],
       "title": "EdgeTypeDef"
     },

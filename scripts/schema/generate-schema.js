@@ -141,6 +141,8 @@ const generateSchema = async () => {
   delete defs.Edges.properties.create.format;
   pull(defs.Edges.required, 'create');
 
+  pull(defs.EdgeTypeDef.required, 'variables');
+
   // Variables: one of `variableRegistry.node[NODE_TYPE].variables[VARIABLE_NAME]`
   // Used for both nodes & edges
   defs.Variables.patternProperties = { '.+': { ...defs.Variables.properties.variable } };
