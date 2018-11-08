@@ -10,7 +10,8 @@ import { actionCreators as deviceSettingsActions } from '../../ducks/modules/dev
 
 const personEntry = (protocol) => {
   const registry = protocol && protocol.variableRegistry;
-  const entry = registry && registry.node && Object.entries(registry.node).find(([, nodeType]) => nodeType.name === 'person');
+  const nodeEntries = registry && registry.node && Object.entries(registry.node);
+  const entry = nodeEntries && nodeEntries.find(([, nodeType]) => nodeType.name === 'person');
   if (!entry || entry.length !== 2) {
     return null;
   }
