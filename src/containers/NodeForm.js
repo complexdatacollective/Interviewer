@@ -3,7 +3,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { isEmpty } from 'lodash';
-import Overlay from '../components/Overlay';
+import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button, ToggleInput } from '../ui/components';
