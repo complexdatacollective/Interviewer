@@ -35,8 +35,8 @@ const settingsMenuHandlers = withHandlers({
     if (!entry) {
       return;
     }
-    const [typeKey, personDef] = entry;
-    props.generateNodes(personDef.variables, typeKey, 20);
+    const [typeKey, personDefinition] = entry;
+    props.generateNodes(personDefinition.variables, typeKey, 20);
     props.closeMenu();
   },
 });

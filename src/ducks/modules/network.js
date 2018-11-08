@@ -49,7 +49,7 @@ export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
  * This resolves those UUIDs to variable names based on the definitions in the variable registry,
  * appropriate for user scripts and export.
  */
-const getNodeAttribtuesWithNamesResolved = (node, nodeVariableDefs) => {
+const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
   if (!nodeVariableDefs) {
     return {};
   }
@@ -75,7 +75,7 @@ const getNodeAttribtuesWithNamesResolved = (node, nodeVariableDefs) => {
 export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
   [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
   [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
-  ...getNodeAttribtuesWithNamesResolved(node, nodeTypeDefinition && nodeTypeDefinition.variables),
+  ...getNodeAttributesWithNamesResolved(node, nodeTypeDefinition && nodeTypeDefinition.variables),
 });
 
 export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
