@@ -1,6 +1,6 @@
-$add-count-button-height: 7rem;
-$add-count-button-inner-size: 5rem; // width of the core circle (without badge)
+$add-count-button-height: 6rem;
 $add-count-button-width: 7rem;
+$add-count-button-inner-size: $add-count-button-width * .8; // width of the core circle (without badge)
 $module-name: add-count-button;
 
 // Provides alternate colors (e.g., to represent different node types)
@@ -23,10 +23,9 @@ $module-name: add-count-button;
   font-size: 3rem;
   font-weight: 500;
   height: $add-count-button-height;
-  line-height: 1.6;
+  padding-bottom: 0;
   padding-left: 0;
   padding-right: $add-count-button-width - $add-count-button-inner-size;
-  padding-top: $add-count-button-height - $add-count-button-inner-size;
   text-align: center;
   text-indent: 0; // override svg-button text hiding
   width: $add-count-button-width;

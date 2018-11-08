@@ -30,10 +30,16 @@ $results-height: calc(100vh - 23rem);
   }
 
   &__close-button {
+    margin: 1rem;
     position: absolute;
     right: 0;
     top: 0;
     z-index: 1;
+
+    &[name='close'] { // specificity needed to override NC-UI
+      height: 1rem;
+      width: 1rem;
+    }
   }
 
   &__content {
