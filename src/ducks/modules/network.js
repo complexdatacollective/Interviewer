@@ -63,6 +63,37 @@ const getNodeAttributesWithNamesResolved = (node, nodeVariableDefs) => {
 };
 
 /**
+ * Given a variable name ("age") and the relevant section of the variable registry, returns the
+ * ID/key for that name.
+ */
+const getVariableIdFromName = (variableName, variableDefs) => {
+  const entry = Object.entries(variableDefs).find(([, variable]) => variable.name === variableName);
+  return entry && entry[0];
+};
+
+/**
+ * The inverse of getNodeAttributesWithNamesResolved
+ */
+export const getNodeWithIdAttributes = (node, nodeVariableDefs) => {
+  if (!nodeVariableDefs) {
+    return {};
+  }
+  const attrs = getNodeAttributes(node);
+  const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
+    const variableId = getVariableIdFromName(varName, nodeVariableDefs);
+    if (variableId) {
+      acc[variableId] = attrs[varName];
+    }
+    return acc;
+  }, {});
+
+  return {
+    ...node,
+    [nodeAttributesProperty]: mappedAttrs,
+  };
+};
+
+/**
  * Contains all user attributes flattened with the node's unique ID.
  *
  *`primaryKeyPropertyForWorker` and `nodeTypePropertyForWorker` are used to minimize conflicts,
