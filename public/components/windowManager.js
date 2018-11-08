@@ -25,7 +25,7 @@ const appUrl = (function getAppUrl() {
   }
   return url.format({
     pathname: path.join(__dirname, '..', 'index.html'),
-    protocol: 'file:'
+    protocol: 'file:',
   });
 }());
 
