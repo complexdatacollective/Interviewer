@@ -16,8 +16,16 @@
     flex: 1;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
     padding: 0 spacing(1);
     text-align: center;
+
+    h3,
+    h5 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
 
     h5 {
       margin: 0;
@@ -35,6 +43,11 @@
     justify-content: center;
     margin: 0;
     padding: 5vh;
+
+    .categorical-item__title,
+    h3 {
+      overflow: initial;
+    }
   }
 
   &__content {

@@ -10,7 +10,6 @@ import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * CategoricalBin Interface
-  * @extends Component
   */
 const CategoricalBin = ({
   promptForward,

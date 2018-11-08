@@ -36,7 +36,6 @@ class CategoricalList extends Component {
     super(props);
     this.state = {
       expandedBinValue: '',
-      accentColor: '',
     };
   }
 
@@ -45,11 +44,10 @@ class CategoricalList extends Component {
     return bin && bin.nodes;
   }
 
-  expandBin = (e, binValue, accentColor) => {
+  expandBin = (e, binValue) => {
     e.stopPropagation();
     this.setState({
       expandedBinValue: binValue,
-      accentColor,
     });
   }
 
@@ -83,7 +81,7 @@ class CategoricalList extends Component {
         label={bin.label}
         accentColor={accentColor}
         onDrop={item => onDrop(item)}
-        onClick={e => this.expandBin(e, bin.value, accentColor)}
+        onClick={e => this.expandBin(e, bin.value)}
         details={details}
         isExpanded={this.state.expandedBinValue === bin.value}
         nodes={bin.nodes}
@@ -99,18 +97,16 @@ class CategoricalList extends Component {
     );
 
     return (
-      <Flipper
-        flipKey={this.state.expandedBinValue}
-        className="categorical-list"
-      >
-        <div
-          className={classNames}
-          onClick={e => this.expandBin(e, '', '')}
-          style={{ '--num-categorical-items': this.props.bins.length }}
-        >
-          {this.props.bins.map(this.renderCategoricalBin)}
-        </div>
-      </Flipper>
+      <div className="categorical-list" onClick={e => this.expandBin(e, '', '')}>
+        <Flipper flipKey={this.state.expandedBinValue}>
+          <div
+            className={classNames}
+            style={{ '--num-categorical-items': this.props.bins.length }}
+          >
+            {this.props.bins.map(this.renderCategoricalBin)}
+          </div>
+        </Flipper>
+      </div>
     );
   }
 }
