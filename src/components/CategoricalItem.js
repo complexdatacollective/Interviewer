@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { Flipped } from 'react-flip-toolkit';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import { NodeList } from './';
@@ -27,22 +28,26 @@ const CategoricalItem = ({
   );
 
   return (
-    <div className={classNames} style={{ borderColor: accentColor }} onClick={onClick} >
-      <div className="categorical-item__title">
-        <h3>{label}</h3>
-        {!isExpanded && <h5>{details}</h5>}
+    <Flipped flipId={label}>
+      <div className={classNames} style={{ borderColor: accentColor }} onClick={onClick} >
+        <Flipped inverseFlipId={label} scale>
+          <div className="categorical-item__title">
+            <h3>{label}</h3>
+            {!isExpanded && <h5>{details}</h5>}
+          </div>
+        </Flipped>
+        {isExpanded &&
+          <div className="categorical-item__content">
+            <NodeList
+              listId={`CATBIN_NODE_LIST_${label}`}
+              id={`CATBIN_NODE_LIST_${label}`}
+              nodes={nodes}
+              sortOrder={sortOrder}
+            />
+          </div>
+        }
       </div>
-      {isExpanded &&
-        <div className="categorical-item__content">
-          <NodeList
-            listId={`CATBIN_NODE_LIST_${label}`}
-            id={`CATBIN_NODE_LIST_${label}`}
-            nodes={nodes}
-            sortOrder={sortOrder}
-          />
-        </div>
-      }
-    </div>
+    </Flipped>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Flipper } from 'react-flip-toolkit';
 import { find } from 'lodash';
 import cx from 'classnames';
 
@@ -93,18 +94,23 @@ class CategoricalList extends Component {
 
   render() {
     const classNames = cx(
-      'categorical-list',
-      { 'categorical-list--expanded': this.state.expandedBinValue },
+      'categorical-list__content',
+      { 'categorical-list__content--expanded': this.state.expandedBinValue },
     );
 
     return (
-      <div
-        className={classNames}
-        onClick={e => this.expandBin(e, '', '')}
-        style={{ '--num-categorical-items': this.props.bins.length }}
+      <Flipper
+        flipKey={this.state.expandedBinValue}
+        className="categorical-list"
       >
-        {this.props.bins.map(this.renderCategoricalBin)}
-      </div>
+        <div
+          className={classNames}
+          onClick={e => this.expandBin(e, '', '')}
+          style={{ '--num-categorical-items': this.props.bins.length }}
+        >
+          {this.props.bins.map(this.renderCategoricalBin)}
+        </div>
+      </Flipper>
     );
   }
 }
