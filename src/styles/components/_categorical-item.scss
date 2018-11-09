@@ -66,10 +66,6 @@
     .scrollable {
       @include scroller-mask($scroller-top-padding-small);
       height: 100%;
-
-      .node_list {
-        height: 100%;
-      }
     }
   }
 }
