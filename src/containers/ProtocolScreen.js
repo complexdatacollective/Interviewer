@@ -9,7 +9,7 @@ import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
 import { Fade, Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
-import { stages, getPromptForCurrentSession } from '../selectors/session';
+import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
 import { getCSSVariableAsNumber } from '../utils/CSSVariables';
 
 /**
@@ -117,7 +117,7 @@ function mapStateToProps(state, ownProps) {
   const protocolType = state.protocol.type;
   const stage = stages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
-  const promptId = getPromptForCurrentSession(state);
+  const promptId = getPromptIndexForCurrentSession(state);
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
 

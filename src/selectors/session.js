@@ -33,15 +33,14 @@ export const getStageForCurrentSession = createSelector(
   (stages, stageIndex) => stages[stageIndex],
 );
 
-// TODO: naming
-export const getPromptForCurrentSession = createSelector(
+export const getPromptIndexForCurrentSession = createSelector(
   state => (state.sessions[state.session] && state.sessions[state.session].promptIndex) || 0,
   promptIndex => promptIndex,
 );
 
-export const getPromptObjectForCurrentSession = createSelector(
+const getPromptForCurrentSession = createSelector(
   getStageForCurrentSession,
-  getPromptForCurrentSession,
+  getPromptIndexForCurrentSession,
   (stage, promptIndex) => stage && stage.prompts && stage.prompts[promptIndex],
 );
 
@@ -49,7 +48,7 @@ export const getPromptObjectForCurrentSession = createSelector(
 //  from the variable registry
 export const getNodeEntryForCurrentPrompt = createSelector(
   protocolRegistry,
-  getPromptObjectForCurrentSession,
+  getPromptForCurrentSession,
   getStageForCurrentSession,
   (registry, prompt, stage) => {
     if (!registry || !registry.node || !prompt || !stage) {
@@ -66,7 +65,7 @@ export const getNodeEntryForCurrentPrompt = createSelector(
 );
 
 export const getAdditionalAttributesForCurrentPrompt = createSelector(
-  getPromptObjectForCurrentSession,
+  getPromptForCurrentSession,
   getStageForCurrentSession,
   (prompt, stage) => getAdditionalAttributes(stage, prompt),
 );
