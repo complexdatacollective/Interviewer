@@ -99,6 +99,7 @@ const generateSchema = async () => {
     'Sociogram',
     'Information',
     'OrdinalBin',
+    'CategoricalBin',
   ];
   defs.Stage.title = 'Interface';
   defs.Stage.properties.type.enum = stageTypeEnum;

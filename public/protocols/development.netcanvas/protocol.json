@@ -1430,7 +1430,6 @@
           "id": "contactType",
           "text": "What is the most frequent type of contact you have?",
           "variable": "contactType",
-          "//": "Categorical variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
               "property": "nickname",
@@ -1444,6 +1443,10 @@
             },
             {
               "property": "age",
+              "direction": "desc"
+            },
+            {
+              "property": "last_name",
               "direction": "desc"
             }
           ]
