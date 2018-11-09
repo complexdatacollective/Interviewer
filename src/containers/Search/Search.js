@@ -153,9 +153,9 @@ class Search extends Component {
         (prompt === SelectPrompt && !hasInput)) {
         hiddenClass = `${HeaderClass}--hidden`;
       }
-      return (<h1 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
+      return (<h2 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
         {prompt}
-      </h1>);
+      </h2>);
     });
 
 
