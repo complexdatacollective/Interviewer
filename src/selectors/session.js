@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 
 import uuidv4 from '../utils/uuid';
 import { currentStageIndex } from '../utils/matchSessionPath';
+import { getSubject } from '../utils/protocol/accessors';
 import { initialState } from '../ducks/modules/session';
 import { protocolRegistry } from './protocol';
 
@@ -54,8 +55,7 @@ export const getNodeEntryForCurrentPrompt = createSelector(
     if (!registry || !prompt || !stage) {
       return null;
     }
-    // TODO: refactor with makeGetSubject
-    const subject = stage.subject || prompt.subject;
+    const subject = getSubject(stage, prompt);
     const nodeType = subject && subject.type;
     // TODO: need nodeTypeName? Simplify?
     const nodeEntries = registry && registry.node && Object.entries(registry.node);

@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import { findKey, filter, has, isMatch, reject } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
+import { getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
   asWorkerAgentEdge,
@@ -82,10 +83,7 @@ export const makeGetAdditionalAttributes = () =>
 export const makeGetSubject = () =>
   createSelector(
     propStage, propPrompt,
-    (stage, prompt) => {
-      if (has(stage, 'subject')) { return stage.subject; }
-      return prompt.subject;
-    },
+    (stage, prompt) => getSubject(stage, prompt),
   );
 
 const nodeTypeIsDefined = (variableRegistry, nodeType) =>
@@ -167,13 +165,12 @@ export const getNodeLabelFunction = createDeepEqualSelector(
  * Get the current prompt/stage subject, and filter the network by this node type.
 */
 
-export const makeNetworkNodesForType = () => {
-  const getSubject = makeGetSubject();
-  return createSelector(
-    networkNodes, getSubject,
+export const makeNetworkNodesForType = () =>
+  createSelector(
+    networkNodes,
+    makeGetSubject(),
     (nodes, subject) => filter(nodes, ['type', subject.type]),
   );
-};
 
 /**
  * makeNetworkNodesForPrompt
