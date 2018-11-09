@@ -14,6 +14,7 @@ import { NodeList } from './';
 const CategoricalItem = ({
   accentColor,
   details,
+  id,
   isExpanded,
   isOver,
   label,
@@ -30,9 +31,9 @@ const CategoricalItem = ({
   );
 
   return (
-    <Flipped flipId={label}>
+    <Flipped flipId={id}>
       <div className={classNames} style={{ borderColor: accentColor }} onClick={onClick} >
-        <Flipped inverseFlipId={label} scale>
+        <Flipped inverseFlipId={id} scale>
           <div className="categorical-item__title">
             <h3>{label}</h3>
             {!isExpanded && <h5>{details(recentNode)}</h5>}
@@ -56,6 +57,7 @@ const CategoricalItem = ({
 CategoricalItem.propTypes = {
   accentColor: PropTypes.string,
   details: PropTypes.func,
+  id: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool,
   isOver: PropTypes.bool,
   label: PropTypes.string,

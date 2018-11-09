@@ -31,6 +31,9 @@ const getCatColor = (itemNumber) => {
   return null;
 };
 
+/**
+  * CategoricalList: Renders a list of categorical bin items
+  */
 class CategoricalList extends Component {
   constructor(props) {
     super(props);
