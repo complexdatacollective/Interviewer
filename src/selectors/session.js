@@ -52,17 +52,15 @@ export const getNodeEntryForCurrentPrompt = createSelector(
   getPromptObjectForCurrentSession,
   getStageForCurrentSession,
   (registry, prompt, stage) => {
-    if (!registry || !prompt || !stage) {
+    if (!registry || !registry.node || !prompt || !stage) {
       return null;
     }
     const subject = getSubject(stage, prompt);
     const nodeType = subject && subject.type;
-    // TODO: need nodeTypeName? Simplify?
-    const nodeEntries = registry && registry.node && Object.entries(registry.node);
-    const entry = nodeEntries && nodeEntries.find(([key]) => key === nodeType);
-    if (!entry || entry.length !== 2) {
-      return null;
+    const nodeTypeDefinition = nodeType && registry.node[nodeType];
+    if (nodeTypeDefinition) {
+      return [nodeType, nodeTypeDefinition];
     }
-    return entry;
+    return null;
   },
 );
