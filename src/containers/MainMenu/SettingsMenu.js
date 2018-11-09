@@ -2,21 +2,13 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
+
 import SettingsMenu from '../../components/MainMenu/SettingsMenu';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as mockActions } from '../../ducks/modules/mock';
 import { actionCreators as dialogsActions } from '../../ducks/modules/dialogs';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
-
-const personEntry = (protocol) => {
-  const registry = protocol && protocol.variableRegistry;
-  const nodeEntries = registry && registry.node && Object.entries(registry.node);
-  const entry = nodeEntries && nodeEntries.find(([, nodeType]) => nodeType.name === 'person');
-  if (!entry || entry.length !== 2) {
-    return null;
-  }
-  return entry;
-};
+import { getNodeEntryForCurrentPrompt } from '../../selectors/session';
 
 const settingsMenuHandlers = withHandlers({
   handleResetAppData: props => () => {
@@ -32,12 +24,11 @@ const settingsMenuHandlers = withHandlers({
     });
   },
   handleAddMockNodes: props => () => {
-    const entry = personEntry(props.protocol);
-    if (!entry) {
+    if (!props.nodeVariableEntry) {
       return;
     }
-    const [typeKey, personDefinition] = entry;
-    props.generateNodes(personDefinition.variables, typeKey, 20);
+    const [typeKey, nodeDefinition] = props.nodeVariableEntry;
+    props.generateNodes(nodeDefinition.variables, typeKey, 20);
     props.closeMenu();
   },
 });
@@ -55,7 +46,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   protocol: state.protocol,
-  shouldShowMocksItem: !!personEntry(state.protocol),
+  nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
+  shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   deviceDescription: state.deviceSettings.description,

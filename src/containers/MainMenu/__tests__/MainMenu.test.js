@@ -94,6 +94,7 @@ describe('<MainMenu />', () => {
               },
             },
           },
+          stages: [{ subject: { type: 'abcdef' }, prompts: [{}] }],
         },
         session: '1234-5678',
         sessions: {
