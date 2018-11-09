@@ -25,3 +25,6 @@ config.xml.original
 # Xcode (Cordova plugin)
 xcuserdata/
 IDEWorkspaceChecks.plist
+
+# Ignore protocol template used for schema generation
+/schema/abstract-protocol.json

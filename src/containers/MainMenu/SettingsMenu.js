@@ -6,6 +6,7 @@ import SettingsMenu from '../../components/MainMenu/SettingsMenu';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as mockActions } from '../../ducks/modules/mock';
 import { actionCreators as dialogsActions } from '../../ducks/modules/dialogs';
+import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 
 const settingsMenuHandlers = withHandlers({
   handleResetAppData: props => () => {
@@ -31,10 +32,21 @@ const mapDispatchToProps = dispatch => ({
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   resetState: () => dispatch(push('/reset')),
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
+  setDeviceDescription: name => dispatch(deviceSettingsActions.setDescription(name)),
+  toggleUseFullScreenForms: () => dispatch(deviceSettingsActions.toggleSetting('useFullScreenForms')),
+  toggleUseDynamicScaling: () => dispatch(deviceSettingsActions.toggleSetting('useDynamicScaling')),
+  setInterfaceScale: scale => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
+});
+
+const mapStateToProps = state => ({
+  useFullScreenForms: state.deviceSettings.useFullScreenForms,
+  useDynamicScaling: state.deviceSettings.useDynamicScaling,
+  deviceDescription: state.deviceSettings.description,
+  interfaceScale: state.deviceSettings.interfaceScale,
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   settingsMenuHandlers,
 )(SettingsMenu);
 

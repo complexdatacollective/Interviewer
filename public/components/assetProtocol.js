@@ -6,7 +6,7 @@ const userDataPath = (electron.app || electron.remote.app).getPath('userData');
 const appPath = (electron.app || electron.remote.app).getAppPath();
 
 // default to asset from factory protocol (with same name) first
-const registerAssetsProtocol = () =>
+const registerProtocol = () =>
   electron.protocol.registerFileProtocol('asset', (request, callback) => {
     const file = request.url.substr(8);
 
@@ -25,4 +25,4 @@ const registerAssetsProtocol = () =>
     }
   });
 
-exports.registerAssetsProtocol = registerAssetsProtocol;
+exports.registerProtocol = registerProtocol;

@@ -1,16 +1,19 @@
 {
   "name": "Development Protocol",
-  "version": "1.0.0",
+  "description": "",
+  "lastModified": "2018-10-01T00:00:00.000Z",
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {
       "person": {
+        "name": "person",
         "label": "Person",
         "color": "node-color-seq-3",
         "displayVariable": "nickname",
         "iconVariant": "add-a-person",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Human readable description",
             "type": "text",
@@ -21,11 +24,13 @@
             }
           },
           "last_name": {
+            "name": "last_name",
             "label": "Last Name",
             "description": "Human readable description",
             "type": "text"
           },
           "age": {
+            "name": "age",
             "label": "Age",
             "description": "Human readable description",
             "type": "number",
@@ -36,6 +41,7 @@
             }
           },
           "nickname": {
+            "name": "nickname",
             "label": "Nickname",
             "description": "Human readable description",
             "type": "text",
@@ -46,26 +52,31 @@
             }
           },
           "close_friend": {
+            "name": "close_friend",
             "label": "Close Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "support_friend": {
+            "name": "support_friend",
             "label": "Support Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "advice_friend": {
+            "name": "advice_friend",
             "label": "Advice Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
           "has_given_advice": {
+            "name": "has_given_advice",
             "label": "Has given advice?",
             "description": "Human readable description",
             "type": "boolean"
           },
           "contactFreq": {
+            "name": "contactFreq",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
@@ -93,6 +104,7 @@
             ]
           },
           "discussFreq": {
+            "name": "discussFreq",
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
@@ -182,21 +194,25 @@
             ]
           },
           "closenessLayout": {
+            "name": "closenessLayout",
             "label": "Closeness layout",
             "description": "Closeness layout",
             "type": "layout"
           },
           "talk_friend": {
+            "name": "talk_friend",
             "label": "Talk friend",
             "description": "Talk friend",
             "type": "boolean"
           },
           "type": {
+            "name": "type",
             "label": "Type",
             "description": "Type",
             "type": "text"
           },
           "special_category": {
+            "name": "special_category",
             "label": "Special category",
             "description": "A special category",
             "type": "ordinal",
@@ -205,12 +221,14 @@
         }
       },
       "dummyNodeType": {
+        "name": "dummytype",
         "label": "Dummy Type",
         "color": "node-color-seq-6",
         "displayVariable": "label",
         "iconVariant": "add-a-person",
         "variables": {
           "label": {
+            "name": "label",
             "label": "Label",
             "description": "Human readable description",
             "type": "text",
@@ -221,6 +239,7 @@
             }
           },
           "numberVariable": {
+            "name": "numberVariable",
             "label": "Number Variable",
             "description": "Human readable description",
             "type": "number",
@@ -231,6 +250,7 @@
             }
           },
           "booleanVariable": {
+            "name": "booleanVariable",
             "label": "Boolean Variable",
             "description": "Human readable description",
             "type": "boolean",
@@ -239,16 +259,19 @@
             }
           },
           "booleanVariable2": {
+            "name": "booleanVariable2",
             "label": "Boolean  2",
             "description": "Human readable description",
             "type": "boolean"
           },
           "checkboxVariable": {
+            "name": "checkboxVariable",
             "label": "A Checkbox",
             "description": "Human readable description",
             "type": "boolean"
           },
           "ordinalVariable": {
+            "name": "ordinalVariable",
             "label": "Ordinal Variable",
             "description": "Human readable description",
             "type": "ordinal",
@@ -279,6 +302,7 @@
             }
           },
           "categoricalVariable": {
+            "name": "categoricalVariable",
             "label": "Categorical Variable",
             "description": "Huam readable description",
             "type": "categorical",
@@ -309,6 +333,7 @@
             }
           },
           "categoricalVariable2": {
+            "name": "categoricalVariable2",
             "label": "Categorical Variable2",
             "description": "Huam readable description",
             "type": "categorical",
@@ -362,12 +387,14 @@
         }
       },
       "venue": {
+        "name": "venue",
         "label": "Venue",
         "displayVariable": "Abbreviated Name",
         "color": "node-color-seq-4",
         "iconVariant": "add-a-place",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Human readable description",
             "type": "text",
@@ -378,11 +405,13 @@
             }
           },
           "location": {
+            "name": "location",
             "label": "Location",
             "description": "Human readable description",
-            "type": "coordinates"
+            "type": "location"
           },
           "visitFreq": {
+            "name": "visitfreq",
             "label": "Visit frequency ordinal variable.",
             "description": "Visit frequency ordinal variable",
             "type": "ordinal",
@@ -410,46 +439,55 @@
             ]
           },
           "primary_venue": {
+            "name": "primary_venue",
             "label": "Primary venue",
             "description": "Primary venue",
             "type": "boolean"
           },
           "Main/Parent Organization": {
+            "name": "parentorg",
             "label": "Main/Parent Organization",
             "description": "Main/Parent Organization",
             "type": "text"
           },
           "Subsidiary/Program/Project": {
+            "name": "subsidiary",
             "label": "Subsidiary/Program/Project",
             "description": "Subsidiary/Program/Project",
             "type": "text"
           },
           "Abbreviated Name": {
+            "name": "abbrevname",
             "label": "Abbreviated Name",
             "description": "Abbreviated Name",
             "type": "text"
           },
           "Standard Word Abbreviations": {
+            "name": "standardwordabbrev",
             "label": "Standard Word Abbreviations",
             "description": "Standard Word Abbreviations",
             "type": "text"
           },
           "Geocoded Address": {
+            "name": "addr",
             "label": "Geocoded Address",
             "description": "Geocoded Address",
             "type": "text"
           },
           "Latitude": {
+            "name": "lat",
             "label": "Latitude",
             "description": "Latitude",
             "type": "number"
           },
           "Longitude": {
+            "name": "long",
             "label": "Longitude",
             "description": "Longitude",
             "type": "number"
           },
           "Raw Address": {
+            "name": "rawaddr",
             "label": "Raw Address",
             "description": "Raw Address",
             "type": "text"
@@ -457,10 +495,12 @@
         }
       },
       "country": {
+        "name": "countryvisited",
         "label": "Country Visited",
         "displayVariable": "name",
         "variables": {
           "name": {
+            "name": "name",
             "label": "Name",
             "description": "Name of the country",
             "type": "text",
@@ -471,19 +511,22 @@
             }
           },
           "location": {
+            "name": "location",
             "label": "Location",
             "description": "Human readable description",
-            "type": "coordinates"
+            "type": "location"
           }
         }
       }
     },
     "edge": {
       "friend": {
+        "name": "friend",
         "label": "Friend",
         "color": "edge-color-seq-4",
         "variables": {
           "contactFreq": {
+            "name": "contactfrequency",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
             "type": "ordinal",
@@ -518,6 +561,7 @@
         }
       },
       "professional": {
+        "name": "professional",
         "label": "Professional",
         "color": "edge-color-seq-2",
         "variables": {}
@@ -831,15 +875,16 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput"
+          "component": "Text",
+          "label": "What is this person's name?"
         },
         {
           "variable": "nickname",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "age",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "timeCreated",
@@ -856,12 +901,12 @@
       "fields": [
         {
           "variable": "label",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is this person's name?"
         },
         {
           "variable": "numberVariable",
-          "component": "TextInput",
+          "component": "Text",
           "label": "What is this person's age?"
         },
         {
@@ -897,15 +942,15 @@
       "fields": [
         {
           "variable": "name",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "nickname",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "age",
-          "component": "TextInput"
+          "component": "Text"
         },
         {
           "variable": "timeCreated",
@@ -927,12 +972,47 @@
       },
       "panels": [
         {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
           "title": "Already mentioned",
           "dataSource": "existing"
         },
         {
+          "id": "another-unique-id",
           "title": "People from your previous visit",
-          "dataSource": "previousInterview"
+          "dataSource": "previousInterview",
+          "filter": {
+            "join": "OR",
+            "rules": [
+              {
+                "type": "alter",
+                "id": "15218241538622",
+                "options": {
+                  "type": "person",
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Dee"
+                }
+              },
+              {
+                "type": "ego",
+                "id": "15218241553253",
+                "options": {
+                  "attribute": "name",
+                  "operator": "EXACTLY",
+                  "value": "Bob"
+                }
+              },
+              {
+                "type": "edge",
+                "id": "15218241565624",
+                "options": {
+                  "type": "friend",
+                  "operator": "EXISTS",
+                  "attribute": "contactFreq"
+                }
+              }
+            ]
+          }
         }
       ],
       "prompts": [
@@ -973,7 +1053,6 @@
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
           "variable": "contactFreq",
-          "//": "Ordinal variables have valid options defined in variable registry.",
           "bucketSortOrder": [
             {
               "property": "nickname",
@@ -1151,8 +1230,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1165,8 +1242,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1187,8 +1262,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1201,8 +1274,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1222,8 +1293,6 @@
             "entity": "node",
             "type": "person"
           },
-          "filter":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'GREATER_THAN', value: 29 })]);",
           "layout": {
             "layoutVariable": "closenessLayout",
             "allowPositioning": true
@@ -1236,8 +1305,6 @@
             "variable": "has_given_advice",
             "allowHighlighting": true
           },
-          "disable":
-            "return operator.or([\nselect.edge({ type: 'friend' }),\nselect.alter({ type: 'person', attribute: 'age', operator: 'LESS_THAN', value: 29 })]);",
           "sortOrder": [
             {
               "property": "nickname",
@@ -1395,13 +1462,24 @@
       "title": "Title for the screen",
       "items": [
         {
+          "id": "a",
           "type": "audio",
           "content": "click_the_thing.mp3",
           "description": "Click by clicking the thing",
           "size": "SMALL"
         },
-        { "type": "image", "content": "rubberduck.jpg", "size": "SMALL" },
-        { "type": "image", "content": "rubberduck.jpg", "size": "MEDIUM" }
+        {
+          "id": "b",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "SMALL"
+        },
+        {
+          "id": "c",
+          "type": "image",
+          "content": "rubberduck.jpg",
+          "size": "MEDIUM"
+        }
       ]
     },
     {
@@ -1411,12 +1489,14 @@
       "title": "This interface has a video with sound.",
       "items": [
         {
+          "id": "65192318-0ef0-454d-91b7-bbaf51380069",
           "type": "text",
           "content":
             "The video below has sound and is set to loop. Some arbitrary text content that can _contain_ **formatting**.",
           "size": "SMALL"
         },
         {
+          "id": "27eee84a-52c0-440d-951c-5ac35bc75168",
           "type": "video",
           "content": "withSound.mp4",
           "description": "Click by clicking the thing",
@@ -1432,6 +1512,7 @@
       "title": "Testing markdown",
       "items": [
         {
+          "id": "d3e52e4b-0d22-42e3-a82f-7a150daf7b6b",
           "type": "text",
           "size": "LARGE",
           "content":
@@ -1445,12 +1526,17 @@
       "type": "Information",
       "title": "To skip or not to skip...",
       "items": [
-        { "type": "text", "content": "...that is the question.", "size": "LARGE" }
+        {
+          "id": "ffaf2249-00e7-4fdb-99fc-5757a24f5605",
+          "type": "text",
+          "content": "...that is the question.",
+          "size": "LARGE"
+        }
       ],
       "skipLogic": {
         "action": "SHOW",
         "operator": "EXACTLY",
-        "value": "3",
+        "value": 3,
         "filter": {
           "join": "OR",
           "rules": [

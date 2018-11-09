@@ -120,7 +120,7 @@ ServerPairing.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    deviceName: state.device.description,
+    deviceName: state.deviceSettings.description,
     isFactory: state.protocol.isFactory,
   };
 }

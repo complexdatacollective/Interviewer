@@ -10,7 +10,7 @@ $timeline-button-size: 6rem;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2000;
+  z-index: var(--z-global-ui);
 
   svg {
     height: 2rem;
@@ -40,6 +40,7 @@ $timeline-button-size: 6rem;
         opacity: 0;
         transition: transform var(--animation-duration-fast) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
         display: block;
+        pointer-events: none;
         position: absolute;
         height: 9rem;
         width: 9rem;
@@ -70,6 +71,7 @@ $timeline-button-size: 6rem;
         opacity: 0;
         transition: transform var(--animation-duration-fast) var(--animation-easing), opacity var(--animation-duration-fast) var(--animation-easing);
         display: block;
+        pointer-events: none;
         position: absolute;
         height: $timeline-button-size * 2;
         width: $timeline-button-size * 2;

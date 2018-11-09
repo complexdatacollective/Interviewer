@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { map } from 'lodash';
 import { protocolRegistry, protocolForms } from './protocol';
 
 // Prop selectors
@@ -38,3 +39,18 @@ export const makeRehydrateForm = () =>
     [propStageForm, protocolForms],
     (form, forms) => forms[form] || null,
   );
+
+export const getDefaultFormValues = createSelector(
+  protocolForms,
+  forms => map(
+    forms,
+    ({ fields }) =>
+      fields.reduce(
+        (memo, { variable, value }) => {
+          if (!value) { return memo; }
+          return { ...memo, [variable]: value };
+        },
+        {},
+      ),
+  ),
+);

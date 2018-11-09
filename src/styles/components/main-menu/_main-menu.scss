@@ -1,6 +1,4 @@
 .main-menu {
-  // todo: replace z-index references with z-index system
-  --z-index-overlay: 3000;
   position: absolute;
   top: -100%;
   left: 0;
@@ -11,7 +9,7 @@
     background: rgba(0, 0, 0, .25); //sass-lint:disable-line no-color-literals
     backdrop-filter: blur(.75rem);
   }
-  z-index: var(--z-index-overlay);
+  z-index: var(--z-modal);
   padding: 0 8vw;
   opacity: 0;
   transition: opacity var(--animation-duration-standard) var(--animation-easing);
@@ -35,7 +33,7 @@
   }
 
   &__header {
-    flex: 0 0 10rem;
+    flex: 0 0 13vh;
     align-items: center;
     display: flex;
     justify-content: flex-end;
@@ -56,7 +54,7 @@
   }
 
   &__footer {
-    flex: 0 0 10rem;
+    flex: 0 0 13vh;
     align-items: center;
     display: flex;
   }

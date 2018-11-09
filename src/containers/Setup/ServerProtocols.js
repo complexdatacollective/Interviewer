@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import ApiClient from '../../utils/ApiClient';
-import Dialog from '../Dialog';
-import { actionCreators as modalActions } from '../../ducks/modules/modals';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
@@ -51,9 +50,25 @@ class ServerProtocols extends Component {
       .then(() => downloadProtocol(protocol.downloadPath, true));
   }
 
+  handleUnpairRequest = () => {
+    this.props.openDialog({
+      type: 'Warning',
+      title: 'Unpair this Server?',
+      confirmLabel: 'Unpair Server',
+      onConfirm: this.props.unpairServer,
+      message: (
+        <p>
+          This will remove this Server from the app.
+          You will have to re-pair to import protocols or export data.
+          Are you sure you want to continue?
+        </p>
+      ),
+    });
+  }
+
   render() {
     const { error, protocols } = this.state;
-    const { isProtocolLoaded, openModal, server } = this.props;
+    const { isProtocolLoaded, server } = this.props;
 
     if (isProtocolLoaded) {
       const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/0`;
@@ -79,22 +94,9 @@ class ServerProtocols extends Component {
 
     return (
       <React.Fragment>
-        <ServerSetup server={server} handleUnpair={() => openModal('CONFIRM_UNPAIR_SERVER')}>
+        <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
           {content}
         </ServerSetup>
-        <Dialog
-          name="CONFIRM_UNPAIR_SERVER"
-          title="Unpair this Server?"
-          type="warning"
-          confirmLabel="Unpair Server"
-          onConfirm={this.props.unpairServer}
-        >
-          <p>
-            This will remove this Server from the app.
-            You will have to re-pair to import protocols or export data.
-            Are you sure you want to continue?
-          </p>
-        </Dialog>
       </React.Fragment>
     );
   }
@@ -108,7 +110,7 @@ ServerProtocols.propTypes = {
   addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
-  openModal: PropTypes.func.isRequired,
+  openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
@@ -133,7 +135,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    openModal: bindActionCreators(modalActions.openModal, dispatch),
+    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
   };
 }

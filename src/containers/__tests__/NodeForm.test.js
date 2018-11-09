@@ -1,39 +1,8 @@
 /* eslint-env jest */
 
 import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import { shallow, mount } from 'enzyme';
-import NodeForm, { NodeForm as NodeFormPure } from '../NodeForm';
-
-jest.mock('../../utils/CSSVariables');
-
-window.matchMedia =
-  window.matchMedia ||
-  (() => ({
-    matches: false,
-    addListener: () => {},
-    removeListener: () => {},
-  }));
-
-const node = {
-  attributes: {
-    foo: 'bar',
-  },
-};
-
-const variableRegistry = {
-  node: {
-    person: {
-      variables: {
-        foo: {
-          type: 'string',
-          label: 'Foo',
-        },
-      },
-    },
-  },
-};
+import { shallow } from 'enzyme';
+import { NodeForm } from '../NodeForm';
 
 const mockProps = {
   name: 'baz',
@@ -51,60 +20,44 @@ const mockProps = {
   openModal: () => {},
   resetValues: () => {},
   initialValues: {},
-  showAddAnotherToggle: false,
+  show: true,
+  useFullScreenForms: true,
+  form: {
+    title: 'alpha',
+  },
 };
 
-const mockStore = () =>
-  createStore(() => ({
-    protocol: {
-      variableRegistry,
-    },
-    modals: [{ name: 'baz', open: true }],
-  }));
-
 describe('<NodeForm />', () => {
-  it('should render', () => {
-    const subject = shallow(<NodeFormPure {...mockProps} />);
+  it('with default props', () => {
+    const subject = shallow(<NodeForm {...mockProps} />);
 
-    expect(subject).toMatchSnapshot();
+    expect(subject.find('FormWizard').prop('controls').length).toBe(1);
   });
 
   it('should render a toggle to add another with prop', () => {
-    const singularForm = mount(
-      <Provider store={mockStore()}>
-        <NodeForm {...mockProps} />
-      </Provider>,
-    );
-
-    expect(singularForm.find('form').find('ToggleInput').length).toBe(0);
-    expect(singularForm.find('form').find('button').length).toBe(1);
-
     const showToggleProps = {
       ...mockProps,
-      showAddAnotherToggle: true,
+      form: {
+        ...mockProps.form,
+        optionToAddAnother: true,
+      },
     };
-    const formWithToggle = mount(
-      <Provider store={mockStore()}>
-        <NodeForm {...showToggleProps} />
-      </Provider>,
-    );
 
-    expect(formWithToggle.find('form').find('ToggleInput').length).toBe(1);
-    expect(formWithToggle.find('form').find('button').length).toBe(1);
+    const subject = shallow(<NodeForm {...showToggleProps} />);
+
+    expect(subject.find('FormWizard').prop('controls').length).toBe(2);
   });
 
   it('should render with prepopulated fields if provided', () => {
-    const subject = mount(
-      <Provider store={mockStore()}>
-        <NodeForm {...mockProps} node={node} />
-      </Provider>,
-    );
-
+    const withInitialValues = {
+      ...mockProps,
+      initialValues: {
+        foo: 'bar',
+      },
+    };
+    const subject = shallow(<NodeForm {...withInitialValues} />);
     expect(
-      subject
-        .find('Form')
-        .first()
-        .prop('initialValues'),
+      subject.find('FormWizard').prop('initialValues'),
     ).toEqual({ foo: 'bar' });
   });
 });

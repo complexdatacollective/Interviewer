@@ -1,46 +1,65 @@
 /* eslint-env jest */
-
-import reducer, { actionCreators } from '../errors';
+import { ActionsObservable } from 'redux-observable';
+import { omit } from 'lodash';
+import { actionCreators as dialogActions } from '../dialogs';
 import { actionCreators as protocolActions } from '../protocol';
+import { actionCreators as serverActions } from '../pairedServer';
+import { actionCreators as sessionsActions } from '../sessions';
+import { epics as errorsEpic } from '../errors';
 
-const initialState = {
-  errors: [],
-  acknowledged: true,
+//  loadProtocolFailed,
+// importProtocolFailed,
+// downloadProtocolFailed,
+// serverActionTypes.SERVER_PAIRING_FAILED,
+// sessionsActionTypes.EXPORT_SESSION_FAILED,
+
+
+const mockError = new Error('foo');
+
+const errorDialogActionWithoutId = error =>
+  omit(
+    dialogActions.openDialog({ error, type: 'Error' }),
+    'id',
+  );
+
+const expectDialogErrorAction = (action, error) => {
+  const action$ = ActionsObservable.of(
+    action(error),
+  );
+
+  const expectedAction = errorDialogActionWithoutId(error);
+
+  return errorsEpic(action$).toPromise().then(
+    result =>
+      expect(result).toMatchObject(expectedAction),
+  );
 };
 
-describe('errors reducer', () => {
-  it('should return the initial state', () => {
-    expect(
-      reducer(undefined, {}),
-    ).toEqual(initialState);
-  });
-
-  it('acknowlege() should set acknowledge to true', () => {
-    const newState = reducer(
-      { ...initialState, acknowledged: false },
-      actionCreators.acknowledge(),
+describe('errors', () => {
+  describe('epics', () => {
+    it(
+      'loadProtocolFailed',
+      () => expectDialogErrorAction(protocolActions.loadProtocolFailed, mockError),
     );
-    expect(newState.acknowledged).toBe(true);
-  });
 
-  it('error() should set acknowledge to false, and add error to log, should respond to protocol errors as error()', () => {
-    const actions = [
-      actionCreators.error,
-      protocolActions.loadProtocolFailed,
-      protocolActions.importProtocolFailed,
-      protocolActions.downloadProtocolFailed,
-    ];
+    it(
+      'importProtocolFailed',
+      () => expectDialogErrorAction(protocolActions.importProtocolFailed, mockError),
+    );
 
-    actions.forEach((action) => {
-      const error = new Error('this is an error');
+    it(
+      'downloadProtocolFailed',
+      () => expectDialogErrorAction(protocolActions.downloadProtocolFailed, mockError),
+    );
 
-      const newState = reducer(
-        { acknowledged: true, errors: [] },
-        action(error),
-      );
+    it(
+      'pairingFailed',
+      () => expectDialogErrorAction(serverActions.pairingFailed, mockError),
+    );
 
-      expect(newState.acknowledged).toBe(false);
-      expect(newState.errors).toEqual([error]);
-    });
+    it(
+      'sessionExportFailed',
+      () => expectDialogErrorAction(sessionsActions.sessionExportFailed, mockError),
+    );
   });
 });
