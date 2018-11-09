@@ -8,7 +8,7 @@ import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as mockActions } from '../../ducks/modules/mock';
 import { actionCreators as dialogsActions } from '../../ducks/modules/dialogs';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
-import { getNodeEntryForCurrentPrompt } from '../../selectors/session';
+import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../selectors/session';
 
 const settingsMenuHandlers = withHandlers({
   handleResetAppData: props => () => {
@@ -28,7 +28,7 @@ const settingsMenuHandlers = withHandlers({
       return;
     }
     const [typeKey, nodeDefinition] = props.nodeVariableEntry;
-    props.generateNodes(nodeDefinition.variables, typeKey, 20);
+    props.generateNodes(nodeDefinition.variables, typeKey, 20, props.additionalMockAttributes);
     props.closeMenu();
   },
 });
@@ -48,6 +48,7 @@ const mapStateToProps = state => ({
   protocol: state.protocol,
   nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
+  additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   deviceDescription: state.deviceSettings.description,

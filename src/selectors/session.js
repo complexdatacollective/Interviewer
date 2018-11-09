@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 
 import uuidv4 from '../utils/uuid';
 import { currentStageIndex } from '../utils/matchSessionPath';
-import { getSubject } from '../utils/protocol/accessors';
+import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { initialState } from '../ducks/modules/session';
 import { protocolRegistry } from './protocol';
 
@@ -63,4 +63,10 @@ export const getNodeEntryForCurrentPrompt = createSelector(
     }
     return null;
   },
+);
+
+export const getAdditionalAttributesForCurrentPrompt = createSelector(
+  getPromptObjectForCurrentSession,
+  getStageForCurrentSession,
+  (prompt, stage) => getAdditionalAttributes(stage, prompt),
 );

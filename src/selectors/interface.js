@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, has, isMatch, reject } from 'lodash';
+import { findKey, filter, isMatch, reject } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
-import { getSubject } from '../utils/protocol/accessors';
+import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
   asWorkerAgentEdge,
@@ -69,15 +69,7 @@ export const makeGetIds = () =>
 export const makeGetAdditionalAttributes = () =>
   createSelector(
     propStage, propPrompt,
-    (stage, prompt) => {
-      const stageAttributes = (has(stage, 'additionalAttributes') ? stage.additionalAttributes : {});
-      const promptAttributes = (has(prompt, 'additionalAttributes') ? prompt.additionalAttributes : {});
-
-      return {
-        ...stageAttributes,
-        ...promptAttributes,
-      };
-    },
+    (stage, prompt) => getAdditionalAttributes(stage, prompt),
   );
 
 export const makeGetSubject = () =>

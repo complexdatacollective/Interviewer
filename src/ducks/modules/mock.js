@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import faker from 'faker';
-import { times } from 'lodash';
+import { has, times } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
 import { getNodeWithIdAttributes, nodeAttributesProperty } from './network';
 
@@ -23,24 +23,29 @@ const mockValue = (nodeVariable) => {
   }
 };
 
-// TODO: ignore additionalAttributes?
-const generateNodes = (variableDefs, typeKey, howMany = 0) =>
+const generateNodes = (variableDefs, typeKey, howMany = 0, additionalAttributes = {}) =>
   (dispatch) => {
     const mockNodes = times(howMany, () => {
       const mockAttrs = Object.entries(variableDefs).reduce((acc, [variableId, variable]) => {
-        acc[variableId] = mockValue(variable);
+        if (!has(additionalAttributes, variableId)) {
+          acc[variableId] = mockValue(variable);
+        }
         return acc;
       }, {});
 
       return getNodeWithIdAttributes({
         type: typeKey,
-        promptId: 'mock',
-        stageId: 'mock',
         [nodeAttributesProperty]: mockAttrs,
       }, variableDefs);
     });
 
-    return dispatch(sessionsActions.addNodes(mockNodes));
+    const additionalProperties = {
+      promptId: 'mock',
+      stageId: 'mock',
+      [nodeAttributesProperty]: additionalAttributes,
+    };
+
+    return dispatch(sessionsActions.addNodes(mockNodes, { ...additionalProperties }));
   };
 
 const actionCreators = {
