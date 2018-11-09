@@ -1,7 +1,7 @@
 const { ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
 const windowManager = require('./windowManager');
-const registerProtocolProtocol = require('./protocolProtocol').registerProtocolProtocol;
+const registerAssetProtocol = require('./assetProtocol').registerProtocol;
 
 function getFileFromArgs(argv) {
   if (argv.length >= 2) {
@@ -88,7 +88,7 @@ const appManager = {
     }
   },
   start: function start() {
-    registerProtocolProtocol();
+    registerAssetProtocol();
 
     return windowManager
       .getWindow();

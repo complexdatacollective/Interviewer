@@ -2,7 +2,6 @@ const { BrowserWindow, Menu, shell } = require('electron');
 const url = require('url');
 const path = require('path');
 const mainMenu = require('./mainMenu');
-const registerAssetsProtocol = require('./assetsProtocol').registerAssetsProtocol;
 const log = require('./log');
 
 const isMacOS = () => process.platform === 'darwin';
@@ -26,7 +25,7 @@ const appUrl = (function getAppUrl() {
   }
   return url.format({
     pathname: path.join(__dirname, '..', 'index.html'),
-    protocol: 'file:'
+    protocol: 'file:',
   });
 }());
 
@@ -46,9 +45,6 @@ function createWindow() {
 
   return new Promise((resolve) => {
     // Create the browser window.
-
-    registerAssetsProtocol();
-
     const windowParameters = Object.assign({
       width: 1440,
       height: 900,
