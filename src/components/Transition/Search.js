@@ -19,6 +19,29 @@ const TimelineOpts = { easing: getCSSVariableAsObject('--animation-easing-js') }
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 
+const getBaseFontSizePx = () => {
+  const baseFontSize = getCssProp(getComputedStyle(document.body), 'font-size');
+  return parseFloat(baseFontSize, 10);
+};
+
+/**
+ * @param  {string} cssValue trimmed css value
+ * @return {number} pxValue (float)
+ */
+const getPxValue = (cssValue) => {
+  if (!cssValue) {
+    return 0;
+  }
+  if (/%$/.test(cssValue)) {
+    console.warn('Unsupported % value', cssValue); // eslint-disable-line no-console
+    return 0;
+  }
+  if (/em$/.test(cssValue)) {
+    return parseFloat(cssValue) * getBaseFontSizePx();
+  }
+  return parseFloat(cssValue);
+};
+
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -29,8 +52,9 @@ class Search extends Component {
   runEnterTimeline(el) {
     const elStyle = getComputedStyle(el);
     const boundingRect = el.getBoundingClientRect();
-    const collapsedSize = getCssProp(elStyle, '--collapsed-square-size');
-    const borderRadius = getCssProp(elStyle, '--border-radius');
+    const collapsedSizePx = getPxValue(getCssProp(elStyle, '--collapsed-square-size-js'));
+    const expandedSizePx = getPxValue(getCssProp(elStyle, 'width'));
+    const borderRadiusPx = getPxValue(getCssProp(elStyle, '--border-radius'));
 
     // Default Styles are expressed in terms of viewport, but we want to
     // animate from a specific size, so we work in pixels. On complete,
@@ -42,18 +66,14 @@ class Search extends Component {
     // Note that just calling anime.timeline() modifies element styling,
     // even if not played.
     const wrapperAnimation = {
-      borderRadius: [collapsedSize, borderRadius],
-      maxHeight: [collapsedSize, boundingRect.height],
-      width: () => {
-        const cw = document.documentElement.clientWidth;
-        const rightOffset = cw - boundingRect.right;
-        return [collapsedSize, cw - (2 * rightOffset)];
-      },
+      borderRadius: [collapsedSizePx, borderRadiusPx],
+      maxHeight: [collapsedSizePx, boundingRect.height],
+      width: () => [collapsedSizePx, expandedSizePx],
     };
 
     // Search may be positioned by parent; animate horizontal centering
-    const rightCollapsed = getCssProp(elStyle, '--right-collapsed');
-    const rightExpanded = getCssProp(elStyle, '--right-offset');
+    const rightCollapsed = getPxValue(getCssProp(elStyle, '--right-collapsed-js'));
+    const rightExpanded = getPxValue(getCssProp(elStyle, '--right-offset'));
     if (rightCollapsed && rightExpanded) {
       wrapperAnimation.right = [rightCollapsed, rightExpanded];
     }
@@ -83,21 +103,20 @@ class Search extends Component {
 
   runExitTimeline(el) {
     const elStyle = getComputedStyle(el);
-    const collapsedSize = getCssProp(elStyle, '--collapsed-square-size');
+    const collapsedSizePx = getPxValue(getCssProp(elStyle, '--collapsed-square-size-js'));
 
     const inverseWrapperAnimation = {
-      borderRadius: getCssProp(elStyle, '--collapsed-square-size'),
-      maxHeight: [el.getBoundingClientRect().height, collapsedSize],
-      width: collapsedSize,
+      borderRadius: collapsedSizePx,
+      maxHeight: [el.getBoundingClientRect().height, collapsedSizePx],
+      width: collapsedSizePx,
     };
 
     // Search may be positioned by parent; animate horizontal centering
-    const rightCollapsed = getCssProp(elStyle, '--right-collapsed');
+    const rightCollapsed = getCssProp(elStyle, '--right-collapsed-js');
     const rightExpanded = getCssProp(elStyle, '--right-offset');
     if (rightCollapsed && rightExpanded) {
-      inverseWrapperAnimation.right = [rightExpanded, rightCollapsed];
+      inverseWrapperAnimation.right = [getPxValue(rightExpanded), getPxValue(rightCollapsed)];
     }
-
 
     const inverseContentAnimation = {
       opacity: 0,
