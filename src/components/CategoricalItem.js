@@ -1,10 +1,11 @@
 import React from 'react';
-import { compose, withProps } from 'recompose';
+import { compose, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 import { NodeList } from './';
 
 /**
@@ -18,6 +19,7 @@ const CategoricalItem = ({
   label,
   nodes,
   onClick,
+  recentNode,
   sortOrder,
   willAccept,
 }) => {
@@ -33,7 +35,7 @@ const CategoricalItem = ({
         <Flipped inverseFlipId={label} scale>
           <div className="categorical-item__title">
             <h3>{label}</h3>
-            {!isExpanded && <h5>{details}</h5>}
+            {!isExpanded && <h5>{details(recentNode)}</h5>}
           </div>
         </Flipped>
         {isExpanded &&
@@ -53,31 +55,38 @@ const CategoricalItem = ({
 
 CategoricalItem.propTypes = {
   accentColor: PropTypes.string,
-  details: PropTypes.string,
+  details: PropTypes.func,
   isExpanded: PropTypes.bool,
   isOver: PropTypes.bool,
   label: PropTypes.string,
   nodes: PropTypes.array,
   onClick: PropTypes.func,
+  recentNode: PropTypes.string,
   sortOrder: PropTypes.array,
   willAccept: PropTypes.bool,
 };
 
 CategoricalItem.defaultProps = {
   accentColor: 'black',
-  details: 'empty',
+  details: () => 'empty',
   isExpanded: false,
   isOver: false,
   label: 'undefined',
   nodes: [],
   onClick: () => {},
+  recentNode: '',
   sortOrder: [],
   willAccept: false,
 };
 
 export default compose(
-  withProps(() => ({
+  withState('recentNode', 'setRecentNode', ''),
+  withProps(props => ({
     accepts: () => true,
+    onDrop: ({ meta }) => {
+      props.onDrop({ meta });
+      props.setRecentNode(meta[nodeAttributesProperty].name);
+    },
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),

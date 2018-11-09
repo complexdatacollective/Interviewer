@@ -57,22 +57,22 @@ class CategoricalList extends Component {
         return;
       }
 
-      this.lastNode = meta[nodeAttributesProperty].name; // TODO make this a state variable
-
       this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
         { [this.props.activePromptVariable]: bin.value });
     };
 
     const accentColor = getCatColor(index);
 
-    let details = 'empty';
-    if (this.lastNode) {
-      if (bin.nodes.length > 0) {
-        details = `${this.lastNode}${bin.nodes.length > 1 ? ` and ${bin.nodes.length - 1} other${bin.nodes.length > 2 ? 's' : ''}` : ''}`;
+    const getDetails = (name) => {
+      if (name) {
+        if (bin.nodes.length > 0) {
+          return `${name}${bin.nodes.length > 1 ? ` and ${bin.nodes.length - 1} other${bin.nodes.length > 2 ? 's' : ''}` : ''}`;
+        }
+      } else if (bin.nodes.length > 0) {
+        return `${bin.nodes.length} node${bin.nodes.length > 1 ? 's' : ''}`;
       }
-    } else if (bin.nodes.length > 0) {
-      details = `${bin.nodes.length} node${bin.nodes.length > 1 ? 's' : ''}`;
-    }
+      return 'empty';
+    };
 
     return (
       <CategoricalItem
@@ -82,7 +82,7 @@ class CategoricalList extends Component {
         accentColor={accentColor}
         onDrop={item => onDrop(item)}
         onClick={e => this.expandBin(e, bin.value)}
-        details={details}
+        details={name => getDetails(name)}
         isExpanded={this.state.expandedBinValue === bin.value}
         nodes={bin.nodes}
         sortOrder={this.props.prompt.binSortOrder}
