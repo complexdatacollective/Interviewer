@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
-import { nodeAttributesProperty } from '../ducks/modules/network';
 import { NodeList } from './';
 
 /**
@@ -63,7 +62,7 @@ CategoricalItem.propTypes = {
   label: PropTypes.string,
   nodes: PropTypes.array,
   onClick: PropTypes.func,
-  recentNode: PropTypes.string,
+  recentNode: PropTypes.object,
   sortOrder: PropTypes.array,
   willAccept: PropTypes.bool,
 };
@@ -76,18 +75,18 @@ CategoricalItem.defaultProps = {
   label: 'undefined',
   nodes: [],
   onClick: () => {},
-  recentNode: '',
+  recentNode: {},
   sortOrder: [],
   willAccept: false,
 };
 
 export default compose(
-  withState('recentNode', 'setRecentNode', ''),
+  withState('recentNode', 'setRecentNode', {}),
   withProps(props => ({
     accepts: () => true,
     onDrop: ({ meta }) => {
       props.onDrop({ meta });
-      props.setRecentNode(meta[nodeAttributesProperty].name);
+      props.setRecentNode(meta);
     },
   })),
   DropTarget,

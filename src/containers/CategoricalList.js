@@ -6,7 +6,7 @@ import { Flipper } from 'react-flip-toolkit';
 import { find } from 'lodash';
 import cx from 'classnames';
 
-import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
+import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, makeGetNodeDisplayVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -66,7 +66,9 @@ class CategoricalList extends Component {
 
     const accentColor = getCatColor(index);
 
-    const getDetails = (name) => {
+    const getDetails = (node) => {
+      const name = node[nodeAttributesProperty] && this.props.displayVariable &&
+        node[nodeAttributesProperty][this.props.displayVariable];
       if (name) {
         if (bin.nodes.length > 0) {
           return `${name}${bin.nodes.length > 1 ? ` and ${bin.nodes.length - 1} other${bin.nodes.length > 2 ? 's' : ''}` : ''}`;
@@ -117,6 +119,7 @@ class CategoricalList extends Component {
 CategoricalList.propTypes = {
   activePromptVariable: PropTypes.string.isRequired,
   bins: PropTypes.array.isRequired,
+  displayVariable: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   toggleNodeAttributes: PropTypes.func.isRequired,
@@ -131,6 +134,7 @@ function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions();
   const getPromptVariable = makeGetPromptVariable();
   const getStageNodes = makeNetworkNodesForType();
+  const getNodeDisplayVariable = makeGetNodeDisplayVariable();
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
@@ -151,6 +155,7 @@ function makeMapStateToProps() {
             nodes,
           };
         }),
+      displayVariable: getNodeDisplayVariable(state, props),
     };
   };
 }
