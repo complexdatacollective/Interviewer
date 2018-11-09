@@ -1,11 +1,11 @@
 .server-card {
-  height: 11rem; // icon + text
   margin: 2rem;
   width: 10rem;
 
   &__label {
     text-align: center;
     margin: 0;
+    overflow-wrap: break-word;
   }
 
   &--clickable {
