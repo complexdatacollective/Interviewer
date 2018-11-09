@@ -71,7 +71,7 @@ describe('network reducer', () => {
     expect(newState.nodes[0][PK]).toEqual('22');
   });
 
-  it('should support additionalAttributes for ADD_NODES', () => {
+  it('should support additionalProperties for ADD_NODES', () => {
     const newState = reducer(
       {
         ...mockState,
@@ -80,7 +80,7 @@ describe('network reducer', () => {
       {
         type: actionTypes.ADD_NODES,
         nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
-        additionalAttributes: { stageId: '2', attributes: { isFriend: true } },
+        additionalProperties: { stageId: '2', attributes: { isFriend: true } },
       },
     );
 

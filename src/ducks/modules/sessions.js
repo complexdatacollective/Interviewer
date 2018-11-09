@@ -86,11 +86,14 @@ export default function reducer(state = initialState, action = {}) {
  * Add a node or nodes to the state.
  *
  * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalAttributes] shared attributes to apply to every new node
+ * @param {Object} [additionalProperties] shared properties to apply to every new node. Note that
+ *                                        user data (e.g., the "additionalAttributes" defined in
+ *                                        a protocol) should exist under a child property named
+ *                                        'attributes'.
  *
  * @memberof! NetworkActionCreators
  */
-const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
+const addNodes = (nodes, additionalProperties) => (dispatch, getState) => {
   const { session } = getState();
 
   let nodeOrNodes = nodes;
@@ -101,18 +104,18 @@ const addNodes = (nodes, additionalAttributes) => (dispatch, getState) => {
     type: ADD_NODES,
     sessionId: session,
     nodes: nodeOrNodes,
-    additionalAttributes,
+    additionalProperties,
   });
 };
 
-const updateNode = (node, additionalAttributes = null) => (dispatch, getState) => {
+const updateNode = (node, additionalProperties = null) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({
     type: UPDATE_NODE,
     sessionId: session,
     node,
-    additionalAttributes,
+    additionalProperties,
   });
 };
 

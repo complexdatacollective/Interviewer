@@ -117,16 +117,16 @@ export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
 /**
  * existingNodes - Existing network.nodes
  * netNodes - nodes to be added to the network
- * additionalAttributes - static props shared to add to each member of newNodes
+ * additionalProperties - static props shared to add to each member of newNodes
 */
-function getNodesWithBatchAdd(existingNodes, newNodes, additionalAttributes = {}) {
+function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}) {
   // Create a function to create a UUID and merge node attributes
   const withModelandAttributeData = newNode => ({
-    ...additionalAttributes,
+    ...additionalProperties,
     [nodePrimaryKeyProperty]: uuidv4(),
     ...newNode, // second to prevent overwriting existing node UUID (e.g., assigned to externalData)
     [nodeAttributesProperty]: {
-      ...additionalAttributes[nodeAttributesProperty],
+      ...additionalProperties[nodeAttributesProperty],
       ...newNode[nodeAttributesProperty],
     },
   });
@@ -170,7 +170,7 @@ export default function reducer(state = initialState, action = {}) {
     case ADD_NODES: {
       return {
         ...state,
-        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalAttributes),
+        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalProperties),
       };
     }
     /**
@@ -207,7 +207,7 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalAttributes),
+        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalProperties),
       };
     }
     case REMOVE_NODE: {
