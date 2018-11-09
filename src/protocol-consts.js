@@ -30,6 +30,7 @@ const FilterOptionsOperator = Object.freeze({
 const FormComponent = Object.freeze({
   Checkbox: 'Checkbox',
   CheckboxGroup: 'CheckboxGroup',
+  Number: 'Number',
   RadioGroup: 'RadioGroup',
   Text: 'Text',
   Toggle: 'Toggle',

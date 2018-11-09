@@ -100,6 +100,7 @@
           "enum": [
             "Checkbox",
             "CheckboxGroup",
+            "Number",
             "RadioGroup",
             "Text",
             "Toggle",
