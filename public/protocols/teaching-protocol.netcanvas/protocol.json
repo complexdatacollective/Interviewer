@@ -4,14 +4,14 @@
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {
-      "person": {
+      "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653": {
         "name": "person",
         "label": "Person",
         "color": "node-color-seq-1",
-        "displayVariable": "nickname",
+        "displayVariable": "32c27dd1-fe74-46b1-a317-a0581bd95672",
         "iconVariant": "add-a-person",
         "variables": {
-          "name": {
+          "fc6a9918-3801-4877-9c1c-9e87cab04a59": {
             "name": "name",
             "label": "Name",
             "description": "The alter's name.",
@@ -22,7 +22,7 @@
               "maxLength": 24
             }
           },
-          "contactFreq": {
+          "073ca4c2-3616-4874-ae24-0a9d2475178f": {
             "name": "contactfrequency",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
@@ -50,7 +50,7 @@
               }
             ]
           },
-          "yearsKnown": {
+          "52852f97-0db3-49df-9050-4e6c1b4ef8f0": {
             "name": "yearsknown",
             "label": "Years known",
             "description": "How many years the participant has known the alter.",
@@ -59,7 +59,7 @@
               "required": true
             }
           },
-          "gender": {
+          "59118d57-6dda-4495-a5d2-3b63c06462a2": {
             "name": "gender",
             "label": "What is this person's gender?",
             "description": "Percieved gender of the alter.",
@@ -69,7 +69,7 @@
               "required": true
             }
           },
-          "nickname": {
+          "32c27dd1-fe74-46b1-a317-a0581bd95672": {
             "name": "nickname",
             "label": "Nickname",
             "description": "Participant Nickname",
@@ -80,55 +80,55 @@
               "maxLength": 10
             }
           },
-          "age": {
+          "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": {
             "name": "age",
             "label": "Age",
             "description": "Age",
             "type": "number"
           },
-          "closenessLayout": {
+          "5f58bb3a-d8e4-43de-9add-64a95f603ace": {
             "name": "closenesslayout",
             "label": "Closeness layout",
             "description": "Closeness layout",
             "type": "layout"
           },
-          "school_important": {
+          "c2aa8096-1a30-4165-aa2c-8d02b3389369": {
             "name": "school_important",
             "label": "School important",
             "description": "School important",
             "type": "boolean"
           },
-          "lives_nearby": {
+          "bafdd0d1-1d8b-4bff-8c42-1150c7922e15": {
             "name": "livesnearby",
             "label": "Lives nearby",
             "description": "Lives nearby",
             "type": "boolean"
           },
-          "family_important": {
+          "b2cb107a-f3c5-4b9e-afd8-38196958776a": {
             "name": "family_important",
             "label": "Family important",
             "description": "Family important",
             "type": "boolean"
           },
-          "facebook_friend": {
+          "de4f211d-a7c0-42ba-a3d7-2c90d70e1b1b": {
             "name": "facebook_friend",
             "label": "Facebook friend",
             "description": "Facebook friend",
             "type": "boolean"
           },
-          "community_important": {
+          "b0be7a78-bdfb-4ebd-b6dd-75acef0bc13b": {
             "name": "community_important",
             "label": "Community important",
             "description": "Community important",
             "type": "boolean"
           },
-          "online_important": {
+          "0ea11269-e3ba-4fcf-a3c6-5aac814664f3": {
             "name": "online_important",
             "label": "Online important",
             "description": "Online important",
             "type": "boolean"
           },
-          "other_important": {
+          "a4410874-3ea3-423c-af6e-f7c3393ea3ec": {
             "name": "other_important",
             "label": "Other important",
             "description": "Other important",
@@ -138,12 +138,12 @@
       }
     },
     "edge": {
-      "friends": {
+      "f4717921-def2-4c54-9429-719614415e89": {
         "name": "friends",
         "label": "Friends",
         "color": "edge-color-seq-1",
         "variables": {
-          "type": {
+          "18e27ac2-fda6-46e3-bd6e-8db4254cbbab": {
             "name": "type",
             "label": "Type",
             "description": "Type",
@@ -151,7 +151,7 @@
           }
         }
       },
-      "professional": {
+      "a3d9c22a-0c00-4203-8b37-d149cbbbb44c": {
         "name": "professional",
         "label": "Professional",
         "color": "node-color-seq-2",
@@ -164,243 +164,243 @@
     "schoolPupils": {
       "nodes": [
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "F. Anita",
-            "nickname": "Annie",
-            "age": "23"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "F. Anita",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Annie",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "23"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "H. Barry",
-            "nickname": "Baz",
-            "age": "31"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "H. Barry",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Baz",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "31"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Carlito",
-            "nickname": "Carl",
-            "age": "25"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Carlito",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Carl",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "25"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Dee",
-            "nickname": "Dee",
-            "age": "72"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Dee",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Dee",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "72"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "A. Eugine",
-            "nickname": "Eu",
-            "age": "27"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "A. Eugine",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Eu",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "27"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Gerald",
-            "nickname": "Gary",
-            "age": "33"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Gerald",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Gary",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "33"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Hannah L.",
-            "nickname": "Hannah",
-            "age": "81"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Hannah L.",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Hannah",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "81"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Isabella",
-            "nickname": "Izzy",
-            "age": "25"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Isabella",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Izzy",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "25"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Jacob",
-            "nickname": "Jake",
-            "age": "52"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Jacob",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Jake",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "52"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Kaylee",
-            "nickname": "Lee",
-            "age": "57"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Kaylee",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Lee",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "57"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Lily",
-            "nickname": "Lil",
-            "age": "93"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Lily",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Lil",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "93"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Michael",
-            "nickname": "Mike",
-            "age": "91"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Michael",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Mike",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "91"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Noah",
-            "nickname": "Nole",
-            "age": "65"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Noah",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Nole",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "65"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "K. Olivia",
-            "nickname": "Olivia",
-            "age": "42"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "K. Olivia",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Olivia",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "42"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Penelope",
-            "nickname": "Nellie",
-            "age": "47"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Penelope",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Nellie",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "47"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Quentin",
-            "nickname": "Quinn",
-            "age": "33"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Quentin",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Quinn",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "33"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Y. Randall",
-            "nickname": "Randy",
-            "age": "51"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Y. Randall",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Randy",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "51"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Sophia",
-            "nickname": "Fia",
-            "age": "85"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Sophia",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Fia",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "85"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Tatiana",
-            "nickname": "Ana",
-            "age": "72"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Tatiana",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Ana",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "72"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Uriel",
-            "nickname": "Uri",
-            "age": "17"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Uriel",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Uri",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "17"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Vanessa",
-            "nickname": "Ness",
-            "age": "56"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Vanessa",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Ness",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "56"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "William",
-            "nickname": "Bill",
-            "age": "61"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "William",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Bill",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "61"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Xavier",
-            "nickname": "X",
-            "age": "65"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Xavier",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "X",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "65"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Yolanda",
-            "nickname": "Landa",
-            "age": "29"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Yolanda",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Landa",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "29"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "T. Zoe",
-            "nickname": "Zoe",
-            "age": "87"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "T. Zoe",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Zoe",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "87"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Fernando",
-            "nickname": "Finn",
-            "age": "63"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Fernando",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Finn",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "63"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Daniella",
-            "nickname": "Dani",
-            "age": "71"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Daniella",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Dani",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "71"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "P. Samuel",
-            "nickname": "Sammy",
-            "age": "20"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "P. Samuel",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Sammy",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "20"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Brooklyn",
-            "nickname": "Brook",
-            "age": "24"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Brooklyn",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Brook",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "24"
           }
         },
         {
-          "type": "person",
+          "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
           "attributes": {
-            "name": "Christopher",
-            "nickname": "Topher",
-            "age": "66"
+            "fc6a9918-3801-4877-9c1c-9e87cab04a59": "Christopher",
+            "32c27dd1-fe74-46b1-a317-a0581bd95672": "Topher",
+            "40e7fe0d-0710-4a4b-9eb2-16f2a9222c01": "66"
           }
         }
       ]
@@ -410,26 +410,26 @@
     "person": {
       "title": "Add A Person",
       "entity": "node",
-      "type": "person",
+      "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
       "optionToAddAnother": true,
       "fields": [
         {
-          "variable": "name",
+          "variable": "fc6a9918-3801-4877-9c1c-9e87cab04a59",
           "component": "Text",
           "label": "What is the person's name?"
         },
         {
-          "variable": "nickname",
+          "variable": "32c27dd1-fe74-46b1-a317-a0581bd95672",
           "component": "Text",
           "label": "What is their nickname?"
         },
         {
-          "variable": "gender",
+          "variable": "59118d57-6dda-4495-a5d2-3b63c06462a2",
           "component": "RadioGroup",
           "label": "What is this person's gender?"
         },
         {
-          "variable": "yearsKnown",
+          "variable": "52852f97-0db3-49df-9050-4e6c1b4ef8f0",
           "component": "Text",
           "label": "How many years have you known this person?"
         }
@@ -462,7 +462,7 @@
       "form": "person",
       "subject": {
         "entity": "node",
-        "type": "person"
+        "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
       },
       "panels": [
         {
@@ -476,7 +476,7 @@
           "id": "6cl",
           "text": "Please list all the people from school who are important to you.",
           "additionalAttributes": {
-            "school_important": true
+            "c2aa8096-1a30-4165-aa2c-8d02b3389369": true
           }
         }
       ]
@@ -488,35 +488,35 @@
       "form": "person",
       "subject": {
         "entity": "node",
-        "type": "person"
+        "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
       },
       "prompts": [
         {
           "id": "6dl",
           "text": "Please list all the family members who are important to you.",
           "additionalAttributes": {
-            "family_important": true
+            "b2cb107a-f3c5-4b9e-afd8-38196958776a": true
           }
         },
         {
           "id": "6el",
           "text": "Please list all the people in the community (such as a sports team, church, voluntary group, neighbours) who are important to you.",
           "additionalAttributes": {
-            "community_important": true
+            "b0be7a78-bdfb-4ebd-b6dd-75acef0bc13b": true
           }
         },
         {
           "id": "6fl",
           "text": "Please list anyone you only know online who is important to you.",
           "additionalAttributes": {
-            "online_important": true
+            "0ea11269-e3ba-4fcf-a3c6-5aac814664f3": true
           }
         },
         {
           "id": "6gl",
           "text": "Finally, is there anyone else important to you who was not yet listed?",
           "additionalAttributes": {
-            "other_important": true
+            "a4410874-3ea3-423c-af6e-f7c3393ea3ec": true
           }
         }
       ]
@@ -541,10 +541,10 @@
           "text": "Please arrange the nodes on the screen. Place people who know each other near each other and place the people you know best closest to the centre. Leave space between each node if you can.",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
           },
           "sortOrder": [
@@ -582,10 +582,10 @@
           "text": "Please mark the relationships between any two people who know each other personally. Click on the first person and then the second to draw the line between two nodes. ",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
           },
           "sortOrder": [
@@ -599,8 +599,8 @@
             "skewedTowardCenter": true
           },
           "edges": {
-            "display": ["friends"],
-            "create": "friends"
+            "display": ["f4717921-def2-4c54-9429-719614415e89"],
+            "create": "f4717921-def2-4c54-9429-719614415e89"
           }
         },
         {
@@ -608,10 +608,10 @@
           "text": "Who lives near (<5km) to you?",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
           },
           "sortOrder": [
@@ -625,10 +625,10 @@
             "skewedTowardCenter": true
           },
           "edges": {
-            "display": ["friends"]
+            "display": ["f4717921-def2-4c54-9429-719614415e89"]
           },
           "highlight": {
-            "variable": "lives_nearby",
+            "variable": "bafdd0d1-1d8b-4bff-8c42-1150c7922e15",
             "allowHighlighting": true
           }
         },
@@ -637,10 +637,10 @@
           "text": "If you have a Facebook account, which of these people are your friends on Facebook?",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
           },
           "sortOrder": [
@@ -654,10 +654,10 @@
             "skewedTowardCenter": true
           },
           "edges": {
-            "display": ["friends"]
+            "display": ["f4717921-def2-4c54-9429-719614415e89"]
           },
           "highlight": {
-            "variable": "facebook_friend",
+            "variable": "de4f211d-a7c0-42ba-a3d7-2c90d70e1b1b",
             "allowHighlighting": true
           }
         }
@@ -669,13 +669,13 @@
       "label": "Contact Freq.",
       "subject": {
         "entity": "node",
-        "type": "person"
+        "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
       },
       "prompts": [
         {
           "id": "contactFreq",
           "text": "When is the last time you spoke with the people you have listed? Please drag the node into the appropriate bin below.",
-          "variable": "contactFreq"
+          "variable": "073ca4c2-3616-4874-ae24-0a9d2475178f"
         }
       ]
     },
