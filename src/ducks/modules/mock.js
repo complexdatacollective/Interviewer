@@ -3,7 +3,7 @@
 import faker from 'faker';
 import { has, times } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
-import { getNodeWithIdAttributes, nodeAttributesProperty } from './network';
+import { nodeAttributesProperty } from './network';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
@@ -33,15 +33,15 @@ const generateNodes = (variableDefs, typeKey, howMany = 0, additionalAttributes 
         return acc;
       }, {});
 
-      return getNodeWithIdAttributes({
-        type: typeKey,
+      return {
         [nodeAttributesProperty]: mockAttrs,
-      }, variableDefs);
+      };
     });
 
     const additionalProperties = {
       promptId: 'mock',
       stageId: 'mock',
+      type: typeKey,
       [nodeAttributesProperty]: additionalAttributes,
     };
 
