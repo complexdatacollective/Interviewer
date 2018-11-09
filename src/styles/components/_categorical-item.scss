@@ -5,6 +5,16 @@
   border: solid .5rem;
   border-radius: 50%;
   margin: var(--categorical-item-margin);
+  transition: box-shadow var(--animation-duration-standard) var(--animation-easing);
+
+  &:hover {
+    &:not(.categorical-item--hover) {
+      &:not(.categorical-item--expanded) {
+        box-shadow: 0 0 1rem 0 var(--node-label);
+        transition: box-shadow var(--animation-duration-standard) var(--animation-easing);
+      }
+    }
+  }
 
   &--hover {
     background-color: var(--panel-selected-node-bg-color);
