@@ -4,7 +4,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
-import Form from '../Form';
+import Form, { Form as UnconnectedForm } from '../Form';
 import Field from '../Field';
 
 jest.mock('../../utils/CSSVariables');
@@ -88,4 +88,9 @@ describe('<Form />', () => {
     expect(subject.find('input[type="hidden"]').length).toBe(1);
   });
   it('Calls autoPopulate on Field blur');
+
+  it('renders a submit button control by default', () => {
+    const subject = shallow(<UnconnectedForm {...props()} />);
+    expect(subject.find('Button').prop('type')).toEqual('submit');
+  });
 });

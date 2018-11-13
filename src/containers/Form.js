@@ -80,7 +80,7 @@ Form.propTypes = {
 Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
-  controls: [<Button key="submit" aria-label="Submit">Submit</Button>],
+  controls: [<Button type="submit" key="submit" aria-label="Submit">Submit</Button>],
   className: null,
   tooltip: 'none',
 };
@@ -107,3 +107,7 @@ export default compose(
     touchOnBlur: false,
   }),
 )(Form);
+
+export {
+  Form,
+};
