@@ -55,7 +55,7 @@ class NodeForm extends Component {
           onCheck={this.onToggleClick}
           inline
         />),
-        <Button key="submit" aria-label="Submit">Finished</Button>,
+        <Button type="submit" key="submit" aria-label="Submit">Finished</Button>,
       ].filter(notEmpty),
       form: reduxFormName,
     };
