@@ -3,7 +3,6 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
-import { find } from 'lodash';
 import cx from 'classnames';
 
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, makeGetNodeDisplayVariable } from '../selectors/interface';
