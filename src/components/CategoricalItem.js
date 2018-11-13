@@ -80,6 +80,8 @@ CategoricalItem.defaultProps = {
   willAccept: false,
 };
 
+export { CategoricalItem as UnconnectedCategoricalItem };
+
 export default compose(
   withState('recentNode', 'setRecentNode', {}),
   withProps(props => ({

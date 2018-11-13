@@ -42,13 +42,8 @@ class CategoricalList extends Component {
     };
   }
 
-  getCurrentBinNodes = () => {
-    const bin = find(this.props.bins, { value: this.state.expandedBinValue });
-    return bin && bin.nodes;
-  }
-
   expandBin = (e, binValue) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     this.setState({
       expandedBinValue: binValue,
     });
@@ -165,6 +160,8 @@ function mapDispatchToProps(dispatch) {
     toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
   };
 }
+
+export { CategoricalList as UnconnectedCategoricalList };
 
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),

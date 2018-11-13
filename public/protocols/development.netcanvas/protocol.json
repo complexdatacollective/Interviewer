@@ -128,6 +128,7 @@
             ]
           },
           "contactType": {
+            "name": "contactType",
             "label": "Contact type categorical variable.",
             "description": "Contact type categorical variable",
             "type": "categorical",
@@ -155,6 +156,7 @@
             ]
           },
           "discussType": {
+            "name": "discussType",
             "label": "Discuss type categorical variable.",
             "description": "Discuss type categorical variable",
             "type": "categorical",

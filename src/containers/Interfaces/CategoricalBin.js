@@ -70,6 +70,8 @@ function makeMapStateToProps() {
   };
 }
 
+export { CategoricalBin as UnconnectedCategoricalBin };
+
 export default compose(
   withPrompt,
   connect(makeMapStateToProps),
