@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,49 +11,42 @@ import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * OrdinalBin Interface
-  * @extends Component
   */
-class OrdinalBin extends Component {
-  render() {
-    const {
-      promptForward,
-      promptBackward,
-      prompt,
-      nodesForPrompt,
-      stage,
-    } = this.props;
+const OrdinalBin = ({
+  promptForward,
+  promptBackward,
+  prompt,
+  nodesForPrompt,
+  stage,
+}) => {
+  const {
+    prompts,
+  } = stage;
 
-    const {
-      prompts,
-    } = this.props.stage;
-
-    return (
-      <div className="ordinal-bin-interface">
-        <div className="ordinal-bin-interface__prompt">
-          <PromptSwiper
-            forward={promptForward}
-            backward={promptBackward}
-            prompt={prompt}
-            prompts={prompts}
-          />
-        </div>
-        <div className="ordinal-bin-interface__bucket">
-          <MultiNodeBucket
-            nodes={nodesForPrompt}
-            listId={`${stage.id}_${prompt.id}_NODE_BUCKET`}
-            id={'NODE_BUCKET'}
-            itemType="EXISTING_NODE"
-            onDrop={this.onDrop}
-            sortOrder={prompt.bucketSortOrder}
-          />
-        </div>
-        <div className="ordinal-bin-interface__bins">
-          <OrdinalBins stage={stage} prompt={prompt} />
-        </div>
+  return (
+    <div className="ordinal-bin-interface">
+      <div className="ordinal-bin-interface__prompt">
+        <PromptSwiper
+          forward={promptForward}
+          backward={promptBackward}
+          prompt={prompt}
+          prompts={prompts}
+        />
       </div>
-    );
-  }
-}
+      <div className="ordinal-bin-interface__bucket">
+        <MultiNodeBucket
+          nodes={nodesForPrompt}
+          listId={`${stage.id}_${prompt.id}_NODE_BUCKET`}
+          itemType="EXISTING_NODE"
+          sortOrder={prompt.bucketSortOrder}
+        />
+      </div>
+      <div className="ordinal-bin-interface__bins">
+        <OrdinalBins stage={stage} prompt={prompt} />
+      </div>
+    </div>
+  );
+};
 
 OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,
@@ -89,4 +82,3 @@ export default compose(
   withPrompt,
   connect(makeMapStateToProps, mapDispatchToProps),
 )(OrdinalBin);
-

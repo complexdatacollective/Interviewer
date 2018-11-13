@@ -2,12 +2,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { UnconnectedMultiNodeBucket as MultiNodeBucket } from '../MultiNodeBucket';
+import MultiNodeBucket from '../MultiNodeBucket';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 jest.mock('../../containers/Node');
 
-describe('OrdinalBinBucket', () => {
+describe('MultiNodeBucket', () => {
   let bucket;
 
   beforeEach(() => {

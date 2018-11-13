@@ -36,7 +36,6 @@ const CategoricalBin = ({
         <MultiNodeBucket
           nodes={nodesForPrompt}
           listId={`${stage.id}_${prompt.id}_CAT_BUCKET`}
-          id={'CAT_BUCKET'}
           sortOrder={prompt.bucketSortOrder}
         />
       </div>

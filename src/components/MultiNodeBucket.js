@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { find, get, isEqual } from 'lodash';
-import cx from 'classnames';
+import { isEqual } from 'lodash';
 import { TransitionGroup } from 'react-transition-group';
 
 import Node from '../containers/Node';
-import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsNumber } from '../utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
-import {
-  DragSource,
-  DropTarget,
-  MonitorDropTarget,
-  MonitorDragSource,
-} from '../behaviours/DragAndDrop';
+import { DragSource } from '../behaviours/DragAndDrop';
 import sortOrder from '../utils/sortOrder';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 
@@ -79,9 +72,6 @@ class MultiNodeBucket extends Component {
       nodeColor,
       label,
       itemType,
-      isOver,
-      willAccept,
-      meta,
     } = this.props;
 
     const {
@@ -90,47 +80,28 @@ class MultiNodeBucket extends Component {
       exit,
     } = this.state;
 
-    const isSource = !!find(
-      nodes,
-      [nodePrimaryKeyProperty, get(meta, nodePrimaryKeyProperty, null)],
-    );
-    const isValidTarget = !isSource && willAccept;
-    const isHovering = isValidTarget && isOver;
-
-    const classNames = cx(
-      'node-list',
-      { 'node-list--drag': isValidTarget },
-    );
-
-    const backgroundColor = getCSSVariableAsString('--light-background');
-
-    const styles = isHovering ? { backgroundColor } : {};
-
     return (
       <TransitionGroup
-        className={classNames}
-        style={styles}
+        className="node-list"
         exit={exit}
       >
         {
-          nodes.map((node, index) => (
-            index < 3 && (
-              <NodeTransition
-                key={`${node[nodePrimaryKeyProperty]}_${index}`}
-                index={index}
-                stagger={stagger}
-              >
-                <EnhancedNode
-                  color={nodeColor}
-                  inactive={index !== 0}
-                  allowDrag={index === 0}
-                  label={`${label(node)}`}
-                  meta={() => ({ ...node, itemType })}
-                  scrollDirection={NO_SCROLL}
-                  {...node}
-                />
-              </NodeTransition>
-            )
+          nodes.slice(0, 3).map((node, index) => (
+            <NodeTransition
+              key={`${node[nodePrimaryKeyProperty]}_${index}`}
+              index={index}
+              stagger={stagger}
+            >
+              <EnhancedNode
+                color={nodeColor}
+                inactive={index !== 0}
+                allowDrag={index === 0}
+                label={`${label(node)}`}
+                meta={() => ({ ...node, itemType })}
+                scrollDirection={NO_SCROLL}
+                {...node}
+              />
+            </NodeTransition>
           ))
         }
       </TransitionGroup>
@@ -143,9 +114,6 @@ MultiNodeBucket.propTypes = {
   nodeColor: PropTypes.string,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  isOver: PropTypes.bool,
-  willAccept: PropTypes.bool,
-  meta: PropTypes.object,
   listId: PropTypes.string.isRequired,
   sortOrder: PropTypes.array,
 };
@@ -154,21 +122,8 @@ MultiNodeBucket.defaultProps = {
   nodes: [],
   nodeColor: '',
   label: () => (''),
-  onDrop: () => {},
   itemType: 'NODE',
-  isOver: false,
-  willAccept: false,
-  isDragging: false,
-  meta: {},
   sortOrder: [],
 };
 
-export default compose(
-  DropTarget,
-  MonitorDropTarget(['isOver', 'willAccept']),
-  MonitorDragSource(['meta', 'isDragging']),
-)(MultiNodeBucket);
-
-export {
-  MultiNodeBucket as UnconnectedMultiNodeBucket,
-};
+export default MultiNodeBucket;
