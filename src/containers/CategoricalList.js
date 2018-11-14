@@ -58,8 +58,6 @@ class CategoricalList extends Component {
         { [this.props.activePromptVariable]: bin.value });
     };
 
-    const accentColor = getCatColor(index);
-
     const getDetails = (node) => {
       const name = node[nodeAttributesProperty] && this.props.displayVariable &&
         node[nodeAttributesProperty][this.props.displayVariable];
@@ -78,7 +76,7 @@ class CategoricalList extends Component {
         id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
         key={index}
         label={bin.label}
-        accentColor={accentColor}
+        accentColor={getCatColor(index)}
         onDrop={item => onDrop(item)}
         onClick={e => this.expandBin(e, bin.value)}
         details={name => getDetails(name)}
