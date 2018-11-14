@@ -186,7 +186,8 @@
       "category": "public.app-category.education"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "certificateSubjectName": "Complex Data Collective"
     },
     "publish": [
       {
