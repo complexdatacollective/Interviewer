@@ -1,6 +1,12 @@
 !macro customInstall
-  MessageBox MB_YESNO "This app uses Apple Bonjour to allow network discovery. Would you like to install it now?" /SD IDYES true IDNO
-  true:
-    ExecWait 'msiexec /i "resources\build-resources\externals\Bonjour64.msi" /quiet /passive'
+  IfFileExists $PROGRAMFILES\Bonjour\mDNSResponder.exe bonjour noBonjour
+    noBonjour:  
+      MessageBox MB_YESNO "This app requires Bonjour to be installed to enable automatic server discovery. Would you like to install it now?" IDYES true
+      true: 
+        ExecWait 'msiexec /i "resources\build-resources\externals\Bonjour64.msi" /quiet /passive'
+        goto end
+    bonjour:
+      goto end
+  end:
 !macroend
 
