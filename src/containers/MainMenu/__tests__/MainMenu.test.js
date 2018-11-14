@@ -85,6 +85,17 @@ describe('<MainMenu />', () => {
     beforeEach(() => {
       const mockStore = getMockStore({
         ui: { isMenuOpen: true },
+        protocol: {
+          variableRegistry: {
+            node: {
+              abcdef: {
+                name: 'person',
+                variables: {},
+              },
+            },
+          },
+          stages: [{ subject: { type: 'abcdef' }, prompts: [{}] }],
+        },
         session: '1234-5678',
         sessions: {
           '1234-5678': {
@@ -119,7 +130,8 @@ describe('<MainMenu />', () => {
     it('Mock data button', () => {
       subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
 
-      expect(actions.filter(({ type }) => type === 'ADD_NODES').length).toBe(20);
+      expect(actions.filter(({ type }) => type === 'ADD_NODES')).toHaveLength(1);
+      expect(actions.filter(({ type }) => type === 'ADD_NODES')[0].nodes).toHaveLength(20);
       expect(isMenuOpen(subject)).toBe(false);
     });
   });

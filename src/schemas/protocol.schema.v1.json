@@ -100,6 +100,7 @@
           "enum": [
             "Checkbox",
             "CheckboxGroup",
+            "Number",
             "RadioGroup",
             "Text",
             "Toggle",
@@ -191,9 +192,6 @@
             }
           },
           "required": [
-            "id",
-            "label",
-            "type",
             "items"
           ]
         },
@@ -211,9 +209,6 @@
             }
           },
           "required": [
-            "id",
-            "label",
-            "type",
             "prompts"
           ]
         }
@@ -227,7 +222,13 @@
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ]
         },
         "content": {
           "type": "string"
@@ -302,7 +303,12 @@
       "additionalProperties": false,
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "alter",
+            "ego",
+            "edge"
+          ]
         },
         "id": {
           "type": "string"
@@ -347,7 +353,8 @@
       },
       "required": [
         "attribute",
-        "operator"
+        "operator",
+        "type"
       ],
       "title": "Rule Options",
       "allOf": [
@@ -368,8 +375,6 @@
           },
           "then": {
             "required": [
-              "attribute",
-              "operator",
               "value"
             ]
           }
@@ -674,8 +679,7 @@
       "required": [
         "action",
         "filter",
-        "operator",
-        "value"
+        "operator"
       ],
       "title": "SkipLogic",
       "allOf": [
@@ -684,17 +688,19 @@
             "properties": {
               "operator": {
                 "enum": [
-                  "ANY",
-                  "NONE"
+                  "EXACTLY",
+                  "NOT",
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL"
                 ]
               }
             }
           },
           "then": {
             "required": [
-              "action",
-              "filter",
-              "operator"
+              "value"
             ]
           }
         }
@@ -719,7 +725,9 @@
       "additionalProperties": false,
       "title": "Edge",
       "patternProperties": {
-        ".+": {}
+        ".+": {
+          "$ref": "#/definitions/EdgeTypeDef"
+        }
       }
     },
     "EdgeTypeDef": {
@@ -742,8 +750,7 @@
       "required": [
         "color",
         "label",
-        "name",
-        "variables"
+        "name"
       ],
       "title": "EdgeTypeDef"
     },
@@ -773,10 +780,10 @@
         "type": {
           "type": "string",
           "enum": [
+            "boolean",
             "text",
             "number",
             "datetime",
-            "boolean",
             "ordinal",
             "categorical",
             "layout",
@@ -879,6 +886,11 @@
           "$ref": "#/definitions/Variables"
         }
       },
+      "required": [
+        "name",
+        "label",
+        "variables"
+      ],
       "title": "NodeTypeDef"
     },
     "OptionElement": {
@@ -909,8 +921,8 @@
     "Entity": {
       "type": "string",
       "enum": [
-        "node",
-        "edge"
+        "edge",
+        "node"
       ],
       "title": "Entity"
     },

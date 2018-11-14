@@ -2,6 +2,7 @@ import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
 import { nodePrimaryKeyProperty, nodeAttributesProperty, getNodeAttributes } from '../ducks/modules/network';
+import { VariableType, VariableTypeValues } from '../protocol-consts';
 
 const setUpXml = () => {
   const graphMLOutline = '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -23,10 +24,8 @@ const getVariableInfo = (variableRegistry, type, element, key) => (
 );
 
 const isVariableRegistryExists = (variableRegistry, type, element, key) => {
-  const knownTypes = ['boolean', 'text', 'number', 'datetime', 'categorical', 'ordinal', 'layout',
-    'location'];
   const variableInfo = getVariableInfo(variableRegistry, type, element, key);
-  return variableInfo && variableInfo.type && knownTypes.includes(variableInfo.type);
+  return variableInfo && variableInfo.type && VariableTypeValues.includes(variableInfo.type);
 };
 
 const getTypeFromVariableRegistry = (variableRegistry, type, element, key, variableAttribute = 'type') => {
@@ -34,6 +33,7 @@ const getTypeFromVariableRegistry = (variableRegistry, type, element, key, varia
   return variableInfo && variableInfo[variableAttribute];
 };
 
+// returns a graphml type
 const getTypeForKey = (data, key) => (
   data.reduce((result, value) => {
     const attrs = getNodeAttributes(value);
@@ -112,23 +112,18 @@ const generateKeys = (
           missingVariables.push(`"${key}" in ${type}.${element.type}`);
         }
 
-        switch (getTypeFromVariableRegistry(variableRegistry, type, element, key)) {
-          case 'boolean':
-            keyElement.setAttribute('attr.type', 'boolean');
+        const variableType = getTypeFromVariableRegistry(variableRegistry, type, element, key);
+        switch (variableType) {
+          case VariableType.boolean:
+            keyElement.setAttribute('attr.type', variableType);
             break;
-          case 'integer':
-            keyElement.setAttribute('attr.type', 'integer');
-            break;
-          case 'double':
-            keyElement.setAttribute('attr.type', 'double');
-            break;
-          case 'ordinal':
-          case 'number': {
+          case VariableType.ordinal:
+          case VariableType.number: {
             const keyType = getTypeForKey(elements, key);
             keyElement.setAttribute('attr.type', keyType);
             break;
           }
-          case 'layout': {
+          case VariableType.layout: {
             // special handling for locations
             keyElement.setAttribute('attr.name', `${keyName}Y`);
             keyElement.setAttribute('id', `${keyName}Y`);
@@ -141,10 +136,10 @@ const generateKeys = (
             graphML.insertBefore(keyElement2, graph);
             break;
           }
-          case 'text':
-          case 'datetime':
-          case 'categorical':
-          case 'location':
+          case VariableType.text:
+          case VariableType.datetime:
+          case VariableType.categorical:
+          case VariableType.location: // TODO: special handling?
           default:
             keyElement.setAttribute('attr.type', 'string');
         }

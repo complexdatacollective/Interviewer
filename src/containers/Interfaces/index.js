@@ -12,15 +12,17 @@ import Information from './Information';
 import CategoricalBin from './CategoricalBin';
 import FinishSession from './FinishSession';
 
+import { StageType } from '../../protocol-consts';
+
 const interfaces = {
-  NameGenerator,
-  NameGeneratorAutoComplete,
-  NameGeneratorList,
-  Sociogram,
-  Quiz,
-  Information,
-  OrdinalBin,
-  CategoricalBin,
+  [StageType.NameGenerator]: NameGenerator,
+  [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
+  [StageType.NameGeneratorList]: NameGeneratorList,
+  [StageType.Sociogram]: Sociogram,
+  [StageType.Quiz]: Quiz,
+  [StageType.Information]: Information,
+  [StageType.OrdinalBin]: OrdinalBin,
+  [StageType.CategoricalBin]: CategoricalBin,
   FinishSession,
 };
 
@@ -32,7 +34,6 @@ const getInterface = (interfaceConfig) => {
     justifyContent: 'center',
   };
 
-  if (has(interfaceConfig, 'custom')) { return interfaceConfig.custom; }
   if (has(interfaces, interfaceConfig)) { return interfaces[interfaceConfig]; }
   return () => (<div style={divStyle}><div style={{ textAlign: 'center' }}><Icon name="warning" /><h1 style={{ marginTop: '1rem' }}>No &quot;{interfaceConfig}&quot; interface found.</h1></div></div>);
 };

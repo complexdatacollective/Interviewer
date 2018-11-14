@@ -6,7 +6,7 @@ import { createStore } from 'redux';
 import withPrompt from '../withPrompt';
 
 jest.mock('../../selectors/session', () => ({
-  getPromptForCurrentSession: jest.fn().mockReturnValue(99),
+  getPromptIndexForCurrentSession: jest.fn().mockReturnValue(99),
   stages: jest.fn().mockReturnValue([{}]),
 }));
 

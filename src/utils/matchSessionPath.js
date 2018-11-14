@@ -17,7 +17,16 @@ const protocolIdFromSessionPath = (pathname) => {
   return pathInfo && pathInfo.params[ProtocolIdKey];
 };
 
+const currentStageIndex = (path) => {
+  const matchedPath = matchSessionPath(path);
+  if (matchedPath) {
+    return parseInt(matchedPath.params.stageIndex, 10);
+  }
+  return 0;
+};
+
 export {
+  currentStageIndex,
   matchSessionPath,
   protocolIdFromSessionPath,
 };

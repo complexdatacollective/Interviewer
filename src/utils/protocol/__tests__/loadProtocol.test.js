@@ -9,7 +9,11 @@ import { readFile } from '../../filesystem';
 jest.mock('../../filesystem');
 jest.mock('../protocolPath');
 
-const validProtocol = { foo: 'bar', stages: [{}], variableRegistry: {} };
+const validProtocol = {
+  name: 'bar',
+  variableRegistry: {},
+  stages: [{ id: '1', type: 'Information', label: '', items: [] }],
+};
 
 describe('loadProtocol', () => {
   describe('Electron', () => {

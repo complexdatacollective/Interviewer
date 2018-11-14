@@ -27,4 +27,4 @@ xcuserdata/
 IDEWorkspaceChecks.plist
 
 # Ignore protocol template used for schema generation
-/schema/abstract-protocol.json
+src/schemas/abstract-protocol.json

@@ -4,17 +4,18 @@ import * as query from '../utils/networkQuery/query';
 import predicate from '../utils/networkQuery/predicate';
 import { stages as getStages } from './session';
 import { getNetwork } from './interface';
+import { FilterJoin, RuleType, SkipLogicAction, SkipLogicOperator } from '../protocol-consts';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const maxLength = state => getStages(state).length;
 
 const mapRuleType = (type) => {
   switch (type) {
-    case 'alter':
+    case RuleType.alter:
       return query.alterRule;
-    case 'ego':
+    case RuleType.ego:
       return query.egoRule;
-    case 'edge':
+    case RuleType.edge:
       return query.edgeRule;
     default:
       return () => {};
@@ -38,7 +39,7 @@ const getFilter = index => createSelector(
 
 const getJoinType = index => createSelector(
   getFilter(index),
-  filter => ((filter && filter.join === 'OR') ? query.or : query.and),
+  filter => ((filter && filter.join === FilterJoin.OR) ? query.or : query.and),
 );
 
 const getRules = index => createSelector(
@@ -67,7 +68,7 @@ const filterNetwork = index => createSelector(
 
 const isSkipAction = index => createSelector(
   getSkipLogic(index),
-  logic => logic && logic.action === 'SKIP',
+  logic => logic && logic.action === SkipLogicAction.SKIP,
 );
 
 const getSkipValue = index => createSelector(
@@ -89,10 +90,10 @@ export const isStageSkipped = index => createSelector(
   (logic, action, operator, comparisonValue, results) => {
     let outerQuery = false;
     switch (operator) {
-      case 'NONE':
+      case SkipLogicOperator.NONE:
         outerQuery = !results.nodes.length;
         break;
-      case 'ANY':
+      case SkipLogicOperator.ANY:
         outerQuery = results.nodes.length > 0;
         break;
       default:

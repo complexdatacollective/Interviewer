@@ -14,6 +14,7 @@ class SettingsMenu extends PureComponent {
       handleResetAppData,
       toggleUseFullScreenForms,
       useFullScreenForms,
+      shouldShowMocksItem,
       toggleUseDynamicScaling,
       useDynamicScaling,
       setDeviceDescription,
@@ -47,18 +48,21 @@ class SettingsMenu extends PureComponent {
                     fieldLabel=" "
                   />
                 </section>
-                <section>
-                  <p>
-                    During an active interview session, clicking this button will create mock nodes
-                    for testing purposes.
-                  </p>
-                  <Button
-                    color="mustard"
-                    onClick={handleAddMockNodes}
-                  >
-                    Add mock nodes
-                  </Button>
-                </section>
+                {
+                  shouldShowMocksItem &&
+                  <section>
+                    <p>
+                      During an active interview session, clicking this button will create
+                      mock nodes for testing purposes.
+                    </p>
+                    <Button
+                      color="mustard"
+                      onClick={handleAddMockNodes}
+                    >
+                      Add mock nodes
+                    </Button>
+                  </section>
+                }
                 <section>
                   <p>
                     Use the button below to reset all Network Canvas data. This will erase any
@@ -135,6 +139,7 @@ SettingsMenu.propTypes = {
   onClickInactive: PropTypes.func,
   handleResetAppData: PropTypes.func.isRequired,
   handleAddMockNodes: PropTypes.func.isRequired,
+  shouldShowMocksItem: PropTypes.bool,
   toggleUseFullScreenForms: PropTypes.func.isRequired,
   useFullScreenForms: PropTypes.bool.isRequired,
   toggleUseDynamicScaling: PropTypes.func.isRequired,
@@ -148,6 +153,7 @@ SettingsMenu.propTypes = {
 SettingsMenu.defaultProps = {
   active: false,
   onClickInactive: () => {},
+  shouldShowMocksItem: false,
 };
 
 export default SettingsMenu;

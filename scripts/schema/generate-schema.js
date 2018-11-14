@@ -7,15 +7,19 @@ const {
   main: quicktypeCli,
 } = require('quicktype');
 
+const enums = require('../../src/protocol-consts');
+
 const projectDir = path.join(__dirname, '..', '..');
-const outputDir = path.join(projectDir, 'schema'); // TODO: unignore
+const outputDir = path.join(projectDir, 'src', 'schemas');
 
 const input = path.join(projectDir, 'public', 'protocols', 'development.netcanvas', 'protocol.json');
 const devProtocol = JSON.parse(fs.readFileSync(input));
 const protocol = { ...devProtocol };
 
+const schemaVersion = 1;
+
 const protocolFile = path.join(outputDir, 'abstract-protocol.json');
-const schemaFile = path.join(outputDir, 'protocol.schema');
+const schemaFile = path.join(outputDir, `protocol.schema.v${schemaVersion}.json`);
 
 const ensureOutputDir = () => {
   try {
@@ -81,7 +85,7 @@ const generateAbstractProtocol = () => {
  */
 const generateSchema = async () => {
   // Write default based on abstract example protocol
-  await quicktypeCli(['--telemetry=disable', '-o', schemaFile, protocolFile]);
+  await quicktypeCli(['--telemetry=disable', '--lang', 'schema', '--top-level', 'Protocol', '-o', schemaFile, protocolFile]);
 
   const schema = JSON.parse(fs.readFileSync(schemaFile));
   const defs = schema.definitions;
@@ -92,28 +96,23 @@ const generateSchema = async () => {
   defs.Protocol.properties.stages.minItems = 1;
   defs.Protocol.properties.lastModified.format = 'date-time';
 
-  const stageTypeEnum = [
-    'NameGenerator',
-    'NameGeneratorList',
-    'NameGeneratorAutoComplete',
-    'Sociogram',
-    'Information',
-    'OrdinalBin',
-    'CategoricalBin',
-  ];
   defs.Stage.title = 'Interface';
-  defs.Stage.properties.type.enum = stageTypeEnum;
+  defs.Stage.properties.type.enum = enums.StageTypeValues;
   defs.Stage.properties.prompts.minItems = 1;
   defs.Stage.anyOf = [
     {
       properties: { type: { const: 'Information' } },
-      required: [...defs.Stage.required, 'items'],
+      required: ['items'],
     },
     {
-      properties: { type: { enum: without(stageTypeEnum, 'Information') } },
-      required: [...defs.Stage.required, 'prompts'],
+      properties: { type: { enum: without(enums.StageTypeValues, 'Information') } },
+      required: ['prompts'],
     },
   ];
+
+  delete defs.Subject.properties.type.format; // need not be UUID
+
+  delete defs.Prompt.properties.variable.format; // need not be UUID
 
   // AdditionalAttributes & ExternalData have no defined props and may contain anything
   delete defs.AdditionalAttributes.properties;
@@ -130,14 +129,19 @@ const generateSchema = async () => {
   delete defs.Node.required;
 
   // NodeTypeDef: `variableRegistry.node[NODE_TYPE]`
-  delete defs.NodeTypeDef.required; // TODO: is this true?
+  delete defs.NodeTypeDef.properties.displayVariable.format;
+  defs.NodeTypeDef.required = ['name', 'label', 'variables'];
 
   // See comments on Node, above
-  defs.Edge.patternProperties = { '.+': { ...defs.Edge.properties.edge } };
+  defs.Edge.patternProperties = { '.+': defs.Edge.properties.edgeTypeDef };
   delete defs.Edge.properties;
   delete defs.Edge.required;
 
+  delete defs.Edges.properties.display.items.format;
+  delete defs.Edges.properties.create.format;
   pull(defs.Edges.required, 'create');
+
+  pull(defs.EdgeTypeDef.required, 'variables');
 
   // Variables: one of `variableRegistry.node[NODE_TYPE].variables[VARIABLE_NAME]`
   // Used for both nodes & edges
@@ -148,9 +152,7 @@ const generateSchema = async () => {
   // Variable Type must be one of the valid types, and is the only required field
   // https://github.com/codaco/Network-Canvas/wiki/Variable-Types
   defs.Variable.required = ['type'];
-  defs.Variable.properties.type.enum = [
-    'text', 'number', 'datetime', 'boolean', 'ordinal', 'categorical', 'layout', 'location',
-  ];
+  defs.Variable.properties.type.enum = enums.VariableTypeValues;
 
   defs.OptionElement.title = 'Variable Option';
 
@@ -159,20 +161,14 @@ const generateSchema = async () => {
   delete defs.Forms.properties;
   delete defs.Forms.required;
 
+  delete defs.Form.properties.type.format; // need not be a UUID
   pull(defs.Form.required, 'optionToAddAnother');
 
-  defs.Field.properties.component.enum = [
-    'Checkbox',
-    'CheckboxGroup',
-    'RadioGroup',
-    'Text',
-    'Toggle',
-    'ToggleButtonGroup',
-    'hidden',
-  ];
+  defs.Field.properties.component.enum = enums.FormComponentValues;
+  delete defs.Field.properties.variable.format; // need not be a UUID
 
   // subject.entity
-  defs.Entity.enum = ['node', 'edge'];
+  defs.Entity.enum = enums.EntityValues;
 
   // All validations are optional
   delete defs.Validation.required;
@@ -180,46 +176,42 @@ const generateSchema = async () => {
   // SkipLogic & Filter rules
   defs.SkipLogic.properties.value.minimum = 1;
   defs.SkipLogic.properties.value.multipleOf = 1;
-  defs.SkipLogic.properties.action.enum = ['SHOW', 'SKIP'];
-  defs.SkipLogic.properties.operator.enum = [
-    'ANY',
-    'NONE',
-    'EXACTLY',
-    'NOT',
-    'GREATER_THAN',
-    'GREATER_THAN_OR_EQUAL',
-    'LESS_THAN',
-    'LESS_THAN_OR_EQUAL',
-  ];
+  defs.SkipLogic.properties.action.enum = enums.SkipLogicActionValues;
+  defs.SkipLogic.properties.operator.enum = enums.SkipLogicOperatorValues;
+  // value only required for some operators
+  pull(defs.SkipLogic.required, 'value');
   defs.SkipLogic.allOf = [
     {
-      if: { properties: { operator: { enum: ['ANY', 'NONE'] } } },
-      then: { required: without(defs.SkipLogic.required, 'value') },
+      if: { properties: { operator: { enum: without(defs.SkipLogic.properties.operator.enum, 'ANY', 'NONE') } } },
+      then: { required: ['value'] },
     },
   ];
 
-  defs.Filter.properties.join.enum = ['OR', 'AND'];
+  defs.Filter.properties.join.enum = enums.FilterJoinValues;
 
-  defs.Rule.type.enum = ['alter', 'ego', 'edge'];
+  defs.Rule.properties.type.enum = enums.RuleTypeValues;
 
-  const filterOptionsEnum = [
-    'EXISTS',
-    'NOT_EXISTS',
-    'EXACTLY',
-    'NOT',
-    'GREATER_THAN',
-    'GREATER_THAN_OR_EQUAL',
-    'LESS_THAN',
-    'LESS_THAN_OR_EQUAL',
-  ];
   defs.Options.title = 'Rule Options';
-  defs.Options.properties.operator.enum = filterOptionsEnum;
+  defs.Options.properties.operator.enum = enums.FilterOptionsOperatorValues;
   defs.Options.allOf = [
     {
-      if: { properties: { operator: { enum: without(filterOptionsEnum, 'EXISTS', 'NOT_EXISTS') } } },
-      then: { required: [...defs.Options.required, 'value'] },
+      if: { properties: { operator: { enum: without(enums.FilterOptionsOperatorValues, 'EXISTS', 'NOT_EXISTS') } } },
+      then: { required: ['value'] }, // in addition to props which are always required
     },
   ];
+  // These need not be UUIDs
+  delete defs.Options.properties.type.format;
+  delete defs.Options.properties.attribute.format;
+
+  delete defs.SortOrder.properties.property.format;
+  delete defs.Property.properties.variable.format;
+  delete defs.Highlight.properties.variable.format;
+  delete defs.CardOptions.properties.displayLabel.format;
+  delete defs.SearchOptions.properties.matchProperties.items.format;
+  delete defs.Layout.properties.layoutVariable.format;
+
+  // Items in an information interface
+  defs.Item.properties.type.enum = enums.InformationContentTypeValues;
 
   // Most props are treated by NC as optional; this will
   // need actual review...

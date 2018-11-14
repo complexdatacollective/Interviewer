@@ -4,6 +4,7 @@ import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
 import { Audio, BackgroundImage, Video } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
+import { InformationContentType } from '../../protocol-consts';
 
 const TAGS = [
   'break',
@@ -19,7 +20,7 @@ const TAGS = [
 
 const getItemComponent = (item) => {
   switch (item.type) {
-    case 'text':
+    case InformationContentType.text:
       return (
         <ReactMarkdown
           source={item.content}
@@ -27,16 +28,16 @@ const getItemComponent = (item) => {
           renderers={defaultMarkdownRenderers}
         />
       );
-    case 'image':
+    case InformationContentType.image:
       return (
         <BackgroundImage
           url={item.content}
           className="information-interface__background-image"
         />
       );
-    case 'audio':
+    case InformationContentType.audio:
       return <Audio url={item.content} controls autoPlay />;
-    case 'video':
+    case InformationContentType.video:
       return <Video url={item.content} loop={item.loop} autoPlay />;
     default:
       return null;
