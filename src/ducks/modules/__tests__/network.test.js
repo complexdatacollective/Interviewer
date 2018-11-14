@@ -2,8 +2,10 @@
 
 import reducer,
 { actionTypes,
+  asWorkerAgentEdge,
   asWorkerAgentNode,
   nodePrimaryKeyProperty as PK,
+  nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../network';
 
@@ -69,7 +71,7 @@ describe('network reducer', () => {
     expect(newState.nodes[0][PK]).toEqual('22');
   });
 
-  it('should support additionalAttributes for ADD_NODES', () => {
+  it('should support additionalProperties for ADD_NODES', () => {
     const newState = reducer(
       {
         ...mockState,
@@ -78,7 +80,7 @@ describe('network reducer', () => {
       {
         type: actionTypes.ADD_NODES,
         nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
-        additionalAttributes: { stageId: '2', attributes: { isFriend: true } },
+        additionalProperties: { stageId: '2', attributes: { isFriend: true } },
       },
     );
 
@@ -230,21 +232,54 @@ describe('network reducer', () => {
 describe('asWorkerAgentNode', () => {
   const nodeInNetwork = {
     attributes: {
-      userProp1: 'userProp1',
+      1234: 'userProp1value',
     },
     [PK]: 'node1',
     stageId: 42,
   };
 
+  const nodeTypeDefinition = {
+    name: 'person',
+    variables: {
+      1234: { name: 'userProp1' },
+    },
+  };
+
   it('returns a node’s attributes', () => {
-    expect(asWorkerAgentNode(nodeInNetwork).userProp1).toEqual('userProp1');
+    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition).userProp1).toEqual('userProp1value');
   });
 
   it('returns a unique ID for the node', () => {
-    expect(asWorkerAgentNode(nodeInNetwork)[primaryKeyPropertyForWorker]).toEqual('node1');
+    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)[primaryKeyPropertyForWorker]).toEqual('node1');
+  });
+
+  it('returns a type for the node', () => {
+    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('person');
   });
 
   it('does not contain other private attrs props', () => {
-    expect(asWorkerAgentNode(nodeInNetwork)).not.toHaveProperty('stageId');
+    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
+  });
+});
+
+describe('asWorkerAgentEdge', () => {
+  const edgeInNetwork = {
+    from: 'node1',
+    to: 'node2',
+    type: '1234',
+  };
+
+  const edgeTypeDefinition = {
+    name: 'friend',
+  };
+
+  it('returns node IDs', () => {
+    const workerEdge = asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition);
+    expect(workerEdge.from).toEqual(edgeInNetwork.from);
+    expect(workerEdge.to).toEqual(edgeInNetwork.to);
+  });
+
+  it('returns a user-friendly edge type', () => {
+    expect(asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition).type).toEqual('friend');
   });
 });

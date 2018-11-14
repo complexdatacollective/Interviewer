@@ -1,11 +1,17 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, has, isMatch, reject } from 'lodash';
+import { findKey, filter, isMatch, reject } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
+import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
-import { getNodeAttributes, nodeAttributesProperty, asWorkerAgentNode } from '../ducks/modules/network';
+import {
+  asWorkerAgentEdge,
+  asWorkerAgentNode,
+  getNodeAttributes,
+  nodeAttributesProperty,
+} from '../ducks/modules/network';
 
 // Selectors that are generic between interfaces
 
@@ -41,11 +47,17 @@ export const networkEdges = createDeepEqualSelector(
 );
 
 export const getWorkerNetwork = createDeepEqualSelector(
-  networkNodes, networkEdges,
-  (nodes = [], edges = []) => ({
-    nodes: nodes.map(asWorkerAgentNode),
-    edges,
-  }),
+  networkNodes,
+  networkEdges,
+  protocolRegistry,
+  (nodes = [], edges = [], registry) => {
+    const nodeRegistry = registry.node || {};
+    const edgeRegistry = registry.edge || {};
+    return ({
+      nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
+      edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+    });
+  },
 );
 
 export const makeGetIds = () =>
@@ -57,31 +69,21 @@ export const makeGetIds = () =>
 export const makeGetAdditionalAttributes = () =>
   createSelector(
     propStage, propPrompt,
-    (stage, prompt) => {
-      const stageAttributes = (has(stage, 'additionalAttributes') ? stage.additionalAttributes : {});
-      const promptAttributes = (has(prompt, 'additionalAttributes') ? prompt.additionalAttributes : {});
-
-      return {
-        ...stageAttributes,
-        ...promptAttributes,
-      };
-    },
+    (stage, prompt) => getAdditionalAttributes(stage, prompt),
   );
 
 export const makeGetSubject = () =>
   createSelector(
     propStage, propPrompt,
-    (stage, prompt) => {
-      if (has(stage, 'subject')) { return stage.subject; }
-      return prompt.subject;
-    },
+    (stage, prompt) => getSubject(stage, prompt),
   );
 
 const nodeTypeIsDefined = (variableRegistry, nodeType) =>
   variableRegistry.node &&
   !!variableRegistry.node[nodeType];
 
-export const makeGetNodeType = () => (createSelector(
+// TODO: Once schema validation is in place, we don't need these asserts.
+export const makeGetSubjectType = () => (createSelector(
   protocolRegistry,
   makeGetSubject(),
   (variableRegistry, subject) => {
@@ -93,7 +95,7 @@ export const makeGetNodeType = () => (createSelector(
 
 export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
-  makeGetNodeType(),
+  makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
@@ -102,7 +104,7 @@ export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
 
 export const makeGetNodeVariables = () => createDeepEqualSelector(
   protocolRegistry,
-  makeGetNodeType(),
+  makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
@@ -155,13 +157,12 @@ export const getNodeLabelFunction = createDeepEqualSelector(
  * Get the current prompt/stage subject, and filter the network by this node type.
 */
 
-export const makeNetworkNodesForType = () => {
-  const getSubject = makeGetSubject();
-  return createSelector(
-    networkNodes, getSubject,
+export const makeNetworkNodesForType = () =>
+  createSelector(
+    networkNodes,
+    makeGetSubject(),
     (nodes, subject) => filter(nodes, ['type', subject.type]),
   );
-};
 
 /**
  * makeNetworkNodesForPrompt

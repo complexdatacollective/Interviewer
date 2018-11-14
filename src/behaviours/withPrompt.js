@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { stages, getPromptForCurrentSession } from '../selectors/session';
+import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
@@ -64,7 +64,7 @@ export default function withPrompt(WrappedComponent) {
   function mapStateToProps(state, ownProps) {
     let promptIndex = ownProps.promptId;
     if (promptIndex === undefined) {
-      promptIndex = getPromptForCurrentSession(state);
+      promptIndex = getPromptIndexForCurrentSession(state);
     }
     return {
       promptIndex,

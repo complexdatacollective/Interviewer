@@ -10,14 +10,14 @@ import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
-import { getNodeLabelFunction, makeGetNodeType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
+import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 
 const networkNodesForPrompt = makeNetworkNodesForPrompt();
 const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-const getNodeType = makeGetNodeType();
+const getNodeType = makeGetSubjectType();
 const getNodeIconName = makeGetNodeIconName();
 
 /**
