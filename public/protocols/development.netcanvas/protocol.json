@@ -5,14 +5,14 @@
   "networkCanvasVersion": "~4.0.0",
   "variableRegistry": {
     "node": {
-      "person": {
+      "4aebf73e-95e3-4fd1-95e7-237dcc4a4466": {
         "name": "person",
         "label": "Person",
         "color": "node-color-seq-3",
-        "displayVariable": "nickname",
+        "displayVariable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
         "iconVariant": "add-a-person",
         "variables": {
-          "name": {
+          "6be95f85-c2d9-4daf-9de1-3939418af888": {
             "name": "name",
             "label": "Name",
             "description": "Human readable description",
@@ -23,13 +23,13 @@
               "maxLength": 24
             }
           },
-          "last_name": {
+          "0ff25001-a2b8-46de-82a9-53143aa00d10": {
             "name": "last_name",
             "label": "Last Name",
             "description": "Human readable description",
             "type": "text"
           },
-          "age": {
+          "c5fee926-855d-4419-b5bb-54e89010cea6": {
             "name": "age",
             "label": "Age",
             "description": "Human readable description",
@@ -40,7 +40,7 @@
               "maxValue": 100
             }
           },
-          "nickname": {
+          "0e75ec18-2cb1-4606-9f18-034d28b07c19": {
             "name": "nickname",
             "label": "Nickname",
             "description": "Human readable description",
@@ -51,31 +51,31 @@
               "maxLength": 8
             }
           },
-          "close_friend": {
+          "ae44b6ba-ad49-4ecf-bf38-b65decfce000": {
             "name": "close_friend",
             "label": "Close Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "support_friend": {
+          "94e2dee9-1c25-4b64-b8bb-4946465c3c07": {
             "name": "support_friend",
             "label": "Support Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "advice_friend": {
+          "ec5b462e-a033-4cbc-8b73-82d90938ec82": {
             "name": "advice_friend",
             "label": "Advice Friend",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "has_given_advice": {
+          "03b03617-46ae-41cb-9462-9acd8a17edd6": {
             "name": "has_given_advice",
             "label": "Has given advice?",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "contactFreq": {
+          "1096204b-48fe-444c-b642-4ab211f7f57c": {
             "name": "contactFreq",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
@@ -103,7 +103,7 @@
               }
             ]
           },
-          "discussFreq": {
+          "23c5a7b9-b553-4ff1-b515-6a81999773d2": {
             "name": "discussFreq",
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
@@ -127,41 +127,47 @@
               }
             ]
           },
-          "closenessLayout": {
+          "d13ca72d-aefe-4f48-841d-09f020e0e988": {
             "name": "closenessLayout",
             "label": "Closeness layout",
             "description": "Closeness layout",
             "type": "layout"
           },
-          "talk_friend": {
+          "d2d8091e-8170-42c1-9dc0-c0d54553b3e6": {
             "name": "talk_friend",
             "label": "Talk friend",
             "description": "Talk friend",
             "type": "boolean"
           },
-          "type": {
+          "3435afb0-f0c3-4b8b-9297-314572569acc": {
             "name": "type",
             "label": "Type",
             "description": "Type",
             "type": "text"
           },
-          "special_category": {
+          "b6f2c4b9-e42f-459b-8f59-a11a685f460d": {
             "name": "special_category",
             "label": "Special category",
             "description": "A special category",
             "type": "ordinal",
             "options": [46,56]
+          },
+          "04298634-eb5f-450a-84dd-95d2708e10c1": {
+            "name": "dataSource",
+            "label": "Data source",
+            "description": "Data source",
+            "type": "text"
           }
         }
       },
-      "dummyNodeType": {
+      "c93af3fe-9f84-4e85-acb5-5b15f30788c7": {
         "name": "dummytype",
         "label": "Dummy Type",
         "color": "node-color-seq-6",
-        "displayVariable": "label",
+        "displayVariable": "2377af3f-3c79-41da-9b0b-6570fb519b93",
         "iconVariant": "add-a-person",
         "variables": {
-          "label": {
+          "2377af3f-3c79-41da-9b0b-6570fb519b93": {
             "name": "label",
             "label": "Label",
             "description": "Human readable description",
@@ -172,7 +178,7 @@
               "maxLength": 10
             }
           },
-          "numberVariable": {
+          "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de": {
             "name": "numberVariable",
             "label": "Number Variable",
             "description": "Human readable description",
@@ -183,7 +189,7 @@
               "maxValue": 100
             }
           },
-          "booleanVariable": {
+          "57fefac9-561f-454a-8f78-81bd9470efaa": {
             "name": "booleanVariable",
             "label": "Boolean Variable",
             "description": "Human readable description",
@@ -192,19 +198,19 @@
               "required": true
             }
           },
-          "booleanVariable2": {
+          "d7b5f733-bec1-49be-8c33-f3c772ca0653": {
             "name": "booleanVariable2",
             "label": "Boolean  2",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "checkboxVariable": {
+          "3eaad411-0530-41ca-bb43-9fb6ea846d6e": {
             "name": "checkboxVariable",
             "label": "A Checkbox",
             "description": "Human readable description",
             "type": "boolean"
           },
-          "ordinalVariable": {
+          "583ad529-66c6-4c84-8e31-a31452d6b5e9": {
             "name": "ordinalVariable",
             "label": "Ordinal Variable",
             "description": "Human readable description",
@@ -235,7 +241,7 @@
               "required": true
             }
           },
-          "categoricalVariable": {
+          "e3537457-41a2-4fbf-a1f8-9235b3c1edc6": {
             "name": "categoricalVariable",
             "label": "Categorical Variable",
             "description": "Huam readable description",
@@ -266,7 +272,7 @@
               "minSelected": 1
             }
           },
-          "categoricalVariable2": {
+          "6c647977-f2d1-426f-b0c5-6d44c795c554": {
             "name": "categoricalVariable2",
             "label": "Categorical Variable2",
             "description": "Huam readable description",
@@ -320,14 +326,14 @@
           }
         }
       },
-      "venue": {
+      "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73": {
         "name": "venue",
         "label": "Venue",
-        "displayVariable": "Abbreviated Name",
+        "displayVariable": "1e9ce62c-44c5-484d-9c26-0d20cc7d7238",
         "color": "node-color-seq-4",
         "iconVariant": "add-a-place",
         "variables": {
-          "name": {
+          "66646d68-cd33-407b-a349-56707021df72": {
             "name": "name",
             "label": "Name",
             "description": "Human readable description",
@@ -338,13 +344,13 @@
               "maxLength": 24
             }
           },
-          "location": {
+          "7316d500-6c1e-4188-a531-b2ef587721e0": {
             "name": "location",
             "label": "Location",
             "description": "Human readable description",
             "type": "location"
           },
-          "visitFreq": {
+          "a39a86ef-18c7-4545-8fbc-d0e5894565d0": {
             "name": "visitfreq",
             "label": "Visit frequency ordinal variable.",
             "description": "Visit frequency ordinal variable",
@@ -372,55 +378,55 @@
               }
             ]
           },
-          "primary_venue": {
+          "55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f": {
             "name": "primary_venue",
             "label": "Primary venue",
             "description": "Primary venue",
             "type": "boolean"
           },
-          "Main/Parent Organization": {
+          "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": {
             "name": "parentorg",
             "label": "Main/Parent Organization",
             "description": "Main/Parent Organization",
             "type": "text"
           },
-          "Subsidiary/Program/Project": {
+          "8ee3a187-d4be-458e-8abb-71efcc071949": {
             "name": "subsidiary",
             "label": "Subsidiary/Program/Project",
             "description": "Subsidiary/Program/Project",
             "type": "text"
           },
-          "Abbreviated Name": {
-            "name": "abbrevname",
+          "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": {
+            "name": "Abbreviated Name",
             "label": "Abbreviated Name",
             "description": "Abbreviated Name",
             "type": "text"
           },
-          "Standard Word Abbreviations": {
+          "18fbc928-d027-42de-bc96-ff5c09bf4944": {
             "name": "standardwordabbrev",
             "label": "Standard Word Abbreviations",
             "description": "Standard Word Abbreviations",
             "type": "text"
           },
-          "Geocoded Address": {
+          "67132d2b-c371-4c57-a5eb-6520083f9d22": {
             "name": "addr",
             "label": "Geocoded Address",
             "description": "Geocoded Address",
             "type": "text"
           },
-          "Latitude": {
+          "bdc60147-fe7a-4c3c-a164-e5b370f6a281": {
             "name": "lat",
             "label": "Latitude",
             "description": "Latitude",
             "type": "number"
           },
-          "Longitude": {
+          "931a7b23-e433-4e7e-8e13-48b72e5f0549": {
             "name": "long",
             "label": "Longitude",
             "description": "Longitude",
             "type": "number"
           },
-          "Raw Address": {
+          "0a5f7952-a9a7-4e87-9353-2d17a59284ee": {
             "name": "rawaddr",
             "label": "Raw Address",
             "description": "Raw Address",
@@ -428,12 +434,12 @@
           }
         }
       },
-      "country": {
+      "0e6e7bf5-7fc5-4f31-93f7-4c44e08e3e24": {
         "name": "countryvisited",
         "label": "Country Visited",
-        "displayVariable": "name",
+        "displayVariable": "5a78a3b2-3350-4bec-af39-232dfb622d8c",
         "variables": {
-          "name": {
+          "5a78a3b2-3350-4bec-af39-232dfb622d8c": {
             "name": "name",
             "label": "Name",
             "description": "Name of the country",
@@ -444,7 +450,7 @@
               "maxLength": 24
             }
           },
-          "location": {
+          "17fe50af-aee2-4dca-813e-5e7f47b35035": {
             "name": "location",
             "label": "Location",
             "description": "Human readable description",
@@ -454,12 +460,12 @@
       }
     },
     "edge": {
-      "friend": {
+      "77199445-9d50-4646-b0bc-6d6b0c0e06bd": {
         "name": "friend",
         "label": "Friend",
         "color": "edge-color-seq-4",
         "variables": {
-          "contactFreq": {
+          "9f106a56-528b-498d-8103-a6f7a8c9fa15": {
             "name": "contactfrequency",
             "label": "Contact frequency ordinal variable.",
             "description": "Contact frequency ordinal variable",
@@ -487,14 +493,15 @@
               }
             ]
           },
-          "type": {
+          "f088bfec-e14d-452a-b45a-016eb9e2228d": {
+            "name": "type",
             "label": "Type",
             "description": "Type",
             "type": "text"
           }
         }
       },
-      "professional": {
+      "867127d9-086b-403a-a3e7-2c7d32126546": {
         "name": "professional",
         "label": "Professional",
         "color": "edge-color-seq-2",
@@ -506,57 +513,57 @@
     "previousInterview": {
       "nodes": [
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Anita",
-            "last_name": "Li",
-            "nickname": "Annie",
-            "age": "23"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Anita",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "Li",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Annie",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 23
           }
         },
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Barry",
-            "last_name": "Smith",
-            "nickname": "Baz",
-            "age": "23"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Barry",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "Smith",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Baz",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 23
           }
         },
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Carlito",
-            "last_name": "González",
-            "nickname": "Carl",
-            "age": "23"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Carlito",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "González",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Carl",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 23
           }
         },
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Dee",
-            "last_name": "Zhang",
-            "nickname": "Dee",
-            "age": "23"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Dee",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "Zhang",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Dee",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 23
           }
         },
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Eugine",
-            "last_name": "Müller",
-            "nickname": "Eu",
-            "age": "23"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Eugine",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "Müller",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Eu",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 23
           }
         },
         {
-          "type": "person",
+          "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
           "attributes": {
-            "name": "Eustace",
-            "last_name": "Nguyễn",
-            "nickname": "Eu",
-            "age": "24"
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Eustace",
+            "0ff25001-a2b8-46de-82a9-53143aa00d10": "Nguyễn",
+            "0e75ec18-2cb1-4606-9f18-034d28b07c19": "Eu",
+            "c5fee926-855d-4419-b5bb-54e89010cea6": 24
           }
         }
       ]
@@ -565,236 +572,236 @@
       "nodes": [
         {
           "attributes": {
-            "Main/Parent Organization": "About My Health",
-            "Subsidiary/Program/Project": "",
-            "Abbreviated Name": "About My Health",
-            "name": "About My Health",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "55 E Washington St, Chicago, Illinois, 60602",
-            "Latitude": 41.882945,
-            "Longitude": -87.62572,
-            "Raw Address": "55 E Washington St, Chicago, Illinois 60602, United States"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "About My Health",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "About My Health",
+            "66646d68-cd33-407b-a349-56707021df72": "About My Health",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "55 E Washington St, Chicago, Illinois, 60602",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.882945,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.62572,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "55 E Washington St, Chicago, Illinois 60602, United States"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "Access Anixter Center",
-            "Abbreviated Name": "Access - Anixter",
-            "name": "Access - Anixter",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "2020 N Clybourn Ave, Chicago, Illinois, 60614",
-            "Latitude": 41.91837,
-            "Longitude": -87.660281,
-            "Raw Address": "2020 N Clybourn Ave, Chicago, Illinois 60614, United States"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "Access Anixter Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Anixter",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Anixter",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "2020 N Clybourn Ave, Chicago, Illinois, 60614",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.91837,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.660281,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "2020 N Clybourn Ave, Chicago, Illinois 60614, United States"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Ashland Family Health Center",
-            "Abbreviated Name": "Access - Ashland Family Health Center",
-            "name": "Access - Ashland Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "5159 S Ashland Ave, Chicago, IL 60609",
-            "Latitude": 41.799756,
-            "Longitude": -87.66443,
-            "Raw Address": "5159 S Ashland Ave, Chicago, Illinois, 60609"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Ashland Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Ashland Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Ashland Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "5159 S Ashland Ave, Chicago, IL 60609",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.799756,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.66443,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "5159 S Ashland Ave, Chicago, Illinois, 60609"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Auburn-Gresham Family Health Center",
-            "Abbreviated Name": "Access - Auburn-Gresham Family Health Center",
-            "name": "Access - Auburn-Gresham Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "8234 S Ashland Ave, Chicago, IL 60620",
-            "Latitude": 41.743832,
-            "Longitude": -87.663648,
-            "Raw Address": "8234 S Ashland Ave, Chicago, Illinois, 60620"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Auburn-Gresham Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Auburn-Gresham Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Auburn-Gresham Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "8234 S Ashland Ave, Chicago, IL 60620",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.743832,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.663648,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "8234 S Ashland Ave, Chicago, Illinois, 60620"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Booker Family Health Center",
-            "Abbreviated Name": "Access - Booker Family Health Center",
-            "name": "Access - Booker Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "654 E 47th St, Chicago, IL 60653",
-            "Latitude": 41.809683,
-            "Longitude": -87.609344,
-            "Raw Address": "654 E 47th St, Chicago, Illinois, 60653"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Booker Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Booker Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Booker Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "654 E 47th St, Chicago, IL 60653",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.809683,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.609344,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "654 E 47th St, Chicago, Illinois, 60653"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Brandon Family Health Center",
-            "Abbreviated Name": "Access - Brandon Family Health Center",
-            "name": "Access - Brandon Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "8300 S Brandon Ave, Chicago, IL 60617",
-            "Latitude": 40.74453,
-            "Longitude": -87.547014,
-            "Raw Address": "8300 S Brandon Ave, Chicago, Illinois, 60617"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Brandon Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Brandon Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Brandon Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "8300 S Brandon Ave, Chicago, IL 60617",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 40.74453,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.547014,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "8300 S Brandon Ave, Chicago, Illinois, 60617"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Cabrini Family Health Center",
-            "Abbreviated Name": "Access - Cabrini Family Health Center",
-            "name": "Access - Cabrini Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3450 S Archer Ave, Chicago, IL 60608",
-            "Latitude": 41.831331,
-            "Longitude": -87.676624,
-            "Raw Address": "3450 S Archer Ave, Chicago, Illinois, 60608"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Cabrini Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Cabrini Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Cabrini Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3450 S Archer Ave, Chicago, IL 60608",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.831331,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.676624,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3450 S Archer Ave, Chicago, Illinois, 60608"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Centro Medico",
-            "Abbreviated Name": "Access - Centro Medico",
-            "name": "Access - Centro Medico",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3700 W 26th St, Chicago, IL 60623",
-            "Latitude": 41.844509,
-            "Longitude": -87.717409,
-            "Raw Address": "3700 W 26th St, Chicago, Illinois, 60623"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Centro Medico",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Centro Medico",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3700 W 26th St, Chicago, IL 60623",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.844509,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.717409,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3700 W 26th St, Chicago, Illinois, 60623"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Centro Medico San Rafael",
-            "Abbreviated Name": "Access - Centro Medico San Rafael",
-            "name": "Access - Centro Medico San Rafael",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3204 W 26th St, Chicago, IL 60623",
-            "Latitude": 41.844713,
-            "Longitude": -87.705448,
-            "Raw Address": "3204 W 26th St, Chicago, Illinois, 60623"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico San Rafael",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Centro Medico San Rafael",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Centro Medico San Rafael",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3204 W 26th St, Chicago, IL 60623",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.844713,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.705448,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3204 W 26th St, Chicago, Illinois, 60623"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Doctors Medical Center",
-            "Abbreviated Name": "Access - Doctors Medical Center",
-            "name": "Access - Doctors Medical Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "6240 W 55th St, Chicago, IL 60638",
-            "Latitude": 41.792657,
-            "Longitude": -87.778601,
-            "Raw Address": "6240 W 55th St, Chicago, Illinois, 60638"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Doctors Medical Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Doctors Medical Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Doctors Medical Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "6240 W 55th St, Chicago, IL 60638",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.792657,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.778601,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "6240 W 55th St, Chicago, Illinois, 60638"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Evanston-Rogers Park Family Health Center",
-            "Abbreviated Name": "Access - Evanston-Rogers Park Family Health Center",
-            "name": "Access - Evanston-Rogers Park Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "1555 Howard St, Chicago, IL 60626",
-            "Latitude": 42.019113,
-            "Longitude": -87.670241,
-            "Raw Address": "1555 W Howard St, Chicago, Illinois, 60626"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Evanston-Rogers Park Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Evanston-Rogers Park Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Evanston-Rogers Park Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "1555 Howard St, Chicago, IL 60626",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 42.019113,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.670241,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "1555 W Howard St, Chicago, Illinois, 60626"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS at Gary Comer Youth Center",
-            "Abbreviated Name": "Access - Gary Comer Youth Center",
-            "name": "Access - Gary Comer Youth Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "7200 S Ingleside Ave, Chicago, IL 60619",
-            "Latitude": 41.764069,
-            "Longitude": -87.602436,
-            "Raw Address": "7200 S Ingleside Ave, Chicago, Illinois, 60619"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at Gary Comer Youth Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Gary Comer Youth Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Gary Comer Youth Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "7200 S Ingleside Ave, Chicago, IL 60619",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.764069,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.602436,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "7200 S Ingleside Ave, Chicago, Illinois, 60619"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "Grand Boulevard Health and Specialty Center",
-            "Abbreviated Name": "Access - Grand Boulevard",
-            "name": "Access - Grand Boulevard",
-            "Standard Word Abbreviations": "Blvd",
-            "Geocoded Address": "5401 S Wentworth Ave, Chicago, Illinois, 60609",
-            "Latitude": 41.795962,
-            "Longitude": -87.629572,
-            "Raw Address": "5401 S Wentworth Ave, Chicago, Illinois 60609, United States"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "Grand Boulevard Health and Specialty Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Grand Boulevard",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Grand Boulevard",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "Blvd",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "5401 S Wentworth Ave, Chicago, Illinois, 60609",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.795962,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.629572,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "5401 S Wentworth Ave, Chicago, Illinois 60609, United States"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Humboldt Park Family Health Center",
-            "Abbreviated Name": "Access - Humboldt Park Family Health Center",
-            "name": "Access - Humboldt Park Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3202 W North Ave, Chicago, IL 60647",
-            "Latitude": 41.910444,
-            "Longitude": -87.707085,
-            "Raw Address": "3202 W North Ave, Chicago, Illinois, 60647"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Humboldt Park Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Humboldt Park Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Humboldt Park Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3202 W North Ave, Chicago, IL 60647",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.910444,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.707085,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3202 W North Ave, Chicago, Illinois, 60647"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS at the Illinois Eye Institute",
-            "Abbreviated Name": "Access - Illinois Eye Institute",
-            "name": "Access - Illinois Eye Institute",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3241 S Michigan Ave, Chicago, IL 60616",
-            "Latitude": 41.835265,
-            "Longitude": -87.622279,
-            "Raw Address": "3241 S Michigan Ave, Chicago, Illinois, 60616"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at the Illinois Eye Institute",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Illinois Eye Institute",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Illinois Eye Institute",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3241 S Michigan Ave, Chicago, IL 60616",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.835265,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.622279,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3241 S Michigan Ave, Chicago, Illinois, 60616"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Kedzie Family Health Center",
-            "Abbreviated Name": "Access - Kedzie Family Health Center",
-            "name": "Access - Kedzie Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3213 W 47th Pl, Chicago, IL 60632",
-            "Latitude": 41.806249,
-            "Longitude": -87.704915,
-            "Raw Address": "3213 W 47th Place, Chicago, Illinois, 60632"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Kedzie Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Kedzie Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Kedzie Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3213 W 47th Pl, Chicago, IL 60632",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.806249,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.704915,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3213 W 47th Place, Chicago, Illinois, 60632"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "Servicios Medicos La Villita",
-            "Abbreviated Name": "Access - La Villita",
-            "name": "Access - La Villita",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3303 W 26th St, Chicago, Illinois, 60623",
-            "Latitude": 41.843835,
-            "Longitude": -87.707797,
-            "Raw Address": "3303 W 26th St, Chicago, Illinois 60623, United States"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "Servicios Medicos La Villita",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - La Villita",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - La Villita",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3303 W 26th St, Chicago, Illinois, 60623",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.843835,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.707797,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3303 W 26th St, Chicago, Illinois 60623, United States"
           }
         },
         {
           "attributes": {
-            "Main/Parent Organization": "Access Community Health Network",
-            "Subsidiary/Program/Project": "ACCESS Madison Family Health Center",
-            "Abbreviated Name": "Access - Madison Family Health Center",
-            "name": "Access - Madison Family Health Center",
-            "Standard Word Abbreviations": "",
-            "Geocoded Address": "3800 W Madison St, Chicago, IL 60624",
-            "Latitude": 41.881126,
-            "Longitude": -87.721142,
-            "Raw Address": "3800 W Madison Ave, Chicago, Illinois, 60624"
+            "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+            "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Madison Family Health Center",
+            "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Madison Family Health Center",
+            "66646d68-cd33-407b-a349-56707021df72": "Access - Madison Family Health Center",
+            "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+            "67132d2b-c371-4c57-a5eb-6520083f9d22": "3800 W Madison St, Chicago, IL 60624",
+            "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.881126,
+            "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.721142,
+            "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3800 W Madison Ave, Chicago, Illinois, 60624"
           }
         }
       ]
@@ -804,66 +811,66 @@
     "person": {
       "title": "Add A Person",
       "entity": "node",
-      "type": "person",
+      "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
       "optionToAddAnother": true,
       "fields": [
         {
-          "variable": "name",
+          "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
           "component": "Text",
           "label": "What is this person's name?"
         },
         {
-          "variable": "nickname",
+          "variable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
           "component": "Text"
         },
         {
-          "variable": "age",
+          "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
           "component": "Text"
         },
         {
-          "variable": "timeCreated",
+          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
-          "value": "return Date.now().toString();"
+          "value": "network-canvas"
         }
       ]
     },
     "allInputsForm": {
       "title": "Test for form input controls",
       "entity": "node",
-      "type": "dummyNodeType",
+      "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7",
       "optionToAddAnother": true,
       "fields": [
         {
-          "variable": "label",
+          "variable": "2377af3f-3c79-41da-9b0b-6570fb519b93",
           "component": "Text",
           "label": "What is this person's name?"
         },
         {
-          "variable": "numberVariable",
+          "variable": "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
           "component": "Text",
           "label": "What is this person's age?"
         },
         {
-          "variable": "ordinalVariable",
+          "variable": "583ad529-66c6-4c84-8e31-a31452d6b5e9",
           "component": "RadioGroup",
           "label": "How much do you like likert scales?"
         },
         {
-          "variable": "checkboxVariable",
+          "variable": "3eaad411-0530-41ca-bb43-9fb6ea846d6e",
           "component": "Checkbox"
         },
         {
-          "variable": "categoricalVariable",
+          "variable": "e3537457-41a2-4fbf-a1f8-9235b3c1edc6",
           "component": "CheckboxGroup",
           "label": "Which of these things do you like?"
         },
         {
-          "variable": "categoricalVariable2",
+          "variable": "6c647977-f2d1-426f-b0c5-6d44c795c554",
           "component": "ToggleButtonGroup",
           "label": "Which of these other things do you like?"
         },
         {
-          "variable": "booleanVariable",
+          "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
           "component": "Toggle",
           "label": "Is the switch below not turned on?"
         }
@@ -872,24 +879,24 @@
     "myCustomForm": {
       "title": "Add A Person",
       "entity": "node",
-      "type": "person",
+      "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
       "fields": [
         {
-          "variable": "name",
+          "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
           "component": "Text"
         },
         {
-          "variable": "nickname",
+          "variable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
           "component": "Text"
         },
         {
-          "variable": "age",
+          "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
           "component": "Text"
         },
         {
-          "variable": "timeCreated",
+          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
-          "value": "return Date.now().toString();"
+          "value": "network-canvas"
         }
       ]
     }
@@ -902,7 +909,7 @@
       "form": "person",
       "subject": {
         "entity": "node",
-        "type": "person"
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
       },
       "panels": [
         {
@@ -921,8 +928,8 @@
                 "type": "alter",
                 "id": "15218241538622",
                 "options": {
-                  "type": "person",
-                  "attribute": "name",
+                  "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                  "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                   "operator": "EXACTLY",
                   "value": "Dee"
                 }
@@ -931,7 +938,8 @@
                 "type": "ego",
                 "id": "15218241553253",
                 "options": {
-                  "attribute": "name",
+                  "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                  "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                   "operator": "EXACTLY",
                   "value": "Bob"
                 }
@@ -940,9 +948,9 @@
                 "type": "edge",
                 "id": "15218241565624",
                 "options": {
-                  "type": "friend",
+                  "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
                   "operator": "EXISTS",
-                  "attribute": "contactFreq"
+                  "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
                 }
               }
             ]
@@ -954,22 +962,22 @@
           "id": "6cl",
           "text": "Who would _you_ consider to be a **close friend**?",
           "additionalAttributes": {
-            "special_category": 46,
-            "close_friend": true
+            "b6f2c4b9-e42f-459b-8f59-a11a685f460d": 46,
+            "ae44b6ba-ad49-4ecf-bf38-b65decfce000": true
           }
         },
         {
           "id": "6su",
           "text": "This is a particularly long prompt, which will be discuraged in the Architect interface but might still be desired by a researcher. What does this look like rendered?",
           "additionalAttributes": {
-            "support_friend": true
+            "94e2dee9-1c25-4b64-b8bb-4946465c3c07": true
           }
         },
         {
           "id": "2we",
           "text": "Within the past 2 weeks, who has provided advice?",
           "additionalAttributes": {
-            "advice_friend": true
+            "ec5b462e-a033-4cbc-8b73-82d90938ec82": true
           }
         }
       ]
@@ -980,26 +988,26 @@
       "label": "Contact Freq.",
       "subject": {
         "entity": "node",
-        "type": "person"
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
       },
       "prompts": [
         {
           "id": "contactFreq",
           "text": "Contact frequency ordinal variable",
-          "variable": "contactFreq",
+          "variable": "1096204b-48fe-444c-b642-4ab211f7f57c",
           "bucketSortOrder": [
             {
-              "property": "nickname",
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
               "direction": "desc"
             }
           ],
           "binSortOrder": [
             {
-              "property": "nickname",
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
               "direction": "desc"
             },
             {
-              "property": "age",
+              "property": "c5fee926-855d-4419-b5bb-54e89010cea6",
               "direction": "desc"
             }
           ]
@@ -1007,7 +1015,7 @@
         {
           "id": "discussFreq",
           "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the color override to style these bins differently than the main prompt.",
-          "variable": "discussFreq",
+          "variable": "23c5a7b9-b553-4ff1-b515-6a81999773d2",
           "color": "ord-color-seq-2"
         }
       ]
@@ -1018,13 +1026,13 @@
       "label": "Contact Freq.",
       "subject": {
         "entity": "node",
-        "type": "venue"
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
       },
       "prompts": [
         {
           "id": "visitFreq",
           "text": "Showing an ordinalbin interface with a node type other than person.",
-          "variable": "visitFreq",
+          "variable": "a39a86ef-18c7-4545-8fbc-d0e5894565d0",
           "color": "ord-color-seq-4"
         }
       ]
@@ -1039,39 +1047,39 @@
           "id": "7tk",
           "text": "Which classmates would you talk to outside of class?",
           "additionalAttributes": {
-            "talk_friend": true
+            "d2d8091e-8170-42c1-9dc0-c0d54553b3e6": true
           },
           "dataSource": "previousInterview",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "cardOptions": {
-            "displayLabel": "nickname",
+            "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
             "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name"
+                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
               },
               {
                 "label": "Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           },
           "sortOptions": {
             "sortOrder": [{
-              "property": "name",
+              "property": "6be95f85-c2d9-4daf-9de1-3939418af888",
               "direction": "asc"
             }],
             "sortableProperties": [
               {
                 "label": "Pupil Name",
-                "variable": "name"
+                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
               },
               {
                 "label": "Pupil Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           }
@@ -1080,40 +1088,40 @@
           "id": "7cl",
           "text": "Which classmates would you also think of as friends?",
           "additionalAttributes": {
-            "special_category": 56,
-            "close_friend": true
+            "b6f2c4b9-e42f-459b-8f59-a11a685f460d": 56,
+            "ae44b6ba-ad49-4ecf-bf38-b65decfce000": true
           },
           "dataSource": "previousInterview",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "cardOptions": {
-            "displayLabel": "nickname",
+            "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
             "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name"
+                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
               },
               {
                 "label": "Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           },
           "sortOptions": {
             "sortOrder": [{
-              "property": "age",
+              "property": "c5fee926-855d-4419-b5bb-54e89010cea6",
               "direction": "desc"
             }],
             "sortableProperties": [
               {
                 "label": "Nickname",
-                "variable": "nickname"
+                "variable": "0e75ec18-2cb1-4606-9f18-034d28b07c19"
               },
               {
                 "label": "Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           }
@@ -1126,7 +1134,7 @@
       "label": "NG Country",
       "subject": {
         "entity": "node",
-        "type": "country"
+        "type": "0e6e7bf5-7fc5-4f31-93f7-4c44e08e3e24"
       },
       "prompts": [
         {
@@ -1142,7 +1150,7 @@
       "form": "allInputsForm",
       "subject": {
         "entity": "node",
-        "type": "dummyNodeType"
+        "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7"
       },
       "prompts": [
         {
@@ -1162,23 +1170,23 @@
             "This prompt uses a background image containing quadrants.",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
             "allowPositioning": true
           },
           "edges": {
-            "display": ["friend", "professional"],
-            "create": "friend"
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
+            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
           },
           "highlight": {
-            "variable": "has_given_advice",
+            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
             "allowHighlighting": true
           },
           "sortOrder": [
             {
-              "property": "nickname",
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
               "direction": "desc"
             }
           ],
@@ -1194,23 +1202,23 @@
             "This is a prompt showing no background.",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
             "allowPositioning": true
           },
           "edges": {
-            "display": ["friend", "professional"],
-            "create": "friend"
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
+            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
           },
           "highlight": {
-            "variable": "has_given_advice",
+            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
             "allowHighlighting": true
           },
           "sortOrder": [
             {
-              "property": "nickname",
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
               "direction": "desc"
             }
           ],
@@ -1225,23 +1233,23 @@
             "This prompt shows 3 concentric circles",
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "layout": {
-            "layoutVariable": "closenessLayout",
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
             "allowPositioning": true
           },
           "edges": {
-            "display": ["friend", "professional"],
-            "create": "friend"
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
+            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
           },
           "highlight": {
-            "variable": "has_given_advice",
+            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
             "allowHighlighting": true
           },
           "sortOrder": [
             {
-              "property": "nickname",
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
               "direction": "desc"
             }
           ],
@@ -1261,92 +1269,92 @@
           "id": "7cl1",
           "text": "Which classmates would you also think of as friends?",
           "additionalAttributes": {
-            "special_category": 46,
-            "close_friend": true
+            "b6f2c4b9-e42f-459b-8f59-a11a685f460d": 46,
+            "ae44b6ba-ad49-4ecf-bf38-b65decfce000": true
           },
           "dataSource": "previousInterview",
           "cardOptions": {
-            "displayLabel": "nickname",
+            "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
             "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name"
+                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
               },
               {
                 "label": "Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           },
           "searchOptions": {
             "fuzziness": 0.4,
-            "matchProperties": ["nickname", "name"]
+            "matchProperties": ["0e75ec18-2cb1-4606-9f18-034d28b07c19", "6be95f85-c2d9-4daf-9de1-3939418af888", "0ff25001-a2b8-46de-82a9-53143aa00d10"]
           },
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           }
         },
         {
           "id": "7cl2",
           "text": "Within the past 6 months, who has been supportive?",
           "additionalAttributes": {
-            "support_friend": true
+            "94e2dee9-1c25-4b64-b8bb-4946465c3c07": true
           },
           "dataSource": "previousInterview",
           "cardOptions": {
-            "displayLabel": "nickname",
+            "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
             "additionalProperties": [
               {
                 "label": "Name",
-                "variable": "name"
+                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
               },
               {
                 "label": "Age",
-                "variable": "age"
+                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
               }
             ]
           },
           "searchOptions": {
             "fuzziness": 0.4,
-            "matchProperties": ["nickname", "name"]
+            "matchProperties": ["0e75ec18-2cb1-4606-9f18-034d28b07c19", "6be95f85-c2d9-4daf-9de1-3939418af888", "0ff25001-a2b8-46de-82a9-53143aa00d10"]
           },
           "subject": {
             "entity": "node",
-            "type": "person"
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           }
         },
         {
           "id": "7su",
           "text": "Which of these venues have you visited in the previous 6 months?",
           "additionalAttributes": {
-            "primary_venue": true
+            "55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f": true
           },
           "dataSource": "HIVServices",
           "cardOptions": {
-            "displayLabel": "Abbreviated Name",
+            "displayLabel": "1e9ce62c-44c5-484d-9c26-0d20cc7d7238",
             "additionalProperties": [
               {
                 "label": "Address",
-                "variable": "Geocoded Address"
+                "variable": "67132d2b-c371-4c57-a5eb-6520083f9d22"
               },
               {
                 "label": "Subsidiary/Program/Project",
-                "variable": "Subsidiary/Program/Project"
+                "variable": "8ee3a187-d4be-458e-8abb-71efcc071949"
               }
             ]
           },
           "searchOptions": {
             "fuzziness": 0.5,
             "matchProperties": [
-              "Abbreviated Name",
-              "Subsidiary/Program/Project",
-              "Geocoded Address"
+              "1e9ce62c-44c5-484d-9c26-0d20cc7d7238",
+              "8ee3a187-d4be-458e-8abb-71efcc071949",
+              "67132d2b-c371-4c57-a5eb-6520083f9d22"
             ]
           },
           "subject": {
             "entity": "node",
-            "type": "venue"
+            "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
           }
         }
       ]
@@ -1440,8 +1448,8 @@
               "type": "alter",
               "id": "15218241538622",
               "options": {
-                "type": "person",
-                "attribute": "name",
+                "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                 "operator": "EXACTLY",
                 "value": "Dee"
               }
@@ -1450,7 +1458,8 @@
               "type": "ego",
               "id": "15218241553253",
               "options": {
-                "attribute": "name",
+                "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                 "operator": "EXACTLY",
                 "value": "Bob"
               }
@@ -1459,9 +1468,9 @@
               "type": "edge",
               "id": "15218241565624",
               "options": {
-                "type": "friend",
+                "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
                 "operator": "EXISTS",
-                "attribute": "contactFreq"
+                "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
               }
             }
           ]

@@ -12,6 +12,7 @@ import {
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
+import { FormComponent } from '../protocol-consts';
 
 /*
   * Returns the named field compontent, if no matching one is found
@@ -20,13 +21,13 @@ import validations from '../utils/Validations';
   */
 
 const fieldTypes = {
-  Checkbox,
-  CheckboxGroup,
-  RadioGroup,
-  Text,
-  Toggle,
-  ToggleButtonGroup,
-  hidden: props => <input {...props} type="hidden" />,
+  [FormComponent.Checkbox]: Checkbox,
+  [FormComponent.CheckboxGroup]: CheckboxGroup,
+  [FormComponent.RadioGroup]: RadioGroup,
+  [FormComponent.Text]: Text,
+  [FormComponent.Toggle]: Toggle,
+  [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
+  [FormComponent.hidden]: props => <input {...props} type="hidden" />,
 };
 
 export const getInputComponent = componentType =>
