@@ -33,7 +33,7 @@ ShallowWrapper {
         onClick={[Function]}
         style={
           Object {
-            "borderColor": "black",
+            "--categorical-item-color": "black",
           }
         }
       >
@@ -82,7 +82,7 @@ ShallowWrapper {
         "className": "categorical-item",
         "onClick": [Function],
         "style": Object {
-          "borderColor": "black",
+          "--categorical-item-color": "black",
         },
       },
       "ref": null,
@@ -167,7 +167,7 @@ ShallowWrapper {
           onClick={[Function]}
           style={
             Object {
-              "borderColor": "black",
+              "--categorical-item-color": "black",
             }
           }
         >
@@ -216,7 +216,7 @@ ShallowWrapper {
           "className": "categorical-item",
           "onClick": [Function],
           "style": Object {
-            "borderColor": "black",
+            "--categorical-item-color": "black",
           },
         },
         "ref": null,

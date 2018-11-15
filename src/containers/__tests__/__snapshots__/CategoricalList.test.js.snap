@@ -65,7 +65,7 @@ ShallowWrapper {
           }
         >
           <withState(withProps(DropTarget))
-            accentColor={null}
+            accentColor={undefined}
             details={[Function]}
             id="CATBIN_ITEM_1_1_0"
             isExpanded={false}
@@ -118,7 +118,7 @@ ShallowWrapper {
           }
         >
           <withState(withProps(DropTarget))
-            accentColor={null}
+            accentColor={undefined}
             details={[Function]}
             id="CATBIN_ITEM_1_1_0"
             isExpanded={false}
@@ -162,7 +162,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <withState(withProps(DropTarget))
-              accentColor={null}
+              accentColor={undefined}
               details={[Function]}
               id="CATBIN_ITEM_1_1_0"
               isExpanded={false}
@@ -207,7 +207,7 @@ ShallowWrapper {
             "key": "0",
             "nodeType": "class",
             "props": Object {
-              "accentColor": null,
+              "accentColor": undefined,
               "details": [Function],
               "id": "CATBIN_ITEM_1_1_0",
               "isExpanded": false,
@@ -274,7 +274,7 @@ ShallowWrapper {
             }
           >
             <withState(withProps(DropTarget))
-              accentColor={null}
+              accentColor={undefined}
               details={[Function]}
               id="CATBIN_ITEM_1_1_0"
               isExpanded={false}
@@ -327,7 +327,7 @@ ShallowWrapper {
             }
           >
             <withState(withProps(DropTarget))
-              accentColor={null}
+              accentColor={undefined}
               details={[Function]}
               id="CATBIN_ITEM_1_1_0"
               isExpanded={false}
@@ -371,7 +371,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <withState(withProps(DropTarget))
-                accentColor={null}
+                accentColor={undefined}
                 details={[Function]}
                 id="CATBIN_ITEM_1_1_0"
                 isExpanded={false}
@@ -416,7 +416,7 @@ ShallowWrapper {
               "key": "0",
               "nodeType": "class",
               "props": Object {
-                "accentColor": null,
+                "accentColor": undefined,
                 "details": [Function],
                 "id": "CATBIN_ITEM_1_1_0",
                 "isExpanded": false,

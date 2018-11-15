@@ -26,7 +26,7 @@ const colorPresets = [
 ];
 
 const getCatColor = (itemNumber) => {
-  if (itemNumber > 0) { return colorPresets[itemNumber % colorPresets.length]; }
+  if (itemNumber >= 0) { return colorPresets[itemNumber % colorPresets.length]; }
   return null;
 };
 
@@ -68,7 +68,7 @@ class CategoricalList extends Component {
       } else if (bin.nodes.length > 0) {
         return `${bin.nodes.length} node${bin.nodes.length > 1 ? 's' : ''}`;
       }
-      return 'empty';
+      return '';
     };
 
     return (

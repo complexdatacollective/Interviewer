@@ -31,7 +31,7 @@ const CategoricalItem = ({
 
   return (
     <Flipped flipId={id}>
-      <div className={classNames} style={{ borderColor: accentColor }} onClick={onClick} >
+      <div className={classNames} style={{ '--categorical-item-color': accentColor }} onClick={onClick} >
         <Flipped inverseFlipId={id} scale>
           <div className="categorical-item__title">
             <h3>{label}</h3>
