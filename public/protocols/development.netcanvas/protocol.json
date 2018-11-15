@@ -127,6 +127,66 @@
               }
             ]
           },
+          "e343a91f-628d-4175-870c-957beffa0152": {
+            "name": "catvar2",
+            "label": "catvar2",
+            "description": "Categorical var with 2 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0153": {
+            "name": "catvar3",
+            "label": "catvar3",
+            "description": "Categorical var with 3 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0154": {
+            "name": "catvar4",
+            "label": "catvar4",
+            "description": "Categorical var with 4 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              },
+              {
+                "label": "Four",
+                "value": "four"
+              }
+            ]
+          },
           "e343a91f-628d-4175-870c-957beffa0151": {
             "name": "contactType",
             "label": "Contact type categorical variable.",
@@ -1436,6 +1496,21 @@
         "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
       },
       "prompts": [
+        {
+          "id": "cat2",
+          "text": "Two",
+          "variable": "e343a91f-628d-4175-870c-957beffa0152"
+        },
+        {
+          "id": "cat3",
+          "text": "Three",
+          "variable": "e343a91f-628d-4175-870c-957beffa0153"
+        },
+        {
+          "id": "cat4",
+          "text": "Four",
+          "variable": "e343a91f-628d-4175-870c-957beffa0154"
+        },
         {
           "id": "contactType",
           "text": "What is the most frequent type of contact you have?",
