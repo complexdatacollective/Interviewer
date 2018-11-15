@@ -6,7 +6,7 @@ import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
 import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/interface';
 import { getNodeLabelWorkerUrl, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/protocol';
-import { asWorkerAgentNode } from '../ducks/modules/network';
+import { asWorkerAgentNode } from '../utils/networkFormat';
 
 /**
   * Renders a Node.

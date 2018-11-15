@@ -12,6 +12,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { getNetwork } from '../../selectors/interface';
 import { getCurrentSession } from '../../selectors/session';
 import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { asExportableNetwork } from '../../utils/networkFormat';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -75,8 +76,8 @@ class FinishSession extends Component {
   }
 
   export(currentSession) {
-    const { remoteProtocolId, sessionId } = this.props;
-    const sessionData = currentSession.network;
+    const { remoteProtocolId, sessionId, variableRegistry } = this.props;
+    const sessionData = asExportableNetwork(currentSession.network, variableRegistry);
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 

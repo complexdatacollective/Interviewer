@@ -215,6 +215,7 @@ const sessionExportFailed = error => ({
   error,
 });
 
+// sessionData should already be in an exportable format (e.g., IDs transposed to names)
 const exportSession = (remoteProtocolId, sessionUuid, sessionData) => ({
   type: EXPORT_SESSION,
   remoteProtocolId,
