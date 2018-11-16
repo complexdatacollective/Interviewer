@@ -86,7 +86,7 @@ export const makeGetNodeIconName = () => createSelector(
   makeGetSubjectType(),
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant;
+    return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant) || 'add-a-person';
   },
 );
 

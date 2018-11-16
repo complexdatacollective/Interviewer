@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from '../ui/components/';
 
 class StageErrorBoundary extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class StageErrorBoundary extends Component {
     if (error) {
       return (
         <div className="error-boundary">
-          <h1>This stage failed to load</h1>
+          <p><Icon name="error" /></p>
+          <h1>There was a problem with this stage.</h1>
           <p>The following error occurred: <code>{error.message}</code></p>
         </div>
       );

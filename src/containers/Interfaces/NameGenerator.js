@@ -6,9 +6,10 @@ import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { makeGetPromptNodeAttributes, makeGetNodeIconName } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
+import { Icon } from '../../ui/components';
 
 /**
   * Name Generator Interface
@@ -83,6 +84,7 @@ class NameGenerator extends Component {
   render() {
     const {
       nodesForPrompt,
+      nodeIconName,
       prompt,
       promptBackward,
       promptForward,
@@ -122,9 +124,11 @@ class NameGenerator extends Component {
         </div>
 
         { form &&
-          <button className="name-generator-interface__add-person" onClick={this.handleClickAddNode}>
-            Add a person
-          </button>
+          <Icon
+            name={nodeIconName}
+            onClick={this.handleClickAddNode}
+            className="name-generator-interface__add-node"
+          />
         }
         { form &&
           <NodeForm
@@ -155,6 +159,7 @@ NameGenerator.propTypes = {
   form: PropTypes.object,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
+  nodeIconName: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -165,12 +170,14 @@ NameGenerator.propTypes = {
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
   const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+  const getNodeIconName = makeGetNodeIconName();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
+      nodeIconName: getNodeIconName(state, props),
     };
   };
 }

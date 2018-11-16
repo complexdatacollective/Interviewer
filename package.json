@@ -174,14 +174,16 @@
   "main": "www/electron-starter.js",
   "build": {
     "extends": null,
-    "extraResources": ["./build-resources/externals/**"],
+    "extraResources": [
+      "./build-resources/externals/**"
+    ],
     "appId": "Network-Canvas",
     "directories": {
       "buildResources": "build-resources",
       "output": "release-builds"
     },
     "nsis": {
-      "include" : "build-resources/scripts/bonjour.nsh" 
+      "include": "build-resources/scripts/bonjour.nsh"
     },
     "mac": {
       "category": "public.app-category.education"

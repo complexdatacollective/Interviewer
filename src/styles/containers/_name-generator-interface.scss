@@ -34,9 +34,10 @@
     display: flex;
   }
 
-  &__add-person {
-    @include svg-button('../images/add-a-person.svg');
-    @include floating-action-button;
+  &__add-node {
+    &.icon {
+      @include floating-action-button;
+    }
   }
 
   &__node-bin {
