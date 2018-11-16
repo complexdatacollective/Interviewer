@@ -67,7 +67,7 @@ CategoricalItem.propTypes = {
 
 CategoricalItem.defaultProps = {
   accentColor: 'black',
-  details: 'empty',
+  details: '',
   isExpanded: false,
   isOver: false,
   label: 'undefined',
