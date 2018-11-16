@@ -36,9 +36,14 @@ const getCatColor = (itemNumber) => {
 class CategoricalList extends Component {
   constructor(props) {
     super(props);
+    this.categoricalComponent = React.createRef();
     this.state = {
       expandedBinValue: '',
     };
+  }
+
+  getAvailableHeight() {
+    return this.categoricalComponent.current ? this.categoricalComponent.current.offsetHeight : 0;
   }
 
   expandBin = (e, binValue) => {
@@ -94,16 +99,28 @@ class CategoricalList extends Component {
     );
 
     return (
-      <div className="categorical-list" onClick={e => this.expandBin(e, '', '')}>
-        <Flipper flipKey={this.state.expandedBinValue}>
+      <Flipper flipKey={this.state.expandedBinValue} className="categorical-list">
+        <div
+          className="categorical-list__inner"
+          onClick={e => this.expandBin(e, '', '')}
+          ref={this.categoricalComponent}
+          style={{ '--categorical-available-height': `${Math.floor(this.getAvailableHeight())}px` }}
+        >
+          <div className="categorical-list__expanded-bin">
+            {this.props.bins.map(this.renderCategoricalBin).filter((bin, index) =>
+              this.props.bins[index].value === this.state.expandedBinValue,
+            )}
+          </div>
           <div
             className={classNames}
             style={{ '--num-categorical-items': this.props.bins.length }}
           >
-            {this.props.bins.map(this.renderCategoricalBin)}
+            {this.props.bins.map(this.renderCategoricalBin).filter((bin, index) =>
+              this.props.bins[index].value !== this.state.expandedBinValue,
+            )}
           </div>
-        </Flipper>
-      </div>
+        </div>
+      </Flipper>
     );
   }
 }

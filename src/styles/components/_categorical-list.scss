@@ -1,15 +1,16 @@
-@function getColumns($num, $row) {
-  @return $num / $row;
-}
-
-@function getExpandedColumns($num, $row) {
-  @return $num / $row;
-}
-
 .categorical-list {
   display: flex;
   height: 100%;
   justify-content: center;
+
+  &__inner {
+    display: flex;
+
+    @media screen and (max-aspect-ratio: 1 / 1) {
+      flex-direction: column;
+      place-items: center;
+    }
+  }
 
   &__content {
     --categorical-available-height: calc(100vh - var(--categorical-bucket-basis) -
@@ -19,35 +20,37 @@
     --num-categorical-rows: 2;
 
     align-self: center;
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fill, calc(var(--categorical-available-height) / var(--num-categorical-rows)));
-    grid-template-rows: repeat(var(--num-categorical-rows), 1fr);
-    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     overflow: hidden;
-    width: calc((var(--categorical-available-height) / var(--num-categorical-rows)) * ((var(--num-categorical-items) + (var(--num-categorical-rows) - 1)) / var(--num-categorical-rows)));
 
     &--expanded {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       --num-categorical-rows: 3;
-      --categorical-expanded-span: 3;
-      width: calc((var(--categorical-available-height) / var(--num-categorical-rows)) * (((var(--num-categorical-items) + (var(--num-categorical-rows) - 1)) / var(--num-categorical-rows)) + var(--categorical-expanded-span)));
     }
 
     @media screen and (max-aspect-ratio: 7 / 5) {
-      --num-categorical-rows: 3;
-
       &--expanded {
-        --categorical-expanded-span: 2;
+        --num-categorical-rows: 4;
       }
     }
 
-    @media screen and (max-aspect-ratio: 11 / 13) {
+    @media screen and (max-aspect-ratio: 4 / 3) {
+      --num-categorical-rows: 2;
+
+      &--expanded {
+        --num-categorical-rows: 4;
+      }
+    }
+
+    @media screen and (max-aspect-ratio: 1 / 1) {
       --num-categorical-rows: 4;
 
       &--expanded {
         --num-categorical-rows: 5;
-        --categorical-expanded-span: 2;
       }
     }
 
@@ -56,8 +59,11 @@
 
       &--expanded {
         --num-categorical-rows: 2;
-        --categorical-expanded-span: 2;
       }
     }
+  }
+
+  &__expanded-bin {
+    display: flex;
   }
 }
