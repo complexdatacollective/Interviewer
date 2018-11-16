@@ -16,10 +16,12 @@ const mockValue = (nodeVariable) => {
     case 'number':
       return faker.random.number({ min: 20, max: 100 });
     case 'ordinal':
-      return faker.random.arrayElement(nodeVariable.options);
+    case 'categorical':
+      return faker.random.arrayElement(nodeVariable.options).value;
     case 'layout':
       return { x: mockCoord(), y: mockCoord() };
-    default: return faker.random.word();
+    default:
+      return faker.random.word();
   }
 };
 
