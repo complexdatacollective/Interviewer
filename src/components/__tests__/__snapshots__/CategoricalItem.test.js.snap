@@ -5,7 +5,7 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CategoricalItem
     accentColor="black"
-    details="empty"
+    details=""
     isExpanded={false}
     isOver={false}
     label="undefined"
@@ -47,7 +47,7 @@ ShallowWrapper {
               undefined
             </h3>
             <h5>
-              empty
+              
             </h5>
           </div>
         </FlippedWithContext>
@@ -72,7 +72,7 @@ ShallowWrapper {
                 undefined
               </h3>
               <h5>
-                empty
+                
               </h5>
             </div>
           </FlippedWithContext>,
@@ -98,7 +98,7 @@ ShallowWrapper {
                 undefined
               </h3>
               <h5>
-                empty
+                
               </h5>
             </div>,
             "inverseFlipId": undefined,
@@ -115,7 +115,7 @@ ShallowWrapper {
                   undefined
                 </h3>,
                 <h5>
-                  empty
+                  
                 </h5>,
               ],
               "className": "categorical-item__title",
@@ -138,10 +138,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "empty",
+                  "children": "",
                 },
                 "ref": null,
-                "rendered": "empty",
+                "rendered": "",
                 "type": "h5",
               },
             ],
@@ -181,7 +181,7 @@ ShallowWrapper {
                 undefined
               </h3>
               <h5>
-                empty
+                
               </h5>
             </div>
           </FlippedWithContext>
@@ -206,7 +206,7 @@ ShallowWrapper {
                   undefined
                 </h3>
                 <h5>
-                  empty
+                  
                 </h5>
               </div>
             </FlippedWithContext>,
@@ -232,7 +232,7 @@ ShallowWrapper {
                   undefined
                 </h3>
                 <h5>
-                  empty
+                  
                 </h5>
               </div>,
               "inverseFlipId": undefined,
@@ -249,7 +249,7 @@ ShallowWrapper {
                     undefined
                   </h3>,
                   <h5>
-                    empty
+                    
                   </h5>,
                 ],
                 "className": "categorical-item__title",
@@ -272,10 +272,10 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": "empty",
+                    "children": "",
                   },
                   "ref": null,
-                  "rendered": "empty",
+                  "rendered": "",
                   "type": "h5",
                 },
               ],
