@@ -19,7 +19,6 @@ const CategoricalItem = ({
   label,
   nodes,
   onClick,
-  recentNode,
   sortOrder,
   willAccept,
 }) => {
@@ -35,7 +34,7 @@ const CategoricalItem = ({
         <Flipped inverseFlipId={id} scale>
           <div className="categorical-item__title">
             <h3>{label}</h3>
-            {!isExpanded && <h5>{details(recentNode)}</h5>}
+            {!isExpanded && <h5>{details}</h5>}
           </div>
         </Flipped>
         {isExpanded &&
@@ -55,27 +54,25 @@ const CategoricalItem = ({
 
 CategoricalItem.propTypes = {
   accentColor: PropTypes.string,
-  details: PropTypes.func,
+  details: PropTypes.string,
   id: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool,
   isOver: PropTypes.bool,
   label: PropTypes.string,
   nodes: PropTypes.array,
   onClick: PropTypes.func,
-  recentNode: PropTypes.object,
   sortOrder: PropTypes.array,
   willAccept: PropTypes.bool,
 };
 
 CategoricalItem.defaultProps = {
   accentColor: 'black',
-  details: () => 'empty',
+  details: 'empty',
   isExpanded: false,
   isOver: false,
   label: 'undefined',
   nodes: [],
   onClick: () => {},
-  recentNode: {},
   sortOrder: [],
   willAccept: false,
 };

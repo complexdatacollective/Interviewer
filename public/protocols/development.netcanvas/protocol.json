@@ -8,7 +8,6 @@
       "4aebf73e-95e3-4fd1-95e7-237dcc4a4466": {
         "name": "person",
         "label": "Person",
-        "color": "node-color-seq-3",
         "displayVariable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
         "iconVariant": "add-a-person",
         "variables": {

@@ -46,6 +46,22 @@ class CategoricalList extends Component {
     return this.categoricalComponent.current ? this.categoricalComponent.current.offsetHeight : 0;
   }
 
+  getDetails = (nodes) => {
+    if (nodes.length === 0) {
+      return '';
+    }
+
+    // todo: the following should be updated to reflect the sort order of the bins
+    const name = nodes[0][nodeAttributesProperty] && this.props.displayVariable &&
+      nodes[0][nodeAttributesProperty][this.props.displayVariable];
+
+    if (nodes.length > 0) {
+      return `${name}${nodes.length > 1 ? ` and ${nodes.length - 1} other${nodes.length > 2 ? 's' : ''}` : ''}`;
+    }
+
+    return '';
+  };
+
   expandBin = (e, binValue) => {
     if (e) e.stopPropagation();
     this.setState({
@@ -63,18 +79,7 @@ class CategoricalList extends Component {
         { [this.props.activePromptVariable]: bin.value });
     };
 
-    const getDetails = (node) => {
-      const name = node[nodeAttributesProperty] && this.props.displayVariable &&
-        node[nodeAttributesProperty][this.props.displayVariable];
-      if (name) {
-        if (bin.nodes.length > 0) {
-          return `${name}${bin.nodes.length > 1 ? ` and ${bin.nodes.length - 1} other${bin.nodes.length > 2 ? 's' : ''}` : ''}`;
-        }
-      } else if (bin.nodes.length > 0) {
-        return `${bin.nodes.length} node${bin.nodes.length > 1 ? 's' : ''}`;
-      }
-      return '';
-    };
+    const binDetails = this.getDetails(bin.nodes);
 
     return (
       <CategoricalItem
@@ -84,7 +89,7 @@ class CategoricalList extends Component {
         accentColor={getCatColor(index)}
         onDrop={item => onDrop(item)}
         onClick={e => this.expandBin(e, bin.value)}
-        details={name => getDetails(name)}
+        details={binDetails}
         isExpanded={this.state.expandedBinValue === bin.value}
         nodes={bin.nodes}
         sortOrder={this.props.prompt.binSortOrder}

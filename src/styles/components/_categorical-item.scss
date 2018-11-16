@@ -1,15 +1,16 @@
 .categorical-item {
-  --categorical-item-margin: 1rem;
+  --categorical-item-margin: .5rem;
   --categorical-item-color: var(--primary);
+  --categorical-item-size: calc(.8 * var(--categorical-available-height) / var(--num-categorical-rows));
   @include transition-properties((background-color width height margin), var(--animation-easing), var(--animation-duration-standard));
 
   display: flex;
   background-color: var(--background);
   border: solid .3rem var(--categorical-item-color);
   border-radius: 50%;
-  height: calc(.8 * var(--categorical-available-height) / var(--num-categorical-rows));
   margin: var(--categorical-item-margin);
-  width: calc(.8 * var(--categorical-available-height) / var(--num-categorical-rows));
+  width: var(--categorical-item-size);
+  height: var(--categorical-item-size);
 
   &:hover {
     &:not(.categorical-item--hover) {
@@ -23,9 +24,9 @@
   &--hover {
     @include transition-properties((background-color width height margin), var(--animation-easing), var(--animation-duration-standard));
     background-color: var(--categorical-item-color);
-    height: calc((.8 * var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
+    height: calc((var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
     margin: 0;
-    width: calc((.8 * var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
+    width: calc((var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
   }
 
   &__title {
@@ -52,7 +53,6 @@
 
   &--expanded {
     align-items: center;
-    background-color: var(--categorical-item-color);
     border: solid .3rem var(--categorical-item-color);
     border-radius: 50%;
     display: flex;
@@ -68,18 +68,6 @@
       height: calc(var(--categorical-available-height) + (var(--categorical-item-margin) * 2));
       margin: 0;
       width: calc(var(--categorical-available-height) + (var(--categorical-item-margin) * 2));
-    }
-
-    @media screen and (max-aspect-ratio: 1 / 1) {
-      height: calc(var(--categorical-available-height) / 2);
-      width: calc(var(--categorical-available-height) / 2);
-
-      &.categorical-item--hover {
-        @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
-        height: calc(var(--categorical-available-height) / 2 + (var(--categorical-item-margin) * 2));
-        margin: 0;
-        width: calc(var(--categorical-available-height) / 2 + (var(--categorical-item-margin) * 2));
-      }
     }
 
     .categorical-item__title,
