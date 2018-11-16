@@ -73,6 +73,13 @@
     @media screen and (max-aspect-ratio: 1 / 1) {
       height: calc(var(--categorical-available-height) / 2);
       width: calc(var(--categorical-available-height) / 2);
+
+      &.categorical-item--hover {
+        @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
+        height: calc(var(--categorical-available-height) / 2 + (var(--categorical-item-margin) * 2));
+        margin: 0;
+        width: calc(var(--categorical-available-height) / 2 + (var(--categorical-item-margin) * 2));
+      }
     }
 
     .categorical-item__title,
