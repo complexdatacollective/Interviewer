@@ -59,11 +59,13 @@ const iosDescription = () => {
 };
 
 const deviceDescription = () => {
-  if (isCordova() && device.platform === 'iOS') {
-    return iosDescription();
-  }
-  if (isCordova() && device.platform === 'Android') {
-    return androidDescription();
+  if (isCordova() && typeof device !== 'undefined') {
+    if (device.platform === 'iOS') {
+      return iosDescription();
+    }
+    if (device.platform === 'Android') {
+      return androidDescription();
+    }
   }
   if (isElectron()) {
     return electronDescription();
