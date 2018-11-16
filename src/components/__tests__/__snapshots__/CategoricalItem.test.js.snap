@@ -5,13 +5,12 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <CategoricalItem
     accentColor="black"
-    details={[Function]}
+    details="empty"
     isExpanded={false}
     isOver={false}
     label="undefined"
     nodes={Array []}
     onClick={[Function]}
-    recentNode={Object {}}
     sortOrder={Array []}
     willAccept={false}
   />,
