@@ -11,7 +11,7 @@ const initialState = {
   // useFullScrenForms should be false for most larger devices, and true for most tablets
   useFullScreenForms: !(window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches),
   // Disable dynamic scaling on android because vmin is resized by software keyboard
-  useDynamicScaling: !(isCordova() && device.platform === 'Android'),
+  useDynamicScaling: !(isCordova() && typeof device !== 'undefined' && device.platform === 'Android'),
   interfaceScale: 100,
 };
 
