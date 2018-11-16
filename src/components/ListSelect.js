@@ -64,7 +64,7 @@ class ListSelect extends Component {
             const detailProperties = Object.values(detail);
 
             return detailProperties.some(
-              item => item.toLowerCase().includes(filterValue),
+              item => item.toString().toLowerCase().includes(filterValue),
             );
           })
         );
@@ -146,7 +146,13 @@ class ListSelect extends Component {
               {(sortField.label || sortField.variable) + this.getDirection(sortField.variable)}
             </Button>
           ))}
-          <input type="search" placeholder="Filter" onChange={this.onFilterChange} value={this.state.filterValue} />
+          <input
+            className="list-select__filter"
+            type="search"
+            placeholder="Filter"
+            onChange={this.onFilterChange}
+            value={this.state.filterValue}
+          />
         </div>
         <CardList
           details={details}

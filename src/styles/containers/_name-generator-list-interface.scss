@@ -34,9 +34,12 @@
     display: flex;
   }
 
-  &__add-person {
-    @include svg-button('../images/add-a-person.svg');
-    @include floating-action-button;
+  &__add-node {
+    position: absolute;
+    bottom: 1.8rem;
+    right: 1.8rem;
+    width: 7rem;
+    height: 7rem;
   }
 
   &__node-bin {
