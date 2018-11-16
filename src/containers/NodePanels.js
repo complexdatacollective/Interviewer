@@ -21,7 +21,7 @@ const colorPresets = [
 ];
 
 const getHighlight = (highlight, panelNumber) => {
-  if (panelNumber > 0) { return colorPresets[panelNumber % colorPresets.length]; }
+  if (panelNumber >= 0) { return colorPresets[panelNumber % colorPresets.length]; }
   return null;
 };
 

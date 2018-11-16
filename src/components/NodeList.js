@@ -148,6 +148,7 @@ NodeList.propTypes = {
   nodeColor: PropTypes.string,
   hoverColor: PropTypes.string,
   onSelect: PropTypes.func,
+  id: PropTypes.string.isRequired,
   itemType: PropTypes.string,
   label: PropTypes.func,
   selected: PropTypes.func,

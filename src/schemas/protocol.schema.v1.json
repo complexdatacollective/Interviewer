@@ -136,7 +136,8 @@
             "NameGeneratorAutoComplete",
             "Sociogram",
             "Information",
-            "OrdinalBin"
+            "OrdinalBin",
+            "CategoricalBin"
           ]
         },
         "label": {
@@ -202,7 +203,8 @@
                 "NameGeneratorList",
                 "NameGeneratorAutoComplete",
                 "Sociogram",
-                "OrdinalBin"
+                "OrdinalBin",
+                "CategoricalBin"
               ]
             }
           },
@@ -483,7 +485,7 @@
           "type": "string"
         },
         "direction": {
-          "type": "string"
+          "$ref": "#/definitions/Direction"
         }
       },
       "required": [
@@ -923,6 +925,14 @@
         "node"
       ],
       "title": "Entity"
+    },
+    "Direction": {
+      "type": "string",
+      "enum": [
+        "desc",
+        "asc"
+      ],
+      "title": "Direction"
     }
   }
 }

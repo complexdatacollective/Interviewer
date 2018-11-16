@@ -2,16 +2,16 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { UnconnectedOrdinalBinBucket as OrdinalBinBucket } from '../OrdinalBinBucket';
+import MultiNodeBucket from '../MultiNodeBucket';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 jest.mock('../../containers/Node');
 
-describe('OrdinalBinBucket', () => {
+describe('MultiNodeBucket', () => {
   let bucket;
 
   beforeEach(() => {
-    bucket = mount(<OrdinalBinBucket nodes={[{}]} />);
+    bucket = mount(<MultiNodeBucket nodes={[{}]} />);
   });
 
   it('renders connected node items', () => {

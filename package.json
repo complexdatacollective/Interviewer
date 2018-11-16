@@ -117,6 +117,7 @@
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.5.2",
     "react-draggable": "^2.2.3",
+    "react-flip-toolkit": "^5.0.5",
     "react-hammerjs": "^1.0.1",
     "react-id-swiper": "^1.6.8",
     "react-markdown": "^3.6.0",

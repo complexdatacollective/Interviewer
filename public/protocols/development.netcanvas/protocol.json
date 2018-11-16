@@ -8,7 +8,6 @@
       "4aebf73e-95e3-4fd1-95e7-237dcc4a4466": {
         "name": "person",
         "label": "Person",
-        "color": "node-color-seq-3",
         "displayVariable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
         "iconVariant": "add-a-person",
         "variables": {
@@ -124,6 +123,134 @@
               {
                 "label": "Missing",
                 "value": -1
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0152": {
+            "name": "catvar2",
+            "label": "catvar2",
+            "description": "Categorical var with 2 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0153": {
+            "name": "catvar3",
+            "label": "catvar3",
+            "description": "Categorical var with 3 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0154": {
+            "name": "catvar4",
+            "label": "catvar4",
+            "description": "Categorical var with 4 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              },
+              {
+                "label": "Four",
+                "value": "four"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0151": {
+            "name": "contactType",
+            "label": "Contact type categorical variable.",
+            "description": "Contact type categorical variable",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "In person",
+                "value": "person"
+              },
+              {
+                "label": "Phone call",
+                "value": "call"
+              },
+              {
+                "label": "Text",
+                "value": "text"
+              },
+              {
+                "label": "Email",
+                "value": "email"
+              },
+              {
+                "label": "Social media",
+                "value": "media"
+              }
+            ]
+          },
+          "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c": {
+            "name": "discussType",
+            "label": "Discuss type categorical variable.",
+            "description": "Discuss type categorical variable",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "Politics",
+                "value": "politics"
+              },
+              {
+                "label": "Weather",
+                "value": "weather"
+              },
+              {
+                "label": "Work",
+                "value": "work"
+              },
+              {
+                "label": "Current events",
+                "value": "current"
+              },
+              {
+                "label": "Entertainment",
+                "value": "entertainment"
+              },
+              {
+                "label": "School",
+                "value": "school"
+              },
+              {
+                "label": "Friends",
+                "value": "friends"
+              },
+              {
+                "label": "Money",
+                "value": "money"
               }
             ]
           },
@@ -1356,6 +1483,62 @@
             "entity": "node",
             "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
           }
+        }
+      ]
+    },
+    {
+      "id": "catBin1",
+      "type": "CategoricalBin",
+      "label": "Contact Types",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "prompts": [
+        {
+          "id": "cat2",
+          "text": "Two",
+          "variable": "e343a91f-628d-4175-870c-957beffa0152"
+        },
+        {
+          "id": "cat3",
+          "text": "Three",
+          "variable": "e343a91f-628d-4175-870c-957beffa0153"
+        },
+        {
+          "id": "cat4",
+          "text": "Four",
+          "variable": "e343a91f-628d-4175-870c-957beffa0154"
+        },
+        {
+          "id": "contactType",
+          "text": "What is the most frequent type of contact you have?",
+          "variable": "e343a91f-628d-4175-870c-957beffa0151",
+          "bucketSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            },
+            {
+              "property": "c5fee926-855d-4419-b5bb-54e89010cea6",
+              "direction": "desc"
+            },
+            {
+              "property": "0ff25001-a2b8-46de-82a9-53143aa00d10",
+              "direction": "desc"
+            }
+          ]
+        },
+        {
+          "id": "discussType",
+          "text": "Discussion type variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the max number of bins.",
+          "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c"
         }
       ]
     },

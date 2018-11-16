@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Touch from 'react-hammerjs';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
 import cx from 'classnames';
@@ -12,8 +11,6 @@ import { Prompt, Pips } from '../components/';
   */
 class PromptSwiper extends Component {
   static propTypes = {
-    forward: PropTypes.func.isRequired,
-    backward: PropTypes.func.isRequired,
     prompts: PropTypes.any.isRequired,
     promptIndex: PropTypes.number.isRequired,
     floating: PropTypes.bool,
@@ -31,26 +28,6 @@ class PromptSwiper extends Component {
     this.state = {
       minimized: false,
     };
-    this.handleTap = this.handleTap.bind(this);
-    this.handleSwipe = this.handleSwipe.bind(this);
-  }
-
-  handleSwipe(event) {
-    switch (event.direction) {
-      case 2:
-      case 3:
-        this.props.forward();
-        break;
-      case 1:
-      case 4:
-        this.props.backward();
-        break;
-      default:
-    }
-  }
-
-  handleTap() {
-    this.props.forward();
   }
 
   handleMinimize = () => {
@@ -102,16 +79,14 @@ class PromptSwiper extends Component {
 
     return (
       <React.Fragment>
-        <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
-          <div className={classes}>
-            <div className="prompts__pips">
-              <Pips count={prompts.length} currentIndex={promptIndex} />
-            </div>
-            {!this.state.minimized && (<div className="prompts__prompts">
-              {promptsRender}
-            </div>)}
+        <div className={classes}>
+          <div className="prompts__pips">
+            <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
-        </Touch>
+          {!this.state.minimized && (<div className="prompts__prompts">
+            {promptsRender}
+          </div>)}
+        </div>
         {minimizable && minimizeButton}
       </React.Fragment>
     );

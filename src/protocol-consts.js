@@ -79,6 +79,7 @@ const StageType = Object.freeze({
   Sociogram: 'Sociogram',
   Information: 'Information',
   OrdinalBin: 'OrdinalBin',
+  CategoricalBin: 'CategoricalBin',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types

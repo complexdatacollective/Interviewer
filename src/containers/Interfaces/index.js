@@ -9,6 +9,7 @@ import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
 import Quiz from './Quiz';
 import Information from './Information';
+import CategoricalBin from './CategoricalBin';
 import FinishSession from './FinishSession';
 
 import { StageType } from '../../protocol-consts';
@@ -21,6 +22,7 @@ const interfaces = {
   [StageType.Quiz]: Quiz,
   [StageType.Information]: Information,
   [StageType.OrdinalBin]: OrdinalBin,
+  [StageType.CategoricalBin]: CategoricalBin,
   FinishSession,
 };
 
@@ -43,6 +45,7 @@ export {
   Sociogram,
   Quiz,
   Information,
+  CategoricalBin,
   OrdinalBin,
 };
 
