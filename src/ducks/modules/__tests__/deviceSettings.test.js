@@ -16,6 +16,26 @@ describe('deviceSettings reducer', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
   });
 
+  describe('Cordova', () => {
+    beforeEach(() => {
+      global.cordova = {};
+    });
+
+    it('provides better Android defaults after device_ready', () => {
+      global.device = { platform: 'Android', isVirtual: true };
+      const newState = reducer(initialState, { type: actionTypes.DEVICE_READY });
+      expect(newState.description).toMatch('Android');
+      expect(newState.useDynamicScaling).toBe(false);
+    });
+
+    it('provides better iOS defaults after device_ready', () => {
+      global.device = { platform: 'iOS', isVirtual: true };
+      const newState = reducer(initialState, { type: actionTypes.DEVICE_READY });
+      expect(newState.description).toMatch('iOS');
+      expect(newState.useDynamicScaling).toBe(true);
+    });
+  });
+
   it('should return a device description', () => {
     const reduced = reducer(initialState,
       { type: actionTypes.SET_DESCRIPTION, description: mockDescription });
