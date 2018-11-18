@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
 import { history, store } from './ducks/store';
+import { actionCreators } from './ducks/modules/deviceSettings';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
 import AppRouter from './routes';
@@ -20,6 +21,8 @@ document.addEventListener('dragover', (e) => {
 });
 
 const startApp = () => {
+  store.dispatch(actionCreators.deviceReady());
+
   ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
