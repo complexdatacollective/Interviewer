@@ -30,6 +30,9 @@ const resetEdgesOfType = edgeType =>
 
 const resetAppState = () => (dispatch) => {
   dispatch({ type: RESET_STATE });
+  // Dispatch deviceReady to re-populate any device defaults.
+  // On Cordova, reset is guaranteed to happen after 'deviceready';
+  // on other platforms, it's safe to call at any time (even after page load).
   dispatch(deviceActions.deviceReady());
 };
 

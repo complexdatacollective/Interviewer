@@ -1,6 +1,4 @@
-/* globals device */
-import deviceDescription from '../../utils/DeviceInfo';
-import { isCordova } from '../../utils/Environment';
+import { deviceDescription, shouldUseDynamicScaling } from '../../utils/DeviceInfo';
 
 const SET_DESCRIPTION = 'SETTINGS/SET_DESCRIPTION';
 const SET_INTERFACE_SCALE = 'SETTINGS/SET_INTERFACE_SCALE';
@@ -26,8 +24,7 @@ const getDeviceReadyState = (state) => {
     description = deviceDescription();
   }
   if (useDynamicScaling === initialState.useDynamicScaling) {
-    // Disable dynamic scaling on android because vmin is resized by software keyboard
-    useDynamicScaling = !(isCordova() && typeof device !== 'undefined' && device.platform === 'Android');
+    useDynamicScaling = shouldUseDynamicScaling();
   }
   return {
     ...state,

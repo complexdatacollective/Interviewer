@@ -59,13 +59,11 @@ const iosDescription = () => {
 };
 
 const deviceDescription = () => {
-  if (isCordova() && typeof device !== 'undefined') {
-    if (device.platform === 'iOS') {
-      return iosDescription();
-    }
-    if (device.platform === 'Android') {
-      return androidDescription();
-    }
+  if (isCordova() && device.platform === 'iOS') {
+    return iosDescription();
+  }
+  if (isCordova() && device.platform === 'Android') {
+    return androidDescription();
   }
   if (isElectron()) {
     return electronDescription();
@@ -73,4 +71,12 @@ const deviceDescription = () => {
   return 'Unknown device';
 };
 
+// Disable dynamic scaling on android because vmin is resized by software keyboard
+const shouldUseDynamicScaling = () => !(isCordova() && device.platform === 'Android');
+
 export default deviceDescription;
+
+export {
+  deviceDescription,
+  shouldUseDynamicScaling,
+};
