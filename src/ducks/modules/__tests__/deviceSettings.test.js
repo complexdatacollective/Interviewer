@@ -4,7 +4,7 @@ import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 const initialState = {
   description: 'Unknown device',
   useFullScreenForms: true,
-  useDynamicScaling: true,
+  useDynamicScaling: undefined,
   interfaceScale: 100,
 };
 const mockDescription = 'My Android Tablet';
@@ -25,7 +25,8 @@ describe('deviceSettings reducer', () => {
   it('should toggle a device setting', () => {
     const reduced = reducer(initialState,
       { type: actionTypes.TOGGLE_SETTING, item: mockSettingToToggle });
-    expect(reduced).toEqual({ ...initialState, [mockSettingToToggle]: false });
+    expect(reduced).toEqual({ ...initialState,
+      [mockSettingToToggle]: !initialState[mockSettingToToggle] });
   });
 
   it('should set an interface scale', () => {

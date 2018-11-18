@@ -5,7 +5,7 @@ import { bindActionCreators, compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 
 import { actionCreators as protocolActions } from '../ducks/modules/protocol';
-import { actionCreators as rootActions } from '../ducks/modules/rootReducer';
+import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
@@ -152,7 +152,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
-    resetState: bindActionCreators(rootActions.resetState, dispatch),
+    resetState: bindActionCreators(resetActions.resetAppState, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
     updateSession: bindActionCreators(sessionsActions.updateSession, dispatch),
   };

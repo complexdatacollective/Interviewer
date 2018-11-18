@@ -87,6 +87,7 @@ const actionCreators = {
 };
 
 const actionTypes = {
+  DEVICE_READY,
   SET_DESCRIPTION,
   SET_INTERFACE_SCALE,
   TOGGLE_SETTING,
