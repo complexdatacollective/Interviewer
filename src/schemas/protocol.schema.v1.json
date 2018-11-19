@@ -144,7 +144,10 @@
           "type": "string"
         },
         "form": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "subject": {
           "$ref": "#/definitions/Subject"

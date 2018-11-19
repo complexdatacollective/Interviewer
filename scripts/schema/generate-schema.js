@@ -99,6 +99,7 @@ const generateSchema = async () => {
 
   defs.Stage.title = 'Interface';
   defs.Stage.properties.type.enum = enums.StageTypeValues;
+  defs.Stage.properties.form.type = ['string', 'null'];
   defs.Stage.properties.prompts.minItems = 1;
   defs.Stage.anyOf = [
     {
