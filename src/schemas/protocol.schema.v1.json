@@ -873,9 +873,6 @@
         "label": {
           "type": "string"
         },
-        "color": {
-          "type": "string"
-        },
         "displayVariable": {
           "type": "string"
         },
@@ -884,6 +881,9 @@
         },
         "variables": {
           "$ref": "#/definitions/Variables"
+        },
+        "color": {
+          "type": "string"
         }
       },
       "required": [
