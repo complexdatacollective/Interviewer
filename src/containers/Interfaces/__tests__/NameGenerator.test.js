@@ -28,7 +28,7 @@ describe('NameGenerator', () => {
       stage: { form: {} },
     };
     const elem = shallow(<NameGenerator {...requiredProps} {...props} />);
-    elem.find('.name-generator-interface__add-person').simulate('click');
+    elem.find('.name-generator-interface__add-node').simulate('click');
     expect(elem.find('Connect(NodeForm)').length).toBeGreaterThan(0);
   });
 });
