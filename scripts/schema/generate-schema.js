@@ -189,6 +189,7 @@ const generateSchema = async () => {
   ];
 
   defs.Filter.properties.join.enum = enums.FilterJoinValues;
+  delete defs.Filter.required;
 
   defs.Rule.properties.type.enum = enums.RuleTypeValues;
 

@@ -292,10 +292,6 @@
           }
         }
       },
-      "required": [
-        "join",
-        "rules"
-      ],
       "title": "Filter"
     },
     "Rule": {
