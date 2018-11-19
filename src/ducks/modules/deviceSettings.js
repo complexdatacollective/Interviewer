@@ -1,22 +1,42 @@
-/* globals device */
-import deviceDescription from '../../utils/DeviceInfo';
-import { isCordova } from '../../utils/Environment';
+import { deviceDescription, shouldUseDynamicScaling } from '../../utils/DeviceInfo';
 
 const SET_DESCRIPTION = 'SETTINGS/SET_DESCRIPTION';
 const SET_INTERFACE_SCALE = 'SETTINGS/SET_INTERFACE_SCALE';
 const TOGGLE_SETTING = 'SETTINGS/TOGGLE_SETTING';
+const DEVICE_READY = 'DEVICE_READY';
 
+// getDeviceReadyState() may provide better defaults once more is known about the device.
+// Static defaults should be distinguishable from user choices (e.g., undefined instead of false).
 const initialState = {
-  description: deviceDescription(),
+  description: 'Unknown device',
+  useDynamicScaling: undefined,
   // useFullScrenForms should be false for most larger devices, and true for most tablets
   useFullScreenForms: !(window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches),
-  // Disable dynamic scaling on android because vmin is resized by software keyboard
-  useDynamicScaling: !(isCordova() && typeof device !== 'undefined' && device.platform === 'Android'),
   interfaceScale: 100,
+};
+
+// This provides additional default state based on information unavailable before 'deviceready'.
+// Rehydration may occur before this, so only overwrite static default values.
+const getDeviceReadyState = (state) => {
+  let description = state.description;
+  let useDynamicScaling = state.useDynamicScaling;
+  if (description === initialState.description) {
+    description = deviceDescription();
+  }
+  if (useDynamicScaling === initialState.useDynamicScaling) {
+    useDynamicScaling = shouldUseDynamicScaling();
+  }
+  return {
+    ...state,
+    description,
+    useDynamicScaling,
+  };
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case DEVICE_READY:
+      return getDeviceReadyState(state);
     case SET_DESCRIPTION:
       return {
         ...state,
@@ -37,6 +57,10 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+const deviceReady = () => ({
+  type: DEVICE_READY,
+});
+
 const setDescription = description => ({
   type: SET_DESCRIPTION,
   description,
@@ -53,12 +77,14 @@ const toggleSetting = item => ({
 });
 
 const actionCreators = {
+  deviceReady,
   setDescription,
   setInterfaceScale,
   toggleSetting,
 };
 
 const actionTypes = {
+  DEVICE_READY,
   SET_DESCRIPTION,
   SET_INTERFACE_SCALE,
   TOGGLE_SETTING,
