@@ -73,7 +73,7 @@
     "electron-log": "^2.2.17",
     "electron-packager": "^8.5.2",
     "electron-to-chromium": "^1.3.75",
-    "electron-updater": "^3.1.2",
+    "electron-updater": "^3.2.3",
     "electron-winstaller": "^2.7.0",
     "emoji-dictionary": "^1.0.9",
     "enzyme": "^3.7.0",
