@@ -144,7 +144,10 @@
           "type": "string"
         },
         "form": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "subject": {
           "$ref": "#/definitions/Subject"
@@ -292,10 +295,6 @@
           }
         }
       },
-      "required": [
-        "join",
-        "rules"
-      ],
       "title": "Filter"
     },
     "Rule": {
@@ -873,9 +872,6 @@
         "label": {
           "type": "string"
         },
-        "color": {
-          "type": "string"
-        },
         "displayVariable": {
           "type": "string"
         },
@@ -884,6 +880,9 @@
         },
         "variables": {
           "$ref": "#/definitions/Variables"
+        },
+        "color": {
+          "type": "string"
         }
       },
       "required": [

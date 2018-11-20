@@ -64,6 +64,7 @@ const generateAbstractProtocol = () => {
   // Referenced dynamically to support Network-Canvas#648
   const vr = protocol.variableRegistry;
   vr.node = { nodeTypeDef: { ...Object.values(vr.node)[0] } };
+  vr.node.nodeTypeDef.color = '';
   vr.node.nodeTypeDef.variables = { variable };
   vr.edge = { edgeTypeDef: { ...Object.values(vr.edge)[0] } };
   vr.edge.edgeTypeDef.variables = { variable };
@@ -98,6 +99,7 @@ const generateSchema = async () => {
 
   defs.Stage.title = 'Interface';
   defs.Stage.properties.type.enum = enums.StageTypeValues;
+  defs.Stage.properties.form.type = ['string', 'null'];
   defs.Stage.properties.prompts.minItems = 1;
   defs.Stage.anyOf = [
     {
@@ -188,6 +190,7 @@ const generateSchema = async () => {
   ];
 
   defs.Filter.properties.join.enum = enums.FilterJoinValues;
+  delete defs.Filter.required;
 
   defs.Rule.properties.type.enum = enums.RuleTypeValues;
 

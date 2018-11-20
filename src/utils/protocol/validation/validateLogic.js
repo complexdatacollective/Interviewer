@@ -23,7 +23,7 @@ const validateLogic = (protocol) => {
     nodeType => `node displayVariable "${nodeType.displayVariable}" did not match any node variable`);
 
   v.addValidation('stages[].form',
-    form => protocol.forms && protocol.forms[form],
+    form => form === null || (protocol.forms && protocol.forms[form]), // `null` form is allowed
     form => `protocol.forms does not contain the form "${form}"`,
   );
 
