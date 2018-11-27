@@ -5,9 +5,11 @@ import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 
 import withPrompt from '../../behaviours/withPrompt';
-import { ConcentricCircles } from '../../containers/';
-import PromptObstacle from '../../containers/ConcentricCircles/PromptObstacle';
-import ButtonObstacle from '../../containers/ConcentricCircles/ButtonObstacle';
+import {
+  ConcentricCircles,
+  PromptObstacle,
+  ButtonObstacle,
+} from '../../containers/Canvas';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 
 /**
