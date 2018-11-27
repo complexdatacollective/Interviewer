@@ -1387,6 +1387,11 @@
       ]
     },
     {
+      "id": "narrative",
+      "type": "Narrative",
+      "label": "Narrative"
+    },
+    {
       "id": "namegenroster1",
       "type": "NameGeneratorAutoComplete",
       "label": "NG Classmates",
