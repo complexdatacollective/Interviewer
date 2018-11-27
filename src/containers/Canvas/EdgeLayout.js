@@ -1,44 +1,66 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Edge } from '../../components';
-import { makeDisplayEdgesForPrompt } from '../../selectors/sociogram';
+import { createSelector } from 'reselect';
+import { flow, groupBy, pick, values, flatten } from 'lodash';
+import { networkNodes, networkEdges } from '../../selectors/interface';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
+import { EdgeLayout } from '../../components/Canvas/EdgeLayout';
 
-const viewBoxScale = 100;
+const edgeCoords = (edge, { nodes, layout }) => {
+  const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
+  const to = nodes.find(n => n[nodePrimaryKeyProperty] === edge.to);
 
-export class EdgeLayout extends PureComponent {
-  static propTypes = {
-    displayEdges: PropTypes.array,
+  if (!from || !to) { return { from: null, to: null }; }
+
+  return {
+    key: `${edge.from}_${edge.type}_${edge.to}`,
+    type: edge.type,
+    from: from[nodeAttributesProperty][layout],
+    to: to[nodeAttributesProperty][layout],
   };
+};
 
-  static defaultProps = {
-    displayEdges: [],
-  };
-
-  renderEdge = ({ key, from, to, type }) => (
-    <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />
+const edgesToCoords = (edges, { nodes, layout }) =>
+  edges.map(
+    edge => edgeCoords(
+      edge,
+      { nodes, layout },
+    ),
   );
 
-  render() {
-    const { displayEdges } = this.props;
+const edgesOfTypes = (edges, types) =>
+  flow(
+    allEdges => groupBy(allEdges, 'type'), // sort by type
+    groupedEdges => pick(groupedEdges, types), // discard unwanted types
+    groupedEdges => values(groupedEdges), // flatten
+    selectedEdges => flatten(selectedEdges),
+  )(edges);
 
-    return (
-      <div className="edge-layout">
-        <svg viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          { displayEdges.map(this.renderEdge) }
-        </svg>
-      </div>
-    );
-  }
-}
+const getDisplay = (_, props) => props.display;
+const getLayout = (_, props) => props.layout;
 
-function makeMapStateToProps() {
-  const displayEdgesForPrompt = makeDisplayEdgesForPrompt();
-  return function mapStateToProps(state, props) {
-    return {
-      displayEdges: displayEdgesForPrompt(state, props),
-    };
-  };
-}
+const makeGetDisplayEdges = () =>
+  createSelector(
+    networkNodes,
+    networkEdges,
+    getDisplay,
+    getLayout,
+    (nodes, edges, display, layout) => {
+      const selectedEdges = edgesOfTypes(edges, display);
+      return edgesToCoords(
+        selectedEdges,
+        { nodes, layout },
+      );
+    },
+  );
+
+const makeMapStateToProps = () => {
+  const getDisplayEdges = makeGetDisplayEdges();
+
+  const mapStateToProps = (state, { display, layout }) => ({
+    displayEdges: getDisplayEdges(state, { display, layout }),
+  });
+
+  return mapStateToProps;
+};
 
 export default connect(makeMapStateToProps)(EdgeLayout);

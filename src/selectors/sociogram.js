@@ -7,22 +7,15 @@ import {
   get,
   reject,
   first,
-  groupBy,
-  pick,
-  values,
-  flatten,
-  flow,
   isEmpty,
 } from 'lodash';
 import {
-  networkEdges,
   makeGetNodeDisplayVariable,
   makeNetworkNodesForType,
 } from './interface';
-import { assert, createDeepEqualSelector } from './utils';
+import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
-import { protocolRegistry } from './protocol';
+import { getNodeAttributes, nodeAttributesProperty } from '../ducks/modules/network';
 
 // Selectors that are specific to the name generator
 
@@ -122,63 +115,6 @@ export const makeGetNextUnplacedNode = () => {
     (nodes, sortOptions) => {
       const sorter = sortOrder(sortOptions.sortOrder);
       return first(sorter(nodes));
-    },
-  );
-};
-
-const edgeCoords = (edge, { nodes, layoutVariable }) => {
-  const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
-  const to = nodes.find(n => n[nodePrimaryKeyProperty] === edge.to);
-
-  if (!from || !to) { return { from: null, to: null }; }
-
-  return {
-    key: `${edge.from}_${edge.type}_${edge.to}`,
-    type: edge.type,
-    from: from[nodeAttributesProperty][layoutVariable],
-    to: to[nodeAttributesProperty][layoutVariable],
-  };
-};
-
-const edgesToCoords = (edges, { nodes, layoutVariable }) =>
-  edges.map(
-    edge => edgeCoords(
-      edge,
-      { nodes, layoutVariable },
-    ),
-  );
-
-const edgesOfTypes = (edges, types) =>
-  flow(
-    allEdges => groupBy(allEdges, 'type'), // sort by type
-    groupedEdges => pick(groupedEdges, types), // discard unwanted types
-    groupedEdges => values(groupedEdges), // flatten
-    selectedEdges => flatten(selectedEdges),
-  )(edges);
-
-const edgeTypeIsDefined = (variableRegistry, edgeType) =>
-  variableRegistry.edge &&
-  !!variableRegistry.edge[edgeType];
-
-export const makeDisplayEdgesForPrompt = () => {
-  const networkNodesForSubject = makeNetworkNodesForType();
-
-  return createSelector(
-    protocolRegistry,
-    networkNodesForSubject,
-    networkEdges,
-    makeGetEdgeOptions(),
-    getLayoutOptions,
-    (variableRegistry, nodes, edges, edgeOptions, { layoutVariable }) => {
-      const edgeType = edgeOptions.createEdge;
-      if (edgeOptions.canCreateEdge) {
-        assert(edgeTypeIsDefined(variableRegistry, edgeType), `Edge type "${edgeType}" is not defined in the registry`);
-      }
-      const selectedEdges = edgesOfTypes(edges, edgeOptions.displayEdges);
-      return edgesToCoords(
-        selectedEdges,
-        { nodes, layoutVariable },
-      );
     },
   );
 };

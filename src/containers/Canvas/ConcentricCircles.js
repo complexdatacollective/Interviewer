@@ -25,14 +25,17 @@ class ConcentricCircles extends Component {
   render() {
     const { stage, prompt } = this.props;
 
+    const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
+    const displayEdges = (prompt.edges && prompt.edges.display) || [];
+
     return (
       <div className="sociogram">
         <Background stage={stage} prompt={prompt} />
         {
           prompt.edges &&
           <EdgeLayout
-            stage={stage}
-            prompt={prompt}
+            display={displayEdges}
+            layout={layoutVariable}
           />
         }
         <NodeLayout
