@@ -26,6 +26,10 @@ class ConcentricCircles extends Component {
     const { stage, prompt } = this.props;
 
     const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
+    const highlight = prompt.highlight && prompt.highlight.variable;
+    const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
+    const createEdge = prompt.edges && prompt.edges.create;
+    const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
     const displayEdges = (prompt.edges && prompt.edges.display) || [];
 
     return (
@@ -40,8 +44,12 @@ class ConcentricCircles extends Component {
         }
         <NodeLayout
           id="NODE_LAYOUT"
-          stage={stage}
-          prompt={prompt}
+          highlight={highlight}
+          allowHighlight={allowHighlight}
+          createEdge={createEdge}
+          layout={layoutVariable}
+          allowPositioning={allowPositioning}
+          subject={prompt.subject}
           connectFrom={this.state.connectFrom}
           updateLinkFrom={this.updateLinkFrom}
         />

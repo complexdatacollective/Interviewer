@@ -1,184 +1,130 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { isEqual, isEmpty, pick, has } from 'lodash';
-import LayoutNode from './LayoutNode';
+import { has } from 'lodash';
 import { withBounds } from '../../behaviours';
-import { makeGetSociogramOptions, makeGetPlacedNodes } from '../../selectors/sociogram';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty, getNodeAttributes } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
-import sociogramOptionsProps from './propTypes';
+import NodeLayout from '../../components/Canvas/NodeLayout';
 
-const watchProps = ['width', 'height', 'dropCount'];
+import { networkNodes } from '../../selectors/interface';
+import { createDeepEqualSelector } from '../../selectors/utils';
 
-const propsChangedExcludingNodes = (nextProps, props) =>
-  !isEqual(pick(nextProps, watchProps), pick(props, watchProps));
+const getLayout = (_, props) => props.layout;
+const getSubject = (_, props) => props.subject;
 
-const nodesLengthChanged = (nextProps, props) =>
-  nextProps.nodes.length !== props.nodes.length;
+const makeGetPlacedNodes = () =>
+  createDeepEqualSelector(
+    networkNodes,
+    getSubject,
+    getLayout,
+    (nodes, { type }, layout) =>
+      nodes.filter((node) => {
+        const attributes = getNodeAttributes(node);
+
+        return (
+          node.type === type &&
+          has(attributes, layout)
+        );
+      }),
+  );
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
   y: (node.y - container.y) / container.height,
 });
 
-const dropHandlers = compose(
-  withState('dropCount', 'setDropCount', 0),
+const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
+
+const withDropHandlers = withHandlers({
+  accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
+  onDrop: ({ updateNode, layout, setRerenderCount, rerenderCount, width, height, x, y }) => (item) => {
+    updateNode(
+      item.meta,
+      {
+        [layout]: relativeCoords({ width, height, x, y }, item),
+      },
+    );
+
+    // Horrible hack for performance (only re-render nodes on drop, not on drag)
+    setRerenderCount(rerenderCount + 1);
+  },
+  onDrag: ({ layout, updateNode, width, height, x, y }) => (item) => {
+    if (!has(item.meta[nodeAttributesProperty], layout)) { return; }
+
+    updateNode(
+      item.meta,
+      {
+        [layout]: relativeCoords({ width, height, x, y }, item),
+      },
+    );
+  },
+  onDragEnd: ({ layout, setRerenderCount, rerenderCount }) => (item) => {
+    if (!has(item.meta[nodeAttributesProperty], layout)) { return; }
+
+    // make sure to also re-render nodes that were updated on drag end
+    setRerenderCount(rerenderCount + 1);
+  },
+});
+
+const withSelectHandlers = compose(
   withHandlers({
-    accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-    onDrop: props => (item) => {
-      props.updateNode(
-        item.meta,
-        {
-          [props.layoutVariable]: relativeCoords(props, item),
-        },
-      );
+    connectNode: ({ createEdge, connectFrom, updateLinkFrom, toggleEdge }) =>
+      (nodeId) => {
+        if (!createEdge) { return; }
 
-      // Horrible hack for performance (only re-render nodes on drop, not on drag)
-      props.setDropCount(props.dropCount + 1);
-    },
-    onDrag: props => (item) => {
-      if (!has(item.meta[nodeAttributesProperty], props.layoutVariable)) { return; }
+        if (!connectFrom) {
+          updateLinkFrom(nodeId);
+          return;
+        }
 
-      props.updateNode(
-        item.meta,
-        {
-          [props.layoutVariable]: relativeCoords(props, item),
-        },
-      );
-    },
-    onDragEnd: props => (item) => {
-      if (!has(item.meta[nodeAttributesProperty], props.layoutVariable)) { return; }
+        if (connectFrom !== nodeId) {
+          toggleEdge({
+            from: connectFrom,
+            to: nodeId,
+            type: createEdge,
+          });
+        }
 
-      // make sure to also re-render nodes that were updated on drag end
-      props.setDropCount(props.dropCount + 1);
+        updateLinkFrom(null);
+      },
+    toggleHighlightAttribute: ({ allowHighlighting, highlight, toggleHighlight }) =>
+      (node) => {
+        if (!allowHighlighting) { return; }
+        const newVal = !node[nodeAttributesProperty][highlight];
+        toggleHighlight(
+          node[nodePrimaryKeyProperty],
+          { [highlight]: newVal },
+        );
+      },
+  }),
+  withHandlers({
+    onSelected: ({
+      allowSelect,
+      connectNode,
+      toggleHighlightAttribute,
+      setRerenderCount,
+      rerenderCount,
+    }) => (node) => {
+      if (!allowSelect) { return; }
+
+      connectNode(node[nodePrimaryKeyProperty]);
+      toggleHighlightAttribute(node);
+      setRerenderCount(rerenderCount + 1);
     },
   }),
 );
 
-class NodeLayout extends Component {
-  static propTypes = {
-    nodes: PropTypes.array,
-    toggleEdge: PropTypes.func.isRequired,
-    toggleHighlight: PropTypes.func.isRequired,
-    connectFrom: PropTypes.string,
-    ...sociogramOptionsProps,
-  };
-
-  static defaultProps = {
-    connectFrom: null,
-    nodes: [],
-    allowPositioning: true,
-    allowSelect: true,
-  };
-
-  shouldComponentUpdate(nextProps) {
-    if (nodesLengthChanged(nextProps, this.props)) { return true; }
-    if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
-
-    return false;
-  }
-
-  onSelected = (node) => {
-    const {
-      allowSelect,
-    } = this.props;
-
-    if (!allowSelect) { return; }
-
-    this.connectNode(node[nodePrimaryKeyProperty]);
-
-    this.toggleHighlightAttribute(node);
-
-    this.forceUpdate();
-  }
-
-  connectNode(nodeId) {
-    const { createEdge, canCreateEdge, connectFrom } = this.props;
-
-    if (!canCreateEdge) { return; }
-
-    if (!connectFrom) {
-      this.props.updateLinkFrom(nodeId);
-      return;
-    }
-
-    if (connectFrom !== nodeId) {
-      this.props.toggleEdge({
-        from: connectFrom,
-        to: nodeId,
-        type: createEdge,
-      });
-    }
-
-    this.props.updateLinkFrom(null);
-  }
-
-  toggleHighlightAttribute(node) {
-    if (!this.props.allowHighlighting) { return; }
-    const newVal = !node[nodeAttributesProperty][this.props.highlightAttribute];
-    this.props.toggleHighlight(
-      node[nodePrimaryKeyProperty],
-      { [this.props.highlightAttribute]: newVal },
-    );
-  }
-
-  isHighlighted(node) {
-    return !isEmpty(this.props.highlightAttribute) &&
-      node[nodeAttributesProperty][this.props.highlightAttribute] === true;
-  }
-
-  isLinking(node) {
-    return this.props.allowSelect &&
-      this.props.canCreateEdge &&
-      node[nodePrimaryKeyProperty] === this.props.connectFrom;
-  }
-
-  render() {
-    const {
-      nodes,
-      allowPositioning,
-      allowSelect,
-      layoutVariable,
-    } = this.props;
-
-    return (
-      <div className="node-layout">
-        { nodes.map((node) => {
-          const nodeAttributes = getNodeAttributes(node);
-          if (!has(nodeAttributes, layoutVariable)) { return null; }
-
-          return (
-            <LayoutNode
-              key={node[nodePrimaryKeyProperty]}
-              node={node}
-              layoutVariable={layoutVariable}
-              onSelected={() => this.onSelected(node)}
-              selected={this.isHighlighted(node)}
-              linking={this.isLinking(node)}
-              allowPositioning={allowPositioning}
-              allowSelect={allowSelect}
-              areaWidth={this.props.width}
-              areaHeight={this.props.height}
-            />
-          );
-        }) }
-      </div>
-    );
-  }
-}
-
 function makeMapStateToProps() {
   const getPlacedNodes = makeGetPlacedNodes();
-  const getSociogramOptions = makeGetSociogramOptions();
 
-  return function mapStateToProps(state, props) {
+  return function mapStateToProps(state, { createEdge, allowHighlighting, subject, layout }) {
+    const allowSelect = createEdge || allowHighlighting;
+
     return {
-      nodes: getPlacedNodes(state, props),
-      ...getSociogramOptions(state, props),
+      nodes: getPlacedNodes(state, { subject, layout }),
+      allowSelect,
     };
   };
 }
@@ -191,11 +137,11 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export { NodeLayout };
-
 export default compose(
   connect(makeMapStateToProps, mapDispatchToProps),
   withBounds,
-  dropHandlers,
+  withRerenderCount,
+  withDropHandlers,
+  withSelectHandlers,
   DropTarget,
 )(NodeLayout);
