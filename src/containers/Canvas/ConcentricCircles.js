@@ -31,10 +31,17 @@ class ConcentricCircles extends Component {
     const createEdge = prompt.edges && prompt.edges.create;
     const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
     const displayEdges = (prompt.edges && prompt.edges.display) || [];
+    const backgroundImage = prompt.background && prompt.background.image;
+    const concentricCircles = prompt.background && prompt.background.concentricCircles;
+    const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
 
     return (
       <div className="sociogram">
-        <Background stage={stage} prompt={prompt} />
+        <Background
+          concentricCircles={concentricCircles}
+          skewedTowardCenter={skewedTowardCenter}
+          image={backgroundImage}
+        />
         {
           prompt.edges &&
           <EdgeLayout

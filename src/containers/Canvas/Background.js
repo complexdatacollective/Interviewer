@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import Radar from './Radar';
-import { makeGetSociogramOptions } from '../../selectors/sociogram';
 import { BackgroundImage } from '../../components';
 import sociogramOptionsProps from './propTypes';
 
@@ -34,16 +32,6 @@ class Background extends PureComponent {
   }
 }
 
-function makeMapStateToProps() {
-  const getSociogramOptions = makeGetSociogramOptions();
-
-  return function mapStateToProps(state, props) {
-    return {
-      ...getSociogramOptions(state, props),
-    };
-  };
-}
-
 export { Background };
 
-export default connect(makeMapStateToProps)(Background);
+export default Background;
