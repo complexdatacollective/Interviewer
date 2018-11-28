@@ -23,17 +23,20 @@ class ConcentricCircles extends Component {
   }
 
   render() {
-    const { stage, prompt } = this.props;
-
-    const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
-    const highlight = prompt.highlight && prompt.highlight.variable;
-    const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
-    const createEdge = prompt.edges && prompt.edges.create;
-    const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
-    const displayEdges = (prompt.edges && prompt.edges.display) || [];
-    const backgroundImage = prompt.background && prompt.background.image;
-    const concentricCircles = prompt.background && prompt.background.concentricCircles;
-    const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
+    const {
+      stage,
+      prompt,
+      subject,
+      layoutVariable,
+      highlight,
+      allowHighlight,
+      createEdge,
+      allowPositioning,
+      displayEdges,
+      backgroundImage,
+      concentricCircles,
+      skewedTowardCenter,
+    } = this.props;
 
     return (
       <div className="sociogram">
@@ -43,7 +46,7 @@ class ConcentricCircles extends Component {
           image={backgroundImage}
         />
         {
-          prompt.edges &&
+          displayEdges.length > 0 &&
           <EdgeLayout
             display={displayEdges}
             layout={layoutVariable}
@@ -56,7 +59,7 @@ class ConcentricCircles extends Component {
           createEdge={createEdge}
           layout={layoutVariable}
           allowPositioning={allowPositioning}
-          subject={prompt.subject}
+          subject={subject}
           connectFrom={this.state.connectFrom}
           updateLinkFrom={this.updateLinkFrom}
         />
@@ -73,6 +76,27 @@ class ConcentricCircles extends Component {
 ConcentricCircles.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
+  subject: PropTypes.object.isRequired,
+  layoutVariable: PropTypes.string.isRequired,
+  highlight: PropTypes.string,
+  allowHighlight: PropTypes.bool,
+  createEdge: PropTypes.string,
+  allowPositioning: PropTypes.bool,
+  displayEdges: PropTypes.array,
+  backgroundImage: PropTypes.string,
+  concentricCircles: PropTypes.number,
+  skewedTowardCenter: PropTypes.bool,
+};
+
+ConcentricCircles.defaultProps = {
+  highlight: null,
+  allowHighlight: false,
+  createEdge: null,
+  allowPositioning: true,
+  displayEdges: [],
+  backgroundImage: null,
+  concentricCircles: null,
+  skewedTowardCenter: null,
 };
 
 export { ConcentricCircles };

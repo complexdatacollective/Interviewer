@@ -31,6 +31,17 @@ class Sociogram extends Component {
       resetInterface,
     } = this.props;
 
+    const subject = prompt.subject;
+    const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
+    const highlight = prompt.highlight && prompt.highlight.variable;
+    const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
+    const createEdge = prompt.edges && prompt.edges.create;
+    const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
+    const displayEdges = (prompt.edges && prompt.edges.display) || [];
+    const backgroundImage = prompt.background && prompt.background.image;
+    const concentricCircles = prompt.background && prompt.background.concentricCircles;
+    const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
+
     return (
       <div className="sociogram-interface">
         <PromptObstacle
@@ -45,8 +56,18 @@ class Sociogram extends Component {
         />
         <div className="sociogram-interface__sociogram">
           <ConcentricCircles
-            stage={stage}
+            subject={subject}
+            layoutVariable={layoutVariable}
+            highlight={highlight}
+            allowHighlight={allowHighlight}
+            createEdge={createEdge}
+            allowPositioning={allowPositioning}
+            displayEdges={displayEdges}
+            backgroundImage={backgroundImage}
+            concentricCircles={concentricCircles}
+            skewedTowardCenter={skewedTowardCenter}
             prompt={prompt}
+            stage={stage}
             key={prompt.id}
             ref={this.linkingRef}
           />
