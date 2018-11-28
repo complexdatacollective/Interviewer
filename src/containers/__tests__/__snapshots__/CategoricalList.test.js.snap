@@ -68,6 +68,7 @@ ShallowWrapper {
           className="categorical-list__content"
           style={
             Object {
+              "--categorical-item-multiplier": 1.2,
               "--num-categorical-items": 2,
             }
           }
@@ -125,6 +126,7 @@ ShallowWrapper {
             className="categorical-list__content"
             style={
               Object {
+                "--categorical-item-multiplier": 1.2,
                 "--num-categorical-items": 2,
               }
             }
@@ -228,6 +230,7 @@ ShallowWrapper {
             ],
             "className": "categorical-list__content",
             "style": Object {
+              "--categorical-item-multiplier": 1.2,
               "--num-categorical-items": 2,
             },
           },
@@ -309,6 +312,7 @@ ShallowWrapper {
             className="categorical-list__content"
             style={
               Object {
+                "--categorical-item-multiplier": 1.2,
                 "--num-categorical-items": 2,
               }
             }
@@ -366,6 +370,7 @@ ShallowWrapper {
               className="categorical-list__content"
               style={
                 Object {
+                  "--categorical-item-multiplier": 1.2,
                   "--num-categorical-items": 2,
                 }
               }
@@ -469,6 +474,7 @@ ShallowWrapper {
               ],
               "className": "categorical-list__content",
               "style": Object {
+                "--categorical-item-multiplier": 1.2,
                 "--num-categorical-items": 2,
               },
             },
