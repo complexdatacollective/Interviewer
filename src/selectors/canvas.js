@@ -25,7 +25,9 @@ export const makeGetNextUnplacedNode = () =>
     getSubject,
     getLayout,
     getSortOptions,
-    (nodes, { type }, layout, sortOptions) => {
+    (nodes, subject, layout, sortOptions) => {
+      const type = subject && subject.type;
+
       const unplacedNodes = nodes.filter((node) => {
         const attributes = getNodeAttributes(node);
 
@@ -52,15 +54,18 @@ export const makeGetPlacedNodes = () =>
     networkNodes,
     getSubject,
     getLayout,
-    (nodes, { type }, layout) =>
-      nodes.filter((node) => {
+    (nodes, subject, layout) => {
+      const type = subject && subject.type;
+
+      return nodes.filter((node) => {
         const attributes = getNodeAttributes(node);
 
         return (
           node.type === type &&
           has(attributes, layout)
         );
-      }),
+      });
+    },
   );
 
 const edgeCoords = (edge, { nodes, layout }) => {
