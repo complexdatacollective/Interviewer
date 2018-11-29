@@ -54,7 +54,7 @@ class ConcentricCircles extends Component {
         <NodeLayout
           id="NODE_LAYOUT"
           highlight={highlight}
-          allowHighlight={allowHighlight}
+          allowHighlight={allowHighlight && !createEdge}
           createEdge={createEdge}
           layout={layoutVariable}
           allowPositioning={allowPositioning}
