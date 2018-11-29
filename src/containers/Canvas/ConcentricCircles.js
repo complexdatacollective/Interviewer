@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NodeBucket } from '../../containers';
+import NodeBucket from './NodeBucket';
 import NodeLayout from './NodeLayout';
 import EdgeLayout from './EdgeLayout';
 import Background from './Background';
@@ -24,8 +24,6 @@ class ConcentricCircles extends Component {
 
   render() {
     const {
-      stage,
-      prompt,
       subject,
       layoutVariable,
       highlight,
@@ -65,8 +63,8 @@ class ConcentricCircles extends Component {
         />
         <NodeBucket
           id="NODE_BUCKET"
-          stage={stage}
-          prompt={prompt}
+          layout={layoutVariable}
+          subject={subject}
         />
       </div>
     );
@@ -74,8 +72,6 @@ class ConcentricCircles extends Component {
 }
 
 ConcentricCircles.propTypes = {
-  stage: PropTypes.object.isRequired,
-  prompt: PropTypes.object.isRequired,
   subject: PropTypes.object.isRequired,
   layoutVariable: PropTypes.string.isRequired,
   highlight: PropTypes.string,

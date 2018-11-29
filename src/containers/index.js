@@ -9,7 +9,6 @@ export { default as Field } from './Field';
 export { default as Node } from './Node';
 export { default as NodeForm } from './NodeForm';
 export { default as FormWizard } from './FormWizard';
-export { default as NodeBucket } from './NodeBucket';
 export { default as LoadScreen } from './LoadScreen';
 export { default as LoadParamsRoute } from './LoadParamsRoute';
 export { default as CategoricalList } from './CategoricalList';

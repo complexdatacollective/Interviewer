@@ -42,6 +42,8 @@ class Sociogram extends Component {
     const concentricCircles = prompt.background && prompt.background.concentricCircles;
     const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
 
+    console.log({ stage, prompt }, 'socio');
+
     return (
       <div className="sociogram-interface">
         <PromptObstacle

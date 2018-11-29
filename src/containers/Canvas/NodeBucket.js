@@ -2,13 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-
-import Node from './Node';
-import { makeGetNextUnplacedNode, makeGetSociogramOptions } from '../selectors/sociogram';
-import { DragSource, DropObstacle } from '../behaviours/DragAndDrop';
-
-import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
-import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import Node from '../Node';
+import { DragSource, DropObstacle } from '../../behaviours/DragAndDrop';
+import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
+import { nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { makeGetNextUnplacedNode } from '../../selectors/canvas';
 
 const EnhancedNode = DragSource(Node);
 
@@ -46,17 +44,22 @@ class NodeBucket extends PureComponent {
   }
 }
 
-function makeMapStateToProps() {
+const makeMapStateToProps = () => {
   const getNextUnplacedNode = makeGetNextUnplacedNode();
-  const getSociogramOptions = makeGetSociogramOptions();
 
-  return function mapStateToProps(state, props) {
+  const mapStateToProps = (state, { layout, subject }) => {
+    console.log({ state, layout, subject }, 'nb');
+
+    const node = getNextUnplacedNode(state, { layout, subject });
+
+
     return {
-      node: getNextUnplacedNode(state, props),
-      ...getSociogramOptions(state, props),
+      node,
     };
   };
-}
+
+  return mapStateToProps;
+};
 
 export { NodeBucket };
 
