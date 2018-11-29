@@ -47,7 +47,7 @@ class ConcentricCircles extends Component {
         {
           displayEdges.length > 0 &&
           <EdgeLayout
-            display={displayEdges}
+            displayEdges={displayEdges}
             layout={layoutVariable}
           />
         }
