@@ -34,6 +34,7 @@ class ConcentricCircles extends Component {
       backgroundImage,
       concentricCircles,
       skewedTowardCenter,
+      sortOrder,
     } = this.props;
 
     return (
@@ -65,6 +66,7 @@ class ConcentricCircles extends Component {
           id="NODE_BUCKET"
           layout={layoutVariable}
           subject={subject}
+          sortOrder={sortOrder}
         />
       </div>
     );
@@ -82,6 +84,7 @@ ConcentricCircles.propTypes = {
   backgroundImage: PropTypes.string,
   concentricCircles: PropTypes.number,
   skewedTowardCenter: PropTypes.bool,
+  sortOrder: PropTypes.array,
 };
 
 ConcentricCircles.defaultProps = {
@@ -93,6 +96,7 @@ ConcentricCircles.defaultProps = {
   backgroundImage: null,
   concentricCircles: null,
   skewedTowardCenter: null,
+  sortOrder: [],
 };
 
 export { ConcentricCircles };

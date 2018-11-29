@@ -4,31 +4,10 @@ import { compose, withHandlers, withState } from 'recompose';
 import { has } from 'lodash';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, nodeAttributesProperty, getNodeAttributes } from '../../ducks/modules/network';
+import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
-
-import { networkNodes } from '../../selectors/interface';
-import { createDeepEqualSelector } from '../../selectors/utils';
-
-const getLayout = (_, props) => props.layout;
-const getSubject = (_, props) => props.subject;
-
-const makeGetPlacedNodes = () =>
-  createDeepEqualSelector(
-    networkNodes,
-    getSubject,
-    getLayout,
-    (nodes, { type }, layout) =>
-      nodes.filter((node) => {
-        const attributes = getNodeAttributes(node);
-
-        return (
-          node.type === type &&
-          has(attributes, layout)
-        );
-      }),
-  );
+import { makeGetPlacedNodes } from '../../selectors/canvas';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,

@@ -41,8 +41,7 @@ class Sociogram extends Component {
     const backgroundImage = prompt.background && prompt.background.image;
     const concentricCircles = prompt.background && prompt.background.concentricCircles;
     const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
-
-    console.log({ stage, prompt }, 'socio');
+    const sortOrder = prompt.sortOrder;
 
     return (
       <div className="sociogram-interface">
@@ -68,8 +67,7 @@ class Sociogram extends Component {
             backgroundImage={backgroundImage}
             concentricCircles={concentricCircles}
             skewedTowardCenter={skewedTowardCenter}
-            prompt={prompt}
-            stage={stage}
+            sortOrder={sortOrder}
             key={prompt.id}
             ref={this.linkingRef}
           />

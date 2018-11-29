@@ -35,3 +35,25 @@ export const makeGetNextUnplacedNode = () =>
       return first(sorter(unplacedNodes));
     },
   );
+
+/**
+ * Selector for placed nodes.
+ *
+ * requires:
+ * { layout, subject } props
+ */
+export const makeGetPlacedNodes = () =>
+  createDeepEqualSelector(
+    networkNodes,
+    getSubject,
+    getLayout,
+    (nodes, { type }, layout) =>
+      nodes.filter((node) => {
+        const attributes = getNodeAttributes(node);
+
+        return (
+          node.type === type &&
+          has(attributes, layout)
+        );
+      }),
+  );
