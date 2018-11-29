@@ -1,96 +1,117 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose } from 'recompose';
+import { withHandlers, compose, withState } from 'recompose';
 import PropTypes from 'prop-types';
-
 import withPrompt from '../../behaviours/withPrompt';
 import {
-  ConcentricCircles,
   PromptObstacle,
   ButtonObstacle,
 } from '../../containers/Canvas';
+import { ConcentricCircles } from '../../components/Canvas';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
+
+const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
+
+const withConnectFromHandler = withHandlers({
+  handleConnectFrom: ({ setConnectFrom }) =>
+    id => setConnectFrom(id),
+  handleResetConnectFrom: ({ setConnectFrom }) =>
+    () => setConnectFrom(null),
+});
+
+const withResetInterfaceHandler = withHandlers({
+  handleResetInterface: ({
+    handleResetConnectFrom,
+    resetPropertyForAllNodes,
+    resetEdgesOfType,
+    stage,
+  }) => () => {
+    handleResetConnectFrom();
+    stage.prompts.forEach((prompt) => {
+      resetPropertyForAllNodes(prompt.layout.layoutVariable);
+      if (prompt.edges) {
+        resetEdgesOfType(prompt.edges.creates);
+      }
+    });
+  },
+});
 
 /**
   * Sociogram Interface
   * @extends Component
   */
-class Sociogram extends Component {
-  constructor(props) {
-    super(props);
-    this.linkingRef = React.createRef();
-  }
+const Sociogram = ({
+  promptForward,
+  promptBackward,
+  prompt,
+  stage,
+  handleResetInterface,
+  connectFrom,
+  handleConnectFrom,
+}) => {
+  const subject = prompt.subject;
+  const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
+  const highlight = prompt.highlight && prompt.highlight.variable;
+  const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
+  const createEdge = prompt.edges && prompt.edges.create;
+  const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
+  const displayEdges = (prompt.edges && prompt.edges.display) || [];
+  const backgroundImage = prompt.background && prompt.background.image;
+  const concentricCircles = prompt.background && prompt.background.concentricCircles;
+  const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
+  const sortOrder = prompt.sortOrder;
 
-  render() {
-    const {
-      promptForward,
-      promptBackward,
-      prompt,
-      stage,
-      resetInterface,
-    } = this.props;
-
-    const subject = prompt.subject;
-    const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
-    const highlight = prompt.highlight && prompt.highlight.variable;
-    const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
-    const createEdge = prompt.edges && prompt.edges.create;
-    const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
-    const displayEdges = (prompt.edges && prompt.edges.display) || [];
-    const backgroundImage = prompt.background && prompt.background.image;
-    const concentricCircles = prompt.background && prompt.background.concentricCircles;
-    const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
-    const sortOrder = prompt.sortOrder;
-
-    return (
-      <div className="sociogram-interface">
-        <PromptObstacle
-          id="PROMPTS_OBSTACLE"
-          className="sociogram-interface__prompts"
-          forward={promptForward}
-          backward={promptBackward}
-          prompts={stage.prompts}
-          prompt={prompt}
-          floating
-          minimizable
+  return (
+    <div className="sociogram-interface">
+      <PromptObstacle
+        id="PROMPTS_OBSTACLE"
+        className="sociogram-interface__prompts"
+        forward={promptForward}
+        backward={promptBackward}
+        prompts={stage.prompts}
+        prompt={prompt}
+        floating
+        minimizable
+      />
+      <div className="sociogram-interface__concentric-circles">
+        <ConcentricCircles
+          subject={subject}
+          layoutVariable={layoutVariable}
+          highlight={highlight}
+          allowHighlight={allowHighlight}
+          createEdge={createEdge}
+          allowPositioning={allowPositioning}
+          displayEdges={displayEdges}
+          backgroundImage={backgroundImage}
+          concentricCircles={concentricCircles}
+          skewedTowardCenter={skewedTowardCenter}
+          sortOrder={sortOrder}
+          connectFrom={connectFrom}
+          updateLinkFrom={handleConnectFrom}
+          key={prompt.id}
         />
-        <div className="sociogram-interface__concentric-circles">
-          <ConcentricCircles
-            subject={subject}
-            layoutVariable={layoutVariable}
-            highlight={highlight}
-            allowHighlight={allowHighlight}
-            createEdge={createEdge}
-            allowPositioning={allowPositioning}
-            displayEdges={displayEdges}
-            backgroundImage={backgroundImage}
-            concentricCircles={concentricCircles}
-            skewedTowardCenter={skewedTowardCenter}
-            sortOrder={sortOrder}
-            key={prompt.id}
-            ref={this.linkingRef}
-          />
-        </div>
-        <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
-          <ButtonObstacle
-            id="RESET_BUTTON_OBSTACLE"
-            label="RESET"
-            size="small"
-            onClick={() => { resetInterface(stage.prompts, this.linkingRef); }}
-          />
-        </div>
       </div>
-    );
-  }
-}
+      <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
+        <ButtonObstacle
+          id="RESET_BUTTON_OBSTACLE"
+          label="RESET"
+          size="small"
+          onClick={handleResetInterface}
+        />
+      </div>
+    </div>
+  );
+};
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
-  resetInterface: PropTypes.func.isRequired,
+  handleResetInterface: PropTypes.func.isRequired,
+  connectFrom: PropTypes.string.isRequired,
+  handleConnectFrom: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -100,16 +121,8 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  withHandlers({
-    resetInterface: props => (prompts, linkingRef) => {
-      linkingRef.current.resetLinking();
-      prompts.forEach((prompt) => {
-        props.resetPropertyForAllNodes(prompt.layout.layoutVariable);
-        if (prompt.edges) {
-          props.resetEdgesOfType(prompt.edges.creates);
-        }
-      });
-    },
-  }),
+  withConnectFrom,
+  withConnectFromHandler,
+  withResetInterfaceHandler,
   withPrompt,
 )(Sociogram);

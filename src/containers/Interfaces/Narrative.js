@@ -4,12 +4,15 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import {
-  Canvas,
   NarrativeControlPanel,
   Annotations,
   ConvexHulls,
-  ConcentricCircles,
 } from '../Canvas';
+
+import {
+  Canvas,
+  ConcentricCircles,
+} from '../../components/Canvas';
 
 /**
   * Narrative Interface
@@ -24,11 +27,7 @@ class Narrative extends Component {
             <NarrativeControlPanel />
             <Annotations />
             <ConvexHulls />
-            {/*
-              <ConcentricCircles />
-              This component needs to be able to work without prompt/stage props
-              Perhaps supplied with node lists and specific configuration options.
-            */}
+            <ConcentricCircles />
           </Canvas>
         </div>
       </div>
