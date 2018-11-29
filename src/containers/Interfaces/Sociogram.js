@@ -55,7 +55,7 @@ class Sociogram extends Component {
           floating
           minimizable
         />
-        <div className="sociogram-interface__sociogram">
+        <div className="sociogram-interface__concentric-circles">
           <ConcentricCircles
             subject={subject}
             layoutVariable={layoutVariable}

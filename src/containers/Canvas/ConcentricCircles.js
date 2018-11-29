@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Canvas from './Canvas';
 import NodeBucket from './NodeBucket';
 import NodeLayout from './NodeLayout';
 import EdgeLayout from './EdgeLayout';
@@ -38,7 +39,7 @@ class ConcentricCircles extends Component {
     } = this.props;
 
     return (
-      <div className="sociogram">
+      <Canvas className="concentric-circles">
         <Background
           concentricCircles={concentricCircles}
           skewedTowardCenter={skewedTowardCenter}
@@ -48,6 +49,7 @@ class ConcentricCircles extends Component {
           displayEdges.length > 0 &&
           <EdgeLayout
             displayEdges={displayEdges}
+            subject={subject}
             layout={layoutVariable}
           />
         }
@@ -68,7 +70,7 @@ class ConcentricCircles extends Component {
           subject={subject}
           sortOrder={sortOrder}
         />
-      </div>
+      </Canvas>
     );
   }
 }

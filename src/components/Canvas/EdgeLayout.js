@@ -6,11 +6,11 @@ const viewBoxScale = 100;
 
 export class EdgeLayout extends PureComponent {
   static propTypes = {
-    displayEdges: PropTypes.array,
+    edges: PropTypes.array,
   };
 
   static defaultProps = {
-    displayEdges: [],
+    edges: [],
   };
 
   renderEdge = ({ key, from, to, type }) => (
@@ -18,12 +18,12 @@ export class EdgeLayout extends PureComponent {
   );
 
   render() {
-    const { displayEdges } = this.props;
+    const { edges } = this.props;
 
     return (
       <div className="edge-layout">
         <svg viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          { displayEdges.map(this.renderEdge) }
+          { edges.map(this.renderEdge) }
         </svg>
       </div>
     );

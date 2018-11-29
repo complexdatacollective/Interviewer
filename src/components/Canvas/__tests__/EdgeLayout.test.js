@@ -19,11 +19,9 @@ const mockEdgeCoords = [
 ];
 
 const mockProps = {
-  stage: {},
-  prompt: {
-    edges: {},
-  },
-  edgeCoords: mockEdgeCoords,
+  displayEdges: [],
+  layout: 'foo',
+  edges: mockEdgeCoords,
 };
 
 describe('<EdgeLayout />', () => {

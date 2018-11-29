@@ -1,30 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<NodeBucket /> renders ok 1`] = `
+exports[`<NodeLayout /> renders ok 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <NodeBucket
-    allowPositioning={true}
-    allowSelect={false}
+  Symbol(enzyme.__unrendered__): <NodeLayout
+    allowHighlighting={false}
+    allowPositioning={false}
+    allowSelect={true}
     canCreateEdge={false}
     canHighlight={false}
     concentricCircles={0}
+    connectFrom={null}
     createEdge="bar"
     displayEdges={Array []}
-    getLabel={[Function]}
+    height={456}
+    highlightAttribute={null}
     highlightAttributes={Object {}}
-    layout="foo"
+    layout={null}
     layoutVariable="foo"
-    node={
-      Object {
-        "label": "some label",
-      }
+    nodes={
+      Array [
+        Object {
+          "_uid": 123,
+          "bar": "buzz",
+          "foo": Object {
+            "x": 0,
+            "y": 0,
+          },
+        },
+      ]
     }
     selectMode=""
     skewedTowardCenter={false}
-    sort={Object {}}
     sortOrder={Array []}
+    toggleEdge={[Function]}
+    toggleHighlight={[Function]}
     updateNode={[Function]}
+    width={123}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -39,29 +51,15 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "host",
     "props": Object {
-      "children": <DragSource
-        allowDrag={true}
-        label="some label"
-        meta={[Function]}
-        scrollDirection="NO_SCROLL"
-      />,
-      "className": "node-bucket",
+      "children": Array [
+        null,
+      ],
+      "className": "node-layout",
     },
     "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "allowDrag": true,
-        "label": "some label",
-        "meta": [Function],
-        "scrollDirection": "NO_SCROLL",
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
+    "rendered": Array [
+      null,
+    ],
     "type": "div",
   },
   Symbol(enzyme.__nodes__): Array [
@@ -70,29 +68,15 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": <DragSource
-          allowDrag={true}
-          label="some label"
-          meta={[Function]}
-          scrollDirection="NO_SCROLL"
-        />,
-        "className": "node-bucket",
+        "children": Array [
+          null,
+        ],
+        "className": "node-layout",
       },
       "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "class",
-        "props": Object {
-          "allowDrag": true,
-          "label": "some label",
-          "meta": [Function],
-          "scrollDirection": "NO_SCROLL",
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
+      "rendered": Array [
+        null,
+      ],
       "type": "div",
     },
   ],

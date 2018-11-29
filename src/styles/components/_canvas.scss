@@ -1,13 +1,7 @@
-.sociogram {
+.canvas {
   @include gpu;
   display: inline-block;
   width: 100%;
   height: 100%;
   position: relative;
-
-  .node-bucket {
-    position: absolute;
-    top: 20px;
-    right: 0;
-  }
 }

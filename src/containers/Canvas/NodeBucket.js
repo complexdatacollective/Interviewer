@@ -48,10 +48,7 @@ const makeMapStateToProps = () => {
   const getNextUnplacedNode = makeGetNextUnplacedNode();
 
   const mapStateToProps = (state, { layout, subject }) => {
-    console.log({ state, layout, subject }, 'nb');
-
     const node = getNextUnplacedNode(state, { layout, subject });
-
 
     return {
       node,

@@ -32,10 +32,10 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
-        className="sociogram-background__image"
+        className="canvas-background__image"
         url="map.png"
       />,
-      "className": "sociogram-background",
+      "className": "canvas-background",
     },
     "ref": null,
     "rendered": Object {
@@ -43,7 +43,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
-        "className": "sociogram-background__image",
+        "className": "canvas-background__image",
         "url": "map.png",
       },
       "ref": null,
@@ -59,10 +59,10 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
-          className="sociogram-background__image"
+          className="canvas-background__image"
           url="map.png"
         />,
-        "className": "sociogram-background",
+        "className": "canvas-background",
       },
       "ref": null,
       "rendered": Object {
@@ -70,7 +70,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
-          "className": "sociogram-background__image",
+          "className": "canvas-background__image",
           "url": "map.png",
         },
         "ref": null,
@@ -135,7 +135,7 @@ ShallowWrapper {
         n={4}
         skewed={true}
       />,
-      "className": "sociogram-background",
+      "className": "canvas-background",
     },
     "ref": null,
     "rendered": Object {
@@ -162,7 +162,7 @@ ShallowWrapper {
           n={4}
           skewed={true}
         />,
-        "className": "sociogram-background",
+        "className": "canvas-background",
       },
       "ref": null,
       "rendered": Object {

@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Radar from './Radar';
 import { BackgroundImage } from '../../components';
-import sociogramOptionsProps from './propTypes';
 
 class Background extends PureComponent {
   static propTypes = {
-    ...sociogramOptionsProps,
+    concentricCircles: PropTypes.number,
+    skewedTowardCenter: PropTypes.bool,
+    image: PropTypes.string,
   };
 
   static defaultProps = {
@@ -19,13 +21,13 @@ class Background extends PureComponent {
     let background;
 
     if (image) {
-      background = <BackgroundImage className="sociogram-background__image" url={image} />;
+      background = <BackgroundImage className="canvas-background__image" url={image} />;
     } else {
       background = <Radar n={concentricCircles} skewed={skewedTowardCenter} />;
     }
 
     return (
-      <div className="sociogram-background">
+      <div className="canvas-background">
         { background }
       </div>
     );

@@ -18,17 +18,18 @@ const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
 
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: ({ updateNode, layout, setRerenderCount, rerenderCount, width, height, x, y }) => (item) => {
-    updateNode(
-      item.meta,
-      {
-        [layout]: relativeCoords({ width, height, x, y }, item),
-      },
-    );
+  onDrop: ({ updateNode, layout, setRerenderCount, rerenderCount, width, height, x, y }) =>
+    (item) => {
+      updateNode(
+        item.meta,
+        {
+          [layout]: relativeCoords({ width, height, x, y }, item),
+        },
+      );
 
-    // Horrible hack for performance (only re-render nodes on drop, not on drag)
-    setRerenderCount(rerenderCount + 1);
-  },
+      // Horrible hack for performance (only re-render nodes on drop, not on drag)
+      setRerenderCount(rerenderCount + 1);
+    },
   onDrag: ({ layout, updateNode, width, height, x, y }) => (item) => {
     if (!has(item.meta[nodeAttributesProperty], layout)) { return; }
 

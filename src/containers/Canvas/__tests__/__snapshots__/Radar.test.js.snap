@@ -22,42 +22,42 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <circle
-          className="sociogram-radar__range"
+          className="canvas-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={50}
         />,
         <circle
-          className="sociogram-radar__range"
+          className="canvas-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={43.54101966249685}
         />,
         <circle
-          className="sociogram-radar__range"
+          className="canvas-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={36.547375096555626}
         />,
         <circle
-          className="sociogram-radar__range"
+          className="canvas-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={28.717082451262844}
         />,
         <circle
-          className="sociogram-radar__range"
+          className="canvas-radar__range"
           cx="50"
           cy="50"
           fill="#000000"
           r={19.270509831248425}
         />,
       ],
-      "className": "sociogram-radar",
+      "className": "canvas-radar",
       "viewBox": "0 0 100 100",
       "xmlns": "http://www.w3.org/2000/svg",
     },
@@ -68,7 +68,7 @@ ShallowWrapper {
         "key": "0",
         "nodeType": "host",
         "props": Object {
-          "className": "sociogram-radar__range",
+          "className": "canvas-radar__range",
           "cx": "50",
           "cy": "50",
           "fill": "#000000",
@@ -83,7 +83,7 @@ ShallowWrapper {
         "key": "1",
         "nodeType": "host",
         "props": Object {
-          "className": "sociogram-radar__range",
+          "className": "canvas-radar__range",
           "cx": "50",
           "cy": "50",
           "fill": "#000000",
@@ -98,7 +98,7 @@ ShallowWrapper {
         "key": "2",
         "nodeType": "host",
         "props": Object {
-          "className": "sociogram-radar__range",
+          "className": "canvas-radar__range",
           "cx": "50",
           "cy": "50",
           "fill": "#000000",
@@ -113,7 +113,7 @@ ShallowWrapper {
         "key": "3",
         "nodeType": "host",
         "props": Object {
-          "className": "sociogram-radar__range",
+          "className": "canvas-radar__range",
           "cx": "50",
           "cy": "50",
           "fill": "#000000",
@@ -128,7 +128,7 @@ ShallowWrapper {
         "key": "4",
         "nodeType": "host",
         "props": Object {
-          "className": "sociogram-radar__range",
+          "className": "canvas-radar__range",
           "cx": "50",
           "cy": "50",
           "fill": "#000000",
@@ -149,42 +149,42 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <circle
-            className="sociogram-radar__range"
+            className="canvas-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={50}
           />,
           <circle
-            className="sociogram-radar__range"
+            className="canvas-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={43.54101966249685}
           />,
           <circle
-            className="sociogram-radar__range"
+            className="canvas-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={36.547375096555626}
           />,
           <circle
-            className="sociogram-radar__range"
+            className="canvas-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={28.717082451262844}
           />,
           <circle
-            className="sociogram-radar__range"
+            className="canvas-radar__range"
             cx="50"
             cy="50"
             fill="#000000"
             r={19.270509831248425}
           />,
         ],
-        "className": "sociogram-radar",
+        "className": "canvas-radar",
         "viewBox": "0 0 100 100",
         "xmlns": "http://www.w3.org/2000/svg",
       },
@@ -195,7 +195,7 @@ ShallowWrapper {
           "key": "0",
           "nodeType": "host",
           "props": Object {
-            "className": "sociogram-radar__range",
+            "className": "canvas-radar__range",
             "cx": "50",
             "cy": "50",
             "fill": "#000000",
@@ -210,7 +210,7 @@ ShallowWrapper {
           "key": "1",
           "nodeType": "host",
           "props": Object {
-            "className": "sociogram-radar__range",
+            "className": "canvas-radar__range",
             "cx": "50",
             "cy": "50",
             "fill": "#000000",
@@ -225,7 +225,7 @@ ShallowWrapper {
           "key": "2",
           "nodeType": "host",
           "props": Object {
-            "className": "sociogram-radar__range",
+            "className": "canvas-radar__range",
             "cx": "50",
             "cy": "50",
             "fill": "#000000",
@@ -240,7 +240,7 @@ ShallowWrapper {
           "key": "3",
           "nodeType": "host",
           "props": Object {
-            "className": "sociogram-radar__range",
+            "className": "canvas-radar__range",
             "cx": "50",
             "cy": "50",
             "fill": "#000000",
@@ -255,7 +255,7 @@ ShallowWrapper {
           "key": "4",
           "nodeType": "host",
           "props": Object {
-            "className": "sociogram-radar__range",
+            "className": "canvas-radar__range",
             "cx": "50",
             "cy": "50",
             "fill": "#000000",

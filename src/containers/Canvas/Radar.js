@@ -47,9 +47,9 @@ const Radar = ({ n, skewed }) => {
   };
 
   return (
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="sociogram-radar">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" className="canvas-radar">
       {radii.map((radius, index) => (
-        <circle key={index} cx="50" cy="50" r={radius} className="sociogram-radar__range" fill={ringFill(index)} />
+        <circle key={index} cx="50" cy="50" r={radius} className="canvas-radar__range" fill={ringFill(index)} />
       ))}
     </svg>
   );
