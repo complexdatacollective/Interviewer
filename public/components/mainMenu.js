@@ -1,5 +1,6 @@
 const { dialog } = require('electron');
 const updater = require('./updater');
+const appUrl = require('./appURL');
 
 const openDialogOptions = {
   buttonLabel: 'Open',
@@ -47,9 +48,6 @@ const MenuTemplate = (window) => {
       label: 'View',
       submenu: [
         { role: 'resetzoom' },
-        { role: 'zoomin' },
-        { role: 'zoomout' },
-        { type: 'separator' },
         { role: 'togglefullscreen' },
       ],
     },
@@ -68,8 +66,8 @@ const MenuTemplate = (window) => {
               buttons: ['OK', 'Cancel'],
             }, (response) => {
               if (response === 0) {
-                window.webContents.session.clearStorageData(() => {
-                  window.webContents.reload();
+                window.webContents.session.clearStorageData({}, () => {
+                  window.loadURL(appUrl);
                 });
               }
             });
