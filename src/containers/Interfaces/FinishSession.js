@@ -49,7 +49,7 @@ class FinishSession extends Component {
     } else if (this.currentSessionisExportable) {
       return (
         <ExportSection defaultServer={defaultServer}>
-          <Button size="small" onClick={() => this.export(currentSession)}>
+          <Button onClick={() => this.export(currentSession)}>
             Export
           </Button>
         </ExportSection>
