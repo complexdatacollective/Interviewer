@@ -508,7 +508,6 @@
         }
       },
       "required": [
-        "additionalProperties",
         "displayLabel"
       ],
       "title": "CardOptions"
