@@ -15,7 +15,7 @@ describe('CategoricalBin', () => {
   it('renders CategoricalBin interface', () => {
     const component = shallow(<CategoricalBin {...requiredProps} />);
     expect(component.find('.categorical-bin-interface')).toHaveLength(1);
-    expect(component.find('.categorical-bin-interface').children()).toHaveLength(3);
+    expect(component.find('.categorical-bin-interface').children()).toHaveLength(4);
     expect(component.find('.categorical-bin-interface__prompt')).toHaveLength(1);
     expect(component.find('.categorical-bin-interface__bucket')).toHaveLength(1);
   });
