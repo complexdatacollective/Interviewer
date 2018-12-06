@@ -11,6 +11,11 @@
   display: flex;
   flex-direction: column;
 
+  hr {
+    border: solid 1px var(--light-background);
+    width: 75%;
+  }
+
   &__prompt {
     @include interface-prompt;
   }
