@@ -39,6 +39,7 @@ const CategoricalBin = ({
           sortOrder={prompt.bucketSortOrder}
         />
       </div>
+      <hr />
       <CategoricalList key={prompt.id} stage={stage} prompt={prompt} />
     </div>
   );
