@@ -1,7 +1,9 @@
 .node-bucket {
+  // sass-lint:disable-block no-color-literals
+  --node-bucket-bg: rgba(255, 255, 255.4);
   background: var(--node-bucket-bg);
-  border-radius: 150px;
-  padding: 20px;
+  border-radius: 100%;
+  padding: 1.25rem;
 
   .node {
     font-size: calc(var(--base-node-size) * .66);

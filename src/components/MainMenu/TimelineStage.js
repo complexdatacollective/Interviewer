@@ -24,7 +24,7 @@ const TimelineStage = ({ item: { type, label, index }, handleOpenStage, currentS
           title="NameGenerator Interface"
         />
       </div>
-      <div className="main-menu-timeline-stage__label">{label}</div>
+      <div className="main-menu-timeline-stage__label">{index + 1}. {label}</div>
     </div>
   );
 };

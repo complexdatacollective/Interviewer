@@ -10,7 +10,7 @@
     backdrop-filter: blur(.75rem);
   }
   z-index: var(--z-modal);
-  padding: 0 8vw;
+  padding: 0 8vmin;
   opacity: 0;
   transition: opacity var(--animation-duration-standard) var(--animation-easing);
 
@@ -36,7 +36,7 @@
     flex: 0 0 13vh;
     align-items: center;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     flex-direction: row;
   }
 
@@ -51,12 +51,6 @@
     transform: translateY(-5rem);
     transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
     transition-delay: var(--animation-duration-fast);
-  }
-
-  &__footer {
-    flex: 0 0 13vh;
-    align-items: center;
-    display: flex;
   }
 }
 

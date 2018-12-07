@@ -7,7 +7,7 @@
   transition-delay: var(--animation-duration-standard);
 
   &__timeline {
-    padding: spacing(large) spacing(large) spacing(large) spacing(huge);
+    padding: spacing(large);
     flex: 3 1 auto;
     display: flex;
     flex-direction: column;

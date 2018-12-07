@@ -28,6 +28,7 @@ class MainMenu extends Component {
       <div className={cx('main-menu', { 'main-menu--show': isOpen })}>
         <div className="main-menu__content">
           <div className="main-menu__header">
+            <Button color="neon-coral" onClick={handleReturnToStart}>&#8617; Return to start screen</Button>
             <Icon name="close" onClick={handleCloseMenu} />
           </div>
           <div className="main-menu__panels">
@@ -41,9 +42,6 @@ class MainMenu extends Component {
                 onClickInactive={() => this.handleToggleActivePanel('stages')}
               />
             )}
-          </div>
-          <div className="main-menu__footer">
-            <Button color="neon-coral" onClick={handleReturnToStart}>Return to start screen</Button>
           </div>
         </div>
       </div>
