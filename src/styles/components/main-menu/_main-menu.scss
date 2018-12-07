@@ -1,28 +1,5 @@
 .main-menu {
-  position: absolute;
-  top: -100%;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: var(--color-navy-taupe);
-  @supports (backdrop-filter: blur(.75rem)) {
-    background: rgba(0, 0, 0, .25); //sass-lint:disable-line no-color-literals
-    backdrop-filter: blur(.75rem);
-  }
-  z-index: var(--z-modal);
-  padding: 0 8vw;
-  opacity: 0;
-  transition: opacity var(--animation-duration-standard) var(--animation-easing);
 
-  &--show {
-    top: 0;
-    opacity: 1;
-
-    .main-menu__panels {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
   &__content {
     width: 100%;
@@ -30,14 +7,22 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    z-index: var(--z-modal);
+    padding: 0 8vmin;
+    transition: opacity var(--animation-duration-standard) var(--animation-easing);
   }
 
   &__header {
     flex: 0 0 13vh;
     align-items: center;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     flex-direction: row;
+  }
+
+  &__return-button {
+    font-weight: 700;
+    font-size: 1.5rem;
   }
 
   &__panels {
@@ -47,16 +32,8 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
-    opacity: 0;
-    transform: translateY(-5rem);
     transition: opacity var(--animation-duration-standard) var(--animation-easing), transform var(--animation-duration-standard) var(--animation-easing);
     transition-delay: var(--animation-duration-fast);
-  }
-
-  &__footer {
-    flex: 0 0 13vh;
-    align-items: center;
-    display: flex;
   }
 }
 

@@ -7,7 +7,8 @@
 
   .node-bucket {
     position: absolute;
-    top: 20px;
-    right: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

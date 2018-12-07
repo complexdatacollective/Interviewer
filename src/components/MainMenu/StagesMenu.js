@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Timeline from './Timeline';
-import StatsPanel from '../../containers/MainMenu/StatsPanel';
 import { Icon } from '../../ui/components';
 import MenuPanel from './MenuPanel';
 
@@ -46,7 +45,6 @@ class StagesMenu extends PureComponent {
             </div>
             <Timeline items={this.state.stages} />
           </div>
-          <StatsPanel />
         </div>
       </MenuPanel>
     );
