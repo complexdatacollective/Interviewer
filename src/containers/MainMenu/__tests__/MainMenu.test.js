@@ -63,7 +63,7 @@ describe('<MainMenu />', () => {
     const { store, actions } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
-    subject.find('Button').at(0).simulate('click');
+    subject.find('.main-menu__return-button').at(0).simulate('click');
 
     const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
 
