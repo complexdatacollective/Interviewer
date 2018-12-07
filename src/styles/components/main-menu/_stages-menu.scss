@@ -7,14 +7,14 @@
   transition-delay: var(--animation-duration-standard);
 
   &__timeline {
-    padding: spacing(large);
+    padding: spacing(large) spacing(large) spacing(large) spacing(huge);
     flex: 3 1 auto;
     display: flex;
     flex-direction: column;
 
     &-header {
       flex: 0 0 3rem;
-      align-items: flex-start;
+      align-items: center;
       display: flex;
       justify-content: space-between;
 

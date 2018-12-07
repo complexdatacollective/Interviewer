@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Button, Icon } from '../../ui/components';
+import { Icon } from '../../ui/components';
 import StagesMenu from '../../containers/MainMenu/StagesMenu';
 import SettingsMenu from '../../containers/MainMenu/SettingsMenu';
 
@@ -28,7 +28,7 @@ class MainMenu extends Component {
       <div className={cx('main-menu', { 'main-menu--show': isOpen })}>
         <div className="main-menu__content">
           <div className="main-menu__header">
-            <Button color="neon-coral" onClick={handleReturnToStart}>&#8617; Return to start screen</Button>
+            <div className="main-menu__return-button" onClick={handleReturnToStart}>&#8592; Return to start screen</div>
             <Icon name="close" onClick={handleCloseMenu} />
           </div>
           <div className="main-menu__panels">

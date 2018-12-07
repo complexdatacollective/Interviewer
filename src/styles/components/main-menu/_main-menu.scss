@@ -40,6 +40,11 @@
     flex-direction: row;
   }
 
+  &__return-button {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
   &__panels {
     flex: 1 1 auto;
     display: flex;
