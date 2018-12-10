@@ -102,6 +102,10 @@ class CategoricalList extends Component {
       'categorical-list__content',
       { 'categorical-list__content--expanded': this.state.expandedBinValue },
     );
+    const styleNames = { '--num-categorical-items': this.props.bins.length };
+    if (this.props.bins.length < 4) {
+      styleNames['--categorical-item-multiplier'] = 1.2;
+    }
 
     return (
       <Flipper flipKey={this.state.expandedBinValue} className="categorical-list">
@@ -118,7 +122,7 @@ class CategoricalList extends Component {
           </div>
           <div
             className={classNames}
-            style={{ '--num-categorical-items': this.props.bins.length }}
+            style={styleNames}
           >
             {this.props.bins.map(this.renderCategoricalBin).filter((bin, index) =>
               this.props.bins[index].value !== this.state.expandedBinValue,

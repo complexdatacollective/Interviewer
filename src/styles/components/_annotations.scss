@@ -12,8 +12,8 @@
 
   &__path {
     fill: none;
-    stroke-width: 1px;
-    stroke: palette('text');
+    stroke-width: .25rem;
+    stroke: palette('selected');
     stroke-linejoin: round;
     stroke-linecap: round;
   }

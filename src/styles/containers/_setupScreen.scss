@@ -8,16 +8,6 @@
   width: 100%;
   min-height: 15rem;
 
-  .icon {
-    &[name='settings'] {
-      position: absolute;
-      top: 1.8rem;
-      left: 1.8rem;
-      margin: 2.5rem;
-      z-index: var(--z-global-ui);
-    }
-  }
-
   &__header {
     align-items: center;
     display: flex;

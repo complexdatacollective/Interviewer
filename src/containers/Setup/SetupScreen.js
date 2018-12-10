@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { ProtocolList, SessionList } from '.';
 
 /**
@@ -49,7 +48,6 @@ class Setup extends Component {
 
     return (
       <div className="setup">
-        <Icon name="settings" onClick={this.props.toggleMenu} />
         <div className="setup__header">
           <div className="header-content">
             <div className="header-content__title">
@@ -91,7 +89,6 @@ Setup.propTypes = {
   protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
   stageIndex: PropTypes.number,
-  toggleMenu: PropTypes.func.isRequired,
 };
 
 Setup.defaultProps = {
@@ -111,12 +108,6 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleMenu: () => dispatch(uiActions.toggle('isMenuOpen')),
-  };
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Setup));
+export default withRouter(connect(mapStateToProps)(Setup));
 
 export { Setup as UnconnectedSetup };

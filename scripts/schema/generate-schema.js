@@ -202,6 +202,7 @@ const generateSchema = async () => {
       then: { required: ['value'] }, // in addition to props which are always required
     },
   ];
+
   // These need not be UUIDs
   delete defs.Options.properties.type.format;
   delete defs.Options.properties.attribute.format;
@@ -220,6 +221,7 @@ const generateSchema = async () => {
   // need actual review...
   pull(defs.Item.required, 'size');
   pull(defs.Highlight.required, 'allowHighlighting');
+  pull(defs.CardOptions.required, 'additionalProperties');
 
   fs.writeFileSync(schemaFile, JSON.stringify(schema, null, 2));
 

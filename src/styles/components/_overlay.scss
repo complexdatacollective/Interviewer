@@ -3,7 +3,7 @@ $close-button-size: 1rem;
 .overlay {
   background: var(--modal-main-panel);
   color: var(--text-light);
-  box-shadow: 0 0 .25rem 0 var(--modal-window-box-shadow);
+  box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
   position: relative;
   border-radius: .75rem;
   padding: 2rem;

@@ -1,7 +1,6 @@
 .categorical-item {
-  --categorical-item-margin: .5rem;
   --categorical-item-color: var(--primary);
-  --categorical-item-size: calc(.8 * var(--categorical-available-height) / var(--num-categorical-rows));
+  --categorical-item-size: calc(var(--categorical-item-multiplier) * var(--categorical-available-height) / var(--num-categorical-rows));
   @include transition-properties((background-color width height margin), var(--animation-easing), var(--animation-duration-standard));
 
   display: flex;
@@ -16,7 +15,6 @@
     &:not(.categorical-item--hover) {
       &:not(.categorical-item--expanded) {
         background-color: var(--categorical-item-color);
-        transition: background-color var(--animation-duration-standard) var(--animation-easing);
       }
     }
   }
@@ -24,9 +22,9 @@
   &--hover {
     @include transition-properties((background-color width height margin), var(--animation-easing), var(--animation-duration-standard));
     background-color: var(--categorical-item-color);
-    height: calc((var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
+    height: calc(var(--categorical-item-size) + (var(--categorical-item-margin) * 2));
     margin: 0;
-    width: calc((var(--categorical-available-height) / var(--num-categorical-rows)) + (var(--categorical-item-margin) * 2));
+    width: calc(var(--categorical-item-size) + (var(--categorical-item-margin) * 2));
   }
 
   &__title {
@@ -68,6 +66,11 @@
       height: calc(var(--categorical-available-height) + (var(--categorical-item-margin) * 2));
       margin: 0;
       width: calc(var(--categorical-available-height) + (var(--categorical-item-margin) * 2));
+      
+      .categorical-item__content {
+        padding: 1rem 2rem;
+        transition: padding var(--animation-duration-standard) var(--animation-easing);
+      }
     }
 
     .categorical-item__title,
@@ -80,6 +83,8 @@
       clip-path: circle();
       shape-outside: circle();
       width: 100%;
+      padding: 1rem;
+      transition: padding var(--animation-duration-standard) var(--animation-easing);
     }
   }
 
@@ -89,6 +94,10 @@
     .scrollable {
       @include scroller-mask($scroller-top-padding-small);
       height: 100%;
+    }
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
     }
   }
 }
