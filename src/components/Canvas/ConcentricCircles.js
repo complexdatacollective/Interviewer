@@ -68,7 +68,7 @@ ConcentricCircles.propTypes = {
   skewedTowardCenter: PropTypes.bool,
   sortOrder: PropTypes.array,
   connectFrom: PropTypes.string,
-  updateLinkFrom: PropTypes.func.isRequired,
+  updateLinkFrom: PropTypes.func,
 };
 
 ConcentricCircles.defaultProps = {
@@ -82,6 +82,7 @@ ConcentricCircles.defaultProps = {
   skewedTowardCenter: null,
   sortOrder: [],
   connectFrom: null,
+  updateLinkFrom: () => {},
 };
 
 export { ConcentricCircles };

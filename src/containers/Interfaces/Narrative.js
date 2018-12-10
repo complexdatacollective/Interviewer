@@ -19,15 +19,46 @@ import {
   * @extends Component
   */
 class Narrative extends Component {
+  constructor() {
+    super();
+    this.state = {
+      presetIndex: 0,
+    };
+  }
+
   render() {
+    const {
+      stage,
+    } = this.props;
+
+    const subject = stage.subject;
+    const presets = stage.presets;
+    const currentPreset = presets[this.state.presetIndex];
+    const layoutVariable = currentPreset.layoutVariable;
+    const highlight = currentPreset.highlight && currentPreset.highlight[0].variable;
+    const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
+    const backgroundImage = stage.background && stage.background.image;
+    const concentricCircles = stage.background && stage.background.concentricCircles;
+    const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
+    const freeDraw = stage.behaviours && stage.behaviours.freeDraw;
+    
     return (
       <div className="narrative-interface">
-        <div className="narrative-interface__canvas">
+        <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
             <NarrativeControlPanel />
-            <Annotations />
+            <Annotations freeDraw={freeDraw} />
             <ConvexHulls />
-            <ConcentricCircles />
+            <ConcentricCircles
+              subject={subject}
+              layoutVariable={layoutVariable}
+              highlight={highlight}
+              displayEdges={displayEdges}
+              backgroundImage={backgroundImage}
+              concentricCircles={concentricCircles}
+              skewedTowardCenter={skewedTowardCenter}
+              key={currentPreset.id}
+            />
           </Canvas>
         </div>
       </div>
@@ -39,9 +70,15 @@ Narrative.propTypes = {
   stage: PropTypes.object.isRequired,
 };
 
+function mapStateToProps(state, ownProps) {
+  return {
+    stage: ownProps.stage || stages(state)[ownProps.stageIndex],
+  };
+}
+
 const mapDispatchToProps = () => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Narrative);

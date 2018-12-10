@@ -1389,7 +1389,44 @@
     {
       "id": "narrative",
       "type": "Narrative",
-      "label": "Narrative"
+      "label": "Narrative",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "presets": [
+        {
+          "id": "preset1",
+          "label": "My preset",
+          "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ]
+          },
+          "highlight": [
+            {
+              "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
+              "color": "node-highlight-seq-1"
+            },
+            {
+              "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
+              "color": "node-highlight-seq-2"
+            }
+          ]
+        }
+      ],
+      "background": {
+        "concentricCircles": 4,
+        "skewedTowardCenter": true
+      },
+      "behaviours": {
+        "freeDraw": true,
+        "featureNode": true,
+        "allowRespositioning": true
+      }
     },
     {
       "id": "namegenroster1",
