@@ -1419,7 +1419,7 @@
         }
       ],
       "background": {
-        "concentricCircles": 4,
+        "concentricCircles": 3,
         "skewedTowardCenter": true
       },
       "behaviours": {

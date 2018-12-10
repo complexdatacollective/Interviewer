@@ -5,8 +5,8 @@ import { makeGetDisplayEdges } from '../../selectors/canvas';
 const makeMapStateToProps = () => {
   const getDisplayEdges = makeGetDisplayEdges();
 
-  const mapStateToProps = (state, { subject, displayEdges, layout }) => ({
-    edges: getDisplayEdges(state, { subject, displayEdges, layout }),
+  const mapStateToProps = (state, { subject, displayEdges, layoutVariable }) => ({
+    edges: getDisplayEdges(state, { subject, displayEdges, layoutVariable }),
   });
 
   return mapStateToProps;

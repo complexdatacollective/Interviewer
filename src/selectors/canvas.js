@@ -1,4 +1,4 @@
-import { first, has } from 'lodash';
+import { first, has, groupBy } from 'lodash';
 import { networkNodes, networkEdges } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -8,7 +8,8 @@ import {
   nodeAttributesProperty,
 } from '../ducks/modules/network';
 
-const getLayout = (_, props) => props.layout;
+const getLayout = (_, props) => props.layoutVariable;
+const getCategoricalVariable = (_, props) => props.groupVariable;
 const getSubject = (_, props) => props.subject;
 const getSortOptions = (_, props) => props.sortOrder;
 const getDisplayEdges = (_, props) => props.displayEdges;
@@ -67,6 +68,20 @@ export const makeGetPlacedNodes = () =>
       });
     },
   );
+
+/**
+ * Selector for nodes by group.
+ */
+
+export const makeGetNodesByCategorical = () => {
+  const getPlacedNodes = makeGetPlacedNodes();
+  return createDeepEqualSelector(
+    getPlacedNodes,
+    getCategoricalVariable,
+    (nodes, categoricalVariable) =>
+      groupBy(nodes, node => node[nodeAttributesProperty][categoricalVariable]),
+  );
+};
 
 const edgeCoords = (edge, { nodes, layout }) => {
   const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
