@@ -1,0 +1,43 @@
+.accordion {
+  border-bottom: solid 1px var(--narrative-border-bottom-color);
+
+  & :not(.accordion__toggle--open) {
+    .accordion__icon--open {
+      display: none;
+    }
+  }
+
+  &__toggle {
+    align-items: center;
+    display: flex;
+    height: 4rem;
+    justify-content: space-between;
+    opacity: .7;
+    padding: 0 1rem;
+
+    &:hover {
+      background-color: var(--narrative-heading-bg-hover);
+    }
+
+    &:hover,
+    &--open {
+      opacity: 1;
+    }
+
+    h4 {
+      letter-spacing: .15rem;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    & .accordion__icon {
+      width: 1rem;
+    }
+
+    &--open {
+      .accordion__icon--close {
+        display: none;
+      }
+    }
+  }
+}

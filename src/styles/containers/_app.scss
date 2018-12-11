@@ -5,6 +5,8 @@
 
 // container for menus and content
 .app {
+  --right-edge-position: 0;
+
   background: palette('primary');
   height: 100%;
   width: 100vw;
@@ -17,11 +19,12 @@
   .app-settings {
     position: absolute;
     top: 0;
-    right: 0;
+    right: var(--right-edge-position);
     margin: 2.5rem;
     height: 4rem;
     width: 4rem;
     z-index: var(--z-global-ui);
+    transition: right var(--animation-duration-standard) var(--animation-easing);
   }
 
   &--electron {

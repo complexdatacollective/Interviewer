@@ -25,6 +25,14 @@ class Narrative extends Component {
     };
   }
 
+  updatePreset = (index) => {
+    if (index !== this.state.presetIndex) {
+      this.setState({
+        presetIndex: index,
+      });
+    }
+  }
+
   render() {
     const {
       stage,
@@ -47,7 +55,6 @@ class Narrative extends Component {
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            <NarrativeControlPanel />
             <Annotations freeDraw={freeDraw} />
             <ConcentricCircles
               subject={subject}
@@ -59,6 +66,12 @@ class Narrative extends Component {
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
               key={currentPreset.id}
+            />
+            <NarrativeControlPanel
+              presets={presets}
+              highlights={currentPreset.highlight}
+              displayEdges={displayEdges}
+              updatePreset={this.updatePreset}
             />
           </Canvas>
         </div>

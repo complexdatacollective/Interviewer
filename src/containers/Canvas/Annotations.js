@@ -75,6 +75,9 @@ class Annotations extends Component {
   }
 
   componentWillUnmount() {
+    if (this.portal) {
+      this.portal.remove();
+    }
     this.cleanupDragManager();
   }
 
