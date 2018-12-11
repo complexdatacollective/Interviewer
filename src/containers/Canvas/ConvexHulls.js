@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { withBounds } from '../../behaviours';
 
 import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import { makeGetNodesByCategorical } from '../../selectors/canvas';
@@ -17,4 +18,5 @@ function makeMapStateToProps() {
 
 export default compose(
   connect(makeMapStateToProps),
+  withBounds,
 )(ConvexHulls);

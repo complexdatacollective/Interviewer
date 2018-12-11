@@ -31,8 +31,6 @@ export const makeGetNextUnplacedNode = () =>
 
       const unplacedNodes = nodes.filter((node) => {
         const attributes = getNodeAttributes(node);
-        console.log(attributes, layout);
-        console.log(has(attributes, layout));
         return (
           node.type === type &&
           !has(attributes, layout)
