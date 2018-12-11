@@ -27,10 +27,18 @@ class ConvexHulls extends React.PureComponent {
     console.log(hulls);
     return (
       hulls.map((hull, index) => {
-        const hullPoints = hull;
 
+        let hullPoints = '';
+        hull.forEach((item) => {
+          const itemX = item[0] * window.innerWidth;
+          const itemY = item[1] * window.innerHeight;
+          hullPoints += `${itemX}, ${itemY} `;
+        });
+
+        const color = `cat-color-seq-${index + 1}`;
+        console.log(hullPoints);
         return (
-          <ConvexHull points={hullPoints} key={index} />
+          <ConvexHull color={color} points={hullPoints} key={index} />
         );
       })
     );

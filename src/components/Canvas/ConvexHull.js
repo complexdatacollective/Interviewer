@@ -4,14 +4,11 @@ import PropTypes from 'prop-types';
 export class ConvexHull extends PureComponent {
   render() {
     const { color, points } = this.props;
-
+    const hullColor = `var(--${color})`;
+    console.log(points);
     return (
-      <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" points={points}>
-        <path d="M10 10 H 90 V 90 H 10 L 10 10" />
-        <circle cx="10" cy="10" r="2" fill={color} />
-        <circle cx="90" cy="90" r="2" fill={color} />
-        <circle cx="90" cy="10" r="2" fill={color} />
-        <circle cx="10" cy="90" r="2" fill={color} />
+      <svg style={{ background: color, position: 'absolute', top: 0, left: 0 }} width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <polygon points={points} style={{ strokeLinejoin: 'round', stroke: hullColor, strokeWidth: 'calc(var(--base-node-size) / 2)', mixBlendMode: 'screen', fill: hullColor }} />
       </svg>
     );
   }
@@ -23,7 +20,7 @@ ConvexHull.propTypes = {
 };
 
 ConvexHull.defaultProps = {
-  color: 'edge-color-seq-1',
+  color: 'cat-color-seq-1',
 };
 
 export default ConvexHull;
