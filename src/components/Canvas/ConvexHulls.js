@@ -6,28 +6,34 @@ import { ConvexHull } from './ConvexHull';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 class ConvexHulls extends React.PureComponent {
-  generateHulls = (nodesByGroup) => {
-    return map(nodesByGroup, (group) => {
-      const groupCoords = map(group, (node) => {
+
+  /*
+    * generateHulls - generate points that encompass a set of nodes
+    *
+    * takes an object structured as follows:
+    * groupName:
+    *   [ nodeList ]
+  */
+
+  generateHulls = nodesByGroup =>
+    map(nodesByGroup, (group) => {
+      const groupAsCoords = map(group, (node) => {
         const coords = node[nodeAttributesProperty][this.props.layoutVariable];
         return [coords.x, coords.y];
       });
-      return ConcaveMan(groupCoords);
+      // See: https://github.com/mapbox/concaveman
+      return ConcaveMan(groupAsCoords, 0.6, 0);
     });
-  };
 
   render() {
     const {
       nodesByGroup,
     } = this.props;
 
-
     const hulls = this.generateHulls(nodesByGroup);
 
-    console.log(hulls);
     return (
       hulls.map((hull, index) => {
-
         let hullPoints = '';
         hull.forEach((item) => {
           const itemX = item[0] * window.innerWidth;
@@ -36,7 +42,6 @@ class ConvexHulls extends React.PureComponent {
         });
 
         const color = `cat-color-seq-${index + 1}`;
-        console.log(hullPoints);
         return (
           <ConvexHull color={color} points={hullPoints} key={index} />
         );
