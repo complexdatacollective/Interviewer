@@ -29,7 +29,6 @@ class ConvexHulls extends React.PureComponent {
     } = this.props;
 
     const hulls = this.generateHulls(nodesByGroup);
-
     return (
       hulls.map((hull, index) => {
         let hullPoints = '';

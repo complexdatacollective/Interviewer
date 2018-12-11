@@ -304,6 +304,12 @@
               "maxLength": 10
             }
           },
+          "d1qwe2d-aefe-4f48-841d-09f020e0e988": {
+            "name": "closenessLayout",
+            "label": "Closeness layout",
+            "description": "Closeness layout",
+            "type": "layout"
+          },
           "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de": {
             "name": "numberVariable",
             "label": "Number Variable",
@@ -1392,14 +1398,14 @@
       "label": "Narrative",
       "subject": {
         "entity": "node",
-        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+        "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7"
       },
       "presets": [
         {
           "id": "preset1",
           "label": "My preset",
-          "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
-          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "layoutVariable": "d1qwe2d-aefe-4f48-841d-09f020e0e988",
+          "groupVariable": "6c647977-f2d1-426f-b0c5-6d44c795c554",
           "edges": {
             "display": [
               "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
