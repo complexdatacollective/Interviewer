@@ -75,12 +75,6 @@ class Annotations extends Component {
   }
 
   componentWillUnmount() {
-    const nodeListRoot = document.getElementsByClassName('node-layout').length > 0 ?
-      document.getElementsByClassName('node-layout')[0] :
-      document.getElementById('narrative-interface__canvas');
-    if (nodeListRoot) {
-      nodeListRoot.removeChild(this.portal);
-    }
     this.cleanupDragManager();
   }
 
