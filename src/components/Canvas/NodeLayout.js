@@ -64,7 +64,6 @@ class NodeLayout extends Component {
       width,
       height,
     } = this.props;
-
     return (
       <div className="node-layout">
         { nodes.map((node) => {

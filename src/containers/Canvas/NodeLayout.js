@@ -103,7 +103,7 @@ function makeMapStateToProps() {
     state,
     { createEdge, allowHighlighting, subject, layoutVariable },
   ) {
-    const allowSelect = createEdge || allowHighlighting;
+    const allowSelect = !!(createEdge || allowHighlighting);
 
     return {
       nodes: getPlacedNodes(state, { subject, layoutVariable }),
