@@ -21,7 +21,6 @@ const CategoricalBin = ({
   const {
     prompts,
   } = stage;
-  console.log(nodesForPrompt);
   return (
     <div className="categorical-bin-interface">
       <div className="categorical-bin-interface__prompt">
@@ -60,8 +59,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
-    console.log(activePromptVariable);
-    console.log(stageNodes);
+
     return {
       activePromptVariable,
       nodesForPrompt: stageNodes.filter(
