@@ -58,7 +58,7 @@ const ConcentricCircles = ({
     />
     <NodeBucket
       id="NODE_BUCKET"
-      layout={layoutVariable}
+      layoutVariable={layoutVariable}
       subject={subject}
       sortOrder={sortOrder}
     />
