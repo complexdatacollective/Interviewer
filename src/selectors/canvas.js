@@ -1,4 +1,4 @@
-import { first, has, groupBy } from 'lodash';
+import { first, has, groupBy, filter } from 'lodash';
 import { networkNodes, networkEdges } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -70,7 +70,7 @@ export const makeGetPlacedNodes = () =>
   );
 
 /**
- * Selector for nodes by group.
+ * Selector for nodes by group (categorical) variable.
  */
 
 export const makeGetNodesByCategorical = () => {
@@ -78,8 +78,14 @@ export const makeGetNodesByCategorical = () => {
   return createDeepEqualSelector(
     getPlacedNodes,
     getCategoricalVariable,
-    (nodes, categoricalVariable) =>
-      groupBy(nodes, node => node[nodeAttributesProperty][categoricalVariable]),
+    (nodes, categoricalVariable) => {
+      // Exclude nodes with no set value for this variable.
+      const filteredNodes = filter(nodes, node =>
+        node[nodeAttributesProperty][categoricalVariable],
+      );
+
+      return groupBy(filteredNodes, node => node[nodeAttributesProperty][categoricalVariable]);
+    },
   );
 };
 

@@ -6,7 +6,6 @@ import { ConvexHull } from './ConvexHull';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 class ConvexHulls extends React.PureComponent {
-
   /*
     * generateHulls - generate points that encompass a set of nodes
     *
@@ -14,7 +13,6 @@ class ConvexHulls extends React.PureComponent {
     * groupName:
     *   [ nodeList ]
   */
-
   generateHulls = nodesByGroup =>
     map(nodesByGroup, (group) => {
       const groupAsCoords = map(group, (node) => {
