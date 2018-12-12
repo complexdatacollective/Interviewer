@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { map, isEqual } from 'lodash';
 import ConcaveMan from 'concaveman';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
+import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
+
+const windowDimensions = getAbsoluteBoundingRect(document.body);
+
+console.log(windowDimensions);
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
     if (!isEqual(this.props.nodePoints, nextProps.nodePoints)) {
@@ -24,8 +29,8 @@ export class ConvexHull extends Component {
     // See: https://github.com/mapbox/concaveman
     ConcaveMan(groupAsCoords, 0.6, 0).forEach((item) => {
       // Scale each hull point from ratio to window coordinate.
-      const itemX = item[0] * window.innerWidth;
-      const itemY = item[1] * window.innerHeight;
+      const itemX = item[0] * windowDimensions.width;
+      const itemY = item[1] * windowDimensions.height;
 
       // SVG points structured as string: "value1,value2 value3,value4"
       hullPointsAsSVG += `${itemX}, ${itemY} `;

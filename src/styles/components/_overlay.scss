@@ -14,7 +14,7 @@ $close-button-size: 1rem;
   }
 
   &__content {
-    max-height: 80vh;
+    max-height: 80%;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 .5rem; // to make scroll bar less jarring
@@ -43,7 +43,7 @@ $close-button-size: 1rem;
 
   &--fullscreen {
     display: block;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     border-radius: 0;
     padding: 6rem;

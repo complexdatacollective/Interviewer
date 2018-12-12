@@ -4,7 +4,7 @@
   --categorical-padding-top: 1rem;
   --categorical-padding-bottom: 4rem;
 
-  height: 100vh;
+  height: 100%;
   //sass-lint:disable shorthand-values
   padding: var(--categorical-padding-top) 0 var(--categorical-padding-bottom);
   overflow: hidden;

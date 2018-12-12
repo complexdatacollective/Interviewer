@@ -58,7 +58,7 @@
 
   &__main {
     flex: 1 1 auto;
-    height: calc(100vh - var(--setup-header-height));
+    height: calc(100% - var(--setup-header-height));
     display: flex;
     align-items: center;
 

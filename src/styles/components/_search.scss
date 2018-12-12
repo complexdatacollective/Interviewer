@@ -1,6 +1,6 @@
 $content-padding: 1rem;
 $module-name: search;
-$results-height: calc(100vh - 23rem);
+$results-height: calc(100% - 23rem);
 
 // Base input on global styling; override as needed below.
 @include text-input('#{$module-name}__input');
@@ -11,7 +11,7 @@ $results-height: calc(100vh - 23rem);
 
   background-color: color('cyber-grape');
   border-radius: var(--border-radius);
-  max-height: 100vh;
+  max-height: 100%;
   position: absolute;
   transform-origin: right bottom;
 
