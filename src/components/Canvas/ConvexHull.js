@@ -1,15 +1,48 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { map, isEqual } from 'lodash';
+import ConcaveMan from 'concaveman';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 
-export class ConvexHull extends PureComponent {
+export class ConvexHull extends Component {
+  shouldComponentUpdate(nextProps) {
+    if (!isEqual(this.props.nodePoints, nextProps.nodePoints)) {
+      return true;
+    }
+    return false;
+  }
+
+  generateHull = (nodeCollection) => {
+    // Restructure as array of arrays of coords
+    const groupAsCoords = map(nodeCollection, (node) => {
+      const nodeCoords = node[nodeAttributesProperty][this.props.layoutVariable];
+      return [nodeCoords.x, nodeCoords.y];
+    });
+
+    let hullPointsAsSVG = '';
+
+    // See: https://github.com/mapbox/concaveman
+    ConcaveMan(groupAsCoords, 0.6, 0).forEach((item) => {
+      // Scale each hull point from ratio to window coordinate.
+      const itemX = item[0] * window.innerWidth;
+      const itemY = item[1] * window.innerHeight;
+
+      // SVG points structured as string: "value1,value2 value3,value4"
+      hullPointsAsSVG += `${itemX}, ${itemY} `;
+    });
+
+    return hullPointsAsSVG;
+  }
+
   render() {
-    const { color, points } = this.props;
+    const { color, nodePoints } = this.props;
 
     const hullClasses = `convex-hull convex-hull__${color}`;
+    const hullPoints = this.generateHull(nodePoints);
 
     return (
       <svg className={hullClasses} xmlns="http://www.w3.org/2000/svg">
-        <polygon points={points} />
+        <polygon points={hullPoints} />
       </svg>
     );
   }
@@ -17,7 +50,8 @@ export class ConvexHull extends PureComponent {
 
 ConvexHull.propTypes = {
   color: PropTypes.string,
-  points: PropTypes.string.isRequired,
+  nodePoints: PropTypes.array.isRequired,
+  layoutVariable: PropTypes.string.isRequired,
 };
 
 ConvexHull.defaultProps = {

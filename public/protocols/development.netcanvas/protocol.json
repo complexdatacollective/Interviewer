@@ -954,6 +954,11 @@
           "component": "Text"
         },
         {
+          "variable": "e343a91f-628d-4175-870c-957beffa0154",
+          "component": "ToggleButtonGroup",
+          "label": "Multiple categorical membership"
+        },
+        {
           "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
           "value": "network-canvas"
@@ -1387,7 +1392,7 @@
       ]
     },
     {
-      "id": "narrative",
+      "id": "narrative1",
       "type": "Narrative",
       "label": "Narrative",
       "subject": {
