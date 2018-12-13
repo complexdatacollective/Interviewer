@@ -21,7 +21,7 @@ class NodeLayout extends Component {
     allowPositioning: PropTypes.bool,
     canCreateEdge: PropTypes.bool,
     allowSelect: PropTypes.bool,
-    layout: PropTypes.string,
+    layoutVariable: PropTypes.string,
     width: PropTypes.number,
     height: PropTypes.number,
   };
@@ -33,7 +33,7 @@ class NodeLayout extends Component {
     allowPositioning: true,
     allowSelect: true,
     canCreateEdge: true,
-    layout: null,
+    layoutVariable: null,
     width: null,
     height: null,
   };
@@ -60,22 +60,21 @@ class NodeLayout extends Component {
       nodes,
       allowPositioning,
       allowSelect,
-      layout,
+      layoutVariable,
       width,
       height,
     } = this.props;
-
     return (
       <div className="node-layout">
         { nodes.map((node) => {
           const nodeAttributes = getNodeAttributes(node);
-          if (!has(nodeAttributes, layout)) { return null; }
+          if (!has(nodeAttributes, layoutVariable)) { return null; }
 
           return (
             <LayoutNode
               key={node[nodePrimaryKeyProperty]}
               node={node}
-              layoutVariable={layout}
+              layoutVariable={layoutVariable}
               onSelected={() => this.props.onSelected(node)}
               selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}

@@ -5,6 +5,7 @@ import NodeBucket from '../../containers/Canvas/NodeBucket';
 import NodeLayout from '../../containers/Canvas/NodeLayout';
 import EdgeLayout from '../../containers/Canvas/EdgeLayout';
 import Background from '../../containers/Canvas/Background';
+import ConvexHulls from '../../containers/Canvas/ConvexHulls';
 
 const ConcentricCircles = ({
   subject,
@@ -12,6 +13,7 @@ const ConcentricCircles = ({
   highlight,
   allowHighlight,
   createEdge,
+  convexHulls,
   allowPositioning,
   displayEdges,
   backgroundImage,
@@ -28,11 +30,19 @@ const ConcentricCircles = ({
       image={backgroundImage}
     />
     {
+      convexHulls &&
+      <ConvexHulls
+        groupVariable={convexHulls}
+        subject={subject}
+        layoutVariable={layoutVariable}
+      />
+    }
+    {
       displayEdges.length > 0 &&
       <EdgeLayout
         displayEdges={displayEdges}
         subject={subject}
-        layout={layoutVariable}
+        layoutVariable={layoutVariable}
       />
     }
     <NodeLayout
@@ -40,7 +50,7 @@ const ConcentricCircles = ({
       highlight={highlight}
       allowHighlight={allowHighlight && !createEdge}
       createEdge={createEdge}
-      layout={layoutVariable}
+      layoutVariable={layoutVariable}
       allowPositioning={allowPositioning}
       subject={subject}
       connectFrom={connectFrom}
@@ -48,7 +58,7 @@ const ConcentricCircles = ({
     />
     <NodeBucket
       id="NODE_BUCKET"
-      layout={layoutVariable}
+      layoutVariable={layoutVariable}
       subject={subject}
       sortOrder={sortOrder}
     />
@@ -63,6 +73,7 @@ ConcentricCircles.propTypes = {
   createEdge: PropTypes.string,
   allowPositioning: PropTypes.bool,
   displayEdges: PropTypes.array,
+  convexHulls: PropTypes.string,
   backgroundImage: PropTypes.string,
   concentricCircles: PropTypes.number,
   skewedTowardCenter: PropTypes.bool,
@@ -77,6 +88,7 @@ ConcentricCircles.defaultProps = {
   createEdge: null,
   allowPositioning: true,
   displayEdges: [],
+  convexHulls: null,
   backgroundImage: null,
   concentricCircles: null,
   skewedTowardCenter: null,

@@ -16,7 +16,6 @@ ShallowWrapper {
     height={456}
     highlightAttribute={null}
     highlightAttributes={Object {}}
-    layout={null}
     layoutVariable="foo"
     nodes={
       Array [

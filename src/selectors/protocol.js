@@ -52,7 +52,6 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
     return edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color;
   },
 );
-
 export const getNodeLabelWorkerUrl = createSelector(
   // null if URLs haven't yet loaded; false if worker does not exist
   state => state.protocol.workerUrlMap &&

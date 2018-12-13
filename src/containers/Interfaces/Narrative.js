@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import {
   NarrativeControlPanel,
   Annotations,
-  ConvexHulls,
 } from '../Canvas';
 
 import {
@@ -37,23 +36,25 @@ class Narrative extends Component {
     const layoutVariable = currentPreset.layoutVariable;
     const highlight = currentPreset.highlight && currentPreset.highlight[0].variable;
     const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
+    const convexHulls = currentPreset.groupVariable;
+
     const backgroundImage = stage.background && stage.background.image;
     const concentricCircles = stage.background && stage.background.concentricCircles;
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
     const freeDraw = stage.behaviours && stage.behaviours.freeDraw;
-    
+
     return (
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
             <NarrativeControlPanel />
             <Annotations freeDraw={freeDraw} />
-            <ConvexHulls />
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
               highlight={highlight}
               displayEdges={displayEdges}
+              convexHulls={convexHulls}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}

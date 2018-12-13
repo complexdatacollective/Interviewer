@@ -61,7 +61,6 @@ const Sociogram = ({
   const concentricCircles = prompt.background && prompt.background.concentricCircles;
   const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
   const sortOrder = prompt.sortOrder;
-
   return (
     <div className="sociogram-interface">
       <PromptObstacle
@@ -110,8 +109,12 @@ Sociogram.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
-  connectFrom: PropTypes.string.isRequired,
+  connectFrom: PropTypes.string,
   handleConnectFrom: PropTypes.func.isRequired,
+};
+
+Sociogram.defaultProps = {
+  connectFrom: null,
 };
 
 const mapDispatchToProps = dispatch => ({
