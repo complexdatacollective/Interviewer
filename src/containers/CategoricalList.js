@@ -93,7 +93,6 @@ class CategoricalList extends Component {
         isExpanded={this.state.expandedBinValue === bin.value}
         nodes={bin.nodes}
         sortOrder={this.props.prompt.binSortOrder}
-        style={{ '--categorical-available-height': `${Math.floor(this.getAvailableHeight())}px` }}
       />
     );
   }
