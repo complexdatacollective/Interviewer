@@ -20,6 +20,7 @@ const CategoricalItem = ({
   nodes,
   onClick,
   sortOrder,
+  style,
   willAccept,
 }) => {
   const classNames = cx(
@@ -30,7 +31,7 @@ const CategoricalItem = ({
 
   return (
     <Flipped flipId={id}>
-      <div className={classNames} style={{ '--categorical-item-color': accentColor }} onClick={onClick} >
+      <div className={classNames} style={{ '--categorical-item-color': accentColor, ...style }} onClick={onClick} >
         <Flipped inverseFlipId={id} scale>
           <div className="categorical-item__title">
             <h3>{label}</h3>
@@ -62,6 +63,7 @@ CategoricalItem.propTypes = {
   nodes: PropTypes.array,
   onClick: PropTypes.func,
   sortOrder: PropTypes.array,
+  style: PropTypes.object,
   willAccept: PropTypes.bool,
 };
 
@@ -74,6 +76,7 @@ CategoricalItem.defaultProps = {
   nodes: [],
   onClick: () => {},
   sortOrder: [],
+  style: {},
   willAccept: false,
 };
 

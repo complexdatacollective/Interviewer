@@ -24,7 +24,7 @@ const exitAnimation = (backward) => {
   const translateDistance = backward ? '200vh' : '-200vh';
   return {
     elasticity: 0,
-    translateY: [0, translateDistance],
+    translateY: ['-100vh', translateDistance],
     easing: getCSSVariableAsObject('--animation-easing-js'),
     duration: duration.exit,
   };
