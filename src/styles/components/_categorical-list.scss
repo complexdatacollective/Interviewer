@@ -20,7 +20,7 @@
   }
 
   &__content {
-    --categorical-available-height: calc(100% - var(--categorical-bucket-basis) -
+    --categorical-available-height: calc(100vh - var(--categorical-bucket-basis) -
       var(--interface-prompt-flex-basis) - var(--categorical-padding-top) -
       var(--categorical-padding-bottom) -
       (var(--categorical-item-margin) * 2 * var(--num-categorical-items) / var(--num-categorical-rows)));
