@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import {
+  asExportableNode,
   asWorkerAgentEdge,
   asWorkerAgentNode,
 } from '../networkFormat';
@@ -69,5 +70,28 @@ describe('asWorkerAgentEdge', () => {
 
   it('returns a user-friendly edge type', () => {
     expect(asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition).type).toEqual('friend');
+  });
+});
+
+describe('asExportableNode', () => {
+  const nodeInNetwork = {
+    attributes: {
+      1234: 'userProp1value',
+    },
+    [nodePrimaryKeyProperty]: 'node1',
+    stageId: 42,
+  };
+
+  const nodeTypeDefinition = {
+    name: 'person',
+    variables: {
+      1234: { name: 'userProp1' },
+    },
+  };
+
+  it('transposes type and attributes', () => {
+    const exportNode = asExportableNode(nodeInNetwork, nodeTypeDefinition);
+    expect(exportNode.attributes.userProp1).toEqual('userProp1value');
+    expect(exportNode.type).toEqual('person');
   });
 });
