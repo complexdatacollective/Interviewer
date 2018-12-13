@@ -8,7 +8,6 @@ import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const windowDimensions = getAbsoluteBoundingRect(document.body);
 
-console.log(windowDimensions);
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
     if (!isEqual(this.props.nodePoints, nextProps.nodePoints)) {
