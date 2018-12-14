@@ -1,13 +1,16 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
+import { uniq } from 'lodash';
+
+import { stages } from '../../selectors/session';
+import { networkEdges } from '../../selectors/interface';
+import { getEdgeTypesFromPreset } from '../../selectors/canvas';
 import {
   NarrativeControlPanel,
   Annotations,
 } from '../Canvas';
-
 import {
   Canvas,
   ConcentricCircles,
@@ -18,16 +21,42 @@ import {
   * @extends Component
   */
 class Narrative extends Component {
+  static getDerivedStateFromProps(props, state) {
+    const presetEdges = getEdgeTypesFromPreset(state, props);
+    if (presetEdges !== state.presetEdges) {
+      return {
+        displayEdges: presetEdges,
+        presetEdges,
+      };
+    }
+
+    return null;
+  }
+
   constructor() {
     super();
     this.state = {
+      displayEdges: [],
       presetIndex: 0,
     };
   }
 
+  toggleEdgeType = (index) => {
+    const edgeId = this.props.edgeTypes[index];
+    const updatedEdges = this.state.displayEdges.includes(edgeId) ?
+      this.state.displayEdges.filter(edge => edge !== edgeId) :
+      this.state.displayEdges.concat([edgeId]);
+    this.setState({
+      displayEdges: updatedEdges,
+    });
+  }
+
   updatePreset = (index) => {
     if (index !== this.state.presetIndex) {
+      const displayEdges = (this.props.stage.presets[index].edges &&
+        this.props.stage.presets[index].edges.display) || [];
       this.setState({
+        displayEdges,
         presetIndex: index,
       });
     }
@@ -35,6 +64,7 @@ class Narrative extends Component {
 
   render() {
     const {
+      edgeTypes,
       stage,
     } = this.props;
 
@@ -43,7 +73,6 @@ class Narrative extends Component {
     const currentPreset = presets[this.state.presetIndex];
     const layoutVariable = currentPreset.layoutVariable;
     const highlight = currentPreset.highlight && currentPreset.highlight[0].variable;
-    const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
     const convexHulls = currentPreset.groupVariable;
 
     const backgroundImage = stage.background && stage.background.image;
@@ -60,7 +89,7 @@ class Narrative extends Component {
               subject={subject}
               layoutVariable={layoutVariable}
               highlight={highlight}
-              displayEdges={displayEdges}
+              displayEdges={this.state.displayEdges}
               convexHulls={convexHulls}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
@@ -70,7 +99,9 @@ class Narrative extends Component {
             <NarrativeControlPanel
               presets={presets}
               highlights={currentPreset.highlight}
-              displayEdges={displayEdges}
+              displayEdges={this.state.displayEdges}
+              allEdgeTypes={edgeTypes}
+              toggleEdgeType={this.toggleEdgeType}
               updatePreset={this.updatePreset}
             />
           </Canvas>
@@ -81,12 +112,16 @@ class Narrative extends Component {
 }
 
 Narrative.propTypes = {
+  edgeTypes: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
+  const edges = networkEdges(state);
+
   return {
     stage: ownProps.stage || stages(state)[ownProps.stageIndex],
+    edgeTypes: uniq(edges.map(edge => edge.type)),
   };
 }
 

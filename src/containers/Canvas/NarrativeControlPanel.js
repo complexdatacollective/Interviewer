@@ -45,9 +45,10 @@ class NarrativeControlPanel extends Component {
 
   render() {
     const {
-      displayEdges,
+      allEdgeTypes,
       highlights,
       presets,
+      toggleEdgeType,
       updatePreset,
     } = this.props;
 
@@ -72,15 +73,25 @@ class NarrativeControlPanel extends Component {
         </div>
         <div className="narrative-control-panel__content">
           <Accordion label="Presets">
-            {presets.map((preset, index) => (
-              <div onClick={() => updatePreset(index)}>{preset.label}</div>
-            ))}
+            <div>
+              {presets.map((preset, index) => (
+                <div key={index} onClick={() => updatePreset(index)}>{preset.label}</div>
+              ))}
+            </div>
           </Accordion>
           <Accordion label="Highlighted">
-            {highlights.map(highlight => <div>{highlight.variable}</div>)}
+            <div>
+              {highlights.map((highlight, index) => (
+                <div key={index}>{highlight.variable}</div>
+              ))}
+            </div>
           </Accordion>
           <Accordion label="Links">
-            {displayEdges.map(edge => <div>{edge}</div>)}
+            <div>
+              {allEdgeTypes.map((edge, index) => (
+                <div key={index} onClick={() => toggleEdgeType(index)}>{edge}</div>
+              ))}
+            </div>
           </Accordion>
           <Accordion label="Contexts"><div>dfds</div></Accordion>
         </div>
@@ -90,16 +101,20 @@ class NarrativeControlPanel extends Component {
 }
 
 NarrativeControlPanel.propTypes = {
+  allEdgeTypes: PropTypes.array,
   displayEdges: PropTypes.array,
   highlights: PropTypes.array,
   presets: PropTypes.array,
+  toggleEdgeType: PropTypes.func,
   updatePreset: PropTypes.func,
 };
 
 NarrativeControlPanel.defaultProps = {
+  allEdgeTypes: [],
   displayEdges: [],
   highlights: [],
   presets: [],
+  toggleEdgeType: () => {},
   updatePreset: () => {},
 };
 
