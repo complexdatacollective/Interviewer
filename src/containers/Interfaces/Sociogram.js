@@ -52,8 +52,8 @@ const Sociogram = ({
 }) => {
   const subject = prompt.subject;
   const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
-  const highlight = prompt.highlight && prompt.highlight.variable;
-  const allowHighlight = prompt.highlight && prompt.highlight.allowHighlight;
+  const highlightAttribute = prompt.highlight && prompt.highlight.variable;
+  const allowHighlighting = prompt.highlight && prompt.highlight.allowHighlighting;
   const createEdge = prompt.edges && prompt.edges.create;
   const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
   const displayEdges = (prompt.edges && prompt.edges.display) || [];
@@ -61,6 +61,7 @@ const Sociogram = ({
   const concentricCircles = prompt.background && prompt.background.concentricCircles;
   const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
   const sortOrder = prompt.sortOrder;
+
   return (
     <div className="sociogram-interface">
       <PromptObstacle
@@ -77,8 +78,8 @@ const Sociogram = ({
         <ConcentricCircles
           subject={subject}
           layoutVariable={layoutVariable}
-          highlight={highlight}
-          allowHighlight={allowHighlight}
+          highlightAttribute={highlightAttribute}
+          allowHighlighting={allowHighlighting}
           createEdge={createEdge}
           allowPositioning={allowPositioning}
           displayEdges={displayEdges}

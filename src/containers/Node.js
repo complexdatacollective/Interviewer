@@ -92,7 +92,7 @@ function mapStateToProps(state, props) {
 
 Node.propTypes = {
   type: PropTypes.string.isRequired,
-  color: PropTypes.string,
+  color: PropTypes.string.isRequired,
   getLabel: PropTypes.func.isRequired,
   nodeTypeDefinition: PropTypes.object,
   workerUrl: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
@@ -100,7 +100,6 @@ Node.propTypes = {
 };
 
 Node.defaultProps = {
-  color: 'node-color-seq-1',
   nodeTypeDefinition: null,
   workerUrl: undefined,
   workerNetwork: null,

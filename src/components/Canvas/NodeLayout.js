@@ -32,7 +32,7 @@ class NodeLayout extends Component {
     highlightAttribute: null,
     allowPositioning: true,
     allowSelect: true,
-    canCreateEdge: true,
+    canCreateEdge: false,
     layoutVariable: null,
     width: null,
     height: null,

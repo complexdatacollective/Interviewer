@@ -589,7 +589,6 @@
       "77199445-9d50-4646-b0bc-6d6b0c0e06bd": {
         "name": "friend",
         "label": "Friend",
-        "color": "edge-color-seq-4",
         "variables": {
           "9f106a56-528b-498d-8103-a6f7a8c9fa15": {
             "name": "contactfrequency",
@@ -1386,7 +1385,7 @@
         {
           "id": "closeness3",
           "text":
-            "This prompt shows 3 concentric circles",
+            "This prompt shows 3 concentric circles and has create edge and allow highlight specified (against the rules!)",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"

@@ -69,13 +69,13 @@ const withSelectHandlers = compose(
 
         updateLinkFrom(null);
       },
-    toggleHighlightAttribute: ({ allowHighlighting, highlight, toggleHighlight }) =>
+    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) =>
       (node) => {
         if (!allowHighlighting) { return; }
-        const newVal = !node[nodeAttributesProperty][highlight];
+        const newVal = !node[nodeAttributesProperty][highlightAttribute];
         toggleHighlight(
           node[nodePrimaryKeyProperty],
-          { [highlight]: newVal },
+          { [highlightAttribute]: newVal },
         );
       },
   }),

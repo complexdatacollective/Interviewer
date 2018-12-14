@@ -40,7 +40,7 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
   (state, props) => props.type,
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color;
+    return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
   },
 );
 
@@ -49,7 +49,7 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
   (state, props) => props.type,
   (variableRegistry, edgeType) => {
     const edgeInfo = variableRegistry.edge;
-    return edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color;
+    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color) || 'edge-color-seq-1';
   },
 );
 export const getNodeLabelWorkerUrl = createSelector(
