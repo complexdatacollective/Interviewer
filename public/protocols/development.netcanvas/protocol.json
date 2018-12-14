@@ -1298,7 +1298,7 @@
         {
           "id": "closeness1",
           "text":
-            "This prompt uses a background image containing quadrants.",
+            "This prompt uses a background image containing quadrants and creates an edge.",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
@@ -1311,10 +1311,36 @@
             "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
             "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
           },
-          "highlight": {
-            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
-            "allowHighlighting": true
+          "highlight": {},
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "background": {
+            "image": "quadrant.svg",
+            "concentricCircles": 4,
+            "skewedTowardCenter": true
+          }
+        },
+        {
+          "id": "edgeType2",
+          "text":
+            "Creates a second edge type",
+          "subject": {
+            "entity": "node",
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
+            "create": "867127d9-086b-403a-a3e7-2c7d32126546"
+          },
+          "highlight": {},
           "sortOrder": [
             {
               "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
@@ -1330,7 +1356,7 @@
         {
           "id": "closeness2",
           "text":
-            "This is a prompt showing no background.",
+            "This is a prompt showing no background and highlighting a variable.",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
@@ -1340,8 +1366,7 @@
             "allowPositioning": true
           },
           "edges": {
-            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
-            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"]
           },
           "highlight": {
             "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
