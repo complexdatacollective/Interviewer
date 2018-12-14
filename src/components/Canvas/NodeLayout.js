@@ -19,7 +19,6 @@ class NodeLayout extends Component {
     connectFrom: PropTypes.string,
     highlightAttribute: PropTypes.string,
     allowPositioning: PropTypes.bool,
-    canCreateEdge: PropTypes.bool,
     allowSelect: PropTypes.bool,
     layoutVariable: PropTypes.string,
     width: PropTypes.number,
@@ -32,7 +31,6 @@ class NodeLayout extends Component {
     highlightAttribute: null,
     allowPositioning: true,
     allowSelect: true,
-    canCreateEdge: false,
     layoutVariable: null,
     width: null,
     height: null,
@@ -51,8 +49,7 @@ class NodeLayout extends Component {
   }
 
   isLinking(node) {
-    return this.props.canCreateEdge &&
-      node[nodePrimaryKeyProperty] === this.props.connectFrom;
+    return node[nodePrimaryKeyProperty] === this.props.connectFrom;
   }
 
   render() {
