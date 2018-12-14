@@ -37,7 +37,7 @@ describe('canvas selectors', () => {
           entity: 'node',
           type: 'person',
         },
-        layout: 'closeness',
+        layoutVariable: 'closeness',
       };
 
       const subject = getPlacedNodes(mockState, props);
@@ -59,7 +59,7 @@ describe('canvas selectors', () => {
           entity: 'node',
           type: 'person',
         },
-        layout: 'closeness',
+        layoutVariable: 'closeness',
         displayEdges: [
           'friends',
         ],
@@ -82,7 +82,7 @@ describe('canvas selectors', () => {
           entity: 'node',
           type: 'person',
         },
-        layout: 'closeness',
+        layoutVariable: 'closeness',
         displayEdges: ['friend'],
       };
 
