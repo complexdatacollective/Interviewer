@@ -104,6 +104,7 @@
             "RadioGroup",
             "Text",
             "Toggle",
+            "ToggleButton",
             "ToggleButtonGroup",
             "hidden"
           ]
