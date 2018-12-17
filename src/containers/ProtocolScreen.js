@@ -7,10 +7,11 @@ import { push } from 'react-router-redux';
 
 import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
-import { Fade, Stage as StageTransition } from '../components/Transition';
+import { Stage as StageTransition } from '../components/Transition';
+import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
 import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
-import { getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 
 /**
   * Check protocol is loaded, and render the stage

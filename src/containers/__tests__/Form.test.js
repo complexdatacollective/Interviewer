@@ -7,7 +7,7 @@ import { shallow, mount } from 'enzyme';
 import Form, { Form as UnconnectedForm } from '../Form';
 import Field from '../Field';
 
-jest.mock('../../utils/CSSVariables');
+jest.mock('../../ui/utils/CSSVariables');
 
 const mockStore = () =>
   createStore(

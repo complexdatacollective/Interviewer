@@ -7,7 +7,7 @@ import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable 
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
-import { getCSSVariableAsString } from '../utils/CSSVariables';
+import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
@@ -24,7 +24,7 @@ class OrdinalBins extends PureComponent {
     meta: {},
   };
 
-  promptColor = () => (getCSSVariableAsString(`--${this.props.prompt.color}`) ?
+  promptColor = () => (this.props.prompt.color ?
     color(getCSSVariableAsString(`--${this.props.prompt.color}`)) :
     color(getCSSVariableAsString('--ord-color-seq-1'))
   );

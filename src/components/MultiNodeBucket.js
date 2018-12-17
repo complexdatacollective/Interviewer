@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 import { TransitionGroup } from 'react-transition-group';
 
 import Node from '../containers/Node';
-import { getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { DragSource } from '../behaviours/DragAndDrop';
