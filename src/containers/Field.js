@@ -31,7 +31,9 @@ const fieldTypes = {
   [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
-  [FormComponent.hidden]: props => <input {...props} type="hidden" />,
+  // In the case of the hidden input component { value } isn't actually passed along, but since
+  // this component is a placeholder, assume the interface for now.
+  [FormComponent.hidden]: ({ input, value }) => <input {...input} value={value} type="hidden" />,
 };
 
 const ComponentTypeNotFound = componentType =>
@@ -68,12 +70,13 @@ const getValidation = validation =>
 class Field extends PureComponent {
   constructor(props) {
     super(props);
-    this.component = (typeof props.component === 'string') ? getInputComponent(props.component) : props.component;
+    this.component = getInputComponent(props.component);
     this.validate = getValidation(props.validation);
   }
 
   render() {
     const { label, name, validation, ...rest } = this.props;
+
     return (
       <ReduxFormField
         {...rest}
