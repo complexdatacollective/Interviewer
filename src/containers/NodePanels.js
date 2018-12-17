@@ -12,19 +12,6 @@ import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 
-const colorPresets = [
-  getCSSVariableAsString('--primary-color-seq-1'),
-  getCSSVariableAsString('--primary-color-seq-2'),
-  getCSSVariableAsString('--primary-color-seq-3'),
-  getCSSVariableAsString('--primary-color-seq-4'),
-  getCSSVariableAsString('--primary-color-seq-5'),
-];
-
-const getHighlight = (highlight, panelNumber) => {
-  if (panelNumber >= 0) { return colorPresets[panelNumber % colorPresets.length]; }
-  return null;
-};
-
 /**
   * Configures and renders `NodeProvider`s into panels according to the protocol config
   */
@@ -89,11 +76,24 @@ class NodePanels extends PureComponent {
       ...nodeListProps
     } = panel;
 
+    const colorPresets = [
+      getCSSVariableAsString('--primary-color-seq-1'),
+      getCSSVariableAsString('--primary-color-seq-2'),
+      getCSSVariableAsString('--primary-color-seq-3'),
+      getCSSVariableAsString('--primary-color-seq-4'),
+      getCSSVariableAsString('--primary-color-seq-5'),
+    ];
+
+    const getHighlight = (panelNumber) => {
+      if (panelNumber >= 0) { return colorPresets[panelNumber % colorPresets.length]; }
+      return null;
+    };
+
     return (
       <Panel
         title={title}
         key={index}
-        highlight={getHighlight(highlight, index)}
+        highlight={getHighlight(index)}
         minimise={!this.isPanelOpen(index)}
       >
         <NodeList
