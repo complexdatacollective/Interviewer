@@ -8,6 +8,7 @@ import {
   ToggleButtonGroup,
   RadioGroup,
   Text,
+  Number as NumberField,
   Toggle,
 } from '../ui/components/Fields';
 
@@ -25,6 +26,7 @@ const fieldTypes = {
   [FormComponent.CheckboxGroup]: CheckboxGroup,
   [FormComponent.RadioGroup]: RadioGroup,
   [FormComponent.Text]: Text,
+  [FormComponent.Number]: NumberField,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
   [FormComponent.hidden]: props => <input {...props} type="hidden" />,
