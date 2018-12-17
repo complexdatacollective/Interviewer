@@ -1173,46 +1173,17 @@
       "type": "NameGeneratorList",
       "label": "NG Classmates",
       "showExistingNodes": true,
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
       "prompts": [
         {
           "id": "7tk",
-          "text": "Which classmates would you talk to outside of class?",
-          "additionalAttributes": {
-            "d2d8091e-8170-42c1-9dc0-c0d54553b3e6": true
-          },
-          "dataSource": "previousInterview",
-          "subject": {
-            "entity": "node",
-            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
-          },
+          "text": "HIV Venue external data, with no sort options or additional attributes.",
+          "dataSource": "HIVServices",
           "cardOptions": {
-            "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
-            "additionalProperties": [
-              {
-                "label": "Name",
-                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
-              },
-              {
-                "label": "Age",
-                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
-              }
-            ]
-          },
-          "sortOptions": {
-            "sortOrder": [{
-              "property": "6be95f85-c2d9-4daf-9de1-3939418af888",
-              "direction": "asc"
-            }],
-            "sortableProperties": [
-              {
-                "label": "Pupil Name",
-                "variable": "6be95f85-c2d9-4daf-9de1-3939418af888"
-              },
-              {
-                "label": "Pupil Age",
-                "variable": "c5fee926-855d-4419-b5bb-54e89010cea6"
-              }
-            ]
+            "displayLabel": "8a35cd77-7bc4-4c7e-b98a-673b6a21321f"
           }
         },
         {
@@ -1223,10 +1194,6 @@
             "ae44b6ba-ad49-4ecf-bf38-b65decfce000": true
           },
           "dataSource": "previousInterview",
-          "subject": {
-            "entity": "node",
-            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
-          },
           "cardOptions": {
             "displayLabel": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
             "additionalProperties": [
@@ -1395,6 +1362,10 @@
       "id": "namegenroster1",
       "type": "NameGeneratorAutoComplete",
       "label": "NG Classmates",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
       "prompts": [
         {
           "id": "7cl1",
@@ -1420,10 +1391,6 @@
           "searchOptions": {
             "fuzziness": 0.4,
             "matchProperties": ["0e75ec18-2cb1-4606-9f18-034d28b07c19", "6be95f85-c2d9-4daf-9de1-3939418af888", "0ff25001-a2b8-46de-82a9-53143aa00d10"]
-          },
-          "subject": {
-            "entity": "node",
-            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           }
         },
         {
@@ -1449,12 +1416,19 @@
           "searchOptions": {
             "fuzziness": 0.4,
             "matchProperties": ["0e75ec18-2cb1-4606-9f18-034d28b07c19", "6be95f85-c2d9-4daf-9de1-3939418af888", "0ff25001-a2b8-46de-82a9-53143aa00d10"]
-          },
-          "subject": {
-            "entity": "node",
-            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           }
-        },
+        }
+      ]
+    },
+    {
+      "id": "namegenroster3",
+      "type": "NameGeneratorAutoComplete",
+      "label": "Roster Autocomplete HIV",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "prompts": [
         {
           "id": "7su",
           "text": "Which of these venues have you visited in the previous 6 months?",
@@ -1482,10 +1456,6 @@
               "8ee3a187-d4be-458e-8abb-71efcc071949",
               "67132d2b-c371-4c57-a5eb-6520083f9d22"
             ]
-          },
-          "subject": {
-            "entity": "node",
-            "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
           }
         }
       ]
