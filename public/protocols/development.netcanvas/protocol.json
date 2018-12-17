@@ -997,6 +997,11 @@
         },
         {
           "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
+          "component": "ToggleButton",
+          "label": "Toggle button for something"
+        },
+        {
+          "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
           "component": "Toggle",
           "label": "Is the switch below not turned on?"
         }

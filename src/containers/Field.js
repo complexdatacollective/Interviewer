@@ -28,15 +28,16 @@ const fieldTypes = {
   [FormComponent.RadioGroup]: RadioGroup,
   [FormComponent.Text]: Text,
   [FormComponent.Number]: NumberField,
+  [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
   [FormComponent.hidden]: props => <input {...props} type="hidden" />,
 };
 
 const ComponentTypeNotFound = componentType =>
-  () => (<div>Input component {componentType} not found.</div>);
+  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
 
-export const getInputComponent = componentType =>
+export const getInputComponent = (componentType = 'Text') =>
   get(
     fieldTypes,
     componentType,
