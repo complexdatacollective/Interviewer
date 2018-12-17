@@ -6,6 +6,7 @@ import {
   Checkbox,
   CheckboxGroup,
   ToggleButtonGroup,
+  ToggleButton,
   RadioGroup,
   Text,
   Number as NumberField,
@@ -32,8 +33,15 @@ const fieldTypes = {
   [FormComponent.hidden]: props => <input {...props} type="hidden" />,
 };
 
+const ComponentTypeNotFound = componentType =>
+  () => (<div>Input component {componentType} not found.</div>);
+
 export const getInputComponent = componentType =>
-  get(fieldTypes, componentType, Text);
+  get(
+    fieldTypes,
+    componentType,
+    ComponentTypeNotFound(componentType),
+  );
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
