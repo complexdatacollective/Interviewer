@@ -24,7 +24,7 @@ class OrdinalBins extends PureComponent {
     meta: {},
   };
 
-  promptColor = () => (getCSSVariableAsString(`--${this.props.prompt.color}`) ?
+  promptColor = () => (this.props.prompt.color ?
     color(getCSSVariableAsString(`--${this.props.prompt.color}`)) :
     color(getCSSVariableAsString('--ord-color-seq-1'))
   );
