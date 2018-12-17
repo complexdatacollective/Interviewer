@@ -4,29 +4,29 @@ import { Transition } from 'react-transition-group';
 import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
-const animationThreshold = 20;
-
-const duration = {
-  enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
-  exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-};
-
-const enterAnimation = {
-  opacity: [0, 1],
-  translateY: ['50%', 0],
-  easing: 'easeOutElastic',
-  duration: duration.enter,
-};
-
-const exitAnimation = {
-  opacity: [1, 0],
-  scale: [1, 0],
-  easing: getCSSVariableAsObject('--animation-easing-js'),
-  duration: duration.exit,
-};
-
 const Node = ({ children, index, stagger, ...props }) => {
   const delay = stagger ? index * 30 : 0;
+
+  const animationThreshold = 20;
+
+  const duration = {
+    enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
+    exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+  };
+
+  const enterAnimation = {
+    opacity: [0, 1],
+    translateY: ['50%', 0],
+    easing: 'easeOutElastic',
+    duration: duration.enter,
+  };
+
+  const exitAnimation = {
+    opacity: [1, 0],
+    scale: [1, 0],
+    easing: getCSSVariableAsObject('--animation-easing-js'),
+    duration: duration.exit,
+  };
 
   return (
     <Transition
