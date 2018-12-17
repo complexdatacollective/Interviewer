@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
 
 import Node from '../containers/Node';
-import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsString, getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
 import {

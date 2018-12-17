@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ConcentricCircles from '../ConcentricCircles';
 
-jest.mock('../../../utils/CSSVariables');
+jest.mock('../../../ui/utils/CSSVariables');
 
 const mockProps = {
   prompt: { sociogram: { background: {} } },

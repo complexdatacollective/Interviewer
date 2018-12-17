@@ -9,7 +9,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
-import { getCSSVariableAsString } from '../utils/CSSVariables';
+import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 
 const colorPresets = [
