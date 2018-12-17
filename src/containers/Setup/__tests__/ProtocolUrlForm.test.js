@@ -26,4 +26,8 @@ describe('ProtocolUrlForm', () => {
     expect(submitButton).toHaveLength(1);
     expect(submitButton.text()).toMatch('Import');
   });
+
+  it('renders a text input', () => {
+    expect(component.find('input[type="text"]')).toHaveLength(1);
+  });
 });

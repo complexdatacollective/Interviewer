@@ -11,7 +11,7 @@ const mockProps = {
   fields: [
     {
       variable: 'foo',
-      component: 'TextInput',
+      component: 'Text',
     },
   ],
   entity: 'node',

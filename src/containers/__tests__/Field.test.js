@@ -19,9 +19,21 @@ const reduxFormFieldProperties = { input: { name: 'foo', value: '' }, meta: { in
 
 describe('getInputComponent()', () => {
   it('should return a dom input', () => {
-    const Input = getInputComponent();
+    const Input = getInputComponent('Text');
     const subject = shallow(<Input {...reduxFormFieldProperties} />);
     expect(subject.find('input')).toHaveLength(1);
+  });
+
+  it('If field component is not found it returns an error component', () => {
+    const Input = getInputComponent('foobar');
+    const subject = shallow(<Input {...reduxFormFieldProperties} />);
+    expect(subject.text()).toEqual('Input component "foobar" not found.');
+  });
+
+  it('If no field component specified it returns a text input', () => {
+    const Input = getInputComponent();
+    const subject = shallow(<Input {...reduxFormFieldProperties} />);
+    expect(subject.find('input').prop('type')).toEqual('text');
   });
 });
 

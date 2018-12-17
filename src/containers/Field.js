@@ -6,8 +6,10 @@ import {
   Checkbox,
   CheckboxGroup,
   ToggleButtonGroup,
+  ToggleButton,
   RadioGroup,
   Text,
+  Number as NumberField,
   Toggle,
 } from '../ui/components/Fields';
 
@@ -25,6 +27,8 @@ const fieldTypes = {
   [FormComponent.CheckboxGroup]: CheckboxGroup,
   [FormComponent.RadioGroup]: RadioGroup,
   [FormComponent.Text]: Text,
+  [FormComponent.Number]: NumberField,
+  [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
   // In the case of the hidden input component { value } isn't actually passed along, but since
@@ -32,8 +36,15 @@ const fieldTypes = {
   [FormComponent.hidden]: ({ input, value }) => <input {...input} value={value} type="hidden" />,
 };
 
-export const getInputComponent = componentType =>
-  get(fieldTypes, componentType, Text);
+const ComponentTypeNotFound = componentType =>
+  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
+
+export const getInputComponent = (componentType = 'Text') =>
+  get(
+    fieldTypes,
+    componentType,
+    ComponentTypeNotFound(componentType),
+  );
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
