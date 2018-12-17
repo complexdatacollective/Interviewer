@@ -58,14 +58,14 @@ describe('<Form />', () => {
       {
         label: 'Name',
         name: 'name',
-        component: 'TextInput',
+        component: 'Text',
         placeholder: 'Name',
         validation: {},
       },
       {
         label: 'Nickname',
         name: 'nickname',
-        component: 'TextInput',
+        component: 'Text',
         placeholder: 'Nickname',
         validation: {},
       },
