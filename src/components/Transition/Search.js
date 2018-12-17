@@ -4,19 +4,6 @@ import { Transition } from 'react-transition-group';
 import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
-const duration = {
-  content: {
-    enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-    exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-  },
-  wrapper: {
-    enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
-    exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
-  },
-};
-
-const TimelineOpts = { easing: getCSSVariableAsObject('--animation-easing-js') };
-
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 
 const getBaseFontSizePx = () => {
@@ -47,6 +34,19 @@ class Search extends Component {
     super(props);
     this.runEnterTimeline = this.runEnterTimeline.bind(this);
     this.runExitTimeline = this.runExitTimeline.bind(this);
+
+    this.duration = {
+      content: {
+        enter: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+        exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+      },
+      wrapper: {
+        enter: getCSSVariableAsNumber('--animation-duration-standard-ms'),
+        exit: getCSSVariableAsNumber('--animation-duration-fast-ms'),
+      },
+    };
+
+    this.TimelineOpts = { easing: getCSSVariableAsObject('--animation-easing-js') };
   }
 
   runEnterTimeline(el) {
@@ -83,11 +83,11 @@ class Search extends Component {
     };
 
     this.cancelRunningAnimation();
-    this.runningAnimation = anime.timeline(TimelineOpts)
+    this.runningAnimation = anime.timeline(this.TimelineOpts)
       .add({
         targets: el,
         ...wrapperAnimation,
-        duration: duration.wrapper.enter,
+        duration: this.duration.wrapper.enter,
         complete: () => {
           const pxStyles = el.style;
           pxStyles.maxHeight = '';
@@ -97,7 +97,7 @@ class Search extends Component {
       .add({
         targets: this.contentsContainer,
         ...contentAnimation,
-        duration: duration.content.enter,
+        duration: this.duration.content.enter,
       });
   }
 
@@ -123,16 +123,16 @@ class Search extends Component {
     };
 
     this.cancelRunningAnimation();
-    this.runningAnimation = anime.timeline(TimelineOpts)
+    this.runningAnimation = anime.timeline(this.TimelineOpts)
       .add({
         targets: this.contentsContainer,
         ...inverseContentAnimation,
-        duration: duration.content.exit,
+        duration: this.duration.content.exit,
       })
       .add({
         targets: el,
         ...inverseWrapperAnimation,
-        duration: duration.wrapper.exit,
+        duration: this.duration.wrapper.exit,
       });
   }
 
@@ -153,8 +153,8 @@ class Search extends Component {
       <Transition
         {...props}
         timeout={{
-          enter: duration.wrapper.enter + duration.content.enter,
-          exit: duration.wrapper.exit + duration.content.exit,
+          enter: this.duration.wrapper.enter + this.duration.content.enter,
+          exit: this.duration.wrapper.exit + this.duration.content.exit,
         }}
         onEnter={this.runEnterTimeline}
         onExit={this.runExitTimeline}
