@@ -8,7 +8,7 @@ import Search from '../Search';
 import SearchResults from '../SearchResults';
 import Card from '../../../components/Card';
 
-jest.mock('../../../utils/CSSVariables');
+jest.mock('../../../ui/utils/CSSVariables');
 
 jest.mock('fuse.js', () => jest.fn(() => (
   {

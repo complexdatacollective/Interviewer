@@ -956,7 +956,7 @@
         },
         {
           "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
-          "component": "Text"
+          "component": "Number"
         },
         {
           "variable": "e343a91f-628d-4175-870c-957beffa0154",
@@ -983,7 +983,7 @@
         },
         {
           "variable": "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
-          "component": "Text",
+          "component": "Number",
           "label": "What is this person's age?"
         },
         {
@@ -1007,6 +1007,11 @@
         },
         {
           "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
+          "component": "ToggleButton",
+          "label": "Toggle button for something"
+        },
+        {
+          "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
           "component": "Toggle",
           "label": "Is the switch below not turned on?"
         }
@@ -1027,7 +1032,7 @@
         },
         {
           "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
-          "component": "Text"
+          "component": "Number"
         },
         {
           "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",

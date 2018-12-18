@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
 
 import Node from '../containers/Node';
-import { getCSSVariableAsString, getCSSVariableAsNumber } from '../utils/CSSVariables';
+import { getCSSVariableAsString, getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { scrollable, selectable } from '../behaviours';
 import {
@@ -89,7 +89,6 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
-      hoverColor,
     } = this.props;
 
     const {
@@ -110,6 +109,8 @@ class NodeList extends Component {
       'node-list',
       { 'node-list--drag': isValidTarget },
     );
+
+    const hoverColor = this.props.hoverColor ? this.props.hoverColor : getCSSVariableAsString('--light-background');
 
     const styles = isHovering ? { backgroundColor: hoverColor } : {};
 
@@ -162,7 +163,7 @@ NodeList.propTypes = {
 NodeList.defaultProps = {
   nodes: [],
   nodeColor: '',
-  hoverColor: getCSSVariableAsString('--light-background'),
+  hoverColor: null,
   label: () => (''),
   selected: () => false,
   onSelect: () => {},

@@ -40,9 +40,11 @@
       --num-categorical-rows: 3;
       --categorical-item-multiplier: 1.1;
 
-      .categorical-item__title h3,
-      .categorical-item__title h5 {
-        font-size: 80%;
+      .categorical-item__title {
+        h3,
+        h5 {
+          font-size: 80%;
+        }
       }
     }
 

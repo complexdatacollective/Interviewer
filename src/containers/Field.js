@@ -6,8 +6,10 @@ import {
   Checkbox,
   CheckboxGroup,
   ToggleButtonGroup,
+  ToggleButton,
   RadioGroup,
   Text,
+  Number as NumberField,
   Toggle,
 } from '../ui/components/Fields';
 
@@ -25,13 +27,24 @@ const fieldTypes = {
   [FormComponent.CheckboxGroup]: CheckboxGroup,
   [FormComponent.RadioGroup]: RadioGroup,
   [FormComponent.Text]: Text,
+  [FormComponent.Number]: NumberField,
+  [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
-  [FormComponent.hidden]: props => <input {...props} type="hidden" />,
+  // In the case of the hidden input component { value } isn't actually passed along, but since
+  // this component is a placeholder, assume the interface for now.
+  [FormComponent.hidden]: ({ input }) => <input {...input} type="hidden" />,
 };
 
-export const getInputComponent = componentType =>
-  get(fieldTypes, componentType, Text);
+const ComponentTypeNotFound = componentType =>
+  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
+
+export const getInputComponent = (componentType = 'Text') =>
+  get(
+    fieldTypes,
+    componentType,
+    ComponentTypeNotFound(componentType),
+  );
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation
@@ -57,12 +70,13 @@ const getValidation = validation =>
 class Field extends PureComponent {
   constructor(props) {
     super(props);
-    this.component = (typeof props.component === 'string') ? getInputComponent(props.component) : props.component;
+    this.component = getInputComponent(props.component);
     this.validate = getValidation(props.validation);
   }
 
   render() {
     const { label, name, validation, ...rest } = this.props;
+
     return (
       <ReduxFormField
         {...rest}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Spinner } from '../ui/components';
-import Fade from '../components/Transition/Fade';
+import Fade from '../ui/components/Transitions/Fade';
 
 const minimumTimeToDisplaySpinner = 1000;
 

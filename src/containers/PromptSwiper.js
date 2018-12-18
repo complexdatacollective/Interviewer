@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Touch from 'react-hammerjs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
@@ -103,16 +102,14 @@ class PromptSwiper extends Component {
 
     return (
       <React.Fragment>
-        <Touch onTap={this.handleTap} onSwipe={this.handleSwipe} >
-          <div className={classes}>
-            <div className="prompts__pips">
-              <Pips count={prompts.length} currentIndex={promptIndex} />
-            </div>
-            {!this.state.minimized && (<div className="prompts__prompts">
-              {promptsRender}
-            </div>)}
+        <div className={classes}>
+          <div className="prompts__pips">
+            <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
-        </Touch>
+          {!this.state.minimized && (<div className="prompts__prompts">
+            {promptsRender}
+          </div>)}
+        </div>
         {minimizable && minimizeButton}
       </React.Fragment>
     );

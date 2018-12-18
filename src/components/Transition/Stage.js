@@ -2,60 +2,62 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
-const duration = {
-  enter: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-  exit: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-};
-
-const enterAnimation = (backward) => {
-  const translateDistance = backward ? '-200vh' : '200vh';
-  return {
-    elasticity: 0,
-    translateY: [translateDistance, 0],
-    easing: getCSSVariableAsObject('--animation-easing-js'),
-    duration: duration.enter,
-    delay: duration.exit,
+const Stage = ({ children, stageBackward, ...props }) => {
+  const duration = {
+    enter: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+    exit: getCSSVariableAsNumber('--animation-duration-slow-ms'),
   };
-};
 
-const exitAnimation = (backward) => {
-  const translateDistance = backward ? '200vh' : '-200vh';
-  return {
-    elasticity: 0,
-    translateY: ['-100vh', translateDistance],
-    easing: getCSSVariableAsObject('--animation-easing-js'),
-    duration: duration.exit,
+  const enterAnimation = (backward) => {
+    const translateDistance = backward ? '-200vh' : '200vh';
+    return {
+      elasticity: 0,
+      translateY: [translateDistance, 0],
+      easing: getCSSVariableAsObject('--animation-easing-js'),
+      duration: duration.enter,
+      delay: duration.exit,
+    };
   };
-};
 
-const Stage = ({ children, stageBackward, ...props }) => (
-  <Transition
-    {...props}
-    timeout={duration}
-    onEnter={
-      (el) => {
-        anime({
-          targets: el,
-          ...enterAnimation(stageBackward),
-        });
+  const exitAnimation = (backward) => {
+    const translateDistance = backward ? '200vh' : '-200vh';
+    return {
+      elasticity: 0,
+      translateY: ['-100vh', translateDistance],
+      easing: getCSSVariableAsObject('--animation-easing-js'),
+      duration: duration.exit,
+    };
+  };
+
+  return (
+    <Transition
+      {...props}
+      timeout={duration}
+      onEnter={
+        (el) => {
+          anime({
+            targets: el,
+            ...enterAnimation(stageBackward),
+          });
+        }
       }
-    }
-    onExit={
-      (el) => {
-        anime({
-          targets: el,
-          ...exitAnimation(stageBackward),
-        });
+      onExit={
+        (el) => {
+          anime({
+            targets: el,
+            ...exitAnimation(stageBackward),
+          });
+        }
       }
-    }
-    appear
-    unmountOnExit
-  >
-    { children }
-  </Transition>
-);
+      appear
+      unmountOnExit
+    >
+      { children }
+    </Transition>
+  );
+};
 
 Stage.propTypes = {
   children: PropTypes.any.isRequired,

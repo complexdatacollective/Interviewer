@@ -1,7 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose, withState } from 'recompose';
+import { withHandlers, compose, withState, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import {
@@ -36,6 +36,11 @@ const withResetInterfaceHandler = withHandlers({
     });
   },
 });
+
+const withPromptIdAsKey = withPropsOnChange(
+  ['promptId'],
+  props => ({ key: props.promptId }),
+);
 
 /**
   * Sociogram Interface
@@ -124,6 +129,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
+  withPromptIdAsKey,
   connect(null, mapDispatchToProps),
   withConnectFrom,
   withConnectFromHandler,

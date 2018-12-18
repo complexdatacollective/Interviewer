@@ -7,7 +7,7 @@ import { shallow, mount } from 'enzyme';
 import Form, { Form as UnconnectedForm } from '../Form';
 import Field from '../Field';
 
-jest.mock('../../utils/CSSVariables');
+jest.mock('../../ui/utils/CSSVariables');
 
 const mockStore = () =>
   createStore(
@@ -58,14 +58,14 @@ describe('<Form />', () => {
       {
         label: 'Name',
         name: 'name',
-        component: 'TextInput',
+        component: 'Text',
         placeholder: 'Name',
         validation: {},
       },
       {
         label: 'Nickname',
         name: 'nickname',
-        component: 'TextInput',
+        component: 'Text',
         placeholder: 'Nickname',
         validation: {},
       },

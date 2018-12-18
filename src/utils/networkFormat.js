@@ -63,8 +63,13 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
   };
 };
 
+/**
+ * Transposes attribute and type IDs to names for export.
+ * Unlike `asWorkerAgentNode()`, this does not flatten attributes.
+ */
 export const asExportableNode = (node, nodeTypeDefinition) => ({
   ...node,
+  type: nodeTypeDefinition.name,
   attributes: getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
 });
 

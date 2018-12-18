@@ -9,26 +9,8 @@ import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable,
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
-import { getCSSVariableAsString } from '../utils/CSSVariables';
+import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
-
-const colorPresets = [
-  getCSSVariableAsString('--cat-color-seq-1'),
-  getCSSVariableAsString('--cat-color-seq-2'),
-  getCSSVariableAsString('--cat-color-seq-3'),
-  getCSSVariableAsString('--cat-color-seq-4'),
-  getCSSVariableAsString('--cat-color-seq-5'),
-  getCSSVariableAsString('--cat-color-seq-6'),
-  getCSSVariableAsString('--cat-color-seq-7'),
-  getCSSVariableAsString('--cat-color-seq-8'),
-  getCSSVariableAsString('--cat-color-seq-9'),
-  getCSSVariableAsString('--cat-color-seq-10'),
-];
-
-const getCatColor = (itemNumber) => {
-  if (itemNumber >= 0) { return colorPresets[itemNumber % colorPresets.length]; }
-  return null;
-};
 
 /**
   * CategoricalList: Renders a list of categorical bin items
@@ -80,6 +62,24 @@ class CategoricalList extends Component {
     };
 
     const binDetails = this.getDetails(bin.nodes);
+
+    const colorPresets = [
+      getCSSVariableAsString('--cat-color-seq-1'),
+      getCSSVariableAsString('--cat-color-seq-2'),
+      getCSSVariableAsString('--cat-color-seq-3'),
+      getCSSVariableAsString('--cat-color-seq-4'),
+      getCSSVariableAsString('--cat-color-seq-5'),
+      getCSSVariableAsString('--cat-color-seq-6'),
+      getCSSVariableAsString('--cat-color-seq-7'),
+      getCSSVariableAsString('--cat-color-seq-8'),
+      getCSSVariableAsString('--cat-color-seq-9'),
+      getCSSVariableAsString('--cat-color-seq-10'),
+    ];
+
+    const getCatColor = (itemNumber) => {
+      if (itemNumber >= 0) { return colorPresets[itemNumber % colorPresets.length]; }
+      return null;
+    };
 
     return (
       <CategoricalItem

@@ -227,7 +227,8 @@ const sessionExportPromise = (pairedServer, action) => {
   const { remoteProtocolId, sessionUuid, sessionData } = action;
   if (pairedServer) {
     const client = new ApiClient(pairedServer);
-    return client.exportSession(remoteProtocolId, sessionUuid, sessionData);
+    return client.addTrustedCert().then(() =>
+      client.exportSession(remoteProtocolId, sessionUuid, sessionData));
   }
   return Promise.reject(new Error('No paired server available'));
 };

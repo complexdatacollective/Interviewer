@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-import { Fade } from '../../components/Transition';
+import { Fade } from '../../ui/components/Transitions';
 
 const AnnotationLines = ({ lines, isDrawing }) => (
   <svg className="annotations__lines" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
@@ -29,7 +29,7 @@ const AnnotationLine = ({ line, showLine }) => {
     <Fade
       in={showLine}
       enter={false}
-      duration={{ enter: 0, exit: 3000 * Math.log10(line.length * line.length) }}
+      customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length * line.length) }}
     >
       <path className="annotations__path" d={pathData} vectorEffect="non-scaling-stroke" />
     </Fade>

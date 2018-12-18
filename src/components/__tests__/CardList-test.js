@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import CardList from '../CardList';
 
-jest.mock('../../utils/CSSVariables');
+jest.mock('../../ui/utils/CSSVariables');
 
 const nodes = [
   { uid: 'a', name: 'a name', age: '22' },
