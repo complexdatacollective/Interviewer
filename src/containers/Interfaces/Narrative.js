@@ -84,14 +84,16 @@ class Narrative extends Component {
               subject={subject}
               layoutVariable={layoutVariable}
               highlight={this.state.showHighlights && highlight}
-              displayEdges={this.state.showEdges && displayEdges}
-              convexHulls={this.state.showConvex && convexHulls}
+              displayEdges={(this.state.showEdges && displayEdges) || []}
+              convexHulls={(this.state.showConvex && convexHulls) || ''}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
               key={currentPreset.id}
             />
             <NarrativeControlPanel
+              id="narrative"
+              subject={subject}
               presets={presets}
               highlights={currentPreset.highlight}
               toggleHighlights={this.toggleHighlights}

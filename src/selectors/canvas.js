@@ -1,4 +1,3 @@
-import { createSelector } from 'reselect';
 import { first, has } from 'lodash';
 import { networkNodes, networkEdges } from './interface';
 import { createDeepEqualSelector } from './utils';
@@ -14,15 +13,6 @@ const getSubject = (_, props) => props.subject;
 const getCategoricalVariable = (_, props) => props.groupVariable;
 const getSortOptions = (_, props) => props.sortOrder;
 const getDisplayEdges = (_, props) => props.displayEdges;
-const propStage = (_, props) => props.stage;
-
-const presetIndex = state => state.presetIndex;
-
-export const getEdgeTypesFromPreset = createSelector(
-  propStage,
-  presetIndex,
-  (stage, index) => (stage.presets[index].edges && stage.presets[index].edges.display) || [],
-);
 
 /**
  * Selector for next unplaced node.

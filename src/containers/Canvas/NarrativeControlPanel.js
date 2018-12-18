@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { Icon } from '../../ui/components';
 import { Accordion } from '.';
+import { DropObstacle } from '../../behaviours/DragAndDrop';
+import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/protocol';
 
 class NarrativeControlPanel extends Component {
   constructor() {
@@ -45,9 +49,9 @@ class NarrativeControlPanel extends Component {
 
   render() {
     const {
-      convexHulls,
-      displayEdges,
-      highlights,
+      convexOptions,
+      edges,
+      highlightLabels,
       presets,
       toggleConvex,
       toggleEdges,
@@ -83,20 +87,32 @@ class NarrativeControlPanel extends Component {
             </div>
           </Accordion>
           <Accordion label="Highlighted">
-            <div>
-              {highlights.map((highlight, index) => (
-                <div key={index} onClick={toggleHighlights}>{highlight.variable}</div>
+            <div onClick={toggleHighlights}>
+              {highlightLabels.map((highlight, index) => (
+                <div key={index} style={{ color: `var(--${highlight.color})` }}>
+                  {highlight.label}
+                </div>
               ))}
             </div>
           </Accordion>
           <Accordion label="Links">
-            <div>
-              {displayEdges.map((edge, index) => (
-                <div key={index} onClick={toggleEdges}>{edge}</div>
+            <div onClick={toggleEdges}>
+              {edges.map((edge, index) => (
+                <div key={index} style={{ color: `var(--${edge.color})` }}>
+                  {edge.label}
+                </div>
               ))}
             </div>
           </Accordion>
-          <Accordion label="Contexts"><div onClick={toggleConvex}>{convexHulls}</div></Accordion>
+          <Accordion label="Contexts">
+            <div onClick={toggleConvex}>
+              {convexOptions.map((option, index) => (
+                <div key={index} style={{ color: `var(--cat-color-seq-${index + 1})` }}>
+                  {option.label}
+                </div>
+              ))}
+            </div>
+          </Accordion>
         </div>
       </div>
     );
@@ -104,9 +120,9 @@ class NarrativeControlPanel extends Component {
 }
 
 NarrativeControlPanel.propTypes = {
-  convexHulls: PropTypes.string,
-  displayEdges: PropTypes.array,
-  highlights: PropTypes.array,
+  convexOptions: PropTypes.array,
+  edges: PropTypes.array,
+  highlightLabels: PropTypes.array,
   presets: PropTypes.array,
   toggleConvex: PropTypes.func,
   toggleEdges: PropTypes.func,
@@ -115,9 +131,9 @@ NarrativeControlPanel.propTypes = {
 };
 
 NarrativeControlPanel.defaultProps = {
-  displayEdges: [],
-  convexHulls: '',
-  highlights: [],
+  edges: [],
+  convexOptions: [],
+  highlightLabels: [],
   presets: [],
   toggleConvex: () => {},
   toggleEdges: () => {},
@@ -125,4 +141,33 @@ NarrativeControlPanel.defaultProps = {
   updatePreset: () => {},
 };
 
-export default NarrativeControlPanel;
+const makeMapStateToProps = () => {
+  const getEdgeColor = makeGetEdgeColor();
+  const getEdgeLabel = makeGetEdgeLabel();
+  const getNodeAttributeLabel = makeGetNodeAttributeLabel();
+  const getCategoricalOptions = makeGetCategoricalOptions();
+
+  const mapStateToProps = (state, props) => {
+    const highlightLabels = props.highlights.map(({ variable, color }) => (
+      { label: getNodeAttributeLabel(state, { variableId: variable, ...props }), color }
+    ));
+    const edges = props.displayEdges.map(type => (
+      { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }
+    ));
+    const convexOptions = getCategoricalOptions(state,
+      { variableId: props.convexHulls, ...props });
+
+    return {
+      convexOptions,
+      edges,
+      highlightLabels,
+    };
+  };
+
+  return mapStateToProps;
+};
+
+export default compose(
+  DropObstacle,
+  connect(makeMapStateToProps),
+)(NarrativeControlPanel);
