@@ -40,15 +40,15 @@ const getTypeForKey = (data, key) => (
     if (isNil(attrs[key])) return result;
     let currentType = typeof attrs[key];
     if (currentType === 'number') {
-      currentType = Number.isInteger(attrs[key]) ? 'integer' : 'double';
+      currentType = Number.isInteger(attrs[key]) ? 'int' : 'double';
       if (result && currentType !== result) return 'double';
     }
     if (String(Number.parseInt(attrs[key], 10)) === attrs[key]) {
-      currentType = 'integer';
+      currentType = 'int';
       if (result === 'double') return 'double';
     } else if (String(Number.parseFloat(attrs[key], 10)) === attrs[key]) {
       currentType = 'double';
-      if (result === 'integer') return 'double';
+      if (result === 'int') return 'double';
     }
     if (isNil(currentType)) return result;
     if (currentType === result || result === '') return currentType;
