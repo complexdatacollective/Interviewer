@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '../ui/components';
-import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../utils/CSSVariables';
+import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../ui/utils/CSSVariables';
 
 /**
  * Renders a modal window.

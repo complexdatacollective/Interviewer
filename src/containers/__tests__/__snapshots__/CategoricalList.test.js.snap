@@ -74,7 +74,7 @@ ShallowWrapper {
           }
         >
           <withState(withProps(DropTarget))
-            accentColor={undefined}
+            accentColor={null}
             details="undefined and 2 others"
             id="CATBIN_ITEM_1_1_0"
             isExpanded={false}
@@ -91,7 +91,7 @@ ShallowWrapper {
             sortOrder={undefined}
           />
           <withState(withProps(DropTarget))
-            accentColor={undefined}
+            accentColor={null}
             details="undefined and 1 other"
             id="CATBIN_ITEM_1_1_1"
             isExpanded={false}
@@ -132,7 +132,7 @@ ShallowWrapper {
             }
           >
             <withState(withProps(DropTarget))
-              accentColor={undefined}
+              accentColor={null}
               details="undefined and 2 others"
               id="CATBIN_ITEM_1_1_0"
               isExpanded={false}
@@ -149,7 +149,7 @@ ShallowWrapper {
               sortOrder={undefined}
             />
             <withState(withProps(DropTarget))
-              accentColor={undefined}
+              accentColor={null}
               details="undefined and 1 other"
               id="CATBIN_ITEM_1_1_1"
               isExpanded={false}
@@ -195,7 +195,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <withState(withProps(DropTarget))
-                accentColor={undefined}
+                accentColor={null}
                 details="undefined and 2 others"
                 id="CATBIN_ITEM_1_1_0"
                 isExpanded={false}
@@ -212,7 +212,7 @@ ShallowWrapper {
                 sortOrder={undefined}
               />,
               <withState(withProps(DropTarget))
-                accentColor={undefined}
+                accentColor={null}
                 details="undefined and 1 other"
                 id="CATBIN_ITEM_1_1_1"
                 isExpanded={false}
@@ -241,7 +241,7 @@ ShallowWrapper {
               "key": "0",
               "nodeType": "class",
               "props": Object {
-                "accentColor": undefined,
+                "accentColor": null,
                 "details": "undefined and 2 others",
                 "id": "CATBIN_ITEM_1_1_0",
                 "isExpanded": false,
@@ -264,7 +264,7 @@ ShallowWrapper {
               "key": "1",
               "nodeType": "class",
               "props": Object {
-                "accentColor": undefined,
+                "accentColor": null,
                 "details": "undefined and 1 other",
                 "id": "CATBIN_ITEM_1_1_1",
                 "isExpanded": false,
@@ -318,7 +318,7 @@ ShallowWrapper {
             }
           >
             <withState(withProps(DropTarget))
-              accentColor={undefined}
+              accentColor={null}
               details="undefined and 2 others"
               id="CATBIN_ITEM_1_1_0"
               isExpanded={false}
@@ -335,7 +335,7 @@ ShallowWrapper {
               sortOrder={undefined}
             />
             <withState(withProps(DropTarget))
-              accentColor={undefined}
+              accentColor={null}
               details="undefined and 1 other"
               id="CATBIN_ITEM_1_1_1"
               isExpanded={false}
@@ -376,7 +376,7 @@ ShallowWrapper {
               }
             >
               <withState(withProps(DropTarget))
-                accentColor={undefined}
+                accentColor={null}
                 details="undefined and 2 others"
                 id="CATBIN_ITEM_1_1_0"
                 isExpanded={false}
@@ -393,7 +393,7 @@ ShallowWrapper {
                 sortOrder={undefined}
               />
               <withState(withProps(DropTarget))
-                accentColor={undefined}
+                accentColor={null}
                 details="undefined and 1 other"
                 id="CATBIN_ITEM_1_1_1"
                 isExpanded={false}
@@ -439,7 +439,7 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <withState(withProps(DropTarget))
-                  accentColor={undefined}
+                  accentColor={null}
                   details="undefined and 2 others"
                   id="CATBIN_ITEM_1_1_0"
                   isExpanded={false}
@@ -456,7 +456,7 @@ ShallowWrapper {
                   sortOrder={undefined}
                 />,
                 <withState(withProps(DropTarget))
-                  accentColor={undefined}
+                  accentColor={null}
                   details="undefined and 1 other"
                   id="CATBIN_ITEM_1_1_1"
                   isExpanded={false}
@@ -485,7 +485,7 @@ ShallowWrapper {
                 "key": "0",
                 "nodeType": "class",
                 "props": Object {
-                  "accentColor": undefined,
+                  "accentColor": null,
                   "details": "undefined and 2 others",
                   "id": "CATBIN_ITEM_1_1_0",
                   "isExpanded": false,
@@ -508,7 +508,7 @@ ShallowWrapper {
                 "key": "1",
                 "nodeType": "class",
                 "props": Object {
-                  "accentColor": undefined,
+                  "accentColor": null,
                   "details": "undefined and 1 other",
                   "id": "CATBIN_ITEM_1_1_1",
                   "isExpanded": false,

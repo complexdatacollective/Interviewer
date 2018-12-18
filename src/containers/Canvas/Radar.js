@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { range, last, zipWith } from 'lodash';
 import color from 'color';
-import { getCSSVariableAsString } from '../../utils/CSSVariables';
+import { getCSSVariableAsString } from '../../ui/utils/CSSVariables';
 
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;

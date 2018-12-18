@@ -34,6 +34,7 @@ const FormComponent = Object.freeze({
   RadioGroup: 'RadioGroup',
   Text: 'Text',
   Toggle: 'Toggle',
+  ToggleButton: 'ToggleButton',
   ToggleButtonGroup: 'ToggleButtonGroup',
   hidden: 'hidden',
 });

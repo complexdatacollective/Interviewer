@@ -21,7 +21,7 @@ class NameGenerator extends Component {
 
     this.state = {
       selectedNode: null,
-      showNodeForm: null,
+      showNodeForm: false,
     };
   }
 

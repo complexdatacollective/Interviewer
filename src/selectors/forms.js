@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { map } from 'lodash';
+import { mapValues } from 'lodash';
 import { protocolRegistry, protocolForms } from './protocol';
 
 // Prop selectors
@@ -13,7 +13,11 @@ const propForm = (_, { entity, type }) => ({ entity, type });
 
 const rehydrateField = ({ registry, entity, type, field }) => {
   if (!field.variable) { return field; }
-  const entityVars = registry[entity][type] ? registry[entity][type].variables[field.variable] : {};
+
+  const entityVars = registry[entity][type] ?
+    registry[entity][type].variables[field.variable] :
+    {};
+
   const returnObject = {
     ...entityVars,
     name: field.variable,
@@ -40,9 +44,12 @@ export const makeRehydrateForm = () =>
     (form, forms) => forms[form] || null,
   );
 
+/**
+ * @return {Object} keyed by form name
+ */
 export const getDefaultFormValues = createSelector(
   protocolForms,
-  forms => map(
+  forms => mapValues(
     forms,
     ({ fields }) =>
       fields.reduce(
