@@ -66,7 +66,7 @@ class Narrative extends Component {
     const presets = stage.presets;
     const currentPreset = presets[this.state.presetIndex];
     const layoutVariable = currentPreset.layoutVariable;
-    const highlight = currentPreset.highlight && currentPreset.highlight[0].variable;
+    const highlight = currentPreset.highlight;
     const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
     const convexHulls = currentPreset.groupVariable;
 
@@ -83,7 +83,7 @@ class Narrative extends Component {
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
-              highlight={this.state.showHighlights && highlight}
+              highlightAttributes={(this.state.showHighlights && highlight) || []}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
               backgroundImage={backgroundImage}
