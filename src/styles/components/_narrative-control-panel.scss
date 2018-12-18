@@ -1,10 +1,10 @@
 .narrative-control-panel {
-  --narrative-panel-width: 15vw;
+  --narrative-panel-width: 15rem;
   background-color: var(--light-background);
   display: flex;
   height: 100%;
-  z-index: 2;
-  
+  z-index: var(--z-panel);
+
   &__content {
     transition: width var(--animation-duration-standard) var(--animation-easing);
     width: var(--narrative-panel-width);

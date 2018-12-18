@@ -5,11 +5,11 @@ import cx from 'classnames';
 import { Icon } from '../../ui/components';
 
 class Accordion extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      open: false,
+      open: props.open,
     };
   }
 
@@ -56,11 +56,13 @@ class Accordion extends Component {
 Accordion.propTypes = {
   children: PropTypes.object,
   label: PropTypes.string,
+  open: PropTypes.bool,
 };
 
 Accordion.defaultProps = {
   children: null,
   label: '',
+  open: false,
 };
 
 export default Accordion;

@@ -86,28 +86,40 @@ class NarrativeControlPanel extends Component {
               ))}
             </div>
           </Accordion>
-          <Accordion label="Highlighted">
+          <Accordion open label="Highlighted">
             <div onClick={toggleHighlights}>
               {highlightLabels.map((highlight, index) => (
-                <div key={index} style={{ color: `var(--${highlight.color})` }}>
+                <div key={index}>
+                  <Icon
+                    name="highlighted"
+                    color={highlight.color}
+                  />
                   {highlight.label}
                 </div>
               ))}
             </div>
           </Accordion>
-          <Accordion label="Links">
+          <Accordion open label="Links">
             <div onClick={toggleEdges}>
               {edges.map((edge, index) => (
-                <div key={index} style={{ color: `var(--${edge.color})` }}>
+                <div key={index}>
+                  <Icon
+                    name="links"
+                    color={edge.color}
+                  />
                   {edge.label}
                 </div>
               ))}
             </div>
           </Accordion>
-          <Accordion label="Contexts">
+          <Accordion open label="Contexts">
             <div onClick={toggleConvex}>
               {convexOptions.map((option, index) => (
-                <div key={index} style={{ color: `var(--cat-color-seq-${index + 1})` }}>
+                <div key={index}>
+                  <Icon
+                    name="contexts"
+                    color={`cat-color-seq-${index + 1}`}
+                  />
                   {option.label}
                 </div>
               ))}
