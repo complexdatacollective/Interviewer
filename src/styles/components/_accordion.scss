@@ -1,5 +1,5 @@
 .accordion {
-  border-bottom: solid 1px var(--narrative-border-bottom-color);
+  border-bottom: solid 0.1rem var(--narrative-border-bottom-color);
 
   & :not(.accordion__toggle--open) {
     .accordion__icon--open {
@@ -11,8 +11,6 @@
     align-items: center;
     display: flex;
     height: 4rem;
-    justify-content: space-between;
-    opacity: .7;
     padding: 0 1rem;
 
     &:hover {
@@ -39,5 +37,19 @@
         display: none;
       }
     }
+  }
+
+  &__content {
+    padding: 1rem;
+  }
+}
+
+.accordion-item {
+  display: flex;
+  align-content: center;
+  align-items: center;
+
+  .icon {
+    margin: .5rem;
   }
 }

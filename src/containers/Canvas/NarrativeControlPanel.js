@@ -82,14 +82,14 @@ class NarrativeControlPanel extends Component {
           <Accordion label="Presets">
             <div>
               {presets.map((preset, index) => (
-                <div key={index} onClick={() => updatePreset(index)}>{preset.label}</div>
+                <div className="accordion-item" key={index} onClick={() => updatePreset(index)}>{preset.label}</div>
               ))}
             </div>
           </Accordion>
           <Accordion open label="Highlighted">
             <div onClick={toggleHighlights}>
               {highlightLabels.map((highlight, index) => (
-                <div key={index}>
+                <div className="accordion-item" key={index}>
                   <Icon
                     name="highlighted"
                     color={highlight.color}
@@ -102,7 +102,7 @@ class NarrativeControlPanel extends Component {
           <Accordion open label="Links">
             <div onClick={toggleEdges}>
               {edges.map((edge, index) => (
-                <div key={index}>
+                <div className="accordion-item" key={index}>
                   <Icon
                     name="links"
                     color={edge.color}
@@ -115,7 +115,7 @@ class NarrativeControlPanel extends Component {
           <Accordion open label="Contexts">
             <div onClick={toggleConvex}>
               {convexOptions.map((option, index) => (
-                <div key={index}>
+                <div className="accordion-item" key={index}>
                   <Icon
                     name="contexts"
                     color={`cat-color-seq-${index + 1}`}

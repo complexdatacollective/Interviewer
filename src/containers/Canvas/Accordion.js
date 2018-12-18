@@ -31,7 +31,7 @@ class Accordion extends Component {
           className={toggleClasses}
           onClick={this.toggleAccordion}
         >
-          <h4>{this.props.label}</h4>
+          <h4>{this.props.label}</h4>&nbsp;
           <Icon
             name="chevron-up"
             color="white"
@@ -44,7 +44,7 @@ class Accordion extends Component {
           />
         </div>
         {this.state.open &&
-          <div>
+          <div className="accordion__content">
             {this.props.children}
           </div>
         }
