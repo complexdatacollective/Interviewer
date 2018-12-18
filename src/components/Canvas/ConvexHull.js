@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import { map, isEqual } from 'lodash';
 import ConcaveMan from 'concaveman';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
-import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
-
-
-const windowDimensions = getAbsoluteBoundingRect(document.body);
 
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
-    if (!isEqual(this.props.nodePoints, nextProps.nodePoints)) {
+    if (this.props.layoutVariable !== nextProps.layoutVariable ||
+      !isEqual(this.props.nodePoints, nextProps.nodePoints) ||
+      !isEqual(this.props.windowDimensions, nextProps.windowDimensions)) {
       return true;
     }
     return false;
@@ -28,8 +26,8 @@ export class ConvexHull extends Component {
     // See: https://github.com/mapbox/concaveman
     ConcaveMan(groupAsCoords, 0.6, 0).forEach((item) => {
       // Scale each hull point from ratio to window coordinate.
-      const itemX = item[0] * windowDimensions.width;
-      const itemY = item[1] * windowDimensions.height;
+      const itemX = item[0] * this.props.windowDimensions.width;
+      const itemY = item[1] * this.props.windowDimensions.height;
 
       // SVG points structured as string: "value1,value2 value3,value4"
       hullPointsAsSVG += `${itemX}, ${itemY} `;
@@ -56,6 +54,7 @@ ConvexHull.propTypes = {
   color: PropTypes.string,
   nodePoints: PropTypes.array.isRequired,
   layoutVariable: PropTypes.string.isRequired,
+  windowDimensions: PropTypes.object.isRequired,
 };
 
 ConvexHull.defaultProps = {

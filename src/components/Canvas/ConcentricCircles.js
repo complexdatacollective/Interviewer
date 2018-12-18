@@ -23,7 +23,7 @@ const ConcentricCircles = ({
   connectFrom,
   updateLinkFrom,
 }) => (
-  <Canvas className="concentric-circles">
+  <Canvas className="concentric-circles" id="concentric-circles">
     <Background
       concentricCircles={concentricCircles}
       skewedTowardCenter={skewedTowardCenter}
