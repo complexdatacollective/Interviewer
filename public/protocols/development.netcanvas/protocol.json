@@ -697,6 +697,7 @@
     "HIVServices": {
       "nodes": [
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "About My Health",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "",
@@ -710,6 +711,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "Access Anixter Center",
@@ -723,6 +725,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Ashland Family Health Center",
@@ -736,6 +739,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Auburn-Gresham Family Health Center",
@@ -749,6 +753,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Booker Family Health Center",
@@ -762,6 +767,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Brandon Family Health Center",
@@ -775,6 +781,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Cabrini Family Health Center",
@@ -788,6 +795,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico",
@@ -801,6 +809,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico San Rafael",
@@ -814,6 +823,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Doctors Medical Center",
@@ -827,6 +837,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Evanston-Rogers Park Family Health Center",
@@ -840,6 +851,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at Gary Comer Youth Center",
@@ -853,6 +865,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "Grand Boulevard Health and Specialty Center",
@@ -866,6 +879,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Humboldt Park Family Health Center",
@@ -879,6 +893,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at the Illinois Eye Institute",
@@ -892,6 +907,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Kedzie Family Health Center",
@@ -905,6 +921,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "Servicios Medicos La Villita",
@@ -918,6 +935,7 @@
           }
         },
         {
+          "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
           "attributes": {
             "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
             "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Madison Family Health Center",
