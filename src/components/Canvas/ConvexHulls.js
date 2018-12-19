@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { findIndex } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { ConvexHull } from './ConvexHull';
 
@@ -41,12 +41,14 @@ class ConvexHulls extends Component {
     const {
       nodesByGroup,
       layoutVariable,
+      categoricalOptions,
     } = this.props;
 
     return (
       <div style={{ width: '100%', height: '100%' }} ref={this.hullComponent}>
         {Object.keys(nodesByGroup).map((group, index) => {
-          const color = `cat-color-seq-${index + 1}`;
+          const colorIndex = findIndex(categoricalOptions, ['value', group]) + 1 || 1;
+          const color = `cat-color-seq-${colorIndex}`;
           return (
             <ConvexHull
               windowDimensions={this.state.size}
@@ -65,9 +67,11 @@ class ConvexHulls extends Component {
 ConvexHulls.propTypes = {
   layoutVariable: PropTypes.string.isRequired,
   nodesByGroup: PropTypes.object.isRequired,
+  categoricalOptions: PropTypes.array,
 };
 
 ConvexHulls.defaultProps = {
+  categoricalOptions: [],
 };
 
 
