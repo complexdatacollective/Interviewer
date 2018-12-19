@@ -29,7 +29,7 @@ const AnnotationLine = ({ line, showLine }) => {
     <Fade
       in={showLine}
       enter={false}
-      customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length * line.length) }}
+      customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length ** 2) }}
     >
       <path className="annotations__path" d={pathData} vectorEffect="non-scaling-stroke" />
     </Fade>
@@ -47,6 +47,7 @@ class Annotations extends Component {
 
     this.state = {
       lines: [],
+      activeLines: 0,
       isDrawing: false,
     };
 
@@ -88,8 +89,11 @@ class Annotations extends Component {
 
     this.setState({
       lines,
+      activeLines: this.state.activeLines + 1,
       isDrawing: true,
     });
+
+    this.props.setActiveStatus(true);
   };
 
   onDragMove = (mouseEvent) => {
@@ -108,6 +112,15 @@ class Annotations extends Component {
 
   onDragEnd = () => {
     this.setState({ isDrawing: false });
+    setTimeout(() => {
+      this.setState({
+        activeLines: this.state.activeLines - 1,
+      }, () => {
+        if (this.state.activeLines === 0) {
+          this.props.setActiveStatus(false);
+        }
+      });
+    }, 3000 * Math.log10(this.state.lines[this.state.lines.length - 1].length ** 2));
   };
 
   cleanupDragManager = () => {
@@ -122,13 +135,6 @@ class Annotations extends Component {
     return ({
       x: (mouseEvent.x - boundingRect.left) / boundingRect.width,
       y: (mouseEvent.y - boundingRect.top) / boundingRect.height,
-    });
-  }
-
-  removeLine = () => {
-    const lines = this.state.lines.slice(1);
-    this.setState({
-      lines,
     });
   }
 
@@ -147,10 +153,12 @@ class Annotations extends Component {
 
 Annotations.propTypes = {
   freeDraw: PropTypes.bool,
+  setActiveStatus: PropTypes.func,
 };
 
 Annotations.defaultProps = {
   freeDraw: true,
+  setActiveStatus: () => {},
 };
 
 export default Annotations;

@@ -4,7 +4,23 @@
   right: 0;
   margin: 2rem;
   display: flex;
-  flex-direction: row;
+
+  &__reset-button {
+    width: 0;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width var(--animation-duration-standard) var(--animation-duration-standard) var(--animation-easing);
+
+    .icon {
+      height: 1.5rem;
+    }
+
+    &--show {
+      width: 5rem;
+    }
+  }
 
   &__navigation {
     background: var(--light-background);
@@ -31,6 +47,7 @@
     &--hidden {
       opacity: 0;
       transition-delay: unset;
+      pointer-events: none;
     }
 
     &--disabled {

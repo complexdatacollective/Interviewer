@@ -25,7 +25,16 @@ class Narrative extends Component {
       showConvex: true,
       showEdges: true,
       showHighlights: true,
+      showResetButton: false,
+      activeAnnotations: false,
+      activeFocusNodes: false,
     };
+  }
+
+  setActiveStatus = (component, status) => {
+    this.setState({
+      [component]: status,
+    });
   }
 
   toggleConvex = () => {
@@ -75,11 +84,13 @@ class Narrative extends Component {
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
     const freeDraw = stage.behaviours && stage.behaviours.freeDraw;
 
+    const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
+
     return (
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            <Annotations freeDraw={freeDraw} />
+            <Annotations freeDraw={freeDraw} setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }} />
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
@@ -100,10 +111,12 @@ class Narrative extends Component {
             subject={subject}
             highlights={currentPreset.highlight}
             toggleHighlights={this.toggleHighlights}
+            resetInteractions={this.resetInteractions}
             displayEdges={displayEdges}
             toggleEdges={this.toggleEdges}
             convexHulls={convexHulls}
             toggleConvex={this.toggleConvex}
+            showResetButton={showResetButton}
           />
         </div>
       </div>
