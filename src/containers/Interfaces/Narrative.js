@@ -95,6 +95,7 @@ class Narrative extends Component {
               id="narrative"
               subject={subject}
               presets={presets}
+              presetIndex={this.state.presetIndex}
               highlights={currentPreset.highlight}
               toggleHighlights={this.toggleHighlights}
               displayEdges={displayEdges}

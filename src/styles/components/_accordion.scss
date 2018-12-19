@@ -52,4 +52,35 @@
   .icon {
     margin: .5rem;
   }
+
+  &__radio {
+    border: solid .1rem;
+    border-color: var(--input-border);
+    border-radius: 50%;
+    height: 2rem;
+    margin: .5rem;
+    width: 2rem;
+    transition: border-color var(--animation-easing) var(--animation-duration-standard);
+
+    &::before {
+      background-color: var(--input-accent);
+      border-radius: 50%;
+      content: '';
+      height: 1.3rem;
+      margin: .25rem;
+      opacity: 0;
+      position: absolute;
+      width: 1.3rem;
+      transition: opacity var(--animation-easing) var(--animation-duration-standard);
+    }
+
+    &--selected {
+      border-color: var(--input-accent);
+
+      &::before {
+        opacity: 1;
+        transition: opacity var(--animation-easing) var(--animation-duration-standard);
+      }
+    }
+  }
 }

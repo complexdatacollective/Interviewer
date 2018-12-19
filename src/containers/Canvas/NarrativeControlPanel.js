@@ -47,6 +47,19 @@ class NarrativeControlPanel extends Component {
     }, this.setSideSpacing(this.getComponentWidth()));
   }
 
+  createPresetList = (preset, index) => {
+    const classes = cx(
+      'accordion-item__radio',
+      { 'accordion-item__radio--selected': this.props.presetIndex === index },
+    );
+    return (
+      <div className="accordion-item" key={index} onClick={() => this.props.updatePreset(index)}>
+        <span className={classes} />
+        {preset.label}
+      </div>
+    );
+  };
+
   render() {
     const {
       convexOptions,
@@ -56,7 +69,6 @@ class NarrativeControlPanel extends Component {
       toggleConvex,
       toggleEdges,
       toggleHighlights,
-      updatePreset,
     } = this.props;
 
     const classNames = cx(
@@ -81,9 +93,7 @@ class NarrativeControlPanel extends Component {
         <div className="narrative-control-panel__content">
           <Accordion label="Presets">
             <div>
-              {presets.map((preset, index) => (
-                <div className="accordion-item" key={index} onClick={() => updatePreset(index)}>{preset.label}</div>
-              ))}
+              {presets.map(this.createPresetList)}
             </div>
           </Accordion>
           <Accordion open label="Highlighted">
@@ -136,6 +146,7 @@ NarrativeControlPanel.propTypes = {
   edges: PropTypes.array,
   highlightLabels: PropTypes.array,
   presets: PropTypes.array,
+  presetIndex: PropTypes.number,
   toggleConvex: PropTypes.func,
   toggleEdges: PropTypes.func,
   toggleHighlights: PropTypes.func,
@@ -147,6 +158,7 @@ NarrativeControlPanel.defaultProps = {
   convexOptions: [],
   highlightLabels: [],
   presets: [],
+  presetIndex: 0,
   toggleConvex: () => {},
   toggleEdges: () => {},
   toggleHighlights: () => {},
