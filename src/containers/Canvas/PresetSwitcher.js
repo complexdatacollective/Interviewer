@@ -32,6 +32,7 @@ class PresetSwitcher extends PureComponent {
       toggleEdges,
       toggleHighlights,
       showResetButton,
+      resetInteractions,
     } = this.props;
 
     const currentPreset = presets[presetIndex];
@@ -61,7 +62,7 @@ class PresetSwitcher extends PureComponent {
         </div>
         <div
           className={cx('preset-switcher__reset-button', { 'preset-switcher__reset-button--show': showResetButton })}
-          onClick={this.resetInteractions}
+          onClick={resetInteractions}
         >
           <Icon name="reset" />
         </div>
@@ -92,6 +93,7 @@ PresetSwitcher.propTypes = {
   toggleEdges: PropTypes.func.isRequired,
   toggleHighlights: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
+  resetInteractions: PropTypes.func.isRequired,
 };
 
 PresetSwitcher.defaultProps = {

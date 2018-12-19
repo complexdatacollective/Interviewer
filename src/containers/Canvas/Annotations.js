@@ -94,6 +94,7 @@ class Annotations extends Component {
     });
 
     this.props.setActiveStatus(true);
+    this.timers = [];
   };
 
   onDragMove = (mouseEvent) => {
@@ -112,15 +113,33 @@ class Annotations extends Component {
 
   onDragEnd = () => {
     this.setState({ isDrawing: false });
-    setTimeout(() => {
-      this.setState({
-        activeLines: this.state.activeLines - 1,
-      }, () => {
-        if (this.state.activeLines === 0) {
-          this.props.setActiveStatus(false);
-        }
-      });
-    }, 3000 * Math.log10(this.state.lines[this.state.lines.length - 1].length ** 2));
+
+    this.timers.push(
+      setTimeout(
+        () => {
+          this.setState({
+            activeLines: this.state.activeLines - 1,
+          }, () => {
+            if (this.state.activeLines === 0) {
+              this.props.setActiveStatus(false);
+            }
+          });
+        },
+        3000 * Math.log10(this.state.lines[this.state.lines.length - 1].length ** 2),
+      ),
+    );
+  };
+
+  reset = () => {
+    this.setState({
+      lines: [],
+      activeLines: 0,
+      isDrawing: false,
+    });
+
+    this.timers.map(timer => clearTimeout(timer));
+
+    this.props.setActiveStatus(false);
   };
 
   cleanupDragManager = () => {

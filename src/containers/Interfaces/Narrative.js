@@ -18,8 +18,8 @@ import {
   * @extends Component
   */
 class Narrative extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       presetIndex: 0,
       showConvex: true,
@@ -29,6 +29,8 @@ class Narrative extends Component {
       activeAnnotations: false,
       activeFocusNodes: false,
     };
+
+    this.annotationLayer = React.createRef();
   }
 
   setActiveStatus = (component, status) => {
@@ -53,6 +55,10 @@ class Narrative extends Component {
     this.setState({
       showHighlights: !this.state.showHighlights,
     });
+  }
+
+  resetInteractions = () => {
+    this.annotationLayer.current.reset();
   }
 
   updatePreset = (index) => {
@@ -90,7 +96,11 @@ class Narrative extends Component {
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            <Annotations freeDraw={freeDraw} setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }} />
+            <Annotations
+              ref={this.annotationLayer}
+              freeDraw={freeDraw}
+              setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
+            />
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}

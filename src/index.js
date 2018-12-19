@@ -44,6 +44,10 @@ secureCommsReady.then(() => {
   if (isCordova()) {
     document.addEventListener('deviceready', startApp, false);
   } else {
-    startApp();
+    document.onreadystatechange = () => {
+      if (document.readyState === 'complete') {
+        startApp();
+      }
+    };
   }
 });
