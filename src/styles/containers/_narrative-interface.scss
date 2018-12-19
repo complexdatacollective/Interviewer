@@ -10,4 +10,11 @@
       display: flex;
     }
   }
+
+
+  .node {
+    &__node-trim {
+      stroke-width: 1.75rem;
+    }
+  }
 }

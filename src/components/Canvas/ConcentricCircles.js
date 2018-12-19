@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Canvas from './Canvas';
 import NodeBucket from '../../containers/Canvas/NodeBucket';
 import NodeLayout from '../../containers/Canvas/NodeLayout';
@@ -22,8 +23,9 @@ const ConcentricCircles = ({
   sortOrder,
   connectFrom,
   updateLinkFrom,
+  className,
 }) => (
-  <Canvas className="concentric-circles" id="concentric-circles">
+  <Canvas className={cx('concentric-circles', className)} id="concentric-circles">
     <Background
       concentricCircles={concentricCircles}
       skewedTowardCenter={skewedTowardCenter}
@@ -80,6 +82,7 @@ ConcentricCircles.propTypes = {
   sortOrder: PropTypes.array,
   connectFrom: PropTypes.string,
   updateLinkFrom: PropTypes.func,
+  className: PropTypes.string,
 };
 
 ConcentricCircles.defaultProps = {
@@ -95,6 +98,7 @@ ConcentricCircles.defaultProps = {
   sortOrder: [],
   connectFrom: null,
   updateLinkFrom: () => {},
+  className: null,
 };
 
 export { ConcentricCircles };

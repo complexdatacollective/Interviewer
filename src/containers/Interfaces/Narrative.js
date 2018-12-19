@@ -90,6 +90,7 @@ class Narrative extends Component {
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
               key={currentPreset.id}
+              className="narrative-concentric-circles"
             />
             <NarrativeControlPanel
               id="narrative"
