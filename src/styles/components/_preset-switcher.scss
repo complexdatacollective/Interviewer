@@ -5,7 +5,6 @@
   margin: 2rem;
   display: flex;
   flex-direction: row;
-  overflow: hidden;
 
   &__navigation {
     background: var(--light-background);
@@ -40,7 +39,7 @@
 
       .icon {
         .cls-2 {
-          fill: var(--text-dark);
+          fill: rgba(255, 255, 255, .2); //sass-lint:disable-line no-color-literals
         }
       }
     }

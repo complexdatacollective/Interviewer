@@ -26,7 +26,7 @@ class Accordion extends Component {
     );
 
     return (
-      <div className="accordion">
+      <div className="accordion" onClick={this.props.onAccordionToggle}>
         <div
           className={toggleClasses}
           onClick={this.toggleAccordion}
@@ -54,9 +54,10 @@ class Accordion extends Component {
 }
 
 Accordion.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.array,
   label: PropTypes.string,
   open: PropTypes.bool,
+  onAccordionToggle: PropTypes.func.isRequired,
 };
 
 Accordion.defaultProps = {

@@ -14,18 +14,6 @@ class PresetSwitcher extends PureComponent {
       openKey: false,
     };
   }
-  createPresetList = (preset, index) => {
-    const classes = cx(
-      'accordion-item__radio',
-      { 'accordion-item__radio--selected': this.props.presetIndex === index },
-    );
-    return (
-      <div className="accordion-item" key={index} >
-        <span className={classes} />
-        {preset.label}
-      </div>
-    );
-  };
 
   toggleKey = () => {
     this.setState({
@@ -40,6 +28,9 @@ class PresetSwitcher extends PureComponent {
       subject,
       displayEdges,
       convexHulls,
+      toggleConvex,
+      toggleEdges,
+      toggleHighlights,
     } = this.props;
 
     const currentPreset = presets[presetIndex];
@@ -51,6 +42,16 @@ class PresetSwitcher extends PureComponent {
 
     return (
       <div className="preset-switcher" id="preset-switcher">
+        <NarrativeKey
+          subject={subject}
+          highlights={currentPreset.highlight}
+          toggleHighlights={toggleHighlights}
+          displayEdges={displayEdges}
+          toggleEdges={toggleEdges}
+          convexHulls={convexHulls}
+          toggleConvex={toggleConvex}
+          open={this.state.openKey}
+        />
         <div
           className={cx(navigationClasses, 'preset-switcher__navigation--previous', { 'preset-switcher__navigation--disabled': presetIndex === 0 })}
           onClick={() => this.props.updatePreset(presetIndex - 1)}
@@ -61,16 +62,6 @@ class PresetSwitcher extends PureComponent {
           <div style={{ width: '100%' }} onClick={this.toggleKey}>
             <h4>{presets[presetIndex].label}</h4>
           </div>
-          <NarrativeKey
-            subject={subject}
-            highlights={currentPreset.highlight}
-            toggleHighlights={this.toggleHighlights}
-            displayEdges={displayEdges}
-            toggleEdges={this.toggleEdges}
-            convexHulls={convexHulls}
-            toggleConvex={this.toggleConvex}
-            open={this.state.openKey}
-          />
         </div>
         <div
           className={cx(navigationClasses, 'preset-switcher__navigation--next', { 'preset-switcher__navigation--disabled': presetIndex + 1 === presets.length })}
@@ -90,6 +81,9 @@ PresetSwitcher.propTypes = {
   subject: PropTypes.object.isRequired,
   displayEdges: PropTypes.array,
   convexHulls: PropTypes.string,
+  toggleConvex: PropTypes.func.isRequired,
+  toggleEdges: PropTypes.func.isRequired,
+  toggleHighlights: PropTypes.func.isRequired,
 };
 
 PresetSwitcher.defaultProps = {

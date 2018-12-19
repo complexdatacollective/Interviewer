@@ -43,44 +43,38 @@ class NarrativeKey extends Component {
     return (
       <div className={classNames} ref={this.panel}>
         <div className="narrative-key__content">
-          <Accordion open label="Attributes">
-            <div onClick={toggleHighlights}>
-              {highlightLabels.map((highlight, index) => (
-                <div className="accordion-item" key={index}>
-                  <Icon
-                    name="highlighted"
-                    color={highlight.color}
-                  />
-                  {highlight.label}
-                </div>
-              ))}
-            </div>
+          <Accordion open label="Attributes" onAccordionToggle={toggleHighlights}>
+            {highlightLabels.map((highlight, index) => (
+              <div className="accordion-item" key={index}>
+                <Icon
+                  name="highlighted"
+                  color={highlight.color}
+                />
+                {highlight.label}
+              </div>
+            ))}
           </Accordion>
-          <Accordion open label="Links">
-            <div onClick={toggleEdges}>
-              {edges.map((edge, index) => (
-                <div className="accordion-item" key={index}>
-                  <Icon
-                    name="links"
-                    color={edge.color}
-                  />
-                  {edge.label}
-                </div>
-              ))}
-            </div>
+          <Accordion open label="Links" onAccordionToggle={toggleEdges}>
+            {edges.map((edge, index) => (
+              <div className="accordion-item" key={index}>
+                <Icon
+                  name="links"
+                  color={edge.color}
+                />
+                {edge.label}
+              </div>
+            ))}
           </Accordion>
-          <Accordion open label="Groups">
-            <div onClick={toggleConvex}>
-              {convexOptions.map((option, index) => (
-                <div className="accordion-item" key={index}>
-                  <Icon
-                    name="contexts"
-                    color={`cat-color-seq-${index + 1}`}
-                  />
-                  {option.label}
-                </div>
-              ))}
-            </div>
+          <Accordion open label="Groups" onAccordionToggle={toggleConvex}>
+            {convexOptions.map((option, index) => (
+              <div className="accordion-item" key={index}>
+                <Icon
+                  name="contexts"
+                  color={`cat-color-seq-${index + 1}`}
+                />
+                {option.label}
+              </div>
+            ))}
           </Accordion>
         </div>
       </div>

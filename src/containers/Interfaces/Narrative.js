@@ -47,7 +47,6 @@ class Narrative extends Component {
   }
 
   updatePreset = (index) => {
-    console.log(index);
     if (index !== this.state.presetIndex) {
       this.setState({
         showConvex: true,

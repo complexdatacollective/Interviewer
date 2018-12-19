@@ -1,11 +1,11 @@
 .narrative-key {
   display: flex;
   z-index: var(--z-panel);
-  bottom: 6.5rem;
-  width: 100%;
-  transition: height var(--animation-duration-standard) var(--animation-easing);
-  height: 70vh;
-  transition-delay: var(--animation-duration-standard);
+  bottom: 7rem;
+  width: 18rem;
+  position: fixed;
+  right: 0;
+  margin-right: 6rem;
 
   &__content {
     z-index: var(--z-panel);
