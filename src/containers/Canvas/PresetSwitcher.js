@@ -5,6 +5,8 @@ import cx from 'classnames';
 import { Icon } from '../../ui/components';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { NarrativeKey } from './';
+import window from '../../ui/components/window';
+
 
 class PresetSwitcher extends PureComponent {
   constructor() {
@@ -103,5 +105,6 @@ PresetSwitcher.defaultProps = {
 };
 
 export default compose(
+  window,
   DropObstacle,
 )(PresetSwitcher);
