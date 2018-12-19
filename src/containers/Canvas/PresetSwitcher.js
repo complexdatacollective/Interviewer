@@ -43,7 +43,7 @@ class PresetSwitcher extends PureComponent {
     );
 
     return (
-      <div className="preset-switcher" id="preset-switcher">
+      <div className="preset-switcher">
         <NarrativeKey
           subject={subject}
           highlights={currentPreset.highlight}

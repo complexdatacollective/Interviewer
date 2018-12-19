@@ -115,6 +115,7 @@ class Narrative extends Component {
             />
           </Canvas>
           <PresetSwitcher
+            id="preset-switcher"
             presets={presets}
             updatePreset={this.updatePreset}
             presetIndex={this.state.presetIndex}
