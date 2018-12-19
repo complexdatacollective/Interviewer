@@ -12,11 +12,13 @@ import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetC
 class NarrativeKey extends Component {
   constructor() {
     super();
+    this.state = {
+      open: false,
+
+    };
 
     this.panel = React.createRef();
   }
-
-  getComponentWidth = () => (this.state.open ? getComputedStyle(this.panel.current).getPropertyValue('--narrative-panel-width') : 0);
 
   togglePanel = () => {
     this.setState({
@@ -43,7 +45,7 @@ class NarrativeKey extends Component {
     return (
       <div className={classNames} ref={this.panel}>
         <div className="narrative-key__content">
-          <Accordion open label="Attributes" onAccordionToggle={toggleHighlights}>
+          <Accordion label="Attributes" onAccordionToggle={toggleHighlights}>
             {highlightLabels.map((highlight, index) => (
               <div className="accordion-item" key={index}>
                 <Icon
@@ -54,7 +56,7 @@ class NarrativeKey extends Component {
               </div>
             ))}
           </Accordion>
-          <Accordion open label="Links" onAccordionToggle={toggleEdges}>
+          <Accordion label="Links" onAccordionToggle={toggleEdges}>
             {edges.map((edge, index) => (
               <div className="accordion-item" key={index}>
                 <Icon
@@ -65,7 +67,7 @@ class NarrativeKey extends Component {
               </div>
             ))}
           </Accordion>
-          <Accordion open label="Groups" onAccordionToggle={toggleConvex}>
+          <Accordion label="Groups" onAccordionToggle={toggleConvex}>
             {convexOptions.map((option, index) => (
               <div className="accordion-item" key={index}>
                 <Icon

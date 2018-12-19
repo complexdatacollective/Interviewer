@@ -13,10 +13,6 @@
     height: 4rem;
     padding: 0 1rem;
 
-    &:hover {
-      background-color: var(--narrative-heading-bg-hover);
-    }
-
     &:hover,
     &--open {
       opacity: 1;

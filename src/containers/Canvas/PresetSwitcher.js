@@ -53,6 +53,7 @@ class PresetSwitcher extends PureComponent {
           convexHulls={convexHulls}
           toggleConvex={toggleConvex}
           open={this.state.openKey}
+          key={presetIndex}
         />
         <div
           className={cx(navigationClasses, 'preset-switcher__navigation--previous', { 'preset-switcher__navigation--disabled': presetIndex === 0 })}

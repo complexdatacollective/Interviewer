@@ -9,7 +9,7 @@ class Accordion extends Component {
     super(props);
 
     this.state = {
-      open: props.open,
+      open: true,
     };
   }
 
@@ -56,14 +56,12 @@ class Accordion extends Component {
 Accordion.propTypes = {
   children: PropTypes.array,
   label: PropTypes.string,
-  open: PropTypes.bool,
   onAccordionToggle: PropTypes.func.isRequired,
 };
 
 Accordion.defaultProps = {
   children: null,
   label: '',
-  open: false,
 };
 
 export default Accordion;
