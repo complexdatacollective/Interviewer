@@ -1,0 +1,31 @@
+.narrative-key {
+  display: flex;
+  z-index: var(--z-panel);
+  bottom: 6.5rem;
+  width: 100%;
+  transition: height var(--animation-duration-standard) var(--animation-easing);
+  height: 70vh;
+  transition-delay: var(--animation-duration-standard);
+
+  &__content {
+    z-index: var(--z-panel);
+    background-color: var(--light-background);
+    width: 100%;
+    transition: opacity var(--animation-duration-fast) var(--animation-easing);
+    opacity: 1;
+    overflow: hidden auto;
+  }
+
+  &__icon {
+    height: 1rem;
+  }
+
+  &:not(.narrative-key--open) {
+    height: 0;
+    transition-delay: unset;
+
+    .narrative-key__content {
+      opacity: 0;
+    }
+  }
+}

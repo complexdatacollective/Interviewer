@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { stages } from '../../selectors/session';
 import {
-  NarrativeControlPanel,
+  PresetSwitcher,
   Annotations,
 } from '../Canvas';
 import {
@@ -47,6 +47,7 @@ class Narrative extends Component {
   }
 
   updatePreset = (index) => {
+    console.log(index);
     if (index !== this.state.presetIndex) {
       this.setState({
         showConvex: true,
@@ -92,20 +93,19 @@ class Narrative extends Component {
               key={currentPreset.id}
               className="narrative-concentric-circles"
             />
-            <NarrativeControlPanel
-              id="narrative"
-              subject={subject}
-              presets={presets}
-              presetIndex={this.state.presetIndex}
-              highlights={currentPreset.highlight}
-              toggleHighlights={this.toggleHighlights}
-              displayEdges={displayEdges}
-              toggleEdges={this.toggleEdges}
-              convexHulls={convexHulls}
-              toggleConvex={this.toggleConvex}
-              updatePreset={this.updatePreset}
-            />
           </Canvas>
+          <PresetSwitcher
+            presets={presets}
+            updatePreset={this.updatePreset}
+            presetIndex={this.state.presetIndex}
+            subject={subject}
+            highlights={currentPreset.highlight}
+            toggleHighlights={this.toggleHighlights}
+            displayEdges={displayEdges}
+            toggleEdges={this.toggleEdges}
+            convexHulls={convexHulls}
+            toggleConvex={this.toggleConvex}
+          />
         </div>
       </div>
     );

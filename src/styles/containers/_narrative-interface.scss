@@ -13,6 +13,8 @@
 
 
   .node {
+    --node-outer-trim-stroke: white;
+
     &__node-trim {
       stroke-width: 1.75rem;
     }
