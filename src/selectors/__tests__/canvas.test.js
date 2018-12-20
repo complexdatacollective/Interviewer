@@ -1,23 +1,24 @@
 /* eslint-env jest */
 
 import {
+  makeGetNodesByCategorical,
   makeGetNextUnplacedNode,
   makeGetPlacedNodes,
   makeGetDisplayEdges,
 } from '../canvas';
+
+const node1 = { _uid: 1, type: 'person', attributes: { role: ['a'], name: 'alpha', closeness: [1, 1] } };
+const node2 = { _uid: 2, type: 'person', attributes: { role: ['a'], name: 'foxtrot' } };
+const node3 = { _uid: 3, type: 'person', attributes: { role: ['a'], name: 'bravo' } };
+const node4 = { _uid: 4, type: 'person', attributes: { role: ['a'], name: 'echo', closeness: [1, 1] } };
+const node5 = { _uid: 5, type: 'person', attributes: { role: ['b'], name: 'charlie', closeness: [1, 1] } };
 
 const mockState = {
   session: 'testSession',
   sessions: {
     testSession: {
       network: {
-        nodes: [
-          { _uid: 1, type: 'person', attributes: { name: 'alpha', closeness: [1, 1] } },
-          { _uid: 2, type: 'person', attributes: { name: 'foxtrot' } },
-          { _uid: 3, type: 'person', attributes: { name: 'bravo' } },
-          { _uid: 4, type: 'person', attributes: { name: 'echo', closeness: [1, 1] } },
-          { _uid: 5, type: 'person', attributes: { name: 'charlie', closeness: [1, 1] } },
-        ],
+        nodes: [node1, node2, node3, node4, node5],
         edges: [
           { type: 'friend', from: 1, to: 4 },
           { type: 'friend', from: 4, to: 5 },
@@ -43,10 +44,27 @@ describe('canvas selectors', () => {
       const subject = getPlacedNodes(mockState, props);
 
       expect(subject).toEqual([
-        { _uid: 1, type: 'person', attributes: { name: 'alpha', closeness: [1, 1] } },
-        { _uid: 4, type: 'person', attributes: { name: 'echo', closeness: [1, 1] } },
-        { _uid: 5, type: 'person', attributes: { name: 'charlie', closeness: [1, 1] } },
+        node1,
+        node4,
+        node5,
       ]);
+    });
+  });
+
+  describe('makeGetNodesByCategorical()', () => {
+    const getNodesByCategorical = makeGetNodesByCategorical();
+    const props = {
+      subject: {
+        entity: 'node',
+        type: 'person',
+      },
+      layoutVariable: 'closeness',
+      groupVariable: 'role',
+    };
+    it('groups placed nodes based on groupVariable', () => {
+      const groups = getNodesByCategorical(mockState, props);
+      expect(groups.a).toEqual([node1, node4]);
+      expect(groups.b).toEqual([node5]);
     });
   });
 
