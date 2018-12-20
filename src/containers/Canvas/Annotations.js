@@ -76,13 +76,10 @@ class Annotations extends Component {
   }
 
   componentWillUnmount() {
-    this.cleanupDragManager();
-    if (this.timers) {
-      this.timers.map(timer => clearTimeout(timer));
-    }
     if (this.portal) {
       this.portal.remove();
     }
+    this.cleanupDragManager();
   }
 
   onDragStart = (mouseEvent) => {
@@ -140,9 +137,7 @@ class Annotations extends Component {
       isDrawing: false,
     });
 
-    if (this.timers) {
-      this.timers.map(timer => clearTimeout(timer));
-    }
+    this.timers.map(timer => clearTimeout(timer));
 
     this.props.setActiveStatus(false);
   };
@@ -182,7 +177,7 @@ Annotations.propTypes = {
 
 Annotations.defaultProps = {
   freeDraw: true,
-  setActiveStatus: () => { },
+  setActiveStatus: () => {},
 };
 
 export default Annotations;
