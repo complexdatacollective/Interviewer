@@ -96,11 +96,13 @@ class Narrative extends Component {
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            <Annotations
-              ref={this.annotationLayer}
-              freeDraw={freeDraw}
-              setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
-            />
+            { freeDraw &&
+              <Annotations
+                ref={this.annotationLayer}
+                setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
+                key={`annotation-${currentPreset.id}`}
+              />
+            }
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
@@ -110,7 +112,7 @@ class Narrative extends Component {
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
-              key={currentPreset.id}
+              key={`circles-${currentPreset.id}`}
               className="narrative-concentric-circles"
             />
           </Canvas>

@@ -54,6 +54,7 @@ class Annotations extends Component {
     this.dragManager = null;
     this.portal = document.createElement('div');
     this.portal.className = 'annotations';
+    this.removeLineTimers = [];
   }
 
   componentDidMount() {
@@ -64,22 +65,22 @@ class Annotations extends Component {
       nodeListRoot.insertBefore(this.portal, nodeListRoot.firstChild);
     }
 
-    if (this.props.freeDraw) {
-      this.dragManager = new DragManager({
-        el: this.portal,
-        onDragStart: this.onDragStart,
-        onDragMove: this.onDragMove,
-        onDragEnd: this.onDragEnd,
-        scrollDirection: NO_SCROLL,
-      });
-    }
+    this.dragManager = new DragManager({
+      el: this.portal,
+      onDragStart: this.onDragStart,
+      onDragMove: this.onDragMove,
+      onDragEnd: this.onDragEnd,
+      scrollDirection: NO_SCROLL,
+    });
   }
 
   componentWillUnmount() {
+    this.cleanupDragManager();
+    this.resetRemoveLineTimers();
+
     if (this.portal) {
       this.portal.remove();
     }
-    this.cleanupDragManager();
   }
 
   onDragStart = (mouseEvent) => {
@@ -94,7 +95,6 @@ class Annotations extends Component {
     });
 
     this.props.setActiveStatus(true);
-    this.timers = [];
   };
 
   onDragMove = (mouseEvent) => {
@@ -114,7 +114,9 @@ class Annotations extends Component {
   onDragEnd = () => {
     this.setState({ isDrawing: false });
 
-    this.timers.push(
+    // Add a setTimeout that decreases state.activeLines once a line has faded out.
+    // Could possibly be replaced by a callback from <Fade />?
+    this.removeLineTimers.push(
       setTimeout(
         () => {
           this.setState({
@@ -130,6 +132,7 @@ class Annotations extends Component {
     );
   };
 
+  // Called by parent component via ref when the reset button is clicked.
   reset = () => {
     this.setState({
       lines: [],
@@ -137,10 +140,16 @@ class Annotations extends Component {
       isDrawing: false,
     });
 
-    this.timers.map(timer => clearTimeout(timer));
-
+    this.resetRemoveLineTimers();
     this.props.setActiveStatus(false);
   };
+
+  resetRemoveLineTimers = () => {
+    if (this.removeLineTimers) {
+      this.removeLineTimers.map(timer => clearTimeout(timer));
+      this.removeLineTimers = [];
+    }
+  }
 
   cleanupDragManager = () => {
     if (this.dragManager) {
@@ -171,13 +180,11 @@ class Annotations extends Component {
 }
 
 Annotations.propTypes = {
-  freeDraw: PropTypes.bool,
   setActiveStatus: PropTypes.func,
 };
 
 Annotations.defaultProps = {
-  freeDraw: true,
-  setActiveStatus: () => {},
+  setActiveStatus: () => { },
 };
 
 export default Annotations;
