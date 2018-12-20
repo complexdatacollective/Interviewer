@@ -4,10 +4,7 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
 import { stages } from '../../selectors/session';
-import {
-  PresetSwitcher,
-  Annotations,
-} from '../Canvas';
+import { PresetSwitcher } from '../Canvas';
 import {
   Canvas,
   ConcentricCircles,
@@ -68,6 +65,7 @@ class Narrative extends Component {
         showEdges: true,
         showHighlights: true,
         presetIndex: index,
+        activeAnnotations: false,
       });
     }
   }
@@ -96,11 +94,6 @@ class Narrative extends Component {
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            <Annotations
-              ref={this.annotationLayer}
-              freeDraw={freeDraw}
-              setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
-            />
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
@@ -110,6 +103,9 @@ class Narrative extends Component {
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
+              annotationDraw={freeDraw}
+              annotationRef={this.annotationLayer}
+              setAnnotationStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
               key={currentPreset.id}
               className="narrative-concentric-circles"
             />

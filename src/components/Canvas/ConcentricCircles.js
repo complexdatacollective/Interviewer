@@ -7,6 +7,7 @@ import NodeLayout from '../../containers/Canvas/NodeLayout';
 import EdgeLayout from '../../containers/Canvas/EdgeLayout';
 import Background from '../../containers/Canvas/Background';
 import ConvexHulls from '../../containers/Canvas/ConvexHulls';
+import { Annotations } from '../../containers/Canvas';
 
 const ConcentricCircles = ({
   subject,
@@ -24,6 +25,9 @@ const ConcentricCircles = ({
   connectFrom,
   updateLinkFrom,
   className,
+  annotationDraw,
+  annotationRef,
+  setAnnotationStatus,
 }) => (
   <Canvas className={cx('concentric-circles', className)} id="concentric-circles">
     <Background
@@ -45,6 +49,14 @@ const ConcentricCircles = ({
         displayEdges={displayEdges}
         subject={subject}
         layoutVariable={layoutVariable}
+      />
+    }
+    {
+      annotationDraw &&
+      <Annotations
+        ref={annotationRef}
+        freeDraw={annotationDraw}
+        setActiveStatus={setAnnotationStatus}
       />
     }
     <NodeLayout
@@ -83,6 +95,9 @@ ConcentricCircles.propTypes = {
   connectFrom: PropTypes.string,
   updateLinkFrom: PropTypes.func,
   className: PropTypes.string,
+  annotationDraw: PropTypes.bool,
+  annotationRef: PropTypes.object,
+  setAnnotationStatus: PropTypes.func,
 };
 
 ConcentricCircles.defaultProps = {
@@ -97,8 +112,11 @@ ConcentricCircles.defaultProps = {
   skewedTowardCenter: null,
   sortOrder: [],
   connectFrom: null,
-  updateLinkFrom: () => {},
+  updateLinkFrom: () => { },
   className: null,
+  annotationDraw: false,
+  annotationRef: null,
+  setAnnotationStatus: () => { },
 };
 
 export { ConcentricCircles };
