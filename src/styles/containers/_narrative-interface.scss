@@ -13,7 +13,7 @@
 
   .node {
     &__node-trim {
-      stroke-width: 2rem;
+      stroke-width: 40px; // px value used here because node SVGs are scaled prooprtionally later.
     }
   }
 }
