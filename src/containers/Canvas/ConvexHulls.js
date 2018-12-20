@@ -4,14 +4,20 @@ import { withBounds } from '../../behaviours';
 
 import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import { makeGetNodesByCategorical } from '../../selectors/canvas';
+import { makeGetCategoricalOptions } from '../../selectors/protocol';
 
 function makeMapStateToProps() {
   const getNodesByGroup = makeGetNodesByCategorical();
+  const getCategoricalOptions = makeGetCategoricalOptions();
 
   return function mapStateToProps(state, props) {
     const nodesByGroup = getNodesByGroup(state, props);
+    const categoricalOptions = getCategoricalOptions(
+      state, { variableId: props.groupVariable, ...props },
+    );
     return {
       nodesByGroup,
+      categoricalOptions,
     };
   };
 }

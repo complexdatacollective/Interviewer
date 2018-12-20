@@ -43,7 +43,13 @@ if (isElectron()) {
 secureCommsReady.then(() => {
   if (isCordova()) {
     document.addEventListener('deviceready', startApp, false);
-  } else {
+  } else if (document.readyState === 'complete') {
     startApp();
+  } else {
+    document.onreadystatechange = () => {
+      if (document.readyState === 'complete') {
+        startApp();
+      }
+    };
   }
 });

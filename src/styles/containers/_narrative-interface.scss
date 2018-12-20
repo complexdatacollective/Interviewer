@@ -5,5 +5,15 @@
   &__canvas {
     width: 100%;
     height: 100%;
+
+    .canvas {
+      display: flex;
+    }
+  }
+
+  .node {
+    &__node-trim {
+      stroke-width: 40px; // px value used here because node SVGs are scaled prooprtionally later.
+    }
   }
 }

@@ -29,7 +29,7 @@ const AnnotationLine = ({ line, showLine }) => {
     <Fade
       in={showLine}
       enter={false}
-      customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length * line.length) }}
+      customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length ** 2) }}
     >
       <path className="annotations__path" d={pathData} vectorEffect="non-scaling-stroke" />
     </Fade>
@@ -47,12 +47,14 @@ class Annotations extends Component {
 
     this.state = {
       lines: [],
+      activeLines: 0,
       isDrawing: false,
     };
 
     this.dragManager = null;
     this.portal = document.createElement('div');
     this.portal.className = 'annotations';
+    this.removeLineTimers = [];
   }
 
   componentDidMount() {
@@ -63,19 +65,22 @@ class Annotations extends Component {
       nodeListRoot.insertBefore(this.portal, nodeListRoot.firstChild);
     }
 
-    if (this.props.freeDraw) {
-      this.dragManager = new DragManager({
-        el: this.portal,
-        onDragStart: this.onDragStart,
-        onDragMove: this.onDragMove,
-        onDragEnd: this.onDragEnd,
-        scrollDirection: NO_SCROLL,
-      });
-    }
+    this.dragManager = new DragManager({
+      el: this.portal,
+      onDragStart: this.onDragStart,
+      onDragMove: this.onDragMove,
+      onDragEnd: this.onDragEnd,
+      scrollDirection: NO_SCROLL,
+    });
   }
 
   componentWillUnmount() {
     this.cleanupDragManager();
+    this.resetRemoveLineTimers();
+
+    if (this.portal) {
+      this.portal.remove();
+    }
   }
 
   onDragStart = (mouseEvent) => {
@@ -85,8 +90,11 @@ class Annotations extends Component {
 
     this.setState({
       lines,
+      activeLines: this.state.activeLines + 1,
       isDrawing: true,
     });
+
+    this.props.setActiveStatus(true);
   };
 
   onDragMove = (mouseEvent) => {
@@ -105,7 +113,43 @@ class Annotations extends Component {
 
   onDragEnd = () => {
     this.setState({ isDrawing: false });
+
+    // Add a setTimeout that decreases state.activeLines once a line has faded out.
+    // Could possibly be replaced by a callback from <Fade />?
+    this.removeLineTimers.push(
+      setTimeout(
+        () => {
+          this.setState({
+            activeLines: this.state.activeLines - 1,
+          }, () => {
+            if (this.state.activeLines === 0) {
+              this.props.setActiveStatus(false);
+            }
+          });
+        },
+        3000 * Math.log10(this.state.lines[this.state.lines.length - 1].length ** 2),
+      ),
+    );
   };
+
+  // Called by parent component via ref when the reset button is clicked.
+  reset = () => {
+    this.setState({
+      lines: [],
+      activeLines: 0,
+      isDrawing: false,
+    });
+
+    this.resetRemoveLineTimers();
+    this.props.setActiveStatus(false);
+  };
+
+  resetRemoveLineTimers = () => {
+    if (this.removeLineTimers) {
+      this.removeLineTimers.map(timer => clearTimeout(timer));
+      this.removeLineTimers = [];
+    }
+  }
 
   cleanupDragManager = () => {
     if (this.dragManager) {
@@ -119,13 +163,6 @@ class Annotations extends Component {
     return ({
       x: (mouseEvent.x - boundingRect.left) / boundingRect.width,
       y: (mouseEvent.y - boundingRect.top) / boundingRect.height,
-    });
-  }
-
-  removeLine = () => {
-    const lines = this.state.lines.slice(1);
-    this.setState({
-      lines,
     });
   }
 
@@ -143,11 +180,11 @@ class Annotations extends Component {
 }
 
 Annotations.propTypes = {
-  freeDraw: PropTypes.bool,
+  setActiveStatus: PropTypes.func,
 };
 
 Annotations.defaultProps = {
-  freeDraw: true,
+  setActiveStatus: () => { },
 };
 
 export default Annotations;

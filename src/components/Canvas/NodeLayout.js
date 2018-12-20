@@ -17,7 +17,7 @@ class NodeLayout extends Component {
     nodes: PropTypes.array,
     onSelected: PropTypes.func.isRequired,
     connectFrom: PropTypes.string,
-    highlightAttribute: PropTypes.string,
+    highlightAttributes: PropTypes.array,
     allowPositioning: PropTypes.bool,
     allowSelect: PropTypes.bool,
     layoutVariable: PropTypes.string,
@@ -28,7 +28,7 @@ class NodeLayout extends Component {
   static defaultProps = {
     connectFrom: null,
     nodes: [],
-    highlightAttribute: null,
+    highlightAttributes: [],
     allowPositioning: true,
     allowSelect: true,
     layoutVariable: null,
@@ -38,14 +38,22 @@ class NodeLayout extends Component {
 
   shouldComponentUpdate(nextProps) {
     if (nodesLengthChanged(nextProps, this.props)) { return true; }
+    if (!isEqual(nextProps.highlightAttributes, this.props.highlightAttributes)) { return true; }
     if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
 
     return false;
   }
 
+  getHighlightColor(node) {
+    if (!this.isHighlighted(node)) return '';
+    return this.props.highlightAttributes.find(
+      attribute => node[nodeAttributesProperty][attribute.variable] === true).color;
+  }
+
   isHighlighted(node) {
-    return !isEmpty(this.props.highlightAttribute) &&
-      node[nodeAttributesProperty][this.props.highlightAttribute] === true;
+    return !isEmpty(this.props.highlightAttributes) &&
+      !(isEmpty(this.props.highlightAttributes.find(
+        attribute => node[nodeAttributesProperty][attribute.variable] === true)));
   }
 
   isLinking(node) {
@@ -73,6 +81,7 @@ class NodeLayout extends Component {
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.props.onSelected(node)}
+              selectedColor={this.getHighlightColor(node)}
               selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}
               allowPositioning={allowPositioning}

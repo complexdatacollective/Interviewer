@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Canvas from './Canvas';
 import NodeBucket from '../../containers/Canvas/NodeBucket';
 import NodeLayout from '../../containers/Canvas/NodeLayout';
@@ -10,7 +11,7 @@ import ConvexHulls from '../../containers/Canvas/ConvexHulls';
 const ConcentricCircles = ({
   subject,
   layoutVariable,
-  highlightAttribute,
+  highlightAttributes,
   allowHighlighting,
   createEdge,
   convexHulls,
@@ -22,8 +23,9 @@ const ConcentricCircles = ({
   sortOrder,
   connectFrom,
   updateLinkFrom,
+  className,
 }) => (
-  <Canvas className="concentric-circles">
+  <Canvas className={cx('concentric-circles', className)} id="concentric-circles">
     <Background
       concentricCircles={concentricCircles}
       skewedTowardCenter={skewedTowardCenter}
@@ -47,7 +49,7 @@ const ConcentricCircles = ({
     }
     <NodeLayout
       id="NODE_LAYOUT"
-      highlightAttribute={highlightAttribute}
+      highlightAttributes={highlightAttributes}
       allowHighlighting={allowHighlighting && !createEdge}
       createEdge={createEdge}
       layoutVariable={layoutVariable}
@@ -68,7 +70,7 @@ const ConcentricCircles = ({
 ConcentricCircles.propTypes = {
   subject: PropTypes.object.isRequired,
   layoutVariable: PropTypes.string.isRequired,
-  highlightAttribute: PropTypes.string,
+  highlightAttributes: PropTypes.array,
   allowHighlighting: PropTypes.bool,
   createEdge: PropTypes.string,
   allowPositioning: PropTypes.bool,
@@ -80,10 +82,11 @@ ConcentricCircles.propTypes = {
   sortOrder: PropTypes.array,
   connectFrom: PropTypes.string,
   updateLinkFrom: PropTypes.func,
+  className: PropTypes.string,
 };
 
 ConcentricCircles.defaultProps = {
-  highlightAttribute: null,
+  highlightAttributes: [],
   allowHighlighting: false,
   createEdge: null,
   allowPositioning: true,
@@ -95,6 +98,7 @@ ConcentricCircles.defaultProps = {
   sortOrder: [],
   connectFrom: null,
   updateLinkFrom: () => {},
+  className: null,
 };
 
 export { ConcentricCircles };
