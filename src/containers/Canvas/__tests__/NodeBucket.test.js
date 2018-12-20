@@ -10,9 +10,13 @@ const mockProps = {
 };
 
 describe('<NodeBucket />', () => {
+  it('displays content when positioning is not disabled', () => {
+    const component = shallow(<NodeBucket {...mockProps} />);
+    expect(component.children()).toHaveLength(1);
+  });
+
   it('does not display bucket when positioning is disabled', () => {
     const component = shallow(<NodeBucket {...mockProps} allowPositioning={false} />);
-
     expect(component.children()).toHaveLength(0);
   });
 });
