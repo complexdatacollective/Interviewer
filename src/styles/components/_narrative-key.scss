@@ -1,14 +1,14 @@
-.narrative-key {
+.preset-switcher-key {
   display: flex;
-  z-index: var(--z-panel);
+  z-index: var(--z-global-ui);
   bottom: 7rem;
   width: 18rem;
   position: fixed;
   right: 0;
   margin-right: 6.1rem; // distance of preset-switcher from right side
+  max-height: 90vh;
 
   &__content {
-    z-index: var(--z-panel);
     background-color: var(--light-background);
     width: 100%;
     transition: opacity var(--animation-duration-fast) var(--animation-easing);
@@ -20,11 +20,11 @@
     height: 1rem;
   }
 
-  &:not(.narrative-key--open) {
+  &:not(.preset-switcher-key--open) {
     height: 0;
     transition-delay: unset;
 
-    .narrative-key__content {
+    .preset-switcher-key__content {
       opacity: 0;
     }
   }

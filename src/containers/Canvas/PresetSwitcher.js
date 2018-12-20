@@ -4,8 +4,7 @@ import { compose } from 'recompose';
 import cx from 'classnames';
 import { Icon } from '../../ui/components';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { NarrativeKey } from './';
-import window from '../../ui/components/window';
+import { PresetSwitcherKey } from './';
 
 
 class PresetSwitcher extends PureComponent {
@@ -46,7 +45,7 @@ class PresetSwitcher extends PureComponent {
 
     return (
       <div className="preset-switcher">
-        <NarrativeKey
+        <PresetSwitcherKey
           subject={subject}
           highlights={currentPreset.highlight}
           toggleHighlights={toggleHighlights}
@@ -105,6 +104,5 @@ PresetSwitcher.defaultProps = {
 };
 
 export default compose(
-  window,
   DropObstacle,
 )(PresetSwitcher);

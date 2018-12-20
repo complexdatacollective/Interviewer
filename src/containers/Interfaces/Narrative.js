@@ -68,6 +68,8 @@ class Narrative extends Component {
         showEdges: true,
         showHighlights: true,
         presetIndex: index,
+        activeAnnotations: false,
+        activeFocusNodes: false,
       });
     }
   }

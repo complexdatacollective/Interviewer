@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
+import window from '../../ui/components/window';
 import { Icon } from '../../ui/components';
 import { Accordion } from '.';
 
 import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/protocol';
 
-class NarrativeKey extends Component {
+class PresetSwitcherKey extends Component {
   constructor() {
     super();
     this.state = {
@@ -38,13 +38,13 @@ class NarrativeKey extends Component {
     } = this.props;
 
     const classNames = cx(
-      'narrative-key',
-      { 'narrative-key--open': open },
+      'preset-switcher-key',
+      { 'preset-switcher-key--open': open },
     );
 
     return (
       <div className={classNames} ref={this.panel}>
-        <div className="narrative-key__content">
+        <div className="preset-switcher-key__content">
           <Accordion label="Attributes" onAccordionToggle={toggleHighlights}>
             {highlightLabels.map((highlight, index) => (
               <div className="accordion-item" key={index}>
@@ -84,7 +84,7 @@ class NarrativeKey extends Component {
   }
 }
 
-NarrativeKey.propTypes = {
+PresetSwitcherKey.propTypes = {
   convexOptions: PropTypes.array,
   edges: PropTypes.array,
   highlightLabels: PropTypes.array,
@@ -94,7 +94,7 @@ NarrativeKey.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-NarrativeKey.defaultProps = {
+PresetSwitcherKey.defaultProps = {
   edges: [],
   convexOptions: [],
   highlightLabels: [],
@@ -130,5 +130,6 @@ const makeMapStateToProps = () => {
 };
 
 export default compose(
+  window,
   connect(makeMapStateToProps),
-)(NarrativeKey);
+)(PresetSwitcherKey);
