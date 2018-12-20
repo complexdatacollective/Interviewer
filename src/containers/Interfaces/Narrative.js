@@ -90,6 +90,7 @@ class Narrative extends Component {
     const backgroundImage = stage.background && stage.background.image;
     const concentricCircles = stage.background && stage.background.concentricCircles;
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
+    const allowRepositioning = stage.behaviours && stage.behaviours.allowRepositioning;
     const freeDraw = stage.behaviours && stage.behaviours.freeDraw;
 
     const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
@@ -111,7 +112,7 @@ class Narrative extends Component {
               highlightAttributes={(this.state.showHighlights && highlight) || []}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
-              allowPositioning={stage.behaviours.allowRepositioning}
+              allowPositioning={allowRepositioning}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}

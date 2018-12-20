@@ -1480,7 +1480,7 @@
       "behaviours": {
         "freeDraw": true,
         "featureNode": true,
-        "allowRespositioning": true
+        "allowRepositioning": true
       }
     },
     {
