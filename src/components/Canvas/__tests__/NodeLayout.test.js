@@ -80,4 +80,26 @@ describe('<NodeLayout />', () => {
 
     expect(componentDidUpdate.mock.calls.length).toEqual(1);
   });
+
+  describe('isLinking', () => {
+    it('detects connecting state', () => {
+      const subject = shallow(<NodeLayout {...mockProps} connectFrom="1" />);
+      expect(subject.instance().isLinking({ _uid: '1' })).toBe(true);
+      expect(subject.instance().isLinking({ _uid: '2' })).toBe(false);
+    });
+  });
+
+  describe('highlighting', () => {
+    const subject = shallow(<NodeLayout highlightAttributes={[{ variable: 'isOn', color: 'neon' }]} />);
+
+    it('detects highlight state', () => {
+      expect(subject.instance().isHighlighted({ attributes: { isOn: true } })).toBe(true);
+      expect(subject.instance().isHighlighted({ attributes: {} })).toBe(false);
+    });
+
+    it('gets the highlight color', () => {
+      expect(subject.instance().getHighlightColor({ attributes: { isOn: true } })).toBe('neon');
+      expect(subject.instance().getHighlightColor({ attributes: {} })).toBe('');
+    });
+  });
 });
