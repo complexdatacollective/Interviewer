@@ -57,7 +57,7 @@ ShallowWrapper {
         onClick={[Function]}
         style={
           Object {
-            "--categorical-available-height": "0px",
+            "--categorical-list-expanded-bin-size": "0px",
           }
         }
       >
@@ -169,7 +169,7 @@ ShallowWrapper {
         "className": "categorical-list__inner",
         "onClick": [Function],
         "style": Object {
-          "--categorical-available-height": "0px",
+          "--categorical-list-expanded-bin-size": "0px",
         },
       },
       "ref": Object {
@@ -301,7 +301,7 @@ ShallowWrapper {
           onClick={[Function]}
           style={
             Object {
-              "--categorical-available-height": "0px",
+              "--categorical-list-expanded-bin-size": "0px",
             }
           }
         >
@@ -413,7 +413,7 @@ ShallowWrapper {
           "className": "categorical-list__inner",
           "onClick": [Function],
           "style": Object {
-            "--categorical-available-height": "0px",
+            "--categorical-list-expanded-bin-size": "0px",
           },
         },
         "ref": Object {
