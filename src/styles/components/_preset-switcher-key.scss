@@ -23,6 +23,7 @@
   &:not(.preset-switcher-key--open) {
     height: 0;
     transition-delay: unset;
+    overflow: hidden;
 
     .preset-switcher-key__content {
       opacity: 0;

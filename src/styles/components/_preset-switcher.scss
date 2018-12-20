@@ -4,6 +4,7 @@
   right: 0;
   margin: 2rem;
   display: flex;
+  justify-content: flex-end;
   z-index: var(--z-modal);
 
   &__reset-button {
