@@ -67,17 +67,19 @@
   &__label {
     display: flex;
     align-items: center;
-    min-width: 18rem;
+    width: 18rem;
     margin: 0 0.1rem;
     flex-direction: column;
     cursor: pointer;
 
     h4 {
       margin: 0;
-      padding: unit(3) unit(1);
-      width: 100%;
+      padding: unit(3) unit(2);
       text-align: center;
       background: var(--light-background);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }

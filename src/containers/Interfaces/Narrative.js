@@ -111,6 +111,7 @@ class Narrative extends Component {
               highlightAttributes={(this.state.showHighlights && highlight) || []}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
+              allowPositioning={stage.behaviours.allowRepositioning}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
