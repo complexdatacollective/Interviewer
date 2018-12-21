@@ -80,8 +80,7 @@ node-gyp rebuild --target=2.0.0 --arch=x64 --dist-url=https://atom.io/download/e
 |`dist:win`|Uses electron-packager to package a Windows release.|
 |`dist:ios`|Builds iOS cordova project|
 |`dist:android`|Builds Android cordova project|
-|`generate-schema`|Generates a JSON schema and an abstract protocol in `./schema` based on the development protocol example|
-|`validate-protocol [path-to-protocol]`|Validate the named protocol (.netcanvas or .json), or the development protocol by default, against the schema created by `generate-schema`|
+|`validate-protocol [path-to-protocol]`|Validate the named protocol (.netcanvas or .json), or the development protocol by default, against the JSON schema|
 
 ## Quick development reference
 

@@ -1,4 +1,6 @@
 // String consts used by protocol files
+// Note: these values are no longer used to produce JSON schemas; the schemas must
+// be kept in sync manually.
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/protocol.json#variable-registry
 const Entity = Object.freeze({
