@@ -1,10 +1,9 @@
 .stage {
-  background-color: palette('background');
-  height: 0;
+  height: 100%;
 
   &__interface {
     flex: 1 auto;
-    height: 100vh;
+    height: 100%;
     position: relative;
   }
 

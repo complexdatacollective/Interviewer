@@ -10,7 +10,7 @@ function styleForSoftKeyboard() {
   const scrollTop = window.pageYOffset || window.scrollY || 0;
   if (scrollTop > 0) {
     style = {
-      height: `calc(100vh - 320px - ${scrollTop}px)`,
+      height: `calc(100% - 320px - ${scrollTop}px)`,
       minHeight: '10em',
     };
   }

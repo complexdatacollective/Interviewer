@@ -21,7 +21,6 @@ const CategoricalBin = ({
   const {
     prompts,
   } = stage;
-
   return (
     <div className="categorical-bin-interface">
       <div className="categorical-bin-interface__prompt">

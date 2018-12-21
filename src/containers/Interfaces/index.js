@@ -10,6 +10,7 @@ import Sociogram from './Sociogram';
 import Quiz from './Quiz';
 import Information from './Information';
 import CategoricalBin from './CategoricalBin';
+import Narrative from './Narrative';
 import FinishSession from './FinishSession';
 
 import { StageType } from '../../protocol-consts';
@@ -23,6 +24,7 @@ const interfaces = {
   [StageType.Information]: Information,
   [StageType.OrdinalBin]: OrdinalBin,
   [StageType.CategoricalBin]: CategoricalBin,
+  [StageType.Narrative]: Narrative,
   FinishSession,
 };
 
@@ -47,6 +49,7 @@ export {
   Information,
   CategoricalBin,
   OrdinalBin,
+  Narrative,
 };
 
 export default getInterface;

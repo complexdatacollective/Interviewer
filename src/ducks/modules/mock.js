@@ -9,6 +9,8 @@ const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
 const mockCoord = () => faker.random.number({ min: 0, max: 1, precision: 0.000001 });
 
+
+// Todo: make these mock values reflect validation
 const mockValue = (nodeVariable) => {
   switch (nodeVariable.type) {
     case 'boolean':
@@ -16,8 +18,9 @@ const mockValue = (nodeVariable) => {
     case 'number':
       return faker.random.number({ min: 20, max: 100 });
     case 'ordinal':
-    case 'categorical':
       return faker.random.arrayElement(nodeVariable.options).value;
+    case 'categorical':
+      return [faker.random.arrayElement(nodeVariable.options).value];
     case 'layout':
       return { x: mockCoord(), y: mockCoord() };
     default:

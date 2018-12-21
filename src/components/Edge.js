@@ -5,11 +5,10 @@ import { makeGetEdgeColor } from '../selectors/protocol';
 
 const getEdgeColor = makeGetEdgeColor();
 
-export class Edge extends PureComponent {
+class Edge extends PureComponent {
   render() {
     const { from, to, color, viewBoxScale } = this.props;
     if (!from || !to) { return null; }
-
     return (
       <line
         x1={from.x * viewBoxScale}
@@ -29,16 +28,12 @@ function mapStateToProps(state, props) {
 }
 
 Edge.propTypes = {
-  color: PropTypes.string,
+  color: PropTypes.string.isRequired,
   from: PropTypes.object.isRequired,
   to: PropTypes.object.isRequired,
   viewBoxScale: PropTypes.number.isRequired,
   /* eslint-disable react/no-unused-prop-types */
   type: PropTypes.string.isRequired,
-};
-
-Edge.defaultProps = {
-  color: 'edge-color-seq-1',
 };
 
 export default connect(mapStateToProps)(Edge);

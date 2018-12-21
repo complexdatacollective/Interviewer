@@ -132,6 +132,7 @@
         "type": {
           "type": "string",
           "enum": [
+            "Narrative",
             "NameGenerator",
             "NameGeneratorList",
             "NameGeneratorAutoComplete",
@@ -166,6 +167,27 @@
           },
           "minItems": 1
         },
+        "presets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Preset"
+          },
+          "minItems": 1
+        },
+        "background": {
+          "type": "object",
+          "items": {
+            "$ref": "#/definitions/Background"
+          },
+          "minItems": 1
+        },
+        "behaviours": {
+          "type": "object",
+          "items": {
+            "$ref": "#/definitions/Behaviours"
+          },
+          "minItems": 1
+        },
         "showExistingNodes": {
           "type": "boolean"
         },
@@ -197,6 +219,18 @@
           },
           "required": [
             "items"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Narrative"
+            }
+          },
+          "required": [
+            "presets",
+            "background",
+            "behaviours"
           ]
         },
         {
@@ -452,6 +486,53 @@
       ],
       "title": "Prompt"
     },
+    "Preset": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "layoutVariable": {
+          "type": "string"
+        },
+        "groupVariable": {
+          "type": "string"
+        },
+        "edges": {
+          "$ref": "#/definitions/Edges"
+        },
+        "highlight": {
+          "$ref": "#/definitions/NarrativeHighlight"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "layoutVariable"
+      ],
+      "title": "Preset"
+    },
+    "Behaviours": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "freeDraw": {
+          "type": "boolean"
+        },
+        "featureNode": {
+          "type": "boolean"
+        },
+        "allowRepositioning": {
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "Behaviours"
+    },
     "AdditionalAttributes": {
       "type": "object",
       "required": [],
@@ -549,11 +630,22 @@
       ],
       "title": "Edges"
     },
+    "NarrativeHighlight": {
+      "type": "array",
+      "additionalProperties": false,
+      "items": {
+        "$ref": "#/definitions/Highlight"
+      },
+      "title": "NarrativeHighlight"
+    },
     "Highlight": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "variable": {
+          "type": "string"
+        },
+        "color": {
           "type": "string"
         },
         "allowHighlighting": {
@@ -747,7 +839,6 @@
         }
       },
       "required": [
-        "color",
         "label",
         "name"
       ],

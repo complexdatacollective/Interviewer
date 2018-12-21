@@ -37,19 +37,50 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 
 export const makeGetNodeColor = () => createDeepEqualSelector(
   protocolRegistry,
-  (state, props) => props.type,
+  (_, props) => props.type,
   (variableRegistry, nodeType) => {
     const nodeInfo = variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color;
+    return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
+  },
+);
+
+export const makeGetEdgeLabel = () => createDeepEqualSelector(
+  protocolRegistry,
+  (_, props) => props.type,
+  (variableRegistry, edgeType) => {
+    const edgeInfo = variableRegistry.edge;
+    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].label) || '';
   },
 );
 
 export const makeGetEdgeColor = () => createDeepEqualSelector(
   protocolRegistry,
-  (state, props) => props.type,
+  (_, props) => props.type,
   (variableRegistry, edgeType) => {
     const edgeInfo = variableRegistry.edge;
-    return edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color;
+    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color) || 'edge-color-seq-1';
+  },
+);
+
+export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
+  protocolRegistry,
+  (_, props) => props.subject.type,
+  (_, props) => props.variableId,
+  (variableRegistry, nodeType, variableId) => {
+    const nodeInfo = variableRegistry.node;
+    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
+    return (variables && variables[variableId] && variables[variableId].label) || [];
+  },
+);
+
+export const makeGetCategoricalOptions = () => createDeepEqualSelector(
+  protocolRegistry,
+  (_, props) => props.subject.type,
+  (_, props) => props.variableId,
+  (variableRegistry, nodeType, variableId) => {
+    const nodeInfo = variableRegistry.node;
+    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
+    return (variables && variables[variableId] && variables[variableId].options) || [];
   },
 );
 

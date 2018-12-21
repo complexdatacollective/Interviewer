@@ -20,6 +20,10 @@ canvas, regardless of scrolling.
 **/
 
 export default function getAbsoluteBoundingRect(el) {
+    if (!el) {
+      return 0;
+    }
+
     var doc  = document,
         win  = window,
         body = doc.body,

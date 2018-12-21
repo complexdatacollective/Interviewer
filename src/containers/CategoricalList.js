@@ -53,12 +53,12 @@ class CategoricalList extends Component {
 
   renderCategoricalBin = (bin, index) => {
     const onDrop = ({ meta }) => {
-      if (getNodeAttributes(meta)[this.props.activePromptVariable] === bin.value) {
+      if (getNodeAttributes(meta)[this.props.activePromptVariable] === [bin.value]) {
         return;
       }
 
       this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
-        { [this.props.activePromptVariable]: bin.value });
+        { [this.props.activePromptVariable]: [bin.value] });
     };
 
     const binDetails = this.getDetails(bin.nodes);
@@ -165,7 +165,7 @@ function makeMapStateToProps() {
           const nodes = stageNodes.filter(
             node =>
               node[nodeAttributesProperty][activePromptVariable] &&
-              node[nodeAttributesProperty][activePromptVariable] === bin.value,
+              node[nodeAttributesProperty][activePromptVariable].includes(bin.value),
           );
 
           return {

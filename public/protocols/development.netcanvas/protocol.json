@@ -260,6 +260,12 @@
             "description": "Closeness layout",
             "type": "layout"
           },
+          "e13ca72d-aefe-4f48-841d-09f020e0e987": {
+            "name": "anotherLayout",
+            "label": "Another layout",
+            "description": "Another layout",
+            "type": "layout"
+          },
           "d2d8091e-8170-42c1-9dc0-c0d54553b3e6": {
             "name": "talk_friend",
             "label": "Talk friend",
@@ -589,7 +595,6 @@
       "77199445-9d50-4646-b0bc-6d6b0c0e06bd": {
         "name": "friend",
         "label": "Friend",
-        "color": "edge-color-seq-4",
         "variables": {
           "9f106a56-528b-498d-8103-a6f7a8c9fa15": {
             "name": "contactfrequency",
@@ -972,6 +977,11 @@
           "component": "Number"
         },
         {
+          "variable": "e343a91f-628d-4175-870c-957beffa0154",
+          "component": "ToggleButtonGroup",
+          "label": "Multiple categorical membership"
+        },
+        {
           "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
           "value": "network-canvas"
@@ -1126,7 +1136,7 @@
           "id": "2we",
           "text": "Within the past 2 weeks, who has provided advice?",
           "additionalAttributes": {
-            "ec5b462e-a033-4cbc-8b73-82d90938ec82": true
+            "03b03617-46ae-41cb-9462-9acd8a17edd6": true
           }
         }
       ]
@@ -1283,7 +1293,7 @@
         {
           "id": "closeness1",
           "text":
-            "This prompt uses a background image containing quadrants.",
+            "This prompt uses a background image containing quadrants and creates an edge.",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
@@ -1296,9 +1306,33 @@
             "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
             "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
           },
-          "highlight": {
-            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
-            "allowHighlighting": true
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "background": {
+            "image": "quadrant.svg",
+            "concentricCircles": 4,
+            "skewedTowardCenter": true
+          }
+        },
+        {
+          "id": "edgeType2",
+          "text":
+            "Creates a second edge type",
+          "subject": {
+            "entity": "node",
+            "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+          },
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+            "allowPositioning": true
+          },
+          "edges": {
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
+            "create": "867127d9-086b-403a-a3e7-2c7d32126546"
           },
           "sortOrder": [
             {
@@ -1315,18 +1349,17 @@
         {
           "id": "closeness2",
           "text":
-            "This is a prompt showing no background.",
+            "This is a prompt showing no background and highlighting a variable.",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
           },
           "layout": {
-            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+            "layoutVariable": "e13ca72d-aefe-4f48-841d-09f020e0e987",
             "allowPositioning": true
           },
           "edges": {
-            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
-            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+            "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"]
           },
           "highlight": {
             "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
@@ -1346,7 +1379,7 @@
         {
           "id": "closeness3",
           "text":
-            "This prompt shows 3 concentric circles",
+            "This prompt shows 3 concentric circles and has create edge and allow highlight specified (against the rules!)",
           "subject": {
             "entity": "node",
             "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
@@ -1375,6 +1408,65 @@
           }
         }
       ]
+    },
+    {
+      "id": "narrative1",
+      "type": "Narrative",
+      "label": "Narrative",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "presets": [
+        {
+          "id": "preset1",
+          "label": "My preset",
+          "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ]
+          },
+          "highlight": [
+            {
+              "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
+              "color": "node-highlight-seq-1"
+            },
+            {
+              "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+              "color": "node-highlight-seq-2"
+            }
+          ]
+        },
+        {
+          "id": "preset2",
+          "label": "Another preset (with more text than will fit)",
+          "layoutVariable": "e13ca72d-aefe-4f48-841d-09f020e0e987",
+          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "edges": {
+            "display": [
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ]
+          },
+          "highlight": [
+            {
+              "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6",
+              "color": "node-highlight-seq-1"
+            }
+          ]
+        }
+      ],
+      "background": {
+        "concentricCircles": 4,
+        "skewedTowardCenter": true
+      },
+      "behaviours": {
+        "freeDraw": true,
+        "featureNode": true,
+        "allowRepositioning": true
+      }
     },
     {
       "id": "namegenroster1",
