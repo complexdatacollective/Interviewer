@@ -133,3 +133,7 @@ export default compose(
   window,
   connect(makeMapStateToProps),
 )(PresetSwitcherKey);
+
+export {
+  PresetSwitcherKey,
+};

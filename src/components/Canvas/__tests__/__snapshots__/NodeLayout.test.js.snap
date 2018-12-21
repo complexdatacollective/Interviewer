@@ -14,7 +14,6 @@ ShallowWrapper {
     createEdge="bar"
     displayEdges={Array []}
     height={456}
-    highlightAttribute={null}
     highlightAttributes={Object {}}
     layoutVariable="foo"
     nodes={
