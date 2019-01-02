@@ -49,34 +49,27 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "host",
     "props": Object {
-      "applyTransformOrigin": true,
-      "children": <div
-        className="categorical-list__inner"
-        onClick={[Function]}
-        style={
-          Object {
-            "--categorical-list-expanded-bin-size": "0px",
-          }
-        }
+      "children": <Flipper
+        applyTransformOrigin={true}
+        className="categorical-list__items"
+        element="div"
+        flipKey=""
       >
         <div
-          className="categorical-list__expanded-bin"
-        />
-        <div
-          className="categorical-list__content"
+          className="categorical-list__item"
           style={
             Object {
-              "--categorical-item-multiplier": 1.2,
-              "--num-categorical-items": 2,
+              "height": "undefinedpx",
+              "width": "undefinedpx",
             }
           }
         >
           <withState(withProps(DropTarget))
             accentColor={null}
             details="undefined and 2 others"
-            id="CATBIN_ITEM_1_1_0"
+            id="CATBIN_ITEM_1_1_1"
             isExpanded={false}
             label="one"
             nodes={
@@ -90,10 +83,20 @@ ShallowWrapper {
             onDrop={[Function]}
             sortOrder={undefined}
           />
+        </div>
+        <div
+          className="categorical-list__item"
+          style={
+            Object {
+              "height": "undefinedpx",
+              "width": "undefinedpx",
+            }
+          }
+        >
           <withState(withProps(DropTarget))
             accentColor={null}
             details="undefined and 1 other"
-            id="CATBIN_ITEM_1_1_1"
+            id="CATBIN_ITEM_1_1_2"
             isExpanded={false}
             label="two"
             nodes={
@@ -107,34 +110,218 @@ ShallowWrapper {
             sortOrder={undefined}
           />
         </div>
-      </div>,
-      "className": "categorical-list",
-      "element": "div",
-      "flipKey": "",
+      </Flipper>,
+      "className": "categorical-list categorical-list--items--2",
     },
-    "ref": null,
+    "ref": Object {
+      "current": null,
+    },
     "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "applyTransformOrigin": true,
+        "children": Array [
+          Array [],
+          Array [
+            <div
+              className="categorical-list__item"
+              style={
+                Object {
+                  "height": "undefinedpx",
+                  "width": "undefinedpx",
+                }
+              }
+            >
+              <withState(withProps(DropTarget))
+                accentColor={null}
+                details="undefined and 2 others"
+                id="CATBIN_ITEM_1_1_1"
+                isExpanded={false}
+                label="one"
+                nodes={
+                  Array [
+                    1,
+                    2,
+                    3,
+                  ]
+                }
+                onClick={[Function]}
+                onDrop={[Function]}
+                sortOrder={undefined}
+              />
+            </div>,
+            <div
+              className="categorical-list__item"
+              style={
+                Object {
+                  "height": "undefinedpx",
+                  "width": "undefinedpx",
+                }
+              }
+            >
+              <withState(withProps(DropTarget))
+                accentColor={null}
+                details="undefined and 1 other"
+                id="CATBIN_ITEM_1_1_2"
+                isExpanded={false}
+                label="two"
+                nodes={
+                  Array [
+                    4,
+                    5,
+                  ]
+                }
+                onClick={[Function]}
+                onDrop={[Function]}
+                sortOrder={undefined}
+              />
+            </div>,
+          ],
+        ],
+        "className": "categorical-list__items",
+        "element": "div",
+        "flipKey": "",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <withState(withProps(DropTarget))
+              accentColor={null}
+              details="undefined and 2 others"
+              id="CATBIN_ITEM_1_1_1"
+              isExpanded={false}
+              label="one"
+              nodes={
+                Array [
+                  1,
+                  2,
+                  3,
+                ]
+              }
+              onClick={[Function]}
+              onDrop={[Function]}
+              sortOrder={undefined}
+            />,
+            "className": "categorical-list__item",
+            "style": Object {
+              "height": "undefinedpx",
+              "width": "undefinedpx",
+            },
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": "1",
+            "nodeType": "class",
+            "props": Object {
+              "accentColor": null,
+              "details": "undefined and 2 others",
+              "id": "CATBIN_ITEM_1_1_1",
+              "isExpanded": false,
+              "label": "one",
+              "nodes": Array [
+                1,
+                2,
+                3,
+              ],
+              "onClick": [Function],
+              "onDrop": [Function],
+              "sortOrder": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <withState(withProps(DropTarget))
+              accentColor={null}
+              details="undefined and 1 other"
+              id="CATBIN_ITEM_1_1_2"
+              isExpanded={false}
+              label="two"
+              nodes={
+                Array [
+                  4,
+                  5,
+                ]
+              }
+              onClick={[Function]}
+              onDrop={[Function]}
+              sortOrder={undefined}
+            />,
+            "className": "categorical-list__item",
+            "style": Object {
+              "height": "undefinedpx",
+              "width": "undefinedpx",
+            },
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": "2",
+            "nodeType": "class",
+            "props": Object {
+              "accentColor": null,
+              "details": "undefined and 1 other",
+              "id": "CATBIN_ITEM_1_1_2",
+              "isExpanded": false,
+              "label": "two",
+              "nodes": Array [
+                4,
+                5,
+              ],
+              "onClick": [Function],
+              "onDrop": [Function],
+              "sortOrder": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+      ],
+      "type": [Function],
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
       "instance": null,
       "key": undefined,
       "nodeType": "host",
       "props": Object {
-        "children": Array [
+        "children": <Flipper
+          applyTransformOrigin={true}
+          className="categorical-list__items"
+          element="div"
+          flipKey=""
+        >
           <div
-            className="categorical-list__expanded-bin"
-          />,
-          <div
-            className="categorical-list__content"
+            className="categorical-list__item"
             style={
               Object {
-                "--categorical-item-multiplier": 1.2,
-                "--num-categorical-items": 2,
+                "height": "undefinedpx",
+                "width": "undefinedpx",
               }
             }
           >
             <withState(withProps(DropTarget))
               accentColor={null}
               details="undefined and 2 others"
-              id="CATBIN_ITEM_1_1_0"
+              id="CATBIN_ITEM_1_1_1"
               isExpanded={false}
               label="one"
               nodes={
@@ -148,10 +335,20 @@ ShallowWrapper {
               onDrop={[Function]}
               sortOrder={undefined}
             />
+          </div>
+          <div
+            className="categorical-list__item"
+            style={
+              Object {
+                "height": "undefinedpx",
+                "width": "undefinedpx",
+              }
+            }
+          >
             <withState(withProps(DropTarget))
               accentColor={null}
               details="undefined and 1 other"
-              id="CATBIN_ITEM_1_1_1"
+              id="CATBIN_ITEM_1_1_2"
               isExpanded={false}
               label="two"
               nodes={
@@ -164,40 +361,92 @@ ShallowWrapper {
               onDrop={[Function]}
               sortOrder={undefined}
             />
-          </div>,
-        ],
-        "className": "categorical-list__inner",
-        "onClick": [Function],
-        "style": Object {
-          "--categorical-list-expanded-bin-size": "0px",
-        },
+          </div>
+        </Flipper>,
+        "className": "categorical-list categorical-list--items--2",
       },
       "ref": Object {
         "current": null,
       },
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [],
-            "className": "categorical-list__expanded-bin",
-          },
-          "ref": null,
-          "rendered": Array [],
-          "type": "div",
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "applyTransformOrigin": true,
+          "children": Array [
+            Array [],
+            Array [
+              <div
+                className="categorical-list__item"
+                style={
+                  Object {
+                    "height": "undefinedpx",
+                    "width": "undefinedpx",
+                  }
+                }
+              >
+                <withState(withProps(DropTarget))
+                  accentColor={null}
+                  details="undefined and 2 others"
+                  id="CATBIN_ITEM_1_1_1"
+                  isExpanded={false}
+                  label="one"
+                  nodes={
+                    Array [
+                      1,
+                      2,
+                      3,
+                    ]
+                  }
+                  onClick={[Function]}
+                  onDrop={[Function]}
+                  sortOrder={undefined}
+                />
+              </div>,
+              <div
+                className="categorical-list__item"
+                style={
+                  Object {
+                    "height": "undefinedpx",
+                    "width": "undefinedpx",
+                  }
+                }
+              >
+                <withState(withProps(DropTarget))
+                  accentColor={null}
+                  details="undefined and 1 other"
+                  id="CATBIN_ITEM_1_1_2"
+                  isExpanded={false}
+                  label="two"
+                  nodes={
+                    Array [
+                      4,
+                      5,
+                    ]
+                  }
+                  onClick={[Function]}
+                  onDrop={[Function]}
+                  sortOrder={undefined}
+                />
+              </div>,
+            ],
+          ],
+          "className": "categorical-list__items",
+          "element": "div",
+          "flipKey": "",
         },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": Array [
-              <withState(withProps(DropTarget))
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <withState(withProps(DropTarget))
                 accentColor={null}
                 details="undefined and 2 others"
-                id="CATBIN_ITEM_1_1_0"
+                id="CATBIN_ITEM_1_1_1"
                 isExpanded={false}
                 label="one"
                 nodes={
@@ -211,39 +460,21 @@ ShallowWrapper {
                 onDrop={[Function]}
                 sortOrder={undefined}
               />,
-              <withState(withProps(DropTarget))
-                accentColor={null}
-                details="undefined and 1 other"
-                id="CATBIN_ITEM_1_1_1"
-                isExpanded={false}
-                label="two"
-                nodes={
-                  Array [
-                    4,
-                    5,
-                  ]
-                }
-                onClick={[Function]}
-                onDrop={[Function]}
-                sortOrder={undefined}
-              />,
-            ],
-            "className": "categorical-list__content",
-            "style": Object {
-              "--categorical-item-multiplier": 1.2,
-              "--num-categorical-items": 2,
+              "className": "categorical-list__item",
+              "style": Object {
+                "height": "undefinedpx",
+                "width": "undefinedpx",
+              },
             },
-          },
-          "ref": null,
-          "rendered": Array [
-            Object {
+            "ref": null,
+            "rendered": Object {
               "instance": null,
-              "key": "0",
+              "key": "1",
               "nodeType": "class",
               "props": Object {
                 "accentColor": null,
                 "details": "undefined and 2 others",
-                "id": "CATBIN_ITEM_1_1_0",
+                "id": "CATBIN_ITEM_1_1_1",
                 "isExpanded": false,
                 "label": "one",
                 "nodes": Array [
@@ -259,14 +490,44 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-            Object {
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <withState(withProps(DropTarget))
+                accentColor={null}
+                details="undefined and 1 other"
+                id="CATBIN_ITEM_1_1_2"
+                isExpanded={false}
+                label="two"
+                nodes={
+                  Array [
+                    4,
+                    5,
+                  ]
+                }
+                onClick={[Function]}
+                onDrop={[Function]}
+                sortOrder={undefined}
+              />,
+              "className": "categorical-list__item",
+              "style": Object {
+                "height": "undefinedpx",
+                "width": "undefinedpx",
+              },
+            },
+            "ref": null,
+            "rendered": Object {
               "instance": null,
-              "key": "1",
+              "key": "2",
               "nodeType": "class",
               "props": Object {
                 "accentColor": null,
                 "details": "undefined and 1 other",
-                "id": "CATBIN_ITEM_1_1_1",
+                "id": "CATBIN_ITEM_1_1_2",
                 "isExpanded": false,
                 "label": "two",
                 "nodes": Array [
@@ -281,257 +542,12 @@ ShallowWrapper {
               "rendered": null,
               "type": [Function],
             },
-          ],
-          "type": "div",
-        },
-      ],
-      "type": "div",
-    },
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "applyTransformOrigin": true,
-        "children": <div
-          className="categorical-list__inner"
-          onClick={[Function]}
-          style={
-            Object {
-              "--categorical-list-expanded-bin-size": "0px",
-            }
-          }
-        >
-          <div
-            className="categorical-list__expanded-bin"
-          />
-          <div
-            className="categorical-list__content"
-            style={
-              Object {
-                "--categorical-item-multiplier": 1.2,
-                "--num-categorical-items": 2,
-              }
-            }
-          >
-            <withState(withProps(DropTarget))
-              accentColor={null}
-              details="undefined and 2 others"
-              id="CATBIN_ITEM_1_1_0"
-              isExpanded={false}
-              label="one"
-              nodes={
-                Array [
-                  1,
-                  2,
-                  3,
-                ]
-              }
-              onClick={[Function]}
-              onDrop={[Function]}
-              sortOrder={undefined}
-            />
-            <withState(withProps(DropTarget))
-              accentColor={null}
-              details="undefined and 1 other"
-              id="CATBIN_ITEM_1_1_1"
-              isExpanded={false}
-              label="two"
-              nodes={
-                Array [
-                  4,
-                  5,
-                ]
-              }
-              onClick={[Function]}
-              onDrop={[Function]}
-              sortOrder={undefined}
-            />
-          </div>
-        </div>,
-        "className": "categorical-list",
-        "element": "div",
-        "flipKey": "",
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <div
-              className="categorical-list__expanded-bin"
-            />,
-            <div
-              className="categorical-list__content"
-              style={
-                Object {
-                  "--categorical-item-multiplier": 1.2,
-                  "--num-categorical-items": 2,
-                }
-              }
-            >
-              <withState(withProps(DropTarget))
-                accentColor={null}
-                details="undefined and 2 others"
-                id="CATBIN_ITEM_1_1_0"
-                isExpanded={false}
-                label="one"
-                nodes={
-                  Array [
-                    1,
-                    2,
-                    3,
-                  ]
-                }
-                onClick={[Function]}
-                onDrop={[Function]}
-                sortOrder={undefined}
-              />
-              <withState(withProps(DropTarget))
-                accentColor={null}
-                details="undefined and 1 other"
-                id="CATBIN_ITEM_1_1_1"
-                isExpanded={false}
-                label="two"
-                nodes={
-                  Array [
-                    4,
-                    5,
-                  ]
-                }
-                onClick={[Function]}
-                onDrop={[Function]}
-                sortOrder={undefined}
-              />
-            </div>,
-          ],
-          "className": "categorical-list__inner",
-          "onClick": [Function],
-          "style": Object {
-            "--categorical-list-expanded-bin-size": "0px",
-          },
-        },
-        "ref": Object {
-          "current": null,
-        },
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [],
-              "className": "categorical-list__expanded-bin",
-            },
-            "ref": null,
-            "rendered": Array [],
-            "type": "div",
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": Array [
-                <withState(withProps(DropTarget))
-                  accentColor={null}
-                  details="undefined and 2 others"
-                  id="CATBIN_ITEM_1_1_0"
-                  isExpanded={false}
-                  label="one"
-                  nodes={
-                    Array [
-                      1,
-                      2,
-                      3,
-                    ]
-                  }
-                  onClick={[Function]}
-                  onDrop={[Function]}
-                  sortOrder={undefined}
-                />,
-                <withState(withProps(DropTarget))
-                  accentColor={null}
-                  details="undefined and 1 other"
-                  id="CATBIN_ITEM_1_1_1"
-                  isExpanded={false}
-                  label="two"
-                  nodes={
-                    Array [
-                      4,
-                      5,
-                    ]
-                  }
-                  onClick={[Function]}
-                  onDrop={[Function]}
-                  sortOrder={undefined}
-                />,
-              ],
-              "className": "categorical-list__content",
-              "style": Object {
-                "--categorical-item-multiplier": 1.2,
-                "--num-categorical-items": 2,
-              },
-            },
-            "ref": null,
-            "rendered": Array [
-              Object {
-                "instance": null,
-                "key": "0",
-                "nodeType": "class",
-                "props": Object {
-                  "accentColor": null,
-                  "details": "undefined and 2 others",
-                  "id": "CATBIN_ITEM_1_1_0",
-                  "isExpanded": false,
-                  "label": "one",
-                  "nodes": Array [
-                    1,
-                    2,
-                    3,
-                  ],
-                  "onClick": [Function],
-                  "onDrop": [Function],
-                  "sortOrder": undefined,
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              Object {
-                "instance": null,
-                "key": "1",
-                "nodeType": "class",
-                "props": Object {
-                  "accentColor": null,
-                  "details": "undefined and 1 other",
-                  "id": "CATBIN_ITEM_1_1_1",
-                  "isExpanded": false,
-                  "label": "two",
-                  "nodes": Array [
-                    4,
-                    5,
-                  ],
-                  "onClick": [Function],
-                  "onDrop": [Function],
-                  "sortOrder": undefined,
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-            ],
             "type": "div",
           },
         ],
-        "type": "div",
+        "type": [Function],
       },
-      "type": [Function],
+      "type": "div",
     },
   ],
   Symbol(enzyme.__options__): Object {

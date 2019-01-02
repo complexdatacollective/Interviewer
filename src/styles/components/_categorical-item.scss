@@ -77,7 +77,7 @@
     z-index: var(--z-global-ui);
 
     .categorical-item__inner {
-      padding: 5vh 5vh 7vh 5vh;
+      padding: 5vh 5vh 7vh;
     }
 
     .categorical-item__disk {
@@ -103,8 +103,6 @@
     }
 
     .categorical-item__content {
-      // clip-path: circle();
-      // shape-outside: circle();
       width: 100%;
       padding: 1rem;
       transition: padding var(--animation-duration-standard) var(--animation-easing);
