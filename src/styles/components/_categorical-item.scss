@@ -25,6 +25,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
   }
 
   &:hover {
@@ -55,15 +56,12 @@
     padding: spacing(.5) spacing(1);
     text-align: center;
 
-    div {
-      overflow: hidden;
-    }
-
     h3,
     h5 {
+      width: 100%;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 100%;
     }
 
     h5 {
@@ -101,6 +99,7 @@
     h3 {
       overflow: initial;
       width: 80%;
+      margin: 0 auto;
     }
 
     .categorical-item__content {

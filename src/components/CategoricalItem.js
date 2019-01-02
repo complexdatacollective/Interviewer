@@ -39,10 +39,8 @@ const CategoricalItem = ({
         <div className="categorical-item__inner">
           <Flipped inverseFlipId={id} scale>
             <div className="categorical-item__title">
-              <div>
-                <h3>{label}</h3>
-                {!isExpanded && <h5>{details}</h5>}
-              </div>
+              <h3>{label}</h3>
+              {!isExpanded && <h5>{details}</h5>}
             </div>
           </Flipped>
           {isExpanded &&

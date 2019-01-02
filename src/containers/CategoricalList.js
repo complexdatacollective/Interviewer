@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { compose, bindActionCreators } from 'redux';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
@@ -78,7 +78,7 @@ class CategoricalList extends Component {
     window.removeEventListener('resize', this.onResize);
   }
 
-  onResize = debounce(() => {
+  onResize = throttle(() => {
     this.forceUpdate();
   }, 1000 / 60);
 
@@ -144,18 +144,13 @@ class CategoricalList extends Component {
   renderCategoricalBin = (bin, index, sizes) => {
     const binDetails = this.getDetails(bin.nodes);
 
-    const itemClasses = cx(
-      'categorical-list__item',
-      { 'categorical-list__item--expanded': bin.value === this.state.expandedBinValue },
-    );
-
     const itemSize = bin.value === this.state.expandedBinValue ?
       { width: `${sizes.expandedSize}px`, height: `${sizes.expandedSize}px` } :
       { width: `${sizes.itemSize}px`, height: `${sizes.itemSize}px` };
 
     return (
       <div
-        className={itemClasses}
+        className="categorical-list__item"
         style={itemSize}
       >
         <CategoricalItem

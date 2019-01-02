@@ -13,7 +13,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0.6rem;
+    padding: 0.3rem;
+    cursor: pointer;
   }
 
   &__items {
@@ -22,13 +23,5 @@
     left: 0;
     width: 100%;
     height: 100%;
-  }
-
-  &--expanded {
-    .categorical-list__expanded-bin {
-      display: flex;
-      max-width: 67%;
-      width: var(--categorical-list-expanded-bin-size);
-    }
   }
 }
