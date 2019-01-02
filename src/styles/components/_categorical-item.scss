@@ -1,8 +1,8 @@
 .categorical-item {
   --categorical-item-color: var(--primary);
   display: flex;
-  width: calc(var(--categorical-item-size) - .6rem);
-  height: calc(var(--categorical-item-size) - .6rem);
+  width: 100%;
+  height: 100%;
   position: relative;
 
   .categorical-item__disk {
@@ -75,9 +75,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: var(--categorical-list-expanded-bin-size);
     justify-content: center;
-    width: var(--categorical-list-expanded-bin-size);
     z-index: var(--z-global-ui);
 
     .categorical-item__inner {
@@ -91,11 +89,7 @@
 
     &.categorical-item--hover {
       @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
-      // height: calc(var(--categorical-list-expanded-bin-size) + (var(--categorical-item-margin) * 2));
       margin: 0;
-      // width: calc(var(--categorical-list-expanded-bin-size) + (var(--categorical-item-margin) * 2));
-      // transform-origin: center;
-      // transform: scale(1.5);
 
       .categorical-item__content {
         padding: 1rem 2rem;
