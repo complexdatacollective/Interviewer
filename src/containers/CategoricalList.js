@@ -29,8 +29,10 @@ const getItemSize = (bounds, itemCount, expanded = false) => {
 
   const isPortrait = getIsPortrait(width, bounds.height);
 
-  const shortCount = [4, 5, 6, 7, 8].includes(itemCount) ? 2 : 1;
-  const longCount = shortCount > 1 ? Math.ceil(itemCount / 2) : itemCount;
+  const unexpandedItemCount = expanded ? itemCount - 1 : itemCount;
+
+  const shortCount = [4, 5, 6, 7, 8].includes(unexpandedItemCount) ? 2 : 1;
+  const longCount = shortCount > 1 ? Math.ceil(unexpandedItemCount / 2) : unexpandedItemCount;
 
   const longSide = isPortrait ? bounds.height : width;
   const shortSide = isPortrait ? width : bounds.height;
