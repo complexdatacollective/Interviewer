@@ -69,14 +69,16 @@ const withSelectHandlers = compose(
 
         updateLinkFrom(null);
       },
-    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) =>
+    toggleHighlightAttribute: ({ allowHighlighting, highlightAttributes, toggleHighlight }) =>
       (node) => {
         if (!allowHighlighting) { return; }
-        const newVal = !node[nodeAttributesProperty][highlightAttribute];
-        toggleHighlight(
-          node[nodePrimaryKeyProperty],
-          { [highlightAttribute]: newVal },
-        );
+        highlightAttributes.forEach((highlightAttribute) => {
+          const newVal = !node[nodeAttributesProperty][highlightAttribute.variable];
+          toggleHighlight(
+            node[nodePrimaryKeyProperty],
+            { [highlightAttribute.variable]: newVal },
+          );
+        });
       },
   }),
   withHandlers({
