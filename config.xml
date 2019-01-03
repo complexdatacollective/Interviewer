@@ -58,7 +58,6 @@
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="android-minSdkVersion" value="25" />
     <preference name="android-targetSdkVersion" value="27" />
-    <preference name="android-maxSdkVersion" value="27" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
