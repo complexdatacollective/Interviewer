@@ -166,8 +166,9 @@ export const makeNetworkNodesForType = () =>
 
 /**
  * makeNetworkNodesForPrompt
- * Take the "additional attributes" specified by the current prompt, and filter nodes of the current
- * prompt type
+ *
+ * Return a filtered node list containing only nodes that have both the additional attributes
+ * specified for this prompt, AND the current promptId.
 */
 
 export const makeNetworkNodesForPrompt = () => {
@@ -175,15 +176,17 @@ export const makeNetworkNodesForPrompt = () => {
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getAttributes,
-    (nodes, attributes) =>
-      filter(nodes, { [nodeAttributesProperty]: attributes }),
+    networkNodesForSubject, getAttributes, propPromptId,
+    (nodes, attributes, promptId) =>
+      filter(nodes, { [nodeAttributesProperty]: attributes, promptId }),
   );
 };
 
 /**
  * makeNetworkNodesForOtherPrompts()
- * Same as above, except returns a filtered node list that **excludes** nodes that match.
+ *
+ * Same as above, except returns a filtered node list that **excludes** nodes that match the current
+ * prompt's additional attributes or promptId.
 */
 
 export const makeNetworkNodesForOtherPrompts = () => {
@@ -192,8 +195,9 @@ export const makeNetworkNodesForOtherPrompts = () => {
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getAttributes,
-    (nodes, attributes) =>
-      reject(nodes, node => isMatch(getNodeAttributes(node), attributes)),
+    networkNodesForSubject, getAttributes, propPromptId,
+    (nodes, attributes, promptId) =>
+      reject(nodes, node =>
+        isMatch(getNodeAttributes(node), attributes) || node.promptId === promptId),
   );
 };
