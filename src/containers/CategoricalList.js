@@ -199,6 +199,7 @@ class CategoricalList extends Component {
       <div
         className={listClasses}
         ref={this.categoricalListElement}
+        onClick={e => this.handleExpandBin(e, '')}
       >
         <Flipper
           flipKey={this.state.expandedBinValue}
