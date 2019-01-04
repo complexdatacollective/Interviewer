@@ -36,7 +36,6 @@
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
     "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage",
-    "generate-schema": "node scripts/schema/generate-schema.js",
     "validate-protocol": "node scripts/schema/validate-protocol.js"
   },
   "repository": {
@@ -113,7 +112,6 @@
     "postcss-loader": "2.0.6",
     "promise": "7.1.1",
     "prop-types": "^15.6.2",
-    "quicktype": "^15.0.137",
     "react": "^16.5.2",
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.5.2",
