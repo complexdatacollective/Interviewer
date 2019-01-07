@@ -1066,6 +1066,7 @@
       "type": "NameGenerator",
       "label": "NG Closeness",
       "form": "person",
+      "quickAdd": true,
       "subject": {
         "entity": "node",
         "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
