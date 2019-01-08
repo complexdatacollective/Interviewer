@@ -71,7 +71,7 @@ function nodeLabelWorker({ node, network }) {
 
 
   // For our example worker we will return a different label dependant on the node type.
-  let label = node.name;
+  let label = node.nickname || node.name;
 
   switch (node.networkCanvasType) {
     case 'person':

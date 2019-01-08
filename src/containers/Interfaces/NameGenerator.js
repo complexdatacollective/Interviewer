@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { get, has } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForPrompt } from '../../selectors/interface';
 import { makeGetPromptNodeAttributes, makeGetNodeIconName } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '../';
+import { PromptSwiper, NodePanels, NodeForm, QuickNodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { Icon } from '../../ui/components';
 
@@ -31,7 +32,9 @@ class NameGenerator extends Component {
   handleSubmitForm = ({ form, addAnotherNode } = { addAnotherNode: false }) => {
     if (form) {
       if (!this.state.selectedNode) {
-        this.props.addNodes({ attributes: { ...form } }, this.props.newNodeAttributes);
+        this.props.addNodes({
+          [nodeAttributesProperty]: { ...form },
+        }, this.props.newNodeAttributes);
       } else {
         this.props.updateNode({ ...this.state.selectedNode }, form);
       }
@@ -57,20 +60,22 @@ class NameGenerator extends Component {
 
   /**
    * Click node handler
-   * Triggers the edit node form
+   * Triggers the edit node form if using forms, and does nothing if using quick form.
    * @param {object} node - key/value object containing node object from the network store
    */
   handleSelectNode = (node) => {
-    this.setState({
-      selectedNode: node,
-      showNodeForm: true,
-    });
+    if (!this.props.stage.quickAdd) {
+      this.setState({
+        selectedNode: node,
+        showNodeForm: true,
+      });
+    }
   }
 
   handleClickAddNode = () => {
     this.setState({
       selectedNode: null,
-      showNodeForm: true,
+      showNodeForm: !this.state.showNodeForm,
     });
   }
 
@@ -94,6 +99,7 @@ class NameGenerator extends Component {
     const {
       prompts,
       form,
+      quickAdd,
     } = this.props.stage;
 
     return (
@@ -123,14 +129,15 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        { form &&
+        { (form && !quickAdd) &&
           <Icon
             name={nodeIconName}
             onClick={this.handleClickAddNode}
             className="name-generator-interface__add-node"
           />
         }
-        { form &&
+
+        { (form && !quickAdd) &&
           <NodeForm
             node={this.state.selectedNode}
             stage={this.props.stage}
@@ -140,9 +147,13 @@ class NameGenerator extends Component {
           />
         }
 
-        <div className="name-generator-interface__node-bin">
-          <NodeBin id="NODE_BIN" />
-        </div>
+        { quickAdd &&
+          <QuickNodeForm
+            stage={this.props.stage}
+            addNodes={this.props.addNodes}
+          />
+        }
+        <NodeBin id="NODE_BIN" />
       </div>
     );
   }
@@ -151,12 +162,14 @@ class NameGenerator extends Component {
 NameGenerator.defaultProps = {
   activePromptAttributes: {},
   form: null,
+  quickAdd: false,
 };
 
 NameGenerator.propTypes = {
   activePromptAttributes: PropTypes.object,
   addNodes: PropTypes.func.isRequired,
   form: PropTypes.object,
+  quickAdd: PropTypes.bool,
   newNodeAttributes: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
