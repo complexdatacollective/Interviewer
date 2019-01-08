@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import withPrompt from '../behaviours/withPrompt';
 import { makeGetNodeDisplayVariable } from '../selectors/interface';
 import { makeGetPromptNodeAttributes } from '../selectors/name-generator';
@@ -16,7 +15,9 @@ class QuickNodeForm extends PureComponent {
     addNodes: PropTypes.func.isRequired.isRequired,
     activePromptAttributes: PropTypes.object.isRequired,
     newNodeAttributes: PropTypes.object.isRequired,
+    stage: PropTypes.object.isRequired,
     displayVariable: PropTypes.string.isRequired,
+    nodeIconName: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -34,7 +35,6 @@ class QuickNodeForm extends PureComponent {
   }
 
   handleOpenForm = () => {
-    console.log('open');
     this.setState({
       show: true,
     });
@@ -67,34 +67,45 @@ class QuickNodeForm extends PureComponent {
   }
 
   render() {
+    const {
+      nodeIconName,
+      displayVariable,
+      stage,
+    } = this.props;
+
+    const {
+      show,
+      nodeLabel,
+    } = this.state;
+
     return (
       <div className="quick-add">
-        <div className={cx('quick-add-container', { 'quick-add-container--show': this.state.show })}>
+        <div className={cx('quick-add-container', { 'quick-add-container--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
-            {this.state.show &&
+            {show &&
             <input
               className="quick-add-container__label-input"
               key="label"
-              autoFocus
+              autoFocus // eslint-disable-line
               onChange={this.handleChange}
               onBlur={this.handleCloseForm}
-              placeholder="Type a name and press enter"
-              value={this.state.nodeLabel}
+              placeholder="Type a name and press enter..."
+              value={nodeLabel}
               type="text"
             />
             }
           </form>
         </div>
-        <div className={cx('flip-box', { 'flip-box--flip': this.state.nodeLabel.length > 0 })}>
+        <div className={cx('flip-box', { 'flip-box--flip': nodeLabel.length > 0 })}>
           <div className="flip-box-inner">
             <div className="flip-box-front" onClick={this.handleOpenForm}>
-              <Icon name="add-a-place" />
+              <Icon name={nodeIconName} />
             </div>
             <div className="flip-box-back">
               <Node
-                type={this.props.stage.subject.type}
+                type={stage.subject.type}
                 attributes={{
-                  [this.props.displayVariable]: this.state.nodeLabel,
+                  [displayVariable]: this.state.nodeLabel,
                 }}
               />
             </div>

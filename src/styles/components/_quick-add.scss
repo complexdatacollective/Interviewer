@@ -1,18 +1,19 @@
 .quick-add {
   position: absolute;
   bottom: 1.8rem;
-  right: 1.8rem;
+  right: 2.8rem;
   display: flex;
   align-items: center;
 }
 
 .quick-add-container {
   @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
-  width: 25rem;
+  width: 20rem;
   opacity: 0;
   transform-origin: center right;
   transform: scaleX(0);
   z-index: var(--z-global-ui);
+  margin-right: unit(1);
 
   &--show {
     opacity: 1;
@@ -26,7 +27,7 @@
     border: 0;
     background: var(--text);
     color: var(--text-dark);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
 
     &::placeholder {
@@ -74,6 +75,9 @@
 
 /* Style the front side */
 .flip-box-front {
+  transform-origin: 1rem 0;
+  margin: 0 0 0 0.7rem;
+  padding-bottom: 0.3rem;
 }
 
 /* Style the back side */

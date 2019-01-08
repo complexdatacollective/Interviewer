@@ -151,6 +151,7 @@ class NameGenerator extends Component {
           <QuickNodeForm
             stage={this.props.stage}
             addNodes={this.props.addNodes}
+            nodeIconName={nodeIconName}
           />
         }
         <NodeBin id="NODE_BIN" />
