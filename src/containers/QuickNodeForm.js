@@ -80,11 +80,11 @@ class QuickNodeForm extends PureComponent {
 
     return (
       <div className="quick-add">
-        <div className={cx('quick-add-container', { 'quick-add-container--show': show })}>
+        <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
             {show &&
             <input
-              className="quick-add-container__label-input"
+              className="quick-add-form__label-input"
               key="label"
               autoFocus // eslint-disable-line
               onChange={this.handleChange}
@@ -96,12 +96,12 @@ class QuickNodeForm extends PureComponent {
             }
           </form>
         </div>
-        <div className={cx('flip-box', { 'flip-box--flip': nodeLabel.length > 0 })}>
-          <div className="flip-box-inner">
-            <div className="flip-box-front" onClick={this.handleOpenForm}>
+        <div className={cx('flip-button', { 'flip-button--flip': nodeLabel.length > 0 })}>
+          <div className="flip-button-inner">
+            <div className="flip-button-front" onClick={this.handleOpenForm}>
               <Icon name={nodeIconName} />
             </div>
-            <div className="flip-box-back">
+            <div className="flip-button-back">
               <Node
                 type={stage.subject.type}
                 attributes={{
