@@ -112,6 +112,7 @@ ShallowWrapper {
         </div>
       </Flipper>,
       "className": "categorical-list categorical-list--items--2",
+      "onClick": [Function],
     },
     "ref": Object {
       "current": null,
@@ -188,7 +189,7 @@ ShallowWrapper {
       "rendered": Array [
         Object {
           "instance": null,
-          "key": undefined,
+          "key": "1",
           "nodeType": "host",
           "props": Object {
             "children": <withState(withProps(DropTarget))
@@ -242,7 +243,7 @@ ShallowWrapper {
         },
         Object {
           "instance": null,
-          "key": undefined,
+          "key": "2",
           "nodeType": "host",
           "props": Object {
             "children": <withState(withProps(DropTarget))
@@ -364,6 +365,7 @@ ShallowWrapper {
           </div>
         </Flipper>,
         "className": "categorical-list categorical-list--items--2",
+        "onClick": [Function],
       },
       "ref": Object {
         "current": null,
@@ -440,7 +442,7 @@ ShallowWrapper {
         "rendered": Array [
           Object {
             "instance": null,
-            "key": undefined,
+            "key": "1",
             "nodeType": "host",
             "props": Object {
               "children": <withState(withProps(DropTarget))
@@ -494,7 +496,7 @@ ShallowWrapper {
           },
           Object {
             "instance": null,
-            "key": undefined,
+            "key": "2",
             "nodeType": "host",
             "props": Object {
               "children": <withState(withProps(DropTarget))

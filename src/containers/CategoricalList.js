@@ -154,7 +154,7 @@ class CategoricalList extends Component {
       <div
         className="categorical-list__item"
         style={itemSize}
-        key={index}
+        key={bin.value}
       >
         <CategoricalItem
           id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${bin.value}`}
