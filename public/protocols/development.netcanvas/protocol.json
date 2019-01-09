@@ -1066,7 +1066,6 @@
       "type": "NameGenerator",
       "label": "NG Closeness",
       "form": "person",
-      "quickAdd": true,
       "subject": {
         "entity": "node",
         "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
@@ -1143,6 +1142,33 @@
       ]
     },
     {
+      "id": "namegen2",
+      "type": "NameGenerator",
+      "label": "NG Quick add",
+      "quickAdd": true,
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "panels": [
+        {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
+          "title": "Other Venues",
+          "dataSource": "existing"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "This name generator creates venue nodes using the quick add form"
+        },
+        {
+          "id": "6su",
+          "text": "Another venue prompt"
+        }
+      ]
+    },
+    {
       "id": "ordinalBin1",
       "type": "OrdinalBin",
       "label": "Contact Freq.",
@@ -1193,7 +1219,7 @@
           "id": "visitFreq",
           "text": "Showing an ordinalbin interface with a node type other than person.",
           "variable": "a39a86ef-18c7-4545-8fbc-d0e5894565d0",
-          "color": "ord-color-seq-4"
+          "color": "ord-color-seq-7"
         }
       ]
     },

@@ -7,7 +7,7 @@
 
   .quick-add-form {
     @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
-    width: 20rem;
+    width: 25rem;
     opacity: 0;
     transform-origin: center right;
     transform: scaleX(0);
