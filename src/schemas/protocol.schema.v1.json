@@ -133,6 +133,7 @@
           "type": "string",
           "enum": [
             "Narrative",
+            "AlterForm",
             "NameGenerator",
             "NameGeneratorList",
             "NameGeneratorAutoComplete",

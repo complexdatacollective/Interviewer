@@ -11,6 +11,7 @@ import Quiz from './Quiz';
 import Information from './Information';
 import CategoricalBin from './CategoricalBin';
 import Narrative from './Narrative';
+import AlterForm from './AlterForm';
 import FinishSession from './FinishSession';
 
 import { StageType } from '../../protocol-consts';
@@ -25,6 +26,7 @@ const interfaces = {
   [StageType.OrdinalBin]: OrdinalBin,
   [StageType.CategoricalBin]: CategoricalBin,
   [StageType.Narrative]: Narrative,
+  [StageType.AlterForm]: AlterForm,
   FinishSession,
 };
 
@@ -50,6 +52,7 @@ export {
   CategoricalBin,
   OrdinalBin,
   Narrative,
+  AlterForm,
 };
 
 export default getInterface;

@@ -1,0 +1,38 @@
+.alter-form {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .swiper-wrapper {
+    box-sizing: border-box;
+    width: 80%;
+
+    .scrollable {
+      height: 100%;
+    }
+  }
+
+  .swiper-slide {
+    height: 50vh;
+    border-radius: var(--border-radius);
+    background: var(--light-background);
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: opacity var(--animation-duration-slow) var(--animation-easing);
+    margin-top: 4rem;
+
+    &.swiper-slide-active {
+      height: 50vh;
+      pointer-events: initial;
+      opacity: 1;
+    }
+
+    &:not(.swiper-slide-active) {
+      height: 25vh;
+      pointer-events: none;
+      opacity: .3;
+    }
+  }
+}
