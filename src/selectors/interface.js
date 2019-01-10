@@ -1,14 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, isMatch, reject } from 'lodash';
+import { findKey, filter, isMatch, reject, includes } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
   getNodeAttributes,
-  nodeAttributesProperty,
 } from '../ducks/modules/network';
 import {
   asExportableNetwork,
@@ -60,6 +59,7 @@ export const getWorkerNetwork = createDeepEqualSelector(
   (network, registry) => asWorkerAgentNetwork(network, registry),
 );
 
+// Returns current stage and prompt ID
 export const makeGetIds = () =>
   createSelector(
     propStageId, propPromptId,
@@ -172,13 +172,15 @@ export const makeNetworkNodesForType = () =>
 */
 
 export const makeNetworkNodesForPrompt = () => {
-  const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getAttributes, propPromptId,
-    (nodes, attributes, promptId) =>
-      filter(nodes, { [nodeAttributesProperty]: attributes, promptId }),
+    networkNodesForSubject, propPromptId,
+    (nodes, promptId) =>
+      filter(nodes, (node) => {
+        console.log(includes(node.promptIDs, promptId));
+        return includes(node.promptIDs, promptId);
+      }),
   );
 };
 

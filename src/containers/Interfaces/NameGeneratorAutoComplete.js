@@ -10,15 +10,10 @@ import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
-import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
-
-const networkNodesForPrompt = makeNetworkNodesForPrompt();
-const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-const getNodeType = makeGetSubjectType();
-const getNodeIconName = makeGetNodeIconName();
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -140,6 +135,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function makeMapStateToProps() {
+  const networkNodesForPrompt = makeNetworkNodesForPrompt();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
+  const getNodeType = makeGetSubjectType();
+  const getNodeIconName = makeGetNodeIconName();
+
   return function mapStateToProps(state, props) {
     return {
       excludedNodes: networkNodes(state, props),

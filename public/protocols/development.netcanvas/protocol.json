@@ -1134,10 +1134,11 @@
         },
         {
           "id": "2we",
-          "text": "Within the past 2 weeks, who has provided advice?",
-          "additionalAttributes": {
-            "03b03617-46ae-41cb-9462-9acd8a17edd6": true
-          }
+          "text": "Prompt with no additional attributes"
+        },
+        {
+          "id": "2we",
+          "text": "Second prompt with no additional attributes"
         }
       ]
     },

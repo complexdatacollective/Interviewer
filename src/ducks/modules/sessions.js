@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODE, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -24,6 +24,7 @@ const withTimestamp = session => ({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ADD_NODE:
     case ADD_NODES:
     case REMOVE_NODE:
     case UPDATE_NODE:
@@ -105,6 +106,17 @@ const addNodes = (nodes, additionalProperties) => (dispatch, getState) => {
     sessionId: session,
     nodes: nodeOrNodes,
     additionalProperties,
+  });
+};
+
+const addNode = (modelData, attributeData) => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
+    type: ADD_NODE,
+    sessionId: session,
+    modelData,
+    attributeData,
   });
 };
 
@@ -245,6 +257,7 @@ const exportSessionEpic = (action$, store) => (
 );
 
 const actionCreators = {
+  addNode,
   addNodes,
   updateNode,
   removeNode,
@@ -261,6 +274,7 @@ const actionCreators = {
 };
 
 const actionTypes = {
+  ADD_NODE,
   ADD_NODES,
   REMOVE_NODE,
   UPDATE_NODE,

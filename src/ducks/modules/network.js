@@ -12,6 +12,7 @@ export const nodeAttributesProperty = 'attributes';
 export const primaryKeyPropertyForWorker = 'networkCanvasId';
 export const nodeTypePropertyForWorker = 'networkCanvasType';
 
+export const ADD_NODE = 'ADD_NODE';
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
 export const UPDATE_NODE = 'UPDATE_NODE';
@@ -47,7 +48,7 @@ export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 
 /**
  * existingNodes - Existing network.nodes
- * netNodes - nodes to be added to the network
+ * newNodes - nodes to be added to the network
  * additionalProperties - static props shared to add to each member of newNodes
 */
 function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}) {
@@ -64,6 +65,39 @@ function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}
 
   return existingNodes.concat(newNodes.map(withModelandAttributeData));
 }
+
+
+/**
+ * existingNodes - Existing network.nodes
+ * newNodes - nodes to be added to the network
+ * additionalProperties - static props shared to add to each member of newNodes
+*/
+function getNewNodeList(existingNodes, modelData, attributeData) {
+  console.log(existingNodes);
+  console.log(modelData);
+  console.log(attributeData);
+
+  const {
+    itemType,
+    type,
+    promptId,
+    stageId,
+  } = modelData;
+
+  const withModelandAttributeData = {
+    [nodePrimaryKeyProperty]: uuidv4(),
+    [nodeAttributesProperty]: attributeData,
+    promptIDs: [promptId],
+    stageId,
+    type,
+    itemType,
+  };
+
+  console.log(withModelandAttributeData);
+
+  return existingNodes.concat(withModelandAttributeData);
+}
+
 
 /**
  * @param {Array} nodes - the current state.nodes
@@ -98,6 +132,15 @@ function getUpdatedNodes(nodes, updatingNode, nodeAttributeData = null) {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    /**
+     * Add single node using new syntax (modelData, attributeData)
+    */
+    case ADD_NODE: {
+      return {
+        ...state,
+        nodes: getNewNodeList(state.nodes, action.modelData, action.attributeData),
+      };
+    }
     case ADD_NODES: {
       return {
         ...state,

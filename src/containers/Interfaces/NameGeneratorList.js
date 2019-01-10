@@ -7,13 +7,12 @@ import { differenceBy } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
-import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
+import { makeNetworkNodesForOtherPrompts, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
 import {
   getDataByPrompt,
   getCardDisplayLabel,
   getCardAdditionalProperties,
   getSortableFields,
-  makeGetPromptNodeAttributes,
   getInitialSortOrder,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
@@ -120,7 +119,7 @@ NameGeneratorList.propTypes = {
 // };
 
 function makeMapStateToProps() {
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {

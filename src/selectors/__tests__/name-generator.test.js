@@ -116,7 +116,7 @@ describe('name generator selector', () => {
   });
   describe('memoed selectors', () => {
     it('should get node attributes for the prompt', () => {
-      const selected = NameGen.makeGetPromptNodeAttributes();
+      const selected = NameGen.makeGetAdditionalAttributes();
       expect(selected(mockState, mockProps)).toEqual({
         attributes: { close_friend: true },
         type: 'person',
