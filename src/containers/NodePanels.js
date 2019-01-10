@@ -17,7 +17,6 @@ import { MonitorDragSource } from '../behaviours/DragAndDrop';
   */
 class NodePanels extends PureComponent {
   static propTypes = {
-    activePromptAttributes: PropTypes.object,
     isDragging: PropTypes.bool,
     meta: PropTypes.object,
     panels: PropTypes.array,
@@ -25,11 +24,10 @@ class NodePanels extends PureComponent {
     newNodeAttributes: PropTypes.object.isRequired,
     removeNode: PropTypes.func.isRequired,
     stage: PropTypes.object,
-    toggleNodeAttributes: PropTypes.func.isRequired,
+    removeNodeFromPrompt: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    activePromptAttributes: {},
     isDragging: false,
     meta: {},
     panels: [],
@@ -41,12 +39,12 @@ class NodePanels extends PureComponent {
     /**
      * Handle a node being dropped into a panel
      *
-     * If
     */
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(
+      this.props.removeNodeFromPrompt(
         meta[nodePrimaryKeyProperty],
-        { ...this.props.activePromptAttributes },
+        this.props.prompt.id,
+        this.props.newNodeAttributes,
       );
     } else {
       this.props.removeNode(meta[nodePrimaryKeyProperty]);
@@ -192,7 +190,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    removeNodeFromPrompt: bindActionCreators(sessionsActions.removeNodeFromPrompt, dispatch),
     removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }

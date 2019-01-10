@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, merge, has, concat } from 'lodash';
+import { reject, findIndex, isMatch, omit, merge, has, concat, pull, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -15,6 +15,7 @@ export const nodeTypePropertyForWorker = 'networkCanvasType';
 export const ADD_NODE = 'ADD_NODE';
 export const ADD_NODES = 'ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
+export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
 export const UPDATE_NODE = 'UPDATE_NODE';
 export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 export const ADD_EDGE = 'ADD_EDGE';
@@ -193,6 +194,40 @@ export default function reducer(state = initialState, action = {}) {
           node[nodePrimaryKeyProperty] === removenodePrimaryKeyProperty),
         edges: reject(state.edges, edge =>
           edge.from === removenodePrimaryKeyProperty || edge.to === removenodePrimaryKeyProperty),
+      };
+    }
+    case REMOVE_NODE_FROM_PROMPT: {
+      const getActionedNodeList = (existingNodes, nodeId, promptId, promptAttributes) =>
+        existingNodes.map(
+          (node) => {
+            if (node[nodePrimaryKeyProperty] !== nodeId) {
+              return node;
+            }
+
+            const updatedNode = {
+              ...node,
+            };
+
+            // Remove prompt attributes
+            updatedNode[nodeAttributesProperty] = omit(
+              node[nodeAttributesProperty],
+              keys(promptAttributes),
+            );
+
+            // Remove prompt ID from collection
+            updatedNode.promptIDs = pull(node.promptIDs, promptId);
+
+            return updatedNode;
+          });
+
+      return {
+        ...state,
+        nodes: getActionedNodeList(
+          state.nodes,
+          action.nodeId,
+          action.promptId,
+          action.promptAttributes,
+        ),
       };
     }
     case ADD_EDGE:
