@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, isMatch, reject, includes } from 'lodash';
+import { findKey, filter, includes } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
@@ -184,18 +184,14 @@ export const makeNetworkNodesForPrompt = () => {
  * makeNetworkNodesForOtherPrompts()
  *
  * Same as above, except returns a filtered node list that **excludes** nodes that match the current
- * prompt's additional attributes or promptId.
+ * prompt's promptId.
 */
 
 export const makeNetworkNodesForOtherPrompts = () => {
-  // used to check prompt ids
-  const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getAttributes, propPromptId,
-    (nodes, attributes, promptId) =>
-      reject(nodes, node =>
-        isMatch(getNodeAttributes(node), attributes) || node.promptId === promptId),
+    networkNodesForSubject, propPromptId,
+    (nodes, promptId) => filter(nodes, node => !includes(node.promptIDs, promptId)),
   );
 };

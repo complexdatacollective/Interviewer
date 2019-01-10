@@ -81,7 +81,8 @@ function getNewNodeList(existingNodes, modelData, attributeData) {
   } = modelData;
 
   const withModelandAttributeData = {
-    [nodePrimaryKeyProperty]: uuidv4(),
+    [nodePrimaryKeyProperty]:
+      modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
     [nodeAttributesProperty]: attributeData,
     promptIDs: [promptId],
     stageId,
@@ -120,7 +121,7 @@ function getUpdatedNodes(existingNodes, nodeID, newModelData, newAttributeData) 
 
     // Merge mew attribute data
     updatedNode[nodeAttributesProperty] = merge(node[nodeAttributesProperty], newAttributeData);
-    console.log(updatedNode);
+
     return updatedNode;
   });
 }

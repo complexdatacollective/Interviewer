@@ -54,7 +54,7 @@ class NameGenerator extends Component {
   /**
    * Drop node handler
    * Adds prompt attributes to existing nodes, or adds new nodes to the network.
-   * @param {object} node - key/value object containing node object from the network store
+   * @param {object} item - key/value object containing node object from the network store
    */
   handleDropNode = (item) => {
     const node = { ...item.meta };

@@ -7,7 +7,7 @@ import { networkNodes, makeNetworkNodesForOtherPrompts, makeGetAdditionalAttribu
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
-import { makeGetPanelConfiguration } from '../selectors/name-generator';
+import { makeGetPanelConfiguration, makeGetPromptNodeModelData } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -116,12 +116,17 @@ class NodePanels extends PureComponent {
   }
 }
 
-const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
+/**
+ *
+ * @param {array} nodes - all network nodes
+ *
+ */
+const getNodesForDataSource = ({ sessionNodes, otherPromptNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
-    existingNodes :
+    otherPromptNodes :
     differenceBy(
-      externalData[dataSource] && externalData[dataSource].nodes,
-      nodes,
+      externalData[dataSource].nodes,
+      sessionNodes,
       nodePrimaryKeyProperty,
     )
 );
@@ -134,14 +139,15 @@ const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
 
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
-  const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
   const getPanelConfiguration = makeGetPanelConfiguration();
+  const getNetworkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
     const allNodes = networkNodes(state);
-    const existingNodes = networkNodesForOtherPrompts(state, props);
+    const existingNodes = getNetworkNodesForOtherPrompts(state, props);
     const externalData = getExternalData(state);
     const newNodeAttributes = getPromptNodeAttributes(state, props);
+    const newNodeModelData = makeGetPromptNodeModelData(state, props);
 
     const panels = getPanelConfiguration(state, props)
       .map((panel) => {
@@ -152,8 +158,8 @@ function makeMapStateToProps() {
         });
 
         const nodes = getNodesForDataSource({
-          nodes: allNodes,
-          existingNodes,
+          sessionNodes: allNodes,
+          otherPromptNodes: existingNodes,
           externalData,
           dataSource: panel.dataSource,
         });
@@ -161,8 +167,8 @@ function makeMapStateToProps() {
         const accepts = (panel.dataSource === 'existing') ?
           ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
-            (meta.stageId !== newNodeAttributes.stageId ||
-              meta.promptId !== newNodeAttributes.promptId)
+            (meta.stageId !== newNodeModelData.stageId ||
+              meta.promptIDs !== newNodeModelData.promptId)
           ) : ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
             includes(originNodeIds, meta[nodePrimaryKeyProperty])
@@ -177,7 +183,7 @@ function makeMapStateToProps() {
       });
 
     return {
-      activePromptAttributes: props.prompt.additionalAttributes,
+      activePromptId: props.prompt.id,
       newNodeAttributes,
       panels,
     };
