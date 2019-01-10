@@ -176,11 +176,7 @@ export const makeNetworkNodesForPrompt = () => {
 
   return createSelector(
     networkNodesForSubject, propPromptId,
-    (nodes, promptId) =>
-      filter(nodes, (node) => {
-        console.log(includes(node.promptIDs, promptId));
-        return includes(node.promptIDs, promptId);
-      }),
+    (nodes, promptId) => filter(nodes, node => includes(node.promptIDs, promptId)),
   );
 };
 

@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit } from 'lodash';
+import { reject, findIndex, isMatch, omit, merge, has, concat } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -69,14 +69,10 @@ function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}
 
 /**
  * existingNodes - Existing network.nodes
- * newNodes - nodes to be added to the network
- * additionalProperties - static props shared to add to each member of newNodes
+ * modelData
+ * attributeData
 */
 function getNewNodeList(existingNodes, modelData, attributeData) {
-  console.log(existingNodes);
-  console.log(modelData);
-  console.log(attributeData);
-
   const {
     itemType,
     type,
@@ -93,39 +89,38 @@ function getNewNodeList(existingNodes, modelData, attributeData) {
     itemType,
   };
 
-  console.log(withModelandAttributeData);
-
   return existingNodes.concat(withModelandAttributeData);
 }
 
 
 /**
- * @param {Array} nodes - the current state.nodes
- * @param {Object} updatingNode - the node to be updated. Will match on _uid.
- * @param {Object} nodeAttributeData - additional attributes to update the node with.
+ * @param {Array} existingNodes - the current state.nodes
+ * @param {Object} nodeID - the node to be updated. Will match on _uid.
+ * @param {Object} newModelData -
+ * @param {Object} newAttributeData - additional attributes to update the node with.
  *                                   If null, then the updatingNode's `attributes` property
  *                                   will overwrite the original node's. Use this to perform
  *                                   a 'full' update, but ensure the entire updated node is
  *                                   passed as `updatingNode`.
  */
-function getUpdatedNodes(nodes, updatingNode, nodeAttributeData = null) {
-  return nodes.map((node) => {
-    if (node[nodePrimaryKeyProperty] !== updatingNode[nodePrimaryKeyProperty]) { return node; }
+function getUpdatedNodes(existingNodes, nodeID, newModelData, newAttributeData) {
+  return existingNodes.map((node) => {
+    if (node[nodePrimaryKeyProperty] !== nodeID) { return node; }
 
-    const updatedNode = {
+    let updatedNode = {
       ...node,
-      ...updatingNode,
-      [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
     };
 
-    if (nodeAttributeData) {
-      updatedNode[nodeAttributesProperty] = {
-        ...node[nodeAttributesProperty],
-        ...updatingNode[nodeAttributesProperty],
-        ...nodeAttributeData,
-      };
+    if (has(newModelData, 'promptId')) {
+      updatedNode.promptIDs = concat(node.promptIDs, newModelData.promptId);
     }
 
+    // Merge new model data
+    updatedNode = merge(updatedNode, omit(newModelData, 'promptId'));
+
+    // Merge mew attribute data
+    updatedNode[nodeAttributesProperty] = merge(node[nodeAttributesProperty], newAttributeData);
+    console.log(updatedNode);
     return updatedNode;
   });
 }
@@ -181,7 +176,12 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalProperties),
+        nodes: getUpdatedNodes(
+          state.nodes,
+          action.nodeID,
+          action.newModelData,
+          action.newAttributeData,
+        ),
       };
     }
     case REMOVE_NODE: {
