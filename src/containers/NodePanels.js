@@ -2,18 +2,17 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { includes, map, differenceBy } from 'lodash';
-import { networkNodes, makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../selectors/interface';
-import { getExternalData } from '../selectors/externalData';
+import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { Panels } from '../components/';
 import { makeGetPanelConfiguration } from '../selectors/name-generator';
-import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
+import NodePanel from './NodePanel';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 
 /**
-  * Configures and renders `NodeProvider`s into panels according to the protocol config
+  * Configures and renders `NodePanels` according to the protocol config
   */
 class NodePanels extends PureComponent {
   static propTypes = {
@@ -35,7 +34,29 @@ class NodePanels extends PureComponent {
     stage: { id: null },
   };
 
-  onDrop = ({ meta }, dataSource) => {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      panelIndexes: [],
+    };
+
+    this.colorPresets = [
+      getCSSVariableAsString('--primary-color-seq-1'),
+      getCSSVariableAsString('--primary-color-seq-2'),
+      getCSSVariableAsString('--primary-color-seq-3'),
+      getCSSVariableAsString('--primary-color-seq-4'),
+      getCSSVariableAsString('--primary-color-seq-5'),
+    ];
+  }
+
+  getHighlight = (panelNumber) => {
+    if (panelNumber === 0) { return null; }
+
+    return this.colorPresets[panelNumber % this.colorPresets.length];
+  };
+
+  handleDrop = ({ meta }, dataSource) => {
     /**
      * Handle a node being dropped into a panel
      * If this panel is showing the interview network, remove the node from the current prompt.
@@ -52,57 +73,83 @@ class NodePanels extends PureComponent {
     }
   }
 
-  isPanelEmpty = index => this.props.panels[index].nodes.length === 0;
+  isPanelEmpty = index => (
+    this.state.panelIndexes[index] &&
+    this.state.panelIndexes[index].count === 0
+  );
 
-  isPanelCompatible = index => this.props.panels[index].accepts({ meta: this.props.meta });
+  isPanelCompatible = (index) => {
+    const {
+      panels,
+      meta,
+      newNodeAttributes,
+    } = this.props;
+
+    const panel = panels[index];
+    const panelIndex = this.state.panelIndexes[index].index;
+
+    // We only accept existing nodes in panels
+    if (meta.itemType !== 'EXISTING_NODE') { return false; }
+
+    // Rules for when panel contains existing nodes
+    if (panel.dataSource === 'existing') {
+      return (
+        meta.stageId !== newNodeAttributes.stageId ||
+        meta.promptId !== newNodeAttributes.promptId
+      );
+    }
+
+    // Rules for when panel contains external data
+    // We need the original list though
+    return panelIndex && panelIndex.has(meta[nodePrimaryKeyProperty]);
+  };
 
   isPanelOpen = index =>
     (this.props.isDragging && this.isPanelCompatible(index)) || !this.isPanelEmpty(index);
 
   isAnyPanelOpen = () =>
-    this.props.panels
-      .map((panel, index) => this.isPanelOpen(index))
-      .reduce((memo, panelOpen) => memo || panelOpen, false);
+    this.props.panels.some((panel, index) => this.isPanelOpen(index));
+
+  handlePanelUpdate = (index, displayCount, nodeIndex) => {
+    this.setState((state) => {
+      const panelIndexes = [...state.panelIndexes];
+      panelIndexes[index] = { count: displayCount, index: nodeIndex };
+
+      return {
+        panelIndexes,
+      };
+    });
+  }
 
   renderNodePanel = (panel, index) => {
-    const stageId = this.props.stage.id;
-    const promptId = this.props.prompt.id;
+    const {
+      stage,
+      prompt,
+    } = this.props;
 
     const {
-      title,
       highlight,
       dataSource,
       ...nodeListProps
     } = panel;
 
-    const colorPresets = [
-      getCSSVariableAsString('--primary-color-seq-1'),
-      getCSSVariableAsString('--primary-color-seq-2'),
-      getCSSVariableAsString('--primary-color-seq-3'),
-      getCSSVariableAsString('--primary-color-seq-4'),
-      getCSSVariableAsString('--primary-color-seq-5'),
-    ];
-
-    const getHighlight = (panelNumber) => {
-      if (panelNumber >= 0) { return colorPresets[panelNumber % colorPresets.length]; }
-      return null;
-    };
-
     return (
-      <Panel
-        title={title}
-        key={index}
-        highlight={getHighlight(index)}
+      <NodePanel
+        {...nodeListProps}
+        prompt={prompt}
+        stage={stage}
+        dataSource={dataSource}
+        accepts={() => this.isPanelCompatible(index)}
+        externalDataSource={dataSource !== 'existing' && dataSource}
+        highlight={this.getHighlight(index)}
         minimise={!this.isPanelOpen(index)}
-      >
-        <NodeList
-          listId={`PANEL_NODE_LIST_${stageId}_${promptId}_${index}`}
-          id={`PANEL_NODE_LIST_${index}`}
-          {...nodeListProps}
-          itemType="NEW_NODE"
-          onDrop={item => this.onDrop(item, dataSource)}
-        />
-      </Panel>
+        listId={`PANEL_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
+        id={`PANEL_NODE_LIST_${index}`}
+        key={`PANEL_NODE_LIST_${index}`}
+        itemType="NEW_NODE"
+        onDrop={this.handleDrop}
+        onUpdate={(nodeCount, nodeIndex) => this.handlePanelUpdate(index, nodeCount, nodeIndex)}
+      />
     );
   }
 
@@ -115,70 +162,13 @@ class NodePanels extends PureComponent {
   }
 }
 
-/**
- *
- * @param {array} nodes - all network nodes
- *
- */
-const getNodesForDataSource = ({ sessionNodes, otherPromptNodes, externalData, dataSource }) => (
-  dataSource === 'existing' ?
-    otherPromptNodes :
-    differenceBy(
-      externalData[dataSource].nodes,
-      sessionNodes,
-      nodePrimaryKeyProperty,
-    )
-);
-
-const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
-  dataSource === 'existing' ?
-    map(existingNodes, nodePrimaryKeyProperty) :
-    map(externalData[dataSource] && externalData[dataSource].nodes, nodePrimaryKeyProperty)
-);
-
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPanelConfiguration = makeGetPanelConfiguration();
-  const getNetworkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
-    const allNodes = networkNodes(state);
-    const existingNodes = getNetworkNodesForOtherPrompts(state, props);
-    const externalData = getExternalData(state);
     const newNodeAttributes = getPromptNodeAttributes(state, props);
-
-    const panels = getPanelConfiguration(state, props)
-      .map((panel) => {
-        const originNodeIds = getOriginNodeIds({
-          existingNodes,
-          externalData,
-          dataSource: panel.dataSource,
-        });
-
-        const nodes = getNodesForDataSource({
-          sessionNodes: allNodes,
-          otherPromptNodes: existingNodes,
-          externalData,
-          dataSource: panel.dataSource,
-        });
-
-        const accepts = (panel.dataSource === 'existing') ?
-          ({ meta }) => (
-            // existing network node
-            meta.itemType === 'EXISTING_NODE'
-          ) : ({ meta }) => (
-            // external data
-            meta.itemType === 'EXISTING_NODE' &&
-            includes(originNodeIds, meta[nodePrimaryKeyProperty])
-          );
-
-        return {
-          ...panel,
-          originNodeIds,
-          nodes,
-          accepts,
-        };
-      });
+    const panels = getPanelConfiguration(state, props);
 
     return {
       activePromptId: props.prompt.id,

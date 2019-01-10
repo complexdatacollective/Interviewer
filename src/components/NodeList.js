@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
-
 import Node from '../containers/Node';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';

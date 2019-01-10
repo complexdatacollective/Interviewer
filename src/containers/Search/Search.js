@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from '../../ui/components';
-
 import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { getNodeAttributes, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
+import withExternalData from '../withExternalData';
 
 /**
  * Fuse.js: approximate string matching.
@@ -245,4 +246,9 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export { Search };
+
+export default compose(
+  withExternalData('dataSourceKey', 'externalData'),
+  connect(mapStateToProps, mapDispatchToProps),
+)(Search);
