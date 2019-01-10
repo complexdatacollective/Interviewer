@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { includes, map, differenceBy } from 'lodash';
+import { includes, map, differenceBy, has } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../selectors/interface';
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -166,7 +166,7 @@ function makeMapStateToProps() {
           ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
             (meta.stageId !== newNodeModelData.stageId ||
-              meta.promptIDs !== newNodeModelData.promptId)
+              !has(meta.promptIDs, newNodeModelData.promptId))
           ) : ({ meta }) => (
             meta.itemType === 'EXISTING_NODE' &&
             includes(originNodeIds, meta[nodePrimaryKeyProperty])

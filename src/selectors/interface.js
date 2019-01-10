@@ -173,7 +173,6 @@ export const makeNetworkNodesForType = () =>
 
 export const makeNetworkNodesForPrompt = () => {
   const networkNodesForSubject = makeNetworkNodesForType();
-
   return createSelector(
     networkNodesForSubject, propPromptId,
     (nodes, promptId) => filter(nodes, node => includes(node.promptIDs, promptId)),
