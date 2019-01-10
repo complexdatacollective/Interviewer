@@ -35,4 +35,14 @@
       opacity: .3;
     }
   }
+
+  &__form {
+    display: flex;
+    flex-wrap: wrap;
+
+    .form-field-container {
+      flex: calc(50% - 2rem);
+      margin: 1rem;
+    }
+  }
 }

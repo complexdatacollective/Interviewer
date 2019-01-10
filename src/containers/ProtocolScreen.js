@@ -17,9 +17,23 @@ import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
   * Check protocol is loaded, and render the stage
   */
 class Protocol extends Component {
+  constructor(props) {
+    super(props);
+    this.interfaceRef = React.createRef();
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.stage.id !== this.props.stage.id) {
+      this.interfaceRef = React.createRef();
+      this.forceUpdate();
+    }
+  }
+
   // change the stage to the next
   onClickNext = () => {
-    if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+    if (this.getInterfaceRef() && !this.getInterfaceRef().isStageEnding()) {
+      this.getInterfaceRef().clickNext();
+    } else if (!this.props.stage.prompts || this.props.isLastPrompt()) {
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
       this.props.promptForward();
@@ -28,10 +42,21 @@ class Protocol extends Component {
 
   // change the stage to the previous
   onClickBack = () => {
-    if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+    if (this.getInterfaceRef() && !this.getInterfaceRef().isStageBeginning()) {
+      this.getInterfaceRef().clickPrevious();
+    } else if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
       this.props.promptBackward();
+    }
+  }
+
+  getInterfaceRef = () => {
+    try {
+      return (this.interfaceRef && this.interfaceRef.current &&
+        this.interfaceRef.current.getWrappedInstance());
+    } catch (e) {
+      return false;
     }
   }
 
@@ -77,6 +102,7 @@ class Protocol extends Component {
               promptId={promptId}
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
+              ref={this.interfaceRef}
             />
           </StageTransition>
         </TransitionGroup>

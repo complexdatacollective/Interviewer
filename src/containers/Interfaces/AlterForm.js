@@ -23,13 +23,23 @@ class AlterForm extends Component {
       this.props.formEnabled(`NODE_FORM_${index - 1}`)
   );
 
-  goNext = () => {
+  isStageBeginning = () => (
+    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
+    this.swipeRef.current.swiper.activeIndex === 0
+  );
+
+  isStageEnding = () => (
+    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
+    this.swipeRef.current.swiper.activeIndex === this.props.stageNodes.length
+  );
+
+  clickNext = () => {
     if (this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex)) {
       this.swipeRef.current.swiper.slideNext();
     }
   };
 
-  goPrev = () => {
+  clickPrevious = () => {
     if (this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex)) {
       this.swipeRef.current.swiper.slidePrev();
     }
@@ -65,12 +75,6 @@ class AlterForm extends Component {
           }
         },
       },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      renderPrevButton: () => (<button className="swiper-button-prev">Prev</button>),
-      renderNextButton: () => (<button className="swiper-button-next">Next</button>),
     };
 
     return (
@@ -88,12 +92,14 @@ class AlterForm extends Component {
           };
 
           return (
-            <div className="alter-form__form swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
+            <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
               <Scroller>
                 <Form
                   key={node[nodePrimaryKeyProperty]}
                   {...form}
+                  className="alter-form__form"
                   initialValues={initialValues}
+                  controls={[]}
                   autoFocus={false}
                   form={`NODE_FORM_${index}`}
                   onSubmit={formData => this.props.updateNode(node, formData)}
@@ -138,5 +144,5 @@ const mapDispatchToProps = dispatch => ({
 export { AlterForm };
 
 export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps),
+  connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true }),
 )(AlterForm);
