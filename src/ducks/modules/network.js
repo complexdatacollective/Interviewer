@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, merge, concat, pull, keys } from 'lodash';
+import { reject, findIndex, isMatch, omit, merge, concat, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -94,20 +94,21 @@ function getNewNodeList(existingNodes, modelData, attributeData) {
   return existingNodes.concat(withModelandAttributeData);
 }
 
+function getActionedNodeList(existingNodes, nodeId, promptId, promptAttributes) {
+  return existingNodes.map(
+    (node) => {
+      if (node[nodePrimaryKeyProperty] !== nodeId) { return node; }
+      return {
+        ...node,
+        [nodeAttributesProperty]: omit(node[nodeAttributesProperty], keys(promptAttributes)),
+        promptIDs: node.promptIDs.filter(id => id !== promptId),
+      };
+    });
+}
 
-/**
- * @param {Array} existingNodes - the current state.nodes
- * @param {Object} nodeID - the node to be updated. Will match on _uid.
- * @param {Object} newModelData -
- * @param {Object} newAttributeData - additional attributes to update the node with.
- *                                   If null, then the updatingNode's `attributes` property
- *                                   will overwrite the original node's. Use this to perform
- *                                   a 'full' update, but ensure the entire updated node is
- *                                   passed as `updatingNode`.
- */
-function getUpdatedNodes(existingNodes, nodeID, newModelData, newAttributeData) {
+function getUpdatedNodes(existingNodes, nodeId, newModelData, newAttributeData) {
   return existingNodes.map((node) => {
-    if (node[nodePrimaryKeyProperty] !== nodeID) { return node; }
+    if (node[nodePrimaryKeyProperty] !== nodeId) { return node; }
     return {
       ...node,
       ...omit(newModelData, 'promptId'),
@@ -187,20 +188,6 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case REMOVE_NODE_FROM_PROMPT: {
-      const getActionedNodeList = (existingNodes, nodeId, promptId, promptAttributes) =>
-        existingNodes.map(
-          (node) => {
-            if (node[nodePrimaryKeyProperty] !== nodeId) {
-              return node;
-            }
-
-            return {
-              ...node,
-              [nodeAttributesProperty]: omit(node[nodeAttributesProperty], keys(promptAttributes)),
-              promptIDs: pull(node.promptIDs, promptId),
-            };
-          });
-
       return {
         ...state,
         nodes: getActionedNodeList(

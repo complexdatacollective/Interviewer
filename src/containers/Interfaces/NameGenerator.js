@@ -59,7 +59,7 @@ class NameGenerator extends Component {
   handleDropNode = (item) => {
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
-    if (has(node, 'promptId') || has(node, 'stageId')) {
+    if (has(node, 'promptIDs')) {
       this.props.updateNode(
         node[nodePrimaryKeyProperty],
         { ...this.props.newNodeModelData },

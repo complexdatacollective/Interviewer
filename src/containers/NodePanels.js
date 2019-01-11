@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { includes, map, differenceBy, has } from 'lodash';
+import { includes, map, differenceBy } from 'lodash';
 import { networkNodes, makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../selectors/interface';
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
-import { makeGetPanelConfiguration, makeGetPromptNodeModelData } from '../selectors/name-generator';
+import { makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -38,7 +38,8 @@ class NodePanels extends PureComponent {
   onDrop = ({ meta }, dataSource) => {
     /**
      * Handle a node being dropped into a panel
-     *
+     * If this panel is showing the interview network, remove the node from the current prompt.
+     * If it is an external data panel, remove the node form the interview network.
     */
     if (dataSource === 'existing') {
       this.props.removeNodeFromPrompt(
@@ -145,7 +146,6 @@ function makeMapStateToProps() {
     const existingNodes = getNetworkNodesForOtherPrompts(state, props);
     const externalData = getExternalData(state);
     const newNodeAttributes = getPromptNodeAttributes(state, props);
-    const newNodeModelData = makeGetPromptNodeModelData(state, props);
 
     const panels = getPanelConfiguration(state, props)
       .map((panel) => {
@@ -164,10 +164,10 @@ function makeMapStateToProps() {
 
         const accepts = (panel.dataSource === 'existing') ?
           ({ meta }) => (
-            meta.itemType === 'EXISTING_NODE' &&
-            (meta.stageId !== newNodeModelData.stageId ||
-              !has(meta.promptIDs, newNodeModelData.promptId))
+            // existing network node
+            meta.itemType === 'EXISTING_NODE'
           ) : ({ meta }) => (
+            // external data
             meta.itemType === 'EXISTING_NODE' &&
             includes(originNodeIds, meta[nodePrimaryKeyProperty])
           );
