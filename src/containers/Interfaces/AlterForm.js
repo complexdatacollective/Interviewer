@@ -10,12 +10,16 @@ import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modu
 import { getDefaultFormValues } from '../../selectors/forms';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
+import { Progress } from '../../ui/components';
 import { Form } from '../';
 
 class AlterForm extends Component {
   constructor(props) {
     super(props);
     this.swipeRef = React.createRef();
+    this.state = {
+      activeIndex: 0,
+    };
   }
 
   formSubmitAllowed = index => (
@@ -54,7 +58,7 @@ class AlterForm extends Component {
     } = this.props;
 
     const params = {
-      containerClass: 'alter-form swiper-container',
+      containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
       slidesPerView: 'auto',
       centeredSlides: true,
@@ -69,8 +73,13 @@ class AlterForm extends Component {
             const submitIndex = this.swipeRef.current.swiper.previousIndex;
             if (!this.formSubmitAllowed(submitIndex)) {
               this.swipeRef.current.swiper.slideTo(submitIndex);
-            } else if (this.props.formDirty(`NODE_FORM_${submitIndex - 1}`)) {
-              this.props.submitForm(`NODE_FORM_${submitIndex - 1}`);
+            } else {
+              if (this.props.formDirty(`NODE_FORM_${submitIndex - 1}`)) {
+                this.props.submitForm(`NODE_FORM_${submitIndex - 1}`);
+              }
+              this.setState({
+                activeIndex: this.swipeRef.current.swiper.activeIndex,
+              });
             }
           }
         },
@@ -78,37 +87,44 @@ class AlterForm extends Component {
     };
 
     return (
-      <Swiper {...params} ref={this.swipeRef} >
-        <div key="alter-form__introduction">
-          <div>{stage.introductionPanel.title}</div>
-          <div>{stage.introductionPanel.text}</div>
-        </div>
-        {stageNodes.map((node, index) => {
-          const nodeAttributes = node ? node[nodeAttributesProperty] : {};
+      <div className="alter-form">
+        <Swiper {...params} ref={this.swipeRef} >
+          <div key="alter-form__introduction">
+            <div>{stage.introductionPanel.title}</div>
+            <div>{stage.introductionPanel.text}</div>
+          </div>
+          {stageNodes.map((node, index) => {
+            const nodeAttributes = node ? node[nodeAttributesProperty] : {};
 
-          const initialValues = {
-            ...defaultFormValues[stage.form],
-            ...nodeAttributes,
-          };
+            const initialValues = {
+              ...defaultFormValues[stage.form],
+              ...nodeAttributes,
+            };
 
-          return (
-            <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
-              <Scroller>
-                <Form
-                  key={node[nodePrimaryKeyProperty]}
-                  {...form}
-                  className="alter-form__form"
-                  initialValues={initialValues}
-                  controls={[]}
-                  autoFocus={false}
-                  form={`NODE_FORM_${index}`}
-                  onSubmit={formData => this.props.updateNode(node, formData)}
-                />
-              </Scroller>
-            </div>
-          );
-        })}
-      </Swiper>
+            return (
+              <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
+                <Scroller>
+                  <Form
+                    key={node[nodePrimaryKeyProperty]}
+                    {...form}
+                    className="alter-form__form"
+                    initialValues={initialValues}
+                    controls={[]}
+                    autoFocus={false}
+                    form={`NODE_FORM_${index}`}
+                    onSubmit={formData => this.props.updateNode(node, formData)}
+                  />
+                </Scroller>
+              </div>
+            );
+          })}
+        </Swiper>
+        <Progress
+          max={stageNodes.length + 1}
+          value={this.state.activeIndex + 1}
+          className="alter-form__progress"
+        />
+      </div>
     );
   }
 }

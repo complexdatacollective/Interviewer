@@ -1,9 +1,11 @@
 .alter-form {
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &__swiper {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .swiper-wrapper {
     box-sizing: border-box;
@@ -44,5 +46,13 @@
       flex: calc(50% - 2rem);
       margin: 1rem;
     }
+  }
+
+  &__progress {
+    bottom: 1rem;
+    left: 37.5%;
+    position: absolute;
+    width: 25%;
+    z-index: var(--z-panel);
   }
 }
