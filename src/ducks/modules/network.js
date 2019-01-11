@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, merge, has, concat, pull, keys } from 'lodash';
+import { reject, findIndex, isMatch, omit, merge, concat, pull, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -108,22 +108,12 @@ function getNewNodeList(existingNodes, modelData, attributeData) {
 function getUpdatedNodes(existingNodes, nodeID, newModelData, newAttributeData) {
   return existingNodes.map((node) => {
     if (node[nodePrimaryKeyProperty] !== nodeID) { return node; }
-
-    let updatedNode = {
+    return {
       ...node,
+      ...omit(newModelData, 'promptId'),
+      promptIDs: concat(node.promptIDs, newModelData.promptId),
+      [nodeAttributesProperty]: merge(node[nodeAttributesProperty], newAttributeData),
     };
-
-    if (has(newModelData, 'promptId')) {
-      updatedNode.promptIDs = concat(node.promptIDs, newModelData.promptId);
-    }
-
-    // Merge new model data
-    updatedNode = merge(updatedNode, omit(newModelData, 'promptId'));
-
-    // Merge mew attribute data
-    updatedNode[nodeAttributesProperty] = merge(node[nodeAttributesProperty], newAttributeData);
-
-    return updatedNode;
   });
 }
 
@@ -204,20 +194,11 @@ export default function reducer(state = initialState, action = {}) {
               return node;
             }
 
-            const updatedNode = {
+            return {
               ...node,
+              [nodeAttributesProperty]: omit(node[nodeAttributesProperty], keys(promptAttributes)),
+              promptIDs: pull(node.promptIDs, promptId),
             };
-
-            // Remove prompt attributes
-            updatedNode[nodeAttributesProperty] = omit(
-              node[nodeAttributesProperty],
-              keys(promptAttributes),
-            );
-
-            // Remove prompt ID from collection
-            updatedNode.promptIDs = pull(node.promptIDs, promptId);
-
-            return updatedNode;
           });
 
       return {
