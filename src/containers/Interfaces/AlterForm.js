@@ -5,6 +5,7 @@ import { isDirty, isValid, isSubmitting, reset, submit } from 'redux-form';
 import Swiper from 'react-id-swiper';
 
 import { Scroller } from '../../components';
+import Node from '../Node';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { getDefaultFormValues } from '../../selectors/forms';
@@ -49,6 +50,14 @@ class AlterForm extends Component {
     }
   };
 
+  clickLast = () => {
+    if (this.formSubmitAllowed(this.state.activeIndex)) {
+      if (this.props.formDirty(`NODE_FORM_${this.state.activeIndex - 1}`)) {
+        this.props.submitForm(`NODE_FORM_${this.state.activeIndex - 1}`);
+      }
+    }
+  }
+
   render() {
     const {
       defaultFormValues,
@@ -89,7 +98,7 @@ class AlterForm extends Component {
     return (
       <div className="alter-form">
         <Swiper {...params} ref={this.swipeRef} >
-          <div key="alter-form__introduction">
+          <div key="alter-form__introduction" className="alter-form__introduction">
             <div>{stage.introductionPanel.title}</div>
             <div>{stage.introductionPanel.text}</div>
           </div>
@@ -103,18 +112,21 @@ class AlterForm extends Component {
 
             return (
               <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
-                <Scroller>
-                  <Form
-                    key={node[nodePrimaryKeyProperty]}
-                    {...form}
-                    className="alter-form__form"
-                    initialValues={initialValues}
-                    controls={[]}
-                    autoFocus={false}
-                    form={`NODE_FORM_${index}`}
-                    onSubmit={formData => this.props.updateNode(node, formData)}
-                  />
-                </Scroller>
+                <Node {...node} />
+                <div className="alter-form__form-container">
+                  <Scroller>
+                    <Form
+                      key={node[nodePrimaryKeyProperty]}
+                      {...form}
+                      className="alter-form__form"
+                      initialValues={initialValues}
+                      controls={[]}
+                      autoFocus={false}
+                      form={`NODE_FORM_${index}`}
+                      onSubmit={formData => this.props.updateNode(node, formData)}
+                    />
+                  </Scroller>
+                </div>
               </div>
             );
           })}

@@ -34,6 +34,9 @@ class Protocol extends Component {
     if (this.getInterfaceRef() && !this.getInterfaceRef().isStageEnding()) {
       this.getInterfaceRef().clickNext();
     } else if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+      if (this.getInterfaceRef()) {
+        this.getInterfaceRef().clickLast();
+      }
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
       this.props.promptForward();

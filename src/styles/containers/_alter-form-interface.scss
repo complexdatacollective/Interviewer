@@ -1,3 +1,5 @@
+$slide-padding: 1.5rem;
+
 .alter-form {
   &__swiper {
     height: 100vh;
@@ -20,22 +22,34 @@
     height: 50vh;
     border-radius: var(--border-radius);
     background: var(--light-background);
-    padding: 1.5rem;
-    overflow: hidden;
     transition: opacity var(--animation-duration-slow) var(--animation-easing);
-    margin-top: 4rem;
+    margin-top: 5rem;
 
     &.swiper-slide-active {
-      height: 50vh;
+      height: 60vh;
       pointer-events: initial;
       opacity: 1;
     }
 
     &:not(.swiper-slide-active) {
-      height: 25vh;
       pointer-events: none;
       opacity: .3;
     }
+  }
+
+  &__introduction {
+    padding: $slide-padding;
+  }
+
+  .node {
+    margin-top: calc((var(--base-node-size) / -2));
+    margin-left: calc(50% - (var(--base-node-size) / 2));
+  }
+
+  &__form-container {
+    height: calc(100% - (var(--base-node-size) / 2));
+    overflow: hidden;
+    padding: $slide-padding;
   }
 
   &__form {
