@@ -41,7 +41,7 @@ class NameGenerator extends Component {
         );
       } else {
         /**
-         * updateNode(nodeID, newModelData, newAttributeData)
+         * updateNode(nodeId, newModelData, newAttributeData)
          */
         const selectedUID = this.state.selectedNode[nodePrimaryKeyProperty];
         this.props.updateNode(selectedUID, {}, form);

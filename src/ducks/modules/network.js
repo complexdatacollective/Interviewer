@@ -42,139 +42,95 @@ function edgeExists(edges, edge) {
   );
 }
 
-/**
- * All generated data is stored inside an 'attributes' property on the node
- */
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
-
-/**
- * existingNodes - Existing network.nodes
- * newNodes - nodes to be added to the network
- * additionalProperties - static props shared to add to each member of newNodes
-*/
-function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}) {
-  // Create a function to create a UUID and merge node attributes
-  const withModelandAttributeData = newNode => ({
-    ...additionalProperties,
-    [nodePrimaryKeyProperty]: uuidv4(),
-    ...newNode, // second to prevent overwriting existing node UUID (e.g., assigned to externalData)
-    [nodeAttributesProperty]: {
-      ...additionalProperties[nodeAttributesProperty],
-      ...newNode[nodeAttributesProperty],
-    },
-  });
-
-  return existingNodes.concat(newNodes.map(withModelandAttributeData));
-}
-
-
-/**
- * existingNodes - Existing network.nodes
- * modelData
- * attributeData
-*/
-function getNewNodeList(existingNodes, modelData, attributeData) {
-  const {
-    itemType,
-    type,
-    promptId,
-    stageId,
-  } = modelData;
-
-  const withModelandAttributeData = {
-    [nodePrimaryKeyProperty]:
-      modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
-    [nodeAttributesProperty]: attributeData,
-    promptIDs: [promptId],
-    stageId,
-    type,
-    itemType,
-  };
-
-  return existingNodes.concat(withModelandAttributeData);
-}
-
-function getActionedNodeList(existingNodes, nodeId, promptId, promptAttributes) {
-  return existingNodes.map(
-    (node) => {
-      if (node[nodePrimaryKeyProperty] !== nodeId) { return node; }
-      return {
-        ...node,
-        [nodeAttributesProperty]: omit(node[nodeAttributesProperty], keys(promptAttributes)),
-        promptIDs: node.promptIDs.filter(id => id !== promptId),
-      };
-    });
-}
-
-function getUpdatedNodes(existingNodes, nodeId, newModelData, newAttributeData) {
-  return existingNodes.map((node) => {
-    if (node[nodePrimaryKeyProperty] !== nodeId) { return node; }
-    return {
-      ...node,
-      ...omit(newModelData, 'promptId'),
-      promptIDs: concat(node.promptIDs, newModelData.promptId),
-      [nodeAttributesProperty]: merge(node[nodeAttributesProperty], newAttributeData),
-    };
-  });
-}
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    /**
-     * Add single node using new syntax (modelData, attributeData)
-    */
     case ADD_NODE: {
       return {
         ...state,
-        nodes: getNewNodeList(state.nodes, action.modelData, action.attributeData),
+        nodes: (() => {
+          const {
+            itemType,
+            type,
+            promptId,
+            stageId,
+          } = action.modelData;
+
+          const withModelandAttributeData = {
+            [nodePrimaryKeyProperty]:
+              action.modelData[nodePrimaryKeyProperty] ?
+                action.modelData[nodePrimaryKeyProperty] : uuidv4(),
+            [nodeAttributesProperty]: action.attributeData,
+            promptIDs: [promptId],
+            stageId,
+            type,
+            itemType,
+          };
+
+          return state.nodes.concat(withModelandAttributeData);
+        })(),
       };
     }
     case ADD_NODES: {
       return {
         ...state,
-        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalProperties),
+        nodes: (() => {
+          const withModelandAttributeData = newNode => ({
+            ...action.additionalProperties,
+            [nodePrimaryKeyProperty]: uuidv4(),
+            ...newNode, // second to prevent overwriting existing node UUID (e.g. externalData)
+            [nodeAttributesProperty]: {
+              ...action.additionalProperties[nodeAttributesProperty],
+              ...newNode[nodeAttributesProperty],
+            },
+          });
+
+          return state.nodes.concat(action.nodes.map(withModelandAttributeData));
+        })(),
       };
     }
-    /**
-     * TOGGLE_NODE_ATTRIBUTES
-     */
     case TOGGLE_NODE_ATTRIBUTES: {
-      const updatedNodes = state.nodes.map((node) => {
-        if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) {
-          return node;
-        }
-
-        // If the node's attrs contain the same key/vals, remove them
-        if (isMatch(node[nodeAttributesProperty], action.attributes)) {
-          const omittedKeys = Object.keys(action.attributes);
-          const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
-          return omit(node, nestedProps);
-        }
-
-        // Otherwise, add/update
-        return {
-          ...node,
-          [nodeAttributesProperty]: {
-            ...node[nodeAttributesProperty],
-            ...action.attributes,
-          },
-        };
-      });
-
       return {
         ...state,
-        nodes: updatedNodes,
+        nodes: (
+          () => state.nodes.map(
+            (node) => {
+              if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
+
+              // If the node's attrs contain the same key/vals, remove them
+              if (isMatch(node[nodeAttributesProperty], action.attributes)) {
+                const omittedKeys = Object.keys(action.attributes);
+                const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
+                return omit(node, nestedProps);
+              }
+
+              // Otherwise, add/update
+              return {
+                ...node,
+                [nodeAttributesProperty]: {
+                  ...node[nodeAttributesProperty],
+                  ...action.attributes,
+                },
+              };
+            }, // end node map function
+          )
+        )(),
       };
     }
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(
-          state.nodes,
-          action.nodeID,
-          action.newModelData,
-          action.newAttributeData,
-        ),
+        nodes: (() => state.nodes.map((node) => {
+          if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+          return {
+            ...node,
+            ...omit(action.newModelData, 'promptId'),
+            promptIDs: concat(node.promptIDs, action.newModelData.promptId),
+            [nodeAttributesProperty]: merge(node[nodeAttributesProperty], action.newAttributeData),
+          };
+        })
+        )(),
       };
     }
     case REMOVE_NODE: {
@@ -190,12 +146,17 @@ export default function reducer(state = initialState, action = {}) {
     case REMOVE_NODE_FROM_PROMPT: {
       return {
         ...state,
-        nodes: getActionedNodeList(
-          state.nodes,
-          action.nodeId,
-          action.promptId,
-          action.promptAttributes,
-        ),
+        nodes: (() => state.nodes.map(
+          (node) => {
+            if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+            return {
+              ...node,
+              [nodeAttributesProperty]:
+                omit(node[nodeAttributesProperty], keys(action.promptAttributes)),
+              promptIDs: node.promptIDs.filter(id => id !== action.promptId),
+            };
+          })
+        )(),
       };
     }
     case ADD_EDGE:

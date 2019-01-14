@@ -167,8 +167,7 @@ export const makeNetworkNodesForType = () =>
 /**
  * makeNetworkNodesForPrompt
  *
- * Return a filtered node list containing only nodes that have both the additional attributes
- * specified for this prompt, AND the current promptId.
+ * Return a filtered node list containing only nodes where node IDs contains the current promptId.
 */
 
 export const makeNetworkNodesForPrompt = () => {
