@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, isEqual, pick, has } from 'lodash';
+import { isEmpty, isEqual, pick, has, isNil } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
 
@@ -73,7 +73,9 @@ class NodeLayout extends Component {
       <div className="node-layout">
         { nodes.map((node) => {
           const nodeAttributes = getNodeAttributes(node);
-          if (!has(nodeAttributes, layoutVariable)) { return null; }
+          if (!has(nodeAttributes, layoutVariable) || isNil(nodeAttributes[layoutVariable])) {
+            return null;
+          }
 
           return (
             <LayoutNode

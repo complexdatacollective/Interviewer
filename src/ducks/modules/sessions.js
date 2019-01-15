@@ -1,9 +1,9 @@
-import { isArray, omit } from 'lodash';
+import { omit, each, map } from 'lodash';
 import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { nodePrimaryKeyProperty, ADD_NODES, REMOVE_NODE, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -24,8 +24,10 @@ const withTimestamp = session => ({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_NODES:
+    case ADD_NODE:
+    case BATCH_ADD_NODES:
     case REMOVE_NODE:
+    case REMOVE_NODE_FROM_PROMPT:
     case UPDATE_NODE:
     case TOGGLE_NODE_ATTRIBUTES:
     case ADD_EDGE:
@@ -83,39 +85,53 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 /**
- * Add a node or nodes to the state.
+ * Add a batch of nodes to the state.
  *
- * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalProperties] shared properties to apply to every new node. Note that
- *                                        user data (e.g., the "additionalAttributes" defined in
- *                                        a protocol) should exist under a child property named
- *                                        'attributes'.
+ * @param {Collection} [nodeList] An array of objects representing nodes to add.
+ * @param {Object} [attributeData] Attribute data that will be merged with each node
  *
  * @memberof! NetworkActionCreators
  */
-const addNodes = (nodes, additionalProperties) => (dispatch, getState) => {
-  const { session } = getState();
+const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
+  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const nodeTypes = map(nodeList, 'type');
 
-  let nodeOrNodes = nodes;
-  if (!isArray(nodeOrNodes)) {
-    nodeOrNodes = [nodeOrNodes];
-  }
+  const registryForTypes = {};
+  each(nodeTypes, (nodeType) => {
+    registryForTypes[nodeType] = nodeRegistry[nodeType].variables;
+  });
+
   dispatch({
-    type: ADD_NODES,
-    sessionId: session,
-    nodes: nodeOrNodes,
-    additionalProperties,
+    type: BATCH_ADD_NODES,
+    sessionId,
+    nodeList,
+    attributeData,
+    registryForTypes,
   });
 };
 
-const updateNode = (node, additionalProperties = null) => (dispatch, getState) => {
+const addNode = (modelData, attributeData) => (dispatch, getState) => {
+  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const registryForType = nodeRegistry[modelData.type].variables;
+
+  dispatch({
+    type: ADD_NODE,
+    sessionId,
+    modelData,
+    attributeData,
+    registryForType,
+  });
+};
+
+const updateNode = (nodeId, newModelData, newAttributeData = null) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({
     type: UPDATE_NODE,
     sessionId: session,
-    node,
-    additionalProperties,
+    nodeId,
+    newModelData,
+    newAttributeData,
   });
 };
 
@@ -137,6 +153,18 @@ const removeNode = uid => (dispatch, getState) => {
     type: REMOVE_NODE,
     sessionId: session,
     [nodePrimaryKeyProperty]: uid,
+  });
+};
+
+const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
+  const { session } = getState();
+
+  dispatch({
+    type: REMOVE_NODE_FROM_PROMPT,
+    sessionId: session,
+    nodeId,
+    promptId,
+    promptAttributes,
   });
 };
 
@@ -245,9 +273,11 @@ const exportSessionEpic = (action$, store) => (
 );
 
 const actionCreators = {
-  addNodes,
+  addNode,
+  batchAddNodes,
   updateNode,
   removeNode,
+  removeNodeFromPrompt,
   addEdge,
   toggleEdge,
   removeEdge,
@@ -261,8 +291,10 @@ const actionCreators = {
 };
 
 const actionTypes = {
-  ADD_NODES,
+  ADD_NODE,
+  BATCH_ADD_NODES,
   REMOVE_NODE,
+  REMOVE_NODE_FROM_PROMPT,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   ADD_EDGE,

@@ -7,7 +7,6 @@ import { NodePanels } from '../NodePanels';
 jest.mock('../../ui/utils/CSSVariables');
 
 const mockProps = {
-  toggleNodeAttributes: () => {},
   removeNode: () => {},
   activePromptAttributes: {},
   newNodeAttributes: {},

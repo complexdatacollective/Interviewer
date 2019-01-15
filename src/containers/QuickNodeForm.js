@@ -5,16 +5,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import withPrompt from '../behaviours/withPrompt';
 import { makeGetNodeDisplayVariable } from '../selectors/interface';
-import { makeGetPromptNodeAttributes } from '../selectors/name-generator';
-import { nodeAttributesProperty } from '../ducks/modules/network';
 import { Icon } from '../ui/components/';
 import { Node } from './';
 
 class QuickNodeForm extends PureComponent {
   static propTypes = {
-    addNodes: PropTypes.func.isRequired.isRequired,
-    activePromptAttributes: PropTypes.object.isRequired,
+    addNode: PropTypes.func.isRequired,
     newNodeAttributes: PropTypes.object.isRequired,
+    newNodeModelData: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
     displayVariable: PropTypes.string.isRequired,
     nodeIconName: PropTypes.string.isRequired,
@@ -55,12 +53,14 @@ class QuickNodeForm extends PureComponent {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.addNodes({
-      [nodeAttributesProperty]: {
-        ...this.props.activePromptAttributes,
+    this.props.addNode(
+      this.props.newNodeModelData,
+      {
+        ...this.props.newNodeAttributes,
         [this.props.displayVariable]: this.state.nodeLabel,
       },
-    }, this.props.newNodeAttributes);
+    );
+
     this.setState({
       nodeLabel: '',
     });
@@ -118,12 +118,9 @@ class QuickNodeForm extends PureComponent {
 
 const mapStateToProps = (state, props) => {
   const getNodeDisplayVariable = makeGetNodeDisplayVariable();
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
 
   return {
     displayVariable: getNodeDisplayVariable(state, props),
-    activePromptAttributes: props.prompt.additionalAttributes,
-    newNodeAttributes: getPromptNodeAttributes(state, props),
   };
 };
 

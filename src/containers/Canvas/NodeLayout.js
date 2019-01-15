@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
+import { isNil } from 'lodash';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { has } from 'lodash';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
@@ -21,7 +21,8 @@ const withDropHandlers = withHandlers({
   onDrop: ({ updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y }) =>
     (item) => {
       updateNode(
-        item.meta,
+        item.meta[nodePrimaryKeyProperty],
+        {},
         {
           [layoutVariable]: relativeCoords({ width, height, x, y }, item),
         },
@@ -30,19 +31,18 @@ const withDropHandlers = withHandlers({
       // Horrible hack for performance (only re-render nodes on drop, not on drag)
       setRerenderCount(rerenderCount + 1);
     },
-  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) => (item) => {
-    if (!has(item.meta[nodeAttributesProperty], layoutVariable)) { return; }
-
-    updateNode(
-      item.meta,
-      {
-        [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-      },
-    );
-  },
-  onDragEnd: ({ layoutVariable, setRerenderCount, rerenderCount }) => (item) => {
-    if (!has(item.meta[nodeAttributesProperty], layoutVariable)) { return; }
-
+  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) =>
+    (item) => {
+      if (isNil(item.meta[nodeAttributesProperty][layoutVariable])) { return; }
+      updateNode(
+        item.meta[nodePrimaryKeyProperty],
+        {},
+        {
+          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
+        },
+      );
+    },
+  onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
     // make sure to also re-render nodes that were updated on drag end
     setRerenderCount(rerenderCount + 1);
   },

@@ -30,23 +30,30 @@ const CategoricalItem = ({
 
   return (
     <Flipped flipId={id}>
-      <div className={classNames} style={{ '--categorical-item-color': accentColor }} onClick={onClick} >
-        <Flipped inverseFlipId={id} scale>
-          <div className="categorical-item__title">
-            <h3>{label}</h3>
-            {!isExpanded && <h5>{details}</h5>}
-          </div>
-        </Flipped>
-        {isExpanded &&
-          <div className="categorical-item__content">
-            <NodeList
-              listId={`CATBIN_NODE_LIST_${label}`}
-              id={`CATBIN_NODE_LIST_${label}`}
-              nodes={nodes}
-              sortOrder={sortOrder}
-            />
-          </div>
-        }
+      <div
+        className={classNames}
+        style={{ '--categorical-item-color': accentColor }}
+        onClick={onClick}
+      >
+        <div className="categorical-item__disk" />
+        <div className="categorical-item__inner">
+          <Flipped inverseFlipId={id} scale>
+            <div className="categorical-item__title">
+              <h3>{label}</h3>
+              {!isExpanded && <h5>{details}</h5>}
+            </div>
+          </Flipped>
+          {isExpanded &&
+            <div className="categorical-item__content">
+              <NodeList
+                listId={`CATBIN_NODE_LIST_${label}`}
+                id={`CATBIN_NODE_LIST_${label}`}
+                nodes={nodes}
+                sortOrder={sortOrder}
+              />
+            </div>
+          }
+        </div>
       </div>
     </Flipped>
   );

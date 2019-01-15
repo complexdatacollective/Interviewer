@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit } from 'lodash';
+import { reject, findIndex, isMatch, omit, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -12,8 +12,10 @@ export const nodeAttributesProperty = 'attributes';
 export const primaryKeyPropertyForWorker = 'networkCanvasId';
 export const nodeTypePropertyForWorker = 'networkCanvasType';
 
-export const ADD_NODES = 'ADD_NODES';
+export const ADD_NODE = 'ADD_NODE';
+export const BATCH_ADD_NODES = 'BATCH_ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
+export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
 export const UPDATE_NODE = 'UPDATE_NODE';
 export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 export const ADD_EDGE = 'ADD_EDGE';
@@ -40,105 +42,116 @@ function edgeExists(edges, edge) {
   );
 }
 
-/**
- * All generated data is stored inside an 'attributes' property on the node
- */
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 
 /**
- * existingNodes - Existing network.nodes
- * netNodes - nodes to be added to the network
- * additionalProperties - static props shared to add to each member of newNodes
-*/
-function getNodesWithBatchAdd(existingNodes, newNodes, additionalProperties = {}) {
-  // Create a function to create a UUID and merge node attributes
-  const withModelandAttributeData = newNode => ({
-    ...additionalProperties,
-    [nodePrimaryKeyProperty]: uuidv4(),
-    ...newNode, // second to prevent overwriting existing node UUID (e.g., assigned to externalData)
-    [nodeAttributesProperty]: {
-      ...additionalProperties[nodeAttributesProperty],
-      ...newNode[nodeAttributesProperty],
-    },
-  });
-
-  return existingNodes.concat(newNodes.map(withModelandAttributeData));
-}
-
-/**
- * @param {Array} nodes - the current state.nodes
- * @param {Object} updatingNode - the node to be updated. Will match on _uid.
- * @param {Object} nodeAttributeData - additional attributes to update the node with.
- *                                   If null, then the updatingNode's `attributes` property
- *                                   will overwrite the original node's. Use this to perform
- *                                   a 'full' update, but ensure the entire updated node is
- *                                   passed as `updatingNode`.
+ * This function generates default values for all variables in the variable registry for this node
+ * type.
+ *
+ * @param {object} registryForType - An object containing the variable registry entry for this
+ *                                   node type.
  */
-function getUpdatedNodes(nodes, updatingNode, nodeAttributeData = null) {
-  return nodes.map((node) => {
-    if (node[nodePrimaryKeyProperty] !== updatingNode[nodePrimaryKeyProperty]) { return node; }
 
-    const updatedNode = {
-      ...node,
-      ...updatingNode,
-      [nodePrimaryKeyProperty]: node[nodePrimaryKeyProperty],
-    };
+const getDefaultAttributesForNodeType = (registryForType) => {
+  const defaultAttributesObject = {};
 
-    if (nodeAttributeData) {
-      updatedNode[nodeAttributesProperty] = {
-        ...node[nodeAttributesProperty],
-        ...updatingNode[nodeAttributesProperty],
-        ...nodeAttributeData,
-      };
-    }
-
-    return updatedNode;
+  // Boolean variables are initialised as `false`, and everything else as `null`
+  Object.keys(registryForType).forEach((key) => {
+    defaultAttributesObject[key] = registryForType[key].type === 'boolean' ? false : null;
   });
-}
+
+  return defaultAttributesObject;
+};
+
+
+const nodeWithModelandAttributeData = (modelData, attributeData, defaultAttributeData = {}) => ({
+  ...omit(modelData, 'promptId'),
+  [nodePrimaryKeyProperty]:
+    modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
+  [nodeAttributesProperty]: {
+    ...getDefaultAttributesForNodeType(defaultAttributeData),
+    ...modelData[nodeAttributesProperty],
+    ...attributeData,
+  },
+  promptIDs: [modelData.promptId],
+  stageId: modelData.stageId,
+  type: modelData.type,
+  itemType: modelData.itemType,
+});
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case ADD_NODES: {
+    case ADD_NODE: {
       return {
         ...state,
-        nodes: getNodesWithBatchAdd(state.nodes, action.nodes, action.additionalProperties),
+        nodes: (
+          () => state.nodes.concat(
+            nodeWithModelandAttributeData(
+              action.modelData,
+              action.attributeData,
+              action.registryForType,
+            ),
+          )
+        )(),
       };
     }
-    /**
-     * TOGGLE_NODE_ATTRIBUTES
-     */
-    case TOGGLE_NODE_ATTRIBUTES: {
-      const updatedNodes = state.nodes.map((node) => {
-        if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) {
-          return node;
-        }
-
-        // If the node's attrs contain the same key/vals, remove them
-        if (isMatch(node[nodeAttributesProperty], action.attributes)) {
-          const omittedKeys = Object.keys(action.attributes);
-          const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
-          return omit(node, nestedProps);
-        }
-
-        // Otherwise, add/update
-        return {
-          ...node,
-          [nodeAttributesProperty]: {
-            ...node[nodeAttributesProperty],
-            ...action.attributes,
-          },
-        };
-      });
-
+    case BATCH_ADD_NODES: {
       return {
         ...state,
-        nodes: updatedNodes,
+        nodes: (() =>
+          state.nodes.concat(action.nodeList.map(node => nodeWithModelandAttributeData(
+            node,
+            action.attributeData,
+            action.registryForTypes[node.type],
+          )))
+        )(),
+      };
+    }
+    case TOGGLE_NODE_ATTRIBUTES: {
+      return {
+        ...state,
+        nodes: (
+          () => state.nodes.map(
+            (node) => {
+              if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
+
+              // If the node's attrs contain the same key/vals, remove them
+              if (isMatch(node[nodeAttributesProperty], action.attributes)) {
+                const omittedKeys = Object.keys(action.attributes);
+                const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
+                return omit(node, nestedProps);
+              }
+
+              // Otherwise, add/update
+              return {
+                ...node,
+                [nodeAttributesProperty]: {
+                  ...node[nodeAttributesProperty],
+                  ...action.attributes,
+                },
+              };
+            }, // end node map function
+          )
+        )(),
       };
     }
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: getUpdatedNodes(state.nodes, action.node, action.additionalProperties),
+        nodes: (() => state.nodes.map((node) => {
+          if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+          return {
+            ...node,
+            ...omit(action.newModelData, 'promptId'),
+            promptIDs: action.newModelData.promptId ?
+              [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
+            [nodeAttributesProperty]: {
+              ...node[nodeAttributesProperty],
+              ...action.newAttributeData,
+            },
+          };
+        })
+        )(),
       };
     }
     case REMOVE_NODE: {
@@ -149,6 +162,22 @@ export default function reducer(state = initialState, action = {}) {
           node[nodePrimaryKeyProperty] === removenodePrimaryKeyProperty),
         edges: reject(state.edges, edge =>
           edge.from === removenodePrimaryKeyProperty || edge.to === removenodePrimaryKeyProperty),
+      };
+    }
+    case REMOVE_NODE_FROM_PROMPT: {
+      return {
+        ...state,
+        nodes: (() => state.nodes.map(
+          (node) => {
+            if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+            return {
+              ...node,
+              [nodeAttributesProperty]:
+                omit(node[nodeAttributesProperty], keys(action.promptAttributes)),
+              promptIDs: node.promptIDs.filter(id => id !== action.promptId),
+            };
+          })
+        )(),
       };
     }
     case ADD_EDGE:
@@ -188,7 +217,8 @@ export default function reducer(state = initialState, action = {}) {
 const actionCreators = {};
 
 const actionTypes = {
-  ADD_NODES,
+  ADD_NODE,
+  BATCH_ADD_NODES,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,

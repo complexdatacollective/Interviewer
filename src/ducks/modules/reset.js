@@ -1,6 +1,5 @@
-import { omit } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
-import { nodeAttributesProperty } from './network';
+import { nodePrimaryKeyProperty } from './network';
 import { actionCreators as deviceActions } from './deviceSettings';
 
 const RESET_STATE = 'RESET_STATE';
@@ -9,11 +8,33 @@ const RESET_PROPERTY_FOR_ALL_NODES = 'RESET/PROPERTY_FOR_ALL_NODES';
 
 const resetPropertyForAllNodes = property =>
   (dispatch, getState) => {
-    const { session } = getState();
-    const { sessions: { [session]: { network: { nodes } } } } = getState();
+    const { session: sessionId } = getState();
+    const {
+      sessions: {
+        [sessionId]: {
+          network: { nodes },
+        },
+      },
+      protocol: {
+        variableRegistry: {
+          node: nodeRegistry,
+        },
+      },
+    } = getState();
 
-    nodes.forEach(node => dispatch(
-      sessionsActions.updateNode(omit(node, `${nodeAttributesProperty}.${property}`))));
+    nodes.forEach((node) => {
+      const registryForType = nodeRegistry[node.type].variables;
+      const variableType = registryForType[property].type;
+      dispatch(
+        sessionsActions.updateNode(
+          node[nodePrimaryKeyProperty],
+          {},
+          {
+            [property]: variableType === 'boolean' ? false : null,
+          },
+        ),
+      );
+    });
   };
 
 const resetEdgesOfType = edgeType =>

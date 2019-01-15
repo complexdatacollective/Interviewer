@@ -1,14 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, isMatch, reject } from 'lodash';
+import { findKey, filter, includes } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
   getNodeAttributes,
-  nodeAttributesProperty,
 } from '../ducks/modules/network';
 import {
   asExportableNetwork,
@@ -60,6 +59,7 @@ export const getWorkerNetwork = createDeepEqualSelector(
   (network, registry) => asWorkerAgentNetwork(network, registry),
 );
 
+// Returns current stage and prompt ID
 export const makeGetIds = () =>
   createSelector(
     propStageId, propPromptId,
@@ -79,8 +79,7 @@ export const makeGetSubject = () =>
   );
 
 const nodeTypeIsDefined = (variableRegistry, nodeType) =>
-  variableRegistry.node &&
-  !!variableRegistry.node[nodeType];
+  variableRegistry.node && !!variableRegistry.node[nodeType];
 
 // TODO: Once schema validation is in place, we don't need these asserts.
 export const makeGetSubjectType = () => (createSelector(
@@ -166,34 +165,30 @@ export const makeNetworkNodesForType = () =>
 
 /**
  * makeNetworkNodesForPrompt
- * Take the "additional attributes" specified by the current prompt, and filter nodes of the current
- * prompt type
+ *
+ * Return a filtered node list containing only nodes where node IDs contains the current promptId.
 */
 
 export const makeNetworkNodesForPrompt = () => {
-  const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
-
   return createSelector(
-    networkNodesForSubject, getAttributes,
-    (nodes, attributes) =>
-      filter(nodes, { [nodeAttributesProperty]: attributes }),
+    networkNodesForSubject, propPromptId,
+    (nodes, promptId) => filter(nodes, node => includes(node.promptIDs, promptId)),
   );
 };
 
 /**
  * makeNetworkNodesForOtherPrompts()
- * Same as above, except returns a filtered node list that **excludes** nodes that match.
+ *
+ * Same as above, except returns a filtered node list that **excludes** nodes that match the current
+ * prompt's promptId.
 */
 
 export const makeNetworkNodesForOtherPrompts = () => {
-  // used to check prompt ids
-  const getAttributes = makeGetAdditionalAttributes();
   const networkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, getAttributes,
-    (nodes, attributes) =>
-      reject(nodes, node => isMatch(getNodeAttributes(node), attributes)),
+    networkNodesForSubject, propPromptId,
+    (nodes, promptId) => filter(nodes, node => !includes(node.promptIDs, promptId)),
   );
 };

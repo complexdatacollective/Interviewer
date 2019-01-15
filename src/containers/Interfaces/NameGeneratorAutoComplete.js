@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { map } from 'lodash';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,15 +11,10 @@ import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
-import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes } from '../../selectors/interface';
-import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeAttributes } from '../../selectors/name-generator';
+import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
-
-const networkNodesForPrompt = makeNetworkNodesForPrompt();
-const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-const getNodeType = makeGetSubjectType();
-const getNodeIconName = makeGetNodeIconName();
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -26,7 +22,12 @@ const getNodeIconName = makeGetNodeIconName();
   */
 class NameGeneratorAutoComplete extends Component {
   onSearchComplete(selectedResults) {
-    this.props.addNodes(selectedResults, this.props.newNodeAttributes);
+    const withNewModelData = map(selectedResults, result => ({
+      ...this.props.newNodeModelData,
+      ...result,
+    }));
+
+    this.props.batchAddNodes(withNewModelData, this.props.newNodeAttributes);
     this.props.closeSearch();
   }
 
@@ -113,12 +114,13 @@ class NameGeneratorAutoComplete extends Component {
 }
 
 NameGeneratorAutoComplete.propTypes = {
-  addNodes: PropTypes.func.isRequired,
+  batchAddNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   getLabel: PropTypes.func.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
+  newNodeModelData: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
   nodeType: PropTypes.string.isRequired,
@@ -133,19 +135,26 @@ NameGeneratorAutoComplete.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
+    batchAddNodes: bindActionCreators(sessionsActions.batchAddNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };
 }
 
 function makeMapStateToProps() {
+  const networkNodesForPrompt = makeNetworkNodesForPrompt();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
+  const getPromptNodeModelData = makeGetPromptNodeModelData();
+  const getNodeType = makeGetSubjectType();
+  const getNodeIconName = makeGetNodeIconName();
+
   return function mapStateToProps(state, props) {
     return {
       excludedNodes: networkNodes(state, props),
       getLabel: getNodeLabelFunction(state),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
+      newNodeModelData: getPromptNodeModelData(state, props),
       nodeIconName: getNodeIconName(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
