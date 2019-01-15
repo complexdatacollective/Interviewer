@@ -1,9 +1,9 @@
-import { isArray, omit } from 'lodash';
+import { omit, each, map, uniq } from 'lodash';
 import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { nodePrimaryKeyProperty, ADD_NODE, ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -25,7 +25,7 @@ const withTimestamp = session => ({
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE:
-    case ADD_NODES:
+    case BATCH_ADD_NODES:
     case REMOVE_NODE:
     case REMOVE_NODE_FROM_PROMPT:
     case UPDATE_NODE:
@@ -95,29 +95,37 @@ export default function reducer(state = initialState, action = {}) {
  *
  * @memberof! NetworkActionCreators
  */
-const addNodes = (nodes, additionalProperties) => (dispatch, getState) => {
-  const { session } = getState();
+const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
+  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const one = map(nodeList, 'type');
+  console.log(one);
+  const two = uniq(one);
+  console.log(two);
 
-  let nodeOrNodes = nodes;
-  if (!isArray(nodeOrNodes)) {
-    nodeOrNodes = [nodeOrNodes];
-  }
+  const registryForTypes = {};
+  each(two, (nodeType) => {
+    registryForTypes[nodeType] = nodeRegistry[nodeType].variables;
+  });
+
   dispatch({
-    type: ADD_NODES,
-    sessionId: session,
-    nodes: nodeOrNodes,
-    additionalProperties,
+    type: BATCH_ADD_NODES,
+    sessionId,
+    nodeList,
+    attributeData,
+    registryForTypes,
   });
 };
 
 const addNode = (modelData, attributeData) => (dispatch, getState) => {
-  const { session } = getState();
+  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const registryForType = nodeRegistry[modelData.type].variables;
 
   dispatch({
     type: ADD_NODE,
-    sessionId: session,
+    sessionId,
     modelData,
     attributeData,
+    registryForType,
   });
 };
 
@@ -272,7 +280,7 @@ const exportSessionEpic = (action$, store) => (
 
 const actionCreators = {
   addNode,
-  addNodes,
+  batchAddNodes,
   updateNode,
   removeNode,
   removeNodeFromPrompt,
@@ -290,7 +298,7 @@ const actionCreators = {
 
 const actionTypes = {
   ADD_NODE,
-  ADD_NODES,
+  BATCH_ADD_NODES,
   REMOVE_NODE,
   REMOVE_NODE_FROM_PROMPT,
   UPDATE_NODE,

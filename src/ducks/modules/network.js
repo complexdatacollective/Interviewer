@@ -13,7 +13,7 @@ export const primaryKeyPropertyForWorker = 'networkCanvasId';
 export const nodeTypePropertyForWorker = 'networkCanvasType';
 
 export const ADD_NODE = 'ADD_NODE';
-export const ADD_NODES = 'ADD_NODES';
+export const BATCH_ADD_NODES = 'BATCH_ADD_NODES';
 export const REMOVE_NODE = 'REMOVE_NODE';
 export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
 export const UPDATE_NODE = 'UPDATE_NODE';
@@ -44,50 +44,67 @@ function edgeExists(edges, edge) {
 
 export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
 
+/**
+ * This function generates default values for all variables in the variable registry for this node
+ * type.
+ *
+ * @param {object} registryForType - An object containing the variable registry entry for this
+ *                                   node type.
+ */
+
+const getDefaultAttributesForNodeType = (registryForType) => {
+  const defaultAttributesObject = {};
+
+  // Boolean variables are initialised as `false`, and everything else as `null`
+  Object.keys(registryForType).forEach((key) => {
+    defaultAttributesObject[key] = registryForType[key].type === 'boolean' ? false : null;
+  });
+
+  return defaultAttributesObject;
+};
+
+
+const nodeWithModelandAttributeData = (modelData, attributeData, defaultAttributeData = {}) => ({
+  ...modelData,
+  [nodePrimaryKeyProperty]:
+    modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
+  [nodeAttributesProperty]: {
+    ...getDefaultAttributesForNodeType(defaultAttributeData),
+    ...modelData[nodeAttributesProperty],
+    ...attributeData,
+  },
+  promptIDs: [modelData.promptId],
+  stageId: modelData.stageId,
+  type: modelData.type,
+  itemType: modelData.itemType,
+});
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE: {
       return {
         ...state,
-        nodes: (() => {
-          const {
-            itemType,
-            type,
-            promptId,
-            stageId,
-          } = action.modelData;
-
-          const withModelandAttributeData = {
-            [nodePrimaryKeyProperty]:
-              action.modelData[nodePrimaryKeyProperty] ?
-                action.modelData[nodePrimaryKeyProperty] : uuidv4(),
-            [nodeAttributesProperty]: action.attributeData,
-            promptIDs: [promptId],
-            stageId,
-            type,
-            itemType,
-          };
-
-          return state.nodes.concat(withModelandAttributeData);
-        })(),
+        nodes: (
+          () => state.nodes.concat(
+            nodeWithModelandAttributeData(
+              action.modelData,
+              action.attributeData,
+              action.registryForType,
+            ),
+          )
+        )(),
       };
     }
-    case ADD_NODES: {
+    case BATCH_ADD_NODES: {
       return {
         ...state,
-        nodes: (() => {
-          const withModelandAttributeData = newNode => ({
-            ...action.additionalProperties,
-            [nodePrimaryKeyProperty]: uuidv4(),
-            ...newNode, // second to prevent overwriting existing node UUID (e.g. externalData)
-            [nodeAttributesProperty]: {
-              ...action.additionalProperties[nodeAttributesProperty],
-              ...newNode[nodeAttributesProperty],
-            },
-          });
-
-          return state.nodes.concat(action.nodes.map(withModelandAttributeData));
-        })(),
+        nodes: (() =>
+          state.nodes.concat(action.nodeList.map(node => nodeWithModelandAttributeData(
+            node,
+            action.attributeData,
+            action.registryForTypes[node.type],
+          )))
+        )(),
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
@@ -196,7 +213,7 @@ export default function reducer(state = initialState, action = {}) {
 const actionCreators = {};
 
 const actionTypes = {
-  ADD_NODES,
+  BATCH_ADD_NODES,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
