@@ -151,6 +151,9 @@
             "null"
           ]
         },
+        "quickAdd": {
+          "type": "boolean"
+        },
         "subject": {
           "$ref": "#/definitions/Subject"
         },
