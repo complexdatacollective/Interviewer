@@ -144,7 +144,7 @@ export default function reducer(state = initialState, action = {}) {
             ...node,
             ...omit(action.newModelData, 'promptId'),
             promptIDs: action.newModelData.promptId ?
-              node.promptIDs.push(action.newModelData.promptId) : node.promptIDs,
+              [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
             [nodeAttributesProperty]: {
               ...node[nodeAttributesProperty],
               ...action.newAttributeData,

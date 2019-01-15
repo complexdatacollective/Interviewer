@@ -3,7 +3,6 @@
 import faker from 'faker';
 import { has, times } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
-import { nodeAttributesProperty } from './network';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 
@@ -29,29 +28,25 @@ const mockValue = (nodeVariable) => {
 };
 
 const generateNodes = (variableDefs, typeKey, howMany = 0, additionalAttributes = {}) =>
-  (dispatch) => {
-    const mockNodes = times(howMany, () => {
-      const mockAttrs = Object.entries(variableDefs).reduce((acc, [variableId, variable]) => {
-        if (!has(additionalAttributes, variableId)) {
-          acc[variableId] = mockValue(variable);
-        }
-        return acc;
-      }, {});
+  dispatch =>
+    times(howMany, () => {
+      const mockAttributes = Object.entries(variableDefs).reduce(
+        (acc, [variableId, variable]) => {
+          if (!has(additionalAttributes, variableId)) {
+            acc[variableId] = mockValue(variable);
+          }
+          return acc;
+        }, {},
+      );
 
-      return {
-        [nodeAttributesProperty]: mockAttrs,
+      const modelData = {
+        promptIDs: ['mock'],
+        stageId: 'mock',
+        type: typeKey,
       };
+
+      dispatch(sessionsActions.addNode(modelData, mockAttributes));
     });
-
-    const additionalProperties = {
-      promptId: 'mock',
-      stageId: 'mock',
-      type: typeKey,
-      [nodeAttributesProperty]: additionalAttributes,
-    };
-
-    return dispatch(sessionsActions.addNodes(mockNodes, { ...additionalProperties }));
-  };
 
 const actionCreators = {
   generateNodes,

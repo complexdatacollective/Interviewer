@@ -27,7 +27,7 @@ const willAccept = (accepts, source) => {
       ...source,
     });
   } catch (e) {
-    console.log('Error in accept() function', e, source); // eslint-disable-line no-console
+    console.warn('Error in accept() function', e, source); // eslint-disable-line no-console
     return false;
   }
 };
@@ -104,7 +104,6 @@ const triggerDrag = (state, source) => {
   source.setValidMove(true);
 
   if (some(hits.obstacles, { isOver: true }) || hits.source.isOutOfBounds) {
-    console.log('here');
     source.setValidMove(false);
     return;
   }
