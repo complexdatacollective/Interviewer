@@ -12,8 +12,6 @@ const mockState = {
   edges: [],
 };
 
-const UIDPattern = /[a-f\d]+-/;
-
 describe('network reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual(mockState);

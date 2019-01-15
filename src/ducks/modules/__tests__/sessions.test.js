@@ -116,7 +116,6 @@ describe('sessions reducer', () => {
 });
 
 describe('sessions actions', () => {
-
   it('should create an BATCH_ADD_NODES action for batch adding', () => {
     const store = mockStore({
       sessions: { a: {} },
