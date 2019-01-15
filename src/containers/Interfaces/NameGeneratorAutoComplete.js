@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { map, merge } from 'lodash';
+import { map } from 'lodash';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -22,13 +22,11 @@ import { NodeBin, NodeList } from '../../components/';
   */
 class NameGeneratorAutoComplete extends Component {
   onSearchComplete(selectedResults) {
-    console.log(this.props.newNodeModelData);
-
     const withNewModelData = map(selectedResults, result => ({
       ...this.props.newNodeModelData,
       ...result,
     }));
-    console.log(withNewModelData);
+
     this.props.batchAddNodes(withNewModelData, this.props.newNodeAttributes);
     this.props.closeSearch();
   }

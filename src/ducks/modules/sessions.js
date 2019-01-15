@@ -1,4 +1,4 @@
-import { omit, each, map, uniq } from 'lodash';
+import { omit, each, map } from 'lodash';
 import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
@@ -85,25 +85,19 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 /**
- * Add a node or nodes to the state.
+ * Add a batch of nodes to the state.
  *
- * @param {Array|Object} nodes - one or more nodes to add
- * @param {Object} [additionalProperties] shared properties to apply to every new node. Note that
- *                                        user data (e.g., the "additionalAttributes" defined in
- *                                        a protocol) should exist under a child property named
- *                                        'attributes'.
+ * @param {Collection} [nodeList] An array of objects representing nodes to add.
+ * @param {Object} [attributeData] Attribute data that will be merged with each node
  *
  * @memberof! NetworkActionCreators
  */
 const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
   const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
-  const one = map(nodeList, 'type');
-  console.log(one);
-  const two = uniq(one);
-  console.log(two);
+  const nodeTypes = map(nodeList, 'type');
 
   const registryForTypes = {};
-  each(two, (nodeType) => {
+  each(nodeTypes, (nodeType) => {
     registryForTypes[nodeType] = nodeRegistry[nodeType].variables;
   });
 
