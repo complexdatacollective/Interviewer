@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, concat, keys } from 'lodash';
+import { reject, findIndex, isMatch, omit, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -65,7 +65,7 @@ const getDefaultAttributesForNodeType = (registryForType) => {
 
 
 const nodeWithModelandAttributeData = (modelData, attributeData, defaultAttributeData = {}) => ({
-  ...modelData,
+  ...omit(modelData, 'promptId'),
   [nodePrimaryKeyProperty]:
     modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
   [nodeAttributesProperty]: {

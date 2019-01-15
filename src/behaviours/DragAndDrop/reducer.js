@@ -104,6 +104,7 @@ const triggerDrag = (state, source) => {
   source.setValidMove(true);
 
   if (some(hits.obstacles, { isOver: true }) || hits.source.isOutOfBounds) {
+    console.log('here');
     source.setValidMove(false);
     return;
   }

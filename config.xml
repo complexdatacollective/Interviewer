@@ -10,7 +10,7 @@
     <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/supports-screens">
         <supports-screens android:anyDensity="false" android:largeScreens="true" android:normalScreens="false" android:requiresSmallestWidthDp="600" android:resizeable="false" android:smallScreens="false" android:xlargeScreens="true" />
     </edit-config>
-    <content src="index.html" />
+    <content src="http://192.168.1.66:3000/" />
     <access origin="*" />
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
@@ -29,6 +29,7 @@
         <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
     </platform>
     <platform name="ios">
+        <allow-navigation href="*" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />

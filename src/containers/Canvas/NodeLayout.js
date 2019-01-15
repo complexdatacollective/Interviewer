@@ -1,4 +1,5 @@
 import { bindActionCreators } from 'redux';
+import { isNil } from 'lodash';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { withBounds } from '../../behaviours';
@@ -30,15 +31,17 @@ const withDropHandlers = withHandlers({
       // Horrible hack for performance (only re-render nodes on drop, not on drag)
       setRerenderCount(rerenderCount + 1);
     },
-  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) => (item) => {
-    updateNode(
-      item.meta[nodePrimaryKeyProperty],
-      {},
-      {
-        [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-      },
-    );
-  },
+  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) =>
+    (item) => {
+      if (isNil(item.meta[nodeAttributesProperty][layoutVariable])) { return; }
+      updateNode(
+        item.meta[nodePrimaryKeyProperty],
+        {},
+        {
+          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
+        },
+      );
+    },
   onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
     // make sure to also re-render nodes that were updated on drag end
     setRerenderCount(rerenderCount + 1);
