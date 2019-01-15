@@ -24,7 +24,6 @@ class LayoutNode extends PureComponent {
       selected,
       selectedColor,
     } = this.props;
-
     const nodeAttributes = getNodeAttributes(node);
 
     const { x, y } = nodeAttributes[layoutVariable];

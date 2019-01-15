@@ -1,4 +1,4 @@
-import { first, has } from 'lodash';
+import { first, has, isNil } from 'lodash';
 import { networkNodes, networkEdges } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -26,14 +26,14 @@ export const makeGetNextUnplacedNode = () =>
     getSubject,
     getLayout,
     getSortOptions,
-    (nodes, subject, layout, sortOptions) => {
+    (nodes, subject, layoutVariable, sortOptions) => {
       const type = subject && subject.type;
 
       const unplacedNodes = nodes.filter((node) => {
         const attributes = getNodeAttributes(node);
         return (
           node.type === type &&
-          !has(attributes, layout)
+          (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
         );
       });
 
@@ -54,13 +54,13 @@ export const makeGetPlacedNodes = () =>
     networkNodes,
     getSubject,
     getLayout,
-    (nodes, subject, layout) => {
+    (nodes, subject, layoutVariable) => {
       const type = subject && subject.type;
       return nodes.filter((node) => {
         const attributes = getNodeAttributes(node);
         return (
           node.type === type &&
-          has(attributes, layout)
+          (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
         );
       });
     },
