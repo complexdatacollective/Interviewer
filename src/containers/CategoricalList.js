@@ -142,7 +142,7 @@ class CategoricalList extends Component {
     this.props.updateNode(
       meta[nodePrimaryKeyProperty],
       {},
-      { [this.props.activePromptVariable]: [bin.value] },
+      { [this.props.activePromptVariable]: [binValue] },
     );
   };
 
