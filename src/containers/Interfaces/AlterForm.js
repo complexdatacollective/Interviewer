@@ -13,6 +13,7 @@ import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
 import { Progress } from '../../ui/components';
 import { Form } from '../';
+import { getItemComponent } from './Information';
 
 class AlterForm extends Component {
   constructor(props) {
@@ -52,9 +53,7 @@ class AlterForm extends Component {
 
   clickLast = () => {
     if (this.formSubmitAllowed(this.state.activeIndex)) {
-      if (this.props.formDirty(`NODE_FORM_${this.state.activeIndex - 1}`)) {
-        this.props.submitForm(`NODE_FORM_${this.state.activeIndex - 1}`);
-      }
+      this.props.submitForm(`NODE_FORM_${this.state.activeIndex - 1}`);
     }
   }
 
@@ -83,9 +82,7 @@ class AlterForm extends Component {
             if (!this.formSubmitAllowed(submitIndex)) {
               this.swipeRef.current.swiper.slideTo(submitIndex);
             } else {
-              if (this.props.formDirty(`NODE_FORM_${submitIndex - 1}`)) {
-                this.props.submitForm(`NODE_FORM_${submitIndex - 1}`);
-              }
+              this.props.submitForm(`NODE_FORM_${submitIndex - 1}`);
               this.setState({
                 activeIndex: this.swipeRef.current.swiper.activeIndex,
               });
@@ -99,8 +96,8 @@ class AlterForm extends Component {
       <div className="alter-form">
         <Swiper {...params} ref={this.swipeRef} >
           <div key="alter-form__introduction" className="alter-form__introduction">
-            <div>{stage.introductionPanel.title}</div>
-            <div>{stage.introductionPanel.text}</div>
+            <h1>{stage.introductionPanel.title}</h1>
+            <div>{getItemComponent({ content: stage.introductionPanel.text, type: 'text' })}</div>
           </div>
           {stageNodes.map((node, index) => {
             const nodeAttributes = node ? node[nodeAttributesProperty] : {};

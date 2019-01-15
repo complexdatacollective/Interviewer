@@ -1660,7 +1660,7 @@
       "form": "myAlterFormID",
       "introductionPanel": {
         "title": "Introduction to this task",
-        "text": "This is some markdown that explains this interface."
+        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*."
       }
     },
     {
