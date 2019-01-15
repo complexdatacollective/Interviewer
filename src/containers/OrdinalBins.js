@@ -16,7 +16,7 @@ class OrdinalBins extends PureComponent {
     bins: PropTypes.array.isRequired,
     prompt: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
-    toggleNodeAttributes: PropTypes.func.isRequired,
+    updateNode: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -61,9 +61,11 @@ class OrdinalBins extends PureComponent {
         return;
       }
 
-      const newValue = {};
-      newValue[this.props.activePromptVariable] = bin.value;
-      this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty], newValue);
+      this.props.updateNode(
+        meta[nodePrimaryKeyProperty],
+        {},
+        { [this.props.activePromptVariable]: bin.value },
+      );
     };
 
     const accentColor = this.calculateAccentColor(index, missingValue);
@@ -128,7 +130,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

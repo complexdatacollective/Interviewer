@@ -1,12 +1,11 @@
 import React from 'react';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
 
 /**
@@ -72,13 +71,7 @@ function makeMapStateToProps() {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
-  };
-}
-
 export default compose(
   withPrompt,
-  connect(makeMapStateToProps, mapDispatchToProps),
+  connect(makeMapStateToProps),
 )(OrdinalBin);
