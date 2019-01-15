@@ -1,4 +1,4 @@
-import { reject, findIndex, isMatch, omit, merge, concat, keys } from 'lodash';
+import { reject, findIndex, isMatch, omit, concat, keys } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -143,8 +143,12 @@ export default function reducer(state = initialState, action = {}) {
           return {
             ...node,
             ...omit(action.newModelData, 'promptId'),
-            promptIDs: concat(node.promptIDs, action.newModelData.promptId),
-            [nodeAttributesProperty]: merge(node[nodeAttributesProperty], action.newAttributeData),
+            promptIDs: action.newModelData.promptId ?
+              node.promptIDs.push(action.newModelData.promptId) : node.promptIDs,
+            [nodeAttributesProperty]: {
+              ...node[nodeAttributesProperty],
+              ...action.newAttributeData,
+            },
           };
         })
         )(),
