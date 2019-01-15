@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { isDirty, isValid, isSubmitting, reset, submit } from 'redux-form';
+import { isValid, isSubmitting, submit } from 'redux-form';
 import Swiper from 'react-id-swiper';
 
 import { Scroller } from '../../components';
@@ -24,9 +25,25 @@ class AlterForm extends Component {
     };
   }
 
+  onSlideTransition = () => {
+    if (this.swipeRef.current && this.swipeRef.current.swiper) {
+      const submitIndex = this.swipeRef.current.swiper.previousIndex;
+      if (!this.formSubmitAllowed(submitIndex)) {
+        this.swipeRef.current.swiper.slideTo(submitIndex);
+      } else {
+        this.props.submitForm(this.getNodeFormName(submitIndex));
+        this.setState({
+          activeIndex: this.swipeRef.current.swiper.activeIndex,
+        });
+      }
+    }
+  }
+
+  getNodeFormName = activeIndex => `NODE_FORM_${activeIndex - 1}`;
+
   formSubmitAllowed = index => (
     this.swipeRef && this.swipeRef.current.swiper &&
-      this.props.formEnabled(`NODE_FORM_${index - 1}`)
+    this.props.formEnabled(this.getNodeFormName(index))
   );
 
   isStageBeginning = () => (
@@ -53,80 +70,82 @@ class AlterForm extends Component {
 
   clickLast = () => {
     if (this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(`NODE_FORM_${this.state.activeIndex - 1}`);
+      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
     }
   }
 
-  render() {
+  updateAllowSwipes = () => {
+    if (this.swipeRef.current && this.swipeRef.current.swiper) {
+      this.swipeRef.current.swiper.allowTouchMove = this.formSubmitAllowed();
+    }
+  }
+
+  renderNodeForms = () => {
     const {
       defaultFormValues,
       form,
+      updateNode,
       stage,
       stageNodes,
     } = this.props;
 
-    const params = {
+    return (
+      stageNodes.map((node, index) => {
+        const nodeAttributes = node ? node[nodeAttributesProperty] : {};
+
+        const initialValues = {
+          ...defaultFormValues[stage.form],
+          ...nodeAttributes,
+        };
+
+        return (
+          <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
+            <Node {...node} />
+            <div className="alter-form__form-container">
+              <Scroller>
+                <Form
+                  key={node[nodePrimaryKeyProperty]}
+                  {...form}
+                  className="alter-form__form"
+                  initialValues={initialValues}
+                  controls={[]}
+                  autoFocus={false}
+                  form={`NODE_FORM_${index}`}
+                  onSubmit={formData => updateNode(node, formData)}
+                />
+              </Scroller>
+            </div>
+          </div>
+        );
+      })
+    );
+  }
+
+  render() {
+    const {
+      stage,
+      stageNodes,
+    } = this.props;
+
+    const swiperParams = {
       containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
       slidesPerView: 'auto',
       centeredSlides: true,
       on: {
-        touchStart: () => {
-          if (this.swipeRef.current && this.swipeRef.current.swiper) {
-            this.swipeRef.current.swiper.allowTouchMove = this.formSubmitAllowed();
-          }
-        },
-        slideChangeTransitionStart: () => {
-          if (this.swipeRef.current && this.swipeRef.current.swiper) {
-            const submitIndex = this.swipeRef.current.swiper.previousIndex;
-            if (!this.formSubmitAllowed(submitIndex)) {
-              this.swipeRef.current.swiper.slideTo(submitIndex);
-            } else {
-              this.props.submitForm(`NODE_FORM_${submitIndex - 1}`);
-              this.setState({
-                activeIndex: this.swipeRef.current.swiper.activeIndex,
-              });
-            }
-          }
-        },
+        touchStart: this.updateAllowSwipes,
+        slideChangeTransitionStart: this.onSlideTransition,
       },
     };
 
     return (
       <div className="alter-form">
-        <Swiper {...params} ref={this.swipeRef} >
+        <Swiper {...swiperParams} ref={this.swipeRef} >
           <div key="alter-form__introduction" className="alter-form__introduction">
             <h1>{stage.introductionPanel.title}</h1>
             <div>{getItemComponent({ content: stage.introductionPanel.text, type: 'text' })}</div>
           </div>
-          {stageNodes.map((node, index) => {
-            const nodeAttributes = node ? node[nodeAttributesProperty] : {};
-
-            const initialValues = {
-              ...defaultFormValues[stage.form],
-              ...nodeAttributes,
-            };
-
-            return (
-              <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
-                <Node {...node} />
-                <div className="alter-form__form-container">
-                  <Scroller>
-                    <Form
-                      key={node[nodePrimaryKeyProperty]}
-                      {...form}
-                      className="alter-form__form"
-                      initialValues={initialValues}
-                      controls={[]}
-                      autoFocus={false}
-                      form={`NODE_FORM_${index}`}
-                      onSubmit={formData => this.props.updateNode(node, formData)}
-                    />
-                  </Scroller>
-                </div>
-              </div>
-            );
-          })}
+          {this.renderNodeForms()}
         </Swiper>
         <Progress
           max={stageNodes.length + 1}
@@ -138,6 +157,21 @@ class AlterForm extends Component {
   }
 }
 
+AlterForm.propTypes = {
+  defaultFormValues: PropTypes.object.isRequired,
+  form: PropTypes.object,
+  formEnabled: PropTypes.func.isRequired,
+  stage: PropTypes.object.isRequired,
+  stageNodes: PropTypes.array,
+  submitForm: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
+};
+
+AlterForm.defaultProps = {
+  form: {},
+  stageNodes: [],
+};
+
 function makeMapStateToProps() {
   const getStageNodes = makeNetworkNodesForType();
 
@@ -145,15 +179,16 @@ function makeMapStateToProps() {
     const forms = protocolForms(state);
     const defaultFormValues = getDefaultFormValues(state);
     const currentForm = forms[props.stage.form];
+    const entity = currentForm && currentForm.entity;
+    const type = currentForm && currentForm.type;
     const stageNodes = getStageNodes(state, {
       ...props,
-      stage: { ...props.stage, subject: { entity: currentForm.entity, type: currentForm.type } },
+      stage: { ...props.stage, subject: { entity, type } },
     });
 
     return {
       form: currentForm,
       formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
-      formDirty: formName => isDirty(formName)(state),
       defaultFormValues,
       stageNodes,
     };
@@ -161,7 +196,6 @@ function makeMapStateToProps() {
 }
 
 const mapDispatchToProps = dispatch => ({
-  resetValues: bindActionCreators(reset, dispatch),
   updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   submitForm: bindActionCreators(formName => submit(formName), dispatch),
 });
