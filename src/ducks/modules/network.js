@@ -217,6 +217,7 @@ export default function reducer(state = initialState, action = {}) {
 const actionCreators = {};
 
 const actionTypes = {
+  ADD_NODE,
   BATCH_ADD_NODES,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,

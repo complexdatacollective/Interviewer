@@ -24,6 +24,7 @@ const mockStage = {
 const externalNode1 = {
   uid: 'person_1',
   type: 'person',
+  promptIDs: ['promptId123'],
   attributes: {
     name: 'F. Anita',
     nickname: 'Annie',
@@ -35,6 +36,7 @@ const externalNode1 = {
 const externalNode2 = {
   uid: 'person_2',
   type: 'person',
+  promptIDs: ['promptId123'],
   attributes: {
     name: 'H. Barry',
     nickname: 'Baz',
@@ -45,6 +47,7 @@ const externalNode2 = {
 const externalNode3 = {
   uid: 'person_3',
   type: 'person',
+  promptIDs: ['promptId123'],
   attributes: {
     nickname: 'Carl',
     age: 25,
@@ -54,6 +57,7 @@ const externalNode3 = {
 const externalNode4 = {
   id: 4,
   uid: 'person_3',
+  promptIDs: ['promptId123'],
   type: 'person',
   attributes: {
     age: 25,
@@ -93,12 +97,12 @@ const emptyProps = {
   stage: {},
 };
 
-const personNode = { uid: 1, type: 'person', attributes: { name: 'foo' } };
-const closeFriendNode = { uid: 2, type: 'person', attributes: { name: 'bar', close_friend: true } };
+const personNode = { uid: 1, promptIDs: ['promptIdxxx'], type: 'person', attributes: { name: 'foo' } };
+const closeFriendNode = { uid: 2, promptIDs: ['promptId123'], type: 'person', attributes: { name: 'bar', close_friend: true } };
 const nodes = [
   personNode,
   closeFriendNode,
-  { uid: 3, attributes: { name: 'baz' }, type: 'venue' },
+  { uid: 3, promptIDs: ['promptId456'], attributes: { name: 'baz' }, type: 'venue' },
 ];
 
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];

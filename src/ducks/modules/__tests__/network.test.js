@@ -3,6 +3,7 @@
 import reducer,
 { actionTypes,
   nodePrimaryKeyProperty as PK,
+  nodeAttributesProperty,
 } from '../network';
 
 const mockState = {
@@ -18,88 +19,50 @@ describe('network reducer', () => {
     expect(reducer(undefined, {})).toEqual(mockState);
   });
 
-  it('should handle ADD_NODES with a single node', () => {
+  it('should handle ADD_NODE', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ id: 1, attributes: { name: 'baz' } }],
       },
       {
-        type: actionTypes.ADD_NODES,
-        nodes: [{ attributes: { name: 'foo' } }],
+        type: actionTypes.ADD_NODE,
+        modelData: { [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11' },
+        attributeData: { name: 'foo' },
       },
     );
+    expect(newState.nodes.length).toBe(1);
+    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [nodeAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
 
-    expect(newState.nodes.length).toBe(2);
-    expect(newState.nodes[0]).toEqual({ id: 1, attributes: { name: 'baz' } });
-
-    const newNode = newState.nodes[1];
+    const newNode = newState.nodes[0];
     expect(newNode.attributes.name).toEqual('foo');
-    expect(newNode[PK]).toMatch(UIDPattern);
-  });
-
-  it('should handle ADD_NODES', () => {
-    const newState = reducer(
-      {
-        ...mockState,
-        nodes: [{ [PK]: 1, attributes: { name: 'baz' } }],
-      },
-      {
-        type: actionTypes.ADD_NODES,
-        nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
-      },
-    );
-
-    expect(newState.nodes.length).toBe(3);
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, attributes: { name: 'baz' } });
-    expect(newState.nodes[1]).toMatchObject({ attributes: { name: 'foo' }, [PK]: expect.stringMatching(UIDPattern) });
-    expect(newState.nodes[2]).toMatchObject({ attributes: { name: 'bar' }, [PK]: expect.stringMatching(UIDPattern) });
   });
 
   it('preserves UID when adding a node', () => {
     const newState = reducer(
       mockState,
       {
-        type: actionTypes.ADD_NODES,
-        nodes: [{ attributes: { name: 'foo' }, [PK]: '22' }],
+        type: actionTypes.ADD_NODE,
+        modelData: { [PK]: '22' },
+        attributeData: { name: 'foo' },
       },
     );
     expect(newState.nodes[0][PK]).toEqual('22');
   });
 
-  it('should support additionalProperties for ADD_NODES', () => {
+  it('should support additionalProperties for ADD_NODE', () => {
     const newState = reducer(
       {
         ...mockState,
         nodes: [],
       },
       {
-        type: actionTypes.ADD_NODES,
-        nodes: [{ attributes: { name: 'foo' } }, { attributes: { name: 'bar' } }],
-        additionalProperties: { stageId: '2', attributes: { isFriend: true } },
+        type: actionTypes.ADD_NODE,
+        modelData: {},
+        attributeData: { name: 'foo', isFriend: true },
       },
     );
 
-    expect(newState.nodes[0].stageId).toBe('2');
-    expect(newState.nodes[1].stageId).toBe('2');
     expect(newState.nodes[0].attributes.isFriend).toBe(true);
-    expect(newState.nodes[1].attributes.isFriend).toBe(true);
-    expect(newState.nodes[0].attributes.name).toEqual('foo');
-    expect(newState.nodes[1].attributes.name).toEqual('bar');
-  });
-
-  it('should prefer node.attributes to additionalAttributes.attributes ', () => {
-    const newState = reducer(
-      {
-        ...mockState,
-        nodes: [],
-      },
-      {
-        type: actionTypes.ADD_NODES,
-        nodes: [{ attributes: { name: 'foo' } }],
-        additionalAttributes: { attributes: { name: 'defaultName' } },
-      },
-    );
     expect(newState.nodes[0].attributes.name).toEqual('foo');
   });
 
@@ -136,14 +99,16 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, id: 1, name: 'baz' }],
+        nodes: [{ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'baz' } }],
       },
       {
         type: actionTypes.UPDATE_NODE,
-        node: { [PK]: 1, name: 'foo' },
+        nodeId: 1,
+        newModelData: {},
+        newAttributeData: { name: 'foo' },
       },
     );
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, name: 'foo' });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'foo' } });
   });
 
   it('toggles node attributes on', () => {
