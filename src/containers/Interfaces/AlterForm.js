@@ -15,6 +15,7 @@ import { protocolForms } from '../../selectors/protocol';
 import { Progress } from '../../ui/components';
 import { Form } from '../';
 import { getItemComponent } from './Information';
+import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
 class AlterForm extends Component {
   constructor(props) {
@@ -99,21 +100,23 @@ class AlterForm extends Component {
         };
 
         return (
-          <div className="swiper-no-swiping" key={node[nodePrimaryKeyProperty]}>
-            <Node {...node} />
-            <div className="alter-form__form-container">
-              <Scroller>
-                <Form
-                  key={node[nodePrimaryKeyProperty]}
-                  {...form}
-                  className="alter-form__form"
-                  initialValues={initialValues}
-                  controls={[]}
-                  autoFocus={false}
-                  form={`NODE_FORM_${index}`}
-                  onSubmit={formData => updateNode(node, formData)}
-                />
-              </Scroller>
+          <div>
+            <div className="slide-content" key={node[nodePrimaryKeyProperty]}>
+              <Node {...node} />
+              <div className="alter-form__form-container">
+                <Scroller>
+                  <Form
+                    key={node[nodePrimaryKeyProperty]}
+                    {...form}
+                    className="alter-form__form"
+                    initialValues={initialValues}
+                    controls={[]}
+                    autoFocus={false}
+                    form={`NODE_FORM_${index}`}
+                    onSubmit={formData => updateNode(node, formData)}
+                  />
+                </Scroller>
+              </div>
             </div>
           </div>
         );
@@ -130,6 +133,12 @@ class AlterForm extends Component {
     const swiperParams = {
       containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
+      speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+      effect: 'coverflow',
+      coverflowEffect: {
+        rotate: 30,
+        slideShadows: false,
+      },
       slidesPerView: 'auto',
       centeredSlides: true,
       on: {
@@ -141,17 +150,22 @@ class AlterForm extends Component {
     return (
       <div className="alter-form">
         <Swiper {...swiperParams} ref={this.swipeRef} >
-          <div key="alter-form__introduction" className="alter-form__introduction">
-            <h1>{stage.introductionPanel.title}</h1>
-            <div>{getItemComponent({ content: stage.introductionPanel.text, type: 'text' })}</div>
+          <div>
+            <div key="alter-form__introduction" className="slide-content alter-form__introduction">
+              <h1>{stage.introductionPanel.title}</h1>
+              <div>{getItemComponent({ content: stage.introductionPanel.text, type: 'text' })}</div>
+            </div>
           </div>
+
           {this.renderNodeForms()}
         </Swiper>
-        <Progress
-          max={stageNodes.length + 1}
-          value={this.state.activeIndex + 1}
-          className="alter-form__progress"
-        />
+        <div className="progress-container">
+          <Progress
+            max={stageNodes.length + 1}
+            value={this.state.activeIndex + 1}
+            className="alter-form__progress"
+          />
+        </div>
       </div>
     );
   }
