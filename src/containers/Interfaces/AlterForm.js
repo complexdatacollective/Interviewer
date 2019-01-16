@@ -30,10 +30,12 @@ class AlterForm extends Component {
   onSlideTransition = () => {
     if (this.swipeRef.current && this.swipeRef.current.swiper) {
       const submitIndex = this.swipeRef.current.swiper.previousIndex;
+      // try to submit (on fail, form is "touched" and errors can show)
+      this.props.submitForm(this.getNodeFormName(submitIndex));
       if (!this.formSubmitAllowed(submitIndex)) {
-        this.swipeRef.current.swiper.slideTo(submitIndex);
+        this.swipeRef.current.swiper.slideTo(submitIndex,
+          getCSSVariableAsNumber('--animation-duration-fast-ms'), false);
       } else {
-        this.props.submitForm(this.getNodeFormName(submitIndex));
         this.setState({
           activeIndex: this.swipeRef.current.swiper.activeIndex,
         });
@@ -59,28 +61,23 @@ class AlterForm extends Component {
   );
 
   clickNext = () => {
-    if (this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex)) {
-      this.swipeRef.current.swiper.slideNext();
+    if (this.swipeRef && this.swipeRef.current) {
+      if (this.swipeRef.current.swiper.isEnd) {
+        this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+      } else {
+        this.swipeRef.current.swiper.slideNext();
+      }
     }
   };
 
   clickPrevious = () => {
-    if (this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex)) {
+    if (this.swipeRef && this.swipeRef.current) {
       this.swipeRef.current.swiper.slidePrev();
     }
   };
 
   clickLast = () => {
-    if (this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-  }
-
-  updateAllowSwipes = () => {
-    if (this.swipeRef.current && this.swipeRef.current.swiper) {
-      this.swipeRef.current.swiper.allowTouchMove = this.formSubmitAllowed(
-        this.swipeRef.current.swiper.activeIndex);
-    }
+    this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
   }
 
   renderNodeForms = () => {
@@ -144,7 +141,6 @@ class AlterForm extends Component {
       slidesPerView: 'auto',
       centeredSlides: true,
       on: {
-        touchStart: this.updateAllowSwipes,
         slideChangeTransitionStart: this.onSlideTransition,
       },
     };
