@@ -23,6 +23,7 @@
     height: 75vh;
 
     .slide-content {
+      display: flex;
       max-height: 70vh;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
@@ -34,11 +35,14 @@
       &.alter-form__introduction {
         align-self: center;
         height: auto;
+        max-height: 80vh;
         background: var(--color-platinum--dark);
         color: var(--text-dark);
         width: auto;
         padding: unit(6);
         left: 0;
+        overflow: hidden;
+        flex-direction: column;
 
         h1 {
           text-align: center;
@@ -70,7 +74,7 @@
   }
 
   &__form-container {
-    height: 100%;
+    height: inherit;
     margin-left: calc(var(--base-node-size) * .4);
   }
 
