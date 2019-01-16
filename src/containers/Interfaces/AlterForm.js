@@ -41,7 +41,7 @@ class AlterForm extends Component {
     }
   }
 
-  getNodeFormName = activeIndex => `NODE_FORM_${activeIndex - 1}`;
+  getNodeFormName = activeIndex => `NODE_FORM_${activeIndex}`;
 
   formSubmitAllowed = index => (
     this.swipeRef && this.swipeRef.current.swiper &&
@@ -78,7 +78,8 @@ class AlterForm extends Component {
 
   updateAllowSwipes = () => {
     if (this.swipeRef.current && this.swipeRef.current.swiper) {
-      this.swipeRef.current.swiper.allowTouchMove = this.formSubmitAllowed();
+      this.swipeRef.current.swiper.allowTouchMove = this.formSubmitAllowed(
+        this.swipeRef.current.swiper.activeIndex);
     }
   }
 
@@ -101,19 +102,18 @@ class AlterForm extends Component {
         };
 
         return (
-          <div>
-            <div className="slide-content" key={node[nodePrimaryKeyProperty]}>
+          <div key={node[nodePrimaryKeyProperty]}>
+            <div className="slide-content">
               <Node {...node} />
               <div className="alter-form__form-container">
                 <Scroller>
                   <Form
-                    key={node[nodePrimaryKeyProperty]}
                     {...form}
                     className="alter-form__form"
                     initialValues={initialValues}
                     controls={[]}
                     autoFocus={false}
-                    form={`NODE_FORM_${index}`}
+                    form={`NODE_FORM_${index + 1}`}
                     onSubmit={formData => updateNode(node, formData)}
                   />
                 </Scroller>

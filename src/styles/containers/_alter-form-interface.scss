@@ -21,10 +21,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 75vh;
+    height: 80%;
 
     .slide-content {
-      max-height: 70vh;
+      display: flex;
+      max-height: 95%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
@@ -35,10 +36,14 @@
       &.alter-form__introduction {
         align-self: center;
         height: auto;
+        max-height: 80vh;
         background: var(--color-platinum--dark);
         color: var(--text-dark);
         width: auto;
         padding: unit(6);
+        left: 0;
+        overflow: hidden;
+        flex-direction: column;
 
         h1 {
           text-align: center;
@@ -71,7 +76,7 @@
   }
 
   &__form-container {
-    height: 100%;
+    height: inherit;
     margin-left: calc(var(--base-node-size) * .4);
   }
 
