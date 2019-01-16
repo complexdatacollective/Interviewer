@@ -135,6 +135,7 @@ class AlterForm extends Component {
       direction: 'vertical',
       speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
       effect: 'coverflow',
+      touchRatio: 2,
       coverflowEffect: {
         rotate: 30,
         slideShadows: false,

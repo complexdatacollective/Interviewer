@@ -107,6 +107,9 @@
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
+            "validation": {
+              "required": true
+            },
             "options": [
               {
                 "label": "Three",
@@ -1065,24 +1068,19 @@
       "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
       "fields": [
         {
-          "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
-          "component": "Text",
-          "label": "What is this person's name?"
-        },
-        {
           "variable": "23c5a7b9-b553-4ff1-b515-6a81999773d2",
           "component": "RadioGroup",
-          "label": "How much do you like likert scales?"
+          "label": "Required likert scale"
         },
         {
           "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c",
           "component": "ToggleButtonGroup",
-          "label": "Which of these other things do you like?"
+          "label": "Which of these does this person like?"
         },
         {
           "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
           "component": "Toggle",
-          "label": "Is the switch below not turned on?"
+          "label": "Does this person have this boolean attribute?"
         }
       ]
     }

@@ -25,9 +25,11 @@
     .slide-content {
       height: 70vh;
       width: 100%;
-      padding: unit(4);
+      padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
+      position: relative;
+      left: calc(var(--base-node-size) * .2);
 
       &.alter-form__introduction {
         align-self: center;
@@ -36,6 +38,7 @@
         color: var(--text-dark);
         width: auto;
         padding: unit(6);
+        left: 0;
 
         h1 {
           text-align: center;
@@ -61,7 +64,7 @@
   .node {
     position: absolute;
     top: calc(50% - var(--base-node-size) /2);
-    left: calc((var(--base-node-size) / -3));
+    left: calc((var(--base-node-size) / -2));
     background: var(--light-background);
     border-radius: 50%;
   }
@@ -72,17 +75,16 @@
   }
 
   &__form {
-    display: flex;
-    flex-wrap: wrap;
+    column-count: 2;
+    margin-top: 2rem;
 
     .form-field-container {
-      flex: calc(50% - 2rem);
-      margin: 1rem;
+      break-inside: avoid;
     }
   }
 
   .progress-container {
-    bottom: unit(2);
+    bottom: unit(4);
     position: absolute;
     z-index: var(--z-panel);
     left: 50%;
@@ -90,6 +92,7 @@
 
     .progress {
       width: 20rem;
+      height: 1.5rem;
     }
 
   }
