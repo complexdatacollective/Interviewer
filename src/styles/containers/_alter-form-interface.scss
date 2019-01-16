@@ -17,8 +17,9 @@
   }
 
   .swiper-slide {
+    @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     height: 75vh;
 
@@ -38,7 +39,6 @@
         color: var(--text-dark);
         width: auto;
         padding: unit(6);
-        left: 0;
 
         h1 {
           text-align: center;
@@ -48,6 +48,7 @@
 
     &.swiper-slide-prev {
       transform: translate3d(0, 0, 0) rotateX(0) rotateY(0deg) !important;
+      opacity: .3;
     }
 
     &.swiper-slide-next {
@@ -84,11 +85,24 @@
   }
 
   .progress-container {
+    @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
     bottom: unit(4);
     position: absolute;
     z-index: var(--z-panel);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 5rem);
+    opacity: 0;
+    text-align: center;
+
+    &__status-text {
+      margin-bottom: 0.5rem;
+    }
+
+
+    &--show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
 
     .progress {
       width: 20rem;

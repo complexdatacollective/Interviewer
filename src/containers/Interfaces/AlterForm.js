@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
@@ -160,10 +161,20 @@ class AlterForm extends Component {
 
           {this.renderNodeForms()}
         </Swiper>
-        <div className="progress-container">
+        <div
+          className={cx(
+            'progress-container',
+            {
+              'progress-container--show': this.state.activeIndex > 0,
+            },
+          )}
+        >
+          <h6 className="progress-container__status-text">
+            <strong>1</strong> of <strong>5</strong>
+          </h6>
           <Progress
-            max={stageNodes.length + 1}
-            value={this.state.activeIndex + 1}
+            max={stageNodes.length}
+            value={this.state.activeIndex}
             className="alter-form__progress"
           />
         </div>
