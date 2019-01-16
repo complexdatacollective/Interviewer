@@ -166,7 +166,7 @@ class AlterForm extends Component {
           )}
         >
           <h6 className="progress-container__status-text">
-            <strong>1</strong> of <strong>5</strong>
+            <strong>{this.state.activeIndex}</strong> of <strong>{stageNodes.length}</strong>
           </h6>
           <Progress
             max={stageNodes.length}
