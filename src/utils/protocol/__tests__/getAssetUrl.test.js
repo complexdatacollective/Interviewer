@@ -2,7 +2,7 @@
 
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
-import assetUrl from '../assetUrl';
+import assetUrl from '../getAssetUrl';
 
 jest.mock('../../filesystem');
 

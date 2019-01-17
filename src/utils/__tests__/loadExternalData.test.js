@@ -17,16 +17,9 @@ const mockFetchResponse = {
 global.fetch = jest.fn(() => Promise.resolve(mockFetchResponse));
 
 describe('loadExternalData', () => {
-  it('returns a cancellable request', (done) => {
-    loadExternalData(mockProtocolName, mockAssetName, mockProtocolType)
-      .then(({ abortController }) => {
-        expect(abortController instanceof AbortController).toBe(true);
-        done();
-      });
-  });
+  it('returns a cancellable request');
   it('request response is json with uids  ', (done) => {
     loadExternalData(mockProtocolName, mockAssetName, mockProtocolType)
-      .then(({ request }) => request)
       .then((result) => {
         expect(result.nodes.length).toBe(mockResult.nodes.length);
         expect(result.nodes.every(

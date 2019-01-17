@@ -47,19 +47,8 @@ const withExternalData = (sourceProperty, dataProperty) =>
   compose(
     connect(mapStateToProps),
     withState(dataProperty, 'setExternalData', null),
-    withState('abortController', 'setAbortController', null),
-    withHandlers({
-      cancelExternalDataRequest: ({ abortController, setAbortController }) =>
-        () => {
-          if (!abortController) { return; }
-          abortController.cancel();
-          setAbortController(null);
-        },
-    }),
     withHandlers({
       loadExternalData: ({
-        setAbortController,
-        cancelExternalDataRequest,
         setExternalData,
         protocolName,
         protocolType,
@@ -67,17 +56,11 @@ const withExternalData = (sourceProperty, dataProperty) =>
         (source) => {
           if (!source) { return; }
 
-          cancelExternalDataRequest();
           setExternalData(null);
 
           loadExternalData(protocolName, source, protocolType)
-            .then(({ request, abortController }) => {
-              setAbortController(abortController);
-              return request;
-            })
             .then((externalData) => {
               setExternalData(externalData);
-              setAbortController(null);
             });
         },
     }),
@@ -94,9 +77,6 @@ const withExternalData = (sourceProperty, dataProperty) =>
         const source = get(this.props, sourceProperty);
         if (!source) { return; }
         this.props.loadExternalData(source);
-      },
-      componentWillUnmount() {
-        this.props.cancelExternalDataRequest();
       },
     }),
     mapProps(
