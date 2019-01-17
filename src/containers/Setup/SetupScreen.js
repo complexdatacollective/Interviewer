@@ -54,7 +54,7 @@ class Setup extends Component {
               <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
               <div className="header-content__title-text">
                 <h1 className="type--title-1">Network Canvas</h1>
-                <h4>Alpha 10 - Porthleven</h4>
+                <h4>Alpha 11 - Cascades</h4>
               </div>
             </div>
             <div className="header-content__nav">
