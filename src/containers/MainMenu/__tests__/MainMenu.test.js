@@ -130,8 +130,7 @@ describe('<MainMenu />', () => {
     it('Mock data button', () => {
       subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
 
-      expect(actions.filter(({ type }) => type === 'ADD_NODES')).toHaveLength(1);
-      expect(actions.filter(({ type }) => type === 'ADD_NODES')[0].nodes).toHaveLength(20);
+      expect(actions.filter(({ type }) => type === 'ADD_NODE')).toHaveLength(20);
       expect(isMenuOpen(subject)).toBe(false);
     });
   });

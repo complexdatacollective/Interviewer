@@ -3,11 +3,11 @@ import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { includes, map, differenceBy } from 'lodash';
-import { networkNodes, makeNetworkNodesForOtherPrompts } from '../selectors/interface';
+import { networkNodes, makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../selectors/interface';
 import { getExternalData } from '../selectors/externalData';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
-import { makeGetPromptNodeAttributes, makeGetPanelConfiguration } from '../selectors/name-generator';
+import { makeGetPanelConfiguration } from '../selectors/name-generator';
 import { Panel, Panels, NodeList } from '../components/';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -17,7 +17,6 @@ import { MonitorDragSource } from '../behaviours/DragAndDrop';
   */
 class NodePanels extends PureComponent {
   static propTypes = {
-    activePromptAttributes: PropTypes.object,
     isDragging: PropTypes.bool,
     meta: PropTypes.object,
     panels: PropTypes.array,
@@ -25,11 +24,10 @@ class NodePanels extends PureComponent {
     newNodeAttributes: PropTypes.object.isRequired,
     removeNode: PropTypes.func.isRequired,
     stage: PropTypes.object,
-    toggleNodeAttributes: PropTypes.func.isRequired,
+    removeNodeFromPrompt: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    activePromptAttributes: {},
     isDragging: false,
     meta: {},
     panels: [],
@@ -40,13 +38,14 @@ class NodePanels extends PureComponent {
   onDrop = ({ meta }, dataSource) => {
     /**
      * Handle a node being dropped into a panel
-     *
-     * If
+     * If this panel is showing the interview network, remove the node from the current prompt.
+     * If it is an external data panel, remove the node form the interview network.
     */
     if (dataSource === 'existing') {
-      this.props.toggleNodeAttributes(
+      this.props.removeNodeFromPrompt(
         meta[nodePrimaryKeyProperty],
-        { ...this.props.activePromptAttributes },
+        this.props.prompt.id,
+        this.props.newNodeAttributes,
       );
     } else {
       this.props.removeNode(meta[nodePrimaryKeyProperty]);
@@ -116,12 +115,17 @@ class NodePanels extends PureComponent {
   }
 }
 
-const getNodesForDataSource = ({ nodes, existingNodes, externalData, dataSource }) => (
+/**
+ *
+ * @param {array} nodes - all network nodes
+ *
+ */
+const getNodesForDataSource = ({ sessionNodes, otherPromptNodes, externalData, dataSource }) => (
   dataSource === 'existing' ?
-    existingNodes :
+    otherPromptNodes :
     differenceBy(
-      externalData[dataSource] && externalData[dataSource].nodes,
-      nodes,
+      externalData[dataSource].nodes,
+      sessionNodes,
       nodePrimaryKeyProperty,
     )
 );
@@ -133,13 +137,13 @@ const getOriginNodeIds = ({ existingNodes, externalData, dataSource }) => (
 );
 
 function makeMapStateToProps() {
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
-  const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPanelConfiguration = makeGetPanelConfiguration();
+  const getNetworkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
     const allNodes = networkNodes(state);
-    const existingNodes = networkNodesForOtherPrompts(state, props);
+    const existingNodes = getNetworkNodesForOtherPrompts(state, props);
     const externalData = getExternalData(state);
     const newNodeAttributes = getPromptNodeAttributes(state, props);
 
@@ -152,18 +156,18 @@ function makeMapStateToProps() {
         });
 
         const nodes = getNodesForDataSource({
-          nodes: allNodes,
-          existingNodes,
+          sessionNodes: allNodes,
+          otherPromptNodes: existingNodes,
           externalData,
           dataSource: panel.dataSource,
         });
 
         const accepts = (panel.dataSource === 'existing') ?
           ({ meta }) => (
-            meta.itemType === 'EXISTING_NODE' &&
-            (meta.stageId !== newNodeAttributes.stageId ||
-              meta.promptId !== newNodeAttributes.promptId)
+            // existing network node
+            meta.itemType === 'EXISTING_NODE'
           ) : ({ meta }) => (
+            // external data
             meta.itemType === 'EXISTING_NODE' &&
             includes(originNodeIds, meta[nodePrimaryKeyProperty])
           );
@@ -177,7 +181,7 @@ function makeMapStateToProps() {
       });
 
     return {
-      activePromptAttributes: props.prompt.additionalAttributes,
+      activePromptId: props.prompt.id,
       newNodeAttributes,
       panels,
     };
@@ -186,7 +190,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    removeNodeFromPrompt: bindActionCreators(sessionsActions.removeNodeFromPrompt, dispatch),
     removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { differenceBy } from 'lodash';
+import { differenceBy, omit } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, getNodeAttributes } from '../../ducks/modules/network';
-import { makeNetworkNodesForOtherPrompts, networkNodes } from '../../selectors/interface';
+import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
+import { makeNetworkNodesForOtherPrompts, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
 import {
   getDataByPrompt,
   getCardDisplayLabel,
   getCardAdditionalProperties,
   getSortableFields,
-  makeGetPromptNodeAttributes,
   getInitialSortOrder,
+  makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
 import { ListSelect } from '../../components';
@@ -37,7 +37,15 @@ class NameGeneratorList extends Component {
    * Select node submit handler
    */
   onSubmitNewNode = (node) => {
-    this.props.addNode({ ...node }, { ...this.props.newNodeAttributes });
+    const attributeData = {
+      ...this.props.newNodeAttributes,
+      ...node[nodeAttributesProperty],
+    };
+    const modelData = {
+      ...this.props.newNodeModelData,
+      ...omit(node, nodeAttributesProperty),
+    };
+    this.props.addNode(modelData, attributeData);
   }
 
   onRemoveNode = (node) => {
@@ -101,6 +109,7 @@ NameGeneratorList.propTypes = {
   initialSortOrder: PropTypes.array.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
+  newNodeModelData: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -112,15 +121,9 @@ NameGeneratorList.propTypes = {
   visibleSupplementaryFields: PropTypes.array.isRequired,
 };
 
-// NameGeneratorList.defaultProps = {
-//   initialSortOrder: [{
-//     property: '',
-//     direction: 'asc',
-//   }],
-// };
-
 function makeMapStateToProps() {
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
+  const getPromptNodeModelData = makeGetPromptNodeModelData();
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return function mapStateToProps(state, props) {
@@ -135,6 +138,7 @@ function makeMapStateToProps() {
     return {
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
+      newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,
       initialSortOrder: getInitialSortOrder(state, props),
       selectedNodes: networkNodes(state),
@@ -146,7 +150,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNode: bindActionCreators(sessionsActions.addNodes, dispatch),
+    addNode: bindActionCreators(sessionsActions.addNode, dispatch),
     removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }

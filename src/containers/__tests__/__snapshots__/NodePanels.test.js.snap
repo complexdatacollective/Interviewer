@@ -21,7 +21,6 @@ ShallowWrapper {
         "id": null,
       }
     }
-    toggleNodeAttributes={[Function]}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],

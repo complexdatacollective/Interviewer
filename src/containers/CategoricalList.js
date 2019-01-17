@@ -1,16 +1,48 @@
 import React, { Component } from 'react';
 import { compose, bindActionCreators } from 'redux';
+import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
-
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, makeGetNodeDisplayVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
+import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
+
+const getIsPortrait = (width, height) =>
+  width / height < 1;
+
+const getExpandedSize = bounds => (
+  bounds.height > (bounds.width * 0.67) ?
+    Math.floor(bounds.width * 0.67) :
+    bounds.height
+);
+
+const getItemSize = (bounds, itemCount, expanded = false) => {
+  const expandedSize = getExpandedSize(bounds);
+
+  const width = expanded ? bounds.width - expandedSize : bounds.width;
+
+  const isPortrait = getIsPortrait(width, bounds.height);
+
+  const unexpandedItemCount = expanded ? itemCount - 1 : itemCount;
+
+  const shortCount = [4, 5, 6, 7, 8].includes(unexpandedItemCount) ? 2 : 1;
+  const longCount = shortCount > 1 ? Math.ceil(unexpandedItemCount / 2) : unexpandedItemCount;
+
+  const longSide = isPortrait ? bounds.height : width;
+  const shortSide = isPortrait ? width : bounds.height;
+
+  const x = Math.floor(longSide / longCount);
+  const y = Math.floor(shortSide / shortCount);
+  const z = x < y ? x : y;
+
+  return z;
+};
 
 /**
   * CategoricalList: Renders a list of categorical bin items
@@ -18,15 +50,39 @@ import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } fro
 class CategoricalList extends Component {
   constructor(props) {
     super(props);
-    this.categoricalComponent = React.createRef();
+    this.categoricalListElement = React.createRef();
     this.state = {
       expandedBinValue: '',
     };
   }
 
-  getAvailableHeight() {
-    return this.categoricalComponent.current ? this.categoricalComponent.current.offsetHeight : 0;
+  componentWillMount() {
+    this.colorPresets = [
+      getCSSVariableAsString('--cat-color-seq-1'),
+      getCSSVariableAsString('--cat-color-seq-2'),
+      getCSSVariableAsString('--cat-color-seq-3'),
+      getCSSVariableAsString('--cat-color-seq-4'),
+      getCSSVariableAsString('--cat-color-seq-5'),
+      getCSSVariableAsString('--cat-color-seq-6'),
+      getCSSVariableAsString('--cat-color-seq-7'),
+      getCSSVariableAsString('--cat-color-seq-8'),
+      getCSSVariableAsString('--cat-color-seq-9'),
+      getCSSVariableAsString('--cat-color-seq-10'),
+    ];
   }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+  }
+
+  onResize = throttle(() => {
+    this.forceUpdate();
+  }, 1000 / 60);
 
   getDetails = (nodes) => {
     if (nodes.length === 0) {
@@ -44,92 +100,118 @@ class CategoricalList extends Component {
     return '';
   };
 
-  expandBin = (e, binValue) => {
+  getSizes = () => {
+    if (!this.categoricalListElement.current) {
+      return [];
+    }
+
+    const categoricalListElement = this.categoricalListElement.current;
+
+    const bounds = getAbsoluteBoundingRect(categoricalListElement);
+
+    const expandedSize = getExpandedSize(bounds);
+    const itemSize = getItemSize(
+      bounds,
+      this.props.bins.length,
+      !!this.state.expandedBinValue,
+    );
+
+    return {
+      expandedSize,
+      itemSize,
+    };
+  };
+
+  getCatColor = (itemNumber) => {
+    if (itemNumber >= 0) { return this.colorPresets[itemNumber % this.colorPresets.length]; }
+    return null;
+  };
+
+  handleExpandBin = (e, binValue) => {
     if (e) e.stopPropagation();
     this.setState({
       expandedBinValue: binValue,
     });
   }
 
-  renderCategoricalBin = (bin, index) => {
-    const onDrop = ({ meta }) => {
-      if (getNodeAttributes(meta)[this.props.activePromptVariable] === [bin.value]) {
-        return;
-      }
+  handleDrop = ({ meta }, binValue) => {
+    if (getNodeAttributes(meta)[this.props.activePromptVariable] === [binValue]) {
+      return;
+    }
 
-      this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
-        { [this.props.activePromptVariable]: [bin.value] });
-    };
+    this.props.updateNode(
+      meta[nodePrimaryKeyProperty],
+      {},
+      { [this.props.activePromptVariable]: [binValue] },
+    );
+  };
 
+  renderCategoricalBin = (bin, index, sizes) => {
     const binDetails = this.getDetails(bin.nodes);
 
-    const colorPresets = [
-      getCSSVariableAsString('--cat-color-seq-1'),
-      getCSSVariableAsString('--cat-color-seq-2'),
-      getCSSVariableAsString('--cat-color-seq-3'),
-      getCSSVariableAsString('--cat-color-seq-4'),
-      getCSSVariableAsString('--cat-color-seq-5'),
-      getCSSVariableAsString('--cat-color-seq-6'),
-      getCSSVariableAsString('--cat-color-seq-7'),
-      getCSSVariableAsString('--cat-color-seq-8'),
-      getCSSVariableAsString('--cat-color-seq-9'),
-      getCSSVariableAsString('--cat-color-seq-10'),
-    ];
-
-    const getCatColor = (itemNumber) => {
-      if (itemNumber >= 0) { return colorPresets[itemNumber % colorPresets.length]; }
-      return null;
-    };
+    const itemSize = bin.value === this.state.expandedBinValue ?
+      { width: `${sizes.expandedSize}px`, height: `${sizes.expandedSize}px` } :
+      { width: `${sizes.itemSize}px`, height: `${sizes.itemSize}px` };
 
     return (
-      <CategoricalItem
-        id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
-        key={index}
-        label={bin.label}
-        accentColor={getCatColor(index)}
-        onDrop={item => onDrop(item)}
-        onClick={e => this.expandBin(e, bin.value)}
-        details={binDetails}
-        isExpanded={this.state.expandedBinValue === bin.value}
-        nodes={bin.nodes}
-        sortOrder={this.props.prompt.binSortOrder}
-      />
+      <div
+        className="categorical-list__item"
+        style={itemSize}
+        key={bin.value}
+      >
+        <CategoricalItem
+          id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${bin.value}`}
+          key={bin.value}
+          label={bin.label}
+          accentColor={this.getCatColor(index)}
+          onDrop={item => this.handleDrop(item, bin.value)}
+          onClick={e => this.handleExpandBin(e, bin.value)}
+          details={binDetails}
+          isExpanded={this.state.expandedBinValue === bin.value}
+          nodes={bin.nodes}
+          sortOrder={this.props.prompt.binSortOrder}
+        />
+      </div>
     );
   }
 
   render() {
-    const classNames = cx(
-      'categorical-list__content',
-      { 'categorical-list__content--expanded': this.state.expandedBinValue },
+    const listClasses = cx(
+      'categorical-list',
+      `categorical-list--items--${this.props.bins.length}`,
+      { 'categorical-list--expanded': this.state.expandedBinValue },
     );
-    const styleNames = { '--num-categorical-items': this.props.bins.length };
-    if (this.props.bins.length < 4) {
-      styleNames['--categorical-item-multiplier'] = 1.2;
-    }
+
+    const sizes = this.getSizes();
+
+    // Render before filter, because we need to preserve order for colors.
+    const categoricalBins = this.props.bins
+      .map((bin, index) => this.renderCategoricalBin(bin, index, sizes));
+
+    const expandedBin = categoricalBins
+      .filter((bin, index) =>
+        this.props.bins[index].value === this.state.expandedBinValue,
+      );
+
+    const otherBins = categoricalBins
+      .filter((bin, index) =>
+        this.props.bins[index].value !== this.state.expandedBinValue,
+      );
 
     return (
-      <Flipper flipKey={this.state.expandedBinValue} className="categorical-list">
-        <div
-          className="categorical-list__inner"
-          onClick={e => this.expandBin(e, '', '')}
-          ref={this.categoricalComponent}
-          style={{ '--categorical-available-height': `${Math.floor(this.getAvailableHeight())}px` }}
+      <div
+        className={listClasses}
+        ref={this.categoricalListElement}
+        onClick={e => this.handleExpandBin(e, '')}
+      >
+        <Flipper
+          flipKey={this.state.expandedBinValue}
+          className="categorical-list__items"
         >
-          <div className="categorical-list__expanded-bin">
-            {this.props.bins.map(this.renderCategoricalBin).filter((bin, index) =>
-              this.props.bins[index].value === this.state.expandedBinValue,
-            )}
-          </div>
-          <div
-            className={classNames}
-            style={styleNames}
-          >
-            {this.props.bins.map(this.renderCategoricalBin).filter((bin, index) =>
-              this.props.bins[index].value !== this.state.expandedBinValue,
-            )}
-          </div>
-        </div>
-      </Flipper>
+          {expandedBin}
+          {otherBins}
+        </Flipper>
+      </div>
     );
   }
 }
@@ -140,7 +222,7 @@ CategoricalList.propTypes = {
   displayVariable: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
-  toggleNodeAttributes: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
 };
 
 CategoricalList.defaultProps = {
@@ -180,7 +262,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

@@ -92,12 +92,13 @@ describe('sessions reducer', () => {
     expect(newState[mockSessionId]).toEqual(undefined);
   });
 
-  it('should handle ADD_NODES', () => {
+  it('should handle ADD_NODE', () => {
     const newState = reducer(mockStateWithSession,
       {
-        type: actionTypes.ADD_NODES,
+        type: actionTypes.ADD_NODE,
         sessionId: mockSessionId,
-        nodes: [{}],
+        modelData: {},
+        attributeData: {},
       },
     );
     expect(newState[mockSessionId].network.nodes).toHaveLength(1);
@@ -106,7 +107,7 @@ describe('sessions reducer', () => {
   it('should throw if ADD_NODES called without an active session', () => {
     expect(() => reducer(mockState,
       {
-        type: actionTypes.ADD_NODES,
+        type: actionTypes.ADD_NODE,
         sessionId: 'a',
         nodes: [{}],
       },
@@ -115,30 +116,30 @@ describe('sessions reducer', () => {
 });
 
 describe('sessions actions', () => {
-  it('should create an ADD_NODES action with a single node', () => {
-    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+  it('should create an BATCH_ADD_NODES action for batch adding', () => {
+    const store = mockStore({
+      sessions: { a: {} },
+      session: 'a',
+      protocol: {
+        variableRegistry: {
+          node: {
+            nodeType: {
+              variables: {},
+            },
+          },
+        },
+      },
+    });
 
     const expectedAction = {
-      type: actionTypes.ADD_NODES,
+      type: actionTypes.BATCH_ADD_NODES,
       sessionId: 'a',
-      nodes: [{ name: 'foo' }],
+      nodeList: [],
+      attributeData: {},
+      registryForTypes: {},
     };
 
-    store.dispatch(actionCreators.addNodes({ name: 'foo' }));
-
-    expect(store.getActions()).toEqual([expectedAction]);
-  });
-
-  it('should create an ADD_NODES action for batch adding', () => {
-    const store = mockStore({ sessions: { a: {} }, session: 'a' });
-
-    const expectedAction = {
-      type: actionTypes.ADD_NODES,
-      sessionId: 'a',
-      nodes: [{ name: 'foo' }, { name: 'bar' }],
-    };
-
-    store.dispatch(actionCreators.addNodes([{ name: 'foo' }, { name: 'bar' }]));
+    store.dispatch(actionCreators.batchAddNodes([], {}));
     expect(store.getActions()).toEqual([expectedAction]);
   });
 
@@ -148,11 +149,12 @@ describe('sessions actions', () => {
     const expectedAction = {
       type: actionTypes.UPDATE_NODE,
       sessionId: 'a',
-      node: {},
-      additionalProperties: null,
+      nodeId: {},
+      newAttributeData: null,
+      newModelData: {},
     };
 
-    store.dispatch(actionCreators.updateNode({}));
+    store.dispatch(actionCreators.updateNode({}, {}));
     expect(store.getActions()).toEqual([expectedAction]);
   });
 

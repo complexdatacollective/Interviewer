@@ -13,9 +13,17 @@ export class EdgeLayout extends PureComponent {
     edges: [],
   };
 
-  renderEdge = ({ key, from, to, type }) => (
-    <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />
-  );
+  renderEdge = (edge) => {
+    if (!['key', 'from', 'to', 'type'].every(prop => prop in edge)) {
+      return null;
+    }
+
+    const { key, from, to, type } = edge;
+
+    return (
+      <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />
+    );
+  };
 
   render() {
     const { edges } = this.props;

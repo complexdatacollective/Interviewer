@@ -17,6 +17,7 @@ ShallowWrapper {
             "x": 100,
             "y": 100,
           },
+          "type": "type",
         },
       ]
     }
@@ -53,7 +54,7 @@ ShallowWrapper {
               "y": 100,
             }
           }
-          type={undefined}
+          type="type"
           viewBoxScale={100}
         />
       </svg>,
@@ -79,7 +80,7 @@ ShallowWrapper {
                 "y": 100,
               }
             }
-            type={undefined}
+            type="type"
             viewBoxScale={100}
           />,
         ],
@@ -102,7 +103,7 @@ ShallowWrapper {
               "x": 100,
               "y": 100,
             },
-            "type": undefined,
+            "type": "type",
             "viewBoxScale": 100,
           },
           "ref": null,
@@ -138,7 +139,7 @@ ShallowWrapper {
                 "y": 100,
               }
             }
-            type={undefined}
+            type="type"
             viewBoxScale={100}
           />
         </svg>,
@@ -164,7 +165,7 @@ ShallowWrapper {
                   "y": 100,
                 }
               }
-              type={undefined}
+              type="type"
               viewBoxScale={100}
             />,
           ],
@@ -187,7 +188,7 @@ ShallowWrapper {
                 "x": 100,
                 "y": 100,
               },
-              "type": undefined,
+              "type": "type",
               "viewBoxScale": 100,
             },
             "ref": null,
