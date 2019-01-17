@@ -1663,7 +1663,7 @@
       "form": "myAlterFormID",
       "introductionPanel": {
         "title": "Introduction to the alter form",
-        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n Below this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accomodate that."
+        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n\nBelow this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accomodate that."
       }
     },
     {
