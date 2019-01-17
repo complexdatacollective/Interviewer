@@ -18,7 +18,7 @@ const TAGS = [
   'thematicBreak',
 ];
 
-export const getItemComponent = (item) => {
+const getItemComponent = (item) => {
   switch (item.type) {
     case InformationContentType.text:
       return (

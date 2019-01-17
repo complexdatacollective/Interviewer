@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
+import ReactMarkdown from 'react-markdown';
+
 import Swiper from 'react-id-swiper';
 import { Scroller, ProgressBar } from '../../components';
 import Node from '../Node';
@@ -11,10 +13,21 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-
+import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { Form } from '../';
-import { getItemComponent } from './Information';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
+
+const TAGS = [
+  'break',
+  'emphasis',
+  'heading',
+  'link',
+  'list',
+  'listItem',
+  'paragraph',
+  'strong',
+  'thematicBreak',
+];
 
 class AlterForm extends Component {
   constructor(props) {
@@ -23,22 +36,6 @@ class AlterForm extends Component {
     this.state = {
       activeIndex: 0,
     };
-  }
-
-  onSlideTransition = () => {
-    if (this.swipeRef.current && this.swipeRef.current.swiper) {
-      const submitIndex = this.swipeRef.current.swiper.previousIndex;
-      // try to submit (on fail, form is "touched" and errors can show)
-      this.props.submitForm(this.getNodeFormName(submitIndex));
-      if (!this.formSubmitAllowed(submitIndex)) {
-        this.swipeRef.current.swiper.slideTo(submitIndex,
-          getCSSVariableAsNumber('--animation-duration-fast-ms'), false);
-      } else {
-        this.setState({
-          activeIndex: this.swipeRef.current.swiper.activeIndex,
-        });
-      }
-    }
   }
 
   getNodeFormName = activeIndex => `NODE_FORM_${activeIndex}`;
@@ -60,9 +57,11 @@ class AlterForm extends Component {
 
   clickNext = () => {
     if (this.swipeRef && this.swipeRef.current) {
-      if (this.swipeRef.current.swiper.isEnd) {
-        this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-      } else {
+      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+      if (this.formSubmitAllowed(this.state.activeIndex)) {
+        this.setState({
+          activeIndex: this.state.activeIndex + 1,
+        });
         this.swipeRef.current.swiper.slideNext();
       }
     }
@@ -70,13 +69,15 @@ class AlterForm extends Component {
 
   clickPrevious = () => {
     if (this.swipeRef && this.swipeRef.current) {
+      if (this.formSubmitAllowed(this.state.activeIndex)) {
+        this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+      }
+      this.setState({
+        activeIndex: this.state.activeIndex - 1,
+      });
       this.swipeRef.current.swiper.slidePrev();
     }
   };
-
-  clickLast = () => {
-    this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-  }
 
   renderNodeForms = () => {
     const {
@@ -86,35 +87,26 @@ class AlterForm extends Component {
     } = this.props;
 
     return (
-      stageNodes.map((node, index) => {
-        const nodeAttributes = node ? node[nodeAttributesProperty] : {};
-
-        const initialValues = {
-          ...nodeAttributes,
-        };
-
-        return (
-          <div key={node[nodePrimaryKeyProperty]}>
-            <div className="slide-content">
-              <Node {...node} />
-              <div className="alter-form__form-container">
-                <Scroller>
-                  <Form
-                    {...form}
-                    className="alter-form__form"
-                    initialValues={initialValues}
-                    controls={[]}
-                    autoFocus={false}
-                    form={`NODE_FORM_${index + 1}`}
-                    onSubmit={formData => updateNode(node[nodePrimaryKeyProperty], {}, formData)}
-                  />
-                </Scroller>
-              </div>
+      stageNodes.map((node, index) => (
+        <div key={index}>
+          <div className="slide-content">
+            <Node {...node} />
+            <div className="alter-form__form-container">
+              <Scroller>
+                <Form
+                  {...form}
+                  className="alter-form__form"
+                  initialValues={node[nodeAttributesProperty]}
+                  controls={[]}
+                  autoFocus={false}
+                  form={`NODE_FORM_${index + 1}`}
+                  onSubmit={formData => updateNode(node[nodePrimaryKeyProperty], {}, formData)}
+                />
+              </Scroller>
             </div>
           </div>
-        );
-      })
-    );
+        </div>
+      )));
   }
 
   render() {
@@ -135,10 +127,14 @@ class AlterForm extends Component {
       },
       slidesPerView: 'auto',
       centeredSlides: true,
-      on: {
-        slideChangeTransitionStart: this.onSlideTransition,
-      },
     };
+
+    const progressClasses = cx(
+      'progress-container',
+      {
+        'progress-container--show': this.state.activeIndex > 0,
+      },
+    );
 
     return (
       <div className="alter-form">
@@ -146,20 +142,17 @@ class AlterForm extends Component {
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
               <h1>{stage.introductionPanel.title}</h1>
-              <div>{getItemComponent({ content: stage.introductionPanel.text, type: 'text' })}</div>
+              <ReactMarkdown
+                source={stage.introductionPanel.text}
+                allowedTypes={TAGS}
+                renderers={defaultMarkdownRenderers}
+              />
             </div>
           </div>
 
           {this.renderNodeForms()}
         </Swiper>
-        <div
-          className={cx(
-            'progress-container',
-            {
-              'progress-container--show': this.state.activeIndex > 0,
-            },
-          )}
-        >
+        <div className={progressClasses}>
           <h6 className="progress-container__status-text">
             <strong>{this.state.activeIndex}</strong> of <strong>{stageNodes.length}</strong>
           </h6>

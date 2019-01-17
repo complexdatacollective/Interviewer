@@ -31,11 +31,12 @@ class Protocol extends Component {
 
   // change the stage to the next
   onClickNext = () => {
-    if (this.getInterfaceRef() && !this.getInterfaceRef().isStageEnding()) {
-      this.getInterfaceRef().clickNext();
+    const interfaceRefInstance = this.getInterfaceRefInstance();
+    if (interfaceRefInstance && !interfaceRefInstance.isStageEnding()) {
+      interfaceRefInstance.clickNext();
     } else if (!this.props.stage.prompts || this.props.isLastPrompt()) {
-      if (this.getInterfaceRef()) {
-        this.getInterfaceRef().clickLast();
+      if (interfaceRefInstance) {
+        interfaceRefInstance.clickNext();
       }
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
@@ -45,8 +46,9 @@ class Protocol extends Component {
 
   // change the stage to the previous
   onClickBack = () => {
-    if (this.getInterfaceRef() && !this.getInterfaceRef().isStageBeginning()) {
-      this.getInterfaceRef().clickPrevious();
+    const interfaceRefInstance = this.getInterfaceRefInstance();
+    if (interfaceRefInstance && !interfaceRefInstance.isStageBeginning()) {
+      interfaceRefInstance.clickPrevious();
     } else if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
@@ -54,7 +56,18 @@ class Protocol extends Component {
     }
   }
 
-  getInterfaceRef = () => {
+  /*
+   * Typically an interface would iterate through "prompts" via clicking back and forward.
+   * If an interface needs a different iterative process, (e.g. iterating through a list
+   * of nodes instead of prompts), the interface can be accessed here as a ref.
+   *
+   * Expected callbacks:
+   * isStageEnding - boolean indicating the end of the stage
+   * isStageBeginning - boolean indicating the beginning of the stage
+   * clickNext - callback for the stage's "next" behavior; also called on stage end transition
+   * clickPrevious - callback for the stage's "back" behavior
+   */
+  getInterfaceRefInstance = () => {
     try {
       return (this.interfaceRef && this.interfaceRef.current &&
         this.interfaceRef.current.getWrappedInstance());
