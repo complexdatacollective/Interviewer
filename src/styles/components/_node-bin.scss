@@ -4,18 +4,21 @@
   background-image: url('../images/node-bin.svg');
   background-repeat: no-repeat;
   background-size: contain;
-  width: 60px;
-  height: 80px;
-  transform: translate3d(0, 200px, 0);
+  width: 5rem;
+  height: 7rem;
+  transform: translateY(1.8rem);
   opacity: 0;
+  position: absolute;
+  bottom: 1.8rem;
+  left: 50%;
+  overflow: hidden;
 
   &--active {
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
     opacity: 1;
   }
 
   &--hover {
-    width: 120px;
-    height: 160px;
+    transform: scale(2);
   }
 }

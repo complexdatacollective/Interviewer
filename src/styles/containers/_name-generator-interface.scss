@@ -39,12 +39,4 @@
       @include floating-action-button;
     }
   }
-
-  &__node-bin {
-    position: absolute;
-    bottom: spacing(large);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: var(--z-tooltip);
-  }
 }

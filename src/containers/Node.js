@@ -64,7 +64,6 @@ class Node extends PureComponent {
       color,
       workerUrl,
     } = this.props;
-
     const useWorkerLabel = workerUrl !== false && !this.state.workerError;
     const label = useWorkerLabel ? (this.state.label || '') : this.props.getLabel(this.props);
     return (
