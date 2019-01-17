@@ -7,14 +7,12 @@ import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 
 import Swiper from 'react-id-swiper';
-import { Scroller, ProgressBar } from '../../components';
-import Node from '../Node';
+import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
+import { SlideForm } from '../';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
-import { Form } from '../';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
 const TAGS = [
@@ -79,40 +77,12 @@ class AlterForm extends Component {
     }
   };
 
-  renderNodeForms = () => {
-    const {
-      form,
-      updateNode,
-      stageNodes,
-    } = this.props;
-
-    return (
-      stageNodes.map((node, index) => (
-        <div key={index}>
-          <div className="slide-content">
-            <Node {...node} />
-            <div className="alter-form__form-container">
-              <Scroller>
-                <Form
-                  {...form}
-                  className="alter-form__form"
-                  initialValues={node[nodeAttributesProperty]}
-                  controls={[]}
-                  autoFocus={false}
-                  form={`NODE_FORM_${index + 1}`}
-                  onSubmit={formData => updateNode(node[nodePrimaryKeyProperty], {}, formData)}
-                />
-              </Scroller>
-            </div>
-          </div>
-        </div>
-      )));
-  }
-
   render() {
     const {
+      form,
       stage,
       stageNodes,
+      updateNode,
     } = this.props;
 
     const swiperParams = {
@@ -150,7 +120,9 @@ class AlterForm extends Component {
             </div>
           </div>
 
-          {this.renderNodeForms()}
+          {stageNodes.map((node, index) => (
+            <SlideForm key={index} node={node} index={index} updateNode={updateNode} form={form} />
+          ))}
         </Swiper>
         <div className={progressClasses}>
           <h6 className="progress-container__status-text">

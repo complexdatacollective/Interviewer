@@ -12,3 +12,4 @@ export { default as FormWizard } from './FormWizard';
 export { default as LoadScreen } from './LoadScreen';
 export { default as LoadParamsRoute } from './LoadParamsRoute';
 export { default as CategoricalList } from './CategoricalList';
+export { default as SlideForm } from './SlideForm';
