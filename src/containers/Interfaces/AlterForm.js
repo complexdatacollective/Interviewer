@@ -9,7 +9,6 @@ import { Scroller, ProgressBar } from '../../components';
 import Node from '../Node';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
-import { getDefaultFormValues } from '../../selectors/forms';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
 
@@ -81,10 +80,8 @@ class AlterForm extends Component {
 
   renderNodeForms = () => {
     const {
-      defaultFormValues,
       form,
       updateNode,
-      stage,
       stageNodes,
     } = this.props;
 
@@ -93,7 +90,6 @@ class AlterForm extends Component {
         const nodeAttributes = node ? node[nodeAttributesProperty] : {};
 
         const initialValues = {
-          ...defaultFormValues[stage.form],
           ...nodeAttributes,
         };
 
@@ -110,7 +106,7 @@ class AlterForm extends Component {
                     controls={[]}
                     autoFocus={false}
                     form={`NODE_FORM_${index + 1}`}
-                    onSubmit={formData => updateNode(node, formData)}
+                    onSubmit={formData => updateNode(node[nodePrimaryKeyProperty], {}, formData)}
                   />
                 </Scroller>
               </div>
@@ -175,7 +171,6 @@ class AlterForm extends Component {
 }
 
 AlterForm.propTypes = {
-  defaultFormValues: PropTypes.object.isRequired,
   form: PropTypes.object,
   formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
@@ -194,7 +189,6 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     const forms = protocolForms(state);
-    const defaultFormValues = getDefaultFormValues(state);
     const currentForm = forms[props.stage.form];
     const entity = currentForm && currentForm.entity;
     const type = currentForm && currentForm.type;
@@ -206,7 +200,6 @@ function makeMapStateToProps() {
     return {
       form: currentForm,
       formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
-      defaultFormValues,
       stageNodes,
     };
   };

@@ -144,7 +144,7 @@ const addNode = (modelData, attributeData) => (dispatch, getState) => {
   });
 };
 
-const updateNode = (nodeId, newModelData, newAttributeData = null) => (dispatch, getState) => {
+const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispatch, getState) => {
   const { session } = getState();
 
   dispatch({

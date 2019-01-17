@@ -7,7 +7,6 @@ import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button, ToggleInput } from '../ui/components';
-import { getDefaultFormValues } from '../selectors/forms';
 import { protocolForms } from '../selectors/protocol';
 import { nodeAttributesProperty } from '../ducks/modules/network';
 
@@ -82,11 +81,9 @@ class NodeForm extends Component {
 
 const mapStateToProps = (state, props) => {
   const forms = protocolForms(state);
-  const defaultFormValues = getDefaultFormValues(state);
   const nodeAttributes = props.node ? props.node[nodeAttributesProperty] : {};
 
   const initialValues = {
-    ...defaultFormValues[props.stage.form],
     ...nodeAttributes,
   };
 

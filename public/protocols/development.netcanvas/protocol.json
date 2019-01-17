@@ -1065,7 +1065,7 @@
           "label": "Does this person have this boolean attribute?"
         },
         {
-          "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+          "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c",
           "component": "ToggleButtonGroup",
           "label": "Which of these does this person like?"
         }

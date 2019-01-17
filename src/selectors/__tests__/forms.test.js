@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { getDefaultFormValues, makeRehydrateForm } from '../forms';
+import { makeRehydrateForm } from '../forms';
 
 describe('forms selector', () => {
   describe('makeRehydrateForm', () => {
@@ -28,17 +28,6 @@ describe('forms selector', () => {
     it('returns form if defined', () => {
       const props = { stage: { form: 'person' } };
       expect(rehydrateForm(state, props)).toEqual(state.protocol.forms.person);
-    });
-  });
-
-  describe('getDefaultFormValues', () => {
-    const state = {
-      protocol: {
-        forms: { person: { fields: [] } },
-      },
-    };
-    it('returns an object keyed by form name', () => {
-      expect(getDefaultFormValues(state)).toHaveProperty('person');
     });
   });
 });

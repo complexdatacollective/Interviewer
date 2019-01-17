@@ -19,7 +19,7 @@ const ProgressBar = ({ percentProgress, onClick, orientation }) =>
 ProgressBar.propTypes = {
   percentProgress: PropTypes.number,
   onClick: PropTypes.func,
-  orientation: PropTypes.oneOf(['horizontal, vertical']),
+  orientation: PropTypes.oneOf(['horizontal', 'vertical']),
 };
 
 ProgressBar.defaultProps = {
