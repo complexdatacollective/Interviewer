@@ -5,15 +5,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import Swiper from 'react-id-swiper';
-
-import { Scroller } from '../../components';
+import { Scroller, ProgressBar } from '../../components';
 import Node from '../Node';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { getDefaultFormValues } from '../../selectors/forms';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-import { Progress } from '../../ui/components';
+
 import { Form } from '../';
 import { getItemComponent } from './Information';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
@@ -168,11 +167,7 @@ class AlterForm extends Component {
           <h6 className="progress-container__status-text">
             <strong>{this.state.activeIndex}</strong> of <strong>{stageNodes.length}</strong>
           </h6>
-          <Progress
-            max={stageNodes.length}
-            value={this.state.activeIndex}
-            className="alter-form__progress"
-          />
+          <ProgressBar orientation="horizontal" percentProgress={(this.state.activeIndex / stageNodes.length) * 100} />
         </div>
       </div>
     );

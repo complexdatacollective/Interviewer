@@ -1,15 +1,33 @@
 .progress-bar {
-  width: .7rem;
   background-color: var(--light-background);
   flex-grow: 1;
   position: relative;
   border-radius: 4rem;
 
+  &--vertical {
+    width: .7rem;
+
+    .progress-bar__filler {
+      width: 100%;
+      transition: height calc(var(--animation-duration-standard)*3) var(--animation-easing);
+    }
+  }
+
+  &--horizontal {
+    height: .7rem;
+
+    .progress-bar__filler {
+      height: 100%;
+      transition: width calc(var(--animation-duration-standard)*3) var(--animation-easing);
+    }
+
+  }
+
   &__filler {
     background-color: var(--transparent-light);
-    width: 100%;
     position: absolute;
     border-radius: inherit;
-    transition: height calc(var(--animation-duration-standard)*3) var(--animation-easing);
   }
 }
+
+

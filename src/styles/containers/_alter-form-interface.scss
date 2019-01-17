@@ -98,6 +98,9 @@
     transform: translate(-50%, 5rem);
     opacity: 0;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
 
     &__status-text {
       margin-bottom: 0.5rem;
