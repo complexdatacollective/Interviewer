@@ -2,8 +2,7 @@
 
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
-import { makeGetSubject, makeGetIds, makeGetSubjectType, makeGetAdditionalAttributes } from './interface';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { makeGetSubject, makeGetIds, makeGetSubjectType } from './interface';
 import { protocolRegistry } from './protocol';
 import { getExternalData } from './externalData';
 
@@ -28,24 +27,17 @@ const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
 
-// Static props that will be added to any created/edited node on the prompt
-// Any protocol-specific props will exist in the [nodeAttributesProperty] object
-export const makeGetPromptNodeAttributes = () => {
+// blah!
+export const makeGetPromptNodeModelData = () => {
   const getSubject = makeGetSubject();
   const getIds = makeGetIds();
-  const getAdditionalAttributes = makeGetAdditionalAttributes();
 
   return createSelector(
     getSubject,
     getIds,
-    getAdditionalAttributes
-    ,
-    ({ type }, ids, additionalAttributes) => ({
+    ({ type }, ids) => ({
       type,
       ...ids,
-      [nodeAttributesProperty]: {
-        ...additionalAttributes,
-      },
     }),
   );
 };

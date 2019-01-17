@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { UnconnectedNameGenerator as NameGenerator } from '../NameGenerator';
 
 const requiredProps = {
-  addNodes: jest.fn(),
+  addNode: jest.fn(),
   getLabel: jest.fn(),
   newNodeAttributes: {},
   nodesForPrompt: [],

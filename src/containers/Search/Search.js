@@ -170,7 +170,7 @@ class Search extends Component {
         className={searchClasses}
         in={!collapsed}
       >
-        <form>
+        <form onSubmit={(e) => { e.preventDefault(); }}>
           <Icon name="close" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
 
           {Headers}

@@ -139,8 +139,11 @@ class CategoricalList extends Component {
       return;
     }
 
-    this.props.toggleNodeAttributes(meta[nodePrimaryKeyProperty],
-      { [this.props.activePromptVariable]: [binValue] });
+    this.props.updateNode(
+      meta[nodePrimaryKeyProperty],
+      {},
+      { [this.props.activePromptVariable]: [binValue] },
+    );
   };
 
   renderCategoricalBin = (bin, index, sizes) => {
@@ -219,7 +222,7 @@ CategoricalList.propTypes = {
   displayVariable: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
-  toggleNodeAttributes: PropTypes.func.isRequired,
+  updateNode: PropTypes.func.isRequired,
 };
 
 CategoricalList.defaultProps = {
@@ -259,7 +262,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleNodeAttributes: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
+    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }
 

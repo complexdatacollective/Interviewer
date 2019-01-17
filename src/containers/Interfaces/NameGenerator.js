@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has } from 'lodash';
+import { get, has, omit } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { makeNetworkNodesForPrompt } from '../../selectors/interface';
-import { makeGetPromptNodeAttributes, makeGetNodeIconName } from '../../selectors/name-generator';
+import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
 import { PromptSwiper, NodePanels, NodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { Icon } from '../../ui/components';
+import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
 
 /**
   * Name Generator Interface
@@ -31,9 +32,19 @@ class NameGenerator extends Component {
   handleSubmitForm = ({ form, addAnotherNode } = { addAnotherNode: false }) => {
     if (form) {
       if (!this.state.selectedNode) {
-        this.props.addNodes({ attributes: { ...form } }, this.props.newNodeAttributes);
+        /**
+         *  addNode(modelData, attributeData);
+        */
+        this.props.addNode(
+          this.props.newNodeModelData,
+          { ...this.props.newNodeAttributes, ...form },
+        );
       } else {
-        this.props.updateNode({ ...this.state.selectedNode }, form);
+        /**
+         * updateNode(nodeId, newModelData, newAttributeData)
+         */
+        const selectedUID = this.state.selectedNode[nodePrimaryKeyProperty];
+        this.props.updateNode(selectedUID, {}, form);
       }
     }
 
@@ -43,15 +54,25 @@ class NameGenerator extends Component {
   /**
    * Drop node handler
    * Adds prompt attributes to existing nodes, or adds new nodes to the network.
-   * @param {object} node - key/value object containing node object from the network store
+   * @param {object} item - key/value object containing node object from the network store
    */
   handleDropNode = (item) => {
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
-    if (has(node, 'promptId') || has(node, 'stageId')) {
-      this.props.updateNode(node, { ...this.props.activePromptAttributes });
+    if (has(node, 'promptIDs')) {
+      this.props.updateNode(
+        node[nodePrimaryKeyProperty],
+        { ...this.props.newNodeModelData },
+        { ...this.props.activePromptAttributes },
+      );
     } else {
-      this.props.addNodes(node, this.props.newNodeAttributes);
+      const droppedAttributeData = node[nodeAttributesProperty];
+      const droppedModelData = omit(node, nodeAttributesProperty);
+
+      this.props.addNode(
+        { ...this.props.newNodeModelData, ...droppedModelData },
+        { ...droppedAttributeData, ...this.props.newNodeAttributes },
+      );
     }
   }
 
@@ -155,9 +176,10 @@ NameGenerator.defaultProps = {
 
 NameGenerator.propTypes = {
   activePromptAttributes: PropTypes.object,
-  addNodes: PropTypes.func.isRequired,
+  addNode: PropTypes.func.isRequired,
   form: PropTypes.object,
   newNodeAttributes: PropTypes.object.isRequired,
+  newNodeModelData: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
@@ -169,13 +191,15 @@ NameGenerator.propTypes = {
 
 function makeMapStateToProps() {
   const networkNodesForPrompt = makeNetworkNodesForPrompt();
-  const getPromptNodeAttributes = makeGetPromptNodeAttributes();
+  const getPromptNodeAttributes = makeGetAdditionalAttributes();
+  const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodeIconName = makeGetNodeIconName();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       newNodeAttributes: getPromptNodeAttributes(state, props),
+      newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeIconName: getNodeIconName(state, props),
     };
@@ -184,7 +208,7 @@ function makeMapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addNodes: bindActionCreators(sessionsActions.addNodes, dispatch),
+    addNode: bindActionCreators(sessionsActions.addNode, dispatch),
     updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
   };
 }

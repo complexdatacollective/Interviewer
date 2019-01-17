@@ -7,6 +7,7 @@ import { EdgeLayout } from '../EdgeLayout';
 const mockEdgeCoords = [
   {
     key: 'foo_bar_baz',
+    type: 'type',
     from: {
       x: 100,
       y: 100,

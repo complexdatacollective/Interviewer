@@ -115,16 +115,6 @@ describe('name generator selector', () => {
     });
   });
   describe('memoed selectors', () => {
-    it('should get node attributes for the prompt', () => {
-      const selected = NameGen.makeGetPromptNodeAttributes();
-      expect(selected(mockState, mockProps)).toEqual({
-        attributes: { close_friend: true },
-        type: 'person',
-        promptId: 'promptId123',
-        stageId: 'stageId123',
-      });
-    });
-
     it('should get card display label', () => {
       expect(NameGen.getCardDisplayLabel(mockState, mockProps)).toEqual('card label');
       expect(NameGen.getCardDisplayLabel(null, emptyProps)).toEqual(undefined);

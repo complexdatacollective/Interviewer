@@ -6,12 +6,14 @@ import {
   makeGetPlacedNodes,
   makeGetDisplayEdges,
 } from '../canvas';
+import { nodeAttributesProperty } from '../../ducks/modules/network';
 
-const node1 = { _uid: 1, type: 'person', attributes: { role: ['a'], name: 'alpha', closeness: [1, 1] } };
-const node2 = { _uid: 2, type: 'person', attributes: { role: ['a'], name: 'foxtrot' } };
-const node3 = { _uid: 3, type: 'person', attributes: { role: ['a'], name: 'bravo' } };
-const node4 = { _uid: 4, type: 'person', attributes: { role: ['a'], name: 'echo', closeness: [1, 1] } };
-const node5 = { _uid: 5, type: 'person', attributes: { role: ['b'], name: 'charlie', closeness: [1, 1] } };
+const node1 = { _uid: 1, type: 'person', [nodeAttributesProperty]: { role: ['a'], name: 'alpha', closeness: [1, 1] } };
+const node2 = { _uid: 2, type: 'person', [nodeAttributesProperty]: { role: ['a'], name: 'foxtrot', closeness: null } };
+const node3 = { _uid: 3, type: 'person', [nodeAttributesProperty]: { role: ['a'], name: 'bravo', closeness: null } };
+const node4 = { _uid: 4, type: 'person', [nodeAttributesProperty]: { role: ['a'], name: 'echo', closeness: [1, 1] } };
+const node5 = { _uid: 5, type: 'person', [nodeAttributesProperty]: { role: ['b'], name: 'charlie', closeness: [1, 1] } };
+
 
 const mockState = {
   session: 'testSession',
