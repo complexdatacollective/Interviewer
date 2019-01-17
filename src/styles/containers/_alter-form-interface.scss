@@ -52,7 +52,7 @@
     }
 
     &.swiper-slide-prev {
-      transform: translate3d(0, 0, 0) rotateX(0) rotateY(0deg) !important;
+      transform: translate3d(0, 0, 0) rotateX(0) rotateY(0deg) !important; // sass-lint:disable-line no-important
       opacity: .3;
     }
 
