@@ -110,6 +110,25 @@ const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
   });
 };
 
+/**
+ * This function generates default values for all variables in the variable registry for this node
+ * type.
+ *
+ * @param {object} registryForType - An object containing the variable registry entry for this
+ *                                   node type.
+ */
+
+const getDefaultAttributesForNodeType = (registryForType = {}) => {
+  const defaultAttributesObject = {};
+
+  // Boolean variables are initialised as `false`, and everything else as `null`
+  Object.keys(registryForType).forEach((key) => {
+    defaultAttributesObject[key] = registryForType[key].type === 'boolean' ? false : null;
+  });
+
+  return defaultAttributesObject;
+};
+
 const addNode = (modelData, attributeData) => (dispatch, getState) => {
   const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
   const registryForType = nodeRegistry[modelData.type].variables;
@@ -118,8 +137,10 @@ const addNode = (modelData, attributeData) => (dispatch, getState) => {
     type: ADD_NODE,
     sessionId,
     modelData,
-    attributeData,
-    registryForType,
+    attributeData: {
+      ...getDefaultAttributesForNodeType(registryForType),
+      ...attributeData,
+    },
   });
 };
 
