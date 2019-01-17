@@ -201,6 +201,12 @@
             "$ref": "#/definitions/Item"
           }
         },
+        "introductionPanel" : {
+          "type": "object",
+          "items": {
+            "$ref": "#/definitions/IntroductionPanel"
+          }
+        },
         "skipLogic": {
           "$ref": "#/definitions/SkipLogic"
         }
@@ -212,6 +218,17 @@
       ],
       "title": "Interface",
       "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "AlterForm"
+            }
+          },
+          "required": [
+            "form",
+            "introductionPanel"
+          ]
+        },
         {
           "properties": {
             "type": {
@@ -288,6 +305,22 @@
         "type"
       ],
       "title": "Item"
+    },
+    "IntroductionPanel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "text"
+      ]
     },
     "Panel": {
       "type": "object",
