@@ -222,6 +222,11 @@
             "label": "Discuss type categorical variable.",
             "description": "Discuss type categorical variable",
             "type": "categorical",
+            "validation": {
+              "required": true,
+              "minSelected": 1,
+              "maxSelected": 1
+            },
             "options": [
               {
                 "label": "Politics",

@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import timelineImages from '../../images/timeline';
 
 const getTimelineImage = type =>
-  get(timelineImages, type, timelineImages.OrdinalBin);
+  get(timelineImages, type, timelineImages.Default);
 
 const TimelineStage = ({ item: { type, label, index }, handleOpenStage, currentStageIndex }) => {
   const classes = cx({
