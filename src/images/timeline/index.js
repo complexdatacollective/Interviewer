@@ -1,3 +1,5 @@
+import Default from './stage--Default.png';
+import AlterForm from './stage--AlterForm.png';
 import CategoricalBin from './stage--CategoricalBin.png';
 import NameGenerator from './stage--NameGenerator.png';
 import NameGeneratorList from './stage--NameGeneratorList.png';
@@ -9,6 +11,8 @@ import Information from './stage--Information.png';
 
 
 export default {
+  Default,
+  AlterForm,
   CategoricalBin,
   NameGenerator,
   NameGeneratorList,

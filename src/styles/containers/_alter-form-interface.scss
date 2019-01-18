@@ -1,0 +1,116 @@
+.alter-form {
+  &__swiper {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swiper-wrapper {
+    box-sizing: border-box;
+    width: 75%;
+
+    .scrollable {
+      height: 100%;
+    }
+  }
+
+  .swiper-slide {
+    @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+
+    .slide-content {
+      display: flex;
+      max-height: 95%;
+      width: 100%;
+      padding: unit(1) unit(4) unit(2);
+      border-radius: var(--border-radius);
+      background: var(--light-background);
+      position: relative;
+      left: calc(var(--base-node-size) * .2);
+
+      &.alter-form__introduction {
+        align-self: center;
+        height: auto;
+        max-height: 80vh;
+        background: var(--color-platinum--dark);
+        color: var(--text-dark);
+        width: auto;
+        padding: unit(6);
+        left: 0;
+        overflow: hidden;
+        flex-direction: column;
+
+        h1 {
+          text-align: center;
+        }
+      }
+    }
+
+    &.swiper-slide-prev {
+      transform: translate3d(0, 0, 0) rotateX(0) rotateY(0deg) !important; // sass-lint:disable-line no-important
+      opacity: .3;
+    }
+
+    &.swiper-slide-next {
+      opacity: 0;
+    }
+  }
+
+  .node {
+    position: absolute;
+    top: calc(50% - var(--base-node-size) /2);
+    left: calc((var(--base-node-size) / -2));
+    background: var(--light-background);
+    border-radius: 50%;
+  }
+
+  &__form-container {
+    height: inherit;
+    margin-left: calc(var(--base-node-size) * .4);
+  }
+
+  &__form {
+    column-count: 2;
+    margin-top: 2rem;
+
+    .form-field-container {
+      break-inside: avoid;
+    }
+  }
+
+  .progress-container {
+    @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
+    bottom: unit(4);
+    position: absolute;
+    z-index: var(--z-panel);
+    left: 50%;
+    transform: translate(-50%, 5rem);
+    opacity: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+
+    &__status-text {
+      margin-bottom: 0.5rem;
+    }
+
+
+    &--show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .progress {
+      width: 20rem;
+      height: 1.5rem;
+    }
+
+  }
+
+}

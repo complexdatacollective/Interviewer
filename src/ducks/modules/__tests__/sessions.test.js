@@ -150,7 +150,7 @@ describe('sessions actions', () => {
       type: actionTypes.UPDATE_NODE,
       sessionId: 'a',
       nodeId: {},
-      newAttributeData: null,
+      newAttributeData: {},
       newModelData: {},
     };
 

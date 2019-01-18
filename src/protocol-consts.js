@@ -84,6 +84,7 @@ const StageType = Object.freeze({
   OrdinalBin: 'OrdinalBin',
   CategoricalBin: 'CategoricalBin',
   Narrative: 'Narrative',
+  AlterForm: 'AlterForm',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types

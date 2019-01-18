@@ -107,6 +107,9 @@
             "label": "Discussion frequency ordinal variable.",
             "description": "Discussion frequency ordinal variable",
             "type": "ordinal",
+            "validation": {
+              "required": true
+            },
             "options": [
               {
                 "label": "Three",
@@ -219,6 +222,11 @@
             "label": "Discuss type categorical variable.",
             "description": "Discuss type categorical variable",
             "type": "categorical",
+            "validation": {
+              "required": true,
+              "minSelected": 1,
+              "maxSelected": 1
+            },
             "options": [
               {
                 "label": "Politics",
@@ -752,6 +760,28 @@
           "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
           "component": "hidden",
           "value": "network-canvas"
+        }
+      ]
+    },
+    "myAlterFormID": {
+      "title": "Modify a Person",
+      "entity": "node",
+      "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+      "fields": [
+        {
+          "variable": "23c5a7b9-b553-4ff1-b515-6a81999773d2",
+          "component": "RadioGroup",
+          "label": "Required likert scale"
+        },
+        {
+          "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+          "component": "Toggle",
+          "label": "Does this person have this boolean attribute?"
+        },
+        {
+          "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c",
+          "component": "ToggleButtonGroup",
+          "label": "Which of these does this person like?"
         }
       ]
     }
@@ -1352,6 +1382,16 @@
           "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c"
         }
       ]
+    },
+    {
+      "id": "alter-form-1",
+      "type": "AlterForm",
+      "label": "Alter Form",
+      "form": "myAlterFormID",
+      "introductionPanel": {
+        "title": "Introduction to the alter form",
+        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n\nBelow this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accomodate that."
+      }
     },
     {
       "id": "rubberduck",

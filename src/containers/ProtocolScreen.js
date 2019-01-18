@@ -17,9 +17,27 @@ import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
   * Check protocol is loaded, and render the stage
   */
 class Protocol extends Component {
+  constructor(props) {
+    super(props);
+    this.interfaceRef = React.createRef();
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.stage.id !== this.props.stage.id) {
+      this.interfaceRef = React.createRef();
+      this.forceUpdate();
+    }
+  }
+
   // change the stage to the next
   onClickNext = () => {
-    if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+    const interfaceRefInstance = this.getInterfaceRefInstance();
+    if (interfaceRefInstance && !interfaceRefInstance.isStageEnding()) {
+      interfaceRefInstance.clickNext();
+    } else if (!this.props.stage.prompts || this.props.isLastPrompt()) {
+      if (interfaceRefInstance) {
+        interfaceRefInstance.clickNext();
+      }
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
     } else {
       this.props.promptForward();
@@ -28,10 +46,33 @@ class Protocol extends Component {
 
   // change the stage to the previous
   onClickBack = () => {
-    if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+    const interfaceRefInstance = this.getInterfaceRefInstance();
+    if (interfaceRefInstance && !interfaceRefInstance.isStageBeginning()) {
+      interfaceRefInstance.clickPrevious();
+    } else if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
       this.props.promptBackward();
+    }
+  }
+
+  /*
+   * Typically an interface would iterate through "prompts" via clicking back and forward.
+   * If an interface needs a different iterative process, (e.g. iterating through a list
+   * of nodes instead of prompts), the interface can be accessed here as a ref.
+   *
+   * Expected callbacks:
+   * isStageEnding - boolean indicating the end of the stage
+   * isStageBeginning - boolean indicating the beginning of the stage
+   * clickNext - callback for the stage's "next" behavior; also called on stage end transition
+   * clickPrevious - callback for the stage's "back" behavior
+   */
+  getInterfaceRefInstance = () => {
+    try {
+      return (this.interfaceRef && this.interfaceRef.current &&
+        this.interfaceRef.current.getWrappedInstance());
+    } catch (e) {
+      return false;
     }
   }
 
@@ -77,6 +118,7 @@ class Protocol extends Component {
               promptId={promptId}
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
+              ref={this.interfaceRef}
             />
           </StageTransition>
         </TransitionGroup>
