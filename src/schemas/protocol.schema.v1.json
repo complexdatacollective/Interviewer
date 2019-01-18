@@ -202,7 +202,6 @@
           }
         },
         "introductionPanel" : {
-          "type": "object",
           "$ref": "#/definitions/IntroductionPanel"
         },
         "skipLogic": {
