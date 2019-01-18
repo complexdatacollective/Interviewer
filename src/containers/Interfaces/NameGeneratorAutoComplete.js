@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from '../../ui/components';
-
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';

@@ -38,6 +38,7 @@ const startApp = () => {
 if (isElectron()) {
   const { webFrame } = require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
+  webFrame.registerURLSchemeAsPrivileged('asset');
 }
 
 secureCommsReady.then(() => {

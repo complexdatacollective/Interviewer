@@ -1,17 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 import Fuse from 'fuse.js';
+import { get } from 'lodash';
 import { createSelector } from 'reselect';
 
-import { getExternalData } from './externalData';
-
-// The value of this key should point to an attribute in the protocol's externalData.
-const getDatasourceKey = (_, props) => props.dataSourceKey;
 const getSearchOpts = (_, props) => props.options;
-const getSearchData = createSelector(
-  getExternalData,
-  getDatasourceKey,
-  (externalData, key) => externalData[key] && externalData[key].nodes,
-);
+const getSearchData = (_, props) => get(props.externalData, 'nodes', []);
 
 /**
  * Fuse.js is an interface for (optionally) fuzzy searching

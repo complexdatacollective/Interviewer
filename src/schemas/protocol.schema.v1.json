@@ -22,8 +22,8 @@
         "variableRegistry": {
           "$ref": "#/definitions/VariableRegistry"
         },
-        "externalData": {
-          "$ref": "#/definitions/ExternalData"
+        "assetManifest": {
+          "$ref": "#/definitions/AssetManifest"
         },
         "forms": {
           "$ref": "#/definitions/Forms"
@@ -43,9 +43,9 @@
       ],
       "title": "Protocol"
     },
-    "ExternalData": {
+    "AssetManifest": {
       "type": "object",
-      "title": "ExternalData"
+      "title": "AssetManifest"
     },
     "Forms": {
       "type": "object",

@@ -2,30 +2,13 @@
 
 import React from 'react';
 import { mount, render } from 'enzyme';
-import { createStore } from 'redux';
-
-import Search from '../Search';
+import { Search } from '../Search';
 import SearchResults from '../SearchResults';
 import Card from '../../../components/Card';
 
+const mockSearchResult = [{ name: 'foo' }];
+
 jest.mock('../../../ui/utils/CSSVariables');
-
-jest.mock('fuse.js', () => jest.fn(() => (
-  {
-    // Mock: return one search result when Fuse.search() is called.
-    search: jest.fn().mockReturnValue([{ name: 'foo' }]),
-  }
-)));
-
-const mockReduxState = {
-  protocol: {
-    variableRegistry: {},
-  },
-  externalData: {},
-  search: {
-    collapsed: false,
-  },
-};
 
 const mockProps = {
   dataSourceKey: '',
@@ -33,8 +16,10 @@ const mockProps = {
   primaryDisplayField: '',
   excludedNodes: [],
   options: {},
-  store: createStore(() => mockReduxState),
   onComplete: () => {},
+  fuse: {
+    search: () => mockSearchResult,
+  },
 };
 
 describe('<Search />', () => {

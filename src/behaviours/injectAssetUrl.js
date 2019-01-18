@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, setPropTypes, mapProps } from 'recompose';
 import PropTypes from 'prop-types';
-import { assetUrl } from '../utils/protocol';
+import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
 
 // curry asset fetcher with protocol path from state
 const mapStateToProps = state => ({
-  getAssetUrl: url => assetUrl(state.protocol.path, url, state.protocol.type),
+  getAssetUrl: url => getMediaAssetUrl(state.protocol.path, url, state.protocol.type),
 });
 
 const injectAssetUrl = compose(

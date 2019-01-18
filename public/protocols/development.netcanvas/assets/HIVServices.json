@@ -1,0 +1,256 @@
+{
+  "nodes": [
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "About My Health",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "About My Health",
+        "66646d68-cd33-407b-a349-56707021df72": "About My Health",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "55 E Washington St, Chicago, Illinois, 60602",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.882945,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.62572,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "55 E Washington St, Chicago, Illinois 60602, United States"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "Access Anixter Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Anixter",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Anixter",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "2020 N Clybourn Ave, Chicago, Illinois, 60614",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.91837,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.660281,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "2020 N Clybourn Ave, Chicago, Illinois 60614, United States"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Ashland Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Ashland Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Ashland Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "5159 S Ashland Ave, Chicago, IL 60609",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.799756,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.66443,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "5159 S Ashland Ave, Chicago, Illinois, 60609"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Auburn-Gresham Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Auburn-Gresham Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Auburn-Gresham Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "8234 S Ashland Ave, Chicago, IL 60620",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.743832,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.663648,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "8234 S Ashland Ave, Chicago, Illinois, 60620"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Booker Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Booker Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Booker Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "654 E 47th St, Chicago, IL 60653",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.809683,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.609344,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "654 E 47th St, Chicago, Illinois, 60653"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Brandon Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Brandon Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Brandon Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "8300 S Brandon Ave, Chicago, IL 60617",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 40.74453,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.547014,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "8300 S Brandon Ave, Chicago, Illinois, 60617"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Cabrini Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Cabrini Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Cabrini Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3450 S Archer Ave, Chicago, IL 60608",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.831331,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.676624,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3450 S Archer Ave, Chicago, Illinois, 60608"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Centro Medico",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Centro Medico",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3700 W 26th St, Chicago, IL 60623",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.844509,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.717409,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3700 W 26th St, Chicago, Illinois, 60623"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Centro Medico San Rafael",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Centro Medico San Rafael",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Centro Medico San Rafael",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3204 W 26th St, Chicago, IL 60623",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.844713,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.705448,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3204 W 26th St, Chicago, Illinois, 60623"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Doctors Medical Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Doctors Medical Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Doctors Medical Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "6240 W 55th St, Chicago, IL 60638",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.792657,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.778601,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "6240 W 55th St, Chicago, Illinois, 60638"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Evanston-Rogers Park Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Evanston-Rogers Park Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Evanston-Rogers Park Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "1555 Howard St, Chicago, IL 60626",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 42.019113,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.670241,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "1555 W Howard St, Chicago, Illinois, 60626"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at Gary Comer Youth Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Gary Comer Youth Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Gary Comer Youth Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "7200 S Ingleside Ave, Chicago, IL 60619",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.764069,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.602436,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "7200 S Ingleside Ave, Chicago, Illinois, 60619"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "Grand Boulevard Health and Specialty Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Grand Boulevard",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Grand Boulevard",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "Blvd",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "5401 S Wentworth Ave, Chicago, Illinois, 60609",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.795962,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.629572,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "5401 S Wentworth Ave, Chicago, Illinois 60609, United States"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Humboldt Park Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Humboldt Park Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Humboldt Park Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3202 W North Ave, Chicago, IL 60647",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.910444,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.707085,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3202 W North Ave, Chicago, Illinois, 60647"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS at the Illinois Eye Institute",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Illinois Eye Institute",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Illinois Eye Institute",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3241 S Michigan Ave, Chicago, IL 60616",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.835265,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.622279,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3241 S Michigan Ave, Chicago, Illinois, 60616"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Kedzie Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Kedzie Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Kedzie Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3213 W 47th Pl, Chicago, IL 60632",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.806249,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.704915,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3213 W 47th Place, Chicago, Illinois, 60632"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "Servicios Medicos La Villita",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - La Villita",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - La Villita",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3303 W 26th St, Chicago, Illinois, 60623",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.843835,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.707797,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3303 W 26th St, Chicago, Illinois 60623, United States"
+      }
+    },
+    {
+      "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73",
+      "attributes": {
+        "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": "Access Community Health Network",
+        "8ee3a187-d4be-458e-8abb-71efcc071949": "ACCESS Madison Family Health Center",
+        "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": "Access - Madison Family Health Center",
+        "66646d68-cd33-407b-a349-56707021df72": "Access - Madison Family Health Center",
+        "18fbc928-d027-42de-bc96-ff5c09bf4944": "",
+        "67132d2b-c371-4c57-a5eb-6520083f9d22": "3800 W Madison St, Chicago, IL 60624",
+        "bdc60147-fe7a-4c3c-a164-e5b370f6a281": 41.881126,
+        "931a7b23-e433-4e7e-8e13-48b72e5f0549": -87.721142,
+        "0a5f7952-a9a7-4e87-9353-2d17a59284ee": "3800 W Madison Ave, Chicago, Illinois, 60624"
+      }
+    }
+  ]
+}
