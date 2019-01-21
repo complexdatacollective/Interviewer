@@ -6,6 +6,7 @@ import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import { nodePrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
+import getFactoryProtocolPath from './protocol/factoryProtocolPath';
 
 const withKeys = data =>
   data.map((node) => {
@@ -30,10 +31,12 @@ const fetchNetwork = inEnvironment(
     }
 
     if (environment === environments.CORDOVA) {
-      return (url, protocolType) => {
+      return (url, { fileName, protocolType, protocolName }) => {
         if (protocolType === 'factory') {
-          return fetch(url)
-            .then(response => response.json())
+          return readFile(
+            getFactoryProtocolPath(protocolName, `assets/${fileName}`)
+          )
+            .then(data => JSON.parse(data))
             .then((json) => {
               const nodes = get(json, 'nodes', []);
               return ({ nodes: withKeys(nodes) });
@@ -63,6 +66,6 @@ const fetchNetwork = inEnvironment(
  */
 const loadExternalData = (protocolName, fileName, protocolType) =>
   getAssetUrl(protocolName, fileName, protocolType)
-    .then(url => fetchNetwork(url, protocolType));
+    .then(url => fetchNetwork(url, { fileName, protocolType, protocolName }));
 
 export default loadExternalData;
