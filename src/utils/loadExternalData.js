@@ -62,7 +62,7 @@ const fetchNetwork = inEnvironment(
  *
  */
 const loadExternalData = (protocolName, fileName, protocolType) =>
-  getAssetUrl(protocolName, `${fileName}.json`, protocolType)
+  getAssetUrl(protocolName, fileName, protocolType)
     .then(url => fetchNetwork(url, protocolType));
 
 export default loadExternalData;
