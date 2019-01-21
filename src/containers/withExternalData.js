@@ -7,16 +7,24 @@ import {
   lifecycle,
   mapProps,
 } from 'recompose';
-import { get } from 'lodash';
+import {
+  get,
+  mapValues,
+} from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
 import { getCurrentSession } from '../selectors/session';
 
 const mapStateToProps = (state) => {
   const session = getCurrentSession(state);
+  const assetFiles = mapValues(
+    state.protocol.assetManifest,
+    asset => asset.source,
+  );
 
   return {
     protocolName: session.protocolPath,
     protocolType: state.protocol.type,
+    assetFiles,
   };
 };
 
@@ -52,13 +60,16 @@ const withExternalData = (sourceProperty, dataProperty) =>
         setExternalData,
         protocolName,
         protocolType,
+        assetFiles,
       }) =>
-        (source) => {
-          if (!source) { return; }
+        (sourceId) => {
+          if (!sourceId) { return; }
 
           setExternalData(null);
 
-          loadExternalData(protocolName, source, protocolType)
+          const sourceFile = assetFiles[sourceId];
+
+          loadExternalData(protocolName, sourceFile, protocolType)
             .then((externalData) => {
               setExternalData(externalData);
             });
