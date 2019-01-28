@@ -31,9 +31,6 @@ const fieldTypes = {
   [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
-  // In the case of the hidden input component { value } isn't actually passed along, but since
-  // this component is a placeholder, assume the interface for now.
-  [FormComponent.hidden]: ({ input }) => <input {...input} type="hidden" />,
 };
 
 const ComponentTypeNotFound = componentType =>

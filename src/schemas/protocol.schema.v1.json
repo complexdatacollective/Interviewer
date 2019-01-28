@@ -106,7 +106,6 @@
             "Toggle",
             "ToggleButton",
             "ToggleButtonGroup",
-            "hidden"
           ]
         },
         "label": {
