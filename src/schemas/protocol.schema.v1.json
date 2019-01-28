@@ -105,7 +105,7 @@
             "Text",
             "Toggle",
             "ToggleButton",
-            "ToggleButtonGroup",
+            "ToggleButtonGroup"
           ]
         },
         "label": {

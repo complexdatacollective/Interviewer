@@ -56,13 +56,3 @@ describe('<Field />', () => {
 
   it('Loads options with optionsSelector');
 });
-
-describe('input', () => {
-  describe('[type="hidden"]', () => {
-    it('should populate a value from an input prop', () => {
-      const Input = getInputComponent('hidden');
-      const subject = shallow(<Input input={{ name: 'foo', value: 'bar' }} />);
-      expect(subject.find('input').prop('value')).toEqual('bar');
-    });
-  });
-});
