@@ -5,12 +5,13 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-
 import Swiper from 'react-id-swiper';
+
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
+import { nodePrimaryKeyProperty } from '../../ducks/modules/network';
 import { SlideForm } from '../';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
@@ -77,12 +78,14 @@ class AlterForm extends Component {
     }
   };
 
+  handleSubmit = (node, formData) => (
+    this.props.updateNode(node[nodePrimaryKeyProperty], {}, formData));
+
   render() {
     const {
       form,
       stage,
       stageNodes,
-      updateNode,
     } = this.props;
 
     const swiperParams = {
@@ -121,7 +124,13 @@ class AlterForm extends Component {
           </div>
 
           {stageNodes.map((node, index) => (
-            <SlideForm key={index} node={node} index={index} updateNode={updateNode} form={form} />
+            <SlideForm
+              key={index}
+              node={node}
+              index={index}
+              updateNode={formData => this.handleSubmit(node, formData)}
+              form={form}
+            />
           ))}
         </Swiper>
         <div className={progressClasses}>

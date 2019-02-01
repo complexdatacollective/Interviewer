@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { Scroller } from '../components';
-import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { nodeAttributesProperty } from '../ducks/modules/network';
 import Node from './Node';
 import { Form } from './';
 
@@ -28,7 +28,7 @@ class SlideForm extends PureComponent {
                 controls={[]}
                 autoFocus={false}
                 form={`NODE_FORM_${index + 1}`}
-                onSubmit={formData => updateNode(node[nodePrimaryKeyProperty], {}, formData)}
+                onSubmit={updateNode}
               />
             </Scroller>
           </div>

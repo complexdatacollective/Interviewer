@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { nodePrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { nodePrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -34,7 +34,6 @@ export default function reducer(state = initialState, action = {}) {
     case TOGGLE_EDGE:
     case REMOVE_EDGE:
     case SET_EGO:
-    case UNSET_EGO:
       return {
         ...state,
         [action.sessionId]: withTimestamp({
@@ -189,6 +188,23 @@ const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, 
   });
 };
 
+const setEgo = (modelData, attributeData) => (dispatch, getState) => {
+  const { session: sessionId, protocol: { variableRegistry: { ego: egoRegistry } } } = getState();
+
+  console.log(modelData);
+  console.log({ ...getDefaultAttributesForNodeType(egoRegistry.ego.variables), ...attributeData });
+
+  dispatch({
+    type: SET_EGO,
+    sessionId,
+    modelData,
+    attributeData: {
+      ...getDefaultAttributesForNodeType(egoRegistry.ego.variables),
+      ...attributeData,
+    },
+  });
+};
+
 const addEdge = edge => (dispatch, getState) => {
   const { session } = getState();
 
@@ -299,6 +315,7 @@ const actionCreators = {
   updateNode,
   removeNode,
   removeNodeFromPrompt,
+  setEgo,
   addEdge,
   toggleEdge,
   removeEdge,
@@ -322,7 +339,6 @@ const actionTypes = {
   TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,
-  UNSET_EGO,
   ADD_SESSION,
   UPDATE_SESSION,
   UPDATE_PROMPT,

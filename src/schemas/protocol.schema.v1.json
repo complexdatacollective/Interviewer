@@ -134,6 +134,7 @@
           "enum": [
             "Narrative",
             "AlterForm",
+            "EgoForm",
             "NameGenerator",
             "NameGeneratorList",
             "NameGeneratorAutoComplete",
@@ -218,6 +219,22 @@
       ],
       "title": "Interface",
       "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "EgoForm"
+            },
+            "egoForms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "egoForms"
+          ]
+        },
         {
           "properties": {
             "type": {

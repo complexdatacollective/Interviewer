@@ -22,7 +22,6 @@ export const ADD_EDGE = 'ADD_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
-export const UNSET_EGO = 'UNSET_EGO';
 
 // Initial network model structure
 const initialState = {
@@ -58,6 +57,15 @@ const nodeWithModelandAttributeData = (modelData, attributeData) => ({
   itemType: modelData.itemType,
 });
 
+const egoWithModelandAttributeData = (modelData, attributeData) => ({
+  [nodePrimaryKeyProperty]:
+    modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
+  [nodeAttributesProperty]: {
+    ...modelData[nodeAttributesProperty],
+    ...attributeData,
+  },
+});
+
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_NODE: {
@@ -71,6 +79,23 @@ export default function reducer(state = initialState, action = {}) {
             ),
           )
         )(),
+      };
+    }
+    case SET_EGO: {
+      console.log('add ego');
+      console.log(egoWithModelandAttributeData(
+        action.modelData,
+        action.attributeData,
+      ));
+      return {
+        ...state,
+        ego: (() => ({
+          ...state.ego,
+          ...egoWithModelandAttributeData(
+            action.modelData,
+            action.attributeData,
+          ),
+        }))(),
       };
     }
     case BATCH_ADD_NODES: {
@@ -204,7 +229,6 @@ const actionTypes = {
   TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,
-  UNSET_EGO,
 };
 
 export {

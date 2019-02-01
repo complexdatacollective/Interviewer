@@ -50,6 +50,9 @@ class Protocol extends Component {
     if (interfaceRefInstance && !interfaceRefInstance.isStageBeginning()) {
       interfaceRefInstance.clickPrevious();
     } else if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
+      if (interfaceRefInstance) {
+        interfaceRefInstance.clickPrevious();
+      }
       this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
     } else {
       this.props.promptBackward();
