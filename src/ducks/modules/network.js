@@ -204,6 +204,8 @@ export default function reducer(state = initialState, action = {}) {
       // remove edge if it exists, add it if it doesn't
       const { to, from, type } = action.modelData;
       if (!to || !from || !type) { return state; }
+
+      // Returns an edge UID if an existing edge is found, otherwise false;
       const existingEdgeId = edgeExists(state.edges, from, to, type);
 
       if (existingEdgeId) {
