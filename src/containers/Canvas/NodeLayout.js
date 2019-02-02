@@ -50,7 +50,12 @@ const withDropHandlers = withHandlers({
 
 const withSelectHandlers = compose(
   withHandlers({
-    connectNode: ({ createEdge, connectFrom, updateLinkFrom, toggleEdge }) =>
+    connectNode: ({
+      createEdge,
+      connectFrom,
+      updateLinkFrom,
+      toggleEdge,
+    }) =>
       (nodeId) => {
         // If edge creation is disabled, return
         if (!createEdge) { return; }

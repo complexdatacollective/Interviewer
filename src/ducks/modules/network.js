@@ -1,4 +1,4 @@
-import { reject, find, isMatch, omit, keys } from 'lodash';
+import { reject, find, isMatch, omit, keys, get } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
@@ -36,9 +36,15 @@ function flipEdge(edge) {
 }
 
 function edgeExists(edges, from, to, type) {
-  const edge = { from, to, type };
-  const edgeID = find(edges, edge) !== -1 || find(edges, flipEdge(edge)) !== -1;
-  return edgeID || false;
+  const forwardsEdge = find(edges, { from, to, type });
+  const reverseEdge = find(edges, flipEdge({ from, to, type }));
+
+  if ((forwardsEdge && forwardsEdge !== -1) || (reverseEdge && reverseEdge !== -1)) {
+    const foundEdge = forwardsEdge || reverseEdge;
+    return get(foundEdge, entityPrimaryKeyProperty);
+  }
+
+  return false;
 }
 
 export const getEntityAttributes = node => node[entityAttributesProperty] || {};
@@ -67,6 +73,25 @@ const edgeWithModelandAttributeData = (modelData, attributeData) => ({
   },
   type: modelData.type,
   itemType: modelData.itemType,
+});
+
+const addEdge = (state, action) => ({
+  ...state,
+  edges: (
+    () => state.edges.concat(
+      edgeWithModelandAttributeData(
+        action.modelData,
+        action.attributeData,
+      ),
+    )
+  )(),
+});
+
+const removeEdge = (state, edgeId) => ({
+  ...state,
+  edges: reject(state.edges, edge =>
+    edge[entityPrimaryKeyProperty] === edgeId,
+  ),
 });
 
 export default function reducer(state = initialState, action = {}) {
@@ -173,39 +198,24 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case ADD_EDGE: {
-      if (edgeExists(state.edges, action.edge)) { return state; }
-      return {
-        ...state,
-        edge: (
-          () => state.edges.concat(
-            edgeWithModelandAttributeData(
-              action.modelData,
-              action.attributeData,
-            ),
-          )
-        )(),
-      };
+      return addEdge(state, action);
     }
-    case TOGGLE_EDGE:
+    case TOGGLE_EDGE: {
       // remove edge if it exists, add it if it doesn't
-      if (edgeExists(state.edges, action.edge)) {
-        return {
-          ...state,
-          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
-        };
+      const { to, from, type } = action.modelData;
+      if (!to || !from || !type) { return state; }
+      const existingEdgeId = edgeExists(state.edges, from, to, type);
+
+      if (existingEdgeId) {
+        // Edge exists - remove it
+        return removeEdge(state, existingEdgeId);
       }
-      return {
-        ...state,
-        edges: [...state.edges, action.edge],
-      };
+
+      // Edge does not exist - create it
+      return addEdge(state, action);
+    }
     case REMOVE_EDGE:
-      if (edgeExists(state.edges, action.edge)) {
-        return {
-          ...state,
-          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
-        };
-      }
-      return state;
+      return removeEdge(state, action.edgeId);
     default:
       return state;
   }
