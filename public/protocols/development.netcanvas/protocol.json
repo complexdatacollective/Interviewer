@@ -876,15 +876,6 @@
                   "operator": "EXACTLY",
                   "value": "Bob"
                 }
-              },
-              {
-                "type": "edge",
-                "id": "15218241565624",
-                "options": {
-                  "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
-                  "operator": "EXISTS",
-                  "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
-                }
               }
             ]
           }
@@ -1445,7 +1436,7 @@
       "id": "alter-edge-form-1",
       "type": "AlterEdgeForm",
       "label": "Alter Edge Form",
-      "form": "myEdgeAlterFormID",
+      "form": "myAlterEdgeFormID",
       "introductionPanel": {
         "title": "Introduction to the alter edge form",
         "text": "Alter edge form"
@@ -1554,15 +1545,6 @@
                 "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                 "operator": "EXACTLY",
                 "value": "Bob"
-              }
-            },
-            {
-              "type": "edge",
-              "id": "15218241565624",
-              "options": {
-                "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
-                "operator": "EXISTS",
-                "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
               }
             }
           ]

@@ -11,7 +11,7 @@ import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-import { SlideForm } from '../';
+import { SlideFormNode } from '../';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
@@ -121,7 +121,13 @@ class AlterForm extends Component {
           </div>
 
           {stageNodes.map((node, index) => (
-            <SlideForm key={index} node={node} index={index} updateNode={updateNode} form={form} />
+            <SlideFormNode
+              key={index}
+              node={node}
+              index={index}
+              updateNode={updateNode}
+              form={form}
+            />
           ))}
         </Swiper>
         <div className={progressClasses}>

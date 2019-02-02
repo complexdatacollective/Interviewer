@@ -5,13 +5,12 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-
 import Swiper from 'react-id-swiper';
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkEdgesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-import { SlideForm } from '../';
+import { SlideFormEdge } from '../';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
@@ -84,7 +83,6 @@ class AlterEdgeForm extends Component {
       stageEdges,
       updateEdge,
     } = this.props;
-
     const swiperParams = {
       containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
@@ -107,7 +105,7 @@ class AlterEdgeForm extends Component {
     );
 
     return (
-      <div className="alter-form">
+      <div className="alter-form alter-edge-form">
         <Swiper {...swiperParams} ref={this.swipeRef} >
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
@@ -121,7 +119,13 @@ class AlterEdgeForm extends Component {
           </div>
 
           {stageEdges.map((edge, index) => (
-            <SlideForm key={index} edge={edge} index={index} updateEdge={updateEdge} form={form} />
+            <SlideFormEdge
+              key={index}
+              edge={edge}
+              index={index}
+              updateEdge={updateEdge}
+              form={form}
+            />
           ))}
         </Swiper>
         <div className={progressClasses}>
@@ -136,7 +140,7 @@ class AlterEdgeForm extends Component {
 }
 
 AlterEdgeForm.propTypes = {
-  form: PropTypes.object,
+  form: PropTypes.object.isRequired,
   formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   stageEdges: PropTypes.array,
@@ -145,7 +149,6 @@ AlterEdgeForm.propTypes = {
 };
 
 AlterEdgeForm.defaultProps = {
-  form: {},
   stageEdges: [],
 };
 
