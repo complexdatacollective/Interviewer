@@ -152,6 +152,18 @@ export const getNodeLabelFunction = createDeepEqualSelector(
 );
 
 /**
+ * makeNetworkEdgesForType()
+ * Get the current prompt/stage subject, and filter the network by this edge type.
+*/
+
+export const makeNetworkEdgesForType = () =>
+  createSelector(
+    networkEdges,
+    makeGetSubject(),
+    (edges, subject) => filter(edges, ['type', subject.type]),
+  );
+
+/**
  * makeNetworkNodesForType()
  * Get the current prompt/stage subject, and filter the network by this node type.
 */
