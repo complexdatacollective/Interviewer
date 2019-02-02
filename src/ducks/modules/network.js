@@ -82,11 +82,6 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case SET_EGO: {
-      console.log('add ego');
-      console.log(egoWithModelandAttributeData(
-        action.modelData,
-        action.attributeData,
-      ));
       return {
         ...state,
         ego: (() => ({

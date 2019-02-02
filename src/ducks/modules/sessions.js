@@ -192,14 +192,14 @@ const setEgo = (modelData, attributeData) => (dispatch, getState) => {
   const { session: sessionId, protocol: { variableRegistry: { ego: egoRegistry } } } = getState();
 
   console.log(modelData);
-  console.log({ ...getDefaultAttributesForNodeType(egoRegistry.ego.variables), ...attributeData });
+  console.log({ ...getDefaultAttributesForNodeType(egoRegistry.variables), ...attributeData });
 
   dispatch({
     type: SET_EGO,
     sessionId,
     modelData,
     attributeData: {
-      ...getDefaultAttributesForNodeType(egoRegistry.ego.variables),
+      ...getDefaultAttributesForNodeType(egoRegistry.variables),
       ...attributeData,
     },
   });

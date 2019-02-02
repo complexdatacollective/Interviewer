@@ -9,8 +9,8 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { protocolForms } from '../../selectors/protocol';
 import { networkEgo } from '../../selectors/interface';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { Node as UINode } from '../../ui/components';
 import { Form } from '../';
-import Node from '../Node';
 
 const nodeFormName = 'EGO_FORM';
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
@@ -63,23 +63,26 @@ class EgoForm extends Component {
 
     return (
       <div className="ego-form">
-        <div className="slide-content">
-          <Node {...ego} />
-          <div className="ego-form__form-container">
-            <Scroller>
-              <Form
-                {...allForms[egoFormNames[this.state.activeIndex]]}
-                className="ego-form__form"
-                initialValues={ego[nodeAttributesProperty]}
-                controls={[]}
-                autoFocus={false}
-                form={nodeFormName}
-                onSubmit={formData => this.handleSubmitForm(formData)}
-              />
-            </Scroller>
-          </div>
-        </div>
+        <div className="ego-form__content">
+          <div className="slide-content">
+            <UINode {...ego} label="You" />
+            <div className="ego-form__form-container">
+              <Scroller>
+                <Form
+                  {...allForms[egoFormNames[this.state.activeIndex]]}
+                  className="ego-form__form"
+                  initialValues={ego[nodeAttributesProperty]}
+                  controls={[]}
+                  autoFocus={false}
+                  form={nodeFormName}
+                  onSubmit={formData => this.handleSubmitForm(formData)}
+                />
+              </Scroller>
+            </div>
 
+          </div>
+
+        </div>
         <div className="progress-container">
           <h6 className="progress-container__status-text">
             <strong>{this.state.activeIndex + 1}</strong> of <strong>{egoFormNames.length}</strong>
