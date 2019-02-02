@@ -79,9 +79,7 @@ class EgoForm extends Component {
                 />
               </Scroller>
             </div>
-
           </div>
-
         </div>
         <div className="progress-container">
           <h6 className="progress-container__status-text">
