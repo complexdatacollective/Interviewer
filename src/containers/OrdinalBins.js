@@ -8,7 +8,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
-import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { getEntityAttributes, entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
   static propTypes = {
@@ -57,12 +57,12 @@ class OrdinalBins extends PureComponent {
     const missingValue = bin.value < 0;
 
     const onDrop = ({ meta }) => {
-      if (getNodeAttributes(meta)[this.props.activePromptVariable] === bin.value) {
+      if (getEntityAttributes(meta)[this.props.activePromptVariable] === bin.value) {
         return;
       }
 
       this.props.updateNode(
-        meta[nodePrimaryKeyProperty],
+        meta[entityPrimaryKeyProperty],
         {},
         { [this.props.activePromptVariable]: bin.value },
       );
@@ -115,8 +115,8 @@ function makeMapStateToProps() {
         .map((bin) => {
           const nodes = stageNodes.filter(
             node =>
-              node[nodeAttributesProperty][activePromptVariable] &&
-              node[nodeAttributesProperty][activePromptVariable] === bin.value,
+              node[entityAttributesProperty][activePromptVariable] &&
+              node[entityAttributesProperty][activePromptVariable] === bin.value,
           );
 
           return {

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { nodePrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
+import network, { entityPrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, REMOVE_EDGE, SET_EGO, UNSET_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -31,7 +31,6 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_NODE:
     case TOGGLE_NODE_ATTRIBUTES:
     case ADD_EDGE:
-    case TOGGLE_EDGE:
     case REMOVE_EDGE:
     case SET_EGO:
     case UNSET_EGO:
@@ -118,7 +117,7 @@ const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
  *                                   node type.
  */
 
-const getDefaultAttributesForNodeType = (registryForType = {}) => {
+const getDefaultAttributesForEntityType = (registryForType = {}) => {
   const defaultAttributesObject = {};
 
   // Boolean variables are initialised as `false`, and everything else as `null`
@@ -129,7 +128,7 @@ const getDefaultAttributesForNodeType = (registryForType = {}) => {
   return defaultAttributesObject;
 };
 
-const addNode = (modelData, attributeData) => (dispatch, getState) => {
+const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
   const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
   const registryForType = nodeRegistry[modelData.type].variables;
 
@@ -138,7 +137,7 @@ const addNode = (modelData, attributeData) => (dispatch, getState) => {
     sessionId,
     modelData,
     attributeData: {
-      ...getDefaultAttributesForNodeType(registryForType),
+      ...getDefaultAttributesForEntityType(registryForType),
       ...attributeData,
     },
   });
@@ -162,7 +161,7 @@ const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   dispatch({
     type: TOGGLE_NODE_ATTRIBUTES,
     sessionId: session,
-    [nodePrimaryKeyProperty]: uid,
+    [entityPrimaryKeyProperty]: uid,
     attributes,
   });
 };
@@ -173,7 +172,7 @@ const removeNode = uid => (dispatch, getState) => {
   dispatch({
     type: REMOVE_NODE,
     sessionId: session,
-    [nodePrimaryKeyProperty]: uid,
+    [entityPrimaryKeyProperty]: uid,
   });
 };
 
@@ -189,23 +188,18 @@ const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, 
   });
 };
 
-const addEdge = edge => (dispatch, getState) => {
-  const { session } = getState();
+const addEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
+  const { session: sessionId, protocol: { variableRegistry: { edge: edgeRegistry } } } = getState();
+  const registryForType = edgeRegistry[modelData.type].variables;
 
   dispatch({
     type: ADD_EDGE,
-    sessionId: session,
-    edge,
-  });
-};
-
-const toggleEdge = edge => (dispatch, getState) => {
-  const { session } = getState();
-
-  dispatch({
-    type: TOGGLE_EDGE,
-    sessionId: session,
-    edge,
+    sessionId,
+    modelData,
+    attributeData: {
+      ...getDefaultAttributesForEntityType(registryForType),
+      ...attributeData,
+    },
   });
 };
 
@@ -300,7 +294,6 @@ const actionCreators = {
   removeNode,
   removeNodeFromPrompt,
   addEdge,
-  toggleEdge,
   removeEdge,
   toggleNodeAttributes,
   addSession,
@@ -319,7 +312,6 @@ const actionTypes = {
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,
   ADD_EDGE,
-  TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,
   UNSET_EGO,

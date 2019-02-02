@@ -10,7 +10,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
-import { getNodeAttributes, nodeAttributesProperty, nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { getEntityAttributes, entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 
 const getIsPortrait = (width, height) =>
@@ -90,8 +90,8 @@ class CategoricalList extends Component {
     }
 
     // todo: the following should be updated to reflect the sort order of the bins
-    const name = nodes[0][nodeAttributesProperty] && this.props.displayVariable &&
-      nodes[0][nodeAttributesProperty][this.props.displayVariable];
+    const name = nodes[0][entityAttributesProperty] && this.props.displayVariable &&
+      nodes[0][entityAttributesProperty][this.props.displayVariable];
 
     if (nodes.length > 0) {
       return `${name}${nodes.length > 1 ? ` and ${nodes.length - 1} other${nodes.length > 2 ? 's' : ''}` : ''}`;
@@ -135,12 +135,12 @@ class CategoricalList extends Component {
   }
 
   handleDrop = ({ meta }, binValue) => {
-    if (getNodeAttributes(meta)[this.props.activePromptVariable] === [binValue]) {
+    if (getEntityAttributes(meta)[this.props.activePromptVariable] === [binValue]) {
       return;
     }
 
     this.props.updateNode(
-      meta[nodePrimaryKeyProperty],
+      meta[entityPrimaryKeyProperty],
       {},
       { [this.props.activePromptVariable]: [binValue] },
     );
@@ -246,8 +246,8 @@ function makeMapStateToProps() {
         .map((bin) => {
           const nodes = stageNodes.filter(
             node =>
-              node[nodeAttributesProperty][activePromptVariable] &&
-              node[nodeAttributesProperty][activePromptVariable].includes(bin.value),
+              node[entityAttributesProperty][activePromptVariable] &&
+              node[entityAttributesProperty][activePromptVariable].includes(bin.value),
           );
 
           return {

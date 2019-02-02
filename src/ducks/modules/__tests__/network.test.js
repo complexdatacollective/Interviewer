@@ -2,8 +2,8 @@
 
 import reducer,
 { actionTypes,
-  nodePrimaryKeyProperty as PK,
-  nodeAttributesProperty,
+  entityPrimaryKeyProperty as PK,
+  entityAttributesProperty,
 } from '../network';
 
 const mockState = {
@@ -29,7 +29,7 @@ describe('network reducer', () => {
       },
     );
     expect(newState.nodes.length).toBe(1);
-    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [nodeAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
+    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [entityAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
 
     const newNode = newState.nodes[0];
     expect(newNode.attributes.name).toEqual('foo');
@@ -97,7 +97,7 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'baz' } }],
+        nodes: [{ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'baz' } }],
       },
       {
         type: actionTypes.UPDATE_NODE,
@@ -106,7 +106,7 @@ describe('network reducer', () => {
         newAttributeData: { name: 'foo' },
       },
     );
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'foo' } });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'foo' } });
   });
 
   it('toggles node attributes on', () => {

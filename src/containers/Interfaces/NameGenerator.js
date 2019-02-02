@@ -10,7 +10,7 @@ import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors
 import { PromptSwiper, NodePanels, NodeForm, QuickNodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
 import { Icon } from '../../ui/components';
-import { nodeAttributesProperty, nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 /**
   * Name Generator Interface
@@ -43,7 +43,7 @@ class NameGenerator extends Component {
         /**
          * updateNode(nodeId, newModelData, newAttributeData)
          */
-        const selectedUID = this.state.selectedNode[nodePrimaryKeyProperty];
+        const selectedUID = this.state.selectedNode[entityPrimaryKeyProperty];
         this.props.updateNode(selectedUID, {}, form);
       }
     }
@@ -61,13 +61,13 @@ class NameGenerator extends Component {
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptIDs')) {
       this.props.updateNode(
-        node[nodePrimaryKeyProperty],
+        node[entityPrimaryKeyProperty],
         { ...this.props.newNodeModelData },
         { ...this.props.newNodeAttributes },
       );
     } else {
-      const droppedAttributeData = node[nodeAttributesProperty];
-      const droppedModelData = omit(node, nodeAttributesProperty);
+      const droppedAttributeData = node[entityAttributesProperty];
+      const droppedModelData = omit(node, entityAttributesProperty);
 
       this.props.addNode(
         { ...this.props.newNodeModelData, ...droppedModelData },

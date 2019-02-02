@@ -6,7 +6,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * OrdinalBin Interface
@@ -65,7 +65,7 @@ function makeMapStateToProps() {
 
     return {
       nodesForPrompt: stageNodes.filter(
-        node => !node[nodeAttributesProperty][activePromptVariable],
+        node => !node[entityAttributesProperty][activePromptVariable],
       ),
     };
   };

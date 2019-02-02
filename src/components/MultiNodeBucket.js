@@ -9,7 +9,7 @@ import { Node as NodeTransition } from './Transition';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { DragSource } from '../behaviours/DragAndDrop';
 import sortOrder from '../utils/sortOrder';
-import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedNode = DragSource(Node);
 
@@ -88,7 +88,7 @@ class MultiNodeBucket extends Component {
         {
           nodes.slice(0, 3).map((node, index) => (
             <NodeTransition
-              key={`${node[nodePrimaryKeyProperty]}_${index}`}
+              key={`${node[entityPrimaryKeyProperty]}_${index}`}
               index={index}
               stagger={stagger}
             >

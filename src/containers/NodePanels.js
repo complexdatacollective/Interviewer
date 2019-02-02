@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { Panels } from '../components/';
 import { makeGetPanelConfiguration } from '../selectors/name-generator';
 import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
@@ -64,12 +64,12 @@ class NodePanels extends PureComponent {
     */
     if (dataSource === 'existing') {
       this.props.removeNodeFromPrompt(
-        meta[nodePrimaryKeyProperty],
+        meta[entityPrimaryKeyProperty],
         this.props.prompt.id,
         this.props.newNodeAttributes,
       );
     } else {
-      this.props.removeNode(meta[nodePrimaryKeyProperty]);
+      this.props.removeNode(meta[entityPrimaryKeyProperty]);
     }
   }
 
@@ -101,7 +101,7 @@ class NodePanels extends PureComponent {
 
     // Rules for when panel contains external data
     // We need the original list though
-    return panelIndex && panelIndex.has(meta[nodePrimaryKeyProperty]);
+    return panelIndex && panelIndex.has(meta[entityPrimaryKeyProperty]);
   };
 
   isPanelOpen = index =>

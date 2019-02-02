@@ -7,7 +7,7 @@ import { protocolRegistry } from './protocol';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { getCurrentSession } from './session';
 import {
-  getNodeAttributes,
+  getEntityAttributes,
 } from '../ducks/modules/network';
 import {
   asExportableNetwork,
@@ -139,7 +139,7 @@ export const getNodeLabelFunction = createDeepEqualSelector(
       nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
 
     // Get the data model properties from the node
-    const nodeDataModelProps = getNodeAttributes(node);
+    const nodeDataModelProps = getEntityAttributes(node);
     // Try to return the label prop
     // else try to use the displayVariable
     // else try to use the first text variable

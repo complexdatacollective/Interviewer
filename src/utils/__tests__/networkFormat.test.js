@@ -7,7 +7,7 @@ import {
 } from '../networkFormat';
 
 import {
-  nodePrimaryKeyProperty,
+  entityPrimaryKeyProperty,
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../../ducks/modules/network';
@@ -17,7 +17,7 @@ describe('asWorkerAgentNode', () => {
     attributes: {
       1234: 'userProp1value',
     },
-    [nodePrimaryKeyProperty]: 'node1',
+    [entityPrimaryKeyProperty]: 'node1',
     stageId: 42,
   };
 
@@ -78,7 +78,7 @@ describe('asExportableNode', () => {
     attributes: {
       1234: 'userProp1value',
     },
-    [nodePrimaryKeyProperty]: 'node1',
+    [entityPrimaryKeyProperty]: 'node1',
     stageId: 42,
   };
 

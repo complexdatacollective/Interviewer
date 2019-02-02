@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { map, isEqual } from 'lodash';
 import ConcaveMan from 'concaveman';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
@@ -17,7 +17,7 @@ export class ConvexHull extends Component {
   generateHull = (nodeCollection) => {
     // Restructure as array of arrays of coords
     const groupAsCoords = map(nodeCollection, (node) => {
-      const nodeCoords = node[nodeAttributesProperty][this.props.layoutVariable];
+      const nodeCoords = node[entityAttributesProperty][this.props.layoutVariable];
       return [nodeCoords.x, nodeCoords.y];
     });
 
