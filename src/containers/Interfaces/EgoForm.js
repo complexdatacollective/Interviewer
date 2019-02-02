@@ -87,7 +87,7 @@ class EgoForm extends Component {
           </h6>
           <ProgressBar
             orientation="horizontal"
-            percentProgress={(this.state.activeIndex / (egoFormNames.length - 1)) * 100}
+            percentProgress={((this.state.activeIndex + 1) / egoFormNames.length) * 100}
           />
         </div>
       </div>
