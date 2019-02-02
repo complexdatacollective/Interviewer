@@ -19,6 +19,7 @@ export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
 export const UPDATE_NODE = 'UPDATE_NODE';
 export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 export const ADD_EDGE = 'ADD_EDGE';
+export const UPDATE_EDGE = 'UPDATE_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
@@ -200,6 +201,23 @@ export default function reducer(state = initialState, action = {}) {
     case ADD_EDGE: {
       return addEdge(state, action);
     }
+    case UPDATE_EDGE: {
+      return {
+        ...state,
+        edges: (() => state.edges.map((edge) => {
+          if (edge[entityPrimaryKeyProperty] !== action.edgeId) { return edge; }
+          return {
+            ...edge,
+            ...action.newModelData,
+            [entityAttributesProperty]: {
+              ...edge[entityAttributesProperty],
+              ...action.newAttributeData,
+            },
+          };
+        })
+        )(),
+      };
+    }
     case TOGGLE_EDGE: {
       // remove edge if it exists, add it if it doesn't
       const { to, from, type } = action.modelData;
@@ -235,6 +253,7 @@ const actionTypes = {
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
   ADD_EDGE,
+  UPDATE_EDGE,
   TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,
