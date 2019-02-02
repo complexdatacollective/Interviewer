@@ -670,7 +670,24 @@
         "name": "professional",
         "label": "Professional",
         "color": "edge-color-seq-2",
-        "variables": {}
+        "variables": {
+          "d343a91f-628d-4175-870c-957beffa0002": {
+            "name": "catvar2",
+            "label": "catvar2",
+            "description": "Categorical var with 2 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          }
+        }
       }
     }
   },
@@ -830,6 +847,18 @@
           "variable": "e343a91f-628d-4175-870c-957beffa0004",
           "component": "ToggleButtonGroup",
           "label": "Four item categorical variable"
+        }
+      ]
+    },
+    "myProfessionalAlterEdgeFormID": {
+      "title": "Modify a Professional Edge",
+      "entity": "edge",
+      "type": "867127d9-086b-403a-a3e7-2c7d32126546",
+      "fields": [
+        {
+          "variable": "d343a91f-628d-4175-870c-957beffa0002",
+          "component": "ToggleButtonGroup",
+          "label": "Two item categorical variable"
         }
       ]
     }
@@ -1435,11 +1464,21 @@
     {
       "id": "alter-edge-form-1",
       "type": "AlterEdgeForm",
-      "label": "Alter Edge Form",
+      "label": "Alter Edge Form (friends)",
       "form": "myAlterEdgeFormID",
       "introductionPanel": {
         "title": "Introduction to the alter edge form",
         "text": "Alter edge form"
+      }
+    },
+    {
+      "id": "alter-edge-form-2",
+      "type": "AlterEdgeForm",
+      "label": "Alter Edge Form (professional)",
+      "form": "myProfessionalAlterEdgeFormID",
+      "introductionPanel": {
+        "title": "An alternative alter edge interface",
+        "text": "This interface acts on professional edges."
       }
     },
     {

@@ -26,6 +26,7 @@
     .slide-content {
       display: flex;
       max-height: 95%;
+      min-height: 55%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
@@ -122,7 +123,7 @@
     top: 30%;
     left: -0.25rem;
     width: 0.5rem;
-    height: 30%;
+    height: 40%;
     z-index: 1;
   }
 
@@ -133,12 +134,12 @@
     background: var(--light-background);
     border-radius: 50%;
 
+    > * { // Render first node on top of fake edge
+      z-index: 2;
+    }
+
     &:first-of-type {
       top: calc(30% - var(--base-node-size) /2);
-
-      > * { // Render first node on top of fake edge
-        z-index: 2;
-      }
     }
   }
 }
