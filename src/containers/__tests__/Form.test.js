@@ -68,7 +68,7 @@ describe('<Form />', () => {
         component: 'Text',
         placeholder: 'Nickname',
         validation: {},
-      }
+      },
     ];
 
     const subject = mount((
