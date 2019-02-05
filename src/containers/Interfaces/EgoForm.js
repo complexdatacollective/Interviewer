@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
+import { TransitionGroup } from 'react-transition-group';
 
 import { ProgressBar, Scroller } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -11,8 +12,8 @@ import { networkEgo } from '../../selectors/interface';
 import { nodeAttributesProperty } from '../../ducks/modules/network';
 import { Node as UINode } from '../../ui/components';
 import { Form } from '../';
+import { Folder as FolderTransition } from '../../components/Transition';
 
-const nodeFormName = 'EGO_FORM';
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 
 class EgoForm extends Component {
@@ -23,7 +24,9 @@ class EgoForm extends Component {
     };
   }
 
-  formSubmitAllowed = () => this.props.formEnabled(nodeFormName);
+  getNodeFormName = () => `EGO_FORM_${this.state.activeIndex}`;
+
+  formSubmitAllowed = () => this.props.formEnabled(this.getNodeFormName());
 
   isStageBeginning = () => (
     this.state.activeIndex === 0
@@ -31,11 +34,11 @@ class EgoForm extends Component {
 
   isStageEnding = () => (
     this.formSubmitAllowed() &&
-      this.state.activeIndex === this.props.egoFormNames.length - 1
+    this.state.activeIndex === this.props.egoFormNames.length - 1
   );
 
   clickNext = () => {
-    this.props.submitForm(nodeFormName);
+    this.props.submitForm(this.getNodeFormName());
     if (this.formSubmitAllowed()) {
       this.setState({
         activeIndex: rotateIndex(this.props.egoFormNames.length, this.state.activeIndex + 1),
@@ -45,7 +48,7 @@ class EgoForm extends Component {
 
   clickPrevious = () => {
     if (this.formSubmitAllowed()) {
-      this.props.submitForm(nodeFormName);
+      this.props.submitForm(this.getNodeFormName());
     }
     this.setState({
       activeIndex: rotateIndex(this.props.egoFormNames.length, this.state.activeIndex - 1),
@@ -67,17 +70,21 @@ class EgoForm extends Component {
           <div className="slide-content">
             <UINode {...ego} label="You" />
             <div className="ego-form__form-container">
-              <Scroller>
-                <Form
-                  {...allForms[egoFormNames[this.state.activeIndex]]}
-                  className="ego-form__form"
-                  initialValues={ego[nodeAttributesProperty]}
-                  controls={[]}
-                  autoFocus={false}
-                  form={nodeFormName}
-                  onSubmit={formData => this.handleSubmitForm(formData)}
-                />
-              </Scroller>
+              <TransitionGroup className="rules">
+                <FolderTransition key={`ego-${this.state.activeIndex}`}>
+                  <Scroller>
+                    <Form
+                      {...allForms[egoFormNames[this.state.activeIndex]]}
+                      className="ego-form__form"
+                      initialValues={ego[nodeAttributesProperty]}
+                      controls={[]}
+                      autoFocus={false}
+                      form={this.getNodeFormName()}
+                      onSubmit={formData => this.handleSubmitForm(formData)}
+                    />
+                  </Scroller>
+                </FolderTransition>
+              </TransitionGroup>
             </div>
           </div>
         </div>
