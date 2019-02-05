@@ -206,7 +206,7 @@ describe('network reducer', () => {
       },
     );
     expect(reducer(
-      { ...mockState, edges: [{...edgeB.modelData, attributes: {} }] },
+      { ...mockState, edges: [{ ...edgeB.modelData, attributes: {} }] },
       {
         type: actionTypes.TOGGLE_EDGE,
         modelData: edgeA.modelData,
