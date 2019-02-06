@@ -6,7 +6,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, CategoricalList } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * CategoricalBin Interface
@@ -63,7 +63,7 @@ function makeMapStateToProps() {
     return {
       activePromptVariable,
       nodesForPrompt: stageNodes.filter(
-        node => !node[nodeAttributesProperty][activePromptVariable],
+        node => !node[entityAttributesProperty][activePromptVariable],
       ),
     };
   };

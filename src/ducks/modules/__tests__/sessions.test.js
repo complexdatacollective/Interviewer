@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import reducer, { actionCreators, actionTypes } from '../sessions';
-import { nodePrimaryKeyProperty } from '../network';
+import { entityPrimaryKeyProperty } from '../network';
 import uuidv4 from '../../../utils/uuid';
 
 const middlewares = [thunk];
@@ -164,7 +164,7 @@ describe('sessions actions', () => {
     const expectedAction = {
       type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
       sessionId: 'a',
-      [nodePrimaryKeyProperty]: 2,
+      [entityPrimaryKeyProperty]: 2,
       attributes: {},
     };
 
@@ -178,7 +178,7 @@ describe('sessions actions', () => {
     const expectedAction = {
       type: actionTypes.REMOVE_NODE,
       sessionId: 'a',
-      [nodePrimaryKeyProperty]: 2,
+      [entityPrimaryKeyProperty]: 2,
     };
 
     store.dispatch(actionCreators.removeNode(2));
@@ -186,16 +186,41 @@ describe('sessions actions', () => {
   });
 
   it('should add create an ADD_EDGE action', () => {
-    const store = mockStore({ sessions: { a: {} }, session: 'a' });
+    const store = mockStore({
+      sessions: { a: {} },
+      session: 'a',
+      protocol: {
+        variableRegistry: {
+          node: {
+            nodeType: {
+              variables: {},
+            },
+          },
+          edge: {
+            edgeType: {
+              variables: {},
+            },
+          },
+        },
+      },
+    });
 
-    const edge = { from: 'foo', to: 'bar', type: 'friend' };
+    const edge = {
+      modelData: {
+        from: 'foo',
+        to: 'bar',
+        type: 'edgeType',
+      },
+      attributeData: {},
+    };
     const expectedAction = {
       type: actionTypes.ADD_EDGE,
       sessionId: 'a',
-      edge,
+      modelData: edge.modelData,
+      attributeData: edge.attributeData,
     };
 
-    store.dispatch(actionCreators.addEdge(edge));
+    store.dispatch(actionCreators.addEdge(edge.modelData, edge.attributeData));
     expect(store.getActions()).toEqual([expectedAction]);
   });
 

@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 
 /* Maps a `createdIndex` index value to all items in an array */
 const withCreatedIndex = items => items.map((item, createdIndex) => ({ ...item, createdIndex }));
@@ -42,7 +42,7 @@ const sortOrder = (sortConfig = [], variableRegistry = {}) => { // eslint-disabl
    */
   return items => orderBy(
     items,
-    sortRules.map(rule => `${nodeAttributesProperty}.${rule.property}`),
+    sortRules.map(rule => `${entityAttributesProperty}.${rule.property}`),
     orders,
   );
 };

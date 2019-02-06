@@ -9,7 +9,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
@@ -61,7 +61,7 @@ class NameGeneratorAutoComplete extends Component {
 
     const searchOptions = { matchProperties: [], ...prompt.searchOptions };
     searchOptions.matchProperties = searchOptions.matchProperties.map(prop => (
-      `${nodeAttributesProperty}.${prop}`));
+      `${entityAttributesProperty}.${prop}`));
 
     return (
       <div className={baseClass}>

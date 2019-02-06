@@ -5,7 +5,7 @@ import { compose } from 'recompose';
 import Node from '../Node';
 import { DragSource, DropObstacle } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-import { nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetNextUnplacedNode } from '../../selectors/canvas';
 
 const EnhancedNode = DragSource(Node);
@@ -33,7 +33,7 @@ class NodeBucket extends PureComponent {
       <div className="node-bucket">
         { node &&
           <EnhancedNode
-            key={node[nodePrimaryKeyProperty]}
+            key={node[entityPrimaryKeyProperty]}
             meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
             scrollDirection={NO_SCROLL}
             {...node}

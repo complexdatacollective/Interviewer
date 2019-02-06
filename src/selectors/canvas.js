@@ -3,9 +3,9 @@ import { networkNodes, networkEdges } from './interface';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
 import {
-  getNodeAttributes,
-  nodePrimaryKeyProperty,
-  nodeAttributesProperty,
+  getEntityAttributes,
+  entityPrimaryKeyProperty,
+  entityAttributesProperty,
 } from '../ducks/modules/network';
 
 const getLayout = (_, props) => props.layoutVariable;
@@ -30,7 +30,7 @@ export const makeGetNextUnplacedNode = () =>
       const type = subject && subject.type;
 
       const unplacedNodes = nodes.filter((node) => {
-        const attributes = getNodeAttributes(node);
+        const attributes = getEntityAttributes(node);
         return (
           node.type === type &&
           (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
@@ -57,7 +57,7 @@ export const makeGetPlacedNodes = () =>
     (nodes, subject, layoutVariable) => {
       const type = subject && subject.type;
       return nodes.filter((node) => {
-        const attributes = getNodeAttributes(node);
+        const attributes = getEntityAttributes(node);
         return (
           node.type === type &&
           (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
@@ -79,7 +79,7 @@ export const makeGetNodesByCategorical = () => {
       const groupedList = {};
 
       nodes.forEach((node) => {
-        const categoricalValues = node[nodeAttributesProperty][categoricalVariable];
+        const categoricalValues = node[entityAttributesProperty][categoricalVariable];
 
         // Filter out nodes with no value for this variable.
         if (!categoricalValues) {
@@ -105,16 +105,16 @@ export const makeGetNodesByCategorical = () => {
 
 
 const edgeCoords = (edge, { nodes, layout }) => {
-  const from = nodes.find(n => n[nodePrimaryKeyProperty] === edge.from);
-  const to = nodes.find(n => n[nodePrimaryKeyProperty] === edge.to);
+  const from = nodes.find(n => n[entityPrimaryKeyProperty] === edge.from);
+  const to = nodes.find(n => n[entityPrimaryKeyProperty] === edge.to);
 
   if (!from || !to) { return { from: null, to: null }; }
 
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
     type: edge.type,
-    from: from[nodeAttributesProperty][layout],
-    to: to[nodeAttributesProperty][layout],
+    from: from[entityAttributesProperty][layout],
+    to: to[entityAttributesProperty][layout],
   };
 };
 

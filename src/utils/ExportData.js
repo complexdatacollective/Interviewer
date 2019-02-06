@@ -1,7 +1,7 @@
 import { findKey, forInRight, isNil } from 'lodash';
 
 import saveFile from './SaveFile';
-import { nodePrimaryKeyProperty, nodeAttributesProperty, getNodeAttributes } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty, entityAttributesProperty, getEntityAttributes } from '../ducks/modules/network';
 import { VariableType, VariableTypeValues } from '../protocol-consts';
 
 const setUpXml = () => {
@@ -36,7 +36,7 @@ const getTypeFromVariableRegistry = (variableRegistry, type, element, key, varia
 // returns a graphml type
 const getTypeForKey = (data, key) => (
   data.reduce((result, value) => {
-    const attrs = getNodeAttributes(value);
+    const attrs = getEntityAttributes(value);
     if (isNil(attrs[key])) return result;
     let currentType = typeof attrs[key];
     if (currentType === 'number') {
@@ -96,7 +96,7 @@ const generateKeys = (
   elements.forEach((element) => {
     let iterableElement = element;
     if (type === 'node') {
-      iterableElement = getNodeAttributes(element);
+      iterableElement = getEntityAttributes(element);
     }
     // Node data model attributes are now stored under a specific propertyy
 
@@ -171,10 +171,10 @@ const addElements = (
 ) => {
   dataList.forEach((dataElement, index) => {
     const domElement = document.createElementNS(uri, type);
-    const nodeAttrs = getNodeAttributes(dataElement);
+    const nodeAttrs = getEntityAttributes(dataElement);
 
-    if (dataElement[nodePrimaryKeyProperty]) {
-      domElement.setAttribute('id', dataElement[nodePrimaryKeyProperty]);
+    if (dataElement[entityPrimaryKeyProperty]) {
+      domElement.setAttribute('id', dataElement[entityPrimaryKeyProperty]);
     } else {
       domElement.setAttribute('id', index);
     }
@@ -258,7 +258,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
     graphML,
     networkData.nodes,
     'node',
-    [nodePrimaryKeyProperty],
+    [entityPrimaryKeyProperty],
     variableRegistry,
     layoutVariable,
   );
@@ -282,7 +282,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [nodePrimaryKeyProperty, nodeAttributesProperty], variableRegistry, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [entityPrimaryKeyProperty, entityAttributesProperty], variableRegistry, layoutVariable);
   addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'type'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), onError, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',

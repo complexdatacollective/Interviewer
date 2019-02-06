@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import loadExternalData from '../loadExternalData';
 
 const mockProtocolName = 'myMockProtocol';
@@ -23,7 +23,7 @@ describe('loadExternalData', () => {
       .then((result) => {
         expect(result.nodes.length).toBe(mockResult.nodes.length);
         expect(result.nodes.every(
-          node => Object.prototype.hasOwnProperty.call(node, nodePrimaryKeyProperty),
+          node => Object.prototype.hasOwnProperty.call(node, entityPrimaryKeyProperty),
         )).toBe(true);
         done();
       });

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { differenceBy, omit, get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
 import {
   getCardDisplayLabel,
@@ -37,23 +37,23 @@ class NameGeneratorList extends Component {
   onSubmitNewNode = (node) => {
     const attributeData = {
       ...this.props.newNodeAttributes,
-      ...node[nodeAttributesProperty],
+      ...node[entityAttributesProperty],
     };
     const modelData = {
       ...this.props.newNodeModelData,
-      ...omit(node, nodeAttributesProperty),
+      ...omit(node, entityAttributesProperty),
     };
     this.props.addNode(modelData, attributeData);
   }
 
   onRemoveNode = (node) => {
-    this.props.removeNode(node[nodePrimaryKeyProperty]);
+    this.props.removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  label = node => getNodeAttributes(node)[this.props.labelKey];
+  label = node => getEntityAttributes(node)[this.props.labelKey];
 
   details = (node) => {
-    const attrs = getNodeAttributes(node);
+    const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
     return fields.map(field => ({ [field.label]: attrs[field.variable] }));
   }
@@ -133,7 +133,7 @@ const makeGetNodesForList = () => {
       return differenceBy(
         externalNodes,
         networkNodesForOtherPrompts(state, props),
-        nodePrimaryKeyProperty,
+        entityPrimaryKeyProperty,
       );
     }
 

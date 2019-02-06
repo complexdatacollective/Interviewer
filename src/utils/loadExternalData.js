@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
-import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
 import getFactoryProtocolPath from './protocol/factoryProtocolPath';
 
@@ -14,7 +14,7 @@ const withKeys = data =>
 
     return {
       ...node,
-      [nodePrimaryKeyProperty]: uid,
+      [entityPrimaryKeyProperty]: uid,
     };
   });
 

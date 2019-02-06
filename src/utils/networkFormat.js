@@ -1,7 +1,7 @@
 import {
-  getNodeAttributes,
-  nodeAttributesProperty,
-  nodePrimaryKeyProperty,
+  getEntityAttributes,
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
@@ -16,11 +16,11 @@ import {
  *
  * @private
  */
-const getNodeAttributesWithNamesResolved = (node, nodeVariables, ignoreExternalProps = false) => {
+const getEntityAttributesWithNamesResolved = (node, nodeVariables, ignoreExternalProps = false) => {
   if (!nodeVariables) {
     return {};
   }
-  const attrs = getNodeAttributes(node);
+  const attrs = getEntityAttributes(node);
   return Object.keys(attrs).reduce((acc, uuid) => {
     if (nodeVariables[uuid] && nodeVariables[uuid].name) {
       acc[nodeVariables[uuid].name] = attrs[uuid];
@@ -42,13 +42,13 @@ const getVariableIdFromName = (variableName, variableDefinitions) => {
 };
 
 /**
- * The inverse of getNodeAttributesWithNamesResolved
+ * The inverse of getEntityAttributesWithNamesResolved
  */
 export const getNodeWithIdAttributes = (node, nodeVariables) => {
   if (!nodeVariables) {
     return {};
   }
-  const attrs = getNodeAttributes(node);
+  const attrs = getEntityAttributes(node);
   const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
     const variableId = getVariableIdFromName(varName, nodeVariables);
     if (variableId) {
@@ -59,7 +59,7 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 
   return {
     ...node,
-    [nodeAttributesProperty]: mappedAttrs,
+    [entityAttributesProperty]: mappedAttrs,
   };
 };
 
@@ -70,7 +70,7 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 export const asExportableNode = (node, nodeTypeDefinition) => ({
   ...node,
   type: nodeTypeDefinition.name,
-  attributes: getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
+  attributes: getEntityAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
 });
 
 export const asExportableEdge = (edge, edgeTypeDefinition) => ({
@@ -107,9 +107,9 @@ export const asExportableNetwork = (network = {}, registry = {}) => {
  * @return {Object} node data safe to supply to user-defined workers.
  */
 export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
-  [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
+  [primaryKeyPropertyForWorker]: node[entityPrimaryKeyProperty],
   [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
-  ...getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
+  ...getEntityAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
 });
 
 export const asWorkerAgentEdge = asExportableEdge;

@@ -26,6 +26,7 @@
     .slide-content {
       display: flex;
       max-height: 95%;
+      min-height: 55%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
@@ -77,6 +78,7 @@
   &__form {
     column-count: 2;
     margin-top: 2rem;
+    margin-bottom: 1rem;
 
     .form-field-container {
       break-inside: avoid;
@@ -113,4 +115,31 @@
 
   }
 
+}
+
+.alter-edge-form {
+  .fake-edge {
+    position: absolute;
+    top: 30%;
+    left: -0.25rem;
+    width: 0.5rem;
+    height: 40%;
+    z-index: 1;
+  }
+
+  .node {
+    position: absolute;
+    top: calc(70% - var(--base-node-size) /2);
+    left: calc((var(--base-node-size) / -2));
+    background: var(--light-background);
+    border-radius: 50%;
+
+    > * { // Render first node on top of fake edge
+      z-index: 2;
+    }
+
+    &:first-of-type {
+      top: calc(30% - var(--base-node-size) /2);
+    }
+  }
 }

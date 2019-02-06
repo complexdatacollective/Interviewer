@@ -2,8 +2,8 @@
 
 import reducer,
 { actionTypes,
-  nodePrimaryKeyProperty as PK,
-  nodeAttributesProperty,
+  entityPrimaryKeyProperty as PK,
+  entityAttributesProperty,
 } from '../network';
 
 const mockState = {
@@ -29,7 +29,7 @@ describe('network reducer', () => {
       },
     );
     expect(newState.nodes.length).toBe(1);
-    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [nodeAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
+    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [entityAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
 
     const newNode = newState.nodes[0];
     expect(newNode.attributes.name).toEqual('foo');
@@ -97,7 +97,7 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'baz' } }],
+        nodes: [{ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'baz' } }],
       },
       {
         type: actionTypes.UPDATE_NODE,
@@ -106,7 +106,7 @@ describe('network reducer', () => {
         newAttributeData: { name: 'foo' },
       },
     );
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [nodeAttributesProperty]: { name: 'foo' } });
+    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'foo' } });
   });
 
   it('toggles node attributes on', () => {
@@ -144,42 +144,87 @@ describe('network reducer', () => {
   });
 
   it('should handle ADD_EDGE', () => {
-    const edge = { from: 'foo', to: 'bar', type: 'friend' };
-    expect(reducer(mockState, { type: actionTypes.ADD_EDGE, edge })).toEqual(
+    const edge = {
+      modelData: {
+        from: 'foo',
+        to: 'bar',
+        type: 'edgeType',
+        [PK]: 1234,
+      },
+      attributeData: {},
+    };
+
+    expect(reducer(mockState, { type: actionTypes.ADD_EDGE, ...edge })).toEqual(
       {
         ...mockState,
-        edges: [edge],
+        edges: [{
+          ...edge.modelData,
+          attributes: {
+            ...edge.attributeData,
+          },
+        }],
       },
     );
   });
 
   it('should handle TOGGLE_EDGE', () => {
-    const edgeA = { from: 'foo', to: 'bar', type: 'friend' };
-    const edgeB = { from: 'asdf', to: 'qwerty', type: 'friend' };
+    const edgeA = {
+      modelData: {
+        from: 'foo',
+        to: 'bar',
+        type: 'friend',
+        [PK]: 12345,
+      },
+      attributeData: {},
+    };
+    const edgeB = {
+      modelData: {
+        from: 'asdf',
+        to: 'qwerty',
+        type: 'friend',
+        [PK]: 123456,
+      },
+      attributeData: {},
+    };
+
     expect(reducer(
-      { ...mockState, edges: [edgeA, edgeB] },
-      { type: actionTypes.TOGGLE_EDGE, edge: edgeA })).toEqual(
       {
         ...mockState,
-        edges: [edgeB],
+        edges: [
+          { ...edgeA.modelData, attributes: {} },
+          { ...edgeB.modelData, attributes: {} },
+        ],
+      },
+      {
+        type: actionTypes.TOGGLE_EDGE,
+        modelData: edgeA.modelData,
+        attributeData: edgeA.attributeData,
+      })).toEqual(
+      {
+        ...mockState,
+        edges: [{ ...edgeB.modelData, attributes: {} }],
       },
     );
     expect(reducer(
-      { ...mockState, edges: [edgeB] },
-      { type: actionTypes.TOGGLE_EDGE, edge: edgeA })).toEqual(
+      { ...mockState, edges: [{ ...edgeB.modelData, attributes: {} }] },
+      {
+        type: actionTypes.TOGGLE_EDGE,
+        modelData: edgeA.modelData,
+        attributeData: edgeA.attributeData,
+      })).toEqual(
       {
         ...mockState,
-        edges: [edgeB, edgeA],
+        edges: [{ ...edgeB.modelData, attributes: {} }, { ...edgeA.modelData, attributes: {} }],
       },
     );
   });
 
   it('should handle REMOVE_EDGE', () => {
-    const edgeA = { from: 'foo', to: 'bar', type: 'friend' };
-    const edgeB = { from: 'asdf', to: 'qwerty', type: 'friend' };
+    const edgeA = { [PK]: 123, from: 'foo', to: 'bar', type: 'friend', attributes: {} };
+    const edgeB = { [PK]: 1234, from: 'asdf', to: 'qwerty', type: 'friend', attributes: {} };
     expect(reducer(
       { ...mockState, edges: [edgeA, edgeB] },
-      { type: actionTypes.REMOVE_EDGE, edge: edgeA })).toEqual(
+      { type: actionTypes.REMOVE_EDGE, edgeId: 123 })).toEqual(
       {
         ...mockState,
         edges: [edgeB],

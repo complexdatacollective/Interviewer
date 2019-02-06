@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { nodePrimaryKeyProperty, nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
 import { makeGetPlacedNodes } from '../../selectors/canvas';
@@ -21,7 +21,7 @@ const withDropHandlers = withHandlers({
   onDrop: ({ updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y }) =>
     (item) => {
       updateNode(
-        item.meta[nodePrimaryKeyProperty],
+        item.meta[entityPrimaryKeyProperty],
         {},
         {
           [layoutVariable]: relativeCoords({ width, height, x, y }, item),
@@ -33,9 +33,9 @@ const withDropHandlers = withHandlers({
     },
   onDrag: ({ layoutVariable, updateNode, width, height, x, y }) =>
     (item) => {
-      if (isNil(item.meta[nodeAttributesProperty][layoutVariable])) { return; }
+      if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
       updateNode(
-        item.meta[nodePrimaryKeyProperty],
+        item.meta[entityPrimaryKeyProperty],
         {},
         {
           [layoutVariable]: relativeCoords({ width, height, x, y }, item),
@@ -50,15 +50,26 @@ const withDropHandlers = withHandlers({
 
 const withSelectHandlers = compose(
   withHandlers({
-    connectNode: ({ createEdge, connectFrom, updateLinkFrom, toggleEdge }) =>
+    connectNode: ({
+      createEdge,
+      connectFrom,
+      updateLinkFrom,
+      toggleEdge,
+    }) =>
       (nodeId) => {
+        // If edge creation is disabled, return
         if (!createEdge) { return; }
 
+        // If the target and source node are the same, return
+        if (connectFrom === nodeId) { return; }
+
+        // If there isn't a target node yet, set the selected node into the linking state
         if (!connectFrom) {
           updateLinkFrom(nodeId);
           return;
         }
 
+        // Either add or remove an edge
         if (connectFrom !== nodeId) {
           toggleEdge({
             from: connectFrom,
@@ -67,15 +78,16 @@ const withSelectHandlers = compose(
           });
         }
 
+        // Reset the node linking state
         updateLinkFrom(null);
       },
     toggleHighlightAttribute: ({ allowHighlighting, highlightAttributes, toggleHighlight }) =>
       (node) => {
         if (!allowHighlighting) { return; }
         highlightAttributes.forEach((highlightAttribute) => {
-          const newVal = !node[nodeAttributesProperty][highlightAttribute.variable];
+          const newVal = !node[entityAttributesProperty][highlightAttribute.variable];
           toggleHighlight(
-            node[nodePrimaryKeyProperty],
+            node[entityPrimaryKeyProperty],
             { [highlightAttribute.variable]: newVal },
           );
         });
@@ -91,7 +103,7 @@ const withSelectHandlers = compose(
     }) => (node) => {
       if (!allowSelect) { return; }
 
-      connectNode(node[nodePrimaryKeyProperty]);
+      connectNode(node[entityPrimaryKeyProperty]);
       toggleHighlightAttribute(node);
       setRerenderCount(rerenderCount + 1);
     },

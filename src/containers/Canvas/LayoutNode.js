@@ -6,7 +6,7 @@ import Node from '../Node';
 import { selectable } from '../../behaviours';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-import { getNodeAttributes } from '../../ducks/modules/network';
+import { getEntityAttributes } from '../../ducks/modules/network';
 
 const EnhancedNode = compose(
   DragSource,
@@ -24,7 +24,7 @@ class LayoutNode extends PureComponent {
       selected,
       selectedColor,
     } = this.props;
-    const nodeAttributes = getNodeAttributes(node);
+    const nodeAttributes = getEntityAttributes(node);
 
     const { x, y } = nodeAttributes[layoutVariable];
 
