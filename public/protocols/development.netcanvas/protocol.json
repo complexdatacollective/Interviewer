@@ -684,11 +684,6 @@
           "variable": "e343a91f-628d-4175-870c-957beffa0154",
           "component": "ToggleButtonGroup",
           "label": "Multiple categorical membership"
-        },
-        {
-          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
-          "component": "hidden",
-          "value": "network-canvas"
         }
       ]
     },
@@ -755,11 +750,6 @@
         {
           "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
           "component": "Number"
-        },
-        {
-          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
-          "component": "hidden",
-          "value": "network-canvas"
         }
       ]
     },
