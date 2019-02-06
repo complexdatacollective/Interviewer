@@ -133,6 +133,7 @@
           "enum": [
             "Narrative",
             "AlterForm",
+            "AlterEdgeForm",
             "NameGenerator",
             "NameGeneratorList",
             "NameGeneratorAutoComplete",
@@ -221,6 +222,17 @@
           "properties": {
             "type": {
               "const": "AlterForm"
+            }
+          },
+          "required": [
+            "form",
+            "introductionPanel"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "AlterEdgeForm"
             }
           },
           "required": [
