@@ -11,19 +11,20 @@ import {
  * This resolves those UUIDs to variable names based on the definitions in the variable registry,
  * appropriate for user scripts and export.
  *
- * If `ignoreExternalProps` is false (the default), and a key is not not found, the resulting node
+ * If `ignoreExternalProps` is false (the default), and a key is not not found, the resulting entity
  * will contain the original key/val. (This may happen with imported external data.)
  *
  * @private
  */
-const getNodeAttributesWithNamesResolved = (node, nodeVariables, ignoreExternalProps = false) => {
-  if (!nodeVariables) {
+const getEntityAttributesWithNamesResolved = (entity, entityVariables,
+  ignoreExternalProps = false) => {
+  if (!entityVariables) {
     return {};
   }
-  const attrs = getNodeAttributes(node);
+  const attrs = getNodeAttributes(entity);
   return Object.keys(attrs).reduce((acc, uuid) => {
-    if (nodeVariables[uuid] && nodeVariables[uuid].name) {
-      acc[nodeVariables[uuid].name] = attrs[uuid];
+    if (entityVariables[uuid] && entityVariables[uuid].name) {
+      acc[entityVariables[uuid].name] = attrs[uuid];
     } else if (!ignoreExternalProps) {
       acc[uuid] = attrs[uuid];
     }
@@ -42,7 +43,7 @@ const getVariableIdFromName = (variableName, variableDefinitions) => {
 };
 
 /**
- * The inverse of getNodeAttributesWithNamesResolved
+ * The inverse of getEntityAttributesWithNamesResolved
  */
 export const getNodeWithIdAttributes = (node, nodeVariables) => {
   if (!nodeVariables) {
@@ -65,17 +66,22 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 
 /**
  * Transposes attribute and type IDs to names for export.
- * Unlike `asWorkerAgentNode()`, this does not flatten attributes.
+ * Unlike `asWorkerAgentEntity()`, this does not flatten attributes.
  */
 export const asExportableNode = (node, nodeTypeDefinition) => ({
   ...node,
   type: nodeTypeDefinition.name,
-  attributes: getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
+  attributes: getEntityAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
 });
 
 export const asExportableEdge = (edge, edgeTypeDefinition) => ({
   ...edge,
   type: edgeTypeDefinition && edgeTypeDefinition.name,
+});
+
+export const asExportableEgo = (ego, egoDefinition) => ({
+  ...ego,
+  attributes: getEntityAttributesWithNamesResolved(ego, (egoDefinition || {}).variables),
 });
 
 /**
@@ -88,11 +94,12 @@ export const asExportableEdge = (edge, edgeTypeDefinition) => ({
  * @return {Object} externalNetwork
  */
 export const asExportableNetwork = (network = {}, registry = {}) => {
-  const { nodes = [], edges = [] } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
+  const { nodes = [], edges = [], ego = {} } = network;
+  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
     nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
     edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),
+    ego: asExportableEgo(ego, egoRegistry),
   });
 };
 
@@ -102,14 +109,14 @@ export const asExportableNetwork = (network = {}, registry = {}) => {
  *`primaryKeyPropertyForWorker` and `nodeTypePropertyForWorker` are used to minimize conflicts,
  * but user data is always preserved in the event of conflicts.
  *
- * @param  {Object} node
- * @param  {Object} nodeTypeDefinition The variableRegistry entry for this node type
- * @return {Object} node data safe to supply to user-defined workers.
+ * @param  {Object} entity
+ * @param  {Object} entityTypeDefinition The variableRegistry entry for this entity type
+ * @return {Object} entity data safe to supply to user-defined workers.
  */
-export const asWorkerAgentNode = (node, nodeTypeDefinition) => ({
-  [primaryKeyPropertyForWorker]: node[nodePrimaryKeyProperty],
-  [nodeTypePropertyForWorker]: nodeTypeDefinition && nodeTypeDefinition.name,
-  ...getNodeAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
+export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
+  [primaryKeyPropertyForWorker]: entity[nodePrimaryKeyProperty],
+  [nodeTypePropertyForWorker]: entityTypeDefinition && entityTypeDefinition.name,
+  ...getEntityAttributesWithNamesResolved(entity, (entityTypeDefinition || {}).variables),
 });
 
 export const asWorkerAgentEdge = asExportableEdge;
@@ -122,10 +129,11 @@ export const asWorkerAgentEdge = asExportableEdge;
  * @return {Object} workerNetwork
  */
 export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
-  const { nodes = [], edges = [] } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {} } = registry;
+  const { nodes = [], edges = [], ego } = network;
+  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
-    nodes: nodes.map(node => asWorkerAgentNode(node, nodeRegistry[node.type])),
+    nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),
     edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+    ego: asWorkerAgentEntity(ego, egoRegistry),
   });
 };

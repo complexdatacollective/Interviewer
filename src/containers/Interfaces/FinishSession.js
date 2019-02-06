@@ -117,8 +117,13 @@ class FinishSession extends Component {
             <div>
               <Button
                 color="platinum"
-                onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.variableRegistry, this.handleExportError)}
+                onClick={() => {
+                  console.log(this.props.currentSession);
+                  const sessionData = asExportableNetwork(this.props.currentSession.network, this.props.variableRegistry);
+                  console.log(sessionData);
+                  // createGraphML(this.props.currentNetwork,
+                    // this.props.variableRegistry, this.handleExportError);
+                }}
               >
                 Download
               </Button>
