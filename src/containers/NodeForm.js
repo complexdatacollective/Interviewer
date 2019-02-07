@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
-import { Button, ToggleInput } from '../ui/components';
+import { Button } from '../ui/components';
 import { protocolForms } from '../selectors/protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
@@ -18,21 +18,11 @@ class NodeForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      addAnotherNode: false,
-    };
-
     this.overlay = React.createRef();
   }
 
-  onToggleClick = () => {
-    this.setState({
-      addAnotherNode: !this.state.addAnotherNode,
-    });
-  }
-
   handleSubmit = (form) => {
-    this.props.onSubmit({ form, addAnotherNode: this.state.addAnotherNode });
+    this.props.onSubmit({ form });
     this.overlay.current.getWrappedInstance().scrollContentsToTop();
     this.props.resetValues(reduxFormName);
   }
@@ -46,14 +36,6 @@ class NodeForm extends Component {
       onSubmit: this.handleSubmit,
       autoFocus: true,
       controls: [
-        (form && form.optionToAddAnother && <ToggleInput
-          key="toggleInput"
-          name="addAnother"
-          label="Add another?"
-          checked={this.state.addAnotherNode}
-          onCheck={this.onToggleClick}
-          inline
-        />),
         <Button type="submit" key="submit" aria-label="Submit">Finished</Button>,
       ].filter(notEmpty),
       form: reduxFormName,

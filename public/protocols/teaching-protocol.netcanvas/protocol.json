@@ -172,7 +172,6 @@
       "title": "Add A Person",
       "entity": "node",
       "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653",
-      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "fc6a9918-3801-4877-9c1c-9e87cab04a59",
