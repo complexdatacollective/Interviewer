@@ -77,6 +77,7 @@ export const asExportableNode = (node, nodeTypeDefinition) => ({
 export const asExportableEdge = (edge, edgeTypeDefinition) => ({
   ...edge,
   type: edgeTypeDefinition && edgeTypeDefinition.name,
+  // TODO attributes for edges
 });
 
 export const asExportableEgo = (ego, egoDefinition) => ({
@@ -134,6 +135,7 @@ export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
   return ({
     nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),
     edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+    // TODO attributes for edges
     ego: asWorkerAgentEntity(ego, egoRegistry),
   });
 };

@@ -121,6 +121,7 @@ class FinishSession extends Component {
                   console.log(this.props.currentSession);
                   const sessionData = asExportableNetwork(this.props.currentSession.network, this.props.variableRegistry);
                   console.log(sessionData);
+                  // TODO put graphML back in place when done testing
                   // createGraphML(this.props.currentNetwork,
                     // this.props.variableRegistry, this.handleExportError);
                 }}

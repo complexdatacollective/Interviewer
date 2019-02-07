@@ -957,12 +957,12 @@
           "variable": "3377af3f-3c79-41da-9b0b-6570fb519b93",
           "value": "You",
           "component": "Text",
-          "label": "What is this person's name?"
+          "label": "What is your name?"
         },
         {
           "variable": "f3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
           "component": "Number",
-          "label": "What is this person's age?"
+          "label": "What is your age?"
         },
         {
           "variable": "683ad529-66c6-4c84-8e31-a31452d6b5e9",
