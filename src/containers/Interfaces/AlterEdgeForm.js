@@ -83,12 +83,12 @@ class AlterEdgeForm extends Component {
       stageEdges,
       updateEdge,
     } = this.props;
+
     const swiperParams = {
       containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
       speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
       effect: 'coverflow',
-      allowTouchMove: false,
       coverflowEffect: {
         rotate: 30,
         slideShadows: false,
@@ -105,7 +105,7 @@ class AlterEdgeForm extends Component {
     );
 
     return (
-      <div className="alter-form alter-edge-form">
+      <div className="alter-form alter-edge-form swiper-no-swiping">
         <Swiper {...swiperParams} ref={this.swipeRef} >
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
