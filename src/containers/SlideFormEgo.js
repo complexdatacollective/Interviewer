@@ -5,7 +5,7 @@ import { TransitionGroup } from 'react-transition-group';
 
 import { Scroller } from '../components';
 import { Folder as FolderTransition } from '../components/Transition';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 import { makeGetEgoColor, makeGetEgoLabel } from '../selectors/protocol';
 import { Node as UINode } from '../ui/components';
 import { Form } from '.';
@@ -33,7 +33,7 @@ class SlideFormEgo extends PureComponent {
                   <Form
                     {...form}
                     className="alter-form__form"
-                    initialValues={ego[nodeAttributesProperty]}
+                    initialValues={ego[entityAttributesProperty]}
                     controls={[]}
                     autoFocus={false}
                     form={formName}

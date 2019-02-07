@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import withPrompt from '../behaviours/withPrompt';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 import { makeGetNodeDisplayVariable } from '../selectors/interface';
 import { Icon } from '../ui/components/';
 import { Node } from './';
@@ -105,7 +105,7 @@ class QuickNodeForm extends PureComponent {
             <div className="flip-button-back">
               <Node
                 type={stage.subject.type}
-                {...{ [nodeAttributesProperty]: {
+                {...{ [entityAttributesProperty]: {
                   [displayVariable]: this.state.nodeLabel,
                 } }}
               />

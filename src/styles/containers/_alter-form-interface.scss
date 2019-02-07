@@ -73,6 +73,7 @@
   &__form-container {
     height: inherit;
     margin-left: calc(var(--base-node-size) * .4);
+    width: 100%;
   }
 
   &__form {
