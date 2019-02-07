@@ -62,6 +62,22 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
   },
 );
 
+export const makeGetEgoLabel = () => createDeepEqualSelector(
+  protocolRegistry,
+  (variableRegistry) => {
+    const egoInfo = variableRegistry.ego;
+    return (egoInfo && egoInfo.label) || 'You';
+  },
+);
+
+export const makeGetEgoColor = () => createDeepEqualSelector(
+  protocolRegistry,
+  (variableRegistry) => {
+    const egoInfo = variableRegistry.ego;
+    return (egoInfo && egoInfo.color) || 'node-color-seq-1';
+  },
+);
+
 export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.subject.type,
