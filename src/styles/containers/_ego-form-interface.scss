@@ -1,78 +1,9 @@
 .ego-form {
-  display: flex;
-  align-items: center;
-  height: 100vh;
-  justify-content: center;
-
-  &__content {
-    display: flex;
-    align-items: center;
-    height: 80%;
-    width: 75%;
-    justify-content: center;
-  }
-
-  .slide-content {
-    width: 100%;
-    max-height: 95%;
-    display: flex;
-    padding: unit(1) unit(4) unit(2);
-    border-radius: var(--border-radius);
-    background: var(--light-background);
-    position: relative;
-    left: calc(var(--base-node-size) * .2);
-  }
-
-  .node {
-    position: absolute;
-    top: calc(50% - var(--base-node-size) /2);
-    left: calc((var(--base-node-size) / -2));
-    background: var(--light-background);
-    border-radius: 50%;
-  }
-
   &__form-container {
-    height: inherit;
-    margin-left: calc(var(--base-node-size) * .4);
     width: 100%;
   }
 
-  &__transition {
+  .slide__transition {
     height: inherit;
-  }
-
-  .scrollable {
-    height: 100%;
-  }
-
-  &__form {
-    column-count: 2;
-    margin-top: 2rem;
-
-    .form-field-container {
-      break-inside: avoid;
-    }
-  }
-
-  .progress-container {
-    bottom: unit(4);
-    position: absolute;
-    z-index: var(--z-panel);
-    left: 50%;
-    text-align: center;
-    transform: translate(-50%, 0);
-    display: flex;
-    flex-direction: column;
-    width: 20rem;
-
-    &__status-text {
-      margin-bottom: 0.5rem;
-    }
-
-    .progress {
-      width: 20rem;
-      height: 1.5rem;
-    }
-
   }
 }

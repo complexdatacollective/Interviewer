@@ -4,20 +4,17 @@ import cx from 'classnames';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
-import { TransitionGroup } from 'react-transition-group';
 import ReactMarkdown from 'react-markdown';
+import Swiper from 'react-id-swiper';
 
-import { ProgressBar, Scroller } from '../../components';
+import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { protocolForms } from '../../selectors/protocol';
 import { networkEgo } from '../../selectors/interface';
-import { nodeAttributesProperty } from '../../ducks/modules/network';
-import { Node as UINode } from '../../ui/components';
-import { Form } from '../';
-import { Folder as FolderTransition } from '../../components/Transition';
+import { SlideFormEgo } from '../';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
+import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
-const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const TAGS = [
   'break',
   'emphasis',
@@ -33,14 +30,18 @@ const TAGS = [
 class EgoForm extends Component {
   constructor(props) {
     super(props);
+    this.swipeRef = React.createRef();
     this.state = {
       activeIndex: 0,
     };
   }
 
-  getNodeFormName = () => `EGO_FORM_${this.state.activeIndex}`;
+  getNodeFormName = activeIndex => `EGO_FORM_${activeIndex}`;
 
-  formSubmitAllowed = () => this.props.formEnabled(this.getNodeFormName());
+  formSubmitAllowed = index => (
+    this.swipeRef && this.swipeRef.current.swiper &&
+    this.props.formEnabled(this.getNodeFormName(index))
+  );
 
   isStageBeginning = () => (
     this.state.activeIndex === 0
@@ -53,22 +54,31 @@ class EgoForm extends Component {
 
   clickNext = () => {
     if (this.state.activeIndex > 0) {
-      this.props.submitForm(this.getNodeFormName());
+      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
     }
-    if (this.state.activeIndex > 0 || this.formSubmitAllowed()) {
+    if (this.state.activeIndex < this.props.egoFormNames.length &&
+      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
       this.setState({
-        activeIndex: rotateIndex(this.props.egoFormNames.length + 1, this.state.activeIndex + 1),
+        activeIndex: this.state.activeIndex + 1,
       });
+      if (this.state.activeIndex === 0) {
+        this.swipeRef.current.swiper.slideNext();
+      }
     }
   };
 
   clickPrevious = () => {
-    if (this.formSubmitAllowed()) {
-      this.props.submitForm(this.getNodeFormName());
+    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
+      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
     }
-    this.setState({
-      activeIndex: rotateIndex(this.props.egoFormNames.length + 1, this.state.activeIndex - 1),
-    });
+    if (this.state.activeIndex > 0) {
+      this.setState({
+        activeIndex: this.state.activeIndex - 1,
+      });
+      if (this.state.activeIndex === 1) {
+        this.swipeRef.current.swiper.slidePrev();
+      }
+    }
   };
 
   handleSubmitForm = formData => this.props.updateEgo(this.props.ego, formData);
@@ -81,6 +91,19 @@ class EgoForm extends Component {
       stage,
     } = this.props;
 
+    const swiperParams = {
+      containerClass: 'alter-form__swiper swiper-container',
+      direction: 'vertical',
+      speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+      effect: 'coverflow',
+      coverflowEffect: {
+        rotate: 30,
+        slideShadows: false,
+      },
+      slidesPerView: 'auto',
+      centeredSlides: true,
+    };
+
     const progressClasses = cx(
       'progress-container',
       {
@@ -88,10 +111,13 @@ class EgoForm extends Component {
       },
     );
 
+    const currentForm = this.state.activeIndex > 0 ?
+      allForms[egoFormNames[this.state.activeIndex - 1]] : allForms[egoFormNames[0]];
+    const formIndex = this.state.activeIndex > 0 ? this.state.activeIndex : 0;
+
     return (
-      <div className="ego-form">
-        <div className="ego-form__content">
-          { this.state.activeIndex === 0 && (
+      <div className="ego-form alter-form swiper-no-swiping">
+        <Swiper {...swiperParams} ref={this.swipeRef} >
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
               <h1>{stage.introductionPanel.title}</h1>
@@ -102,30 +128,14 @@ class EgoForm extends Component {
               />
             </div>
           </div>
-          )}
-          { this.state.activeIndex > 0 && (
-          <div className="slide-content">
-            <UINode {...ego} label="You" />
-            <div className="ego-form__form-container">
-              <TransitionGroup className="ego-form__transition">
-                <FolderTransition key={`ego-${this.state.activeIndex - 1}`}>
-                  <Scroller>
-                    <Form
-                      {...allForms[egoFormNames[this.state.activeIndex - 1]]}
-                      className="ego-form__form"
-                      initialValues={ego[nodeAttributesProperty]}
-                      controls={[]}
-                      autoFocus={false}
-                      form={this.getNodeFormName()}
-                      onSubmit={formData => this.handleSubmitForm(formData)}
-                    />
-                  </Scroller>
-                </FolderTransition>
-              </TransitionGroup>
-            </div>
-          </div>
-          )}
-        </div>
+          <SlideFormEgo
+            ego={ego}
+            form={currentForm}
+            formName={this.getNodeFormName(formIndex)}
+            index={formIndex}
+            updateEgo={formData => this.handleSubmitForm(formData)}
+          />
+        </Swiper>
         <div className={progressClasses}>
           <h6 className="progress-container__status-text">
             <strong>{this.state.activeIndex}</strong> of <strong>{egoFormNames.length}</strong>
