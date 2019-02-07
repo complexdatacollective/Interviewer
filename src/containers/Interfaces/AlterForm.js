@@ -90,7 +90,6 @@ class AlterForm extends Component {
       direction: 'vertical',
       speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
       effect: 'coverflow',
-      allowTouchMove: false,
       coverflowEffect: {
         rotate: 30,
         slideShadows: false,
@@ -107,7 +106,7 @@ class AlterForm extends Component {
     );
 
     return (
-      <div className="alter-form">
+      <div className="alter-form swiper-no-swiping">
         <Swiper {...swiperParams} ref={this.swipeRef} >
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
