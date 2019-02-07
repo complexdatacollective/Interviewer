@@ -1,5 +1,5 @@
 import { actionCreators as sessionsActions } from './sessions';
-import { nodePrimaryKeyProperty } from './network';
+import { entityPrimaryKeyProperty } from './network';
 import { actionCreators as deviceActions } from './deviceSettings';
 
 const RESET_STATE = 'RESET_STATE';
@@ -27,7 +27,7 @@ const resetPropertyForAllNodes = property =>
       const variableType = registryForType[property].type;
       dispatch(
         sessionsActions.updateNode(
-          node[nodePrimaryKeyProperty],
+          node[entityPrimaryKeyProperty],
           {},
           {
             [property]: variableType === 'boolean' ? false : null,

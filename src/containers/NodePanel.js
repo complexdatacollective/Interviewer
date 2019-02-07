@@ -9,7 +9,7 @@ import {
 } from '../selectors/interface';
 import { Panel, NodeList } from '../components/';
 import withExternalData from './withExternalData';
-import { nodePrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 class NodePanel extends PureComponent {
   componentDidMount() {
@@ -32,7 +32,7 @@ class NodePanel extends PureComponent {
     const externalNodes = get(externalData, 'nodes', []);
     const allNodes = (dataSource === 'existing' ? nodes : externalNodes);
 
-    return new Set(allNodes.map(node => node[nodePrimaryKeyProperty]));
+    return new Set(allNodes.map(node => node[entityPrimaryKeyProperty]));
   }
 
   // This can use the displayed nodes for a count as it is used to see whether the panel
@@ -82,7 +82,7 @@ class NodePanel extends PureComponent {
 }
 
 
-const getNodeId = node => node[nodePrimaryKeyProperty];
+const getNodeId = node => node[entityPrimaryKeyProperty];
 
 const makeGetNodes = () => {
   const getNodesForPrompt = makeGetNodesForPrompt();
@@ -97,7 +97,7 @@ const makeGetNodes = () => {
     };
 
     const notInSet = set =>
-      node => !set.has(node[nodePrimaryKeyProperty]);
+      node => !set.has(node[entityPrimaryKeyProperty]);
 
     if (props.dataSource === 'existing') {
       const nodes = nodesForOtherPrompts

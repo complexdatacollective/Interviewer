@@ -8,7 +8,7 @@ import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button, ToggleInput } from '../ui/components';
 import { protocolForms } from '../selectors/protocol';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 
 const reduxFormName = 'NODE_FORM';
 
@@ -81,7 +81,7 @@ class NodeForm extends Component {
 
 const mapStateToProps = (state, props) => {
   const forms = protocolForms(state);
-  const nodeAttributes = props.node ? props.node[nodeAttributesProperty] : {};
+  const nodeAttributes = props.node ? props.node[entityAttributesProperty] : {};
 
   const initialValues = {
     ...nodeAttributes,

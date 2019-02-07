@@ -38,7 +38,6 @@ const FormComponent = Object.freeze({
   Toggle: 'Toggle',
   ToggleButton: 'ToggleButton',
   ToggleButtonGroup: 'ToggleButtonGroup',
-  hidden: 'hidden',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types
@@ -86,6 +85,7 @@ const StageType = Object.freeze({
   Narrative: 'Narrative',
   AlterForm: 'AlterForm',
   EgoForm: 'EgoForm',
+  AlterEdgeForm: 'AlterEdgeForm',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types

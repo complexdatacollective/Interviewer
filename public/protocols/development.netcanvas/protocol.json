@@ -767,39 +767,65 @@
         "name": "friend",
         "label": "Friend",
         "variables": {
-          "9f106a56-528b-498d-8103-a6f7a8c9fa15": {
-            "name": "contactfrequency",
-            "label": "Contact frequency ordinal variable.",
-            "description": "Contact frequency ordinal variable",
-            "type": "ordinal",
+          "e343a91f-628d-4175-870c-957beffa0002": {
+            "name": "catvar2",
+            "label": "catvar2",
+            "description": "Categorical var with 2 options",
+            "type": "categorical",
             "options": [
               {
-                "label": "Last 24 hours",
-                "value": 4
+                "label": "One",
+                "value": "one"
               },
               {
-                "label": "Last week",
-                "value": 3
-              },
-              {
-                "label": "Last six months",
-                "value": 2
-              },
-              {
-                "label": "Last two years",
-                "value": 1
-              },
-              {
-                "label": "Over two years ago",
-                "value": -1
+                "label": "Two",
+                "value": "two"
               }
             ]
           },
-          "f088bfec-e14d-452a-b45a-016eb9e2228d": {
-            "name": "type",
-            "label": "Type",
-            "description": "Type",
-            "type": "text"
+          "e343a91f-628d-4175-870c-957beffa0003": {
+            "name": "catvar3",
+            "label": "catvar3",
+            "description": "Categorical var with 3 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0004": {
+            "name": "catvar4",
+            "label": "catvar4",
+            "description": "Categorical var with 4 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              },
+              {
+                "label": "Four",
+                "value": "four"
+              }
+            ]
           }
         }
       },
@@ -807,7 +833,24 @@
         "name": "professional",
         "label": "Professional",
         "color": "edge-color-seq-2",
-        "variables": {}
+        "variables": {
+          "d343a91f-628d-4175-870c-957beffa0002": {
+            "name": "catvar2",
+            "label": "catvar2",
+            "description": "Categorical var with 2 options",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          }
+        }
       }
     }
   },
@@ -847,11 +890,6 @@
           "variable": "e343a91f-628d-4175-870c-957beffa0154",
           "component": "ToggleButtonGroup",
           "label": "Multiple categorical membership"
-        },
-        {
-          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
-          "component": "hidden",
-          "value": "network-canvas"
         }
       ]
     },
@@ -918,11 +956,6 @@
         {
           "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
           "component": "Number"
-        },
-        {
-          "variable": "04298634-eb5f-450a-84dd-95d2708e10c1",
-          "component": "hidden",
-          "value": "network-canvas"
         }
       ]
     },
@@ -1005,6 +1038,40 @@
           "label": "Is the switch below not turned on?"
         }
       ]
+    },
+    "myAlterEdgeFormID": {
+      "title": "Modify an Edge",
+      "entity": "edge",
+      "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+      "fields": [
+        {
+          "variable": "e343a91f-628d-4175-870c-957beffa0002",
+          "component": "ToggleButtonGroup",
+          "label": "Two item categorical variable"
+        },
+        {
+          "variable": "e343a91f-628d-4175-870c-957beffa0003",
+          "component": "ToggleButtonGroup",
+          "label": "Three item categorical variable"
+        },
+        {
+          "variable": "e343a91f-628d-4175-870c-957beffa0004",
+          "component": "ToggleButtonGroup",
+          "label": "Four item categorical variable"
+        }
+      ]
+    },
+    "myProfessionalAlterEdgeFormID": {
+      "title": "Modify a Professional Edge",
+      "entity": "edge",
+      "type": "867127d9-086b-403a-a3e7-2c7d32126546",
+      "fields": [
+        {
+          "variable": "d343a91f-628d-4175-870c-957beffa0002",
+          "component": "ToggleButtonGroup",
+          "label": "Two item categorical variable"
+        }
+      ]
     }
   },
   "stages": [
@@ -1048,15 +1115,6 @@
                   "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                   "operator": "EXACTLY",
                   "value": "Bob"
-                }
-              },
-              {
-                "type": "edge",
-                "id": "15218241565624",
-                "options": {
-                  "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
-                  "operator": "EXISTS",
-                  "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
                 }
               }
             ]
@@ -1629,6 +1687,26 @@
       }
     },
     {
+      "id": "alter-edge-form-1",
+      "type": "AlterEdgeForm",
+      "label": "Alter Edge Form (friends)",
+      "form": "myAlterEdgeFormID",
+      "introductionPanel": {
+        "title": "Introduction to the alter edge form",
+        "text": "Alter edge form"
+      }
+    },
+    {
+      "id": "alter-edge-form-2",
+      "type": "AlterEdgeForm",
+      "label": "Alter Edge Form (professional)",
+      "form": "myProfessionalAlterEdgeFormID",
+      "introductionPanel": {
+        "title": "An alternative alter edge interface",
+        "text": "This interface acts on professional edges."
+      }
+    },
+    {
       "id": "rubberduck",
       "label": "Audio test",
       "type": "Information",
@@ -1731,15 +1809,6 @@
                 "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
                 "operator": "EXACTLY",
                 "value": "Bob"
-              }
-            },
-            {
-              "type": "edge",
-              "id": "15218241565624",
-              "options": {
-                "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
-                "operator": "EXISTS",
-                "attribute": "9f106a56-528b-498d-8103-a6f7a8c9fa15"
               }
             }
           ]

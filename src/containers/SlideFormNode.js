@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { Scroller } from '../components';
-import { nodeAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 import Node from './Node';
-import { Form } from './';
+import { Form } from '.';
 
 class SlideForm extends PureComponent {
   render() {
@@ -24,7 +24,7 @@ class SlideForm extends PureComponent {
               <Form
                 {...form}
                 className="alter-form__form"
-                initialValues={node[nodeAttributesProperty]}
+                initialValues={node[entityAttributesProperty]}
                 controls={[]}
                 autoFocus={false}
                 form={`NODE_FORM_${index + 1}`}

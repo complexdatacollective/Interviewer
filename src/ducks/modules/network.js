@@ -1,12 +1,12 @@
-import { reject, findIndex, isMatch, omit, keys } from 'lodash';
+import { reject, find, isMatch, omit, keys, get } from 'lodash';
 
 import uuidv4 from '../../utils/uuid';
 
-// Property name for the primary key for nodes
-export const nodePrimaryKeyProperty = '_uid';
+// Property name for the primary key for nodes or edged
+export const entityPrimaryKeyProperty = '_uid';
 
-// Property name for node "model" properties
-export const nodeAttributesProperty = 'attributes';
+// Property name for node or edge model properties
+export const entityAttributesProperty = 'attributes';
 
 // Property names passed to user worker scripts
 export const primaryKeyPropertyForWorker = 'networkCanvasId';
@@ -19,6 +19,7 @@ export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
 export const UPDATE_NODE = 'UPDATE_NODE';
 export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
 export const ADD_EDGE = 'ADD_EDGE';
+export const UPDATE_EDGE = 'UPDATE_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const SET_EGO = 'SET_EGO';
@@ -34,21 +35,26 @@ function flipEdge(edge) {
   return { from: edge.to, to: edge.from, type: edge.type };
 }
 
-function edgeExists(edges, edge) {
-  return (
-    findIndex(edges, edge) !== -1 ||
-    findIndex(edges, flipEdge(edge)) !== -1
-  );
+function edgeExists(edges, from, to, type) {
+  const forwardsEdge = find(edges, { from, to, type });
+  const reverseEdge = find(edges, flipEdge({ from, to, type }));
+
+  if ((forwardsEdge && forwardsEdge !== -1) || (reverseEdge && reverseEdge !== -1)) {
+    const foundEdge = forwardsEdge || reverseEdge;
+    return get(foundEdge, entityPrimaryKeyProperty);
+  }
+
+  return false;
 }
 
-export const getNodeAttributes = node => node[nodeAttributesProperty] || {};
+export const getEntityAttributes = node => node[entityAttributesProperty] || {};
 
 const nodeWithModelandAttributeData = (modelData, attributeData) => ({
   ...omit(modelData, 'promptId'),
-  [nodePrimaryKeyProperty]:
-    modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
-  [nodeAttributesProperty]: {
-    ...modelData[nodeAttributesProperty],
+  [entityPrimaryKeyProperty]:
+    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
+  [entityAttributesProperty]: {
+    ...modelData[entityAttributesProperty],
     ...attributeData,
   },
   promptIDs: [modelData.promptId],
@@ -58,12 +64,43 @@ const nodeWithModelandAttributeData = (modelData, attributeData) => ({
 });
 
 const egoWithModelandAttributeData = (modelData, attributeData) => ({
-  [nodePrimaryKeyProperty]:
-    modelData[nodePrimaryKeyProperty] ? modelData[nodePrimaryKeyProperty] : uuidv4(),
-  [nodeAttributesProperty]: {
-    ...modelData[nodeAttributesProperty],
+  [entityPrimaryKeyProperty]:
+    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
+  [entityAttributesProperty]: {
+    ...modelData[entityAttributesProperty],
     ...attributeData,
   },
+});
+
+const edgeWithModelandAttributeData = (modelData, attributeData) => ({
+  ...modelData,
+  [entityPrimaryKeyProperty]:
+    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
+  [entityAttributesProperty]: {
+    ...modelData[entityAttributesProperty],
+    ...attributeData,
+  },
+  type: modelData.type,
+  itemType: modelData.itemType,
+});
+
+const addEdge = (state, action) => ({
+  ...state,
+  edges: (
+    () => state.edges.concat(
+      edgeWithModelandAttributeData(
+        action.modelData,
+        action.attributeData,
+      ),
+    )
+  )(),
+});
+
+const removeEdge = (state, edgeId) => ({
+  ...state,
+  edges: reject(state.edges, edge =>
+    edge[entityPrimaryKeyProperty] === edgeId,
+  ),
 });
 
 export default function reducer(state = initialState, action = {}) {
@@ -111,20 +148,22 @@ export default function reducer(state = initialState, action = {}) {
         nodes: (
           () => state.nodes.map(
             (node) => {
-              if (node[nodePrimaryKeyProperty] !== action[nodePrimaryKeyProperty]) { return node; }
+              if (node[entityPrimaryKeyProperty] !== action[entityPrimaryKeyProperty]) {
+                return node;
+              }
 
               // If the node's attrs contain the same key/vals, remove them
-              if (isMatch(node[nodeAttributesProperty], action.attributes)) {
+              if (isMatch(node[entityAttributesProperty], action.attributes)) {
                 const omittedKeys = Object.keys(action.attributes);
-                const nestedProps = omittedKeys.map(key => `${nodeAttributesProperty}.${key}`);
+                const nestedProps = omittedKeys.map(key => `${entityAttributesProperty}.${key}`);
                 return omit(node, nestedProps);
               }
 
               // Otherwise, add/update
               return {
                 ...node,
-                [nodeAttributesProperty]: {
-                  ...node[nodeAttributesProperty],
+                [entityAttributesProperty]: {
+                  ...node[entityAttributesProperty],
                   ...action.attributes,
                 },
               };
@@ -137,14 +176,14 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         nodes: (() => state.nodes.map((node) => {
-          if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+          if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
           return {
             ...node,
             ...omit(action.newModelData, 'promptId'),
             promptIDs: action.newModelData.promptId ?
               [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
-            [nodeAttributesProperty]: {
-              ...node[nodeAttributesProperty],
+            [entityAttributesProperty]: {
+              ...node[entityAttributesProperty],
               ...action.newAttributeData,
             },
           };
@@ -153,13 +192,14 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case REMOVE_NODE: {
-      const removenodePrimaryKeyProperty = action[nodePrimaryKeyProperty];
+      const removeentityPrimaryKeyProperty = action[entityPrimaryKeyProperty];
       return {
         ...state,
         nodes: reject(state.nodes, node =>
-          node[nodePrimaryKeyProperty] === removenodePrimaryKeyProperty),
+          node[entityPrimaryKeyProperty] === removeentityPrimaryKeyProperty),
         edges: reject(state.edges, edge =>
-          edge.from === removenodePrimaryKeyProperty || edge.to === removenodePrimaryKeyProperty),
+          edge.from === removeentityPrimaryKeyProperty ||
+          edge.to === removeentityPrimaryKeyProperty),
       };
     }
     case REMOVE_NODE_FROM_PROMPT: {
@@ -167,43 +207,55 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         nodes: (() => state.nodes.map(
           (node) => {
-            if (node[nodePrimaryKeyProperty] !== action.nodeId) { return node; }
+            if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
             return {
               ...node,
-              [nodeAttributesProperty]:
-                omit(node[nodeAttributesProperty], keys(action.promptAttributes)),
+              [entityAttributesProperty]:
+                omit(node[entityAttributesProperty], keys(action.promptAttributes)),
               promptIDs: node.promptIDs.filter(id => id !== action.promptId),
             };
           })
         )(),
       };
     }
-    case ADD_EDGE:
-      if (edgeExists(state.edges, action.edge)) { return state; }
+    case ADD_EDGE: {
+      return addEdge(state, action);
+    }
+    case UPDATE_EDGE: {
       return {
         ...state,
-        edges: [...state.edges, action.edge],
+        edges: (() => state.edges.map((edge) => {
+          if (edge[entityPrimaryKeyProperty] !== action.edgeId) { return edge; }
+          return {
+            ...edge,
+            ...action.newModelData,
+            [entityAttributesProperty]: {
+              ...edge[entityAttributesProperty],
+              ...action.newAttributeData,
+            },
+          };
+        })
+        )(),
       };
-    case TOGGLE_EDGE:
+    }
+    case TOGGLE_EDGE: {
       // remove edge if it exists, add it if it doesn't
-      if (edgeExists(state.edges, action.edge)) {
-        return {
-          ...state,
-          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
-        };
+      const { to, from, type } = action.modelData;
+      if (!to || !from || !type) { return state; }
+
+      // Returns an edge UID if an existing edge is found, otherwise false;
+      const existingEdgeId = edgeExists(state.edges, from, to, type);
+
+      if (existingEdgeId) {
+        // Edge exists - remove it
+        return removeEdge(state, existingEdgeId);
       }
-      return {
-        ...state,
-        edges: [...state.edges, action.edge],
-      };
+
+      // Edge does not exist - create it
+      return addEdge(state, action);
+    }
     case REMOVE_EDGE:
-      if (edgeExists(state.edges, action.edge)) {
-        return {
-          ...state,
-          edges: reject(reject(state.edges, action.edge), flipEdge(action.edge)),
-        };
-      }
-      return state;
+      return removeEdge(state, action.edgeId);
     default:
       return state;
   }
@@ -221,6 +273,7 @@ const actionTypes = {
   TOGGLE_NODE_ATTRIBUTES,
   REMOVE_NODE,
   ADD_EDGE,
+  UPDATE_EDGE,
   TOGGLE_EDGE,
   REMOVE_EDGE,
   SET_EGO,

@@ -1,7 +1,7 @@
 import {
-  getNodeAttributes,
-  nodeAttributesProperty,
-  nodePrimaryKeyProperty,
+  getEntityAttributes,
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
@@ -21,7 +21,7 @@ const getEntityAttributesWithNamesResolved = (entity, entityVariables,
   if (!entityVariables) {
     return {};
   }
-  const attrs = getNodeAttributes(entity);
+  const attrs = getEntityAttributes(entity);
   return Object.keys(attrs).reduce((acc, uuid) => {
     if (entityVariables[uuid] && entityVariables[uuid].name) {
       acc[entityVariables[uuid].name] = attrs[uuid];
@@ -49,7 +49,7 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
   if (!nodeVariables) {
     return {};
   }
-  const attrs = getNodeAttributes(node);
+  const attrs = getEntityAttributes(node);
   const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
     const variableId = getVariableIdFromName(varName, nodeVariables);
     if (variableId) {
@@ -60,7 +60,7 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 
   return {
     ...node,
-    [nodeAttributesProperty]: mappedAttrs,
+    [entityAttributesProperty]: mappedAttrs,
   };
 };
 
@@ -115,7 +115,7 @@ export const asExportableNetwork = (network = {}, registry = {}) => {
  * @return {Object} entity data safe to supply to user-defined workers.
  */
 export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
-  [primaryKeyPropertyForWorker]: entity[nodePrimaryKeyProperty],
+  [primaryKeyPropertyForWorker]: entity[entityPrimaryKeyProperty],
   [nodeTypePropertyForWorker]: entityTypeDefinition && entityTypeDefinition.name,
   ...getEntityAttributesWithNamesResolved(entity, (entityTypeDefinition || {}).variables),
 });

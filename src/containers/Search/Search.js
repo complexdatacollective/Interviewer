@@ -9,7 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getNodeAttributes, nodePrimaryKeyProperty } from '../../ducks/modules/network';
+import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 import withExternalData from '../withExternalData';
 
@@ -122,7 +122,7 @@ class Search extends Component {
   //   and so preferable to filter found results dynamically.
   isAllowedResult(candidate) {
     return this.props.excludedNodes.every(excluded =>
-      excluded[nodePrimaryKeyProperty] !== candidate[nodePrimaryKeyProperty]);
+      excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty]);
   }
 
   render() {
@@ -161,8 +161,9 @@ class Search extends Component {
 
 
     // Result formatters:
-    const toDetail = (node, field) => ({ [field.label]: getNodeAttributes(node)[field.variable] });
-    const getLabel = node => getNodeAttributes(node)[primaryDisplayField];
+    const toDetail = (node, field) =>
+      ({ [field.label]: getEntityAttributes(node)[field.variable] });
+    const getLabel = node => getEntityAttributes(node)[primaryDisplayField];
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
     const getDetails = node => additionalAttributes.map(attr => toDetail(node, attr));
 

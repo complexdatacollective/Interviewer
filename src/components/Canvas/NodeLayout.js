@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, isEqual, pick, has, isNil } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
-import { nodePrimaryKeyProperty, getNodeAttributes, nodeAttributesProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 
 const watchProps = ['width', 'height', 'rerenderCount'];
 
@@ -47,17 +47,17 @@ class NodeLayout extends Component {
   getHighlightColor(node) {
     if (!this.isHighlighted(node)) return '';
     return this.props.highlightAttributes.find(
-      attribute => node[nodeAttributesProperty][attribute.variable] === true).color;
+      attribute => node[entityAttributesProperty][attribute.variable] === true).color;
   }
 
   isHighlighted(node) {
     return !isEmpty(this.props.highlightAttributes) &&
       !(isEmpty(this.props.highlightAttributes.find(
-        attribute => node[nodeAttributesProperty][attribute.variable] === true)));
+        attribute => node[entityAttributesProperty][attribute.variable] === true)));
   }
 
   isLinking(node) {
-    return node[nodePrimaryKeyProperty] === this.props.connectFrom;
+    return node[entityPrimaryKeyProperty] === this.props.connectFrom;
   }
 
   render() {
@@ -72,14 +72,14 @@ class NodeLayout extends Component {
     return (
       <div className="node-layout">
         { nodes.map((node) => {
-          const nodeAttributes = getNodeAttributes(node);
+          const nodeAttributes = getEntityAttributes(node);
           if (!has(nodeAttributes, layoutVariable) || isNil(nodeAttributes[layoutVariable])) {
             return null;
           }
 
           return (
             <LayoutNode
-              key={node[nodePrimaryKeyProperty]}
+              key={node[entityPrimaryKeyProperty]}
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.props.onSelected(node)}
