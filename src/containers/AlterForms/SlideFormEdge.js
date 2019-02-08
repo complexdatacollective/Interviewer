@@ -2,13 +2,13 @@ import React, { PureComponent } from 'react';
 import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { networkNodes } from '../selectors/interface';
-import { makeGetEdgeColor } from '../selectors/protocol';
 
-import { Scroller } from '../components';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
-import Node from './Node';
-import { Form } from '.';
+import { networkNodes } from '../../selectors/interface';
+import { makeGetEdgeColor } from '../../selectors/protocol';
+import { Scroller } from '../../components';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import Node from '../Node';
+import { Form } from '..';
 
 class SlideFormEdge extends PureComponent {
   render() {

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { TransitionGroup } from 'react-transition-group';
 
-import { Scroller } from '../components';
-import { Folder as FolderTransition } from '../components/Transition';
-import { entityAttributesProperty } from '../ducks/modules/network';
-import { makeGetEgoColor, makeGetEgoLabel } from '../selectors/protocol';
-import { Node as UINode } from '../ui/components';
-import { Form } from '.';
+import { Scroller } from '../../components';
+import { Folder as FolderTransition } from '../../components/Transition';
+import { entityAttributesProperty } from '../../ducks/modules/network';
+import { makeGetEgoColor, makeGetEgoLabel } from '../../selectors/protocol';
+import { Node as UINode } from '../../ui/components';
+import { Form } from '..';
 
 class SlideFormEgo extends PureComponent {
   render() {

@@ -11,7 +11,7 @@ import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { protocolForms } from '../../selectors/protocol';
 import { networkEgo } from '../../selectors/interface';
-import { SlideFormEgo } from '../';
+import { SlideFormEgo } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
@@ -39,7 +39,6 @@ class EgoForm extends Component {
   getNodeFormName = activeIndex => `EGO_FORM_${activeIndex}`;
 
   formSubmitAllowed = index => (
-    this.swipeRef && this.swipeRef.current.swiper &&
     this.props.formEnabled(this.getNodeFormName(index))
   );
 
@@ -48,7 +47,7 @@ class EgoForm extends Component {
   );
 
   isStageEnding = () => (
-    this.formSubmitAllowed() &&
+    this.formSubmitAllowed(this.state.activeIndex) &&
     this.state.activeIndex === this.props.egoFormNames.length
   );
 

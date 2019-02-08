@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { Scroller } from '../components';
-import { entityAttributesProperty } from '../ducks/modules/network';
-import Node from './Node';
-import { Form } from '.';
+import { Scroller } from '../../components';
+import { entityAttributesProperty } from '../../ducks/modules/network';
+import Node from '../Node';
+import { Form } from '..';
 
 class SlideForm extends PureComponent {
   render() {
