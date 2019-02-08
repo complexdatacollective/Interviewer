@@ -95,10 +95,8 @@ const generateKeys = (
 
   elements.forEach((element) => {
     let iterableElement = element;
-    if (type === 'node') {
-      iterableElement = getEntityAttributes(element);
-    }
-    // Node data model attributes are now stored under a specific propertyy
+    iterableElement = getEntityAttributes(element);
+    // Entity data model attributes are now stored under a specific propertyy
 
     Object.keys(iterableElement).forEach((key) => {
       // transpose ids to names based on registry
@@ -189,38 +187,22 @@ const addElements = (
       domElement.appendChild(getDataElement(uri, 'label', label));
     }
 
-    // Add node attributes
-    if (type === 'node') {
-      Object.keys(nodeAttrs).forEach((key) => {
-        const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
-        if (!excludeList.includes(keyName)) {
-          if (typeof nodeAttrs[key] !== 'object') {
-            domElement.appendChild(
-              getDataElement(uri, keyName, nodeAttrs[key]));
-          } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-            domElement.appendChild(getDataElement(uri, `${keyName}X`, nodeAttrs[key].x));
-            domElement.appendChild(getDataElement(uri, `${keyName}Y`, nodeAttrs[key].y));
-          } else {
-            domElement.appendChild(
-              getDataElement(uri, keyName, JSON.stringify(nodeAttrs[key])));
-          }
+    // Add entity attributes
+    Object.keys(nodeAttrs).forEach((key) => {
+      const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
+      if (!excludeList.includes(keyName) && !!nodeAttrs[key]) {
+        if (typeof nodeAttrs[key] !== 'object') {
+          domElement.appendChild(
+            getDataElement(uri, keyName, nodeAttrs[key]));
+        } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
+          domElement.appendChild(getDataElement(uri, `${keyName}X`, nodeAttrs[key].x));
+          domElement.appendChild(getDataElement(uri, `${keyName}Y`, nodeAttrs[key].y));
+        } else {
+          domElement.appendChild(
+            getDataElement(uri, keyName, JSON.stringify(nodeAttrs[key])));
         }
-      });
-    } else {
-      Object.keys(dataElement).forEach((key) => {
-        const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
-        if (!excludeList.includes(keyName)) {
-          if (typeof dataElement[key] !== 'object') {
-            domElement.appendChild(getDataElement(uri, keyName, dataElement[key]));
-          } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
-            domElement.appendChild(getDataElement(uri, `${keyName}X`, dataElement[key].x));
-            domElement.appendChild(getDataElement(uri, `${keyName}Y`, dataElement[key].y));
-          } else {
-            domElement.appendChild(getDataElement(uri, keyName, JSON.stringify(dataElement[key])));
-          }
-        }
-      });
-    }
+      }
+    });
 
     // add positions for gephi
     if (layoutVariable && nodeAttrs[layoutVariable]) {
@@ -269,7 +251,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
     graphML,
     networkData.edges,
     'edge',
-    ['from', 'to', 'type'],
+    [entityPrimaryKeyProperty, 'from', 'to', 'type'],
     variableRegistry,
   ));
 
@@ -283,7 +265,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
 
   // add nodes and edges to graph
   addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [entityPrimaryKeyProperty, entityAttributesProperty], variableRegistry, layoutVariable);
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', ['from', 'to', 'type'], variableRegistry, null, true);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', [entityPrimaryKeyProperty, entityAttributesProperty, 'from', 'to', 'type'], variableRegistry, null, true);
 
   return saveFile(xmlToString(xml), onError, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });

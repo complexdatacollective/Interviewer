@@ -77,7 +77,7 @@ export const asExportableNode = (node, nodeTypeDefinition) => ({
 export const asExportableEdge = (edge, edgeTypeDefinition) => ({
   ...edge,
   type: edgeTypeDefinition && edgeTypeDefinition.name,
-  // TODO attributes for edges
+  attributes: getEntityAttributesWithNamesResolved(edge, (edgeTypeDefinition || {}).variables),
 });
 
 export const asExportableEgo = (ego, egoDefinition) => ({
@@ -120,8 +120,6 @@ export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
   ...getEntityAttributesWithNamesResolved(entity, (entityTypeDefinition || {}).variables),
 });
 
-export const asWorkerAgentEdge = asExportableEdge;
-
 /**
  * Produces a network suitable for worker scripts.
  *
@@ -134,8 +132,7 @@ export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
   const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
     nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
-    // TODO attributes for edges
+    edges: edges.map(edge => asWorkerAgentEntity(edge, edgeRegistry[edge.type])),
     ego: asWorkerAgentEntity(ego, egoRegistry),
   });
 };
