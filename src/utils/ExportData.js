@@ -118,7 +118,11 @@ const generateKeys = (
           case VariableType.ordinal:
           case VariableType.number: {
             const keyType = getTypeForKey(elements, key);
-            keyElement.setAttribute('attr.type', keyType);
+            if (keyType === '') {
+              keyElement.setAttribute('attr.type', 'double');
+            } else {
+              keyElement.setAttribute('attr.type', keyType);
+            }
             break;
           }
           case VariableType.layout: {
@@ -190,7 +194,7 @@ const addElements = (
     // Add entity attributes
     Object.keys(nodeAttrs).forEach((key) => {
       const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
-      if (!excludeList.includes(keyName) && !!nodeAttrs[key]) {
+      if (!excludeList.includes(keyName) && nodeAttrs[key] !== null) {
         if (typeof nodeAttrs[key] !== 'object') {
           domElement.appendChild(
             getDataElement(uri, keyName, nodeAttrs[key]));

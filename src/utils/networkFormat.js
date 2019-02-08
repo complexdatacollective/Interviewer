@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import {
   getEntityAttributes,
   entityAttributesProperty,
@@ -120,6 +121,11 @@ export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
   ...getEntityAttributesWithNamesResolved(entity, (entityTypeDefinition || {}).variables),
 });
 
+export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
+  ...omit(edge, entityAttributesProperty),
+  ...asWorkerAgentEntity(edge, edgeTypeDefinition),
+});
+
 /**
  * Produces a network suitable for worker scripts.
  *
@@ -132,7 +138,7 @@ export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
   const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
     nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asWorkerAgentEntity(edge, edgeRegistry[edge.type])),
+    edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
     ego: asWorkerAgentEntity(ego, egoRegistry),
   });
 };

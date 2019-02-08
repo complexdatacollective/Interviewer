@@ -44,7 +44,13 @@ const variableRegistry = {
 const sessionA = {
   network: {
     edges: [
-      { type: 'friend', to: 1, from: 2, connected: true },
+      { type: 'friend',
+        to: 1,
+        from: 2,
+        attributes: {
+          connected: true,
+        },
+      },
     ],
     ego: {},
     nodes: [

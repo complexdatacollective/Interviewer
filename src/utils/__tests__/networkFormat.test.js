@@ -2,8 +2,8 @@
 
 import {
   asExportableNode,
-  asWorkerAgentEdge,
   asWorkerAgentEntity,
+  asWorkerAgentEdge,
 } from '../networkFormat';
 
 import {
@@ -56,6 +56,7 @@ describe('asWorkerAgentEdge', () => {
     from: 'node1',
     to: 'node2',
     type: '1234',
+    [entityPrimaryKeyProperty]: 'edge1',
   };
 
   const edgeTypeDefinition = {
@@ -69,7 +70,7 @@ describe('asWorkerAgentEdge', () => {
   });
 
   it('returns a user-friendly edge type', () => {
-    expect(asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition).type).toEqual('friend');
+    expect(asWorkerAgentEntity(edgeInNetwork, edgeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('friend');
   });
 });
 
