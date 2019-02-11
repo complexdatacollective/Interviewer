@@ -22,7 +22,6 @@ class NodeForm extends Component {
 
   handleSubmit = (form) => {
     this.props.onSubmit({ form });
-    this.overlay.current.getWrappedInstance().scrollContentsToTop();
   }
 
   render() {
@@ -43,7 +42,6 @@ class NodeForm extends Component {
       <Overlay
         show={show}
         title={form.title}
-        ref={this.overlay}
         onClose={this.props.onClose}
       >
         { this.props.useFullScreenForms ?
