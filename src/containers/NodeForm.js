@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reset } from 'redux-form';
 import { isEmpty } from 'lodash';
 import Overlay from './Overlay';
 import Form from './Form';
@@ -24,7 +23,6 @@ class NodeForm extends Component {
   handleSubmit = (form) => {
     this.props.onSubmit({ form });
     this.overlay.current.getWrappedInstance().scrollContentsToTop();
-    this.props.resetValues(reduxFormName);
   }
 
   render() {
@@ -76,12 +74,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  resetValues: bindActionCreators(reset, dispatch),
-});
-
 export { NodeForm };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
 )(NodeForm);
