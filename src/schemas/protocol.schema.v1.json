@@ -83,8 +83,7 @@
       "required": [
         "entity",
         "fields",
-        "title",
-        "type"
+        "title"
       ],
       "title": "Form"
     },
@@ -152,6 +151,12 @@
             "string",
             "null"
           ]
+        },
+        "egoForms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "quickAdd": {
           "type": "boolean"
@@ -223,16 +228,11 @@
           "properties": {
             "type": {
               "const": "EgoForm"
-            },
-            "egoForms": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
             }
           },
           "required": [
-            "egoForms"
+            "egoForms",
+            "introductionPanel"
           ]
         },
         {
@@ -868,6 +868,9 @@
         },
         "edge": {
           "$ref": "#/definitions/Edge"
+        },
+        "ego": {
+          "$ref": "#/definitions/Ego"
         }
       },
       "required": [],
@@ -1045,6 +1048,14 @@
       ],
       "title": "NodeTypeDef"
     },
+    "Ego": {
+      "label": "string",
+      "color": "string",
+      "title": "Ego",
+      "variables": {
+        "$ref": "#/definitions/Variables"
+      }
+    },
     "OptionElement": {
       "anyOf": [
         {
@@ -1074,7 +1085,8 @@
       "type": "string",
       "enum": [
         "edge",
-        "node"
+        "node",
+        "ego"
       ],
       "title": "Entity"
     },
