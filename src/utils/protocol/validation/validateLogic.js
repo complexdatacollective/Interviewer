@@ -44,14 +44,14 @@ const validateLogic = (protocol) => {
       form => `form entity "${form.entity}" is not defined in variableRegistry`,
     ],
     [
-      form => registry[form.entity][form.type] || !form.type,
+      form => (registry[form.entity][form.type] || !form.type),
       form => `"${form.type}" definition not found in variableRegistry["${form.entity}"]`,
     ],
     [
       form =>
-        form.fields.every(field => !!form.type ?
+        form.fields.every(field => (form.type ?
           registry[form.entity][form.type].variables[field.variable] :
-          registry[form.entity].variables[field.variable]),
+          registry[form.entity].variables[field.variable])),
       form => `Undefined form field variables in variableRegistry: ${undefinedFormVariables(form, registry)}`,
     ],
   );
