@@ -77,7 +77,7 @@ class AlterForm extends Component {
     }
   };
 
-  handleSubmit = (node, formData) => (
+  handleUpdate = (node, formData) => (
     this.props.updateNode(node[entityPrimaryKeyProperty], {}, formData));
 
   render() {
@@ -126,7 +126,7 @@ class AlterForm extends Component {
               key={index}
               node={node}
               index={index}
-              updateNode={formData => this.handleSubmit(node, formData)}
+              onUpdate={this.handleUpdate}
               form={form}
             />
           ))}

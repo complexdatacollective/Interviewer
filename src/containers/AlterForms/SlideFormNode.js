@@ -7,10 +7,14 @@ import Node from '../Node';
 import { Form } from '..';
 
 class SlideForm extends PureComponent {
+  handleSubmit = (formData) => {
+    const { node, onUpdate } = this.props;
+    onUpdate(node, formData);
+  }
+
   render() {
     const {
       form,
-      updateNode,
       node,
       index,
     } = this.props;
@@ -28,7 +32,7 @@ class SlideForm extends PureComponent {
                 controls={[]}
                 autoFocus={false}
                 form={`NODE_FORM_${index + 1}`}
-                onSubmit={updateNode}
+                onSubmit={this.handleSubmit}
               />
             </Scroller>
           </div>
@@ -40,8 +44,8 @@ class SlideForm extends PureComponent {
 
 SlideForm.propTypes = {
   form: PropTypes.object,
-  updateNode: PropTypes.func,
   node: PropTypes.object,
+  onUpdate: PropTypes.func,
   index: PropTypes.number,
 };
 
@@ -49,7 +53,7 @@ SlideForm.defaultProps = {
   form: {},
   index: 0,
   node: {},
-  updateNode: () => {},
+  onUpdate: () => {},
 };
 
 export default SlideForm;

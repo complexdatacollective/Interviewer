@@ -132,7 +132,7 @@ class EgoForm extends Component {
             form={currentForm}
             formName={this.getNodeFormName(formIndex)}
             index={formIndex}
-            updateEgo={formData => this.handleSubmitForm(formData)}
+            updateEgo={this.handleSubmitForm}
           />
         </Swiper>
         <div className={progressClasses}>
