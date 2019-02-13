@@ -26,6 +26,8 @@ const TAGS = [
   'thematicBreak',
 ];
 
+const FORM_NAME = 'EGO_FORM';
+
 class EgoForm extends Component {
   constructor(props) {
     super(props);
@@ -39,24 +41,25 @@ class EgoForm extends Component {
     this.props.formEnabled(this.props.form)
   );
 
+  isStageBeginning = () => (
+    this.state.scrollProgress === 0
+  );
+
+  isStageEnding = () => true;
+
   clickNext = () => {
-    if (this.state.activeIndex > 0) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-    if (this.formSubmitAllowed()) {
-      this.setState({
-        activeIndex: this.state.activeIndex + 1,
-      });
-    }
+    this.props.submitForm();
   };
 
   clickPrevious = () => {
-    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+    if (this.formSubmitAllowed()) {
+      this.props.submitForm();
     }
   };
 
-  handleSubmitForm = formData => this.props.updateEgo(this.props.ego, formData);
+  handleSubmitForm = (formData) => {
+    this.props.updateEgo({}, formData);
+  }
 
   handleScroll = () => {
     const element = document.getElementsByClassName('scrollable')[0];
@@ -100,12 +103,13 @@ class EgoForm extends Component {
               initialValues={ego[entityAttributesProperty]}
               controls={[]}
               autoFocus={false}
-              form="EGO_FORM_1"
-              onSubmit={this.props.updateEgo}
+              form={FORM_NAME}
+              onSubmit={this.handleSubmitForm}
             />
           </Scroller>
         </div>
         <div className={progressClasses}>
+          { this.state.scrollProgress === 1 && (<span className="progress-container__status-text">Click next to continue</span>)}
           <ProgressBar
             orientation="horizontal"
             percentProgress={this.state.scrollProgress * 100}
@@ -131,21 +135,22 @@ EgoForm.defaultProps = {
 
 function mapStateToProps(state, props) {
   const forms = protocolForms(state);
+  const ego = networkEgo(state);
   return {
     form: forms[props.stage.form],
     introductionPanel: props.stage.introductionPanel,
-    ego: networkEgo(state),
-    formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
+    ego,
+    formEnabled: () => isValid(FORM_NAME)(state) && !isSubmitting(FORM_NAME)(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateEgo: bindActionCreators(sessionsActions.setEgo, dispatch),
-  submitForm: bindActionCreators(formName => submit(formName), dispatch),
+  updateEgo: bindActionCreators(sessionsActions.updateEgo, dispatch),
+  submitForm: bindActionCreators(() => submit(FORM_NAME), dispatch),
 });
 
 export { EgoForm };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true }),
 )(EgoForm);

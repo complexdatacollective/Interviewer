@@ -17,7 +17,7 @@ Scroller.defaultProps = {
 Scroller.propTypes = {
   children: PropTypes.any.isRequired,
   className: PropTypes.string,
-  onScroll: PropTypes.function,
+  onScroll: PropTypes.func,
 };
 
 export default scrollable(Scroller);

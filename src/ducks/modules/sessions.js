@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
 
 import uuidv4 from '../../utils/uuid';
-import network, { entityPrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, UPDATE_EDGE, TOGGLE_EDGE, REMOVE_EDGE, SET_EGO } from './network';
+import network, { entityPrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, UPDATE_EDGE, TOGGLE_EDGE, REMOVE_EDGE, UPDATE_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
@@ -34,7 +34,7 @@ export default function reducer(state = initialState, action = {}) {
     case UPDATE_EDGE:
     case TOGGLE_EDGE:
     case REMOVE_EDGE:
-    case SET_EGO:
+    case UPDATE_EGO:
       return {
         ...state,
         [action.sessionId]: withTimestamp({
@@ -189,11 +189,10 @@ const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, 
   });
 };
 
-const setEgo = (modelData, attributeData) => (dispatch, getState) => {
+const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) => {
   const { session: sessionId, protocol: { variableRegistry: { ego: egoRegistry } } } = getState();
-
   dispatch({
-    type: SET_EGO,
+    type: UPDATE_EGO,
     sessionId,
     modelData,
     attributeData: {
@@ -335,7 +334,7 @@ const actionCreators = {
   updateNode,
   removeNode,
   removeNodeFromPrompt,
-  setEgo,
+  updateEgo,
   addEdge,
   updateEdge,
   toggleEdge,
@@ -360,7 +359,7 @@ const actionTypes = {
   UPDATE_EDGE,
   TOGGLE_EDGE,
   REMOVE_EDGE,
-  SET_EGO,
+  UPDATE_EGO,
   ADD_SESSION,
   UPDATE_SESSION,
   UPDATE_PROMPT,
