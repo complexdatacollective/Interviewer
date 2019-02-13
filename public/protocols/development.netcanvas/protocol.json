@@ -708,7 +708,6 @@
       "title": "Add A Person",
       "entity": "node",
       "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
-      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
@@ -734,7 +733,6 @@
       "title": "Test for form input controls",
       "entity": "node",
       "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7",
-      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "2377af3f-3c79-41da-9b0b-6570fb519b93",

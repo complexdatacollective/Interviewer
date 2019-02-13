@@ -70,9 +70,6 @@
         "type": {
           "type": "string"
         },
-        "optionToAddAnother": {
-          "type": "boolean"
-        },
         "fields": {
           "type": "array",
           "items": {
