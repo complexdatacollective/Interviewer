@@ -1,6 +1,5 @@
 .ego-form {
-  margin-left: var(--timeline-width);
-  margin-right: 4rem;
+  margin: 0 auto;
   height: 100%;
   padding: 1rem 0 4rem;
   overflow: hidden;
@@ -19,7 +18,7 @@
     height: 100%;
 
     .scrollable {
-      padding-top: 30vh;
+      padding-top: unit(4);
       height: 100%;
     }
   }

@@ -18,7 +18,7 @@
 
     .progress-bar__filler {
       height: 100%;
-      transition: width calc(var(--animation-duration-standard)*3) var(--animation-easing);
+      transition: width calc(var(--animation-duration-fast)) var(--animation-easing);
     }
 
   }

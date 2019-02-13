@@ -27,6 +27,14 @@ const TAGS = [
 ];
 
 class EgoForm extends Component {
+  constructor(props) {
+    super(props);
+    this.scrollerRef = React.createRef();
+    this.state = {
+      scrollProgress: 0,
+    };
+  }
+
   formSubmitAllowed = () => (
     this.props.formEnabled(this.props.form)
   );
@@ -50,6 +58,17 @@ class EgoForm extends Component {
 
   handleSubmitForm = formData => this.props.updateEgo(this.props.ego, formData);
 
+  handleScroll = () => {
+    const element = document.getElementsByClassName('scrollable')[0];
+    const currentScrollPosition = element.scrollTop;
+    const maxScrollPosition = element.scrollHeight - element.clientHeight;
+
+    const scrollPercent = currentScrollPosition / maxScrollPosition;
+    this.setState({
+      scrollProgress: scrollPercent,
+    });
+  }
+
   render() {
     const {
       form,
@@ -57,13 +76,18 @@ class EgoForm extends Component {
       introductionPanel,
     } = this.props;
 
-    console.log(this.props);
+    const progressClasses = cx(
+      'progress-container',
+      {
+        'progress-container--show': this.state.scrollProgress > 0,
+      },
+    );
 
     return (
       <div className="ego-form alter-form">
         <div className="ego-form__form-container">
-          <Scroller>
-            <div key="ego-form__introduction" className="ego-form__introduction">
+          <Scroller onScroll={this.handleScroll}>
+            <div className="ego-form__introduction">
               <h1>{introductionPanel.title}</h1>
               <ReactMarkdown
                 source={introductionPanel.text}
@@ -81,10 +105,10 @@ class EgoForm extends Component {
             />
           </Scroller>
         </div>
-        <div>
+        <div className={progressClasses}>
           <ProgressBar
             orientation="horizontal"
-            percentProgress={50}
+            percentProgress={this.state.scrollProgress * 100}
           />
         </div>
       </div>

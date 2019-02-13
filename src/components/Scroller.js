@@ -11,11 +11,13 @@ const Scroller = ({ className, ...props }) => (
 
 Scroller.defaultProps = {
   className: '',
+  onScroll: () => {},
 };
 
 Scroller.propTypes = {
   children: PropTypes.any.isRequired,
   className: PropTypes.string,
+  onScroll: PropTypes.function,
 };
 
 export default scrollable(Scroller);

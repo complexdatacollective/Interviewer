@@ -2,7 +2,7 @@ import React from 'react';
 
 const scrollable = (WrappedComponent) => {
   const Scrollable = props => (
-    <div className="scrollable">
+    <div className="scrollable" onScroll={props.onScroll}>
       <WrappedComponent {...props} />
     </div>
   );
