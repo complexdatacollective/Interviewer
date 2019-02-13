@@ -1,5 +1,26 @@
 .ego-form {
-  .slide__transition {
+  margin-left: var(--timeline-width);
+  margin-right: 4rem;
+  height: 100%;
+  padding: 1rem 0 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 60rem;
+
+  &__introduction {
+    border-radius: var(--border-radius);
+    background: var(--primary);
+    padding: 4rem;
+    margin-bottom: unit(10);
+  }
+
+  &__form-container {
     height: 100%;
+
+    .scrollable {
+      padding-top: 30vh;
+      height: 100%;
+    }
   }
 }

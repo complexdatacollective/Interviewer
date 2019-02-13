@@ -915,10 +915,6 @@
           "label": "How much do you like likert scales?"
         },
         {
-          "variable": "3eaad411-0530-41ca-bb43-9fb6ea846d6e",
-          "component": "Checkbox"
-        },
-        {
           "variable": "e3537457-41a2-4fbf-a1f8-9235b3c1edc6",
           "component": "CheckboxGroup",
           "label": "Which of these things do you like?"
@@ -927,11 +923,6 @@
           "variable": "6c647977-f2d1-426f-b0c5-6d44c795c554",
           "component": "ToggleButtonGroup",
           "label": "Which of these other things do you like?"
-        },
-        {
-          "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
-          "component": "ToggleButton",
-          "label": "Toggle button for something"
         },
         {
           "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
@@ -1000,16 +991,6 @@
           "variable": "683ad529-66c6-4c84-8e31-a31452d6b5e9",
           "component": "RadioGroup",
           "label": "How much do you like likert scales?"
-        }
-      ]
-    },
-    "egoForm2": {
-      "title": "Add part 2 of ego",
-      "entity": "ego",
-      "fields": [
-        {
-          "variable": "4eaad411-0530-41ca-bb43-9fb6ea846d6e",
-          "component": "Checkbox"
         },
         {
           "variable": "f3537457-41a2-4fbf-a1f8-9235b3c1edc6",
@@ -1020,17 +1001,6 @@
           "variable": "7c647977-f2d1-426f-b0c5-6d44c795c554",
           "component": "ToggleButtonGroup",
           "label": "Which of these other things do you like?"
-        }
-      ]
-    },
-    "egoForm3": {
-      "title": "Part 3 of ego form",
-      "entity": "ego",
-      "fields": [
-        {
-          "variable": "67fefac9-561f-454a-8f78-81bd9470efaa",
-          "component": "ToggleButton",
-          "label": "Toggle button for something"
         },
         {
           "variable": "67fefac9-561f-454a-8f78-81bd9470efaa",
@@ -1309,11 +1279,7 @@
       "id": "ego-form-1",
       "type": "EgoForm",
       "label": "Ego Form",
-      "egoForms": [
-        "egoForm1",
-        "egoForm2",
-        "egoForm3"
-      ],
+      "form": "egoForm1",
       "introductionPanel": {
         "title": "Introduction to the ego form",
         "text": "There are multiple ways to describe **you**."
