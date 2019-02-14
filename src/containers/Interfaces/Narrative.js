@@ -28,6 +28,7 @@ class Narrative extends Component {
       showResetButton: false,
       activeAnnotations: false,
       activeFocusNodes: false,
+      isFreeze: false,
     };
 
     this.annotationLayer = React.createRef();
@@ -54,6 +55,12 @@ class Narrative extends Component {
   toggleHighlights = () => {
     this.setState({
       showHighlights: !this.state.showHighlights,
+    });
+  }
+
+  toggleFreeze = () => {
+    this.setState({
+      isFreeze: !this.state.isFreeze,
     });
   }
 
@@ -104,6 +111,7 @@ class Narrative extends Component {
                 ref={this.annotationLayer}
                 setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
                 key={`annotation-${currentPreset.id}`}
+                isFreeze={this.state.isFreeze}
               />
             }
             <ConcentricCircles
@@ -134,6 +142,8 @@ class Narrative extends Component {
             convexHulls={convexHulls}
             toggleConvex={this.toggleConvex}
             showResetButton={showResetButton}
+            isFreeze={this.state.isFreeze}
+            toggleFreeze={this.toggleFreeze}
           />
         </div>
       </div>

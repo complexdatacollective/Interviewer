@@ -21,6 +21,7 @@
 
     &--show {
       width: 5rem;
+      margin-left: 0.1rem;
     }
   }
 
@@ -80,6 +81,24 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+    }
+  }
+
+  &__freeze {
+    display: flex;
+    margin-left: 0.1rem;
+    justify-content: center;
+    width: 5rem;
+    cursor: pointer;
+    background: var(--light-background);
+    align-items: center;
+
+    &--active {
+      background: var(--primary);
+    }
+
+    h1 {
+      margin: 0;
     }
   }
 }
