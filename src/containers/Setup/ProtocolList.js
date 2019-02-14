@@ -26,18 +26,21 @@ class ProtocolList extends Component {
       return;
     }
 
-    this.setState({ showNewSessionOverlay: true });
+    this.setState({
+      showNewSessionOverlay: true,
+      protocol,
+    });
   }
 
   handleCreateSession = (caseId) => {
     this.props.addSession(caseId);
     this.handleCloseOverlay();
 
-    // if (protocol.isFactoryProtocol) {
-    //   this.props.loadFactoryProtocol(protocol.path);
-    // } else if (protocol.path) {
-    //   this.props.loadProtocol(protocol.path);
-    // }
+    if (this.state.protocol.isFactoryProtocol) {
+      this.props.loadFactoryProtocol(this.state.protocol.path);
+    } else if (this.state.protocol.path) {
+      this.props.loadProtocol(this.state.protocol.path);
+    }
   }
 
   handleCloseOverlay = () => {

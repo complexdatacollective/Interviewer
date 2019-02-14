@@ -12,8 +12,6 @@ import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
 import { matchSessionPath } from '../../utils/matchSessionPath';
 
-const shortId = uuid => (uuid || '').replace(/-.*/, '');
-
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
@@ -23,6 +21,7 @@ const pathInfo = (sessionPath) => {
   const matchedPath = matchSessionPath(sessionPath);
   if (matchedPath) {
     info.sessionId = matchedPath.params.sessionId;
+    info.caseId = matchedPath.params.caseId;
     info.protocol = matchedPath.params.protocolId;
     info.protocolType = matchedPath.params.protocolType;
     info.stageIndex = matchedPath.params.stageIndex;
@@ -63,7 +62,7 @@ class SessionList extends Component {
     if (isEmpty(sessionList)) {
       return emptyView;
     }
-
+    console.log(this.props);
     return (
       <div className="session-list__wrapper">
         <CardList
@@ -75,7 +74,7 @@ class SessionList extends Component {
               removeSession(data.uuid);
             }
           }}
-          label={sessionInfo => shortId(sessionInfo.uuid)}
+          label={sessionInfo => sessionInfo.value.caseId}
           nodes={sessionList}
           onToggleCard={this.onClickLoadSession}
           getKey={sessionInfo => sessionInfo.uuid}
@@ -90,8 +89,6 @@ class SessionList extends Component {
               { 'Last Changed': displayDate(session.updatedAt) },
               { Protocol: protocolLabel },
               { Stage: oneBasedIndex(info.stageIndex) },
-              { 'Number of Nodes': session.network.nodes.length },
-              { 'Number of Edges': session.network.edges.length },
               { Exported: exportedDisplay },
             ];
           }}
