@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
-import { scrollable } from '../behaviours';
+class Scroller extends Component {
+  constructor(props) {
+    super(props);
 
-const Scroller = ({ className, ...props }) => (
-  <div className={className}>
-    {props.children}
-  </div>
-);
+    this.scrollable = React.createRef();
+  }
+
+  handleScroll = () => {
+    if (!this.scrollable.current) { return; }
+    const element = this.scrollable.current;
+    const scrollTop = element.scrollTop;
+    const maxScrollPosition = element.scrollHeight - element.clientHeight;
+    const scrollAmount = scrollTop / maxScrollPosition;
+
+    this.props.onScroll(scrollTop, scrollAmount);
+  }
+
+  render() {
+    const {
+      className,
+      children,
+    } = this.props;
+
+    return (
+      <div
+        className={cx('scrollable', className)}
+        onScroll={this.handleScroll}
+        ref={this.scrollable}
+      >
+        {children}
+      </div>
+    );
+  }
+}
 
 Scroller.defaultProps = {
   className: '',
@@ -20,4 +48,4 @@ Scroller.propTypes = {
   onScroll: PropTypes.func,
 };
 
-export default scrollable(Scroller);
+export default Scroller;
