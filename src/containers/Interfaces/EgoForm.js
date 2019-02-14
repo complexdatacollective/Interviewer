@@ -45,7 +45,7 @@ class EgoForm extends Component {
     this.state.scrollProgress === 0
   );
 
-  isStageEnding = () => false;
+  isStageEnding = () => this.props.formEnabled();
 
   clickNext = () => {
     this.props.submitForm();
