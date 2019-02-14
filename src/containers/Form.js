@@ -8,11 +8,53 @@ import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
 import { makeRehydrateFields } from '../selectors/forms';
 
+const getScrollParent = (node) => {
+  const regex = /(auto|scroll)/;
+  const parents = (_node, ps) => {
+    if (_node.parentNode === null) { return ps; }
+    return parents(_node.parentNode, ps.concat([_node]));
+  };
+
+  const style = (_node, prop) => getComputedStyle(_node, null).getPropertyValue(prop);
+  const overflow = _node => style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x');
+  const scroll = _node => regex.test(overflow(_node));
+
+  /* eslint-disable consistent-return */
+  const scrollParent = (_node) => {
+    if (!(_node instanceof HTMLElement || _node instanceof SVGElement)) {
+      return;
+    }
+
+    const ps = parents(_node.parentNode, []);
+
+    for (let i = 0; i < ps.length; i += 1) {
+      if (scroll(ps[i])) {
+        return ps[i];
+      }
+    }
+
+    return document.scrollingElement || document.documentElement;
+  };
+
+  return scrollParent(node);
+  /* eslint-enable consistent-return */
+};
+
 const scrollToFirstError = (errors) => {
+  // Todo: first item is an assumption that may not be valid. Should iterate and check
+  // vertical position
   const firstError = Object.keys(errors)[0];
+
+  // All Fields have a name corresponding to variable ID.
   const el = document.querySelector(`[name="${firstError}"]`);
+
+  // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
-  const scroller = document.getElementsByClassName('scrollable')[0];
+
+  // Assume forms are inside a scrollable
+  const scroller = getScrollParent(el);
+
+
   scroller.scrollTop = topPos;
 };
 
