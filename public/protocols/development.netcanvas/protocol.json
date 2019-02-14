@@ -973,7 +973,7 @@
       ]
     },
     "egoForm1": {
-      "title": "Add part 1 of ego",
+      "title": "An example ego form",
       "entity": "ego",
       "fields": [
         {

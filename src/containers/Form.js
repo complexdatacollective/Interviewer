@@ -8,6 +8,14 @@ import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
 import { makeRehydrateFields } from '../selectors/forms';
 
+const scrollToFirstError = (errors) => {
+  const firstError = Object.keys(errors)[0];
+  const el = document.querySelector(`[name="${firstError}"]`);
+  const topPos = el.offsetTop - 200;
+  const scroller = document.getElementsByClassName('scrollable')[0];
+  scroller.scrollTop = topPos;
+};
+
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   */
@@ -106,6 +114,7 @@ export default compose(
     enableReinitialize: true,
     touchOnChange: true,
     touchOnBlur: false,
+    onSubmitFail: scrollToFirstError,
   }),
 )(Form);
 
