@@ -86,7 +86,6 @@ class Form extends Component {
       autoFocus,
       fields,
       handleSubmit,
-      controls,
       tooltip,
       className,
     } = this.props;
@@ -105,9 +104,6 @@ class Form extends Component {
             />
           );
         }) }
-        <div className="form__button-container">
-          {controls.map(control => control)}
-        </div>
       </form>
     );
   }
@@ -122,7 +118,6 @@ Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
-  controls: PropTypes.array,
   className: PropTypes.string,
   tooltip: PropTypes.string,
 };
