@@ -31,7 +31,6 @@ const FORM_NAME = 'EGO_FORM';
 class EgoForm extends Component {
   constructor(props) {
     super(props);
-    this.scrollerRef = React.createRef();
     this.state = {
       scrollProgress: 0,
     };
@@ -61,15 +60,8 @@ class EgoForm extends Component {
     this.props.updateEgo({}, formData);
   }
 
-  handleScroll = () => {
-    const element = document.getElementsByClassName('scrollable')[0];
-    const currentScrollPosition = element.scrollTop;
-    const maxScrollPosition = element.scrollHeight - element.clientHeight;
-
-    const scrollPercent = currentScrollPosition / maxScrollPosition;
-    this.setState({
-      scrollProgress: scrollPercent,
-    });
+  handleScroll = (scrollTop, scrollProgress) => {
+    this.setState({ scrollProgress });
   }
 
   render() {
