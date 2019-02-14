@@ -62,7 +62,7 @@ class SessionList extends Component {
     if (isEmpty(sessionList)) {
       return emptyView;
     }
-    console.log(this.props);
+
     return (
       <div className="session-list__wrapper">
         <CardList
